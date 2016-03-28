@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
 
   s.name         = "PTools"
-  s.version      = “1.0.0”
+  s.version      = “1.0.1”
   s.summary      = "A short description of PTools."
   s.description  = <<-DESC
                    DESC
