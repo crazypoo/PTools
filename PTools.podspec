@@ -9,14 +9,15 @@
 Pod::Spec.new do |s|
 
   s.name         = "PTools"
-  s.version      = "1.0.1"
-  s.summary      = "A short description of PTools."
+  s.version      = "1.0.2"
+  s.summary      = "First To Cocoapods"
   s.description  = <<-DESC
+你们好哦...............
                    DESC
   s.homepage     = "https://github.com/crazypoo/PTools"
   s.license      = "MIT"
-  s.author       = { "公司" => "273277355@qq.com" }				      
+  s.author       = { "HelloKitty" => "273277355@qq.com" }				      
   s.platform     = :ios, "8.0"
-  s.source       = { :git => "https://github.com/crazypoo/PTools.git", :tag =>"#{s.version}" }
+  s.source       = { :git => "https://github.com/crazypoo/PTools.git", :tag =>"1.0.2"}
   s.source_files  = "PTools/*"
 end
