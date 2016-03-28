@@ -25,6 +25,11 @@
 		C027FD8619C58F860007CA9B /* PBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = C027FD8419C58F860007CA9B /* PBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C027FD8719C58F860007CA9B /* PBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = C027FD8519C58F860007CA9B /* PBugReporter.m */; };
 		C027FDA619C591240007CA9B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027FDA519C591240007CA9B /* CoreTelephony.framework */; };
+		C0380CB21CA9105800CC712D /* DES3Util.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CAC1CA9105700CC712D /* DES3Util.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C0380CB31CA9105800CC712D /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = C0380CAD1CA9105800CC712D /* DES3Util.m */; };
+		C0380CB41CA9105800CC712D /* LGTMBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CAF1CA9105800CC712D /* LGTMBase64.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		C0380CB51CA9105800CC712D /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C0380CB01CA9105800CC712D /* LGTMBase64.m */; };
+		C0380CB61CA9105800CC712D /* LGTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CB11CA9105800CC712D /* LGTMDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C048B01E19C5932E00F19CFB /* PHong.h in Headers */ = {isa = PBXBuildFile; fileRef = C048B01D19C5932E00F19CFB /* PHong.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C048B02C19C596E000F19CFB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C048B02B19C596E000F19CFB /* QuartzCore.framework */; };
 		C0554FC719C36D1F004B589F /* PooUDIDInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = C0554FC519C36D1F004B589F /* PooUDIDInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -64,8 +69,6 @@
 		C08024B81AF3061E00398361 /* QCSlideSwitchView.m in Sources */ = {isa = PBXBuildFile; fileRef = C08024B61AF3061E00398361 /* QCSlideSwitchView.m */; };
 		C0833FF91AF6883300A4E289 /* Utils.h in Headers */ = {isa = PBXBuildFile; fileRef = C0833FF71AF6883300A4E289 /* Utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C0833FFA1AF6883300A4E289 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = C0833FF81AF6883300A4E289 /* Utils.m */; };
-		C0EA4BF719C3E135004D455F /* DES3Util.h in Headers */ = {isa = PBXBuildFile; fileRef = C0EA4BF319C3E135004D455F /* DES3Util.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C0EA4BF819C3E135004D455F /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = C0EA4BF419C3E135004D455F /* DES3Util.m */; };
 		C0EA4BFF19C45069004D455F /* UIView+ModifyFrame.h in Headers */ = {isa = PBXBuildFile; fileRef = C0554FDF19C36F6D004B589F /* UIView+ModifyFrame.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC06F0371A5133AD002DEE4A /* SecurityStrategy.h in Headers */ = {isa = PBXBuildFile; fileRef = CC06F0331A5133AD002DEE4A /* SecurityStrategy.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CC06F0381A5133AD002DEE4A /* SecurityStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = CC06F0341A5133AD002DEE4A /* SecurityStrategy.m */; };
@@ -101,9 +104,6 @@
 		CCF2A1E91A50F8FB0088BBE6 /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF2A1E31A50F8FB0088BBE6 /* UIColor+Helper.m */; };
 		CCF2A1EA1A50F8FB0088BBE6 /* UIColor+Random.h in Headers */ = {isa = PBXBuildFile; fileRef = CCF2A1E41A50F8FB0088BBE6 /* UIColor+Random.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CCF2A1EB1A50F8FB0088BBE6 /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF2A1E51A50F8FB0088BBE6 /* UIColor+Random.m */; };
-		DB2DCCC81B2918E3004D5053 /* LGTMBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = DB2DCCC51B2918E3004D5053 /* LGTMBase64.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DB2DCCC91B2918E3004D5053 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = DB2DCCC61B2918E3004D5053 /* LGTMBase64.m */; };
-		DB2DCCCA1B2918E3004D5053 /* LGTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = DB2DCCC71B2918E3004D5053 /* LGTMDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB4C181B1AF077DC0075B14D /* CDPMonitorKeyboard.h in Headers */ = {isa = PBXBuildFile; fileRef = DB4C18191AF077DC0075B14D /* CDPMonitorKeyboard.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		DB4C181C1AF077DC0075B14D /* CDPMonitorKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = DB4C181A1AF077DC0075B14D /* CDPMonitorKeyboard.m */; };
 		DB4C18311AF1C06B0075B14D /* GPLittlePassWordView.h in Headers */ = {isa = PBXBuildFile; fileRef = DB4C18251AF1C06B0075B14D /* GPLittlePassWordView.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -146,6 +146,11 @@
 		C027FD8419C58F860007CA9B /* PBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
 		C027FD8519C58F860007CA9B /* PBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
 		C027FDA519C591240007CA9B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		C0380CAC1CA9105700CC712D /* DES3Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
+		C0380CAD1CA9105800CC712D /* DES3Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
+		C0380CAF1CA9105800CC712D /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
+		C0380CB01CA9105800CC712D /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
+		C0380CB11CA9105800CC712D /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
 		C048B01D19C5932E00F19CFB /* PHong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHong.h; sourceTree = "<group>"; };
 		C048B02B19C596E000F19CFB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C0554FBD19C36C33004B589F /* PTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -188,8 +193,6 @@
 		C08024B61AF3061E00398361 /* QCSlideSwitchView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QCSlideSwitchView.m; sourceTree = "<group>"; };
 		C0833FF71AF6883300A4E289 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		C0833FF81AF6883300A4E289 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		C0EA4BF319C3E135004D455F /* DES3Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
-		C0EA4BF419C3E135004D455F /* DES3Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
 		CC06F0331A5133AD002DEE4A /* SecurityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityStrategy.h; sourceTree = "<group>"; };
 		CC06F0341A5133AD002DEE4A /* SecurityStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
 		CC06F0351A5133AD002DEE4A /* UIImage+BlurGlass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurGlass.h"; sourceTree = "<group>"; };
@@ -224,9 +227,6 @@
 		CCF2A1E31A50F8FB0088BBE6 /* UIColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
 		CCF2A1E41A50F8FB0088BBE6 /* UIColor+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Random.h"; sourceTree = "<group>"; };
 		CCF2A1E51A50F8FB0088BBE6 /* UIColor+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Random.m"; sourceTree = "<group>"; };
-		DB2DCCC51B2918E3004D5053 /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
-		DB2DCCC61B2918E3004D5053 /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
-		DB2DCCC71B2918E3004D5053 /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
 		DB4C18191AF077DC0075B14D /* CDPMonitorKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDPMonitorKeyboard.h; sourceTree = "<group>"; };
 		DB4C181A1AF077DC0075B14D /* CDPMonitorKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDPMonitorKeyboard.m; sourceTree = "<group>"; };
 		DB4C18251AF1C06B0075B14D /* GPLittlePassWordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPLittlePassWordView.h; sourceTree = "<group>"; };
@@ -292,6 +292,16 @@
 			name = "设备信息";
 			sourceTree = "<group>";
 		};
+		C0380CAE1CA9105800CC712D /* GTMBase64 */ = {
+			isa = PBXGroup;
+			children = (
+				C0380CAF1CA9105800CC712D /* LGTMBase64.h */,
+				C0380CB01CA9105800CC712D /* LGTMBase64.m */,
+				C0380CB11CA9105800CC712D /* LGTMDefines.h */,
+			);
+			path = GTMBase64;
+			sourceTree = "<group>";
+		};
 		C048B01C19C5931300F19CFB /* 宏定义 */ = {
 			isa = PBXGroup;
 			children = (
@@ -329,6 +339,9 @@
 		C0554FBE19C36C33004B589F /* PTools */ = {
 			isa = PBXGroup;
 			children = (
+				C0380CAC1CA9105700CC712D /* DES3Util.h */,
+				C0380CAD1CA9105800CC712D /* DES3Util.m */,
+				C0380CAE1CA9105800CC712D /* GTMBase64 */,
 				DB82CEBF1B01E1080045DE83 /* 运营商获取 */,
 				C0833FF61AF6883300A4E289 /* PUtils */,
 				C08024B41AF3061E00398361 /* 仿网易ui */,
@@ -354,7 +367,6 @@
 				C048B01C19C5931300F19CFB /* 宏定义 */,
 				C027FD8819C5906B0007CA9B /* 设备信息 */,
 				C027FD8319C58F790007CA9B /* BUG反馈 */,
-				C0EA4BF219C3E11A004D455F /* DES */,
 				C0554FDA19C36F47004B589F /* 自定义弹出框 */,
 				C0554FD519C36F0F004B589F /* 数字键盘 */,
 				C0554FD019C36E5D004B589F /* KeyChain */,
@@ -477,16 +489,6 @@
 			path = PUtils;
 			sourceTree = "<group>";
 		};
-		C0EA4BF219C3E11A004D455F /* DES */ = {
-			isa = PBXGroup;
-			children = (
-				DB2DCCC41B2918E3004D5053 /* GTMBase64 */,
-				C0EA4BF319C3E135004D455F /* DES3Util.h */,
-				C0EA4BF419C3E135004D455F /* DES3Util.m */,
-			);
-			name = DES;
-			sourceTree = "<group>";
-		};
 		CC06F0321A5133AD002DEE4A /* 重要信息模糊 */ = {
 			isa = PBXGroup;
 			children = (
@@ -564,16 +566,6 @@
 				CCF2A1E51A50F8FB0088BBE6 /* UIColor+Random.m */,
 			);
 			path = "UIColor+Helper";
-			sourceTree = "<group>";
-		};
-		DB2DCCC41B2918E3004D5053 /* GTMBase64 */ = {
-			isa = PBXGroup;
-			children = (
-				DB2DCCC51B2918E3004D5053 /* LGTMBase64.h */,
-				DB2DCCC61B2918E3004D5053 /* LGTMBase64.m */,
-				DB2DCCC71B2918E3004D5053 /* LGTMDefines.h */,
-			);
-			path = GTMBase64;
 			sourceTree = "<group>";
 		};
 		DB4C18181AF077DC0075B14D /* 输入法键盘遮挡解决 */ = {
@@ -672,7 +664,6 @@
 				CC8B74421A4A6FB900CAFDCB /* WMHubWindow.h in Headers */,
 				CC8B743E1A4A6FB900CAFDCB /* WMHubView.h in Headers */,
 				CC8B743C1A4A6FB800CAFDCB /* WMHub.h in Headers */,
-				C0EA4BF719C3E135004D455F /* DES3Util.h in Headers */,
 				CCF2A1DB1A50F80B0088BBE6 /* UIViewController+TopBarMessage.h in Headers */,
 				CCF2A1EA1A50F8FB0088BBE6 /* UIColor+Random.h in Headers */,
 				CCF2A1E61A50F8FB0088BBE6 /* UIColor+Colours.h in Headers */,
@@ -700,10 +691,11 @@
 				C08024861AF2B1B400398361 /* BBLaunchAdMonitor.h in Headers */,
 				C080248D1AF2B2D300398361 /* JMHoledView.h in Headers */,
 				C08024B71AF3061E00398361 /* QCSlideSwitchView.h in Headers */,
+				C0380CB21CA9105800CC712D /* DES3Util.h in Headers */,
+				C0380CB61CA9105800CC712D /* LGTMDefines.h in Headers */,
+				C0380CB41CA9105800CC712D /* LGTMBase64.h in Headers */,
 				DB82CEC21B01E1080045DE83 /* PCarrie.h in Headers */,
-				DB2DCCC81B2918E3004D5053 /* LGTMBase64.h in Headers */,
 				C0833FF91AF6883300A4E289 /* Utils.h in Headers */,
-				DB2DCCCA1B2918E3004D5053 /* LGTMDefines.h in Headers */,
 				CCF2A1C11A50ECF90088BBE6 /* HPTextViewInternal.h in Headers */,
 				C0554FD319C36E6B004B589F /* GPKeyChain.h in Headers */,
 			);
@@ -802,7 +794,7 @@
 				CC7E8AD819C680C300323099 /* PooCodeView.m in Sources */,
 				C08024A91AF2FF9200398361 /* WPAttributedStyleAction.m in Sources */,
 				CC8B743D1A4A6FB900CAFDCB /* WMHub.m in Sources */,
-				DB2DCCC91B2918E3004D5053 /* LGTMBase64.m in Sources */,
+				C0380CB51CA9105800CC712D /* LGTMBase64.m in Sources */,
 				C080248E1AF2B2D300398361 /* JMHoledView.m in Sources */,
 				CC8B74411A4A6FB900CAFDCB /* WMHubViewController.m in Sources */,
 				DB4C181C1AF077DC0075B14D /* CDPMonitorKeyboard.m in Sources */,
@@ -822,10 +814,10 @@
 				CC06F0381A5133AD002DEE4A /* SecurityStrategy.m in Sources */,
 				C0833FFA1AF6883300A4E289 /* Utils.m in Sources */,
 				DB82CEC31B01E1080045DE83 /* PCarrie.m in Sources */,
-				C0EA4BF819C3E135004D455F /* DES3Util.m in Sources */,
 				C0554FDE19C36F57004B589F /* PooAlertView.m in Sources */,
 				DBE0CB771AE9D64A00027325 /* PooPhoneBlock.m in Sources */,
 				DB4C183C1AF1C06B0075B14D /* PooPassWordView.m in Sources */,
+				C0380CB31CA9105800CC712D /* DES3Util.m in Sources */,
 				DB4C18381AF1C06B0075B14D /* MJPasswordView.m in Sources */,
 				CCF2A1C01A50ECF90088BBE6 /* HPGrowingTextView.m in Sources */,
 				CC0F80071A4AA25000CF7AAF /* NSString+Regulars.m in Sources */,
