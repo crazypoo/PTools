@@ -34,6 +34,7 @@
 
 #import "PooCodeView.h"
 #import "PHong.h"
+#import "DES3Util.h"
 #import "PBugReporter.h"
 #import "PooNumberKeyBoard.h"
 #import "PooAlertView.h"
