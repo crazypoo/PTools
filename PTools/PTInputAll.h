@@ -41,7 +41,6 @@
 #import "NSString+Regulars.h"
 #import "NSString+Encryption.h"
 #import "WMHub.h"
-#import "DES3Util.h"
 #import "GPKeyChain.h"
 #import "PooSystemInfo.h"
 #import "HPGrowingTextView.h"

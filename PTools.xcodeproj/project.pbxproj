@@ -25,11 +25,6 @@
 		C027FD8619C58F860007CA9B /* PBugReporter.h in Headers */ = {isa = PBXBuildFile; fileRef = C027FD8419C58F860007CA9B /* PBugReporter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C027FD8719C58F860007CA9B /* PBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = C027FD8519C58F860007CA9B /* PBugReporter.m */; };
 		C027FDA619C591240007CA9B /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C027FDA519C591240007CA9B /* CoreTelephony.framework */; };
-		C0380CB21CA9105800CC712D /* DES3Util.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CAC1CA9105700CC712D /* DES3Util.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C0380CB31CA9105800CC712D /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = C0380CAD1CA9105800CC712D /* DES3Util.m */; };
-		C0380CB41CA9105800CC712D /* LGTMBase64.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CAF1CA9105800CC712D /* LGTMBase64.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		C0380CB51CA9105800CC712D /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = C0380CB01CA9105800CC712D /* LGTMBase64.m */; };
-		C0380CB61CA9105800CC712D /* LGTMDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = C0380CB11CA9105800CC712D /* LGTMDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C048B01E19C5932E00F19CFB /* PHong.h in Headers */ = {isa = PBXBuildFile; fileRef = C048B01D19C5932E00F19CFB /* PHong.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C048B02C19C596E000F19CFB /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C048B02B19C596E000F19CFB /* QuartzCore.framework */; };
 		C0554FC719C36D1F004B589F /* PooUDIDInfo.h in Headers */ = {isa = PBXBuildFile; fileRef = C0554FC519C36D1F004B589F /* PooUDIDInfo.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -146,11 +141,6 @@
 		C027FD8419C58F860007CA9B /* PBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
 		C027FD8519C58F860007CA9B /* PBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
 		C027FDA519C591240007CA9B /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
-		C0380CAC1CA9105700CC712D /* DES3Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
-		C0380CAD1CA9105800CC712D /* DES3Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
-		C0380CAF1CA9105800CC712D /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
-		C0380CB01CA9105800CC712D /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
-		C0380CB11CA9105800CC712D /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
 		C048B01D19C5932E00F19CFB /* PHong.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHong.h; sourceTree = "<group>"; };
 		C048B02B19C596E000F19CFB /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C0554FBD19C36C33004B589F /* PTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -292,16 +282,6 @@
 			name = "设备信息";
 			sourceTree = "<group>";
 		};
-		C0380CAE1CA9105800CC712D /* GTMBase64 */ = {
-			isa = PBXGroup;
-			children = (
-				C0380CAF1CA9105800CC712D /* LGTMBase64.h */,
-				C0380CB01CA9105800CC712D /* LGTMBase64.m */,
-				C0380CB11CA9105800CC712D /* LGTMDefines.h */,
-			);
-			path = GTMBase64;
-			sourceTree = "<group>";
-		};
 		C048B01C19C5931300F19CFB /* 宏定义 */ = {
 			isa = PBXGroup;
 			children = (
@@ -339,9 +319,6 @@
 		C0554FBE19C36C33004B589F /* PTools */ = {
 			isa = PBXGroup;
 			children = (
-				C0380CAC1CA9105700CC712D /* DES3Util.h */,
-				C0380CAD1CA9105800CC712D /* DES3Util.m */,
-				C0380CAE1CA9105800CC712D /* GTMBase64 */,
 				DB82CEBF1B01E1080045DE83 /* 运营商获取 */,
 				C0833FF61AF6883300A4E289 /* PUtils */,
 				C08024B41AF3061E00398361 /* 仿网易ui */,
@@ -691,9 +668,6 @@
 				C08024861AF2B1B400398361 /* BBLaunchAdMonitor.h in Headers */,
 				C080248D1AF2B2D300398361 /* JMHoledView.h in Headers */,
 				C08024B71AF3061E00398361 /* QCSlideSwitchView.h in Headers */,
-				C0380CB21CA9105800CC712D /* DES3Util.h in Headers */,
-				C0380CB61CA9105800CC712D /* LGTMDefines.h in Headers */,
-				C0380CB41CA9105800CC712D /* LGTMBase64.h in Headers */,
 				DB82CEC21B01E1080045DE83 /* PCarrie.h in Headers */,
 				C0833FF91AF6883300A4E289 /* Utils.h in Headers */,
 				CCF2A1C11A50ECF90088BBE6 /* HPTextViewInternal.h in Headers */,
@@ -794,7 +768,6 @@
 				CC7E8AD819C680C300323099 /* PooCodeView.m in Sources */,
 				C08024A91AF2FF9200398361 /* WPAttributedStyleAction.m in Sources */,
 				CC8B743D1A4A6FB900CAFDCB /* WMHub.m in Sources */,
-				C0380CB51CA9105800CC712D /* LGTMBase64.m in Sources */,
 				C080248E1AF2B2D300398361 /* JMHoledView.m in Sources */,
 				CC8B74411A4A6FB900CAFDCB /* WMHubViewController.m in Sources */,
 				DB4C181C1AF077DC0075B14D /* CDPMonitorKeyboard.m in Sources */,
@@ -817,7 +790,6 @@
 				C0554FDE19C36F57004B589F /* PooAlertView.m in Sources */,
 				DBE0CB771AE9D64A00027325 /* PooPhoneBlock.m in Sources */,
 				DB4C183C1AF1C06B0075B14D /* PooPassWordView.m in Sources */,
-				C0380CB31CA9105800CC712D /* DES3Util.m in Sources */,
 				DB4C18381AF1C06B0075B14D /* MJPasswordView.m in Sources */,
 				CCF2A1C01A50ECF90088BBE6 /* HPGrowingTextView.m in Sources */,
 				CC0F80071A4AA25000CF7AAF /* NSString+Regulars.m in Sources */,
