@@ -67,9 +67,9 @@ CGFloat buttonSpacerHeight = 0;
     delegate = _delegate;
 }
 
-- (void)pooAlertViewButtonTouchUpInside:(id)sender
+- (void)pooAlertViewButtonTouchUpInside:(UIButton *)sender
 {
-    [delegate pooAlertViewButtonTouchUpInside:self clickedButtonAtIndex:[(UIButton*)sender tag]];
+    [delegate pooAlertViewButtonTouchUpInside:self clickedButtonAtIndex:sender.tag];
 }
 
 - (void)pooAlertViewButtonTouchUpInside:(PooAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex

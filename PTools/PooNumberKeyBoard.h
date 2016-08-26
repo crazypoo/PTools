@@ -7,11 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+@class PooNumberKeyBoard;
 
 @protocol PooNumberKeyBoardDelegate <NSObject>
-- (void) numberKeyboardInput:(NSInteger) number;
-- (void) numberKeyboardBackspace;
-- (void) dismissKeyBoard;
+- (void)numberKeyboard:(PooNumberKeyBoard *)keyboard input:(NSString *)number;
+- (void)numberKeyboardBackspace:(PooNumberKeyBoard *)keyboard;
 @end
 
 @interface PooNumberKeyBoard : UIView

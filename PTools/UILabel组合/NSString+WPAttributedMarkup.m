@@ -121,7 +121,7 @@ NSString* kWPAttributedMarkupLinkName = @"WPAttributedMarkupLinkName";
 -(void)setLink:(NSURL*)url range:(NSRange)range onAttributedString:(NSMutableAttributedString*)as
 {
     [as removeAttribute:kWPAttributedMarkupLinkName range:range]; // Work around for Apple leak
-    if (link)
+    if (&link)
     {
         [as addAttribute:kWPAttributedMarkupLinkName value:[url absoluteString] range:range];
     }

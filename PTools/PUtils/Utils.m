@@ -49,4 +49,21 @@
     return [emailTest evaluateWithObject:email];
     
 }
+
++(NSString *)chineseTransform:(NSString *)chinese
+{
+    NSMutableString *pinyin = [chinese mutableCopy];
+    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformMandarinLatin, NO);
+    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformStripCombiningMarks, NO);
+    NSString *newStr = pinyin;
+    newStr = [newStr stringByReplacingOccurrencesOfString:@" " withString:@""];
+    return newStr.uppercaseString;
+}
+
++(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width
+{
+    NSDictionary *dic = @{NSFontAttributeName: [UIFont systemFontOfSize:fontToSize]};
+    CGSize size = [string boundingRectWithSize:CGSizeMake(width, heigh) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    return size;
+}
 @end

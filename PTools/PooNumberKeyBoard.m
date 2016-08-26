@@ -9,19 +9,19 @@
 #import "PooNumberKeyBoard.h"
 #define kLineWidth 1
 #define kNumFont [UIFont systemFontOfSize:27]
-#define DefaultFrame CGRectMake(0, 200, 320, 216)
+#define DefaultFrame CGRectMake(0, 200, [UIScreen mainScreen].bounds.size.width, 216)
+
 @implementation PooNumberKeyBoard
 
 +(instancetype)pooNumberKeyBoard{
     return [[PooNumberKeyBoard alloc] initWithFrame:DefaultFrame];
 }
 
-//TODO: 設置keyboard frame大小
 - (id)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        self.bounds = CGRectMake(0, 0, 320, 216);
+        self.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 216);
         for (int i=0; i<4; i++)
         {
             for (int j=0; j<3; j++)
@@ -31,22 +31,22 @@
             }
         }
         UIColor *color = [UIColor colorWithRed:188/255.0 green:192/255.0 blue:199/255.0 alpha:1];
-        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(105, 0, kLineWidth, 216)];
+        UIView *line1 = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width-2)/3, 0, kLineWidth, 216)];
         line1.backgroundColor = color;
         [self addSubview:line1];
-        UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(214, 0, kLineWidth, 216)];
+        UIView *line2 = [[UIView alloc] initWithFrame:CGRectMake(([UIScreen mainScreen].bounds.size.width-2)/3*2, 0, kLineWidth, 216)];
         line2.backgroundColor = color;
         [self addSubview:line2];
         for (int i=0; i<3; i++)
         {
-            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 54*(i+1), 320, kLineWidth)];
+            UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 54*(i+1), [UIScreen mainScreen].bounds.size.width, kLineWidth)];
             line.backgroundColor = color;
             [self addSubview:line];
         }
     }
     return self;
 }
-//TODO: 設置按鈕
+
 -(UIButton *)creatButtonWithX:(NSInteger) x Y:(NSInteger) y
 {
     UIButton *button;
@@ -56,17 +56,17 @@
     {
         case 0:
             frameX = 0.0;
-            frameW = 106.0;
+            frameW = ([UIScreen mainScreen].bounds.size.width-2)/3;
             break;
         case 1:
-            frameX = 105.0;
-            frameW = 110.0;
+            frameX = ([UIScreen mainScreen].bounds.size.width-2)/3;
+            frameW = ([UIScreen mainScreen].bounds.size.width-2)/3;
             break;
         case 2:
-            frameX = 214.0;
-            frameW = 106.0;
+            frameX = ([UIScreen mainScreen].bounds.size.width-2)/3*2;
+            frameW = ([UIScreen mainScreen].bounds.size.width-2)/3;
             break;
-            
+
         default:
             break;
     }
@@ -78,7 +78,7 @@
 
     UIColor *colorNormal = [UIColor colorWithRed:252/255.0 green:252/255.0 blue:252/255.0 alpha:1];
     UIColor *colorHightlighted = [UIColor colorWithRed:186.0/255 green:189.0/255 blue:194.0/255 alpha:1.0];
-    
+
     if (num == 10 || num == 12)
     {
         UIColor *colorTemp = colorNormal;
@@ -93,8 +93,8 @@
     UIImage *pressedColorImg = UIGraphicsGetImageFromCurrentImageContext();
     UIGraphicsEndImageContext();
     [button setImage:pressedColorImg forState:UIControlStateHighlighted];
-    
-    
+
+
     if (num<10)
     {
         UILabel *labelNum = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, frameW, 28)];
@@ -116,7 +116,7 @@
     else if (num == 10)
     {
         UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, frameW, 28)];
-        label.text = @"完成";
+        label.text = @".";
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
         [button addSubview:label];
@@ -132,26 +132,26 @@
     return button;
 }
 
-//TODO: 按鈕動作
 -(void)clickButton:(UIButton *)sender
 {
-    if (sender.tag == 10)
+    if(sender.tag == 12)
     {
-        [self.delegate dismissKeyBoard];
-        return;
-    }
-    else if(sender.tag == 12)
-    {
-        [self.delegate numberKeyboardBackspace];
+        [self.delegate numberKeyboardBackspace:self];
     }
     else
     {
-        NSInteger num = sender.tag;
+        NSString *num = [NSString stringWithFormat:@"%ld",(long)sender.tag];
         if (sender.tag == 11)
         {
-            num = 0;
+            num = @"0";
         }
-        [self.delegate numberKeyboardInput:num];
+        else if (sender.tag == 10)
+        {
+            num = @".";
+        }
+        [self.delegate numberKeyboard:self input:num];
     }
 }
+
 @end
+

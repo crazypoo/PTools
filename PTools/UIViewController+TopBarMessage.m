@@ -74,7 +74,11 @@ static NSMutableDictionary *__defaultTopMessageConfig = nil;
 
 - (void)layoutSubviews
 {
-    CGSize textSize = [self.label.text sizeWithFont:self.label.font constrainedToSize:CGSizeMake(CGRectGetWidth(self.bounds) * 0.9, 20.f) lineBreakMode:NSLineBreakByTruncatingTail];
+    NSLineBreakMode lineBreakMode = NSLineBreakByTruncatingTail;
+    NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
+    paragraphStyle.lineBreakMode = lineBreakMode;
+
+    CGSize textSize = [self.label.text boundingRectWithSize:CGSizeMake(CGRectGetWidth(self.bounds) * 0.9, 20.f) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:@{NSFontAttributeName:self.label.font,NSParagraphStyleAttributeName:paragraphStyle} context:nil].size;
     CGFloat betweenIconAndText  = 10.0f;
     CGFloat iconWidth = 20.0f;
     if (!self.iconIgv.image) {

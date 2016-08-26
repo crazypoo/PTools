@@ -126,7 +126,7 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     [dictForQuery setValue:(id)kSecClassGenericPassword forKey:(id)kSecClass];
     
     [dictForQuery setValue:[NSString stringWithUTF8String:kKeychainUDIDItemIdentifier]
-                    forKey:kSecAttrDescription];
+                    forKey:@"kSecAttrDescription"];
     
     NSData *keychainItemID = [NSData dataWithBytes:kKeychainUDIDItemIdentifier
                                             length:strlen(kKeychainUDIDItemIdentifier)];
@@ -146,11 +146,13 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
     
     OSStatus queryErr   = noErr;
-    NSData   *udidValue = nil;
+//    NSData   *udidValue = nil;
+    CFDataRef udidValue;
     NSString *udid      = nil;
     SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&udidValue);
     
-    NSMutableDictionary *dict = nil;
+//    NSMutableDictionary *dict = nil;
+    CFDictionaryRef dict;
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnAttributes];
     queryErr = SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&dict);
     
@@ -164,11 +166,12 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         NSLog(@"KeyChain Item: %@", udidValue);
         
         if (udidValue) {
-            udid = [NSString stringWithUTF8String:udidValue.bytes];
+            NSData *passDat = (__bridge_transfer NSData *)udidValue;
+            udid = [NSString stringWithUTF8String:passDat.bytes];
         }
     }
     
-    [dictForQuery release];
+//    [dictForQuery release];
     return udid;
 }
 
@@ -177,7 +180,7 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     NSMutableDictionary *dictForAdd = [[NSMutableDictionary alloc] init];
     
     [dictForAdd setValue:(id)kSecClassGenericPassword forKey:(id)kSecClass];
-    [dictForAdd setValue:[NSString stringWithUTF8String:kKeychainUDIDItemIdentifier] forKey:kSecAttrDescription];
+    [dictForAdd setValue:[NSString stringWithUTF8String:kKeychainUDIDItemIdentifier] forKey:@"kSecAttrDescription"];
     
     [dictForAdd setValue:@"UUID" forKey:(id)kSecAttrGeneric];
     
@@ -201,7 +204,7 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     OSStatus writeErr = noErr;
     if ([PooUDIDInfo getUDIDFromKeyChain]) {        // there is item in keychain
         [PooUDIDInfo updateUDIDInKeyChain:udid];
-        [dictForAdd release];
+//        [dictForAdd release];
         return YES;
     }
     else {          // add item to keychain
@@ -209,16 +212,16 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         if (writeErr != errSecSuccess) {
             NSLog(@"Add KeyChain Item Error!!! Error Code:%d", (int)writeErr);
             
-            [dictForAdd release];
+//            [dictForAdd release];
             return NO;
         }
         else {
             NSLog(@"Add KeyChain Item Success!!!");
-            [dictForAdd release];
+//            [dictForAdd release];
             return YES;
         }
     }
-    [dictForAdd release];
+//    [dictForAdd release];
     return NO;
 }
 
@@ -235,14 +238,14 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     deleteErr = SecItemDelete((CFDictionaryRef)dictToDelete);
     if (deleteErr != errSecSuccess) {
         NSLog(@"delete UUID from KeyChain Error!!! Error code:%d", (int)deleteErr);
-        [dictToDelete release];
+//        [dictToDelete release];
         return NO;
     }
     else {
         NSLog(@"delete success!!!");
     }
     
-    [dictToDelete release];
+//    [dictToDelete release];
     return YES;
 }
 
@@ -260,12 +263,13 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     [dictForQuery setValue:(id)kSecMatchLimitOne forKey:(id)kSecMatchLimit];
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnAttributes];
     
-    NSDictionary *queryResult = nil;
+//    NSDictionary *queryResult = nil;
+    CFDictionaryRef queryResult;
     SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&queryResult);
     if (queryResult) {
         
         NSMutableDictionary *dictForUpdate = [[NSMutableDictionary alloc] init];
-        [dictForUpdate setValue:[NSString stringWithUTF8String:kKeychainUDIDItemIdentifier] forKey:kSecAttrDescription];
+        [dictForUpdate setValue:[NSString stringWithUTF8String:kKeychainUDIDItemIdentifier] forKey:@"kSecAttrDescription"];
         [dictForUpdate setValue:keychainItemID forKey:(id)kSecAttrGeneric];
         
         const char *udidStr = [newUDID UTF8String];
@@ -274,7 +278,7 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         
         OSStatus updateErr = noErr;
         
-        NSMutableDictionary *updateItem = [NSMutableDictionary dictionaryWithDictionary:queryResult];
+        NSMutableDictionary *updateItem = [NSMutableDictionary dictionaryWithDictionary:(__bridge NSDictionary * _Nonnull)(queryResult)];
 
         [updateItem setObject:(id)kSecClassGenericPassword forKey:(id)kSecClass];
         
@@ -282,19 +286,19 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         if (updateErr != errSecSuccess) {
             NSLog(@"Update KeyChain Item Error!!! Error Code:%d", (int)updateErr);
             
-            [dictForQuery release];
-            [dictForUpdate release];
+//            [dictForQuery release];
+//            [dictForUpdate release];
             return NO;
         }
         else {
             NSLog(@"Update KeyChain Item Success!!!");
-            [dictForQuery release];
-            [dictForUpdate release];
+//            [dictForQuery release];
+//            [dictForUpdate release];
             return YES;
         }
     }
     
-    [dictForQuery release];
+//    [dictForQuery release];
     return NO;
 }
 

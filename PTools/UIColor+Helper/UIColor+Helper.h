@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "UIColor+Colours.h"
-#import "UIColor+Random.h"
 
 @interface UIColor (Helpers)
 

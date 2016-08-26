@@ -24,7 +24,7 @@
 - (void)show;
 - (void)close;
 - (void)setButtonTitles: (NSMutableArray *)buttonTitles;
-- (void)pooAlertViewButtonTouchUpInside:(id)sender;
+- (void)pooAlertViewButtonTouchUpInside:(UIButton *)sender;
 - (void)pooAlertViewMoveOffset;
 - (void)pooAlertViewResetOffset;
 - (void)pooAlertViewShake;
@@ -33,6 +33,6 @@
 
 @protocol PooAlertViewDelegate <NSObject>
 
--(void)pooAlertViewButtonTouchUpInside:(PooAlertView*)alertView clickedButtonAtIndex:(int)index;
+-(void)pooAlertViewButtonTouchUpInside:(PooAlertView*)alertView clickedButtonAtIndex:(NSInteger)index;
 
 @end
