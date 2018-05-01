@@ -11,7 +11,7 @@
 
 #import "WMHubWindow.h"
 #import "WMHubViewController.h"
-#import <UIColor+Helper.h>
+#import "UIColor+Helper.h"
 
 @implementation WMHub
 
