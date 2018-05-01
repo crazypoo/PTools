@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'PooTools_Example' do
+  pod 'PooTools', :path => '../'
+
+  target 'PooTools_Tests' do
+    inherit! :search_paths
+
+    pod 'FBSnapshotTestCase'
+  end
+end

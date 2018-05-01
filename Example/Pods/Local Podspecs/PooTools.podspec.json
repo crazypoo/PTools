@@ -1,0 +1,22 @@
+{
+  "name": "PooTools",
+  "version": "0.1.0",
+  "summary": "A short description of PooTools.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/crazypoo/PooTools",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "crazypoo": "273277355@qq.com"
+  },
+  "source": {
+    "git": "https://github.com/crazypoo/PooTools.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "PooTools/Classes/**/*"
+}

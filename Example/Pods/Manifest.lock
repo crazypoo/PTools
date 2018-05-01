@@ -1,0 +1,23 @@
+PODS:
+  - FBSnapshotTestCase (2.1.4):
+    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
+  - FBSnapshotTestCase/Core (2.1.4)
+  - FBSnapshotTestCase/SwiftSupport (2.1.4):
+    - FBSnapshotTestCase/Core
+  - PooTools (0.1.0)
+
+DEPENDENCIES:
+  - FBSnapshotTestCase
+  - PooTools (from `../`)
+
+EXTERNAL SOURCES:
+  PooTools:
+    :path: ../
+
+SPEC CHECKSUMS:
+  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
+  PooTools: aed6d6daf47b517e0b5f2bd314c4eca85b6d8a9a
+
+PODFILE CHECKSUM: 0272c5a9a5e51d1d0de2fbfbd9ffb1177712d0e6
+
+COCOAPODS: 1.4.0
