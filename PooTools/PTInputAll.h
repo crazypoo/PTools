@@ -35,7 +35,6 @@
 
 
 //工具类
-#import "AHReach.h"//网络监测
 #import "DES3Util.h"//DES加密
 #import "GPKeyChain.h"//KeyChain
 #import "PBugReporter.h"//BUG反馈
