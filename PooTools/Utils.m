@@ -327,4 +327,27 @@
     }
     return phone;
 }
+
++(NSArray *)arraySortASC:(NSArray *)arr
+{
+    NSArray *result = [arr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        
+        //        NSLog(@"%@~%@",obj1,obj2); //3~4 2~1 3~1 3~2
+        
+        return [obj1 compare:obj2]; //升序
+        
+    }];
+    return result;
+}
+
++(NSArray *)arraySortINV:(NSArray *)arr
+{
+    NSArray *result = [arr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
+        
+        
+        return [obj2 compare:obj1]; //倒序
+        
+    }];
+    return result;
+}
 @end

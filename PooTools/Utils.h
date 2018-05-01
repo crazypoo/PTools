@@ -51,4 +51,8 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 + (NSArray *)stringToJSON:(NSString *)jsonStr;
 
 +(NSString*)shoujibaomi:(NSString*)phone;
+
++(NSArray *)arraySortASC:(NSArray *)arr;
++(NSArray *)arraySortINV:(NSArray *)arr;
+
 @end
