@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
 s.name        = 'PTools'
-s.version     = '1.1.5'
+s.version     = '1.1.6'
 s.authors     = { '邓杰豪' => '273277355@qq.com' }
 s.homepage    = 'https://github.com/crazypoo/PTools'
 s.summary     = 'Tools.'
