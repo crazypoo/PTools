@@ -10,24 +10,27 @@
 #import "UIView+ModifyFrame.h"
 
 @interface PooAlertView()<PooAlertViewDelegate>
-
+{
+    UIView *parentView;
+    UIView *containerView;
+}
 @end
 
 static const int DefaultOffset = 60;
 static const float AnimationTime = 0.3f;
 @implementation PooAlertView
 
-@synthesize parentView, containerView, dialogView, buttonView;
+@synthesize dialogView,buttonTitleColorNormal,buttonTitleColorSelected;
 @synthesize delegate;
 @synthesize buttonTitles;
 @synthesize closeButton;
 
-CGFloat static defaultButtonHeight = 50;
+CGFloat static defaultButtonHeight = 44;
 CGFloat static defaultButtonSpacerHeight = 1;
 CGFloat static cornerRadius = 7;
 
-CGFloat buttonHeight = 0;
-CGFloat buttonSpacerHeight = 0;
+CGFloat pButtonHeight = 0;
+CGFloat pButtonSpacerHeight = 0;
 
 - (id)initWithParentView: (UIView *)_parentView
 {
@@ -36,6 +39,9 @@ CGFloat buttonSpacerHeight = 0;
         parentView = _parentView;
         delegate = self;
         buttonTitles = [NSMutableArray arrayWithObject:@"取消"];
+        buttonTitleColorNormal = [NSMutableArray arrayWithObject:[UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f]];
+        buttonTitleColorSelected = [NSMutableArray arrayWithObject:[UIColor colorWithRed:0.2f green:0.2f blue:0.2f alpha:0.5f]];
+        self.containerViewHeight = 150;
     }
     return self;
 }
@@ -53,12 +59,12 @@ CGFloat buttonSpacerHeight = 0;
     [parentView addSubview:self];
     
     [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionCurveEaseInOut
-					 animations:^{
-						 self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
+                     animations:^{
+                         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
                          dialogView.layer.opacity = 1.0f;
                          dialogView.layer.transform = CATransform3DMakeScale(1, 1, 1);
-					 }
-					 completion:NULL
+                     }
+                     completion:NULL
      ];
 }
 
@@ -84,18 +90,18 @@ CGFloat buttonSpacerHeight = 0;
     dialogView.layer.opacity = 1.0f;
     
     [UIView animateWithDuration:0.2f delay:0.0 options:UIViewAnimationOptionTransitionNone
-					 animations:^{
-						 self.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
+                     animations:^{
+                         self.backgroundColor = [UIColor colorWithRed:0.0f green:0.0f blue:0.0f alpha:0.0f];
                          dialogView.layer.transform = CATransform3DMakeScale(0.6f, 0.6f, 1.0);
                          dialogView.layer.opacity = 0.0f;
-					 }
-					 completion:^(BOOL finished) {
+                     }
+                     completion:^(BOOL finished) {
                          for (UIView *v in [self subviews]) {
                              [v removeFromSuperview];
                          }
                          [self removeFromSuperview];
-					 }
-	 ];
+                     }
+     ];
 }
 
 - (void)setSubView: (UIView *)subView
@@ -106,19 +112,19 @@ CGFloat buttonSpacerHeight = 0;
 - (UIView *)createContainerView
 {
     if ([buttonTitles count] > 0) {
-        buttonHeight = defaultButtonHeight;
-        buttonSpacerHeight = defaultButtonSpacerHeight;
+        pButtonHeight = defaultButtonHeight;
+        pButtonSpacerHeight = defaultButtonSpacerHeight;
     } else {
-        buttonHeight = 0;
-        buttonSpacerHeight = 0;
+        pButtonHeight = 0;
+        pButtonSpacerHeight = 0;
     }
     
     if (containerView == NULL) {
-        containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, 150)];
+        containerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 300, self.containerViewHeight)];
     }
     
     CGFloat dialogWidth = containerView.frame.size.width;
-    CGFloat dialogHeight = containerView.frame.size.height + buttonHeight + buttonSpacerHeight;
+    CGFloat dialogHeight = containerView.frame.size.height + pButtonHeight + pButtonSpacerHeight;
     
     CGFloat screenWidth = [UIScreen mainScreen].bounds.size.width;
     CGFloat screenHeight = [UIScreen mainScreen].bounds.size.height;
@@ -152,7 +158,7 @@ CGFloat buttonSpacerHeight = 0;
     dialogContainer.layer.shadowOpacity = 0.1f;
     dialogContainer.layer.shadowOffset = CGSizeMake(0 - (cornerRadius+5)/2, 0 - (cornerRadius+5)/2);
     
-    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, dialogContainer.bounds.size.height - buttonHeight - buttonSpacerHeight, dialogContainer.bounds.size.width, buttonSpacerHeight)];
+    UIView *lineView = [[UIView alloc] initWithFrame:CGRectMake(0, dialogContainer.bounds.size.height - pButtonHeight - pButtonSpacerHeight, dialogContainer.bounds.size.width, pButtonSpacerHeight)];
     lineView.backgroundColor = [UIColor colorWithRed:198.0/255.0 green:198.0/255.0 blue:198.0/255.0 alpha:1.0f];
     [dialogContainer addSubview:lineView];
     
@@ -171,12 +177,12 @@ CGFloat buttonSpacerHeight = 0;
         
         closeButton = [UIButton buttonWithType:UIButtonTypeCustom];
         
-        [closeButton setFrame:CGRectMake(i * buttonWidth, container.bounds.size.height - buttonHeight, buttonWidth, buttonHeight)];
+        [closeButton setFrame:CGRectMake(i * buttonWidth, container.bounds.size.height - pButtonHeight, buttonWidth, pButtonHeight)];
         [closeButton setTag:i];
         [closeButton addTarget:self action:@selector(pooAlertViewButtonTouchUpInside:) forControlEvents:UIControlEventTouchUpInside];
         [closeButton setTitle:[buttonTitles objectAtIndex:i] forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor colorWithRed:0.0f green:0.5f blue:1.0f alpha:1.0f] forState:UIControlStateNormal];
-        [closeButton setTitleColor:[UIColor colorWithRed:0.2f green:0.2f blue:0.2f alpha:0.5f] forState:UIControlStateHighlighted];
+        [closeButton setTitleColor:buttonTitleColorNormal[i] forState:UIControlStateNormal];
+        [closeButton setTitleColor:buttonTitleColorSelected[i] forState:UIControlStateHighlighted];
         [closeButton.titleLabel setFont:[UIFont boldSystemFontOfSize:16.0f]];
         [closeButton.layer setCornerRadius:cornerRadius];
         

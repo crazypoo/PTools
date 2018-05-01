@@ -146,12 +146,10 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnData];
     
     OSStatus queryErr   = noErr;
-//    NSData   *udidValue = nil;
     CFDataRef udidValue;
     NSString *udid      = nil;
     SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&udidValue);
     
-//    NSMutableDictionary *dict = nil;
     CFDictionaryRef dict;
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnAttributes];
     queryErr = SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&dict);
@@ -171,7 +169,6 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         }
     }
     
-//    [dictForQuery release];
     return udid;
 }
 
@@ -204,7 +201,6 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     OSStatus writeErr = noErr;
     if ([PooUDIDInfo getUDIDFromKeyChain]) {        // there is item in keychain
         [PooUDIDInfo updateUDIDInKeyChain:udid];
-//        [dictForAdd release];
         return YES;
     }
     else {          // add item to keychain
@@ -212,16 +208,13 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         if (writeErr != errSecSuccess) {
             NSLog(@"Add KeyChain Item Error!!! Error Code:%d", (int)writeErr);
             
-//            [dictForAdd release];
             return NO;
         }
         else {
             NSLog(@"Add KeyChain Item Success!!!");
-//            [dictForAdd release];
             return YES;
         }
     }
-//    [dictForAdd release];
     return NO;
 }
 
@@ -238,14 +231,12 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     deleteErr = SecItemDelete((CFDictionaryRef)dictToDelete);
     if (deleteErr != errSecSuccess) {
         NSLog(@"delete UUID from KeyChain Error!!! Error code:%d", (int)deleteErr);
-//        [dictToDelete release];
         return NO;
     }
     else {
         NSLog(@"delete success!!!");
     }
     
-//    [dictToDelete release];
     return YES;
 }
 
@@ -263,7 +254,6 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
     [dictForQuery setValue:(id)kSecMatchLimitOne forKey:(id)kSecMatchLimit];
     [dictForQuery setValue:(id)kCFBooleanTrue forKey:(id)kSecReturnAttributes];
     
-//    NSDictionary *queryResult = nil;
     CFDictionaryRef queryResult;
     SecItemCopyMatching((CFDictionaryRef)dictForQuery, (CFTypeRef*)&queryResult);
     if (queryResult) {
@@ -286,19 +276,14 @@ static const char kKeyChainUDIDAccessGroup[] = "com.company.app.password";
         if (updateErr != errSecSuccess) {
             NSLog(@"Update KeyChain Item Error!!! Error Code:%d", (int)updateErr);
             
-//            [dictForQuery release];
-//            [dictForUpdate release];
             return NO;
         }
         else {
             NSLog(@"Update KeyChain Item Success!!!");
-//            [dictForQuery release];
-//            [dictForUpdate release];
             return YES;
         }
     }
     
-//    [dictForQuery release];
     return NO;
 }
 

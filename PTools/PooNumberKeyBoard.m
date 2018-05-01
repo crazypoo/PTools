@@ -13,20 +13,22 @@
 
 @implementation PooNumberKeyBoard
 
-+(instancetype)pooNumberKeyBoard{
-    return [[PooNumberKeyBoard alloc] initWithFrame:DefaultFrame];
++(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint
+{
+    return [[PooNumberKeyBoard alloc] initWithFrame:DefaultFrame withDog:dogpoint];
 }
 
-- (id)initWithFrame:(CGRect)frame
+- (id)initWithFrame:(CGRect)frame withDog:(BOOL)dog
 {
     self = [super initWithFrame:frame];
     if (self) {
+        self.haveDog = dog;
         self.bounds = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, 216);
         for (int i=0; i<4; i++)
         {
             for (int j=0; j<3; j++)
             {
-                UIButton *button = [self creatButtonWithX:i Y:j];
+                UIButton *button = [self creatButtonWithX:i Y:j withDog:dog];
                 [self addSubview:button];
             }
         }
@@ -47,7 +49,7 @@
     return self;
 }
 
--(UIButton *)creatButtonWithX:(NSInteger) x Y:(NSInteger) y
+-(UIButton *)creatButtonWithX:(NSInteger) x Y:(NSInteger) y withDog:(BOOL)dog
 {
     UIButton *button;
     CGFloat frameX = 0.0;
@@ -115,11 +117,13 @@
     }
     else if (num == 10)
     {
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, frameW, 28)];
-        label.text = @".";
-        label.textColor = [UIColor blackColor];
-        label.textAlignment = NSTextAlignmentCenter;
-        [button addSubview:label];
+        if (dog) {
+            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 15, frameW, 28)];
+            label.text = @".";
+            label.textColor = [UIColor blackColor];
+            label.textAlignment = NSTextAlignmentCenter;
+            [button addSubview:label];
+        }
     }
     else
     {
@@ -147,9 +151,16 @@
         }
         else if (sender.tag == 10)
         {
-            num = @".";
+            if (self.haveDog) {
+                num = @".";
+            }
+            else
+            {
+                num = @"";
+            }
         }
         [self.delegate numberKeyboard:self input:num];
+
     }
 }
 
