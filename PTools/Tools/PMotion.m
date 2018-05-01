@@ -8,7 +8,7 @@
 
 #import "PMotion.h"
 #import <CoreMotion/CoreMotion.h>
-#import <PTools/Utils.h>
+#import "Utils.h"
 
 static PMotion *pmotion = nil;
 
