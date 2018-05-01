@@ -1064,7 +1064,7 @@
 				CC1254C72098283B00E31A38 /* WPTappableLabel.m */,
 			);
 			name = Classes;
-			path = PooTools/Classes;
+			path = Example/PooTools/Classes;
 			sourceTree = "<group>";
 		};
 		F35791481CAFDD8E7715AE1B44687328 /* Core */ = {
