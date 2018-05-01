@@ -104,130 +104,130 @@
 		B9CEF7D6C5E08AB80E58DABC75D882BC /* UIImage+Diff.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "UIImage+Diff.m"; path = "FBSnapshotTestCase/Categories/UIImage+Diff.m"; sourceTree = "<group>"; };
 		C1F7783EBC762D06AE332A6C8F54A8CA /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6E88A450A84E3957158B3B3459740AA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
-		CC12515220981AA100E31A38 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
-		CC12515320981AA100E31A38 /* ALActionSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALActionSheetView.h; sourceTree = "<group>"; };
-		CC12515420981AA100E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
-		CC12515620981AA100E31A38 /* UIButton+Block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+Block.h"; sourceTree = "<group>"; };
-		CC12515720981AA100E31A38 /* UIButton+Block.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Block.m"; sourceTree = "<group>"; };
-		CC12515820981AA100E31A38 /* UIButton+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+EX.h"; sourceTree = "<group>"; };
-		CC12515920981AA100E31A38 /* UIButton+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EX.m"; sourceTree = "<group>"; };
-		CC12515A20981AA100E31A38 /* UIImage+Size.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Size.h"; sourceTree = "<group>"; };
-		CC12515B20981AA100E31A38 /* UIImage+Size.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Size.m"; sourceTree = "<group>"; };
-		CC12515C20981AA100E31A38 /* UINavigationItem+Excursion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+Excursion.h"; sourceTree = "<group>"; };
-		CC12515D20981AA100E31A38 /* UINavigationItem+Excursion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+Excursion.m"; sourceTree = "<group>"; };
-		CC12515E20981AA100E31A38 /* DES3Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
-		CC12515F20981AA100E31A38 /* DES3Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
-		CC12516020981AA100E31A38 /* GPKeyChain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPKeyChain.h; sourceTree = "<group>"; };
-		CC12516120981AA100E31A38 /* GPKeyChain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPKeyChain.m; sourceTree = "<group>"; };
-		CC12516320981AA100E31A38 /* LGTMBase64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
-		CC12516420981AA100E31A38 /* LGTMBase64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
-		CC12516520981AA100E31A38 /* LGTMDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
-		CC12516720981AA100E31A38 /* NSString+Encryption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encryption.h"; sourceTree = "<group>"; };
-		CC12516820981AA100E31A38 /* NSString+Encryption.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encryption.m"; sourceTree = "<group>"; };
-		CC12516920981AA100E31A38 /* NSString+Regulars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
-		CC12516A20981AA100E31A38 /* NSString+Regulars.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Regulars.m"; sourceTree = "<group>"; };
-		CC12516B20981AA100E31A38 /* MethodSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
-		CC12516C20981AA100E31A38 /* MethodSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
-		CC12516D20981AA100E31A38 /* PBugReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
-		CC12516E20981AA100E31A38 /* PBugReporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
-		CC12516F20981AA100E31A38 /* PGifHud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
-		CC12517020981AA100E31A38 /* PGifHud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
-		CC12517120981AA100E31A38 /* PHealthKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHealthKit.h; sourceTree = "<group>"; };
-		CC12517220981AA100E31A38 /* PHealthKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHealthKit.m; sourceTree = "<group>"; };
-		CC12517320981AA100E31A38 /* PMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
-		CC12517420981AA100E31A38 /* PMotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMotion.h; sourceTree = "<group>"; };
-		CC12517520981AA100E31A38 /* PMotion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
-		CC12517620981AA100E31A38 /* PooAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooAlertView.h; sourceTree = "<group>"; };
-		CC12517720981AA100E31A38 /* PooAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooAlertView.m; sourceTree = "<group>"; };
-		CC12517820981AA100E31A38 /* PooCodeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooCodeView.h; sourceTree = "<group>"; };
-		CC12517920981AA100E31A38 /* PooCodeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooCodeView.m; sourceTree = "<group>"; };
-		CC12517A20981AA100E31A38 /* PooLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
-		CC12517B20981AA100E31A38 /* PooLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
-		CC12517C20981AA100E31A38 /* PooNumberKeyBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooNumberKeyBoard.h; sourceTree = "<group>"; };
-		CC12517D20981AA100E31A38 /* PooNumberKeyBoard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooNumberKeyBoard.m; sourceTree = "<group>"; };
-		CC12517E20981AA100E31A38 /* PooSegView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
-		CC12517F20981AA100E31A38 /* PooSegView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
-		CC12518020981AA100E31A38 /* PooTagsLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooTagsLabel.h; sourceTree = "<group>"; };
-		CC12518120981AA100E31A38 /* PooTagsLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooTagsLabel.m; sourceTree = "<group>"; };
-		CC12518220981AA100E31A38 /* PooUDIDInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
-		CC12518320981AA100E31A38 /* PooUDIDInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
-		CC12518420981AA100E31A38 /* PSpeech.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PSpeech.h; sourceTree = "<group>"; };
-		CC12518520981AA100E31A38 /* PSpeech.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PSpeech.m; sourceTree = "<group>"; };
-		CC12518620981AA100E31A38 /* PStarRateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PStarRateView.h; sourceTree = "<group>"; };
-		CC12518720981AA100E31A38 /* PStarRateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PStarRateView.m; sourceTree = "<group>"; };
-		CC12518820981AA100E31A38 /* PTInputAll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
-		CC12518920981AA100E31A38 /* PTouchID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTouchID.h; sourceTree = "<group>"; };
-		CC12518A20981AA100E31A38 /* PTouchID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTouchID.m; sourceTree = "<group>"; };
-		CC12518C20981AA100E31A38 /* NSURLResponse+Help.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Help.h"; sourceTree = "<group>"; };
-		CC12518D20981AA100E31A38 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
-		CC12518E20981AA100E31A38 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		CC12518F20981AA100E31A38 /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		CC12519020981AA100E31A38 /* RCDraggableButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCDraggableButton.h; sourceTree = "<group>"; };
-		CC12519120981AA100E31A38 /* RCDraggableButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCDraggableButton.m; sourceTree = "<group>"; };
-		CC12519320981AA100E31A38 /* UIColor+Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colours.h"; sourceTree = "<group>"; };
-		CC12519420981AA100E31A38 /* UIColor+Colours.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
-		CC12519520981AA100E31A38 /* UIColor+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
-		CC12519620981AA100E31A38 /* UIColor+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
-		CC12519720981AA100E31A38 /* UIColor+Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Random.h"; sourceTree = "<group>"; };
-		CC12519820981AA100E31A38 /* UIColor+Random.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Random.m"; sourceTree = "<group>"; };
-		CC12519A20981AA100E31A38 /* CustomTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
-		CC12519B20981AA100E31A38 /* CustomTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
-		CC12519C20981AA100E31A38 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
-		CC12519D20981AA100E31A38 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
-		CC12519E20981AA100E31A38 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
-		CC12519F20981AA100E31A38 /* NSString+WPAttributedMarkup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+WPAttributedMarkup.m"; sourceTree = "<group>"; };
-		CC1251A020981AA100E31A38 /* PLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
-		CC1251A120981AA100E31A38 /* PLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
-		CC1251A220981AA100E31A38 /* PooSearchBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSearchBar.h; sourceTree = "<group>"; };
-		CC1251A320981AA100E31A38 /* PooSearchBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSearchBar.m; sourceTree = "<group>"; };
-		CC1251A420981AA100E31A38 /* PooTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooTextView.h; sourceTree = "<group>"; };
-		CC1251A520981AA100E31A38 /* PooTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooTextView.m; sourceTree = "<group>"; };
-		CC1251A620981AA100E31A38 /* PTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTextField.h; sourceTree = "<group>"; };
-		CC1251A720981AA100E31A38 /* PTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTextField.m; sourceTree = "<group>"; };
-		CC1251A820981AA100E31A38 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
-		CC1251A920981AA100E31A38 /* UILabel+FlickerNumber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FlickerNumber.m"; sourceTree = "<group>"; };
-		CC1251AA20981AA100E31A38 /* WPAttributedStyleAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPAttributedStyleAction.h; sourceTree = "<group>"; };
-		CC1251AB20981AA100E31A38 /* WPAttributedStyleAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPAttributedStyleAction.m; sourceTree = "<group>"; };
-		CC1251AC20981AA100E31A38 /* WPHotspotLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPHotspotLabel.h; sourceTree = "<group>"; };
-		CC1251AD20981AA100E31A38 /* WPHotspotLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPHotspotLabel.m; sourceTree = "<group>"; };
-		CC1251AE20981AA100E31A38 /* WPTappableLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPTappableLabel.h; sourceTree = "<group>"; };
-		CC1251AF20981AA100E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
-		CC1251B020981AA100E31A38 /* UIView+ModifyFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ModifyFrame.h"; sourceTree = "<group>"; };
-		CC1251B120981AA100E31A38 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
-		CC1251B220981AA100E31A38 /* UIViewController+TopBarMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TopBarMessage.h"; sourceTree = "<group>"; };
-		CC1251B320981AA100E31A38 /* UIViewController+TopBarMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TopBarMessage.m"; sourceTree = "<group>"; };
-		CC1251B620981AA100E31A38 /* WMHub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHub.h; sourceTree = "<group>"; };
-		CC1251B720981AA100E31A38 /* WMHub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHub.m; sourceTree = "<group>"; };
-		CC1251B820981AA100E31A38 /* WMHubView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubView.h; sourceTree = "<group>"; };
-		CC1251B920981AA100E31A38 /* WMHubView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubView.m; sourceTree = "<group>"; };
-		CC1251BA20981AA100E31A38 /* WMHubViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubViewController.h; sourceTree = "<group>"; };
-		CC1251BB20981AA100E31A38 /* WMHubViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubViewController.m; sourceTree = "<group>"; };
-		CC1251BC20981AA100E31A38 /* WMHubWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubWindow.h; sourceTree = "<group>"; };
-		CC1251BD20981AA100E31A38 /* WMHubWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubWindow.m; sourceTree = "<group>"; };
-		CC1251BF20981AA100E31A38 /* PLaunchAdMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLaunchAdMonitor.h; sourceTree = "<group>"; };
-		CC1251C020981AA100E31A38 /* PLaunchAdMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLaunchAdMonitor.m; sourceTree = "<group>"; };
-		CC1251C220981AA100E31A38 /* PooPhoneBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooPhoneBlock.h; sourceTree = "<group>"; };
-		CC1251C320981AA100E31A38 /* PooPhoneBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooPhoneBlock.m; sourceTree = "<group>"; };
-		CC1251C520981AA100E31A38 /* HPGrowingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
-		CC1251C620981AA100E31A38 /* HPGrowingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
-		CC1251C720981AA100E31A38 /* HPTextViewInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
-		CC1251C820981AA100E31A38 /* HPTextViewInternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
-		CC1251CA20981AA100E31A38 /* PooActionOnCalendar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooActionOnCalendar.h; sourceTree = "<group>"; };
-		CC1251CB20981AA100E31A38 /* PooActionOnCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooActionOnCalendar.m; sourceTree = "<group>"; };
-		CC1251CD20981AA100E31A38 /* PooSystemInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSystemInfo.h; sourceTree = "<group>"; };
-		CC1251CE20981AA100E31A38 /* PooSystemInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSystemInfo.m; sourceTree = "<group>"; };
-		CC1251D020981AA100E31A38 /* AHReach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHReach.h; sourceTree = "<group>"; };
-		CC1251D120981AA100E31A38 /* AHReach.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHReach.m; sourceTree = "<group>"; };
-		CC1251D320981AA100E31A38 /* JMHoledView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMHoledView.h; sourceTree = "<group>"; };
-		CC1251D420981AA100E31A38 /* JMHoledView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JMHoledView.m; sourceTree = "<group>"; };
-		CC1251D620981AA100E31A38 /* PCarrie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCarrie.h; sourceTree = "<group>"; };
-		CC1251D720981AA100E31A38 /* PCarrie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCarrie.m; sourceTree = "<group>"; };
-		CC1251D920981AA100E31A38 /* SecurityStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecurityStrategy.h; sourceTree = "<group>"; };
-		CC1251DA20981AA100E31A38 /* SecurityStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
-		CC1251DB20981AA100E31A38 /* UIImage+BlurGlass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurGlass.h"; sourceTree = "<group>"; };
-		CC1251DC20981AA100E31A38 /* UIImage+BlurGlass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurGlass.m"; sourceTree = "<group>"; };
-		CC1251DE20981AA100E31A38 /* NSMutableArray+Shuffle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Shuffle.h"; sourceTree = "<group>"; };
-		CC1251DF20981AA100E31A38 /* NSMutableArray+Shuffle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffle.m"; sourceTree = "<group>"; };
+		CC1251E1209821E600E31A38 /* .gitkeep */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitkeep; sourceTree = "<group>"; };
+		CC1251E2209821E600E31A38 /* AHReach.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AHReach.h; sourceTree = "<group>"; };
+		CC1251E3209821E600E31A38 /* AHReach.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AHReach.m; sourceTree = "<group>"; };
+		CC1251E4209821E600E31A38 /* ALActionSheetView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ALActionSheetView.h; sourceTree = "<group>"; };
+		CC1251E5209821E600E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
+		CC1251E6209821E600E31A38 /* CustomTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
+		CC1251E7209821E600E31A38 /* CustomTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
+		CC1251E8209821E600E31A38 /* DES3Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
+		CC1251E9209821E600E31A38 /* DES3Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
+		CC1251EA209821E600E31A38 /* GPKeyChain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GPKeyChain.h; sourceTree = "<group>"; };
+		CC1251EB209821E600E31A38 /* GPKeyChain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GPKeyChain.m; sourceTree = "<group>"; };
+		CC1251EC209821E600E31A38 /* HPGrowingTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		CC1251ED209821E600E31A38 /* HPGrowingTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		CC1251EE209821E600E31A38 /* HPTextViewInternal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		CC1251EF209821E600E31A38 /* HPTextViewInternal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		CC1251F0209821E600E31A38 /* JMHoledView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JMHoledView.h; sourceTree = "<group>"; };
+		CC1251F1209821E600E31A38 /* JMHoledView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JMHoledView.m; sourceTree = "<group>"; };
+		CC1251F2209821E600E31A38 /* LGTMBase64.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
+		CC1251F3209821E600E31A38 /* LGTMBase64.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
+		CC1251F4209821E600E31A38 /* LGTMDefines.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
+		CC1251F5209821E600E31A38 /* MethodSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
+		CC1251F6209821E600E31A38 /* MethodSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
+		CC1251F7209821E600E31A38 /* NSMutableArray+Shuffle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Shuffle.h"; sourceTree = "<group>"; };
+		CC1251F8209821E600E31A38 /* NSMutableArray+Shuffle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffle.m"; sourceTree = "<group>"; };
+		CC1251F9209821E600E31A38 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
+		CC1251FA209821E600E31A38 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
+		CC1251FB209821E600E31A38 /* NSString+Encryption.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Encryption.h"; sourceTree = "<group>"; };
+		CC1251FC209821E600E31A38 /* NSString+Encryption.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encryption.m"; sourceTree = "<group>"; };
+		CC1251FD209821E600E31A38 /* NSString+Regulars.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
+		CC1251FE209821E600E31A38 /* NSString+Regulars.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Regulars.m"; sourceTree = "<group>"; };
+		CC1251FF209821E600E31A38 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
+		CC125200209821E600E31A38 /* NSString+WPAttributedMarkup.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+WPAttributedMarkup.m"; sourceTree = "<group>"; };
+		CC125201209821E600E31A38 /* NSURLResponse+Help.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Help.h"; sourceTree = "<group>"; };
+		CC125202209821E600E31A38 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
+		CC125203209821E600E31A38 /* PBugReporter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
+		CC125204209821E600E31A38 /* PBugReporter.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
+		CC125205209821E600E31A38 /* PCarrie.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCarrie.h; sourceTree = "<group>"; };
+		CC125206209821E600E31A38 /* PCarrie.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCarrie.m; sourceTree = "<group>"; };
+		CC125207209821E600E31A38 /* PGifHud.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
+		CC125208209821E600E31A38 /* PGifHud.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
+		CC125209209821E600E31A38 /* PHealthKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PHealthKit.h; sourceTree = "<group>"; };
+		CC12520A209821E600E31A38 /* PHealthKit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PHealthKit.m; sourceTree = "<group>"; };
+		CC12520B209821E600E31A38 /* PLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
+		CC12520C209821E600E31A38 /* PLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
+		CC12520D209821E600E31A38 /* PLaunchAdMonitor.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PLaunchAdMonitor.h; sourceTree = "<group>"; };
+		CC12520E209821E600E31A38 /* PLaunchAdMonitor.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PLaunchAdMonitor.m; sourceTree = "<group>"; };
+		CC12520F209821E600E31A38 /* PMacros.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
+		CC125210209821E600E31A38 /* PMotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PMotion.h; sourceTree = "<group>"; };
+		CC125211209821E600E31A38 /* PMotion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
+		CC125212209821E600E31A38 /* PooActionOnCalendar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooActionOnCalendar.h; sourceTree = "<group>"; };
+		CC125213209821E600E31A38 /* PooActionOnCalendar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooActionOnCalendar.m; sourceTree = "<group>"; };
+		CC125214209821E600E31A38 /* PooAlertView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooAlertView.h; sourceTree = "<group>"; };
+		CC125215209821E600E31A38 /* PooAlertView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooAlertView.m; sourceTree = "<group>"; };
+		CC125216209821E600E31A38 /* PooCodeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooCodeView.h; sourceTree = "<group>"; };
+		CC125217209821E600E31A38 /* PooCodeView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooCodeView.m; sourceTree = "<group>"; };
+		CC125218209821E600E31A38 /* PooLoadingView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
+		CC125219209821E600E31A38 /* PooLoadingView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
+		CC12521A209821E600E31A38 /* PooNumberKeyBoard.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooNumberKeyBoard.h; sourceTree = "<group>"; };
+		CC12521B209821E600E31A38 /* PooNumberKeyBoard.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooNumberKeyBoard.m; sourceTree = "<group>"; };
+		CC12521C209821E600E31A38 /* PooPhoneBlock.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooPhoneBlock.h; sourceTree = "<group>"; };
+		CC12521D209821E600E31A38 /* PooPhoneBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooPhoneBlock.m; sourceTree = "<group>"; };
+		CC12521E209821E600E31A38 /* PooSearchBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSearchBar.h; sourceTree = "<group>"; };
+		CC12521F209821E600E31A38 /* PooSearchBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSearchBar.m; sourceTree = "<group>"; };
+		CC125220209821E600E31A38 /* PooSegView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
+		CC125221209821E600E31A38 /* PooSegView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
+		CC125222209821E600E31A38 /* PooSystemInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooSystemInfo.h; sourceTree = "<group>"; };
+		CC125223209821E600E31A38 /* PooSystemInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooSystemInfo.m; sourceTree = "<group>"; };
+		CC125224209821E600E31A38 /* PooTagsLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooTagsLabel.h; sourceTree = "<group>"; };
+		CC125225209821E600E31A38 /* PooTagsLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooTagsLabel.m; sourceTree = "<group>"; };
+		CC125226209821E600E31A38 /* PooTextView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooTextView.h; sourceTree = "<group>"; };
+		CC125227209821E600E31A38 /* PooTextView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooTextView.m; sourceTree = "<group>"; };
+		CC125228209821E600E31A38 /* PooUDIDInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
+		CC125229209821E600E31A38 /* PooUDIDInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
+		CC12522A209821E600E31A38 /* PSpeech.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PSpeech.h; sourceTree = "<group>"; };
+		CC12522B209821E600E31A38 /* PSpeech.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PSpeech.m; sourceTree = "<group>"; };
+		CC12522C209821E600E31A38 /* PStarRateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PStarRateView.h; sourceTree = "<group>"; };
+		CC12522D209821E600E31A38 /* PStarRateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PStarRateView.m; sourceTree = "<group>"; };
+		CC12522E209821E600E31A38 /* PTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTextField.h; sourceTree = "<group>"; };
+		CC12522F209821E600E31A38 /* PTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTextField.m; sourceTree = "<group>"; };
+		CC125230209821E600E31A38 /* PTInputAll.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
+		CC125231209821E600E31A38 /* PTouchID.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTouchID.h; sourceTree = "<group>"; };
+		CC125232209821E600E31A38 /* PTouchID.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTouchID.m; sourceTree = "<group>"; };
+		CC125233209821E600E31A38 /* RCDraggableButton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RCDraggableButton.h; sourceTree = "<group>"; };
+		CC125234209821E600E31A38 /* RCDraggableButton.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = RCDraggableButton.m; sourceTree = "<group>"; };
+		CC125235209821E600E31A38 /* SecurityStrategy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SecurityStrategy.h; sourceTree = "<group>"; };
+		CC125236209821E600E31A38 /* SecurityStrategy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
+		CC125237209821E600E31A38 /* UIButton+Block.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+Block.h"; sourceTree = "<group>"; };
+		CC125238209821E600E31A38 /* UIButton+Block.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Block.m"; sourceTree = "<group>"; };
+		CC125239209821E600E31A38 /* UIButton+EX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIButton+EX.h"; sourceTree = "<group>"; };
+		CC12523A209821E600E31A38 /* UIButton+EX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EX.m"; sourceTree = "<group>"; };
+		CC12523B209821E600E31A38 /* UIColor+Colours.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colours.h"; sourceTree = "<group>"; };
+		CC12523C209821E600E31A38 /* UIColor+Colours.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
+		CC12523D209821E600E31A38 /* UIColor+Helper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
+		CC12523E209821E600E31A38 /* UIColor+Helper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
+		CC12523F209821E600E31A38 /* UIColor+Random.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Random.h"; sourceTree = "<group>"; };
+		CC125240209821E600E31A38 /* UIColor+Random.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Random.m"; sourceTree = "<group>"; };
+		CC125241209821E600E31A38 /* UIImage+BlurGlass.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurGlass.h"; sourceTree = "<group>"; };
+		CC125242209821E600E31A38 /* UIImage+BlurGlass.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurGlass.m"; sourceTree = "<group>"; };
+		CC125243209821E600E31A38 /* UIImage+Size.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+Size.h"; sourceTree = "<group>"; };
+		CC125244209821E600E31A38 /* UIImage+Size.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Size.m"; sourceTree = "<group>"; };
+		CC125245209821E600E31A38 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
+		CC125246209821E600E31A38 /* UILabel+FlickerNumber.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FlickerNumber.m"; sourceTree = "<group>"; };
+		CC125247209821E600E31A38 /* UINavigationItem+Excursion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationItem+Excursion.h"; sourceTree = "<group>"; };
+		CC125248209821E600E31A38 /* UINavigationItem+Excursion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UINavigationItem+Excursion.m"; sourceTree = "<group>"; };
+		CC125249209821E600E31A38 /* UIView+ModifyFrame.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ModifyFrame.h"; sourceTree = "<group>"; };
+		CC12524A209821E600E31A38 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
+		CC12524B209821E600E31A38 /* UIViewController+TopBarMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TopBarMessage.h"; sourceTree = "<group>"; };
+		CC12524C209821E600E31A38 /* UIViewController+TopBarMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TopBarMessage.m"; sourceTree = "<group>"; };
+		CC12524D209821E600E31A38 /* Utils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
+		CC12524E209821E600E31A38 /* Utils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
+		CC12524F209821E600E31A38 /* WMHub.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHub.h; sourceTree = "<group>"; };
+		CC125250209821E600E31A38 /* WMHub.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHub.m; sourceTree = "<group>"; };
+		CC125251209821E600E31A38 /* WMHubView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubView.h; sourceTree = "<group>"; };
+		CC125252209821E600E31A38 /* WMHubView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubView.m; sourceTree = "<group>"; };
+		CC125253209821E600E31A38 /* WMHubViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubViewController.h; sourceTree = "<group>"; };
+		CC125254209821E600E31A38 /* WMHubViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubViewController.m; sourceTree = "<group>"; };
+		CC125255209821E600E31A38 /* WMHubWindow.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WMHubWindow.h; sourceTree = "<group>"; };
+		CC125256209821E600E31A38 /* WMHubWindow.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WMHubWindow.m; sourceTree = "<group>"; };
+		CC125257209821E600E31A38 /* WPAttributedStyleAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPAttributedStyleAction.h; sourceTree = "<group>"; };
+		CC125258209821E600E31A38 /* WPAttributedStyleAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPAttributedStyleAction.m; sourceTree = "<group>"; };
+		CC125259209821E600E31A38 /* WPHotspotLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPHotspotLabel.h; sourceTree = "<group>"; };
+		CC12525A209821E600E31A38 /* WPHotspotLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPHotspotLabel.m; sourceTree = "<group>"; };
+		CC12525B209821E600E31A38 /* WPTappableLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WPTappableLabel.h; sourceTree = "<group>"; };
+		CC12525C209821E600E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
 		CC12BCFA3FC0B8C307F5B38C673EDD12 /* FBSnapshotTestCase-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "FBSnapshotTestCase-prefix.pch"; sourceTree = "<group>"; };
 		CC85EC9CC071F8CF485EE3473B6CF3B7 /* Pods-PooTools_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-PooTools_Example-frameworks.sh"; sourceTree = "<group>"; };
 		CF9E5DB05FF6D0D2C8FEBCFB4CED89AA /* Pods-PooTools_Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-PooTools_Example-acknowledgements.plist"; sourceTree = "<group>"; };
@@ -425,7 +425,7 @@
 		ADFA36568A8BF7A918D51B2FE07A70B3 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
-				CC12515120981AA100E31A38 /* Classes */,
+				CC1251E0209821E600E31A38 /* Classes */,
 				B7448DB127E37B210D787AAB3044A481 /* Pod */,
 				A4EDF397236B29EF326FDFBED83A6AD1 /* Support Files */,
 			);
@@ -443,280 +443,136 @@
 			name = Pod;
 			sourceTree = "<group>";
 		};
-		CC12515120981AA100E31A38 /* Classes */ = {
+		CC1251E0209821E600E31A38 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				CC12515220981AA100E31A38 /* .gitkeep */,
-				CC12515320981AA100E31A38 /* ALActionSheetView.h */,
-				CC12515420981AA100E31A38 /* ALActionSheetView.m */,
-				CC12515520981AA100E31A38 /* Category */,
-				CC12515E20981AA100E31A38 /* DES3Util.h */,
-				CC12515F20981AA100E31A38 /* DES3Util.m */,
-				CC12516020981AA100E31A38 /* GPKeyChain.h */,
-				CC12516120981AA100E31A38 /* GPKeyChain.m */,
-				CC12516220981AA100E31A38 /* GTMBase64 */,
-				CC12516620981AA100E31A38 /* MD5+正则表达式 */,
-				CC12516B20981AA100E31A38 /* MethodSwizzle.h */,
-				CC12516C20981AA100E31A38 /* MethodSwizzle.m */,
-				CC12516D20981AA100E31A38 /* PBugReporter.h */,
-				CC12516E20981AA100E31A38 /* PBugReporter.m */,
-				CC12516F20981AA100E31A38 /* PGifHud.h */,
-				CC12517020981AA100E31A38 /* PGifHud.m */,
-				CC12517120981AA100E31A38 /* PHealthKit.h */,
-				CC12517220981AA100E31A38 /* PHealthKit.m */,
-				CC12517320981AA100E31A38 /* PMacros.h */,
-				CC12517420981AA100E31A38 /* PMotion.h */,
-				CC12517520981AA100E31A38 /* PMotion.m */,
-				CC12517620981AA100E31A38 /* PooAlertView.h */,
-				CC12517720981AA100E31A38 /* PooAlertView.m */,
-				CC12517820981AA100E31A38 /* PooCodeView.h */,
-				CC12517920981AA100E31A38 /* PooCodeView.m */,
-				CC12517A20981AA100E31A38 /* PooLoadingView.h */,
-				CC12517B20981AA100E31A38 /* PooLoadingView.m */,
-				CC12517C20981AA100E31A38 /* PooNumberKeyBoard.h */,
-				CC12517D20981AA100E31A38 /* PooNumberKeyBoard.m */,
-				CC12517E20981AA100E31A38 /* PooSegView.h */,
-				CC12517F20981AA100E31A38 /* PooSegView.m */,
-				CC12518020981AA100E31A38 /* PooTagsLabel.h */,
-				CC12518120981AA100E31A38 /* PooTagsLabel.m */,
-				CC12518220981AA100E31A38 /* PooUDIDInfo.h */,
-				CC12518320981AA100E31A38 /* PooUDIDInfo.m */,
-				CC12518420981AA100E31A38 /* PSpeech.h */,
-				CC12518520981AA100E31A38 /* PSpeech.m */,
-				CC12518620981AA100E31A38 /* PStarRateView.h */,
-				CC12518720981AA100E31A38 /* PStarRateView.m */,
-				CC12518820981AA100E31A38 /* PTInputAll.h */,
-				CC12518920981AA100E31A38 /* PTouchID.h */,
-				CC12518A20981AA100E31A38 /* PTouchID.m */,
-				CC12518B20981AA100E31A38 /* PUtils */,
-				CC12519020981AA100E31A38 /* RCDraggableButton.h */,
-				CC12519120981AA100E31A38 /* RCDraggableButton.m */,
-				CC12519220981AA100E31A38 /* UIColor+Helper */,
-				CC12519920981AA100E31A38 /* UILabel组合 */,
-				CC1251B020981AA100E31A38 /* UIView+ModifyFrame.h */,
-				CC1251B120981AA100E31A38 /* UIView+ModifyFrame.m */,
-				CC1251B220981AA100E31A38 /* UIViewController+TopBarMessage.h */,
-				CC1251B320981AA100E31A38 /* UIViewController+TopBarMessage.m */,
-				CC1251B420981AA100E31A38 /* 仿支付宝手势解锁 */,
-				CC1251B520981AA100E31A38 /* 加载hub */,
-				CC1251BE20981AA100E31A38 /* 启动广告 */,
-				CC1251C120981AA100E31A38 /* 打电话 */,
-				CC1251C420981AA100E31A38 /* 文字输入框 */,
-				CC1251C920981AA100E31A38 /* 添加提醒到日历 */,
-				CC1251CC20981AA100E31A38 /* 硬件信息 */,
-				CC1251CF20981AA100E31A38 /* 网络检测 */,
-				CC1251D220981AA100E31A38 /* 自定义遮挡教程View */,
-				CC1251D520981AA100E31A38 /* 运营商获取 */,
-				CC1251D820981AA100E31A38 /* 重要信息模糊 */,
-				CC1251DD20981AA100E31A38 /* 随机数组 */,
+				CC1251E1209821E600E31A38 /* .gitkeep */,
+				CC1251E2209821E600E31A38 /* AHReach.h */,
+				CC1251E3209821E600E31A38 /* AHReach.m */,
+				CC1251E4209821E600E31A38 /* ALActionSheetView.h */,
+				CC1251E5209821E600E31A38 /* ALActionSheetView.m */,
+				CC1251E6209821E600E31A38 /* CustomTextField.h */,
+				CC1251E7209821E600E31A38 /* CustomTextField.m */,
+				CC1251E8209821E600E31A38 /* DES3Util.h */,
+				CC1251E9209821E600E31A38 /* DES3Util.m */,
+				CC1251EA209821E600E31A38 /* GPKeyChain.h */,
+				CC1251EB209821E600E31A38 /* GPKeyChain.m */,
+				CC1251EC209821E600E31A38 /* HPGrowingTextView.h */,
+				CC1251ED209821E600E31A38 /* HPGrowingTextView.m */,
+				CC1251EE209821E600E31A38 /* HPTextViewInternal.h */,
+				CC1251EF209821E600E31A38 /* HPTextViewInternal.m */,
+				CC1251F0209821E600E31A38 /* JMHoledView.h */,
+				CC1251F1209821E600E31A38 /* JMHoledView.m */,
+				CC1251F2209821E600E31A38 /* LGTMBase64.h */,
+				CC1251F3209821E600E31A38 /* LGTMBase64.m */,
+				CC1251F4209821E600E31A38 /* LGTMDefines.h */,
+				CC1251F5209821E600E31A38 /* MethodSwizzle.h */,
+				CC1251F6209821E600E31A38 /* MethodSwizzle.m */,
+				CC1251F7209821E600E31A38 /* NSMutableArray+Shuffle.h */,
+				CC1251F8209821E600E31A38 /* NSMutableArray+Shuffle.m */,
+				CC1251F9209821E600E31A38 /* NSMutableString+TagReplace.h */,
+				CC1251FA209821E600E31A38 /* NSMutableString+TagReplace.m */,
+				CC1251FB209821E600E31A38 /* NSString+Encryption.h */,
+				CC1251FC209821E600E31A38 /* NSString+Encryption.m */,
+				CC1251FD209821E600E31A38 /* NSString+Regulars.h */,
+				CC1251FE209821E600E31A38 /* NSString+Regulars.m */,
+				CC1251FF209821E600E31A38 /* NSString+WPAttributedMarkup.h */,
+				CC125200209821E600E31A38 /* NSString+WPAttributedMarkup.m */,
+				CC125201209821E600E31A38 /* NSURLResponse+Help.h */,
+				CC125202209821E600E31A38 /* NSURLResponse+Help.m */,
+				CC125203209821E600E31A38 /* PBugReporter.h */,
+				CC125204209821E600E31A38 /* PBugReporter.m */,
+				CC125205209821E600E31A38 /* PCarrie.h */,
+				CC125206209821E600E31A38 /* PCarrie.m */,
+				CC125207209821E600E31A38 /* PGifHud.h */,
+				CC125208209821E600E31A38 /* PGifHud.m */,
+				CC125209209821E600E31A38 /* PHealthKit.h */,
+				CC12520A209821E600E31A38 /* PHealthKit.m */,
+				CC12520B209821E600E31A38 /* PLabel.h */,
+				CC12520C209821E600E31A38 /* PLabel.m */,
+				CC12520D209821E600E31A38 /* PLaunchAdMonitor.h */,
+				CC12520E209821E600E31A38 /* PLaunchAdMonitor.m */,
+				CC12520F209821E600E31A38 /* PMacros.h */,
+				CC125210209821E600E31A38 /* PMotion.h */,
+				CC125211209821E600E31A38 /* PMotion.m */,
+				CC125212209821E600E31A38 /* PooActionOnCalendar.h */,
+				CC125213209821E600E31A38 /* PooActionOnCalendar.m */,
+				CC125214209821E600E31A38 /* PooAlertView.h */,
+				CC125215209821E600E31A38 /* PooAlertView.m */,
+				CC125216209821E600E31A38 /* PooCodeView.h */,
+				CC125217209821E600E31A38 /* PooCodeView.m */,
+				CC125218209821E600E31A38 /* PooLoadingView.h */,
+				CC125219209821E600E31A38 /* PooLoadingView.m */,
+				CC12521A209821E600E31A38 /* PooNumberKeyBoard.h */,
+				CC12521B209821E600E31A38 /* PooNumberKeyBoard.m */,
+				CC12521C209821E600E31A38 /* PooPhoneBlock.h */,
+				CC12521D209821E600E31A38 /* PooPhoneBlock.m */,
+				CC12521E209821E600E31A38 /* PooSearchBar.h */,
+				CC12521F209821E600E31A38 /* PooSearchBar.m */,
+				CC125220209821E600E31A38 /* PooSegView.h */,
+				CC125221209821E600E31A38 /* PooSegView.m */,
+				CC125222209821E600E31A38 /* PooSystemInfo.h */,
+				CC125223209821E600E31A38 /* PooSystemInfo.m */,
+				CC125224209821E600E31A38 /* PooTagsLabel.h */,
+				CC125225209821E600E31A38 /* PooTagsLabel.m */,
+				CC125226209821E600E31A38 /* PooTextView.h */,
+				CC125227209821E600E31A38 /* PooTextView.m */,
+				CC125228209821E600E31A38 /* PooUDIDInfo.h */,
+				CC125229209821E600E31A38 /* PooUDIDInfo.m */,
+				CC12522A209821E600E31A38 /* PSpeech.h */,
+				CC12522B209821E600E31A38 /* PSpeech.m */,
+				CC12522C209821E600E31A38 /* PStarRateView.h */,
+				CC12522D209821E600E31A38 /* PStarRateView.m */,
+				CC12522E209821E600E31A38 /* PTextField.h */,
+				CC12522F209821E600E31A38 /* PTextField.m */,
+				CC125230209821E600E31A38 /* PTInputAll.h */,
+				CC125231209821E600E31A38 /* PTouchID.h */,
+				CC125232209821E600E31A38 /* PTouchID.m */,
+				CC125233209821E600E31A38 /* RCDraggableButton.h */,
+				CC125234209821E600E31A38 /* RCDraggableButton.m */,
+				CC125235209821E600E31A38 /* SecurityStrategy.h */,
+				CC125236209821E600E31A38 /* SecurityStrategy.m */,
+				CC125237209821E600E31A38 /* UIButton+Block.h */,
+				CC125238209821E600E31A38 /* UIButton+Block.m */,
+				CC125239209821E600E31A38 /* UIButton+EX.h */,
+				CC12523A209821E600E31A38 /* UIButton+EX.m */,
+				CC12523B209821E600E31A38 /* UIColor+Colours.h */,
+				CC12523C209821E600E31A38 /* UIColor+Colours.m */,
+				CC12523D209821E600E31A38 /* UIColor+Helper.h */,
+				CC12523E209821E600E31A38 /* UIColor+Helper.m */,
+				CC12523F209821E600E31A38 /* UIColor+Random.h */,
+				CC125240209821E600E31A38 /* UIColor+Random.m */,
+				CC125241209821E600E31A38 /* UIImage+BlurGlass.h */,
+				CC125242209821E600E31A38 /* UIImage+BlurGlass.m */,
+				CC125243209821E600E31A38 /* UIImage+Size.h */,
+				CC125244209821E600E31A38 /* UIImage+Size.m */,
+				CC125245209821E600E31A38 /* UILabel+FlickerNumber.h */,
+				CC125246209821E600E31A38 /* UILabel+FlickerNumber.m */,
+				CC125247209821E600E31A38 /* UINavigationItem+Excursion.h */,
+				CC125248209821E600E31A38 /* UINavigationItem+Excursion.m */,
+				CC125249209821E600E31A38 /* UIView+ModifyFrame.h */,
+				CC12524A209821E600E31A38 /* UIView+ModifyFrame.m */,
+				CC12524B209821E600E31A38 /* UIViewController+TopBarMessage.h */,
+				CC12524C209821E600E31A38 /* UIViewController+TopBarMessage.m */,
+				CC12524D209821E600E31A38 /* Utils.h */,
+				CC12524E209821E600E31A38 /* Utils.m */,
+				CC12524F209821E600E31A38 /* WMHub.h */,
+				CC125250209821E600E31A38 /* WMHub.m */,
+				CC125251209821E600E31A38 /* WMHubView.h */,
+				CC125252209821E600E31A38 /* WMHubView.m */,
+				CC125253209821E600E31A38 /* WMHubViewController.h */,
+				CC125254209821E600E31A38 /* WMHubViewController.m */,
+				CC125255209821E600E31A38 /* WMHubWindow.h */,
+				CC125256209821E600E31A38 /* WMHubWindow.m */,
+				CC125257209821E600E31A38 /* WPAttributedStyleAction.h */,
+				CC125258209821E600E31A38 /* WPAttributedStyleAction.m */,
+				CC125259209821E600E31A38 /* WPHotspotLabel.h */,
+				CC12525A209821E600E31A38 /* WPHotspotLabel.m */,
+				CC12525B209821E600E31A38 /* WPTappableLabel.h */,
+				CC12525C209821E600E31A38 /* WPTappableLabel.m */,
 			);
 			name = Classes;
 			path = PooTools/Classes;
-			sourceTree = "<group>";
-		};
-		CC12515520981AA100E31A38 /* Category */ = {
-			isa = PBXGroup;
-			children = (
-				CC12515620981AA100E31A38 /* UIButton+Block.h */,
-				CC12515720981AA100E31A38 /* UIButton+Block.m */,
-				CC12515820981AA100E31A38 /* UIButton+EX.h */,
-				CC12515920981AA100E31A38 /* UIButton+EX.m */,
-				CC12515A20981AA100E31A38 /* UIImage+Size.h */,
-				CC12515B20981AA100E31A38 /* UIImage+Size.m */,
-				CC12515C20981AA100E31A38 /* UINavigationItem+Excursion.h */,
-				CC12515D20981AA100E31A38 /* UINavigationItem+Excursion.m */,
-			);
-			path = Category;
-			sourceTree = "<group>";
-		};
-		CC12516220981AA100E31A38 /* GTMBase64 */ = {
-			isa = PBXGroup;
-			children = (
-				CC12516320981AA100E31A38 /* LGTMBase64.h */,
-				CC12516420981AA100E31A38 /* LGTMBase64.m */,
-				CC12516520981AA100E31A38 /* LGTMDefines.h */,
-			);
-			path = GTMBase64;
-			sourceTree = "<group>";
-		};
-		CC12516620981AA100E31A38 /* MD5+正则表达式 */ = {
-			isa = PBXGroup;
-			children = (
-				CC12516720981AA100E31A38 /* NSString+Encryption.h */,
-				CC12516820981AA100E31A38 /* NSString+Encryption.m */,
-				CC12516920981AA100E31A38 /* NSString+Regulars.h */,
-				CC12516A20981AA100E31A38 /* NSString+Regulars.m */,
-			);
-			path = "MD5+正则表达式";
-			sourceTree = "<group>";
-		};
-		CC12518B20981AA100E31A38 /* PUtils */ = {
-			isa = PBXGroup;
-			children = (
-				CC12518C20981AA100E31A38 /* NSURLResponse+Help.h */,
-				CC12518D20981AA100E31A38 /* NSURLResponse+Help.m */,
-				CC12518E20981AA100E31A38 /* Utils.h */,
-				CC12518F20981AA100E31A38 /* Utils.m */,
-			);
-			path = PUtils;
-			sourceTree = "<group>";
-		};
-		CC12519220981AA100E31A38 /* UIColor+Helper */ = {
-			isa = PBXGroup;
-			children = (
-				CC12519320981AA100E31A38 /* UIColor+Colours.h */,
-				CC12519420981AA100E31A38 /* UIColor+Colours.m */,
-				CC12519520981AA100E31A38 /* UIColor+Helper.h */,
-				CC12519620981AA100E31A38 /* UIColor+Helper.m */,
-				CC12519720981AA100E31A38 /* UIColor+Random.h */,
-				CC12519820981AA100E31A38 /* UIColor+Random.m */,
-			);
-			path = "UIColor+Helper";
-			sourceTree = "<group>";
-		};
-		CC12519920981AA100E31A38 /* UILabel组合 */ = {
-			isa = PBXGroup;
-			children = (
-				CC12519A20981AA100E31A38 /* CustomTextField.h */,
-				CC12519B20981AA100E31A38 /* CustomTextField.m */,
-				CC12519C20981AA100E31A38 /* NSMutableString+TagReplace.h */,
-				CC12519D20981AA100E31A38 /* NSMutableString+TagReplace.m */,
-				CC12519E20981AA100E31A38 /* NSString+WPAttributedMarkup.h */,
-				CC12519F20981AA100E31A38 /* NSString+WPAttributedMarkup.m */,
-				CC1251A020981AA100E31A38 /* PLabel.h */,
-				CC1251A120981AA100E31A38 /* PLabel.m */,
-				CC1251A220981AA100E31A38 /* PooSearchBar.h */,
-				CC1251A320981AA100E31A38 /* PooSearchBar.m */,
-				CC1251A420981AA100E31A38 /* PooTextView.h */,
-				CC1251A520981AA100E31A38 /* PooTextView.m */,
-				CC1251A620981AA100E31A38 /* PTextField.h */,
-				CC1251A720981AA100E31A38 /* PTextField.m */,
-				CC1251A820981AA100E31A38 /* UILabel+FlickerNumber.h */,
-				CC1251A920981AA100E31A38 /* UILabel+FlickerNumber.m */,
-				CC1251AA20981AA100E31A38 /* WPAttributedStyleAction.h */,
-				CC1251AB20981AA100E31A38 /* WPAttributedStyleAction.m */,
-				CC1251AC20981AA100E31A38 /* WPHotspotLabel.h */,
-				CC1251AD20981AA100E31A38 /* WPHotspotLabel.m */,
-				CC1251AE20981AA100E31A38 /* WPTappableLabel.h */,
-				CC1251AF20981AA100E31A38 /* WPTappableLabel.m */,
-			);
-			path = "UILabel组合";
-			sourceTree = "<group>";
-		};
-		CC1251B420981AA100E31A38 /* 仿支付宝手势解锁 */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = "仿支付宝手势解锁";
-			sourceTree = "<group>";
-		};
-		CC1251B520981AA100E31A38 /* 加载hub */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251B620981AA100E31A38 /* WMHub.h */,
-				CC1251B720981AA100E31A38 /* WMHub.m */,
-				CC1251B820981AA100E31A38 /* WMHubView.h */,
-				CC1251B920981AA100E31A38 /* WMHubView.m */,
-				CC1251BA20981AA100E31A38 /* WMHubViewController.h */,
-				CC1251BB20981AA100E31A38 /* WMHubViewController.m */,
-				CC1251BC20981AA100E31A38 /* WMHubWindow.h */,
-				CC1251BD20981AA100E31A38 /* WMHubWindow.m */,
-			);
-			path = "加载hub";
-			sourceTree = "<group>";
-		};
-		CC1251BE20981AA100E31A38 /* 启动广告 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251BF20981AA100E31A38 /* PLaunchAdMonitor.h */,
-				CC1251C020981AA100E31A38 /* PLaunchAdMonitor.m */,
-			);
-			path = "启动广告";
-			sourceTree = "<group>";
-		};
-		CC1251C120981AA100E31A38 /* 打电话 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251C220981AA100E31A38 /* PooPhoneBlock.h */,
-				CC1251C320981AA100E31A38 /* PooPhoneBlock.m */,
-			);
-			path = "打电话";
-			sourceTree = "<group>";
-		};
-		CC1251C420981AA100E31A38 /* 文字输入框 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251C520981AA100E31A38 /* HPGrowingTextView.h */,
-				CC1251C620981AA100E31A38 /* HPGrowingTextView.m */,
-				CC1251C720981AA100E31A38 /* HPTextViewInternal.h */,
-				CC1251C820981AA100E31A38 /* HPTextViewInternal.m */,
-			);
-			path = "文字输入框";
-			sourceTree = "<group>";
-		};
-		CC1251C920981AA100E31A38 /* 添加提醒到日历 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251CA20981AA100E31A38 /* PooActionOnCalendar.h */,
-				CC1251CB20981AA100E31A38 /* PooActionOnCalendar.m */,
-			);
-			path = "添加提醒到日历";
-			sourceTree = "<group>";
-		};
-		CC1251CC20981AA100E31A38 /* 硬件信息 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251CD20981AA100E31A38 /* PooSystemInfo.h */,
-				CC1251CE20981AA100E31A38 /* PooSystemInfo.m */,
-			);
-			path = "硬件信息";
-			sourceTree = "<group>";
-		};
-		CC1251CF20981AA100E31A38 /* 网络检测 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251D020981AA100E31A38 /* AHReach.h */,
-				CC1251D120981AA100E31A38 /* AHReach.m */,
-			);
-			path = "网络检测";
-			sourceTree = "<group>";
-		};
-		CC1251D220981AA100E31A38 /* 自定义遮挡教程View */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251D320981AA100E31A38 /* JMHoledView.h */,
-				CC1251D420981AA100E31A38 /* JMHoledView.m */,
-			);
-			path = "自定义遮挡教程View";
-			sourceTree = "<group>";
-		};
-		CC1251D520981AA100E31A38 /* 运营商获取 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251D620981AA100E31A38 /* PCarrie.h */,
-				CC1251D720981AA100E31A38 /* PCarrie.m */,
-			);
-			path = "运营商获取";
-			sourceTree = "<group>";
-		};
-		CC1251D820981AA100E31A38 /* 重要信息模糊 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251D920981AA100E31A38 /* SecurityStrategy.h */,
-				CC1251DA20981AA100E31A38 /* SecurityStrategy.m */,
-				CC1251DB20981AA100E31A38 /* UIImage+BlurGlass.h */,
-				CC1251DC20981AA100E31A38 /* UIImage+BlurGlass.m */,
-			);
-			path = "重要信息模糊";
-			sourceTree = "<group>";
-		};
-		CC1251DD20981AA100E31A38 /* 随机数组 */ = {
-			isa = PBXGroup;
-			children = (
-				CC1251DE20981AA100E31A38 /* NSMutableArray+Shuffle.h */,
-				CC1251DF20981AA100E31A38 /* NSMutableArray+Shuffle.m */,
-			);
-			path = "随机数组";
 			sourceTree = "<group>";
 		};
 		F35791481CAFDD8E7715AE1B44687328 /* Core */ = {
