@@ -7,8 +7,8 @@
 #
 
 Pod::Spec.new do |s|
-    s.name        = 'PTools'
-    s.version     = '1.1.7'
+    s.name        = 'PooTools'
+    s.version     = '1.1.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = 'hahahahahahahahha.'
