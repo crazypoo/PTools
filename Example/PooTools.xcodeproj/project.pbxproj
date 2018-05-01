@@ -18,7 +18,6 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		CC1256B52098286400E31A38 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1256B42098286400E31A38 /* PooTools.framework */; };
-		CC1257AF2098319300E31A38 /* AHReach.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257352098319200E31A38 /* AHReach.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
 		CC1257B22098319300E31A38 /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573B2098319200E31A38 /* DES3Util.m */; };
@@ -109,8 +108,6 @@
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		CC1256B42098286400E31A38 /* PooTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PooTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CC1257342098319200E31A38 /* AHReach.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AHReach.h; sourceTree = "<group>"; };
-		CC1257352098319200E31A38 /* AHReach.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AHReach.m; sourceTree = "<group>"; };
 		CC1257362098319200E31A38 /* ALActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALActionSheetView.h; sourceTree = "<group>"; };
 		CC1257372098319200E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
 		CC1257382098319200E31A38 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
@@ -358,8 +355,6 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
-				CC1257342098319200E31A38 /* AHReach.h */,
-				CC1257352098319200E31A38 /* AHReach.m */,
 				CC1257362098319200E31A38 /* ALActionSheetView.h */,
 				CC1257372098319200E31A38 /* ALActionSheetView.m */,
 				CC1257382098319200E31A38 /* CustomTextField.h */,
@@ -611,7 +606,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC1257BD2098319300E31A38 /* NSString+WPAttributedMarkup.m in Sources */,
-				CC1257AF2098319300E31A38 /* AHReach.m in Sources */,
 				CC1257C72098319300E31A38 /* PooAlertView.m in Sources */,
 				CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
@@ -815,6 +809,13 @@
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MODULE_NAME = ExampleApp;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"PooTools\"",
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -831,6 +832,13 @@
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MODULE_NAME = ExampleApp;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					"\"PooTools\"",
+					"-all_load",
+					"-ObjC",
+				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
