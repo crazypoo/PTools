@@ -16,7 +16,8 @@ Pod::Spec.new do |s|
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.platform = :ios, '8.0'
     s.requires_arc = true
-    s.source_files = 'PooTools/Classes/**/*','PooTools/*','PooTools/PTools/*.{h,m}','PooTools/**/*.h'
+    s.source_files = 'PooTools/Classes/**/*'
+    #,'PooTools/*','PooTools/PTools/*.{h,m}','PooTools/**/*.h'
 
     s.ios.deployment_target = '8.0'
     s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion'
