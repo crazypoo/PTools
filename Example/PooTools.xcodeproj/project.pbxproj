@@ -15,6 +15,8 @@
 		6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* PTAppDelegate.m */; };
 		6003F5A7195388D20070C39A /* PTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* PTViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
+		64F95E052099327200858FED /* IGBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E022099327200858FED /* IGBannerItem.m */; };
+		64F95E062099327200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E042099327200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		CC1256B52098286400E31A38 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1256B42098286400E31A38 /* PooTools.framework */; };
@@ -101,6 +103,10 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		64F95E012099327100858FED /* IGBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerItem.h; sourceTree = "<group>"; };
+		64F95E022099327200858FED /* IGBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBannerItem.m; sourceTree = "<group>"; };
+		64F95E032099327200858FED /* IGBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerView.h; sourceTree = "<group>"; };
+		64F95E042099327200858FED /* IGBannerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBannerView.m; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		77F5D0446CAF22C1C8B37FBE /* Pods-PooTools_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Tests/Pods-PooTools_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		8547CFF61C7FE8C255805D38 /* Pods_PooTools_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -355,6 +361,10 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				64F95E012099327100858FED /* IGBannerItem.h */,
+				64F95E022099327200858FED /* IGBannerItem.m */,
+				64F95E032099327200858FED /* IGBannerView.h */,
+				64F95E042099327200858FED /* IGBannerView.m */,
 				CC1257362098319200E31A38 /* ALActionSheetView.h */,
 				CC1257372098319200E31A38 /* ALActionSheetView.m */,
 				CC1257382098319200E31A38 /* CustomTextField.h */,
@@ -555,10 +565,12 @@
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
+				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -647,6 +659,8 @@
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
+				64F95E062099327200858FED /* IGBannerView.m in Sources */,
+				64F95E052099327200858FED /* IGBannerItem.m in Sources */,
 				CC1257B12098319300E31A38 /* CustomTextField.m in Sources */,
 				CC1257DE2098319300E31A38 /* UIImage+Size.m in Sources */,
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,

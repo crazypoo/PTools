@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.2.4'
+    s.version     = '1.2.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = 'hahahahahahahahha.'
@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = '8.0'
     s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion'
+    s.dependency 'SDWebImage'
 
 end
 

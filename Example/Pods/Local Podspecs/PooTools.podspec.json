@@ -1,22 +1,47 @@
 {
   "name": "PooTools",
-  "version": "0.1.0",
-  "summary": "A short description of PooTools.",
-  "description": "TODO: Add long description of the pod here.",
-  "homepage": "https://github.com/crazypoo/PooTools",
+  "version": "1.2.5",
+  "authors": {
+    "crazypoo": "273277355@qq.com"
+  },
+  "homepage": "https://github.com/crazypoo/PTools",
+  "summary": "hahahahahahahahha.",
+  "source": {
+    "git": "https://github.com/crazypoo/PTools.git",
+    "tag": "1.2.5"
+  },
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
-  "authors": {
-    "crazypoo": "273277355@qq.com"
-  },
-  "source": {
-    "git": "https://github.com/crazypoo/PooTools.git",
-    "tag": "0.1.0"
-  },
   "platforms": {
     "ios": "8.0"
   },
-  "source_files": "PooTools/Classes/**/*"
+  "requires_arc": true,
+  "source_files": [
+    "PooTools",
+    "PooTools/**/*.{h,m}"
+  ],
+  "frameworks": [
+    "UIKit",
+    "AudioToolbox",
+    "ExternalAccessory",
+    "CoreText",
+    "SystemConfiguration",
+    "WebKit",
+    "QuartzCore",
+    "CoreTelephony",
+    "Security",
+    "Foundation",
+    "AVFoundation",
+    "Speech",
+    "LocalAuthentication",
+    "HealthKit",
+    "CoreMotion"
+  ],
+  "dependencies": {
+    "SDWebImage": [
+
+    ]
+  }
 }

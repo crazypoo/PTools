@@ -1,23 +1,22 @@
 PODS:
-  - FBSnapshotTestCase (2.1.4):
-    - FBSnapshotTestCase/SwiftSupport (= 2.1.4)
-  - FBSnapshotTestCase/Core (2.1.4)
-  - FBSnapshotTestCase/SwiftSupport (2.1.4):
-    - FBSnapshotTestCase/Core
-  - PooTools (0.1.0)
+  - PooTools (1.2.5):
+    - SDWebImage
+  - SDWebImage (4.3.3):
+    - SDWebImage/Core (= 4.3.3)
+  - SDWebImage/Core (4.3.3)
 
 DEPENDENCIES:
-  - FBSnapshotTestCase
   - PooTools (from `../`)
+  - SDWebImage
 
 EXTERNAL SOURCES:
   PooTools:
     :path: ../
 
 SPEC CHECKSUMS:
-  FBSnapshotTestCase: 094f9f314decbabe373b87cc339bea235a63e07a
-  PooTools: aed6d6daf47b517e0b5f2bd314c4eca85b6d8a9a
+  PooTools: fe9b9fa930b3854980957f8f3b9645b6dbb164a4
+  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
 
-PODFILE CHECKSUM: 0272c5a9a5e51d1d0de2fbfbd9ffb1177712d0e6
+PODFILE CHECKSUM: eac4c6f49aff520f0885ff39f0d47df9c8075453
 
 COCOAPODS: 1.4.0
