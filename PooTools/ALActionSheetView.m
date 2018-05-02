@@ -17,17 +17,17 @@
 
 @interface ALActionSheetView ()
 {
-    UIView      *_backView;
-    UIView *_actionSheetView;
-    CGFloat _actionSheetHeight;
     BOOL        _isShow;
 }
 
-@property (nonatomic, copy)  NSString *title;
-@property (nonatomic, copy)  NSString *cancelButtonTitle;
-@property (nonatomic, copy)  NSString *destructiveButtonTitle;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *cancelButtonTitle;
+@property (nonatomic, copy) NSString *destructiveButtonTitle;
 @property (nonatomic, copy) NSArray *otherButtonTitles;
 @property (nonatomic, copy) ALActionSheetViewDidSelectButtonBlock selectRowBlock;
+@property (nonatomic, strong) UIView *backView;
+@property (nonatomic, strong) UIView *actionSheetView;
+@property (nonatomic, assign) CGFloat actionSheetHeight;
 
 @end
 
@@ -42,8 +42,8 @@
     self.otherButtonTitles = nil;
     self.selectRowBlock = nil;
     
-    _actionSheetView = nil;
-    _backView = nil;
+    self.actionSheetView = nil;
+    self.backView = nil;
 }
 
 - (instancetype)init
@@ -75,9 +75,9 @@
         _backView.alpha = 0.0f;
         [self addSubview:_backView];
         
-        _actionSheetView = [[UIView alloc] init];
-        _actionSheetView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f];
-        [self addSubview:_actionSheetView];
+        self.actionSheetView = [[UIView alloc] init];
+        self.actionSheetView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f];
+        [self addSubview:self.actionSheetView];
         
         CGFloat offy = 0;
         CGFloat width = self.frame.size.width;
@@ -98,7 +98,7 @@
             titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
             titleLabel.numberOfLines = 0;
             titleLabel.text = _title;
-            [_actionSheetView addSubview:titleLabel];
+            [self.actionSheetView addSubview:titleLabel];
             
             offy += titleHeight+kRowLineHeight;
         }
@@ -117,7 +117,7 @@
                 [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
                 [btn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
                 [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-                [_actionSheetView addSubview:btn];
+                [self.actionSheetView addSubview:btn];
                 
                 offy += kRowHeight+kRowLineHeight;
             }
@@ -139,14 +139,14 @@
             [destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
             [destructiveButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
             [destructiveButton addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-            [_actionSheetView addSubview:destructiveButton];
+            [self.actionSheetView addSubview:destructiveButton];
             
             offy += kRowHeight;
         }
         
         UIView *separatorView = [[UIView alloc] initWithFrame:CGRectMake(0, offy, width, kSeparatorHeight)];
         separatorView.backgroundColor = [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f];
-        [_actionSheetView addSubview:separatorView];
+        [self.actionSheetView addSubview:separatorView];
         
         offy += kSeparatorHeight;
         
@@ -161,13 +161,13 @@
         [cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
         [cancelBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
         [cancelBtn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-        [_actionSheetView addSubview:cancelBtn];
+        [self.actionSheetView addSubview:cancelBtn];
         
         offy += kRowHeight;
         
-        _actionSheetHeight = offy;
+        self.actionSheetHeight = offy;
         
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), _actionSheetHeight);
+        self.actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), self.actionSheetHeight);
     }
     
     return self;
@@ -185,7 +185,7 @@
 {
     UITouch *touch = [touches anyObject];
     CGPoint point = [touch locationInView:_backView];
-    if (!CGRectContainsPoint([_actionSheetView frame], point))
+    if (!CGRectContainsPoint([self.actionSheetView frame], point))
     {
         [self dismiss];
     }
@@ -230,9 +230,9 @@
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
         [[[[UIApplication sharedApplication] delegate] window] addSubview:self];
-        _backView.alpha = 1.0;
+        self.backView.alpha = 1.0;
         
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame)-_actionSheetHeight, CGRectGetWidth(self.frame), _actionSheetHeight);
+        self.actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame)-self.actionSheetHeight, CGRectGetWidth(self.frame), self.actionSheetHeight);
     } completion:NULL];
 }
 
@@ -242,9 +242,9 @@
     
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
-        _backView.alpha = 0.0;
+        self.backView.alpha = 0.0;
         
-        _actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), _actionSheetHeight);
+        self.actionSheetView.frame = CGRectMake(0, CGRectGetHeight(self.frame), CGRectGetWidth(self.frame), self.actionSheetHeight);
         
     } completion:^(BOOL finished) {
         [self removeFromSuperview];

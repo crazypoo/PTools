@@ -12,7 +12,7 @@
 
 @interface PooAlertView : UIView
 
-@property (nonatomic, retain) UIView *dialogView;
+@property (nonatomic, strong) UIView *dialogView;
 @property (nonatomic, assign) id<PooAlertViewDelegate> delegate;
 @property (nonatomic, retain) UIButton *closeButton;
 @property (nonatomic, assign) CGFloat containerViewHeight;

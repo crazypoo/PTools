@@ -122,6 +122,7 @@
             label.text = @".";
             label.textColor = [UIColor blackColor];
             label.textAlignment = NSTextAlignmentCenter;
+            label.font = kNumFont;
             [button addSubview:label];
         }
     }
@@ -131,6 +132,7 @@
         label.text = @"刪除";
         label.textColor = [UIColor blackColor];
         label.textAlignment = NSTextAlignmentCenter;
+        label.font = kNumFont;
         [button addSubview:label];
     }
     return button;

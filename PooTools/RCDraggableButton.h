@@ -41,9 +41,10 @@
     UIBezierPath *_draggingPath;
     
     NSMutableArray *_traceButtons;
-    NSTimer *_autoAddTraceButtonTimer;
     NSTimer *_traceDismissTimer;
 }
+@property (nonatomic, strong) NSTimer *autoAddTraceButtonTimer;
+@property (nonatomic) BOOL isRecordingDraggingPathEnabled;
 
 @property (nonatomic) BOOL draggable;
 @property (nonatomic) BOOL autoDocking;
@@ -99,10 +100,10 @@
 + (void)removeAllFromView:(id)view crossedRect:(CGRect)rect;
 - (void)removeFromSuperviewCrossedRect:(CGRect)rect;
 
-+ (void)allInView:(id)view moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion;
-+ (void)inView:(id)view withTag:(NSInteger)tag moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion;
-+ (void)inView:(id)view withTags:(NSArray *)tags moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion;
-- (void)moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion;
++ (void)allInView:(id)view moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion;
++ (void)inView:(id)view withTag:(NSInteger)tag moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion;
++ (void)inView:(id)view withTags:(NSArray *)tags moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion;
+- (void)moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion;
 
 + (void)allInView:(id)view moveToPoint:(CGPoint)point;
 + (void)inView:(id)view withTag:(NSInteger)tag moveToPoint:(CGPoint)point;

@@ -282,16 +282,16 @@
             self.center = CGPointMake(frame.size.width / 2, self.center.y);
         }
         
-        if (_autoDockingBlock) {
-            _autoDockingBlock(self);
+        if (self.autoDockingBlock) {
+            self.autoDockingBlock(self);
         }
     } completion:^(BOOL finished) {
-        if (_isRecordingDraggingPathEnabled) {
-            [_draggingPath addLineToPoint:self.center];
+        if (self.isRecordingDraggingPathEnabled) {
+            [self.draggingPath addLineToPoint:self.center];
         }
         
-        if (_autoDockEndedBlock) {
-            _autoDockEndedBlock(self);
+        if (self.autoDockEndedBlock) {
+            self.autoDockEndedBlock(self);
         }
     }];
 }
@@ -300,16 +300,16 @@
     [UIView animateWithDuration:RC_DEFAULT_ANIMATE_DURATION animations:^{
         self.center = self.dockPoint;
         
-        if (_autoDockingBlock) {
-            _autoDockingBlock(self);
+        if (self.autoDockingBlock) {
+            self.autoDockingBlock(self);
         }
     } completion:^(BOOL finished) {
-        if (_isRecordingDraggingPathEnabled) {
-            [_draggingPath addLineToPoint:self.center];
+        if (self.isRecordingDraggingPathEnabled) {
+            [self.draggingPath addLineToPoint:self.center];
         }
         
-        if (_autoDockEndedBlock) {
-            _autoDockEndedBlock(self);
+        if (self.autoDockEndedBlock) {
+            self.autoDockEndedBlock(self);
         }
     }];
 }
@@ -524,13 +524,13 @@
 
 #pragma mark - Auto Move To Point
 
-+ (void)allInView:(id)view moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion {
++ (void)allInView:(id)view moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion {
     for (RCDraggableButton *subview in [self itemsInView:view]) {
         [subview moveToPoint:point animatedWithDuration:duration delay:delay options:options completion:completion];
     }
 }
 
-+ (void)inView:(id)view withTag:(NSInteger)tag moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion {
++ (void)inView:(id)view withTag:(NSInteger)tag moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion {
     for (RCDraggableButton *subview in [self itemsInView:view]) {
         if (tag == subview.tag) {
             [subview moveToPoint:point animatedWithDuration:duration delay:delay options:options completion:completion];
@@ -538,13 +538,13 @@
     }
 }
 
-+ (void)inView:(id)view withTags:(NSArray *)tags moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion {
++ (void)inView:(id)view withTags:(NSArray *)tags moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion {
     for (NSNumber *tag in tags) {
         [self inView:view withTag:[tag integerValue] moveToPoint:point animatedWithDuration:duration delay:delay options:options completion:completion];
     }
 }
 
-- (void)moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)())completion {
+- (void)moveToPoint:(CGPoint)point animatedWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options completion:(void (^)(void))completion {
     if ( !_willBeRemoved) {
         _moveBeginPoint = self.center;
         
@@ -555,13 +555,13 @@
         [UIView animateWithDuration:duration delay:delay options:options animations:^{
             [self resetCenter:point];
         } completion:^(BOOL finished) {
-            if (_autoAddTraceButtonTimer) {
-                [_autoAddTraceButtonTimer invalidate];
-                _autoAddTraceButtonTimer = nil;
+            if (self.autoAddTraceButtonTimer) {
+                [self.autoAddTraceButtonTimer invalidate];
+                self.autoAddTraceButtonTimer = nil;
             }
             
-            if (_isRecordingDraggingPathEnabled) {
-                [_draggingPath addLineToPoint:self.center];
+            if (self.isRecordingDraggingPathEnabled) {
+                [self.draggingPath addLineToPoint:self.center];
             }
             
             if (completion) {
