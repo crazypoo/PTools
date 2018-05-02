@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.3.7'
+    s.version     = '1.3.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = 'hahahahahahahahha.'
@@ -34,4 +34,9 @@ Pod::Spec.new do |s|
     s.dependency 'FMDB'
     s.dependency 'DHSmartScreenshot'
     s.dependency 'YCXMenu'
+    s.dependency 'Masonry'
+    s.dependency 'MJRefresh'
+    s.dependency 'MYBlurIntroductionView'
+    s.dependency 'TextFieldEffects'
+    s.dependency 'pop'
 end
