@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.2.7'
+    s.version     = '1.2.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = 'hahahahahahahahha.'
@@ -23,8 +23,7 @@ Pod::Spec.new do |s|
 
     s.ios.deployment_target = '8.0'
     s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion'
-    s.dependency 'SDWebImage','CYLTabBarController','Mantle','TOWebViewController','DZNEmptyDataSet','IQKeyboardManager','UITableView+FDTemplateLayoutCell','FDFullscreenPopGesture','LTNavigationBar','HTAutocompleteTextField','UIViewController+Swizzled','AFNetworking','FMDB','FLEX','JPFPSStatus','DHSmartScreenshot'
-    #,'YCXMenu'
+    s.dependency = 'SDWebImage','CYLTabBarController','Mantle','TOWebViewController','DZNEmptyDataSet','IQKeyboardManager','UITableView+FDTemplateLayoutCell','FDFullscreenPopGesture','LTNavigationBar','HTAutocompleteTextField','UIViewController+Swizzled','AFNetworking','FMDB','FLEX','JPFPSStatus','DHSmartScreenshot','YCXMenu'
 end
 
 #Pod::Spec.new do |s|
