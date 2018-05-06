@@ -20,9 +20,10 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
 #include "TargetConditionals.h"
 #include <Foundation/Foundation.h>
-
 
 #pragma mark - Static String Keys
 static NSString * kColoursRGBA_R = @"RGBA-r";
@@ -522,3 +523,4 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
 + (instancetype)dustColor;
 
 @end
+#pragma clang diagnostic pop

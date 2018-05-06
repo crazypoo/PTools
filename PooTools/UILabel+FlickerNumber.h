@@ -5,7 +5,8 @@
 //  Created by Diaoshu on 15-2-1.
 //  Copyright (c) 2015年 DDKit. All rights reserved.
 //
-
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
 #import <UIKit/UIKit.h>
 
 typedef enum : NSUInteger {
@@ -174,3 +175,4 @@ typedef enum : NSUInteger {
 + (instancetype)dictionaryWithAttribute:(NSDictionary *)attribute andRange:(NSRange)range;
 
 @end
+#pragma clang diagnostic pop

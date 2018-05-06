@@ -8,10 +8,7 @@
 
 #import "SecurityStrategy.h"
 #import "UIImage+BlurGlass.h"
-
-#define screenWidth ([UIScreen mainScreen].bounds.size.width)
-#define screenHeight ([UIScreen mainScreen].bounds.size.height)
-#define screenScale ([UIScreen mainScreen].scale)
+#import "PMacros.h"
 
 #define effectTag 19999
 
@@ -56,7 +53,7 @@
 +(UIImage *)screenShot
 {
     
-    UIGraphicsBeginImageContextWithOptions(CGSizeMake(screenWidth*screenScale, screenHeight*screenScale), YES, 0);
+    UIGraphicsBeginImageContextWithOptions(CGSizeMake(kSCREEN_WIDTH*kSCREEN_SCALE, kSCREEN_HEIGHT*kSCREEN_SCALE), YES, 0);
     //设置截屏大小
     [[[[UIApplication sharedApplication] keyWindow] layer] renderInContext:UIGraphicsGetCurrentContext()];
     
@@ -65,7 +62,7 @@
     UIGraphicsEndImageContext();
     
     CGImageRef imageRef = viewImage.CGImage;
-    CGRect rect = CGRectMake(0, 0, screenWidth*screenScale,screenHeight*screenScale);
+    CGRect rect = CGRectMake(0, 0, kSCREEN_WIDTH*kSCREEN_SCALE,kSCREEN_HEIGHT*kSCREEN_SCALE);
    
     CGImageRef imageRefRect =CGImageCreateWithImageInRect(imageRef, rect);
     UIImage *sendImage = [[UIImage alloc] initWithCGImage:imageRefRect];
