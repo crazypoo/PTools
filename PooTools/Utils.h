@@ -55,4 +55,5 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(NSArray *)arraySortASC:(NSArray *)arr;
 +(NSArray *)arraySortINV:(NSArray *)arr;
 
++(void)turnTheScreen:(UIInterfaceOrientation)type;//旋转屏幕
 @end

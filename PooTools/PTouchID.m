@@ -14,10 +14,10 @@
 static PTouchID *pTouchID = nil;
 
 @interface PTouchID()
-{
-    TouchIDStatus touchIDStatus;
-}
-@property (nonatomic, retain) NSString *strBeDelete;
+
+@property (nonatomic, strong) NSString *strBeDelete;
+@property (nonatomic, assign) TouchIDStatus touchIDStatus;
+
 @end
 
 @implementation PTouchID
@@ -42,9 +42,9 @@ static PTouchID *pTouchID = nil;
                                                 kSecAccessControlUserPresence, &error);
     if(sacObject == NULL || error != NULL)
     {
-        touchIDStatus = TouchIDStatusItemNotFound;
+        self.touchIDStatus = TouchIDStatusItemNotFound;
         if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-            [self.delegate touchIDStatus:touchIDStatus];
+            [self.delegate touchIDStatus:self.touchIDStatus];
         }
         return;
     }
@@ -60,10 +60,10 @@ static PTouchID *pTouchID = nil;
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         OSStatus status =  SecItemAdd((__bridge CFDictionaryRef)attributes, nil);
         
-        touchIDStatus = [self touchStatusReturn:status];
+        self.touchIDStatus = [self touchStatusReturn:status];
         
         if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-            [self.delegate touchIDStatus:touchIDStatus];
+            [self.delegate touchIDStatus:self.touchIDStatus];
         }
     });
 
@@ -81,9 +81,9 @@ static PTouchID *pTouchID = nil;
         [security evaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics localizedReason:touchIDAlertTitle reply:^(BOOL succes, NSError *error)
          {
              if (succes) {
-                 touchIDStatus = TouchIDStatusSuccess;
+                 self.touchIDStatus = TouchIDStatusSuccess;
                  if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-                     [self.delegate touchIDStatus:touchIDStatus];
+                     [self.delegate touchIDStatus:self.touchIDStatus];
                  }
              }
              else
@@ -92,51 +92,51 @@ static PTouchID *pTouchID = nil;
                  switch (error.code) {
                      case LAErrorSystemCancel:
                      {
-                         touchIDStatus = TouchIDStatusSystemCancel;
+                        self. touchIDStatus = TouchIDStatusSystemCancel;
                          break;
                      }
                      case LAErrorUserCancel:
                      {
-                         touchIDStatus = TouchIDStatusAlertCancel;
+                         self.touchIDStatus = TouchIDStatusAlertCancel;
                          break;
                      }
                      case LAErrorAuthenticationFailed:
                      {
-                         touchIDStatus = TouchIDStatusAuthenticationFailed;
+                         self.touchIDStatus = TouchIDStatusAuthenticationFailed;
                          break;
                      }
                      case LAErrorPasscodeNotSet:
                      {
-                         touchIDStatus = TouchIDStatusKeyboardIDNotFound;
+                         self.touchIDStatus = TouchIDStatusKeyboardIDNotFound;
                          break;
                      }
                      case LAErrorTouchIDNotAvailable:
                      {
-                         touchIDStatus = TouchIDStatusTouchIDNotOpen;
+                         self.touchIDStatus = TouchIDStatusTouchIDNotOpen;
                          break;
                      }
                      case LAErrorTouchIDNotEnrolled:
                      {
-                         touchIDStatus = TouchIDStatusTouchIDNotFound;
+                         self.touchIDStatus = TouchIDStatusTouchIDNotFound;
                          break;
                      }
                      case LAErrorUserFallback:
                      {
                          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                             touchIDStatus = TouchIDStatusKeyboardTouchID;
+                             self.touchIDStatus = TouchIDStatusKeyboardTouchID;
                          }];
                          break;
                      }
                      default:
                      {
                          [[NSOperationQueue mainQueue] addOperationWithBlock:^{
-                             touchIDStatus = TouchIDStatusUnknowStatus;
+                             self.touchIDStatus = TouchIDStatusUnknowStatus;
                          }];
                          break;
                      }
                  }
                  if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-                     [self.delegate touchIDStatus:touchIDStatus];
+                     [self.delegate touchIDStatus:self.touchIDStatus];
                  }
              }
          }];
@@ -146,22 +146,22 @@ static PTouchID *pTouchID = nil;
         switch (error.code) {
             case LAErrorTouchIDNotEnrolled:
             {
-                touchIDStatus = TouchIDStatusTouchIDNotFound;
+                self.touchIDStatus = TouchIDStatusTouchIDNotFound;
                 break;
             }
             case LAErrorPasscodeNotSet:
             {
-                touchIDStatus = TouchIDStatusKeyboardIDNotFound;
+                self.touchIDStatus = TouchIDStatusKeyboardIDNotFound;
                 break;
             }
             default:
             {
-                touchIDStatus = TouchIDStatusUnknowStatus;
+                self.touchIDStatus = TouchIDStatusUnknowStatus;
                 break;
             }
         }
         if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-            [self.delegate touchIDStatus:touchIDStatus];
+            [self.delegate touchIDStatus:self.touchIDStatus];
         }
         NSLog(@"%@",error.localizedDescription);
     }
@@ -180,22 +180,22 @@ static PTouchID *pTouchID = nil;
                   
                   switch (status) {
                       case errSecSuccess:
-                          touchIDStatus = TouchIDStatusPassWordKilled;
+                          self.touchIDStatus = TouchIDStatusPassWordKilled;
                           break;
                       case errSecDuplicateItem:
-                          touchIDStatus = TouchIDStatusDuplicateItem;
+                          self.touchIDStatus = TouchIDStatusDuplicateItem;
                           break;
                       case errSecItemNotFound:
-                          touchIDStatus = TouchIDStatusItemNotFound;
+                          self.touchIDStatus = TouchIDStatusItemNotFound;
                           break;
                       case -26276:
-                          touchIDStatus = TouchIDStatusAlertCancel;
+                          self.touchIDStatus = TouchIDStatusAlertCancel;
                       default:
                           break;
                   }
                   if ([self.delegate respondsToSelector:@selector(touchIDStatus:)])
                   {
-                      [self.delegate touchIDStatus:touchIDStatus];
+                      [self.delegate touchIDStatus:self.touchIDStatus];
                   }
                   );
 }
@@ -214,9 +214,9 @@ static PTouchID *pTouchID = nil;
     
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         OSStatus status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)changes);
-        touchIDStatus = [self touchStatusReturn:status];
+        self.touchIDStatus = [self touchStatusReturn:status];
         if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
-            [self.delegate touchIDStatus:touchIDStatus];
+            [self.delegate touchIDStatus:self.touchIDStatus];
         }
     });
 }

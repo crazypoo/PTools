@@ -17,7 +17,8 @@
     static BOOL seed = NO;
     if (!seed) {
         seed = YES;
-        srandom(time(NULL));
+        int a = (int)time(NULL);
+        srandom(a);
     }
     CGFloat red = (CGFloat)random()/(CGFloat)RAND_MAX;
     CGFloat green = (CGFloat)random()/(CGFloat)RAND_MAX;

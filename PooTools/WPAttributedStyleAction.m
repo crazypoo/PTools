@@ -12,7 +12,7 @@ NSString* kWPAttributedStyleAction = @"WPAttributedStyleAction";
 
 @implementation WPAttributedStyleAction
 
-- (instancetype)initWithAction:(void (^)())action
+- (instancetype)initWithAction:(void (^)(void))action
 {
     self = [super init];
     if (self) {
@@ -21,7 +21,7 @@ NSString* kWPAttributedStyleAction = @"WPAttributedStyleAction";
     return self;
 }
 
-+(NSArray*)styledActionWithAction:(void (^)())action
++(NSArray*)styledActionWithAction:(void (^)(void))action
 {
     WPAttributedStyleAction* container = [[WPAttributedStyleAction alloc] initWithAction:action];
     return [container styledAction];

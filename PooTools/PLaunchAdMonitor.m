@@ -24,7 +24,7 @@ static PLaunchAdMonitor *monitor = nil;
 @property (nonatomic, strong) NSMutableData *imgData;
 @property (nonatomic, strong) NSURLConnection *conn;
 @property (nonatomic, strong) NSMutableDictionary *detailParam;
-@property (nonatomic, copy) void(^callback)();
+@property (nonatomic, copy) void(^callback)(void);
 @property (nonatomic, strong) NSString *imageType;
 @property (nonatomic, assign) BOOL playMovie;
 @property (nonatomic, strong) NSURL *videoUrl;
@@ -34,7 +34,7 @@ static PLaunchAdMonitor *monitor = nil;
 
 @implementation PLaunchAdMonitor
 
-+ (void)showAdAtPath:(NSArray *)path onView:(UIView *)container timeInterval:(NSTimeInterval)interval detailParameters:(NSDictionary *)param years:(NSString *)year skipButtonFont:(UIFont *)sbFont comName:(nullable NSString *)comname comNameFont:(UIFont *)cFont callback:(void (^ _Nullable)())callback
++ (void)showAdAtPath:(NSArray *)path onView:(UIView *)container timeInterval:(NSTimeInterval)interval detailParameters:(NSDictionary *)param years:(NSString *)year skipButtonFont:(UIFont *)sbFont comName:(nullable NSString *)comname comNameFont:(UIFont *)cFont callback:(void (^ _Nullable)(void))callback
 {
     [[self defaultMonitor] loadImageAtPath:path];
     while (!monitor.imgLoaded)

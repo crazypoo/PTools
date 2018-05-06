@@ -10,10 +10,10 @@
 
 @interface WPAttributedStyleAction : NSObject
 
-@property (readwrite, copy) void (^action) ();
+@property (readwrite, copy) void (^action) (void);
 
-- (instancetype)initWithAction:(void (^)())action;
-+(NSArray*)styledActionWithAction:(void (^)())action;
+- (instancetype)initWithAction:(void (^)(void))action;
++(NSArray*)styledActionWithAction:(void (^)(void))action;
 -(NSArray*)styledAction;
 
 

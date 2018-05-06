@@ -13,6 +13,6 @@
 extern NSString * _Nullable PLaunchAdDetailDisplayNotification;
 
 @interface PLaunchAdMonitor : NSObject
-+ (void)showAdAtPath:(nonnull NSArray *)path onView:(nonnull UIView *)container timeInterval:(NSTimeInterval)interval detailParameters:(nullable NSDictionary *)param years:(nullable NSString *)year skipButtonFont:(UIFont *)sbFont comName:(nullable NSString * )comname comNameFont:(UIFont *)cFont callback:(void(^_Nullable)())callback;
++ (void)showAdAtPath:(nonnull NSArray *)path onView:(nonnull UIView *)container timeInterval:(NSTimeInterval)interval detailParameters:(nullable NSDictionary *)param years:(nullable NSString *)year skipButtonFont:(UIFont *)sbFont comName:(nullable NSString * )comname comNameFont:(UIFont *)cFont callback:(void(^_Nullable)(void))callback;
 
 @end

@@ -27,6 +27,7 @@
 
 #import "HPGrowingTextView.h"
 #import "HPTextViewInternal.h"
+#import "PMacros.h"
 
 @interface HPGrowingTextView(private)
 -(void)commonInitialiser;
@@ -295,6 +296,7 @@
                 
                 if ([UIView resolveClassMethod:@selector(animateWithDuration:animations:)]) {
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 40000
+                    kWeakSelf(self);
                     [UIView animateWithDuration:animationDuration 
                                           delay:0 
                                         options:(UIViewAnimationOptionAllowUserInteraction|
@@ -303,8 +305,8 @@
                                          [self resizeTextView:newSizeH];
                                      } 
                                      completion:^(BOOL finished) {
-                                         if ([delegate respondsToSelector:@selector(growingTextView:didChangeHeight:)]) {
-                                             [delegate growingTextView:self didChangeHeight:newSizeH];
+                                         if ([weakself.delegate respondsToSelector:@selector(growingTextView:didChangeHeight:)]) {
+                                             [weakself.delegate growingTextView:weakself didChangeHeight:newSizeH];
                                          }
                                      }];
 #endif

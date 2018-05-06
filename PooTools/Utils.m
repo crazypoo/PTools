@@ -157,39 +157,44 @@
 
 +(void)changeAPPIcon:(NSString *)IconName
 {
-    if ([UIApplication sharedApplication].supportsAlternateIcons) {
-        NSLog(@"you can change this app's icon");
-    }else{
-        [Utils alertShowWithMessage:@"你不能更换此APP的Icon"];
-        return;
-    }
-    
-    NSString *iconName = [[UIApplication sharedApplication] alternateIconName];
-    
-    if (iconName) {
-        // change to primary icon
-        [[UIApplication sharedApplication] setAlternateIconName:nil completionHandler:^(NSError * _Nullable error) {
-            if (error) {
-                [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
-            }
-            NSLog(@"The alternate icon's name is %@",iconName);
-        }];
-    }
-    else
-    {
-        // change to alterante icon
-        [[UIApplication sharedApplication] setAlternateIconName:IconName completionHandler:^(NSError * _Nullable error) {
-            if (error) {
-                [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
-            }
-            NSLog(@"The alternate icon's name is %@",iconName);
-        }];
+    if (@available(iOS 10.3, *)) {
+        if ([UIApplication sharedApplication].supportsAlternateIcons) {
+            NSLog(@"you can change this app's icon");
+        }else{
+            [Utils alertShowWithMessage:@"你不能更换此APP的Icon"];
+            return;
+        }
+        
+        NSString *iconName = [[UIApplication sharedApplication] alternateIconName];
+        
+        if (iconName) {
+            // change to primary icon
+            [[UIApplication sharedApplication] setAlternateIconName:nil completionHandler:^(NSError * _Nullable error) {
+                if (error) {
+                    [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
+                }
+                NSLog(@"The alternate icon's name is %@",iconName);
+            }];
+        }
+        else
+        {
+            // change to alterante icon
+            [[UIApplication sharedApplication] setAlternateIconName:IconName completionHandler:^(NSError * _Nullable error) {
+                if (error) {
+                    [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
+                }
+                NSLog(@"The alternate icon's name is %@",iconName);
+            }];
+        }
     }
 }
 
 +(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language
 {
-    return [string stringByApplyingTransform:language reverse:NO];
+    if (@available(iOS 9.0, *)) {
+        return [string stringByApplyingTransform:language reverse:NO];
+    }
+    return @"只支持iOS9.0以上";
 }
 
 +(NSString *)backbankenameWithBanknumber:(NSString *)banknumber
@@ -349,5 +354,16 @@
         
     }];
     return result;
+}
+
++(void)turnTheScreen:(UIInterfaceOrientation)type
+{
+    SEL selector = NSSelectorFromString(@"setOrientation:");
+    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
+    [invocation setSelector:selector];
+    [invocation setTarget:[UIDevice currentDevice]];
+    int val = type;
+    [invocation setArgument:&val atIndex:2];
+    [invocation invoke];
 }
 @end

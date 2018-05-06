@@ -9,11 +9,11 @@
 #import "PHealthKit.h"
 
 @interface PHealthKit ()
-{
-    BOOL isLoad;
-    double stepCount;
-    NSString *stepStr;
-}
+
+@property (nonatomic,assign) double stepCount;
+@property (nonatomic,assign) BOOL isLoad;
+@property (nonatomic,strong) NSString *stepStr;
+
 @end
 
 @implementation PHealthKit
@@ -31,7 +31,7 @@
 
 - (void)initSetting {
     
-    isLoad = NO;
+    self.isLoad = NO;
     if ([HKHealthStore isHealthDataAvailable])
     {
         NSSet *readDataTypes = [self dataTypesToRead];
@@ -71,7 +71,7 @@
     NSDateComponents *interval = [[NSDateComponents alloc] init];
     interval.day = 1;
     
-    stepCount = 0;
+    self.stepCount = 0;
     NSDateComponents *anchorComponents = [calendar components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear
                                                      fromDate:[NSDate date]];
     anchorComponents.hour = 0;
@@ -110,14 +110,14 @@
             
             if (quantity) {
                 double value = [quantity doubleValueForUnit:[HKUnit countUnit]];
-                stepCount = stepCount + value;
+                self.stepCount = self.stepCount + value;
             }
             dispatch_async(dispatch_get_main_queue(), ^{
-                stepStr = [NSString stringWithFormat:@"%@",[NSNumberFormatter localizedStringFromNumber:@(stepCount) numberStyle:NSNumberFormatterNoStyle]];
-                isLoad = YES;
+                self.stepStr = [NSString stringWithFormat:@"%@",[NSNumberFormatter localizedStringFromNumber:@(self.stepCount) numberStyle:NSNumberFormatterNoStyle]];
+                self.isLoad = YES;
                 
                 if ([self.delegate respondsToSelector:@selector(kitDataIsload:stepStr:)]) {
-                    [self.delegate kitDataIsload:isLoad stepStr:stepStr];
+                    [self.delegate kitDataIsload:self.isLoad stepStr:self.stepStr];
                 }
             });
         }];
