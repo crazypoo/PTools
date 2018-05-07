@@ -355,15 +355,4 @@
     }];
     return result;
 }
-
-+(void)turnTheScreen:(UIInterfaceOrientation)type
-{
-    SEL selector = NSSelectorFromString(@"setOrientation:");
-    NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:[UIDevice instanceMethodSignatureForSelector:selector]];
-    [invocation setSelector:selector];
-    [invocation setTarget:[UIDevice currentDevice]];
-    int val = type;
-    [invocation setArgument:&val atIndex:2];
-    [invocation invoke];
-}
 @end
