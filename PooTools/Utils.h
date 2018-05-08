@@ -52,7 +52,8 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 +(NSString*)shoujibaomi:(NSString*)phone;
 
-+(NSArray *)arraySortASC:(NSArray *)arr;
-+(NSArray *)arraySortINV:(NSArray *)arr;
++(NSArray *)arraySortASC:(NSArray *)arr;//数组升序
++(NSArray *)arraySortINV:(NSArray *)arr;//数组倒序
 
++ (int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay dateFormatter:(NSString *)df;//日期时间对比
 @end

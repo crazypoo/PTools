@@ -79,6 +79,7 @@
 		CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AA2098319200E31A38 /* WPAttributedStyleAction.m */; };
 		CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AC2098319200E31A38 /* WPHotspotLabel.m */; };
 		CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AE2098319200E31A38 /* WPTappableLabel.m */; };
+		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
 		F0A70E63CC9A27D1B5339D04 /* Pods_PooTools_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -235,6 +236,8 @@
 		CC1257AC2098319200E31A38 /* WPHotspotLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPHotspotLabel.m; sourceTree = "<group>"; };
 		CC1257AD2098319200E31A38 /* WPTappableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTappableLabel.h; sourceTree = "<group>"; };
 		CC1257AE2098319200E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
+		CC9C606220A1537800F06B92 /* PooDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooDatePicker.h; sourceTree = "<group>"; };
+		CC9C606320A1537900F06B92 /* PooDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooDatePicker.m; sourceTree = "<group>"; };
 		D7E6224504513A2D932A5233 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F01DFF91343DF608B861705D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		F98D569275CC0803B29E678B /* Pods-PooTools_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Tests/Pods-PooTools_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -361,6 +364,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC9C606220A1537800F06B92 /* PooDatePicker.h */,
+				CC9C606320A1537900F06B92 /* PooDatePicker.m */,
 				64F95E2F2099374200858FED /* IGBannerItem.h */,
 				64F95E2D2099374200858FED /* IGBannerItem.m */,
 				64F95E2E2099374200858FED /* IGBannerView.h */,
@@ -642,6 +647,7 @@
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				CC1257B92098319300E31A38 /* NSMutableArray+Shuffle.m in Sources */,
+				CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */,
 				CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */,
 				CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */,
 				CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */,
