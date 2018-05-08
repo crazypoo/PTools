@@ -7,7 +7,8 @@
 //
 
 #import "PooDatePicker.h"
-#import <PooTools/UIButton+Block.h>
+#import "UIButton+Block.h"
+#import "PMacros.h"
 
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
@@ -15,6 +16,7 @@
     NSInteger monthIndex;
     NSInteger dayIndex;
     UIView *topV;
+    UIFont *pickerFonts;
 }
 @property (nonatomic, strong) UIPickerView *pickerView;
 @property (nonatomic, strong) NSMutableArray *yearArray;
@@ -75,11 +77,11 @@
 }
 
 
-- (instancetype)initWithTitle:(NSString *)title
+- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf
 {
     self = [super initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
     if (self) {
-        
+        pickerFonts = pf;
         self.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
@@ -87,28 +89,28 @@
         [self addGestureRecognizer:tapGesture];
         
         topV = [[UIView alloc] initWithFrame:CGRectMake(0, kSCREEN_HEIGHT-44-216, kSCREEN_WIDTH, 44)];
-        topV.backgroundColor = AppColor;
+        topV.backgroundColor = tbbc;
         [self addSubview:topV];
         
         UILabel *nameTitle = [[UILabel alloc] initWithFrame:topV.bounds];
         nameTitle.textAlignment = NSTextAlignmentCenter;
-        nameTitle.textColor = AppFontColor;
-        nameTitle.font = kDEFAULT_FONT(FontName, 20);
+        nameTitle.textColor = tbtc;
+        nameTitle.font = font;
         nameTitle.text = title;
         [topV addSubview:nameTitle];
 
         UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         cancelBtn.frame = CGRectMake(10, 0, 50, 44);
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-        [cancelBtn setTitleColor:AppFontColor forState:UIControlStateNormal];
-        [cancelBtn.titleLabel setFont:kDEFAULT_FONT(FontName, 20)];
+        [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [cancelBtn.titleLabel setFont:font];
         [topV addSubview:cancelBtn];
         
         UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         yesBtn.frame = CGRectMake(kSCREEN_WIDTH-60, 0, 50, 44);
         [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
-        [yesBtn setTitleColor:AppFontColor forState:UIControlStateNormal];
-        [yesBtn.titleLabel setFont:kDEFAULT_FONT(FontName, 20)];
+        [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [yesBtn.titleLabel setFont:font];
         [topV addSubview:yesBtn];
         
         [cancelBtn addActionHandler:^(NSInteger tag) {
@@ -169,15 +171,15 @@
             
             UILabel *label = (UILabel *)[_pickerView viewForRow:yearIndex forComponent:0];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = font;
             
             label = (UILabel *)[_pickerView viewForRow:monthIndex forComponent:1];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = font;
             
             label = (UILabel *)[_pickerView viewForRow:dayIndex forComponent:2];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = font;
             
         });
     }
@@ -249,7 +251,7 @@
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = pickerFonts;
             
         });
         
@@ -278,11 +280,11 @@
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = pickerFonts;
             
             label = (UILabel *)[pickerView viewForRow:dayIndex forComponent:2];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = pickerFonts;
             
         });
     }else {
@@ -292,7 +294,7 @@
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = kDEFAULT_FONT(FontName, 20);
+            label.font = pickerFonts;
             
         });
     }
@@ -313,7 +315,7 @@
     UILabel *genderLabel = [[UILabel alloc] init];
     genderLabel.textAlignment = NSTextAlignmentCenter;
     genderLabel.textColor = [UIColor blackColor];
-    genderLabel.font = kDEFAULT_FONT(FontName, 20);
+    genderLabel.font = pickerFonts;
     if (component == 0) {
         
         genderLabel.text = self.yearArray[row];

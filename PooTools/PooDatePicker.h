@@ -9,6 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface PooDatePicker : UIView
--(instancetype)initWithTitle:(NSString *)title;
+- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf;
 @property (nonatomic, copy) void (^block)(NSString *);
 @end
