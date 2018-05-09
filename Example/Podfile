@@ -2,7 +2,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'PooTools_Example' do
-  pod 'PooTools', :path => '../'
+  #pod 'PooTools', :path => '../'
   pod 'SDWebImage'
 
 #  target 'PooTools_Tests' do
