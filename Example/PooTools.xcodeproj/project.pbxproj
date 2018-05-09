@@ -15,6 +15,7 @@
 		6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* PTAppDelegate.m */; };
 		6003F5A7195388D20070C39A /* PTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* PTViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
+		643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 643252C320A26819003A0228 /* YXCustomAlertView.m */; };
 		64F95E312099374200858FED /* IGBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E2D2099374200858FED /* IGBannerItem.m */; };
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
@@ -104,6 +105,8 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
+		643252C220A26819003A0228 /* YXCustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXCustomAlertView.h; sourceTree = "<group>"; };
+		643252C320A26819003A0228 /* YXCustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXCustomAlertView.m; sourceTree = "<group>"; };
 		64F95E2D2099374200858FED /* IGBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBannerItem.m; sourceTree = "<group>"; };
 		64F95E2E2099374200858FED /* IGBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerView.h; sourceTree = "<group>"; };
 		64F95E2F2099374200858FED /* IGBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerItem.h; sourceTree = "<group>"; };
@@ -364,6 +367,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				643252C220A26819003A0228 /* YXCustomAlertView.h */,
+				643252C320A26819003A0228 /* YXCustomAlertView.m */,
 				CC9C606220A1537800F06B92 /* PooDatePicker.h */,
 				CC9C606320A1537900F06B92 /* PooDatePicker.m */,
 				64F95E2F2099374200858FED /* IGBannerItem.h */,
@@ -528,6 +533,11 @@
 				CLASSPREFIX = PT;
 				LastUpgradeCheck = 0930;
 				ORGANIZATIONNAME = crazypoo;
+				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = FA9SE57VK7;
+					};
+				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "PooTools" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -687,6 +697,7 @@
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
 				CC1257D22098319300E31A38 /* PSpeech.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -825,6 +836,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				DEVELOPMENT_TEAM = FA9SE57VK7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
@@ -849,6 +861,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				DEVELOPMENT_TEAM = FA9SE57VK7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
