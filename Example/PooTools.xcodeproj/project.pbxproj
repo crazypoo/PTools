@@ -20,7 +20,6 @@
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
-		CC1256B52098286400E31A38 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC1256B42098286400E31A38 /* PooTools.framework */; };
 		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
 		CC1257B22098319300E31A38 /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573B2098319200E31A38 /* DES3Util.m */; };
@@ -248,7 +247,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC1256B52098286400E31A38 /* PooTools.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
@@ -836,8 +834,6 @@
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"PooTools\"",
 					"-all_load",
 					"-ObjC",
 				);
@@ -861,8 +857,6 @@
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
-					"-framework",
-					"\"PooTools\"",
 					"-all_load",
 					"-ObjC",
 				);
