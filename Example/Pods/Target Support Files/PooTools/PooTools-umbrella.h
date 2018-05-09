@@ -18,7 +18,6 @@
 #import "HPTextViewInternal.h"
 #import "IGBannerItem.h"
 #import "IGBannerView.h"
-#import "JMHoledView.h"
 #import "LGTMBase64.h"
 #import "LGTMDefines.h"
 #import "MethodSwizzle.h"
@@ -39,6 +38,7 @@
 #import "PooActionOnCalendar.h"
 #import "PooAlertView.h"
 #import "PooCodeView.h"
+#import "PooDatePicker.h"
 #import "PooLoadingView.h"
 #import "PooNumberKeyBoard.h"
 #import "PooPhoneBlock.h"
@@ -74,6 +74,7 @@
 #import "WPAttributedStyleAction.h"
 #import "WPHotspotLabel.h"
 #import "WPTappableLabel.h"
+#import "YXCustomAlertView.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];

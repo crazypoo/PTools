@@ -7,6 +7,7 @@
 //
 
 #import "ALActionSheetView.h"
+#import "PMacros.h"
 
 #define kRowHeight 48.0f
 #define kRowLineHeight 0.5f
@@ -58,7 +59,7 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles handler:(ALActionSheetViewDidSelectButtonBlock)block;
+- (instancetype)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
     self = [self init];
     
@@ -89,13 +90,13 @@
         {
             CGFloat spacing = 15.0f;
             
-            CGFloat titleHeight = ceil([_title boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]} context:nil].size.height) + spacing*2;
+            CGFloat titleHeight = ceil([_title boundingRectWithSize:CGSizeMake(width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kDEFAULT_FONT(bfName, kTitleFontSize)} context:nil].size.height) + spacing*2;
             
             UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, titleHeight)];
             titleLabel.backgroundColor = [UIColor whiteColor];
             titleLabel.textColor = [UIColor colorWithRed:111.0f/255.0f green:111.0f/255.0f blue:111.0f/255.0f alpha:1.0f];
             titleLabel.textAlignment = NSTextAlignmentCenter;
-            titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
+            titleLabel.font = kDEFAULT_FONT(bfName, kTitleFontSize);
             titleLabel.numberOfLines = 0;
             titleLabel.text = _title;
             [self.actionSheetView addSubview:titleLabel];
@@ -111,7 +112,7 @@
                 btn.frame = CGRectMake(0, offy, width, kRowHeight);
                 btn.tag = i;
                 btn.backgroundColor = [UIColor whiteColor];
-                btn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
+                btn.titleLabel.font = kDEFAULT_FONT(bfName, kButtonTitleFontSize);
                 [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [btn setTitle:_otherButtonTitles[i] forState:UIControlStateNormal];
                 [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
@@ -133,7 +134,7 @@
             destructiveButton.frame = CGRectMake(0, offy, width, kRowHeight);
             destructiveButton.tag = [_otherButtonTitles count] ?: 0;
             destructiveButton.backgroundColor = [UIColor whiteColor];
-            destructiveButton.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
+            destructiveButton.titleLabel.font = kDEFAULT_FONT(bfName, kButtonTitleFontSize);
             [destructiveButton setTitleColor:[UIColor colorWithRed:255.0f/255.0f green:10.0f/255.0f blue:10.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
             [destructiveButton setTitle:_destructiveButtonTitle forState:UIControlStateNormal];
             [destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
@@ -155,7 +156,7 @@
         cancelBtn.frame = CGRectMake(0, offy, width, kRowHeight);
         cancelBtn.tag = -1;
         cancelBtn.backgroundColor = [UIColor whiteColor];
-        cancelBtn.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
+        cancelBtn.titleLabel.font = kDEFAULT_FONT(bfName, kButtonTitleFontSize);
         [cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
         [cancelBtn setTitle:_cancelButtonTitle ?: @"取消" forState:UIControlStateNormal];
         [cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
@@ -173,9 +174,9 @@
     return self;
 }
 
-+ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles handler:(ALActionSheetViewDidSelectButtonBlock)block;
++ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
-    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles handler:block];
+    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName handler:block];
     
     return actionSheetView;
 }
