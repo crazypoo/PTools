@@ -57,7 +57,6 @@
 #import "WMHub.h"//转圈加载动画
 
 //View
-#import "JMHoledView.h"//遮罩教程
 #import "PGifHud.h"//GIFHUD
 #import "PLaunchAdMonitor.h"//启动广告
 #import "PooTagsLabel.h"//标签
