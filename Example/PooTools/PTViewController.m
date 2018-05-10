@@ -31,7 +31,9 @@
 
 -(void)aaaaa
 {
-    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view centerY:kSCREEN_HEIGHT/2 alertTitle:@"1111231231231231231231231231" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"] clickAction:^(YXCustomAlertView *alert, NSInteger buttonIndex) {
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view centerY:kSCREEN_HEIGHT/2 alertTitle:@"1111231231231231231231231231" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"] setCustomView:^(YXCustomAlertView *alert){
+        alert.customView.backgroundColor = kRandomColor;
+    } clickAction:^(YXCustomAlertView *alert, NSInteger buttonIndex) {
         PNSLog(@"%ld>>>>>>%ld",(long)alert.tag,buttonIndex);
         if (buttonIndex == 0) {
             [alert dissMiss];

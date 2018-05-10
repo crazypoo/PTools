@@ -20,6 +20,7 @@
 }
 
 @property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, copy) YXCustomAlertViewSetCustomViewBlock setBlock;
 @property (nonatomic, copy) YXCustomAlertViewClickBlock clickBlock;
 @property (nonatomic, copy) YXCustomAlertViewDidDismissBlock didDismissBlock;
 @property (nonatomic, strong) UIView *superViews;
@@ -29,7 +30,7 @@
 @implementation YXCustomAlertView
 
 
-- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView centerY:(CGFloat)yFolat alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable )bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull)mbtArray clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock
+- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView centerY:(CGFloat)yFolat alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable )bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull)mbtArray setCustomView:(YXCustomAlertViewSetCustomViewBlock)setViewBlock clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock
 {
     self = [super initWithFrame:frame];
     
@@ -37,6 +38,7 @@
         self.clickBlock = clickBlock;
         self.didDismissBlock = didDismissBlock;
         self.superViews = superView;
+        self.setBlock = setViewBlock;
         
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
@@ -59,10 +61,14 @@
         self.titleLabel.font = btFont;
         self.titleLabel.text = title;
         [self addSubview:_titleLabel];
-        
+    
         self.customView = [[UIView alloc] initWithFrame:CGRectMake(0, BOTTOM(self.titleLabel), frame.size.width, frame.size.height-TitleViewH-BottomButtonH)];
         [self addSubview:self.customView];
 
+        if (self.setBlock) {
+            self.setBlock(self);
+        }
+        
         CGFloat btnW = (frame.size.width - (mbtArray.count-1)*1)/mbtArray.count;
         for (int i = 0 ; i < mbtArray.count; i++) {
             CGRect buttonFrame = CGRectMake(btnW*i+1*i, frame.size.height-BottomButtonH, btnW, BottomButtonH);

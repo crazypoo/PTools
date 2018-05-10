@@ -14,6 +14,7 @@
 
 @class YXCustomAlertView;
 
+typedef void (^YXCustomAlertViewSetCustomViewBlock)(YXCustomAlertView *alertView);
 typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView *alertView, NSInteger buttonIndex);
 typedef void (^YXCustomAlertViewDidDismissBlock)(void);
 
@@ -23,7 +24,7 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(void);
 
 @property (nonatomic, strong) UIView *customView;
 
-- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView centerY:(CGFloat)yFolat alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable)bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull) mbtArray clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock;
+- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView centerY:(CGFloat)yFolat alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable)bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull) mbtArray setCustomView:(YXCustomAlertViewSetCustomViewBlock)setViewBlock clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock;
 
 - (void) dissMiss;
 - (void) showView;
