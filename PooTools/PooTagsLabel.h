@@ -41,11 +41,7 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 @property (nonatomic,copy) NSString *singleSelectedTitle;     //单个选中对应的标题(初始化时默认选中的)
 @property (nonatomic,copy) NSArray *selectedDefaultTags;      //多个选中对应的标题数组(初始化时默认选中的)
 
-
-
 @end
-
-
 
 @interface PooTagsLabel : UIView
 

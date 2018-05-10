@@ -18,6 +18,7 @@
 @property (nonatomic, strong) UIView *backgroundStarView;
 
 @property (nonatomic, assign) NSInteger numberOfStars;
+@property (nonatomic, copy) PStarRateViewRateBlock rateBlock;
 
 @end
 
@@ -29,13 +30,14 @@
     return nil;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    return [self initWithFrame:frame numberOfStars:DEFALUT_STAR_NUMBER imageForeground:[Utils createImageWithColor:[UIColor redColor]] imageBackGround:[Utils createImageWithColor:[UIColor blueColor]] withTap:YES];
+- (instancetype)initWithFrame:(CGRect)frame rateBlock:(PStarRateViewRateBlock)block{
+    return [self initWithFrame:frame numberOfStars:DEFALUT_STAR_NUMBER imageForeground:[Utils createImageWithColor:[UIColor redColor]] imageBackGround:[Utils createImageWithColor:[UIColor blueColor]] withTap:YES rateBlock:block];
 }
 
-- (instancetype)initWithFrame:(CGRect)frame numberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno
+- (instancetype)initWithFrame:(CGRect)frame numberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block
 {
     if (self = [super initWithFrame:frame]) {
+        self.rateBlock = block;
         _numberOfStars = numberOfStars;
         [self buildUIWithImageStr:fStr backGround:bStr taped:yesORno];
     }
@@ -110,8 +112,8 @@
         _scorePercent = scroePercent;
     }
     
-    if ([self.delegate respondsToSelector:@selector(starRateView:scroePercentDidChange:)]) {
-        [self.delegate starRateView:self scroePercentDidChange:scroePercent];
+    if (self.rateBlock) {
+        self.rateBlock(self, scroePercent);
     }
     
     [self setNeedsLayout];

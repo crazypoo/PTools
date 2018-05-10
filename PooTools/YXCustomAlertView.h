@@ -12,8 +12,6 @@
 #define TitleViewH 35
 #define BottomButtonH 42
 
-
-
 @class YXCustomAlertView;
 
 typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView *alertView, NSInteger buttonIndex);

@@ -9,11 +9,9 @@
 #import <UIKit/UIKit.h>
 
 @class PooSegView;
-@protocol PooSegViewDelegate <NSObject>
-- (void)didSelectedSegmentWith:(PooSegView *)seg AtIndex:(NSInteger)index;
-@end
+
+typedef void (^PooSegViewClickBlock)(PooSegView *segViewView, NSInteger buttonIndex);
 
 @interface PooSegView : UIView
--(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth;
-@property (nonatomic, weak) id<PooSegViewDelegate> delegate;
+-(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth clickBlock:(PooSegViewClickBlock)block;
 @end

@@ -19,3 +19,8 @@ typedef void (^TouchedBlock)(NSInteger tag);
 -(void)bs_setTextAlignment:(NSTextAlignment)textAlignment;
 -(void)bs_setFont:(UIFont *)font;
 @end
+
+@interface UIButton (EX)//按钮图片上文字下
+- (void)verticalImageAndTitle:(CGFloat)spacing;
+
+@end

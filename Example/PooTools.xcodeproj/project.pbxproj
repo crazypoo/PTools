@@ -42,7 +42,6 @@
 		CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257602098319200E31A38 /* PLaunchAdMonitor.m */; };
 		CC1257C52098319300E31A38 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257632098319200E31A38 /* PMotion.m */; };
 		CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257652098319200E31A38 /* PooActionOnCalendar.m */; };
-		CC1257C72098319300E31A38 /* PooAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257672098319200E31A38 /* PooAlertView.m */; };
 		CC1257C82098319300E31A38 /* PooCodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257692098319200E31A38 /* PooCodeView.m */; };
 		CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576B2098319200E31A38 /* PooLoadingView.m */; };
 		CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */; };
@@ -60,7 +59,6 @@
 		CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257862098319200E31A38 /* RCDraggableButton.m */; };
 		CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257882098319200E31A38 /* SecurityStrategy.m */; };
 		CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12578A2098319200E31A38 /* UIButton+Block.m */; };
-		CC1257D92098319300E31A38 /* UIButton+EX.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12578C2098319200E31A38 /* UIButton+EX.m */; };
 		CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12578E2098319200E31A38 /* UIColor+Colours.m */; };
 		CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257902098319200E31A38 /* UIColor+Helper.m */; };
 		CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257922098319200E31A38 /* UIColor+Random.m */; };
@@ -162,8 +160,6 @@
 		CC1257632098319200E31A38 /* PMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
 		CC1257642098319200E31A38 /* PooActionOnCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooActionOnCalendar.h; sourceTree = "<group>"; };
 		CC1257652098319200E31A38 /* PooActionOnCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooActionOnCalendar.m; sourceTree = "<group>"; };
-		CC1257662098319200E31A38 /* PooAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooAlertView.h; sourceTree = "<group>"; };
-		CC1257672098319200E31A38 /* PooAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooAlertView.m; sourceTree = "<group>"; };
 		CC1257682098319200E31A38 /* PooCodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooCodeView.h; sourceTree = "<group>"; };
 		CC1257692098319200E31A38 /* PooCodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooCodeView.m; sourceTree = "<group>"; };
 		CC12576A2098319200E31A38 /* PooLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
@@ -199,8 +195,6 @@
 		CC1257882098319200E31A38 /* SecurityStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
 		CC1257892098319200E31A38 /* UIButton+Block.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+Block.h"; sourceTree = "<group>"; };
 		CC12578A2098319200E31A38 /* UIButton+Block.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+Block.m"; sourceTree = "<group>"; };
-		CC12578B2098319200E31A38 /* UIButton+EX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+EX.h"; sourceTree = "<group>"; };
-		CC12578C2098319200E31A38 /* UIButton+EX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+EX.m"; sourceTree = "<group>"; };
 		CC12578D2098319200E31A38 /* UIColor+Colours.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colours.h"; sourceTree = "<group>"; };
 		CC12578E2098319200E31A38 /* UIColor+Colours.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
 		CC12578F2098319200E31A38 /* UIColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
@@ -416,8 +410,6 @@
 				CC1257632098319200E31A38 /* PMotion.m */,
 				CC1257642098319200E31A38 /* PooActionOnCalendar.h */,
 				CC1257652098319200E31A38 /* PooActionOnCalendar.m */,
-				CC1257662098319200E31A38 /* PooAlertView.h */,
-				CC1257672098319200E31A38 /* PooAlertView.m */,
 				CC1257682098319200E31A38 /* PooCodeView.h */,
 				CC1257692098319200E31A38 /* PooCodeView.m */,
 				CC12576A2098319200E31A38 /* PooLoadingView.h */,
@@ -453,8 +445,6 @@
 				CC1257882098319200E31A38 /* SecurityStrategy.m */,
 				CC1257892098319200E31A38 /* UIButton+Block.h */,
 				CC12578A2098319200E31A38 /* UIButton+Block.m */,
-				CC12578B2098319200E31A38 /* UIButton+EX.h */,
-				CC12578C2098319200E31A38 /* UIButton+EX.m */,
 				CC12578D2098319200E31A38 /* UIColor+Colours.h */,
 				CC12578E2098319200E31A38 /* UIColor+Colours.m */,
 				CC12578F2098319200E31A38 /* UIColor+Helper.h */,
@@ -624,7 +614,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC1257BD2098319300E31A38 /* NSString+WPAttributedMarkup.m in Sources */,
-				CC1257C72098319300E31A38 /* PooAlertView.m in Sources */,
 				CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */,
@@ -661,7 +650,6 @@
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
-				CC1257D92098319300E31A38 /* UIButton+EX.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,

@@ -19,13 +19,18 @@
     UIColor *lineColor;
     float linesWidth;
 }
+@property (nonatomic, copy) PooSegViewClickBlock clickBlock;
+
 @end
 
 @implementation PooSegView
--(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth
+-(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth clickBlock:(PooSegViewClickBlock)block
 {
     self = [super initWithFrame:frame];
     if (self) {
+        
+        self.clickBlock = block;
+        
         titlesArr = titleArr;
         titleNormalColor = nColor;
         titleSelectedColor = sColor;
@@ -74,8 +79,9 @@
     selectedBtn.selected = NO;
     sender.selected = YES;
     selectedBtn = sender;
-    if ([self.delegate respondsToSelector:@selector(didSelectedSegmentWith:AtIndex:)]) {
-        [self.delegate didSelectedSegmentWith:self AtIndex:sender.tag];
+    
+    if (self.clickBlock) {
+        self.clickBlock(self, sender.tag);
     }
 }
 @end

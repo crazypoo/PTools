@@ -43,7 +43,6 @@
 #import "PMacros.h"//宏定义
 #import "PMotion.h"//运动步数，速度，状态
 #import "PooActionOnCalendar.h"//添加时间到日历
-#import "PooAlertView.h"//自定义弹出框
 #import "PooCodeView.h"//动态验证码
 #import "PooPhoneBlock.h"//打电话
 #import "PooSystemInfo.h"//系统信息
@@ -98,5 +97,4 @@
 #import "UINavigationItem+Excursion.h"//导航栏按钮位置调整
 #import "UIView+ModifyFrame.h"//简化xywh获取
 #import "UIViewController+TopBarMessage.h"//自定义顶部弹出提醒
-#import "UIButton+EX.h"//按钮图片上文字下
 #endif
