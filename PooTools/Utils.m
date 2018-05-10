@@ -66,6 +66,23 @@
     return alert;
 }
 
++(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                             message:m
+                                                                      preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:okT style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        okBlock();
+    }];
+    [alertController addAction:okAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cT style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        cancelBlock();
+    }];
+    [alertController addAction:cancelAction];
+    [vC presentViewController:alertController animated:YES completion:^{
+    }];
+}
+
 +(void)timmerRunWithTime:(int)time button:(UIButton *)btn originalStr:(NSString *)str setTapEnable:(BOOL)yesOrNo
 {
     __block int timeout = time;

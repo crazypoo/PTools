@@ -12,7 +12,7 @@
 #import "PMacros.h"
 
 
-@interface PTViewController ()<YXCustomAlertViewDelegate>
+@interface PTViewController ()
 
 @end
 
@@ -31,10 +31,17 @@
 
 -(void)aaaaa
 {
-    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"]];
-    alert.center = CGPointMake(kSCREEN_WIDTH/2, kSCREEN_HEIGHT/2);
-    alert.delegate = self;
-    alert.titleStr = @"111123123123123";
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view centerY:kSCREEN_HEIGHT/2 alertTitle:@"1111231231231231231231231231" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"] clickAction:^(YXCustomAlertView *alert, NSInteger buttonIndex) {
+        PNSLog(@"%ld>>>>>>%ld",(long)alert.tag,buttonIndex);
+        if (buttonIndex == 0) {
+            [alert dissMiss];
+        }
+    } didDismissBlock:^{
+        PNSLog(@"112312312314124124");
+        
+    }];
+//    alert.tag = 1;
+    [alert showView];
 }
 
 #pragma mark - YXCustomAlertViewDelegate

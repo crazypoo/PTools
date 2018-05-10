@@ -20,18 +20,23 @@
 }
 
 @property (nonatomic, strong) UILabel *titleLabel;
-
+@property (nonatomic, copy) YXCustomAlertViewClickBlock clickBlock;
+@property (nonatomic, copy) YXCustomAlertViewDidDismissBlock didDismissBlock;
+@property (nonatomic, strong) UIView *superViews;
 @end
 
 
 @implementation YXCustomAlertView
 
 
-- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable )bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
+- (instancetype) initAlertViewWithFrame:(CGRect)frame andSuperView:(UIView *)superView centerY:(CGFloat)yFolat alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable )bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull)mbtArray clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock
 {
     self = [super initWithFrame:frame];
     
     if (self) {
+        self.clickBlock = clickBlock;
+        self.didDismissBlock = didDismissBlock;
+        self.superViews = superView;
         
         self.middleView.frame = superView.frame;
         [superView addSubview:_middleView];
@@ -40,14 +45,19 @@
         alertBottomButtonColor = bbtColor;
         verLineColor = vlColor;
         
+        UITapGestureRecognizer *tapBackgroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dissMiss)];
+        tapBackgroundView.numberOfTouchesRequired = 1;
+        tapBackgroundView.numberOfTapsRequired = 1;
+        [_middleView addGestureRecognizer:tapBackgroundView];
+
+        
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 8;
-        self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, _centerY);
-        [superView addSubview:self];
-        
+        self.center = CGPointMake([UIScreen mainScreen].bounds.size.width/2, yFolat);
         
         self.titleLabel.frame = CGRectMake(0, 0, frame.size.width, TitleViewH);
         self.titleLabel.font = btFont;
+        self.titleLabel.text = title;
         [self addSubview:_titleLabel];
         
         self.customView = [[UIView alloc] initWithFrame:CGRectMake(0, BOTTOM(self.titleLabel), frame.size.width, frame.size.height-TitleViewH-BottomButtonH)];
@@ -107,12 +117,15 @@
 #pragma mark - Action
 - (void)confirmBtnClick:(UIButton *)sender
 {
-    if ([_delegate respondsToSelector:@selector(customAlertView:clickedButtonAtIndex:)]) {
-        [_delegate customAlertView:self clickedButtonAtIndex:sender.tag];
+    if (self.clickBlock) {
+        self.clickBlock(self, sender.tag);
     }
-    
 }
 
+-(void)showView
+{
+    [self.superViews addSubview:self];
+}
 
 #pragma mark - 注销视图
 - (void) dissMiss
@@ -125,18 +138,12 @@
     
     [self removeFromSuperview];
 
-    if ([_delegate respondsToSelector:@selector(customAlertViewWasDismiss)]) {
-        [_delegate customAlertViewWasDismiss];
+    if (self.didDismissBlock) {
+        self.didDismissBlock();
     }
 }
 
 #pragma mark - getter And setter
-
-- (void) setTitleStr:(NSString *)titleStr
-{
-    _titleLabel.text = titleStr;
-}
-
 
 - (UIView *) middleView
 {
