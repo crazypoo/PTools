@@ -7,6 +7,7 @@
 //
 
 #import "NSString+Regulars.h"
+#import "PMacros.h"
 
 @implementation NSString (Regulars)
 
@@ -143,6 +144,47 @@ static NSString *URL = @"[a-zA-z]+://.*";
         }
     }
     return NO;
+}
+
+- (BOOL)isVaildRealName:(NSString *)realName
+{
+    if (kStringIsEmpty(realName))
+    {
+     return NO;
+    }
+    
+    NSRange range1 = [realName rangeOfString:@"·"];
+    NSRange range2 = [realName rangeOfString:@"•"];
+    if(range1.location != NSNotFound ||   // 中文 ·
+       range2.location != NSNotFound )    // 英文 •
+    {
+        //一般中间带 `•`的名字长度不会超过15位，如果有那就设高一点
+        if ([realName length] < 2 || [realName length] > 15)
+        {
+            return NO;
+        }
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[\u4e00-\u9fa5]+[·•][\u4e00-\u9fa5]+$" options:0 error:NULL];
+        
+        NSTextCheckingResult *match = [regex firstMatchInString:realName options:0 range:NSMakeRange(0, [realName length])];
+        
+        NSUInteger count = [match numberOfRanges];
+        
+        return count == 1;
+    }
+    else
+    {
+        //一般正常的名字长度不会少于2位并且不超过8位，如果有那就设高一点
+        if ([realName length] < 2 || [realName length] > 8) {
+            return NO;
+        }
+        NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"^[\u4e00-\u9fa5]+$" options:0 error:NULL];
+        
+        NSTextCheckingResult *match = [regex firstMatchInString:realName options:0 range:NSMakeRange(0, [realName length])];
+        
+        NSUInteger count = [match numberOfRanges];
+        
+        return count == 1;
+    }
 }
 
 @end
