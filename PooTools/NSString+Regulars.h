@@ -19,5 +19,5 @@
 -(BOOL)isValidateIdentity;
 -(BOOL)isIPAddress;
 -(BOOL)isUrlString;
--(BOOL)isVaildRealName:(NSString *)realName;
+-(BOOL)isVaildRealName;
 @end

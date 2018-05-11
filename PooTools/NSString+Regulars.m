@@ -146,7 +146,7 @@ static NSString *URL = @"[a-zA-z]+://.*";
     return NO;
 }
 
-- (BOOL)isVaildRealName:(NSString *)realName
+- (BOOL)isVaildRealName
 {
     if (kStringIsEmpty(realName))
     {
