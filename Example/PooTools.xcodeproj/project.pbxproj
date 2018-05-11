@@ -16,6 +16,7 @@
 		6003F5A7195388D20070C39A /* PTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* PTViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 643252C320A26819003A0228 /* YXCustomAlertView.m */; };
+		64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CF39E020A627C3003F64BF /* PooPieChart.m */; };
 		64F95E312099374200858FED /* IGBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E2D2099374200858FED /* IGBannerItem.m */; };
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
@@ -103,6 +104,8 @@
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		643252C220A26819003A0228 /* YXCustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXCustomAlertView.h; sourceTree = "<group>"; };
 		643252C320A26819003A0228 /* YXCustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXCustomAlertView.m; sourceTree = "<group>"; };
+		64CF39DF20A627C2003F64BF /* PooPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooPieChart.h; sourceTree = "<group>"; };
+		64CF39E020A627C3003F64BF /* PooPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooPieChart.m; sourceTree = "<group>"; };
 		64F95E2D2099374200858FED /* IGBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBannerItem.m; sourceTree = "<group>"; };
 		64F95E2E2099374200858FED /* IGBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerView.h; sourceTree = "<group>"; };
 		64F95E2F2099374200858FED /* IGBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerItem.h; sourceTree = "<group>"; };
@@ -356,6 +359,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				64CF39DF20A627C2003F64BF /* PooPieChart.h */,
+				64CF39E020A627C3003F64BF /* PooPieChart.m */,
 				643252C220A26819003A0228 /* YXCustomAlertView.h */,
 				643252C320A26819003A0228 /* YXCustomAlertView.m */,
 				CC9C606220A1537800F06B92 /* PooDatePicker.h */,
@@ -651,6 +656,7 @@
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
+				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
 				64F95E322099374200858FED /* IGBannerView.m in Sources */,
