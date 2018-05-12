@@ -70,7 +70,7 @@
             self.setBlock(self);
         }
         
-        CGFloat btnW = (frame.size.width - (mbtArray.count-1)*1)/mbtArray.count;
+        CGFloat btnW = (frame.size.width - (mbtArray.count-1)*0.5)/mbtArray.count;
         for (int i = 0 ; i < mbtArray.count; i++) {
             CGRect buttonFrame = CGRectMake(btnW*i+1*i, frame.size.height-BottomButtonH, btnW, BottomButtonH);
             UIButton *btn = [self creatButtonWithFrame:buttonFrame title:mbtArray[i]];
@@ -81,7 +81,7 @@
         
         if (mbtArray.count != 1) {
             for (int j = 0; j < (mbtArray.count-1); j++) {
-                verLine = [[UIView alloc] initWithFrame:CGRectMake(btnW+1*j+btnW*j,frame.size.height-43, 1, 43)];
+                verLine = [[UIView alloc] initWithFrame:CGRectMake(btnW+0.5*j+btnW*j,frame.size.height-43, 0.5, 43)];
                 if (verLineColor == nil) {
                     verLine.backgroundColor = kRGBColor(213, 213, 215);
                 }
