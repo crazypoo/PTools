@@ -16,7 +16,7 @@
 
 typedef void (^YXCustomAlertViewSetCustomViewBlock)(YXCustomAlertView *alertView);
 typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView *alertView, NSInteger buttonIndex);
-typedef void (^YXCustomAlertViewDidDismissBlock)(void);
+typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView *alertView);
 
 @interface YXCustomAlertView : UIView
 

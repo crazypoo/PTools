@@ -138,16 +138,16 @@
 - (void) dissMiss
 {
     
+    if (self.didDismissBlock) {
+        self.didDismissBlock(self);
+    }
+    
     if (_middleView) {
         [_middleView removeFromSuperview];
         _middleView = nil;
     }
     
     [self removeFromSuperview];
-
-    if (self.didDismissBlock) {
-        self.didDismissBlock();
-    }
 }
 
 #pragma mark - getter And setter
