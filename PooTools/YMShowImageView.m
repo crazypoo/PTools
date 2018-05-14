@@ -244,7 +244,7 @@
 - (void)showWithFinish:(didRemoveImage)tempBlock{
     UIView *maskview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
     maskview.backgroundColor = [UIColor blackColor];
-    [self.window addSubview:maskview];
+    [window addSubview:maskview];
     
     [self show:maskview didFinish:^{
         [UIView animateWithDuration:0.5f animations:^{
