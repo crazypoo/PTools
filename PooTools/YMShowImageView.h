@@ -18,21 +18,23 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 
 @interface YMShowImageView : UIView<UIScrollViewDelegate>{
     UIImageView *showImage;
+    
+    UIColor *titleColor;
+    NSString *fontName;
+    UIColor *currentPageIndicatorTintColor;
+    UIColor *pageIndicatorTintColor;
+    NSString *deleteImageName;
+    UIColor *showImageBackgroundColor;
+    UIWindow *window;
 }
 
 @property (nonatomic,copy) didRemoveImage removeImg;
 @property (nonatomic,copy) YMShowImageViewDidDeleted didDeleted;
-@property (nonatomic,strong)UIColor *titleColor;
-@property (nonatomic,strong)NSString *fontName;
-@property (nonatomic,strong)UIColor *currentPageIndicatorTintColor;
-@property (nonatomic,strong)UIColor *pageIndicatorTintColor;
-@property (nonatomic,strong)NSString *deleteImageName;
-@property (nonatomic,strong)UIColor *showImageBackgroundColor;
-@property (strong,nonatomic)UIWindow *window;
+
 
 - (void)showWithFinish:(didRemoveImage)tempBlock;
 
 - (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock;
 
-- (id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray deleteAble:(BOOL)canDelete;
+- (id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w deleteAble:(BOOL)canDelete;
 @end

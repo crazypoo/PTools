@@ -31,12 +31,19 @@
     UIButton *deleteButton;
 }
 
--(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray<PooShowImageModel *> *)appendArray deleteAble:(BOOL)canDelete
+-(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w deleteAble:(BOOL)canDelete
 {
     self = [super initWithFrame:frame];
     if (self) {
         
         self_Frame = frame;
+        titleColor = tC;
+        fontName = fName;
+        currentPageIndicatorTintColor = cpic;
+        pageIndicatorTintColor = pic;
+        deleteImageName = di;
+        showImageBackgroundColor = sibc;
+        window = w;
         
         self.alpha = 0.0f;
         self.page = 0;
@@ -66,7 +73,7 @@
         deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
         deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
         deleteButton.showsTouchWhenHighlighted = YES;
-        [deleteButton setImage:kImageNamed(self.deleteImageName) forState:UIControlStateNormal];
+        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
         [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:deleteButton];
     }
@@ -81,8 +88,8 @@
     pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0,24, kSCREEN_WIDTH, 20)];
     pageControl.numberOfPages = appendArray.count;
     pageControl.backgroundColor = [UIColor clearColor];
-    pageControl.pageIndicatorTintColor = self.pageIndicatorTintColor;
-    pageControl.currentPageIndicatorTintColor = self.currentPageIndicatorTintColor;
+    pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
+    pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
     [pageControl sizeForNumberOfPages:2];
     [self addSubview:pageControl];
     
@@ -95,7 +102,7 @@
         PooShowImageModel *model = appendArray[i];
         
         UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(self.width * i, 0, self.width, self.height)];
-        imageScrollView.backgroundColor = self.showImageBackgroundColor;
+        imageScrollView.backgroundColor = showImageBackgroundColor;
         imageScrollView.contentSize = CGSizeMake(self.width, self.height);
         imageScrollView.delegate = self;
         imageScrollView.maximumZoomScale = 4;
@@ -104,10 +111,10 @@
         if ([model.imageFullView isEqualToString:@"1"]) {
             
             UILabel *fullViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH-60 , 24, 50, 20)];
-            kViewBorderRadius(fullViewLabel, 5, 1, self.titleColor);
+            kViewBorderRadius(fullViewLabel, 5, 1, titleColor);
             fullViewLabel.textAlignment = NSTextAlignmentCenter;
-            fullViewLabel.font = kDEFAULT_FONT(self.fontName, 18);
-            fullViewLabel.textColor = self.titleColor;
+            fullViewLabel.font = kDEFAULT_FONT(fontName, 18);
+            fullViewLabel.textColor = titleColor;
             fullViewLabel.text = @"全景";
             [imageScrollView addSubview:fullViewLabel];
             
@@ -153,20 +160,20 @@
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-20, 40)];
         titleLabel.textAlignment = NSTextAlignmentLeft;
-        titleLabel.textColor     = self.titleColor;
+        titleLabel.textColor     = titleColor;
         titleLabel.numberOfLines = 0;
         titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
+        titleLabel.font = kDEFAULT_FONT(fontName, 16);
         titleLabel.text          = model.imageTitle;
         titleLabel.hidden        = titleLabel.text.length == 0;
         [imageScrollView addSubview:titleLabel];
         
         UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-20, 40)];
         infoLabel.textAlignment = NSTextAlignmentLeft;
-        infoLabel.textColor     = self.titleColor;
+        infoLabel.textColor     = titleColor;
         infoLabel.numberOfLines = 0;
         infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        infoLabel.font = kDEFAULT_FONT(self.fontName, 16);
+        infoLabel.font = kDEFAULT_FONT(fontName, 16);
         infoLabel.text          = model.imageInfo;
         infoLabel.hidden        = infoLabel.text.length == 0;
         [imageScrollView addSubview:infoLabel];
@@ -312,7 +319,7 @@
                                                                    cancelButtonTitle:@"取消"
                                                               destructiveButtonTitle:nil
                                                                    otherButtonTitles:@[@"删除照片"]
-                                                                      buttonFontName:self.fontName
+                                                                      buttonFontName:fontName
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
                                               if (buttonIndex == 0)
