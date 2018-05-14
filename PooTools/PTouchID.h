@@ -25,7 +25,12 @@ typedef enum
     TouchIDStatusSystemCancel//系统取消
 } TouchIDStatus;
 
+@protocol PTouchIDDelegate <NSObject>
+-(void)touchIDStatus:(TouchIDStatus)status;
+@end
+
 @interface PTouchID : NSObject
+@property (nonatomic, weak) id<PTouchIDDelegate>delegate;
 @property (nonatomic, copy) void(^touchIDBlock)(TouchIDStatus touchIDStatus);
 //初始化
 +(instancetype)defaultTouchID;

@@ -43,6 +43,9 @@ static PTouchID *pTouchID = nil;
     if(sacObject == NULL || error != NULL)
     {
         self.touchIDStatus = TouchIDStatusItemNotFound;
+        if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+            [self.delegate touchIDStatus:self.touchIDStatus];
+        }
         if (self.touchIDBlock) {
             self.touchIDBlock(self.touchIDStatus);
         }
@@ -61,6 +64,9 @@ static PTouchID *pTouchID = nil;
         OSStatus status =  SecItemAdd((__bridge CFDictionaryRef)attributes, nil);
         
         self.touchIDStatus = [self touchStatusReturn:status];
+        if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+            [self.delegate touchIDStatus:self.touchIDStatus];
+        }
         if (self.touchIDBlock) {
             self.touchIDBlock(self.touchIDStatus);
         }
@@ -81,6 +87,9 @@ static PTouchID *pTouchID = nil;
          {
              if (succes) {
                  self.touchIDStatus = TouchIDStatusSuccess;
+                 if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+                     [self.delegate touchIDStatus:self.touchIDStatus];
+                 }
                  if (self.touchIDBlock) {
                      self.touchIDBlock(self.touchIDStatus);
                  }
@@ -134,6 +143,9 @@ static PTouchID *pTouchID = nil;
                          break;
                      }
                  }
+                 if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+                     [self.delegate touchIDStatus:self.touchIDStatus];
+                 }
                  if (self.touchIDBlock) {
                      self.touchIDBlock(self.touchIDStatus);
                  }
@@ -158,6 +170,9 @@ static PTouchID *pTouchID = nil;
                 self.touchIDStatus = TouchIDStatusUnknowStatus;
                 break;
             }
+        }
+        if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+            [self.delegate touchIDStatus:self.touchIDStatus];
         }
         if (self.touchIDBlock) {
             self.touchIDBlock(self.touchIDStatus);
@@ -192,6 +207,9 @@ static PTouchID *pTouchID = nil;
                       default:
                           break;
                   }
+                  if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+                      [self.delegate touchIDStatus:self.touchIDStatus];
+                  }
                   if (self.touchIDBlock) {
                       self.touchIDBlock(self.touchIDStatus);
                   }
@@ -213,6 +231,9 @@ static PTouchID *pTouchID = nil;
     dispatch_async(dispatch_get_global_queue( DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         OSStatus status = SecItemUpdate((__bridge CFDictionaryRef)query, (__bridge CFDictionaryRef)changes);
         self.touchIDStatus = [self touchStatusReturn:status];
+        if ([self.delegate respondsToSelector:@selector(touchIDStatus:)]) {
+            [self.delegate touchIDStatus:self.touchIDStatus];
+        }
         if (self.touchIDBlock) {
             self.touchIDBlock(self.touchIDStatus);
         }
