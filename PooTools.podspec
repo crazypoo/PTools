@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.3.30'
+    s.version     = '1.3.31'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = 'hahahahahahahahha.'
@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m}'
     s.ios.deployment_target = '8.0'
-    s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion'
+    s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion','SceneKit'
     s.dependency 'AFNetworking'
     s.dependency 'SDWebImage'
     s.dependency 'CYLTabBarController'

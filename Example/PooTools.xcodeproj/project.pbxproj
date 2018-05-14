@@ -78,6 +78,8 @@
 		CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AC2098319200E31A38 /* WPHotspotLabel.m */; };
 		CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AE2098319200E31A38 /* WPTappableLabel.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
+		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
+		CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E420A9A3D800943107 /* PooShowImageModel.m */; };
 		F0A70E63CC9A27D1B5339D04 /* Pods_PooTools_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -234,6 +236,10 @@
 		CC1257AE2098319200E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
 		CC9C606220A1537800F06B92 /* PooDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooDatePicker.h; sourceTree = "<group>"; };
 		CC9C606320A1537900F06B92 /* PooDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooDatePicker.m; sourceTree = "<group>"; };
+		CCB433E120A9A3D700943107 /* PooShowImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooShowImageModel.h; sourceTree = "<group>"; };
+		CCB433E220A9A3D700943107 /* YMShowImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMShowImageView.h; sourceTree = "<group>"; };
+		CCB433E320A9A3D800943107 /* YMShowImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMShowImageView.m; sourceTree = "<group>"; };
+		CCB433E420A9A3D800943107 /* PooShowImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooShowImageModel.m; sourceTree = "<group>"; };
 		D7E6224504513A2D932A5233 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F01DFF91343DF608B861705D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		F98D569275CC0803B29E678B /* Pods-PooTools_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Tests/Pods-PooTools_Tests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -359,6 +365,10 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CCB433E220A9A3D700943107 /* YMShowImageView.h */,
+				CCB433E320A9A3D800943107 /* YMShowImageView.m */,
+				CCB433E120A9A3D700943107 /* PooShowImageModel.h */,
+				CCB433E420A9A3D800943107 /* PooShowImageModel.m */,
 				64CF39DF20A627C2003F64BF /* PooPieChart.h */,
 				64CF39E020A627C3003F64BF /* PooPieChart.m */,
 				643252C220A26819003A0228 /* YXCustomAlertView.h */,
@@ -667,9 +677,11 @@
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
 				CC1257D52098319300E31A38 /* PTouchID.m in Sources */,
 				CC1257B82098319300E31A38 /* MethodSwizzle.m in Sources */,
+				CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */,
 				CC1257DD2098319300E31A38 /* UIImage+BlurGlass.m in Sources */,
 				CC1257C52098319300E31A38 /* PMotion.m in Sources */,
 				CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */,
+				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,
 				CC1257BB2098319300E31A38 /* NSString+Encryption.m in Sources */,
