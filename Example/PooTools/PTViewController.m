@@ -10,10 +10,11 @@
 #import "Utils.h"
 #import "YXCustomAlertView.h"
 #import "PMacros.h"
+#import "PTouchID.h"
 
 
 @interface PTViewController ()
-
+@property (nonatomic, strong)PTouchID *touchID;
 @end
 
 @implementation PTViewController
@@ -31,6 +32,20 @@
 
 -(void)aaaaa
 {
+    kWeakSelf(self);
+    self.touchID = [PTouchID defaultTouchID];
+    [self.touchID keyboardAndTouchID];
+    self.touchID.touchIDBlock = ^(TouchIDStatus touchIDStatus) {
+        PNSLog(@"%d",touchIDStatus);
+        switch (touchIDStatus) {
+            case TouchIDStatusKeyboardTouchID:
+                [weakself.touchID keyboardAndTouchID];
+                break;
+                
+            default:
+                break;
+        }
+    };
 //    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view centerY:kSCREEN_HEIGHT/2 alertTitle:@"1111231231231231231231231231" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"] setCustomView:^(YXCustomAlertView *alert){
 //        alert.customView.backgroundColor = kRandomColor;
 //    } clickAction:^(YXCustomAlertView *alert, NSInteger buttonIndex) {
