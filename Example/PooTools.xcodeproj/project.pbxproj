@@ -19,6 +19,7 @@
 		64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CF39E020A627C3003F64BF /* PooPieChart.m */; };
 		64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E0598720A9E06500E434CD /* NSData+AES.m */; };
 		64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E0598A20A9E06600E434CD /* SecurityUtil.m */; };
+		64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E0599620AB6D0200E434CD /* PooCleanCache.m */; };
 		64F95E312099374200858FED /* IGBannerItem.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E2D2099374200858FED /* IGBannerItem.m */; };
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
@@ -114,6 +115,8 @@
 		64E0598820A9E06500E434CD /* SecurityUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityUtil.h; sourceTree = "<group>"; };
 		64E0598920A9E06500E434CD /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
 		64E0598A20A9E06600E434CD /* SecurityUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityUtil.m; sourceTree = "<group>"; };
+		64E0599520AB6D0100E434CD /* PooCleanCache.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooCleanCache.h; sourceTree = "<group>"; };
+		64E0599620AB6D0200E434CD /* PooCleanCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooCleanCache.m; sourceTree = "<group>"; };
 		64F95E2D2099374200858FED /* IGBannerItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBannerItem.m; sourceTree = "<group>"; };
 		64F95E2E2099374200858FED /* IGBannerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerView.h; sourceTree = "<group>"; };
 		64F95E2F2099374200858FED /* IGBannerItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBannerItem.h; sourceTree = "<group>"; };
@@ -371,6 +374,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				64E0599520AB6D0100E434CD /* PooCleanCache.h */,
+				64E0599620AB6D0200E434CD /* PooCleanCache.m */,
 				64E0598920A9E06500E434CD /* NSData+AES.h */,
 				64E0598720A9E06500E434CD /* NSData+AES.m */,
 				64E0598820A9E06500E434CD /* SecurityUtil.h */,
@@ -649,6 +654,7 @@
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
+				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC1257B22098319300E31A38 /* DES3Util.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
 				CC1257C22098319300E31A38 /* PHealthKit.m in Sources */,
