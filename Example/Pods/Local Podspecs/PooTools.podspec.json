@@ -1,14 +1,14 @@
 {
   "name": "PooTools",
-  "version": "1.3.36",
+  "version": "1.3.39",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
   "homepage": "https://github.com/crazypoo/PTools",
-  "summary": "hahahahahahahahha.",
+  "summary": "自己用到的工具",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.3.36"
+    "tag": "1.3.39"
   },
   "license": {
     "type": "MIT",
@@ -95,9 +95,6 @@
     "MYBlurIntroductionView": [
 
     ],
-    "TextFieldEffects": [
-
-    ],
     "pop": [
 
     ],
@@ -105,6 +102,12 @@
 
     ],
     "UITextField+Shake": [
+
+    ],
+    "UINavigation-SXFixSpace": [
+
+    ],
+    "MJExtension": [
 
     ]
   }
