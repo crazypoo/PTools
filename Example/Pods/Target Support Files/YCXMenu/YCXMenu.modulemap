@@ -1,0 +1,6 @@
+framework module YCXMenu {
+  umbrella header "YCXMenu-umbrella.h"
+
+  export *
+  module * { export * }
+}

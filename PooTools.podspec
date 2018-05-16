@@ -8,10 +8,10 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.3.36'
+    s.version     = '1.3.37'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
-    s.summary     = 'hahahahahahahahha.'
+    s.summary     = '自己用到的工具'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.platform = :ios, '8.0'
@@ -41,4 +41,6 @@ Pod::Spec.new do |s|
     s.dependency 'pop'
     s.dependency 'JMHoledView'
     s.dependency 'UITextField+Shake'
+    s.dependency 'UINavigation-SXFixSpace'
+    s.dependency 'MJExtension'
 end

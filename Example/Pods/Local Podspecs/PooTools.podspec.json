@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "1.3.14",
+  "version": "1.3.36",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "hahahahahahahahha.",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.3.14"
+    "tag": "1.3.36"
   },
   "license": {
     "type": "MIT",
@@ -37,7 +37,8 @@
     "Speech",
     "LocalAuthentication",
     "HealthKit",
-    "CoreMotion"
+    "CoreMotion",
+    "SceneKit"
   ],
   "dependencies": {
     "AFNetworking": [
@@ -101,6 +102,9 @@
 
     ],
     "JMHoledView": [
+
+    ],
+    "UITextField+Shake": [
 
     ]
   }

@@ -80,6 +80,33 @@
 		CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AA2098319200E31A38 /* WPAttributedStyleAction.m */; };
 		CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AC2098319200E31A38 /* WPHotspotLabel.m */; };
 		CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AE2098319200E31A38 /* WPTappableLabel.m */; };
+		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
+		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
+		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
+		CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CDC20AC3D8400949DF6 /* CGADCollectionViewCell.m */; };
+		CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */; };
+		CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */; };
+		CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */; };
+		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
+		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
+		CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE820AC3F7C00949DF6 /* FMDB.framework */; };
+		CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEA20AC3F7C00949DF6 /* HTAutocompleteTextField.framework */; };
+		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
+		CC658CEF20AC3F7C00949DF6 /* JMHoledView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEE20AC3F7C00949DF6 /* JMHoledView.framework */; };
+		CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF020AC3F7C00949DF6 /* LTNavigationBar.framework */; };
+		CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF220AC3F7C00949DF6 /* Mantle.framework */; };
+		CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF420AC3F7C00949DF6 /* Masonry.framework */; };
+		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
+		CC658CF920AC3F7C00949DF6 /* MYBlurIntroductionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF820AC3F7C00949DF6 /* MYBlurIntroductionView.framework */; };
+		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
+		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
+		CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFE20AC3F7C00949DF6 /* SDWebImage.framework */; };
+		CC658D0120AC3F7C00949DF6 /* TextFieldEffects.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0020AC3F7C00949DF6 /* TextFieldEffects.framework */; };
+		CC658D0320AC3F7C00949DF6 /* TOWebViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0220AC3F7C00949DF6 /* TOWebViewController.framework */; };
+		CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0420AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework */; };
+		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
+		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
+		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
 		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
 		CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E420A9A3D800943107 /* PooShowImageModel.m */; };
@@ -243,6 +270,37 @@
 		CC1257AC2098319200E31A38 /* WPHotspotLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPHotspotLabel.m; sourceTree = "<group>"; };
 		CC1257AD2098319200E31A38 /* WPTappableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTappableLabel.h; sourceTree = "<group>"; };
 		CC1257AE2098319200E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
+		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
+		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
+		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
+		CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGAdBannerModel.m; sourceTree = "<group>"; };
+		CC658CD820AC3D6C00949DF6 /* CGLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGLayout.h; sourceTree = "<group>"; };
+		CC658CD920AC3D6D00949DF6 /* CGLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGLayout.m; sourceTree = "<group>"; };
+		CC658CDB20AC3D8300949DF6 /* CGADCollectionViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGADCollectionViewCell.h; sourceTree = "<group>"; };
+		CC658CDC20AC3D8400949DF6 /* CGADCollectionViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGADCollectionViewCell.m; sourceTree = "<group>"; };
+		CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CYLTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DHSmartScreenshot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DZNEmptyDataSet.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FDFullscreenPopGesture.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CE820AC3F7C00949DF6 /* FMDB.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = FMDB.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CEA20AC3F7C00949DF6 /* HTAutocompleteTextField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = HTAutocompleteTextField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = IQKeyboardManager.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CEE20AC3F7C00949DF6 /* JMHoledView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = JMHoledView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CF020AC3F7C00949DF6 /* LTNavigationBar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = LTNavigationBar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CF220AC3F7C00949DF6 /* Mantle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Mantle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CF420AC3F7C00949DF6 /* Masonry.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = Masonry.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJRefresh.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CF820AC3F7C00949DF6 /* MYBlurIntroductionView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MYBlurIntroductionView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CFA20AC3F7C00949DF6 /* PooTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PooTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CFC20AC3F7C00949DF6 /* pop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = pop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658CFE20AC3F7C00949DF6 /* SDWebImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SDWebImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0020AC3F7C00949DF6 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0220AC3F7C00949DF6 /* TOWebViewController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TOWebViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0420AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UITableView_FDTemplateLayoutCell.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UITextField_Shake.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIViewController_Swizzled.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YCXMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC9C606220A1537800F06B92 /* PooDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooDatePicker.h; sourceTree = "<group>"; };
 		CC9C606320A1537900F06B92 /* PooDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooDatePicker.m; sourceTree = "<group>"; };
 		CCB433E120A9A3D700943107 /* PooShowImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooShowImageModel.h; sourceTree = "<group>"; };
@@ -259,6 +317,29 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */,
+				CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */,
+				CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */,
+				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
+				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
+				CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */,
+				CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */,
+				CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */,
+				CC658CEF20AC3F7C00949DF6 /* JMHoledView.framework in Frameworks */,
+				CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */,
+				CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */,
+				CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */,
+				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
+				CC658CF920AC3F7C00949DF6 /* MYBlurIntroductionView.framework in Frameworks */,
+				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
+				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
+				CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */,
+				CC658D0120AC3F7C00949DF6 /* TextFieldEffects.framework in Frameworks */,
+				CC658D0320AC3F7C00949DF6 /* TOWebViewController.framework in Frameworks */,
+				CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */,
+				CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */,
+				CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */,
+				CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
@@ -303,6 +384,29 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */,
+				CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */,
+				CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */,
+				CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */,
+				CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */,
+				CC658CE820AC3F7C00949DF6 /* FMDB.framework */,
+				CC658CEA20AC3F7C00949DF6 /* HTAutocompleteTextField.framework */,
+				CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */,
+				CC658CEE20AC3F7C00949DF6 /* JMHoledView.framework */,
+				CC658CF020AC3F7C00949DF6 /* LTNavigationBar.framework */,
+				CC658CF220AC3F7C00949DF6 /* Mantle.framework */,
+				CC658CF420AC3F7C00949DF6 /* Masonry.framework */,
+				CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */,
+				CC658CF820AC3F7C00949DF6 /* MYBlurIntroductionView.framework */,
+				CC658CFA20AC3F7C00949DF6 /* PooTools.framework */,
+				CC658CFC20AC3F7C00949DF6 /* pop.framework */,
+				CC658CFE20AC3F7C00949DF6 /* SDWebImage.framework */,
+				CC658D0020AC3F7C00949DF6 /* TextFieldEffects.framework */,
+				CC658D0220AC3F7C00949DF6 /* TOWebViewController.framework */,
+				CC658D0420AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework */,
+				CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */,
+				CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */,
+				CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */,
 				CC1256B42098286400E31A38 /* PooTools.framework */,
 				6003F58D195388D20070C39A /* Foundation.framework */,
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
@@ -374,6 +478,14 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC658CDB20AC3D8300949DF6 /* CGADCollectionViewCell.h */,
+				CC658CDC20AC3D8400949DF6 /* CGADCollectionViewCell.m */,
+				CC658CD820AC3D6C00949DF6 /* CGLayout.h */,
+				CC658CD920AC3D6D00949DF6 /* CGLayout.m */,
+				CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */,
+				CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */,
+				CC658CD220AC3D4400949DF6 /* PADView.h */,
+				CC658CD320AC3D4400949DF6 /* PADView.m */,
 				64E0599520AB6D0100E434CD /* PooCleanCache.h */,
 				64E0599620AB6D0200E434CD /* PooCleanCache.m */,
 				64E0598920A9E06500E434CD /* NSData+AES.h */,
@@ -526,7 +638,6 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				0D097DFFB01E8844D9A6139F /* [CP] Embed Pods Frameworks */,
-				8A3EB47BE853A63DF8E13B0C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -592,30 +703,59 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
+				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
+				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
+				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/HTAutocompleteTextField/HTAutocompleteTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
+				"${BUILT_PRODUCTS_DIR}/JMHoledView/JMHoledView.framework",
+				"${BUILT_PRODUCTS_DIR}/LTNavigationBar/LTNavigationBar.framework",
+				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
+				"${BUILT_PRODUCTS_DIR}/MYBlurIntroductionView/MYBlurIntroductionView.framework",
+				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
+				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/TOWebViewController/TOWebViewController.framework",
+				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
+				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
+				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
+				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
+				"${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework",
+				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTAutocompleteTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JMHoledView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTNavigationBar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MYBlurIntroductionView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOWebViewController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCXMenu.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		8A3EB47BE853A63DF8E13B0C /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		EF2C1901976606ADFEA97616 /* [CP] Check Pods Manifest.lock */ = {
@@ -654,6 +794,7 @@
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
+				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC1257B22098319300E31A38 /* DES3Util.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
@@ -672,6 +813,7 @@
 				CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */,
 				CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */,
 				64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */,
+				CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */,
 				CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */,
 				CC1257CD2098319300E31A38 /* PooSegView.m in Sources */,
 				CC1257E42098319300E31A38 /* WMHub.m in Sources */,
@@ -700,9 +842,11 @@
 				CC1257C52098319300E31A38 /* PMotion.m in Sources */,
 				CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */,
 				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
+				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,
 				CC1257BB2098319300E31A38 /* NSString+Encryption.m in Sources */,
+				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
 				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,

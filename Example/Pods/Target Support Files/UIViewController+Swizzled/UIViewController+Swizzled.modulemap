@@ -1,0 +1,6 @@
+framework module UIViewController_Swizzled {
+  umbrella header "UIViewController+Swizzled-umbrella.h"
+
+  export *
+  module * { export * }
+}

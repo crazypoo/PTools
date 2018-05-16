@@ -4,7 +4,7 @@ use_frameworks!
 target 'PooTools_Example' do
   pod 'PooTools', :path => '../'
   pod 'SDWebImage'
-
+  pod 'Masonry'
 #  target 'PooTools_Tests' do
 #    inherit! :search_paths
 

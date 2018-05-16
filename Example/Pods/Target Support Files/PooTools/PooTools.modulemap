@@ -1,0 +1,6 @@
+framework module PooTools {
+  umbrella header "PooTools-umbrella.h"
+
+  export *
+  module * { export * }
+}
