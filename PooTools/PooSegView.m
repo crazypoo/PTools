@@ -18,13 +18,16 @@
     BOOL setLines;
     UIColor *lineColor;
     float linesWidth;
+    
+    UIColor *selectedBackgroundColor;
+    UIColor *normalBackgroundColor;
 }
 @property (nonatomic, copy) PooSegViewClickBlock clickBlock;
 
 @end
 
 @implementation PooSegView
--(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth clickBlock:(PooSegViewClickBlock)block
+-(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc clickBlock:(PooSegViewClickBlock)block
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -38,6 +41,8 @@
         setLines = yesORno;
         lineColor = lColor;
         linesWidth = lWidth;
+        selectedBackgroundColor = sbc;
+        normalBackgroundColor = nbc;
         [self initUI];
     }
     return self;
@@ -76,9 +81,23 @@
     if (selectedBtn == sender) {
         return;
     }
+    if (normalBackgroundColor) {
+        [selectedBtn setBackgroundColor:normalBackgroundColor];
+    }
+    else
+    {
+        [selectedBtn setBackgroundColor:[UIColor clearColor]];
+    }
     selectedBtn.selected = NO;
     sender.selected = YES;
     selectedBtn = sender;
+    if (selectedBackgroundColor) {
+        [selectedBtn setBackgroundColor:selectedBackgroundColor];
+    }
+    else
+    {
+        [selectedBtn setBackgroundColor:[UIColor clearColor]];
+    }
     
     if (self.clickBlock) {
         self.clickBlock(self, sender.tag);
