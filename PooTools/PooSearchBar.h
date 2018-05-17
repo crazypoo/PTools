@@ -9,14 +9,15 @@
 #import <UIKit/UIKit.h>
 
 @interface PooSearchBar : UISearchBar
-@property (nonatomic, retain) NSString *searchPlaceholder;
-@property (nonatomic, retain) UIFont *searchPlaceholderFont;
-@property (nonatomic, retain) UIColor *searchPlaceholderColor;
-@property (nonatomic, retain) UIColor *searchTextColor;
-@property (nonatomic, retain) UIColor *searchTextFieldBackgroundColor;
-@property (nonatomic, retain) UIImage *searchBarImage;
-@property (nonatomic, retain) UIColor *searchBarOutViewColor;
-@property (nonatomic, retain) UIColor *searchBarTextFieldBorderColor;
-@property (nonatomic) float searchBarTextFieldBorderWidth;
-@property (nonatomic) float searchBarTextFieldCornerRadius;
+@property (nonatomic, strong, nonnull) NSString *searchPlaceholder;
+@property (nonatomic, strong, nonnull) UIFont *searchPlaceholderFont;
+@property (nonatomic, strong, nonnull) UIColor *searchPlaceholderColor;
+@property (nonatomic, strong) UIColor *searchTextColor;
+@property (nonatomic, strong) UIColor *searchTextFieldBackgroundColor;
+@property (nonatomic, strong) UIImage *searchBarImage;
+@property (nonatomic, strong) UIColor *searchBarOutViewColor;
+@property (nonatomic, strong) UIColor *searchBarTextFieldBorderColor;
+@property (nonatomic, assign) float searchBarTextFieldBorderWidth;
+@property (nonatomic, assign) float searchBarTextFieldCornerRadius;
+@property (nonatomic, strong) UIColor *cursorColor;
 @end

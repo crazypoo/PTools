@@ -38,6 +38,7 @@
     }
     
     if(searchField) {
+        searchField.font = self.searchPlaceholderFont;
         searchField.placeholder = self.searchPlaceholder;
         [searchField setBorderStyle:UITextBorderStyleRoundedRect];
         [searchField setBackgroundColor:self.searchTextFieldBackgroundColor];
@@ -48,9 +49,23 @@
         searchField.layer.borderWidth = self.searchBarTextFieldBorderWidth;
         searchField.layer.cornerRadius = self.searchBarTextFieldCornerRadius;
 
-        UIImageView *iView = [[UIImageView alloc] initWithImage:self.searchBarImage];
-        [iView setFrame:CGRectMake(0.0, 0.0, 16.0, 16.0)];
-        searchField.leftView = iView;
+        if (self.searchBarImage) {
+            UIImageView *iView = [[UIImageView alloc] initWithImage:self.searchBarImage];
+            [iView setFrame:CGRectMake(0.0, 0.0, 16.0, 16.0)];
+            searchField.leftView = iView;
+        }
+        else
+        {
+            searchField.leftView = nil;
+        }
+        
+        if (self.cursorColor) {
+            [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:self.cursorColor];
+        }
+        else
+        {
+            [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor lightGrayColor]];
+        }
     }
     
     UIView *outView = [[UIView alloc] initWithFrame:self.bounds];
