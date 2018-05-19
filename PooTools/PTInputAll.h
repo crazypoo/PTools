@@ -48,7 +48,7 @@
 #import "PooSystemInfo.h"//系统信息
 #import "PooUDIDInfo.h"//自定义UDID
 #import "PSpeech.h"//语音识别（iOS10以上）
-#import "PTouchID.h"//TouchID
+#import "PBiologyID.h"//生物验证
 #import "Utils.h"//通用工具
 
 //加载
