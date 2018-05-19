@@ -30,6 +30,8 @@
     [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     
+    kAdaptedOtherFontSize(@"", 16);
+    
 //    PooSearchBar *searchBar = [[PooSearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH-200, 44)];
 //    searchBar.barStyle     = UIBarStyleDefault;
 //    searchBar.translucent  = YES;

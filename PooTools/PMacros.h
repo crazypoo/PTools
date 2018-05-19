@@ -304,6 +304,15 @@ return self; \
 #pragma mark ---------------> 设置默认字体&字体大小
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 #define kDEFAULT_FONT(n,s)     [UIFont fontWithName:n size:s]
+
+//不同屏幕尺寸字体适配
+#define kScreenWidthRatio  (UIScreen.mainScreen.bounds.size.width / 375.0)
+#define kScreenHeightRatio (UIScreen.mainScreen.bounds.size.height / 667.0)
+#define kAdaptedWidth(x)  ceilf((x) * kScreenWidthRatio)
+#define kAdaptedHeight(x) ceilf((x) * kScreenHeightRatio)
+#define kAdaptedFontSize(R) [UIFont systemFontOfSize:kAdaptedWidth(R)]
+#define kAdaptedOtherFontSize(n,R) kDEFAULT_FONT(n,kAdaptedWidth(R))
+
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #pragma mark ---------------> 创建返回按钮
