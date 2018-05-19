@@ -366,44 +366,37 @@
     }
 }
 
-+(NSString *)convertToJsonData:(NSDictionary *)dict
-
++(NSString *)convertToJsonData:(NSDictionary *)dictData
 {
-    
-    NSError *error;
-    
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
-    
-    NSString *jsonString;
-    
-    if (!jsonData) {
-        
-        NSLog(@"%@",error);
-        
+    NSError *error = nil;
+    NSData *jsonData = nil;
+    if (!self) {
+        return nil;
     }
-    else
-    {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dictData enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
+        NSString *keyString = nil;
+        NSString *valueString = nil;
+        if ([key isKindOfClass:[NSString class]]) {
+            keyString = key;
+        }else{
+            keyString = [NSString stringWithFormat:@"%@",key];
+        }
         
-        jsonString = [[NSString alloc]initWithData:jsonData encoding:NSUTF8StringEncoding];
+        if ([obj isKindOfClass:[NSString class]]) {
+            valueString = obj;
+        }else{
+            valueString = [NSString stringWithFormat:@"%@",obj];
+        }
         
+        [dict setObject:valueString forKey:keyString];
+    }];
+    jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
+    if ([jsonData length] == 0 || error != nil) {
+        return nil;
     }
-    
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
-    
-    NSRange range = {0,jsonString.length};
-    
-    //去掉字符串中的空格
-    
-    [mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
-    
-    NSRange range2 = {0,mutStr.length};
-    
-    //去掉字符串中的换行符
-    
-    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
-    
-    return mutStr;
-    
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    return jsonString;
 }
 
 +(NSString*)shoujibaomi:(NSString*)phone

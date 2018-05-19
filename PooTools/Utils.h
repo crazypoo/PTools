@@ -63,7 +63,7 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 #pragma mark ------> JSON
 +(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 +(NSArray *)stringToJSON:(NSString *)jsonStr;
-+(NSString *)convertToJsonData:(NSDictionary *)dict;
++(NSString *)convertToJsonData:(NSDictionary *)dictData;
 
 #pragma mark ------> 数组
 +(NSArray *)arraySortASC:(NSArray *)arr;//数组升序
