@@ -12,16 +12,16 @@
 
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 {
-    NSInteger yearIndex;
-    NSInteger monthIndex;
-    NSInteger dayIndex;
     UIView *topV;
-    UIFont *pickerFonts;
 }
 @property (nonatomic, strong) UIPickerView *pickerView;
 @property (nonatomic, strong) NSMutableArray *yearArray;
 @property (nonatomic, strong) NSMutableArray *monthArray;
 @property (nonatomic, strong) NSMutableArray *dayArray;
+@property (nonatomic, strong) UIFont *pickerFonts;
+@property (nonatomic, assign) NSInteger yearIndex;
+@property (nonatomic, assign) NSInteger monthIndex;
+@property (nonatomic, assign) NSInteger dayIndex;
 @end
 
 @implementation PooDatePicker
@@ -81,7 +81,7 @@
 {
     self = [super initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
     if (self) {
-        pickerFonts = pf;
+        self.pickerFonts = pf;
         self.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
@@ -114,17 +114,17 @@
         [topV addSubview:yesBtn];
         
         [cancelBtn addActionHandler:^(NSInteger tag) {
-            if (_block) {
-                _block(nil);
+            if (self.block) {
+                self.block(nil);
             }
             
             [self remove];
         }];
         
         [yesBtn addActionHandler:^(NSInteger tag) {
-            if (_block) {
+            if (self.block) {
                 
-                NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[_pickerView viewForRow:yearIndex forComponent:0]).text, ((UILabel *)[_pickerView viewForRow:monthIndex forComponent:1]).text, ((UILabel *)[_pickerView viewForRow:dayIndex forComponent:2]).text];
+                NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text, ((UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2]).text];
                 
                 
                 timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
@@ -133,7 +133,7 @@
                 
                 timeStr = [timeStr stringByReplacingOccurrencesOfString:@"日" withString:@""];
                 
-                _block(timeStr);
+                self.block(timeStr);
                 
             }
             [self remove];
@@ -155,29 +155,29 @@
         // 获取不同时间字段的信息
         NSDateComponents *comp = [calendar components: unitFlags fromDate:[NSDate date]];
         
-        yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", comp.year]];
-        monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", comp.month]];
-        dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", comp.day]];
+        self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", comp.year]];
+        self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", comp.month]];
+        self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", comp.day]];
         
-        [_pickerView selectRow:yearIndex inComponent:0 animated:YES];
-        [_pickerView selectRow:monthIndex inComponent:1 animated:YES];
-        [_pickerView selectRow:dayIndex inComponent:2 animated:YES];
+        [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
+        [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
+        [self.pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
         
-        [self pickerView:_pickerView didSelectRow:yearIndex inComponent:0];
-        [self pickerView:_pickerView didSelectRow:monthIndex inComponent:1];
-        [self pickerView:_pickerView didSelectRow:dayIndex inComponent:2];
+        [self pickerView:self.pickerView didSelectRow:self.yearIndex inComponent:0];
+        [self pickerView:self.pickerView didSelectRow:self.monthIndex inComponent:1];
+        [self pickerView:self.pickerView didSelectRow:self.dayIndex inComponent:2];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
-            UILabel *label = (UILabel *)[_pickerView viewForRow:yearIndex forComponent:0];
+            UILabel *label = (UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0];
             label.textColor = [UIColor blackColor];
             label.font = font;
             
-            label = (UILabel *)[_pickerView viewForRow:monthIndex forComponent:1];
+            label = (UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1];
             label.textColor = [UIColor blackColor];
             label.font = font;
             
-            label = (UILabel *)[_pickerView viewForRow:dayIndex forComponent:2];
+            label = (UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2];
             label.textColor = [UIColor blackColor];
             label.font = font;
             
@@ -208,7 +208,7 @@
         
     }else {
         
-        switch (monthIndex + 1) {
+        switch (self.monthIndex + 1) {
                 
             case 1:
             case 3:
@@ -246,55 +246,55 @@
 {
     if (component == 0) {
         
-        yearIndex = row;
+        self.yearIndex = row;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = pickerFonts;
+            label.font = self.pickerFonts;
             
         });
         
     }else if (component == 1) {
         
-        monthIndex = row;
+        self.monthIndex = row;
         
         [pickerView reloadComponent:2];
         
         
-        if (monthIndex + 1 == 4 || monthIndex + 1 == 6 || monthIndex + 1 == 9 || monthIndex + 1 == 11) {
+        if (self.monthIndex + 1 == 4 || self.monthIndex + 1 == 6 || self.monthIndex + 1 == 9 || self.monthIndex + 1 == 11) {
             
-            if (dayIndex + 1 == 31) {
+            if (self.dayIndex + 1 == 31) {
                 
-                dayIndex--;
+                self.dayIndex--;
             }
-        }else if (monthIndex + 1 == 2) {
+        }else if (self.monthIndex + 1 == 2) {
             
-            if (dayIndex + 1 > 28) {
-                dayIndex = 27;
+            if (self.dayIndex + 1 > 28) {
+                self.dayIndex = 27;
             }
         }
-        [pickerView selectRow:dayIndex inComponent:2 animated:YES];
+        [pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = pickerFonts;
+            label.font = self.pickerFonts;
             
-            label = (UILabel *)[pickerView viewForRow:dayIndex forComponent:2];
+            label = (UILabel *)[pickerView viewForRow:self.dayIndex forComponent:2];
             label.textColor = [UIColor blackColor];
-            label.font = pickerFonts;
+            label.font = self.pickerFonts;
             
         });
     }else {
         
-        dayIndex = row;
+        self.dayIndex = row;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
-            label.font = pickerFonts;
+            label.font = self.pickerFonts;
             
         });
     }
@@ -315,7 +315,7 @@
     UILabel *genderLabel = [[UILabel alloc] init];
     genderLabel.textAlignment = NSTextAlignmentCenter;
     genderLabel.textColor = [UIColor blackColor];
-    genderLabel.font = pickerFonts;
+    genderLabel.font = self.pickerFonts;
     if (component == 0) {
         
         genderLabel.text = self.yearArray[row];

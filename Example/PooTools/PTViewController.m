@@ -10,12 +10,12 @@
 #import "Utils.h"
 #import "YXCustomAlertView.h"
 #import "PMacros.h"
-#import "PTouchID.h"
+#import "PBiologyID.h"
 #import "PooSearchBar.h"
 
 
 @interface PTViewController ()
-@property (nonatomic, strong)PTouchID *touchID;
+@property (nonatomic, strong)PBiologyID *touchID;
 @end
 
 @implementation PTViewController
@@ -25,30 +25,35 @@
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
     
-    PooSearchBar *searchBar = [[PooSearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH-200, 44)];
-    searchBar.barStyle     = UIBarStyleDefault;
-    searchBar.translucent  = YES;
-//    searchBar.delegate     = self;
-    searchBar.keyboardType = UIKeyboardTypeDefault;
-    searchBar.searchPlaceholder = @"点击此处查找地市名字";
-    searchBar.searchPlaceholderColor = [UIColor lightGrayColor];
-    searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
-    searchBar.searchTextColor = kRandomColor;
-    //    searchBar.searchBarImage = kImageNamed(@"Search");
-    searchBar.searchTextFieldBackgroundColor = [UIColor whiteColor];
-    searchBar.searchBarOutViewColor = [UIColor whiteColor];
-    searchBar.searchBarTextFieldCornerRadius = 15;
-    [self.view addSubview:searchBar];
+//    PooSearchBar *searchBar = [[PooSearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH-200, 44)];
+//    searchBar.barStyle     = UIBarStyleDefault;
+//    searchBar.translucent  = YES;
+////    searchBar.delegate     = self;
+//    searchBar.keyboardType = UIKeyboardTypeDefault;
+//    searchBar.searchPlaceholder = @"点击此处查找地市名字";
+//    searchBar.searchPlaceholderColor = [UIColor lightGrayColor];
+//    searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
+//    searchBar.searchTextColor = kRandomColor;
+//    //    searchBar.searchBarImage = kImageNamed(@"Search");
+//    searchBar.searchTextFieldBackgroundColor = [UIColor whiteColor];
+//    searchBar.searchBarOutViewColor = [UIColor whiteColor];
+//    searchBar.searchBarTextFieldCornerRadius = 15;
+//    [self.view addSubview:searchBar];
 
 }
 
 -(void)aaaaa
 {
+    self.touchID = [PBiologyID defaultBiologyID];
+    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
+        PNSLog(@"%ld",(long)biologyIDType);
+    };
+//    [self.touchID biologyAction];
 //    kWeakSelf(self);
 //    self.touchID = [PTouchID defaultTouchID];
 //    [self.touchID keyboardAndTouchID];
