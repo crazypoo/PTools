@@ -71,10 +71,18 @@
 //view的right的x
 #define RIGHT(view) (view.frame.origin.x + view.frame.size.width)
 
-#define HEIGHT_NAV 44.0
-#define HEIGHT_STATUS 20.0
-#define HEIGHT_TABBAR 44.0
-#define HEIGHT_NAVBAR 64
+//普通NAV
+#define HEIGHT_NAV 44.0//nav高度
+#define HEIGHT_STATUS 20.0//status高度
+#define HEIGHT_TABBAR 44.0//tabbar高度
+#define HEIGHT_NAVBAR 64//普通导航栏高度
+#define HEIGHT_IPHONEXSTATUSBAR 44//iPhonex的status高度
+#define HEIGHT_IPHONEXNAVBAR HEIGHT_IPHONEXSTATUSBAR+HEIGHT_NAV//iPhoneX导航栏高度
+
+////普通Nav加LargeTitle
+#define HEIGHT_LARGETITLE 52//大标题高度
+#define HEIGHT_NAVBARXLARGETITLE HEIGHT_NAVBAR+HEIGHT_LARGETITLE//普通机型带大标题高度
+#define HEIGHT_IPHONEXSTATUSBARXNAVXLARGETITLE HEIGHT_NAV*2+HEIGHT_IPHONEXSTATUSBAR//iPhoneX带大标题高度
 
 #define SCREEN_POINT (float)SCREEN_WIDTH/320.f
 #define SCREEN_H_POINT (float)SCREEN_HEIGHT/480.f
