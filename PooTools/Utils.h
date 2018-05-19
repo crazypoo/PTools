@@ -33,7 +33,7 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName;
 +(UIAlertView *)alertShowWithMessage:(NSString *)message;
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock;
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock;
++(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock;
 
 #pragma mark ------> 计算字符串高度或者宽度
 +(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width;
@@ -63,6 +63,7 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 #pragma mark ------> JSON
 +(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 +(NSArray *)stringToJSON:(NSString *)jsonStr;
++(NSString *)convertToJsonData:(NSDictionary *)dict;
 
 #pragma mark ------> 数组
 +(NSArray *)arraySortASC:(NSArray *)arr;//数组升序
