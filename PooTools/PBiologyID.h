@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
 typedef enum
 {
     BiologyIDVerifyStatusTypeSuccess,//成功
