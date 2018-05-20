@@ -13,7 +13,6 @@
 #import "ALActionSheetView.h"
 #import <SceneKit/SceneKit.h>
 #import "PMacros.h"
-#import "PooLoadingView.h"
 
 @interface YMShowImageView ()<NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 {
@@ -140,12 +139,12 @@
             SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
             sphere.firstMaterial.doubleSided = YES;
             
-            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-150)/2, (kSCREEN_HEIGHT-150)/2, 150, 150)];
+//            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-150)/2, (kSCREEN_HEIGHT-150)/2, 150, 150)];
             
             [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                [loading startAnimation];
+//                [loading startAnimation];
             } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                [loading stopAnimation];
+//                [loading stopAnimation];
                 //Create node, containing a sphere, using the panoramic image as a texture
                 
                 sphere.firstMaterial.diffuse.contents = image;
