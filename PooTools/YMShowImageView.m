@@ -140,7 +140,7 @@
             SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
             sphere.firstMaterial.doubleSided = YES;
             
-            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-100)/2, (kSCREEN_HEIGHT-100)/2, 100, 100)];
+            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-150)/2, (kSCREEN_HEIGHT-150)/2, 150, 150)];
             
             [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 [loading startAnimation];
