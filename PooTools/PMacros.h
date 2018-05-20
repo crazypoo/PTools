@@ -71,6 +71,8 @@
 //view的right的x
 #define RIGHT(view) (view.frame.origin.x + view.frame.size.width)
 
+#define kScreenStatusBottom  ([UIApplication sharedApplication].statusBarFrame.origin.y + [UIApplication sharedApplication].statusBarFrame.size.height)
+
 //普通NAV
 #define HEIGHT_NAV 44.0//nav高度
 #define HEIGHT_STATUS 20.0//status高度
