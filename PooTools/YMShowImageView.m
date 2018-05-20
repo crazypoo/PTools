@@ -13,6 +13,7 @@
 #import "ALActionSheetView.h"
 #import <SceneKit/SceneKit.h>
 #import "PMacros.h"
+#import "PooLoadingView.h"
 
 @interface YMShowImageView ()<NSURLConnectionDataDelegate, NSURLConnectionDelegate>
 {
@@ -31,7 +32,7 @@
     UIButton *deleteButton;
 }
 
--(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w deleteAble:(BOOL)canDelete
+-(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -44,6 +45,7 @@
         deleteImageName = di;
         showImageBackgroundColor = sibc;
         window = w;
+        loadingImageName = li;
         
         self.alpha = 0.0f;
         self.page = 0;
@@ -118,7 +120,17 @@
             fullViewLabel.text = @"全景";
             [imageScrollView addSubview:fullViewLabel];
             
-            SCNView *sceneView = [[SCNView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR, self.width, self.height-HEIGHT_NAVBAR-80)];
+            CGFloat navH = 0.0f;
+            if (kDevice_Is_iPhoneX)
+            {
+                navH = HEIGHT_IPHONEXNAVBAR;
+            }
+            else
+            {
+                navH = HEIGHT_NAVBAR;
+            }
+            
+            SCNView *sceneView = [[SCNView alloc] initWithFrame:CGRectMake(0, navH, self.width, self.height-navH-80)];
             [imageScrollView addSubview:sceneView];
             
             sceneView.scene = [[SCNScene alloc] init];
@@ -127,10 +139,13 @@
             
             SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
             sphere.firstMaterial.doubleSided = YES;
+            
+            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-100)/2, (kSCREEN_HEIGHT-100)/2, 100, 100)];
+            
             [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                sphere.firstMaterial.diffuse.contents = kImageNamed(@"DemoImage");
+                [loading startAnimation];
             } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                
+                [loading stopAnimation];
                 //Create node, containing a sphere, using the panoramic image as a texture
                 
                 sphere.firstMaterial.diffuse.contents = image;
@@ -145,10 +160,10 @@
             NSString *imageURLString = model.imageUrl;
             if (imageURLString) {
                 if ([imageURLString isKindOfClass:[NSString class]]) {
-                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(@"DemoImage")];
+                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(loadingImageName)];
                 }else if([imageURLString isKindOfClass:[NSURL class]]){
                     [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString
-                                     placeholderImage:kImageNamed(@"DemoImage")];
+                                     placeholderImage:kImageNamed(loadingImageName)];
                     
                 }else if([imageURLString isKindOfClass:[UIImage class]]){
                     self.nilViews.image = (UIImage*)imageURLString;

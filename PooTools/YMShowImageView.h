@@ -26,6 +26,7 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
     NSString *deleteImageName;
     UIColor *showImageBackgroundColor;
     UIWindow *window;
+    NSString *loadingImageName;
 }
 
 @property (nonatomic,copy) didRemoveImage removeImg;
@@ -36,5 +37,5 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 
 - (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock;
 
-- (id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w deleteAble:(BOOL)canDelete;
+- (id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete;
 @end
