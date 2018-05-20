@@ -85,7 +85,7 @@
     self.scrollView.contentSize = CGSizeMake(self.width * appendArray.count, 0);
     [self addSubview:self.scrollView];
     
-    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0,24, kSCREEN_WIDTH, 20)];
+    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0,kScreenStatusBottom+5, kSCREEN_WIDTH, 20)];
     pageControl.numberOfPages = appendArray.count;
     pageControl.backgroundColor = [UIColor clearColor];
     pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
@@ -110,7 +110,7 @@
         
         if ([model.imageFullView isEqualToString:@"1"]) {
             
-            UILabel *fullViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH-60 , 24, 50, 20)];
+            UILabel *fullViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH-60 , kScreenStatusBottom+5, 50, 20)];
             kViewBorderRadius(fullViewLabel, 5, 1, titleColor);
             fullViewLabel.textAlignment = NSTextAlignmentCenter;
             fullViewLabel.font = kDEFAULT_FONT(fontName, 18);
