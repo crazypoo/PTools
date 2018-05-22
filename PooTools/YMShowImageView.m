@@ -30,9 +30,12 @@
     CGRect self_Frame;
     BOOL doubleClick;
     UIButton *deleteButton;
+    BOOL saveImageBool;
+    UIButton *saveImageButton;
+    NSString *saveImageButtonImageName;
 }
 
--(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete
+-(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave saveImageImage:(NSString *)sii
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -46,10 +49,12 @@
         showImageBackgroundColor = sibc;
         window = w;
         loadingImageName = li;
+        saveImageButtonImageName = sii;
         
         self.alpha = 0.0f;
         self.page = 0;
         doubleClick = YES;
+        saveImageBool = canSave;
         
         [self configScrollViewWith:clickTag andAppendArray:appendArray canDelete:canDelete];
         
@@ -79,6 +84,24 @@
         [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
         [self addSubview:deleteButton];
     }
+    
+    if (saveImageBool) {
+        self.saveImageArr = [[NSMutableArray alloc] init];
+        
+        saveImageButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+        if (deleteButton == nil) {
+            saveImageButton.frame = CGRectMake( self.width-105, self.height-50, 45.0f, 45.0f);
+        }
+        else
+        {
+            saveImageButton.frame = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
+        }
+        [deleteButton setImage:kImageNamed(saveImageButtonImageName) forState:UIControlStateNormal];
+        [deleteButton addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:deleteButton];
+
+    }
+    
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self_Frame];
     self.scrollView.backgroundColor = [UIColor blackColor];
@@ -149,6 +172,7 @@
                 //Create node, containing a sphere, using the panoramic image as a texture
                 
                 sphere.firstMaterial.diffuse.contents = image;
+                [self.saveImageArr addObject:image];
             }];
             SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
             sphereNode.position = SCNVector3Make(0,0,0);
@@ -171,9 +195,12 @@
             }
             self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:self.nilViews];
+            
+            [self.saveImageArr addObject:self.nilViews.image];
+
         }
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-20, 40)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-110, 40)];
         titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.textColor     = titleColor;
         titleLabel.numberOfLines = 0;
@@ -183,7 +210,7 @@
         titleLabel.hidden        = titleLabel.text.length == 0;
         [imageScrollView addSubview:titleLabel];
         
-        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-20, 40)];
+        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-110, 40)];
         infoLabel.textAlignment = NSTextAlignmentLeft;
         infoLabel.textColor     = titleColor;
         infoLabel.numberOfLines = 0;
@@ -325,6 +352,32 @@
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
   
 
+}
+
+#pragma mark - ----> 保存图片
+-(void)saveImage:(UIButton *)sender
+{
+    NSInteger index = self.page;
+    [self saveImageToPhotos:self.saveImageArr[index]];
+}
+
+- (void)saveImageToPhotos:(UIImage*)savedImage
+{
+    UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    //因为需要知道该操作的完成情况，即保存成功与否，所以此处需要一个回调方法image:didFinishSavingWithError:contextInfo:
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    BOOL saveimageAction;
+    if(error != NULL){
+        saveimageAction = NO;
+    }else{
+        saveimageAction = YES;
+    }
+    if (self.saveImageStatus) {
+        self.saveImageStatus(saveimageAction);
+    }
 }
 
 #pragma mark - ----> 删除图片
