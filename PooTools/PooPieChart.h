@@ -11,7 +11,7 @@
 #import "UIView+ModifyFrame.h"
 
 @interface PooPieChart : UIView
--(instancetype)initWithFrame:(CGRect)frame fontName:(NSString *)fName;
+-(instancetype)initWithFrame:(CGRect)frame lineFontName:(UIFont *)lName centerLabelFont:(UIFont *)cFont;
 //数据数组
 @property (strong, nonatomic) NSArray *dataArray;
 //标题
@@ -27,7 +27,7 @@
 @end
 
 @interface PooPieCenterView : UIView
-- (instancetype)initWithFrame:(CGRect)frame fontName:(NSString *)fName;
+- (instancetype)initWithFrame:(CGRect)frame centerLabelFont:(UIFont *)cFont;
 @property (strong, nonatomic) UILabel *nameLabel;
 @property (strong, nonatomic) UIView *centerView;
 @end

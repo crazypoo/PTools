@@ -15,7 +15,9 @@
 @interface PooPieChart ()
 {
     CGPoint centerPoint;
-    NSString *fontName;
+    UIFont *fontName;
+    UIFont *centerFont;
+
 }
 
 @property (nonatomic, strong) NSMutableArray *modelArray;
@@ -25,11 +27,12 @@
 
 @implementation PooPieChart
 
-- (instancetype)initWithFrame:(CGRect)frame fontName:(NSString *)fName
+- (instancetype)initWithFrame:(CGRect)frame lineFontName:(UIFont *)lName centerLabelFont:(UIFont *)cFont
 {
     if (self = [super initWithFrame:frame])
     {
-        fontName = fName;
+        fontName = lName;
+        centerFont = cFont;
         self.backgroundColor = [UIColor whiteColor];
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPieAction:)];
         [self addGestureRecognizer:tap];
@@ -136,7 +139,7 @@
     }
     
     // 在中心添加label
-    PooPieCenterView *centerView = [[PooPieCenterView alloc] initWithFrame:CGRectMake(0, 0, 80, 80) fontName:fontName];    
+    PooPieCenterView *centerView = [[PooPieCenterView alloc] initWithFrame:CGRectMake(0, 0, 80, 80) centerLabelFont:centerFont];
     CGRect frame = centerView.frame;
     frame.origin = CGPointMake(self.width * 0.5 - frame.size.width * 0.5, self.height * 0.5 - frame.size.width * 0.5);
     centerView.frame = frame;
@@ -352,10 +355,10 @@
         view.layer.masksToBounds = true;
         
         //指引线上面的数字
-        [name drawInRect:CGRectMake(numberX, numberY, numberWidth, numberHeight) withAttributes:@{NSFontAttributeName:kDEFAULT_FONT(fontName, 9), NSForegroundColorAttributeName:color,NSParagraphStyleAttributeName:paragraph}];
+        [name drawInRect:CGRectMake(numberX, numberY, numberWidth, numberHeight) withAttributes:@{NSFontAttributeName:fontName, NSForegroundColorAttributeName:color,NSParagraphStyleAttributeName:paragraph}];
         
         // 指引线下面的title
-        [number drawInRect:CGRectMake(titleX, titleY, titleWidth, titleHeight) withAttributes:@{NSFontAttributeName:kDEFAULT_FONT(fontName, 9),NSForegroundColorAttributeName:color,NSParagraphStyleAttributeName:paragraph}];
+        [number drawInRect:CGRectMake(titleX, titleY, titleWidth, titleHeight) withAttributes:@{NSFontAttributeName:fontName,NSForegroundColorAttributeName:color,NSParagraphStyleAttributeName:paragraph}];
         
     }
 }
@@ -450,7 +453,7 @@
 
 @implementation PooPieCenterView
 
-- (instancetype)initWithFrame:(CGRect)frame fontName:(NSString *)fName;
+- (instancetype)initWithFrame:(CGRect)frame centerLabelFont:(UIFont *)cFont;
 {
     
     if (self = [super initWithFrame:frame])
@@ -464,7 +467,7 @@
         
         UILabel *nameLabel = [[UILabel alloc] init];
         nameLabel.textColor = kRGBAColor(51, 51, 51, 1);
-        nameLabel.font = kDEFAULT_FONT(fName, 18);
+        nameLabel.font = cFont;
         
         nameLabel.textAlignment = NSTextAlignmentCenter;
         self.nameLabel = nameLabel;
