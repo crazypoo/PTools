@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *imageScrollViews;
 @property (nonatomic, assign) NSInteger page;
+@property (nonatomic, strong) NSString *loadingImageName;
+
 @end
 
 @implementation YMShowImageView
@@ -48,7 +50,7 @@
         deleteImageName = di;
         showImageBackgroundColor = sibc;
         window = w;
-        loadingImageName = li;
+        self.loadingImageName = li;
         saveImageButtonImageName = sii;
         
         self.alpha = 0.0f;
@@ -75,33 +77,9 @@
 
 - (void)configScrollViewWith:(NSInteger)clickTag andAppendArray:(NSArray<PooShowImageModel *> *)appendArray canDelete:(BOOL)cd
 {
-    if (cd) {
-        deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
-        deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
-        deleteButton.showsTouchWhenHighlighted = YES;
-        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
-        [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:deleteButton];
-    }
-    
     if (saveImageBool) {
         self.saveImageArr = [[NSMutableArray alloc] init];
-        
-        saveImageButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
-        if (deleteButton == nil) {
-            saveImageButton.frame = CGRectMake( self.width-105, self.height-50, 45.0f, 45.0f);
-        }
-        else
-        {
-            saveImageButton.frame = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
-        }
-        [deleteButton setImage:kImageNamed(saveImageButtonImageName) forState:UIControlStateNormal];
-        [deleteButton addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:deleteButton];
-
     }
-    
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self_Frame];
     self.scrollView.backgroundColor = [UIColor blackColor];
@@ -182,22 +160,30 @@
         {
             self.nilViews = [[UIImageView alloc] initWithFrame:self.bounds];
             NSString *imageURLString = model.imageUrl;
+            kWeakSelf(self);
             if (imageURLString) {
                 if ([imageURLString isKindOfClass:[NSString class]]) {
-                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(loadingImageName)];
+                    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageURLString] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        self.nilViews.image = image;
+                        [self.saveImageArr addObject:image];
+                    }];
                 }else if([imageURLString isKindOfClass:[NSURL class]]){
-                    [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString
-                                     placeholderImage:kImageNamed(loadingImageName)];
-                    
+                    [[SDWebImageManager sharedManager] loadImageWithURL:(NSURL*)imageURLString options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        self.nilViews.image = image;
+                        [self.saveImageArr addObject:image];
+                    }];
                 }else if([imageURLString isKindOfClass:[UIImage class]]){
                     self.nilViews.image = (UIImage*)imageURLString;
+                    [self.saveImageArr addObject:(UIImage*)imageURLString];
+                    
                 }
             }
             self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:self.nilViews];
-            
-            [self.saveImageArr addObject:self.nilViews.image];
-
         }
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-110, 40)];
@@ -225,11 +211,35 @@
         
         imageScrollView.tag = 100 + i ;
         self.nilViews.tag = 1000 + i;
-        
-        
     }
     [self.scrollView setContentOffset:CGPointMake(W * (clickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
     self.page = clickTag - YMShowImageViewClickTagAppend;
+    
+    if (cd) {
+        deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+        deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
+        deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
+        deleteButton.showsTouchWhenHighlighted = YES;
+        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
+        [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:deleteButton];
+    }
+    
+    if (saveImageBool) {
+        
+        saveImageButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+        if (cd) {
+            saveImageButton.frame = CGRectMake(self.width-105, self.height-50, 45.0f, 45.0f);
+        }
+        else
+        {
+            saveImageButton.frame = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
+        }
+        saveImageButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
+        [saveImageButton setImage:kImageNamed(saveImageButtonImageName) forState:UIControlStateNormal];
+        [saveImageButton addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:saveImageButton];
+    }
 }
 
 -(void)removeFromSuperview

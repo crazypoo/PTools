@@ -26,7 +26,6 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
     NSString *deleteImageName;
     UIColor *showImageBackgroundColor;
     UIWindow *window;
-    NSString *loadingImageName;
 }
 
 @property (nonatomic,copy) didRemoveImage removeImg;
