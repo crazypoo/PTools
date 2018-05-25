@@ -58,5 +58,7 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
  */
 -(instancetype)initWithFrame:(CGRect)frame tagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
 
+-(instancetype)initWithFrame:(CGRect)frame tagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
+
 - (CGFloat)heighttagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config;
 @end

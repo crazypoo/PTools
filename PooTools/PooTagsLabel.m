@@ -7,6 +7,7 @@
 //
 
 #import "PooTagsLabel.h"
+#import "PMacros.h"
 
 #define BTN_Tags_Tag        784843
 
@@ -19,6 +20,103 @@
 @end
 
 @implementation PooTagsLabel
+
+-(instancetype)initWithFrame:(CGRect)frame tagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex
+{
+    if (self = [super initWithFrame:frame]) {
+        
+        for (UIView *subView in self.subviews) {
+            [subView removeFromSuperview];
+        }
+        
+        self.tag = sectionIndex;
+        
+        
+        _curConfig = config;
+        _multiSelectedTags = [NSMutableArray array];
+        if (config.selectedDefaultTags.count) {
+            [_multiSelectedTags addObjectsFromArray:config.selectedDefaultTags];
+        }
+        
+        UIImageView *bgImageView = [UIImageView new];
+        bgImageView.userInteractionEnabled = YES;
+        self.bgImageView = bgImageView;
+        [self addSubview:bgImageView];
+        
+        CGRect lastBtnRect = CGRectZero;
+        CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
+        
+        UIFont *font = [UIFont systemFontOfSize:config.fontSize > 0 ? config.fontSize : 12.0];
+        
+        for (int i = 0; i < tagsNormalArr.count; i++) {
+            UIImage *normalImage = kImageNamed(tagsNormalArr[i]);
+            NSString *title = tagsTitleArr[i];
+            
+            CGFloat titleWidth = normalImage.size.width;
+            
+            if ((CGRectGetMaxX(lastBtnRect) + config.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame)) {
+                lastBtnRect.origin.x = 0.0;
+                hMargin = 0.0;
+                lastBtnRect.size.width = 0.0;
+                orgin_Y += (config.itemHeight + config.itemVerMargin);
+            }
+            
+            
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, config.itemHeight, config.itemHeight)];
+            lastBtnRect = btn.frame;
+            hMargin = config.itemHerMargin;
+            btn.tag = BTN_Tags_Tag + i;
+            
+            ///标题设置
+            [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+            [btn setTitle:title forState:UIControlStateNormal];
+            [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
+            [btn setBackgroundImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+            
+            btn.backgroundColor = config.backgroundColor ? config.backgroundColor : [UIColor clearColor];
+            btn.titleLabel.font = font;
+            [btn addTarget:self action:@selector(tagBtnAction:) forControlEvents:UIControlEventTouchUpInside];
+            
+            CGRect frame = self.frame;
+            frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
+            self.frame = frame;
+            self.bgImageView.frame = self.bounds;
+            
+            ///边框
+            if (config.hasBorder) {
+                btn.clipsToBounds = YES;
+                btn.layer.cornerRadius = config.itemHeight / 2.0;
+                btn.layer.borderColor = config.borderColor.CGColor;
+                btn.layer.borderWidth = config.borderWidth > 0.0 ? config.borderWidth : 0.5;
+            }
+            
+            ///可选中
+            if (config.isCanSelected) {
+                //多选
+                if (config.isMulti) {
+                    
+                    for (NSString *str in config.selectedDefaultTags) {
+                        if ([title isEqualToString:str]) {
+                            btn.selected = YES;
+                        }
+                    }
+                    
+                }else{  //单选
+                    if ([title isEqualToString:config.singleSelectedTitle]) {
+                        btn.selected = YES;
+                        self.selectedBtn = btn;
+                    }
+                }
+                
+            }else{  //不可选中
+                btn.enabled = NO;
+            }
+            
+            [self addSubview:btn];
+        }        
+    }
+    return self;
+}
 
 -(instancetype)initWithFrame:(CGRect)frame tagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex
 {

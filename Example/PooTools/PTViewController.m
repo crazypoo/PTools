@@ -13,6 +13,8 @@
 #import "PBiologyID.h"
 #import "PooSearchBar.h"
 
+#import "PooTagsLabel.h"
+
 
 @interface PTViewController ()
 @property (nonatomic, strong)PBiologyID *touchID;
@@ -46,7 +48,29 @@
 //    searchBar.searchBarOutViewColor = [UIColor whiteColor];
 //    searchBar.searchBarTextFieldCornerRadius = 15;
 //    [self.view addSubview:searchBar];
+    
+    NSArray *titleS = @[@"7"];
 
+    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+    config.itemHeight = 50;
+    config.itemHerMargin = 10;
+    config.itemVerMargin = 10;
+    config.hasBorder = YES;
+    config.topBottomSpace = 5.0;
+    config.itemContentEdgs = 20;
+    config.isCanSelected = YES;
+    config.isCanCancelSelected = YES;
+    config.isMulti = YES;
+    config.selectedDefaultTags = titleS;
+    config.borderColor = [UIColor clearColor];
+    config.borderWidth = 0;
+    
+    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
+    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
+    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+
+    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
+    [self.view addSubview:tag];
 }
 
 -(void)aaaaa
