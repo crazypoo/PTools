@@ -23,6 +23,8 @@
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *imageScrollViews;
 @property (nonatomic, assign) NSInteger page;
+@property (nonatomic, strong) NSString *loadingImageName;
+
 @end
 
 @implementation YMShowImageView
@@ -30,9 +32,12 @@
     CGRect self_Frame;
     BOOL doubleClick;
     UIButton *deleteButton;
+    BOOL saveImageBool;
+    UIButton *saveImageButton;
+    NSString *saveImageButtonImageName;
 }
 
--(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete
+-(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave saveImageImage:(NSString *)sii
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -45,11 +50,13 @@
         deleteImageName = di;
         showImageBackgroundColor = sibc;
         window = w;
-        loadingImageName = li;
+        self.loadingImageName = li;
+        saveImageButtonImageName = sii;
         
         self.alpha = 0.0f;
         self.page = 0;
         doubleClick = YES;
+        saveImageBool = canSave;
         
         [self configScrollViewWith:clickTag andAppendArray:appendArray canDelete:canDelete];
         
@@ -70,14 +77,8 @@
 
 - (void)configScrollViewWith:(NSInteger)clickTag andAppendArray:(NSArray<PooShowImageModel *> *)appendArray canDelete:(BOOL)cd
 {
-    if (cd) {
-        deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
-        deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
-        deleteButton.showsTouchWhenHighlighted = YES;
-        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
-        [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:deleteButton];
+    if (saveImageBool) {
+        self.saveImageArr = [[NSMutableArray alloc] init];
     }
     
     self.scrollView = [[UIScrollView alloc] initWithFrame:self_Frame];
@@ -149,6 +150,7 @@
                 //Create node, containing a sphere, using the panoramic image as a texture
                 
                 sphere.firstMaterial.diffuse.contents = image;
+                [self.saveImageArr addObject:image];
             }];
             SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
             sphereNode.position = SCNVector3Make(0,0,0);
@@ -158,22 +160,33 @@
         {
             self.nilViews = [[UIImageView alloc] initWithFrame:self.bounds];
             NSString *imageURLString = model.imageUrl;
+            kWeakSelf(self);
             if (imageURLString) {
                 if ([imageURLString isKindOfClass:[NSString class]]) {
-                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(loadingImageName)];
+                    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageURLString] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        self.nilViews.image = image;
+                        [self.saveImageArr addObject:image];
+                    }];
                 }else if([imageURLString isKindOfClass:[NSURL class]]){
-                    [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString
-                                     placeholderImage:kImageNamed(loadingImageName)];
-                    
+                    [[SDWebImageManager sharedManager] loadImageWithURL:(NSURL*)imageURLString options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                        self.nilViews.image = image;
+                        [self.saveImageArr addObject:image];
+                    }];
                 }else if([imageURLString isKindOfClass:[UIImage class]]){
                     self.nilViews.image = (UIImage*)imageURLString;
+                    [self.saveImageArr addObject:(UIImage*)imageURLString];
+                    
                 }
             }
             self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:self.nilViews];
         }
         
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-20, 40)];
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-110, 40)];
         titleLabel.textAlignment = NSTextAlignmentLeft;
         titleLabel.textColor     = titleColor;
         titleLabel.numberOfLines = 0;
@@ -183,7 +196,7 @@
         titleLabel.hidden        = titleLabel.text.length == 0;
         [imageScrollView addSubview:titleLabel];
         
-        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-20, 40)];
+        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-110, 40)];
         infoLabel.textAlignment = NSTextAlignmentLeft;
         infoLabel.textColor     = titleColor;
         infoLabel.numberOfLines = 0;
@@ -198,11 +211,35 @@
         
         imageScrollView.tag = 100 + i ;
         self.nilViews.tag = 1000 + i;
-        
-        
     }
     [self.scrollView setContentOffset:CGPointMake(W * (clickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
     self.page = clickTag - YMShowImageViewClickTagAppend;
+    
+    if (cd) {
+        deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+        deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
+        deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
+        deleteButton.showsTouchWhenHighlighted = YES;
+        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
+        [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:deleteButton];
+    }
+    
+    if (saveImageBool) {
+        
+        saveImageButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+        if (cd) {
+            saveImageButton.frame = CGRectMake(self.width-105, self.height-50, 45.0f, 45.0f);
+        }
+        else
+        {
+            saveImageButton.frame = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
+        }
+        saveImageButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
+        [saveImageButton setImage:kImageNamed(saveImageButtonImageName) forState:UIControlStateNormal];
+        [saveImageButton addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:saveImageButton];
+    }
 }
 
 -(void)removeFromSuperview
@@ -325,6 +362,32 @@
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView{
   
 
+}
+
+#pragma mark - ----> 保存图片
+-(void)saveImage:(UIButton *)sender
+{
+    NSInteger index = self.page;
+    [self saveImageToPhotos:self.saveImageArr[index]];
+}
+
+- (void)saveImageToPhotos:(UIImage*)savedImage
+{
+    UIImageWriteToSavedPhotosAlbum(savedImage, self, @selector(image:didFinishSavingWithError:contextInfo:), NULL);
+    //因为需要知道该操作的完成情况，即保存成功与否，所以此处需要一个回调方法image:didFinishSavingWithError:contextInfo:
+}
+
+- (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
+{
+    BOOL saveimageAction;
+    if(error != NULL){
+        saveimageAction = NO;
+    }else{
+        saveimageAction = YES;
+    }
+    if (self.saveImageStatus) {
+        self.saveImageStatus(saveimageAction);
+    }
 }
 
 #pragma mark - ----> 删除图片
