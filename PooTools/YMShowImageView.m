@@ -144,13 +144,15 @@
             PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-150)/2, (kSCREEN_HEIGHT-150)/2, 150, 150)];
             
             [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                [loading startAnimation];
+                GCDWithMain(^{
+                    [loading startAnimation];
+                });
             } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                [loading stopAnimation];
-                //Create node, containing a sphere, using the panoramic image as a texture
-                
-                sphere.firstMaterial.diffuse.contents = image;
-                [self.saveImageArr addObject:image];
+                GCDWithMain(^{
+                    [loading stopAnimation];
+                    sphere.firstMaterial.diffuse.contents = image;
+                    [self.saveImageArr addObject:image];
+                });
             }];
             SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
             sphereNode.position = SCNVector3Make(0,0,0);
@@ -164,10 +166,14 @@
             if (imageURLString) {
                 if ([imageURLString isKindOfClass:[NSString class]]) {
                     [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageURLString] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                        GCDWithMain(^{
+                            self.nilViews.image = kImageNamed(weakself.loadingImageName);
+                        });
                     } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                        self.nilViews.image = image;
-                        [self.saveImageArr addObject:image];
+                        GCDWithMain(^{
+                            self.nilViews.image = image;
+                            [self.saveImageArr addObject:image];
+                        });
                     }];
                 }else if([imageURLString isKindOfClass:[NSURL class]]){
                     [[SDWebImageManager sharedManager] loadImageWithURL:(NSURL*)imageURLString options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
