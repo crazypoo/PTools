@@ -162,30 +162,16 @@
         {
             self.nilViews = [[UIImageView alloc] initWithFrame:self.bounds];
             NSString *imageURLString = model.imageUrl;
-            kWeakSelf(self);
             if (imageURLString) {
                 if ([imageURLString isKindOfClass:[NSString class]]) {
-                    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:imageURLString] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                        GCDWithMain(^{
-                            self.nilViews.image = kImageNamed(weakself.loadingImageName);
-                        });
-                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                        GCDWithMain(^{
-                            self.nilViews.image = image;
-                            [self.saveImageArr addObject:image];
-                        });
-                    }];
+                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+                    [self.saveImageArr addObject:self.nilViews.image];
                 }else if([imageURLString isKindOfClass:[NSURL class]]){
-                    [[SDWebImageManager sharedManager] loadImageWithURL:(NSURL*)imageURLString options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                        self.nilViews.image = kImageNamed(weakself.loadingImageName);
-                    } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                        self.nilViews.image = image;
-                        [self.saveImageArr addObject:image];
-                    }];
+                    [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+                    [self.saveImageArr addObject:self.nilViews.image];
                 }else if([imageURLString isKindOfClass:[UIImage class]]){
                     self.nilViews.image = (UIImage*)imageURLString;
                     [self.saveImageArr addObject:(UIImage*)imageURLString];
-                    
                 }
             }
             self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
