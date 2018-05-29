@@ -11,6 +11,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <CoreMedia/CoreMedia.h>
 #import <MediaPlayer/MediaPlayer.h>
+#import <CoreImage/CoreImage.h>
 
 typedef NS_ENUM(NSInteger, GradeType) {
     GradeTypeGe = 0,
@@ -59,6 +60,7 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time;//获取视频第一帧
 +(UIImage*)createImageWithColor:(UIColor*)color;//用颜色生成图片
 +(void)changeAPPIcon:(NSString *)IconName;//此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
++(UIImage *)createQRImageWithString:(NSString *)string withSize:(CGFloat)size;//生成二维码
 
 #pragma mark ------> JSON
 +(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
