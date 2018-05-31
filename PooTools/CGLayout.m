@@ -24,6 +24,19 @@
     return layout;
 }
 
++(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h sectionInset:(UIEdgeInsets)inset  minimumLineSpacing:(CGFloat)mls minimumInteritemSpacing:(CGFloat)mis scrollDirection:(UICollectionViewScrollDirection)sd
+{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.itemSize                    = CGSizeMake(w, h);
+    layout.scrollDirection = sd;
+    
+    layout.sectionInset                = inset;
+    layout.minimumLineSpacing          = mls;
+    layout.minimumInteritemSpacing     = mis;
+    
+    return layout;
+}
+
 +(UICollectionViewFlowLayout *)createLayoutNormalScrollDirection:(UICollectionViewScrollDirection)sd
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
