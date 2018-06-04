@@ -93,14 +93,13 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 {
     NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
     
-    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:1/2];
+    NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
     [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     
     NSInteger nextItem = currentIndexPathReset.item +1;
     NSInteger nextSection = currentIndexPathReset.section;
     if (nextItem == viewData.count) {
         nextItem = 0;
-        nextSection++;
     }
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
     

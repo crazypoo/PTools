@@ -123,7 +123,7 @@ static PLaunchAdMonitor *monitor = nil;
         [v addSubview:imageBtn];
 
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
-        exit.frame = CGRectMake(f.size.width-55, 24, 45, 35);
+        exit.frame = CGRectMake(f.size.width-55, kScreenStatusBottom, 45, 35);
         exit.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
         [exit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         exit.titleLabel.font = sbFont;

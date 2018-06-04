@@ -25,7 +25,9 @@
     self.adImage = [UIImageView new];
     [self.contentView addSubview:self.adImage];
     [self.adImage mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.contentView);
+        make.top.bottom.equalTo(self.contentView);
+        make.left.equalTo(self.contentView).offset(20);
+        make.right.equalTo(self.contentView).offset(-20);
     }];
 }
 @end
