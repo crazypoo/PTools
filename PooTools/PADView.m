@@ -27,7 +27,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         adCollectionView.delegate                       = self;
         adCollectionView.showsHorizontalScrollIndicator = NO;
         adCollectionView.showsVerticalScrollIndicator   = NO;
-        adCollectionView.pagingEnabled                  = YES;
+        adCollectionView.pagingEnabled                  = NO;
         [adCollectionView registerClass:[CGADCollectionViewCell class] forCellWithReuseIdentifier:ADBannerCollectionViewCell];
         [self addSubview:adCollectionView];
         

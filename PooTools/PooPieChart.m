@@ -22,6 +22,7 @@
 
 @property (nonatomic, strong) NSMutableArray *modelArray;
 @property (nonatomic, strong) NSMutableArray *colorArray;
+@property (nonatomic, strong) NSMutableArray *totalArr;
 @end
 
 
@@ -81,18 +82,18 @@
         self.modelArray = [NSMutableArray array];
         self.colorArray = [NSMutableArray array];
         
-        NSMutableArray *totalArr = [[NSMutableArray alloc] init];
+        self.totalArr = [[NSMutableArray alloc] init];
         for (int j = 0; j < self.dataArray.count; j++)
         {
             PooPieViewModel *model = self.dataArray[j];
-            [totalArr addObject:model.value];
+            [self.totalArr addObject:model.value];
         }
         
         for (int i = 0; i < self.dataArray.count; i++)
         {
             PooPieViewModel *model = self.dataArray[i];
             
-            CGFloat percent = [model.value floatValue]/[[totalArr valueForKeyPath:@"@sum.floatValue"] floatValue];
+            CGFloat percent = [model.value floatValue]/[[self.totalArr valueForKeyPath:@"@sum.floatValue"] floatValue];
             UIColor *color = model.color;
             
             start = end;
@@ -175,8 +176,10 @@
         PooPieViewModel *model = self.modelArray[i];
         
         // 模型的数据
+        CGFloat percent = [model.value floatValue]/[[self.totalArr valueForKeyPath:@"@sum.floatValue"] floatValue];
+
         NSString *name = model.name;
-        NSString *number = model.value;
+        NSString *number = [NSString stringWithFormat:@"%@元 占%.2f%%",model.value,percent*100];
         
         
         // 圆弧中心点的x值和y值
@@ -203,8 +206,8 @@
         
         // 绘制文字和数字时，所占的size（width和height）
         // width使用lineWidth更好，我这么写固定值是为了达到产品要求
-        CGFloat numberWidth = 80.f;
-        CGFloat numberHeight = 15.f;
+        CGFloat numberWidth = 150.f;
+        CGFloat numberHeight = 25.f;
         
         CGFloat titleWidth = numberWidth;
         CGFloat titleHeight = numberHeight;
