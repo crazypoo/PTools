@@ -75,10 +75,10 @@
 
 -(void)aaaaa
 {
-    self.touchID = [PBiologyID defaultBiologyID];
-    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
-        PNSLog(@"%ld",(long)biologyIDType);
-    };
+//    self.touchID = [PBiologyID defaultBiologyID];
+//    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
+//        PNSLog(@"%ld",(long)biologyIDType);
+//    };
 //    [self.touchID biologyAction];
 //    kWeakSelf(self);
 //    self.touchID = [PTouchID defaultTouchID];
@@ -94,19 +94,15 @@
 //                break;
 //        }
 //    };
-//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view centerY:kSCREEN_HEIGHT/2 alertTitle:@"1111231231231231231231231231" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123",@"31231412431241"] setCustomView:^(YXCustomAlertView *alert){
-//        alert.customView.backgroundColor = kRandomColor;
-//    } clickAction:^(YXCustomAlertView *alert, NSInteger buttonIndex) {
-//        PNSLog(@"%ld>>>>>>%ld",(long)alert.tag,buttonIndex);
-//        if (buttonIndex == 0) {
-//            [alert dissMiss];
-//        }
-//    } didDismissBlock:^{
-//        PNSLog(@"112312312314124124");
-//
-//    }];
-//    alert.tag = 1;
-//    [alert showView];
+    
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+        
+    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+        
+    } didDismissBlock:^(YXCustomAlertView *alertView) {
+        
+    }];
+    [alert showView];
 }
 
 #pragma mark - YXCustomAlertViewDelegate
