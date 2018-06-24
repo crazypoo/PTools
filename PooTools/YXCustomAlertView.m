@@ -62,7 +62,6 @@
         [self addSubview:_titleLabel];
 
         self.customView = [UIView new];
-        self.customView.backgroundColor = kRandomColor;
         [self addSubview:self.customView];
         
         if (btFont.pointSize*title.length > frame.size.width) {
