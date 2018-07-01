@@ -24,7 +24,9 @@
 @property (nonatomic, strong) NSMutableArray *imageScrollViews;
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, strong) NSString *loadingImageName;
-
+@property (nonatomic, strong) NSMutableArray *modelArr;
+@property (nonatomic, strong) UILabel *titleLabel;
+@property (nonatomic, strong) UILabel *infoLabel;
 @end
 
 @implementation YMShowImageView
@@ -59,6 +61,9 @@
         saveImageBool = canSave;
         
         [self configScrollViewWith:clickTag andAppendArray:appendArray canDelete:canDelete];
+        
+        self.modelArr = [[NSMutableArray alloc] init];
+        [self.modelArr addObjectsFromArray:appendArray];
         
         UITapGestureRecognizer *tapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(disappear)];
         tapGser.numberOfTouchesRequired = 1;
@@ -177,27 +182,7 @@
             self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
             [imageScrollView addSubview:self.nilViews];
         }
-        
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-80, kSCREEN_WIDTH-110, 40)];
-        titleLabel.textAlignment = NSTextAlignmentLeft;
-        titleLabel.textColor     = titleColor;
-        titleLabel.numberOfLines = 0;
-        titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        titleLabel.font = kDEFAULT_FONT(fontName, 16);
-        titleLabel.text          = model.imageTitle;
-        titleLabel.hidden        = titleLabel.text.length == 0;
-        [imageScrollView addSubview:titleLabel];
-        
-        UILabel *infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, imageScrollView.height-40, kSCREEN_WIDTH-110, 40)];
-        infoLabel.textAlignment = NSTextAlignmentLeft;
-        infoLabel.textColor     = titleColor;
-        infoLabel.numberOfLines = 0;
-        infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        infoLabel.font = kDEFAULT_FONT(fontName, 16);
-        infoLabel.text          = model.imageInfo;
-        infoLabel.hidden        = infoLabel.text.length == 0;
-        [imageScrollView addSubview:infoLabel];
-        
+                
         [self.scrollView addSubview:imageScrollView];
         [self.imageScrollViews addObject:imageScrollView];
         
@@ -207,6 +192,28 @@
     [self.scrollView setContentOffset:CGPointMake(W * (clickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
     self.page = clickTag - YMShowImageViewClickTagAppend;
     
+    PooShowImageModel *model = appendArray[0];
+    
+    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, kSCREEN_HEIGHT-80, kSCREEN_WIDTH-110, 40)];
+    self.titleLabel.textAlignment = NSTextAlignmentLeft;
+    self.titleLabel.textColor     = titleColor;
+    self.titleLabel.numberOfLines = 0;
+    self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    self.titleLabel.font = kDEFAULT_FONT(fontName, 16);
+    self.titleLabel.text          = model.imageTitle;
+    self.titleLabel.hidden        = self.titleLabel.text.length == 0;
+    [self addSubview:self.titleLabel];
+    
+    self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, kSCREEN_HEIGHT-40, kSCREEN_WIDTH-110, 40)];
+    self.infoLabel.textAlignment = NSTextAlignmentLeft;
+    self.infoLabel.textColor     = titleColor;
+    self.infoLabel.numberOfLines = 0;
+    self.infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    self.infoLabel.font = kDEFAULT_FONT(fontName, 16);
+    self.infoLabel.text          = model.imageInfo;
+    self.infoLabel.hidden        = self.infoLabel.text.length == 0;
+    [self addSubview:self.infoLabel];
+
     if (cd) {
         deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
         deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
@@ -329,6 +336,12 @@
 {
     int page = (scrollView.contentOffset.x)/scrollView.width;
     pageControl.currentPage = page;
+    
+    if (scrollView == self.scrollView) {
+        PooShowImageModel *model = self.modelArr[page];
+        self.titleLabel.text = model.imageTitle;
+        self.infoLabel.text = model.imageInfo;
+    }
 }
 
 
