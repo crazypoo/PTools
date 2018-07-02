@@ -21,13 +21,15 @@
     
     UIColor *selectedBackgroundColor;
     UIColor *normalBackgroundColor;
+    
+    PooSegShowType showViewType;
 }
 @property (nonatomic, copy) PooSegViewClickBlock clickBlock;
 
 @end
 
 @implementation PooSegView
--(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc clickBlock:(PooSegViewClickBlock)block
+-(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc showType:(PooSegShowType)viewType clickBlock:(PooSegViewClickBlock)block
 {
     self = [super initWithFrame:frame];
     if (self) {
@@ -43,6 +45,7 @@
         linesWidth = lWidth;
         selectedBackgroundColor = sbc;
         normalBackgroundColor = nbc;
+        showViewType = viewType;
         [self initUI];
     }
     return self;
@@ -63,6 +66,26 @@
         if (i == 0) {
             [self btnTap:btn];
         }
+        
+        UIView *underLIneView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/titlesArr.count*i, self.frame.size.height-2, self.frame.size.width/titlesArr.count, 2)];
+        underLIneView.tag = 1000+i;
+        if (i == 0) {
+            underLIneView.backgroundColor = titleSelectedColor;
+        }
+        [self addSubview:underLIneView];
+        switch (showViewType) {
+            case PooSegShowTypeUnderLine:
+            {
+                underLIneView.hidden = NO;
+            }
+                break;
+            default:
+            {
+                underLIneView.hidden = YES;
+            }
+                break;
+        }
+
     }
     if (setLines) {
         int a = 1;
@@ -82,21 +105,83 @@
         return;
     }
     if (normalBackgroundColor) {
-        [selectedBtn setBackgroundColor:normalBackgroundColor];
+        
+        switch (showViewType) {
+            case PooSegShowTypeUnderLine:
+            {
+                UIView *underLineV = [self viewWithTag:1000+sender.tag];
+                underLineV.backgroundColor = normalBackgroundColor;
+            }
+                break;
+            default:
+            {
+                [selectedBtn setBackgroundColor:normalBackgroundColor];
+            }
+                break;
+        }
     }
     else
     {
-        [selectedBtn setBackgroundColor:[UIColor clearColor]];
+        switch (showViewType) {
+            case PooSegShowTypeUnderLine:
+            {
+                UIView *underLineV = [self viewWithTag:1000+sender.tag];
+                underLineV.backgroundColor = [UIColor clearColor];
+            }
+                break;
+            default:
+            {
+                [selectedBtn setBackgroundColor:[UIColor clearColor]];
+            }
+                break;
+        }
     }
     selectedBtn.selected = NO;
     sender.selected = YES;
     selectedBtn = sender;
     if (selectedBackgroundColor) {
-        [selectedBtn setBackgroundColor:selectedBackgroundColor];
+        switch (showViewType) {
+            case PooSegShowTypeUnderLine:
+            {
+                UIView *underLineV = [self viewWithTag:1000+sender.tag];
+                underLineV.backgroundColor = selectedBackgroundColor;
+            }
+                break;
+            default:
+            {
+                [selectedBtn setBackgroundColor:selectedBackgroundColor];
+            }
+                break;
+        }
     }
     else
     {
-        [selectedBtn setBackgroundColor:[UIColor clearColor]];
+        switch (showViewType) {
+            case PooSegShowTypeUnderLine:
+            {
+                UIView *underLineV = [self viewWithTag:1000+sender.tag];
+                underLineV.backgroundColor = [UIColor clearColor];
+            }
+                break;
+            default:
+            {
+                [selectedBtn setBackgroundColor:[UIColor clearColor]];
+            }
+                break;
+        }
+    }
+    
+    for (int i= 0; i < titlesArr.count; i++) {
+        UIView *underLineV = [self viewWithTag:1000+i];
+        if (sender.selected) {
+            if (underLineV.tag == 1000+sender.tag) {
+                underLineV.backgroundColor = selectedBackgroundColor;
+            }
+            else
+            {
+                underLineV.backgroundColor = [UIColor clearColor];
+            }
+        }
     }
     
     if (self.clickBlock) {
