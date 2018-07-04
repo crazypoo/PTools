@@ -89,6 +89,9 @@
 #define SCREEN_POINT (float)SCREEN_WIDTH/320.f
 #define SCREEN_H_POINT (float)SCREEN_HEIGHT/480.f
 
+//ps字号----->ios字号
+#define kPSFontToiOSFont(pixel) (pixel*3/4)
+
 //设置View的tag属性
 #define kVIEWWITHTAG(_OBJECT, _TAG) [_OBJECT viewWithTag : _TAG]
 
