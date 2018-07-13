@@ -17,6 +17,7 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 @property (nonatomic) CGFloat itemHerMargin;            //item之间的左右间距
 @property (nonatomic) CGFloat itemVerMargin;            //item之间的上下间距
 @property (nonatomic) CGFloat itemHeight;               //item的高度
+@property (nonatomic) CGFloat itemWidth;               //item的长度(有图片的时候用)
 @property (nonatomic) CGFloat itemContentEdgs;          //item标题距左右边缘的距离
 @property (nonatomic) CGFloat topBottomSpace;           //最顶部和最底部的item距离俯视图顶部和底部的距离(无间距时可设为0.1)
 

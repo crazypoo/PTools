@@ -62,7 +62,16 @@
             }
             
             
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, config.itemHeight, config.itemHeight)];
+            CGFloat tagW;
+            if (config.itemWidth == 0) {
+                tagW = config.itemHeight;
+            }
+            else
+            {
+                tagW = config.itemWidth;
+            }
+            
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, tagW, config.itemHeight)];
             lastBtnRect = btn.frame;
             hMargin = config.itemHerMargin;
             btn.tag = BTN_Tags_Tag + i;
