@@ -6,6 +6,11 @@
 //  Copyright © 2017年 邓杰豪. All rights reserved.
 //
 
+typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
+    PooTagsLabelShowWithImageStatusNormal = 0,
+    PooTagsLabelShowWithImageStatusNoTitle
+};
+
 #import <UIKit/UIKit.h>
 
 @class PooTagsLabel;
@@ -17,7 +22,7 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 @property (nonatomic) CGFloat itemHerMargin;            //item之间的左右间距
 @property (nonatomic) CGFloat itemVerMargin;            //item之间的上下间距
 @property (nonatomic) CGFloat itemHeight;               //item的高度
-@property (nonatomic) CGFloat itemWidth;               //item的长度(有图片的时候用)
+@property (nonatomic) CGFloat itemWidth;               //item的长度
 @property (nonatomic) CGFloat itemContentEdgs;          //item标题距左右边缘的距离
 @property (nonatomic) CGFloat topBottomSpace;           //最顶部和最底部的item距离俯视图顶部和底部的距离(无间距时可设为0.1)
 
@@ -28,11 +33,14 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 @property (nonatomic,strong) NSString *normalBgImage;
 @property (nonatomic,strong) NSString *selectedBgImage;
 
+@property (nonatomic,assign) PooTagsLabelShowWithImageStatus showStatus;
+@property (nonatomic,strong) UIFont *btnFont;
 
 //是否有边框  默认没有边框
 @property (nonatomic) BOOL hasBorder;
 @property (nonatomic) CGFloat borderWidth;
 @property (nonatomic) UIColor *borderColor;
+@property (nonatomic) CGFloat cornerRadius;
 
 //是否可以选中默认为NO (YES时为单选)
 @property (nonatomic) BOOL isCanSelected;

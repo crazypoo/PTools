@@ -62,25 +62,36 @@
             }
             
             
-            CGFloat tagW;
-            if (config.itemWidth == 0) {
-                tagW = config.itemHeight;
-            }
-            else
-            {
-                tagW = config.itemWidth;
-            }
-            
-            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, tagW, config.itemHeight)];
+            UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, config.itemWidth, config.itemHeight)];
             lastBtnRect = btn.frame;
             hMargin = config.itemHerMargin;
             btn.tag = BTN_Tags_Tag + i;
             
             ///标题设置
-            [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
-            [btn setTitle:title forState:UIControlStateNormal];
-            [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
-            [btn setBackgroundImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+            switch (config.showStatus) {
+                case PooTagsLabelShowWithImageStatusNoTitle:
+                {
+                    [btn setTitleColor:[UIColor clearColor] forState:UIControlStateNormal];
+                    [btn setTitle:title forState:UIControlStateNormal];
+                    [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
+                    [btn setBackgroundImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+                }
+                    break;
+                default:
+                {
+                    btn.titleLabel.font = config.btnFont;
+                    UIColor *normorTitleColor = config.normalTitleColor ? config.normalTitleColor : [UIColor grayColor];
+                    UIColor *selectedTitleColor = config.selectedTitleColor ? config.selectedTitleColor : [UIColor greenColor];
+
+                    [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
+                    [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
+                    [btn setTitle:title forState:UIControlStateNormal];
+                    [btn setTitle:title forState:UIControlStateSelected];
+                    [btn setImage:normalImage forState:UIControlStateNormal];
+                    [btn setImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+                }
+                    break;
+            }
             
             btn.backgroundColor = config.backgroundColor ? config.backgroundColor : [UIColor clearColor];
             btn.titleLabel.font = font;
@@ -94,7 +105,15 @@
             ///边框
             if (config.hasBorder) {
                 btn.clipsToBounds = YES;
-                btn.layer.cornerRadius = config.itemHeight / 2.0;
+                CGFloat radius;
+                if (config.cornerRadius == 0) {
+                    radius = config.itemHeight / 2.0;
+                }
+                else
+                {
+                    radius = config.cornerRadius;
+                }
+                btn.layer.cornerRadius = radius;
                 btn.layer.borderColor = config.borderColor.CGColor;
                 btn.layer.borderWidth = config.borderWidth > 0.0 ? config.borderWidth : 0.5;
             }
