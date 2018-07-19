@@ -89,6 +89,7 @@
                     [btn setTitle:title forState:UIControlStateSelected];
                     [btn setImage:normalImage forState:UIControlStateNormal];
                     [btn setImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+                    [btn layoutButtonWithEdgeInsetsStyle:config.insetsStyle imageTitleSpace:config.imageAndTitleSpace];
                 }
                     break;
             }

@@ -105,6 +105,7 @@
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
+		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
 		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
@@ -299,6 +300,8 @@
 		CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UITextField_Shake.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIViewController_Swizzled.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YCXMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
+		CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
 		CC96809B20B042B700AA07F5 /* PBiologyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBiologyID.h; sourceTree = "<group>"; };
 		CC96809C20B042B800AA07F5 /* PBiologyID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBiologyID.m; sourceTree = "<group>"; };
 		CC9C606220A1537800F06B92 /* PooDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooDatePicker.h; sourceTree = "<group>"; };
@@ -480,6 +483,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
+				CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */,
 				CC96809B20B042B700AA07F5 /* PBiologyID.h */,
 				CC96809C20B042B800AA07F5 /* PBiologyID.m */,
 				CC658CDB20AC3D8300949DF6 /* CGADCollectionViewCell.h */,
@@ -827,6 +832,7 @@
 				64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */,
 				CC1257C12098319300E31A38 /* PGifHud.m in Sources */,
 				CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */,
+				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,

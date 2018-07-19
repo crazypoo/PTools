@@ -12,6 +12,7 @@ typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
 };
 
 #import <UIKit/UIKit.h>
+#import "UIButton+ImageTitleSpacing.h"
 
 @class PooTagsLabel;
 
@@ -35,6 +36,8 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 
 @property (nonatomic,assign) PooTagsLabelShowWithImageStatus showStatus;
 @property (nonatomic,strong) UIFont *btnFont;
+@property (nonatomic,assign) MKButtonEdgeInsetsStyle insetsStyle;
+@property (nonatomic) CGFloat imageAndTitleSpace;
 
 //是否有边框  默认没有边框
 @property (nonatomic) BOOL hasBorder;
