@@ -58,14 +58,9 @@
         {
             searchField.leftView = nil;
         }
-        
-        if (self.cursorColor) {
-            [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:self.cursorColor];
-        }
-        else
-        {
-            [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:[UIColor lightGrayColor]];
-        }
+
+        [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:self.cursorColor ? self.cursorColor : [UIColor lightGrayColor]];
+
     }
     
     UIView *outView = [[UIView alloc] initWithFrame:self.bounds];

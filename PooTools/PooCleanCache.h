@@ -9,13 +9,11 @@
 #import <Foundation/Foundation.h>
 
 @interface PooCleanCache : NSObject
-/**
- *  获取缓存大小
- */
+/*! @brief 获取缓存大小
+*/
 + (NSString *)getCacheSize;
 
-/**
- *  清理缓存
+/*! @brief 清理缓存
  */
 + (BOOL)clearCaches;
 @end

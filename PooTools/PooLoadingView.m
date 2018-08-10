@@ -113,14 +113,8 @@
         _anglePer = 0;
     }
     
-    CGFloat lineWidth = 1.f;
-    UIColor *lineColor = [UIColor lightGrayColor];
-    if (self.lineWidth) {
-        lineWidth = self.lineWidth;
-    }
-    if (self.lineColor) {
-        lineColor = self.lineColor;
-    }
+    CGFloat lineWidth = self.lineWidth ? self.lineWidth : 1.0f;
+    UIColor *lineColor = self.lineColor ? self.lineColor : [UIColor lightGrayColor];
     
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetLineWidth(context, lineWidth);

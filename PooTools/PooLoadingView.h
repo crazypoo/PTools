@@ -10,17 +10,28 @@
 
 @interface PooLoadingView : UIView
 
-//默認線的寬度1.0f
+/*! @brief Loading的线宽度
+ * @param 默認1.0f
+ */
 @property (nonatomic, assign) CGFloat lineWidth;
 
-//默認顔色[UIColor lightGrayColor]
+/*! @brief Loading的线颜色
+ * @param 默認[UIColor lightGrayColor]
+ */
 @property (nonatomic, strong) UIColor *lineColor;
 
+/*! @brief 是否开启动画
+ */
 @property (nonatomic, readonly) BOOL isAnimating;
 
 - (id)initWithFrame:(CGRect)frame;
 
+/*! @brief 展示
+ */
 - (void)startAnimation;
+
+/*! @brief 关闭
+ */
 - (void)stopAnimation;
 
 @end

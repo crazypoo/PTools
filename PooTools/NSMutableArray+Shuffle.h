@@ -10,7 +10,12 @@
 
 @interface NSMutableArray (Shuffle)
 
+/*! @brief 数组随机
+ */
 - (void) shuffle;
+
+/*! @brief 数组随机(NSMutableArray)
+ */
 -(NSMutableArray *)randomizedArray;
 @end
 

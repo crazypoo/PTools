@@ -9,5 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface CGImaginaryLine : UIView
+/*! @brief 虚线颜色
+ */
 @property (nonatomic, strong) UIColor *lineColor;
 @end

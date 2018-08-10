@@ -15,9 +15,20 @@ typedef NS_ENUM(NSInteger,PSliderStyle){
 
 @interface PSlider : UISlider
 
+/*! @brief 是否展示TitleLabel
+ */
 @property (nonatomic,assign) BOOL isShowTitle;
+
+/*! @brief TitleLabel展示风格
+ */
 @property (nonatomic,assign) PSliderStyle titleStyle;
+
+/*! @brief TitleLabel展示颜色
+ */
 @property (nonatomic,strong) UIColor *titleColor;
+
+/*! @brief TitleLabel展示字体
+ */
 @property (nonatomic,strong) UIFont *titleFont;
 
 @end

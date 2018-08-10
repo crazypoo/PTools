@@ -11,6 +11,12 @@
 #import <CoreTelephony/CTCarrier.h>
 
 @interface PCarrie : NSObject
+
+/*! @brief 获取手机当前运营商
+ */
 +(NSString *)currentRadioAccessTechnology;
+
+/*! @brief 获取手机当前运营商其他信息
+ */
 +(NSMutableDictionary *)subscriberCellularProvider;
 @end

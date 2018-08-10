@@ -12,10 +12,12 @@
     
 }
 
-// 加密方法
+/*! @brief 加密(DES)
+ */
 + (NSString*)encrypt:(NSString*)plainText withKey:(NSString *)key;
 
-// 解密方法
+/*! @brief 解密(DES)
+ */
 + (NSString*)decrypt:(NSString*)encryptText withKey:(NSString *)key;
 
 @end

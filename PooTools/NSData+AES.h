@@ -11,8 +11,12 @@
 @class NSString;
 
 @interface NSData (Encryption)
+/*! @brief 加密(AES)
+ */
+- (NSData *)AES128EncryptWithKey:(NSString *)key gIv:(NSString *)Iv;
 
-- (NSData *)AES128EncryptWithKey:(NSString *)key gIv:(NSString *)Iv;   //加密
-- (NSData *)AES128DecryptWithKey:(NSString *)key gIv:(NSString *)Iv;   //解密
+/*! @brief 解密(AES)
+ */
+- (NSData *)AES128DecryptWithKey:(NSString *)key gIv:(NSString *)Iv;
 
 @end

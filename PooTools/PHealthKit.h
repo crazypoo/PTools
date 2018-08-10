@@ -16,8 +16,12 @@
 @interface PHealthKit : NSObject
 @property (nonatomic ,strong) HKHealthStore *healthStore;
 @property (nonatomic, weak) id<PHealthKitDelegate>delegate;
-//初始化
+
+/*! @brief 初始化
+ */
 +(instancetype)shareInstance;
-//HealthKit步数
+
+/*! @brief HealthKit步数获取
+ */
 -(void)stepAllCount;
 @end

@@ -12,16 +12,29 @@
 @interface SecurityUtil : NSObject 
 
 #pragma mark - base64
+/*! @brief 字符串加密(Base64)
+ */
 + (NSString*)encodeBase64String:(NSString *)input;
+
+/*! @brief 字符串解密(Base64)
+ */
 + (NSString*)decodeBase64String:(NSString *)input;
 
+/*! @brief NSData加密(Base64)
+ */
 + (NSString*)encodeBase64Data:(NSData *)data;
+
+/*! @brief NSData解密(Base64)
+ */
 + (NSString*)decodeBase64Data:(NSData *)data;
 
 #pragma mark - AES加密
-//将string转成带密码的data
+/*! @brief 将string转成带密码的数据(RSA)
+ */
 +(NSString*)encryptAESData:(NSString*)string enterKey:(NSString *)key enterIv:(NSString *)iv;
-//将带密码的data转成string
+
+/*! @brief 将带密码的数据转成string(RSA)
+ */
 +(NSString*)decryptAESData:(NSString*)string enterKey:(NSString *)key enterIv:(NSString *)iv;
 
 

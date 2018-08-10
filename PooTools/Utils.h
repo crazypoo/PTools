@@ -30,24 +30,32 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 @interface Utils : NSObject
 
 #pragma mark ------> UIImageView
+/*! @brief 图片简易生成
+ */
 +(UIImageView *)imageViewWithFrame:(CGRect)frame withImage:(UIImage *)image;
     
 #pragma mark ------> UILabel
+/*! @brief Label简易生成
+ */
 +(UILabel *)labelWithFrame:(CGRect)frame withTitle:(NSString *)title titleFontSize:(UIFont *)font textColor:(UIColor *)color backgroundColor:(UIColor *)bgColor alignment:(NSTextAlignment)textAlignment;
 
 #pragma mark ------> UIAlertView/UIViewController
 /*! @brief AlertView Normal
  */
 +(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName;
+
 /*! @brief AlertView + Only cancel
  */
 +(UIAlertView *)alertShowWithMessage:(NSString *)message;
+
 /*! @brief AlertController Normal
  */
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock;
+
 /*! @brief AlertController Only Cancel
  */
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock;
+
 /*! @brief AlertController Normal + Other Buttons + Can switch alert style
  */
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT otherButtonArrow:(NSArray *)titleArr shouIn:(UIViewController *)vC alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock otherButtonAction:(void (^) (NSInteger))buttonIndexPath;
@@ -58,44 +66,103 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width;
 
 #pragma mark ------> UIButton
+/*! @brief 按钮简易生成
+ */
 +(UIButton *)createBtnWithType:(UIButtonType)btnType frame:(CGRect)btnFrame backgroundColor:(UIColor*)bgColor;
+
+/*! @brief 按钮倒计时
+ */
 +(void)timmerRunWithTime:(int)time button:(UIButton *)btn originalStr:(NSString *)str setTapEnable:(BOOL)yesOrNo;
     
 #pragma mark ------> 时间日期
+/*! @brief 获取时间年月日时分秒(一般方法)
+ */
 +(NSString *)formateTime:(NSDate*)date;
+
+/*! @brief 获取时间年月日时分秒
+ */
 +(NSString *)getYMDHHS;
+
+/*! @brief 获取时间年月日
+ */
 +(NSString *)getYMD;
+
+/*! @brief 某个时间的某时间之后或者之前
+ */
 +(NSDate *)fewMonthLater:(NSInteger)month fromNow:(NSDate *)thisTime;
-+ (int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay dateFormatter:(NSString *)df;//日期时间对比
-+(NSString *)theDayBeforeToday:(NSString *)dayStr;//类似朋友圈的时间显示
+
+/*! @brief 日期时间对比
+ */
++ (int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay dateFormatter:(NSString *)df;
+
+/*! @brief 类似朋友圈的时间显示
+ */
++(NSString *)theDayBeforeToday:(NSString *)dayStr;
 
 #pragma mark ------> 获取手机语言
+/*! @brief 获取手机App语言(根据定位)
+ */
 +(NSString *)getCurrentApplicationLocale;
+
+/*! @brief 获取手机App语言(根据系统)
+ */
 +(NSString *)getCurrentDeviceLanguageInIOS;
+
+/*! @brief 获取手机App语言(根据系统加强版)
+ */
 +(NSMutableDictionary *)getCurrentDeviceLanguageInIOSWithDic;
 
 #pragma mark ------> 图片
-+(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time;//获取视频第一帧
-+(UIImage*)createImageWithColor:(UIColor*)color;//用颜色生成图片
-+(void)changeAPPIcon:(NSString *)IconName;//此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
-+(UIImage *)createQRImageWithString:(NSString *)string withSize:(CGFloat)size;//生成二维码
+/*! @brief 获取视频第一帧
+ */
++(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time;
+/*! @brief 用颜色生成图片
+ */
++(UIImage*)createImageWithColor:(UIColor*)color;
+
+/*! @brief iOS更换App图标
+ * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
+ */
++(void)changeAPPIcon:(NSString *)IconName;
+
+/*! @brief 生成二维码
+ */
++(UIImage *)createQRImageWithString:(NSString *)string withSize:(CGFloat)size;
 
 #pragma mark ------> JSON
+/*! @brief Json字符串转字典
+ */
 +(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
+/*! @brief Json字符串转数组
+ */
 +(NSArray *)stringToJSON:(NSString *)jsonStr;
+/*! @brief 字典转字符串
+ */
 +(NSString *)convertToJsonData:(NSDictionary *)dictData;
+/*! @brief 不规则Json字符串变换成规则字符串
+ */
 +(NSString *)changeJsonStringToTrueJsonString:(NSString *)json;
 
 #pragma mark ------> 数组
-+(NSArray *)arraySortASC:(NSArray *)arr;//数组升序
-+(NSArray *)arraySortINV:(NSArray *)arr;//数组倒序
+/*! @brief 数组升序
+ */
++(NSArray *)arraySortASC:(NSArray *)arr;
+/*! @brief 数组倒序
+ */
++(NSArray *)arraySortINV:(NSArray *)arr;
 
 #pragma mark ------> 字符串
-+(NSString *)chineseTransform:(NSString *)chinese;//中文转拼音
+/*! @brief 中文转拼音
+ */
++(NSString *)chineseTransform:(NSString *)chinese;
 
-+(NSString *)backbankenameWithBanknumber:(NSString *)banknumber;//银行卡号辨别银行
-    
-+(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language;//iOS9++，暂时仅限英文换其他
+/*! @brief 银行卡号辨别银行
+ */
++(NSString *)backbankenameWithBanknumber:(NSString *)banknumber;
+
+/*! @brief iOS9++，暂时仅限英文换其他
+ */
++(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language;
 
 /*! @brief 数字小写转大写
  */
