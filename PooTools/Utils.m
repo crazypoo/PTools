@@ -96,6 +96,31 @@
     }];
 }
 
++(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT otherButtonArrow:(NSArray *)titleArr shouIn:(UIViewController *)vC  alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock otherButtonAction:(void (^) (NSInteger))buttonIndexPath
+{
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
+                                                                             message:m
+                                                                      preferredStyle:style];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:okT style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        okBlock();
+    }];
+    [alertController addAction:okAction];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cT style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        cancelBlock();
+    }];
+    [alertController addAction:cancelAction];
+    
+    for (int i = 0; i < titleArr.count; i++) {
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:titleArr[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            buttonIndexPath(i);
+        }];
+        [alertController addAction:cancelAction];
+    }
+    
+    [vC presentViewController:alertController animated:YES completion:^{
+    }];
+}
+
 +(void)timmerRunWithTime:(int)time button:(UIButton *)btn originalStr:(NSString *)str setTapEnable:(BOOL)yesOrNo
 {
     __block int timeout = time;
@@ -321,6 +346,7 @@
     return thumbnailImage;
 }
 
+#pragma mark ------> JSON
 + (NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString
 {
     if (jsonString == nil) {
@@ -406,6 +432,34 @@
     return mutStr;
 }
 
++ (NSString *)changeJsonStringToTrueJsonString:(NSString *)json
+{
+    // 将没有双引号的替换成有双引号的
+    NSString *validString = [json stringByReplacingOccurrencesOfString:@"(\\w+)\\s*:([^A-Za-z0-9_])"
+                                                            withString:@"\"$1\":$2"
+                                                               options:NSRegularExpressionSearch
+                                                                 range:NSMakeRange(0, [json length])];
+    
+    
+    //把'单引号改为双引号"
+    validString = [validString stringByReplacingOccurrencesOfString:@"([:\\[,\\{])'"
+                                                         withString:@"$1\""
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, [validString length])];
+    validString = [validString stringByReplacingOccurrencesOfString:@"'([:\\],\\}])"
+                                                         withString:@"\"$1"
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, [validString length])];
+    
+    //再重复一次 将没有双引号的替换成有双引号的
+    validString = [validString stringByReplacingOccurrencesOfString:@"([:\\[,\\{])(\\w+)\\s*:"
+                                                         withString:@"$1\"$2\":"
+                                                            options:NSRegularExpressionSearch
+                                                              range:NSMakeRange(0, [validString length])];
+    return validString;
+}
+
+#pragma mark ------> 手机隐蔽
 +(NSString*)shoujibaomi:(NSString*)phone
 {
     if (phone && phone.length>10) {
@@ -687,5 +741,57 @@
     return [UIImage imageWithCGImage:scaledImage];
 }
 
+#pragma mark ------>华氏转摄氏/摄氏转华氏
++ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value changeTo:(TemperatureUnit)unit
+{ //温度单位转换方法
+    if (unit == Fahrenheit)
+    {
+        return 32 + 1.8 * value; //华氏度
+    }
+    else
+    {
+        return (value - 32) / 1.8; //摄氏度
+    }
+}
 
+#pragma mark ------>英文星期几转中文星期几
++(NSString *)engDayCoverToZHCN:(NSString *)str
+{
+    NSString *realStr;
+    if ([str isEqualToString:@"Mon"]) {
+        realStr = @"周一";
+    }
+    else if ([str isEqualToString:@"Tue"]) {
+        realStr = @"周二";
+    }
+    else if ([str isEqualToString:@"Wed"]) {
+        realStr = @"周三";
+    }
+    else if ([str isEqualToString:@"Thu"]) {
+        realStr = @"周四";
+    }
+    else if ([str isEqualToString:@"Fri"]) {
+        realStr = @"周五";
+    }
+    else if ([str isEqualToString:@"Sat"]) {
+        realStr = @"周六";
+    }
+    else if ([str isEqualToString:@"Sun"]) {
+        realStr = @"周日";
+    }
+    return realStr;
+}
+
+#pragma mark ------>判断是否白天
++(BOOL)isNowDayTime
+{
+    NSDate *date = [NSDate date];
+    NSCalendar *cal = [NSCalendar currentCalendar];
+    NSDateComponents *components = [cal components:NSCalendarUnitHour fromDate:date];
+    if ([components hour] >= 19 || [components hour] < 6) {
+        return NO;
+    }else{
+        return YES;
+    }
+}
 @end

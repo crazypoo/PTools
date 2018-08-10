@@ -19,6 +19,11 @@ typedef NS_ENUM(NSInteger, GradeType) {
     GradeTypeYi
 };
 
+typedef NS_ENUM(NSInteger,TemperatureUnit){
+    Fahrenheit = 0,
+    CentigradeDegree
+};
+
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString *LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
@@ -31,12 +36,25 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(UILabel *)labelWithFrame:(CGRect)frame withTitle:(NSString *)title titleFontSize:(UIFont *)font textColor:(UIColor *)color backgroundColor:(UIColor *)bgColor alignment:(NSTextAlignment)textAlignment;
 
 #pragma mark ------> UIAlertView/UIViewController
+/*! @brief AlertView Normal
+ */
 +(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName;
+/*! @brief AlertView + Only cancel
+ */
 +(UIAlertView *)alertShowWithMessage:(NSString *)message;
+/*! @brief AlertController Normal
+ */
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock;
+/*! @brief AlertController Only Cancel
+ */
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock;
+/*! @brief AlertController Normal + Other Buttons + Can switch alert style
+ */
++(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT otherButtonArrow:(NSArray *)titleArr shouIn:(UIViewController *)vC alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock otherButtonAction:(void (^) (NSInteger))buttonIndexPath;
 
 #pragma mark ------> 计算字符串高度或者宽度
+/*! @brief Compute string heigh or width
+ */
 +(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width;
 
 #pragma mark ------> UIButton
@@ -66,6 +84,7 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 +(NSDictionary *)dictionaryWithJsonString:(NSString *)jsonString;
 +(NSArray *)stringToJSON:(NSString *)jsonStr;
 +(NSString *)convertToJsonData:(NSDictionary *)dictData;
++(NSString *)changeJsonStringToTrueJsonString:(NSString *)json;
 
 #pragma mark ------> 数组
 +(NSArray *)arraySortASC:(NSArray *)arr;//数组升序
@@ -78,15 +97,30 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
     
 +(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language;//iOS9++，暂时仅限英文换其他
 
-// 数字小写转大写
+/*! @brief 数字小写转大写
+ */
 +(NSString *)getUperDigit:(NSString *)inputStr;
 +(NSString *)getIntPartUper:(int)digit;
 +(NSString *)getPartAfterDot:(NSString *)digitStr;
 +(NSString *)dealWithDigit:(int)digit grade:(GradeType)grade;
 
-//隐藏手机号码某一段
+/*! @brief 隐藏手机号码某一段
+ */
 +(NSString*)shoujibaomi:(NSString*)phone;
 
-// 查找某字符在字符串的位置
+/*! @brief 查找某字符在字符串的位置
+ */
 + (NSArray *)rangeOfSubString:(NSString *)subStr inString:(NSString *)string;
+
+/*! @brief 华氏转摄氏/摄氏转华氏
+ */
++ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value changeTo:(TemperatureUnit)unit;
+
+/*! @brief 英文星期几转中文星期几
+ */
++(NSString *)engDayCoverToZHCN:(NSString *)str;
+
+/*! @brief 判断是否白天
+ */
++(BOOL)isNowDayTime;
 @end

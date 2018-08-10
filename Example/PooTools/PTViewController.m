@@ -95,14 +95,22 @@
 //        }
 //    };
     
-    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
-        
-    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
-        
-    } didDismissBlock:^(YXCustomAlertView *alertView) {
-        
-    }];
-    [alert showView];
+//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+//
+//    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+//
+//    } didDismissBlock:^(YXCustomAlertView *alertView) {
+//
+//    }];
+//    [alert showView];
+    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
+                   okAction:^{
+                       
+                   } cancelAction:^{
+                       
+                   } otherButtonAction:^(NSInteger aaaaaaaaaa) {
+                       PNSLog(@"%ld",(long)aaaaaaaaaa);
+                   }];
 }
 
 #pragma mark - YXCustomAlertViewDelegate
