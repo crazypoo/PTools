@@ -75,7 +75,6 @@
 
         self.customView = [UIView new];
         [self addSubview:self.customView];
-        self.customView.backgroundColor = kRandomColor;
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             NSLog(@"0秒后获取frame：%@", self);
@@ -116,7 +115,7 @@
 -(void)setBottomView
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        PNSLog(@"0.1秒后获取frame：%@", self);
+        NSLog(@"0.1秒后获取frame：%@", self);
         CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*0.5)/self.bottomBtnArr.count;
         for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
             UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
@@ -164,7 +163,7 @@
 - (void)orientationChanged:(NSNotification *)note
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        PNSLog(@"0秒后获取frame：%@", self);
+        NSLog(@"0秒后获取frame：%@", self);
         CGFloat textH;
         UIDeviceOrientation o = [[UIDevice currentDevice] orientation];
         switch (o) {
