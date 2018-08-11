@@ -7,12 +7,31 @@
 //
 
 #import "PTAppDelegate.h"
+#import "PLaunchAdMonitor.h"
+#import "PTViewController.h"
+
+#import "PMacros.h"
+
+#define FontName @"HelveticaNeue-Light"
+#define FontNameBold @"HelveticaNeue-Medium"
+
+#define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 @implementation PTAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
+    PTViewController *view = [[PTViewController alloc] init];
+    self.window.rootViewController = view;
+    [self.window makeKeyAndVisible];
+    
+    [PLaunchAdMonitor showAdAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:self.window.rootViewController.view timeInterval:100 detailParameters:@{} years:@"2000" skipButtonFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callback:^{
+        
+    }];
+
     return YES;
 }
 

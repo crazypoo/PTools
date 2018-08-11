@@ -89,6 +89,11 @@ static PLaunchAdMonitor *monitor = nil;
     CGRect f = [UIScreen mainScreen].bounds;
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor lightGrayColor];
+    [container addSubview:v];
+    [container bringSubviewToFront:v];
+    [v mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(container);
+    }];
     
     f.size.height -= 50;
     
@@ -102,13 +107,8 @@ static PLaunchAdMonitor *monitor = nil;
         bottomViewHeight = 100;
     }
     
-    if (monitor.playMovie) {
-        [container addSubview:v];
-        [container bringSubviewToFront:v];
-        [v mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(container);
-        }];
-
+    if (monitor.playMovie)
+    {
         monitor.player = [[MPMoviePlayerController alloc] initWithContentURL:monitor.videoUrl];
         monitor.player.controlStyle = MPMovieControlStyleNone;
         monitor.player.shouldAutoplay = YES;
@@ -145,7 +145,6 @@ static PLaunchAdMonitor *monitor = nil;
             make.width.offset(sbFont.pointSize*exit.titleLabel.text.length+10*2);
             make.height.offset(sbFont.pointSize*exit.titleLabel.text.length+5*2);
         }];
-
     }
     else
     {
@@ -159,7 +158,6 @@ static PLaunchAdMonitor *monitor = nil;
                 UIImage* imageName = [UIImage imageWithCGImage:imageRef];
                 [frames addObject:imageName];
                 CGImageRelease(imageRef);
-                
             }
             
             UIImageView *imageView = [UIImageView new];
@@ -179,8 +177,6 @@ static PLaunchAdMonitor *monitor = nil;
         {
             UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
-            imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
-            [imageBtn setAdjustsImageWhenHighlighted:NO];
             [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
             monitor.conn = nil;
             [monitor.imgData setLength:0];
@@ -188,17 +184,16 @@ static PLaunchAdMonitor *monitor = nil;
             [v addSubview:imageBtn];
             [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.left.right.equalTo(v);
-                make.height.offset(bottomViewHeight);
+                make.bottom.equalTo(v).offset(-bottomViewHeight);
             }];
+            imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
+            [imageBtn setAdjustsImageWhenHighlighted:NO];
         }
         
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
-        exit.frame = CGRectMake(f.size.width-65, 24, 55, 55);
         exit.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
         [exit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [exit addTarget:self action:@selector(hideView:) forControlEvents:UIControlEventTouchUpInside];
-        exit.layer.cornerRadius = exit.frame.size.width/2;
-        exit.layer.masksToBounds = YES;
         exit.titleLabel.textAlignment = NSTextAlignmentCenter;
         exit.titleLabel.numberOfLines = 0;
         exit.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
@@ -209,29 +204,29 @@ static PLaunchAdMonitor *monitor = nil;
             make.top.equalTo(v).offset(kScreenStatusBottom);
             make.width.height.offset(55);
         }];
+        kViewBorderRadius(exit, 55/2, 0, kClearColor);
         
-        [Utils timmerRunWithTime:time button:exit originalStr:@"" setTapEnable:YES];
-//        __block int timeout = time;
-//        dispatch_queue_t queue   = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-//        dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
-//        dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0);
-//        dispatch_source_set_event_handler(_timer, ^{
-//            if(timeout <= 0){
-//                dispatch_source_cancel(_timer);
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                });
-//            }
-//            else
-//            {
-//                NSString *strTime = [NSString stringWithFormat:@"%.2d",timeout];
-//                dispatch_async(dispatch_get_main_queue(), ^{
-//                    NSString *buttonTime          = [NSString stringWithFormat:@"跳过\n%@s",strTime];
-//                    [exit setTitle:buttonTime forState:UIControlStateNormal];
-//                });
-//                timeout--;
-//            }
-//        });
-//        dispatch_resume(_timer);
+        __block int timeout = time;
+        dispatch_queue_t queue   = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+        dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
+        dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0);
+        dispatch_source_set_event_handler(_timer, ^{
+            if(timeout <= 0){
+                dispatch_source_cancel(_timer);
+                dispatch_async(dispatch_get_main_queue(), ^{
+                });
+            }
+            else
+            {
+                NSString *strTime = [NSString stringWithFormat:@"%.2d",timeout];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    NSString *buttonTime          = [NSString stringWithFormat:@"跳过\n%@s",strTime];
+                    [exit setTitle:buttonTime forState:UIControlStateNormal];
+                });
+                timeout--;
+            }
+        });
+        dispatch_resume(_timer);
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             v.userInteractionEnabled = NO;
@@ -248,8 +243,6 @@ static PLaunchAdMonitor *monitor = nil;
                                  
                              }];
         });
-        [container addSubview:v];
-        [container bringSubviewToFront:v];
     }
     
     
@@ -264,12 +257,18 @@ static PLaunchAdMonitor *monitor = nil;
             cfont = cFont;
         }
         
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, [UIScreen mainScreen].bounds.size.height-bottomViewHeight, f.size.width, bottomViewHeight)];
+        UILabel *label = [UILabel new];
         label.backgroundColor = [UIColor whiteColor];
         label.font = cfont;
         label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@. All rights reserved.",year,comname];
         label.textAlignment = NSTextAlignmentCenter;
         [v addSubview:label];
+        [label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(v);
+            make.height.offset(bottomViewHeight);
+            make.bottom.equalTo(v);
+
+        }];
         label = nil;
     }
 }

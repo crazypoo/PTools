@@ -313,7 +313,6 @@
             
         }];
     }];
-
 }
 
 - (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock{

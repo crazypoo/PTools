@@ -12,8 +12,16 @@
 #import "PMacros.h"
 #import "PBiologyID.h"
 #import "PooSearchBar.h"
+#import "PooDatePicker.h"
 
 #import "PooTagsLabel.h"
+
+#import <Masonry/Masonry.h>
+
+#define FontName @"HelveticaNeue-Light"
+#define FontNameBold @"HelveticaNeue-Medium"
+
+#define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 
 @interface PTViewController ()
@@ -26,6 +34,8 @@
 {
     [super viewDidLoad];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
     btn.frame = self.view.bounds;
@@ -95,22 +105,49 @@
 //        }
 //    };
     
-//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithFrame:CGRectMake(10, 0, kSCREEN_WIDTH-20, 450) andSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+
+    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+        switch (buttonIndex) {
+                case 0:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+             case 1:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+            default:
+                break;
+        }
+
+    } didDismissBlock:^(YXCustomAlertView *alertView) {
+
+    }];
+    [alert showView];
+    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.equalTo(self.view).offset(10);
+//        make.right.bottom.equalTo(self.view).offset(-10);
+        make.width.height.offset(250);
+        make.centerX.centerY.equalTo(self.view);
+    }];
+//    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
+//                   okAction:^{
 //
-//    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+//                   } cancelAction:^{
 //
-//    } didDismissBlock:^(YXCustomAlertView *alertView) {
-//
+//                   } otherButtonAction:^(NSInteger aaaaaaaaaa) {
+//                       PNSLog(@"%ld",(long)aaaaaaaaaa);
+//                   }];
+//    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
+//    [self.view addSubview:view];
+//    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo(self.view);
 //    }];
-//    [alert showView];
-    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
-                   okAction:^{
-                       
-                   } cancelAction:^{
-                       
-                   } otherButtonAction:^(NSInteger aaaaaaaaaa) {
-                       PNSLog(@"%ld",(long)aaaaaaaaaa);
-                   }];
 }
 
 #pragma mark - YXCustomAlertViewDelegate

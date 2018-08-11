@@ -79,7 +79,7 @@
 
 - (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf
 {
-    self = [super initWithFrame:[UIApplication sharedApplication].keyWindow.frame];
+    self = [super init];
     if (self) {
         self.pickerFonts = pf;
         self.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
