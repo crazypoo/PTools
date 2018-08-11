@@ -9,11 +9,10 @@
 #import "PooDatePicker.h"
 #import "UIButton+Block.h"
 #import "PMacros.h"
+#import <Masonry/Masonry.h>
 
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
-{
-    UIView *topV;
-}
+
 @property (nonatomic, strong) UIPickerView *pickerView;
 @property (nonatomic, strong) NSMutableArray *yearArray;
 @property (nonatomic, strong) NSMutableArray *monthArray;
@@ -22,6 +21,7 @@
 @property (nonatomic, assign) NSInteger yearIndex;
 @property (nonatomic, assign) NSInteger monthIndex;
 @property (nonatomic, assign) NSInteger dayIndex;
+@property (nonatomic, strong) UIView *topV;
 @end
 
 @implementation PooDatePicker
@@ -88,30 +88,52 @@
         tapGesture.numberOfTapsRequired    = 1;
         [self addGestureRecognizer:tapGesture];
         
-        topV = [[UIView alloc] initWithFrame:CGRectMake(0, kSCREEN_HEIGHT-44-216, kSCREEN_WIDTH, 44)];
-        topV.backgroundColor = tbbc;
-        [self addSubview:topV];
+        self.topV = [UIView new];
+        self.topV.backgroundColor = tbbc;
+        [self addSubview:self.topV];
+        [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(44);
+            make.top.equalTo(self.mas_bottom).offset(-44-216);
+        }];
         
-        UILabel *nameTitle = [[UILabel alloc] initWithFrame:topV.bounds];
+        UILabel *nameTitle = [UILabel new];
         nameTitle.textAlignment = NSTextAlignmentCenter;
         nameTitle.textColor = tbtc;
         nameTitle.font = font;
         nameTitle.text = title;
-        [topV addSubview:nameTitle];
+        [self.topV addSubview:nameTitle];
 
         UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        cancelBtn.frame = CGRectMake(10, 0, 50, 44);
+//        cancelBtn.frame = CGRectMake(10, 0, 50, 44);
+        [cancelBtn.titleLabel setFont:font];
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [cancelBtn.titleLabel setFont:font];
-        [topV addSubview:cancelBtn];
+        [self.topV addSubview:cancelBtn];
+        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.topV).offset(10);
+            make.top.bottom.equalTo(self.topV);
+            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
+        }];
         
         UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        yesBtn.frame = CGRectMake(kSCREEN_WIDTH-60, 0, 50, 44);
+//        yesBtn.frame = CGRectMake(kSCREEN_WIDTH-60, 0, 50, 44);
+        [yesBtn.titleLabel setFont:font];
         [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [yesBtn.titleLabel setFont:font];
-        [topV addSubview:yesBtn];
+        [self.topV addSubview:yesBtn];
+        [yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.topV).offset(-10);
+            make.top.bottom.equalTo(self.topV);
+            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
+        }];
+        
+        [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.equalTo(self.topV);
+            make.centerX.equalTo(self.topV.mas_centerX);
+            make.left.equalTo(cancelBtn.mas_right);
+            make.right.equalTo(yesBtn.mas_left);
+        }];
         
         [cancelBtn addActionHandler:^(NSInteger tag) {
             if (self.block) {
@@ -139,11 +161,16 @@
             [self remove];
         }];
         
-        _pickerView = [[UIPickerView alloc] initWithFrame:CGRectMake(0, kSCREEN_HEIGHT-216, kSCREEN_WIDTH, 216)];
+        _pickerView = [UIPickerView new];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
         _pickerView.backgroundColor = [UIColor whiteColor];
         [self addSubview:_pickerView];
+        [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(216);
+            make.bottom.equalTo(self);
+        }];
         
         NSCalendar *calendar = [[NSCalendar alloc]
                                 initWithCalendarIdentifier:NSCalendarIdentifierGregorian];

@@ -13,6 +13,7 @@
 #import <AVKit/AVKit.h>
 #import "PMacros.h"
 #import "Utils.h"
+#import <Masonry/Masonry.h>
 
 NSString *PLaunchAdDetailDisplayNotification = @"PShowLaunchAdDetailNotification";
 
@@ -86,7 +87,7 @@ static PLaunchAdMonitor *monitor = nil;
 + (void)showImageOnView:(UIView *)container forTime:(NSTimeInterval)time years:(NSString *)year comName:(NSString *)comname dic:(BOOL)yesOrNo comLabel:(BOOL)hide skipButtonFont:(UIFont *)sbFont comNameFont:(UIFont *)cFont
 {
     CGRect f = [UIScreen mainScreen].bounds;
-    UIView *v = [[UIView alloc] initWithFrame:f];
+    UIView *v = [UIView new];
     v.backgroundColor = [UIColor lightGrayColor];
     
     f.size.height -= 50;
@@ -104,6 +105,9 @@ static PLaunchAdMonitor *monitor = nil;
     if (monitor.playMovie) {
         [container addSubview:v];
         [container bringSubviewToFront:v];
+        [v mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(container);
+        }];
 
         monitor.player = [[MPMoviePlayerController alloc] initWithContentURL:monitor.videoUrl];
         monitor.player.controlStyle = MPMovieControlStyleNone;
@@ -112,18 +116,22 @@ static PLaunchAdMonitor *monitor = nil;
         [monitor.player setFullscreen:YES animated:YES];
         monitor.player.scalingMode = MPMovieScalingModeAspectFit;
         [monitor.player prepareToPlay];
-        [monitor.player.view setFrame:CGRectMake(0, 0, f.size.width, [UIScreen mainScreen].bounds.size.height-bottomViewHeight)];
         [v addSubview: monitor.player.view];
+        [monitor.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.equalTo(v);
+            make.height.offset(bottomViewHeight);
+        }];
         [monitor.player play];
 
         UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        imageBtn.frame = CGRectMake(0, 0, f.size.width, [UIScreen mainScreen].bounds.size.height-bottomViewHeight);
         [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
         imageBtn.userInteractionEnabled = yesOrNo;
         [v addSubview:imageBtn];
+        [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(monitor.player.view);
+        }];
 
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
-        exit.frame = CGRectMake(f.size.width-55, kScreenStatusBottom, 45, 35);
         exit.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
         [exit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         exit.titleLabel.font = sbFont;
@@ -131,6 +139,13 @@ static PLaunchAdMonitor *monitor = nil;
         [exit addTarget:self action:@selector(hideView:) forControlEvents:UIControlEventTouchUpInside];
         kViewBorderRadius(exit, 5, 0, [UIColor clearColor]);
         [v addSubview:exit];
+        [exit mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(v).offset(-10);
+            make.top.equalTo(v).offset(kScreenStatusBottom);
+            make.width.offset(sbFont.pointSize*exit.titleLabel.text.length+10*2);
+            make.height.offset(sbFont.pointSize*exit.titleLabel.text.length+5*2);
+        }];
+
     }
     else
     {
@@ -147,11 +162,15 @@ static PLaunchAdMonitor *monitor = nil;
                 
             }
             
-            UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, f.size.width, [UIScreen mainScreen].bounds.size.height-bottomViewHeight)];
+            UIImageView *imageView = [UIImageView new];
             imageView.animationImages = frames;
             imageView.animationDuration = 1;
             [imageView startAnimating];
             [v addSubview:imageView];
+            [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.left.right.equalTo(v);
+                make.height.offset(bottomViewHeight);
+            }];
             
             UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAdDetail:)];
             [imageView addGestureRecognizer:tapGesture];
@@ -159,7 +178,6 @@ static PLaunchAdMonitor *monitor = nil;
         else
         {
             UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            imageBtn.frame = CGRectMake(0, 0, f.size.width, [UIScreen mainScreen].bounds.size.height-bottomViewHeight);
             [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
             imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
             [imageBtn setAdjustsImageWhenHighlighted:NO];
@@ -168,6 +186,10 @@ static PLaunchAdMonitor *monitor = nil;
             [monitor.imgData setLength:0];
             imageBtn.userInteractionEnabled = yesOrNo;
             [v addSubview:imageBtn];
+            [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.top.left.right.equalTo(v);
+                make.height.offset(bottomViewHeight);
+            }];
         }
         
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -182,28 +204,34 @@ static PLaunchAdMonitor *monitor = nil;
         exit.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
         exit.titleLabel.font = sbFont;
         [v addSubview:exit];
+        [exit mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(v).offset(-10);
+            make.top.equalTo(v).offset(kScreenStatusBottom);
+            make.width.height.offset(55);
+        }];
         
-        __block int timeout = time;
-        dispatch_queue_t queue   = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-        dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
-        dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0);
-        dispatch_source_set_event_handler(_timer, ^{
-            if(timeout <= 0){
-                dispatch_source_cancel(_timer);
-                dispatch_async(dispatch_get_main_queue(), ^{
-                });
-            }
-            else
-            {
-                NSString *strTime = [NSString stringWithFormat:@"%.2d",timeout];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    NSString *buttonTime          = [NSString stringWithFormat:@"跳过\n%@s",strTime];
-                    [exit setTitle:buttonTime forState:UIControlStateNormal];
-                });
-                timeout--;
-            }
-        });
-        dispatch_resume(_timer);
+        [Utils timmerRunWithTime:time button:exit originalStr:@"" setTapEnable:YES];
+//        __block int timeout = time;
+//        dispatch_queue_t queue   = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+//        dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
+//        dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0);
+//        dispatch_source_set_event_handler(_timer, ^{
+//            if(timeout <= 0){
+//                dispatch_source_cancel(_timer);
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                });
+//            }
+//            else
+//            {
+//                NSString *strTime = [NSString stringWithFormat:@"%.2d",timeout];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+//                    NSString *buttonTime          = [NSString stringWithFormat:@"跳过\n%@s",strTime];
+//                    [exit setTitle:buttonTime forState:UIControlStateNormal];
+//                });
+//                timeout--;
+//            }
+//        });
+//        dispatch_resume(_timer);
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             v.userInteractionEnabled = NO;

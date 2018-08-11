@@ -106,13 +106,7 @@
         for (int i = 0 ; i < mbtArray.count; i++) {
             UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
             cancelBtn.frame = frame;
-            if (alertBottomButtonColor == nil) {
-                [cancelBtn setTitleColor:kRGBColor(0 , 84, 166) forState:UIControlStateNormal];
-            }
-            else
-            {
-                [cancelBtn setTitleColor:alertBottomButtonColor forState:UIControlStateNormal];
-            }
+            [cancelBtn setTitleColor:alertBottomButtonColor ? alertBottomButtonColor : kRGBColor(0 , 84, 166) forState:UIControlStateNormal];
             [cancelBtn setTitle:mbtArray[i] forState:UIControlStateNormal];
             cancelBtn.titleLabel.font = viewFont;
             cancelBtn.tag = i;
@@ -130,13 +124,7 @@
         if (mbtArray.count != 1) {
             for (int j = 0; j < (mbtArray.count-1); j++) {
                 verLine = [UIView new];
-                if (verLineColor == nil) {
-                    verLine.backgroundColor = kRGBColor(213, 213, 215);
-                }
-                else
-                {
-                    verLine.backgroundColor = verLineColor;
-                }
+                verLine.backgroundColor = verLineColor ? verLineColor : kRGBColor(213, 213, 215);
                 [self addSubview:verLine];
                 [verLine mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.offset(btnW+0.5*j+btnW*j);
@@ -213,7 +201,7 @@
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _titleLabel.numberOfLines = 0;
-        _titleLabel.backgroundColor = [UIColor clearColor];
+        _titleLabel.backgroundColor = kClearColor;
     }
     
     return _titleLabel;
