@@ -15,6 +15,7 @@
 #import "PooDatePicker.h"
 #import "ALActionSheetView.h"
 #import "PooTagsLabel.h"
+#import "PooSegView.h"
 
 #import <Masonry/Masonry.h>
 
@@ -44,43 +45,59 @@
     
     kAdaptedOtherFontSize(@"", 16);
     
-//    PooSearchBar *searchBar = [[PooSearchBar alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH-200, 44)];
+//    PooSearchBar *searchBar = [PooSearchBar new];
 //    searchBar.barStyle     = UIBarStyleDefault;
 //    searchBar.translucent  = YES;
 ////    searchBar.delegate     = self;
 //    searchBar.keyboardType = UIKeyboardTypeDefault;
 //    searchBar.searchPlaceholder = @"点击此处查找地市名字";
-//    searchBar.searchPlaceholderColor = [UIColor lightGrayColor];
+//    searchBar.searchPlaceholderColor = kRandomColor;
 //    searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
 //    searchBar.searchTextColor = kRandomColor;
 //    //    searchBar.searchBarImage = kImageNamed(@"Search");
-//    searchBar.searchTextFieldBackgroundColor = [UIColor whiteColor];
-//    searchBar.searchBarOutViewColor = [UIColor whiteColor];
+//    searchBar.searchTextFieldBackgroundColor = kRandomColor;
+//    searchBar.searchBarOutViewColor = kRandomColor;
 //    searchBar.searchBarTextFieldCornerRadius = 15;
+//    searchBar.cursorColor = kRandomColor;
 //    [self.view addSubview:searchBar];
+//    [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.equalTo(self.view);
+//        make.height.offset(44);
+//    }];
     
-    NSArray *titleS = @[@"7"];
+    PooSegView *seg = [[PooSegView alloc] initWithFrame:CGRectMake(0, 20, kSCREEN_WIDTH, 44) titles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+        
+    }];
+    [self.view addSubview:seg];
+    [seg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(self.view);
+        make.height.offset(44);
+    }];
 
-    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-    config.itemHeight = 50;
-    config.itemHerMargin = 10;
-    config.itemVerMargin = 10;
-    config.hasBorder = YES;
-    config.topBottomSpace = 5.0;
-    config.itemContentEdgs = 20;
-    config.isCanSelected = YES;
-    config.isCanCancelSelected = YES;
-    config.isMulti = YES;
-    config.selectedDefaultTags = titleS;
-    config.borderColor = [UIColor clearColor];
-    config.borderWidth = 0;
     
-    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
-    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
-
-    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
-    [self.view addSubview:tag];
+    
+//    NSArray *titleS = @[@"7"];
+//
+//    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+//    config.itemHeight = 50;
+//    config.itemHerMargin = 10;
+//    config.itemVerMargin = 10;
+//    config.hasBorder = YES;
+//    config.topBottomSpace = 5.0;
+//    config.itemContentEdgs = 20;
+//    config.isCanSelected = YES;
+//    config.isCanCancelSelected = YES;
+//    config.isMulti = YES;
+//    config.selectedDefaultTags = titleS;
+//    config.borderColor = [UIColor clearColor];
+//    config.borderWidth = 0;
+//
+//    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
+//    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
+//    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+//
+//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
+//    [self.view addSubview:tag];
 }
 
 -(void)aaaaa
