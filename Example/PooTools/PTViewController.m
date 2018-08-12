@@ -16,8 +16,10 @@
 #import "ALActionSheetView.h"
 #import "PooTagsLabel.h"
 #import "PooSegView.h"
+#import "PooNumberKeyBoard.h"
 
 #import <Masonry/Masonry.h>
+#import <IQKeyboardManager/IQKeyboardManager.h>
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
@@ -25,8 +27,9 @@
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 
-@interface PTViewController ()
+@interface PTViewController ()<PooNumberKeyBoardDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
+@property (nonatomic, strong)UITextField *textField;
 @end
 
 @implementation PTViewController
@@ -38,10 +41,23 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
-    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = self.view.bounds;
+//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:btn];
+    
+    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
+    userNameKeyboard.delegate = self;
+
+    self.textField = [UITextField new];
+    self.textField.placeholder = @"11111";
+    self.textField.inputView = userNameKeyboard;
+    [self.view addSubview:self.textField];
+    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.offset(64);
+        make.height.offset(30);
+    }];
     
     kAdaptedOtherFontSize(@"", 16);
     
@@ -65,14 +81,14 @@
 //        make.height.offset(44);
 //    }];
     
-    PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
-        
-    }];
-    [self.view addSubview:seg];
-    [seg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.view);
-        make.height.offset(44);
-    }];
+//    PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+//
+//    }];
+//    [self.view addSubview:seg];
+//    [seg mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.equalTo(self.view);
+//        make.height.offset(44);
+//    }];
 
     
     
@@ -190,6 +206,20 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark ------> PooNumberKeyBoardDelegate
+-(void)numberKeyboard:(PooNumberKeyBoard *)keyboard input:(NSString *)number
+{
+    self.textField.text = [self.textField.text stringByAppendingString:number];
+}
+
+-(void)numberKeyboardBackspace:(PooNumberKeyBoard *)keyboard
+{
+    if (self.textField.text.length != 0)
+    {
+        self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
+    }
 }
 
 @end
