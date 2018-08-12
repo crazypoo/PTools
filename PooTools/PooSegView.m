@@ -31,7 +31,7 @@
 @end
 
 @implementation PooSegView
--(id)initWithFrame:(CGRect)frame titles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc showType:(PooSegShowType)viewType clickBlock:(PooSegViewClickBlock)block
+-(id)initWithTitles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc showType:(PooSegShowType)viewType clickBlock:(PooSegViewClickBlock)block
 {
     self = [super init];
     if (self) {
