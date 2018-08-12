@@ -13,7 +13,7 @@
 #import "PBiologyID.h"
 #import "PooSearchBar.h"
 #import "PooDatePicker.h"
-
+#import "ALActionSheetView.h"
 #import "PooTagsLabel.h"
 
 #import <Masonry/Masonry.h>
@@ -85,6 +85,11 @@
 
 -(void)aaaaa
 {
+    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+        
+    }];
+    [actionSheet show];
+    
 //    self.touchID = [PBiologyID defaultBiologyID];
 //    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
 //        PNSLog(@"%ld",(long)biologyIDType);
@@ -105,36 +110,44 @@
 //        }
 //    };
     
-    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
-
-    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
-        switch (buttonIndex) {
-                case 0:
-            {
-                [alertView dissMiss];
-                alertView = nil;
-            }
-                break;
-             case 1:
-            {
-                [alertView dissMiss];
-                alertView = nil;
-            }
-                break;
-            default:
-                break;
-        }
-
-    } didDismissBlock:^(YXCustomAlertView *alertView) {
-
-    }];
-    [alert showView];
-    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.top.equalTo(self.view).offset(10);
-//        make.right.bottom.equalTo(self.view).offset(-10);
-        make.width.height.offset(250);
-        make.centerX.centerY.equalTo(self.view);
-    }];
+//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+//
+//        UILabel *aaa = [UILabel new];
+//        aaa.backgroundColor = kRandomColor;
+//        aaa.text = @"1123123123123";
+//        [alertView.customView addSubview:aaa];
+//        [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
+//            make.left.right.top.bottom.equalTo(alertView.customView);
+//        }];
+//
+//    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+//        switch (buttonIndex) {
+//                case 0:
+//            {
+//                [alertView dissMiss];
+//                alertView = nil;
+//            }
+//                break;
+//             case 1:
+//            {
+//                [alertView dissMiss];
+//                alertView = nil;
+//            }
+//                break;
+//            default:
+//                break;
+//        }
+//
+//    } didDismissBlock:^(YXCustomAlertView *alertView) {
+//
+//    }];
+//    [alert showView];
+//    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
+////        make.left.top.equalTo(self.view).offset(10);
+////        make.right.bottom.equalTo(self.view).offset(-10);
+//        make.width.height.offset(250);
+//        make.centerX.centerY.equalTo(self.view);
+//    }];
 //    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
 //                   okAction:^{
 //
