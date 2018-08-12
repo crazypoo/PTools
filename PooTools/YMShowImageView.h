@@ -19,13 +19,9 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 @interface YMShowImageView : UIView<UIScrollViewDelegate>{
     UIImageView *showImage;
     
-    UIColor *titleColor;
-    NSString *fontName;
+    
     UIColor *currentPageIndicatorTintColor;
     UIColor *pageIndicatorTintColor;
-    NSString *deleteImageName;
-    UIColor *showImageBackgroundColor;
-    UIWindow *window;
 }
 
 @property (nonatomic,copy) didRemoveImage removeImg;
@@ -38,5 +34,5 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 
 - (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock;
 
-- (id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave saveImageImage:(NSString *)sii;
+- (id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main;
 @end

@@ -11,5 +11,6 @@
 @interface PTAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
++ (PTAppDelegate *)appDelegate;
 
 @end

@@ -17,6 +17,8 @@
 #import "PooTagsLabel.h"
 #import "PooSegView.h"
 #import "PooNumberKeyBoard.h"
+#import "YMShowImageView.h"
+#import "PTAppDelegate.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -41,23 +43,23 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
     
-    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
-    userNameKeyboard.delegate = self;
-
-    self.textField = [UITextField new];
-    self.textField.placeholder = @"11111";
-    self.textField.inputView = userNameKeyboard;
-    [self.view addSubview:self.textField];
-    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.offset(64);
-        make.height.offset(30);
-    }];
+//    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
+//    userNameKeyboard.delegate = self;
+//
+//    self.textField = [UITextField new];
+//    self.textField.placeholder = @"11111";
+//    self.textField.inputView = userNameKeyboard;
+//    [self.view addSubview:self.textField];
+//    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.offset(64);
+//        make.height.offset(30);
+//    }];
     
     kAdaptedOtherFontSize(@"", 16);
     
@@ -118,10 +120,37 @@
 
 -(void)aaaaa
 {
-    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
-        
+    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel.imageFullView = @"1";
+    imageModel.imageInfo = @"11111111241241241241928390128309128";
+    imageModel.imageTitle = @"22222212312312312312312312312";
+    
+    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel1.imageFullView = @"0";
+    imageModel1.imageInfo = @"444444";
+    imageModel1.imageTitle = @"333333";
+    
+    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+    imageModel2.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel2.imageFullView = @"0";
+    imageModel2.imageInfo = @"6666666";
+    imageModel2.imageTitle = @"5555555";
+    
+    NSArray *arr = @[imageModel,imageModel1,imageModel2];
+    
+    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+    [ymImageV showWithFinish:^{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     }];
-    [actionSheet show];
+    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+    }];
+//    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+//
+//    }];
+//    [actionSheet show];
     
 //    self.touchID = [PBiologyID defaultBiologyID];
 //    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {

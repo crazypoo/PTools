@@ -19,6 +19,11 @@
 
 @implementation PTAppDelegate
 
++ (PTAppDelegate *)appDelegate
+{
+    return (PTAppDelegate *)[[UIApplication sharedApplication] delegate];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.

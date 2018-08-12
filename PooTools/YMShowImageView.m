@@ -14,11 +14,18 @@
 #import <SceneKit/SceneKit.h>
 #import "PMacros.h"
 #import "PooLoadingView.h"
+#import <Masonry/Masonry.h>
+#import "WMHub.h"
+
+typedef NS_ENUM(NSInteger,MoreActionType){
+    MoreActionTypeNoMore = 0,
+    MoreActionTypeMoreNormal,
+    MoreActionTypeOnlySave,
+    MoreActionTypeOnlyDelete
+};
 
 @interface YMShowImageView ()<NSURLConnectionDataDelegate, NSURLConnectionDelegate>
-{
-    UIPageControl *pageControl;
-}
+
 @property (nonatomic, strong) UIImageView *nilViews;
 @property (nonatomic, strong) UIScrollView *scrollView;
 @property (nonatomic, strong) NSMutableArray *imageScrollViews;
@@ -27,40 +34,74 @@
 @property (nonatomic, strong) NSMutableArray *modelArr;
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *infoLabel;
+@property (nonatomic, strong) UIWindow *window;
+@property (nonatomic, strong) NSMutableArray *imageModelArr;
+@property (nonatomic, assign) NSInteger viewClickTag;
+@property (nonatomic, strong) UIButton *deleteButton;
+@property (nonatomic, strong) UIButton *saveImageButton;
+@property (nonatomic, strong) UIColor *showImageBackgroundColor;
+@property (nonatomic, strong) UIColor *titleColor;
+@property (nonatomic, strong) NSString *fontName;
+@property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, assign) MoreActionType moreType;
+@property (nonatomic, strong) NSArray *actionSheetOtherBtnArr;
+@property (nonatomic, strong) NSString *moreActionImageNames;
+
 @end
 
 @implementation YMShowImageView
 {
-    CGRect self_Frame;
-    BOOL doubleClick;
-    UIButton *deleteButton;
-    BOOL saveImageBool;
-    UIButton *saveImageButton;
-    NSString *saveImageButtonImageName;
+    BOOL doubleClick;    
 }
 
--(id)initWithFrame:(CGRect)frame byClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic deleteImageName:(NSString *)di showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave saveImageImage:(NSString *)sii
+-(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
         
-        self_Frame = frame;
-        titleColor = tC;
-        fontName = fName;
+        if (canDelete == YES && canSave == YES) {
+            self.moreType = MoreActionTypeMoreNormal;
+            self.actionSheetOtherBtnArr = @[@"保存图片",@"删除图片"];
+            self.saveImageArr = [[NSMutableArray alloc] init];
+        }
+        else if (canDelete == NO && canSave == YES)
+        {
+            self.moreType = MoreActionTypeOnlySave;
+            self.actionSheetOtherBtnArr = @[@"保存图片"];
+            self.saveImageArr = [[NSMutableArray alloc] init];
+        }
+        else if (canDelete == YES && canSave == NO)
+        {
+            self.moreType = MoreActionTypeOnlyDelete;
+            self.actionSheetOtherBtnArr = @[@"删除图片"];
+        }
+        else
+        {
+            self.moreType = MoreActionTypeNoMore;
+            self.actionSheetOtherBtnArr = nil;
+        }
+        
+        UIDevice *device = [UIDevice currentDevice]; //Get the device object
+        [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
+        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
+        [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
+        
+        self.titleColor = tC;
+        self.fontName = fName;
         currentPageIndicatorTintColor = cpic;
         pageIndicatorTintColor = pic;
-        deleteImageName = di;
-        showImageBackgroundColor = sibc;
-        window = w;
+        self.showImageBackgroundColor = sibc;
+        self.window = w;
         self.loadingImageName = li;
-        saveImageButtonImageName = sii;
+        self.moreActionImageNames = main;
+        self.imageModelArr = [NSMutableArray array];
+        [self.imageModelArr addObjectsFromArray:appendArray];
         
         self.alpha = 0.0f;
         self.page = 0;
         doubleClick = YES;
-        saveImageBool = canSave;
         
-        [self configScrollViewWith:clickTag andAppendArray:appendArray canDelete:canDelete];
+        [self configScrollViewWith:clickTag andAppendArray:appendArray];
         
         self.modelArr = [[NSMutableArray alloc] init];
         [self.modelArr addObjectsFromArray:appendArray];
@@ -80,165 +121,25 @@
 
 }
 
-- (void)configScrollViewWith:(NSInteger)clickTag andAppendArray:(NSArray<PooShowImageModel *> *)appendArray canDelete:(BOOL)cd
+- (void)configScrollViewWith:(NSInteger)clickTag andAppendArray:(NSArray<PooShowImageModel *> *)appendArray
 {
-    if (saveImageBool) {
-        self.saveImageArr = [[NSMutableArray alloc] init];
-    }
+    self.viewClickTag = clickTag;
     
-    self.scrollView = [[UIScrollView alloc] initWithFrame:self_Frame];
-    self.scrollView.backgroundColor = [UIColor blackColor];
+    self.scrollView = [UIScrollView new];
+    self.scrollView.backgroundColor = kClearColor;
     self.scrollView.pagingEnabled = true;
     self.scrollView.delegate = self;
-    self.scrollView.contentSize = CGSizeMake(self.width * appendArray.count, 0);
     [self addSubview:self.scrollView];
     
-    pageControl = [[UIPageControl alloc]initWithFrame:CGRectMake(0,kScreenStatusBottom+5, kSCREEN_WIDTH, 20)];
-    pageControl.numberOfPages = appendArray.count;
-    pageControl.backgroundColor = [UIColor clearColor];
-    pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
-    pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
-    [pageControl sizeForNumberOfPages:2];
-    [self addSubview:pageControl];
+    self.pageControl = [UIPageControl new];
+    self.pageControl.numberOfPages = appendArray.count;
+    self.pageControl.backgroundColor = [UIColor clearColor];
+    self.pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
+    self.pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
+    [self.pageControl sizeForNumberOfPages:2];
+    [self addSubview:self.pageControl];
     
     self.imageScrollViews = [[NSMutableArray alloc] init];
-    
-    float W = self.frame.size.width;
-    
-    
-    for (int i = 0; i < appendArray.count; i ++) {
-        PooShowImageModel *model = appendArray[i];
-        
-        UIScrollView *imageScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(self.width * i, 0, self.width, self.height)];
-        imageScrollView.backgroundColor = showImageBackgroundColor;
-        imageScrollView.contentSize = CGSizeMake(self.width, self.height);
-        imageScrollView.delegate = self;
-        imageScrollView.maximumZoomScale = 4;
-        imageScrollView.minimumZoomScale = 1;
-        
-        if ([model.imageFullView isEqualToString:@"1"]) {
-            
-            UILabel *fullViewLabel = [[UILabel alloc] initWithFrame:CGRectMake(kSCREEN_WIDTH-60 , kScreenStatusBottom+5, 50, 20)];
-            kViewBorderRadius(fullViewLabel, 5, 1, titleColor);
-            fullViewLabel.textAlignment = NSTextAlignmentCenter;
-            fullViewLabel.font = kDEFAULT_FONT(fontName, 18);
-            fullViewLabel.textColor = titleColor;
-            fullViewLabel.text = @"全景";
-            [imageScrollView addSubview:fullViewLabel];
-            
-            CGFloat navH = 0.0f;
-            if (kDevice_Is_iPhoneX)
-            {
-                navH = HEIGHT_IPHONEXNAVBAR;
-            }
-            else
-            {
-                navH = HEIGHT_NAVBAR;
-            }
-            
-            SCNView *sceneView = [[SCNView alloc] initWithFrame:CGRectMake(0, navH, self.width, self.height-navH-80)];
-            [imageScrollView addSubview:sceneView];
-            
-            sceneView.scene = [[SCNScene alloc] init];
-            sceneView.showsStatistics = NO;
-            sceneView.allowsCameraControl = YES;
-            
-            SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
-            sphere.firstMaterial.doubleSided = YES;
-            
-            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectMake((kSCREEN_WIDTH-150)/2, (kSCREEN_HEIGHT-150)/2, 150, 150)];
-            
-            [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                GCDWithMain(^{
-                    [loading startAnimation];
-                });
-            } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                GCDWithMain(^{
-                    [loading stopAnimation];
-                    sphere.firstMaterial.diffuse.contents = image;
-                    [self.saveImageArr addObject:image];
-                });
-            }];
-            SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
-            sphereNode.position = SCNVector3Make(0,0,0);
-            [sceneView.scene.rootNode addChildNode:sphereNode];
-        }
-        else
-        {
-            self.nilViews = [[UIImageView alloc] initWithFrame:self.bounds];
-            NSString *imageURLString = model.imageUrl;
-            if (imageURLString) {
-                if ([imageURLString isKindOfClass:[NSString class]]) {
-                    [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-                    [self.saveImageArr addObject:self.nilViews.image];
-                }else if([imageURLString isKindOfClass:[NSURL class]]){
-                    [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-                    [self.saveImageArr addObject:self.nilViews.image];
-                }else if([imageURLString isKindOfClass:[UIImage class]]){
-                    self.nilViews.image = (UIImage*)imageURLString;
-                    [self.saveImageArr addObject:(UIImage*)imageURLString];
-                }
-            }
-            self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
-            [imageScrollView addSubview:self.nilViews];
-        }
-                
-        [self.scrollView addSubview:imageScrollView];
-        [self.imageScrollViews addObject:imageScrollView];
-        
-        imageScrollView.tag = 100 + i ;
-        self.nilViews.tag = 1000 + i;
-    }
-    [self.scrollView setContentOffset:CGPointMake(W * (clickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-    self.page = clickTag - YMShowImageViewClickTagAppend;
-    
-    PooShowImageModel *model = appendArray[0];
-    
-    self.titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, kSCREEN_HEIGHT-80, kSCREEN_WIDTH-110, 40)];
-    self.titleLabel.textAlignment = NSTextAlignmentLeft;
-    self.titleLabel.textColor     = titleColor;
-    self.titleLabel.numberOfLines = 0;
-    self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    self.titleLabel.font = kDEFAULT_FONT(fontName, 16);
-    self.titleLabel.text          = model.imageTitle;
-    self.titleLabel.hidden        = self.titleLabel.text.length == 0;
-    [self addSubview:self.titleLabel];
-    
-    self.infoLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, kSCREEN_HEIGHT-40, kSCREEN_WIDTH-110, 40)];
-    self.infoLabel.textAlignment = NSTextAlignmentLeft;
-    self.infoLabel.textColor     = titleColor;
-    self.infoLabel.numberOfLines = 0;
-    self.infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    self.infoLabel.font = kDEFAULT_FONT(fontName, 16);
-    self.infoLabel.text          = model.imageInfo;
-    self.infoLabel.hidden        = self.infoLabel.text.length == 0;
-    [self addSubview:self.infoLabel];
-
-    if (cd) {
-        deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
-        deleteButton.frame                     = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
-        deleteButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
-        deleteButton.showsTouchWhenHighlighted = YES;
-        [deleteButton setImage:kImageNamed(deleteImageName) forState:UIControlStateNormal];
-        [deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:deleteButton];
-    }
-    
-    if (saveImageBool) {
-        
-        saveImageButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
-        if (cd) {
-            saveImageButton.frame = CGRectMake(self.width-105, self.height-50, 45.0f, 45.0f);
-        }
-        else
-        {
-            saveImageButton.frame = CGRectMake(self.width - 50.0f, self.height-50, 45.0f, 45.0f);
-        }
-        saveImageButton.imageEdgeInsets           = UIEdgeInsetsMake(5.0f, 5.0f, 5.0f, 5.0f);
-        [saveImageButton setImage:kImageNamed(saveImageButtonImageName) forState:UIControlStateNormal];
-        [saveImageButton addTarget:self action:@selector(saveImage:) forControlEvents:UIControlEventTouchUpInside];
-        [self addSubview:saveImageButton];
-    }
 }
 
 -(void)removeFromSuperview
@@ -293,9 +194,12 @@
 }
 
 - (void)showWithFinish:(didRemoveImage)tempBlock{
-    UIView *maskview = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT)];
-    maskview.backgroundColor = [UIColor blackColor];
-    [window addSubview:maskview];
+    UIView *maskview = [UIView new];
+    maskview.backgroundColor = self.showImageBackgroundColor;
+    [self.window addSubview:maskview];
+    [maskview mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.window);
+    }];
     
     [self show:maskview didFinish:^{
         [UIView animateWithDuration:0.5f animations:^{
@@ -315,26 +219,259 @@
     }];
 }
 
-- (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock{
+- (void)show:(UIView *)bgView didFinish:(didRemoveImage)tempBlock
+{
+    [bgView addSubview:self];
+    [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(bgView);
+    }];
+    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(bgView);
+        make.top.offset(kScreenStatusBottom+5);
+        make.height.offset(20);
+        make.centerX.equalTo(bgView);
+    }];
     
-     [bgView addSubview:self];
-    
-     _removeImg = tempBlock;
-    
-     [UIView animateWithDuration:.4f animations:^(){
-         
-         self.alpha = 1.0f;
-    
-      } completion:^(BOOL finished) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"0秒后获取frame：%@", self);
+        self.scrollView.contentSize = CGSizeMake(self.width * self.imageModelArr.count, 0);
         
-     }];
+        float W = self.width;
+        
+        for (int i = 0; i < self.imageModelArr.count; i ++) {
+            PooShowImageModel *model = self.imageModelArr[i];
+            
+            UIScrollView *imageScrollView = [UIScrollView new];
+            imageScrollView.backgroundColor = self.showImageBackgroundColor;
+            imageScrollView.contentSize = CGSizeMake(self.width, self.height);
+            imageScrollView.delegate = self;
+            imageScrollView.maximumZoomScale = 4;
+            imageScrollView.minimumZoomScale = 1;
+            [self.scrollView addSubview:imageScrollView];
+            [imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.offset(self.width*i);
+                make.top.offset(0);
+                make.width.offset(self.width);
+                make.height.offset(self.height);
+            }];
+            
+            imageScrollView.tag = 100 + i ;
+            
+            CGFloat navH = 0.0f;
+            if (kDevice_Is_iPhoneX)
+            {
+                navH = HEIGHT_IPHONEXNAVBAR;
+            }
+            else
+            {
+                navH = HEIGHT_NAVBAR;
+            }
+            
+            if ([model.imageFullView isEqualToString:@"1"]) {
+                
+                UILabel *fullViewLabel = [UILabel new];
+                kViewBorderRadius(fullViewLabel, 5, 1, self.titleColor);
+                fullViewLabel.textAlignment = NSTextAlignmentCenter;
+                fullViewLabel.font = kDEFAULT_FONT(self.fontName, 18);
+                fullViewLabel.textColor = self.titleColor;
+                fullViewLabel.text = @"全景";
+                [imageScrollView addSubview:fullViewLabel];
+                [fullViewLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.offset(50);
+                    make.height.offset(20);
+                    make.right.equalTo(self).offset(-10);
+                    make.top.equalTo(imageScrollView).offset(kScreenStatusBottom+5);
+                }];
+                
+                SCNView *sceneView = [SCNView new];
+                [imageScrollView addSubview:sceneView];
+                [sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+                sceneView.tag = 2000 + i;
+
+                
+                sceneView.scene = [[SCNScene alloc] init];
+                sceneView.showsStatistics = NO;
+                sceneView.allowsCameraControl = YES;
+                
+                SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
+                sphere.firstMaterial.doubleSided = YES;
+                
+                [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    GCDWithMain(^{
+                        [self.saveImageArr addObject:image];
+                        sphere.firstMaterial.diffuse.contents = image;
+                    });
+                }];
+                SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
+                sphereNode.position = SCNVector3Make(0,0,0);
+                [sceneView.scene.rootNode addChildNode:sphereNode];
+            }
+            else
+            {
+                self.nilViews = [UIImageView new];
+                NSString *imageURLString = model.imageUrl;
+                if (imageURLString) {
+                    if ([imageURLString isKindOfClass:[NSString class]]) {
+                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+                        [self.saveImageArr addObject:self.nilViews.image];
+                    }else if([imageURLString isKindOfClass:[NSURL class]]){
+                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+                        [self.saveImageArr addObject:self.nilViews.image];
+                    }else if([imageURLString isKindOfClass:[UIImage class]]){
+                        self.nilViews.image = (UIImage*)imageURLString;
+                        [self.saveImageArr addObject:(UIImage*)imageURLString];
+                    }
+                }
+                self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
+                [imageScrollView addSubview:self.nilViews];
+                [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+                self.nilViews.tag = 1000 + i;
+            }
+            [self.imageScrollViews addObject:imageScrollView];
+            
+        }
+        [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
+        self.page = self.viewClickTag - YMShowImageViewClickTagAppend;
+        
+        PooShowImageModel *model = self.imageModelArr[0];
+        
+        self.titleLabel = [UILabel new];
+        self.titleLabel.textAlignment = NSTextAlignmentLeft;
+        self.titleLabel.textColor     = self.titleColor;
+        self.titleLabel.numberOfLines = 0;
+        self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        self.titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
+        self.titleLabel.text          = model.imageTitle;
+        self.titleLabel.hidden        = self.titleLabel.text.length == 0;
+        [self addSubview:self.titleLabel];
+        [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(10);
+            make.bottom.equalTo(self).offset(-40);
+            make.height.offset(40);
+            make.right.equalTo(self).offset(-110);
+        }];
+        
+        self.infoLabel = [UILabel new];
+        self.infoLabel.textAlignment = NSTextAlignmentLeft;
+        self.infoLabel.textColor     = self.titleColor;
+        self.infoLabel.numberOfLines = 0;
+        self.infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
+        self.infoLabel.font = kDEFAULT_FONT(self.fontName, 16);
+        self.infoLabel.text          = model.imageInfo;
+        self.infoLabel.hidden        = self.infoLabel.text.length == 0;
+        [self addSubview:self.infoLabel];
+        [self.infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.height.right.equalTo(self.titleLabel);
+            make.bottom.equalTo(self);
+        }];
+        
+        switch (self.moreType) {
+            case MoreActionTypeNoMore:
+                break;
+            default:
+            {
+                self.deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+                self.deleteButton.showsTouchWhenHighlighted = YES;
+                [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
+                [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
+                [self addSubview:self.deleteButton];
+                [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.height.offset(30);
+                    make.right.bottom.equalTo(self).offset(-10);
+                }];
+            }
+                break;
+        }
+    });
+    
+    _removeImg = tempBlock;
+    
+    [UIView animateWithDuration:.4f animations:^(){
+        
+        self.alpha = 1.0f;
+        
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)orientationChanged:(NSNotification *)note
+{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        NSLog(@"0.1秒后获取frame：%@", self);
+        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(self);
+        }];
+        [self.pageControl mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.top.offset(kScreenStatusBottom+5);
+            make.height.offset(20);
+            make.centerX.equalTo(self);
+        }];
+        self.scrollView.contentSize = CGSizeMake(self.width * self.imageModelArr.count, 0);
+        for (int i = 0; i < self.imageModelArr.count; i ++)
+        {
+            PooShowImageModel *model = self.imageModelArr[i];
+            UIScrollView *imageScrollView = (UIScrollView *)[self.scrollView viewWithTag:100+i];
+            [imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.offset(self.width*i);
+                make.top.offset(0);
+                make.width.offset(self.width);
+                make.height.offset(self.height);
+
+            }];
+            imageScrollView.contentSize = CGSizeMake(self.width, self.height);
+            
+            CGFloat navH = 0.0f;
+            if (kDevice_Is_iPhoneX)
+            {
+                navH = HEIGHT_IPHONEXNAVBAR;
+            }
+            else
+            {
+                navH = HEIGHT_NAVBAR;
+            }
+            
+            if ([model.imageFullView isEqualToString:@"1"])
+            {
+                SCNView *sceneView = (SCNView *)[imageScrollView viewWithTag:2000+i];
+                [sceneView mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+            }
+            else
+            {
+                self.nilViews = (UIImageView *)[imageScrollView viewWithTag:1000+i];
+                [self.nilViews mas_updateConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+            }
+        }
+        [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
+
+    });
+    
 }
 
 #pragma mark - ScorllViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
     int page = (scrollView.contentOffset.x)/scrollView.width;
-    pageControl.currentPage = page;
+    self.pageControl.currentPage = page;
     
     if (scrollView == self.scrollView) {
         PooShowImageModel *model = self.modelArr[page];
@@ -369,7 +506,7 @@
 }
 
 #pragma mark - ----> 保存图片
--(void)saveImage:(UIButton *)sender
+-(void)saveImage
 {
     NSInteger index = self.page;
     [self saveImageToPhotos:self.saveImageArr[index]];
@@ -397,63 +534,119 @@
 #pragma mark - ----> 删除图片
 - (void)removeCurrImage{
 
-    ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:nil
+    ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:@"图片操作"
                                                                    cancelButtonTitle:@"取消"
                                                               destructiveButtonTitle:nil
-                                                                   otherButtonTitles:@[@"删除照片"]
-                                                                      buttonFontName:fontName
+                                                                   otherButtonTitles:self.actionSheetOtherBtnArr
+                                                                      buttonFontName:self.fontName
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
-                                              if (buttonIndex == 0)
-                                              {
-                                                  NSInteger index = self.page;
-
-                                                  if (self.didDeleted)
+                                              switch (self.moreType) {
+                                                  case MoreActionTypeOnlyDelete:
                                                   {
-                                                      self.didDeleted(self,index);
-                                                  }
-
-                                                  UIView *currView = self.imageScrollViews[index];
-                                                  if (currView) {
-                                                      if (self.imageScrollViews.count == 1)
+                                                      if (buttonIndex == 0)
                                                       {
-                                                          [self disappear];
-                                                      }
-                                                      else
-                                                      {
-                                                          __block float lastWidth = currView.width;
-                                                          [UIView animateWithDuration:0.2 animations:^{
-                                                              currView.alpha = 0;
-                                                              currView.frame = CGRectMake(currView.x*0.5, currView.y, 0, 0);
-
-                                                              self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - lastWidth, self.scrollView.contentSize.height);
-                                                              [self.imageScrollViews removeObjectAtIndex:index];
-
-                                                              if (index >= self.imageScrollViews.count)
-                                                              {
-                                                                  self.page = self.page - 1;
-                                                              }
-                                                              else
-                                                              {
-                                                                  for (int i = (int)index ; i < self.imageScrollViews.count ;  i++)
-                                                                  {
-                                                                      UIView *nextView = self.imageScrollViews[i];
-                                                                      nextView.tag = i+100;
-                                                                      nextView.x -= lastWidth;
-                                                                      lastWidth = nextView.width;
-                                                                  }
-                                                              }
-                                                          } completion:^(BOOL finished) {
-                                                              [currView removeFromSuperview];
-                                                          }];
+                                                          [self deleteImage];
                                                       }
                                                   }
+                                                      break;
+                                                  case MoreActionTypeOnlySave:
+                                                  {
+                                                      if (buttonIndex == 0)
+                                                      {
+                                                          [self saveImage];
+                                                      }
+                                                  }
+                                                      break;
+                                                  case MoreActionTypeMoreNormal:
+                                                  {
+                                                      switch (buttonIndex) {
+                                                          case 0:
+                                                              {
+                                                                  [self saveImage];
+                                                              }
+                                                              break;
+                                                          case 1:
+                                                          {
+                                                              [self deleteImage];
+                                                          }
+                                                              break;
+                                                          default:
+                                                              break;
+                                                      }
+                                                  }
+                                                      break;
+                                                  default:
+                                                      break;
                                               }
                                           }];
     [actionSheetView show];
 }
 
-
+-(void)deleteImage
+{
+    NSInteger index = self.page;
+    
+    if (self.didDeleted)
+    {
+        self.didDeleted(self,index);
+    }
+    
+    UIScrollView *currView = (UIScrollView *)[self.scrollView viewWithTag:100+index];
+    
+    if (currView) {
+        if (self.imageScrollViews.count == 1)
+        {
+            [self disappear];
+        }
+        else
+        {
+            __block float lastWidth = currView.width;
+            [UIView animateWithDuration:0.2 animations:^{
+                
+                self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - lastWidth, self.scrollView.contentSize.height);
+                [self.imageScrollViews removeObjectAtIndex:index];
+                [self.modelArr removeObjectAtIndex:index];
+                [self.saveImageArr removeObjectAtIndex:index];
+                
+                self.pageControl.numberOfPages = self.imageScrollViews.count;
+                
+                [self.imageModelArr removeObjectAtIndex:index];
+                
+                if (index >= self.imageScrollViews.count)
+                {
+                    self.page = self.page - 1;
+                }
+                else
+                {
+                    for (int i = (int)index ; i < self.imageScrollViews.count ;  i++)
+                    {
+                        UIScrollView *nextView = (UIScrollView *)self.imageScrollViews[i];
+                        nextView.tag = i+100;
+                        [nextView mas_updateConstraints:^(MASConstraintMaker *make) {
+                            make.left.offset(self.width*i);
+                            make.top.offset(0);
+                            make.width.offset(self.width);
+                            make.height.offset(self.height);
+                            
+                        }];
+                    }
+                }
+                GCDWithMain(^{
+                    PooShowImageModel *model = self.modelArr[self.page];
+                    self.titleLabel.text = model.imageTitle;
+                    self.infoLabel.text = model.imageInfo;
+                });
+                
+            } completion:^(BOOL finished) {
+                GCDWithMain(^{
+                    [currView removeFromSuperview];
+                });
+                
+            }];
+        }
+    }
+}
 
 
 @end
