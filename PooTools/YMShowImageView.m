@@ -329,16 +329,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 id urlObject;
                 if (imageURLString) {
                     if ([imageURLString isKindOfClass:[NSString class]]) {
-//                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-//                        [self.saveImageArr addObject:self.nilViews.image];
                         urlObject = imageURLString;
                     }else if([imageURLString isKindOfClass:[NSURL class]]){
-//                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-//                        [self.saveImageArr addObject:self.nilViews.image];
                         urlObject = imageURLString;
                     }else if([imageURLString isKindOfClass:[UIImage class]]){
-//                        self.nilViews.image = (UIImage*)imageURLString;
-//                        [self.saveImageArr addObject:(UIImage*)imageURLString];
                     }
                 }
 
@@ -351,15 +345,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",imageW,imageH);
                     PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",image.size.width,image.size.height);
 
-                    [imageScrollView addSubview:self.nilViews];
-                    [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.left.right.equalTo(self);
-                        make.height.offset(image.size.height);
-                        make.top.equalTo(self).offset(navH);
-                    }];
+                    
                 }];
                 self.nilViews.image = subImage;
-
+                [imageScrollView addSubview:self.nilViews];
+                [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(subImage.size.height);
+                    make.top.equalTo(self).offset(navH);
+                }];
 //                if (imageURLString) {
 //                    if ([imageURLString isKindOfClass:[NSString class]]) {
 //                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
@@ -530,8 +524,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 }
 
 
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-  
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
     if (scrollView == self.scrollView) {
         CGPoint offset = self.scrollView.contentOffset;
         self.page = offset.x / self.width ;
@@ -547,6 +541,13 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         UIScrollView *scollV_pre = (UIScrollView *)[self viewWithTag:self.page+100-1]; //后一页
         if (scollV_pre.zoomScale != 1.0){
             scollV_pre.zoomScale = 1.0;
+        }
+    }
+    else
+    {
+        UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
+        if (scrollView == currentScrollView) {
+            PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.y);
         }
     }
 }
