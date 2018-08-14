@@ -17,6 +17,10 @@
 #import <Masonry/Masonry.h>
 #import "WMHub.h"
 
+#define kMinZoomScale 0.6f
+#define kMaxZoomScale 2.0f
+
+
 typedef NS_ENUM(NSInteger,MoreActionType){
     MoreActionTypeNoMore = 0,
     MoreActionTypeMoreNormal,
@@ -253,6 +257,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             imageScrollView.minimumZoomScale = 1;
             imageScrollView.showsVerticalScrollIndicator = NO;
             imageScrollView.showsHorizontalScrollIndicator = NO;
+//            imageScrollView.clipsToBounds = YES;
             [self.scrollView addSubview:imageScrollView];
             [imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.offset(self.width*i);
@@ -323,7 +328,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             {
                 self.nilViews = [UIImageView new];
                 NSString *imageURLString = model.imageUrl;
-                self.nilViews.contentMode = UIViewContentModeScaleAspectFill;
+                self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
                 __block UIImage *subImage;
                 
                 id urlObject;
@@ -337,23 +342,35 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 }
 
                 [self.nilViews sd_setImageWithURL:urlObject placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                    subImage = image;
-                    CGFloat imageScale = kSCREEN_WIDTH/image.size.width;
-                    CGFloat imageW = imageScale*image.size.width;
-                    CGFloat imageH = imageScale*image.size.height;
-                    imageScrollView.contentSize = CGSizeMake(imageW, imageH);
-                    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",imageW,imageH);
-                    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",image.size.width,image.size.height);
-
                     
+                    GCDWithMain(^{
+                        subImage = image;
+                        CGFloat imageScale = kSCREEN_WIDTH/image.size.width;
+                        CGFloat imageW = imageScale*image.size.width;
+                        CGFloat imageH = imageScale*image.size.height;
+                        imageScrollView.contentSize = CGSizeMake(imageW, imageH);
+                        CGFloat maxScale = kSCREEN_HEIGHT/subImage.size.height;
+                        maxScale = kSCREEN_WIDTH/subImage.size.width>maxScale?kSCREEN_WIDTH/subImage.size.width:maxScale;
+                        //超过了设置的最大的才算数
+                        maxScale = maxScale>kMaxZoomScale?maxScale:kMaxZoomScale;
+                        //初始化
+                        imageScrollView.minimumZoomScale = kMinZoomScale;
+                        imageScrollView.maximumZoomScale = maxScale;
+                        imageScrollView.zoomScale = 1.0f;
+
+                        PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",imageW,imageH);
+                        PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",image.size.width,image.size.height);
+                    });
                 }];
                 self.nilViews.image = subImage;
                 [imageScrollView addSubview:self.nilViews];
+                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.%f",imageScrollView.contentSize.height);
                 [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.right.equalTo(self);
-                    make.height.offset(subImage.size.height);
+                    make.height.offset(subImage.size.height*(kSCREEN_WIDTH/subImage.size.width));
                     make.top.equalTo(self).offset(navH);
                 }];
+
 //                if (imageURLString) {
 //                    if ([imageURLString isKindOfClass:[NSString class]]) {
 //                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
@@ -519,6 +536,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
         if (scrollView == currentScrollView) {
             PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.x);
+            self.scrollView.scrollEnabled = NO;
+        }
+        else
+        {
+            self.scrollView.scrollEnabled = YES;
         }
     }
 }
@@ -548,6 +570,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
         if (scrollView == currentScrollView) {
             PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.y);
+            self.scrollView.scrollEnabled = YES;
         }
     }
 }
@@ -571,6 +594,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 -(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
 {
+    self.scrollView.scrollEnabled = YES;
     PNSLog(@"viewW:%f>>>>>>>>>>>viewH%f",view.width,view.height);
 }
 
