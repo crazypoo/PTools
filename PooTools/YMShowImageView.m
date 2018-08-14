@@ -111,10 +111,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         tapGser.numberOfTapsRequired = 1;
         [self addGestureRecognizer:tapGser];
         
-        UITapGestureRecognizer *doubleTapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeBig:)];
-        doubleTapGser.numberOfTapsRequired = 2;
-        [self addGestureRecognizer:doubleTapGser];
-        [tapGser requireGestureRecognizerToFail:doubleTapGser];
+//        UITapGestureRecognizer *doubleTapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeBig:)];
+//        doubleTapGser.numberOfTapsRequired = 2;
+//        [self addGestureRecognizer:doubleTapGser];
+//        [tapGser requireGestureRecognizerToFail:doubleTapGser];
         
     }
     return self;
@@ -168,15 +168,20 @@ typedef NS_ENUM(NSInteger,MoreActionType){
       
         [currentScrollView zoomToRect:currentScrollView.frame animated:YES];
     }
-    
     doubleClick = !doubleClick;
-
 }
 
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
     
-    UIImageView *imageView = (UIImageView *)[self viewWithTag:scrollView.tag + 900];
-    return imageView;
+    UIScrollView *aaaaa = (UIScrollView *)[self.scrollView viewWithTag:100+self.page];
+    
+    if (scrollView == aaaaa) {
+        UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:self.page + 1000];
+        return imageView;
+    }
+    return nil;
+//    UIImageView *imageView = (UIImageView *)[self viewWithTag:scrollView.tag + 900];
+//    return imageView;
 
 }
 
@@ -243,10 +248,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             UIScrollView *imageScrollView = [UIScrollView new];
             imageScrollView.backgroundColor = self.showImageBackgroundColor;
-            imageScrollView.contentSize = CGSizeMake(self.width, self.height);
             imageScrollView.delegate = self;
-            imageScrollView.maximumZoomScale = 4;
+            imageScrollView.maximumZoomScale = 2;
             imageScrollView.minimumZoomScale = 1;
+            imageScrollView.showsVerticalScrollIndicator = NO;
+            imageScrollView.showsHorizontalScrollIndicator = NO;
             [self.scrollView addSubview:imageScrollView];
             [imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.offset(self.width*i);
@@ -311,30 +317,62 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
                 sphereNode.position = SCNVector3Make(0,0,0);
                 [sceneView.scene.rootNode addChildNode:sphereNode];
+                imageScrollView.contentSize = CGSizeMake(self.width, self.height);
             }
             else
             {
                 self.nilViews = [UIImageView new];
                 NSString *imageURLString = model.imageUrl;
+                self.nilViews.contentMode = UIViewContentModeScaleAspectFill;
+                __block UIImage *subImage;
+                
+                id urlObject;
                 if (imageURLString) {
                     if ([imageURLString isKindOfClass:[NSString class]]) {
-                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-                        [self.saveImageArr addObject:self.nilViews.image];
+//                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+//                        [self.saveImageArr addObject:self.nilViews.image];
+                        urlObject = imageURLString;
                     }else if([imageURLString isKindOfClass:[NSURL class]]){
-                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-                        [self.saveImageArr addObject:self.nilViews.image];
+//                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+//                        [self.saveImageArr addObject:self.nilViews.image];
+                        urlObject = imageURLString;
                     }else if([imageURLString isKindOfClass:[UIImage class]]){
-                        self.nilViews.image = (UIImage*)imageURLString;
-                        [self.saveImageArr addObject:(UIImage*)imageURLString];
+//                        self.nilViews.image = (UIImage*)imageURLString;
+//                        [self.saveImageArr addObject:(UIImage*)imageURLString];
                     }
                 }
-                self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
-                [imageScrollView addSubview:self.nilViews];
-                [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(self);
-                    make.height.offset(self.height-navH-80);
-                    make.top.equalTo(self).offset(navH);
+
+                [self.nilViews sd_setImageWithURL:urlObject placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+                    subImage = image;
+                    CGFloat imageScale = kSCREEN_WIDTH/image.size.width;
+                    CGFloat imageW = imageScale*image.size.width;
+                    CGFloat imageH = imageScale*image.size.height;
+                    imageScrollView.contentSize = CGSizeMake(imageW, imageH);
+                    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",imageW,imageH);
+                    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",image.size.width,image.size.height);
+
+                    [imageScrollView addSubview:self.nilViews];
+                    [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.left.right.equalTo(self);
+                        make.height.offset(image.size.height);
+                        make.top.equalTo(self).offset(navH);
+                    }];
                 }];
+                self.nilViews.image = subImage;
+
+//                if (imageURLString) {
+//                    if ([imageURLString isKindOfClass:[NSString class]]) {
+//                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+//                        [self.saveImageArr addObject:self.nilViews.image];
+//                    }else if([imageURLString isKindOfClass:[NSURL class]]){
+//                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
+//                        [self.saveImageArr addObject:self.nilViews.image];
+//                    }else if([imageURLString isKindOfClass:[UIImage class]]){
+//                        self.nilViews.image = (UIImage*)imageURLString;
+//                        [self.saveImageArr addObject:(UIImage*)imageURLString];
+//                    }
+//                }
+                
                 self.nilViews.tag = 1000 + i;
             }
             [self.imageScrollViews addObject:imageScrollView];
@@ -430,7 +468,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 make.height.offset(self.height);
 
             }];
-            imageScrollView.contentSize = CGSizeMake(self.width, self.height);
             
             CGFloat navH = 0.0f;
             if (kDevice_Is_iPhoneX)
@@ -450,6 +487,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     make.height.offset(self.height-navH-80);
                     make.top.equalTo(self).offset(navH);
                 }];
+                imageScrollView.contentSize = CGSizeMake(self.width, self.height);
             }
             else
             {
@@ -459,6 +497,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     make.height.offset(self.height-navH-80);
                     make.top.equalTo(self).offset(navH);
                 }];
+                imageScrollView.contentSize = CGSizeMake(self.nilViews.image.size.width, self.nilViews.image.size.height);
+
             }
         }
         [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
@@ -470,41 +510,79 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 #pragma mark - ScorllViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    int page = (scrollView.contentOffset.x)/scrollView.width;
-    self.pageControl.currentPage = page;
-    
     if (scrollView == self.scrollView) {
-        PooShowImageModel *model = self.modelArr[page];
-        self.titleLabel.text = model.imageTitle;
-        self.infoLabel.text = model.imageInfo;
+        int page = (scrollView.contentOffset.x)/scrollView.width;
+        self.pageControl.currentPage = page;
+        
+        if (scrollView == self.scrollView) {
+            PooShowImageModel *model = self.modelArr[page];
+            self.titleLabel.text = model.imageTitle;
+            self.infoLabel.text = model.imageInfo;
+        }
+    }
+    else
+    {
+        UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
+        if (scrollView == currentScrollView) {
+            PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.x);
+        }
     }
 }
 
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
   
-    CGPoint offset = self.scrollView.contentOffset;
-    self.page = offset.x / self.width ;
-   
-    
-    UIScrollView *scrollV_next = (UIScrollView *)[self viewWithTag:self.page+100+1]; //前一页
-    
-    if (scrollV_next.zoomScale != 1.0){
-    
-        scrollV_next.zoomScale = 1.0;
-    }
-    
-    UIScrollView *scollV_pre = (UIScrollView *)[self viewWithTag:self.page+100-1]; //后一页
-    if (scollV_pre.zoomScale != 1.0){
-        scollV_pre.zoomScale = 1.0;
+    if (scrollView == self.scrollView) {
+        CGPoint offset = self.scrollView.contentOffset;
+        self.page = offset.x / self.width ;
+        
+        
+        UIScrollView *scrollV_next = (UIScrollView *)[self viewWithTag:self.page+100+1]; //前一页
+        
+        if (scrollV_next.zoomScale != 1.0){
+            
+            scrollV_next.zoomScale = 1.0;
+        }
+        
+        UIScrollView *scollV_pre = (UIScrollView *)[self viewWithTag:self.page+100-1]; //后一页
+        if (scollV_pre.zoomScale != 1.0){
+            scollV_pre.zoomScale = 1.0;
+        }
     }
 }
 
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView{
-  
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView
+{
+    UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
+    if (scrollView == currentScrollView) {
+        if (scrollView.contentOffset.x == 0 && scrollView.contentOffset.y == 0) {
+            self.scrollView.scrollEnabled = YES;
+            UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:self.page + 1000];
+            imageView.center = [self centerOfScrollViewContent:scrollView];
 
+        }
+        else
+        {
+            self.scrollView.scrollEnabled = NO;
+        }
+    }
 }
 
+-(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
+{
+    PNSLog(@"viewW:%f>>>>>>>>>>>viewH%f",view.width,view.height);
+}
+
+- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
+{
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                       scrollView.contentSize.height * 0.5 + offsetY);
+    return actualCenter;
+}
 #pragma mark - ----> 保存图片
 -(void)saveImage
 {

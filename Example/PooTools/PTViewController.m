@@ -133,7 +133,7 @@
     imageModel1.imageTitle = @"333333";
     
     PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-    imageModel2.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
     imageModel2.imageFullView = @"0";
     imageModel2.imageInfo = @"6666666";
     imageModel2.imageTitle = @"5555555";
