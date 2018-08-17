@@ -19,58 +19,115 @@ typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
 typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag);
 
 @interface PooTagsLabelConfig : NSObject
+/*! @brief item之间的左右间距
+ */
+@property (nonatomic) CGFloat itemHerMargin;
+/*! @brief item之间的上下间距
+ */
+@property (nonatomic) CGFloat itemVerMargin;
+/*! @brief item的高度
+ */
+@property (nonatomic) CGFloat itemHeight;
+/*! @brief item的长度 (只在图片模式使用)
+ */
+@property (nonatomic) CGFloat itemWidth;
+/*! @brief item标题距左右边缘的距离 (默认10)
+ */
+@property (nonatomic) CGFloat itemContentEdgs;
+/*! @brief 最顶部的item层到本view最顶部的距离,最底部的item层到本view最底部的距离 (0.1基本可看作无距离)
+ */
+@property (nonatomic) CGFloat topBottomSpace;
 
-@property (nonatomic) CGFloat itemHerMargin;            //item之间的左右间距
-@property (nonatomic) CGFloat itemVerMargin;            //item之间的上下间距
-@property (nonatomic) CGFloat itemHeight;               //item的高度
-@property (nonatomic) CGFloat itemWidth;               //item的长度
-@property (nonatomic) CGFloat itemContentEdgs;          //item标题距左右边缘的距离
-@property (nonatomic) CGFloat topBottomSpace;           //最顶部和最底部的item距离俯视图顶部和底部的距离(无间距时可设为0.1)
+/*! @brief item字体大小 (默认12)
+ */
+@property (nonatomic) CGFloat fontSize;
+/*! @brief item字体 (默认HelveticaNeue-Medium)
+ */
+@property (nonatomic,strong) NSString *fontName;
 
-@property (nonatomic) CGFloat fontSize;                     //字体大小  默认12
+/*! @brief 没选中字体颜色 (默认[UIColor grayColor])
+ */
 @property (nonatomic,strong) UIColor *normalTitleColor;
+/*! @brief 选中字体颜色 (默认[UIColor greenColor])
+ */
 @property (nonatomic,strong) UIColor *selectedTitleColor;
+/*! @brief 选中字体颜色 (默认[UIColor clearColor])
+ */
 @property (nonatomic,strong) UIColor *backgroundColor;
+/*! @brief 没选中背景图片 (只在纯文字模式下使用)
+ */
 @property (nonatomic,strong) NSString *normalBgImage;
+/*! @brief 选中背景图片 (只在纯文字模式下使用)
+ */
 @property (nonatomic,strong) NSString *selectedBgImage;
 
+/*! @brief 展示样式 (图片模式下使用)
+ */
 @property (nonatomic,assign) PooTagsLabelShowWithImageStatus showStatus;
-@property (nonatomic,strong) UIFont *btnFont;
+/*! @brief 图片与文字之间展示排版样式 (图片模式下使用)
+ */
 @property (nonatomic,assign) MKButtonEdgeInsetsStyle insetsStyle;
+/*! @brief 图片与文字之间展间隙 (图片模式下使用)
+ */
 @property (nonatomic) CGFloat imageAndTitleSpace;
 
-//是否有边框  默认没有边框
+
+/*! @brief 是否有边框  (默认没有边框)
+ */
 @property (nonatomic) BOOL hasBorder;
+/*! @brief 边框宽度 (默认0.5)
+ */
 @property (nonatomic) CGFloat borderWidth;
+/*! @brief 边框颜色 (默认[UIColor redColor])
+ */
 @property (nonatomic) UIColor *borderColor;
+/*! @brief 边框弧度 (默认item高度/2)
+ */
 @property (nonatomic) CGFloat cornerRadius;
 
-//是否可以选中默认为NO (YES时为单选)
+/*! @brief 是否可以选中 (默认为NO (YES时为单选))
+ */
 @property (nonatomic) BOOL isCanSelected;
-@property (nonatomic) BOOL isCanCancelSelected; //是否可以取消选中
-
+/*! @brief 是否可以取消选中
+ */
+@property (nonatomic) BOOL isCanCancelSelected;
+/*! @brief 是否可以多选
+ */
 @property (nonatomic) BOOL isMulti;
-@property (nonatomic,copy) NSString *singleSelectedTitle;     //单个选中对应的标题(初始化时默认选中的)
-@property (nonatomic,copy) NSArray *selectedDefaultTags;      //多个选中对应的标题数组(初始化时默认选中的)
+/*! @brief 单个选中对应的标题 (初始化时默认选中的)
+ */
+@property (nonatomic,copy) NSString *singleSelectedTitle;
+/*! @brief 多个选中对应的标题数组(初始化时默认选中的)
+ */
+@property (nonatomic,copy) NSArray *selectedDefaultTags;
 
 @end
 
 @interface PooTagsLabel : UIView
 
-///点击回调
+/*! @brief 点击block
+ */
 @property (nonatomic,copy) tagBtnClicked tagBtnClickedBlock;
 
+/*! @brief 设置view的背景图片
+ */
 @property (nonatomic,strong) UIImageView *bgImageView;
-///对应单选 当前选中的tag按钮
+
+/*! @brief 对应单选 当前选中的tag按钮
+ */
 @property (nonatomic,strong) UIButton *selectedBtn;
-//多个选中对应的标题数组
+/*! @brief 多个选中对应的标题数组
+ */
 @property (nonatomic,copy) NSMutableArray *multiSelectedTags;
-/*
- 必须给父视图设置一个宽度
+
+/*! @brief 初始化,必须给view设置一个宽度 (最普通模式)
  */
 -(instancetype)initWithFrame:(CGRect)frame tagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
-
+/*! @brief 初始化,必须给view设置一个宽度 (图片模式)
+ */
 -(instancetype)initWithFrame:(CGRect)frame tagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
 
-- (CGFloat)heighttagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config;
+/*! @brief view高度回调 (必须要初始化,加载了之后才能算出来)
+ */
+- (CGFloat)heightTagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config;
 @end

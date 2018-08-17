@@ -32,6 +32,7 @@
 @interface PTViewController ()<PooNumberKeyBoardDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
 @property (nonatomic, strong)UITextField *textField;
+@property (nonatomic, strong)PooTagsLabel *tagLabel;
 @end
 
 @implementation PTViewController
@@ -43,10 +44,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
-    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = self.view.bounds;
+//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:btn];
     
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
 //    userNameKeyboard.delegate = self;
@@ -94,28 +95,33 @@
 
     
     
-//    NSArray *titleS = @[@"7"];
+    NSArray *titleS = @[@"3"];
 //
-//    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-//    config.itemHeight = 50;
-//    config.itemHerMargin = 10;
-//    config.itemVerMargin = 10;
-//    config.hasBorder = YES;
-//    config.topBottomSpace = 5.0;
-//    config.itemContentEdgs = 20;
-//    config.isCanSelected = YES;
-//    config.isCanCancelSelected = YES;
-//    config.isMulti = YES;
-//    config.selectedDefaultTags = titleS;
-//    config.borderColor = [UIColor clearColor];
-//    config.borderWidth = 0;
+    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+    config.itemHeight = 100;
+    config.itemHerMargin = 10;
+    config.itemVerMargin = 10;
+    config.hasBorder = YES;
+    config.topBottomSpace = 5;
+    config.itemContentEdgs = 20;
+    config.isCanSelected = YES;
+    config.isCanCancelSelected = YES;
+    config.isMulti = YES;
+    config.selectedDefaultTags = titleS;
+//    config.borderColor = kRandomColor;
+    config.borderWidth = 1;
+    config.fontSize = 24;
+    config.cornerRadius = 5;
 //
 //    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
 //    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
 //    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
 //
-//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
-//    [self.view addSubview:tag];
+    self.tagLabel = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config wihtSection:0];
+    self.tagLabel.backgroundColor = kRandomColor;
+    [self.view addSubview:self.tagLabel];
+    PNSLog(@"%f",[self.tagLabel heightTagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config]);
+
 }
 
 -(void)aaaaa
