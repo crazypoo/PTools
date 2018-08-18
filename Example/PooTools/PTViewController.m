@@ -19,6 +19,7 @@
 #import "PooNumberKeyBoard.h"
 #import "YMShowImageView.h"
 #import "PTAppDelegate.h"
+#import "UIButton+Block.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -43,6 +44,20 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    for (int i = 0; i < 2; i++) {
+        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        pBtn.frame = CGRectMake(100*i+10*i, 100, 100, 40);
+        pBtn.backgroundColor = kRandomColor;
+        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+        [pBtn setTitle:[NSString stringWithFormat:@"%d",i] forState:UIControlStateNormal];
+        pBtn.tag = i;
+        [self.view addSubview:pBtn];
+        [pBtn addActionHandler:^(UIButton *sender) {
+            PNSLog(@"%ld",(long)sender.tag);
+        }];
+        
+    }
     
 //    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
 //    btn.frame = self.view.bounds;
@@ -119,7 +134,7 @@
 //
     self.tagLabel = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config wihtSection:0];
     self.tagLabel.backgroundColor = kRandomColor;
-    [self.view addSubview:self.tagLabel];
+//    [self.view addSubview:self.tagLabel];
     PNSLog(@"%f",[self.tagLabel heightTagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config]);
 
 }

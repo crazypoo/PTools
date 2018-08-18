@@ -135,15 +135,15 @@
             make.right.equalTo(yesBtn.mas_left);
         }];
         
-        [cancelBtn addActionHandler:^(NSInteger tag) {
+        [cancelBtn addActionHandler:^(UIButton *sender) {
             if (self.block) {
                 self.block(nil);
             }
             
             [self remove];
         }];
-        
-        [yesBtn addActionHandler:^(NSInteger tag) {
+
+        [yesBtn addActionHandler:^(UIButton *sender) {
             if (self.block) {
                 
                 NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text, ((UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2]).text];
@@ -156,7 +156,6 @@
                 timeStr = [timeStr stringByReplacingOccurrencesOfString:@"日" withString:@""];
                 
                 self.block(timeStr);
-                
             }
             [self remove];
         }];
