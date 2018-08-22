@@ -45,37 +45,25 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    for (int i = 0; i < 2; i++) {
-        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        pBtn.frame = CGRectMake(100*i+10*i, 100, 100, 40);
-        pBtn.backgroundColor = kRandomColor;
-        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
-        [pBtn setTitle:[NSString stringWithFormat:@"%d",i] forState:UIControlStateNormal];
-        pBtn.tag = i;
-        [self.view addSubview:pBtn];
-        [pBtn addActionHandler:^(UIButton *sender) {
-            PNSLog(@"%ld",(long)sender.tag);
-        }];
-        
-    }
-    
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
-    
-//    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
-//    userNameKeyboard.delegate = self;
+//    for (int i = 0; i < 2; i++) {
+//        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//        pBtn.frame = CGRectMake(100*i+10*i, 100, 100, 40);
+//        pBtn.backgroundColor = kRandomColor;
+//        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+//        [pBtn setTitle:[NSString stringWithFormat:@"%d",i] forState:UIControlStateNormal];
+//        pBtn.tag = i;
+//        [self.view addSubview:pBtn];
+//        [pBtn addActionHandler:^(UIButton *sender) {
+//            PNSLog(@"%ld",(long)sender.tag);
+//        }];
 //
-//    self.textField = [UITextField new];
-//    self.textField.placeholder = @"11111";
-//    self.textField.inputView = userNameKeyboard;
-//    [self.view addSubview:self.textField];
-//    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.equalTo(self.view);
-//        make.top.offset(64);
-//        make.height.offset(30);
-//    }];
+//    }
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    
     
     kAdaptedOtherFontSize(@"", 16);
     
@@ -110,32 +98,32 @@
 
     
     
-    NSArray *titleS = @[@"3"];
-//
-    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-    config.itemHeight = 100;
-    config.itemHerMargin = 10;
-    config.itemVerMargin = 10;
-    config.hasBorder = YES;
-    config.topBottomSpace = 5;
-    config.itemContentEdgs = 20;
-    config.isCanSelected = YES;
-    config.isCanCancelSelected = YES;
-    config.isMulti = YES;
-    config.selectedDefaultTags = titleS;
-//    config.borderColor = kRandomColor;
-    config.borderWidth = 1;
-    config.fontSize = 24;
-    config.cornerRadius = 5;
-//
-//    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
-//    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-//    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
-//
-    self.tagLabel = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config wihtSection:0];
-    self.tagLabel.backgroundColor = kRandomColor;
-//    [self.view addSubview:self.tagLabel];
-    PNSLog(@"%f",[self.tagLabel heightTagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config]);
+//    NSArray *titleS = @[@"3"];
+////
+//    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+//    config.itemHeight = 100;
+//    config.itemHerMargin = 10;
+//    config.itemVerMargin = 10;
+//    config.hasBorder = YES;
+//    config.topBottomSpace = 5;
+//    config.itemContentEdgs = 20;
+//    config.isCanSelected = YES;
+//    config.isCanCancelSelected = YES;
+//    config.isMulti = YES;
+//    config.selectedDefaultTags = titleS;
+////    config.borderColor = kRandomColor;
+//    config.borderWidth = 1;
+//    config.fontSize = 24;
+//    config.cornerRadius = 5;
+////
+////    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
+////    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
+////    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+////
+//    self.tagLabel = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config wihtSection:0];
+//    self.tagLabel.backgroundColor = kRandomColor;
+////    [self.view addSubview:self.tagLabel];
+//    PNSLog(@"%f",[self.tagLabel heightTagsArray:@[@"1",@"2",@"3",@"4",@"5",@"6",@"7"] config:config]);
 
 }
 
@@ -168,10 +156,10 @@
 //    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
 //    }];
-    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
-
-    }];
-    [actionSheet show];
+//    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+//
+//    }];
+//    [actionSheet show];
     
 //    self.touchID = [PBiologyID defaultBiologyID];
 //    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
@@ -193,44 +181,58 @@
 //        }
 //    };
     
-//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
-//
-//        UILabel *aaa = [UILabel new];
-//        aaa.backgroundColor = kRandomColor;
-//        aaa.text = @"1123123123123";
-//        [alertView.customView addSubview:aaa];
-//        [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.left.right.top.bottom.equalTo(alertView.customView);
-//        }];
-//
-//    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
-//        switch (buttonIndex) {
-//                case 0:
-//            {
-//                [alertView dissMiss];
-//                alertView = nil;
-//            }
-//                break;
-//             case 1:
-//            {
-//                [alertView dissMiss];
-//                alertView = nil;
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//
-//    } didDismissBlock:^(YXCustomAlertView *alertView) {
-//
-//    }];
-//    [alert showView];
-//    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-////        make.left.top.equalTo(self.view).offset(10);
-////        make.right.bottom.equalTo(self.view).offset(-10);
-//        make.width.height.offset(250);
-//        make.centerX.centerY.equalTo(self.view);
-//    }];
+    PNSLog(@">>>>>>>%f",[YXCustomAlertView titleAndBottomViewNormalH]);
+    
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+        
+        PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *alertView) {
+            if (self.textField.text.length != 0)
+            {
+                self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
+            }
+        } returnSTH:^(PooNumberKeyBoard *alertView, NSString *returnSTH) {
+            self.textField.text = [self.textField.text stringByAppendingString:returnSTH];
+        }];
+        
+        self.textField = [UITextField new];
+        self.textField.placeholder = @"11111";
+        self.textField.inputView = userNameKeyboard;
+        [alertView.customView addSubview:self.textField];
+        [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(alertView.customView);
+            make.top.offset(64);
+            make.height.offset(30);
+        }];
+
+
+    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+        switch (buttonIndex) {
+                case 0:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+             case 1:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+            default:
+                break;
+        }
+
+    } didDismissBlock:^(YXCustomAlertView *alertView) {
+
+    }];
+    alert.customView.backgroundColor = kRandomColor;
+    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.offset(250);
+        make.left.equalTo(self.view).offset(10);
+        make.right.equalTo(self.view).offset(-10);
+        make.centerX.centerY.equalTo(self.view);
+    }];
 //    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
 //                   okAction:^{
 //
@@ -257,19 +259,4 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
-
-#pragma mark ------> PooNumberKeyBoardDelegate
--(void)numberKeyboard:(PooNumberKeyBoard *)keyboard input:(NSString *)number
-{
-    self.textField.text = [self.textField.text stringByAppendingString:number];
-}
-
--(void)numberKeyboardBackspace:(PooNumberKeyBoard *)keyboard
-{
-    if (self.textField.text.length != 0)
-    {
-        self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
-    }
-}
-
 @end
