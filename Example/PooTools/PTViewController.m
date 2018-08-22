@@ -23,6 +23,7 @@
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
+//#import <TextFieldEffects/TextFieldEffects-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
@@ -246,12 +247,6 @@
 //    [view mas_makeConstraints:^(MASConstraintMaker *make) {
 //        make.left.right.top.bottom.equalTo(self.view);
 //    }];
-}
-
-#pragma mark - YXCustomAlertViewDelegate
--(void)customAlertView:(YXCustomAlertView *)customAlertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    PNSLog(@"%ld",(long)buttonIndex);
 }
 
 - (void)didReceiveMemoryWarning
