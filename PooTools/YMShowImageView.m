@@ -11,15 +11,16 @@
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "UIView+ModifyFrame.h"
 #import "ALActionSheetView.h"
-#import <SceneKit/SceneKit.h>
 #import "PMacros.h"
-#import "PooLoadingView.h"
 #import <Masonry/Masonry.h>
-#import "WMHub.h"
+#import "HZWaitingView.h"
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f
 
+#define hIndexTitleHeight 30
+#define cIndexTitleBackgroundColor [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f]
+#define SubViewBasicsIndex 888
 
 typedef NS_ENUM(NSInteger,MoreActionType){
     MoreActionTypeNoMore = 0,
@@ -39,31 +40,29 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) UILabel *titleLabel;
 @property (nonatomic, strong) UILabel *infoLabel;
 @property (nonatomic, strong) UIWindow *window;
-@property (nonatomic, strong) NSMutableArray *imageModelArr;
 @property (nonatomic, assign) NSInteger viewClickTag;
 @property (nonatomic, strong) UIButton *deleteButton;
 @property (nonatomic, strong) UIButton *saveImageButton;
 @property (nonatomic, strong) UIColor *showImageBackgroundColor;
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, strong) NSString *fontName;
-@property (nonatomic, strong) UIPageControl *pageControl;
 @property (nonatomic, assign) MoreActionType moreType;
 @property (nonatomic, strong) NSArray *actionSheetOtherBtnArr;
 @property (nonatomic, strong) NSString *moreActionImageNames;
-
+@property (nonatomic, strong) UILabel *indexLabel;
+@property (nonatomic, strong) UILabel *fullViewLabel;
+@property (nonatomic, assign) CGFloat navH;
 @end
 
 @implementation YMShowImageView
-{
-    BOOL doubleClick;    
-}
 
 -(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
 {
     self = [super init];
-    if (self) {
-        
-        if (canDelete == YES && canSave == YES) {
+    if (self)
+    {
+        if (canDelete == YES && canSave == YES)
+        {
             self.moreType = MoreActionTypeMoreNormal;
             self.actionSheetOtherBtnArr = @[@"保存图片",@"删除图片"];
             self.saveImageArr = [[NSMutableArray alloc] init];
@@ -98,12 +97,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.window = w;
         self.loadingImageName = li;
         self.moreActionImageNames = main;
-        self.imageModelArr = [NSMutableArray array];
-        [self.imageModelArr addObjectsFromArray:appendArray];
         
         self.alpha = 0.0f;
         self.page = 0;
-        doubleClick = YES;
         
         [self configScrollViewWith:clickTag andAppendArray:appendArray];
         
@@ -114,15 +110,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         tapGser.numberOfTouchesRequired = 1;
         tapGser.numberOfTapsRequired = 1;
         [self addGestureRecognizer:tapGser];
-        
-//        UITapGestureRecognizer *doubleTapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(changeBig:)];
-//        doubleTapGser.numberOfTapsRequired = 2;
-//        [self addGestureRecognizer:doubleTapGser];
-//        [tapGser requireGestureRecognizerToFail:doubleTapGser];
-        
     }
     return self;
-
+    
 }
 
 - (void)configScrollViewWith:(NSInteger)clickTag andAppendArray:(NSArray<PooShowImageModel *> *)appendArray
@@ -135,15 +125,42 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.scrollView.delegate = self;
     [self addSubview:self.scrollView];
     
-    self.pageControl = [UIPageControl new];
-    self.pageControl.numberOfPages = appendArray.count;
-    self.pageControl.backgroundColor = [UIColor clearColor];
-    self.pageControl.pageIndicatorTintColor = pageIndicatorTintColor;
-    self.pageControl.currentPageIndicatorTintColor = currentPageIndicatorTintColor;
-    [self.pageControl sizeForNumberOfPages:2];
-    [self addSubview:self.pageControl];
-    
     self.imageScrollViews = [[NSMutableArray alloc] init];
+    
+    if (kDevice_Is_iPhoneX)
+    {
+        self.navH = HEIGHT_IPHONEXNAVBAR;
+    }
+    else
+    {
+        self.navH = HEIGHT_NAVBAR;
+    }
+    
+    self.indexLabel = [[UILabel alloc] init];
+    self.indexLabel.textAlignment = NSTextAlignmentCenter;
+    self.indexLabel.textColor = [UIColor whiteColor];
+    self.indexLabel.font = kDEFAULT_FONT(self.fontName, 20);
+    self.indexLabel.backgroundColor = cIndexTitleBackgroundColor;
+    self.indexLabel.bounds = CGRectMake(0, kScreenStatusBottom + (self.navH - kScreenStatusBottom - 30)/2, 80, hIndexTitleHeight);
+    self.indexLabel.center = CGPointMake(kSCREEN_WIDTH * 0.5, hIndexTitleHeight);
+    self.indexLabel.layer.cornerRadius = 15;
+    self.indexLabel.clipsToBounds = YES;
+    if (appendArray.count > 1) {
+        _indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)appendArray.count];
+        [self addSubview:self.indexLabel];
+    }
+    
+    self.fullViewLabel = [[UILabel alloc] init];
+    self.fullViewLabel.textAlignment = NSTextAlignmentCenter;
+    self.fullViewLabel.textColor = [UIColor whiteColor];
+    self.fullViewLabel.font = kDEFAULT_FONT(self.fontName, 20);
+    self.fullViewLabel.text = @"全景";
+    self.fullViewLabel.backgroundColor = cIndexTitleBackgroundColor;
+    self.fullViewLabel.frame = CGRectMake(kSCREEN_WIDTH-50-20, self.indexLabel.top, 50, hIndexTitleHeight);
+    self.fullViewLabel.layer.cornerRadius = 15;
+    self.fullViewLabel.clipsToBounds = YES;
+    [self addSubview:self.fullViewLabel];
+    self.fullViewLabel.hidden = YES;
 }
 
 -(void)removeFromSuperview
@@ -152,54 +169,24 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.nilViews = nil;
 }
 
-- (void)disappear{
-    if (_removeImg) {
+- (void)disappear
+{
+    if (_removeImg)
+    {
         _removeImg();
     }
 }
 
-- (void)changeBig:(UITapGestureRecognizer *)tapGes{
-
-    CGFloat newscale = 1.9;
-    UIScrollView *currentScrollView = (UIScrollView *)[self viewWithTag:self.page + 100];
-    CGRect zoomRect = [self zoomRectForScale:newscale withCenter:[tapGes locationInView:tapGes.view] andScrollView:currentScrollView];
-    
-    if (doubleClick == YES)  {
-        
-        [currentScrollView zoomToRect:zoomRect animated:YES];
-        
-    }else {
-      
-        [currentScrollView zoomToRect:currentScrollView.frame animated:YES];
-    }
-    doubleClick = !doubleClick;
-}
-
-- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{
-    
-    UIScrollView *aaaaa = (UIScrollView *)[self.scrollView viewWithTag:100+self.page];
-    
-    if (scrollView == aaaaa) {
-        UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:self.page + 1000];
-        return imageView;
-    }
-    return nil;
-//    UIImageView *imageView = (UIImageView *)[self viewWithTag:scrollView.tag + 900];
-//    return imageView;
-
-}
-
-- (CGRect)zoomRectForScale:(CGFloat)newscale withCenter:(CGPoint)center andScrollView:(UIScrollView *)scrollV{
-   
+- (CGRect)zoomRectForScale:(CGFloat)newscale withCenter:(CGPoint)center andScrollView:(UIScrollView *)scrollV
+{
     CGRect zoomRect = CGRectZero;
     
     zoomRect.size.height = scrollV.height / newscale;
     zoomRect.size.width = scrollV.width  / newscale;
     zoomRect.origin.x = center.x - (zoomRect.size.width  / 2.0);
     zoomRect.origin.y = center.y - (zoomRect.size.height / 2.0);
-   // NSLog(@" === %f",zoomRect.origin.x);
+    // NSLog(@" === %f",zoomRect.origin.x);
     return zoomRect;
-
 }
 
 - (void)showWithFinish:(didRemoveImage)tempBlock{
@@ -215,7 +202,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.alpha = 0.0f;
             maskview.alpha = 0.0f;
         } completion:^(BOOL finished) {
-            if (tempBlock) {
+            if (tempBlock)
+            {
                 tempBlock();
             }
             [self removeFromSuperview];
@@ -234,165 +222,30 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     [self.scrollView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(bgView);
     }];
-    [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(bgView);
-        make.top.offset(kScreenStatusBottom+5);
-        make.height.offset(20);
-        make.centerX.equalTo(bgView);
-    }];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"0秒后获取frame：%@", self);
-        self.scrollView.contentSize = CGSizeMake(self.width * self.imageModelArr.count, 0);
+        NSLog(@"初始化：%@", self);
+        self.scrollView.contentSize = CGSizeMake(self.width * self.modelArr.count, 0);
         
         float W = self.width;
         
-        for (int i = 0; i < self.imageModelArr.count; i ++) {
-            PooShowImageModel *model = self.imageModelArr[i];
+        for (int i = 0; i < self.modelArr.count; i ++)
+        {
+            PooShowImageModel *model = self.modelArr[i];
             
-            UIScrollView *imageScrollView = [UIScrollView new];
-            imageScrollView.backgroundColor = self.showImageBackgroundColor;
-            imageScrollView.delegate = self;
-            imageScrollView.maximumZoomScale = 2;
-            imageScrollView.minimumZoomScale = 1;
-            imageScrollView.showsVerticalScrollIndicator = NO;
-            imageScrollView.showsHorizontalScrollIndicator = NO;
-//            imageScrollView.clipsToBounds = YES;
-            [self.scrollView addSubview:imageScrollView];
-            [imageScrollView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(self.width*i);
-                make.top.offset(0);
-                make.width.offset(self.width);
-                make.height.offset(self.height);
-            }];
-            
-            imageScrollView.tag = 100 + i ;
-            
-            CGFloat navH = 0.0f;
-            if (kDevice_Is_iPhoneX)
-            {
-                navH = HEIGHT_IPHONEXNAVBAR;
-            }
-            else
-            {
-                navH = HEIGHT_NAVBAR;
-            }
-            
-            if ([model.imageFullView isEqualToString:@"1"]) {
-                
-                UILabel *fullViewLabel = [UILabel new];
-                kViewBorderRadius(fullViewLabel, 5, 1, self.titleColor);
-                fullViewLabel.textAlignment = NSTextAlignmentCenter;
-                fullViewLabel.font = kDEFAULT_FONT(self.fontName, 18);
-                fullViewLabel.textColor = self.titleColor;
-                fullViewLabel.text = @"全景";
-                [imageScrollView addSubview:fullViewLabel];
-                [fullViewLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.offset(50);
-                    make.height.offset(20);
-                    make.right.equalTo(self).offset(-10);
-                    make.top.equalTo(imageScrollView).offset(kScreenStatusBottom+5);
-                }];
-                
-                SCNView *sceneView = [SCNView new];
-                [imageScrollView addSubview:sceneView];
-                [sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(self);
-                    make.height.offset(self.height-navH-80);
-                    make.top.equalTo(self).offset(navH);
-                }];
-                sceneView.tag = 2000 + i;
-
-                
-                sceneView.scene = [[SCNScene alloc] init];
-                sceneView.showsStatistics = NO;
-                sceneView.allowsCameraControl = YES;
-                
-                SCNSphere *sphere =   [SCNSphere sphereWithRadius:20.0];
-                sphere.firstMaterial.doubleSided = YES;
-                
-                [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-
-                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                    GCDWithMain(^{
-                        [self.saveImageArr addObject:image];
-                        sphere.firstMaterial.diffuse.contents = image;
-                    });
-                }];
-                SCNNode *sphereNode = [SCNNode nodeWithGeometry:sphere];
-                sphereNode.position = SCNVector3Make(0,0,0);
-                [sceneView.scene.rootNode addChildNode:sphereNode];
-                imageScrollView.contentSize = CGSizeMake(self.width, self.height);
-            }
-            else
-            {
-                self.nilViews = [UIImageView new];
-                NSString *imageURLString = model.imageUrl;
-                self.nilViews.contentMode = UIViewContentModeScaleAspectFit;
-                __block UIImage *subImage;
-                
-                id urlObject;
-                if (imageURLString) {
-                    if ([imageURLString isKindOfClass:[NSString class]]) {
-                        urlObject = imageURLString;
-                    }else if([imageURLString isKindOfClass:[NSURL class]]){
-                        urlObject = imageURLString;
-                    }else if([imageURLString isKindOfClass:[UIImage class]]){
-                    }
-                }
-
-                [self.nilViews sd_setImageWithURL:urlObject placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-                    
-                    GCDWithMain(^{
-                        subImage = image;
-                        CGFloat imageScale = kSCREEN_WIDTH/image.size.width;
-                        CGFloat imageW = imageScale*image.size.width;
-                        CGFloat imageH = imageScale*image.size.height;
-                        imageScrollView.contentSize = CGSizeMake(imageW, imageH);
-                        CGFloat maxScale = kSCREEN_HEIGHT/subImage.size.height;
-                        maxScale = kSCREEN_WIDTH/subImage.size.width>maxScale?kSCREEN_WIDTH/subImage.size.width:maxScale;
-                        //超过了设置的最大的才算数
-                        maxScale = maxScale>kMaxZoomScale?maxScale:kMaxZoomScale;
-                        //初始化
-                        imageScrollView.minimumZoomScale = kMinZoomScale;
-                        imageScrollView.maximumZoomScale = maxScale;
-                        imageScrollView.zoomScale = 1.0f;
-
-                        PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",imageW,imageH);
-                        PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%f>>>>>>>>>>>>>>>>.%f",image.size.width,image.size.height);
-                    });
-                }];
-                self.nilViews.image = subImage;
-                [imageScrollView addSubview:self.nilViews];
-                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>.%f",imageScrollView.contentSize.height);
-                [self.nilViews mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(self);
-                    make.height.offset(subImage.size.height*(kSCREEN_WIDTH/subImage.size.width));
-                    make.top.equalTo(self).offset(navH);
-                }];
-
-//                if (imageURLString) {
-//                    if ([imageURLString isKindOfClass:[NSString class]]) {
-//                        [self.nilViews sd_setImageWithURL:[NSURL URLWithString:imageURLString] placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-//                        [self.saveImageArr addObject:self.nilViews.image];
-//                    }else if([imageURLString isKindOfClass:[NSURL class]]){
-//                        [self.nilViews sd_setImageWithURL:(NSURL*)imageURLString placeholderImage:kImageNamed(self.loadingImageName) options:SDWebImageRetryFailed];
-//                        [self.saveImageArr addObject:self.nilViews.image];
-//                    }else if([imageURLString isKindOfClass:[UIImage class]]){
-//                        self.nilViews.image = (UIImage*)imageURLString;
-//                        [self.saveImageArr addObject:(UIImage*)imageURLString];
-//                    }
-//                }
-                
-                self.nilViews.tag = 1000 + i;
-            }
-            [self.imageScrollViews addObject:imageScrollView];
-            
+            PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
+            imageScroll.isFullWidthForLandScape = NO;
+            [imageScroll setImageWithModel:model placeholderImage:kImageNamed(self.loadingImageName)];
+            imageScroll.tag = SubViewBasicsIndex+i;
+            [self.scrollView addSubview:imageScroll];
+            [self.imageScrollViews addObject:imageScroll];
         }
         [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
         self.page = self.viewClickTag - YMShowImageViewClickTagAppend;
         
-        PooShowImageModel *model = self.imageModelArr[0];
+        self.fullViewLabel.hidden = [self fullImageHidden];
+        
+        PooShowImageModel *model = self.modelArr[0];
         
         self.titleLabel = [UILabel new];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -424,18 +277,19 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             make.bottom.equalTo(self);
         }];
         
-        switch (self.moreType) {
+        switch (self.moreType)
+        {
             case MoreActionTypeNoMore:
                 break;
             default:
             {
-                self.deleteButton                           = [UIButton buttonWithType:UIButtonTypeCustom];
+                self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 self.deleteButton.showsTouchWhenHighlighted = YES;
                 [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
                 [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
                 [self addSubview:self.deleteButton];
                 [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.height.offset(30);
+                    make.width.height.offset(44);
                     make.right.bottom.equalTo(self).offset(-10);
                 }];
             }
@@ -461,141 +315,65 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(self);
         }];
-        [self.pageControl mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.top.offset(kScreenStatusBottom+5);
-            make.height.offset(20);
-            make.centerX.equalTo(self);
-        }];
-        self.scrollView.contentSize = CGSizeMake(self.width * self.imageModelArr.count, 0);
-        for (int i = 0; i < self.imageModelArr.count; i ++)
+        self.scrollView.contentSize = CGSizeMake(self.width * self.modelArr.count, 0);
+        for (int i = 0; i < self.modelArr.count; i ++)
         {
-            PooShowImageModel *model = self.imageModelArr[i];
-            UIScrollView *imageScrollView = (UIScrollView *)[self.scrollView viewWithTag:100+i];
+            PShowImageSingleView *imageScrollView = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
             [imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.left.offset(self.width*i);
                 make.top.offset(0);
                 make.width.offset(self.width);
                 make.height.offset(self.height);
-
             }];
-            
-            CGFloat navH = 0.0f;
-            if (kDevice_Is_iPhoneX)
-            {
-                navH = HEIGHT_IPHONEXNAVBAR;
-            }
-            else
-            {
-                navH = HEIGHT_NAVBAR;
-            }
-            
-            if ([model.imageFullView isEqualToString:@"1"])
-            {
-                SCNView *sceneView = (SCNView *)[imageScrollView viewWithTag:2000+i];
-                [sceneView mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(self);
-                    make.height.offset(self.height-navH-80);
-                    make.top.equalTo(self).offset(navH);
-                }];
-                imageScrollView.contentSize = CGSizeMake(self.width, self.height);
-            }
-            else
-            {
-                self.nilViews = (UIImageView *)[imageScrollView viewWithTag:1000+i];
-                [self.nilViews mas_updateConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.equalTo(self);
-                    make.height.offset(self.height-navH-80);
-                    make.top.equalTo(self).offset(navH);
-                }];
-                imageScrollView.contentSize = CGSizeMake(self.nilViews.image.size.width, self.nilViews.image.size.height);
-
-            }
         }
         [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-
+        [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(80);
+            make.height.offset(hIndexTitleHeight);
+            make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
+            make.centerX.equalTo(self.mas_centerX);
+        }];
+        
+        [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(50);
+            make.height.offset(hIndexTitleHeight);
+            make.top.equalTo(self.indexLabel);
+            make.right.equalTo(self).offset(-20);
+        }];
+        
     });
-    
+}
+
+-(BOOL)fullImageHidden
+{
+    PooShowImageModel *model = self.modelArr[self.page];
+    if ([model.imageFullView isEqualToString:@"1"]) {
+        return NO;
+    }
+    else
+    {
+        return YES;
+    }
 }
 
 #pragma mark - ScorllViewDelegate
 -(void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    if (scrollView == self.scrollView) {
+    if (scrollView == self.scrollView)
+    {
         int page = (scrollView.contentOffset.x)/scrollView.width;
-        self.pageControl.currentPage = page;
+        self.page = page;
+        self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
-        if (scrollView == self.scrollView) {
+        self.fullViewLabel.hidden = [self fullImageHidden];
+        
+        if (scrollView == self.scrollView)
+        {
             PooShowImageModel *model = self.modelArr[page];
             self.titleLabel.text = model.imageTitle;
             self.infoLabel.text = model.imageInfo;
         }
     }
-    else
-    {
-        UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
-        if (scrollView == currentScrollView) {
-            PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.x);
-            self.scrollView.scrollEnabled = NO;
-        }
-        else
-        {
-            self.scrollView.scrollEnabled = YES;
-        }
-    }
-}
-
-
-- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
-{
-    if (scrollView == self.scrollView) {
-        CGPoint offset = self.scrollView.contentOffset;
-        self.page = offset.x / self.width ;
-        
-        
-        UIScrollView *scrollV_next = (UIScrollView *)[self viewWithTag:self.page+100+1]; //前一页
-        
-        if (scrollV_next.zoomScale != 1.0){
-            
-            scrollV_next.zoomScale = 1.0;
-        }
-        
-        UIScrollView *scollV_pre = (UIScrollView *)[self viewWithTag:self.page+100-1]; //后一页
-        if (scollV_pre.zoomScale != 1.0){
-            scollV_pre.zoomScale = 1.0;
-        }
-    }
-    else
-    {
-        UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
-        if (scrollView == currentScrollView) {
-            PNSLog(@">>>>>>>>>>>>>.%f",scrollView.contentOffset.y);
-            self.scrollView.scrollEnabled = YES;
-        }
-    }
-}
-
-- (void)scrollViewDidZoom:(UIScrollView *)scrollView
-{
-    UIScrollView *currentScrollView = [self.scrollView viewWithTag:100+self.page];
-    if (scrollView == currentScrollView) {
-        if (scrollView.contentOffset.x == 0 && scrollView.contentOffset.y == 0) {
-            self.scrollView.scrollEnabled = YES;
-            UIImageView *imageView = (UIImageView *)[scrollView viewWithTag:self.page + 1000];
-            imageView.center = [self centerOfScrollViewContent:scrollView];
-
-        }
-        else
-        {
-            self.scrollView.scrollEnabled = NO;
-        }
-    }
-}
-
--(void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale
-{
-    self.scrollView.scrollEnabled = YES;
-    PNSLog(@"viewW:%f>>>>>>>>>>>viewH%f",view.width,view.height);
 }
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
@@ -608,11 +386,43 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                        scrollView.contentSize.height * 0.5 + offsetY);
     return actualCenter;
 }
+
 #pragma mark - ----> 保存图片
 -(void)saveImage
 {
     NSInteger index = self.page;
-    [self saveImageToPhotos:self.saveImageArr[index]];
+    PooShowImageModel *model = self.modelArr[index];
+    if ([model.imageFullView isEqualToString:@"1"])
+    {
+        PShowImageSingleView *currentView = self.imageScrollViews[index];
+        if (currentView.hasLoadedImage)
+        {
+            UIImage *fullImage = (UIImage *)currentView.sphere.firstMaterial.diffuse.contents;
+            [self saveImageToPhotos:fullImage];
+        }
+        else
+        {
+            if (self.saveImageStatus)
+            {
+                self.saveImageStatus(NO);
+            }
+        }
+    }
+    else
+    {
+        PShowImageSingleView *currentView = self.imageScrollViews[index];
+        if (currentView.hasLoadedImage)
+        {
+            [self saveImageToPhotos:currentView.imageview.image];
+        }
+        else
+        {
+            if (self.saveImageStatus)
+            {
+                self.saveImageStatus(NO);
+            }
+        }
+    }
 }
 
 - (void)saveImageToPhotos:(UIImage*)savedImage
@@ -624,19 +434,23 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 - (void)image:(UIImage *)image didFinishSavingWithError:(NSError *)error contextInfo:(void *)contextInfo
 {
     BOOL saveimageAction;
-    if(error != NULL){
+    if(error != NULL)
+    {
         saveimageAction = NO;
-    }else{
+    }
+    else
+    {
         saveimageAction = YES;
     }
-    if (self.saveImageStatus) {
+    if (self.saveImageStatus)
+    {
         self.saveImageStatus(saveimageAction);
     }
 }
 
 #pragma mark - ----> 删除图片
-- (void)removeCurrImage{
-
+- (void)removeCurrImage
+{
     ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:@"图片操作"
                                                                    cancelButtonTitle:@"取消"
                                                               destructiveButtonTitle:nil
@@ -644,7 +458,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                                                       buttonFontName:self.fontName
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
-                                              switch (self.moreType) {
+                                              switch (self.moreType)
+                                              {
                                                   case MoreActionTypeOnlyDelete:
                                                   {
                                                       if (buttonIndex == 0)
@@ -663,11 +478,12 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                                       break;
                                                   case MoreActionTypeMoreNormal:
                                                   {
-                                                      switch (buttonIndex) {
+                                                      switch (buttonIndex)
+                                                      {
                                                           case 0:
-                                                              {
-                                                                  [self saveImage];
-                                                              }
+                                                          {
+                                                              [self saveImage];
+                                                          }
                                                               break;
                                                           case 1:
                                                           {
@@ -695,61 +511,308 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.didDeleted(self,index);
     }
     
-    UIScrollView *currView = (UIScrollView *)[self.scrollView viewWithTag:100+index];
-    
-    if (currView) {
-        if (self.imageScrollViews.count == 1)
-        {
-            [self disappear];
+    if (_scrollView.subviews.count == 1 && self.imageScrollViews.count == 1)
+    {
+        [self disappear];
+    }
+    else
+    {
+        [_scrollView.subviews[index] removeFromSuperview];
+        PShowImageSingleView *vvvv = [self.scrollView viewWithTag:SubViewBasicsIndex+index];
+        [vvvv removeFromSuperview];
+        [self.modelArr removeObjectAtIndex:index];
+        [self.imageScrollViews removeObjectAtIndex:index];
+        PNSLog(@">>>>>>>>%@",self.modelArr);
+        _scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - kSCREEN_WIDTH, self.scrollView.contentSize.height);
+        _scrollView.contentOffset = CGPointMake((index)* _scrollView.frame.size.width, 0);
+        
+        if (self.modelArr.count > 1) {
+            int indexaaaaa = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
+            _indexLabel.text = [NSString stringWithFormat:@"%d/%ld",indexaaaaa,(long)self.modelArr.count];
         }
         else
         {
-            __block float lastWidth = currView.width;
-            [UIView animateWithDuration:0.2 animations:^{
-                
-                self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - lastWidth, self.scrollView.contentSize.height);
-                [self.imageScrollViews removeObjectAtIndex:index];
-                [self.modelArr removeObjectAtIndex:index];
-                [self.saveImageArr removeObjectAtIndex:index];
-                
-                self.pageControl.numberOfPages = self.imageScrollViews.count;
-                
-                [self.imageModelArr removeObjectAtIndex:index];
-                
-                if (index >= self.imageScrollViews.count)
-                {
-                    self.page = self.page - 1;
-                }
-                else
-                {
-                    for (int i = (int)index ; i < self.imageScrollViews.count ;  i++)
-                    {
-                        UIScrollView *nextView = (UIScrollView *)self.imageScrollViews[i];
-                        nextView.tag = i+100;
-                        [nextView mas_updateConstraints:^(MASConstraintMaker *make) {
-                            make.left.offset(self.width*i);
-                            make.top.offset(0);
-                            make.width.offset(self.width);
-                            make.height.offset(self.height);
-                            
-                        }];
-                    }
-                }
-                GCDWithMain(^{
-                    PooShowImageModel *model = self.modelArr[self.page];
-                    self.titleLabel.text = model.imageTitle;
-                    self.infoLabel.text = model.imageInfo;
-                });
-                
-            } completion:^(BOOL finished) {
-                GCDWithMain(^{
-                    [currView removeFromSuperview];
-                });
-                
-            }];
+            [_indexLabel removeFromSuperview];
         }
     }
 }
 
+@end
 
+@interface PShowImageSingleView() <UIScrollViewDelegate>
+@property (nonatomic, strong) HZWaitingView *waitingView;
+@property (nonatomic, strong) PooShowImageModel *imageModels;
+@property (nonatomic, strong) UIImage *placeHolderImage;
+@property (nonatomic, strong) UIButton *reloadButton;
+@property (nonatomic, strong) SCNView *sceneView;
+@end
+
+@implementation PShowImageSingleView
+#pragma mark recyle
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame]) {
+        [self addSubview:self.scrollview];
+    }
+    return self;
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    CGFloat selfW = self.bounds.size.width;
+    CGFloat selfH = self.bounds.size.height;
+    _waitingView.center = CGPointMake(selfW * 0.5, selfH * 0.5);
+    _scrollview.frame = self.bounds;
+    CGFloat reloadBtnW = 200;
+    CGFloat reloadBtnH = 40;
+    _reloadButton.frame = CGRectMake((selfW - reloadBtnW)*0.5, (selfH - reloadBtnH)*0.5, reloadBtnW, reloadBtnH);
+    [self adjustFrame];
+}
+
+#pragma mark getter setter
+- (UIScrollView *)scrollview
+{
+    if (!_scrollview) {
+        _scrollview = [[UIScrollView alloc] init];
+        _scrollview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        _scrollview.showsVerticalScrollIndicator = NO;
+        _scrollview.showsHorizontalScrollIndicator = NO;
+        _scrollview.delegate = self;
+        _scrollview.clipsToBounds = YES;
+    }
+    return _scrollview;
+}
+
+- (UIImageView *)imageview
+{
+    if (!_imageview) {
+        _imageview = [[UIImageView alloc] init];
+        _imageview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+        _imageview.userInteractionEnabled = YES;
+    }
+    return _imageview;
+}
+
+- (void)setProgress:(CGFloat)progress
+{
+    _progress = progress;
+    _waitingView.progress = progress;
+}
+
+#pragma mark public methods
+- (void)setImageWithModel:(PooShowImageModel *)model placeholderImage:(UIImage *)placeholder
+{
+    _imageModels = model;
+    _placeHolderImage = placeholder;
+    
+    CGFloat navH = 0.0f;
+    if (kDevice_Is_iPhoneX)
+    {
+        navH = HEIGHT_IPHONEXNAVBAR;
+    }
+    else
+    {
+        navH = HEIGHT_NAVBAR;
+    }
+    
+    if ([model.imageFullView isEqualToString:@"1"]) {
+        
+        self.sceneView = [SCNView new];
+        [_scrollview addSubview:self.sceneView];
+        [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(self.height-navH-80);
+            make.top.equalTo(self).offset(navH);
+        }];
+        
+        self.sceneView.scene = [[SCNScene alloc] init];
+        self.sceneView.showsStatistics = NO;
+        self.sceneView.allowsCameraControl = YES;
+        
+        self.sphere =   [SCNSphere sphereWithRadius:20.0];
+        self.sphere.firstMaterial.doubleSided = YES;
+        
+        kWeakSelf(self);
+        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+            });
+        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+            [self.waitingView removeFromSuperview];
+            GCDWithMain(^{
+                self.sphere.firstMaterial.diffuse.contents = image;
+                weakself.hasLoadedImage = YES;//图片加载成功
+            });
+        }];
+        SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
+        sphereNode.position = SCNVector3Make(0,0,0);
+        [self.sceneView.scene.rootNode addChildNode:sphereNode];
+        _scrollview.contentSize = CGSizeMake(self.width, self.height);
+        
+        [self setNeedsLayout];
+    }
+    else
+    {
+        self.imageview = [UIImageView new];
+        NSString *imageURLString = model.imageUrl;
+        self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+        
+        id urlObject;
+        if (imageURLString) {
+            if ([imageURLString isKindOfClass:[NSString class]]) {
+                urlObject = imageURLString;
+            }else if([imageURLString isKindOfClass:[NSURL class]]){
+                urlObject = imageURLString;
+            }else if([imageURLString isKindOfClass:[UIImage class]]){
+            }
+        }
+        
+        [_scrollview addSubview:self.imageview];
+        
+        kWeakSelf(self);
+        [_imageview sd_setImageWithURL:urlObject placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+            //在主线程做UI更新
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+            });
+            
+        } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+            [weakself.waitingView removeFromSuperview];
+            
+            if (error) {
+                //图片加载失败的处理，此处可以自定义各种操作（...）
+                weakself.hasLoadedImage = NO;//图片加载失败
+                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+                weakself.reloadButton = button;
+                button.layer.cornerRadius = 2;
+                button.clipsToBounds = YES;
+                button.titleLabel.font = [UIFont systemFontOfSize:14];
+                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
+                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                [button addTarget:weakself action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
+                
+                [self addSubview:button];
+                return;
+            }
+            //加载成功重新计算frame,解决长图可能显示不正确的问题
+            [self setNeedsLayout];
+            weakself.hasLoadedImage = YES;//图片加载成功
+        }];
+    }
+}
+
+#pragma mark private methods
+- (void)reloadImage
+{
+    [self setImageWithModel:_imageModels placeholderImage:_placeHolderImage];
+}
+
+- (void)adjustFrame
+{
+    CGFloat navH = 0.0f;
+    if (kDevice_Is_iPhoneX)
+    {
+        navH = HEIGHT_IPHONEXNAVBAR;
+    }
+    else
+    {
+        navH = HEIGHT_NAVBAR;
+    }
+    CGRect frame = self.frame;
+    if (self.imageview.image) {
+        CGSize imageSize = self.imageview.image.size;//获得图片的size
+        CGRect imageFrame = CGRectMake(0, 0, imageSize.width, imageSize.height);
+        if (_isFullWidthForLandScape) {//图片宽度始终==屏幕宽度(新浪微博就是这种效果)
+            CGFloat ratio = frame.size.width/imageFrame.size.width;
+            imageFrame.size.height = imageFrame.size.height*ratio;
+            imageFrame.size.width = frame.size.width;
+        } else{
+            if (frame.size.width<=frame.size.height) {
+                //竖屏时候
+                CGFloat ratio = frame.size.width/imageFrame.size.width;
+                imageFrame.size.height = imageFrame.size.height*ratio;
+                imageFrame.size.width = frame.size.width;
+            }else{ //横屏的时候
+                CGFloat ratio = frame.size.height/imageFrame.size.height;
+                imageFrame.size.width = imageFrame.size.width*ratio;
+                imageFrame.size.height = frame.size.height;
+            }
+        }
+        
+        self.imageview.frame = imageFrame;
+        self.scrollview.contentSize = self.imageview.frame.size;
+        self.imageview.center = [self centerOfScrollViewContent:self.scrollview];
+        
+        //根据图片大小找到最大缩放等级，保证最大缩放时候，不会有黑边
+        CGFloat maxScale = frame.size.height/imageFrame.size.height;
+        maxScale = frame.size.width/imageFrame.size.width>maxScale?frame.size.width/imageFrame.size.width:maxScale;
+        //超过了设置的最大的才算数
+        maxScale = maxScale>kMaxZoomScale?maxScale:kMaxZoomScale;
+        //初始化
+        self.scrollview.minimumZoomScale = kMinZoomScale;
+        self.scrollview.maximumZoomScale = maxScale;
+        self.scrollview.zoomScale = 1.0f;
+    }else{
+        frame.origin = CGPointZero;
+        self.imageview.frame = frame;
+        self.sceneView.frame = frame;
+        //重置内容大小
+        self.scrollview.contentSize = self.imageview.frame.size;
+    }
+    self.scrollview.contentOffset = CGPointZero;
+    self.zoomImageSize = self.imageview.frame.size;
+    [self.sceneView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(self.height-navH-80);
+        make.top.equalTo(self).offset(navH);
+    }];
+}
+
+- (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
+{
+    CGFloat offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width)?
+    (scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5 : 0.0;
+    CGFloat offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height)?
+    (scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5 : 0.0;
+    CGPoint actualCenter = CGPointMake(scrollView.contentSize.width * 0.5 + offsetX,
+                                       scrollView.contentSize.height * 0.5 + offsetY);
+    return actualCenter;
+}
+
+#pragma mark UIScrollViewDelegate
+- (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView
+{
+    return self.imageview;
+}
+
+- (void)scrollViewDidEndZooming:(UIScrollView *)scrollView withView:(UIView *)view atScale:(CGFloat)scale{
+    self.zoomImageSize = view.frame.size;
+    self.scrollOffset = scrollView.contentOffset;
+}
+
+- (void)scrollViewWillEndDragging:(UIScrollView *)scrollView withVelocity:(CGPoint)velocity targetContentOffset:(inout CGPoint *)targetContentOffset{
+    if(self.scrollViewWillEndDragging){
+        self.scrollViewWillEndDragging(velocity, scrollView.contentOffset);
+    }
+}
+
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    if (self.scrollViewDidEndDecelerating) {
+        self.scrollViewDidEndDecelerating();
+    }
+}
+
+- (void)scrollViewDidZoom:(UIScrollView *)scrollView //这里是缩放进行时调整
+{
+    self.imageview.center = [self centerOfScrollViewContent:scrollView];
+}
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView{
+    self.scrollOffset = scrollView.contentOffset;
+    if (self.scrollViewDidScroll) {
+        self.scrollViewDidScroll(self.scrollOffset);
+    }
+}
 @end

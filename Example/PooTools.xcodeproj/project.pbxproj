@@ -84,6 +84,7 @@
 		CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BB211D706400FD29F4 /* MAThermometer.m */; };
 		CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */; };
 		CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */; };
+		CC21EFC4212E510000B57035 /* HZWaitingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC21EFC2212E50FF00B57035 /* HZWaitingView.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
 		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
 		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
@@ -284,6 +285,8 @@
 		CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGImaginaryLine.h; sourceTree = "<group>"; };
 		CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCheckbox.m; sourceTree = "<group>"; };
 		CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCheckbox.h; sourceTree = "<group>"; };
+		CC21EFC2212E50FF00B57035 /* HZWaitingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HZWaitingView.m; sourceTree = "<group>"; };
+		CC21EFC3212E510000B57035 /* HZWaitingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HZWaitingView.h; sourceTree = "<group>"; };
 		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
 		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
 		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
@@ -528,6 +531,8 @@
 				64E0598A20A9E06600E434CD /* SecurityUtil.m */,
 				CCB433E220A9A3D700943107 /* YMShowImageView.h */,
 				CCB433E320A9A3D800943107 /* YMShowImageView.m */,
+				CC21EFC3212E510000B57035 /* HZWaitingView.h */,
+				CC21EFC2212E50FF00B57035 /* HZWaitingView.m */,
 				CCB433E120A9A3D700943107 /* PooShowImageModel.h */,
 				CCB433E420A9A3D800943107 /* PooShowImageModel.m */,
 				64CF39DF20A627C2003F64BF /* PooPieChart.h */,
@@ -862,6 +867,7 @@
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
+				CC21EFC4212E510000B57035 /* HZWaitingView.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
