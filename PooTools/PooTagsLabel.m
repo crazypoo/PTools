@@ -148,7 +148,9 @@
                 
                 [self addSubview:btn];
             }
-
+            if (self.tagHeightBlock) {
+                self.tagHeightBlock(self, self.frame.size.height);
+            }
         });
     }
     return self;
