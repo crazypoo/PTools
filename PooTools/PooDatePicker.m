@@ -181,9 +181,9 @@
         // 获取不同时间字段的信息
         NSDateComponents *comp = [calendar components: unitFlags fromDate:[NSDate date]];
         
-        self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", comp.year]];
-        self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", comp.month]];
-        self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", comp.day]];
+        self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
+        self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
+        self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", (long)comp.day]];
         
         [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
         [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];

@@ -43,10 +43,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
-    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = self.view.bounds;
+//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:btn];
     
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
 //    userNameKeyboard.delegate = self;
@@ -94,60 +94,65 @@
 
     
     
-//    NSArray *titleS = @[@"7"];
-//
-//    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-//    config.itemHeight = 50;
-//    config.itemHerMargin = 10;
-//    config.itemVerMargin = 10;
-//    config.hasBorder = YES;
-//    config.topBottomSpace = 5.0;
-//    config.itemContentEdgs = 20;
-//    config.isCanSelected = YES;
-//    config.isCanCancelSelected = YES;
-//    config.isMulti = YES;
-//    config.selectedDefaultTags = titleS;
-//    config.borderColor = [UIColor clearColor];
-//    config.borderWidth = 0;
+    NSArray *titleS = @[@"7"];
+
+    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+    config.itemHeight = 50;
+    config.itemHerMargin = 10;
+    config.itemVerMargin = 10;
+    config.hasBorder = YES;
+    config.topBottomSpace = 5.0;
+    config.itemContentEdgs = 20;
+    config.isCanSelected = YES;
+    config.isCanCancelSelected = YES;
+    config.isMulti = YES;
+    config.selectedDefaultTags = titleS;
+    config.borderColor = kRandomColor;
+    config.borderWidth = 2;
 //
 //    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
 //    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-//    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
-//
-//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
-//    [self.view addSubview:tag];
+    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+
+    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:title config:config wihtSection:0];
+    tag.backgroundColor = kRandomColor;
+    [self.view addSubview:tag];
+    [tag mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.view).offset(100);
+    }];
 }
 
 -(void)aaaaa
 {
-    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
-    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-    imageModel.imageFullView = @"1";
-    imageModel.imageInfo = @"11111111241241241241928390128309128";
-    imageModel.imageTitle = @"22222212312312312312312312312";
-    
-    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
-    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-    imageModel1.imageFullView = @"0";
-    imageModel1.imageInfo = @"444444";
-    imageModel1.imageTitle = @"333333";
-    
-    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-    imageModel2.imageFullView = @"0";
-    imageModel2.imageInfo = @"6666666";
-    imageModel2.imageTitle = @"5555555";
-    
-    NSArray *arr = @[imageModel,imageModel1,imageModel2];
-    
-    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
-    [ymImageV showWithFinish:^{
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    }];
-    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-    }];
-//    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjs" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+//    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+//    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+//    imageModel.imageFullView = @"1";
+//    imageModel.imageInfo = @"11111111241241241241928390128309128";
+//    imageModel.imageTitle = @"22222212312312312312312312312";
+//
+//    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+//    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+//    imageModel1.imageFullView = @"0";
+//    imageModel1.imageInfo = @"444444";
+//    imageModel1.imageTitle = @"333333";
+//
+//    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+//    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+//    imageModel2.imageFullView = @"0";
+//    imageModel2.imageInfo = @"6666666";
+//    imageModel2.imageTitle = @"5555555";
+//
+//    NSArray *arr = @[imageModel,imageModel1,imageModel2];
+//
+//    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+//    [ymImageV showWithFinish:^{
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    }];
+//    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+//    }];
+//    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjAAAAAAA" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
 //
 //    }];
 //    [actionSheet show];

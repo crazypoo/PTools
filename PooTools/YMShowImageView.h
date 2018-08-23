@@ -53,7 +53,7 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 @property (nonatomic,assign) CGPoint scrollOffset;
 @property (nonatomic, strong) void(^scrollViewDidScroll)(CGPoint offset);
 @property (nonatomic,copy) void(^scrollViewWillEndDragging)(CGPoint velocity,CGPoint offset);//返回scrollView滚动速度
-@property (nonatomic,copy) void(^scrollViewDidEndDecelerating)();
+@property (nonatomic,copy) void(^scrollViewDidEndDecelerating)(void);
 @property (nonatomic, assign) BOOL isFullWidthForLandScape;
 - (void)setImageWithModel:(PooShowImageModel *)model placeholderImage:(UIImage *)placeholder;
 
