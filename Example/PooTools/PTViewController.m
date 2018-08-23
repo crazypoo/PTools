@@ -43,10 +43,10 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
     
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
 //    userNameKeyboard.delegate = self;
@@ -94,40 +94,40 @@
 
     
     
-    NSArray *titleS = @[@"7"];
-
-    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-    config.itemHeight = 50;
-    config.itemWidth = 50;
-    config.itemHerMargin = 10;
-    config.itemVerMargin = 10;
-    config.hasBorder = YES;
-    config.topBottomSpace = 5.0;
-    config.itemContentEdgs = 20;
-    config.isCanSelected = YES;
-    config.isCanCancelSelected = YES;
-    config.isMulti = YES;
-    config.selectedDefaultTags = titleS;
-    config.borderColor = kRandomColor;
-    config.borderWidth = 2;
-    config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
-
-//    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
-//    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6",@"11",@"12",@"13",@"14",@"15",@"16",@"177",@"123123123",@"1231231231314124"];
-
-    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
-//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectZero tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
-    tag.backgroundColor = kRandomColor;
-    [self.view addSubview:tag];
-    [tag mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(kScreenStatusBottom);
-        make.bottom.equalTo(self.view).offset(-kScreenStatusBottom);
-    }];
-    tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
-        PNSLog(@"%f",viewHeight);
-    };
+//    NSArray *titleS = @[@"7"];
+//
+//    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+//    config.itemHeight = 50;
+//    config.itemWidth = 50;
+//    config.itemHerMargin = 10;
+//    config.itemVerMargin = 10;
+//    config.hasBorder = YES;
+//    config.topBottomSpace = 5.0;
+//    config.itemContentEdgs = 20;
+//    config.isCanSelected = YES;
+//    config.isCanCancelSelected = YES;
+//    config.isMulti = YES;
+//    config.selectedDefaultTags = titleS;
+//    config.borderColor = kRandomColor;
+//    config.borderWidth = 2;
+//    config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+//
+////    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
+////    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
+//    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6",@"11",@"12",@"13",@"14",@"15",@"16",@"177",@"123123123",@"1231231231314124"];
+//
+//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+////    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectZero tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
+//    tag.backgroundColor = kRandomColor;
+//    [self.view addSubview:tag];
+//    [tag mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.equalTo(self.view).offset(kScreenStatusBottom);
+//        make.bottom.equalTo(self.view).offset(-kScreenStatusBottom);
+//    }];
+//    tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
+//        PNSLog(@"%f",viewHeight);
+//    };
 }
 
 -(void)aaaaa
@@ -184,8 +184,8 @@
 //        }
 //    };
     
-//    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
-//
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+
 //        UILabel *aaa = [UILabel new];
 //        aaa.backgroundColor = kRandomColor;
 //        aaa.text = @"1123123123123";
@@ -193,35 +193,69 @@
 //        [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
 //            make.left.right.top.bottom.equalTo(alertView.customView);
 //        }];
-//
-//    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
-//        switch (buttonIndex) {
-//                case 0:
-//            {
-//                [alertView dissMiss];
-//                alertView = nil;
-//            }
-//                break;
-//             case 1:
-//            {
-//                [alertView dissMiss];
-//                alertView = nil;
-//            }
-//                break;
-//            default:
-//                break;
-//        }
-//
-//    } didDismissBlock:^(YXCustomAlertView *alertView) {
-//
-//    }];
-//    [alert showView];
-//    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-////        make.left.top.equalTo(self.view).offset(10);
-////        make.right.bottom.equalTo(self.view).offset(-10);
-//        make.width.height.offset(250);
-//        make.centerX.centerY.equalTo(self.view);
-//    }];
+        NSArray *titleS = @[@"7"];
+        
+        PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+        config.itemHeight = 50;
+        config.itemWidth = 50;
+        config.itemHerMargin = 10;
+        config.itemVerMargin = 10;
+        config.hasBorder = YES;
+        config.topBottomSpace = 5.0;
+        config.itemContentEdgs = 20;
+        config.isCanSelected = YES;
+        config.isCanCancelSelected = YES;
+        config.isMulti = YES;
+        config.selectedDefaultTags = titleS;
+        config.borderColor = kRandomColor;
+        config.borderWidth = 2;
+        config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+        
+        NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
+        NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
+//        NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6",@"11",@"12",@"13",@"14",@"15",@"16",@"177",@"123123123",@"1231231231314124"];
+        NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+
+//        PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
+        tag.backgroundColor = kRandomColor;
+        [alertView.customView addSubview:tag];
+        [tag mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(alertView.customView);
+            make.top.equalTo(alertView.customView).offset(kScreenStatusBottom);
+            make.bottom.equalTo(alertView.customView).offset(-kScreenStatusBottom);
+        }];
+        tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
+            PNSLog(@"%f",viewHeight);
+        };
+
+    } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+        switch (buttonIndex) {
+                case 0:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+             case 1:
+            {
+                [alertView dissMiss];
+                alertView = nil;
+            }
+                break;
+            default:
+                break;
+        }
+
+    } didDismissBlock:^(YXCustomAlertView *alertView) {
+
+    }];
+    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.top.equalTo(self.view).offset(10);
+//        make.right.bottom.equalTo(self.view).offset(-10);
+        make.width.height.offset(310);
+        make.centerX.centerY.equalTo(self.view);
+    }];
 //    [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
 //                   okAction:^{
 //
