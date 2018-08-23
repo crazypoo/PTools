@@ -17,6 +17,7 @@ typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
 @class PooTagsLabel;
 
 typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag);
+typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 
 @interface PooTagsLabelConfig : NSObject
 /*! @brief item之间的左右间距
@@ -104,7 +105,9 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 @end
 
 @interface PooTagsLabel : UIView
-
+/*! @brief 父视图实际高度回调
+ */
+@property (nonatomic,copy) tagViewHeightBlock tagHeightBlock;
 /*! @brief 点击block
  */
 @property (nonatomic,copy) tagBtnClicked tagBtnClickedBlock;
@@ -122,12 +125,8 @@ typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSIntege
 
 /*! @brief 初始化,必须给view设置一个宽度 (最普通模式)
  */
--(instancetype)initWithFrame:(CGRect)frame tagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
+-(instancetype)initWithTagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
 /*! @brief 初始化,必须给view设置一个宽度 (图片模式)
  */
--(instancetype)initWithFrame:(CGRect)frame tagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
-
-/*! @brief view高度回调 (必须要初始化,加载了之后才能算出来)
- */
-- (CGFloat)heightTagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config;
+-(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
 @end

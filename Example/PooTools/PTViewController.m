@@ -98,6 +98,7 @@
 
     PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
     config.itemHeight = 50;
+    config.itemWidth = 50;
     config.itemHerMargin = 10;
     config.itemVerMargin = 10;
     config.hasBorder = YES;
@@ -109,18 +110,24 @@
     config.selectedDefaultTags = titleS;
     config.borderColor = kRandomColor;
     config.borderWidth = 2;
-//
+    config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+
 //    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
 //    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6"];
+    NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6",@"11",@"12",@"13",@"14",@"15",@"16",@"177",@"123123123",@"1231231231314124"];
 
-    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectMake(0, 100, kSCREEN_WIDTH, 0) tagsArray:title config:config wihtSection:0];
+    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+//    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectZero tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
     tag.backgroundColor = kRandomColor;
     [self.view addSubview:tag];
     [tag mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(100);
+        make.top.equalTo(self.view).offset(kScreenStatusBottom);
+        make.bottom.equalTo(self.view).offset(-kScreenStatusBottom);
     }];
+    tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
+        PNSLog(@"%f",viewHeight);
+    };
 }
 
 -(void)aaaaa
