@@ -125,7 +125,13 @@
     }];
     self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
     self.actionSheetScroll.showsVerticalScrollIndicator = NO;
-    self.actionSheetScroll.scrollEnabled = YES;
+    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT) {
+        self.actionSheetScroll.scrollEnabled = YES;
+    }
+    else
+    {
+        self.actionSheetScroll.scrollEnabled = NO;
+    }
     
     if ([_otherButtonTitles count] > 0)
     {
@@ -260,10 +266,15 @@
     return ceil([self.title boundingRectWithSize:CGSizeMake(kSCREEN_WIDTH, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kDEFAULT_FONT(self.btnFontName, kTitleFontSize)} context:nil].size.height) + spacing*2;
 }
 
+-(CGFloat)actionSheetRealHeight
+{
+    return [self scrollContentH] + ([self titleHeight] + kRowLineHeight) +(kSeparatorHeight + kRowHeight) + [self destRowH] + [self destLineH];
+}
+
 -(CGFloat)actionSheetHeight
 {
-    CGFloat realH = [self scrollContentH] + ([self titleHeight] + kRowLineHeight) +(kSeparatorHeight + kRowHeight) + [self destRowH] + [self destLineH];
-    if (realH >= kSCREEN_HEIGHT) {
+    CGFloat realH = [self actionSheetRealHeight];
+    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT) {
         return kSCREEN_HEIGHT-kScreenStatusBottom;
     }
     else
@@ -389,9 +400,9 @@
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
         self.backView.alpha = 0.0;
-        
-    } completion:^(BOOL finished) {
         [self removeFromSuperview];
+
+    } completion:^(BOOL finished) {
     }];
 }
 

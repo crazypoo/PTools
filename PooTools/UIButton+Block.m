@@ -19,7 +19,7 @@ static const void *UIButtonBlockKey = &UIButtonBlockKey;
 -(void)actionTouched:(UIButton *)btn{
     TouchedBlock block = objc_getAssociatedObject(self, UIButtonBlockKey);
     if (block) {
-        block(btn.tag);
+        block(btn);
     }
 }
 

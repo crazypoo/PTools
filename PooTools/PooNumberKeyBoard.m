@@ -17,26 +17,35 @@
 #define kKeyH (self.bounds.size.height- kLineWidth*3)/4
 #define kKeyW (self.bounds.size.width-2)/3
 
+@interface PooNumberKeyBoard()
+@property (nonatomic, copy) PooNumberKeyBoardBackSpace backSpaceBlock;
+@property (nonatomic, copy) PooNumberKeyBoardReturnSTH returnSTHBlock;
+
+@end
+
 @implementation PooNumberKeyBoard
 
 +(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint
 {
-    return [[PooNumberKeyBoard alloc] initWithDog:dogpoint];
+    return [[PooNumberKeyBoard alloc] initWithDog:dogpoint backSpace:nil returnSTH:nil];
 }
 
-- (id)initWithDog:(BOOL)dog
++(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
+{
+    return [[PooNumberKeyBoard alloc] initWithDog:dogpoint backSpace:backSpaceBlock returnSTH:returnSTHBlock];
+}
+
+- (id)initWithDog:(BOOL)dog backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
 {
     self = [super init];
     if (self) {
         self.haveDog = dog;
         
+        self.returnSTHBlock = returnSTHBlock;
+        self.backSpaceBlock = backSpaceBlock;
+
         self.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kKeyBoardH);
         
-        UIDevice *device = [UIDevice currentDevice]; //Get the device object
-        [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
-        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
-        [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
-
         UIColor *colorNormal = [UIColor colorWithRed:252/255.0 green:252/255.0 blue:252/255.0 alpha:1];
         UIColor *colorHightlighted = [UIColor colorWithRed:186.0/255 green:189.0/255 blue:194.0/255 alpha:1.0];
 
@@ -124,8 +133,9 @@
     return self;
 }
 
-- (void)orientationChanged:(NSNotification *)note
+-(void)layoutSubviews
 {
+    [super layoutSubviews];
     for (int i = 0; i<4; i++)
     {
         for (int j = 0; j<3; j++)
@@ -165,7 +175,15 @@
 {
     if(sender.tag == 12)
     {
-        [self.delegate numberKeyboardBackspace:self];
+        if ([self.delegate respondsToSelector:@selector(numberKeyboardBackspace:)]) {
+            [self.delegate numberKeyboardBackspace:self];
+        }
+        else
+        {
+            if (self.backSpaceBlock) {
+                self.backSpaceBlock(self);
+            }
+        }
     }
     else
     {
@@ -184,7 +202,15 @@
                 num = @"";
             }
         }
-        [self.delegate numberKeyboard:self input:num];
+        if ([self.delegate respondsToSelector:@selector(numberKeyboard:input:)]) {
+            [self.delegate numberKeyboard:self input:num];
+        }
+        else
+        {
+            if (self.returnSTHBlock) {
+                self.returnSTHBlock(self, num);
+            }
+        }
     }
 }
 @end
