@@ -58,10 +58,10 @@
 //        make.height.offset(40);
 //    }];
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 //
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
 //        if (self.textField.text.length != 0)
@@ -86,25 +86,25 @@
     
     kAdaptedOtherFontSize(@"", 16);
     
-    PooSearchBar *searchBar = [PooSearchBar new];
-    searchBar.barStyle     = UIBarStyleDefault;
-    searchBar.translucent  = YES;
-//    searchBar.delegate     = self;
-    searchBar.keyboardType = UIKeyboardTypeDefault;
-    searchBar.searchPlaceholder = @"点击此处查找地市名字";
-    searchBar.searchPlaceholderColor = kRandomColor;
-    searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
-    searchBar.searchTextColor = kRandomColor;
-    //    searchBar.searchBarImage = kImageNamed(@"Search");
-    searchBar.searchTextFieldBackgroundColor = kRandomColor;
-    searchBar.searchBarOutViewColor = kRandomColor;
-    searchBar.searchBarTextFieldCornerRadius = 15;
-    searchBar.cursorColor = kRandomColor;
-    [self.view addSubview:searchBar];
-    [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.equalTo(self.view);
-        make.height.offset(44);
-    }];
+//    PooSearchBar *searchBar = [PooSearchBar new];
+//    searchBar.barStyle     = UIBarStyleDefault;
+//    searchBar.translucent  = YES;
+////    searchBar.delegate     = self;
+//    searchBar.keyboardType = UIKeyboardTypeDefault;
+//    searchBar.searchPlaceholder = @"点击此处查找地市名字";
+//    searchBar.searchPlaceholderColor = kRandomColor;
+//    searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
+//    searchBar.searchTextColor = kRandomColor;
+//    //    searchBar.searchBarImage = kImageNamed(@"Search");
+//    searchBar.searchTextFieldBackgroundColor = kRandomColor;
+//    searchBar.searchBarOutViewColor = kRandomColor;
+//    searchBar.searchBarTextFieldCornerRadius = 15;
+//    searchBar.cursorColor = kRandomColor;
+//    [self.view addSubview:searchBar];
+//    [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.equalTo(self.view);
+//        make.height.offset(44);
+//    }];
     
 //    PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
 //
@@ -155,33 +155,33 @@
 
 -(void)aaaaa
 {
-//    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
-//    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-//    imageModel.imageFullView = @"1";
-//    imageModel.imageInfo = @"11111111241241241241928390128309128";
-//    imageModel.imageTitle = @"22222212312312312312312312312";
-//
-//    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
-//    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-//    imageModel1.imageFullView = @"0";
-//    imageModel1.imageInfo = @"444444";
-//    imageModel1.imageTitle = @"333333";
-//
-//    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-//    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-//    imageModel2.imageFullView = @"0";
-//    imageModel2.imageInfo = @"6666666";
-//    imageModel2.imageTitle = @"5555555";
-//
-//    NSArray *arr = @[imageModel,imageModel1,imageModel2];
-//
-//    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
-//    [ymImageV showWithFinish:^{
-//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-//    }];
-//    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-//    }];
+    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel.imageFullView = @"1";
+    imageModel.imageInfo = @"11111111241241241241928390128309128";
+    imageModel.imageTitle = @"22222212312312312312312312312";
+
+    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+    imageModel1.imageFullView = @"0";
+    imageModel1.imageInfo = @"444444";
+    imageModel1.imageTitle = @"333333";
+
+    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+    imageModel2.imageFullView = @"0";
+    imageModel2.imageInfo = @"6666666";
+    imageModel2.imageTitle = @"5555555";
+
+    NSArray *arr = @[imageModel,imageModel1,imageModel2];
+
+    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+    [ymImageV showWithFinish:^{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
+    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+    }];
 //    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjAAAAAAA" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
 //
 //    }];

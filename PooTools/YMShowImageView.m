@@ -84,10 +84,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.actionSheetOtherBtnArr = nil;
         }
         
-        UIDevice *device = [UIDevice currentDevice]; //Get the device object
-        [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
-        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
-        [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
+//        UIDevice *device = [UIDevice currentDevice]; //Get the device object
+//        [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
+//        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
+//        [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
         
         self.titleColor = tC;
         self.fontName = fName;
@@ -123,6 +123,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.scrollView.backgroundColor = kClearColor;
     self.scrollView.pagingEnabled = true;
     self.scrollView.delegate = self;
+    self.scrollView.showsVerticalScrollIndicator = NO;
+    self.scrollView.showsHorizontalScrollIndicator = NO;
     [self addSubview:self.scrollView];
     
     self.imageScrollViews = [[NSMutableArray alloc] init];
@@ -308,40 +310,38 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }];
 }
 
-- (void)orientationChanged:(NSNotification *)note
+-(void)layoutSubviews
 {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"0.1秒后获取frame：%@", self);
-        [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(self);
+    [super layoutSubviews];
+    [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
+    self.scrollView.contentSize = CGSizeMake(self.width * self.modelArr.count, 0);
+    for (int i = 0; i < self.modelArr.count; i ++)
+    {
+        PShowImageSingleView *imageScrollView = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
+        [imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.offset(self.width*i);
+            make.top.offset(0);
+            make.width.offset(self.width);
+            make.height.offset(self.height);
         }];
-        self.scrollView.contentSize = CGSizeMake(self.width * self.modelArr.count, 0);
-        for (int i = 0; i < self.modelArr.count; i ++)
-        {
-            PShowImageSingleView *imageScrollView = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
-            [imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(self.width*i);
-                make.top.offset(0);
-                make.width.offset(self.width);
-                make.height.offset(self.height);
-            }];
-        }
-        [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-        [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(80);
-            make.height.offset(hIndexTitleHeight);
-            make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
-            make.centerX.equalTo(self.mas_centerX);
-        }];
-        
-        [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(50);
-            make.height.offset(hIndexTitleHeight);
-            make.top.equalTo(self.indexLabel);
-            make.right.equalTo(self).offset(-20);
-        }];
-        
-    });
+    }
+    [self.scrollView setContentOffset:CGPointMake(self.width * self.page, 0) animated:YES];
+    [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(80);
+        make.height.offset(hIndexTitleHeight);
+        make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
+        make.centerX.equalTo(self.mas_centerX);
+    }];
+    
+    [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(50);
+        make.height.offset(hIndexTitleHeight);
+        make.top.equalTo(self.indexLabel);
+        make.right.equalTo(self).offset(-20);
+    }];
+
 }
 
 -(BOOL)fullImageHidden
