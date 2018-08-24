@@ -29,6 +29,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
+//TODO:浏览图片2.0
 
 @interface PTViewController ()<PooNumberKeyBoardDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
