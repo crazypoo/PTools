@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "PooShowImageModel.h"
 #import <SceneKit/SceneKit.h>
+#import <ImageIO/ImageIO.h>
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @class YMShowImageView;
 
@@ -47,6 +50,7 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 @property (nonatomic, assign) CGFloat progress;
 @property (nonatomic, assign) BOOL beginLoadingImage;
 @property (nonatomic,strong) SCNSphere *sphere;
+@property (nonatomic, strong) MPMoviePlayerController *player;
 /**判断图片是否加载成功*/
 @property (nonatomic, assign) BOOL hasLoadedImage;
 @property (nonatomic,assign) CGSize zoomImageSize;
@@ -55,6 +59,19 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 @property (nonatomic,copy) void(^scrollViewWillEndDragging)(CGPoint velocity,CGPoint offset);//返回scrollView滚动速度
 @property (nonatomic,copy) void(^scrollViewDidEndDecelerating)(void);
 @property (nonatomic, assign) BOOL isFullWidthForLandScape;
-- (void)setImageWithModel:(PooShowImageModel *)model placeholderImage:(UIImage *)placeholder;
+- (void)setImageWithModel:(PooShowImageModel *)model;
+
+@end
+
+
+typedef enum {
+    HZWaitingViewModeLoopDiagram, // 环形
+    HZWaitingViewModePieDiagram // 饼型
+} HZWaitingViewMode;
+
+@interface HZWaitingView : UIView
+
+@property (nonatomic, assign) CGFloat progress;
+@property (nonatomic, assign) int mode;
 
 @end

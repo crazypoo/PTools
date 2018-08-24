@@ -13,7 +13,7 @@
 #import "ALActionSheetView.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
-#import "HZWaitingView.h"
+
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f
@@ -233,7 +233,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
             imageScroll.isFullWidthForLandScape = NO;
-            [imageScroll setImageWithModel:model placeholderImage:kImageNamed(self.loadingImageName)];
+            [imageScroll setImageWithModel:model];
             imageScroll.tag = SubViewBasicsIndex+i;
             [self.scrollView addSubview:imageScroll];
             [self.imageScrollViews addObject:imageScroll];
@@ -316,6 +316,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     for (int i = 0; i < self.modelArr.count; i ++)
     {
         PShowImageSingleView *imageScrollView = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
+        imageScrollView.tag = SubViewBasicsIndex+i;
         [imageScrollView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.offset(self.width*i);
             make.top.offset(0);
@@ -361,15 +362,27 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     {
         int page = (scrollView.contentOffset.x)/scrollView.width;
         self.page = page;
+        
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
         self.fullViewLabel.hidden = [self fullImageHidden];
         
-        if (scrollView == self.scrollView)
-        {
-            PooShowImageModel *model = self.modelArr[page];
-            self.titleLabel.text = model.imageTitle;
-            self.infoLabel.text = model.imageInfo;
+        PooShowImageModel *model = self.modelArr[page];
+        self.titleLabel.text = model.imageTitle;
+        self.infoLabel.text = model.imageInfo;
+        
+        
+        for (int i = 0 ; i < self.modelArr.count; i++) {
+            PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + i];
+            if (i == page) {
+                [currentImageS.imageview startAnimating];
+                [currentImageS.player play];
+            }
+            else
+            {
+                [currentImageS.imageview stopAnimating];
+                [currentImageS.player stop];
+            }
         }
     }
 }
@@ -515,32 +528,58 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
     else
     {
+        for (int i = 0 ; i < self.modelArr.count; i++) {
+            PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
+            [imageScroll removeFromSuperview];
+        }
+        
         [UIView animateWithDuration:0.1 animations:^{
-            [self.scrollView.subviews[index] removeFromSuperview];
-            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - kSCREEN_WIDTH, self.scrollView.contentSize.height);
+            
             NSInteger newIndex = index - 1;
             if (newIndex < 0)
             {
-                newIndex = 1;
+                newIndex = 0;
+            }
+            else if (newIndex == 0)
+            {
+                newIndex = 0;
             }
             else
             {
-                newIndex = index - 1;
+                newIndex = index-1;
             }
-            self.scrollView.contentOffset = CGPointMake(newIndex * self.scrollView.frame.size.width, 0);
+            self.page = newIndex;
+
+            self.scrollView.contentSize = CGSizeMake(self.imageScrollViews.count*kSCREEN_WIDTH, self.scrollView.contentSize.height);
+            [self.scrollView setContentOffset:CGPointMake(self.page * kSCREEN_WIDTH, 0) animated:YES];
             [self.modelArr removeObjectAtIndex:index];
-            [self.imageScrollViews removeObjectAtIndex:index];
+            [self.imageScrollViews removeAllObjects];
+
+            for (int i = 0 ; i < self.modelArr.count; i++)
+            {
+                PooShowImageModel *model = self.modelArr[i];
+                PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
+                imageScroll.isFullWidthForLandScape = NO;
+                [imageScroll setImageWithModel:model];
+                imageScroll.tag = SubViewBasicsIndex+i;
+                [self.scrollView addSubview:imageScroll];
+                [self.imageScrollViews addObject:imageScroll];
+            }
+
             if (self.modelArr.count > 1)
             {
                 int textIndex = self.scrollView.contentOffset.x / self.scrollView.bounds.size.width;
+                if (textIndex == 0) {
+                    textIndex = 1;
+                }
                 self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld",textIndex,(long)self.modelArr.count];
             }
             else
             {
                 [self.indexLabel removeFromSuperview];
             }
+            [self layoutSubviews];
         }];
-        [self layoutIfNeeded];
     }
 }
 
@@ -552,6 +591,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) UIImage *placeHolderImage;
 @property (nonatomic, strong) UIButton *reloadButton;
 @property (nonatomic, strong) SCNView *sceneView;
+@property (nonatomic, strong) UIImage *loadImage;
 @end
 
 @implementation PShowImageSingleView
@@ -610,10 +650,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 }
 
 #pragma mark public methods
-- (void)setImageWithModel:(PooShowImageModel *)model placeholderImage:(UIImage *)placeholder
+- (void)setImageWithModel:(PooShowImageModel *)model
 {
     _imageModels = model;
-    _placeHolderImage = placeholder;
+    
+    HZWaitingView *waitingView = [[HZWaitingView alloc] init];
+    waitingView.mode = HZWaitingViewModeLoopDiagram;
+    waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
+    self.waitingView = waitingView;
+    [self addSubview:waitingView];
     
     CGFloat navH = 0.0f;
     if (kDevice_Is_iPhoneX)
@@ -649,10 +694,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             });
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             [self.waitingView removeFromSuperview];
-            GCDWithMain(^{
-                self.sphere.firstMaterial.diffuse.contents = image;
-                weakself.hasLoadedImage = YES;//图片加载成功
-            });
+            self.sphere.firstMaterial.diffuse.contents = image;
+            weakself.hasLoadedImage = YES;//图片加载成功
+
         }];
         SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
         sphereNode.position = SCNVector3Make(0,0,0);
@@ -663,66 +707,179 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
     else
     {
-        self.imageview = [UIImageView new];
-        NSString *imageURLString = model.imageUrl;
-        self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+        [self.waitingView removeFromSuperview];
         
-        id urlObject;
-        if (imageURLString)
-        {
-            if ([imageURLString isKindOfClass:[NSString class]])
+        NSURL *videoUrl;
+        NSString* pathExtention = [model.imageUrl pathExtension];
+        if([pathExtention isEqualToString:@"mp4"]) {
+            if ([model.imageUrl rangeOfString:@"/var"].length>0)
             {
-                urlObject = imageURLString;
+                videoUrl = [NSURL fileURLWithPath:model.imageUrl];
             }
-            else if([imageURLString isKindOfClass:[NSURL class]])
+            else
             {
-                urlObject = imageURLString;
+                videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
             }
-            else if([imageURLString isKindOfClass:[UIImage class]])
-            {
-                
-            }
-        }
-        
-        [_scrollview addSubview:self.imageview];
-        
-        kWeakSelf(self);
-        [_imageview sd_setImageWithURL:urlObject placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            //在主线程做UI更新
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
-            });
-            
-        } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-            [weakself.waitingView removeFromSuperview];
-            
-            if (error) {
-                //图片加载失败的处理，此处可以自定义各种操作（...）
-                weakself.hasLoadedImage = NO;//图片加载失败
-                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-                weakself.reloadButton = button;
-                button.layer.cornerRadius = 2;
-                button.clipsToBounds = YES;
-                button.titleLabel.font = [UIFont systemFontOfSize:14];
-                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
-                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                [button addTarget:weakself action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
-                
-                [self addSubview:button];
-                return;
-            }
-            //加载成功重新计算frame,解决长图可能显示不正确的问题
+            self.player = [[MPMoviePlayerController alloc] initWithContentURL:videoUrl];
+            self.player.controlStyle = MPMovieControlStyleNone;
+            self.player.shouldAutoplay = YES;
+            self.player.repeatMode = MPMovieRepeatModeNone;
+            [self.player setFullscreen:YES animated:YES];
+            self.player.scalingMode = MPMovieScalingModeAspectFit;
+            [self.player prepareToPlay];
+            [_scrollview addSubview: self.player.view];
+            [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self);
+                make.height.offset(self.height-navH-80);
+                make.top.equalTo(self).offset(navH);
+            }];
+            [self.player play];
             [self setNeedsLayout];
-            weakself.hasLoadedImage = YES;//图片加载成功
-        }];
+        }
+        else
+        {
+            self.imageview = [UIImageView new];
+            NSString *imageURLString = model.imageUrl;
+            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+            
+            id urlObject;
+            if (imageURLString)
+            {
+                if ([imageURLString isKindOfClass:[NSString class]])
+                {
+                    urlObject = imageURLString;
+                }
+                else if([imageURLString isKindOfClass:[NSURL class]])
+                {
+                    urlObject = imageURLString;
+                }
+                else if([imageURLString isKindOfClass:[UIImage class]])
+                {
+                    
+                }
+            }
+            
+            [_scrollview addSubview:self.imageview];
+            
+            __weak __typeof(self)weakself = self;
+            [[SDWebImageManager sharedManager] loadImageWithURL:urlObject options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                __strong __typeof(weakself)strongself = weakself;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    strongself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+                    strongself.imageview.image = nil;
+                });
+                
+            } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                __strong __typeof(weakself)strongself = weakself;
+
+                [strongself.waitingView removeFromSuperview];
+                
+                NSString *imageType = [self contentTypeForImageData:data];
+                if ([imageType isEqualToString:@"gif"]) {
+                    CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+                    size_t frameCout = CGImageSourceGetCount(source);
+                    NSMutableArray* frames = [[NSMutableArray alloc] init];
+                    for (size_t i=0; i<frameCout; i++)
+                    {
+                        CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
+                        UIImage* imageName = [UIImage imageWithCGImage:imageRef];
+                        [frames addObject:imageName];
+                        CGImageRelease(imageRef);
+                    }
+                    strongself.imageview.animationImages = frames;
+                    strongself.imageview.animationDuration = 2;
+                    [strongself.imageview startAnimating];
+                    strongself.imageview.image = image;
+                }
+                else
+                {
+                    strongself.imageview.image = image;
+                }
+                [self setNeedsLayout];
+                strongself.hasLoadedImage = YES;//图片加载成功
+            }];
+        }
+//        kWeakSelf(self);
+//        [_imageview sd_setImageWithURL:urlObject placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+//            //在主线程做UI更新
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+//            });
+//
+//        } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+//            [weakself.waitingView removeFromSuperview];
+//
+//            if (error) {
+//                //图片加载失败的处理，此处可以自定义各种操作（...）
+//                weakself.hasLoadedImage = NO;//图片加载失败
+//                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//                weakself.reloadButton = button;
+//                button.layer.cornerRadius = 2;
+//                button.clipsToBounds = YES;
+//                button.titleLabel.font = [UIFont systemFontOfSize:14];
+//                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+//                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
+//                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//                [button addTarget:weakself action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
+//
+//                [self addSubview:button];
+//                return;
+//            }
+//            //加载成功重新计算frame,解决长图可能显示不正确的问题
+//            [self setNeedsLayout];
+//            weakself.hasLoadedImage = YES;//图片加载成功
+//        }];
     }
+}
+
+#pragma mark ---------------> SwitchImageType
+- (NSString *)contentTypeForImageData:(NSData *)data {
+    
+    uint8_t c;
+    
+    [data getBytes:&c length:1];
+    
+    switch (c) {
+            
+        case 0xFF:
+        {
+            return @"jpeg";
+        }
+        case 0x89:
+        {
+            return @"png";
+        }
+        case 0x47:
+        {
+            return @"gif";
+        }
+        case 0x49:
+        case 0x4D:
+        {
+            return @"tiff";
+        }
+        case 0x52:
+        {
+            if ([data length] < 12) {
+                return nil;
+            }
+            
+            NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
+            
+            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"])
+            {
+                return @"webp";
+            }
+            return nil;
+        }
+    }
+    return nil;
 }
 
 #pragma mark private methods
 - (void)reloadImage
 {
-    [self setImageWithModel:_imageModels placeholderImage:_placeHolderImage];
+    [self setImageWithModel:_imageModels];
 }
 
 - (void)adjustFrame
@@ -793,6 +950,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         make.height.offset(self.height-navH-80);
         make.top.equalTo(self).offset(navH);
     }];
+    [self.player.view mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(self.height-navH-80);
+        make.top.equalTo(self).offset(navH);
+    }];
 }
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
@@ -841,3 +1003,86 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
 }
 @end
+
+#define HZWaitingViewBackgroundColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]
+#define HZWaitingViewItemMargin 10
+
+@implementation HZWaitingView
+
+
+- (id)initWithFrame:(CGRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        self.backgroundColor = HZWaitingViewBackgroundColor;
+        self.clipsToBounds = YES;
+        self.mode = HZWaitingViewModeLoopDiagram;
+    }
+    return self;
+}
+
+- (void)setProgress:(CGFloat)progress
+{
+    _progress = progress;
+    [self setNeedsDisplay];
+    if (progress >= 1) {
+        [self removeFromSuperview];
+    }
+}
+
+- (void)setFrame:(CGRect)frame
+{
+    //设置背景图为圆
+    frame.size.width = 50;
+    frame.size.height = 50;
+    self.layer.cornerRadius = 25;
+    [super setFrame:frame];
+}
+
+- (void)drawRect:(CGRect)rect
+{
+    CGContextRef ctx = UIGraphicsGetCurrentContext();
+    
+    CGFloat xCenter = rect.size.width * 0.5;
+    CGFloat yCenter = rect.size.height * 0.5;
+    [[UIColor whiteColor] set];
+    
+    switch (self.mode) {
+        case HZWaitingViewModePieDiagram:
+        {
+            CGFloat radius = MIN(rect.size.width * 0.5, rect.size.height * 0.5) - HZWaitingViewItemMargin;
+            
+            
+            CGFloat w = radius * 2 + HZWaitingViewItemMargin;
+            CGFloat h = w;
+            CGFloat x = (rect.size.width - w) * 0.5;
+            CGFloat y = (rect.size.height - h) * 0.5;
+            CGContextAddEllipseInRect(ctx, CGRectMake(x, y, w, h));
+            CGContextFillPath(ctx);
+            
+            [HZWaitingViewBackgroundColor set];
+            CGContextMoveToPoint(ctx, xCenter, yCenter);
+            CGContextAddLineToPoint(ctx, xCenter, 0);
+            CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.001; // 初始值
+            CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 1);
+            CGContextClosePath(ctx);
+            
+            CGContextFillPath(ctx);
+        }
+            break;
+            
+        default:
+        {
+            CGContextSetLineWidth(ctx, 4);
+            CGContextSetLineCap(ctx, kCGLineCapRound);
+            CGFloat to = - M_PI * 0.5 + self.progress * M_PI * 2 + 0.05; // 初始值0.05
+            CGFloat radius = MIN(rect.size.width, rect.size.height) * 0.5 - HZWaitingViewItemMargin;
+            CGContextAddArc(ctx, xCenter, yCenter, radius, - M_PI * 0.5, to, 0);
+            CGContextStrokePath(ctx);
+        }
+            break;
+    }
+}
+
+@end
+
