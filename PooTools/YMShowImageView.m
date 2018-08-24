@@ -580,7 +580,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 #pragma mark getter setter
 - (UIScrollView *)scrollview
 {
-    if (!_scrollview) {
+    if (!_scrollview)
+    {
         _scrollview = [[UIScrollView alloc] init];
         _scrollview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
         _scrollview.showsVerticalScrollIndicator = NO;
@@ -593,7 +594,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 - (UIImageView *)imageview
 {
-    if (!_imageview) {
+    if (!_imageview)
+    {
         _imageview = [[UIImageView alloc] init];
         _imageview.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
         _imageview.userInteractionEnabled = YES;
@@ -623,8 +625,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         navH = HEIGHT_NAVBAR;
     }
     
-    if ([model.imageFullView isEqualToString:@"1"]) {
-        
+    if ([model.imageFullView isEqualToString:@"1"])
+    {
         self.sceneView = [SCNView new];
         [_scrollview addSubview:self.sceneView];
         [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -666,12 +668,19 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.imageview.contentMode = UIViewContentModeScaleAspectFit;
         
         id urlObject;
-        if (imageURLString) {
-            if ([imageURLString isKindOfClass:[NSString class]]) {
+        if (imageURLString)
+        {
+            if ([imageURLString isKindOfClass:[NSString class]])
+            {
                 urlObject = imageURLString;
-            }else if([imageURLString isKindOfClass:[NSURL class]]){
+            }
+            else if([imageURLString isKindOfClass:[NSURL class]])
+            {
                 urlObject = imageURLString;
-            }else if([imageURLString isKindOfClass:[UIImage class]]){
+            }
+            else if([imageURLString isKindOfClass:[UIImage class]])
+            {
+                
             }
         }
         
@@ -728,20 +737,27 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         navH = HEIGHT_NAVBAR;
     }
     CGRect frame = self.frame;
-    if (self.imageview.image) {
+    if (self.imageview.image)
+    {
         CGSize imageSize = self.imageview.image.size;//获得图片的size
         CGRect imageFrame = CGRectMake(0, 0, imageSize.width, imageSize.height);
-        if (_isFullWidthForLandScape) {//图片宽度始终==屏幕宽度(新浪微博就是这种效果)
+        if (_isFullWidthForLandScape)
+        {//图片宽度始终==屏幕宽度(新浪微博就是这种效果)
             CGFloat ratio = frame.size.width/imageFrame.size.width;
             imageFrame.size.height = imageFrame.size.height*ratio;
             imageFrame.size.width = frame.size.width;
-        } else{
-            if (frame.size.width<=frame.size.height) {
+        }
+        else
+        {
+            if (frame.size.width<=frame.size.height)
+            {
                 //竖屏时候
                 CGFloat ratio = frame.size.width/imageFrame.size.width;
                 imageFrame.size.height = imageFrame.size.height*ratio;
                 imageFrame.size.width = frame.size.width;
-            }else{ //横屏的时候
+            }
+            else
+            { //横屏的时候
                 CGFloat ratio = frame.size.height/imageFrame.size.height;
                 imageFrame.size.width = imageFrame.size.width*ratio;
                 imageFrame.size.height = frame.size.height;
