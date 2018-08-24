@@ -24,6 +24,7 @@
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
 		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
 		CC1257B22098319300E31A38 /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573B2098319200E31A38 /* DES3Util.m */; };
@@ -160,6 +161,7 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
+		C8FCB8F921308328000BB281 /* PooTools.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PooTools.bundle; sourceTree = "<group>"; };
 		CC1256B42098286400E31A38 /* PooTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PooTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC1257362098319200E31A38 /* ALActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALActionSheetView.h; sourceTree = "<group>"; };
 		CC1257372098319200E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
@@ -498,6 +500,7 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				C8FCB8F921308328000BB281 /* PooTools.bundle */,
 				CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */,
 				CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */,
 				CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */,
@@ -721,6 +724,7 @@
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
+				C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

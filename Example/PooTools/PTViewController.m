@@ -164,7 +164,7 @@
     
     PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
     imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    imageModelV.imageFullView = @"0";
+    imageModelV.imageShowType = PooShowImageModelTypeVideo;
     imageModelV.imageInfo = @"11111111241241241241928390128309128";
     imageModelV.imageTitle = @"22222212312312312312312312312";
     
@@ -177,13 +177,13 @@
 
     PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
     imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-    imageModel2.imageFullView = @"0";
+    imageModelV.imageShowType = PooShowImageModelTypeNormal;
     imageModel2.imageInfo = @"6666666";
     imageModel2.imageTitle = @"5555555";
     
     PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
     imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
-    imageModel3.imageFullView = @"0";
+    imageModelV.imageShowType = PooShowImageModelTypeGIF;
     imageModel3.imageInfo = @"444444";
     imageModel3.imageTitle = @"333333";
 
@@ -196,6 +196,9 @@
     [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
     }];
+    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
+        PNSLog(@"%d",saveStatus);
+    };
 //    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjAAAAAAA" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
 //
 //    }];

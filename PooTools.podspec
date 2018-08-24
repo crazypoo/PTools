@@ -17,6 +17,7 @@ Pod::Spec.new do |s|
     s.platform = :ios, '8.0'
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m}'
+    s.resource     = 'PooTools/PooTools.bundle'
     s.ios.deployment_target = '8.0'
     s.frameworks = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','Speech','LocalAuthentication','HealthKit','CoreMotion','SceneKit','CoreImage'
     s.dependency 'AFNetworking'

@@ -13,7 +13,8 @@
 #import "ALActionSheetView.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
-
+#import "Utils.h"
+#import <AFNetworking/AFNetworking.h>
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f
@@ -153,13 +154,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.fullViewLabel.textAlignment = NSTextAlignmentCenter;
     self.fullViewLabel.textColor = [UIColor whiteColor];
     self.fullViewLabel.font = kDEFAULT_FONT(self.fontName, 20);
-    self.fullViewLabel.text = @"全景";
     self.fullViewLabel.backgroundColor = cIndexTitleBackgroundColor;
     self.fullViewLabel.frame = CGRectMake(kSCREEN_WIDTH-50-20, self.indexLabel.top, 50, hIndexTitleHeight);
     self.fullViewLabel.layer.cornerRadius = 15;
     self.fullViewLabel.clipsToBounds = YES;
     [self addSubview:self.fullViewLabel];
-    self.fullViewLabel.hidden = YES;
 }
 
 -(void)removeFromSuperview
@@ -170,6 +169,23 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 - (void)disappear
 {
+    for (int i = 0 ; i < self.modelArr.count; i++) {
+        PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + i];
+        switch (currentImageS.showMode) {
+            case PShowModeGif:
+            {
+                [currentImageS.imageview stopAnimating];
+            }
+                break;
+            case PShowModeVideo:
+            {
+                [currentImageS.player stop];
+            }
+            default:
+                break;
+        }
+    }
+
     if (_removeImg)
     {
         _removeImg();
@@ -229,20 +245,28 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         
         for (int i = 0; i < self.modelArr.count; i ++)
         {
-            PooShowImageModel *model = self.modelArr[i];
-            
             PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
             imageScroll.isFullWidthForLandScape = NO;
-            [imageScroll setImageWithModel:model];
             imageScroll.tag = SubViewBasicsIndex+i;
             [self.scrollView addSubview:imageScroll];
             [self.imageScrollViews addObject:imageScroll];
         }
         [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
         
-        self.fullViewLabel.hidden = [self fullImageHidden];
+        self.fullViewLabel.text = [self fullImageHidden];
+//        if ([[self fullImageHidden] isEqualToString:@""])
+//        {
+//            self.fullViewLabel.hidden = YES;
+//        }
+//        else
+//        {
+//            self.fullViewLabel.hidden = NO;
+//        }
         
         PooShowImageModel *model = self.modelArr[0];
+        PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+0];
+        [imageScroll setImageWithModel:model];
+        imageScroll.beginLoadingImage = YES;
         
         self.titleLabel = [UILabel new];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
@@ -325,7 +349,26 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }];
     }
     [self.scrollView setContentOffset:CGPointMake(self.width * self.page, 0) animated:YES];
-    
+    PooShowImageModel *model = self.modelArr[self.page];
+    PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
+    [currentImageS setImageWithModel:model];
+    switch (currentImageS.showMode) {
+        case PShowModeGif:
+        {
+            [currentImageS.imageview startAnimating];
+        }
+            break;
+        case PShowModeVideo:
+        {
+            currentImageS.video1STImage.hidden = NO;
+            currentImageS.playBtn.hidden = NO;
+            currentImageS.stopBtn.hidden = YES;
+            currentImageS.videoSlider.hidden = YES;
+        }
+        default:
+            break;
+    }
+
     if (self.modelArr.count > 1) {
         [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.offset(80);
@@ -343,15 +386,29 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
 }
 
--(BOOL)fullImageHidden
+-(NSString *)fullImageHidden
 {
     PooShowImageModel *model = self.modelArr[self.page];
-    if ([model.imageFullView isEqualToString:@"1"]) {
-        return NO;
-    }
-    else
+    switch (model.imageShowType)
     {
-        return YES;
+        case PooShowImageModelTypeFullView:
+        {
+            return @"全景";
+        }
+            break;
+        case PooShowImageModelTypeGIF:
+        {
+            return @"GIF";
+        }
+        case PooShowImageModelTypeVideo:
+        {
+            return @"视频";
+        }
+        default:
+        {
+            return @"普通";
+        }
+            break;
     }
 }
 
@@ -365,25 +422,62 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
-        self.fullViewLabel.hidden = [self fullImageHidden];
+        self.fullViewLabel.text = [self fullImageHidden];
+//        if ([[self fullImageHidden] isEqualToString:@""])
+//        {
+//            self.fullViewLabel.hidden = YES;
+//        }
+//        else
+//        {
+//            self.fullViewLabel.hidden = NO;
+//        }
         
         PooShowImageModel *model = self.modelArr[page];
         self.titleLabel.text = model.imageTitle;
         self.infoLabel.text = model.imageInfo;
-        
-        
+    
         for (int i = 0 ; i < self.modelArr.count; i++) {
             PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + i];
             if (i == page) {
-                [currentImageS.imageview startAnimating];
-                [currentImageS.player play];
+                switch (currentImageS.showMode) {
+                    case PShowModeGif:
+                        {
+                            [currentImageS.imageview startAnimating];
+                        }
+                        break;
+                    case PShowModeVideo:
+                    {
+                        currentImageS.video1STImage.hidden = NO;
+                        currentImageS.playBtn.hidden = NO;
+                        currentImageS.stopBtn.hidden = YES;
+                        currentImageS.videoSlider.hidden = YES;
+                    }
+                    default:
+                        break;
+                }
             }
             else
             {
-                [currentImageS.imageview stopAnimating];
-                [currentImageS.player stop];
+                switch (currentImageS.showMode) {
+                    case PShowModeGif:
+                    {
+                        [currentImageS.imageview stopAnimating];
+                    }
+                        break;
+                    case PShowModeVideo:
+                    {
+                        [currentImageS.player stop];
+                    }
+                    default:
+                        break;
+                }
             }
         }
+
+        PShowImageSingleView *current = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + page];
+        if (current.beginLoadingImage) return;
+        [current setImageWithModel:model];
+        current.beginLoadingImage = YES;
     }
 }
 
@@ -403,7 +497,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 {
     NSInteger index = self.page;
     PooShowImageModel *model = self.modelArr[index];
-    if ([model.imageFullView isEqualToString:@"1"])
+    if (model.imageShowType == PooShowImageModelTypeFullView)
     {
         PShowImageSingleView *currentView = self.imageScrollViews[index];
         if (currentView.hasLoadedImage)
@@ -424,7 +518,18 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         PShowImageSingleView *currentView = self.imageScrollViews[index];
         if (currentView.hasLoadedImage)
         {
-            [self saveImageToPhotos:currentView.imageview.image];
+            switch (currentView.showMode) {
+                case PShowModeVideo:
+                {
+                    [self playerDownload:model.imageUrl withViews:currentView];
+                }
+                    break;
+                default:
+                {
+                    [self saveImageToPhotos:currentView.imageview.image];
+                }
+                    break;
+            }
         }
         else
         {
@@ -456,6 +561,53 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     if (self.saveImageStatus)
     {
         self.saveImageStatus(saveimageAction);
+    }
+}
+
+- (void)playerDownload:(NSString *)url withViews:(PShowImageSingleView *)currentViews
+{
+    HZWaitingView *waitingView = [[HZWaitingView alloc] init];
+    waitingView.mode = HZWaitingViewModeLoopDiagram;
+    [currentViews.player.view addSubview:waitingView];
+    [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(currentViews.width * 0.5);
+        make.height.offset(currentViews.height * 0.5);
+        make.centerX.centerY.equalTo(currentViews.player.view);
+    }];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    NSString  *fullPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [NSString stringWithFormat:@"%@.mp4",[Utils getYMDHHS]]];
+    NSURL *urlNew = [NSURL URLWithString:url];
+    NSURLRequest *request = [NSURLRequest requestWithURL:urlNew];
+    NSURLSessionDownloadTask *task =
+    [manager downloadTaskWithRequest:request
+                            progress:^(NSProgress * _Nonnull downloadProgress) {
+                                dispatch_async(dispatch_get_main_queue(), ^{
+                                    waitingView.progress = downloadProgress.fractionCompleted;
+                                });
+                            }  destination:^NSURL *(NSURL *targetPath, NSURLResponse *response) {
+                                return [NSURL fileURLWithPath:fullPath];
+                            }
+                   completionHandler:^(NSURLResponse *response, NSURL *filePath, NSError *error) {
+                       [waitingView removeFromSuperview];
+                       [self saveVideo:fullPath];
+                   }];
+    [task resume];
+}
+
+- (void)saveVideo:(NSString *)videoPath{
+    
+    if (videoPath) {
+        NSURL *url = [NSURL URLWithString:videoPath];
+        BOOL compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum([url path]);
+        if (compatible)
+        {
+            //保存相册核心代码
+            UISaveVideoAtPathToSavedPhotosAlbum([url path], self, @selector(image:didFinishSavingWithError:contextInfo:), nil);
+        }
     }
 }
 
@@ -530,6 +682,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     {
         for (int i = 0 ; i < self.modelArr.count; i++) {
             PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
+            [imageScroll.player stop];
             [imageScroll removeFromSuperview];
         }
         
@@ -557,10 +710,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
             for (int i = 0 ; i < self.modelArr.count; i++)
             {
-                PooShowImageModel *model = self.modelArr[i];
                 PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
                 imageScroll.isFullWidthForLandScape = NO;
-                [imageScroll setImageWithModel:model];
                 imageScroll.tag = SubViewBasicsIndex+i;
                 [self.scrollView addSubview:imageScroll];
                 [self.imageScrollViews addObject:imageScroll];
@@ -580,12 +731,19 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             }
             [self layoutSubviews];
         }];
+        if (self.didDeleted) {
+            self.didDeleted(self, index);
+        }
     }
 }
 
 @end
 
 @interface PShowImageSingleView() <UIScrollViewDelegate>
+{
+    NSTimer *timer;
+    CGFloat videoTime;
+}
 @property (nonatomic, strong) HZWaitingView *waitingView;
 @property (nonatomic, strong) PooShowImageModel *imageModels;
 @property (nonatomic, strong) UIImage *placeHolderImage;
@@ -658,7 +816,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     waitingView.mode = HZWaitingViewModeLoopDiagram;
     waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
     self.waitingView = waitingView;
-    [self addSubview:waitingView];
     
     CGFloat navH = 0.0f;
     if (kDevice_Is_iPhoneX)
@@ -670,8 +827,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         navH = HEIGHT_NAVBAR;
     }
     
-    if ([model.imageFullView isEqualToString:@"1"])
+    if (model.imageShowType == PooShowImageModelTypeFullView)
     {
+        self.showMode = PShowModeFullView;
         self.sceneView = [SCNView new];
         [_scrollview addSubview:self.sceneView];
         [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -679,6 +837,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             make.height.offset(self.height-navH-80);
             make.top.equalTo(self).offset(navH);
         }];
+        
+        [self addSubview:self.waitingView];
         
         self.sceneView.scene = [[SCNScene alloc] init];
         self.sceneView.showsStatistics = NO;
@@ -694,6 +854,22 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             });
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             [self.waitingView removeFromSuperview];
+            if (error) {
+                //图片加载失败的处理，此处可以自定义各种操作（...）
+                weakself.hasLoadedImage = NO;//图片加载失败
+                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+                weakself.reloadButton = button;
+                button.layer.cornerRadius = 2;
+                button.clipsToBounds = YES;
+                button.titleLabel.font = [UIFont systemFontOfSize:14];
+                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
+                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                [button addTarget:self action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
+                [self addSubview:button];
+                return;
+            }
+
             self.sphere.firstMaterial.diffuse.contents = image;
             weakself.hasLoadedImage = YES;//图片加载成功
 
@@ -708,6 +884,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     else
     {
         [self.waitingView removeFromSuperview];
+        
+        self.showMode = PShowModeVideo;
         
         NSURL *videoUrl;
         NSString* pathExtention = [model.imageUrl pathExtension];
@@ -726,14 +904,59 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.player.repeatMode = MPMovieRepeatModeNone;
             [self.player setFullscreen:YES animated:YES];
             self.player.scalingMode = MPMovieScalingModeAspectFit;
-            [self.player prepareToPlay];
             [_scrollview addSubview: self.player.view];
             [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self);
                 make.height.offset(self.height-navH-80);
                 make.top.equalTo(self).offset(navH);
             }];
-            [self.player play];
+            
+            UIImage *firstImage = [Utils thumbnailImageForVideo:videoUrl atTime:1];
+            self.video1STImage = [UIImageView new];
+            self.video1STImage.contentMode = UIViewContentModeScaleAspectFit;
+            self.video1STImage.image = firstImage;
+            [self.player.view addSubview:self.video1STImage];
+            [self.video1STImage mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.player.view);
+                make.centerY.equalTo(self.player.view);
+            }];
+            
+            NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
+
+            UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+            self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
+            [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.player.view addSubview:self.playBtn];
+            [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.offset(44);
+                make.centerX.centerY.equalTo(self.player.view);
+            }];
+            
+            UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+            self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
+            [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.player.view addSubview:self.stopBtn];
+            [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.offset(44);
+                make.left.equalTo(self.player.view).offset(10);
+                make.bottom.equalTo(self.player.view).offset(-10);
+            }];
+            self.stopBtn.hidden = YES;
+            
+            self.videoSlider = [UISlider new];
+            [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
+            [self.player.view addSubview:self.videoSlider];
+            [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.stopBtn.mas_right).offset(10);
+                make.right.equalTo(self.player.view).offset(-10);
+                make.height.offset(20);
+                make.centerY.equalTo(self.stopBtn.mas_centerY);
+            }];
+            self.videoSlider.hidden = YES;
+            self.hasLoadedImage = YES;
+            
             [self setNeedsLayout];
         }
         else
@@ -761,6 +984,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             [_scrollview addSubview:self.imageview];
             
+            [self addSubview:self.waitingView];
+
             __weak __typeof(self)weakself = self;
             [[SDWebImageManager sharedManager] loadImageWithURL:urlObject options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 __strong __typeof(weakself)strongself = weakself;
@@ -774,8 +999,26 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
                 [strongself.waitingView removeFromSuperview];
                 
+                if (error) {
+                    //图片加载失败的处理，此处可以自定义各种操作（...）
+                    weakself.hasLoadedImage = NO;//图片加载失败
+                    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+                    weakself.reloadButton = button;
+                    button.layer.cornerRadius = 2;
+                    button.clipsToBounds = YES;
+                    button.titleLabel.font = [UIFont systemFontOfSize:14];
+                    button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+                    [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
+                    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                    [button addTarget:self action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
+                    [self addSubview:button];
+                    return;
+                }
+
                 NSString *imageType = [self contentTypeForImageData:data];
                 if ([imageType isEqualToString:@"gif"]) {
+                    strongself.showMode = PShowModeGif;
+
                     CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
                     size_t frameCout = CGImageSourceGetCount(source);
                     NSMutableArray* frames = [[NSMutableArray alloc] init];
@@ -793,43 +1036,62 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 }
                 else
                 {
+                    strongself.showMode = PShowModeNormal;
                     strongself.imageview.image = image;
                 }
                 [self setNeedsLayout];
                 strongself.hasLoadedImage = YES;//图片加载成功
             }];
         }
-//        kWeakSelf(self);
-//        [_imageview sd_setImageWithURL:urlObject placeholderImage:placeholder options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-//            //在主线程做UI更新
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
-//            });
-//
-//        } completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
-//            [weakself.waitingView removeFromSuperview];
-//
-//            if (error) {
-//                //图片加载失败的处理，此处可以自定义各种操作（...）
-//                weakself.hasLoadedImage = NO;//图片加载失败
-//                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-//                weakself.reloadButton = button;
-//                button.layer.cornerRadius = 2;
-//                button.clipsToBounds = YES;
-//                button.titleLabel.font = [UIFont systemFontOfSize:14];
-//                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-//                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
-//                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//                [button addTarget:weakself action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
-//
-//                [self addSubview:button];
-//                return;
-//            }
-//            //加载成功重新计算frame,解决长图可能显示不正确的问题
-//            [self setNeedsLayout];
-//            weakself.hasLoadedImage = YES;//图片加载成功
-//        }];
     }
+}
+
+-(void)playVideoAction:(UIButton *)sender
+{
+    self.video1STImage.hidden = YES;
+    self.stopBtn.hidden = NO;
+    self.videoSlider.hidden = NO;
+    sender.hidden = YES;
+    [self.player play];
+    
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
+                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:self.imageModels.imageUrl] options:opts];  // 初始化视频媒体文件
+    videoTime = urlAsset.duration.value / urlAsset.duration.timescale;
+    self.videoSlider.maximumValue = videoTime;
+    self.videoSlider.minimumValue = 0.0;
+    [self addTime];
+}
+
+-(void)addTime
+{
+    timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(nextpage) userInfo:nil repeats:YES];
+    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+}
+
+-(void)nextpage
+{
+    if (self.videoSlider.value >= videoTime) {
+        [timer invalidate];
+    }
+    self.videoSlider.value = self.player.currentPlaybackTime;
+}
+
+-(void)stopVideoAction:(UIButton *)sender
+{
+    sender.hidden = YES;
+    self.playBtn.hidden = NO;
+    [self.player pause];
+    [timer invalidate];
+}
+
+-(void)playVideoSomeTime:(UISlider *)sender
+{
+    [self.player pause];
+    [timer invalidate];
+    [self.player setCurrentPlaybackTime:sender.value];
+    [self.player play];
+    [self addTime];
 }
 
 #pragma mark ---------------> SwitchImageType

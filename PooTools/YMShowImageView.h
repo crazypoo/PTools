@@ -44,6 +44,13 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 - (id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main;
 @end
 
+typedef enum {
+    PShowModeGif, // gif
+    PShowModeVideo, // 视频
+    PShowModeNormal, //普通
+    PShowModeFullView //全景
+} PShowMode;
+
 @interface PShowImageSingleView : UIView
 @property (nonatomic,strong) UIScrollView *scrollview;
 @property (nonatomic,strong) UIImageView *imageview;
@@ -51,6 +58,11 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 @property (nonatomic, assign) BOOL beginLoadingImage;
 @property (nonatomic,strong) SCNSphere *sphere;
 @property (nonatomic, strong) MPMoviePlayerController *player;
+@property (nonatomic,strong) UIButton *playBtn;
+@property (nonatomic,strong) UIButton *stopBtn;
+@property (nonatomic,strong) UIImageView *video1STImage;
+@property (nonatomic, assign) PShowMode showMode;
+@property (nonatomic, strong) UISlider *videoSlider;
 /**判断图片是否加载成功*/
 @property (nonatomic, assign) BOOL hasLoadedImage;
 @property (nonatomic,assign) CGSize zoomImageSize;
