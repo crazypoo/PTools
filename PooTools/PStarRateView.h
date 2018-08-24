@@ -18,7 +18,7 @@ typedef void (^PStarRateViewRateBlock)(PStarRateView *rateView, CGFloat newScore
 @property (nonatomic, assign) BOOL hasAnimation;//是否允许动画，默认为NO
 @property (nonatomic, assign) BOOL allowIncompleteStar;//评分时是否允许不是整星，默认为NO
 
-- (instancetype)initWithFrame:(CGRect)frame rateBlock:(PStarRateViewRateBlock)block;
-- (instancetype)initWithFrame:(CGRect)frame numberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block;
+- (instancetype)initWithRateBlock:(PStarRateViewRateBlock)block;
+- (instancetype)initWithNumberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block;
 
 @end

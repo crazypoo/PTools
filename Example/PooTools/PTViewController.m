@@ -19,6 +19,7 @@
 #import "PooNumberKeyBoard.h"
 #import "YMShowImageView.h"
 #import "PTAppDelegate.h"
+#import "PStarRateView.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -43,10 +44,24 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
-    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+    PStarRateView *rV = [[PStarRateView alloc] initWithRateBlock:^(PStarRateView *rateView, CGFloat newScorePercent) {
+        
+    }];
+    rV.backgroundColor = kRandomColor;
+    rV.scorePercent = 0.5;
+    rV.hasAnimation = NO;
+    rV.allowIncompleteStar = NO;
+    [self.view addSubview:rV];
+    [rV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.offset(100);
+        make.height.offset(40);
+    }];
+    
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = self.view.bounds;
+//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:btn];
     
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES];
 //    userNameKeyboard.delegate = self;
