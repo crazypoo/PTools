@@ -83,12 +83,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.moreType = MoreActionTypeNoMore;
             self.actionSheetOtherBtnArr = nil;
         }
-        
-//        UIDevice *device = [UIDevice currentDevice]; //Get the device object
-//        [device beginGeneratingDeviceOrientationNotifications]; //Tell it to start monitoring the accelerometer for orientation
-//        NSNotificationCenter *nc = [NSNotificationCenter defaultCenter]; //Get the notification centre for the app
-//        [nc addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification  object:device];
-        
+    
         self.titleColor = tC;
         self.fontName = fName;
         currentPageIndicatorTintColor = cpic;
@@ -119,6 +114,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 {
     self.viewClickTag = clickTag;
     
+    self.page = self.viewClickTag - YMShowImageViewClickTagAppend;
+
     self.scrollView = [UIScrollView new];
     self.scrollView.backgroundColor = kClearColor;
     self.scrollView.pagingEnabled = true;
@@ -226,7 +223,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }];
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        NSLog(@"初始化：%@", self);
         self.scrollView.contentSize = CGSizeMake(self.width * self.modelArr.count, 0);
         
         float W = self.width;
@@ -243,7 +239,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             [self.imageScrollViews addObject:imageScroll];
         }
         [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-        self.page = self.viewClickTag - YMShowImageViewClickTagAppend;
         
         self.fullViewLabel.hidden = [self fullImageHidden];
         
@@ -313,6 +308,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 -(void)layoutSubviews
 {
     [super layoutSubviews];
+    
     [self.scrollView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);
     }];
@@ -328,20 +324,22 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }];
     }
     [self.scrollView setContentOffset:CGPointMake(self.width * self.page, 0) animated:YES];
-    [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.offset(80);
-        make.height.offset(hIndexTitleHeight);
-        make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
-        make.centerX.equalTo(self.mas_centerX);
-    }];
     
-    [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.offset(50);
-        make.height.offset(hIndexTitleHeight);
-        make.top.equalTo(self.indexLabel);
-        make.right.equalTo(self).offset(-20);
-    }];
-
+    if (self.modelArr.count > 1) {
+        [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(80);
+            make.height.offset(hIndexTitleHeight);
+            make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
+            make.centerX.equalTo(self.mas_centerX);
+        }];
+        
+        [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(50);
+            make.height.offset(hIndexTitleHeight);
+            make.top.equalTo(self.indexLabel);
+            make.right.equalTo(self).offset(-20);
+        }];
+    }
 }
 
 -(BOOL)fullImageHidden
@@ -517,23 +515,32 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
     else
     {
-        [_scrollView.subviews[index] removeFromSuperview];
-        PShowImageSingleView *vvvv = [self.scrollView viewWithTag:SubViewBasicsIndex+index];
-        [vvvv removeFromSuperview];
-        [self.modelArr removeObjectAtIndex:index];
-        [self.imageScrollViews removeObjectAtIndex:index];
-        PNSLog(@">>>>>>>>%@",self.modelArr);
-        _scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - kSCREEN_WIDTH, self.scrollView.contentSize.height);
-        _scrollView.contentOffset = CGPointMake((index)* _scrollView.frame.size.width, 0);
-        
-        if (self.modelArr.count > 1) {
-            int indexaaaaa = _scrollView.contentOffset.x / _scrollView.bounds.size.width;
-            _indexLabel.text = [NSString stringWithFormat:@"%d/%ld",indexaaaaa,(long)self.modelArr.count];
-        }
-        else
-        {
-            [_indexLabel removeFromSuperview];
-        }
+        [UIView animateWithDuration:0.1 animations:^{
+            [self.scrollView.subviews[index] removeFromSuperview];
+            self.scrollView.contentSize = CGSizeMake(self.scrollView.contentSize.width - kSCREEN_WIDTH, self.scrollView.contentSize.height);
+            NSInteger newIndex = index - 1;
+            if (newIndex < 0)
+            {
+                newIndex = 1;
+            }
+            else
+            {
+                newIndex = index - 1;
+            }
+            self.scrollView.contentOffset = CGPointMake(newIndex * self.scrollView.frame.size.width, 0);
+            [self.modelArr removeObjectAtIndex:index];
+            [self.imageScrollViews removeObjectAtIndex:index];
+            if (self.modelArr.count > 1)
+            {
+                int textIndex = self.scrollView.contentOffset.x / self.scrollView.bounds.size.width;
+                self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld",textIndex,(long)self.modelArr.count];
+            }
+            else
+            {
+                [self.indexLabel removeFromSuperview];
+            }
+        }];
+        [self layoutIfNeeded];
     }
 }
 
@@ -754,7 +761,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.scrollview.minimumZoomScale = kMinZoomScale;
         self.scrollview.maximumZoomScale = maxScale;
         self.scrollview.zoomScale = 1.0f;
-    }else{
+    }
+    else
+    {
         frame.origin = CGPointZero;
         self.imageview.frame = frame;
         self.sceneView.frame = frame;

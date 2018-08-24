@@ -155,11 +155,11 @@
 
 -(void)aaaaa
 {
-    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
-    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-    imageModel.imageFullView = @"1";
-    imageModel.imageInfo = @"11111111241241241241928390128309128";
-    imageModel.imageTitle = @"22222212312312312312312312312";
+//    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+//    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+//    imageModel.imageFullView = @"1";
+//    imageModel.imageInfo = @"11111111241241241241928390128309128";
+//    imageModel.imageTitle = @"22222212312312312312312312312";
 
     PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
     imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
@@ -173,7 +173,7 @@
     imageModel2.imageInfo = @"6666666";
     imageModel2.imageTitle = @"5555555";
 
-    NSArray *arr = @[imageModel,imageModel1,imageModel2];
+    NSArray *arr = @[imageModel1,imageModel2];
 
     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
     [ymImageV showWithFinish:^{
