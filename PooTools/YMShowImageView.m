@@ -888,8 +888,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.showMode = PShowModeVideo;
         
         NSURL *videoUrl;
-        NSString* pathExtention = [model.imageUrl pathExtension];
-        if([pathExtention isEqualToString:@"mp4"]) {
+        if([Utils contentTypeForUrlString:model.imageUrl] == ToolsUrlStringVideoTypeMP4) {
             if ([model.imageUrl rangeOfString:@"/var"].length>0)
             {
                 videoUrl = [NSURL fileURLWithPath:model.imageUrl];
@@ -1015,29 +1014,33 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     return;
                 }
 
-                NSString *imageType = [self contentTypeForImageData:data];
-                if ([imageType isEqualToString:@"gif"]) {
-                    strongself.showMode = PShowModeGif;
-
-                    CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-                    size_t frameCout = CGImageSourceGetCount(source);
-                    NSMutableArray* frames = [[NSMutableArray alloc] init];
-                    for (size_t i=0; i<frameCout; i++)
+                switch ([Utils contentTypeForImageData:data]) {
+                    case ToolsAboutImageTypeGIF:
                     {
-                        CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
-                        UIImage* imageName = [UIImage imageWithCGImage:imageRef];
-                        [frames addObject:imageName];
-                        CGImageRelease(imageRef);
+                        strongself.showMode = PShowModeGif;
+                        
+                        CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+                        size_t frameCout = CGImageSourceGetCount(source);
+                        NSMutableArray* frames = [[NSMutableArray alloc] init];
+                        for (size_t i=0; i<frameCout; i++)
+                        {
+                            CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
+                            UIImage* imageName = [UIImage imageWithCGImage:imageRef];
+                            [frames addObject:imageName];
+                            CGImageRelease(imageRef);
+                        }
+                        strongself.imageview.animationImages = frames;
+                        strongself.imageview.animationDuration = 2;
+                        [strongself.imageview startAnimating];
+                        strongself.imageview.image = image;
                     }
-                    strongself.imageview.animationImages = frames;
-                    strongself.imageview.animationDuration = 2;
-                    [strongself.imageview startAnimating];
-                    strongself.imageview.image = image;
-                }
-                else
-                {
-                    strongself.showMode = PShowModeNormal;
-                    strongself.imageview.image = image;
+                        break;
+                    default:
+                    {
+                        strongself.showMode = PShowModeNormal;
+                        strongself.imageview.image = image;
+                    }
+                        break;
                 }
                 [self setNeedsLayout];
                 strongself.hasLoadedImage = YES;//图片加载成功
@@ -1092,50 +1095,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     [self.player setCurrentPlaybackTime:sender.value];
     [self.player play];
     [self addTime];
-}
-
-#pragma mark ---------------> SwitchImageType
-- (NSString *)contentTypeForImageData:(NSData *)data {
-    
-    uint8_t c;
-    
-    [data getBytes:&c length:1];
-    
-    switch (c) {
-            
-        case 0xFF:
-        {
-            return @"jpeg";
-        }
-        case 0x89:
-        {
-            return @"png";
-        }
-        case 0x47:
-        {
-            return @"gif";
-        }
-        case 0x49:
-        case 0x4D:
-        {
-            return @"tiff";
-        }
-        case 0x52:
-        {
-            if ([data length] < 12) {
-                return nil;
-            }
-            
-            NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
-            
-            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"])
-            {
-                return @"webp";
-            }
-            return nil;
-        }
-    }
-    return nil;
 }
 
 #pragma mark private methods

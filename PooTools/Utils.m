@@ -325,6 +325,7 @@
     return result;
 }
 
+#pragma mark ------> Image
 +(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time
 {
     AVURLAsset *asset = [[AVURLAsset alloc] initWithURL:videoURL options:nil];
@@ -344,6 +345,67 @@
     UIImage *thumbnailImage = thumbnailImageRef ? [[UIImage alloc]initWithCGImage: thumbnailImageRef] : nil;
     
     return thumbnailImage;
+}
+
++ (ToolsAboutImageType)contentTypeForImageData:(NSData *)data
+{    
+    uint8_t c;
+    
+    [data getBytes:&c length:1];
+    
+    switch (c) {
+            
+        case 0xFF:
+        {
+            return ToolsAboutImageTypeJPEG;
+        }
+        case 0x89:
+        {
+            return ToolsAboutImageTypePNG;
+        }
+        case 0x47:
+        {
+            return ToolsAboutImageTypeGIF;
+        }
+        case 0x49:
+        case 0x4D:
+        {
+            return ToolsAboutImageTypeTIFF;
+        }
+        case 0x52:
+        {
+            if ([data length] < 12) {
+                return ToolsAboutImageTypeUNKNOW;
+            }
+            
+            NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
+            
+            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"])
+            {
+                return ToolsAboutImageTypeWEBP;
+            }
+            return ToolsAboutImageTypeUNKNOW;
+        }
+    }
+    return ToolsAboutImageTypeUNKNOW;
+}
+
++ (ToolsUrlStringVideoType)contentTypeForUrlString:(NSString *)urlString
+{
+    NSString* pathExtention = [urlString pathExtension];
+    if([pathExtention isEqualToString:@"mp4"] || [pathExtention isEqualToString:@"MP4"])
+    {
+        return ToolsUrlStringVideoTypeMP4;
+    }
+    else if([pathExtention isEqualToString:@"mov"] || [pathExtention isEqualToString:@"MOV"])
+    {
+        return ToolsUrlStringVideoTypeMOV;
+    }
+    else if([pathExtention isEqualToString:@"3gp"] || [pathExtention isEqualToString:@"3GP"])
+    {
+        return ToolsUrlStringVideoType3GP;
+    }
+    return ToolsUrlStringVideoTypeUNKNOW;
 }
 
 #pragma mark ------> JSON

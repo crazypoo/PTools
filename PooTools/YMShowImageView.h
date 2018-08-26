@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "PooShowImageModel.h"
 #import <SceneKit/SceneKit.h>
-#import <ImageIO/ImageIO.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 

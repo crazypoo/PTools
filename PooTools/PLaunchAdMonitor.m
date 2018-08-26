@@ -7,7 +7,6 @@
 //
 
 #import "PLaunchAdMonitor.h"
-#import <ImageIO/ImageIO.h>
 #import <AVFoundation/AVFoundation.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVKit/AVKit.h>
@@ -26,7 +25,7 @@ static PLaunchAdMonitor *monitor = nil;
 @property (nonatomic, strong) NSURLConnection *conn;
 @property (nonatomic, strong) NSMutableDictionary *detailParam;
 @property (nonatomic, copy) void(^callback)(void);
-@property (nonatomic, strong) NSString *imageType;
+@property (nonatomic, assign) ToolsAboutImageType imageType;
 @property (nonatomic, assign) BOOL playMovie;
 @property (nonatomic, strong) NSURL *videoUrl;
 @property (nonatomic, strong) MPMoviePlayerController *player;
@@ -97,14 +96,33 @@ static PLaunchAdMonitor *monitor = nil;
     
     f.size.height -= 50;
     
-    CGFloat bottomViewHeight = 0;
+    UIDevice *device = [UIDevice currentDevice];
     
-    if (hide) {
+    CGFloat bottomViewHeight = 0;
+    if (hide)
+    {
         bottomViewHeight = 0;
     }
     else
     {
-        bottomViewHeight = 100;
+        switch (device.orientation)
+        {
+            case UIDeviceOrientationLandscapeLeft:
+            {
+                bottomViewHeight = 50;
+            }
+                break;
+            case UIDeviceOrientationLandscapeRight:
+            {
+                bottomViewHeight = 50;
+            }
+                break;
+            default:
+            {
+                bottomViewHeight = 100;
+            }
+                break;
+        }
     }
     
     if (monitor.playMovie)
@@ -148,46 +166,52 @@ static PLaunchAdMonitor *monitor = nil;
     }
     else
     {
-        if ([monitor.imageType isEqualToString:@"gif"]) {
-            CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)monitor.imgData, NULL);
-            size_t frameCout = CGImageSourceGetCount(source);
-            NSMutableArray* frames = [[NSMutableArray alloc] init];
-            for (size_t i=0; i<frameCout; i++)
-            {
-                CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
-                UIImage* imageName = [UIImage imageWithCGImage:imageRef];
-                [frames addObject:imageName];
-                CGImageRelease(imageRef);
-            }
-            
-            UIImageView *imageView = [UIImageView new];
-            imageView.animationImages = frames;
-            imageView.animationDuration = 1;
-            [imageView startAnimating];
-            [v addSubview:imageView];
-            [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.left.right.equalTo(v);
-                make.height.offset(bottomViewHeight);
-            }];
-            
-            UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAdDetail:)];
-            [imageView addGestureRecognizer:tapGesture];
-        }
-        else
+        switch (monitor.imageType)
         {
-            UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
-            [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
-            monitor.conn = nil;
-            [monitor.imgData setLength:0];
-            imageBtn.userInteractionEnabled = yesOrNo;
-            [v addSubview:imageBtn];
-            [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.left.right.equalTo(v);
-                make.bottom.equalTo(v).offset(-bottomViewHeight);
-            }];
-            imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
-            [imageBtn setAdjustsImageWhenHighlighted:NO];
+            case ToolsAboutImageTypeGIF:
+            {
+                CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)monitor.imgData, NULL);
+                size_t frameCout = CGImageSourceGetCount(source);
+                NSMutableArray* frames = [[NSMutableArray alloc] init];
+                for (size_t i=0; i<frameCout; i++)
+                {
+                    CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
+                    UIImage* imageName = [UIImage imageWithCGImage:imageRef];
+                    [frames addObject:imageName];
+                    CGImageRelease(imageRef);
+                }
+                
+                UIImageView *imageView = [UIImageView new];
+                imageView.animationImages = frames;
+                imageView.animationDuration = 1;
+                [imageView startAnimating];
+                [v addSubview:imageView];
+                [imageView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.left.right.equalTo(v);
+                    make.height.offset(bottomViewHeight);
+                }];
+                
+                UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAdDetail:)];
+                [imageView addGestureRecognizer:tapGesture];
+            }
+                break;
+            default:
+            {
+                UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
+                [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
+                monitor.conn = nil;
+                [monitor.imgData setLength:0];
+                imageBtn.userInteractionEnabled = yesOrNo;
+                [v addSubview:imageBtn];
+                [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.left.right.equalTo(v);
+                    make.bottom.equalTo(v).offset(-bottomViewHeight);
+                }];
+                imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
+                [imageBtn setAdjustsImageWhenHighlighted:NO];
+            }
+                break;
         }
         
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -240,26 +264,15 @@ static PLaunchAdMonitor *monitor = nil;
                              }
                              completion:^(BOOL finished) {
                                  [v removeFromSuperview];
-                                 
                              }];
         });
     }
     
-    
-    if (!hide) {
-        
-        UIFont *cfont;
-        if (cFont == nil) {
-            cfont = [UIFont systemFontOfSize:12];
-        }
-        else
-        {
-            cfont = cFont;
-        }
-        
+    if (!hide)
+    {
         UILabel *label = [UILabel new];
         label.backgroundColor = [UIColor whiteColor];
-        label.font = cfont;
+        label.font = cFont ? cFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
         label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@. All rights reserved.",year,comname];
         label.textAlignment = NSTextAlignmentCenter;
         [v addSubview:label];
@@ -267,7 +280,6 @@ static PLaunchAdMonitor *monitor = nil;
             make.left.right.equalTo(v);
             make.height.offset(bottomViewHeight);
             make.bottom.equalTo(v);
-
         }];
         label = nil;
     }
@@ -277,7 +289,8 @@ static PLaunchAdMonitor *monitor = nil;
 {
     UIView *sup = [(UIButton *)sender superview];
     sup.userInteractionEnabled = NO;
-    if (monitor.callback) {
+    if (monitor.callback)
+    {
         monitor.callback();
         monitor.callback = nil;
     }
@@ -287,23 +300,29 @@ static PLaunchAdMonitor *monitor = nil;
                      }
                      completion:^(BOOL finished) {
                          [sup removeFromSuperview];
-
                      }];
 }
 
 + (void)showAdDetail:(id)sender
 {
     UIView *sup = nil;
-    if ([monitor.imageType isEqualToString:@"gif"]) {
-        sup = [(UIImageView *)sender superview];
-    }
-    else
+    switch (monitor.imageType)
     {
-        sup = [(UIButton *)sender superview];
+        case ToolsAboutImageTypeGIF:
+        {
+            sup = [(UIImageView *)sender superview];
+        }
+            break;
+        default:
+        {
+            sup = [(UIButton *)sender superview];
+        }
+            break;
     }
     
     sup.userInteractionEnabled = NO;
-    if (monitor.callback) {
+    if (monitor.callback)
+    {
         monitor.callback();
         monitor.callback = nil;
     }
@@ -315,16 +334,15 @@ static PLaunchAdMonitor *monitor = nil;
                          [sup removeFromSuperview];
                          [[NSNotificationCenter defaultCenter] postNotificationName:PLaunchAdDetailDisplayNotification object:monitor.detailParam];
                          [monitor.detailParam removeAllObjects];
-
-                     }];    
+                     }];
 }
 
 - (void)loadImageAtPath:(NSArray *)path
 {
     NSString *imageStr = [path objectAtIndex:0];
     if (imageStr) {
-        NSString* pathExtention = [imageStr pathExtension];
-        if([pathExtention isEqualToString:@"mp4"]) {
+        if([Utils contentTypeForUrlString:imageStr] == ToolsUrlStringVideoTypeMP4)
+        {
             self.playMovie = YES;
             self.imgLoaded = YES;
             if ([imageStr rangeOfString:@"/var"].length>0)
@@ -378,7 +396,7 @@ static PLaunchAdMonitor *monitor = nil;
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
-    self.imageType = [self contentTypeForImageData:data];
+    self.imageType = [Utils contentTypeForImageData:data];
     [self.imgData appendData:data];
 }
 
@@ -386,50 +404,5 @@ static PLaunchAdMonitor *monitor = nil;
 {
     self.imgLoaded = YES;
 }
-
-#pragma mark ---------------> SwitchImageType
-- (NSString *)contentTypeForImageData:(NSData *)data {
-    
-    uint8_t c;
-    
-    [data getBytes:&c length:1];
-    
-    switch (c) {
-            
-        case 0xFF:
-        {
-            return @"jpeg";
-        }
-        case 0x89:
-        {
-            return @"png";
-        }
-        case 0x47:
-        {
-            return @"gif";
-        }
-        case 0x49:
-        case 0x4D:
-        {
-            return @"tiff";
-        }
-        case 0x52:
-        {
-            if ([data length] < 12) {
-                return nil;
-            }
-            
-            NSString *testString = [[NSString alloc] initWithData:[data subdataWithRange:NSMakeRange(0, 12)] encoding:NSASCIIStringEncoding];
-            
-            if ([testString hasPrefix:@"RIFF"] && [testString hasSuffix:@"WEBP"])
-            {
-                return @"webp";
-            }
-            return nil;
-        }
-    }
-    return nil;
-}
-
 @end
 

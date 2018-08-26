@@ -12,6 +12,7 @@
 #import <CoreMedia/CoreMedia.h>
 #import <MediaPlayer/MediaPlayer.h>
 #import <CoreImage/CoreImage.h>
+#import <ImageIO/ImageIO.h>
 
 typedef NS_ENUM(NSInteger, GradeType) {
     GradeTypeGe = 0,
@@ -22,6 +23,22 @@ typedef NS_ENUM(NSInteger, GradeType) {
 typedef NS_ENUM(NSInteger,TemperatureUnit){
     Fahrenheit = 0,
     CentigradeDegree
+};
+
+typedef NS_ENUM(NSInteger,ToolsAboutImageType){
+    ToolsAboutImageTypeJPEG = 0,
+    ToolsAboutImageTypePNG,
+    ToolsAboutImageTypeGIF,
+    ToolsAboutImageTypeTIFF,
+    ToolsAboutImageTypeWEBP,
+    ToolsAboutImageTypeUNKNOW
+};
+
+typedef NS_ENUM(NSInteger,ToolsUrlStringVideoType){
+    ToolsUrlStringVideoTypeMP4 = 0,
+    ToolsUrlStringVideoTypeMOV,
+    ToolsUrlStringVideoType3GP,
+    ToolsUrlStringVideoTypeUNKNOW
 };
 
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
@@ -119,7 +136,12 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 /*! @brief 用颜色生成图片
  */
 +(UIImage*)createImageWithColor:(UIColor*)color;
-
+/*! @brief 获取图片格式
+ */
++ (ToolsAboutImageType)contentTypeForImageData:(NSData *)data;
+/*! @brief 获取视频格式
+ */
++ (ToolsUrlStringVideoType)contentTypeForUrlString:(NSString *)urlString;
 /*! @brief iOS更换App图标
  * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
  */
