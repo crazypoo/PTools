@@ -20,6 +20,7 @@
 #import "YMShowImageView.h"
 #import "PTAppDelegate.h"
 #import "PStarRateView.h"
+#import "PADView.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -28,8 +29,6 @@
 #define FontNameBold @"HelveticaNeue-Medium"
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
-
-//TODO:浏览图片2.0
 
 @interface PTViewController ()<PooNumberKeyBoardDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
@@ -45,6 +44,16 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
+    aaaaa.bannerTitle = @"111111";
+    
+    PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
+    [self.view addSubview:adaaaa];
+    [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.offset(100);
+        make.height.offset(150);
+    }];
 //    PStarRateView *rV = [[PStarRateView alloc] initWithRateBlock:^(PStarRateView *rateView, CGFloat newScorePercent) {
 //
 //    }];
@@ -59,10 +68,10 @@
 //        make.height.offset(40);
 //    }];
     
-    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
-    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addSubview:btn];
+//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+//    btn.frame = self.view.bounds;
+//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+//    [self.view addSubview:btn];
 //
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
 //        if (self.textField.text.length != 0)

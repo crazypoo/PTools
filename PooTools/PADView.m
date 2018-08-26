@@ -9,19 +9,33 @@
 #import "PADView.h"
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "PMacros.h"
+#import <Masonry/Masonry.h>
 
 static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCell";
+@interface PADView ()
+@property (nonatomic,assign)CGFloat viewW;
+@property (nonatomic,assign)CGFloat viewH;
+@property (nonatomic,assign)CGFloat viewX;
+@property (nonatomic,assign)CGFloat viewY;
+@property (nonatomic,strong)UIFont *titleFont;
+
+@end
 
 @implementation PADView
--(instancetype)initWithFrame:(CGRect)frame adArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT
+-(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT adTitleFont:(UIFont *)adTitleFont
 {
-    self = [super initWithFrame:frame];
+    self = [super init];
     if (self) {
         viewData = adArr;
         placeholderImageString = pI;
         pageTime = pT;
+        self.viewW = sw;
+        self.viewH = sh;
+        self.viewX = px;
+        self.viewY = py;
+        self.titleFont = adTitleFont;
         
-        adCollectionView = [[UICollectionView alloc] initWithFrame:self.bounds collectionViewLayout:[CGLayout createLayoutItemW:sw itemH:sh paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
+        adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:sw itemH:sh paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
         adCollectionView.backgroundColor                = [UIColor whiteColor];
         adCollectionView.dataSource                     = self;
         adCollectionView.delegate                       = self;
@@ -30,10 +44,34 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         adCollectionView.pagingEnabled                  = NO;
         [adCollectionView registerClass:[CGADCollectionViewCell class] forCellWithReuseIdentifier:ADBannerCollectionViewCell];
         [self addSubview:adCollectionView];
+        [adCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo(self);
+        }];
         
-        [self addTimer];
+        if (pT != 0) {
+            [self addTimer];
+        }
     }
     return self;
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    if (self.viewW == kSCREEN_HEIGHT)
+    {
+        self.viewW = kSCREEN_WIDTH;
+    }
+    else
+    {
+        self.viewW = self.viewW;
+    }
+    
+    adCollectionView.collectionViewLayout = [CGLayout createLayoutItemW:self.viewW itemH:self.viewH paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
+    [adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
 }
 
 #pragma mark ---------------> UICollectionViewDataSource
@@ -53,6 +91,15 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 
     CGADCollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:ADBannerCollectionViewCell forIndexPath:indexPath];
     [cell.adImage sd_setImageWithURL:[NSURL URLWithString:models.bannerImage] placeholderImage:kImageNamed(placeholderImageString)];
+    if (kStringIsEmpty(models.bannerTitle)) {
+        cell.adTitle.hidden = YES;
+    }
+    else
+    {
+        cell.adTitle.hidden = NO;
+        cell.adTitle.font = self.titleFont ? self.titleFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        cell.adTitle.text = models.bannerTitle;
+    }
     // Configure the cell
     
     return cell;

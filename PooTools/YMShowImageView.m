@@ -1273,7 +1273,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         {
             CGFloat radius = MIN(rect.size.width * 0.5, rect.size.height * 0.5) - HZWaitingViewItemMargin;
             
-            
             CGFloat w = radius * 2 + HZWaitingViewItemMargin;
             CGFloat h = w;
             CGFloat x = (rect.size.width - w) * 0.5;

@@ -10,4 +10,6 @@
 
 @interface CGADCollectionViewCell : UICollectionViewCell
 @property (nonatomic,strong)UIImageView *adImage;
+@property (nonatomic,strong)UILabel *adTitle;
+
 @end
