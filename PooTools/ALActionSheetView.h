@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+#define kCancelBtnTag 99999
+#define kCancelRealTag kCancelBtnTag - 100
+
 @class ALActionSheetView;
 
 typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionSheetView, NSInteger buttonIndex);

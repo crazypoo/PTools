@@ -175,7 +175,7 @@
     }];
     
     self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.cancelBtn.tag = -1;
+    self.cancelBtn.tag = kCancelBtnTag;
     self.cancelBtn.backgroundColor = [UIColor whiteColor];
     self.cancelBtn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
     [self.cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
