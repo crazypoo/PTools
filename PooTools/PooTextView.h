@@ -10,6 +10,8 @@
 
 @interface PooTextView : UITextView
 
+/*! @brief TextView的Placeholder
+ */
 @property(nonatomic, retain) NSString *placeholder;
 
 @end

@@ -18,12 +18,10 @@ typedef NS_ENUM(NSUInteger, MKButtonEdgeInsetsStyle) {
 
 @interface UIButton (ImageTitleSpacing)
 
-/**
- * 设置button的titleLabel和imageView的布局样式，及间距
- *
- * @param style titleLabel和imageView的布局样式
- * @param space titleLabel和imageView的间距
- */
+/*! @brief 设置button的titleLabel和imageView的布局样式，及间距
+* @param style titleLabel和imageView的布局样式
+* @param space titleLabel和imageView的间距
+*/
 - (void)layoutButtonWithEdgeInsetsStyle:(MKButtonEdgeInsetsStyle)style
                         imageTitleSpace:(CGFloat)space;
 

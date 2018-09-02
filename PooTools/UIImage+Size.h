@@ -11,5 +11,4 @@
 
 @interface UIImage (size)
 - (UIImage*)transformWidth:(CGFloat)width height:(CGFloat)height;
-
 @end

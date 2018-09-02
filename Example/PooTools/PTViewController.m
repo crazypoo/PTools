@@ -44,16 +44,16 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
-    aaaaa.bannerTitle = @"111111";
-    
-    PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
-    [self.view addSubview:adaaaa];
-    [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.offset(100);
-        make.height.offset(150);
-    }];
+//    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
+//    aaaaa.bannerTitle = @"111111";
+//
+//    PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
+//    [self.view addSubview:adaaaa];
+//    [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.offset(100);
+//        make.height.offset(150);
+//    }];
 //    PStarRateView *rV = [[PStarRateView alloc] initWithRateBlock:^(PStarRateView *rateView, CGFloat newScorePercent) {
 //
 //    }];
@@ -68,10 +68,10 @@
 //        make.height.offset(40);
 //    }];
     
-//    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-//    btn.frame = self.view.bounds;
-//    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
-//    [self.view addSubview:btn];
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = self.view.bounds;
+    [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
 //
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
 //        if (self.textField.text.length != 0)
@@ -171,47 +171,47 @@
 //    imageModel.imageInfo = @"11111111241241241241928390128309128";
 //    imageModel.imageTitle = @"22222212312312312312312312312";
     
-    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
-    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    imageModelV.imageShowType = PooShowImageModelTypeVideo;
-    imageModelV.imageInfo = @"11111111241241241241928390128309128";
-    imageModelV.imageTitle = @"22222212312312312312312312312";
-    
-
-//    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
-//    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-//    imageModel1.imageFullView = @"0";
-//    imageModel1.imageInfo = @"444444";
-//    imageModel1.imageTitle = @"333333";
-
-    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-    imageModelV.imageShowType = PooShowImageModelTypeNormal;
-    imageModel2.imageInfo = @"6666666";
-    imageModel2.imageTitle = @"5555555";
-    
-    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
-    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
-    imageModelV.imageShowType = PooShowImageModelTypeGIF;
-    imageModel3.imageInfo = @"444444";
-    imageModel3.imageTitle = @"333333";
-
-    NSArray *arr = @[imageModelV,imageModel2,imageModel3];
-
-    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
-    [ymImageV showWithFinish:^{
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    }];
-    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-    }];
-    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
-        PNSLog(@"%d",saveStatus);
-    };
-//    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"sjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjssjdhfjkshdfjkhsdjkfhsdjfhjksdhfjkshdfjkhsdjkfhjsdhfjsdfjshdjfkhskjdfhjksdhfjshdkjhjAAAAAAA" cancelButtonTitle:@"adasdasdasdad" destructiveButtonTitle:@"1231231231" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+//    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
+//    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//    imageModelV.imageShowType = PooShowImageModelTypeVideo;
+//    imageModelV.imageInfo = @"11111111241241241241928390128309128";
+//    imageModelV.imageTitle = @"22222212312312312312312312312";
 //
+//
+////    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+////    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+////    imageModel1.imageFullView = @"0";
+////    imageModel1.imageInfo = @"444444";
+////    imageModel1.imageTitle = @"333333";
+//
+//    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+//    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+//    imageModelV.imageShowType = PooShowImageModelTypeNormal;
+//    imageModel2.imageInfo = @"6666666";
+//    imageModel2.imageTitle = @"5555555";
+//
+//    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
+//    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+//    imageModelV.imageShowType = PooShowImageModelTypeGIF;
+//    imageModel3.imageInfo = @"444444";
+//    imageModel3.imageTitle = @"333333";
+//
+//    NSArray *arr = @[imageModelV,imageModel2,imageModel3];
+//
+//    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName currentPageIndicatorTintColor:[UIColor whiteColor] pageIndicatorTintColor:[UIColor grayColor] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+//    [ymImageV showWithFinish:^{
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 //    }];
-//    [actionSheet show];
+//    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+//    }];
+//    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
+//        PNSLog(@"%d",saveStatus);
+//    };
+    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:nil cancelButtonTitle:@"11111" destructiveButtonTitle:nil otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+
+    }];
+    [actionSheet show];
     
 //    self.touchID = [PBiologyID defaultBiologyID];
 //    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {

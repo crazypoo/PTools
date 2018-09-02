@@ -15,8 +15,16 @@
 @end
 
 @interface PSpeech : NSObject
+/*! @brief 代理
+ */
 @property (nonatomic, weak) id<PSpeechDelegate> delegate;
+/*! @brief 创建单例
+ */
 + (instancetype)sharedManager;
+/*! @brief 运行识别
+ */
 - (void)startRecognizeWithSuccess:(void(^)(BOOL success))success;
+/*! @brief 停止识别
+ */
 - (void)stopRecognize;
 @end

@@ -105,7 +105,6 @@
         [self.topV addSubview:nameTitle];
 
         UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        cancelBtn.frame = CGRectMake(10, 0, 50, 44);
         [cancelBtn.titleLabel setFont:font];
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
@@ -117,7 +116,6 @@
         }];
         
         UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-//        yesBtn.frame = CGRectMake(kSCREEN_WIDTH-60, 0, 50, 44);
         [yesBtn.titleLabel setFont:font];
         [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];

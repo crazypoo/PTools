@@ -95,6 +95,9 @@
     UIImage *normalImage = [self imageWithColor:[UIColor whiteColor]];
     UIImage *highlightedImage = [self imageWithColor:[UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f]];
     
+    self.actionSheetScroll = [UIScrollView new];
+    [self.actionSheetView addSubview:self.actionSheetScroll];
+
     if (_title && _title.length>0)
     {
         self.titleLabel = [UILabel new];
@@ -109,15 +112,46 @@
             make.top.left.right.equalTo(self.actionSheetView);
             make.height.offset([self titleHeight]);
         }];
+        
+        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.actionSheetView);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+            }];
+        }
+        else
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.actionSheetView);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+            }];
+        }
+    }
+    else
+    {
+        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.right.equalTo(self.actionSheetView);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+            }];
+        }
+        else
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.right.equalTo(self.actionSheetView);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+            }];
+        }
     }
     
-    self.actionSheetScroll = [UIScrollView new];
-    [self.actionSheetView addSubview:self.actionSheetScroll];
-    [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.actionSheetView);
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
-        make.height.offset([self scrollH]);
-    }];
     self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
     self.actionSheetScroll.showsVerticalScrollIndicator = NO;
     if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT) {
@@ -164,6 +198,7 @@
             make.height.offset(kRowHeight);
         }];
     }
+ 
     
     self.separatorView = [UIView new];
     self.separatorView.backgroundColor = [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f];
@@ -211,16 +246,53 @@
         make.height.offset([self actionSheetHeight]);
     }];
     
-    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.left.right.equalTo(self.actionSheetView);
-        make.height.offset([self titleHeight]);
-    }];
+    if (_title && _title.length>0)
+    {
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.left.right.equalTo(self.actionSheetView);
+            make.height.offset([self titleHeight]);
+        }];
+        
+        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.actionSheetView);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+            }];
+        }
+        else
+        {
+            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.actionSheetView);
+                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+            }];
+        }
+    }
+    else
+    {
+        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+        {
+            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.top.right.equalTo(self.actionSheetView);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+            }];
+        }
+        else
+        {
+            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.left.top.right.equalTo(self.actionSheetView);
+                make.height.offset([self scrollH]);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+            }];
+        }
+    }
     
-    [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.actionSheetView);
-        make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
-        make.height.offset([self scrollH]);
-    }];
+    
     self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
     
     if ([self.otherButtonTitles count] > 0)
@@ -236,11 +308,14 @@
         }
     }
     
-    [self.destructiveButton mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.actionSheetView);
-        make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
-        make.height.offset(kRowHeight);
-    }];
+    if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+    {
+        [self.destructiveButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.actionSheetView);
+            make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+            make.height.offset(kRowHeight);
+        }];
+    }
     
     [self.separatorView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.actionSheetView);
