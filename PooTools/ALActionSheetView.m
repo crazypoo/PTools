@@ -9,6 +9,7 @@
 #import "ALActionSheetView.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
+#import "Utils.h"
 
 #define kRowHeight 44.0f
 #define kRowLineHeight 0.5f
@@ -47,7 +48,6 @@
     self.destructiveButtonTitle = nil;
     self.otherButtonTitles = nil;
     self.selectRowBlock = nil;
-    
     self.actionSheetView = nil;
     self.backView = nil;
 }
@@ -75,7 +75,7 @@
         _destructiveButtonTitle = destructiveButtonTitle;
         _otherButtonTitles = otherButtonTitles;
         _selectRowBlock = block;
-        self.btnFontName = bfName;
+        self.btnFontName = bfName ? bfName : @"HelveticaNeue-Light";
     }
     
     return self;
@@ -84,16 +84,16 @@
 -(void)loadView
 {
     _backView = [UIView new];
-    _backView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
+    _backView.backgroundColor = kRGBAColorDecimals(0, 0, 0, 0.2);
     _backView.alpha = 0.0f;
     [self addSubview:_backView];
     
     self.actionSheetView = [UIView new];
-    self.actionSheetView.backgroundColor = [UIColor colorWithRed:230.0f/255.0f green:230.0f/255.0f blue:230.0f/255.0f alpha:1.0f];
+    self.actionSheetView.backgroundColor = kRGBAColor(230, 230, 230, 1);
     [self addSubview:self.actionSheetView];
     
-    UIImage *normalImage = [self imageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImage = [self imageWithColor:[UIColor colorWithRed:242.0f/255.0f green:242.0f/255.0f blue:242.0f/255.0f alpha:1.0f]];
+    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
+    UIImage *highlightedImage = [Utils createImageWithColor:kRGBAColor(242, 242, 242, 1)];
     
     self.actionSheetScroll = [UIScrollView new];
     [self.actionSheetView addSubview:self.actionSheetScroll];
@@ -102,7 +102,7 @@
     {
         self.titleLabel = [UILabel new];
         self.titleLabel.backgroundColor = [UIColor whiteColor];
-        self.titleLabel.textColor = [UIColor colorWithRed:111.0f/255.0f green:111.0f/255.0f blue:111.0f/255.0f alpha:1.0f];
+        self.titleLabel.textColor = kRGBAColor(111, 111, 111, 1);
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kTitleFontSize);
         self.titleLabel.numberOfLines = 0;
@@ -117,7 +117,6 @@
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
-                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
                 make.height.offset([self scrollH]);
                 make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
             }];
@@ -126,7 +125,6 @@
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
-                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
                 make.height.offset([self scrollH]);
                 make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
             }];
@@ -154,7 +152,8 @@
     
     self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
     self.actionSheetScroll.showsVerticalScrollIndicator = NO;
-    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT) {
+    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
+    {
         self.actionSheetScroll.scrollEnabled = YES;
     }
     else
@@ -186,7 +185,7 @@
         self.destructiveButton.tag = [_otherButtonTitles count] ?: 0;
         self.destructiveButton.backgroundColor = [UIColor whiteColor];
         self.destructiveButton.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-        [self.destructiveButton setTitleColor:[UIColor colorWithRed:255.0f/255.0f green:10.0f/255.0f blue:10.0f/255.0f alpha:1.0f] forState:UIControlStateNormal];
+        [self.destructiveButton setTitleColor:kRGBAColor(255, 10, 10, 1) forState:UIControlStateNormal];
         [self.destructiveButton setTitle:_destructiveButtonTitle forState:UIControlStateNormal];
         [self.destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
         [self.destructiveButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
@@ -199,9 +198,8 @@
         }];
     }
  
-    
     self.separatorView = [UIView new];
-    self.separatorView.backgroundColor = [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f];
+    self.separatorView.backgroundColor = kRGBAColor(238, 238, 238, 1);
     [self.actionSheetView addSubview:self.separatorView];
     [self.separatorView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.actionSheetView);
@@ -255,8 +253,7 @@
         
         if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
         {
-            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self.actionSheetView);
+            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
                 make.height.offset([self scrollH]);
                 make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
@@ -264,9 +261,8 @@
         }
         else
         {
-            [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
-                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
                 make.height.offset([self scrollH]);
                 make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
             }];
@@ -291,7 +287,6 @@
             }];
         }
     }
-    
     
     self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
     
@@ -327,12 +322,20 @@
         make.left.right.bottom.equalTo(self.actionSheetView);
         make.height.offset(kRowHeight);
     }];
-
 }
 
+#pragma mark ------> SubViewHeight
 -(CGFloat)titleHeight
 {
-    CGFloat spacing = 15.0f;
+    CGFloat spacing;
+    if (_title && _title.length>0)
+    {
+        spacing = 15.0f;
+    }
+    else
+    {
+        spacing = 0.0f;
+    }
     return ceil([self.title boundingRectWithSize:CGSizeMake(kSCREEN_WIDTH, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:kDEFAULT_FONT(self.btnFontName, kTitleFontSize)} context:nil].size.height) + spacing*2;
 }
 
@@ -344,7 +347,8 @@
 -(CGFloat)actionSheetHeight
 {
     CGFloat realH = [self actionSheetRealHeight];
-    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT) {
+    if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
+    {
         return kSCREEN_HEIGHT-kScreenStatusBottom;
     }
     else
@@ -355,7 +359,7 @@
 
 -(CGFloat)scrollContentH
 {
-    CGFloat realH = self.otherButtonTitles.count*kRowHeight + kRowLineHeight*(self.otherButtonTitles.count-1);
+    CGFloat realH = self.otherButtonTitles.count * kRowHeight + kRowLineHeight * (self.otherButtonTitles.count-1);
     return realH;
 }
 
@@ -418,24 +422,7 @@
     [self dismiss];
 }
 
-- (UIImage *)imageWithColor:(UIColor *)color
-{
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
-
 #pragma mark - public
-
 - (void)show
 {
     if(_isShow) return;

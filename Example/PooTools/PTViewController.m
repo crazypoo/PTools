@@ -208,7 +208,7 @@
 //    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
 //        PNSLog(@"%d",saveStatus);
 //    };
-    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:nil cancelButtonTitle:@"11111" destructiveButtonTitle:nil otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontName handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"11111" cancelButtonTitle:@"11111" destructiveButtonTitle:@"11111" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
 
     }];
     [actionSheet show];
