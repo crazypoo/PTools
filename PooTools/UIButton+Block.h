@@ -22,5 +22,4 @@ typedef void (^TouchedBlock)(UIButton *sender);
 
 @interface UIButton (EX)//按钮图片上文字下
 - (void)verticalImageAndTitle:(CGFloat)spacing;
-
 @end

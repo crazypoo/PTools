@@ -235,7 +235,7 @@
     [super layoutSubviews];
     
     [_backView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo([[[UIApplication sharedApplication] delegate] window]);
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
     
     [self.actionSheetView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -433,10 +433,10 @@
 
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
-        [[[[UIApplication sharedApplication] delegate] window] addSubview:self];
+        [kAppDelegateWindow addSubview:self];
         
         [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo([[[UIApplication sharedApplication] delegate] window]);
+            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
         }];
         
         [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {

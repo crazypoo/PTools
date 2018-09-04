@@ -57,7 +57,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 @implementation YMShowImageView
 
--(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName currentPageIndicatorTintColor:(UIColor *)cpic pageIndicatorTintColor:(UIColor *)pic showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
+-(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
 {
     self = [super init];
     if (self)
@@ -66,13 +66,13 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         {
             self.moreType = MoreActionTypeMoreNormal;
             self.actionSheetOtherBtnArr = @[@"保存图片",@"删除图片"];
-            self.saveImageArr = [[NSMutableArray alloc] init];
+//            self.saveImageArr = [[NSMutableArray alloc] init];
         }
         else if (canDelete == NO && canSave == YES)
         {
             self.moreType = MoreActionTypeOnlySave;
             self.actionSheetOtherBtnArr = @[@"保存图片"];
-            self.saveImageArr = [[NSMutableArray alloc] init];
+//            self.saveImageArr = [[NSMutableArray alloc] init];
         }
         else if (canDelete == YES && canSave == NO)
         {
@@ -85,11 +85,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.actionSheetOtherBtnArr = nil;
         }
     
-        self.titleColor = tC;
-        self.fontName = fName;
-        currentPageIndicatorTintColor = cpic;
-        pageIndicatorTintColor = pic;
-        self.showImageBackgroundColor = sibc;
+        self.titleColor = tC ? tC : [UIColor whiteColor];
+        self.fontName = fName ? fName : @"HelveticaNeue-Light";
+        self.showImageBackgroundColor = sibc ? sibc : [UIColor blackColor];
         self.window = w;
         self.loadingImageName = li;
         self.moreActionImageNames = main;
@@ -736,7 +734,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
     }
 }
-
 @end
 
 @interface PShowImageSingleView() <UIScrollViewDelegate>
@@ -829,31 +826,34 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     if (model.imageShowType == PooShowImageModelTypeFullView)
     {
-        self.showMode = PShowModeFullView;
-        self.sceneView = [SCNView new];
-        [_scrollview addSubview:self.sceneView];
-        [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.height.offset(self.height-navH-80);
-            make.top.equalTo(self).offset(navH);
-        }];
-        
-        [self addSubview:self.waitingView];
-        
-        self.sceneView.scene = [[SCNScene alloc] init];
-        self.sceneView.showsStatistics = NO;
-        self.sceneView.allowsCameraControl = YES;
-        
-        self.sphere =   [SCNSphere sphereWithRadius:20.0];
-        self.sphere.firstMaterial.doubleSided = YES;
-        
+        if (!self.waitingView) {
+            [self addSubview:self.waitingView];
+        }
+
         kWeakSelf(self);
         [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                weakself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+                weakself.waitingView.progress = (CGFloat)receivedSize / (CGFloat)expectedSize;
             });
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            [self.waitingView removeFromSuperview];
+            [weakself.waitingView removeFromSuperview];
+            weakself.waitingView = nil;
+            self.showMode = PShowModeFullView;
+            self.sceneView = [SCNView new];
+            [self.scrollview addSubview:self.sceneView];
+            [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self);
+                make.height.offset(self.height-navH-80);
+                make.top.equalTo(self).offset(navH);
+            }];
+            
+            self.sceneView.scene = [[SCNScene alloc] init];
+            self.sceneView.showsStatistics = NO;
+            self.sceneView.allowsCameraControl = YES;
+            
+            self.sphere =   [SCNSphere sphereWithRadius:20.0];
+            self.sphere.firstMaterial.doubleSided = YES;
+
             if (error) {
                 //图片加载失败的处理，此处可以自定义各种操作（...）
                 weakself.hasLoadedImage = NO;//图片加载失败
@@ -872,14 +872,14 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
             self.sphere.firstMaterial.diffuse.contents = image;
             weakself.hasLoadedImage = YES;//图片加载成功
-
+            
+            SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
+            sphereNode.position = SCNVector3Make(0,0,0);
+            [self.sceneView.scene.rootNode addChildNode:sphereNode];
+            self.scrollview.contentSize = CGSizeMake(self.width, self.height);
         }];
-        SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
-        sphereNode.position = SCNVector3Make(0,0,0);
-        [self.sceneView.scene.rootNode addChildNode:sphereNode];
-        _scrollview.contentSize = CGSizeMake(self.width, self.height);
         
-        [self setNeedsLayout];
+//        [self setNeedsLayout];
     }
     else
     {

@@ -10,5 +10,4 @@
 
 @interface PooActionOnCalendar : NSObject
 + (void)saveEventStartDate:(NSDate*)startData endDate:(NSDate*)endDate alarm:(float)alarm eventTitle:(NSString*)eventTitle location:(NSString*)location isReminder:(BOOL)isReminder;
-
 @end

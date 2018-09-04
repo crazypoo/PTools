@@ -16,9 +16,7 @@ typedef NS_ENUM(NSInteger, GTAnimationType) {
 };
 @interface CustomTextField : UITextField
 @property(nonatomic, strong)UIColor *normalColor;
-
 @property(nonatomic, strong)UIColor *selectedColor;
-
 @property(nonatomic, assign)GTAnimationType gtAnimationType;
 @property (nonatomic, retain) UIColor *lineColor;
 @end

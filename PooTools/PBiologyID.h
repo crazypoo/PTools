@@ -35,13 +35,25 @@ typedef NS_ENUM(NSInteger,BiologyIDType){
 @end
 
 @interface PBiologyID : NSObject
+/*! @brief 生物技术验证代理
+ */
 @property (nonatomic, weak) id<PBiologyIDDelegate>delegate;
+/*! @brief 生物技术验证回调
+ */
 @property (nonatomic, copy) void(^biologyIDVerifyBlock)(BiologyIDVerifyStatusType biologyIDVerifyStatus);
+/*! @brief 生物技术功能回调
+ */
 @property (nonatomic, copy) void(^biologyIDBlock)(BiologyIDType biologyIDType);
-//初始化
+/*! @brief 生物识别技术单例化
+ */
 +(instancetype)defaultBiologyID;
-//TouchID操作
+/*! @brief 验证生物技术
+ */
 -(void)verifyBiologyIDAction;
+/*! @brief 删除生物技术
+ */
 -(void)deleteBiologyID;
+/*! @brief 生物技术操作
+ */
 -(void)biologyAction;
 @end

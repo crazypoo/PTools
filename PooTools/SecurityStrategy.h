@@ -11,8 +11,11 @@
 
 @interface SecurityStrategy : NSObject
 
-//后台模糊效果
+/*! @brief 添加模糊效果
+ */
 +(void)addBlurEffect;
+/*! @brief 移除模糊效果
+ */
 +(void)removeBlurEffect;
 
 @end

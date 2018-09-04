@@ -10,13 +10,11 @@
 
 @interface PooLoadingView : UIView
 
-/*! @brief Loading的线宽度
- * @param 默認1.0f
+/*! @brief Loading的线宽度 (默認1.0f)
  */
 @property (nonatomic, assign) CGFloat lineWidth;
 
-/*! @brief Loading的线颜色
- * @param 默認[UIColor lightGrayColor]
+/*! @brief Loading的线颜色 (默認[UIColor lightGrayColor])
  */
 @property (nonatomic, strong) UIColor *lineColor;
 

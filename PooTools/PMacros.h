@@ -187,7 +187,7 @@
 
 /*! @brief SaveArea适配
  */
-#define  adjustsScrollViewInsets(scrollView)\
+#define adjustsScrollViewInsets(scrollView)\
 do {\
 _Pragma("clang diagnostic push")\
 _Pragma("clang diagnostic ignored \"-Warc-performSelector-leaks\"")\
@@ -203,6 +203,10 @@ invocation.selector = @selector(setContentInsetAdjustmentBehavior:);\
 }\
 _Pragma("clang diagnostic pop")\
 } while (0)
+
+/*! @brief AppDelegateWindow
+ */
+#define kAppDelegateWindow [[[UIApplication sharedApplication] delegate] window]
 
 #pragma mark ---------------> 通知中心
 /*! @brief [NSNotificationCenter defaultCenter]

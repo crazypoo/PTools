@@ -13,7 +13,13 @@
 @end
 
 @interface PMotion : NSObject
+/*! @brief M7处理器数据代理
+ */
 @property (nonatomic, weak) id<PMotionDelegate>delegate;
+/*! @brief M7处理器使用单例化
+ */
 +(instancetype)defaultMonitor;
+/*! @brief 获取M7处理器数据
+ */
 -(void)getMotion;
 @end

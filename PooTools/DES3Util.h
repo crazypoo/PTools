@@ -8,9 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface DES3Util : NSObject {
-    
-}
+@interface DES3Util : NSObject
 
 /*! @brief 加密(DES)
  */
