@@ -35,6 +35,10 @@ typedef void (^PStarRateViewRateBlock)(PStarRateView *rateView, CGFloat newScore
  * @param yesORno 是否可以点击
  * @return block 点评分数回调
  */
-- (instancetype)initWithNumberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block;
+- (instancetype)initWithNumberOfStars:(NSInteger)numberOfStars
+                      imageForeground:(UIImage *)fStr
+                      imageBackGround:(UIImage *)bStr
+                              withTap:(BOOL)yesORno
+                            rateBlock:(PStarRateViewRateBlock)block;
 
 @end

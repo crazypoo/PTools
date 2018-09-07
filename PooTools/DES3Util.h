@@ -12,11 +12,13 @@
 
 /*! @brief 加密(DES)
  */
-+ (NSString*)encrypt:(NSString*)plainText withKey:(NSString *)key;
++ (NSString*)encrypt:(NSString*)plainText
+             withKey:(NSString *)key;
 
 /*! @brief 解密(DES)
  */
-+ (NSString*)decrypt:(NSString*)encryptText withKey:(NSString *)key;
++ (NSString*)decrypt:(NSString*)encryptText
+             withKey:(NSString *)key;
 
 @end
 

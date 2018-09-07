@@ -18,7 +18,7 @@
             nil];
 }
 
-+ (void) saveUserName:(NSString*)userName
++ (void)saveUserName:(NSString*)userName
       userNameService:(NSString*)userNameService
              psaaword:(NSString*)pwd
       psaawordService:(NSString*)pwdService
@@ -34,7 +34,7 @@
     SecItemAdd((__bridge CFDictionaryRef)keychainQuery, NULL);
 }
 
-+ (void) deleteWithUserNameService:(NSString*)userNameService
++ (void)deleteWithUserNameService:(NSString*)userNameService
                    psaawordService:(NSString*)pwdService
 {
     NSMutableDictionary *keychainQuery = [self getKeyChainQuery:userNameService];
@@ -44,7 +44,7 @@
     SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
 }
 
-+ (NSString*) getUserNameWithService:(NSString*)userNameService
++ (NSString*)getUserNameWithService:(NSString*)userNameService
 {
     NSString* ret = nil;
     NSMutableDictionary *keychainQuery = [self getKeyChainQuery:userNameService];
@@ -70,7 +70,7 @@
     return ret;
 }
 
-+ (NSString*) getPasswordWithService:(NSString*)pwdService
++ (NSString*)getPasswordWithService:(NSString*)pwdService
 {
     NSString* ret = nil;
     NSMutableDictionary *keychainQuery = [self getKeyChainQuery:pwdService];

@@ -25,7 +25,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @param bfName 字体 (默认HelveticaNeue-Light)
  * @return block 按钮点击回调tag
  */
-- (instancetype)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
+- (instancetype)initWithTitle:(NSString *)title
+            cancelButtonTitle:(NSString *)cancelButtonTitle
+       destructiveButtonTitle:(NSString *)destructiveButtonTitle
+            otherButtonTitles:(NSArray *)otherButtonTitles
+               buttonFontName:(NSString *)bfName
+                      handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 展示
  */
@@ -39,7 +44,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @param bfName 字体 (默认HelveticaNeue-Light)
  * @return block 按钮点击回调tag
  */
-+ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
++ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title
+                              cancelButtonTitle:(NSString *)cancelButtonTitle
+                         destructiveButtonTitle:(NSString *)destructiveButtonTitle
+                              otherButtonTitles:(NSArray *)otherButtonTitles
+                                 buttonFontName:(NSString *)bfName
+                                        handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 消失
  */

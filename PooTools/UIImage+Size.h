@@ -10,5 +10,6 @@
 #import <UIKit/UIKit.h>
 
 @interface UIImage (size)
-- (UIImage*)transformWidth:(CGFloat)width height:(CGFloat)height;
+- (UIImage*)transformWidth:(CGFloat)width
+                    height:(CGFloat)height;
 @end

@@ -125,8 +125,14 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 
 /*! @brief 初始化,必须给view设置一个宽度 (最普通模式)
  */
--(instancetype)initWithTagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
+-(instancetype)initWithTagsArray:(NSArray *)tagsArr
+                          config:(PooTagsLabelConfig *)config
+                     wihtSection:(NSInteger)sectionIndex;
 /*! @brief 初始化,必须给view设置一个宽度 (图片模式)
  */
--(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
+-(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr
+                       tagsSelectArray:(NSArray *)tagsSelectArr
+                        tagsTitleArray:(NSArray *)tagsTitleArr
+                                config:(PooTagsLabelConfig *)config
+                           wihtSection:(NSInteger)sectionIndex;
 @end

@@ -27,6 +27,8 @@ typedef void (^PooNumberKeyBoardReturnSTH)(PooNumberKeyBoard *keyboardView,NSStr
 +(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint;
 /*! @brief 初始化(Block)
  */
-+(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock;
++(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint
+                              backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock
+                              returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock;
 
 @end

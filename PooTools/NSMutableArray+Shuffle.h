@@ -12,7 +12,7 @@
 
 /*! @brief 数组随机
  */
-- (void) shuffle;
+- (void)shuffle;
 
 /*! @brief 数组随机(NSMutableArray)
  */

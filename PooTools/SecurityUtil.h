@@ -31,11 +31,15 @@
 #pragma mark - AES加密
 /*! @brief 将string转成带密码的数据(RSA)
  */
-+(NSString*)encryptAESData:(NSString*)string enterKey:(NSString *)key enterIv:(NSString *)iv;
++(NSString*)encryptAESData:(NSString*)string
+                  enterKey:(NSString *)key
+                   enterIv:(NSString *)iv;
 
 /*! @brief 将带密码的数据转成string(RSA)
  */
-+(NSString*)decryptAESData:(NSString*)string enterKey:(NSString *)key enterIv:(NSString *)iv;
++(NSString*)decryptAESData:(NSString*)string
+                  enterKey:(NSString *)key
+                   enterIv:(NSString *)iv;
 
 
 @end

@@ -10,7 +10,7 @@
 
 @implementation NSMutableArray (Shuffle)
 
-- (void) shuffle {
+- (void)shuffle {
     for (NSInteger i = [self count] - 1; i > 0; --i) {
         NSInteger j = random() % i;
         [self exchangeObjectAtIndex:j withObjectAtIndex:i];

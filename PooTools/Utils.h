@@ -49,17 +49,27 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 #pragma mark ------> UIImageView
 /*! @brief 图片简易生成
  */
-+(UIImageView *)imageViewWithFrame:(CGRect)frame withImage:(UIImage *)image;
++(UIImageView *)imageViewWithFrame:(CGRect)frame
+                         withImage:(UIImage *)image;
     
 #pragma mark ------> UILabel
 /*! @brief Label简易生成
  */
-+(UILabel *)labelWithFrame:(CGRect)frame withTitle:(NSString *)title titleFontSize:(UIFont *)font textColor:(UIColor *)color backgroundColor:(UIColor *)bgColor alignment:(NSTextAlignment)textAlignment;
++(UILabel *)labelWithFrame:(CGRect)frame
+                 withTitle:(NSString *)title
+             titleFontSize:(UIFont *)font
+                 textColor:(UIColor *)color
+           backgroundColor:(UIColor *)bgColor
+                 alignment:(NSTextAlignment)textAlignment;
 
 #pragma mark ------> UIAlertView/UIViewController
 /*! @brief AlertView Normal
  */
-+(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName;
++(UIAlertView *)alertTitle:(NSString *)title
+                   message:(NSString *)msg
+                  delegate:(id)aDeleagte
+                 cancelBtn:(NSString *)cancelName
+              otherBtnName:(NSString *)otherbuttonName;
 
 /*! @brief AlertView + Only cancel
  */
@@ -67,29 +77,56 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 /*! @brief AlertController Normal
  */
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock;
++(void)alertVCWithTitle:(NSString *)title
+                message:(NSString *)m
+            cancelTitle:(NSString *)cT
+                okTitle:(NSString *)okT
+                 shouIn:(UIViewController *)vC
+               okAction:(void (^ _Nullable)(void))okBlock
+           cancelAction:(void (^ _Nullable)(void))cancelBlock;
 
 /*! @brief AlertController Only Cancel
  */
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock;
++(void)alertVCWithTitle:(NSString *)title
+                message:(NSString *)m
+            cancelTitle:(NSString *)cT
+                 shouIn:(UIViewController *)vC
+           cancelAction:(void (^ _Nullable)(void))cancelBlock;
 
 /*! @brief AlertController Normal + Other Buttons + Can switch alert style
  */
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT otherButtonArrow:(NSArray *)titleArr shouIn:(UIViewController *)vC alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock otherButtonAction:(void (^) (NSInteger))buttonIndexPath;
++(void)alertVCWithTitle:(NSString *)title
+                message:(NSString *)m
+            cancelTitle:(NSString *)cT
+                okTitle:(NSString *)okT
+       otherButtonArrow:(NSArray *)titleArr
+                 shouIn:(UIViewController *)vC
+             alertStyle:(UIAlertControllerStyle)style
+               okAction:(void (^ _Nullable)(void))okBlock
+           cancelAction:(void (^ _Nullable)(void))cancelBlock
+      otherButtonAction:(void (^) (NSInteger))buttonIndexPath;
 
 #pragma mark ------> 计算字符串高度或者宽度
 /*! @brief Compute string heigh or width
  */
-+(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width;
++(CGSize)sizeForString:(NSString *)string
+            fontToSize:(float)fontToSize
+              andHeigh:(float)heigh
+              andWidth:(float)width;
 
 #pragma mark ------> UIButton
 /*! @brief 按钮简易生成
  */
-+(UIButton *)createBtnWithType:(UIButtonType)btnType frame:(CGRect)btnFrame backgroundColor:(UIColor*)bgColor;
++(UIButton *)createBtnWithType:(UIButtonType)btnType
+                         frame:(CGRect)btnFrame
+               backgroundColor:(UIColor*)bgColor;
 
 /*! @brief 按钮倒计时
  */
-+(void)timmerRunWithTime:(int)time button:(UIButton *)btn originalStr:(NSString *)str setTapEnable:(BOOL)yesOrNo;
++(void)timmerRunWithTime:(int)time
+                  button:(UIButton *)btn
+             originalStr:(NSString *)str
+            setTapEnable:(BOOL)yesOrNo;
     
 #pragma mark ------> 时间日期
 /*! @brief 获取时间年月日时分秒(一般方法)
@@ -106,11 +143,14 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 /*! @brief 某个时间的某时间之后或者之前
  */
-+(NSDate *)fewMonthLater:(NSInteger)month fromNow:(NSDate *)thisTime;
++(NSDate *)fewMonthLater:(NSInteger)month
+                 fromNow:(NSDate *)thisTime;
 
 /*! @brief 日期时间对比
  */
-+ (int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay dateFormatter:(NSString *)df;
++ (int)compareOneDay:(NSDate *)oneDay
+      withAnotherDay:(NSDate *)anotherDay
+       dateFormatter:(NSString *)df;
 
 /*! @brief 类似朋友圈的时间显示
  */
@@ -132,7 +172,8 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 #pragma mark ------> 图片
 /*! @brief 获取视频第一帧
  */
-+(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL atTime:(NSTimeInterval)time;
++(UIImage *)thumbnailImageForVideo:(NSURL *)videoURL
+                            atTime:(NSTimeInterval)time;
 /*! @brief 用颜色生成图片
  */
 +(UIImage*)createImageWithColor:(UIColor*)color;
@@ -149,7 +190,8 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 /*! @brief 生成二维码
  */
-+(UIImage *)createQRImageWithString:(NSString *)string withSize:(CGFloat)size;
++(UIImage *)createQRImageWithString:(NSString *)string
+                           withSize:(CGFloat)size;
 
 #pragma mark ------> JSON
 /*! @brief Json字符串转字典
@@ -184,14 +226,16 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 /*! @brief iOS9++，暂时仅限英文换其他
  */
-+(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language;
++(NSString *)stringToOtherLanguage:(NSString *)string
+                     otherLanguage:(NSStringTransform)language;
 
 /*! @brief 数字小写转大写
  */
 +(NSString *)getUperDigit:(NSString *)inputStr;
 +(NSString *)getIntPartUper:(int)digit;
 +(NSString *)getPartAfterDot:(NSString *)digitStr;
-+(NSString *)dealWithDigit:(int)digit grade:(GradeType)grade;
++(NSString *)dealWithDigit:(int)digit
+                     grade:(GradeType)grade;
 
 /*! @brief 隐藏手机号码某一段
  */
@@ -199,11 +243,13 @@ static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
 
 /*! @brief 查找某字符在字符串的位置
  */
-+ (NSArray *)rangeOfSubString:(NSString *)subStr inString:(NSString *)string;
++ (NSArray *)rangeOfSubString:(NSString *)subStr
+                     inString:(NSString *)string;
 
 /*! @brief 华氏转摄氏/摄氏转华氏
  */
-+ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value changeTo:(TemperatureUnit)unit;
++ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value
+                               changeTo:(TemperatureUnit)unit;
 
 /*! @brief 英文星期几转中文星期几
  */

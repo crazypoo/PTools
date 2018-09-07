@@ -12,21 +12,21 @@
 
 /*! @brief KeyChain保存帐号密码
  */
-+ (void) saveUserName:(NSString*)userName
++ (void)saveUserName:(NSString*)userName
       userNameService:(NSString*)userNameService
              psaaword:(NSString*)pwd
       psaawordService:(NSString*)pwdService;
 
 /*! @brief KeyChain删除帐号密码
  */
-+ (void) deleteWithUserNameService:(NSString*)userNameService
++ (void)deleteWithUserNameService:(NSString*)userNameService
                    psaawordService:(NSString*)pwdService;
 
 /*! @brief KeyChain获取帐号
  */
-+ (NSString*) getUserNameWithService:(NSString*)userNameService;
++ (NSString*)getUserNameWithService:(NSString*)userNameService;
 
 /*! @brief KeyChain获取密码
  */
-+ (NSString*) getPasswordWithService:(NSString*)pwdService;
++ (NSString*)getPasswordWithService:(NSString*)pwdService;
 @end

@@ -16,7 +16,9 @@
  * @param lName 界面的字体
  * @param cFont 中间label的字体
  */
--(instancetype)initWithFrame:(CGRect)frame lineFontName:(UIFont *)lName centerLabelFont:(UIFont *)cFont;
+-(instancetype)initWithFrame:(CGRect)frame
+                lineFontName:(UIFont *)lName
+             centerLabelFont:(UIFont *)cFont;
 /*! @brief PieView的数据
  */
 @property (strong, nonatomic) NSArray *dataArray;
@@ -41,7 +43,8 @@
  * @param frame 大小位置
  * @param cFont label的字体
  */
-- (instancetype)initWithFrame:(CGRect)frame centerLabelFont:(UIFont *)cFont;
+- (instancetype)initWithFrame:(CGRect)frame
+              centerLabelFont:(UIFont *)cFont;
 
 /*! @brief CenterView的文字视图
  */

@@ -10,5 +10,6 @@
 
 @interface PTextField : UITextField
 @property (nonatomic, strong) UIImageView *textFieldHeadImageView;
--(id)initWithFrame:(CGRect)frame image:(UIImage *)image;
+-(id)initWithFrame:(CGRect)frame
+             image:(UIImage *)image;
 @end

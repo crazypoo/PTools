@@ -50,7 +50,15 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
  * @param canSave 是否能够保存图片
  * @param main 更多操作的图片名字
  */
-- (id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main;
+- (id)initWithByClick:(NSInteger)clickTag
+          appendArray:(NSArray <PooShowImageModel*>*)appendArray
+           titleColor:(UIColor *)tC
+             fontName:(NSString *)fName
+showImageBackgroundColor:(UIColor *)sibc
+           showWindow:(UIWindow *)w
+     loadingImageName:(NSString *)li
+           deleteAble:(BOOL)canDelete
+             saveAble:(BOOL)canSave moreActionImageName:(NSString *)main;
 
 /*! @brief 展示浏览图片View
  * @param tempBlock 当浏览图片的View消失时,做出的回调

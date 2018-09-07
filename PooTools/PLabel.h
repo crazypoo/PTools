@@ -26,7 +26,9 @@ typedef enum
 
 /*! @brief 设置展示样式 (综合设置)
  */
-- (void)setVerticalAlignment:(VerticalAlignment)verticalAlignment strikeThroughAlignment:(StrikeThroughAlignment)strikeThroughAlignment setStrikeThroughEnabled:(BOOL)strikeThroughEnabled;
+- (void)setVerticalAlignment:(VerticalAlignment)verticalAlignment
+      strikeThroughAlignment:(StrikeThroughAlignment)strikeThroughAlignment
+     setStrikeThroughEnabled:(BOOL)strikeThroughEnabled;
 /*! @brief 文字展示样式
  */
 @property (nonatomic) VerticalAlignment verticalAlignment;
