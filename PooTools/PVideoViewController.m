@@ -13,6 +13,7 @@
 #import <AVFoundation/AVFoundation.h>
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <Photos/Photos.h>
+#import <Masonry/Masonry.h>
 
 @interface PVideoViewController()<PControllerBarDelegate,AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate> {
     
@@ -161,7 +162,6 @@ static PVideoViewController *__currentVideoVC = nil;
     _ctrlBar.delegate = self;
     [self.actionView addSubview:_ctrlBar];
     
-    
     self.videoView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topSlideView.frame), videoViewSize.width, videoViewSize.height)];
     [self.actionView addSubview:self.videoView];
     
@@ -180,21 +180,29 @@ static PVideoViewController *__currentVideoVC = nil;
     self.focusView = [[PFocusView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     self.focusView.backgroundColor = [UIColor clearColor];
     
-    self.statusInfo = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.videoView.frame) - 30, self.videoView.frame.size.width, 20)];
+    self.statusInfo = [UILabel new];
     self.statusInfo.textAlignment = NSTextAlignmentCenter;
     self.statusInfo.font = [UIFont systemFontOfSize:14.0];
     self.statusInfo.textColor = [UIColor whiteColor];
-    self.statusInfo.hidden = YES;
+    self.statusInfo.hidden = NO;
     [self.actionView addSubview:self.statusInfo];
+    [self.statusInfo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.videoView);
+        make.height.offset(20);
+        make.bottom.equalTo(self.videoView.mas_bottom).offset(-30);
+    }];
     
-    self.cancelInfo = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 120, 24)];
-    self.cancelInfo.center = self.videoView.center;
+    self.cancelInfo = [UILabel new];
     self.cancelInfo.textAlignment = NSTextAlignmentCenter;
     self.cancelInfo.textColor = kThemeWhiteColor;
     self.cancelInfo.backgroundColor = kThemeWaringColor;
     self.cancelInfo.hidden = YES;
     [self.actionView addSubview:self.cancelInfo];
-    
+    [self.cancelInfo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(120);
+        make.height.offset(24);
+        make.centerX.centerY.equalTo(self.videoView);
+    }];
     
     [_actionView sendSubviewToBack:self.videoView];
 }
