@@ -85,6 +85,11 @@
 		CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BB211D706400FD29F4 /* MAThermometer.m */; };
 		CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */; };
 		CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */; };
+		CC3838D3214364D100453548 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838C9214364CF00453548 /* PVideoSupport.m */; };
+		CC3838D4214364D100453548 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CC214364D000453548 /* PVideoViewController.m */; };
+		CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CD214364D000453548 /* PVideoListViewController.m */; };
+		CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CE214364D000453548 /* PVideoPlayer.m */; };
+		CC3838D7214364D100453548 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D1214364D100453548 /* PVideoConfig.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
 		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
 		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
@@ -286,6 +291,16 @@
 		CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGImaginaryLine.h; sourceTree = "<group>"; };
 		CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCheckbox.m; sourceTree = "<group>"; };
 		CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCheckbox.h; sourceTree = "<group>"; };
+		CC3838C9214364CF00453548 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
+		CC3838CA214364CF00453548 /* PVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoViewController.h; sourceTree = "<group>"; };
+		CC3838CB214364CF00453548 /* PVideoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoConfig.h; sourceTree = "<group>"; };
+		CC3838CC214364D000453548 /* PVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoViewController.m; sourceTree = "<group>"; };
+		CC3838CD214364D000453548 /* PVideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoListViewController.m; sourceTree = "<group>"; };
+		CC3838CE214364D000453548 /* PVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoPlayer.m; sourceTree = "<group>"; };
+		CC3838CF214364D000453548 /* PVideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoListViewController.h; sourceTree = "<group>"; };
+		CC3838D0214364D000453548 /* PVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoPlayer.h; sourceTree = "<group>"; };
+		CC3838D1214364D100453548 /* PVideoConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoConfig.m; sourceTree = "<group>"; };
+		CC3838D2214364D100453548 /* PVideoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoSupport.h; sourceTree = "<group>"; };
 		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
 		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
 		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
@@ -500,6 +515,16 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC3838CB214364CF00453548 /* PVideoConfig.h */,
+				CC3838D1214364D100453548 /* PVideoConfig.m */,
+				CC3838CF214364D000453548 /* PVideoListViewController.h */,
+				CC3838CD214364D000453548 /* PVideoListViewController.m */,
+				CC3838D0214364D000453548 /* PVideoPlayer.h */,
+				CC3838CE214364D000453548 /* PVideoPlayer.m */,
+				CC3838D2214364D100453548 /* PVideoSupport.h */,
+				CC3838C9214364CF00453548 /* PVideoSupport.m */,
+				CC3838CA214364CF00453548 /* PVideoViewController.h */,
+				CC3838CC214364D000453548 /* PVideoViewController.m */,
 				C8FCB8F921308328000BB281 /* PooTools.bundle */,
 				CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */,
 				CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */,
@@ -830,11 +855,13 @@
 				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
+				CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC1257B22098319300E31A38 /* DES3Util.m in Sources */,
+				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
 				CC1257C22098319300E31A38 /* PHealthKit.m in Sources */,
@@ -848,10 +875,12 @@
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
+				CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */,
 				CC1257B92098319300E31A38 /* NSMutableArray+Shuffle.m in Sources */,
 				CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */,
 				CC1D38BC211D706400FD29F4 /* MAThermometerBorder.m in Sources */,
 				CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */,
+				CC3838D7214364D100453548 /* PVideoConfig.m in Sources */,
 				CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */,
 				64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */,
 				CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */,
@@ -869,6 +898,7 @@
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
+				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,

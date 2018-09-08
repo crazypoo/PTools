@@ -22,6 +22,7 @@
 #import "PStarRateView.h"
 #import "PADView.h"
 #import "PLabel.h"
+#import "PVideoViewController.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -31,7 +32,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PooNumberKeyBoardDelegate>
+@interface PTViewController ()<PooNumberKeyBoardDelegate,PVideoViewControllerDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
 @property (nonatomic, strong)UITextField *textField;
 @end
@@ -74,16 +75,16 @@
     [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
     
-    PLabel *aaaaaaaaaaaaaa = [PLabel new];
-    aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
-    [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentMiddle setStrikeThroughEnabled:YES];
-    aaaaaaaaaaaaaa.text = @"111111111111111";
-    [self.view addSubview:aaaaaaaaaaaaaa];
-    [aaaaaaaaaaaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(100);
-        make.height.offset(40);
-    }];
+//    PLabel *aaaaaaaaaaaaaa = [PLabel new];
+//    aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
+//    [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentMiddle setStrikeThroughEnabled:YES];
+//    aaaaaaaaaaaaaa.text = @"111111111111111";
+//    [self.view addSubview:aaaaaaaaaaaaaa];
+//    [aaaaaaaaaaaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.top.equalTo(self.view).offset(100);
+//        make.height.offset(40);
+//    }];
     
 //
 //    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
@@ -178,49 +179,53 @@
 
 -(void)aaaaa
 {
-    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
-    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-    imageModel.imageShowType = PooShowImageModelTypeFullView;
-    imageModel.imageInfo = @"11111111241241241241928390128309128";
-    imageModel.imageTitle = @"22222212312312312312312312312";
-    
-    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
-    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-    imageModelV.imageShowType = PooShowImageModelTypeVideo;
-    imageModelV.imageInfo = @"11111111241241241241928390128309128";
-    imageModelV.imageTitle = @"22222212312312312312312312312";
+    PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
+    videoVC.delegate = self;
+    [videoVC startAnimationWithType:PVideoViewShowTypeSmall];
 
-
-//    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
-//    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-//    imageModel1.imageFullView = @"0";
-//    imageModel1.imageInfo = @"444444";
-//    imageModel1.imageTitle = @"333333";
-
-    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-    imageModelV.imageShowType = PooShowImageModelTypeNormal;
-    imageModel2.imageInfo = @"6666666";
-    imageModel2.imageTitle = @"5555555";
-
-    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
-    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
-    imageModelV.imageShowType = PooShowImageModelTypeGIF;
-    imageModel3.imageInfo = @"444444";
-    imageModel3.imageTitle = @"333333";
-
-    NSArray *arr = @[imageModel,imageModelV,imageModel2,imageModel3];
-
-    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
-    [ymImageV showWithFinish:^{
-        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    }];
-    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-    }];
-    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
-        PNSLog(@"%d",saveStatus);
-    };
+//    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+//    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+//    imageModel.imageShowType = PooShowImageModelTypeFullView;
+//    imageModel.imageInfo = @"11111111241241241241928390128309128";
+//    imageModel.imageTitle = @"22222212312312312312312312312";
+//
+//    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
+//    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//    imageModelV.imageShowType = PooShowImageModelTypeVideo;
+//    imageModelV.imageInfo = @"11111111241241241241928390128309128";
+//    imageModelV.imageTitle = @"22222212312312312312312312312";
+//
+//
+////    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+////    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+////    imageModel1.imageFullView = @"0";
+////    imageModel1.imageInfo = @"444444";
+////    imageModel1.imageTitle = @"333333";
+//
+//    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+//    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+//    imageModelV.imageShowType = PooShowImageModelTypeNormal;
+//    imageModel2.imageInfo = @"6666666";
+//    imageModel2.imageTitle = @"5555555";
+//
+//    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
+//    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+//    imageModelV.imageShowType = PooShowImageModelTypeGIF;
+//    imageModel3.imageInfo = @"444444";
+//    imageModel3.imageTitle = @"333333";
+//
+//    NSArray *arr = @[imageModel,imageModelV,imageModel2,imageModel3];
+//
+//    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+//    [ymImageV showWithFinish:^{
+//        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+//    }];
+//    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+//    }];
+//    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
+//        PNSLog(@"%d",saveStatus);
+//    };
     
 //    ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"11111" cancelButtonTitle:@"11111" destructiveButtonTitle:@"11111" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
 //
@@ -360,5 +365,44 @@
 //        self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
 //    }
 //}
+
+#pragma mark - PVideoViewControllerDelegate
+- (void)videoViewController:(PVideoViewController *)videoController didRecordVideo:(PVideoModel *)videoModel
+{
+    NSLog(@"%@>>>>>>>>>>%@>>>>>>>>>",videoController,videoModel);
+    
+    //    _videoModel = videoModel;
+    //
+    //    videoUrl = [NSURL fileURLWithPath:_videoModel.videoAbsolutePath];
+    //    NSLog(@"----------------------------VideoPath:%@",videoUrl);
+    //    [self.videoUrlArr addObject:videoUrl];
+    //    NSError *error = nil;
+    //    NSFileManager *fm = [NSFileManager defaultManager];
+    //    NSDictionary *attri = [fm attributesOfItemAtPath:_videoModel.videoAbsolutePath error:&error];
+    //    if (error) {
+    //        NSLog(@"error:%@",error);
+    //    }
+    //    else {
+    //        NSLog(@"%@",[NSString stringWithFormat:@"视频总大小:%.0fKB",attri.fileSize/1024.0]);
+    //    }
+    //
+    //    imageVideo = [[UIImageView alloc] initWithFrame:videoV.bounds];
+    //    imageVideo.image = [Utils thumbnailImageForVideo:videoUrl atTime:1];
+    //    [videoV addSubview:imageVideo];
+    //
+    //    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
+    //
+    //    videoDeleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    //    videoDeleteBtn.frame = CGRectMake(imageVideo.width-30, 0, 30, 30);
+    //    [videoDeleteBtn setImage:kImageNamed(@"list_icon_delete") forState:UIControlStateNormal];
+    //    [videoDeleteBtn addTarget:self action:@selector(deleteVideoFirstView:) forControlEvents:UIControlEventTouchUpInside];
+    //    [cell.contentView addSubview:videoDeleteBtn];
+    //
+    //    [self movChangeMP4:videoUrl];
+}
+
+- (void)videoViewControllerDidCancel:(PVideoViewController *)videoController {
+    NSLog(@"没有录到视频");
+}
 
 @end
