@@ -150,17 +150,27 @@ static PVideoViewController *__currentVideoVC = nil;
     
     CGFloat buttomHeight =  isSmallStyle ? self.customControViewHeight : allHeight - topHeight - videoViewSize.height;
     
-    _topSlideView = [[PStatusBar alloc] initWithFrame:CGRectMake(0, 0, allWidth, topHeight) style:self.showType];
+    _topSlideView = [[PStatusBar alloc] initWithFrame:CGRectZero style:self.showType];
     if (!isSmallStyle) {
         [_topSlideView addCancelTarget:self selector:@selector(endAniamtion)];
     }
     [self.actionView addSubview:_topSlideView];
+    [_topSlideView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.equalTo(self.actionView);
+        make.width.offset(allWidth);
+        make.height.offset(topHeight);
+    }];
     
-    
-    _ctrlBar = [[PControllerBar alloc] initWithFrame:CGRectMake(0, allHeight - buttomHeight, allWidth, buttomHeight)];
+    _ctrlBar = [PControllerBar new];
     [_ctrlBar setupSubViewsWithStyle:self.showType recordTime:customRecordTime];
     _ctrlBar.delegate = self;
     [self.actionView addSubview:_ctrlBar];
+    [_ctrlBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.actionView);
+        make.top.equalTo(self.actionView).offset(allHeight - buttomHeight);
+        make.width.offset(allWidth);
+        make.height.offset(buttomHeight);
+    }];
     
     self.videoView = [[UIView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_topSlideView.frame), videoViewSize.width, videoViewSize.height)];
     [self.actionView addSubview:self.videoView];

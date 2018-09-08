@@ -8,11 +8,11 @@
 
 #import "PVideoListViewController.h"
 #import "PVideoSupport.h"
+#import <Masonry/Masonry.h>
+#import "CGLayout.h"
 
-@interface PVideoListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource> {
-    
-    UILabel *_titleLabel;
-    
+@interface PVideoListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>
+{
     PCloseBtn *_leftBtn;
     UIButton *_rightBtn;
     
@@ -26,6 +26,8 @@
 @property (nonatomic, strong)  NSMutableArray *dataArr;
 
 @property (nonatomic, assign) PVideoViewShowType showType;
+
+@property (nonatomic, strong) UILabel *titleLabel;
 
 @end
 
@@ -97,19 +99,29 @@ static PVideoListViewController *__currentListVC = nil;
     _actionView.backgroundColor = [UIColor clearColor];
     [PVideoConfig motionBlurView:_actionView];
     
-    _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, btnTopEdge, _actionView.frame.size.width, topBarHeight)];
-    _titleLabel.textColor = kThemeGraryColor;
-    _titleLabel.textAlignment = NSTextAlignmentCenter;
-    _titleLabel.font = [UIFont systemFontOfSize:16];
-    _titleLabel.text = @"小视频";
-    [_actionView addSubview:_titleLabel];
+    _titleLabel = [UILabel new];
+    self.titleLabel.textColor = kThemeGraryColor;
+    self.titleLabel.textAlignment = NSTextAlignmentCenter;
+    self.titleLabel.font = [UIFont systemFontOfSize:16];
+    self.titleLabel.text = @"小视频";
+    [_actionView addSubview:self.titleLabel];
+    [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.actionView);
+        make.height.offset(topBarHeight);
+        make.top.offset(btnTopEdge);
+    }];
     
     _leftBtn = [[PCloseBtn alloc] initWithFrame:CGRectMake(0, btnTopEdge, 60, topBarHeight)];
     _leftBtn.backgroundColor = [UIColor clearColor];
     [_leftBtn addTarget:self action:@selector(closeViewAction) forControlEvents:UIControlEventTouchUpInside];
     _leftBtn.gradientColors = [PVideoConfig gradualColors];
     [_actionView addSubview:_leftBtn];
-    
+//    [_leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.equalTo(self.actionView);
+//        make.top.offset(btnTopEdge);
+//        make.height.offset(topBarHeight);
+//        make.width.offset(60);
+//    }];
     
     _rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(_actionView.frame.size.width - 60, btnTopEdge, 60, topBarHeight)];
     [_rightBtn setTitle:@"编辑" forState: UIControlStateNormal];
@@ -122,8 +134,14 @@ static PVideoListViewController *__currentListVC = nil;
     gradLayer.colors = [PVideoConfig gradualColors];
     [_rightBtn.layer addSublayer:gradLayer];
     gradLayer.mask = _rightBtn.titleLabel.layer;
-    
     [_actionView addSubview:_rightBtn];
+//    [_rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.right.equalTo(self.actionView).offset();
+//        make.top.offset(btnTopEdge);
+//        make.height.offset(topBarHeight);
+//        make.width.offset(60);
+//    }];
+
 }
 
 static NSString *cellId = @"Cell";
@@ -131,13 +149,13 @@ static NSString *addCellId = @"AddCell";
 static NSString *footerId = @"footer";
 
 - (void)setupCollectionView {
+    
+    CGFloat btnTopEdge = _showType == PVideoViewShowTypeSingle ? 20:0;
+
     self.dataArr = [NSMutableArray arrayWithArray:[PVideoUtil getSortVideoList]];
     CGFloat itemWidth = (_actionView.frame.size.width - 40)/3;
-    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.minimumLineSpacing = 8;
-    layout.itemSize = CGSizeMake(itemWidth, itemWidth/customVideo_W_H);
-    layout.sectionInset = UIEdgeInsetsMake(10, 8, 10, 8);
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_titleLabel.frame), _actionView.frame.size.width, _actionView.frame.size.height - _titleLabel.frame.size.height) collectionViewLayout:layout];
+
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:itemWidth itemH:itemWidth/customVideo_W_H sectionInset:UIEdgeInsetsMake(10, 8, 10, 8) minimumLineSpacing:8 minimumInteritemSpacing:0 scrollDirection:UICollectionViewScrollDirectionVertical]];
     collectionView.delegate = self;
     collectionView.dataSource = self;
     [collectionView registerClass:[PVideoListCell class] forCellWithReuseIdentifier:cellId];
@@ -146,6 +164,11 @@ static NSString *footerId = @"footer";
     collectionView.backgroundColor = [UIColor clearColor];
     [self.actionView addSubview:collectionView];
     self.collectionView = collectionView;
+    [collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.actionView);
+        make.top.equalTo(self.titleLabel.mas_bottom);
+        make.bottom.equalTo(self.actionView.mas_bottom).offset(-btnTopEdge);
+    }];
 }
 
 #pragma mark ---------------> Actions
@@ -203,13 +226,17 @@ static NSString *footerId = @"footer";
             }
             NSInteger day = time/60/60/24 + 1;
             
-            UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(_actionView.frame), 20)];
+            UILabel *label = [UILabel new];
             label.textColor = kThemeGraryColor;
             label.font = [UIFont systemFontOfSize:14];
             label.textAlignment = NSTextAlignmentCenter;
             label.text = [NSString stringWithFormat:@"最近 %ld 天拍摄的小视频",(long)day];
             label.alpha = 0.6;
             [footerView addSubview:label];
+            [label mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.top.equalTo(footerView);
+                make.height.offset(20);
+            }];
         }
         return footerView;
     }

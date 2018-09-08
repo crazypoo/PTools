@@ -7,6 +7,7 @@
 //
 
 #import "PVideoSupport.h"
+#import <Masonry/Masonry.h>
 
 #pragma mark ---------------> Custom View
 
@@ -37,54 +38,62 @@
     [_cancelBtn removeFromSuperview];
     
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _cancelBtn.frame = CGRectMake(10, 22, 50, 40);
     [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [_cancelBtn addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
     [_cancelBtn setTitleColor:kThemeTineColor forState:UIControlStateNormal];
     _cancelBtn.alpha = 0.8;
     [self addSubview:_cancelBtn];
+    [_cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self).offset(10);
+        make.top.equalTo(self).offset(22);
+        make.width.offset(50);
+        make.height.offset(40);
+    }];
 }
 
 - (void)setupSubLayers {
     
-    if (_style == PVideoViewShowTypeSingle) {
-        return;
-    }
-    
-    UIView *showView = [[UIView alloc] initWithFrame:self.bounds];
-    showView.backgroundColor = [UIColor clearColor];
-    [self addSubview:showView];
-    
-    CGAffineTransform transform = CGAffineTransformIdentity;
-    
-    CGFloat barW = 20.0;
-    CGFloat barSpace = 4.0;
-    CGFloat topEdge = 5.5;
-    CGPoint selfCent = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
-    CGMutablePathRef nomalPath = CGPathCreateMutable();
-    for (int i=0; i<3; i++) {
-        CGPathMoveToPoint(nomalPath, &transform, selfCent.x-(barW/2), topEdge+(barSpace * i));
-        CGPathAddLineToPoint(nomalPath, &transform, selfCent.x+(barW/2), topEdge+(barSpace * i));
-    }
-    self.nomalLayer = [CAShapeLayer layer];
-    self.nomalLayer.frame = self.bounds;
-    self.nomalLayer.strokeColor = [UIColor  colorWithRed: 0.5 green: 0.5 blue: 0.5 alpha: 0.7 ].CGColor;
-    self.nomalLayer.lineCap = kCALineCapRound;
-    self.nomalLayer.lineWidth = 2.0;
-    self.nomalLayer.path = nomalPath;
-    [showView.layer addSublayer:self.nomalLayer];
-    CGPathRelease(nomalPath);
-    
-    CGFloat width = 10;
-    CGFloat height = 8;
-    self.recodingLayer = [CALayer layer];
-    self.recodingLayer.frame = CGRectMake(selfCent.x - width/2, selfCent.y - height/2, width, height);
-    self.recodingLayer.cornerRadius = height/2;
-    self.recodingLayer.masksToBounds = YES;
-    self.recodingLayer.backgroundColor = kThemeWaringColor.CGColor;
-    [showView.layer addSublayer:self.recodingLayer];
-    
-    self.recodingLayer.hidden = YES;
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_style == PVideoViewShowTypeSingle) {
+            return;
+        }
+        
+        UIView *showView = [[UIView alloc] initWithFrame:self.bounds];
+        showView.backgroundColor = [UIColor clearColor];
+        [self addSubview:showView];
+        
+        CGAffineTransform transform = CGAffineTransformIdentity;
+        
+        CGFloat barW = 20.0;
+        CGFloat barSpace = 4.0;
+        CGFloat topEdge = 5.5;
+        CGPoint selfCent = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
+        CGMutablePathRef nomalPath = CGPathCreateMutable();
+        for (int i=0; i<3; i++) {
+            CGPathMoveToPoint(nomalPath, &transform, selfCent.x-(barW/2), topEdge+(barSpace * i));
+            CGPathAddLineToPoint(nomalPath, &transform, selfCent.x+(barW/2), topEdge+(barSpace * i));
+        }
+        self.nomalLayer = [CAShapeLayer layer];
+        self.nomalLayer.frame = self.bounds;
+        self.nomalLayer.strokeColor = [UIColor  colorWithRed: 0.5 green: 0.5 blue: 0.5 alpha: 0.7 ].CGColor;
+        self.nomalLayer.lineCap = kCALineCapRound;
+        self.nomalLayer.lineWidth = 2.0;
+        self.nomalLayer.path = nomalPath;
+        [showView.layer addSublayer:self.nomalLayer];
+        CGPathRelease(nomalPath);
+        
+        CGFloat width = 10;
+        CGFloat height = 8;
+        self.recodingLayer = [CALayer layer];
+        self.recodingLayer.frame = CGRectMake(selfCent.x - width/2, selfCent.y - height/2, width, height);
+        self.recodingLayer.cornerRadius = height/2;
+        self.recodingLayer.masksToBounds = YES;
+        self.recodingLayer.backgroundColor = kThemeWaringColor.CGColor;
+        [showView.layer addSublayer:self.recodingLayer];
+        
+        self.recodingLayer.hidden = YES;
+
+    });
 }
 
 - (void)setIsRecoding:(BOOL)isRecoding {
@@ -185,8 +194,10 @@
 - (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style{
     if (self = [super initWithFrame:frame]) {
         _style = style;
-        [self setupRoundButton];
-        self.layer.cornerRadius = self.bounds.size.width/2;
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self setupRoundButton];
+            self.layer.cornerRadius = self.bounds.size.width/2;
+        });
         self.layer.masksToBounds = YES;
         self.userInteractionEnabled = YES;
     }
@@ -438,77 +449,98 @@ CGFloat angleToRadian(CGFloat angle) {
 @property (nonatomic,strong)UIView *progressLine;
 @property (nonatomic,assign)NSTimeInterval surplusTime;
 @property (nonatomic,assign)BOOL recording;
-
+@property (nonatomic,assign)int customRecordTime;
+@property (nonatomic,strong)UILongPressGestureRecognizer *longPress;
+@property (nonatomic,strong)UIButton *videoListBtn;
+@property (nonatomic,strong)PCloseBtn *closeVideoBtn;
 @end
 
 @implementation PControllerBar {
-    UILongPressGestureRecognizer *_longPress;
     BOOL _touchIsInside;
     
     NSTimer *_timer;
-    
-    UIButton *_videoListBtn;
-    PCloseBtn *_closeVideoBtn;
-    
+
     BOOL _videoDidEnd;
-    
-    int customRecordTime;
 }
 
 - (void)setupSubViewsWithStyle:(PVideoViewShowType)style recordTime:(NSTimeInterval)recordTime
 {
     [self layoutIfNeeded];
-    [PVideoConfig motionBlurView:self];
-    customRecordTime = recordTime;
     
-    CGFloat selfHeight = self.bounds.size.height;
-    CGFloat selfWidth = self.bounds.size.width;
-    CGFloat edge = 20.0;
-    CGFloat startBtnWidth = style == PVideoViewShowTypeSmall ? selfHeight - (edge * 2) : selfHeight/2;
-    
-    self.startBtn = [[PRecordBtn alloc] initWithFrame:CGRectMake(0, 0, startBtnWidth, startBtnWidth) style:style];
-    self.startBtn.center = CGPointMake(selfWidth/2, selfHeight/2);
-    [self addSubview:self.startBtn];
-    
-    _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longpressAction:)];
-    _longPress.minimumPressDuration = 0.01;
-    _longPress.delegate = self;
-    [self addGestureRecognizer:_longPress];
-    
-    self.progressLine = [[UIView alloc] initWithFrame:CGRectMake(0, 0, selfWidth, 4)];
-    self.progressLine.backgroundColor = kThemeTineColor;
-    self.progressLine.hidden = YES;
-    [self addSubview:self.progressLine];
-    
-    self.surplusTime = customRecordTime;
-    
-    
-    if (style == PVideoViewShowTypeSingle) {
-        return;
-    }
-    
-    _videoListBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    _videoListBtn.frame = CGRectMake(edge, edge+startBtnWidth/6, startBtnWidth/4*3, startBtnWidth/3*2);
-    _videoListBtn.layer.cornerRadius = 8;
-    _videoListBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
-    _videoListBtn.layer.masksToBounds = YES;
-    [_videoListBtn addTarget:self action:@selector(videoListAction) forControlEvents:UIControlEventTouchUpInside];
-    //        self.videoListBtn.backgroundColor = kzThemeTineColor
-    [self addSubview:_videoListBtn];
-    
-    NSArray<PVideoModel *> *videoList = [PVideoUtil getSortVideoList];
-    if (videoList.count == 0) {
-        _videoListBtn.hidden = YES;
-    }
-    else {
-        [_videoListBtn setBackgroundImage:[UIImage imageWithContentsOfFile:videoList[0].thumAbsolutePath] forState: UIControlStateNormal];
-    }
-    
-    CGFloat closeBtnWidth = _videoListBtn.frame.size.height;
-    _closeVideoBtn = [PCloseBtn buttonWithType:UIButtonTypeCustom];
-    _closeVideoBtn.frame = CGRectMake(self.bounds.size.width - closeBtnWidth - edge, CGRectGetMinY(_videoListBtn.frame), closeBtnWidth, closeBtnWidth);
-    [_closeVideoBtn addTarget:self action:@selector(videoCloseAction) forControlEvents:UIControlEventTouchUpInside];
-    [self addSubview:_closeVideoBtn];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [PVideoConfig motionBlurView:self];
+        self.customRecordTime = recordTime;
+        
+        CGFloat selfHeight = self.bounds.size.height;
+        CGFloat selfWidth = self.bounds.size.width;
+        CGFloat edge = 20.0;
+        CGFloat startBtnWidth = style == PVideoViewShowTypeSmall ? selfHeight - (edge * 2) : selfHeight/2;
+        
+        self.startBtn = [[PRecordBtn alloc] initWithFrame:CGRectZero style:style];
+        //    self.startBtn.center = CGPointMake(selfWidth/2, selfHeight/2);
+        [self addSubview:self.startBtn];
+        [self.startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.offset(startBtnWidth);
+            make.centerX.centerY.equalTo(self);
+        }];
+        //    CGRectMake(0, 0, startBtnWidth, startBtnWidth)
+        
+        self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longpressAction:)];
+        self.longPress.minimumPressDuration = 0.01;
+        self.longPress.delegate = self;
+        [self addGestureRecognizer:self.longPress];
+        
+        self.progressLine = [UIView new];
+        self.progressLine.backgroundColor = kThemeTineColor;
+        self.progressLine.hidden = YES;
+        [self addSubview:self.progressLine];
+        [self.progressLine mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.top.equalTo(self);
+            make.width.offset(selfWidth);
+            make.height.offset(4);
+        }];
+        
+        self.surplusTime = self.customRecordTime;
+        
+        
+        if (style == PVideoViewShowTypeSingle) {
+            return;
+        }
+        
+        self.videoListBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        //    self.videoListBtn.frame = CGRectMake(edge, edge+startBtnWidth/6, startBtnWidth/4*3, startBtnWidth/3*2);
+        self.videoListBtn.layer.cornerRadius = 8;
+        self.videoListBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
+        self.videoListBtn.layer.masksToBounds = YES;
+        [self.videoListBtn addTarget:self action:@selector(videoListAction) forControlEvents:UIControlEventTouchUpInside];
+        //        self.videoListBtn.backgroundColor = kzThemeTineColor
+        [self addSubview:self.videoListBtn];
+        [self.videoListBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self).offset(edge);
+            make.top.equalTo(self).offset(edge+startBtnWidth/6);
+            make.width.offset(startBtnWidth/4*3);
+            make.height.offset(startBtnWidth/3*2);
+        }];
+        
+        NSArray<PVideoModel *> *videoList = [PVideoUtil getSortVideoList];
+        if (videoList.count == 0) {
+            self.videoListBtn.hidden = YES;
+        }
+        else {
+            [self.videoListBtn setBackgroundImage:[UIImage imageWithContentsOfFile:videoList[0].thumAbsolutePath] forState: UIControlStateNormal];
+        }
+        
+        CGFloat closeBtnWidth = startBtnWidth/3*2;
+        self.closeVideoBtn = [PCloseBtn buttonWithType:UIButtonTypeCustom];
+        //    self.closeVideoBtn.frame = CGRectMake(self.bounds.size.width - closeBtnWidth - edge, edge+startBtnWidth/6, closeBtnWidth, closeBtnWidth);
+        [self.closeVideoBtn addTarget:self action:@selector(videoCloseAction) forControlEvents:UIControlEventTouchUpInside];
+        [self addSubview:self.closeVideoBtn];
+        [self.closeVideoBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self).offset(- edge);
+            make.top.equalTo(self).offset(edge+startBtnWidth/6);
+            make.width.height.offset(closeBtnWidth);
+        }];
+    });
 }
 
 - (void)startRecordSet {
@@ -518,7 +550,7 @@ CGFloat angleToRadian(CGFloat angle) {
     self.progressLine.backgroundColor = kThemeTineColor;
     self.progressLine.hidden = NO;
     
-    self.surplusTime = customRecordTime;
+    self.surplusTime = self.customRecordTime;
     self.recording = YES;
     
     _videoDidEnd = NO;
@@ -549,7 +581,7 @@ CGFloat angleToRadian(CGFloat angle) {
 
 #pragma mark ---------------> UIGestureRecognizerDelegate
 - (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer == _longPress) {
+    if (gestureRecognizer == self.longPress) {
         if (self.surplusTime <= 0) return  NO;
         
         CGPoint point = [gestureRecognizer locationInView:self];
@@ -590,7 +622,7 @@ CGFloat angleToRadian(CGFloat angle) {
             break;
         case UIGestureRecognizerStateEnded: {
             [self endRecordSet];
-            if (!_touchIsInside || customRecordTime - self.surplusTime <= 1) {
+            if (!_touchIsInside || self.customRecordTime - self.surplusTime <= 1) {
                 PRecordCancelReason reason = PRecordCancelReasonTimeShort;
                 if (!_touchIsInside) {
                     reason = PRecordCancelReasonDefault;
@@ -646,7 +678,7 @@ CGFloat angleToRadian(CGFloat angle) {
 }
 
 - (void)recordTimerAction {
-    CGFloat reduceLen = self.bounds.size.width/customRecordTime;
+    CGFloat reduceLen = self.bounds.size.width/self.customRecordTime;
     CGFloat oldLineLen = self.progressLine.frame.size.width;
     CGRect oldFrame = self.progressLine.frame;
     
