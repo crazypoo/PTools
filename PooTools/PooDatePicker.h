@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSInteger,PPickerType){
+    PPickerTypeYMD = 0,
+    PPickerTypeYM,
+    PPickerTypeY
+};
+
 @interface PooDatePicker : UIView
 
 /*! @brief 日期Picker初始化
@@ -16,14 +22,16 @@
  * @param font 字体
  * @param tbtc tabbar上的字体颜色
  * @param pf picker的字体
+ * @param pT picker显示类型 (年月日/年月/年)
  */
 - (instancetype)initWithTitle:(NSString *)title
        toolBarBackgroundColor:(UIColor *)tbbc
                     labelFont:(UIFont *)font
             toolBarTitleColor:(UIColor *)tbtc
-                   pickerFont:(UIFont *)pf;
+                   pickerFont:(UIFont *)pf
+                   pickerType:(PPickerType)pT;
 
 /*! @brief 选取回调
  */
-@property (nonatomic, copy) void (^block)(NSString *);
+@property (nonatomic, copy) void (^block)(NSString *dateString);
 @end

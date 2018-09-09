@@ -22,70 +22,63 @@
 @property (nonatomic, assign) NSInteger monthIndex;
 @property (nonatomic, assign) NSInteger dayIndex;
 @property (nonatomic, strong) UIView *topV;
+@property (nonatomic, assign) PPickerType pickerType;
 @end
 
 @implementation PooDatePicker
-- (NSMutableArray *)yearArray {
-    
-    if (_yearArray == nil) {
-        
+- (NSMutableArray *)yearArray
+{
+    if (_yearArray == nil)
+    {
         _yearArray = [NSMutableArray array];
-        
-        for (int year = 2000; year < 2050; year++) {
-            
+        for (int year = 2000; year < 2050; year++)
+        {
             NSString *str = [NSString stringWithFormat:@"%d年", year];
-            
             [_yearArray addObject:str];
         }
     }
-    
     return _yearArray;
 }
 
-- (NSMutableArray *)monthArray {
-    
-    if (_monthArray == nil) {
-        
+- (NSMutableArray *)monthArray
+{
+    if (_monthArray == nil)
+    {
         _monthArray = [NSMutableArray array];
-        
-        for (int month = 1; month <= 12; month++) {
-            
+        for (int month = 1; month <= 12; month++)
+        {
             NSString *str = [NSString stringWithFormat:@"%02d月", month];
-            
             [_monthArray addObject:str];
         }
     }
-    
     return _monthArray;
 }
 
-- (NSMutableArray *)dayArray {
-    
-    if (_dayArray == nil) {
-        
+- (NSMutableArray *)dayArray
+{
+    if (_dayArray == nil)
+    {
         _dayArray = [NSMutableArray array];
-        
-        for (int day = 1; day <= 31; day++) {
-            
+        for (int day = 1; day <= 31; day++)
+        {
             NSString *str = [NSString stringWithFormat:@"%02d日", day];
-            
             [_dayArray addObject:str];
         }
     }
-    
     return _dayArray;
 }
 
-
-- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf
+- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf pickerType:(PPickerType)pT
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.pickerFonts = pf;
-        self.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
+        self.pickerType = pT;
+        self.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
-        tapGesture.numberOfTapsRequired    = 1;
+        tapGesture.numberOfTapsRequired = 1;
         [self addGestureRecognizer:tapGesture];
         
         self.topV = [UIView new];
@@ -134,26 +127,53 @@
         }];
         
         [cancelBtn addActionHandler:^(UIButton *sender) {
-            if (self.block) {
+            if (self.block)
+            {
                 self.block(nil);
             }
-            
             [self remove];
         }];
 
         [yesBtn addActionHandler:^(UIButton *sender) {
-            if (self.block) {
-                
-                NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text, ((UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2]).text];
-                
-                
-                timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
-                
-                timeStr = [timeStr stringByReplacingOccurrencesOfString:@"月" withString:@"-"];
-                
-                timeStr = [timeStr stringByReplacingOccurrencesOfString:@"日" withString:@""];
-                
-                self.block(timeStr);
+            if (self.block)
+            {
+                switch (self.pickerType)
+                {
+                    case PPickerTypeYMD:
+                    {
+                        NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text, ((UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2]).text];
+                        
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"月" withString:@"-"];
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"日" withString:@""];
+                        
+                        self.block(timeStr);
+                    }
+                        break;
+                    case PPickerTypeYM:
+                    {
+                        NSString *timeStr = [NSString stringWithFormat:@"%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text];
+                        
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"月" withString:@"-"];
+                        
+                        NSString *newTime = [timeStr substringToIndex:timeStr.length-1];
+                        
+                        self.block(newTime);
+                    }
+                        break;
+                    default:
+                    {
+                        NSString *timeStr = [NSString stringWithFormat:@"%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text];
+                        
+                        timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
+                        
+                        NSString *newTime = [timeStr substringToIndex:timeStr.length-1];
+                        
+                        self.block(newTime);
+                    }
+                        break;
+                }
             }
             [self remove];
         }];
@@ -179,32 +199,83 @@
         // 获取不同时间字段的信息
         NSDateComponents *comp = [calendar components: unitFlags fromDate:[NSDate date]];
         
-        self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
-        self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
-        self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", (long)comp.day]];
-        
-        [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
-        [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
-        [self.pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
-        
-        [self pickerView:self.pickerView didSelectRow:self.yearIndex inComponent:0];
-        [self pickerView:self.pickerView didSelectRow:self.monthIndex inComponent:1];
-        [self pickerView:self.pickerView didSelectRow:self.dayIndex inComponent:2];
+        switch (self.pickerType)
+        {
+            case PPickerTypeYMD:
+            {
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
+                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
+                self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", (long)comp.day]];
+                
+                [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
+                [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
+                [self.pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
+                
+                [self pickerView:self.pickerView didSelectRow:self.yearIndex inComponent:0];
+                [self pickerView:self.pickerView didSelectRow:self.monthIndex inComponent:1];
+                [self pickerView:self.pickerView didSelectRow:self.dayIndex inComponent:2];
+            }
+                break;
+            case PPickerTypeYM:
+            {
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
+                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
+                
+                [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
+                [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
+                
+                [self pickerView:self.pickerView didSelectRow:self.yearIndex inComponent:0];
+                [self pickerView:self.pickerView didSelectRow:self.monthIndex inComponent:1];
+            }
+                break;
+            default:
+            {
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
+                
+                [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
+                
+                [self pickerView:self.pickerView didSelectRow:self.yearIndex inComponent:0];
+            }
+                break;
+        }
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
-            UILabel *label = (UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0];
-            label.textColor = [UIColor blackColor];
-            label.font = font;
-            
-            label = (UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1];
-            label.textColor = [UIColor blackColor];
-            label.font = font;
-            
-            label = (UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2];
-            label.textColor = [UIColor blackColor];
-            label.font = font;
-            
+            switch (self.pickerType)
+            {
+                case PPickerTypeYMD:
+                {
+                    UILabel *label = (UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                    
+                    label = (UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                    
+                    label = (UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                }
+                    break;
+                case PPickerTypeYM:
+                {
+                    UILabel *label = (UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                    
+                    label = (UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                }
+                    break;
+                default:
+                {
+                    UILabel *label = (UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0];
+                    label.textColor = [UIColor blackColor];
+                    label.font = font;
+                }
+                    break;
+            }
         });
     }
     return self;
@@ -218,47 +289,69 @@
 #pragma mark UIPickerView的数据源
 - (NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
 {
-    return 3;
+    switch (self.pickerType)
+    {
+        case PPickerTypeYMD:
+        {
+            return 3;
+        }
+            break;
+        case PPickerTypeYM:
+        {
+            return 2;
+        }
+        default:
+        {
+            return 1;
+        }
+            break;
+    }
 }
 
 - (NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
 {
-    if (component == 0) {
+    if (component == 0)
+    {
         return self.yearArray.count;
-        
-    }else if(component == 1) {
-        
-        return self.monthArray.count;
-        
-    }else {
-        
-        switch (self.monthIndex + 1) {
-                
-            case 1:
-            case 3:
-            case 5:
-            case 7:
-            case 8:
-            case 10:
-            case 12: return 31;
-                
-            case 4:
-            case 6:
-            case 9:
-            case 11: return 30;
-                
-            default: return 28;
+    }
+    else if(component == 1)
+    {
+        if (self.pickerType == PPickerTypeYMD || self.pickerType == PPickerTypeYM)
+        {
+            return self.monthArray.count;
         }
     }
+    else
+    {
+        if (self.pickerType == PPickerTypeYMD)
+        {
+            switch (self.monthIndex + 1)
+            {
+                case 1:
+                case 3:
+                case 5:
+                case 7:
+                case 8:
+                case 10:
+                case 12: return 31;
+                    
+                case 4:
+                case 6:
+                case 9:
+                case 11: return 30;
+                    
+                default: return 28;
+            }
+        }
+    }
+    return 0;
 }
 
-
-- (void)remove {
-    
+- (void)remove
+{
     [UIView animateWithDuration:0.25 animations:^{
         
     } completion:^(BOOL finished) {
-        
         [self removeFromSuperview];
     }];
     
@@ -268,91 +361,103 @@
 // 滚动UIPickerView就会调用
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 {
-    if (component == 0) {
-        
+    if (component == 0)
+    {
         self.yearIndex = row;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
             label.textColor = [UIColor blackColor];
             label.font = self.pickerFonts;
-            
         });
-        
-    }else if (component == 1) {
-        
-        self.monthIndex = row;
-        
-        [pickerView reloadComponent:2];
-        
-        
-        if (self.monthIndex + 1 == 4 || self.monthIndex + 1 == 6 || self.monthIndex + 1 == 9 || self.monthIndex + 1 == 11) {
+    }
+    else if (component == 1)
+    {
+        if (self.pickerType == PPickerTypeYMD || self.pickerType == PPickerTypeYM)
+        {
+            self.monthIndex = row;
+            if (self.pickerType == PPickerTypeYMD)
+            {
+                [pickerView reloadComponent:2];
+            }
             
-            if (self.dayIndex + 1 == 31) {
+            if (self.monthIndex + 1 == 4 || self.monthIndex + 1 == 6 || self.monthIndex + 1 == 9 || self.monthIndex + 1 == 11)
+            {
+                if (self.pickerType == PPickerTypeYMD)
+                {
+                    if (self.dayIndex + 1 == 31)
+                    {
+                        self.dayIndex--;
+                    }
+                }
+            }
+            else if (self.monthIndex + 1 == 2)
+            {
+                if (self.pickerType == PPickerTypeYMD)
+                {
+                    if (self.dayIndex + 1 > 28)
+                    {
+                        self.dayIndex = 27;
+                    }
+                }
+            }
+            if (self.pickerType == PPickerTypeYMD)
+            {
+                [pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
+            }
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
+                label.textColor = [UIColor blackColor];
+                label.font = self.pickerFonts;
                 
-                self.dayIndex--;
-            }
-        }else if (self.monthIndex + 1 == 2) {
-            
-            if (self.dayIndex + 1 > 28) {
-                self.dayIndex = 27;
-            }
+                if (self.pickerType == PPickerTypeYMD)
+                {
+                    label = (UILabel *)[pickerView viewForRow:self.dayIndex forComponent:2];
+                    label.textColor = [UIColor blackColor];
+                    label.font = self.pickerFonts;
+                }
+            });
         }
-        [pickerView selectRow:self.dayIndex inComponent:2 animated:YES];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
-            UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
-            label.textColor = [UIColor blackColor];
-            label.font = self.pickerFonts;
-            
-            label = (UILabel *)[pickerView viewForRow:self.dayIndex forComponent:2];
-            label.textColor = [UIColor blackColor];
-            label.font = self.pickerFonts;
-            
-        });
-    }else {
-        
-        self.dayIndex = row;
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
-            UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
-            label.textColor = [UIColor blackColor];
-            label.font = self.pickerFonts;
-            
-        });
+    }
+    else
+    {
+        if (self.pickerType == PPickerTypeYMD)
+        {
+            self.dayIndex = row;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
+                label.textColor = [UIColor blackColor];
+                label.font = self.pickerFonts;
+            });
+        }
     }
 }
 
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    //    //设置分割线的颜色
-    //    for(UIView *singleLine in pickerView.subviews)
-    //    {
-    //        if (singleLine.frame.size.height < 1)
-    //        {
-    //            singleLine.backgroundColor = kSingleLineColor;
-    //        }
-    //    }
-    
     //设置文字的属性
     UILabel *genderLabel = [[UILabel alloc] init];
     genderLabel.textAlignment = NSTextAlignmentCenter;
     genderLabel.textColor = [UIColor blackColor];
     genderLabel.font = self.pickerFonts;
-    if (component == 0) {
-        
+    if (component == 0)
+    {
         genderLabel.text = self.yearArray[row];
-        
-    }else if (component == 1) {
-        
-        genderLabel.text = self.monthArray[row];
-        
-    }else {
-        
-        genderLabel.text = self.dayArray[row];
     }
-    
+    else if (component == 1)
+    {
+        if (self.pickerType == PPickerTypeYMD || self.pickerType == PPickerTypeYM)
+        {
+            genderLabel.text = self.monthArray[row];
+        }
+    }
+    else
+    {
+        if (self.pickerType == PPickerTypeYMD)
+        {
+            genderLabel.text = self.dayArray[row];
+        }
+    }
     return genderLabel;
 }
 

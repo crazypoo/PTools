@@ -179,9 +179,9 @@
 
 -(void)aaaaa
 {
-    PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
-    videoVC.delegate = self;
-    [videoVC startAnimationWithType:PVideoViewShowTypeSmall];
+//    PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
+//    videoVC.delegate = self;
+//    [videoVC startAnimationWithType:PVideoViewShowTypeSmall];
 
 //    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
 //    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
@@ -333,11 +333,14 @@
 //                   } otherButtonAction:^(NSInteger aaaaaaaaaa) {
 //                       PNSLog(@"%ld",(long)aaaaaaaaaa);
 //                   }];
-//    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
-//    [self.view addSubview:view];
-//    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.top.bottom.equalTo(self.view);
-//    }];
+    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
+    [self.view addSubview:view];
+    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
+    }];
+    view.block = ^(NSString *dateString) {
+        PNSLog(@">>>>>>>>>>>%@",dateString);
+    };
 }
 
 #pragma mark - YXCustomAlertViewDelegate
