@@ -8,10 +8,11 @@
 
 #import <Foundation/Foundation.h>
 #import "PVideoConfig.h"
+#import <UIKit/UIKit.h>
 
 @protocol PVideoViewControllerDelegate;
 
-@interface PVideoViewController : NSObject
+@interface PVideoViewController : UIView
 
 @property (nonatomic, assign) id<PVideoViewControllerDelegate> delegate;
 

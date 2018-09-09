@@ -50,7 +50,6 @@ static PVideoListViewController *__currentListVC = nil;
     [self setupSubViews];
     __currentListVC = self;
     UIWindow *keyWindow = [UIApplication sharedApplication].delegate.window;
-    //    _actionView.transform = _showType == KZVideoViewShowTypeSmall ? CGAffineTransformScale(CGAffineTransformIdentity, 1.6, 1.6): CGAffineTransformMakeTranslation(0, CGRectGetHeight([KZVideoConfig viewFrameWithType:showType]));
     _actionView.transform = CGAffineTransformScale(CGAffineTransformIdentity, 1.6, 1.6);
     _actionView.alpha = 0.0;
     [keyWindow addSubview:_actionView];
@@ -116,12 +115,6 @@ static PVideoListViewController *__currentListVC = nil;
     [_leftBtn addTarget:self action:@selector(closeViewAction) forControlEvents:UIControlEventTouchUpInside];
     _leftBtn.gradientColors = [PVideoConfig gradualColors];
     [_actionView addSubview:_leftBtn];
-//    [_leftBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.equalTo(self.actionView);
-//        make.top.offset(btnTopEdge);
-//        make.height.offset(topBarHeight);
-//        make.width.offset(60);
-//    }];
     
     _rightBtn = [[UIButton alloc] initWithFrame:CGRectMake(_actionView.frame.size.width - 60, btnTopEdge, 60, topBarHeight)];
     [_rightBtn setTitle:@"编辑" forState: UIControlStateNormal];
@@ -135,13 +128,6 @@ static PVideoListViewController *__currentListVC = nil;
     [_rightBtn.layer addSublayer:gradLayer];
     gradLayer.mask = _rightBtn.titleLabel.layer;
     [_actionView addSubview:_rightBtn];
-//    [_rightBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.right.equalTo(self.actionView).offset();
-//        make.top.offset(btnTopEdge);
-//        make.height.offset(topBarHeight);
-//        make.width.offset(60);
-//    }];
-
 }
 
 static NSString *cellId = @"Cell";

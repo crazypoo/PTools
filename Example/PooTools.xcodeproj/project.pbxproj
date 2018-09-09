@@ -90,6 +90,7 @@
 		CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CD214364D000453548 /* PVideoListViewController.m */; };
 		CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CE214364D000453548 /* PVideoPlayer.m */; };
 		CC3838D7214364D100453548 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D1214364D100453548 /* PVideoConfig.m */; };
+		CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
 		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
 		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
@@ -301,6 +302,8 @@
 		CC3838D0214364D000453548 /* PVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoPlayer.h; sourceTree = "<group>"; };
 		CC3838D1214364D100453548 /* PVideoConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoConfig.m; sourceTree = "<group>"; };
 		CC3838D2214364D100453548 /* PVideoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoSupport.h; sourceTree = "<group>"; };
+		CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
+		CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
 		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
 		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
 		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
@@ -681,6 +684,8 @@
 				CC1257AC2098319200E31A38 /* WPHotspotLabel.m */,
 				CC1257AD2098319200E31A38 /* WPTappableLabel.h */,
 				CC1257AE2098319200E31A38 /* WPTappableLabel.m */,
+				CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */,
+				CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -850,6 +855,7 @@
 				CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */,
+				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */,
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
 				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,

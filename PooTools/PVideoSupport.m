@@ -14,13 +14,14 @@
 @interface PStatusBar()
 @property (nonatomic,strong)CALayer *recodingLayer;
 @property (nonatomic,strong)CAShapeLayer *nomalLayer;
+@property (nonatomic,assign)PVideoViewShowType style;
 @end
 
 @implementation PStatusBar
 {
     BOOL _clear;
     
-    PVideoViewShowType _style;
+    
     
     UIButton *_cancelBtn;
 }
@@ -54,7 +55,7 @@
 - (void)setupSubLayers {
     
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (_style == PVideoViewShowTypeSingle) {
+        if (self.style == PVideoViewShowTypeSingle) {
             return;
         }
         
@@ -477,13 +478,11 @@ CGFloat angleToRadian(CGFloat angle) {
         CGFloat startBtnWidth = style == PVideoViewShowTypeSmall ? selfHeight - (edge * 2) : selfHeight/2;
         
         self.startBtn = [[PRecordBtn alloc] initWithFrame:CGRectZero style:style];
-        //    self.startBtn.center = CGPointMake(selfWidth/2, selfHeight/2);
         [self addSubview:self.startBtn];
         [self.startBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.width.height.offset(startBtnWidth);
             make.centerX.centerY.equalTo(self);
         }];
-        //    CGRectMake(0, 0, startBtnWidth, startBtnWidth)
         
         self.longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longpressAction:)];
         self.longPress.minimumPressDuration = 0.01;
@@ -508,7 +507,6 @@ CGFloat angleToRadian(CGFloat angle) {
         }
         
         self.videoListBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        //    self.videoListBtn.frame = CGRectMake(edge, edge+startBtnWidth/6, startBtnWidth/4*3, startBtnWidth/3*2);
         self.videoListBtn.layer.cornerRadius = 8;
         self.videoListBtn.imageView.contentMode = UIViewContentModeScaleAspectFill;
         self.videoListBtn.layer.masksToBounds = YES;

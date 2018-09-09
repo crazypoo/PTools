@@ -8,6 +8,7 @@
 
 #import "PVideoConfig.h"
 #import <AVFoundation/AVFoundation.h>
+#import <Masonry/Masonry.h>
 
 void kz_dispatch_after(float time, dispatch_block_t block)
 {
@@ -41,10 +42,13 @@ void kz_dispatch_after(float time, dispatch_block_t block)
 
 + (void)motionBlurView:(UIView *)superView {
     superView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
-    UIToolbar *bar = [[UIToolbar alloc] initWithFrame:superView.bounds];
+    UIToolbar *bar = [UIToolbar new];
     [bar setBarStyle:UIBarStyleBlackTranslucent];
     bar.clipsToBounds = YES;
     [superView addSubview:bar];
+    [bar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(superView);
+    }];
 }
 
 + (void)showHinInfo:(NSString *)text inView:(UIView *)superView frame:(CGRect)frame timeLong:(NSTimeInterval)time {
