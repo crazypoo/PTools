@@ -1,9 +1,23 @@
 # PooTools
 
-[![Build Status](https://img.shields.io/travis/crazypoo/PooTools.svg?style=flat)](https://travis-ci.org/crazypoo/PooTools)
-[![Version](https://img.shields.io/cocoapods/v/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)
-[![License](https://img.shields.io/cocoapods/l/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)
-[![Platform](https://img.shields.io/cocoapods/p/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)
+<!--[![Build Status](https://img.shields.io/travis/crazypoo/PooTools.svg?style=flat)](https://travis-ci.org/crazypoo/PooTools)-->
+<!--[![Version](https://img.shields.io/cocoapods/v/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)-->
+<!--[![License](https://img.shields.io/cocoapods/l/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)-->
+<!--[![Platform](https://img.shields.io/cocoapods/p/PooTools.svg?style=flat)](https://cocoapods.org/pods/PooTools)-->
+
+<!--https://img.shields.io/travis/:user/:repo.svg-->
+
+<p align="center">
+<a href=""><img src="https://img.shields.io/cocoapods/v/PooTools.svg"></a>
+<a href=""><img src="https://img.shields.io/cocoapods/p/PooTools.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg"></a>
+<a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
+</p>
+<p align="center">
+<a href="https://twitter.com/stevechen1010"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
+<a href="http://weibo.com/luohanchenyilong"><img src="http://i67.tinypic.com/wbulbr.jpg"></a>
+<a href="https://gitter.im/ChenYilong/CYLTabBarController?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/ChenYilong/CYLTabBarController.svg"></a>
+</p>
 
 ## About
 
