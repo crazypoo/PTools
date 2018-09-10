@@ -103,29 +103,29 @@ PooTools是一款积累了好多比较适合本人开发的工具类,也有可�
 
 本工具集成了以下辅助第三方工具:</br>
 'AFNetworking':https://github.com/AFNetworking/AFNetworking</br>
-'CYLTabBarController'
-'DHSmartScreenshot'
-'DZNEmptyDataSet'
-'FDFullscreenPopGesture'
-'FMDB'
-'HTAutocompleteTextField'
-'IQKeyboardManager'
-'JMHoledView'
-'LTNavigationBar'
-'Mantle'
-'Masonry'
-'MJExtension'
-'MJRefresh'
-'MYBlurIntroductionView'
-'pop'
-'SDWebImage'
-'TextFieldEffects'
-'TOWebViewController'
-'UITextField+Shake'
-'UINavigation-SXFixSpace'
-'UITableView+FDTemplateLayoutCell'
-'UIViewController+Swizzled'
-'YCXMenu'
+'CYLTabBarController':https://github.com/ChenYilong/CYLTabBarController</br>
+'DHSmartScreenshot':https://github.com/AFNetworking/AFNetworking</br>
+'DZNEmptyDataSet':https://github.com/AFNetworking/AFNetworking</br>
+'FDFullscreenPopGesture':https://github.com/AFNetworking/AFNetworking</br>
+'FMDB':https://github.com/AFNetworking/AFNetworking</br>
+'HTAutocompleteTextField':https://github.com/AFNetworking/AFNetworking</br>
+'IQKeyboardManager':https://github.com/AFNetworking/AFNetworking</br>
+'JMHoledView':https://github.com/AFNetworking/AFNetworking</br>
+'LTNavigationBar':https://github.com/AFNetworking/AFNetworking</br>
+'Mantle':https://github.com/AFNetworking/AFNetworking</br>
+'Masonry':https://github.com/AFNetworking/AFNetworking</br>
+'MJExtension':https://github.com/AFNetworking/AFNetworking</br>
+'MJRefresh':https://github.com/AFNetworking/AFNetworking</br>
+'MYBlurIntroductionView':https://github.com/AFNetworking/AFNetworking</br>
+'pop':https://github.com/AFNetworking/AFNetworking</br>
+'SDWebImage':https://github.com/AFNetworking/AFNetworking</br>
+'TextFieldEffects':https://github.com/AFNetworking/AFNetworking</br>
+'TOWebViewController':https://github.com/AFNetworking/AFNetworking</br>
+'UITextField+Shake':https://github.com/AFNetworking/AFNetworking</br>
+'UINavigation-SXFixSpace':https://github.com/AFNetworking/AFNetworking</br>
+'UITableView+FDTemplateLayoutCell':https://github.com/AFNetworking/AFNetworking</br>
+'UIViewController+Swizzled':https://github.com/AFNetworking/AFNetworking</br>
+'YCXMenu':https://github.com/AFNetworking/AFNetworking</br>
 
 ## Requirements
 
