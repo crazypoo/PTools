@@ -102,7 +102,7 @@ PooTools是一款积累了好多比较适合本人开发的工具类,也有可�
 ## Assist
 
 本工具集成了以下辅助第三方工具:
-'AFNetworking'
+'AFNetworking':https://github.com/AFNetworking/AFNetworking
 'CYLTabBarController'
 'DHSmartScreenshot'
 'DZNEmptyDataSet'
