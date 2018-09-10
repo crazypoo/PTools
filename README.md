@@ -13,7 +13,7 @@
 
 ## About
 
-PooTools是一款积累了好多比较适合本人开发的工具类,也有可能适合到一些有需要的人
+PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码,或者有些代码年份可能跨度有点大作者忘记了(估计也是12年到现在的代码).如有侵犯,请issue.希望大家喜欢
 
 ## Tool's Infomation
 
@@ -82,9 +82,9 @@ PooTools是一款积累了好多比较适合本人开发的工具类,也有可�
 '类似Google的Loading'</br>
 'Layer的AutoLayout'</br>
 
-## About OS Kit
+## About iOS Kit
 
-本工具运用到以下系统工具:
+本工具运用到以下系统工具:</br>
 'AssetsLibrary'</br>
 'AudioToolbox'</br>
 'AVFoundation'</br>
@@ -135,7 +135,7 @@ PooTools是一款积累了好多比较适合本人开发的工具类,也有可�
 
 ## Requirements
 
-使用工具时，一定要在Build Settings->other links flags加入-ObjC和-all_load
+使用工具时，一定要在Build Settings->other links flags加入-ObjC和-all_load,以防避免一些奇奇怪怪的问题发生.
 
 ## Attention
 
