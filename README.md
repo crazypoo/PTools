@@ -10,7 +10,7 @@
 <p align="center">
 <a href=""><img src="https://img.shields.io/cocoapods/v/PooTools.svg"></a>
 <a href=""><img src="https://img.shields.io/cocoapods/p/PooTools.svg"></a>
-<a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/platform-iOS%208.0%2B-ff69b5152950834.svg"></a>
 <a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
 </p>
 <p align="center">
