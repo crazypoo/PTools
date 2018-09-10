@@ -555,10 +555,6 @@
         }];
         
         [cancelBtn addActionHandler:^(UIButton *sender) {
-            if (self.block)
-            {
-                self.block(nil);
-            }
             [self remove];
         }];
         
@@ -588,18 +584,6 @@
             make.height.offset(216);
             make.bottom.equalTo(self);
         }];
-        
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            UIView *pickerView = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
-            UILabel *pickerLabel = (UILabel *)[pickerView subviews].lastObject;
-            pickerLabel.textColor = [UIColor blackColor];
-            pickerLabel.font = pf;
-            
-            pickerView = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
-            pickerLabel = (UILabel *)[pickerView subviews].lastObject;
-            pickerLabel.textColor = [UIColor blackColor];
-            pickerLabel.font = pf;
-        });
     }
     return self;
 }
@@ -611,9 +595,10 @@
 - (void)remove
 {
     [UIView animateWithDuration:0.25 animations:^{
-        
     } completion:^(BOOL finished) {
-        [self removeFromSuperview];
+        if (self.dismissBlock) {
+            self.dismissBlock(self);
+        }
     }];
 }
 
@@ -640,18 +625,6 @@
     return 0;
 }
 
-//返回指定列，行的高度，就是自定义行的高度
-- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
-{
-    return 30.0f;
-}
-
-//返回指定列的宽度
-- (CGFloat) pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
-{
-    return  kSCREEN_WIDTH/2;
-}
-
 // 自定义指定列的每行的视图，即指定列的每行的视图行为一致
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
@@ -660,7 +633,7 @@
         view = [[UIView alloc]init];
     }
     
-    UILabel *text = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH/2, 30)];
+    UILabel *text = [UILabel new];
     text.textColor = [UIColor blackColor];
     text.textAlignment = NSTextAlignmentCenter;
     text.font = self.pickerFonts;
@@ -681,6 +654,9 @@
             break;
     }
     [view addSubview:text];
+    [text mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.height.equalTo(view);
+    }];
 
     return view;
 }
@@ -691,23 +667,19 @@
         case 0:
         {
             self.hourIndex = row;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
-                UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
-                pickerLabel.textColor = [UIColor blackColor];
-                pickerLabel.font = self.pickerFonts;
-            });
+            UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
+            UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
+            pickerLabel.textColor = [UIColor blackColor];
+            pickerLabel.font = self.pickerFonts;
         }
             break;
         case 1:
         {
             self.minuteIndex = row;
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
-                UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
-                pickerLabel.textColor = [UIColor blackColor];
-                pickerLabel.font = self.pickerFonts;
-            });
+            UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
+            UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
+            pickerLabel.textColor = [UIColor blackColor];
+            pickerLabel.font = self.pickerFonts;
         }
             break;
         default:

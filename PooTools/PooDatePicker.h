@@ -49,7 +49,9 @@ typedef NS_ENUM(NSInteger,PPickerType){
                     labelFont:(UIFont *)font
             toolBarTitleColor:(UIColor *)tbtc
                    pickerFont:(UIFont *)pf;
+
 @property (nonatomic, copy) void (^block)(NSString *timeString);
+@property (nonatomic, copy) void (^dismissBlock)(PooTimePicker *timePicker);
 @property (nonatomic, strong) UIPickerView *pickerView;
 
 - (void)customSelectRow:(NSInteger)row

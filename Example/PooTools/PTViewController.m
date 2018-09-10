@@ -343,7 +343,7 @@
 //    };
     
     PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
-    [self.view addSubview:view];
+    [[PTAppDelegate appDelegate].window addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
@@ -356,6 +356,10 @@
 
     [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
     [view customSelectRow:1 inComponent:1 animated:YES];
+    view.dismissBlock = ^(PooTimePicker *timePicker) {
+        [timePicker removeFromSuperview];
+        timePicker = nil;
+    };
 }
 
 #pragma mark - YXCustomAlertViewDelegate
