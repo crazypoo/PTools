@@ -32,7 +32,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PooNumberKeyBoardDelegate,PVideoViewControllerDelegate>
+@interface PTViewController ()<PooNumberKeyBoardDelegate,PVideoViewControllerDelegate,PooTimePickerDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
 @property (nonatomic, strong)UITextField *textField;
 @end
@@ -343,23 +343,24 @@
 //    };
     
     PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
+    view.delegate = self;
     [[PTAppDelegate appDelegate].window addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
-    view.block = ^(NSString *dateString) {
-        PNSLog(@">>>>>>>>>>>%@",dateString);
-    };
+//    view.block = ^(NSString *dateString) {
+//        PNSLog(@">>>>>>>>>>>%@",dateString);
+//    };
     
     [view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
     [view customSelectRow:10 inComponent:0 animated:YES];
 
     [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
     [view customSelectRow:1 inComponent:1 animated:YES];
-    view.dismissBlock = ^(PooTimePicker *timePicker) {
-        [timePicker removeFromSuperview];
-        timePicker = nil;
-    };
+//    view.dismissBlock = ^(PooTimePicker *timePicker) {
+//        [timePicker removeFromSuperview];
+//        timePicker = nil;
+//    };
 }
 
 #pragma mark - YXCustomAlertViewDelegate
@@ -425,6 +426,16 @@
 
 - (void)videoViewControllerDidCancel:(PVideoViewController *)videoController {
     NSLog(@"没有录到视频");
+}
+
+-(void)timePickerReturnStr:(NSString *)timeStr
+{
+    PNSLog(@">>>>>>>>>>>>>%@",timeStr);
+}
+
+-(void)timePickerDismiss:(PooTimePicker *)timePicker
+{
+    PNSLog(@">>>>>>>>>>>>>%@",timePicker);
 }
 
 @end

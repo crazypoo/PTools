@@ -36,6 +36,13 @@ typedef NS_ENUM(NSInteger,PPickerType){
 @property (nonatomic, copy) void (^block)(NSString *dateString);
 @end
 
+@class PooTimePicker;
+
+@protocol PooTimePickerDelegate <NSObject>
+-(void)timePickerReturnStr:(NSString *)timeStr;
+-(void)timePickerDismiss:(PooTimePicker *)timePicker;
+@end
+
 @interface PooTimePicker : UIView
 /*! @brief 时间Picker初始化
  * @param title 标题
@@ -53,6 +60,7 @@ typedef NS_ENUM(NSInteger,PPickerType){
 @property (nonatomic, copy) void (^block)(NSString *timeString);
 @property (nonatomic, copy) void (^dismissBlock)(PooTimePicker *timePicker);
 @property (nonatomic, strong) UIPickerView *pickerView;
+@property (nonatomic, weak) id<PooTimePickerDelegate>delegate;
 
 - (void)customSelectRow:(NSInteger)row
             inComponent:(NSInteger)component

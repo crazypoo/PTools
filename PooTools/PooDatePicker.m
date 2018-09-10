@@ -559,18 +559,24 @@
         }];
         
         [yesBtn addActionHandler:^(UIButton *sender) {
+            UIView *pickerViewCom0 = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
+            UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
+            
+            UIView *pickerViewCom1 = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
+            UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
+            
+            NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
+
             if (self.block)
             {
-                UIView *pickerViewCom0 = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
-                UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
-                
-                UIView *pickerViewCom1 = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
-                UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
-                
-                NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
                 
                 self.block(timeStr);
             }
+            
+            if ([self.delegate respondsToSelector:@selector(timePickerReturnStr:)]) {
+                [self.delegate timePickerReturnStr:timeStr];
+            }
+            
             [self remove];
         }];
         
@@ -598,6 +604,10 @@
     } completion:^(BOOL finished) {
         if (self.dismissBlock) {
             self.dismissBlock(self);
+        }
+        
+        if ([self.delegate respondsToSelector:@selector(timePickerDismiss:)]) {
+            [self.delegate timePickerDismiss:self];
         }
     }];
 }
