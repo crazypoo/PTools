@@ -23,6 +23,7 @@
 
 - (void)showAnimationWithType:(PVideoViewShowType)showType;
 
--(instancetype)initWithVideo_H_W:(CGFloat)Video_W_H withControViewHeight:(CGFloat)controViewHeight;
+-(instancetype)initWithVideo_H_W:(CGFloat)Video_W_H
+            withControViewHeight:(CGFloat)controViewHeight;
 
 @end

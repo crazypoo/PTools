@@ -11,6 +11,7 @@
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 
+#pragma mark ------> DatePicker
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
 
 @property (nonatomic, strong) UIPickerView *pickerView;
@@ -354,8 +355,8 @@
     } completion:^(BOOL finished) {
         [self removeFromSuperview];
     }];
-    
 }
+
 #pragma mark -UIPickerView的代理
 
 // 滚动UIPickerView就会调用
@@ -460,5 +461,267 @@
     }
     return genderLabel;
 }
+@end
 
+#pragma mark ------> TimePicker
+@interface PooTimePicker()<UIPickerViewDataSource,UIPickerViewDelegate>
+@property (nonatomic, strong) UIView *topV;
+@property (nonatomic, strong) UIFont *pickerFonts;
+@property (nonatomic, assign) NSInteger hourIndex;
+@property (nonatomic, assign) NSInteger minuteIndex;
+@end
+
+@implementation PooTimePicker
+
+-(NSMutableArray *)hourArray
+{
+    NSMutableArray *hour = [[NSMutableArray alloc] init];
+    for (int i = 0; i <= 23; i++) {
+        
+        NSString *str = [NSString stringWithFormat:@"%02d", i];
+        
+        [hour addObject:str];
+    }
+    return hour;
+}
+
+-(NSMutableArray *)minuteArray
+{
+    NSMutableArray *minute = [[NSMutableArray alloc] init];
+    for (int i = 0; i <= 59; i++) {
+        
+        NSString *str = [NSString stringWithFormat:@"%02d", i];
+        
+        [minute addObject:str];
+    }
+    return minute;
+}
+
+- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf
+{
+    self = [super init];
+    if (self)
+    {
+        self.pickerFonts = pf;
+        self.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
+        
+        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
+        tapGesture.numberOfTapsRequired = 1;
+        [self addGestureRecognizer:tapGesture];
+        
+        self.topV = [UIView new];
+        self.topV.backgroundColor = tbbc;
+        [self addSubview:self.topV];
+        [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(44);
+            make.top.equalTo(self.mas_bottom).offset(-44-216);
+        }];
+        
+        UILabel *nameTitle = [UILabel new];
+        nameTitle.textAlignment = NSTextAlignmentCenter;
+        nameTitle.textColor = tbtc;
+        nameTitle.font = font;
+        nameTitle.text = title;
+        [self.topV addSubview:nameTitle];
+        
+        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelBtn.titleLabel setFont:font];
+        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:cancelBtn];
+        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.topV).offset(10);
+            make.top.bottom.equalTo(self.topV);
+            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
+        }];
+        
+        UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [yesBtn.titleLabel setFont:font];
+        [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:yesBtn];
+        [yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.equalTo(self.topV).offset(-10);
+            make.top.bottom.equalTo(self.topV);
+            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
+        }];
+        
+        [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.bottom.equalTo(self.topV);
+            make.centerX.equalTo(self.topV.mas_centerX);
+            make.left.equalTo(cancelBtn.mas_right);
+            make.right.equalTo(yesBtn.mas_left);
+        }];
+        
+        [cancelBtn addActionHandler:^(UIButton *sender) {
+            if (self.block)
+            {
+                self.block(nil);
+            }
+            [self remove];
+        }];
+        
+        [yesBtn addActionHandler:^(UIButton *sender) {
+            if (self.block)
+            {
+                UIView *pickerViewCom0 = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
+                UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
+                
+                UIView *pickerViewCom1 = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
+                UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
+                
+                NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
+                
+                self.block(timeStr);
+            }
+            [self remove];
+        }];
+        
+        _pickerView = [UIPickerView new];
+        _pickerView.dataSource = self;
+        _pickerView.delegate = self;
+        _pickerView.backgroundColor = [UIColor whiteColor];
+        [self addSubview:_pickerView];
+        [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(216);
+            make.bottom.equalTo(self);
+        }];
+        
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            UIView *pickerView = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
+            UILabel *pickerLabel = (UILabel *)[pickerView subviews].lastObject;
+            pickerLabel.textColor = [UIColor blackColor];
+            pickerLabel.font = pf;
+            
+            pickerView = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
+            pickerLabel = (UILabel *)[pickerView subviews].lastObject;
+            pickerLabel.textColor = [UIColor blackColor];
+            pickerLabel.font = pf;
+        });
+    }
+    return self;
+}
+
+- (void)hideViewAction:(UITapGestureRecognizer *)gesture {
+    [self remove];
+}
+
+- (void)remove
+{
+    [UIView animateWithDuration:0.25 animations:^{
+        
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
+}
+
+#pragma mark ------> UIPickerViewDataSource
+//返回有几列
+-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+
+{
+    return 2;
+}
+
+//返回指定列的行数
+-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+
+{
+    if (component == 0)
+    {
+        return  self.hourArray.count;
+    }
+    else if(component == 1)
+    {
+        return  self.minuteArray.count;
+    }
+    return 0;
+}
+
+//返回指定列，行的高度，就是自定义行的高度
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component
+{
+    return 30.0f;
+}
+
+//返回指定列的宽度
+- (CGFloat) pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
+{
+    return  kSCREEN_WIDTH/2;
+}
+
+// 自定义指定列的每行的视图，即指定列的每行的视图行为一致
+- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+{
+    if (!view)
+    {
+        view = [[UIView alloc]init];
+    }
+    
+    UILabel *text = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, kSCREEN_WIDTH/2, 30)];
+    text.textColor = [UIColor blackColor];
+    text.textAlignment = NSTextAlignmentCenter;
+    text.font = self.pickerFonts;
+
+    switch (component)
+    {
+        case 0:
+        {
+            text.text = self.hourArray[row];
+        }
+            break;
+        case 1:
+        {
+            text.text = self.minuteArray[row];
+        }
+            break;
+        default:
+            break;
+    }
+    [view addSubview:text];
+
+    return view;
+}
+
+-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    switch (component) {
+        case 0:
+        {
+            self.hourIndex = row;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
+                UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
+                pickerLabel.textColor = [UIColor blackColor];
+                pickerLabel.font = self.pickerFonts;
+            });
+        }
+            break;
+        case 1:
+        {
+            self.minuteIndex = row;
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
+                UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
+                pickerLabel.textColor = [UIColor blackColor];
+                pickerLabel.font = self.pickerFonts;
+            });
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+-(void)customSelectRow:(NSInteger)row inComponent:(NSInteger)component animated:(BOOL)animated
+{
+    [self.pickerView selectRow:row inComponent:component animated:YES];
+}
+
+-(void)customPickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
+{
+    [self pickerView:pickerView didSelectRow:row inComponent:component];
+}
 @end

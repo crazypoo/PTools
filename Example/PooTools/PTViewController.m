@@ -333,7 +333,16 @@
 //                   } otherButtonAction:^(NSInteger aaaaaaaaaa) {
 //                       PNSLog(@"%ld",(long)aaaaaaaaaa);
 //                   }];
-    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
+//    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
+//    [self.view addSubview:view];
+//    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.bottom.equalTo(self.view);
+//    }];
+//    view.block = ^(NSString *dateString) {
+//        PNSLog(@">>>>>>>>>>>%@",dateString);
+//    };
+    
+    PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
     [self.view addSubview:view];
     [view mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
@@ -341,6 +350,12 @@
     view.block = ^(NSString *dateString) {
         PNSLog(@">>>>>>>>>>>%@",dateString);
     };
+    
+    [view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
+    [view customSelectRow:10 inComponent:0 animated:YES];
+
+    [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
+    [view customSelectRow:1 inComponent:1 animated:YES];
 }
 
 #pragma mark - YXCustomAlertViewDelegate

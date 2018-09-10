@@ -32,13 +32,17 @@
  * @param videoWidthPX 视频默认宽的分辨率  高 = kzVideoWidthPX / kzVideo_w_h (默认200)
  * @param controViewHeight 控制条高度小屏幕时 (默认120)
  */
--(instancetype)initWithRecordTime:(NSTimeInterval)recordTime video_W_H:(CGFloat)video_W_H withVideoWidthPX:(CGFloat)videoWidthPX withControViewHeight:(CGFloat)controViewHeight;
+-(instancetype)initWithRecordTime:(NSTimeInterval)recordTime
+                        video_W_H:(CGFloat)video_W_H
+                 withVideoWidthPX:(CGFloat)videoWidthPX
+             withControViewHeight:(CGFloat)controViewHeight;
 @end
 
 @protocol PVideoViewControllerDelegate <NSObject>
 
 @required
-- (void)videoViewController:(PVideoViewController *)videoController didRecordVideo:(PVideoModel *)videoModel;
+- (void)videoViewController:(PVideoViewController *)videoController
+             didRecordVideo:(PVideoModel *)videoModel;
 
 @optional
 - (void)videoViewControllerDidCancel:(PVideoViewController *)videoController;

@@ -35,3 +35,27 @@ typedef NS_ENUM(NSInteger,PPickerType){
  */
 @property (nonatomic, copy) void (^block)(NSString *dateString);
 @end
+
+@interface PooTimePicker : UIView
+/*! @brief 时间Picker初始化
+ * @param title 标题
+ * @param tbbc tabbar的背景颜色
+ * @param font 字体
+ * @param tbtc tabbar上的字体颜色
+ * @param pf picker的字体
+ */
+- (instancetype)initWithTitle:(NSString *)title
+       toolBarBackgroundColor:(UIColor *)tbbc
+                    labelFont:(UIFont *)font
+            toolBarTitleColor:(UIColor *)tbtc
+                   pickerFont:(UIFont *)pf;
+@property (nonatomic, copy) void (^block)(NSString *timeString);
+@property (nonatomic, strong) UIPickerView *pickerView;
+
+- (void)customSelectRow:(NSInteger)row
+            inComponent:(NSInteger)component
+               animated:(BOOL)animated;
+- (void)customPickerView:(UIPickerView *)pickerView
+            didSelectRow:(NSInteger)row
+             inComponent:(NSInteger)component;
+@end

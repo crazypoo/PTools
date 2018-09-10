@@ -13,9 +13,11 @@
 #pragma mark ---------------> 录视频顶部状态条
 @interface PStatusBar : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style;
+- (instancetype)initWithFrame:(CGRect)frame
+                        style:(PVideoViewShowType)style;
 
-- (void)addCancelTarget:(id)target selector:(SEL)selector;
+- (void)addCancelTarget:(id)target
+               selector:(SEL)selector;
 
 @property (nonatomic, assign) BOOL isRecoding;
 
@@ -33,7 +35,8 @@
 #pragma mark ---------------> 点击录制的按钮
 @interface PRecordBtn : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style;
+- (instancetype)initWithFrame:(CGRect)frame
+                        style:(PVideoViewShowType)style;
 
 @end
 
@@ -66,7 +69,8 @@ typedef NS_ENUM(NSUInteger, PRecordCancelReason) {
 
 - (void)ctrollVideoDidEnd:(PControllerBar *)controllerBar;
 
-- (void)ctrollVideoDidCancel:(PControllerBar *)controllerBar reason:(PRecordCancelReason)reason;
+- (void)ctrollVideoDidCancel:(PControllerBar *)controllerBar
+                      reason:(PRecordCancelReason)reason;
 
 - (void)ctrollVideoWillCancel:(PControllerBar *)controllerBar;
 
@@ -82,7 +86,8 @@ typedef NS_ENUM(NSUInteger, PRecordCancelReason) {
 
 @property (nonatomic, assign) id<PControllerBarDelegate> delegate;
 
-- (void)setupSubViewsWithStyle:(PVideoViewShowType)style recordTime:(NSTimeInterval)recordTime;
+- (void)setupSubViewsWithStyle:(PVideoViewShowType)style
+                    recordTime:(NSTimeInterval)recordTime;
 
 @end
 #pragma mark ---------------> Video List 控件

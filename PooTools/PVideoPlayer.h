@@ -10,7 +10,8 @@
 
 @interface PVideoPlayer : UIView
 
-- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSURL *)videoUrl;
+- (instancetype)initWithFrame:(CGRect)frame
+                     videoUrl:(NSURL *)videoUrl;
 
 @property (nonatomic, strong, readonly) NSURL *videoUrl;
 

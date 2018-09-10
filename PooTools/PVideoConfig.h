@@ -29,13 +29,16 @@ typedef NS_ENUM(NSUInteger, PVideoViewShowType) {
 
 /*! @brief 录像的View大小
  */
-+ (CGRect)viewFrameWithType:(PVideoViewShowType)type video_W_H:(CGFloat)video_W_H withControViewHeight:(CGFloat)controViewHeight;
++ (CGRect)viewFrameWithType:(PVideoViewShowType)type
+                  video_W_H:(CGFloat)video_W_H
+       withControViewHeight:(CGFloat)controViewHeight;
 /*! @brief 视频View的尺寸
  */
 + (CGSize)videoViewDefaultSizeWithVideo_W_H:(CGFloat)video_W_H;
 /*! @brief 默认视频分辨率
  */
-+ (CGSize)defualtVideoSizeWithVideo_W_H:(CGFloat)video_W_H withVideoWidthPX:(CGFloat)videoWidthPX;
++ (CGSize)defualtVideoSizeWithVideo_W_H:(CGFloat)video_W_H
+                       withVideoWidthPX:(CGFloat)videoWidthPX;
 /*! @brief 渐变色
  */
 + (NSArray *)gradualColors;
@@ -43,7 +46,10 @@ typedef NS_ENUM(NSUInteger, PVideoViewShowType) {
  */
 + (void)motionBlurView:(UIView *)superView;
 
-+ (void)showHinInfo:(NSString *)text inView:(UIView *)superView frame:(CGRect)frame timeLong:(NSTimeInterval)time;
++ (void)showHinInfo:(NSString *)text
+             inView:(UIView *)superView
+              frame:(CGRect)frame
+           timeLong:(NSTimeInterval)time;
 
 @end
 
@@ -78,7 +84,8 @@ typedef NS_ENUM(NSUInteger, PVideoViewShowType) {
  *  @param videoUrl 视频路径
  *  @param second   第几秒的缩略图
  */
-+ (void)saveThumImageWithVideoURL:(NSURL *)videoUrl second:(int64_t)second;
++ (void)saveThumImageWithVideoURL:(NSURL *)videoUrl
+                           second:(int64_t)second;
 
 /*!
  *  产生新的对象
