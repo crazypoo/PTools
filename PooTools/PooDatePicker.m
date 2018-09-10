@@ -573,8 +573,8 @@
                 self.block(timeStr);
             }
             
-            if ([self.delegate respondsToSelector:@selector(timePickerReturnStr:)]) {
-                [self.delegate timePickerReturnStr:timeStr];
+            if ([self.delegate respondsToSelector:@selector(timePickerReturnStr:timePicker:)]) {
+                [self.delegate timePickerReturnStr:timeStr timePicker:self];
             }
             
             [self remove];

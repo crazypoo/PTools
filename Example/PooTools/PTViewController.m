@@ -428,7 +428,7 @@
     NSLog(@"没有录到视频");
 }
 
--(void)timePickerReturnStr:(NSString *)timeStr
+-(void)timePickerReturnStr:(NSString *)timeStr timePicker:(PooTimePicker *)timePicker
 {
     PNSLog(@">>>>>>>>>>>>>%@",timeStr);
 }

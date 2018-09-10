@@ -39,7 +39,7 @@ typedef NS_ENUM(NSInteger,PPickerType){
 @class PooTimePicker;
 
 @protocol PooTimePickerDelegate <NSObject>
--(void)timePickerReturnStr:(NSString *)timeStr;
+-(void)timePickerReturnStr:(NSString *)timeStr timePicker:(PooTimePicker *)timePicker;
 -(void)timePickerDismiss:(PooTimePicker *)timePicker;
 @end
 
