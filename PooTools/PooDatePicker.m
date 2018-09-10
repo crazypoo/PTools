@@ -97,7 +97,7 @@
         nameTitle.font = font;
         nameTitle.text = title;
         [self.topV addSubview:nameTitle];
-
+        
         UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelBtn.titleLabel setFont:font];
         [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
@@ -134,7 +134,7 @@
             }
             [self remove];
         }];
-
+        
         [yesBtn addActionHandler:^(UIButton *sender) {
             if (self.block)
             {
@@ -473,7 +473,23 @@
 
 @implementation PooTimePicker
 
--(NSMutableArray *)hourArray
++(NSInteger)getEditHourIndexWithTimeString:(NSString*)str
+{
+    NSString *hourStr = [str substringToIndex:2];
+    NSInteger hourIndex  = [[PooTimePicker hourArray] indexOfObject:hourStr];
+    
+    return hourIndex;
+}
+
++(NSInteger)getEditMinuteIndexWithTimeString:(NSString*)str
+{
+    NSString *minuteStr = [str substringFromIndex:3];
+    NSInteger minuteIndex  = [[PooTimePicker minuteArray] indexOfObject:minuteStr];
+    
+    return minuteIndex;
+}
+
++(NSMutableArray *)hourArray
 {
     NSMutableArray *hour = [[NSMutableArray alloc] init];
     for (int i = 0; i <= 23; i++) {
@@ -485,7 +501,7 @@
     return hour;
 }
 
--(NSMutableArray *)minuteArray
++(NSMutableArray *)minuteArray
 {
     NSMutableArray *minute = [[NSMutableArray alloc] init];
     for (int i = 0; i <= 59; i++) {
@@ -566,7 +582,7 @@
             UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
             
             NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
-
+            
             if (self.block)
             {
                 
@@ -602,6 +618,7 @@
 {
     [UIView animateWithDuration:0.25 animations:^{
     } completion:^(BOOL finished) {
+        [self removeFromSuperview];
         if (self.dismissBlock) {
             self.dismissBlock(self);
         }
@@ -626,11 +643,11 @@
 {
     if (component == 0)
     {
-        return  self.hourArray.count;
+        return  [PooTimePicker hourArray].count;
     }
     else if(component == 1)
     {
-        return  self.minuteArray.count;
+        return  [PooTimePicker minuteArray].count;
     }
     return 0;
 }
@@ -647,17 +664,17 @@
     text.textColor = [UIColor blackColor];
     text.textAlignment = NSTextAlignmentCenter;
     text.font = self.pickerFonts;
-
+    
     switch (component)
     {
         case 0:
         {
-            text.text = self.hourArray[row];
+            text.text = [PooTimePicker hourArray][row];
         }
             break;
         case 1:
         {
-            text.text = self.minuteArray[row];
+            text.text = [PooTimePicker minuteArray][row];
         }
             break;
         default:
@@ -667,7 +684,7 @@
     [text mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.height.equalTo(view);
     }];
-
+    
     return view;
 }
 

@@ -68,4 +68,10 @@ typedef NS_ENUM(NSInteger,PPickerType){
 - (void)customPickerView:(UIPickerView *)pickerView
             didSelectRow:(NSInteger)row
              inComponent:(NSInteger)component;
+
++(NSMutableArray *)hourArray;
++(NSMutableArray *)minuteArray;
+
++(NSInteger)getEditHourIndexWithTimeString:(NSString*)str;
++(NSInteger)getEditMinuteIndexWithTimeString:(NSString*)str;
 @end
