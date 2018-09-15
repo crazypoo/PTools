@@ -19,7 +19,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
 
 + (CGRect)viewFrameWithType:(PVideoViewShowType)type video_W_H:(CGFloat)video_W_H withControViewHeight:(CGFloat)controViewHeight
 {
-    if (type == PVideoViewShowTypeSingle) {
+    if (type == PVideoViewShowTypeSingle)
+    {
         return [UIScreen mainScreen].bounds;
     }
     CGFloat viewHeight = kSCREEN_WIDTH/video_W_H + 20 + controViewHeight;
@@ -36,11 +37,13 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     return CGSizeMake(videoWidthPX, videoWidthPX/video_W_H);
 }
 
-+ (NSArray *)gradualColors {
++ (NSArray *)gradualColors
+{
     return @[(__bridge id)[UIColor greenColor].CGColor,(__bridge id)[UIColor yellowColor].CGColor,];
 }
 
-+ (void)motionBlurView:(UIView *)superView {
++ (void)motionBlurView:(UIView *)superView
+{
     superView.backgroundColor = [UIColor colorWithRed:0.0 green:0.0 blue:0.0 alpha:0.8];
     UIToolbar *bar = [UIToolbar new];
     [bar setBarStyle:UIBarStyleBlackTranslucent];
@@ -51,7 +54,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     }];
 }
 
-+ (void)showHinInfo:(NSString *)text inView:(UIView *)superView frame:(CGRect)frame timeLong:(NSTimeInterval)time {
++ (void)showHinInfo:(NSString *)text inView:(UIView *)superView frame:(CGRect)frame timeLong:(NSTimeInterval)time
+{
     __block UILabel *zoomLab = [[UILabel alloc] initWithFrame:frame];
     zoomLab.font = [UIFont boldSystemFontOfSize:15.0];
     zoomLab.text = text;
@@ -68,7 +72,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
 
 @implementation PVideoModel
 
-+ (instancetype)modelWithPath:(NSString *)videoPath thumPath:(NSString *)thumPath recordTime:(NSDate *)recordTime {
++ (instancetype)modelWithPath:(NSString *)videoPath thumPath:(NSString *)thumPath recordTime:(NSDate *)recordTime
+{
     PVideoModel *model = [[PVideoModel alloc] init];
     model.videoAbsolutePath = videoPath;
     model.thumAbsolutePath = thumPath;
@@ -82,25 +87,29 @@ void kz_dispatch_after(float time, dispatch_block_t block)
 
 @implementation PVideoUtil
 
-+ (BOOL)existVideo {
++ (BOOL)existVideo
+{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSArray *nameList = [fileManager subpathsAtPath:[self getVideoPath]];
     return nameList.count > 0;
 }
 
-
-+ (NSMutableArray *)getVideoList {
++ (NSMutableArray *)getVideoList
+{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSMutableArray *modelList = [NSMutableArray array];
     NSArray *nameList = [fileManager subpathsAtPath:[self getVideoPath]];
-    for (NSString *name in nameList) {
-        if ([name hasSuffix:@".JPG"]) {
+    for (NSString *name in nameList)
+    {
+        if ([name hasSuffix:@".JPG"])
+        {
             PVideoModel *model = [[PVideoModel alloc] init];
             NSString *thumAbsolutePath = [[self getVideoPath] stringByAppendingPathComponent:name];
             model.thumAbsolutePath = thumAbsolutePath;
             
             NSString *totalVideoPath = [thumAbsolutePath stringByReplacingOccurrencesOfString:@"JPG" withString:@"MOV"];
-            if ([fileManager fileExistsAtPath:totalVideoPath]) {
+            if ([fileManager fileExistsAtPath:totalVideoPath])
+            {
                 model.videoAbsolutePath = totalVideoPath;
             }
             NSString *timeString = [name substringToIndex:(name.length-4)];
@@ -115,13 +124,15 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     return modelList;
 }
 
-+ (NSArray *)getSortVideoList {
++ (NSArray *)getSortVideoList
+{
     NSArray *oldList = [self getVideoList];
     NSArray *sortList = [oldList sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
         PVideoModel *model1 = obj1;
         PVideoModel *model2 = obj2;
         NSComparisonResult compare = [model1.recordTime compare:model2.recordTime];
-        switch (compare) {
+        switch (compare)
+        {
             case NSOrderedDescending:
                 return NSOrderedAscending;
             case NSOrderedAscending:
@@ -133,7 +144,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     return sortList;
 }
 
-+ (void)saveThumImageWithVideoURL:(NSURL *)videoUrl second:(int64_t)second {
++ (void)saveThumImageWithVideoURL:(NSURL *)videoUrl second:(int64_t)second
+{
     AVURLAsset *urlSet = [AVURLAsset assetWithURL:videoUrl];
     AVAssetImageGenerator *imageGenerator = [AVAssetImageGenerator assetImageGeneratorWithAsset:urlSet];
     
@@ -153,7 +165,8 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     CGImageRelease(cgimage);
 }
 
-+ (PVideoModel *)createNewVideo {
++ (PVideoModel *)createNewVideo
+{
     NSDate *currentDate = [NSDate date];
     NSDateFormatter *formate = [[NSDateFormatter alloc] init];
     formate.dateFormat = @"yyyy-MM-dd_HH:mm:ss";
@@ -167,37 +180,44 @@ void kz_dispatch_after(float time, dispatch_block_t block)
     return model;
 }
 
-+ (void)deleteVideo:(NSString *)videoPath {
++ (void)deleteVideo:(NSString *)videoPath
+{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error = nil;
     [fileManager removeItemAtPath:videoPath error:&error];
-    if (error) {
+    if (error)
+    {
         NSLog(@"删除视频失败:%@",error);
     }
     NSString *thumPath = [videoPath stringByReplacingOccurrencesOfString:@"MOV" withString:@"JPG"];
     NSError *error2 = nil;
     [fileManager removeItemAtPath:thumPath error:&error2];
-    if (error2) {
+    if (error2)
+    {
         NSLog(@"删除缩略图失败:%@",error);
     }
 }
 
-+ (NSString *)getVideoPath {
++ (NSString *)getVideoPath
+{
     return [self getDocumentSubPath:kVideoDicName];
 }
 
-+ (NSString *)getDocumentSubPath:(NSString *)dirName {
++ (NSString *)getDocumentSubPath:(NSString *)dirName
+{
     NSString *documentPath = [NSSearchPathForDirectoriesInDomains(NSDocumentationDirectory, NSUserDomainMask, YES) firstObject];
     return [documentPath stringByAppendingPathComponent:dirName];
 }
 
-+ (void)initialize {
++ (void)initialize
+{
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSString *dirPath = [self getVideoPath];
     
     NSError *error = nil;
     [fileManager createDirectoryAtPath:dirPath withIntermediateDirectories:YES attributes:nil error:&error];
-    if (error) {
+    if (error)
+    {
         NSLog(@"创建文件夹失败:%@",error);
     }
 }

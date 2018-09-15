@@ -18,7 +18,6 @@
     
     CGFloat customVideo_W_H;
     CGFloat customControViewHeight;
-
 }
 
 @property (nonatomic, weak)  UICollectionView *collectionView;
@@ -38,14 +37,16 @@ static PVideoListViewController *__currentListVC = nil;
 -(instancetype)initWithVideo_H_W:(CGFloat)Video_W_H withControViewHeight:(CGFloat)controViewHeight
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         customVideo_W_H = Video_W_H;
         customControViewHeight = controViewHeight;
     }
     return self;
 }
 
-- (void)showAnimationWithType:(PVideoViewShowType)showType {
+- (void)showAnimationWithType:(PVideoViewShowType)showType
+{
     _showType = showType;
     [self setupSubViews];
     __currentListVC = self;
@@ -63,20 +64,23 @@ static PVideoListViewController *__currentListVC = nil;
     [self setupCollectionView];
 }
 
-- (void)closeAnimation {
+- (void)closeAnimation
+{
     __weak typeof (self) blockSelf = self;
     [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         self.actionView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, self.actionView.bounds.size.width);
         self.actionView.alpha = .0;
     } completion:^(BOOL finished) {
-        if (self.didCloseBlock) {
+        if (self.didCloseBlock)
+        {
             self.didCloseBlock();
         }
         [blockSelf closeView];
     }];
 }
 
-- (void)closeView {
+- (void)closeView
+{
     [_collectionView removeFromSuperview];
     _collectionView = nil;
     [_actionView removeFromSuperview];
@@ -86,11 +90,8 @@ static PVideoListViewController *__currentListVC = nil;
     __currentListVC = nil;
 }
 
-- (void)dealloc {
-    //    NSLog(@"dalloc listView");
-}
-
-- (void)setupSubViews {
+- (void)setupSubViews
+{
     CGFloat btnTopEdge = _showType == PVideoViewShowTypeSingle ? 20:0;
     CGFloat topBarHeight = _showType == PVideoViewShowTypeSingle ? 44 : 40;
     
@@ -134,8 +135,8 @@ static NSString *cellId = @"Cell";
 static NSString *addCellId = @"AddCell";
 static NSString *footerId = @"footer";
 
-- (void)setupCollectionView {
-    
+- (void)setupCollectionView
+{
     CGFloat btnTopEdge = _showType == PVideoViewShowTypeSingle ? 20:0;
 
     self.dataArr = [NSMutableArray arrayWithArray:[PVideoUtil getSortVideoList]];
@@ -158,26 +159,33 @@ static NSString *footerId = @"footer";
 }
 
 #pragma mark ---------------> Actions
-- (void)closeViewAction {
+- (void)closeViewAction
+{
     [self closeAnimation];
 }
-- (void)editVideosAction {
+
+- (void)editVideosAction
+{
     _rightBtn.selected = !_rightBtn.selected;
     [_collectionView reloadData];
 }
 
 #pragma mark ---------------> UICollectionViewDataSource
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    if (_rightBtn.selected) {
+    if (_rightBtn.selected)
+    {
         return self.dataArr.count;
     }
-    else {
+    else
+    {
         return self.dataArr.count+1;
     }
 }
 
-- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.item == self.dataArr.count) {
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == self.dataArr.count)
+    {
         PAddNewVideoCell *addCell = [collectionView dequeueReusableCellWithReuseIdentifier:addCellId forIndexPath:indexPath];
         return addCell;
     }
@@ -200,14 +208,18 @@ static NSString *footerId = @"footer";
     return cell;
 }
 
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath {
-    if ([kind isEqualToString:UICollectionElementKindSectionFooter]) {
+- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
+{
+    if ([kind isEqualToString:UICollectionElementKindSectionFooter])
+    {
         
         UICollectionReusableView *footerView = [collectionView dequeueReusableSupplementaryViewOfKind:kind withReuseIdentifier:footerId forIndexPath:indexPath];
-        if (footerView.subviews.count < 1) {
+        if (footerView.subviews.count < 1)
+        {
             PVideoModel *lastVideo = _dataArr.lastObject;
             NSTimeInterval time = [[NSDate date] timeIntervalSinceDate:lastVideo.recordTime];
-            if (time < 0) {
+            if (time < 0)
+            {
                 time = 0;
             }
             NSInteger day = time/60/60/24 + 1;
@@ -229,17 +241,22 @@ static NSString *footerId = @"footer";
     return nil;
 }
 
-- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section {
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section
+{
     return CGSizeMake(CGRectGetWidth(_actionView.frame), 20);
 }
 
 #pragma mark ---------------> UICollectionViewDelegate
-- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.item == self.dataArr.count) {
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.item == self.dataArr.count)
+    {
         [self closeAnimation];
     }
-    else {
-        if (self.selectBlock) {
+    else
+    {
+        if (self.selectBlock)
+        {
             self.selectBlock(self.dataArr[indexPath.item]);
         }
         [self closeAnimation];

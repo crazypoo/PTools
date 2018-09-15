@@ -13,16 +13,18 @@
 @property (nonatomic ,strong) AVPlayer *player;
 @end
 
-@implementation PVideoPlayer {
-    
+@implementation PVideoPlayer
+{
     UIView *_ctrlView;
     CALayer *_playStatus;
     
     BOOL _isPlaying;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSURL *)videoUrl{
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame videoUrl:(NSURL *)videoUrl
+{
+    if (self = [super initWithFrame:frame])
+    {
         _autoReplay = YES;
         _videoUrl = videoUrl;
         [self setupSubViews];
@@ -30,21 +32,26 @@
     return self;
 }
 
-- (void)play {
-    if (_isPlaying) {
+- (void)play
+{
+    if (_isPlaying)
+    {
         return;
     }
     [self tapAction];
 }
 
-- (void)stop {
-    if (_isPlaying) {
+- (void)stop
+{
+    if (_isPlaying)
+    {
         [self tapAction];
     }
 }
 
 
-- (void)setupSubViews {
+- (void)setupSubViews
+{
     AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:_videoUrl];
     self.player = [AVPlayer playerWithPlayerItem:playerItem];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playEnd) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
@@ -64,7 +71,8 @@
     [self tapAction];
 }
 
-- (void)setupStatusView {
+- (void)setupStatusView
+{
     CGPoint selfCent = CGPointMake(self.bounds.size.width/2+10, self.bounds.size.height/2);
     CGFloat width = 40;
     
@@ -90,20 +98,25 @@
     CGPathRelease(path);
 }
 
-- (void)tapAction {
-    if (_isPlaying) {
+- (void)tapAction
+{
+    if (_isPlaying)
+    {
         [self.player pause];
     }
-    else {
+    else
+    {
         [self.player play];
     }
     _isPlaying = !_isPlaying;
     _playStatus.hidden = !_playStatus.hidden;
 }
 
-- (void)playEnd {
+- (void)playEnd
+{
     
-    if (!_autoReplay) {
+    if (!_autoReplay)
+    {
         return;
     }
     [self.player seekToTime:kCMTimeZero completionHandler:^(BOOL finished) {
@@ -111,7 +124,8 @@
     }];
 }
 
-- (void)removeFromSuperview {
+- (void)removeFromSuperview
+{
     [self.player.currentItem cancelPendingSeeks];
     [self.player.currentItem.asset cancelLoading];
     [[NSNotificationCenter defaultCenter] removeObserver:self ];

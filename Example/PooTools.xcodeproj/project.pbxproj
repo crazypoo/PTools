@@ -27,7 +27,6 @@
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
 		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
-		CC1257B22098319300E31A38 /* DES3Util.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573B2098319200E31A38 /* DES3Util.m */; };
 		CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573D2098319200E31A38 /* GPKeyChain.m */; };
 		CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573F2098319200E31A38 /* HPGrowingTextView.m */; };
 		CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257412098319200E31A38 /* HPTextViewInternal.m */; };
@@ -173,8 +172,6 @@
 		CC1257372098319200E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
 		CC1257382098319200E31A38 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		CC1257392098319200E31A38 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
-		CC12573A2098319200E31A38 /* DES3Util.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DES3Util.h; sourceTree = "<group>"; };
-		CC12573B2098319200E31A38 /* DES3Util.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DES3Util.m; sourceTree = "<group>"; };
 		CC12573C2098319200E31A38 /* GPKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPKeyChain.h; sourceTree = "<group>"; };
 		CC12573D2098319200E31A38 /* GPKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPKeyChain.m; sourceTree = "<group>"; };
 		CC12573E2098319200E31A38 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
@@ -575,8 +572,6 @@
 				CC1257372098319200E31A38 /* ALActionSheetView.m */,
 				CC1257382098319200E31A38 /* CustomTextField.h */,
 				CC1257392098319200E31A38 /* CustomTextField.m */,
-				CC12573A2098319200E31A38 /* DES3Util.h */,
-				CC12573B2098319200E31A38 /* DES3Util.m */,
 				CC12573C2098319200E31A38 /* GPKeyChain.h */,
 				CC12573D2098319200E31A38 /* GPKeyChain.m */,
 				CC12573E2098319200E31A38 /* HPGrowingTextView.h */,
@@ -866,7 +861,6 @@
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
-				CC1257B22098319300E31A38 /* DES3Util.m in Sources */,
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,

@@ -35,7 +35,6 @@
 
 
 //工具类
-#import "DES3Util.h"//DES加密
 #import "GPKeyChain.h"//KeyChain
 #import "PBugReporter.h"//BUG反馈
 #import "PCarrie.h"//网络运营商检测

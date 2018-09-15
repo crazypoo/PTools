@@ -21,13 +21,13 @@
 {
     BOOL _clear;
     
-    
-    
     UIButton *_cancelBtn;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style; {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style
+{
+    if (self = [super initWithFrame:frame])
+    {
         _style = style;
         [PVideoConfig motionBlurView:self];
         [self setupSubLayers];
@@ -35,9 +35,9 @@
     return self;
 }
 
-- (void)addCancelTarget:(id)target selector:(SEL)selector {
+- (void)addCancelTarget:(id)target selector:(SEL)selector
+{
     [_cancelBtn removeFromSuperview];
-    
     _cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [_cancelBtn addTarget:target action:selector forControlEvents:UIControlEventTouchUpInside];
@@ -52,10 +52,11 @@
     }];
 }
 
-- (void)setupSubLayers {
-    
+- (void)setupSubLayers
+{
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        if (self.style == PVideoViewShowTypeSingle) {
+        if (self.style == PVideoViewShowTypeSingle)
+        {
             return;
         }
         
@@ -70,7 +71,8 @@
         CGFloat topEdge = 5.5;
         CGPoint selfCent = CGPointMake(self.bounds.size.width/2, self.bounds.size.height/2);
         CGMutablePathRef nomalPath = CGPathCreateMutable();
-        for (int i=0; i<3; i++) {
+        for (int i = 0; i < 3; i++)
+        {
             CGPathMoveToPoint(nomalPath, &transform, selfCent.x-(barW/2), topEdge+(barSpace * i));
             CGPathAddLineToPoint(nomalPath, &transform, selfCent.x+(barW/2), topEdge+(barSpace * i));
         }
@@ -97,18 +99,21 @@
     });
 }
 
-- (void)setIsRecoding:(BOOL)isRecoding {
+- (void)setIsRecoding:(BOOL)isRecoding
+{
     _isRecoding = isRecoding;
-    
     [self display];
 }
 
-- (void)display {
-    if (_style == PVideoViewShowTypeSingle) {
+- (void)display
+{
+    if (_style == PVideoViewShowTypeSingle)
+    {
         return;
     }
     
-    if (self.isRecoding) {
+    if (self.isRecoding)
+    {
         self.recodingLayer.hidden = NO;
         self.nomalLayer.hidden = YES;
         kz_dispatch_after(0.5, ^{
@@ -117,7 +122,8 @@
             self.nomalLayer.hidden = YES;
         });
     }
-    else {
+    else
+    {
         self.nomalLayer.hidden = NO;
         self.recodingLayer.hidden = YES;
     }
@@ -125,11 +131,11 @@
 
 @end
 
-
 @implementation PCloseBtn
 
 
-- (void)setGradientColors:(NSArray *)gradientColors {
+- (void)setGradientColors:(NSArray *)gradientColors
+{
     self.backgroundColor = [UIColor clearColor];
     _gradientColors = gradientColors;
     
@@ -154,9 +160,11 @@
 }
 
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     [super drawRect:rect];
-    if (_gradientColors != nil) {
+    if (_gradientColors != nil)
+    {
         return;
     }
     
@@ -173,7 +181,8 @@
 }
 
 
-- (CGMutablePathRef)getDrawPath {
+- (CGMutablePathRef)getDrawPath
+{
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat centX = self.bounds.size.width/2;
     CGFloat centY = self.bounds.size.height/2;
@@ -187,13 +196,16 @@
 
 @end
 
-@implementation PRecordBtn {
+@implementation PRecordBtn
+{
     UITapGestureRecognizer *_tapGesture;
     PVideoViewShowType _style;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style{
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame style:(PVideoViewShowType)style
+{
+    if (self = [super initWithFrame:frame])
+    {
         _style = style;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             [self setupRoundButton];
@@ -205,7 +217,8 @@
     return self;
 }
 
-- (void)setupRoundButton {
+- (void)setupRoundButton
+{
     self.backgroundColor = [UIColor clearColor];
     
     CGFloat width = self.frame.size.width;
@@ -221,7 +234,8 @@
     trackLayer.path = path.CGPath;
     [self.layer addSublayer:trackLayer];
     
-    if (_style == PVideoViewShowTypeSingle) {
+    if (_style == PVideoViewShowTypeSingle)
+    {
         CATextLayer *textLayer = [CATextLayer layer];
         textLayer.string = @"按住拍";
         textLayer.frame = CGRectMake(0, 0, 120, 30);
@@ -249,13 +263,16 @@
 @end
 
 
-@implementation PFocusView {
+@implementation PFocusView
+{
     CGFloat _width;
     CGFloat _height;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
         _width = CGRectGetWidth(frame);
         _height = _width;
     }
@@ -263,7 +280,8 @@
     
 }
 
-- (void)focusing {
+- (void)focusing
+{
     [UIView animateWithDuration:0.5 animations:^{
         
         self.transform = CGAffineTransformScale(CGAffineTransformIdentity, 0.8, 0.8);
@@ -272,7 +290,8 @@
     }];
 }
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     [super drawRect:rect];
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetStrokeColorWithColor(context, kThemeTineColor.CGColor);
@@ -304,9 +323,10 @@
 @implementation PEyeView
 
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
         [PVideoConfig motionBlurView:self];
         
         [self setupView];
@@ -314,8 +334,10 @@
     return self;
 }
 
-- (instancetype)initWithCoder:(NSCoder *)aDecoder {
-    if (self = [super initWithCoder:aDecoder]) {
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    if (self = [super initWithCoder:aDecoder])
+    {
         [self layoutIfNeeded];
         [PVideoConfig motionBlurView:self];
         [self setupView];
@@ -323,7 +345,8 @@
     return self;
 }
 
-- (void)setupView {
+- (void)setupView
+{
     UIView *view = [[UIView alloc] initWithFrame:self.bounds];
     view.backgroundColor = [UIColor clearColor];
     [self addSubview:view];
@@ -376,17 +399,20 @@
  KZEyePathRelease(path);
  }
  */
-typedef struct eyePath {
+typedef struct eyePath
+{
     CGMutablePathRef strokePath;
     CGMutablePathRef fillPath;
 } PEyePath;
 
-void KZEyePathRelease(PEyePath path) {
+void KZEyePathRelease(PEyePath path)
+{
     CGPathRelease(path.fillPath);
     CGPathRelease(path.strokePath);
 }
 
-PEyePath createEyePath(CGRect rect) {
+PEyePath createEyePath(CGRect rect)
+{
     CGPoint selfCent = CGPointMake(CGRectGetWidth(rect)/2, CGRectGetHeight(rect)/2);
     CGFloat eyeWidth = 64.0;
     CGFloat eyeHeight = 40.0;
@@ -430,15 +456,18 @@ CGMutablePathRef createDonutPath(CGPoint center, CGFloat startAngle, CGFloat end
     return path;
 }
 
-double kz_sin(double angle) {
+double kz_sin(double angle)
+{
     return sin(angleToRadian(angle));
 }
 
-double kz_cos(double angle) {
+double kz_cos(double angle)
+{
     return cos(angleToRadian(angle));
 }
 
-CGFloat angleToRadian(CGFloat angle) {
+CGFloat angleToRadian(CGFloat angle)
+{
     return angle/180.0*M_PI;
 }
 
@@ -456,7 +485,8 @@ CGFloat angleToRadian(CGFloat angle) {
 @property (nonatomic,strong)PCloseBtn *closeVideoBtn;
 @end
 
-@implementation PControllerBar {
+@implementation PControllerBar
+{
     BOOL _touchIsInside;
     
     NSTimer *_timer;
@@ -501,8 +531,8 @@ CGFloat angleToRadian(CGFloat angle) {
         
         self.surplusTime = self.customRecordTime;
         
-        
-        if (style == PVideoViewShowTypeSingle) {
+        if (style == PVideoViewShowTypeSingle)
+        {
             return;
         }
         
@@ -521,10 +551,12 @@ CGFloat angleToRadian(CGFloat angle) {
         }];
         
         NSArray<PVideoModel *> *videoList = [PVideoUtil getSortVideoList];
-        if (videoList.count == 0) {
+        if (videoList.count == 0)
+        {
             self.videoListBtn.hidden = YES;
         }
-        else {
+        else
+        {
             [self.videoListBtn setBackgroundImage:[UIImage imageWithContentsOfFile:videoList[0].thumAbsolutePath] forState: UIControlStateNormal];
         }
         
@@ -541,7 +573,8 @@ CGFloat angleToRadian(CGFloat angle) {
     });
 }
 
-- (void)startRecordSet {
+- (void)startRecordSet
+{
     self.startBtn.alpha = 1.0;
     
     self.progressLine.frame = CGRectMake(0, 0, self.bounds.size.width, 2);
@@ -553,7 +586,8 @@ CGFloat angleToRadian(CGFloat angle) {
     
     _videoDidEnd = NO;
     
-    if (_timer == nil) {
+    if (_timer == nil)
+    {
         _timer = [NSTimer timerWithTimeInterval:1.0 target:self selector:@selector(recordTimerAction) userInfo:nil repeats:YES];
         [[NSRunLoop currentRunLoop] addTimer:_timer forMode:NSDefaultRunLoopMode];
     }
@@ -563,13 +597,15 @@ CGFloat angleToRadian(CGFloat angle) {
         self.startBtn.alpha = 0.0;
         self.startBtn.transform = CGAffineTransformScale(CGAffineTransformIdentity, 2.0, 2.0);
     } completion:^(BOOL finished) {
-        if (finished) {
+        if (finished)
+        {
             self.startBtn.transform = CGAffineTransformIdentity;
         }
     }];
 }
 
-- (void)endRecordSet {
+- (void)endRecordSet
+{
     self.progressLine.hidden = YES;
     [_timer invalidate];
     _timer = nil;
@@ -578,9 +614,11 @@ CGFloat angleToRadian(CGFloat angle) {
 }
 
 #pragma mark ---------------> UIGestureRecognizerDelegate
-- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    if (gestureRecognizer == self.longPress) {
-        if (self.surplusTime <= 0) return  NO;
+- (BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer
+{
+    if (gestureRecognizer == self.longPress)
+    {
+        if (self.surplusTime <= 0) return NO;
         
         CGPoint point = [gestureRecognizer locationInView:self];
         CGPoint startBtnCent = self.startBtn.center;
@@ -589,7 +627,8 @@ CGFloat angleToRadian(CGFloat angle) {
         CGFloat dy = point.y - startBtnCent.y;
         
         CGFloat startWidth = self.startBtn.bounds.size.width;
-        if ((dx * dx) + (dy * dy) < (startWidth * startWidth)) {
+        if ((dx * dx) + (dy * dy) < (startWidth * startWidth))
+        {
             return YES;
         }
         return NO;
@@ -598,36 +637,46 @@ CGFloat angleToRadian(CGFloat angle) {
 }
 
 #pragma mark ---------------> Actions
-- (void)longpressAction:(UILongPressGestureRecognizer *)gesture {
+- (void)longpressAction:(UILongPressGestureRecognizer *)gesture
+{
     CGPoint point = [gesture locationInView:self];
     _touchIsInside = point.y >= 0;
-    switch (gesture.state) {
-        case UIGestureRecognizerStateBegan: {
+    switch (gesture.state)
+    {
+        case UIGestureRecognizerStateBegan:
+        {
             [self videoStartAction];
         }
             break;
-        case UIGestureRecognizerStateChanged: {
-            if (!_touchIsInside) {
+        case UIGestureRecognizerStateChanged:
+        {
+            if (!_touchIsInside)
+            {
                 self.progressLine.backgroundColor = kThemeWaringColor;
-                if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoWillCancel:)]) {
+                if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoWillCancel:)])
+                {
                     [_delegate ctrollVideoWillCancel:self];
                 }
             }
-            else {
+            else
+            {
                 self.progressLine.backgroundColor = kThemeTineColor;
             }
         }
             break;
-        case UIGestureRecognizerStateEnded: {
+        case UIGestureRecognizerStateEnded:
+        {
             [self endRecordSet];
             if (!_touchIsInside || self.customRecordTime - self.surplusTime <= 1) {
                 PRecordCancelReason reason = PRecordCancelReasonTimeShort;
-                if (!_touchIsInside) {
+                if (!_touchIsInside)
+                {
                     reason = PRecordCancelReasonDefault;
                 }
                 [self videoCancelAction:reason];
             }
-            else {
+            else
+            {
                 [self videoEndAction];
             }
         }
@@ -636,46 +685,55 @@ CGFloat angleToRadian(CGFloat angle) {
             break;
         default:
             break;
-            
     }
 }
 
-- (void)videoStartAction {
+- (void)videoStartAction
+{
     [self startRecordSet];
-    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidStart:)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidStart:)])
+    {
         [_delegate ctrollVideoDidStart:self];
     }
 }
 
-- (void)videoCancelAction:(PRecordCancelReason)reason {
-    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidCancel:reason:)]) {
+- (void)videoCancelAction:(PRecordCancelReason)reason
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidCancel:reason:)])
+    {
         [_delegate ctrollVideoDidCancel:self reason:reason];
     }
 }
 
-- (void)videoEndAction {
+- (void)videoEndAction
+{
     
     if (_videoDidEnd) return;
     
     _videoDidEnd = YES;
-    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidEnd:)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidEnd:)])
+    {
         [_delegate ctrollVideoDidEnd:self];
     }
 }
 
-- (void)videoListAction {
-    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoOpenVideoList:)]) {
+- (void)videoListAction
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoOpenVideoList:)])
+    {
         [_delegate ctrollVideoOpenVideoList:self];
     }
 }
 
 - (void)videoCloseAction {
-    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidClose:)]) {
+    if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidClose:)])
+    {
         [_delegate ctrollVideoDidClose:self];
     }
 }
 
-- (void)recordTimerAction {
+- (void)recordTimerAction
+{
     CGFloat reduceLen = self.bounds.size.width/self.customRecordTime;
     CGFloat oldLineLen = self.progressLine.frame.size.width;
     CGRect oldFrame = self.progressLine.frame;
@@ -686,11 +744,13 @@ CGFloat angleToRadian(CGFloat angle) {
     } completion:^(BOOL finished) {
         self.surplusTime --;
         if (self.recording) {
-            if (self.delegate && [self.delegate respondsToSelector:@selector(ctrollVideoDidRecordSEC:)]) {
+            if (self.delegate && [self.delegate respondsToSelector:@selector(ctrollVideoDidRecordSEC:)])
+            {
                 [self.delegate ctrollVideoDidRecordSEC:self];
             }
         }
-        if (self.surplusTime <= 0.0) {
+        if (self.surplusTime <= 0.0)
+        {
             [self endRecordSet];
             [self videoEndAction];
         }
@@ -702,7 +762,8 @@ CGFloat angleToRadian(CGFloat angle) {
 #pragma mark ---------------> Video List控件
 @implementation PCircleCloseBtn
 
-- (void)drawRect:(CGRect)rect {
+- (void)drawRect:(CGRect)rect
+{
     [super drawRect:rect];
     
     self.layer.backgroundColor = [UIColor whiteColor].CGColor;
@@ -730,14 +791,16 @@ CGFloat angleToRadian(CGFloat angle) {
 @end
 
 
-@implementation PVideoListCell {
+@implementation PVideoListCell
+{
     UIImageView *_thumImage;
     PCircleCloseBtn *_closeBtn;
 }
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
         _thumImage = [[UIImageView alloc] initWithFrame:CGRectMake(4, 4, self.bounds.size.width - 8, self.bounds.size.height - 8)];
         _thumImage.layer.cornerRadius = 6.0;
         _thumImage.layer.masksToBounds = YES;
@@ -753,36 +816,40 @@ CGFloat angleToRadian(CGFloat angle) {
     return self;
 }
 
-- (void)setVideoModel:(PVideoModel *)videoModel {
+- (void)setVideoModel:(PVideoModel *)videoModel
+{
     _videoModel = videoModel;
     _thumImage.image = [UIImage imageNamed:videoModel.thumAbsolutePath];
     //    [UIImage imageWithContentsOfFile:videoModel.totalThumPath];
 }
 
-- (void)setEdit:(BOOL)canEdit {
+- (void)setEdit:(BOOL)canEdit
+{
     _closeBtn.hidden = !canEdit;
 }
 
-- (void)deleteAction {
-    if (self.deleteVideoBlock) {
+- (void)deleteAction
+{
+    if (self.deleteVideoBlock)
+    {
         self.deleteVideoBlock(self.videoModel);
     }
 }
-
-
 @end
-
 
 @implementation PAddNewVideoCell
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    if (self = [super initWithFrame:frame])
+    {
         [self setupView];
     }
     return self;
 }
 
-- (void)setupView {
+- (void)setupView
+{
     CALayer *bgLayer = [CALayer layer];
     bgLayer.frame = CGRectMake(4, 4, self.bounds.size.width - 8, self.bounds.size.height - 8);
     bgLayer.backgroundColor = [UIColor colorWithRed: 0.5 green: 0.5 blue: 0.5 alpha: 0.3].CGColor;
@@ -807,9 +874,5 @@ CGFloat angleToRadian(CGFloat angle) {
     crossLayer.opacity = 1.0;
     [bgLayer addSublayer:crossLayer];
     CGPathRelease(path);
-}
-
-- (void)dealloc {
-    //    NSLog(@"cell add  dealloc");
 }
 @end
