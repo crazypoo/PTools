@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.7.1'
+    s.version     = '1.7.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '自己用到的工具'
@@ -38,7 +38,7 @@ Pod::Spec.new do |s|
     s.dependency 'Masonry'
     s.dependency 'MJRefresh'
     s.dependency 'MYBlurIntroductionView'
-    s.dependency 'TextFieldEffects'
+    #s.dependency 'TextFieldEffects'
     s.dependency 'pop'
     s.dependency 'JMHoledView'
     s.dependency 'UITextField+Shake'
