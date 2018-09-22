@@ -1,6 +1,9 @@
 {
   "name": "PooTools",
-  "version": "1.7.0",
+  "version": "1.7.4",
+  "platforms": {
+    "ios": "8.0"
+  },
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,14 +11,11 @@
   "summary": "自己用到的工具",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.7.0"
+    "tag": "1.7.4"
   },
   "license": {
     "type": "MIT",
     "file": "LICENSE"
-  },
-  "platforms": {
-    "ios": "8.0"
   },
   "requires_arc": true,
   "source_files": [
@@ -23,6 +23,7 @@
     "PooTools/**/*.{h,m}"
   ],
   "resources": "PooTools/PooTools.bundle",
+  "swift_version": "4.2",
   "frameworks": [
     "UIKit",
     "AudioToolbox",
@@ -97,6 +98,9 @@
 
     ],
     "MYBlurIntroductionView": [
+
+    ],
+    "TextFieldEffects": [
 
     ],
     "pop": [

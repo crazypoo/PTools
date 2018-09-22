@@ -32,7 +32,7 @@ PODS:
   - MJExtension (3.0.15.1)
   - MJRefresh (3.1.15.7)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.7.0):
+  - PooTools (1.7.4):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -50,6 +50,7 @@ PODS:
     - MYBlurIntroductionView
     - pop
     - SDWebImage
+    - TextFieldEffects
     - TOWebViewController
     - UINavigation-SXFixSpace
     - "UITableView+FDTemplateLayoutCell"
@@ -60,6 +61,7 @@ PODS:
   - SDWebImage (4.3.3):
     - SDWebImage/Core (= 4.3.3)
   - SDWebImage/Core (4.3.3)
+  - TextFieldEffects (1.5.0)
   - TOWebViewController (2.2.8):
     - TOWebViewController/Core (= 2.2.8)
   - TOWebViewController/Core (2.2.8)
@@ -93,6 +95,7 @@ SPEC REPOS:
     - MYBlurIntroductionView
     - pop
     - SDWebImage
+    - TextFieldEffects
     - TOWebViewController
     - UINavigation-SXFixSpace
     - "UITableView+FDTemplateLayoutCell"
@@ -120,9 +123,10 @@ SPEC CHECKSUMS:
   MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
   MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 99483b07f02d602ce4cac7f5d419b04a6d45008a
+  PooTools: 37e9ed6f9372c8dcdc05316519181cbe157fb9e3
   pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
   SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
+  TextFieldEffects: bf9e9cac7cb1a97d632fbcd0724bb6347dd86633
   TOWebViewController: 953a24619d32f7aa1d9d4098a74885a9236f7348
   UINavigation-SXFixSpace: 02323ab6d50f3719bf0829afa22995acb9b2486b
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
