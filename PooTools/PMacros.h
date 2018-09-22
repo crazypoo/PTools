@@ -185,10 +185,6 @@
  */
 #define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
 
-/*! @brief KeyWindow
- */
-#define kKeyWindow [[UIApplication sharedApplication] keyWindow]
-
 /*! @brief SaveArea适配
  */
 #define adjustsScrollViewInsets(scrollView)\

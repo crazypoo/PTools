@@ -24,10 +24,8 @@ static PBiologyID *pTouchID = nil;
 
 +(instancetype)defaultBiologyID
 {
-    @synchronized (self)
-    {
-        if (!pTouchID)
-        {
+    @synchronized (self) {
+        if (!pTouchID) {
             pTouchID = [[PBiologyID alloc] init];
         }
         
@@ -40,47 +38,39 @@ static PBiologyID *pTouchID = nil;
 
 -(void)verifyBiologyIDAction
 {
-    if (@available(iOS 8.0, *))
-    {
+    if (@available(iOS 8.0, *)) {
         self.security = [[LAContext alloc] init];
         
         NSError *error = nil;
         BOOL isCanEvaluatePolicy = [self.security canEvaluatePolicy:LAPolicyDeviceOwnerAuthenticationWithBiometrics error:&error];
         //TODO:TOUCHID是否存在
         if (error) {
-            if (self.biologyIDBlock)
-            {
+            if (self.biologyIDBlock) {
                 self.biologyIDBlock(BiologyIDTypeNone);
             }
         }
         else
         {
-            if (isCanEvaluatePolicy)
-            {
-                if (@available(iOS 11.0, *))
-                {
-                    switch (self.security.biometryType)
-                    {
+            if (isCanEvaluatePolicy) {
+                if (@available(iOS 11.0, *)) {
+                    switch (self.security.biometryType) {
                         case LABiometryNone:
                         {
-                            if (self.biologyIDBlock)
-                            {
+                            if (self.biologyIDBlock) {
                                 self.biologyIDBlock(BiologyIDTypeNone);
                             }
                         }
                             break;
                         case LABiometryTypeTouchID:
                         {
-                            if (self.biologyIDBlock)
-                            {
+                            if (self.biologyIDBlock) {
                                 self.biologyIDBlock(BiologyIDTypeTouchID);
                             }
                         }
                             break;
                         case LABiometryTypeFaceID:
                         {
-                            if (self.biologyIDBlock)
-                            {
+                            if (self.biologyIDBlock) {
                                 self.biologyIDBlock(BiologyIDTypeFaceID);
                             }
                         }
@@ -92,16 +82,14 @@ static PBiologyID *pTouchID = nil;
                 else
                 {
                     // Fallback on earlier versions
-                    if (self.biologyIDBlock)
-                    {
+                    if (self.biologyIDBlock) {
                         self.biologyIDBlock(BiologyIDTypeTouchID);
                     }
                 }
             }
             else
             {
-                if (self.biologyIDBlock)
-                {
+                if (self.biologyIDBlock) {
                     self.biologyIDBlock(BiologyIDTypeNone);
                 }
             }
@@ -109,8 +97,7 @@ static PBiologyID *pTouchID = nil;
     }
     else
     {
-        if (self.biologyIDBlock)
-        {
+        if (self.biologyIDBlock) {
             self.biologyIDBlock(BiologyIDTypeNone);
         }
     }
@@ -120,8 +107,7 @@ static PBiologyID *pTouchID = nil;
 {
     NSString *touchIDAlertTitle = @"生物技术验证";
     LAPolicy evaluatePolicyType;
-    if (@available(iOS 9.0, *))
-    {
+    if (@available(iOS 9.0, *)) {
         evaluatePolicyType = LAPolicyDeviceOwnerAuthentication;
     }
     else
@@ -135,19 +121,16 @@ static PBiologyID *pTouchID = nil;
          if (succes)
          {
              self.biologyIDVerifyType = BiologyIDVerifyStatusTypeSuccess;
-             if ([self.delegate respondsToSelector:@selector(biologyIDVerifyStatus:)])
-             {
+             if ([self.delegate respondsToSelector:@selector(biologyIDVerifyStatus:)]) {
                  [self.delegate biologyIDVerifyStatus:self.biologyIDVerifyType];
              }
-             if (self.biologyIDVerifyBlock)
-             {
+             if (self.biologyIDVerifyBlock) {
                  self.biologyIDVerifyBlock(self.biologyIDVerifyType);
              }
          }
          else
          {
-             switch (error.code)
-             {
+             switch (error.code) {
                  case LAErrorSystemCancel:
                  {
                      self. biologyIDVerifyType = BiologyIDVerifyStatusTypeSystemCancel;
@@ -196,12 +179,12 @@ static PBiologyID *pTouchID = nil;
              if ([self.delegate respondsToSelector:@selector(biologyIDVerifyStatus:)]) {
                  [self.delegate biologyIDVerifyStatus:self.biologyIDVerifyType];
              }
-             if (self.biologyIDVerifyBlock)
-             {
+             if (self.biologyIDVerifyBlock) {
                  self.biologyIDVerifyBlock(self.biologyIDVerifyType);
              }
          }
      }];
+
 }
 
 
@@ -215,8 +198,7 @@ static PBiologyID *pTouchID = nil;
     GCDWithGlobal(
                   OSStatus status = SecItemDelete((__bridge CFDictionaryRef)(query));
                   
-                  switch (status)
-    {
+                  switch (status) {
                       case errSecSuccess:
                           self.biologyIDVerifyType = BiologyIDVerifyStatusTypePassWordKilled;
                           break;
@@ -231,12 +213,10 @@ static PBiologyID *pTouchID = nil;
                       default:
                           break;
                   }
-                  if ([self.delegate respondsToSelector:@selector(biologyIDVerifyStatus:)])
-                  {
+                  if ([self.delegate respondsToSelector:@selector(biologyIDVerifyStatus:)]) {
                       [self.delegate biologyIDVerifyStatus:self.biologyIDVerifyType];
                   }
-                  if (self.biologyIDVerifyBlock)
-                  {
+                  if (self.biologyIDVerifyBlock) {
                       self.biologyIDVerifyBlock(self.biologyIDVerifyType);
                   }
                   );

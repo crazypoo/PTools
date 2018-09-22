@@ -13,8 +13,7 @@
 @synthesize strikeThroughAlignment = strikeThroughAlignment_;
 
 - (id)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame])
-    {
+    if (self = [super initWithFrame:frame]) {
         self.verticalAlignment = VerticalAlignmentMiddle;
         self.strikeThroughAlignment = StrikeThroughAlignmentMiddle;
         self.strikeThroughEnabled = NO;
@@ -32,8 +31,7 @@
 
 - (CGRect)textRectForBounds:(CGRect)bounds limitedToNumberOfLines:(NSInteger)numberOfLines {
     CGRect textRect = [super textRectForBounds:bounds limitedToNumberOfLines:numberOfLines];
-    switch (self.verticalAlignment)
-    {
+    switch (self.verticalAlignment) {
         case VerticalAlignmentTop:
             textRect.origin.y = bounds.origin.y;
             break;
@@ -49,8 +47,7 @@
     {
         CGFloat strikeWidth = textRect.size.width;
         CGRect lineRect;
-        switch (self.strikeThroughAlignment)
-        {
+        switch (self.strikeThroughAlignment) {
             case StrikeThroughAlignmentTop:
             {
                 lineRect = CGRectMake(textRect.origin.x, textRect.origin.y, strikeWidth, 1);
@@ -81,6 +78,7 @@
 {
     CGRect actualRect = [self textRectForBounds:requestedRect limitedToNumberOfLines:self.numberOfLines];
     [super drawTextInRect:actualRect];
+
 }
 
 @end

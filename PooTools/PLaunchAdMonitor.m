@@ -46,8 +46,7 @@ static PLaunchAdMonitor *monitor = nil;
     [monitor.detailParam addEntriesFromDictionary:param];
     
     BOOL dic;
-    if (param == nil)
-    {
+    if (param == nil) {
         dic = NO;
     }
     else
@@ -57,8 +56,7 @@ static PLaunchAdMonitor *monitor = nil;
     monitor.callback = callback;
     
     BOOL comLabel;
-    if (year == nil || comname == nil)
-    {
+    if (year == nil || comname == nil) {
         comLabel = YES;
     }
     else
@@ -71,8 +69,7 @@ static PLaunchAdMonitor *monitor = nil;
 
 + (instancetype)defaultMonitor
 {
-    @synchronized (self)
-    {
+    @synchronized (self) {
         if (!monitor) {
             monitor = [[PLaunchAdMonitor alloc] init];
         }
@@ -238,8 +235,7 @@ static PLaunchAdMonitor *monitor = nil;
         dispatch_source_t _timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0,queue);
         dispatch_source_set_timer(_timer,dispatch_walltime(NULL, 0),1.0*NSEC_PER_SEC, 0);
         dispatch_source_set_event_handler(_timer, ^{
-            if(timeout <= 0)
-            {
+            if(timeout <= 0){
                 dispatch_source_cancel(_timer);
                 dispatch_async(dispatch_get_main_queue(), ^{
                 });
@@ -258,8 +254,7 @@ static PLaunchAdMonitor *monitor = nil;
 
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             v.userInteractionEnabled = NO;
-            if (monitor.callback)
-            {
+            if (monitor.callback) {
                 monitor.callback();
                 monitor.callback = nil;
             }
@@ -363,42 +358,36 @@ static PLaunchAdMonitor *monitor = nil;
         {
             self.playMovie = NO;
 
-            if ([imageStr isKindOfClass:[NSString class]])
-            {
+            if ([imageStr isKindOfClass:[NSString class]]) {
                 NSURL *URL = [NSURL URLWithString:imageStr];
                 NSURLRequest *request = [NSURLRequest requestWithURL:URL];
                 self.conn = [NSURLConnection connectionWithRequest:request delegate:self];
-                if (self.conn)
-                {
+                if (self.conn) {
                     [self.conn start];
                 }
-            }
-            else if([imageStr isKindOfClass:[NSURL class]])
-            {
+            }else if([imageStr isKindOfClass:[NSURL class]]){
                 NSURL *URL = [NSURL URLWithString:imageStr];
                 NSURLRequest *request = [NSURLRequest requestWithURL:URL];
                 self.conn = [NSURLConnection connectionWithRequest:request delegate:self];
-                if (self.conn)
-                {
+                if (self.conn) {
                     [self.conn start];
                 }
             }
-            else if([imageStr isKindOfClass:[UIImage class]])
-            {
+            else if([imageStr isKindOfClass:[UIImage class]]){
                 self.imgData = [NSMutableData data];
                 [self.imgData appendData:UIImagePNGRepresentation((UIImage*)imageStr)];
                 self.imgLoaded = YES;
             }
         }
     }
+    
 }
 
 #pragma mark - NSURLConnectionDataDelegate method
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
 {
     NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
-    if (resp.statusCode != 200)
-    {
+    if (resp.statusCode != 200) {
         self.imgLoaded = YES;
         return ;
     }

@@ -14,8 +14,7 @@
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
-    if (self)
-    {
+    if (self) {
         [self initViews];
         self.backgroundColor = kClearColor;
     }

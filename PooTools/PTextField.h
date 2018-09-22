@@ -10,8 +10,6 @@
 
 @interface PTextField : UITextField
 @property (nonatomic, strong) UIImageView *textFieldHeadImageView;
-/*! @brief TextField类似TextView一样,最左边带图片
- */
 -(id)initWithFrame:(CGRect)frame
              image:(UIImage *)image;
 @end

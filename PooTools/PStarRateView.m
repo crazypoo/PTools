@@ -32,21 +32,18 @@
 @implementation PStarRateView
 
 #pragma mark - Init Methods
-- (instancetype)init
-{
+- (instancetype)init {
     NSAssert(NO, @"You should never call this method in this class. Use initWithFrame: instead!");
     return nil;
 }
 
-- (instancetype)initWithRateBlock:(PStarRateViewRateBlock)block
-{
+- (instancetype)initWithRateBlock:(PStarRateViewRateBlock)block{
     return [self initWithNumberOfStars:DEFALUT_STAR_NUMBER imageForeground:[Utils createImageWithColor:[UIColor redColor]] imageBackGround:[Utils createImageWithColor:[UIColor blueColor]] withTap:YES rateBlock:block];
 }
 
 - (instancetype)initWithNumberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block
 {
-    if (self = [super init])
-    {
+    if (self = [super init]) {
         self.rateBlock = block;
         self.numberOfStars = numberOfStars;
         [self buildUIWithImageStr:fStr backGround:bStr taped:yesORno];
