@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "1.6.8",
+  "version": "1.7.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "自己用到的工具",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.6.8"
+    "tag": "1.7.0"
   },
   "license": {
     "type": "MIT",
@@ -97,9 +97,6 @@
 
     ],
     "MYBlurIntroductionView": [
-
-    ],
-    "TextFieldEffects": [
 
     ],
     "pop": [
