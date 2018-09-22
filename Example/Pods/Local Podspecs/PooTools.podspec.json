@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "1.3.45",
+  "version": "1.6.8",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "自己用到的工具",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.3.45"
+    "tag": "1.6.8"
   },
   "license": {
     "type": "MIT",
@@ -22,6 +22,7 @@
     "PooTools",
     "PooTools/**/*.{h,m}"
   ],
+  "resources": "PooTools/PooTools.bundle",
   "frameworks": [
     "UIKit",
     "AudioToolbox",
@@ -38,7 +39,10 @@
     "LocalAuthentication",
     "HealthKit",
     "CoreMotion",
-    "SceneKit"
+    "SceneKit",
+    "CoreImage",
+    "AssetsLibrary",
+    "Photos"
   ],
   "dependencies": {
     "AFNetworking": [
@@ -93,6 +97,9 @@
 
     ],
     "MYBlurIntroductionView": [
+
+    ],
+    "TextFieldEffects": [
 
     ],
     "pop": [
