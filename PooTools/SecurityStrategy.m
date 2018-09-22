@@ -19,13 +19,15 @@
     UIImageView *imageView = [[UIImageView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     imageView.tag = effectTag;
     imageView.image = [self blurImage];
-    [[[UIApplication sharedApplication] keyWindow] addSubview:imageView];
+    [kKeyWindow addSubview:imageView];
 }
 +(void)removeBlurEffect
 {
-    NSArray *subViews = [[UIApplication sharedApplication] keyWindow].subviews;
-    for (id object in subViews) {
-        if ([[object class] isSubclassOfClass:[UIImageView class]]) {
+    NSArray *subViews = kKeyWindow.subviews;
+    for (id object in subViews)
+    {
+        if ([[object class] isSubclassOfClass:[UIImageView class]])
+        {
             UIImageView *imageView = (UIImageView *)object;
             if(imageView.tag == effectTag)
             {
@@ -39,7 +41,6 @@
     }
 }
 
-
 //毛玻璃效果
 +(UIImage *)blurImage
 {
@@ -49,13 +50,14 @@
     
     return image;
 }
+
 //屏幕截屏
 +(UIImage *)screenShot
 {
     
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(kSCREEN_WIDTH*kSCREEN_SCALE, kSCREEN_HEIGHT*kSCREEN_SCALE), YES, 0);
     //设置截屏大小
-    [[[[UIApplication sharedApplication] keyWindow] layer] renderInContext:UIGraphicsGetCurrentContext()];
+    [[kKeyWindow layer] renderInContext:UIGraphicsGetCurrentContext()];
     
     UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
     

@@ -49,7 +49,6 @@
     }
 }
 
-
 - (void)setupSubViews
 {
     AVPlayerItem *playerItem = [[AVPlayerItem alloc] initWithURL:_videoUrl];
