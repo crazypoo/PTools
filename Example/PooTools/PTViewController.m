@@ -23,6 +23,8 @@
 #import "PADView.h"
 #import "PLabel.h"
 #import "PVideoViewController.h"
+#import "UIView+ViewRectCorner.h"
+#import "UITextField+ModifyPlaceholder.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -71,9 +73,16 @@
 //    }];
     
     UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-    btn.frame = self.view.bounds;
+    btn.frame = CGRectMake(100, 100, 100, 100);
+    btn.viewUI_rectCornerRadii = 20;
+    btn.backgroundColor = kRandomColor;
     [btn addTarget:self action:@selector(aaaaa) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:btn];
+    
+//    NSMutableArray *_RectCornerArr = [NSMutableArray array];
+//    [_RectCornerArr addObject:@(UIRectCornerAllCorners)];
+
+    btn.viewUI_rectCorner = UIRectCornerBottomRight;
     
 //    PLabel *aaaaaaaaaaaaaa = [PLabel new];
 //    aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
@@ -86,27 +95,31 @@
 //        make.height.offset(40);
 //    }];
     
+
+    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
+        if (self.textField.text.length != 0)
+        {
+            self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
+        }
+
+    } returnSTH:^(PooNumberKeyBoard *keyboardView, NSString *returnSTH) {
+        self.textField.text = [self.textField.text stringByAppendingString:returnSTH];
+
+    }];
 //
-//    PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
-//        if (self.textField.text.length != 0)
-//        {
-//            self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
-//        }
-//
-//    } returnSTH:^(PooNumberKeyBoard *keyboardView, NSString *returnSTH) {
-//        self.textField.text = [self.textField.text stringByAppendingString:returnSTH];
-//
-//    }];
-//
-//    self.textField = [UITextField new];
-//    self.textField.placeholder = @"11111";
-//    self.textField.inputView = userNameKeyboard;
-//    [self.view addSubview:self.textField];
-//    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.equalTo(self.view);
-//        make.top.offset(64);
-//        make.height.offset(30);
-//    }];
+    self.textField = [UITextField new];
+    self.textField.placeholder = @"222222";
+//    self.textField.UI_PlaceholderLabel.text = @"11111";
+//    self.textField.UI_PlaceholderLabel.textAlignment = NSTextAlignmentCenter;
+//    self.textField.UI_PlaceholderLabel.textColor = kRandomColor;
+//    self.textField.UI_PlaceholderLabel.font = [UIFont systemFontOfSize:14];
+    self.textField.inputView = userNameKeyboard;
+    [self.view addSubview:self.textField];
+    [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.view);
+        make.top.offset(64);
+        make.height.offset(30);
+    }];
     
     kAdaptedOtherFontSize(@"", 16);
     

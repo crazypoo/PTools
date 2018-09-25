@@ -92,6 +92,8 @@
 		CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CE214364D000453548 /* PVideoPlayer.m */; };
 		CC3838D7214364D100453548 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D1214364D100453548 /* PVideoConfig.m */; };
 		CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */; };
+		CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */; };
+		CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
 		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
 		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
@@ -306,6 +308,10 @@
 		CC3838D2214364D100453548 /* PVideoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoSupport.h; sourceTree = "<group>"; };
 		CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
 		CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
+		CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewRectCorner.h"; sourceTree = "<group>"; };
+		CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewRectCorner.m"; sourceTree = "<group>"; };
+		CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
+		CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
 		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
 		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
 		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
@@ -691,6 +697,10 @@
 				CC1257AE2098319200E31A38 /* WPTappableLabel.m */,
 				CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */,
 				CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */,
+				CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */,
+				CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */,
+				CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */,
+				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -909,6 +919,7 @@
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
+				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
@@ -937,6 +948,7 @@
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
+				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
 				CC1257D22098319300E31A38 /* PSpeech.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
