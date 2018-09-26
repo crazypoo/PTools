@@ -25,6 +25,7 @@
 #import "PVideoViewController.h"
 #import "UIView+ViewRectCorner.h"
 #import "UITextField+ModifyPlaceholder.h"
+#import "UIView+ViewShaking.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -374,6 +375,7 @@
 //        [timePicker removeFromSuperview];
 //        timePicker = nil;
 //    };
+//    [self.textField ViewUI_viewShaking];
 }
 
 #pragma mark - YXCustomAlertViewDelegate

@@ -125,6 +125,7 @@
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
 		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
 		CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E420A9A3D800943107 /* PooShowImageModel.m */; };
+		CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC01E08215B341300874BDF /* UIView+ViewShaking.m */; };
 		CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE7811A20BD88D2004E6ADB /* CoreImage.framework */; };
 		F0A70E63CC9A27D1B5339D04 /* Pods_PooTools_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */; };
 /* End PBXBuildFile section */
@@ -353,6 +354,8 @@
 		CCB433E220A9A3D700943107 /* YMShowImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMShowImageView.h; sourceTree = "<group>"; };
 		CCB433E320A9A3D800943107 /* YMShowImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMShowImageView.m; sourceTree = "<group>"; };
 		CCB433E420A9A3D800943107 /* PooShowImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooShowImageModel.m; sourceTree = "<group>"; };
+		CCC01E07215B341300874BDF /* UIView+ViewShaking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewShaking.h"; sourceTree = "<group>"; };
+		CCC01E08215B341300874BDF /* UIView+ViewShaking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewShaking.m"; sourceTree = "<group>"; };
 		CCE7811A20BD88D2004E6ADB /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		D7E6224504513A2D932A5233 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F01DFF91343DF608B861705D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -701,6 +704,8 @@
 				CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */,
 				CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */,
 				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
+				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
+				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -875,6 +880,7 @@
 				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */,
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
+				CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */,
 				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
