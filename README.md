@@ -30,10 +30,20 @@ didRecordVideo:(PVideoModel *)videoModel;
 - (void)videoViewControllerDidCancel:(PVideoViewController *)videoController;
 ```
 '同意勾选框按钮'</br>
+```objc
+```
 '虚线View'</br>
+```objc
+```
 '温度计View'</br>
+```objc
+```
 'Slider'</br>
+```objc
+```
 '按钮内的文图扩展'</br>
+```objc
+```
 'iPhone生物验证'</br>
 ```objc
 PBiologyID *touchID = [PBiologyID defaultBiologyID];
@@ -42,8 +52,9 @@ PNSLog(@"%ld",(long)biologyIDType);
 };
 [self.touchID biologyAction];
 ```
-'以CollectionView展示方式的广告View'</br>
+'以CollectionView展示方式的广告View/以Scroll展示方式的广告View'</br>
 ```objc
+---CollectionView方式
 CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
 aaaaa.bannerTitle = @"111111";
 
@@ -62,8 +73,14 @@ make.height.offset(150);
 +(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h sectionInset:(UIEdgeInsets)inset minimumLineSpacing:(CGFloat)mls minimumInteritemSpacing:(CGFloat)mis scrollDirection:(UICollectionViewScrollDirection)sd;
 ```
 '清理缓存'</br>
+```objc
+```
 'AES加密'</br>
+```objc
+```
 'Base64加密/RSA加密'</br>
+```objc
+```
 '图片展示View'</br>
 ```objc
 PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
@@ -108,6 +125,33 @@ PNSLog(@"%d",saveStatus);
 ```
 '自定义AlertView'</br>
 ```objc
+YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+
+} clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+switch (buttonIndex) {
+case 0:
+{
+[alertView dissMiss];
+alertView = nil;
+}
+break;
+case 1:
+{
+[alertView dissMiss];
+alertView = nil;
+}
+break;
+default:
+break;
+}
+
+} didDismissBlock:^(YXCustomAlertView *alertView) {
+
+}];
+[alert mas_makeConstraints:^(MASConstraintMaker *make) {
+make.width.height.offset(310);
+make.centerX.centerY.equalTo(self.view);
+}];
 ```
 '日期选择器/时间选择器'</br>
 ```objc
@@ -148,9 +192,6 @@ PNSLog(@">>>>>>>>>>>>>%@",timeStr);
 {
 PNSLog(@">>>>>>>>>>>>>%@",timePicker);
 }
-```
-'以Scroll展示方式的广告View'</br>
-```objc
 ```
 '自定义ActionSheet'</br>
 ```objc
