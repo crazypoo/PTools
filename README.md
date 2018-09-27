@@ -19,6 +19,16 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 
 本工具内集成了:</br>
 '小视频录制'</br>
+```objc
+PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
+videoVC.delegate = self;
+[videoVC startAnimationWithType:PVideoViewShowTypeSmall];
+
+---Delegate
+- (void)videoViewController:(PVideoViewController *)videoController
+didRecordVideo:(PVideoModel *)videoModel;
+- (void)videoViewControllerDidCancel:(PVideoViewController *)videoController;
+```
 '同意勾选框按钮'</br>
 '虚线View'</br>
 '温度计View'</br>
