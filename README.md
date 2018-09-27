@@ -35,12 +35,74 @@ didRecordVideo:(PVideoModel *)videoModel;
 'Slider'</br>
 '按钮内的文图扩展'</br>
 'iPhone生物验证'</br>
+```objc
+PBiologyID *touchID = [PBiologyID defaultBiologyID];
+touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
+PNSLog(@"%ld",(long)biologyIDType);
+};
+[self.touchID biologyAction];
+```
 '以CollectionView展示方式的广告View'</br>
+```objc
+CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
+aaaaa.bannerTitle = @"111111";
+
+PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
+[self.view addSubview:adaaaa];
+[adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.equalTo(self.view);
+make.top.offset(100);
+make.height.offset(150);
+}];
+```
 'CollectionViewLayout的快速初始化'</br>
+```objc
++(UICollectionViewFlowLayout *)createLayoutNormalScrollDirection:(UICollectionViewScrollDirection)sd;
++(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h paddingY:(CGFloat)pY paddingX:(CGFloat)pX scrollDirection:(UICollectionViewScrollDirection)sd;
++(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h sectionInset:(UIEdgeInsets)inset minimumLineSpacing:(CGFloat)mls minimumInteritemSpacing:(CGFloat)mis scrollDirection:(UICollectionViewScrollDirection)sd;
+```
 '清理缓存'</br>
 'AES加密'</br>
 'Base64加密/RSA加密'</br>
 '图片展示View'</br>
+```objc
+PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+imageModel.imageShowType = PooShowImageModelTypeFullView;
+imageModel.imageInfo = @"11111111241241241241928390128309128";
+imageModel.imageTitle = @"22222212312312312312312312312";
+
+PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
+imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+imageModelV.imageShowType = PooShowImageModelTypeVideo;
+imageModelV.imageInfo = @"11111111241241241241928390128309128";
+imageModelV.imageTitle = @"22222212312312312312312312312";
+
+PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+imageModelV.imageShowType = PooShowImageModelTypeNormal;
+imageModel2.imageInfo = @"6666666";
+imageModel2.imageTitle = @"5555555";
+
+PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
+imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+imageModelV.imageShowType = PooShowImageModelTypeGIF;
+imageModel3.imageInfo = @"444444";
+imageModel3.imageTitle = @"333333";
+
+NSArray *arr = @[imageModel,imageModelV,imageModel2,imageModel3];
+
+YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:[UIColor whiteColor] fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+[ymImageV showWithFinish:^{
+[[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}];
+[ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+}];
+ymImageV.saveImageStatus = ^(BOOL saveStatus) {
+PNSLog(@"%d",saveStatus);
+};
+```
 '简单的饼状图'</br>
 '自定义AlertView'</br>
 '日期选择器/时间选择器'</br>
