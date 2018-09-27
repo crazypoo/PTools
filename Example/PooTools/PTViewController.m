@@ -371,10 +371,10 @@
 
     [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
     [view customSelectRow:1 inComponent:1 animated:YES];
-//    view.dismissBlock = ^(PooTimePicker *timePicker) {
-//        [timePicker removeFromSuperview];
-//        timePicker = nil;
-//    };
+    view.dismissBlock = ^(PooTimePicker *timePicker) {
+        [timePicker removeFromSuperview];
+        timePicker = nil;
+    };
 //    [self.textField ViewUI_viewShaking];
 }
 

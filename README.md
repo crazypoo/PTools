@@ -104,56 +104,199 @@ PNSLog(@"%d",saveStatus);
 };
 ```
 '简单的饼状图'</br>
+```objc
+```
 '自定义AlertView'</br>
+```objc
+```
 '日期选择器/时间选择器'</br>
+```objc
+---DatePicker
+PooDatePicker *viewDate = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
+[self.view addSubview:viewDate];
+[viewDate mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.top.bottom.equalTo(self.view);
+}];
+viewDate.block = ^(NSString *dateString) {
+PNSLog(@">>>>>>>>>>>%@",dateString);
+};
+
+---TimePicker
+PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
+view.delegate = self;
+[[PTAppDelegate appDelegate].window addSubview:view];
+[view mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.top.bottom.equalTo(self.view);
+}];
+[view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
+[view customSelectRow:10 inComponent:0 animated:YES];
+
+[view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
+[view customSelectRow:1 inComponent:1 animated:YES];
+view.dismissBlock = ^(PooTimePicker *timePicker) {
+[timePicker removeFromSuperview];
+timePicker = nil;
+};
+
+---TimePickerDelegate
+-(void)timePickerReturnStr:(NSString *)timeStr timePicker:(PooTimePicker *)timePicker
+{
+PNSLog(@">>>>>>>>>>>>>%@",timeStr);
+}
+
+-(void)timePickerDismiss:(PooTimePicker *)timePicker
+{
+PNSLog(@">>>>>>>>>>>>>%@",timePicker);
+}
+```
 '以Scroll展示方式的广告View'</br>
+```objc
+```
 '自定义ActionSheet'</br>
+```objc
+ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"11111" cancelButtonTitle:@"11111" destructiveButtonTitle:@"11111" otherButtonTitles:@[@"1231",@"1231",@"1231",@"1231"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+
+}];
+[actionSheet show];
+```
 '带动画的TextField'</br>
+```objc
+```
 'DES加密'</br>
+```objc
+```
 '以KeyChain方式保存帐号密码'</br>
+```objc
+```
 '可以变大的TextView'</br>
+```objc
+```
 'iOS黑魔法'</br>
+```objc
+```
 '随机数组'</br>
+```objc
+```
 '字符串数组更换'</br>
+```objc
+```
 'MD5加密'</br>
+```objc
+```
 '正则表达式'</br>
+```objc
+```
 '富文本'</br>
+```objc
+```
 '在线获取App版本'</br>
+```objc
+```
 'Bug报告'</br>
+```objc
+```
 '运营商获取'</br>
+```objc
+```
 'GifLoading框'</br>
+```objc
+```
 'HealthKit'</br>
+```objc
+```
 '带穿过线的Label'</br>
+```objc
+```
 'App启动广告View'</br>
+```objc
+```
 '一些常用的宏定义'</br>
+```objc
+```
 'M7+处理器数据获取'</br>
+```objc
+```
 '加入到日历提醒'</br>
+```objc
+```
 '验证码生成'</br>
+```objc
+```
 '简单的Loading动画'</br>
+```objc
+```
 '数字键盘'</br>
+```objc
+```
 '打电话模块'</br>
+```objc
+```
 'SearchBar'</br>
+```objc
+```
 '分段选择器'</br>
+```objc
+```
 '系统信息'</br>
+```objc
+```
 '标签Label'</br>
+```objc
+```
 '带有Placeholder的TextView'</br>
+```objc
+```
 'UDID生成'</br>
+```objc
+```
 '语音翻译'</br>
+```objc
+```
 '评分View'</br>
+```objc
+```
 'TextField类似TextView那样最左有图片'</br>
+```objc
+```
 '浮动按钮'</br>
+```objc
+```
 '后台界面模糊效果'</br>
+```objc
+```
 '按钮扩展'</br>
+```objc
+```
 '颜色扩展'</br>
+```objc
+```
 '图片模糊化'</br>
+```objc
+```
 '图片大小切换'</br>
+```objc
+```
 '跳动数字Label'</br>
+```objc
+```
 '导航栏按钮扩展'</br>
+```objc
+```
 '界面的XYWH边界获取'</br>
+```objc
+```
 'StatusBar的信息提醒'</br>
+```objc
+```
 '一些其他工具集合'</br>
+```objc
+```
 '类似Google的Loading'</br>
+```objc
+```
 'Layer的AutoLayout'</br>
+```objc
+```
 
 ## About iOS Kit
 
