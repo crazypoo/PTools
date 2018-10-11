@@ -49,6 +49,14 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    if (isIPhoneXSeries()) {
+        PNSLog(@"is");
+    }
+    else
+    {
+        PNSLog(@"NO");
+    }
+    
 //    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
 //    aaaaa.bannerTitle = @"111111";
 //

@@ -44,6 +44,25 @@ typedef NS_ENUM(NSInteger,ToolsUrlStringVideoType){
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString *LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
+
+/*! @brief 判断iPhone X / XS / XS MAX / XR
+ */
+static inline BOOL isIPhoneXSeries() {
+    BOOL iPhoneXSeries = NO;
+    if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone) {
+        return iPhoneXSeries;
+    }
+    
+    if (@available(iOS 11.0, *)) {
+        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {
+            iPhoneXSeries = YES;
+        }
+    }
+    
+    return iPhoneXSeries;
+}
+
 @interface Utils : NSObject
 
 #pragma mark ------> UIImageView
