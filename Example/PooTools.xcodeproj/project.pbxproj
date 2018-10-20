@@ -125,6 +125,8 @@
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
 		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
 		CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E420A9A3D800943107 /* PooShowImageModel.m */; };
+		CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */; };
+		CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C55217B127400B205CF /* CountryCodes.m */; };
 		CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC01E08215B341300874BDF /* UIView+ViewShaking.m */; };
 		CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE7811A20BD88D2004E6ADB /* CoreImage.framework */; };
 		F0A70E63CC9A27D1B5339D04 /* Pods_PooTools_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */; };
@@ -354,6 +356,11 @@
 		CCB433E220A9A3D700943107 /* YMShowImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMShowImageView.h; sourceTree = "<group>"; };
 		CCB433E320A9A3D800943107 /* YMShowImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMShowImageView.m; sourceTree = "<group>"; };
 		CCB433E420A9A3D800943107 /* PooShowImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooShowImageModel.m; sourceTree = "<group>"; };
+		CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+Limit.h"; sourceTree = "<group>"; };
+		CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
+		CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
+		CCBC5C54217B127400B205CF /* CountryCodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CountryCodes.h; sourceTree = "<group>"; };
+		CCBC5C55217B127400B205CF /* CountryCodes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CountryCodes.m; sourceTree = "<group>"; };
 		CCC01E07215B341300874BDF /* UIView+ViewShaking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewShaking.h"; sourceTree = "<group>"; };
 		CCC01E08215B341300874BDF /* UIView+ViewShaking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewShaking.m"; sourceTree = "<group>"; };
 		CCE7811A20BD88D2004E6ADB /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
@@ -706,6 +713,11 @@
 				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
 				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
 				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
+				CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */,
+				CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */,
+				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
+				CCBC5C54217B127400B205CF /* CountryCodes.h */,
+				CCBC5C55217B127400B205CF /* CountryCodes.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -745,6 +757,7 @@
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
 						DevelopmentTeam = FA9SE57VK7;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -920,6 +933,7 @@
 				64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */,
 				CC1257C12098319300E31A38 /* PGifHud.m in Sources */,
 				CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */,
+				CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */,
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
@@ -928,6 +942,7 @@
 				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
+				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
@@ -1097,12 +1112,14 @@
 			baseConfigurationReference = 89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				DEVELOPMENT_TEAM = FA9SE57VK7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1111,6 +1128,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -1120,12 +1140,14 @@
 			baseConfigurationReference = BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				DEVELOPMENT_TEAM = FA9SE57VK7;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1134,6 +1156,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
+				SWIFT_VERSION = 4.2;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

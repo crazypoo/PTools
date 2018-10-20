@@ -401,6 +401,27 @@ PNSLog(@"%f",viewHeight);
 'Layer的AutoLayout'</br>
 ```objc
 ```
+'限制输入字数'</br>
+```objc
+[testField setPlaceholder:@"11111" color:[UIColor redColor] font:[UIFont systemFontOfSize:15]];
+
+[testField limitCondition:^BOOL(NSString *inputStr){
+return ![testField.text isEqualToString:@"xxxxx"];
+} action:^{
+NSLog(@"limit action");
+}];
+
+[testField limitNums:3 action:^{
+NSLog(@"num limit action");
+}];
+
+```
+'国家地区号码'</br>
+```objc
+CountryCodeModel *model = [CountryCodes countryCodes][30];
+PNSLog(@"%@-----%@",model.countryName,model.countryCode);
+
+```
 
 ## About iOS Kit
 

@@ -26,6 +26,7 @@
 #import "UIView+ViewRectCorner.h"
 #import "UITextField+ModifyPlaceholder.h"
 #import "UIView+ViewShaking.h"
+#import "CountryCodes.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
@@ -56,6 +57,9 @@
     {
         PNSLog(@"NO");
     }
+    
+    CountryCodeModel *model = [CountryCodes countryCodes][30];
+    PNSLog(@"%@-----%@",model.countryName,model.countryCode);
     
 //    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
 //    aaaaa.bannerTitle = @"111111";
