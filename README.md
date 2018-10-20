@@ -250,6 +250,8 @@ ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"1111
 ```
 'App启动广告View'</br>
 ```objc
+[PLaunchAdMonitor showAdAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:self.window.rootViewController.view timeInterval:100 detailParameters:@{} years:@"2000" skipButtonFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callback:^{
+}];
 ```
 '一些常用的宏定义'</br>
 ```objc
@@ -268,21 +270,82 @@ ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"1111
 ```
 '数字键盘'</br>
 ```objc
+PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
+} returnSTH:^(PooNumberKeyBoard *keyboardView, NSString *returnSTH) {
+}];
 ```
 '打电话模块'</br>
 ```objc
 ```
 'SearchBar'</br>
 ```objc
+PooSearchBar *searchBar = [PooSearchBar new];
+searchBar.barStyle     = UIBarStyleDefault;
+searchBar.translucent  = YES;
+searchBar.keyboardType = UIKeyboardTypeDefault;
+searchBar.searchPlaceholder = @"点击此处查找地市名字";
+searchBar.searchPlaceholderColor = kRandomColor;
+searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
+searchBar.searchTextColor = kRandomColor;
+searchBar.searchTextFieldBackgroundColor = kRandomColor;
+searchBar.searchBarOutViewColor = kRandomColor;
+searchBar.searchBarTextFieldCornerRadius = 15;
+searchBar.cursorColor = kRandomColor;
+[self.view addSubview:searchBar];
+[searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.top.equalTo(self.view);
+make.height.offset(44);
+}];
+
 ```
 '分段选择器'</br>
 ```objc
+PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+
+}];
+[self.view addSubview:seg];
+[seg mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.top.equalTo(self.view);
+make.height.offset(44);
+}];
 ```
 '系统信息'</br>
 ```objc
 ```
 '标签Label'</br>
 ```objc
+NSArray *titleS = @[@"7"];
+
+PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+config.itemHeight = 50;
+config.itemWidth = 50;
+config.itemHerMargin = 10;
+config.itemVerMargin = 10;
+config.hasBorder = YES;
+config.topBottomSpace = 5.0;
+config.itemContentEdgs = 20;
+config.isCanSelected = YES;
+config.isCanCancelSelected = YES;
+config.isMulti = YES;
+config.selectedDefaultTags = titleS;
+config.borderColor = kRandomColor;
+config.borderWidth = 2;
+config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+
+NSArray *title = @[@"7",@"1",@"2",@"3",@"4",@"5",@"6",@"11",@"12",@"13",@"14",@"15",@"16",@"177",@"123123123",@"1231231231314124"];
+
+PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+tag.backgroundColor = kRandomColor;
+[self.view addSubview:tag];
+[tag mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.right.equalTo(self.view);
+make.top.equalTo(self.view).offset(kScreenStatusBottom);
+make.bottom.equalTo(self.view).offset(-kScreenStatusBottom);
+}];
+tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
+PNSLog(@"%f",viewHeight);
+};
+
 ```
 '带有Placeholder的TextView'</br>
 ```objc
