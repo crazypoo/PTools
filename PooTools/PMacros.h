@@ -387,6 +387,20 @@ if (__CELL__ == nil) {\
 __CELL__ = [[__CELLCLASS__ alloc]initWithStyle:__STYLE__ reuseIdentifier:__INDETIFIER__];\
 }\
 }
+/*! @brief 初始化TableViewCell
+ */
+#define kTableCellFullInit(__CELLNAME__,__CELLCLASSNAME__,__STYLE__,__INDETIFIER__) \
+__CELLCLASSNAME__ *__CELLNAME__ = nil; \
+if (__CELLNAME__ == nil) \
+{ \
+    __CELLNAME__ = [[__CELLCLASSNAME__ alloc]initWithStyle:__STYLE__ reuseIdentifier:__INDETIFIER__]; \
+} \
+else \
+{ \
+    while ([__CELLNAME__.contentView.subviews lastObject] != nil) { \
+        [(UIView *)[__CELLNAME__.contentView.subviews lastObject] removeFromSuperview]; \
+    } \
+}
 
 #pragma mark ---------------> Show Alert, brackets is the parameters.       宏定义一个弹窗方法,括号里面是方法的参数
 /*! @brief 定义一个简单的取消弹出框
