@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
+@class CountryCodeModel;
 
 @interface CountryCodes : NSObject
-+(NSMutableArray *)countryCodes;
++(NSMutableArray <CountryCodeModel *>*)countryCodes;
 @end
 
 @interface CountryCodeModel : NSObject

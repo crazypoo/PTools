@@ -10,13 +10,13 @@
 
 @implementation CountryCodes
 
-+(NSMutableArray *)countryCodes
++(NSMutableArray <CountryCodeModel *>*)countryCodes
 {
     NSMutableArray *dicToArray = [NSMutableArray array];
     
     NSDictionary *dic = @{
-                          @"Abkhazia":@"+7 840",
-                          @"Abkhazia":@"+7 940",
+                          @"Abkhazia(1st)":@"+7 840",
+                          @"Abkhazia(2nd)":@"+7 940",
                           @"Afghanistan":@"+93",
                           @"Albania":@"+355",
                           @"Algeria":@"+213",
@@ -58,7 +58,7 @@
                           @"Cameroon":@"+237",
                           @"Cape Verde":@"+238",
                           @"Cayman Islands":@"+ 345",
-                          @"Central African Republic"                     :@"+236",
+                          @"Central African Republic":@"+236",
                           @"Chad":@"+235",
                           @"Chile":@"+56",
                           @"Christmas Island":@"+61",
@@ -66,7 +66,7 @@
                           @"Colombia":@"+57",
                           @"Comoros":@"+269",
                           @"Congo":@"+242",
-                          @"Congo], Dem. Rep. of (Zaire)"                 :@"+243",
+                          @"Congo Dem. Rep. of (Zaire)":@"+243",
                           @"Cook Islands":@"+682",
                           @"Costa Rica":@"+506",
                           @"Ivory Coast":@"+225",
@@ -79,9 +79,9 @@
                           @"Diego Garcia":@"+246",
                           @"Djibouti":@"+253",
                           @"Dominica":@"+1 767",
-                          @"Dominican Republic":@"+1 809",
-                          @"Dominican Republic":@"+1 829",
-                          @"Dominican Republic":@"+1 849",
+                          @"Dominican Republic(1st)":@"+1 809",
+                          @"Dominican Republic(2nd)":@"+1 829",
+                          @"Dominican Republic(3rd)":@"+1 849",
                           @"East Timor":@"+670",
                           @"Easter Island":@"+56",
                           @"Ecuador":@"+593",
@@ -255,15 +255,19 @@
                           @"Zanzibar":@"+255",
                           @"Zimbabwe":@"+263"
                           };
-
-    [dic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL * _Nonnull stop) {
-        
-        CountryCodeModel *model = [[CountryCodeModel alloc] init];
-        model.countryName = key;
-        model.countryCode = obj;
-        [dicToArray addObject:model];
-        
+    
+    NSArray *arr = [dic allKeys];
+    arr = [arr sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2){
+        NSComparisonResult result = [obj1 compare:obj2];
+        return result == NSOrderedDescending;
     }];
+    
+    for (int i = 0; i < arr.count; i++) {
+        CountryCodeModel *model = [[CountryCodeModel alloc] init];
+        model.countryName = arr[i];
+        model.countryCode = dic[arr[i]];
+        [dicToArray addObject:model];
+    }
     
     return dicToArray;
 }

@@ -58,7 +58,7 @@
         PNSLog(@"NO");
     }
     
-    CountryCodeModel *model = [CountryCodes countryCodes][30];
+    CountryCodeModel *model = [CountryCodes countryCodes][1];
     PNSLog(@"%@-----%@",model.countryName,model.countryCode);
     
 //    CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
