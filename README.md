@@ -485,7 +485,7 @@ NSString *ipString = [PGetIpAddresses getIPAddress:YES];
 
 ## Attention
 
-本工具使用了HealthKit之类的框架,审核时可能要集成,如果没需要,可以移除这些框架
+本工具使用了HealthKit之类的框架,审核时可能要集成,如果没需要,可以移除这些框架,使用压缩解压第三方库时,要添加libz.tbd
 
 ## Installation
 
