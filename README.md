@@ -425,7 +425,7 @@ PNSLog(@"%@-----%@",model.countryName,model.countryCode);
 
 ## About iOS Kit
 
-本工具运用到以下系统工具:</br>
+本工具运用到以下系统工具框架:</br>
 'AssetsLibrary'</br>
 'AudioToolbox'</br>
 'AVFoundation'</br>
