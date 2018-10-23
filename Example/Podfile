@@ -5,6 +5,8 @@ target 'PooTools_Example' do
   pod 'PooTools', :path => '../'
   pod 'SDWebImage'
   pod 'Masonry'
+  pod 'SSZipArchive'
+  pod "GCDWebServer/WebUploader", "~> 3.0"
 #  target 'PooTools_Tests' do
 #    inherit! :search_paths
 

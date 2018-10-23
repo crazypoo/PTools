@@ -128,6 +128,10 @@
 		CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */; };
 		CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C55217B127400B205CF /* CountryCodes.m */; };
 		CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC01E08215B341300874BDF /* UIView+ViewShaking.m */; };
+		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
+		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
+		CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */; };
+		CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDD3CD5217EFBF40021BC19 /* PGetIpAddresses.m */; };
 		CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCE7811A20BD88D2004E6ADB /* CoreImage.framework */; };
 		F0A70E63CC9A27D1B5339D04 /* Pods_PooTools_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */; };
 /* End PBXBuildFile section */
@@ -363,6 +367,11 @@
 		CCBC5C55217B127400B205CF /* CountryCodes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CountryCodes.m; sourceTree = "<group>"; };
 		CCC01E07215B341300874BDF /* UIView+ViewShaking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewShaking.h"; sourceTree = "<group>"; };
 		CCC01E08215B341300874BDF /* UIView+ViewShaking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewShaking.m"; sourceTree = "<group>"; };
+		CCDD3CC8217EC3530021BC19 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SSZipArchive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCDD3CD4217EFBF30021BC19 /* PGetIpAddresses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGetIpAddresses.h; sourceTree = "<group>"; };
+		CCDD3CD5217EFBF40021BC19 /* PGetIpAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGetIpAddresses.m; sourceTree = "<group>"; };
 		CCE7811A20BD88D2004E6ADB /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
 		D7E6224504513A2D932A5233 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		F01DFF91343DF608B861705D /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -374,6 +383,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */,
+				CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */,
+				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
 				C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */,
 				C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
@@ -443,6 +455,9 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */,
+				CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */,
+				CCDD3CC8217EC3530021BC19 /* libz.tbd */,
 				C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */,
 				C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */,
 				C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */,
@@ -713,6 +728,8 @@
 				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
 				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
 				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
+				CCDD3CD4217EFBF30021BC19 /* PGetIpAddresses.h */,
+				CCDD3CD5217EFBF40021BC19 /* PGetIpAddresses.m */,
 				CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */,
 				CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */,
 				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
@@ -808,6 +825,7 @@
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/HTAutocompleteTextField/HTAutocompleteTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/JMHoledView/JMHoledView.framework",
@@ -819,6 +837,7 @@
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/TOWebViewController/TOWebViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UINavigation-SXFixSpace/UINavigation_SXFixSpace.framework",
@@ -836,6 +855,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTAutocompleteTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JMHoledView.framework",
@@ -847,6 +867,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOWebViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UINavigation_SXFixSpace.framework",
@@ -901,6 +922,7 @@
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
+				CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,

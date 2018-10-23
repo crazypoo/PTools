@@ -27,21 +27,69 @@
 #import "UITextField+ModifyPlaceholder.h"
 #import "UIView+ViewShaking.h"
 #import "CountryCodes.h"
+#import "PGetIpAddresses.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
+#import <GCDWebServer/GCDWebUploader.h>
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PooNumberKeyBoardDelegate,PVideoViewControllerDelegate,PooTimePickerDelegate>
+@interface PTViewController ()<PooNumberKeyBoardDelegate,PVideoViewControllerDelegate,PooTimePickerDelegate,GCDWebUploaderDelegate>
 @property (nonatomic, strong)PBiologyID *touchID;
 @property (nonatomic, strong)UITextField *textField;
+@property (nonatomic, strong) GCDWebUploader *webServer;
 @end
 
 @implementation PTViewController
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    // 文件存储位置
+    NSString *pathDocuments = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *createImagePath = [NSString stringWithFormat:@"%@/Photo", pathDocuments];
+    // 创建webServer,设置根目录
+    self.webServer = [[GCDWebUploader alloc] initWithUploadDirectory:createImagePath];
+    // 设置代理
+    self.webServer.delegate = self;
+    self.webServer.allowHiddenItems = YES;
+    // 开启
+    NSString *urlString;
+    if ([_webServer start])
+    {
+        NSString *ipString = [PGetIpAddresses getIPAddress:YES];
+        NSLog(@"ip地址为：%@", ipString);
+        NSUInteger port = self.webServer.port;
+        NSLog(@"开启监听的端口为：%zd", port);
+        urlString = [NSString stringWithFormat:@"请在上传设备浏览器上输入%@\n端口为:%lu\n例子:IP地址:端口地址",self.webServer.serverURL,(unsigned long)port];
+    }
+    else
+    {
+        NSLocalizedString(@"GCDWebServer not running!", nil);
+        urlString = @"GCDWebServer not running!";
+    }
+    
+    UILabel *infoLabel = [UILabel new];
+    infoLabel.textColor = [UIColor blackColor];
+    infoLabel.textAlignment = NSTextAlignmentCenter;
+    infoLabel.numberOfLines = 0;
+    infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    infoLabel.text = urlString;
+    [self.view addSubview:infoLabel];
+    [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
+    }];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [self.webServer stop];
+    self.webServer = nil;
+}
 
 - (void)viewDidLoad
 {
@@ -463,6 +511,23 @@
 -(void)timePickerDismiss:(PooTimePicker *)timePicker
 {
     PNSLog(@">>>>>>>>>>>>>%@",timePicker);
+}
+
+#pragma mark - <GCDWebUploaderDelegate>
+- (void)webUploader:(GCDWebUploader*)uploader didUploadFileAtPath:(NSString*)path {
+    NSLog(@"[UPLOAD] %@", path);
+}
+
+- (void)webUploader:(GCDWebUploader*)uploader didMoveItemFromPath:(NSString*)fromPath toPath:(NSString*)toPath {
+    NSLog(@"[MOVE] %@ -> %@", fromPath, toPath);
+}
+
+- (void)webUploader:(GCDWebUploader*)uploader didDeleteItemAtPath:(NSString*)path {
+    NSLog(@"[DELETE] %@", path);
+}
+
+- (void)webUploader:(GCDWebUploader*)uploader didCreateDirectoryAtPath:(NSString*)path {
+    NSLog(@"[CREATE] %@", path);
 }
 
 @end
