@@ -73,8 +73,8 @@
     CountryCodeModel *model = [CountryCodes countryCodes][1];
     PNSLog(@"%@-----%@",model.countryName,model.countryCode);
     
-    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别"],@[@"手机判断"],@[@"数字键盘展示",@"SearchBar"],@[@"界面展示某个圆角"],@[@"label的下划线"],@[@"ActionSheet",@"CustomAlertView",@"系统自带AlertView的封装"]]];
-    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框"]];
+    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别"],@[@"手机判断"],@[@"数字键盘展示",@"SearchBar"],@[@"界面展示某个圆角"],@[@"label的下划线"],@[@"ActionSheet",@"CustomAlertView",@"系统自带AlertView的封装"],@[@"日期选择",@"时间选择"]]];
+    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"picker"]];
     
     tbView    = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     tbView.dataSource                     = self;
@@ -93,34 +93,6 @@
 
 -(void)aaaaa
 {
-//    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
-//    [self.view addSubview:view];
-//    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.left.right.top.bottom.equalTo(self.view);
-//    }];
-//    view.block = ^(NSString *dateString) {
-//        PNSLog(@">>>>>>>>>>>%@",dateString);
-//    };
-    
-    PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
-    view.delegate = self;
-    [[PTAppDelegate appDelegate].window addSubview:view];
-    [view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.view);
-    }];
-//    view.block = ^(NSString *dateString) {
-//        PNSLog(@">>>>>>>>>>>%@",dateString);
-//    };
-    
-    [view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
-    [view customSelectRow:10 inComponent:0 animated:YES];
-
-    [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
-    [view customSelectRow:1 inComponent:1 animated:YES];
-    view.dismissBlock = ^(PooTimePicker *timePicker) {
-        [timePicker removeFromSuperview];
-        timePicker = nil;
-    };
 //    [self.textField ViewUI_viewShaking];
 }
 
@@ -602,6 +574,45 @@ static NSString *cellIdentifier = @"CELL";
 
         }
             break;
+            case 6:
+        {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    UILabel *infoLabel = [UILabel new];
+                    infoLabel.textColor = [UIColor blackColor];
+                    infoLabel.textAlignment = NSTextAlignmentCenter;
+                    infoLabel.numberOfLines = 0;
+                    infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
+                    infoLabel.text = @"点我弹出日期选择";
+                    [cell.contentView addSubview:infoLabel];
+                    [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.top.equalTo(functionName.mas_bottom);
+                        make.left.right.bottom.equalTo(cell.contentView);
+                    }];
+                }
+                    break;
+                    case 1:
+                {
+                    UILabel *infoLabel = [UILabel new];
+                    infoLabel.textColor = [UIColor blackColor];
+                    infoLabel.textAlignment = NSTextAlignmentCenter;
+                    infoLabel.numberOfLines = 0;
+                    infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
+                    infoLabel.text = @"点我弹出时间选择";
+                    [cell.contentView addSubview:infoLabel];
+                    [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.top.equalTo(functionName.mas_bottom);
+                        make.left.right.bottom.equalTo(cell.contentView);
+                    }];
+
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
         default:
             break;
     }
@@ -776,7 +787,49 @@ static NSString *cellIdentifier = @"CELL";
             }
         }
             break;
-            
+        case 6:
+        {
+            switch (indexPath.row) {
+                case 0:
+                {
+                    PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
+                    [self.view addSubview:view];
+                    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.left.right.top.bottom.equalTo(self.view);
+                    }];
+                    view.block = ^(NSString *dateString) {
+                        PNSLog(@">>>>>>>>>>>%@",dateString);
+                    };
+                }
+                    break;
+                case 1:
+                {
+                    PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
+                    view.delegate = self;
+                    [[PTAppDelegate appDelegate].window addSubview:view];
+                    [view mas_makeConstraints:^(MASConstraintMaker *make) {
+                        make.left.right.top.bottom.equalTo(self.view);
+                    }];
+                    //    view.block = ^(NSString *dateString) {
+                    //        PNSLog(@">>>>>>>>>>>%@",dateString);
+                    //    };
+                    
+                    [view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
+                    [view customSelectRow:10 inComponent:0 animated:YES];
+                    
+                    [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
+                    [view customSelectRow:1 inComponent:1 animated:YES];
+                    view.dismissBlock = ^(PooTimePicker *timePicker) {
+                        [timePicker removeFromSuperview];
+                        timePicker = nil;
+                    };
+                    
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
         default:
             break;
     }
