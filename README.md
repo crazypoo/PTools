@@ -247,6 +247,17 @@ ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"1111
 ```
 '带穿过线的Label'</br>
 ```objc
+PLabel *aaaaaaaaaaaaaa = [PLabel new];
+aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
+[aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentMiddle setStrikeThroughEnabled:YES];
+aaaaaaaaaaaaaa.text = @"111111111111111";
+[self.view addSubview:aaaaaaaaaaaaaa];
+[aaaaaaaaaaaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
+make.left.right.equalTo(self.view);
+make.height.offset(44);
+}];
+
 ```
 'App启动广告View'</br>
 ```objc
@@ -349,6 +360,19 @@ PNSLog(@"%f",viewHeight);
 ```
 '带有Placeholder的TextView'</br>
 ```objc
+PooTextView *textView = [PooTextView new];
+textView.backgroundColor = kRandomColor;
+textView.placeholder = @"我是TextView";
+textView.delegate = self;
+textView.returnKeyType = UIReturnKeyDone;
+textView.font = APPFONT(20);
+textView.textColor = kRandomColor;
+[self.view addSubview:textView];
+[textView mas_makeConstraints:^(MASConstraintMaker *make) {
+make.top.equalTo(searchBar.mas_bottom).offset(10);
+make.left.right.equalTo(self.view);
+make.height.offset(44);
+}];
 ```
 'UDID生成'</br>
 ```objc
@@ -358,6 +382,18 @@ PNSLog(@"%f",viewHeight);
 ```
 '评分View'</br>
 ```objc
+PStarRateView *rV = [[PStarRateView alloc] initWithRateBlock:^(PStarRateView *rateView, CGFloat newScorePercent) {
+}];
+rV.backgroundColor = kRandomColor;
+rV.scorePercent = 0.5;
+rV.hasAnimation = NO;
+rV.allowIncompleteStar = NO;
+[self.view addSubview:rV];
+[rV mas_makeConstraints:^(MASConstraintMaker *make) {
+make.centerX.centerY.equalTo(self.view);
+make.height.offset(100);
+make.left.right.equalTo(self.view);
+}];
 ```
 'TextField类似TextView那样最左有图片'</br>
 ```objc
@@ -397,6 +433,7 @@ PNSLog(@"%f",viewHeight);
 ```
 '类似Google的Loading'</br>
 ```objc
+[WMHub show];
 ```
 'Layer的AutoLayout'</br>
 ```objc

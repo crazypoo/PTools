@@ -30,11 +30,12 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 
     PTViewController *view = [[PTViewController alloc] init];
-    self.window.rootViewController = view;
+    UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:view];
+    self.window.rootViewController = mainNav;
     [self.window makeKeyAndVisible];
     
-//    [PLaunchAdMonitor showAdAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:self.window.rootViewController.view timeInterval:100 detailParameters:@{} years:@"2000" skipButtonFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callback:^{
-//    }];
+    [PLaunchAdMonitor showAdAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:self.window.rootViewController.view timeInterval:3 detailParameters:@{} years:@"2000" skipButtonFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callback:^{
+    }];
 
     return YES;
 }

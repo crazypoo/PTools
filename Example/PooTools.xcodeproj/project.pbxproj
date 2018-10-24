@@ -86,6 +86,7 @@
 		CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BB211D706400FD29F4 /* MAThermometer.m */; };
 		CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */; };
 		CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */; };
+		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC3838D3214364D100453548 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838C9214364CF00453548 /* PVideoSupport.m */; };
 		CC3838D4214364D100453548 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CC214364D000453548 /* PVideoViewController.m */; };
 		CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CD214364D000453548 /* PVideoListViewController.m */; };
@@ -303,6 +304,8 @@
 		CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGImaginaryLine.h; sourceTree = "<group>"; };
 		CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCheckbox.m; sourceTree = "<group>"; };
 		CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCheckbox.h; sourceTree = "<group>"; };
+		CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTShowFunctionViewController.h; sourceTree = "<group>"; };
+		CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTShowFunctionViewController.m; sourceTree = "<group>"; };
 		CC3838C9214364CF00453548 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
 		CC3838CA214364CF00453548 /* PVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoViewController.h; sourceTree = "<group>"; };
 		CC3838CB214364CF00453548 /* PVideoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoConfig.h; sourceTree = "<group>"; };
@@ -508,6 +511,8 @@
 				71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */,
+				CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -983,6 +988,7 @@
 				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,
+				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				CC1257BB2098319300E31A38 /* NSString+Encryption.m in Sources */,
 				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
