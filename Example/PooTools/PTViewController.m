@@ -21,6 +21,11 @@
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
+#import "PCarrie.h"
+#import "PooSystemInfo.h"
+#import "PooPhoneBlock.h"
+#import "PooCleanCache.h"
+
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -48,8 +53,8 @@
 	// Do any additional setup after loading the view, typically from a nib.
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断"],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"]]];
+   
+    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"]]];
     self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading"]];
     
     tbView    = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -184,12 +189,22 @@ static NSString *cellIdentifier = @"CELL";
                     {
                         isiPhoneX = @"否";
                     }
+                    
+                    NSString *isJailBroken;
+                    if ([PooSystemInfo isJailBroken]) {
+                        isJailBroken = @"是";
+                    }
+                    else
+                    {
+                        isJailBroken = @"否";
+                    }
+                    
                     UILabel *infoLabel = [UILabel new];
                     infoLabel.textColor = [UIColor blackColor];
                     infoLabel.textAlignment = NSTextAlignmentCenter;
                     infoLabel.numberOfLines = 0;
                     infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@",isiPhoneX];
+                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,[PCarrie currentRadioAccessTechnology],isJailBroken,[PooSystemInfo getDeviceVersion]];
                     [cell.contentView addSubview:infoLabel];
                     [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.top.equalTo(functionName.mas_bottom);
@@ -349,6 +364,31 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionCountryCodeSelect];
                     [self.navigationController pushViewController:view animated:YES];
+                }
+                    break;
+                default:
+                    break;
+            }
+        }
+            break;
+        case 1:
+        {
+            switch (indexPath.row) {
+                case 1:
+                {
+                    [PooPhoneBlock callPhoneNumber:@"13800138000" call:^(NSTimeInterval duration) {
+                        
+                    } cancel:^{
+                        
+                    }];
+                }
+                    break;
+                case 2:
+                {
+                    if ([PooCleanCache clearCaches]) {
+                        [Utils alertShowWithMessage:@"清理成功"];
+                        [tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
+                    }
                 }
                     break;
                 default:
