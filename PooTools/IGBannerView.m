@@ -15,7 +15,7 @@ static const int TAG_OF_TITLE_VIEW = 2000;
 @interface IGBannerView ()<UIGestureRecognizerDelegate,UIScrollViewDelegate>{
     UIScrollView *scrollView;
     UIPageControl *pageControl;
-    
+    UIImage *placeHolderImage;
     NSArray *items;
 }
 
@@ -46,13 +46,15 @@ static const int TAG_OF_TITLE_VIEW = 2000;
     }
     return self;
 }
-- (id)initWithFrame:(CGRect)frame bannerItems:(NSArray *)aitems{
+- (id)initWithFrame:(CGRect)frame bannerItems:(NSArray *)aitems bannerPlaceholderImage:(UIImage *)pI
+{
     self = [super initWithFrame:frame];
     if (self) {
         items = aitems;
         if (!items || ![items isKindOfClass:[NSArray class]]) {
             items = [[NSArray alloc] init];
         }
+        placeHolderImage = pI;
         [self initUI];
     }
     return self;
@@ -110,10 +112,7 @@ static const int TAG_OF_TITLE_VIEW = 2000;
     pageControl.numberOfPages = items.count;
     
     CGSize scrollViewSize = scrollView.frame.size;
-    UIImage *placeHolderImage = nil;
-    if (delegate && [delegate respondsToSelector:@selector(placeHolderImage)]) {
-        placeHolderImage = [delegate placeHolderImage];
-    }
+
     for (int i = 0; i < items.count; i++) {
         IGBannerItem *item = [items objectAtIndex:i];
         UIImageView *imageView = [[UIImageView alloc] init];
@@ -213,6 +212,10 @@ static const int TAG_OF_TITLE_VIEW = 2000;
         //delegate
         if (delegate && [delegate respondsToSelector:@selector(bannerView:didSelectItem:)]) {
             [delegate bannerView:self didSelectItem:item];
+        }
+        
+        if (self.bannerTapBlock) {
+            self.bannerTapBlock(self, item);
         }
     }
 }

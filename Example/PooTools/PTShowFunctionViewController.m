@@ -17,6 +17,7 @@
 #import "PGetIpAddresses.h"
 
 #import "PADView.h"
+#import "IGBannerView.h"
 
 #import "PStarRateView.h"
 
@@ -41,6 +42,9 @@
 
 #import "WMHub.h"
 #import "PGifHud.h"
+#import "PooLoadingView.h"
+
+#import "UIImage+BlurGlass.h"
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
@@ -130,10 +134,22 @@
             PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
             [self.view addSubview:adaaaa];
             [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.centerY.equalTo(self.view);
+                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
                 make.height.offset(100);
                 make.left.right.equalTo(self.view);
             }];
+            
+            IGBannerView *banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR*2+100+10, kSCREEN_WIDTH, 100) bannerItems:@[[IGBannerItem itemWithTitle:@"广告1" imageUrl:@"" tag:0],[IGBannerItem itemWithTitle:@"广告2" imageUrl:@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg" tag:1]] bannerPlaceholderImage:kImageNamed(@"DemoImage")];
+            banner.pageControlBackgroundColor = [UIColor clearColor];
+            banner.titleBackgroundColor = [UIColor clearColor];
+            banner.titleColor = [UIColor clearColor];
+//            banner.delegate                   = self;
+            banner.autoScrolling              = YES;
+            banner.titleFont = kDEFAULT_FONT(FontName,14);
+            [self.view addSubview:banner];
+            banner.bannerTapBlock = ^(IGBannerView *bannerView, IGBannerItem *bannerItem) {
+                PNSLog(@">>>>>>>>>>%@",bannerItem);
+            };
         }
             break;
             case ShowFunctionStarRate:
@@ -347,9 +363,9 @@
 
         }
             break;
-            case ShowFunctionCountryLoading:
+        case ShowFunctionCountryLoading:
         {
-            NSArray *arr = @[@"Google",@"GIF"];
+            NSArray *arr = @[@"Google",@"GIF",@"Other"];
             
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -360,6 +376,20 @@
                 [pBtn addTarget:self action:@selector(showLoadingHubAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.view addSubview:pBtn];
             }
+        }
+            break;
+        case ShowFunctionAboutImage:
+        {
+            UIImage *placeholderImage = kImageNamed(@"DemoImage");
+            
+            UIImageView *blurGlassImage = [UIImageView new];
+            blurGlassImage.image = [placeholderImage imgWithBlur];
+            [self.view addSubview:blurGlassImage];
+            [blurGlassImage mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.equalTo(self.view);
+                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
+                make.width.height.offset(100);
+            }];
         }
             break;
         default:
@@ -549,6 +579,20 @@
             });
         }
             break;
+        case 2:
+        {
+            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectZero];
+            [self.view addSubview:loading];
+            [loading mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.offset(100);
+                make.centerX.centerY.equalTo(self.view);
+            }];
+            [loading startAnimation];
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond*3), dispatch_get_main_queue(), ^{
+                [loading stopAnimation];
+            });
+        }
+            break;
         default:
             break;
     }
@@ -624,5 +668,19 @@
 
 //-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 //{
+//}
+
+//#pragma mark - Banner Delegate
+//static UIImage *pi = nil;
+//-(UIImage*)placeHolderImage{
+//    if (!pi) {
+//        pi = kImageNamed(@"DemoImage");
+//    }
+//    return pi;
+//}
+//
+//-(void)bannerView:(IGBannerView *)bannerView didSelectItem:(IGBannerItem *)item
+//{
+//    PNSLog(@"%@",item);
 //}
 @end

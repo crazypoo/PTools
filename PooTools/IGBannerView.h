@@ -11,6 +11,9 @@
 #import "IGBannerItem.h"
 
 @protocol IGBannerViewDelegate;
+@class IGBannerView;
+
+typedef void (^BannerViewDidTapBlock)(IGBannerView *bannerView, IGBannerItem *bannerItem);
 
 @interface IGBannerView : UIView
 @property (nonatomic, assign) BOOL autoScrolling; // default is YES;
@@ -28,14 +31,14 @@
 @property (nonatomic, strong) UIColor *pageControlBackgroundColor; // default is black(alpha is 35%)
 
 - (id)initWithFrame:(CGRect)frame bannerItem:(IGBannerItem *)items, ... NS_REQUIRES_NIL_TERMINATION;
-- (id)initWithFrame:(CGRect)frame bannerItems:(NSArray *)items;
+- (id)initWithFrame:(CGRect)frame bannerItems:(NSArray *)items bannerPlaceholderImage:(UIImage *)pI;
 
+@property (nonatomic,strong) BannerViewDidTapBlock bannerTapBlock;
 
 @end
 
 @protocol IGBannerViewDelegate <NSObject>
 @optional
 -(void)bannerView:(IGBannerView*)bannerView didSelectItem:(IGBannerItem*)item;
--(UIImage*)placeHolderImage;
 
 @end

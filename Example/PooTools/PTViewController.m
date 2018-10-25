@@ -54,8 +54,8 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
    
-    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"]]];
-    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading"]];
+    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片"]]];
+    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading",@"图片"]];
     
     tbView    = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     tbView.dataSource                     = self;
@@ -428,6 +428,11 @@ static NSString *cellIdentifier = @"CELL";
         case 7:
         {
             PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionCountryLoading];
+            [self.navigationController pushViewController:view animated:YES];
+        }
+        case 8:
+        {
+            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionAboutImage];
             [self.navigationController pushViewController:view animated:YES];
         }
         default:

@@ -20,7 +20,8 @@ typedef NS_ENUM(NSUInteger, ShowFunction) {
     ShowFunctionShowAlert,
     ShowFunctionPicker,
     ShowFunctionCountryCodeSelect,
-    ShowFunctionCountryLoading
+    ShowFunctionCountryLoading,
+    ShowFunctionAboutImage,
 };
 
 NS_ASSUME_NONNULL_BEGIN

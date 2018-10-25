@@ -65,6 +65,19 @@ make.left.right.equalTo(self.view);
 make.top.offset(100);
 make.height.offset(150);
 }];
+
+--Scroll方式
+IGBannerView *banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR*2+100+10, kSCREEN_WIDTH, 100) bannerItems:@[[IGBannerItem itemWithTitle:@"广告1" imageUrl:@"" tag:0],[IGBannerItem itemWithTitle:@"广告2" imageUrl:@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg" tag:1]] bannerPlaceholderImage:kImageNamed(@"DemoImage")];
+banner.pageControlBackgroundColor = [UIColor clearColor];
+banner.titleBackgroundColor = [UIColor clearColor];
+banner.titleColor = [UIColor clearColor];
+//            banner.delegate                   = self;
+banner.autoScrolling              = YES;
+banner.titleFont = kDEFAULT_FONT(FontName,14);
+[self.view addSubview:banner];
+banner.bannerTapBlock = ^(IGBannerView *bannerView, IGBannerItem *bannerItem) {
+PNSLog(@">>>>>>>>>>%@",bannerItem);
+};
 ```
 'CollectionViewLayout的快速初始化'</br>
 ```objc
@@ -806,6 +819,16 @@ return self; \
 ```
 '简单的Loading动画'</br>
 ```objc
+PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectZero];
+[self.view addSubview:loading];
+[loading mas_makeConstraints:^(MASConstraintMaker *make) {
+make.width.height.offset(100);
+make.centerX.centerY.equalTo(self.view);
+}];
+[loading startAnimation];
+dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond*3), dispatch_get_main_queue(), ^{
+[loading stopAnimation];
+});
 ```
 '数字键盘'</br>
 ```objc
@@ -945,8 +968,18 @@ make.left.right.equalTo(self.view);
 '颜色扩展'</br>
 ```objc
 ```
-'图片模糊化'</br>
+'毛玻璃图片效果'</br>
 ```objc
+UIImage *placeholderImage = kImageNamed(@"DemoImage");
+
+UIImageView *blurGlassImage = [UIImageView new];
+blurGlassImage.image = [placeholderImage imgWithBlur];
+[self.view addSubview:blurGlassImage];
+[blurGlassImage mas_makeConstraints:^(MASConstraintMaker *make) {
+make.left.equalTo(self.view);
+make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
+make.width.height.offset(100);
+}];
 ```
 '图片大小切换'</br>
 ```objc
