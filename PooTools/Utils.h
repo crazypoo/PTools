@@ -277,4 +277,9 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief 判断是否白天
  */
 +(BOOL)isNowDayTime;
+
+/*! @brief 判断是否存在Emoji
+ */
++(BOOL)stringContainsEmoji:(NSString *)string;
+
 @end
