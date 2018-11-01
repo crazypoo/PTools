@@ -54,7 +54,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
    
-    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片"]]];
+    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片"]]];
     self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading",@"图片"]];
     
     tbView    = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
@@ -260,50 +260,32 @@ static NSString *cellIdentifier = @"CELL";
     return hView;
 }
 
+-(NSMutableArray *)typeArr
+{
+    NSMutableArray *arr = [[NSMutableArray alloc] init];
+    for (int i = 0; i < 14; i++) {
+        NSString *str = [NSString stringWithFormat:@"%d",i];
+        [arr addObject:str];
+    }
+    NSArray *arrA = @[@[arr[ShowFunctionFile],arr[ShowFunctionCollectionAD],arr[ShowFunctionStarRate],arr[ShowFunctionSegmented],arr[ShowFunctionTagLabel],@"",@"",@"",arr[ShowFunctionCountryCodeSelect]],@[@[@"",@""]],@[arr[ShowFunctionInputView]],@[arr[ShowFunctionViewCorner]],@[arr[ShowFunctionLabelThroughLine],arr[ShowFunctionLabelCountingLabel]],@[arr[ShowFunctionShowAlert]],@[arr[ShowFunctionPicker]],@[arr[ShowFunctionCountryLoading]],@[arr[ShowFunctionAboutImage]]];
+    NSMutableArray *arrB = [[NSMutableArray alloc] initWithArray:arrA];
+    return arrB;
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     switch (indexPath.section) {
-            case 0:
+        case 0:
         {
             switch (indexPath.row) {
-                case 0:
-                {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionFile];
-                    [self.navigationController pushViewController:view animated:YES];
-                }
-                    break;
-                case 1:
-                {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionCollectionAD];
-                    [self.navigationController pushViewController:view animated:YES];
-                }
-                    break;
-                    case 2:
-                {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionStarRate];
-                    [self.navigationController pushViewController:view animated:YES];
-                }
-                    break;
-                case 3:
-                {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionSegmented];
-                    [self.navigationController pushViewController:view animated:YES];
-                }
-                    break;
-                case 4:
-                {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionTagLabel];
-                    [self.navigationController pushViewController:view animated:YES];
-                }
-                    break;
-                    case 5:
+                case 5:
                 {
                     PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
                     videoVC.delegate = self;
                     [videoVC startAnimationWithType:PVideoViewShowTypeSmall];
                 }
                     break;
-                    case 6:
+                case 6:
                 {
                     PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
                     imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
@@ -348,10 +330,10 @@ static NSString *cellIdentifier = @"CELL";
                     ymImageV.saveImageStatus = ^(BOOL saveStatus) {
                         PNSLog(@"%d",saveStatus);
                     };
-
+                    
                 }
                     break;
-                    case 7:
+                case 7:
                 {
                     self.touchID = [PBiologyID defaultBiologyID];
                     self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
@@ -360,13 +342,12 @@ static NSString *cellIdentifier = @"CELL";
                     [self.touchID biologyAction];
                 }
                     break;
-                case 8:
+                    
+                default:
                 {
-                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionCountryCodeSelect];
+                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:[self.typeArr[indexPath.section][indexPath.row] integerValue]];
                     [self.navigationController pushViewController:view animated:YES];
                 }
-                    break;
-                default:
                     break;
             }
         }
@@ -396,46 +377,11 @@ static NSString *cellIdentifier = @"CELL";
             }
         }
             break;
-        case 2:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionInputView];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-            break;
-        case 3:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionViewCorner];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-            break;
-        case 4:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionLabelThroughLine];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-            break;
-        case 5:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionShowAlert];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-            break;
-        case 6:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionPicker];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-        case 7:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionCountryLoading];
-            [self.navigationController pushViewController:view animated:YES];
-        }
-        case 8:
-        {
-            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:ShowFunctionAboutImage];
-            [self.navigationController pushViewController:view animated:YES];
-        }
         default:
+        {
+            PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:[self.typeArr[indexPath.section][indexPath.row] integerValue]];
+            [self.navigationController pushViewController:view animated:YES];
+        }
             break;
     }
 }

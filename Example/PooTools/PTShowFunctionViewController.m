@@ -32,6 +32,7 @@
 #import "UIView+ViewRectCorner.h"
 
 #import "PLabel.h"
+#import "UICountingLabel.h"
 
 #import "ALActionSheetView.h"
 #import "YXCustomAlertView.h"
@@ -390,6 +391,26 @@
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
                 make.width.height.offset(100);
             }];
+        }
+            break;
+        case ShowFunctionLabelCountingLabel:
+        {
+            UICountingLabel *balanceLabel = [UICountingLabel new];
+            balanceLabel.textAlignment = NSTextAlignmentCenter;
+            balanceLabel.font = kDEFAULT_FONT(FontName, 30);
+            balanceLabel.textColor = [UIColor blackColor];
+            [self.view addSubview:balanceLabel];
+            //设置格式
+            balanceLabel.format = @"%.2f";
+            //设置分隔符样式
+            //self.balanceLabel.positiveFormat = @"###,##0.00";
+            [balanceLabel countFrom:99999.99 to:0.00 withDuration:1.0f];
+            [balanceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.view);
+                make.height.offset(44);
+                make.centerY.equalTo(self.view);
+            }];
+
         }
             break;
         default:

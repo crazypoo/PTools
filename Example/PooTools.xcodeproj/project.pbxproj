@@ -93,6 +93,7 @@
 		CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CE214364D000453548 /* PVideoPlayer.m */; };
 		CC3838D7214364D100453548 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D1214364D100453548 /* PVideoConfig.m */; };
 		CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */; };
+		CC4C717E218AD4F6008B1804 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4C717D218AD4F6008B1804 /* UICountingLabel.m */; };
 		CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */; };
 		CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
@@ -318,6 +319,8 @@
 		CC3838D2214364D100453548 /* PVideoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoSupport.h; sourceTree = "<group>"; };
 		CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
 		CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
+		CC4C717C218AD4F6008B1804 /* UICountingLabel.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = UICountingLabel.h; sourceTree = "<group>"; };
+		CC4C717D218AD4F6008B1804 /* UICountingLabel.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
 		CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewRectCorner.h"; sourceTree = "<group>"; };
 		CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewRectCorner.m"; sourceTree = "<group>"; };
 		CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
@@ -740,6 +743,8 @@
 				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
 				CCBC5C54217B127400B205CF /* CountryCodes.h */,
 				CCBC5C55217B127400B205CF /* CountryCodes.m */,
+				CC4C717C218AD4F6008B1804 /* UICountingLabel.h */,
+				CC4C717D218AD4F6008B1804 /* UICountingLabel.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -933,6 +938,7 @@
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
 				CC1257C22098319300E31A38 /* PHealthKit.m in Sources */,
+				CC4C717E218AD4F6008B1804 /* UICountingLabel.m in Sources */,
 				CC1257E62098319300E31A38 /* WMHubViewController.m in Sources */,
 				CC1257E22098319300E31A38 /* UIViewController+TopBarMessage.m in Sources */,
 				CC1257D02098319300E31A38 /* PooTextView.m in Sources */,

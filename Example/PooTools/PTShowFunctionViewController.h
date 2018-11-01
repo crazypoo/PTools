@@ -17,6 +17,7 @@ typedef NS_ENUM(NSUInteger, ShowFunction) {
     ShowFunctionInputView,
     ShowFunctionViewCorner,
     ShowFunctionLabelThroughLine,
+    ShowFunctionLabelCountingLabel,
     ShowFunctionShowAlert,
     ShowFunctionPicker,
     ShowFunctionCountryCodeSelect,
