@@ -122,6 +122,7 @@
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
+		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
 		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
@@ -356,6 +357,8 @@
 		CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UITextField_Shake.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIViewController_Swizzled.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YCXMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MLScreenshot.h"; sourceTree = "<group>"; };
+		CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MLScreenshot.m"; sourceTree = "<group>"; };
 		CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
 		CC96809B20B042B700AA07F5 /* PBiologyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBiologyID.h; sourceTree = "<group>"; };
@@ -564,6 +567,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
+				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
 				CC3838CB214364CF00453548 /* PVideoConfig.h */,
 				CC3838D1214364D100453548 /* PVideoConfig.m */,
 				CC3838CF214364D000453548 /* PVideoListViewController.h */,
@@ -973,6 +978,7 @@
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,
+				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,

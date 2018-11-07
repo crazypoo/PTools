@@ -244,7 +244,7 @@
     }
 }
 
-- (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason {
+- (void)textFieldDidEndEditing:(UITextField *)textField reason:(UITextFieldDidEndEditingReason)reason API_AVAILABLE(ios(10.0)){
     _LimitInfo *info = [self safeReadForKey:textField];
     if ([info.pinocchio respondsToSelector:_cmd]) {
         return [info.pinocchio textFieldDidEndEditing:textField reason:reason];

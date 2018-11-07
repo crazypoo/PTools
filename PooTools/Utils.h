@@ -212,6 +212,11 @@ static inline BOOL isIPhoneXSeries() {
 +(UIImage *)createQRImageWithString:(NSString *)string
                            withSize:(CGFloat)size;
 
+/*! @brief 图片按比例大小转换
+ */
++(UIImage *)scaleImage:(UIImage *)image
+               toScale:(float)scaleSize;
+
 #pragma mark ------> JSON
 /*! @brief Json字符串转字典
  */
