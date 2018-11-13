@@ -20,26 +20,27 @@
 @interface PooNumberKeyBoard()
 @property (nonatomic, copy) PooNumberKeyBoardBackSpace backSpaceBlock;
 @property (nonatomic, copy) PooNumberKeyBoardReturnSTH returnSTHBlock;
+@property (nonatomic, assign) PKeyboardType keyboardType;
 
 @end
 
 @implementation PooNumberKeyBoard
 
-+(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint
++(instancetype)pooNumberKeyBoardWithType:(PKeyboardType)keyboardType
 {
-    return [[PooNumberKeyBoard alloc] initWithDog:dogpoint backSpace:nil returnSTH:nil];
+    return [[PooNumberKeyBoard alloc] initWithType:keyboardType backSpace:nil returnSTH:nil];
 }
 
-+(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
++(instancetype)pooNumberKeyBoardWithType:(PKeyboardType)keyboardType backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
 {
-    return [[PooNumberKeyBoard alloc] initWithDog:dogpoint backSpace:backSpaceBlock returnSTH:returnSTHBlock];
+    return [[PooNumberKeyBoard alloc] initWithType:keyboardType backSpace:backSpaceBlock returnSTH:returnSTHBlock];
 }
 
-- (id)initWithDog:(BOOL)dog backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
+- (id)initWithType:(PKeyboardType)keyboardType backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock
 {
     self = [super init];
     if (self) {
-        self.haveDog = dog;
+        self.keyboardType = keyboardType;
         
         self.returnSTHBlock = returnSTHBlock;
         self.backSpaceBlock = backSpaceBlock;
@@ -88,8 +89,27 @@
                 }
                 else if (button.tag == 10)
                 {
-                    if (dog) {
-                        [button setTitle:@"." forState:UIControlStateNormal];
+                    switch (self.keyboardType) {
+                        case PKeyboardTypeCall:
+                            {
+                                [button setTitle:@"+" forState:UIControlStateNormal];
+                            }
+                            break;
+                        case PKeyboardTypePoint:
+                        {
+                            [button setTitle:@"." forState:UIControlStateNormal];
+                        }
+                            break;
+                        case PKeyboardTypeInputID:
+                        {
+                            [button setTitle:@"X" forState:UIControlStateNormal];
+                        }
+                            break;
+                        default:
+                        {
+                            [button setTitle:@"" forState:UIControlStateNormal];
+                        }
+                            break;
                     }
                 }
                 else
@@ -194,12 +214,28 @@
         }
         else if (sender.tag == 10)
         {
-            if (self.haveDog) {
-                num = @".";
-            }
-            else
+            switch (self.keyboardType)
             {
-                num = @"";
+                case PKeyboardTypeCall:
+                {
+                    num = @"+";
+                }
+                    break;
+                case PKeyboardTypePoint:
+                {
+                    num = @".";
+                }
+                    break;
+                case PKeyboardTypeInputID:
+                {
+                    num = @"X";
+                }
+                    break;
+                default:
+                {
+                    num = @"";
+                }
+                    break;
             }
         }
         if ([self.delegate respondsToSelector:@selector(numberKeyboard:input:)]) {

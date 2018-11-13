@@ -7,6 +7,15 @@
 //
 
 #import <UIKit/UIKit.h>
+
+typedef NS_ENUM(NSUInteger, PKeyboardType) {
+    PKeyboardTypeNormal,
+    PKeyboardTypeCall,
+    PKeyboardTypePoint,
+    PKeyboardTypeInputID
+};
+
+
 @class PooNumberKeyBoard;
 
 typedef void (^PooNumberKeyBoardBackSpace)(PooNumberKeyBoard *keyboardView);
@@ -19,15 +28,15 @@ typedef void (^PooNumberKeyBoardReturnSTH)(PooNumberKeyBoard *keyboardView,NSStr
 @end
 
 @interface PooNumberKeyBoard : UIView
-@property (nonatomic, assign)BOOL haveDog;
+//@property (nonatomic, assign)BOOL haveDog;
 @property (nonatomic, assign)id<PooNumberKeyBoardDelegate> delegate;
 
 /*! @brief 初始化(Delegate)
  */
-+(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint;
++(instancetype)pooNumberKeyBoardWithType:(PKeyboardType)keyboardType;
 /*! @brief 初始化(Block)
  */
-+(instancetype)pooNumberKeyBoardWithDog:(BOOL)dogpoint
++(instancetype)pooNumberKeyBoardWithType:(PKeyboardType)keyboardType
                               backSpace:(PooNumberKeyBoardBackSpace)backSpaceBlock
                               returnSTH:(PooNumberKeyBoardReturnSTH)returnSTHBlock;
 

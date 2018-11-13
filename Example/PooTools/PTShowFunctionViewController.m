@@ -220,7 +220,7 @@
             break;
             case ShowFunctionInputView:
         {
-            PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
+            PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithType:PKeyboardTypeInputID backSpace:^(PooNumberKeyBoard *keyboardView) {
                 if (self.textField.text.length != 0)
                 {
                     self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];

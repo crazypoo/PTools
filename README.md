@@ -832,7 +832,7 @@ dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond*3), dis
 ```
 '数字键盘'</br>
 ```objc
-PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithDog:YES backSpace:^(PooNumberKeyBoard *keyboardView) {
+PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithType:PKeyboardTypeNormal backSpace:^(PooNumberKeyBoard *keyboardView) {
 } returnSTH:^(PooNumberKeyBoard *keyboardView, NSString *returnSTH) {
 }];
 ```
