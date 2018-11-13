@@ -52,4 +52,9 @@
 /*! @brief 正则表达式(是否中文名)
  */
 -(BOOL)isVaildRealName;
+
+/*! @brief 正则表达式(是否金钱)
+ */
+-(BOOL)isMoneyString;
+
 @end

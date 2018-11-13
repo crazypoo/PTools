@@ -26,6 +26,7 @@ static NSString *HomePhone = @"^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$";
 // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
 static NSString *IpAddress = @"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 static NSString *URL = @"[a-zA-z]+://.*";
+static NSString *MoneyString = @"(\\+|\\-)?(([0]|(0[.]\\d{0,2}))|([1-9]\\d{0,4}(([.]\\d{0,2})?)))?";
 
 - (BOOL)isUrlString
 {
@@ -63,6 +64,11 @@ static NSString *URL = @"[a-zA-z]+://.*";
 -(BOOL)isIPAddress
 {
     return [self checkWithRegular:IpAddress];
+}
+
+-(BOOL)isMoneyString
+{
+    return [self checkWithRegular:MoneyString];
 }
 
 -(BOOL)checkWithRegular:(NSString*)expression{
