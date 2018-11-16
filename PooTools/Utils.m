@@ -155,6 +155,8 @@
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
     [formatter setDateFormat:@"HH:mm:ss"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timeZone];
     NSString *dateTime = [formatter stringFromDate:date];
     return dateTime;
 }
@@ -166,6 +168,8 @@
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timeZone];
     NSString *dateTime = [formatter stringFromDate:date];
     return dateTime;
 }
@@ -177,8 +181,24 @@
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     [formatter setDateFormat:@"YYYY-MM-dd"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timeZone];
     NSString *dateTime = [formatter stringFromDate:date];
     return dateTime;
+}
+
++(NSString *)getTimeStamp
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"YYYY-MM-dd"];
+    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timeZone];
+    NSDate *date = [NSDate date];
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
+    return timeSp;
+
 }
 
 +(NSString *)getCurrentApplicationLocale

@@ -160,6 +160,10 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(NSString *)getYMD;
 
+/*! @brief 时间戳
+ */
++(NSString *)getTimeStamp;
+
 /*! @brief 某个时间的某时间之后或者之前
  */
 +(NSDate *)fewMonthLater:(NSInteger)month
