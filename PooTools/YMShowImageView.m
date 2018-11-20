@@ -1033,6 +1033,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                         strongself.imageview.animationDuration = 2;
                         [strongself.imageview startAnimating];
                         strongself.imageview.image = image;
+                        //FIX:内存释放
+                        CFRelease(source);
                     }
                         break;
                     default:

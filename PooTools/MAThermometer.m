@@ -249,7 +249,8 @@
     CGContextClip(context);
 
     NSInteger index = 0;
-    CGFloat valueMin = _minValue;
+    //FIX:没有调用
+//    CGFloat valueMin = _minValue;
     CGFloat valueMax = 0;
     
     if ([_arrayColors count] == 1)
@@ -264,6 +265,9 @@
                                              _lowerCircleMiddle.y - originY));
         
         CGContextFillPath(context);
+        
+        //FIX:内存释放
+        CFRelease(baseSpace);
         
         return;
     }
@@ -281,7 +285,7 @@
         {
             [self drawIntermediateGradientNum:index withBaseSpace:baseSpace inContext:context];
         }
-        valueMin = valueMax;
+//        valueMin = valueMax;
         index ++;
     }
     

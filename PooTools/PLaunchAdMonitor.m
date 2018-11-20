@@ -193,6 +193,8 @@ static PLaunchAdMonitor *monitor = nil;
                 
                 UIGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(showAdDetail:)];
                 [imageView addGestureRecognizer:tapGesture];
+                //FIX:没有释放
+                CFRelease(source);
             }
                 break;
             default:

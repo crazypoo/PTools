@@ -52,7 +52,6 @@
 //屏幕截屏
 +(UIImage *)screenShot
 {
-    
     UIGraphicsBeginImageContextWithOptions(CGSizeMake(kSCREEN_WIDTH*kSCREEN_SCALE, kSCREEN_HEIGHT*kSCREEN_SCALE), YES, 0);
     //设置截屏大小
     [[[[UIApplication sharedApplication] keyWindow] layer] renderInContext:UIGraphicsGetCurrentContext()];
@@ -66,6 +65,8 @@
    
     CGImageRef imageRefRect =CGImageCreateWithImageInRect(imageRef, rect);
     UIImage *sendImage = [[UIImage alloc] initWithCGImage:imageRefRect];
+    //FIX:没有释放
+    CFRelease(imageRefRect);
     return sendImage;
 }
 

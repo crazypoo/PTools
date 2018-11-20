@@ -782,9 +782,10 @@
 +(NSDate *)fewMonthLater:(NSInteger)month fromNow:(NSDate *)thisTime
 {
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *comps = nil;
-    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
-    NSDateComponents *adcomps = [[NSDateComponents alloc] init];
+    //FIX:修复代码没使用的地方
+//    NSDateComponents *comps = nil;
+//    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
+    NSDateComponents *adcomps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
     [adcomps setYear:0];
     [adcomps setMonth:month];
     [adcomps setDay:0];
@@ -819,6 +820,8 @@
     size_t height = CGRectGetHeight(extent) * scale;
     CGColorSpaceRef cs = CGColorSpaceCreateDeviceGray();
     CGContextRef bitmapRef = CGBitmapContextCreate(nil, width, height, 8, 0, cs, (CGBitmapInfo)kCGImageAlphaNone);
+    //FIX:释放
+    CFRelease(cs);
     CIContext *context = [CIContext contextWithOptions:nil];
     CGImageRef bitmapImage = [context createCGImage:image fromRect:extent];
     CGContextSetInterpolationQuality(bitmapRef, kCGInterpolationNone);
@@ -829,7 +832,12 @@
     CGImageRef scaledImage = CGBitmapContextCreateImage(bitmapRef);
     CGContextRelease(bitmapRef);
     CGImageRelease(bitmapImage);
-    return [UIImage imageWithCGImage:scaledImage];
+    
+    UIImage *newImage = [UIImage imageWithCGImage:scaledImage];
+    //FIX:释放
+    CFRelease(scaledImage);
+
+    return newImage;
 }
 
 #pragma mark ------>华氏转摄氏/摄氏转华氏

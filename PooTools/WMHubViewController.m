@@ -67,7 +67,10 @@
 
 #pragma mark - life cycle
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
     [self setupDefaultHUD];
     
     //一開始的彈出動畫效果

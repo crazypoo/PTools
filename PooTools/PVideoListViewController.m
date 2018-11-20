@@ -238,7 +238,7 @@ static NSString *footerId = @"footer";
         }
         return footerView;
     }
-    return nil;
+    return [[UICollectionReusableView alloc] init];
 }
 
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout referenceSizeForFooterInSection:(NSInteger)section

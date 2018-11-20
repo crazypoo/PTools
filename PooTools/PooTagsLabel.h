@@ -121,7 +121,7 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 @property (nonatomic,strong) UIButton *selectedBtn;
 /*! @brief 多个选中对应的标题数组
  */
-@property (nonatomic,copy) NSMutableArray *multiSelectedTags;
+@property (nonatomic,strong) NSMutableArray *multiSelectedTags;
 
 /*! @brief 初始化,必须给view设置一个宽度 (最普通模式)
  */

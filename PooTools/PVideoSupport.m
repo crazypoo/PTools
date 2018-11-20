@@ -146,7 +146,17 @@
     trackLayer.lineCap = kCALineCapRound;
     trackLayer.lineWidth = 3.0;
     
-    CGMutablePathRef path = [self getDrawPath];
+//    CGMutablePathRef path = [self getDrawPath];
+    
+    CGMutablePathRef path = CGPathCreateMutable();
+    CGFloat centX = self.bounds.size.width/2;
+    CGFloat centY = self.bounds.size.height/2;
+    CGFloat drawWidth = 22;
+    CGFloat drawHeight = 10;
+    CGPathMoveToPoint(path, NULL, (centX - drawWidth/2), (centY - drawHeight/2));
+    CGPathAddLineToPoint(path, NULL, centX, centY + drawHeight/2);
+    CGPathAddLineToPoint(path, NULL, centX + drawWidth/2, centY - drawHeight/2);
+
     trackLayer.path = path;
     [self.layer addSublayer:trackLayer];
     CGPathRelease(path);
@@ -174,15 +184,8 @@
     CGContextSetStrokeColorWithColor(context, kThemeGraryColor.CGColor);
     CGContextSetLineWidth(context, 3.0);
     CGContextSetLineCap(context, kCGLineCapRound);
-    CGMutablePathRef path = [self getDrawPath];
-    CGContextAddPath(context, path);
-    CGContextDrawPath(context, kCGPathStroke);
-    CGPathRelease(path);
-}
-
-
-- (CGMutablePathRef)getDrawPath
-{
+//    CGMutablePathRef path = [self getDrawPath];
+    
     CGMutablePathRef path = CGPathCreateMutable();
     CGFloat centX = self.bounds.size.width/2;
     CGFloat centY = self.bounds.size.height/2;
@@ -191,8 +194,29 @@
     CGPathMoveToPoint(path, NULL, (centX - drawWidth/2), (centY - drawHeight/2));
     CGPathAddLineToPoint(path, NULL, centX, centY + drawHeight/2);
     CGPathAddLineToPoint(path, NULL, centX + drawWidth/2, centY - drawHeight/2);
-    return path;
+
+    CGContextAddPath(context, path);
+    CGContextDrawPath(context, kCGPathStroke);
+    CGPathRelease(path);
 }
+
+//FIX:没有释放
+//- (CGMutablePathRef)getDrawPath
+//{
+//    CGMutablePathRef path = CGPathCreateMutable();
+//    CGFloat centX = self.bounds.size.width/2;
+//    CGFloat centY = self.bounds.size.height/2;
+//    CGFloat drawWidth = 22;
+//    CGFloat drawHeight = 10;
+//    CGPathMoveToPoint(path, NULL, (centX - drawWidth/2), (centY - drawHeight/2));
+//    CGPathAddLineToPoint(path, NULL, centX, centY + drawHeight/2);
+//    CGPathAddLineToPoint(path, NULL, centX + drawWidth/2, centY - drawHeight/2);
+//
+//    CGMutablePathRef newPath = path;
+//    //FIX:释放
+//    CGPathRelease(path);
+//    return newPath;
+//}
 
 @end
 
