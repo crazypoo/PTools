@@ -151,6 +151,7 @@
     dispatch_resume(_timer);
 }
 
+#pragma mark ------> 时间
 +(NSString *)formateTime:(NSDate*)date
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
@@ -198,9 +199,27 @@
     NSDate *date = [NSDate date];
     NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
     return timeSp;
-
 }
 
++(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString *)contractDate expTimeStamp:(int)timeStamp
+{
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:@"yyyy-MM-dd"];
+    NSDate *create = [formater dateFromString:contractDate];
+    NSDate *now = [NSDate date];
+    NSTimeInterval timeDifference = [create timeIntervalSinceDate:now];
+    float thirty = [[NSNumber numberWithInt: timeStamp] floatValue];
+    if (timeDifference - thirty <= 0.000000)
+    {
+        return CheckNowTimeAndPastTimeRelationshipsExpire;
+    }
+    else
+    {
+        return CheckNowTimeAndPastTimeRelationshipsNormal;
+    }
+    return CheckNowTimeAndPastTimeRelationshipsError;
+}
+#pragma mark ------> 获取地区
 +(NSString *)getCurrentApplicationLocale
 {
     NSLocale *locale = [NSLocale currentLocale];

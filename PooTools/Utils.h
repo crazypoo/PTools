@@ -41,6 +41,12 @@ typedef NS_ENUM(NSInteger,ToolsUrlStringVideoType){
     ToolsUrlStringVideoTypeUNKNOW
 };
 
+typedef NS_ENUM(NSInteger,CheckNowTimeAndPastTimeRelationships){
+    CheckNowTimeAndPastTimeRelationshipsExpire = 0,
+    CheckNowTimeAndPastTimeRelationshipsNormal,
+    CheckNowTimeAndPastTimeRelationshipsError
+};
+
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString *LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
@@ -192,6 +198,9 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(NSMutableDictionary *)getCurrentDeviceLanguageInIOSWithDic;
 
+/*! @brief 用某个时间戳来判断当前时间与服务器获取的时间对比,是否快到期
+ */
++(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString *)contractDate expTimeStamp:(int)timeStamp;
 #pragma mark ------> 图片
 /*! @brief 获取视频第一帧
  */
