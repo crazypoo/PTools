@@ -201,6 +201,10 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief 用某个时间戳来判断当前时间与服务器获取的时间对比,是否快到期
  */
 +(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString *)contractDate expTimeStamp:(int)timeStamp;
+
+/*! @brief 用某个时间戳来判断当前时间与时间的对比,是否快到期
+ */
++(CheckNowTimeAndPastTimeRelationships)checkStartDateExpireEndDataWithStartDate:(NSString *)sD withEndDate:(NSString *)eD expTimeStamp:(int)timeStamp;
 #pragma mark ------> 图片
 /*! @brief 获取视频第一帧
  */

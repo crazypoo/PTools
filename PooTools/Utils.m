@@ -219,6 +219,27 @@
     }
     return CheckNowTimeAndPastTimeRelationshipsError;
 }
+
++(CheckNowTimeAndPastTimeRelationships)checkStartDateExpireEndDataWithStartDate:(NSString *)sD withEndDate:(NSString *)eD expTimeStamp:(int)timeStamp
+{
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];
+    [formater setDateFormat:@"yyyy-MM-dd"];
+    NSDate *startDate = [formater dateFromString:sD];
+    NSDate *endDate = [formater dateFromString:eD];
+    
+    NSTimeInterval timeDifference = [endDate timeIntervalSinceDate:startDate];
+    float thirty = [[NSNumber numberWithInt:timeStamp] floatValue];
+    if (timeDifference - thirty <= 0.000000)
+    {
+        return CheckNowTimeAndPastTimeRelationshipsExpire;
+    }
+    else
+    {
+        return CheckNowTimeAndPastTimeRelationshipsNormal;
+    }
+    return CheckNowTimeAndPastTimeRelationshipsError;
+}
+
 #pragma mark ------> 获取地区
 +(NSString *)getCurrentApplicationLocale
 {
