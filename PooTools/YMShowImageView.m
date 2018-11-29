@@ -809,10 +809,12 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 {
     _imageModels = model;
     
-    HZWaitingView *waitingView = [[HZWaitingView alloc] init];
-    waitingView.mode = HZWaitingViewModeLoopDiagram;
-    waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
-    self.waitingView = waitingView;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+        HZWaitingView *waitingView = [[HZWaitingView alloc] init];
+        waitingView.mode = HZWaitingViewModeLoopDiagram;
+        waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
+//        self.waitingView = waitingView;
+//    });
     
     CGFloat navH = 0.0f;
     if (kDevice_Is_iPhoneX)
@@ -826,8 +828,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     if (model.imageShowType == PooShowImageModelTypeFullView)
     {
-        if (!self.waitingView) {
-            [self addSubview:self.waitingView];
+        if (!waitingView) {
+            [self addSubview:waitingView];
         }
 
         kWeakSelf(self);
@@ -836,8 +838,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 weakself.waitingView.progress = (CGFloat)receivedSize / (CGFloat)expectedSize;
             });
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            [weakself.waitingView removeFromSuperview];
-            weakself.waitingView = nil;
+            [waitingView removeFromSuperview];
+//            waitingView = nil;
             self.showMode = PShowModeFullView;
             self.sceneView = [SCNView new];
             [self.scrollview addSubview:self.sceneView];
@@ -883,7 +885,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
     else
     {
-        [self.waitingView removeFromSuperview];
+        [waitingView removeFromSuperview];
         
         self.showMode = PShowModeVideo;
         
@@ -983,20 +985,22 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             [_scrollview addSubview:self.imageview];
             
-            [self addSubview:self.waitingView];
+            [self addSubview:waitingView];
 
             __weak __typeof(self)weakself = self;
             [[SDWebImageManager sharedManager] loadImageWithURL:urlObject options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 __strong __typeof(weakself)strongself = weakself;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    strongself.waitingView.progress = (CGFloat)receivedSize / expectedSize;
+                    waitingView.progress = (CGFloat)receivedSize / expectedSize;
                     strongself.imageview.image = nil;
                 });
                 
             } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
                 __strong __typeof(weakself)strongself = weakself;
 
-                [strongself.waitingView removeFromSuperview];
+//                dispatch_async(dispatch_get_main_queue(), ^{
+                    [waitingView removeFromSuperview];
+//                });
                 
                 if (error) {
                     //图片加载失败的处理，此处可以自定义各种操作（...）
