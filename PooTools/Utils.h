@@ -234,6 +234,42 @@ static inline BOOL isIPhoneXSeries() {
 +(UIImage *)scaleImage:(UIImage *)image
                toScale:(float)scaleSize;
 
+/*! @brief 添加文字水印
+ * @param image 原来的图片
+ * @param text 水印内容
+ * @param point 水印位置
+ * @param attributed 水印设置
+ */
++ (UIImage *)jx_WaterImageWithImage:(UIImage *)image
+                               text:(NSString *)text
+                          textPoint:(CGPoint)point
+                   attributedString:(NSDictionary * )attributed;
+
+
+/*! @brief 添加文字水印(斜文字版)
+ * @param originalImage 原来的图片
+ * @param title 水印内容
+ * @param markFont 水印字体
+ * @param markColor 水印颜色
+ */
++ (UIImage *)getWaterMarkImage:(UIImage *)originalImage
+                      andTitle:(NSString *)title
+                   andMarkFont:(UIFont *)markFont
+                  andMarkColor:(UIColor *)markColor;
+
+/*! @brief 添加图片水印
+ * @param image 原来的图片
+ * @param waterImage 水印图片
+ * @param rect 水印位置大小
+ */
++ (UIImage *)jx_WaterImageWithImage:(UIImage *)image
+                         waterImage:(UIImage *)waterImage
+                     waterImageRect:(CGRect)rect;
+
+/*! @brief 根据图片获取图片的主色调
+ */
++(UIColor*)mostColor:(UIImage*)image;
+
 #pragma mark ------> JSON
 /*! @brief Json字符串转字典
  */
