@@ -12,12 +12,6 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
-#define IOS_CELLULAR    @"pdp_ip0"
-#define IOS_WIFI        @"en0"
-//#define IOS_VPN       @"utun0"
-#define IP_ADDR_IPv4    @"ipv4"
-#define IP_ADDR_IPv6    @"ipv6"
-
 @implementation PGetIpAddresses
 //获取设备当前网络IP地址
 + (NSString *)getIPAddress:(BOOL)preferIPv4
@@ -77,5 +71,19 @@
         freeifaddrs(interfaces);
     }
     return [addresses count] ? addresses : nil;
+}
+
++ (NSString *)deviceWANIPAddress
+{
+    NSURL *ipURL = [NSURL URLWithString:@"http://ip.taobao.com/service/getIpInfo.php?ip=myip"];
+    NSData *data = [NSData dataWithContentsOfURL:ipURL];
+    if (data != nil) {
+        NSDictionary *ipDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+        return (ipDic[@"data"][@"ip"] ? ipDic[@"data"][@"ip"] : @"0.0.0.0");
+    }
+    else
+    {
+        return @"0.0.0.0";
+    }
 }
 @end
