@@ -10,5 +10,5 @@
 #import "UIColor+Colours.h"
 
 @interface UIColor (Helpers)
-
+-(UIColor *)inverseColor;
 @end

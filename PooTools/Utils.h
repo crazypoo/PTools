@@ -266,10 +266,6 @@ static inline BOOL isIPhoneXSeries() {
                          waterImage:(UIImage *)waterImage
                      waterImageRect:(CGRect)rect;
 
-/*! @brief 根据图片获取图片的主色调
- */
-+(UIColor*)mostColor:(UIImage*)image;
-
 #pragma mark ------> JSON
 /*! @brief Json字符串转字典
  */

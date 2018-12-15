@@ -136,7 +136,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     self.indexLabel = [[UILabel alloc] init];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
-    self.indexLabel.textColor = [UIColor whiteColor];
+    self.indexLabel.textColor = self.titleColor;
     self.indexLabel.font = kDEFAULT_FONT(self.fontName, 20);
     self.indexLabel.backgroundColor = cIndexTitleBackgroundColor;
     self.indexLabel.bounds = CGRectMake(0, kScreenStatusBottom + (self.navH - kScreenStatusBottom - 30)/2, 80, hIndexTitleHeight);
@@ -144,13 +144,13 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.indexLabel.layer.cornerRadius = 15;
     self.indexLabel.clipsToBounds = YES;
     if (appendArray.count > 1) {
-        _indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)appendArray.count];
+        self.indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)appendArray.count];
         [self addSubview:self.indexLabel];
     }
     
     self.fullViewLabel = [[UILabel alloc] init];
     self.fullViewLabel.textAlignment = NSTextAlignmentCenter;
-    self.fullViewLabel.textColor = [UIColor whiteColor];
+    self.fullViewLabel.textColor = self.titleColor;
     self.fullViewLabel.font = kDEFAULT_FONT(self.fontName, 20);
     self.fullViewLabel.backgroundColor = cIndexTitleBackgroundColor;
     self.fullViewLabel.frame = CGRectMake(kSCREEN_WIDTH-50-20, self.indexLabel.top, 50, hIndexTitleHeight);
@@ -252,20 +252,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
         
         self.fullViewLabel.text = [self fullImageHidden];
-//        if ([[self fullImageHidden] isEqualToString:@""])
-//        {
-//            self.fullViewLabel.hidden = YES;
-//        }
-//        else
-//        {
-//            self.fullViewLabel.hidden = NO;
-//        }
         
         PooShowImageModel *model = self.modelArr[0];
-        PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+0];
-        [imageScroll setImageWithModel:model];
-        imageScroll.beginLoadingImage = YES;
         
+
         self.titleLabel = [UILabel new];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.titleLabel.textColor     = self.titleColor;
@@ -350,6 +340,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     PooShowImageModel *model = self.modelArr[self.page];
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
     [currentImageS setImageWithModel:model];
+    
     switch (currentImageS.showMode) {
         case PShowModeGif:
         {
@@ -421,14 +412,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
         self.fullViewLabel.text = [self fullImageHidden];
-//        if ([[self fullImageHidden] isEqualToString:@""])
-//        {
-//            self.fullViewLabel.hidden = YES;
-//        }
-//        else
-//        {
-//            self.fullViewLabel.hidden = NO;
-//        }
         
         PooShowImageModel *model = self.modelArr[page];
         self.titleLabel.text = model.imageTitle;
@@ -880,7 +863,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             [self.sceneView.scene.rootNode addChildNode:sphereNode];
             self.scrollview.contentSize = CGSizeMake(self.width, self.height);
         }];
-        
 //        [self setNeedsLayout];
     }
     else
@@ -1001,7 +983,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 //                dispatch_async(dispatch_get_main_queue(), ^{
                     [waitingView removeFromSuperview];
 //                });
-                
+//                PNSLog(@">>>>>>>>>>>>>>%@",[Utils mostColor:[UIImage imageWithData:data]]);
+
                 if (error) {
                     //图片加载失败的处理，此处可以自定义各种操作（...）
                     weakself.hasLoadedImage = NO;//图片加载失败
@@ -1017,7 +1000,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     [self addSubview:button];
                     return;
                 }
-
+                
                 switch ([Utils contentTypeForImageData:data]) {
                     case ToolsAboutImageTypeGIF:
                     {

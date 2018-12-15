@@ -86,6 +86,7 @@
 		CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BB211D706400FD29F4 /* MAThermometer.m */; };
 		CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */; };
 		CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */; };
+		CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */; };
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC3838D3214364D100453548 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838C9214364CF00453548 /* PVideoSupport.m */; };
 		CC3838D4214364D100453548 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CC214364D000453548 /* PVideoViewController.m */; };
@@ -306,6 +307,8 @@
 		CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGImaginaryLine.h; sourceTree = "<group>"; };
 		CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCheckbox.m; sourceTree = "<group>"; };
 		CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCheckbox.h; sourceTree = "<group>"; };
+		CC1E610A21C4E0060092559A /* UIImage+UIColorEX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIColorEX.h"; sourceTree = "<group>"; };
+		CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIColorEX.m"; sourceTree = "<group>"; };
 		CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTShowFunctionViewController.h; sourceTree = "<group>"; };
 		CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTShowFunctionViewController.m; sourceTree = "<group>"; };
 		CC3838C9214364CF00453548 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
@@ -750,6 +753,8 @@
 				CCBC5C55217B127400B205CF /* CountryCodes.m */,
 				CC4C717C218AD4F6008B1804 /* UICountingLabel.h */,
 				CC4C717D218AD4F6008B1804 /* UICountingLabel.m */,
+				CC1E610A21C4E0060092559A /* UIImage+UIColorEX.h */,
+				CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -1008,6 +1013,7 @@
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
+				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,

@@ -138,6 +138,7 @@ typedef enum {
 /*! @brief 单个浏览图片的设置数据Model
  */
 - (void)setImageWithModel:(PooShowImageModel *)model;
+
 @end
 
 
