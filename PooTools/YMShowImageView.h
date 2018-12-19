@@ -90,9 +90,6 @@ typedef enum {
 /*! @brief 单个浏览图片的ImageView
  */
 @property (nonatomic,strong) UIImageView *imageview;
-/*! @brief 单个浏览图片的Sphere
- */
-@property (nonatomic,strong) SCNSphere *sphere;
 /*! @brief 单个浏览图片的媒体播放器
  */
 @property (nonatomic, strong) MPMoviePlayerController *player;
@@ -108,7 +105,9 @@ typedef enum {
 /*! @brief 单个浏览图片的媒体播放器的进度条
  */
 @property (nonatomic, strong) UISlider *videoSlider;
-
+/*! @brief 单个浏览图片的panoramaNode
+ */
+@property (nonatomic, strong) SCNNode *panoramaNode;
 /*! @brief 单个浏览图片的数据形式
  */
 @property (nonatomic, assign) PShowMode showMode;

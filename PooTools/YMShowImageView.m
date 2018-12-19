@@ -15,6 +15,7 @@
 #import <Masonry/Masonry.h>
 #import "Utils.h"
 #import <AFNetworking/AFNetworking.h>
+#import <CoreMotion/CoreMotion.h>
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f
@@ -483,7 +484,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         PShowImageSingleView *currentView = self.imageScrollViews[index];
         if (currentView.hasLoadedImage)
         {
-            UIImage *fullImage = (UIImage *)currentView.sphere.firstMaterial.diffuse.contents;
+            UIImage *fullImage = (UIImage *)currentView.panoramaNode.geometry.firstMaterial.diffuse.contents;
             [self saveImageToPhotos:fullImage];
         }
         else
@@ -728,8 +729,19 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) PooShowImageModel *imageModels;
 @property (nonatomic, strong) UIImage *placeHolderImage;
 @property (nonatomic, strong) UIButton *reloadButton;
-@property (nonatomic, strong) SCNView *sceneView;
 @property (nonatomic, strong) UIImage *loadImage;
+
+@property (nonatomic,strong)SCNView *sceneView;
+@property (strong,nonatomic)CMMotionManager *motionManager;
+@property (nonatomic,strong)SCNNode *cameraNode;
+@property (nonatomic,assign)BOOL gestureDuring;
+@property (nonatomic,assign)CGFloat lastPoint_x;
+@property (nonatomic,assign)CGFloat lastPoint_y;
+@property (nonatomic,assign)CGFloat fingerRotationX;
+@property (nonatomic,assign)CGFloat fingerRotationY;
+@property (nonatomic,assign)CGFloat currentScale;
+@property (nonatomic,assign)CGFloat prevScale;
+
 @end
 
 @implementation PShowImageSingleView
@@ -815,6 +827,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             [self addSubview:waitingView];
         }
 
+        self.currentScale = 1.0;
+        self.prevScale = 1.0;
+
         kWeakSelf(self);
         [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -824,7 +839,12 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             [waitingView removeFromSuperview];
 //            waitingView = nil;
             self.showMode = PShowModeFullView;
+            
+            SCNCamera *camera = [[SCNCamera alloc] init];
+            self.cameraNode = [[SCNNode alloc] init];
+
             self.sceneView = [SCNView new];
+            self.sceneView.scene = [[SCNScene alloc] init];
             [self.scrollview addSubview:self.sceneView];
             [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self);
@@ -832,12 +852,18 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 make.top.equalTo(self).offset(navH);
             }];
             
-            self.sceneView.scene = [[SCNScene alloc] init];
-            self.sceneView.showsStatistics = NO;
             self.sceneView.allowsCameraControl = YES;
+
+            self.cameraNode.camera = camera;
+            self.cameraNode.camera.automaticallyAdjustsZRange = YES;
+            self.cameraNode.position = SCNVector3Zero;
+            self.cameraNode.camera.xFov = 60;
+            self.cameraNode.camera.yFov = 60;
+            [self.sceneView.scene.rootNode addChildNode:self.cameraNode];
+
             
-            self.sphere =   [SCNSphere sphereWithRadius:20.0];
-            self.sphere.firstMaterial.doubleSided = YES;
+//            self.sphere =   [SCNSphere sphereWithRadius:20.0];
+//            self.sphere.firstMaterial.doubleSided = YES;
 
             if (error) {
                 //图片加载失败的处理，此处可以自定义各种操作（...）
@@ -855,12 +881,49 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 return;
             }
 
-            self.sphere.firstMaterial.diffuse.contents = image;
+            self.panoramaNode = [[SCNNode alloc] init];
+            self.panoramaNode.geometry = [SCNSphere sphereWithRadius:150];
+            self.panoramaNode.geometry.firstMaterial.cullMode = SCNCullModeFront;
+            self.panoramaNode.geometry.firstMaterial.doubleSided = YES;
+            self.panoramaNode.position = SCNVector3Zero;
+            [self.sceneView.scene.rootNode addChildNode:self.panoramaNode];
+
+            self.panoramaNode.geometry.firstMaterial.diffuse.contents = image;
+
+            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)];
+            [self.sceneView addGestureRecognizer:pan];
+            
+            UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
+            [self.sceneView addGestureRecognizer:pinch];
+            
+            self.motionManager = [[CMMotionManager alloc] init];
+            self.motionManager.deviceMotionUpdateInterval = 1/6;
+            
+            if (self.motionManager.deviceMotionAvailable) {
+                //开始更新设备的动作信息
+                [self.motionManager startDeviceMotionUpdates];
+            } else {
+                NSLog(@"该设备的deviceMotion不可用");
+            }
+            
+            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+                    if (orientation == UIInterfaceOrientationPortrait && !self.gestureDuring) {
+                        SCNMatrix4 modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0);
+                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.roll, 0, 1, 0);
+                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.pitch, 1, 0, 0);
+                        self.cameraNode.pivot = modelMatrix;
+                    }
+                });
+            }];
+
+//            self.sphere.firstMaterial.diffuse.contents = image;
             weakself.hasLoadedImage = YES;//图片加载成功
             
-            SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
-            sphereNode.position = SCNVector3Make(0,0,0);
-            [self.sceneView.scene.rootNode addChildNode:sphereNode];
+//            SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
+//            sphereNode.position = SCNVector3Make(0,0,0);
+//            [self.sceneView.scene.rootNode addChildNode:sphereNode];
             self.scrollview.contentSize = CGSizeMake(self.width, self.height);
         }];
 //        [self setNeedsLayout];
@@ -1212,6 +1275,87 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.scrollViewDidScroll(self.scrollOffset);
     }
 }
+
+-(void)panImage:(UIGestureRecognizer *)gesture
+{
+    if (![gesture isKindOfClass:[UIPanGestureRecognizer class]]) {
+        return;
+    }
+    
+    if (gesture.delaysTouchesBegan) {
+        self.gestureDuring = YES;
+        CGPoint currentPoint = [gesture locationInView:self.sceneView];
+        self.lastPoint_x = currentPoint.x;
+        self.lastPoint_y = currentPoint.y;
+    }
+    else if (gesture.delaysTouchesEnded)
+    {
+        self.gestureDuring = NO;
+    }
+    else
+    {
+        CGPoint currentPoint = [gesture locationInView:self.sceneView];
+        CGFloat distX = currentPoint.x - self.lastPoint_x;
+        CGFloat distY = currentPoint.y - self.lastPoint_y;
+        self.lastPoint_x = currentPoint.x;
+        self.lastPoint_y = currentPoint.y;
+        distX *= -0.003;
+        distY *= -0.003;
+        self.fingerRotationY += distY;
+        self.fingerRotationX += distX;
+        SCNMatrix4 modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0);
+        modelMatrix = SCNMatrix4Rotate(modelMatrix, self.fingerRotationX,0, 1, 0);
+        modelMatrix = SCNMatrix4Rotate(modelMatrix, self.fingerRotationY, 1, 0, 0);
+        self.cameraNode.pivot = modelMatrix;
+    }
+}
+
+-(void)pinchGesture:(UIGestureRecognizer *)gesture
+{
+    if (![gesture isKindOfClass:[UIPinchGestureRecognizer class]]) {
+        return;
+    }
+    
+    UIPinchGestureRecognizer *pinchGesture = (UIPinchGestureRecognizer*)gesture;
+    
+    if (pinchGesture.state != UIGestureRecognizerStateEnded && pinchGesture.state != UIGestureRecognizerStateFailed)
+    {
+        if (pinchGesture.scale != 0.0)
+        {
+            CGFloat scale = pinchGesture.scale - 1;
+            if (scale < 0) {
+                scale *= (5 - 0.5);
+            }
+            self.currentScale = scale + self.prevScale;
+            self.currentScale = [self validateScale:self.currentScale];
+            
+            CGFloat valScale = [self validateScale:self.currentScale];
+            CGFloat scaleRatio = 1-(valScale-1)*0.15;
+            CGFloat xFov = 60 * scaleRatio;
+            CGFloat yFov = 50 * scaleRatio;
+            self.cameraNode.camera.xFov = xFov;
+            self.cameraNode.camera.yFov = yFov;
+        }
+    }
+    else if (pinchGesture.state == UIGestureRecognizerStateEnded)
+    {
+        self.prevScale = self.currentScale;
+    }
+}
+
+-(CGFloat)validateScale:(CGFloat)scale
+{
+    CGFloat validateScale = scale;
+    if (scale < 0.5) {
+        validateScale = 0.5;
+    }
+    else if (scale > 5)
+    {
+        validateScale = 5;
+    }
+    return validateScale;
+}
+
 @end
 
 #define HZWaitingViewBackgroundColor [UIColor colorWithRed:0 green:0 blue:0 alpha:0.7]
