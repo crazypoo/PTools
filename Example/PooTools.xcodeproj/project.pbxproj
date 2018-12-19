@@ -124,6 +124,7 @@
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
 		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
+		CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */; };
 		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
@@ -362,6 +363,8 @@
 		CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YCXMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MLScreenshot.h"; sourceTree = "<group>"; };
 		CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MLScreenshot.m"; sourceTree = "<group>"; };
+		CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
+		CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitiveWordTools.m; sourceTree = "<group>"; };
 		CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
 		CC96809B20B042B700AA07F5 /* PBiologyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBiologyID.h; sourceTree = "<group>"; };
@@ -570,6 +573,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */,
+				CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */,
 				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
 				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
 				CC3838CB214364CF00453548 /* PVideoConfig.h */,
@@ -1012,6 +1017,7 @@
 				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
+				CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,

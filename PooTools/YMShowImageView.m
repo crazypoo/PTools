@@ -256,7 +256,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         
         PooShowImageModel *model = self.modelArr[0];
         
-
         self.titleLabel = [UILabel new];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.titleLabel.textColor     = self.titleColor;
