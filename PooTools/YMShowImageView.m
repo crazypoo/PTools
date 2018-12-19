@@ -804,12 +804,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 {
     _imageModels = model;
     
-//    dispatch_async(dispatch_get_main_queue(), ^{
-        HZWaitingView *waitingView = [[HZWaitingView alloc] init];
-        waitingView.mode = HZWaitingViewModeLoopDiagram;
-        waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
-//        self.waitingView = waitingView;
-//    });
+    HZWaitingView *waitingView = [[HZWaitingView alloc] init];
+    waitingView.mode = HZWaitingViewModeLoopDiagram;
+    waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
     
     CGFloat navH = 0.0f;
     if (kDevice_Is_iPhoneX)
@@ -823,7 +820,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     if (model.imageShowType == PooShowImageModelTypeFullView)
     {
-        if (!waitingView) {
+        if (waitingView == nil) {
             [self addSubview:waitingView];
         }
 
@@ -837,7 +834,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             });
         } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             [waitingView removeFromSuperview];
-//            waitingView = nil;
+
             self.showMode = PShowModeFullView;
             
             SCNCamera *camera = [[SCNCamera alloc] init];
@@ -860,10 +857,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.cameraNode.camera.xFov = 60;
             self.cameraNode.camera.yFov = 60;
             [self.sceneView.scene.rootNode addChildNode:self.cameraNode];
-
-            
-//            self.sphere =   [SCNSphere sphereWithRadius:20.0];
-//            self.sphere.firstMaterial.doubleSided = YES;
 
             if (error) {
                 //图片加载失败的处理，此处可以自定义各种操作（...）
@@ -918,12 +911,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 });
             }];
 
-//            self.sphere.firstMaterial.diffuse.contents = image;
             weakself.hasLoadedImage = YES;//图片加载成功
             
-//            SCNNode *sphereNode = [SCNNode nodeWithGeometry:self.sphere];
-//            sphereNode.position = SCNVector3Make(0,0,0);
-//            [self.sceneView.scene.rootNode addChildNode:sphereNode];
             self.scrollview.contentSize = CGSizeMake(self.width, self.height);
         }];
 //        [self setNeedsLayout];
