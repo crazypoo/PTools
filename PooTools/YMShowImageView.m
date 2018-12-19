@@ -140,7 +140,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.indexLabel.textColor = self.titleColor;
     self.indexLabel.font = kDEFAULT_FONT(self.fontName, 20);
     self.indexLabel.backgroundColor = cIndexTitleBackgroundColor;
-    self.indexLabel.bounds = CGRectMake(0, kScreenStatusBottom + (self.navH - kScreenStatusBottom - 30)/2, 80, hIndexTitleHeight);
+    self.indexLabel.bounds = CGRectMake(0, kScreenStatusBottom + (self.navH - hIndexTitleHeight)/2, 80, hIndexTitleHeight);
     self.indexLabel.center = CGPointMake(kSCREEN_WIDTH * 0.5, hIndexTitleHeight);
     self.indexLabel.layer.cornerRadius = 15;
     self.indexLabel.clipsToBounds = YES;
@@ -820,9 +820,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     if (model.imageShowType == PooShowImageModelTypeFullView)
     {
-        if (waitingView == nil) {
-            [self addSubview:waitingView];
-        }
+        [self addSubview:waitingView];
 
         self.currentScale = 1.0;
         self.prevScale = 1.0;
