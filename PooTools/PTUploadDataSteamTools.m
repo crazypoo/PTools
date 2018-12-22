@@ -14,6 +14,9 @@
 #import <Masonry/Masonry.h>
 #import "PMacros.h"
 
+@implementation PTUploadDataModel
+@end
+
 @implementation PTUploadDataSteamTools
 
 +(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress withDataName:(NSString *)dataName imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock

@@ -8,10 +8,27 @@
 
 #import <Foundation/Foundation.h>
 
-#import "PTUploadDataModel.h"
+typedef NS_ENUM(NSUInteger, CGUploadType) {
+    CGUploadTypeGIF,
+    CGUploadTypeJPG,
+    CGUploadTypePNG,
+    CGUploadTypeJPEG,
+    CGUploadTypeMP4,
+    CGUploadTypeAUDIO,
+    CGUploadTypeFLV,
+    CGUploadTypeMP3,
+    CGUploadTypeFULLVIEW
+};
 
 typedef void (^PTUploadDataToServerSuccessBlock)(NSDictionary *result);
 typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
+
+@interface PTUploadDataModel : NSObject
+@property (nonatomic,strong) UIImage *uploadImage;
+@property (nonatomic,assign) CGUploadType imageType;
+@property (nonatomic,strong) NSString *imageName;
+@property (nonatomic,strong) NSData *imageData;
+@end
 
 NS_ASSUME_NONNULL_BEGIN
 
