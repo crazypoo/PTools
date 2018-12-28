@@ -32,7 +32,7 @@
     if (_yearArray == nil)
     {
         _yearArray = [NSMutableArray array];
-        for (int year = 2000; year < 2050; year++)
+        for (int year = 1950; year < 2050; year++)
         {
             NSString *str = [NSString stringWithFormat:@"%d年", year];
             [_yearArray addObject:str];
@@ -69,7 +69,7 @@
     return _dayArray;
 }
 
-- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf pickerType:(PPickerType)pT
+- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf pickerType:(PPickerType)pT inPutDataString:(NSString *)ipds
 {
     self = [super init];
     if (self)
@@ -189,24 +189,25 @@
             make.height.offset(216);
             make.bottom.equalTo(self);
         }];
+                
+        NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
+        [formatter1 setDateFormat:@"yyyy-MM-dd"];
+        NSDate *date =[formatter1 dateFromString:ipds];
+        NSDateFormatter *formatter2 = [[NSDateFormatter alloc] init];
+        [formatter2 setDateFormat:@"yyyyMMdd"];
+        NSString *dateString2 = [formatter2 stringFromDate:date ];
         
-        NSCalendar *calendar = [[NSCalendar alloc]
-                                initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-        // 定义一个时间字段的旗标，指定将会获取指定年、月、日、时、分、秒的信息
-        unsigned unitFlags = NSCalendarUnitYear |
-        NSCalendarUnitMonth |  NSCalendarUnitDay |
-        NSCalendarUnitHour |  NSCalendarUnitMinute |
-        NSCalendarUnitSecond | NSCalendarUnitWeekday;
-        // 获取不同时间字段的信息
-        NSDateComponents *comp = [calendar components: unitFlags fromDate:[NSDate date]];
+        NSString *yearStr = [dateString2 substringToIndex:4];
+        NSString *monthStr = [dateString2 substringWithRange:NSMakeRange(4,2)];
+        NSString *dayStr = [dateString2 substringFromIndex:6];
         
         switch (self.pickerType)
         {
             case PPickerTypeYMD:
             {
-                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
-                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
-                self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%02ld日", (long)comp.day]];
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%@年", yearStr]];
+                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%@月", monthStr]];
+                self.dayIndex = [self.dayArray indexOfObject:[NSString stringWithFormat:@"%@日", dayStr]];
                 
                 [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
                 [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
@@ -219,8 +220,8 @@
                 break;
             case PPickerTypeYM:
             {
-                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
-                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%02ld月", (long)comp.month]];
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%@年", yearStr]];
+                self.monthIndex = [self.monthArray indexOfObject:[NSString stringWithFormat:@"%@月", monthStr]];
                 
                 [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
                 [self.pickerView selectRow:self.monthIndex inComponent:1 animated:YES];
@@ -231,7 +232,7 @@
                 break;
             default:
             {
-                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%ld年", (long)comp.year]];
+                self.yearIndex = [self.yearArray indexOfObject:[NSString stringWithFormat:@"%@年", yearStr]];
                 
                 [self.pickerView selectRow:self.yearIndex inComponent:0 animated:YES];
                 

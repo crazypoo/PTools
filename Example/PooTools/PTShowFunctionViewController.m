@@ -526,10 +526,10 @@
     switch (sender.tag) {
         case 0:
         {
-            PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeY];
-            [self.view addSubview:view];
+            PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeYMD inPutDataString:@"2018-07-08"];
+            [[PTAppDelegate appDelegate].window addSubview:view];
             [view mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo(self.view);
+                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
             }];
             view.block = ^(NSString *dateString) {
                 PNSLog(@">>>>>>>>>>>%@",dateString);
@@ -542,7 +542,7 @@
             view.delegate = self;
             [[PTAppDelegate appDelegate].window addSubview:view];
             [view mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo(self.view);
+                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
             }];
             //    view.block = ^(NSString *dateString) {
             //        PNSLog(@">>>>>>>>>>>%@",dateString);

@@ -29,7 +29,8 @@ typedef NS_ENUM(NSInteger,PPickerType){
                     labelFont:(UIFont *)font
             toolBarTitleColor:(UIColor *)tbtc
                    pickerFont:(UIFont *)pf
-                   pickerType:(PPickerType)pT;
+                   pickerType:(PPickerType)pT
+              inPutDataString:(NSString *)ipds;
 
 /*! @brief 选取回调
  */
