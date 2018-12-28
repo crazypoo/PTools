@@ -134,6 +134,7 @@
 		CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */; };
 		CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C55217B127400B205CF /* CountryCodes.m */; };
 		CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC01E08215B341300874BDF /* UIView+ViewShaking.m */; };
+		CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
 		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
 		CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */; };
@@ -385,6 +386,8 @@
 		CCBC5C55217B127400B205CF /* CountryCodes.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CountryCodes.m; sourceTree = "<group>"; };
 		CCC01E07215B341300874BDF /* UIView+ViewShaking.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewShaking.h"; sourceTree = "<group>"; };
 		CCC01E08215B341300874BDF /* UIView+ViewShaking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewShaking.m"; sourceTree = "<group>"; };
+		CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTNormalPicker.h; sourceTree = "<group>"; };
+		CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTNormalPicker.m; sourceTree = "<group>"; };
 		CCDD3CC8217EC3530021BC19 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SSZipArchive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -765,6 +768,8 @@
 				CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */,
 				CC29C9F921CE1F9100786FF1 /* PTUploadDataSteamTools.h */,
 				CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */,
+				CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */,
+				CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -1025,6 +1030,7 @@
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
 				CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
+				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,

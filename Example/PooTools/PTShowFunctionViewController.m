@@ -38,6 +38,7 @@
 #import "YXCustomAlertView.h"
 
 #import "PooDatePicker.h"
+#import "PTNormalPicker.h"
 
 #import "CountryCodes.h"
 
@@ -340,7 +341,7 @@
             break;
         case ShowFunctionPicker:
         {
-            NSArray *arr = @[@"日期",@"时间"];
+            NSArray *arr = @[@"日期",@"时间",@"普通"];
             
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -557,6 +558,23 @@
                 timePicker = nil;
             };
             
+        }
+            break;
+        case 2:
+        {
+            PTNormalPickerModel *aaaaa = [PTNormalPickerModel new];
+            aaaaa.pickerTitle = @"1111111";
+            PTNormalPickerModel *bbbbbb = [PTNormalPickerModel new];
+            bbbbbb.pickerTitle = @"222222222";
+
+            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:[UIColor whiteColor] withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb]];
+            nP.returnBlock = ^(PTNormalPicker *normalPicker, PTNormalPickerModel *pickerModel) {
+                PNSLog(@">>>>>>>>>>>>%@>>>>>>>>>>%@>>>>>>>>>>>>>>>%@",normalPicker,pickerModel.pickerTitle,pickerModel.pickerIndexPath);
+            };
+            [[PTAppDelegate appDelegate].window addSubview:nP];
+            [nP mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+            }];
         }
             break;
         default:
