@@ -189,17 +189,38 @@
             make.height.offset(216);
             make.bottom.equalTo(self);
         }];
-                
-        NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
-        [formatter1 setDateFormat:@"yyyy-MM-dd"];
-        NSDate *date =[formatter1 dateFromString:ipds];
-        NSDateFormatter *formatter2 = [[NSDateFormatter alloc] init];
-        [formatter2 setDateFormat:@"yyyyMMdd"];
-        NSString *dateString2 = [formatter2 stringFromDate:date ];
         
-        NSString *yearStr = [dateString2 substringToIndex:4];
-        NSString *monthStr = [dateString2 substringWithRange:NSMakeRange(4,2)];
-        NSString *dayStr = [dateString2 substringFromIndex:6];
+        NSString *yearStr;
+        NSString *monthStr;
+        NSString *dayStr;
+        if (kStringIsEmpty(ipds)) {
+            NSCalendar *calendar = [[NSCalendar alloc]
+                                    initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+            // 定义一个时间字段的旗标，指定将会获取指定年、月、日、时、分、秒的信息
+            unsigned unitFlags = NSCalendarUnitYear |
+            NSCalendarUnitMonth |  NSCalendarUnitDay |
+            NSCalendarUnitHour |  NSCalendarUnitMinute |
+            NSCalendarUnitSecond | NSCalendarUnitWeekday;
+            // 获取不同时间字段的信息
+            NSDateComponents *comp = [calendar components: unitFlags fromDate:[NSDate date]];
+            
+            yearStr  = [NSString stringWithFormat:@"%ld", (long)comp.year];
+            monthStr = [NSString stringWithFormat:@"%02ld", (long)comp.month];
+            dayStr   = [NSString stringWithFormat:@"%02ld", (long)comp.day];
+        }
+        else
+        {
+            NSDateFormatter *formatter1 = [[NSDateFormatter alloc] init];
+            [formatter1 setDateFormat:@"yyyy-MM-dd"];
+            NSDate *date =[formatter1 dateFromString:ipds];
+            NSDateFormatter *formatter2 = [[NSDateFormatter alloc] init];
+            [formatter2 setDateFormat:@"yyyyMMdd"];
+            NSString *dateString2 = [formatter2 stringFromDate:date ];
+
+            yearStr  = [dateString2 substringToIndex:4];
+            monthStr = [dateString2 substringWithRange:NSMakeRange(4,2)];
+            dayStr   = [dateString2 substringFromIndex:6];
+        }
         
         switch (self.pickerType)
         {
