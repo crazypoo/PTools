@@ -27,6 +27,11 @@
 #import "PooPhoneBlock.h"
 #import "PooCleanCache.h"
 
+#import "IGHTTPClient.h"
+#import "IGBatchTaskManager.h"
+
+#import "Utils.h"
+
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -73,6 +78,8 @@
     }];
     
     kAdaptedOtherFontSize(@"", 16);
+    
+    [self apiTest];
     
 }
 
@@ -394,6 +401,42 @@ static NSString *cellIdentifier = @"CELL";
         }
             break;
     }
+}
+
+#pragma mark ------> API
+- (void)apiTest
+{
+    RespDictionaryBlock dBlock = ^(NSMutableDictionary *infoDict, NSError *error) {
+        if (!error) {
+            if (infoDict && [infoDict isKindOfClass:[NSMutableDictionary class]]) {
+                if ([infoDict[@"result"] isEqualToString:@"false"]) {
+                    [Utils alertShowWithMessage:infoDict[@"message"]];
+                }
+                else
+                {
+                    NSString *aesStr = infoDict[@"userinfo"];
+                    PNSLog(@"%@",aesStr);
+                }
+            }
+        }
+        else
+        {
+            [Utils alertShowWithMessage:@"error"];
+        }
+    };
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:@"2" forKey:@"type"];
+    [dic setObject:@"13068893276" forKey:@"userPhone"];
+    [dic setObject:@"R0VR9eaLumsh2r/ENgHZCw==" forKey:@"password"];
+    [dic setObject:@"" forKey:@"registrationID"];
+    [dic setObject:@"true" forKey:@"isLogin"];
+    
+    [HTTPClient(nil) POSTApi:@"/chl/tenant/account/addAccountInfo"
+             parameters:dic
+              parserKey:pkIGTestParserApp
+                success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
+                failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
 }
 
 @end
