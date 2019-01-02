@@ -6,7 +6,7 @@
 //
 //
 
-#import "AFURLRequestSerialization.h"
+#import <AFNetworking/AFURLRequestSerialization.h>
 
 @interface IGHTTPRequestSerializer : AFHTTPRequestSerializer
 

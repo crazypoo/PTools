@@ -9,7 +9,7 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdocumentation"
 
-#import "AFNetworking.h"
+#import <AFNetworking/AFNetworking.h>
 
 #import "NSError+HTTPClient.h"
 #import "NSURLSessionTask+IGHTTPClient.h"

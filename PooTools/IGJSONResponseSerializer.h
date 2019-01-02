@@ -6,7 +6,7 @@
 //
 //
 
-#import "AFURLResponseSerialization.h"
+#import <AFNetworking/AFURLResponseSerialization.h>
 
 @class NSURLSessionTask;
 
