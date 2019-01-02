@@ -135,6 +135,20 @@
 		CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C55217B127400B205CF /* CountryCodes.m */; };
 		CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC01E08215B341300874BDF /* UIView+ViewShaking.m */; };
 		CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */; };
+		CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD6609521DCCD31004AA57D /* IGBatchTask.m */; };
+		CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD6609B21DCCD32004AA57D /* IGHTTPClient+Download.m */; };
+		CCD660B821DCCD3B004AA57D /* NSURLSessionTask+IGHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD6609F21DCCD33004AA57D /* NSURLSessionTask+IGHTTPClient.m */; };
+		CCD660B921DCCD3B004AA57D /* IGHTTPRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A121DCCD34004AA57D /* IGHTTPRequestSerializer.m */; };
+		CCD660BA21DCCD3B004AA57D /* IGJSONResponseObjectParserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A521DCCD35004AA57D /* IGJSONResponseObjectParserManager.m */; };
+		CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A621DCCD35004AA57D /* IGTestParser.m */; };
+		CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A821DCCD36004AA57D /* IGHTTPClient.m */; };
+		CCD660BD21DCCD3B004AA57D /* IGFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */; };
+		CCD660BE21DCCD3B004AA57D /* IGJSONModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AA21DCCD37004AA57D /* IGJSONModel.m */; };
+		CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AB21DCCD37004AA57D /* IGJSONResponseSerializer.m */; };
+		CCD660C021DCCD3B004AA57D /* IGHTTPRequestBuilderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AE21DCCD38004AA57D /* IGHTTPRequestBuilderManager.m */; };
+		CCD660C121DCCD3B004AA57D /* IGHTTPTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660B121DCCD3A004AA57D /* IGHTTPTools.m */; };
+		CCD660C221DCCD3B004AA57D /* IGBatchTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660B421DCCD3B004AA57D /* IGBatchTaskManager.m */; };
+		CCD660C321DCCD3B004AA57D /* NSError+HTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660B521DCCD3B004AA57D /* NSError+HTTPClient.m */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
 		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
 		CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */; };
@@ -388,6 +402,39 @@
 		CCC01E08215B341300874BDF /* UIView+ViewShaking.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewShaking.m"; sourceTree = "<group>"; };
 		CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTNormalPicker.h; sourceTree = "<group>"; };
 		CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTNormalPicker.m; sourceTree = "<group>"; };
+		CCD6609521DCCD31004AA57D /* IGBatchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBatchTask.m; sourceTree = "<group>"; };
+		CCD6609621DCCD31004AA57D /* IGHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPClient.h; sourceTree = "<group>"; };
+		CCD6609721DCCD31004AA57D /* IGJSONResponseObjectParserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseObjectParserManager.h; sourceTree = "<group>"; };
+		CCD6609821DCCD31004AA57D /* NSError+HTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+HTTPClient.h"; sourceTree = "<group>"; };
+		CCD6609921DCCD32004AA57D /* IGHTTPTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPTools.h; sourceTree = "<group>"; };
+		CCD6609A21DCCD32004AA57D /* IGHTTPRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilder.h; sourceTree = "<group>"; };
+		CCD6609B21DCCD32004AA57D /* IGHTTPClient+Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IGHTTPClient+Download.m"; sourceTree = "<group>"; };
+		CCD6609C21DCCD33004AA57D /* IGHTTPClient+Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IGHTTPClient+Download.h"; sourceTree = "<group>"; };
+		CCD6609D21DCCD33004AA57D /* IGFileUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGFileUploadManager.h; sourceTree = "<group>"; };
+		CCD6609E21DCCD33004AA57D /* IGBatchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBatchTask.h; sourceTree = "<group>"; };
+		CCD6609F21DCCD33004AA57D /* NSURLSessionTask+IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSessionTask+IGHTTPClient.m"; sourceTree = "<group>"; };
+		CCD660A021DCCD34004AA57D /* IGHTTPJSONResponseParserList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPJSONResponseParserList.h; sourceTree = "<group>"; };
+		CCD660A121DCCD34004AA57D /* IGHTTPRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPRequestSerializer.m; sourceTree = "<group>"; };
+		CCD660A221DCCD34004AA57D /* IGJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONModel.h; sourceTree = "<group>"; };
+		CCD660A321DCCD34004AA57D /* IGJSONResponseSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseSerializer.h; sourceTree = "<group>"; };
+		CCD660A421DCCD34004AA57D /* NSURLSessionTask+IGHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSessionTask+IGHTTPClient.h"; sourceTree = "<group>"; };
+		CCD660A521DCCD35004AA57D /* IGJSONResponseObjectParserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONResponseObjectParserManager.m; sourceTree = "<group>"; };
+		CCD660A621DCCD35004AA57D /* IGTestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGTestParser.m; sourceTree = "<group>"; };
+		CCD660A721DCCD36004AA57D /* IGHTTPClientProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPClientProfile.h; sourceTree = "<group>"; };
+		CCD660A821DCCD36004AA57D /* IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPClient.m; sourceTree = "<group>"; };
+		CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGFileUploadManager.m; sourceTree = "<group>"; };
+		CCD660AA21DCCD37004AA57D /* IGJSONModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONModel.m; sourceTree = "<group>"; };
+		CCD660AB21DCCD37004AA57D /* IGJSONResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONResponseSerializer.m; sourceTree = "<group>"; };
+		CCD660AC21DCCD38004AA57D /* IGTestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGTestParser.h; sourceTree = "<group>"; };
+		CCD660AD21DCCD38004AA57D /* IGJSONResponseObjectParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseObjectParser.h; sourceTree = "<group>"; };
+		CCD660AE21DCCD38004AA57D /* IGHTTPRequestBuilderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPRequestBuilderManager.m; sourceTree = "<group>"; };
+		CCD660AF21DCCD39004AA57D /* IGHTTPRequestBuilderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilderManager.h; sourceTree = "<group>"; };
+		CCD660B021DCCD39004AA57D /* IGHTTPRequestBuilderList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilderList.h; sourceTree = "<group>"; };
+		CCD660B121DCCD3A004AA57D /* IGHTTPTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPTools.m; sourceTree = "<group>"; };
+		CCD660B221DCCD3A004AA57D /* IGBatchTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBatchTaskManager.h; sourceTree = "<group>"; };
+		CCD660B321DCCD3A004AA57D /* IGHTTPRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestSerializer.h; sourceTree = "<group>"; };
+		CCD660B421DCCD3B004AA57D /* IGBatchTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBatchTaskManager.m; sourceTree = "<group>"; };
+		CCD660B521DCCD3B004AA57D /* NSError+HTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+HTTPClient.m"; sourceTree = "<group>"; };
 		CCDD3CC8217EC3530021BC19 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SSZipArchive.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -579,6 +626,39 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CCD6609E21DCCD33004AA57D /* IGBatchTask.h */,
+				CCD6609521DCCD31004AA57D /* IGBatchTask.m */,
+				CCD660B221DCCD3A004AA57D /* IGBatchTaskManager.h */,
+				CCD660B421DCCD3B004AA57D /* IGBatchTaskManager.m */,
+				CCD6609D21DCCD33004AA57D /* IGFileUploadManager.h */,
+				CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */,
+				CCD6609621DCCD31004AA57D /* IGHTTPClient.h */,
+				CCD660A821DCCD36004AA57D /* IGHTTPClient.m */,
+				CCD6609C21DCCD33004AA57D /* IGHTTPClient+Download.h */,
+				CCD6609B21DCCD32004AA57D /* IGHTTPClient+Download.m */,
+				CCD660A721DCCD36004AA57D /* IGHTTPClientProfile.h */,
+				CCD660A021DCCD34004AA57D /* IGHTTPJSONResponseParserList.h */,
+				CCD6609A21DCCD32004AA57D /* IGHTTPRequestBuilder.h */,
+				CCD660B021DCCD39004AA57D /* IGHTTPRequestBuilderList.h */,
+				CCD660AF21DCCD39004AA57D /* IGHTTPRequestBuilderManager.h */,
+				CCD660AE21DCCD38004AA57D /* IGHTTPRequestBuilderManager.m */,
+				CCD660B321DCCD3A004AA57D /* IGHTTPRequestSerializer.h */,
+				CCD660A121DCCD34004AA57D /* IGHTTPRequestSerializer.m */,
+				CCD6609921DCCD32004AA57D /* IGHTTPTools.h */,
+				CCD660B121DCCD3A004AA57D /* IGHTTPTools.m */,
+				CCD660A221DCCD34004AA57D /* IGJSONModel.h */,
+				CCD660AA21DCCD37004AA57D /* IGJSONModel.m */,
+				CCD660AD21DCCD38004AA57D /* IGJSONResponseObjectParser.h */,
+				CCD6609721DCCD31004AA57D /* IGJSONResponseObjectParserManager.h */,
+				CCD660A521DCCD35004AA57D /* IGJSONResponseObjectParserManager.m */,
+				CCD660A321DCCD34004AA57D /* IGJSONResponseSerializer.h */,
+				CCD660AB21DCCD37004AA57D /* IGJSONResponseSerializer.m */,
+				CCD660AC21DCCD38004AA57D /* IGTestParser.h */,
+				CCD660A621DCCD35004AA57D /* IGTestParser.m */,
+				CCD6609821DCCD31004AA57D /* NSError+HTTPClient.h */,
+				CCD660B521DCCD3B004AA57D /* NSError+HTTPClient.m */,
+				CCD660A421DCCD34004AA57D /* NSURLSessionTask+IGHTTPClient.h */,
+				CCD6609F21DCCD33004AA57D /* NSURLSessionTask+IGHTTPClient.m */,
 				CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */,
 				CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */,
 				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
@@ -943,7 +1023,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC1257BD2098319300E31A38 /* NSString+WPAttributedMarkup.m in Sources */,
+				CCD660BE21DCCD3B004AA57D /* IGJSONModel.m in Sources */,
 				CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */,
+				CCD660C021DCCD3B004AA57D /* IGHTTPRequestBuilderManager.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */,
 				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
@@ -958,6 +1040,7 @@
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
 				CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */,
+				CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
@@ -967,9 +1050,13 @@
 				CC1257E62098319300E31A38 /* WMHubViewController.m in Sources */,
 				CC1257E22098319300E31A38 /* UIViewController+TopBarMessage.m in Sources */,
 				CC1257D02098319300E31A38 /* PooTextView.m in Sources */,
+				CCD660BA21DCCD3B004AA57D /* IGJSONResponseObjectParserManager.m in Sources */,
 				CC1257B72098319300E31A38 /* LGTMBase64.m in Sources */,
 				CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */,
+				CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */,
 				CC1257BA2098319300E31A38 /* NSMutableString+TagReplace.m in Sources */,
+				CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */,
+				CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */,
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
@@ -992,6 +1079,7 @@
 				CC1257C12098319300E31A38 /* PGifHud.m in Sources */,
 				CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */,
 				CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */,
+				CCD660C221DCCD3B004AA57D /* IGBatchTaskManager.m in Sources */,
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
@@ -1002,13 +1090,17 @@
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
+				CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */,
+				CCD660C121DCCD3B004AA57D /* IGHTTPTools.m in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
 				64F95E322099374200858FED /* IGBannerView.m in Sources */,
 				64F95E312099374200858FED /* IGBannerItem.m in Sources */,
+				CCD660B821DCCD3B004AA57D /* NSURLSessionTask+IGHTTPClient.m in Sources */,
 				CC29C9FB21CE1F9100786FF1 /* PTUploadDataSteamTools.m in Sources */,
 				CC1257B12098319300E31A38 /* CustomTextField.m in Sources */,
+				CCD660B921DCCD3B004AA57D /* IGHTTPRequestSerializer.m in Sources */,
 				CC1257DE2098319300E31A38 /* UIImage+Size.m in Sources */,
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
@@ -1017,6 +1109,7 @@
 				CC1257DD2098319300E31A38 /* UIImage+BlurGlass.m in Sources */,
 				CC1257C52098319300E31A38 /* PMotion.m in Sources */,
 				CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */,
+				CCD660C321DCCD3B004AA57D /* NSError+HTTPClient.m in Sources */,
 				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
 				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
@@ -1032,6 +1125,7 @@
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
 				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
+				CCD660BD21DCCD3B004AA57D /* IGFileUploadManager.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
