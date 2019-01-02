@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name                  = 'PooTools'
-    s.version               = '1.9.39'
+    s.version               = '1.9.40'
     s.author                = { 'crazypoo' => '273277355@qq.com' }
     s.homepage              = 'https://github.com/crazypoo/PTools'
     s.summary               = '多年来积累的轮子'
@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
     s.platform              = :ios, '8.0'
     s.requires_arc          = true
     #s.source_files          = 'PooTools','PooTools/**/*'
-    s.source_files          = 'PooTools','PooTools/**/*.{h,m,swift}'
+    #s.source_files          = 'PooTools','PooTools/**/*.{h,m,swift}'
     s.exclude_files         = 'PooTools','PooTools/**/*.plist'
     s.resource              = 'PooTools/PooTools.bundle'
     s.ios.deployment_target = '8.0'
