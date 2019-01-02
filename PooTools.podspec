@@ -18,8 +18,8 @@ Pod::Spec.new do |s|
     s.swift_version         = '4.2'
     s.platform              = :ios, '8.0'
     s.requires_arc          = true
-    s.source_files          = 'PooTools','PooTools/**/*'
-    #s.source_files         = 'PooTools','PooTools/**/*.{h,m,swift}'
+    #s.source_files          = 'PooTools','PooTools/**/*'
+    s.source_files          = 'PooTools','PooTools/**/*.{h,m,swift}'
     s.exclude_files         = 'PooTools','PooTools/**/*.plist'
     s.resource              = 'PooTools/PooTools.bundle'
     s.ios.deployment_target = '8.0'
