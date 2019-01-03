@@ -567,7 +567,7 @@
             PTNormalPickerModel *bbbbbb = [PTNormalPickerModel new];
             bbbbbb.pickerTitle = @"222222222";
 
-            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:[UIColor whiteColor] withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb]];
+            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:[UIColor whiteColor] withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb] withPickerTitle:@"11111111" checkPickerCurrentRow:@"1111111"];
             nP.returnBlock = ^(PTNormalPicker *normalPicker, PTNormalPickerModel *pickerModel) {
                 PNSLog(@">>>>>>>>>>>>%@>>>>>>>>>>%@>>>>>>>>>>>>>>>%@",normalPicker,pickerModel.pickerTitle,pickerModel.pickerIndexPath);
             };

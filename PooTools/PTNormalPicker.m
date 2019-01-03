@@ -30,20 +30,19 @@
 
 @implementation PTNormalPicker
 
--(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr
+-(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr withPickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr
 {
     self = [super init];
     if (self) {
         self.viewDataArr = [NSMutableArray array];
         [self.viewDataArr addObjectsFromArray:dataArr];
         self.pickerFont = titleFont;
-        
-        [self configViewWithPickerBackgroundColor:pickerBGC withTapBarBGColor:tabColor withTitleAndBtnTitleColor:textColor withTitleFont:titleFont];
+        [self configViewWithPickerBackgroundColor:pickerBGC withTapBarBGColor:tabColor withTitleAndBtnTitleColor:textColor withTitleFont:titleFont pickerTitle:pT checkPickerCurrentRow:currentStr];
     }
     return self;
 }
 
--(void)configViewWithPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont
+-(void)configViewWithPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont pickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr
 {
     self.pickerBackground = [UIView new];
     self.pickerBackground.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
@@ -79,7 +78,7 @@
     self.nameTitle.textAlignment = NSTextAlignmentCenter;
     self.nameTitle.textColor = textColor;
     self.nameTitle.font = titleFont;
-    self.nameTitle.text = @"选择传感器安装位置";
+    self.nameTitle.text = pT;
     [self.tbar_picker addSubview:self.nameTitle];
     [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.tbar_picker);
@@ -112,8 +111,27 @@
         make.top.bottom.equalTo(self.tbar_picker);
     }];
     
-    [self.viewPicker selectRow:0 inComponent:0 animated:YES];
-    [self pickerView:self.viewPicker didSelectRow:0 inComponent:0];
+    if (!kStringIsEmpty(currentStr)) {
+        [self.viewPicker selectRow:[self getIndexWithString:currentStr] inComponent:0 animated:YES];
+        [self pickerView:self.viewPicker didSelectRow:[self getIndexWithString:currentStr] inComponent:0];
+    }
+    else
+    {
+        [self.viewPicker selectRow:0 inComponent:0 animated:YES];
+        [self pickerView:self.viewPicker didSelectRow:0 inComponent:0];
+    }
+}
+
+-(NSInteger)getIndexWithString:(NSString*)str
+{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (PTNormalPickerModel *model in self.viewDataArr) {
+        [arr addObject:model.pickerTitle];
+    }
+    
+    NSInteger index  = [arr indexOfObject:str];
+    
+    return index;
 }
 
 -(void)layoutSubviews

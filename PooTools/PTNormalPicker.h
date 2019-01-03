@@ -19,7 +19,7 @@ typedef void(^PickerReturnBlock) (PTNormalPicker *normalPicker,PTNormalPickerMod
 @end
 
 @interface PTNormalPicker : UIView
--(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr;
+-(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr withPickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr;
 @property (nonatomic, copy) PickerReturnBlock returnBlock;
 
 @end
