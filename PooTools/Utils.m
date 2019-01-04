@@ -927,16 +927,29 @@
 }
 
 #pragma mark ------> DateAndTime
-+(NSDate *)fewMonthLater:(NSInteger)month fromNow:(NSDate *)thisTime
++(NSDate *)fewMonthLater:(NSInteger)month
+                 fromNow:(NSDate *)thisTime
+                timeType:(FewMonthLaterType)type
 {
     NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    //FIX:修复代码没使用的地方
-//    NSDateComponents *comps = nil;
-//    comps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
     NSDateComponents *adcomps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
     [adcomps setYear:0];
-    [adcomps setMonth:month];
-    [adcomps setDay:0];
+    switch (type) {
+        case FewMonthLaterTypeNormal:
+            {
+                [adcomps setMonth:month];
+                [adcomps setDay:0];
+            }
+            break;
+        case FewMonthLaterTypeContract:
+        {
+            [adcomps setMonth:(month-1)];
+            [adcomps setDay:30];
+        }
+            break;
+        default:
+            break;
+    }
     
     return [calendar dateByAddingComponents:adcomps toDate:thisTime options:0];
 }

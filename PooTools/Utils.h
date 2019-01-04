@@ -47,6 +47,11 @@ typedef NS_ENUM(NSInteger,CheckNowTimeAndPastTimeRelationships){
     CheckNowTimeAndPastTimeRelationshipsError
 };
 
+typedef NS_ENUM(NSInteger,FewMonthLaterType){
+    FewMonthLaterTypeNormal = 0,
+    FewMonthLaterTypeContract
+};
+
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString *LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
@@ -173,7 +178,8 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief 某个时间的某时间之后或者之前
  */
 +(NSDate *)fewMonthLater:(NSInteger)month
-                 fromNow:(NSDate *)thisTime;
+                 fromNow:(NSDate *)thisTime
+                timeType:(FewMonthLaterType)type;
 
 /*! @brief 日期时间对比
  */
