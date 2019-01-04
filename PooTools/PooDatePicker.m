@@ -95,6 +95,8 @@
         nameTitle.textAlignment = NSTextAlignmentCenter;
         nameTitle.textColor = tbtc;
         nameTitle.font = font;
+        nameTitle.numberOfLines = 0;
+        nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
         nameTitle.text = title;
         [self.topV addSubview:nameTitle];
         
@@ -123,8 +125,8 @@
         [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.equalTo(self.topV);
             make.centerX.equalTo(self.topV.mas_centerX);
-            make.left.equalTo(cancelBtn.mas_right);
-            make.right.equalTo(yesBtn.mas_left);
+            make.left.equalTo(cancelBtn.mas_right).offset(5);
+            make.right.equalTo(yesBtn.mas_left).offset(-5);
         }];
         
         [cancelBtn addActionHandler:^(UIButton *sender) {
@@ -560,6 +562,8 @@
         nameTitle.textAlignment = NSTextAlignmentCenter;
         nameTitle.textColor = tbtc;
         nameTitle.font = font;
+        nameTitle.numberOfLines = 0;
+        nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
         nameTitle.text = title;
         [self.topV addSubview:nameTitle];
         
@@ -588,8 +592,8 @@
         [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.bottom.equalTo(self.topV);
             make.centerX.equalTo(self.topV.mas_centerX);
-            make.left.equalTo(cancelBtn.mas_right);
-            make.right.equalTo(yesBtn.mas_left);
+            make.left.equalTo(cancelBtn.mas_right).offset(5);
+            make.right.equalTo(yesBtn.mas_left).offset(-5);
         }];
         
         [cancelBtn addActionHandler:^(UIButton *sender) {

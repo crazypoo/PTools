@@ -74,43 +74,43 @@
         make.bottom.equalTo(self.viewPicker.mas_top);
     }];
     
-    self.nameTitle = [UILabel new];
-    self.nameTitle.textAlignment = NSTextAlignmentCenter;
-    self.nameTitle.textColor = textColor;
-    self.nameTitle.font = titleFont;
-    self.nameTitle.text = pT;
-    [self.tbar_picker addSubview:self.nameTitle];
-    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(self.tbar_picker);
-        make.centerX.equalTo(self.tbar_picker.mas_centerX);
-    }];
-    
     self.cancelBtn                = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.titleLabel.font = titleFont;
     [self.cancelBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(hideViewAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.cancelBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     [self.tbar_picker addSubview:self.cancelBtn];
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.tbar_picker).offset(10);
-        make.right.equalTo(self.nameTitle.mas_left).offset(-10);
+        make.width.offset(titleFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
         make.top.bottom.equalTo(self.tbar_picker);
     }];
-    
+
     self.doneBtn                  = [UIButton buttonWithType:UIButtonTypeCustom];
     self.doneBtn.titleLabel.font = titleFont;
     [self.doneBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.doneBtn setTitle:@"完成" forState:UIControlStateNormal];
     [self.doneBtn addTarget:self action:@selector(pickerSelectDoneAction:) forControlEvents:UIControlEventTouchUpInside];
-    self.doneBtn.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
     [self.tbar_picker addSubview:self.doneBtn];
     [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.nameTitle.mas_right).offset(10);
+        make.top.bottom.width.equalTo(self.cancelBtn);
         make.right.equalTo(self.tbar_picker).offset(-10);
-        make.top.bottom.equalTo(self.tbar_picker);
     }];
-    
+
+    self.nameTitle = [UILabel new];
+    self.nameTitle.textAlignment = NSTextAlignmentCenter;
+    self.nameTitle.textColor = textColor;
+    self.nameTitle.font = titleFont;
+    self.nameTitle.numberOfLines = 0;
+    self.nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
+    self.nameTitle.text = pT;
+    [self.tbar_picker addSubview:self.nameTitle];
+    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(self.cancelBtn);
+        make.left.equalTo(self.cancelBtn.mas_right).offset(5);
+        make.right.equalTo(self.doneBtn.mas_left).offset(-5);
+    }];
+
     if (!kStringIsEmpty(currentStr)) {
         [self.viewPicker selectRow:[self getIndexWithString:currentStr] inComponent:0 animated:YES];
         [self pickerView:self.viewPicker didSelectRow:[self getIndexWithString:currentStr] inComponent:0];
@@ -120,6 +120,8 @@
         [self.viewPicker selectRow:0 inComponent:0 animated:YES];
         [self pickerView:self.viewPicker didSelectRow:0 inComponent:0];
     }
+    
+    [self layoutIfNeeded];
 }
 
 -(NSInteger)getIndexWithString:(NSString*)str
@@ -132,43 +134,6 @@
     NSInteger index  = [arr indexOfObject:str];
     
     return index;
-}
-
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    [self.pickerBackground mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self);
-    }];
-    
-    [self.viewPicker mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.pickerBackground);
-        make.height.offset(216);
-    }];
-    
-    [self.tbar_picker mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.pickerBackground);
-        make.height.offset(44);
-        make.bottom.equalTo(self.viewPicker.mas_top);
-    }];
-
-    [self.nameTitle mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(self.tbar_picker);
-        make.centerX.equalTo(self.tbar_picker.mas_centerX);
-    }];
-    
-    [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.tbar_picker).offset(10);
-        make.right.equalTo(self.nameTitle.mas_left).offset(-10);
-        make.top.bottom.equalTo(self.tbar_picker);
-    }];
-
-    [self.doneBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.nameTitle.mas_right).offset(10);
-        make.right.equalTo(self.tbar_picker).offset(-10);
-        make.top.bottom.equalTo(self.tbar_picker);
-    }];
 }
 
 #pragma mark ------> UIPickerViewDataSource
