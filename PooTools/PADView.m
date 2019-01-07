@@ -18,11 +18,11 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 @property (nonatomic,assign)CGFloat viewX;
 @property (nonatomic,assign)CGFloat viewY;
 @property (nonatomic,strong)UIFont *titleFont;
-
+@property (nonatomic,strong)UIPageControl *pageControl;
 @end
 
 @implementation PADView
--(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT adTitleFont:(UIFont *)adTitleFont
+-(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT adTitleFont:(UIFont *)adTitleFont pageIndicatorTintColor:(UIColor *)pageTColor currentPageIndicatorTintColor:(UIColor *)pageCColor
 {
     self = [super init];
     if (self) {
@@ -48,6 +48,18 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
             make.left.right.top.bottom.equalTo(self);
         }];
         
+        self.pageControl = [UIPageControl new];
+        self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
+        self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
+        self.pageControl.numberOfPages = adArr.count;
+        self.pageControl.currentPage = 0;
+        [self addSubview:self.pageControl];
+        [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.bottom.equalTo(self);
+            make.height.equalTo(@(20));
+            make.width.equalTo(@(100));
+        }];
+
         if (pT != 0) {
             [self addTimer];
         }
@@ -129,6 +141,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 #pragma mark ------> UIScrollViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self removeTimer];
+    self.pageControl.currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.frame.size.width);
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
@@ -139,7 +152,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 -(void)nextpage
 {
     NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
-    
+    [self.pageControl setCurrentPage:currentIndexPath.item];
     NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
     [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     

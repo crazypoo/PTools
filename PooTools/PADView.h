@@ -23,11 +23,10 @@
 @property (nonatomic, copy) void(^adTouchBlock)(CGAdBannerModel *touchModel);
 
 -(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr
-                     singleADW:(CGFloat)sw
-                     singleADH:(CGFloat)sh
-                      paddingY:(CGFloat)py
-                      paddingX:(CGFloat)px
-              placeholderImage:(NSString *)pI
-                      pageTime:(int)pT
-                   adTitleFont:(UIFont *)adTitleFont;
+                     singleADW:(CGFloat)sw singleADH:(CGFloat)sh
+                      paddingY:(CGFloat)py paddingX:(CGFloat)px
+              placeholderImage:(NSString *)pI pageTime:(int)pT
+                   adTitleFont:(UIFont *)adTitleFont
+        pageIndicatorTintColor:(UIColor *)pageTColor
+ currentPageIndicatorTintColor:(UIColor *)pageCColor;
 @end

@@ -133,15 +133,15 @@
             CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
             aaaaa.bannerTitle = @"111111";
             
-            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19)];
+            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:nil currentPageIndicatorTintColor:nil];
             [self.view addSubview:adaaaa];
             [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
-                make.height.offset(100);
+                make.height.offset(160);
                 make.left.right.equalTo(self.view);
             }];
             
-            IGBannerView *banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR*2+100+10, kSCREEN_WIDTH, 100) bannerItems:@[[IGBannerItem itemWithTitle:@"广告1" imageUrl:@"" tag:0],[IGBannerItem itemWithTitle:@"广告2" imageUrl:@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg" tag:1]] bannerPlaceholderImage:kImageNamed(@"DemoImage")];
+            IGBannerView *banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR*2+160+10, kSCREEN_WIDTH, 100) bannerItems:@[[IGBannerItem itemWithTitle:@"广告1" imageUrl:@"" tag:0],[IGBannerItem itemWithTitle:@"广告2" imageUrl:@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg" tag:1]] bannerPlaceholderImage:kImageNamed(@"DemoImage")];
             banner.pageControlBackgroundColor = [UIColor clearColor];
             banner.titleBackgroundColor = [UIColor clearColor];
             banner.titleColor = [UIColor clearColor];
