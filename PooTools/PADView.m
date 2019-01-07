@@ -152,17 +152,16 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 -(void)nextpage
 {
     NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
-    [self.pageControl setCurrentPage:currentIndexPath.item];
     NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
     [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
-    
+
     NSInteger nextItem = currentIndexPathReset.item +1;
     NSInteger nextSection = currentIndexPathReset.section;
     if (nextItem == viewData.count) {
         nextItem = 0;
     }
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
-    
+    [self.pageControl setCurrentPage:nextIndexPath.item];
     [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
 }
 @end

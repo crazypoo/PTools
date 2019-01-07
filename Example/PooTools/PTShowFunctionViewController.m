@@ -133,7 +133,7 @@
             CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
             aaaaa.bannerTitle = @"111111";
             
-            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:nil currentPageIndicatorTintColor:nil];
+            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:[UIColor lightGrayColor] currentPageIndicatorTintColor:[UIColor redColor]];
             [self.view addSubview:adaaaa];
             [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
