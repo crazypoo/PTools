@@ -131,9 +131,14 @@
         [arr addObject:model.pickerTitle];
     }
     
-    NSInteger index  = [arr indexOfObject:str];
-    
-    return index;
+    if ([arr containsObject:str])
+    {
+        return [arr indexOfObject:str];
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 #pragma mark ------> UIPickerViewDataSource

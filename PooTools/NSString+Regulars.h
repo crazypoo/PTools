@@ -57,4 +57,11 @@
  */
 -(BOOL)isMoneyString;
 
+/*! @brief 判断字符串是否银行卡号
+ */
+- (BOOL)isBankCard;
+
+/*! @brief 判断字符串是否银行卡号并返回属于哪个银行
+ */
+- (NSString *)returnBankName;
 @end
