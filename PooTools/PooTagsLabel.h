@@ -135,4 +135,8 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
                         tagsTitleArray:(NSArray *)tagsTitleArr
                                 config:(PooTagsLabelConfig *)config
                            wihtSection:(NSInteger)sectionIndex;
+
+/*! @brief 重置界面
+ */
+-(void)clearTag;
 @end
