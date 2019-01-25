@@ -315,18 +315,18 @@ static NSString *cellIdentifier = @"CELL";
                     imageModel2.imageShowType = PooShowImageModelTypeNormal;
                     imageModel2.imageInfo = @"6666666";
                     imageModel2.imageTitle = @"5555555";
-                    
-                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
-                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-                    imageModelT.imageShowType = PooShowImageModelTypeNormal;
-                    imageModelT.imageInfo = @"6666666";
-                    imageModelT.imageTitle = @"5555555";
-
-                    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
-                    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
-                    imageModel3.imageShowType = PooShowImageModelTypeGIF;
-                    imageModel3.imageInfo = @"444444";
-                    imageModel3.imageTitle = @"333333";
+//
+//                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
+//                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+//                    imageModelT.imageShowType = PooShowImageModelTypeNormal;
+//                    imageModelT.imageInfo = @"6666666";
+//                    imageModelT.imageTitle = @"5555555";
+//
+//                    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
+//                    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+//                    imageModel3.imageShowType = PooShowImageModelTypeGIF;
+//                    imageModel3.imageInfo = @"444444";
+//                    imageModel3.imageTitle = @"333333";
                     
                     PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
                     imageModel4.imageUrl = kImageNamed(@"DemoImage");
@@ -334,8 +334,9 @@ static NSString *cellIdentifier = @"CELL";
                     imageModel4.imageInfo = @"444444";
                     imageModel4.imageTitle = @"333333";
                     
-                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    
+//                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
+                    NSArray *arr = @[imageModel4,imageModel2];
+
                     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
                         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];

@@ -823,217 +823,40 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
         self.currentScale = 1.0;
         self.prevScale = 1.0;
-
-        kWeakSelf(self);
-        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:model.imageUrl] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakself.waitingView.progress = (CGFloat)receivedSize / (CGFloat)expectedSize;
-            });
-        } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            [waitingView removeFromSuperview];
-
-            self.showMode = PShowModeFullView;
-            
-            SCNCamera *camera = [[SCNCamera alloc] init];
-            self.cameraNode = [[SCNNode alloc] init];
-
-            self.sceneView = [SCNView new];
-            self.sceneView.scene = [[SCNScene alloc] init];
-            [self.scrollview addSubview:self.sceneView];
-            [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self);
-                make.height.offset(self.height-navH-80);
-                make.top.equalTo(self).offset(navH);
-            }];
-            
-            self.sceneView.allowsCameraControl = YES;
-
-            self.cameraNode.camera = camera;
-            self.cameraNode.camera.automaticallyAdjustsZRange = YES;
-            self.cameraNode.position = SCNVector3Zero;
-            self.cameraNode.camera.xFov = 60;
-            self.cameraNode.camera.yFov = 60;
-            [self.sceneView.scene.rootNode addChildNode:self.cameraNode];
-
-            if (error) {
-                //图片加载失败的处理，此处可以自定义各种操作（...）
-                weakself.hasLoadedImage = NO;//图片加载失败
-                UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-                weakself.reloadButton = button;
-                button.layer.cornerRadius = 2;
-                button.clipsToBounds = YES;
-                button.titleLabel.font = [UIFont systemFontOfSize:14];
-                button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-                [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
-                [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-                [button addTarget:self action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
-                [self addSubview:button];
-                return;
-            }
-
-            self.panoramaNode = [[SCNNode alloc] init];
-            self.panoramaNode.geometry = [SCNSphere sphereWithRadius:150];
-            self.panoramaNode.geometry.firstMaterial.cullMode = SCNCullModeFront;
-            self.panoramaNode.geometry.firstMaterial.doubleSided = YES;
-            self.panoramaNode.position = SCNVector3Zero;
-            [self.sceneView.scene.rootNode addChildNode:self.panoramaNode];
-
-            self.panoramaNode.geometry.firstMaterial.diffuse.contents = image;
-
-            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)];
-            [self.sceneView addGestureRecognizer:pan];
-            
-            UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
-            [self.sceneView addGestureRecognizer:pinch];
-            
-            self.motionManager = [[CMMotionManager alloc] init];
-            self.motionManager.deviceMotionUpdateInterval = 1/6;
-            
-            if (self.motionManager.deviceMotionAvailable) {
-                //开始更新设备的动作信息
-                [self.motionManager startDeviceMotionUpdates];
-            } else {
-                NSLog(@"该设备的deviceMotion不可用");
-            }
-            
-            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
-                    if (orientation == UIInterfaceOrientationPortrait && !self.gestureDuring) {
-                        SCNMatrix4 modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0);
-                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.roll, 0, 1, 0);
-                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.pitch, 1, 0, 0);
-                        self.cameraNode.pivot = modelMatrix;
-                    }
-                });
-            }];
-
-            weakself.hasLoadedImage = YES;//图片加载成功
-            
-            self.scrollview.contentSize = CGSizeMake(self.width, self.height);
-        }];
-//        [self setNeedsLayout];
-    }
-    else
-    {
-        [waitingView removeFromSuperview];
         
-        self.showMode = PShowModeVideo;
-        
-        NSURL *videoUrl;
-        if([Utils contentTypeForUrlString:model.imageUrl] == ToolsUrlStringVideoTypeMP4) {
-            if ([model.imageUrl rangeOfString:@"/var"].length>0)
-            {
-                videoUrl = [NSURL fileURLWithPath:model.imageUrl];
-            }
-            else
-            {
-                videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-            }
-            self.player = [[MPMoviePlayerController alloc] initWithContentURL:videoUrl];
-            self.player.controlStyle = MPMovieControlStyleNone;
-            self.player.shouldAutoplay = YES;
-            self.player.repeatMode = MPMovieRepeatModeNone;
-            [self.player setFullscreen:YES animated:YES];
-            self.player.scalingMode = MPMovieScalingModeAspectFit;
-            [_scrollview addSubview: self.player.view];
-            [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self);
-                make.height.offset(self.height-navH-80);
-                make.top.equalTo(self).offset(navH);
-            }];
-            
-            UIImage *firstImage = [Utils thumbnailImageForVideo:videoUrl atTime:1];
-            self.video1STImage = [UIImageView new];
-            self.video1STImage.contentMode = UIViewContentModeScaleAspectFit;
-            self.video1STImage.image = firstImage;
-            [self.player.view addSubview:self.video1STImage];
-            [self.video1STImage mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self.player.view);
-                make.centerY.equalTo(self.player.view);
-            }];
-            
-            NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
-
-            UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-            self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
-            [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.player.view addSubview:self.playBtn];
-            [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.offset(44);
-                make.centerX.centerY.equalTo(self.player.view);
-            }];
-            
-            UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-            self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
-            [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.player.view addSubview:self.stopBtn];
-            [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.offset(44);
-                make.left.equalTo(self.player.view).offset(10);
-                make.bottom.equalTo(self.player.view).offset(-10);
-            }];
-            self.stopBtn.hidden = YES;
-            
-            self.videoSlider = [UISlider new];
-            [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
-            [self.player.view addSubview:self.videoSlider];
-            [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self.stopBtn.mas_right).offset(10);
-                make.right.equalTo(self.player.view).offset(-10);
-                make.height.offset(20);
-                make.centerY.equalTo(self.stopBtn.mas_centerY);
-            }];
-            self.videoSlider.hidden = YES;
-            self.hasLoadedImage = YES;
-            
-            [self setNeedsLayout];
-        }
-        else
-        {
-            self.imageview = [UIImageView new];
-            NSString *imageURLString = model.imageUrl;
-            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
-            
-            id urlObject;
-            if (imageURLString)
-            {
-                if ([imageURLString isKindOfClass:[NSString class]])
-                {
-                    urlObject = imageURLString;
-                }
-                else if([imageURLString isKindOfClass:[NSURL class]])
-                {
-                    urlObject = imageURLString;
-                }
-                else if([imageURLString isKindOfClass:[UIImage class]])
-                {
-                    
-                }
-            }
-            
-            [_scrollview addSubview:self.imageview];
-            
-            [self addSubview:waitingView];
-
-            __weak __typeof(self)weakself = self;
-            [[SDWebImageManager sharedManager] loadImageWithURL:urlObject options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-                __strong __typeof(weakself)strongself = weakself;
+        id contentOBJ = model.imageUrl;
+        if ([contentOBJ isKindOfClass:[NSString class]]) {
+            kWeakSelf(self);
+            [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:(NSString *)contentOBJ] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    waitingView.progress = (CGFloat)receivedSize / expectedSize;
-                    strongself.imageview.image = nil;
+                    weakself.waitingView.progress = (CGFloat)receivedSize / (CGFloat)expectedSize;
                 });
-                
             } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-                __strong __typeof(weakself)strongself = weakself;
-
-//                dispatch_async(dispatch_get_main_queue(), ^{
-                    [waitingView removeFromSuperview];
-//                });
-//                PNSLog(@">>>>>>>>>>>>>>%@",[Utils mostColor:[UIImage imageWithData:data]]);
-
+                [waitingView removeFromSuperview];
+                
+                self.showMode = PShowModeFullView;
+                
+                SCNCamera *camera = [[SCNCamera alloc] init];
+                self.cameraNode = [[SCNNode alloc] init];
+                
+                self.sceneView = [SCNView new];
+                self.sceneView.scene = [[SCNScene alloc] init];
+                [self.scrollview addSubview:self.sceneView];
+                [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+                
+                self.sceneView.allowsCameraControl = YES;
+                
+                self.cameraNode.camera = camera;
+                self.cameraNode.camera.automaticallyAdjustsZRange = YES;
+                self.cameraNode.position = SCNVector3Zero;
+                self.cameraNode.camera.xFov = 60;
+                self.cameraNode.camera.yFov = 60;
+                [self.sceneView.scene.rootNode addChildNode:self.cameraNode];
+                
                 if (error) {
                     //图片加载失败的处理，此处可以自定义各种操作（...）
                     weakself.hasLoadedImage = NO;//图片加载失败
@@ -1050,39 +873,294 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     return;
                 }
                 
-                switch ([Utils contentTypeForImageData:data]) {
-                    case ToolsAboutImageTypeGIF:
-                    {
-                        strongself.showMode = PShowModeGif;
-                        
-                        CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-                        size_t frameCout = CGImageSourceGetCount(source);
-                        NSMutableArray* frames = [[NSMutableArray alloc] init];
-                        for (size_t i=0; i<frameCout; i++)
-                        {
-                            CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
-                            UIImage* imageName = [UIImage imageWithCGImage:imageRef];
-                            [frames addObject:imageName];
-                            CGImageRelease(imageRef);
-                        }
-                        strongself.imageview.animationImages = frames;
-                        strongself.imageview.animationDuration = 2;
-                        [strongself.imageview startAnimating];
-                        strongself.imageview.image = image;
-                        //FIX:内存释放
-                        CFRelease(source);
-                    }
-                        break;
-                    default:
-                    {
-                        strongself.showMode = PShowModeNormal;
-                        strongself.imageview.image = image;
-                    }
-                        break;
+                self.panoramaNode = [[SCNNode alloc] init];
+                self.panoramaNode.geometry = [SCNSphere sphereWithRadius:150];
+                self.panoramaNode.geometry.firstMaterial.cullMode = SCNCullModeFront;
+                self.panoramaNode.geometry.firstMaterial.doubleSided = YES;
+                self.panoramaNode.position = SCNVector3Zero;
+                [self.sceneView.scene.rootNode addChildNode:self.panoramaNode];
+                
+                self.panoramaNode.geometry.firstMaterial.diffuse.contents = image;
+                
+                UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)];
+                [self.sceneView addGestureRecognizer:pan];
+                
+                UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
+                [self.sceneView addGestureRecognizer:pinch];
+                
+                self.motionManager = [[CMMotionManager alloc] init];
+                self.motionManager.deviceMotionUpdateInterval = 1/6;
+                
+                if (self.motionManager.deviceMotionAvailable) {
+                    //开始更新设备的动作信息
+                    [self.motionManager startDeviceMotionUpdates];
+                } else {
+                    NSLog(@"该设备的deviceMotion不可用");
                 }
-                [self setNeedsLayout];
-                strongself.hasLoadedImage = YES;//图片加载成功
+                
+                [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+                        if (orientation == UIInterfaceOrientationPortrait && !self.gestureDuring) {
+                            SCNMatrix4 modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0);
+                            modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.roll, 0, 1, 0);
+                            modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.pitch, 1, 0, 0);
+                            self.cameraNode.pivot = modelMatrix;
+                        }
+                    });
+                }];
+                
+                weakself.hasLoadedImage = YES;//图片加载成功
+                
+                self.scrollview.contentSize = CGSizeMake(self.width, self.height);
             }];
+
+        }
+        else if ([contentOBJ isKindOfClass:[UIImage class]])
+        {
+            [waitingView removeFromSuperview];
+            
+            self.showMode = PShowModeFullView;
+            
+            SCNCamera *camera = [[SCNCamera alloc] init];
+            self.cameraNode = [[SCNNode alloc] init];
+            
+            self.sceneView = [SCNView new];
+            self.sceneView.scene = [[SCNScene alloc] init];
+            [self.scrollview addSubview:self.sceneView];
+            [self.sceneView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self);
+                make.height.offset(self.height-navH-80);
+                make.top.equalTo(self).offset(navH);
+            }];
+            
+            self.sceneView.allowsCameraControl = YES;
+            
+            self.cameraNode.camera = camera;
+            self.cameraNode.camera.automaticallyAdjustsZRange = YES;
+            self.cameraNode.position = SCNVector3Zero;
+            self.cameraNode.camera.xFov = 60;
+            self.cameraNode.camera.yFov = 60;
+            [self.sceneView.scene.rootNode addChildNode:self.cameraNode];
+            
+            self.panoramaNode = [[SCNNode alloc] init];
+            self.panoramaNode.geometry = [SCNSphere sphereWithRadius:150];
+            self.panoramaNode.geometry.firstMaterial.cullMode = SCNCullModeFront;
+            self.panoramaNode.geometry.firstMaterial.doubleSided = YES;
+            self.panoramaNode.position = SCNVector3Zero;
+            [self.sceneView.scene.rootNode addChildNode:self.panoramaNode];
+            
+            self.panoramaNode.geometry.firstMaterial.diffuse.contents = (UIImage *)contentOBJ;
+            
+            UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panImage:)];
+            [self.sceneView addGestureRecognizer:pan];
+            
+            UIPinchGestureRecognizer *pinch = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchGesture:)];
+            [self.sceneView addGestureRecognizer:pinch];
+            
+            self.motionManager = [[CMMotionManager alloc] init];
+            self.motionManager.deviceMotionUpdateInterval = 1/6;
+            
+            if (self.motionManager.deviceMotionAvailable) {
+                //开始更新设备的动作信息
+                [self.motionManager startDeviceMotionUpdates];
+            }
+            else
+            {
+                PNSLog(@"该设备的deviceMotion不可用");
+            }
+            
+            [self.motionManager startDeviceMotionUpdatesUsingReferenceFrame:CMAttitudeReferenceFrameXMagneticNorthZVertical toQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion * _Nullable motion, NSError * _Nullable error) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+                    if (orientation == UIInterfaceOrientationPortrait && !self.gestureDuring) {
+                        SCNMatrix4 modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0);
+                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.roll, 0, 1, 0);
+                        modelMatrix = SCNMatrix4Rotate(modelMatrix, -motion.attitude.pitch, 1, 0, 0);
+                        self.cameraNode.pivot = modelMatrix;
+                    }
+                });
+            }];
+            
+            self.hasLoadedImage = YES;//图片加载成功
+            
+            self.scrollview.contentSize = CGSizeMake(self.width, self.height);
+
+        }
+    }
+    else
+    {
+        [waitingView removeFromSuperview];
+        
+        id contentOBJ = model.imageUrl;
+        if ([contentOBJ isKindOfClass:[NSString class]]) {
+            if([Utils contentTypeForUrlString:model.imageUrl] == ToolsUrlStringVideoTypeMP4)
+            {
+                NSURL *videoUrl;
+                
+                self.showMode = PShowModeVideo;
+                
+                if ([model.imageUrl rangeOfString:@"/var"].length>0)
+                {
+                    videoUrl = [NSURL fileURLWithPath:model.imageUrl];
+                }
+                else
+                {
+                    videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+                }
+                self.player = [[MPMoviePlayerController alloc] initWithContentURL:videoUrl];
+                self.player.controlStyle = MPMovieControlStyleNone;
+                self.player.shouldAutoplay = YES;
+                self.player.repeatMode = MPMovieRepeatModeNone;
+                [self.player setFullscreen:YES animated:YES];
+                self.player.scalingMode = MPMovieScalingModeAspectFit;
+                [_scrollview addSubview: self.player.view];
+                [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self);
+                    make.height.offset(self.height-navH-80);
+                    make.top.equalTo(self).offset(navH);
+                }];
+                
+                UIImage *firstImage = [Utils thumbnailImageForVideo:videoUrl atTime:1];
+                self.video1STImage = [UIImageView new];
+                self.video1STImage.contentMode = UIViewContentModeScaleAspectFit;
+                self.video1STImage.image = firstImage;
+                [self.player.view addSubview:self.video1STImage];
+                [self.video1STImage mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.right.equalTo(self.player.view);
+                    make.centerY.equalTo(self.player.view);
+                }];
+                
+                NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
+                
+                UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+                self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
+                [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.player.view addSubview:self.playBtn];
+                [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.height.offset(44);
+                    make.centerX.centerY.equalTo(self.player.view);
+                }];
+                
+                UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+                self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
+                [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+                [self.player.view addSubview:self.stopBtn];
+                [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.height.offset(44);
+                    make.left.equalTo(self.player.view).offset(10);
+                    make.bottom.equalTo(self.player.view).offset(-10);
+                }];
+                self.stopBtn.hidden = YES;
+                
+                self.videoSlider = [UISlider new];
+                [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
+                [self.player.view addSubview:self.videoSlider];
+                [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(self.stopBtn.mas_right).offset(10);
+                    make.right.equalTo(self.player.view).offset(-10);
+                    make.height.offset(20);
+                    make.centerY.equalTo(self.stopBtn.mas_centerY);
+                }];
+                self.videoSlider.hidden = YES;
+                self.hasLoadedImage = YES;
+                
+                [self setNeedsLayout];
+            }
+            else
+            {
+                self.imageview = [UIImageView new];
+                //            NSString *imageURLString = model.imageUrl;
+                self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+                
+                [_scrollview addSubview:self.imageview];
+                
+                [self addSubview:waitingView];
+                
+                id urlObject = model.imageUrl;
+                __weak __typeof(self)weakself = self;
+                [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:(NSString *)urlObject] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
+                    __strong __typeof(weakself)strongself = weakself;
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        waitingView.progress = (CGFloat)receivedSize / expectedSize;
+                        strongself.imageview.image = nil;
+                    });
+                    
+                } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+                    __strong __typeof(weakself)strongself = weakself;
+                    
+                    //                dispatch_async(dispatch_get_main_queue(), ^{
+                    [waitingView removeFromSuperview];
+                    //                });
+                    //                PNSLog(@">>>>>>>>>>>>>>%@",[Utils mostColor:[UIImage imageWithData:data]]);
+                    
+                    if (error) {
+                        //图片加载失败的处理，此处可以自定义各种操作（...）
+                        weakself.hasLoadedImage = NO;//图片加载失败
+                        UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+                        weakself.reloadButton = button;
+                        button.layer.cornerRadius = 2;
+                        button.clipsToBounds = YES;
+                        button.titleLabel.font = [UIFont systemFontOfSize:14];
+                        button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
+                        [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
+                        [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+                        [button addTarget:self action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
+                        [self addSubview:button];
+                        return;
+                    }
+                    
+                    switch ([Utils contentTypeForImageData:data]) {
+                        case ToolsAboutImageTypeGIF:
+                        {
+                            strongself.showMode = PShowModeGif;
+                            
+                            CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
+                            size_t frameCout = CGImageSourceGetCount(source);
+                            NSMutableArray* frames = [[NSMutableArray alloc] init];
+                            for (size_t i=0; i<frameCout; i++)
+                            {
+                                CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
+                                UIImage* imageName = [UIImage imageWithCGImage:imageRef];
+                                [frames addObject:imageName];
+                                CGImageRelease(imageRef);
+                            }
+                            strongself.imageview.animationImages = frames;
+                            strongself.imageview.animationDuration = 2;
+                            [strongself.imageview startAnimating];
+                            strongself.imageview.image = image;
+                            //FIX:内存释放
+                            CFRelease(source);
+                        }
+                            break;
+                        default:
+                        {
+                            strongself.showMode = PShowModeNormal;
+                            strongself.imageview.image = image;
+                        }
+                            break;
+                    }
+                    [self setNeedsLayout];
+                    strongself.hasLoadedImage = YES;//图片加载成功
+                }];
+            }
+
+        }
+        else if ([contentOBJ isKindOfClass:[UIImage class]])
+        {
+            self.imageview = [UIImageView new];
+            //            NSString *imageURLString = model.imageUrl;
+            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+            
+            [_scrollview addSubview:self.imageview];
+
+            [waitingView removeFromSuperview];
+            self.showMode = PShowModeNormal;
+            self.imageview.image = (UIImage *)contentOBJ;
+            [self setNeedsLayout];
+            self.hasLoadedImage = YES;//图片加载成功
         }
     }
 }
