@@ -54,7 +54,7 @@
 
 -(void)buildUIWithImageStr:(UIImage *)f backGround:(UIImage *)b taped:(BOOL)tapped
 {
-    self.scorePercent = 0.2;//默认为1
+    self.scorePercent = 1.0f/self.numberOfStars;//默认为1
     self.hasAnimation = NO;//默认为NO
     self.allowIncompleteStar = NO;//默认为NO
 
