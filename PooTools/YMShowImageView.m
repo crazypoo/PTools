@@ -210,7 +210,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     [maskview mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.window);
     }];
-    
+
     [self show:maskview didFinish:^{
         [UIView animateWithDuration:0.5f animations:^{
             self.alpha = 0.0f;
@@ -336,7 +336,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             make.height.offset(self.height);
         }];
     }
-    [self.scrollView setContentOffset:CGPointMake(self.width * self.page, 0) animated:YES];
+
+    [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
     PooShowImageModel *model = self.modelArr[self.page];
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
     [currentImageS setImageWithModel:model];

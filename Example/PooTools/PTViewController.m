@@ -335,9 +335,9 @@ static NSString *cellIdentifier = @"CELL";
                     imageModel4.imageTitle = @"333333";
                     
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    NSArray *arr = @[imageModel4,imageModel2];
+                    NSArray *arr = @[imageModel4,imageModel2,imageModel2,imageModel2];
 
-                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+3 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
                         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
                     }];
