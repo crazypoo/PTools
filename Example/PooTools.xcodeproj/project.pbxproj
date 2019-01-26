@@ -81,6 +81,8 @@
 		CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AA2098319200E31A38 /* WPAttributedStyleAction.m */; };
 		CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AC2098319200E31A38 /* WPHotspotLabel.m */; };
 		CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257AE2098319200E31A38 /* WPTappableLabel.m */; };
+		CC15EB1D21FC54690033D99F /* PopSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC15EB1A21FC54680033D99F /* PopSignatureView.m */; };
+		CC15EB1E21FC54690033D99F /* EasySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC15EB1B21FC54690033D99F /* EasySignatureView.m */; };
 		CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38B5211D620C00FD29F4 /* PSlider.m */; };
 		CC1D38BC211D706400FD29F4 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38B9211D706300FD29F4 /* MAThermometerBorder.m */; };
 		CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38BB211D706400FD29F4 /* MAThermometer.m */; };
@@ -314,6 +316,10 @@
 		CC1257AC2098319200E31A38 /* WPHotspotLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPHotspotLabel.m; sourceTree = "<group>"; };
 		CC1257AD2098319200E31A38 /* WPTappableLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WPTappableLabel.h; sourceTree = "<group>"; };
 		CC1257AE2098319200E31A38 /* WPTappableLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WPTappableLabel.m; sourceTree = "<group>"; };
+		CC15EB1921FC54680033D99F /* EasySignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasySignatureView.h; sourceTree = "<group>"; };
+		CC15EB1A21FC54680033D99F /* PopSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopSignatureView.m; sourceTree = "<group>"; };
+		CC15EB1B21FC54690033D99F /* EasySignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasySignatureView.m; sourceTree = "<group>"; };
+		CC15EB1C21FC54690033D99F /* PopSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopSignatureView.h; sourceTree = "<group>"; };
 		CC1D38B5211D620C00FD29F4 /* PSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSlider.m; sourceTree = "<group>"; };
 		CC1D38B6211D620D00FD29F4 /* PSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSlider.h; sourceTree = "<group>"; };
 		CC1D38B8211D706300FD29F4 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
@@ -626,6 +632,10 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC15EB1921FC54680033D99F /* EasySignatureView.h */,
+				CC15EB1B21FC54690033D99F /* EasySignatureView.m */,
+				CC15EB1C21FC54690033D99F /* PopSignatureView.h */,
+				CC15EB1A21FC54680033D99F /* PopSignatureView.m */,
 				CCD6609E21DCCD33004AA57D /* IGBatchTask.h */,
 				CCD6609521DCCD31004AA57D /* IGBatchTask.m */,
 				CCD660B221DCCD3A004AA57D /* IGBatchTaskManager.h */,
@@ -1031,10 +1041,12 @@
 				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */,
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
+				CC15EB1D21FC54690033D99F /* PopSignatureView.m in Sources */,
 				CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */,
 				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
+				CC15EB1E21FC54690033D99F /* EasySignatureView.m in Sources */,
 				CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
