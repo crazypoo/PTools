@@ -128,6 +128,7 @@
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
 		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
 		CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */; };
+		CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */; };
 		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
@@ -389,6 +390,8 @@
 		CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MLScreenshot.m"; sourceTree = "<group>"; };
 		CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
 		CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitiveWordTools.m; sourceTree = "<group>"; };
+		CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNPayPasswordView.h; sourceTree = "<group>"; };
+		CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNPayPasswordView.m; sourceTree = "<group>"; };
 		CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
 		CC96809B20B042B700AA07F5 /* PBiologyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBiologyID.h; sourceTree = "<group>"; };
@@ -632,6 +635,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */,
+				CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */,
 				CC15EB1921FC54680033D99F /* EasySignatureView.h */,
 				CC15EB1B21FC54690033D99F /* EasySignatureView.m */,
 				CC15EB1C21FC54690033D99F /* PopSignatureView.h */,
@@ -1067,6 +1072,7 @@
 				CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */,
 				CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */,
 				CC1257BA2098319300E31A38 /* NSMutableString+TagReplace.m in Sources */,
+				CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */,
 				CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */,
 				CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */,
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
