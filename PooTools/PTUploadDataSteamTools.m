@@ -36,6 +36,9 @@
     manager.requestSerializer.timeoutInterval = timeoutInterval;
     [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"textml",@"text/css",@"text/plain", @"application/javascript",@"application/json", @"application/x-www-form-urlencoded",@"multipart/form-data",@"image/jpg",@"image/png",@"image/jpeg",@"video/mp4",@"audio/mpeg",@"flv/qsv",@"mp3/mp3",@"application/octet-stream",@"text/html", nil]];
     
+#if DEBUG
+    PNSLog(@"Address:%@\nParameters:%@",serverAddress,parameters);
+#endif
     [manager POST:serverAddress parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData){
         [WMHub hide];
         for (int i = 0; i < dataModelArr.count; i++)
@@ -50,11 +53,17 @@
     }success:^(NSURLSessionDataTask *task, id responseObject){
         [waitingView removeFromSuperview];
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+#if DEBUG
+        PNSLog(@"ServerSuccessReturn:%@",dic);
+#endif
         if (successBlock) {
             successBlock(dic);
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error){
         [waitingView removeFromSuperview];
+#if DEBUG
+        PNSLog(@"ServerFailureReturn:%@",error);
+#endif
         if (failureBlock) {
             failureBlock(error);
         }

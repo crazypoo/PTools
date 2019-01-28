@@ -90,6 +90,8 @@
 		CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */; };
 		CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */; };
 		CC29C9FB21CE1F9100786FF1 /* PTUploadDataSteamTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */; };
+		CC35017521FE90DC00E64074 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */; };
+		CC35017821FE935300E64074 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = CC35017621FE935300E64074 /* PObject2Json.m */; };
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC3838D3214364D100453548 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838C9214364CF00453548 /* PVideoSupport.m */; };
 		CC3838D4214364D100453548 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3838CC214364D000453548 /* PVideoViewController.m */; };
@@ -335,6 +337,10 @@
 		CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIColorEX.m"; sourceTree = "<group>"; };
 		CC29C9F921CE1F9100786FF1 /* PTUploadDataSteamTools.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTUploadDataSteamTools.h; sourceTree = "<group>"; };
 		CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTUploadDataSteamTools.m; sourceTree = "<group>"; };
+		CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WWFoldableTableView.m"; sourceTree = "<group>"; };
+		CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WWFoldableTableView.h"; sourceTree = "<group>"; };
+		CC35017621FE935300E64074 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
+		CC35017721FE935300E64074 /* PObject2Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PObject2Json.h; sourceTree = "<group>"; };
 		CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTShowFunctionViewController.h; sourceTree = "<group>"; };
 		CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTShowFunctionViewController.m; sourceTree = "<group>"; };
 		CC3838C9214364CF00453548 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
@@ -635,6 +641,10 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC35017721FE935300E64074 /* PObject2Json.h */,
+				CC35017621FE935300E64074 /* PObject2Json.m */,
+				CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */,
+				CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */,
 				CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */,
 				CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */,
 				CC15EB1921FC54680033D99F /* EasySignatureView.h */,
@@ -1051,6 +1061,7 @@
 				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
+				CC35017521FE90DC00E64074 /* UITableView+WWFoldableTableView.m in Sources */,
 				CC15EB1E21FC54690033D99F /* EasySignatureView.m in Sources */,
 				CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
@@ -1104,6 +1115,7 @@
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,
+				CC35017821FE935300E64074 /* PObject2Json.m in Sources */,
 				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
