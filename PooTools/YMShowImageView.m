@@ -126,14 +126,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     self.imageScrollViews = [[NSMutableArray alloc] init];
     
-    if (kDevice_Is_iPhoneX)
-    {
-        self.navH = HEIGHT_IPHONEXNAVBAR;
-    }
-    else
-    {
-        self.navH = HEIGHT_NAVBAR;
-    }
+    self.navH = HEIGHT_NAVBAR;
     
     self.indexLabel = [[UILabel alloc] init];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
@@ -809,15 +802,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     waitingView.center = CGPointMake(self.bounds.size.width * 0.5, self.bounds.size.height * 0.5);
     
     CGFloat navH = 0.0f;
-    if (kDevice_Is_iPhoneX)
-    {
-        navH = HEIGHT_IPHONEXNAVBAR;
-    }
-    else
-    {
-        navH = HEIGHT_NAVBAR;
-    }
-    
+    navH = HEIGHT_NAVBAR;
+
     if (model.imageShowType == PooShowImageModelTypeFullView)
     {
         [self addSubview:waitingView];
@@ -1223,14 +1209,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 - (void)adjustFrame
 {
     CGFloat navH = 0.0f;
-    if (kDevice_Is_iPhoneX)
-    {
-        navH = HEIGHT_IPHONEXNAVBAR;
-    }
-    else
-    {
-        navH = HEIGHT_NAVBAR;
-    }
+    navH = HEIGHT_NAVBAR;
+
     CGRect frame = self.frame;
     if (self.imageview.image)
     {

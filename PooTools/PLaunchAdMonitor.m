@@ -11,7 +11,6 @@
 #import <MediaPlayer/MediaPlayer.h>
 #import <AVKit/AVKit.h>
 #import "PMacros.h"
-#import "Utils.h"
 #import <Masonry/Masonry.h>
 
 NSString *PLaunchAdDetailDisplayNotification = @"PShowLaunchAdDetailNotification";

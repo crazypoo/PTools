@@ -6,6 +6,7 @@
 //  Copyright (c) 2014年 crazypoo. All rights reserved.
 //
 
+#import "Utils.h"
 #ifndef PTools_PMacros_h
 #define PTools_PMacros_h
 
@@ -138,19 +139,13 @@
 #define HEIGHT_NAV 44.0
 /*! @brief status高度 (iPhoneX除外)
  */
-#define HEIGHT_STATUS 20.0
+#define HEIGHT_STATUS isIPhoneXSeries() ? 44 : 20
 /*! @brief tabbar高度
  */
 #define HEIGHT_TABBAR 44.0
 /*! @brief 普通导航栏高度 (nav高度+status高度)
  */
 #define HEIGHT_NAVBAR HEIGHT_NAV + HEIGHT_STATUS
-/*! @brief status高度 (iPhoneX专用)
- */
-#define HEIGHT_IPHONEXSTATUSBAR 44
-/*! @brief iPhoneX导航栏高度 (nav高度+status高度)
- */
-#define HEIGHT_IPHONEXNAVBAR HEIGHT_IPHONEXSTATUSBAR + HEIGHT_NAV
 
 /*! @brief 大标题高度
  */
