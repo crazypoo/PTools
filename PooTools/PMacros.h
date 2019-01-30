@@ -146,16 +146,12 @@
 /*! @brief 普通导航栏高度 (nav高度+status高度)
  */
 #define HEIGHT_NAVBAR HEIGHT_NAV + HEIGHT_STATUS
-
 /*! @brief 大标题高度
  */
 #define HEIGHT_LARGETITLE 52
-/*! @brief 普通机型带大标题高度
+/*! @brief iPhone带大标题高度
  */
-#define HEIGHT_NAVBARXLARGETITLE HEIGHT_NAVBAR + HEIGHT_LARGETITLE
-/*! @brief iPhoneX带大标题高度
- */
-#define HEIGHT_IPHONEXSTATUSBARXNAVXLARGETITLE HEIGHT_IPHONEXSTATUSBAR + HEIGHT_NAV + HEIGHT_LARGETITLE
+#define HEIGHT_IPHONESTATUSBARXNAVXLARGETITLE HEIGHT_STATUS + HEIGHT_NAV + HEIGHT_LARGETITLE
 
 /*! @brief Picker一般高度
  */
