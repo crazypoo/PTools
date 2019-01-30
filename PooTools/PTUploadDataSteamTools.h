@@ -28,12 +28,13 @@ typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
 @property (nonatomic,assign) CGUploadType imageType;
 @property (nonatomic,strong) NSString *imageName;
 @property (nonatomic,strong) NSData *imageData;
+@property (nonatomic,strong) NSString *imageDataName;
 @end
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PTUploadDataSteamTools : NSObject
-+(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress withDataName:(NSString *)dataName imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock;
++(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock;
 @end
 
 NS_ASSUME_NONNULL_END

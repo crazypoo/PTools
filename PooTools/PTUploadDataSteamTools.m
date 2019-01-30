@@ -19,7 +19,7 @@
 
 @implementation PTUploadDataSteamTools
 
-+(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress withDataName:(NSString *)dataName imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
++(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
 {
     HZWaitingView *waitingView = [[HZWaitingView alloc] init];
     waitingView.mode = HZWaitingViewModeLoopDiagram;
@@ -44,7 +44,7 @@
         for (int i = 0; i < dataModelArr.count; i++)
         {
             PTUploadDataModel *model = dataModelArr[i];
-            [formData appendPartWithFileData:model.imageData name:dataName fileName:model.imageName mimeType:[PTUploadDataSteamTools imageMimeTypeWith:model.imageType]];
+            [formData appendPartWithFileData:model.imageData name:model.imageDataName fileName:model.imageName mimeType:[PTUploadDataSteamTools imageMimeTypeWith:model.imageType]];
         }
     }progress:^(NSProgress *uploadProgress){
         dispatch_async(dispatch_get_main_queue(), ^{
