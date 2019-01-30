@@ -139,7 +139,7 @@
 #define HEIGHT_NAV 44.f
 /*! @brief status高度 (iPhoneX除外)
  */
-#define HEIGHT_STATUS isIPhoneXSeries() ? 44.f : 20.f
+#define HEIGHT_STATUS (isIPhoneXSeries() ? 44.f : 20.f)
 /*! @brief tabbar高度
  */
 #define HEIGHT_TABBAR 44.0f
