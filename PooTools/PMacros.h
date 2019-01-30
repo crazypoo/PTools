@@ -136,32 +136,32 @@
 
 /*! @brief nav高度
  */
-#define HEIGHT_NAV 44.0
+#define HEIGHT_NAV 44.f
 /*! @brief status高度 (iPhoneX除外)
  */
-#define HEIGHT_STATUS isIPhoneXSeries() ? 44 : 20
+#define HEIGHT_STATUS isIPhoneXSeries() ? 44.f : 20.f
 /*! @brief tabbar高度
  */
-#define HEIGHT_TABBAR 44.0
+#define HEIGHT_TABBAR 44.0f
 /*! @brief 普通导航栏高度 (nav高度+status高度)
  */
 #define HEIGHT_NAVBAR HEIGHT_NAV + HEIGHT_STATUS
 /*! @brief 大标题高度
  */
-#define HEIGHT_LARGETITLE 52
+#define HEIGHT_LARGETITLE 52.f
 /*! @brief iPhone带大标题高度
  */
 #define HEIGHT_IPHONESTATUSBARXNAVXLARGETITLE HEIGHT_STATUS + HEIGHT_NAV + HEIGHT_LARGETITLE
 
 /*! @brief Picker一般高度
  */
-#define HEIGHT_PICKER 216
+#define HEIGHT_PICKER 216.f
 /*! @brief PickerToolBar一般高度
  */
-#define HEIGHT_PICKERTOOLBAR 44
+#define HEIGHT_PICKERTOOLBAR 44.f
 /*! @brief Button一般高度
  */
-#define HEIGHT_BUTTON 44
+#define HEIGHT_BUTTON 44.f
 
 /*! @brief 当前屏幕的宽与320的比例
  */
@@ -180,7 +180,7 @@
 
 /*! @brief R屏
  */
-#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
+#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640.f, 960.f), [[UIScreen mainScreen] currentMode].size) : NO)
 
 /*! @brief SaveArea适配
  */
