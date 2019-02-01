@@ -140,12 +140,21 @@
 /*! @brief status高度 (iPhoneX除外)
  */
 #define HEIGHT_STATUS (isIPhoneXSeries() ? 44.f : 20.f)
-/*! @brief tabbar高度
- */
-#define HEIGHT_TABBAR 44.0f
 /*! @brief 普通导航栏高度 (nav高度+status高度)
  */
 #define HEIGHT_NAVBAR HEIGHT_NAV + HEIGHT_STATUS
+/*! @brief tabbara安全区域高度
+ */
+#define HEIGHT_TABBAR_SAFEAREA (isIPhoneXSeries() ? 34.f : 0.f)
+/*! @brief tabbar高度
+ */
+#define HEIGHT_TABBAR 49.0f
+/*! @brief tabbar总高度
+ */
+#define HEIGHT_TABBAR_TOTAL (HEIGHT_TABBAR + HEIGHT_TABBAR_SAFEAREA)
+/*! @brief NAV+TAB总高度
+ */
+#define HEIGHT_NAV+TABBAR_TOTAL (HEIGHT_TABBAR_TOTAL + HEIGHT_NAVBAR)
 /*! @brief 大标题高度
  */
 #define HEIGHT_LARGETITLE 52.f
