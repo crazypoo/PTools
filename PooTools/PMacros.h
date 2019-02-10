@@ -415,15 +415,18 @@ else \
 /*! @brief GCDMain
  */
 #define GCDWithMain(block) dispatch_async(dispatch_get_main_queue(),block)
+/* @brief GCD延时执行
+ */
+#define GCDAfter(time,block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
 /*! @brief GCD (一次性执行)
  */
 #define kDISPATCH_ONCE_BLOCK(onceBlock) static dispatch_once_t onceToken; dispatch_once(&onceToken, onceBlock);
 /*! @brief GCD (在Main线程上运行)
  */
-#define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), mainQueueBlock);
+#define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), ^{mainQueueBlock});
 /*! @brief GCD (开启异步线程)
  */
-#define kDISPATCH_GLOBAL_QUEUE_DEFAULT(globalQueueBlock) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), globalQueueBlock);
+#define kDISPATCH_GLOBAL_QUEUE_DEFAULT(globalQueueBlock) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{globalQueueBlock});
 
 #pragma mark ---------------> 单例化 一个类
 /*! @brief 创建单例
