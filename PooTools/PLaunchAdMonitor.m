@@ -273,8 +273,10 @@ static PLaunchAdMonitor *monitor = nil;
     {
         UILabel *label = [UILabel new];
         label.backgroundColor = [UIColor whiteColor];
+        label.numberOfLines = 0;
+        label.lineBreakMode = NSLineBreakByCharWrapping;
         label.font = cFont ? cFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
-        label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@. All rights reserved.",year,comname];
+        label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@.\n All rights reserved.",year,comname];
         label.textAlignment = NSTextAlignmentCenter;
         [v addSubview:label];
         [label mas_makeConstraints:^(MASConstraintMaker *make) {
