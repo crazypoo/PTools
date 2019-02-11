@@ -62,7 +62,7 @@
     [self.pickerBackground addSubview:self.viewPicker];
     [self.viewPicker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.pickerBackground);
-        make.height.offset(216);
+        make.height.offset(HEIGHT_PICKER);
     }];
     
     self.tbar_picker                = [UIView new];
@@ -70,7 +70,7 @@
     [self.pickerBackground addSubview:self.tbar_picker];
     [self.tbar_picker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.pickerBackground);
-        make.height.offset(44);
+        make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.viewPicker.mas_top);
     }];
     

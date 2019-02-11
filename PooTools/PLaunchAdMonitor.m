@@ -33,7 +33,15 @@ static PLaunchAdMonitor *monitor = nil;
 
 @implementation PLaunchAdMonitor
 
-+ (void)showAdAtPath:(NSArray *)path onView:(UIView *)container timeInterval:(NSTimeInterval)interval detailParameters:(NSDictionary *)param years:(NSString *)year skipButtonFont:(UIFont *)sbFont comName:(nullable NSString *)comname comNameFont:(UIFont *)cFont callback:(void (^ _Nullable)(void))callback
++ (void)showAdAtPath:(nonnull NSArray *)path
+              onView:(nonnull UIView *)container
+        timeInterval:(NSTimeInterval)interval
+    detailParameters:(nullable NSDictionary *)param
+               years:(nullable NSString *)year
+      skipButtonFont:(nullable UIFont *)sbFont
+             comName:(nullable NSString * )comname
+         comNameFont:(nullable UIFont *)cFont
+            callback:(void(^_Nullable)(void))callback
 {
     [[self defaultMonitor] loadImageAtPath:path];
     while (!monitor.imgLoaded)
@@ -44,14 +52,7 @@ static PLaunchAdMonitor *monitor = nil;
     [monitor.detailParam removeAllObjects];
     [monitor.detailParam addEntriesFromDictionary:param];
     
-    BOOL dic;
-    if (param == nil) {
-        dic = NO;
-    }
-    else
-    {
-        dic = YES;
-    }
+    BOOL dic = (param == nil) ? NO : YES;
     monitor.callback = callback;
     
     BOOL comLabel;
@@ -68,7 +69,8 @@ static PLaunchAdMonitor *monitor = nil;
 
 + (instancetype)defaultMonitor
 {
-    @synchronized (self) {
+    @synchronized (self)
+    {
         if (!monitor) {
             monitor = [[PLaunchAdMonitor alloc] init];
         }
@@ -151,7 +153,7 @@ static PLaunchAdMonitor *monitor = nil;
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
         exit.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
         [exit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        exit.titleLabel.font = sbFont;
+        exit.titleLabel.font = sbFont ? sbFont : kDEFAULT_FONT(kDevLikeFont, 16);
         [exit setTitle:@"跳过" forState:UIControlStateNormal];
         [exit addTarget:self action:@selector(hideView:) forControlEvents:UIControlEventTouchUpInside];
         kViewBorderRadius(exit, 5, 0, [UIColor clearColor]);
@@ -275,7 +277,7 @@ static PLaunchAdMonitor *monitor = nil;
         label.backgroundColor = [UIColor whiteColor];
         label.numberOfLines = 0;
         label.lineBreakMode = NSLineBreakByCharWrapping;
-        label.font = cFont ? cFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:12];
+        label.font = cFont ? cFont : kDEFAULT_FONT(kDevLikeFont, 12);
         label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@.\n All rights reserved.",year,comname];
         label.textAlignment = NSTextAlignmentCenter;
         [v addSubview:label];
@@ -348,14 +350,7 @@ static PLaunchAdMonitor *monitor = nil;
         {
             self.playMovie = YES;
             self.imgLoaded = YES;
-            if ([imageStr rangeOfString:@"/var"].length>0)
-            {
-                self.videoUrl = [NSURL fileURLWithPath:imageStr];
-            }
-            else
-            {
-                self.videoUrl = [NSURL URLWithString:[imageStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-            }
+            self.videoUrl = ([imageStr rangeOfString:@"/var"].length>0) ? [NSURL fileURLWithPath:imageStr] : [NSURL URLWithString:[imageStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
         }
         else
         {

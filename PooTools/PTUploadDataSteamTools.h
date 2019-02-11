@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, CGUploadType) {
     CGUploadTypeFULLVIEW
 };
 
-typedef void (^PTUploadDataToServerSuccessBlock)(NSDictionary *result);
+typedef void (^PTUploadDataToServerSuccessBlock)(NSDictionary * _Nonnull result);
 typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
 
 @interface PTUploadDataModel : NSObject

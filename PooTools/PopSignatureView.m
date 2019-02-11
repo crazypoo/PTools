@@ -10,9 +10,10 @@
 #import "EasySignatureView.h"
 #import <Masonry/Masonry.h>
 #import <PooTools/NSString+WPAttributedMarkup.h>
+#import <PooTools/PMacros.h>
 
 #define SignatureViewHeight ((kSCREEN_WIDTH*(350))/(375))
-#define NavButonH 44
+
 @interface PopSignatureView () <SignatureViewDelegate> {
     UIView* _mainView;
     UILabel *navTitle;
@@ -93,14 +94,14 @@
     self.signatureView.backgroundColor = UIColor.whiteColor;
     self.signatureView.delegate = self;
     self.signatureView.showMessage = self.maskString ? self.maskString : @"";
-    self.signatureView.placeholderFont = self.fontName ? self.fontName : @"HelveticaNeue-Light";
+    self.signatureView.placeholderFont = self.fontName ? self.fontName : kDevLikeFont;
     [self.backGroundView addSubview:self.signatureView];
 
     self.navView = [UIView new];
     self.navView.backgroundColor = self.navColor ? self.navColor : kRandomColor;
     [self.backGroundView addSubview:self.navView];
     
-    UIFont *viewBtnFont = kDEFAULT_FONT(self.fontName ? self.fontName : @"HelveticaNeue-Light", 16);
+    UIFont *viewBtnFont = kDEFAULT_FONT(self.fontName ? self.fontName : kDevLikeFont, 16);
     
     CGFloat navSpace = 10;
     NSString *cleanString = @"清除";
@@ -133,18 +134,18 @@
         
         [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(kSCREEN_HEIGHT - NavButonH*2);
-            make.top.offset(NavButonH);
+            make.height.offset(kSCREEN_HEIGHT - HEIGHT_BUTTON*2);
+            make.top.offset(HEIGHT_BUTTON);
         }];
         
         [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self.backGroundView);
-            make.height.offset(NavButonH);
+            make.height.offset(HEIGHT_BUTTON);
         }];
         
         NSDictionary *style = @{
-                                @"big":@[kDEFAULT_FONT(self.navFontName ? self.navFontName : @"HelveticaNeue-Medium", 12),UIColor.whiteColor],
-                                @"small":@[kDEFAULT_FONT(self.navFontName ? self.navFontName : @"HelveticaNeue-Medium", 10),UIColor.whiteColor]
+                                @"big":@[kDEFAULT_FONT(self.navFontName ? self.navFontName : kDevLikeFont_Bold, 12),UIColor.whiteColor],
+                                @"small":@[kDEFAULT_FONT(self.navFontName ? self.navFontName : kDevLikeFont_Bold, 10),UIColor.whiteColor]
                                 };
         
         navTitle = [UILabel new];
@@ -176,7 +177,7 @@
         [self.btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
             make.bottom.equalTo(self.backGroundView);
-            make.height.offset(NavButonH);
+            make.height.offset(HEIGHT_BUTTON);
         }];
     }
     else
@@ -191,18 +192,18 @@
         [self.btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
             make.bottom.equalTo(self.backGroundView);
-            make.height.offset(NavButonH);
+            make.height.offset(HEIGHT_BUTTON);
         }];
         
         [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(SignatureViewHeight - NavButonH - NavButonH);
+            make.height.offset(SignatureViewHeight - HEIGHT_BUTTON*2);
             make.bottom.equalTo(self.btn3.mas_top);
         }];
         
         [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(NavButonH);
+            make.height.offset(HEIGHT_BUTTON);
             make.bottom.equalTo(self.signatureView.mas_top);
         }];
         

@@ -36,7 +36,17 @@
     return TitleViewH + BottomButtonH;
 }
 
-- (instancetype) initAlertViewWithSuperView:(UIView *)superView alertTitle:(NSString *)title withButtonAndTitleFont:(UIFont *)btFont titleColor:(UIColor * _Nonnull)tColor bottomButtonTitleColor:(UIColor * _Nullable )bbtColor verLineColor:(UIColor * _Nullable )vlColor moreButtonTitleArray:(NSArray * _Nonnull)mbtArray viewTag:(NSInteger)tag setCustomView:(YXCustomAlertViewSetCustomViewBlock)setViewBlock clickAction:(YXCustomAlertViewClickBlock)clickBlock didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock
+- (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
+                                           alertTitle:(NSString * _Nullable)title
+                               withButtonAndTitleFont:(UIFont * _Nullable)btFont
+                                           titleColor:(UIColor * _Nullable)tColor
+                               bottomButtonTitleColor:(UIColor * _Nullable)bbtColor
+                                         verLineColor:(UIColor * _Nullable)vlColor
+                                 moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
+                                              viewTag:(NSInteger)tag
+                                        setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
+                                          clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
+                                      didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock
 {
     self = [super init];
     
@@ -56,10 +66,10 @@
             make.left.right.top.bottom.equalTo(superView);
         }];
         
-        self.viewFont = btFont;
-        alertTitleColor = tColor;
-        self.alertBottomButtonColor = bbtColor;
-        self.verLineColor = vlColor;
+        self.viewFont = btFont ? btFont : kDEFAULT_FONT(kDevLikeFont, 18);
+        alertTitleColor = tColor ? tColor : kRGBColor(0 , 84, 166);
+        self.alertBottomButtonColor = bbtColor ? bbtColor : kRGBColor(0 , 84, 166);
+        self.verLineColor = vlColor ? vlColor : kRGBColor(213, 213, 215);
         self.tag = tag;
         self.titleStr = title;
         
@@ -118,7 +128,7 @@
     CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*0.5)/self.bottomBtnArr.count;
     for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
         UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelBtn setTitleColor:self.alertBottomButtonColor ? self.alertBottomButtonColor : kRGBColor(0 , 84, 166) forState:UIControlStateNormal];
+        [cancelBtn setTitleColor:self.alertBottomButtonColor forState:UIControlStateNormal];
         [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
         cancelBtn.titleLabel.font = self.viewFont;
         cancelBtn.tag = 100+i;
@@ -135,7 +145,7 @@
     if (self.bottomBtnArr.count != 1) {
         for (int j = 0; j < (self.bottomBtnArr.count-1); j++) {
             UIView *verLine = [UIView new];
-            verLine.backgroundColor = self.verLineColor ? self.verLineColor : kRGBColor(213, 213, 215);
+            verLine.backgroundColor = self.verLineColor;
             verLine.tag = 200 + j;
             [self addSubview:verLine];
             [verLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -149,7 +159,7 @@
 
     
     UIView *horLine = [UIView new];
-    horLine.backgroundColor = self.verLineColor ? self.verLineColor : kRGBColor(213, 213, 215);
+    horLine.backgroundColor = self.verLineColor;
     horLine.tag = 1000;
     [self addSubview:horLine];
     [horLine mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -274,7 +284,7 @@
     if (_titleLabel == nil) {
         _titleLabel = [[UILabel alloc] init];
         _titleLabel.font = self.viewFont;
-        _titleLabel.textColor = alertTitleColor ? alertTitleColor : kRGBColor(0 , 84, 166);
+        _titleLabel.textColor = alertTitleColor;
         _titleLabel.textAlignment = NSTextAlignmentCenter;
         _titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
         _titleLabel.numberOfLines = 0;

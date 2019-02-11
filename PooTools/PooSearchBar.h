@@ -23,23 +23,23 @@
 
 /*! @brief SearchBar输入文字颜色 (默认随机)
  */
-@property (nonatomic, strong) UIColor *searchTextColor;
+@property (nonatomic, strong, nullable) UIColor *searchTextColor;
 
 /*! @brief SearchBar输入框背景颜色 (默认随机)
  */
-@property (nonatomic, strong) UIColor *searchTextFieldBackgroundColor;
+@property (nonatomic, strong, nullable) UIColor *searchTextFieldBackgroundColor;
 
 /*! @brief SearchBar输入框左边小图标 (默认没图片)
  */
-@property (nonatomic, strong) UIImage *searchBarImage;
+@property (nonatomic, strong, nullable) UIImage *searchBarImage;
 
 /*! @brief SearchBar输入框外框颜色 (默认随机)
  */
-@property (nonatomic, strong) UIColor *searchBarOutViewColor;
+@property (nonatomic, strong, nullable) UIColor *searchBarOutViewColor;
 
 /*! @brief SearchBar输入框内框Border颜色 (默认随机)
  */
-@property (nonatomic, strong) UIColor *searchBarTextFieldBorderColor;
+@property (nonatomic, strong, nullable) UIColor *searchBarTextFieldBorderColor;
 
 /*! @brief SearchBar输入框内框Border宽度 (默认0.5)
  */
@@ -51,5 +51,5 @@
 
 /*! @brief SearchBar输入框光标颜色 (默认浅灰色)
  */
-@property (nonatomic, strong) UIColor *cursorColor;
+@property (nonatomic, strong, nullable) UIColor *cursorColor;
 @end

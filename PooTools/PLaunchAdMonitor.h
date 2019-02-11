@@ -30,9 +30,9 @@ extern NSString * _Nullable PLaunchAdDetailDisplayNotification;
         timeInterval:(NSTimeInterval)interval
     detailParameters:(nullable NSDictionary *)param
                years:(nullable NSString *)year
-      skipButtonFont:(UIFont *)sbFont
+      skipButtonFont:(nullable UIFont *)sbFont
              comName:(nullable NSString * )comname
-         comNameFont:(UIFont *)cFont
+         comNameFont:(nullable UIFont *)cFont
             callback:(void(^_Nullable)(void))callback;
 
 @end

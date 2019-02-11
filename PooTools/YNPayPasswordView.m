@@ -32,12 +32,12 @@
 
 @implementation YNPayPasswordView
 
--(instancetype)initWithTitle:(NSString *)title
-                WithSubTitle:(NSString *)subTitle
+-(instancetype)initWithTitle:(NSString * _Nonnull)title
+                WithSubTitle:(NSString * _Nonnull)subTitle
                   WithButton:(NSArray * _Nonnull )bttonArray
-               withTitleFont:(UIFont *)font
-                      handle:(InputViewBtnBlock)block
-                     dismiss:(InputViewDismissBlock)dismissBlock
+               withTitleFont:(UIFont * _Nullable)font
+                      handle:(InputViewBtnBlock _Nonnull)block
+                     dismiss:(InputViewDismissBlock _Nonnull)dismissBlock
 {
     self = [super init];
     if (self)
@@ -46,7 +46,7 @@
         self.subTitleString = subTitle;
         self.buttonArray = bttonArray;
         self.block = block;
-        self.viewFont = font;
+        self.viewFont = font ? font : kDEFAULT_FONT(kDevLikeFont, 16);
         self.dismissBlock = dismissBlock;
     }
     return self;
@@ -54,8 +54,8 @@
 
 - (void)loadView
 {
-    UIFont *titleFont = self.viewFont ? self.viewFont : kDEFAULT_FONT(@"HelveticaNeue-Light", 15);
-    UIFont *subTitleFont = self.viewFont ? kDEFAULT_FONT(self.viewFont.familyName, self.viewFont.pointSize+5) : kDEFAULT_FONT(@"HelveticaNeue-Light", 20);
+    UIFont *titleFont = self.viewFont ? self.viewFont : kDEFAULT_FONT(kDevLikeFont, 15);
+    UIFont *subTitleFont = self.viewFont ? kDEFAULT_FONT(self.viewFont.familyName, self.viewFont.pointSize+5) : kDEFAULT_FONT(kDevLikeFont, 20);
 
     UIView *viewBG = [UIView new];
     viewBG.backgroundColor = kRGBAColor(1, 1, 1, 0.6);

@@ -14,19 +14,19 @@
 
 @class YXCustomAlertView;
 
-typedef void (^YXCustomAlertViewSetCustomViewBlock)(YXCustomAlertView *alertView);
-typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView *alertView, NSInteger buttonIndex);
-typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView *alertView);
+typedef void (^YXCustomAlertViewSetCustomViewBlock)(YXCustomAlertView * _Nonnull alertView);
+typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex);
+typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull alertView);
 
 @interface YXCustomAlertView : UIView
 
 /*! @brief AlertView透明背景View
  */
-@property (nonatomic, strong) UIView *middleView;
+@property (nonatomic, strong, nullable) UIView *middleView;
 
 /*! @brief AlertView内容View
  */
-@property (nonatomic, strong) UIView *customView;
+@property (nonatomic, strong, nullable) UIView *customView;
 
 /*! @brief AlertView默认Title加底部按钮高度
  */
@@ -34,17 +34,17 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView *alertView);
 
 /*! @brief 初始化View,带回调
  */
-- (instancetype) initAlertViewWithSuperView:(UIView *)superView
-                                 alertTitle:(NSString *)title
-                     withButtonAndTitleFont:(UIFont *)btFont
-                                 titleColor:(UIColor * _Nonnull)tColor
-                     bottomButtonTitleColor:(UIColor * _Nullable)bbtColor
-                               verLineColor:(UIColor * _Nullable )vlColor
-                       moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
-                                    viewTag:(NSInteger)tag
-                              setCustomView:(YXCustomAlertViewSetCustomViewBlock)setViewBlock
-                                clickAction:(YXCustomAlertViewClickBlock)clickBlock
-                            didDismissBlock:(YXCustomAlertViewDidDismissBlock)didDismissBlock;
+- (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
+                                           alertTitle:(NSString * _Nullable)title
+                               withButtonAndTitleFont:(UIFont * _Nullable)btFont
+                                           titleColor:(UIColor * _Nullable)tColor
+                               bottomButtonTitleColor:(UIColor * _Nullable)bbtColor
+                                         verLineColor:(UIColor * _Nullable)vlColor
+                                 moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
+                                              viewTag:(NSInteger)tag
+                                        setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
+                                          clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
+                                      didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock;
 
 /*! @brief AlertView消失
  */

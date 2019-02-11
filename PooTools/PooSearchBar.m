@@ -44,7 +44,7 @@
     
     if(searchField)
     {
-        UIFont *searchFieldFont = self.searchPlaceholderFont ? self.searchPlaceholderFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:16];
+        UIFont *searchFieldFont = self.searchPlaceholderFont ? self.searchPlaceholderFont : kDEFAULT_FONT(kDevLikeFont, 16);
         NSString *placeholderStr = self.searchPlaceholder ? self.searchPlaceholder : @"请输入文字";
         UIColor *searchBarTextFieldBorderColorSelect = self.searchBarTextFieldBorderColor ? self.searchBarTextFieldBorderColor : kRandomColor;
         

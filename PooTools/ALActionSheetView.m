@@ -75,7 +75,7 @@
         _destructiveButtonTitle = destructiveButtonTitle;
         _otherButtonTitles = otherButtonTitles;
         _selectRowBlock = block;
-        self.btnFontName = bfName ? bfName : @"HelveticaNeue-Light";
+        self.btnFontName = bfName ? bfName : kDevLikeFont;
     }
     
     return self;

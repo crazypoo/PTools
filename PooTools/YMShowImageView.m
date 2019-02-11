@@ -87,7 +87,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
     
         self.titleColor = tC ? tC : [UIColor whiteColor];
-        self.fontName = fName ? fName : @"HelveticaNeue-Light";
+        self.fontName = fName ? fName : kDevLikeFont;
         self.showImageBackgroundColor = sibc ? sibc : [UIColor blackColor];
         self.window = w;
         self.loadingImageName = li;

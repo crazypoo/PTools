@@ -11,7 +11,7 @@
 
 @class YNPayPasswordView;
 
-typedef void (^InputViewBtnBlock)(YNPayPasswordView *inputView, NSInteger buttonIndex, NSString *inputText);
+typedef void (^InputViewBtnBlock)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText);
 
 typedef void (^InputViewDismissBlock)(void);
 
@@ -25,12 +25,12 @@ typedef void (^InputViewDismissBlock)(void);
  * @param block 输入框按钮回调
  * @param dismissBlock 输入框消失回调
  */
--(instancetype)initWithTitle:(NSString *)title
-                WithSubTitle:(NSString *)subTitle
+-(instancetype)initWithTitle:(NSString * _Nonnull)title
+                WithSubTitle:(NSString * _Nonnull)subTitle
                   WithButton:(NSArray * _Nonnull )bttonArray
-               withTitleFont:(UIFont *)font
-                      handle:(InputViewBtnBlock)block
-                     dismiss:(InputViewDismissBlock)dismissBlock;
+               withTitleFont:(UIFont * _Nullable)font
+                      handle:(InputViewBtnBlock _Nonnull)block
+                     dismiss:(InputViewDismissBlock _Nonnull)dismissBlock;
 
 /*! @brief 密码点
  */

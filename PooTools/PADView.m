@@ -109,7 +109,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     else
     {
         cell.adTitle.hidden = NO;
-        cell.adTitle.font = self.titleFont ? self.titleFont : [UIFont fontWithName:@"HelveticaNeue-Light" size:18];
+        cell.adTitle.font = self.titleFont ? self.titleFont : kDEFAULT_FONT(kDevLikeFont, 18);
         cell.adTitle.text = models.bannerTitle;
     }
     // Configure the cell

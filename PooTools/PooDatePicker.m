@@ -87,8 +87,8 @@
         [self addSubview:self.topV];
         [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
-            make.height.offset(44);
-            make.top.equalTo(self.mas_bottom).offset(-44-216);
+            make.height.offset(HEIGHT_BUTTON);
+            make.top.equalTo(self.mas_bottom).offset(-HEIGHT_BUTTON-HEIGHT_PICKER);
         }];
         
         UILabel *nameTitle = [UILabel new];
@@ -188,7 +188,7 @@
         [self addSubview:_pickerView];
         [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
-            make.height.offset(216);
+            make.height.offset(HEIGHT_PICKER);
             make.bottom.equalTo(self);
         }];
         
@@ -554,8 +554,8 @@
         [self addSubview:self.topV];
         [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
-            make.height.offset(44);
-            make.top.equalTo(self.mas_bottom).offset(-44-216);
+            make.height.offset(HEIGHT_BUTTON);
+            make.top.equalTo(self.mas_bottom).offset(-HEIGHT_BUTTON-HEIGHT_PICKER);
         }];
         
         UILabel *nameTitle = [UILabel new];
@@ -629,7 +629,7 @@
         [self addSubview:_pickerView];
         [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
-            make.height.offset(216);
+            make.height.offset(HEIGHT_PICKER);
             make.bottom.equalTo(self);
         }];
     }

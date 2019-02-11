@@ -51,8 +51,8 @@
             
             CGRect lastBtnRect = CGRectZero;
             CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
-            
-            UIFont *font = [UIFont fontWithName:config.fontName ? config.fontName:@"HelveticaNeue-Medium" size:config.fontSize > 0 ? config.fontSize : 12.0];
+            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0)
+;
             
             for (int i = 0; i < tagsNormalArr.count; i++)
             {
@@ -185,8 +185,8 @@
             CGRect lastBtnRect = CGRectZero;
             CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
             
-            UIFont *font = [UIFont fontWithName:config.fontName ? config.fontName:@"HelveticaNeue-Medium" size:config.fontSize > 0 ? config.fontSize : 12.0];
-            
+            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
+
             for (int i = 0; i < tagsArr.count; i++)
             {
                 NSString *title = tagsArr[i];
@@ -286,7 +286,7 @@
     CGRect lastBtnRect = CGRectZero;
     CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
     
-    UIFont *font = [UIFont fontWithName:self.curConfig.fontName ? self.curConfig.fontName:@"HelveticaNeue-Medium" size:self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0];
+    UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
 
     for (int i = 0; i < self.normalTagsArr.count; i++)
     {
