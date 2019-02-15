@@ -8,6 +8,7 @@
 
 #import "PooSegView.h"
 #import <Masonry/Masonry.h>
+#import "PMacros.h"
 
 #define ButtonTag 2000
 #define UnderLabelTag 1000
@@ -27,11 +28,23 @@
 @property (nonatomic, strong) UIColor *selectedBackgroundColor;
 @property (nonatomic, strong) UIColor *normalBackgroundColor;
 @property (nonatomic, assign) PooSegShowType showViewType;
+@property (nonatomic, assign) NSInteger firstSelect;
 
 @end
 
 @implementation PooSegView
--(id)initWithTitles:(NSArray *)titleArr titleNormalColor:(UIColor *)nColor titleSelectedColor:(UIColor *)sColor titleFont:(UIFont *)tFont setLine:(BOOL)yesORno lineColor:(UIColor *)lColor lineWidth:(float)lWidth selectedBackgroundColor:(UIColor *)sbc normalBackgroundColor:(UIColor *)nbc showType:(PooSegShowType)viewType clickBlock:(PooSegViewClickBlock)block
+-(id)initWithTitles:(NSArray *)titleArr
+   titleNormalColor:(UIColor *)nColor
+ titleSelectedColor:(UIColor *)sColor
+          titleFont:(UIFont *)tFont
+            setLine:(BOOL)yesORno
+          lineColor:(UIColor *)lColor
+          lineWidth:(float)lWidth
+selectedBackgroundColor:(UIColor *)sbc
+normalBackgroundColor:(UIColor *)nbc
+           showType:(PooSegShowType)viewType
+   firstSelectIndex:(NSInteger)fSelect
+         clickBlock:(PooSegViewClickBlock)block
 {
     self = [super init];
     if (self)
@@ -47,6 +60,7 @@
         self.selectedBackgroundColor = sbc;
         self.normalBackgroundColor = nbc;
         self.showViewType = viewType;
+        self.firstSelect = (fSelect > titleArr.count) ? 0 : fSelect;
         [self initUI];
     }
     return self;
@@ -66,7 +80,7 @@
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
             [self addSubview:btn];
             [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
-            if (i == 0)
+            if (i == self.firstSelect)
             {
                 [self btnTap:btn];
             }

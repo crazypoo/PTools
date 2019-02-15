@@ -30,6 +30,7 @@ typedef void (^PooSegViewClickBlock)(PooSegView *segViewView, NSInteger buttonIn
  * @param sbc 选中背景颜色
  * @param nbc 未选中背景颜色
  * @param viewType 展示样式
+ * @param fSelect 初始化选项位置
  * @param block 点击回调
  */
 -(id)initWithTitles:(NSArray *)titleArr
@@ -42,5 +43,6 @@ typedef void (^PooSegViewClickBlock)(PooSegView *segViewView, NSInteger buttonIn
 selectedBackgroundColor:(UIColor *)sbc
 normalBackgroundColor:(UIColor *)nbc
            showType:(PooSegShowType)viewType
+   firstSelectIndex:(NSInteger)fSelect
          clickBlock:(PooSegViewClickBlock)block;
 @end
