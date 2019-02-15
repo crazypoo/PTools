@@ -87,7 +87,7 @@ normalBackgroundColor:(UIColor *)nbc
             
             UIView *underLIneView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/self.titlesArr.count*i, self.frame.size.height-2, self.frame.size.width/self.titlesArr.count, 2)];
             underLIneView.tag = UnderLabelTag+i;
-            if (i == 0)
+            if (i == self.firstSelect)
             {
                 underLIneView.backgroundColor = self.titleSelectedColor;
             }
