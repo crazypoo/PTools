@@ -172,12 +172,12 @@
             break;
         case ShowFunctionSegmented:
         {
-            PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"2"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:YES lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+            PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223",@"22223",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
             }];
             [self.view addSubview:seg];
             [seg mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.centerY.equalTo(self.view);
+                make.centerY.equalTo(self.view);
                 make.height.offset(44);
                 make.left.right.equalTo(self.view);
             }];

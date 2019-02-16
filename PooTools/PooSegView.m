@@ -29,7 +29,9 @@
 @property (nonatomic, strong) UIColor *normalBackgroundColor;
 @property (nonatomic, assign) PooSegShowType showViewType;
 @property (nonatomic, assign) NSInteger firstSelect;
-
+@property (nonatomic, assign) CGFloat btnW;
+@property (nonatomic, assign) CGFloat scrollerContentSizeW;
+@property (nonatomic, strong) UIScrollView *scroller;
 @end
 
 @implementation PooSegView
@@ -69,29 +71,40 @@ normalBackgroundColor:(UIColor *)nbc
 -(void)initUI
 {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        
+        self.scroller = [[UIScrollView alloc] initWithFrame:self.bounds];
+        self.scroller.showsVerticalScrollIndicator = YES;
+        [self addSubview:self.scroller];
+        self.scroller.scrollEnabled = YES;
+        self.scroller.backgroundColor = kRandomColor;
+        
+        self.btnW = 0.0f;
+        self.scrollerContentSizeW = 0.0f;
         for (int i= 0; i < self.titlesArr.count; i++)
         {
+            CGFloat btnWNormal = [(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.frame = CGRectMake(self.frame.size.width/self.titlesArr.count*i, 0, self.frame.size.width/self.titlesArr.count, self.frame.size.height);
+            btn.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
             btn.tag = ButtonTag+i;
             [btn setTitleColor:self.titleNormalColor forState:UIControlStateNormal];
             [btn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
             btn.titleLabel.font = self.titleFont;
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
-            [self addSubview:btn];
+            [self.scroller addSubview:btn];
             [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
-            if (i == self.firstSelect)
-            {
-                [self btnTap:btn];
-            }
             
-            UIView *underLIneView = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/self.titlesArr.count*i, self.frame.size.height-2, self.frame.size.width/self.titlesArr.count, 2)];
+            UIView *underLIneView = [[UIView alloc] initWithFrame:CGRectMake(self.scrollerContentSizeW, self.frame.size.height-2, btnWNormal, 2)];
             underLIneView.tag = UnderLabelTag+i;
             if (i == self.firstSelect)
             {
+                [self btnTap:btn];
                 underLIneView.backgroundColor = self.titleSelectedColor;
             }
-            [self addSubview:underLIneView];
+            else
+            {
+                underLIneView.backgroundColor = kClearColor;
+            }
+            [self.scroller addSubview:underLIneView];
             switch (self.showViewType)
             {
                     case PooSegShowTypeUnderLine:
@@ -105,73 +118,75 @@ normalBackgroundColor:(UIColor *)nbc
                 }
                     break;
             }
-        }
-        
-        if (self.setLines)
-        {
-            int a = 1;
-            int b = [[NSString stringWithFormat:@"%ld",(unsigned long)self.titlesArr.count] intValue];
-            int c = b - a;
-            for (int i= c; i < self.titlesArr.count; i++) {
-                UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.frame.size.width/self.titlesArr.count*i-self.linesWidth/2, 0, self.linesWidth, self.frame.size.height)];
-                line.tag = VerLineTag+i;
-                line.backgroundColor = self.lineColor;
-                [self addSubview:line];
+            
+            if (self.setLines)
+            {
+                if (self.titlesArr.count > 1) {
+                    if (i != 0) {
+                        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(self.scrollerContentSizeW-self.linesWidth/2, 0, self.linesWidth, self.frame.size.height)];
+                        line.tag = VerLineTag+i;
+                        line.backgroundColor = self.lineColor;
+                        [self.scroller addSubview:line];
+
+                    }
+                }
             }
+            self.btnW = btnWNormal;
+            self.scrollerContentSizeW = self.scrollerContentSizeW+self.btnW;
         }
+        [self setView];
     });
 }
 
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
-    for (int i= 0; i < self.titlesArr.count; i++)
-    {
-        UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+i];
-        [button mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.offset(self.frame.size.width/self.titlesArr.count*i);
-            make.top.bottom.equalTo(self);
-            make.width.offset(self.frame.size.width/self.titlesArr.count);
-        }];
-        
-        UIView *underLine = (UIView *)[self viewWithTag:UnderLabelTag+i];
-        [underLine mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.offset(self.frame.size.width/self.titlesArr.count*i);
-            make.height.offset(2);
-            make.bottom.equalTo(self);
-            make.width.offset(self.frame.size.width/self.titlesArr.count);
-        }];
-        switch (self.showViewType)
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        self.scroller.frame = self.bounds;
+        self.btnW = 0.0f;
+        self.scrollerContentSizeW = 0.0f;
+        for (int i= 0; i < self.titlesArr.count; i++)
         {
-            case PooSegShowTypeUnderLine:
+            CGFloat btnWNormal = [(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
+            UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+i];
+            button.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
+            UIView *underLineV = [self viewWithTag:UnderLabelTag+i];
+            underLineV.frame = CGRectMake(self.scrollerContentSizeW, self.frame.size.height-2, btnWNormal, 2);
+            if (self.setLines)
             {
-                underLine.hidden = NO;
+                if (self.titlesArr.count > 1) {
+                    if (i != 0) {
+                        UIView *lineV = [self viewWithTag:VerLineTag+i];
+                        lineV.frame = CGRectMake(self.scrollerContentSizeW-self.linesWidth/2, 0, self.linesWidth, self.frame.size.height);
+                    }
+                }
             }
-                break;
-            default:
-            {
-                underLine.hidden = YES;
-            }
-                break;
+            self.btnW = btnWNormal;
+            self.scrollerContentSizeW = self.scrollerContentSizeW+self.btnW;
         }
-    }
-    
-    if (self.setLines)
-    {
-        int a = 1;
-        int b = [[NSString stringWithFormat:@"%ld",(unsigned long)self.titlesArr.count] intValue];
-        int c = b - a;
-        for (int i= c; i < self.titlesArr.count; i++) {
-            UIView *line = (UIView *)[self viewWithTag:VerLineTag+i];
-            [line mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(self.frame.size.width/self.titlesArr.count*i-self.linesWidth/2);
-                make.top.bottom.equalTo(self);
-                make.width.offset(self.linesWidth);
-            }];
-        }
-    }
+        [self setView];
+    });
+}
 
+-(void)setView
+{
+    if (self.scrollerContentSizeW < self.frame.size.width) {
+        for (int i= 0; i < self.titlesArr.count; i++)
+        {
+            UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+i];
+            button.frame = CGRectMake(self.frame.size.width/self.titlesArr.count*i, 0, self.frame.size.width/self.titlesArr.count, self.frame.size.height);
+            UIView *underLineV = [self viewWithTag:UnderLabelTag+i];
+            underLineV.frame = CGRectMake(self.frame.size.width/self.titlesArr.count*i, self.frame.size.height-2, self.frame.size.width/self.titlesArr.count, 2);
+        }
+    }
+    else
+    {
+        self.scroller.contentSize = CGSizeMake(self.scrollerContentSizeW, self.frame.size.height);
+        UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+self.firstSelect];
+        UIButton *button1 = (UIButton *)[self viewWithTag:ButtonTag+self.firstSelect+1];
+        
+        [self.scroller scrollRectToVisible:CGRectMake(button.frame.origin.x+button1.frame.size.width/2, 0, button.frame.size.width, self.frame.size.height) animated:YES];
+    }
 }
 
 -(void)btnTap:(UIButton *)sender
@@ -204,12 +219,12 @@ normalBackgroundColor:(UIColor *)nbc
             case PooSegShowTypeUnderLine:
             {
                 UIView *underLineV = [self viewWithTag:UnderLabelTag+(sender.tag-ButtonTag)];
-                underLineV.backgroundColor = [UIColor clearColor];
+                underLineV.backgroundColor = kClearColor;
             }
                 break;
             default:
             {
-                [self.selectedBtn setBackgroundColor:[UIColor clearColor]];
+                [self.selectedBtn setBackgroundColor:kClearColor];
             }
                 break;
         }
@@ -241,17 +256,20 @@ normalBackgroundColor:(UIColor *)nbc
             case PooSegShowTypeUnderLine:
             {
                 UIView *underLineV = [self viewWithTag:UnderLabelTag+(sender.tag-ButtonTag)];
-                underLineV.backgroundColor = [UIColor clearColor];
+                underLineV.backgroundColor = kClearColor;
             }
                 break;
             default:
             {
-                [self.selectedBtn setBackgroundColor:[UIColor clearColor]];
+                [self.selectedBtn setBackgroundColor:kClearColor];
             }
                 break;
         }
     }
     
+    UIButton *button1 = (UIButton *)[self viewWithTag:sender.tag+1];
+    [self.scroller scrollRectToVisible:CGRectMake(sender.frame.origin.x+button1.frame.size.width/2, 0, sender.frame.size.width, self.frame.size.height) animated:YES];
+
     for (int i= 0; i < self.titlesArr.count; i++)
     {
         UIView *underLineV = [self viewWithTag:UnderLabelTag+i];
@@ -259,11 +277,11 @@ normalBackgroundColor:(UIColor *)nbc
         {
             if (underLineV.tag == UnderLabelTag+(sender.tag-ButtonTag))
             {
-                underLineV.backgroundColor = self.selectedBackgroundColor;
+                underLineV.backgroundColor = self.titleSelectedColor;
             }
             else
             {
-                underLineV.backgroundColor = [UIColor clearColor];
+                underLineV.backgroundColor = kClearColor;
             }
         }
     }
