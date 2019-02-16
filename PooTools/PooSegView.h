@@ -45,4 +45,6 @@ normalBackgroundColor:(UIColor *)nbc
            showType:(PooSegShowType)viewType
    firstSelectIndex:(NSInteger)fSelect
          clickBlock:(PooSegViewClickBlock)block;
+
+-(void)setSegCurrentIndex:(NSInteger)index;
 @end

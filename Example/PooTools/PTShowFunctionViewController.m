@@ -63,6 +63,8 @@
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, strong) UIButton *cornerBtn;
+
+@property (nonatomic, strong) PooSegView *seg;
 @end
 
 @implementation PTShowFunctionViewController
@@ -172,15 +174,26 @@
             break;
         case ShowFunctionSegmented:
         {
-            PooSegView *seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223",@"22223",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+            
+            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223",@"22223",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
             }];
-            [self.view addSubview:seg];
-            [seg mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.view addSubview:self.seg];
+            [self.seg mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(self.view);
                 make.height.offset(44);
                 make.left.right.equalTo(self.view);
             }];
+            
+            UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            pBtn.backgroundColor = kRandomColor;
+            [pBtn addTarget:self action:@selector(segAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.view addSubview:pBtn];
+            [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.height.equalTo(self.seg);
+                make.top.equalTo(self.seg.mas_bottom).offset(44);
+            }];
+
         }
             break;
             case ShowFunctionTagLabel:
@@ -722,4 +735,9 @@
 //{
 //    PNSLog(@"%@",item);
 //}
+
+-(void)segAction:(UIButton *)sender
+{
+    [self.seg setSegCurrentIndex:3];
+}
 @end

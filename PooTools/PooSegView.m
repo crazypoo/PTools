@@ -291,4 +291,11 @@ normalBackgroundColor:(UIColor *)nbc
         self.clickBlock(self, (sender.tag-ButtonTag));
     }
 }
+
+-(void)setSegCurrentIndex:(NSInteger)index
+{
+    self.firstSelect = index;
+    UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+index];
+    [self btnTap:button];
+}
 @end
