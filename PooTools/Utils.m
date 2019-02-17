@@ -157,53 +157,157 @@
 }
 
 #pragma mark ------> 时间
-+(NSString *)formateTime:(NSDate*)date
++(NSString *)formateTime:(NSDate*)date WithType:(GetTimeType)type
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc]init];
-    [formatter setDateFormat:@"HH:mm:ss"];
+    switch (type) {
+        case GetTimeTypeYMD:
+        {
+            [formatter setDateFormat:@"YYYY-MM-dd"];
+        }
+            break;
+        case GetTimeTypeYMDHHS:
+        {
+            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+        }
+            break;
+        case GetTimeTypeMD:
+        {
+            [formatter setDateFormat:@"MM-dd"];
+        }
+            break;
+        case GetTimeTypeHHS:
+        {
+            [formatter setDateFormat:@"HH:mm:ss"];
+        }
+            break;
+        case GetTimeTypeHH:
+        {
+            [formatter setDateFormat:@"HH:mm"];
+        }
+            break;
+        default:
+        {
+            [formatter setDateFormat:@"HH:mm:ss"];
+        }
+            break;
+    }
     NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
     [formatter setTimeZone:timeZone];
     NSString *dateTime = [formatter stringFromDate:date];
     return dateTime;
 }
 
-+(NSString *)getYMDHHS
++(NSString *)getTimeWithType:(GetTimeType)type
 {
     NSDate *date = [NSDate date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"YYYY-MM-dd hh:mm:ss"];
     NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-    [formatter setTimeZone:timeZone];
-    NSString *dateTime = [formatter stringFromDate:date];
-    return dateTime;
+
+    switch (type) {
+        case GetTimeTypeYMD:
+            {
+                [formatter setDateFormat:@"YYYY-MM-dd"];
+                [formatter setTimeZone:timeZone];
+                return [formatter stringFromDate:date];
+            }
+            break;
+        case GetTimeTypeYMDHHS:
+        {
+            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
+            break;
+        case GetTimeTypeTimeStamp:
+        {
+            return [NSString stringWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
+        }
+            break;
+        case GetTimeTypeMD:
+        {
+            [formatter setDateFormat:@"MM-dd"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
+            break;
+        case GetTimeTypeHHS:
+        {
+            [formatter setDateFormat:@"HH:mm:ss"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
+            break;
+        case GetTimeTypeHH:
+        {
+            [formatter setDateFormat:@"HH:mm"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
+            break;
+        default:
+        {
+            return @"";
+        }
+            break;
+    }
 }
 
-+(NSString *)getYMD
++(NSString *)dateStringFormater:(NSString *)timeString withType:(GetTimeType)type
 {
-    NSDate *date = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"YYYY-MM-dd"];
-    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-    [formatter setTimeZone:timeZone];
-    NSString *dateTime = [formatter stringFromDate:date];
-    return dateTime;
-}
-
-+(NSString *)getTimeStamp
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
-    NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-    [formatter setTimeZone:timeZone];
-    NSDate *date = [NSDate date];
-    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[date timeIntervalSince1970]];
-    return timeSp;
+    NSDateFormatter *formater = [[NSDateFormatter alloc] init];
+    switch (type) {
+        case GetTimeTypeYMD:
+        {
+            [formater setDateFormat:@"yyyy-MM-dd"];
+            NSDate *create = [formater dateFromString:timeString];
+            return [formater stringFromDate:create];
+        }
+            break;
+        case GetTimeTypeYMDHHS:
+        {
+            [formater setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            NSDate *create = [formater dateFromString:timeString];
+            return [formater stringFromDate:create];
+        }
+            break;
+        case GetTimeTypeTimeStamp:
+        {
+            NSTimeInterval interval    =[timeString doubleValue] / 1000.0;
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
+            [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
+            return  [formater stringFromDate:date];
+        }
+            break;
+        case GetTimeTypeMD:
+        {
+            [formater setDateFormat:@"MM-dd"];
+            NSDate *create = [formater dateFromString:timeString];
+            return [formater stringFromDate:create];
+        }
+            break;
+        case GetTimeTypeHHS:
+        {
+            [formater setDateFormat:@"HH:mm:ss"];
+            NSDate *create = [formater dateFromString:timeString];
+            return [formater stringFromDate:create];
+        }
+            break;
+        case GetTimeTypeHH:
+        {
+            [formater setDateFormat:@"HH:mm"];
+            NSDate *create = [formater dateFromString:timeString];
+            return [formater stringFromDate:create];
+        }
+            break;
+        default:
+        {
+            return @"";
+        }
+            break;
+    }
 }
 
 +(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString *)contractDate expTimeStamp:(int)timeStamp

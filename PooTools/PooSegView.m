@@ -76,7 +76,6 @@ normalBackgroundColor:(UIColor *)nbc
         self.scroller.showsVerticalScrollIndicator = YES;
         [self addSubview:self.scroller];
         self.scroller.scrollEnabled = YES;
-        self.scroller.backgroundColor = kRandomColor;
         
         self.btnW = 0.0f;
         self.scrollerContentSizeW = 0.0f;

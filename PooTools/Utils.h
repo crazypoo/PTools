@@ -52,6 +52,15 @@ typedef NS_ENUM(NSInteger,FewMonthLaterType){
     FewMonthLaterTypeContract
 };
 
+typedef NS_ENUM(NSInteger,GetTimeType){
+    GetTimeTypeYMD = 0,
+    GetTimeTypeMD,
+    GetTimeTypeTimeStamp,
+    GetTimeTypeYMDHHS,
+    GetTimeTypeHHS,
+    GetTimeTypeHH
+};
+
 static NSString *LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString *LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString *LANGUAGECHINESE = @"LANGUAGECHINESE";
@@ -159,21 +168,17 @@ static inline BOOL isIPhoneXSeries() {
             setTapEnable:(BOOL)yesOrNo;
     
 #pragma mark ------> 时间日期
-/*! @brief 获取时间年月日时分秒(一般方法)
+/*! @brief 根据NSDate格式化时间
  */
-+(NSString *)formateTime:(NSDate*)date;
++(NSString *)formateTime:(NSDate*)date WithType:(GetTimeType)type;
 
-/*! @brief 获取时间年月日时分秒
+/*! @brief 获取当前时间
  */
-+(NSString *)getYMDHHS;
++(NSString *)getTimeWithType:(GetTimeType)type;
 
-/*! @brief 获取时间年月日
+/*! @brief 时间格式化
  */
-+(NSString *)getYMD;
-
-/*! @brief 时间戳
- */
-+(NSString *)getTimeStamp;
++(NSString *)dateStringFormater:(NSString *)timeString withType:(GetTimeType)type;
 
 /*! @brief 某个时间的某时间之后或者之前
  */

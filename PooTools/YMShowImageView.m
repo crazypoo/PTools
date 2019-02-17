@@ -554,7 +554,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     NSString *documentsDirectory = [paths objectAtIndex:0];
     
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    NSString  *fullPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [NSString stringWithFormat:@"%@.mp4",[Utils getYMDHHS]]];
+    NSString  *fullPath = [NSString stringWithFormat:@"%@/%@", documentsDirectory, [NSString stringWithFormat:@"%@.mp4",[Utils getTimeWithType:GetTimeTypeYMDHHS]]];
     NSURL *urlNew = [NSURL URLWithString:url];
     NSURLRequest *request = [NSURLRequest requestWithURL:urlNew];
     NSURLSessionDownloadTask *task =
