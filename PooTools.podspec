@@ -48,4 +48,5 @@ Pod::Spec.new do |s|
     s.dependency 'SSZipArchive'
     s.dependency 'GCDWebServer'
     s.dependency 'GCDWebServer/WebUploader'
+    s.dependency 'MBProgressHUD'
 end
