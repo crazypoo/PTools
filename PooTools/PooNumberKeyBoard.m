@@ -14,7 +14,7 @@
 #define kLineWidth 1
 #define kNumFont [UIFont systemFontOfSize:27]
 #define kKeyBoardH 216
-#define kKeyH (self.bounds.size.height- kLineWidth*3)/4
+#define kKeyH (kKeyBoardH - kLineWidth*3)/4
 #define kKeyW (self.bounds.size.width-2)/3
 
 @interface PooNumberKeyBoard()
@@ -45,7 +45,7 @@
         self.returnSTHBlock = returnSTHBlock;
         self.backSpaceBlock = backSpaceBlock;
 
-        self.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kKeyBoardH);
+        self.bounds = CGRectMake(0, 0, kSCREEN_WIDTH, kKeyBoardH + (isIPhoneXSeries() ? HEIGHT_TABBAR_SAFEAREA : 0));
         
         UIColor *colorNormal = [UIColor colorWithRed:252/255.0 green:252/255.0 blue:252/255.0 alpha:1];
         UIColor *colorHightlighted = [UIColor colorWithRed:186.0/255 green:189.0/255 blue:194.0/255 alpha:1.0];

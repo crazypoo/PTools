@@ -29,6 +29,8 @@
         make.centerX.centerY.equalTo(view);
     }];
     
+    kShowNetworkActivityIndicator();
+    
     //表单请求，上传文件
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//请求
@@ -52,6 +54,7 @@
         });
     }success:^(NSURLSessionDataTask *task, id responseObject){
         [waitingView removeFromSuperview];
+        kHideNetworkActivityIndicator();
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
 #if DEBUG
         PNSLog(@"ServerSuccessReturn:%@",dic);
@@ -61,6 +64,7 @@
         }
     }failure:^(NSURLSessionDataTask *task, NSError *error){
         [waitingView removeFromSuperview];
+        kHideNetworkActivityIndicator();
 #if DEBUG
         PNSLog(@"ServerFailureReturn:%@",error);
 #endif

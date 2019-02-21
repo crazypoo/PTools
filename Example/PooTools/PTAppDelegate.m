@@ -12,8 +12,6 @@
 
 #import "PMacros.h"
 
-#import "AHReach.h"
-
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -40,11 +38,6 @@
     }];
 
     PNSLog(@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]);
-
-    AHReach *hostReach             = [AHReach reachForHost:@"baidu.com"];
-    [hostReach startUpdatingWithBlock:^(AHReach *reach) {
-        PNSLog(@"%@",reach);
-    }];
     
     return YES;
 }
