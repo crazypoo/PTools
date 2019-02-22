@@ -131,7 +131,7 @@
             [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self).offset(kKeyW * i);
                 make.width.offset(kLineWidth);
-                make.height.offset(self.bounds.size.height);
+                make.height.offset(kKeyBoardH);
                 make.top.equalTo(self);
             }];
         }
@@ -174,7 +174,7 @@
         [line1 mas_updateConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self).offset(kKeyW * i);
             make.width.offset(kLineWidth);
-            make.height.offset(self.bounds.size.height);
+            make.height.offset(kKeyBoardH);
             make.top.equalTo(self);
         }];
     }

@@ -177,7 +177,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 break;
         }
     }
-
+    //TODO:隐藏
     if (_removeImg)
     {
         _removeImg();
@@ -196,7 +196,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     return zoomRect;
 }
 
-- (void)showWithFinish:(didRemoveImage)tempBlock{
+- (void)showWithFinish:(didRemoveImage)tempBlock
+{
     UIView *maskview = [UIView new];
     maskview.backgroundColor = self.showImageBackgroundColor;
     [self.window addSubview:maskview];
@@ -218,7 +219,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             self.nilViews = nil;
             self.scrollView = nil;
             self.imageScrollViews = nil;
-            
         }];
     }];
 }
@@ -451,8 +451,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
         PShowImageSingleView *current = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + page];
         if (current.beginLoadingImage) return;
-        [current setImageWithModel:model];
-        current.beginLoadingImage = YES;
+        if (!current.hasLoadedImage)
+        {
+            [current setImageWithModel:model];
+            current.beginLoadingImage = YES;
+        }
     }
 }
 
@@ -1137,13 +1140,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
         else if ([contentOBJ isKindOfClass:[UIImage class]])
         {
-            self.imageview = [UIImageView new];
-            //            NSString *imageURLString = model.imageUrl;
-            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
-            
-            [_scrollview addSubview:self.imageview];
-
+            UIImageView *imageview = [UIImageView new];
+            imageview.contentMode = UIViewContentModeScaleAspectFit;
+            [_scrollview addSubview:imageview];
             [waitingView removeFromSuperview];
+            self.imageview = imageview;
             self.showMode = PShowModeNormal;
             self.imageview.image = (UIImage *)contentOBJ;
             [self setNeedsLayout];
@@ -1160,8 +1161,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     sender.hidden = YES;
     [self.player play];
     
-    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO]
-                                                     forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
+    NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:self.imageModels.imageUrl] options:opts];  // 初始化视频媒体文件
     videoTime = urlAsset.duration.value / urlAsset.duration.timescale;
     self.videoSlider.maximumValue = videoTime;
