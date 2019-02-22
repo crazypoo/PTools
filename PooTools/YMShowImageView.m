@@ -40,25 +40,36 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) NSString *loadingImageName;
 @property (nonatomic, strong) NSMutableArray *modelArr;
 @property (nonatomic, strong) UILabel *titleLabel;
-@property (nonatomic, strong) UILabel *infoLabel;
 @property (nonatomic, strong) UIWindow *window;
 @property (nonatomic, assign) NSInteger viewClickTag;
 @property (nonatomic, strong) UIButton *deleteButton;
 @property (nonatomic, strong) UIButton *saveImageButton;
+@property (nonatomic, strong) UIButton *hideButton;
 @property (nonatomic, strong) UIColor *showImageBackgroundColor;
 @property (nonatomic, strong) UIColor *titleColor;
 @property (nonatomic, strong) NSString *fontName;
 @property (nonatomic, assign) MoreActionType moreType;
 @property (nonatomic, strong) NSArray *actionSheetOtherBtnArr;
 @property (nonatomic, strong) NSString *moreActionImageNames;
+@property (nonatomic, strong) NSString *hideImageNames;
 @property (nonatomic, strong) UILabel *indexLabel;
 @property (nonatomic, strong) UILabel *fullViewLabel;
 @property (nonatomic, assign) CGFloat navH;
+@property (nonatomic, strong) UIView *navView;
+@property (nonatomic, strong) UIView *bottomView;
+@property (nonatomic, assign) BOOL hideNavAndBottom;
+@property (nonatomic, strong) UIPageControl *pageView;
+@property (nonatomic, strong) UITapGestureRecognizer *singleTap;
+@property (nonatomic, strong) UITapGestureRecognizer *doubleTap;
+@property (nonatomic, strong) UIView *maskview;
+@property (nonatomic,strong) UIView *coverView;
+@property (nonatomic,strong) UIImageView *tempView;
+@property (nonatomic,strong) UIPanGestureRecognizer *pan;
 @end
 
 @implementation YMShowImageView
 
--(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
+-(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main hideImageName:(NSString *)hImage
 {
     self = [super init];
     if (self)
@@ -67,13 +78,11 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         {
             self.moreType = MoreActionTypeMoreNormal;
             self.actionSheetOtherBtnArr = @[@"保存图片",@"删除图片"];
-//            self.saveImageArr = [[NSMutableArray alloc] init];
         }
         else if (canDelete == NO && canSave == YES)
         {
             self.moreType = MoreActionTypeOnlySave;
             self.actionSheetOtherBtnArr = @[@"保存图片"];
-//            self.saveImageArr = [[NSMutableArray alloc] init];
         }
         else if (canDelete == YES && canSave == NO)
         {
@@ -92,7 +101,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.window = w;
         self.loadingImageName = li;
         self.moreActionImageNames = main;
-        
+        self.hideImageNames = hImage;
         self.alpha = 0.0f;
         self.page = 0;
         
@@ -100,11 +109,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         
         self.modelArr = [[NSMutableArray alloc] init];
         [self.modelArr addObjectsFromArray:appendArray];
-        
-        UITapGestureRecognizer *tapGser = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(disappear)];
-        tapGser.numberOfTouchesRequired = 1;
-        tapGser.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:tapGser];
     }
     return self;
     
@@ -126,31 +130,344 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     self.imageScrollViews = [[NSMutableArray alloc] init];
     
-    self.navH = HEIGHT_NAVBAR;
+    self.navView = [UIView new];
+    self.navView.backgroundColor = kRGBAColor(0.1, 0.1, 0.1, 0.4);
+    [self addSubview:self.navView];
+    [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self);
+        make.height.offset(HEIGHT_NAVBAR);
+    }];
     
+    self.bottomView = [UIView new];
+    self.bottomView.backgroundColor = kRGBAColor(0.1, 0.1, 0.1, 0.4);
+    [self addSubview:self.bottomView];
+    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.left.right.equalTo(self);
+        make.height.offset(HEIGHT_NAVBAR*2.5);
+    }];
+    
+    self.hideNavAndBottom = NO;
+
     self.indexLabel = [[UILabel alloc] init];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
     self.indexLabel.textColor = self.titleColor;
     self.indexLabel.font = kDEFAULT_FONT(self.fontName, 20);
     self.indexLabel.backgroundColor = cIndexTitleBackgroundColor;
-    self.indexLabel.bounds = CGRectMake(0, kScreenStatusBottom + (self.navH - hIndexTitleHeight)/2, 80, hIndexTitleHeight);
-    self.indexLabel.center = CGPointMake(kSCREEN_WIDTH * 0.5, hIndexTitleHeight);
     self.indexLabel.layer.cornerRadius = 15;
     self.indexLabel.clipsToBounds = YES;
     if (appendArray.count > 1) {
         self.indexLabel.text = [NSString stringWithFormat:@"1/%ld", (long)appendArray.count];
-        [self addSubview:self.indexLabel];
+        [self.navView addSubview:self.indexLabel];
+        [self.indexLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(self.indexLabel.text.length*20);
+            make.height.offset(hIndexTitleHeight);
+            make.centerX.equalTo(self.navView);
+            make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-hIndexTitleHeight)/2);
+        }];
     }
-    
+
     self.fullViewLabel = [[UILabel alloc] init];
     self.fullViewLabel.textAlignment = NSTextAlignmentCenter;
     self.fullViewLabel.textColor = self.titleColor;
     self.fullViewLabel.font = kDEFAULT_FONT(self.fontName, 20);
     self.fullViewLabel.backgroundColor = cIndexTitleBackgroundColor;
-    self.fullViewLabel.frame = CGRectMake(kSCREEN_WIDTH-50-20, self.indexLabel.top, 50, hIndexTitleHeight);
     self.fullViewLabel.layer.cornerRadius = 15;
     self.fullViewLabel.clipsToBounds = YES;
-    [self addSubview:self.fullViewLabel];
+    [self.navView addSubview:self.fullViewLabel];
+    [self.fullViewLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(50);
+        make.height.offset(hIndexTitleHeight);
+        make.right.equalTo(self).offset(-20);
+        make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-hIndexTitleHeight)/2);
+    }];
+    
+    self.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [self.hideButton setImage:(kStringIsEmpty(self.hideImageNames) ? [Utils createImageWithColor:kRandomColor] : kImageNamed(self.hideImageNames)) forState:UIControlStateNormal];
+    [self.hideButton addTarget:self action:@selector(hideAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.navView addSubview:self.hideButton];
+    [self.hideButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.offset(28);
+        make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-28)/2);
+        make.left.equalTo(self.navView).offset(10);
+    }];
+    
+    self.pageView = [UIPageControl new];
+    self.pageView.backgroundColor = kClearColor;
+    self.pageView.pageIndicatorTintColor = [UIColor lightGrayColor];
+    self.pageView.currentPageIndicatorTintColor = [UIColor whiteColor];
+    [self addSubview:self.pageView];
+    [self.pageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(100);
+        make.height.offset(20);
+        make.centerX.equalTo(self);
+        make.bottom.equalTo(self).offset(-20);
+    }];
+    self.pageView.alpha = 0.0f;
+    
+    self.userInteractionEnabled = YES;
+
+}
+
+- (void)didMoveToSuperview
+{
+    [super didMoveToSuperview];
+    [self addGestureRecognizer:self.singleTap];
+    [self addGestureRecognizer:self.doubleTap];
+    [self addGestureRecognizer:self.pan];
+}
+
+- (UITapGestureRecognizer *)singleTap{
+    if (!_singleTap) {
+        _singleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(photoClick:)];
+        _singleTap.numberOfTapsRequired = 1;
+        _singleTap.delaysTouchesBegan = YES;
+        [_singleTap requireGestureRecognizerToFail:self.doubleTap];
+    }
+    return _singleTap;
+}
+
+- (UITapGestureRecognizer *)doubleTap
+{
+    if (!_doubleTap) {
+        _doubleTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleDoubleTap:)];
+        _doubleTap.numberOfTapsRequired = 2;
+        //        _doubleTap.numberOfTouchesRequired = 1;
+    }
+    return _doubleTap;
+}
+
+- (UIPanGestureRecognizer *)pan{
+    if (!_pan) {
+        _pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(didPan:)];
+    }
+    return _pan;
+}
+
+- (UIImageView *)tempView{
+    if (!_tempView) {
+        PShowImageSingleView *photoBrowserView = self.scrollView.subviews[self.page];
+        UIImageView *currentImageView = photoBrowserView.imageview;
+        CGFloat tempImageX = currentImageView.frame.origin.x - photoBrowserView.scrollOffset.x;
+        CGFloat tempImageY = currentImageView.frame.origin.y - photoBrowserView.scrollOffset.y;
+        
+        CGFloat tempImageW = photoBrowserView.zoomImageSize.width;
+        CGFloat tempImageH = photoBrowserView.zoomImageSize.height;
+        UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+        if (UIDeviceOrientationIsLandscape(orientation)) {//横屏
+            
+            //处理长图,图片太长会导致旋转动画飞掉
+            if (tempImageH > kSCREEN_HEIGHT) {
+                tempImageH = tempImageH > (tempImageW * 1.5)? (tempImageW * 1.5):tempImageH;
+                if (fabs(tempImageY) > tempImageH) {
+                    tempImageY = 0;
+                }
+            }
+            
+        }
+        
+        _tempView = [[UIImageView alloc] init];
+        //这边的contentmode要跟 HZPhotoGrop里面的按钮的 contentmode保持一致（防止最后出现闪动的动画）
+        _tempView.contentMode = UIViewContentModeScaleAspectFill;
+        _tempView.clipsToBounds = YES;
+        _tempView.frame = CGRectMake(tempImageX, tempImageY, tempImageW, tempImageH);
+        _tempView.image = currentImageView.image;
+    }
+    return _tempView;
+}
+
+#pragma mark - tap
+#pragma mark 单击
+- (void)photoClick:(UITapGestureRecognizer *)recognizer
+{
+    [UIView animateWithDuration:.4f animations:^(){
+        self.navView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
+        self.bottomView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
+        self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        self.hideNavAndBottom = !self.hideNavAndBottom;
+    } completion:^(BOOL finished) {
+        
+    }];
+}
+
+- (void)handleDoubleTap:(UITapGestureRecognizer *)recognizer
+{
+    PShowImageSingleView *view = self.scrollView.subviews[self.page];
+    CGPoint touchPoint = [recognizer locationInView:self];
+    if (view.scrollview.zoomScale <= 1.0) {
+        CGFloat scaleX = touchPoint.x + view.scrollview.contentOffset.x;//需要放大的图片的X点
+        CGFloat sacleY = touchPoint.y + view.scrollview.contentOffset.y;//需要放大的图片的Y点
+        [view.scrollview zoomToRect:CGRectMake(scaleX, sacleY, 10, 10) animated:YES];
+    }
+    else
+    {
+        [view.scrollview setZoomScale:1.0 animated:YES]; //还原
+    }
+}
+
+#pragma mark 长按
+- (void)didPan:(UIPanGestureRecognizer *)panGesture {
+    UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
+    if (UIDeviceOrientationIsLandscape(orientation)) {//横屏不允许拉动图片
+        return;
+    }
+    //transPoint : 手指在视图上移动的位置（x,y）向下和向右为正，向上和向左为负。
+    //locationPoint ： 手指在视图上的位置（x,y）就是手指在视图本身坐标系的位置。
+    //velocity： 手指在视图上移动的速度（x,y）, 正负也是代表方向。
+    CGPoint transPoint = [panGesture translationInView:self];
+    //    CGPoint locationPoint = [panGesture locationInView:self];
+    CGPoint velocity = [panGesture velocityInView:self];//速度
+    
+    switch (panGesture.state) {
+        case UIGestureRecognizerStateBegan:
+        {
+            [self prepareForHide];
+        }
+            break;
+        case UIGestureRecognizerStateChanged:
+        {
+            self.navView.alpha = 0.0f;
+            self.bottomView.alpha = 0.0f;
+            double delt = 1 - fabs(transPoint.y) / self.frame.size.height;
+            delt = MAX(delt, 0);
+            double s = MAX(delt, 0.5);
+            CGAffineTransform translation = CGAffineTransformMakeTranslation(transPoint.x/s, transPoint.y/s);
+            CGAffineTransform scale = CGAffineTransformMakeScale(s, s);
+            self.tempView.transform = CGAffineTransformConcat(translation, scale);
+            self.coverView.alpha = delt;
+        }
+            break;
+        case UIGestureRecognizerStateEnded:
+            //        case UIGestureRecognizerStateCancelled:
+        {
+            if (fabs(transPoint.y) > 220 || fabs(velocity.y) > 500)
+            {//退出图片浏览器
+                [self hideAnimation];
+            }
+            else
+            {//回到原来的位置
+                [self bounceToOrigin];
+            }
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+- (void)bounceToOrigin
+{
+    self.userInteractionEnabled = NO;
+    [UIView animateWithDuration:0.35 animations:^{
+        self.tempView.transform = CGAffineTransformIdentity;
+        self.maskview.alpha = 1;
+    } completion:^(BOOL finished) {
+        self.userInteractionEnabled = YES;
+        self.navView.alpha = 1.0f;
+        self.bottomView.alpha = 1.0f;
+        [self.tempView removeFromSuperview];
+        [self.coverView removeFromSuperview];
+        self.tempView = nil;
+        self.coverView = nil;
+        self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
+        self.maskview.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
+        UIView *view = [self getSourceView];
+        view.hidden = NO;
+    }];
+}
+
+- (void)hidePhotoBrowser
+{
+    [self prepareForHide];
+    [self hideAnimation];
+}
+
+- (void)hideAnimation
+{
+    self.userInteractionEnabled = NO;
+    CGRect targetTemp;
+    UIWindow *window = [UIApplication sharedApplication].keyWindow;
+
+    PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:self.page+SubViewBasicsIndex];
+
+    UIView *sourceView = [self getSourceView];
+    if (!sourceView) {
+        targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
+    }
+    if (currentImageS.showMode == PShowModeNormal) {
+        UIView *sourceView = [self getSourceView];
+        targetTemp = [currentImageS convertRect:sourceView.frame toView:self];
+    }
+    else if (currentImageS.showMode == PShowModeGif) {
+        UIView *sourceView = [self getSourceView];
+        targetTemp = [currentImageS convertRect:sourceView.frame toView:self];
+    }
+    else
+    {
+        //默认回到屏幕中央
+        targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
+    }
+    self.window.windowLevel = UIWindowLevelNormal;//显示状态栏
+    [UIView animateWithDuration:0.35f animations:^{
+        if (currentImageS.showMode == PShowModeNormal)
+        {
+            self.tempView.transform = CGAffineTransformInvert(self.transform);
+        }
+        else if (currentImageS.showMode == PShowModeGif) {
+            self.tempView.transform = CGAffineTransformInvert(self.transform);
+        }
+        self.coverView.alpha = 0;
+        self.tempView.frame = targetTemp;
+    } completion:^(BOOL finished) {
+        if (self.removeImg)
+        {
+            self.removeImg();
+        }
+        [self removeFromSuperview];
+        [self.tempView removeFromSuperview];
+        [self.maskview removeFromSuperview];
+        self.tempView = nil;
+        self.maskview = nil;
+        sourceView.hidden = YES;
+    }];
+}
+
+- (UIView *)getSourceView
+{
+    PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:self.page+SubViewBasicsIndex];
+    UIView *sourceView = currentImageS;
+    return sourceView;
+}
+
+- (void)prepareForHide
+{
+    PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:self.page+SubViewBasicsIndex];
+    [self.maskview insertSubview:self.coverView belowSubview:self];
+    self.navView.alpha = 0.0f;
+    self.bottomView.alpha = 0.0f;
+    [self addSubview:self.tempView];
+    currentImageS.hidden = YES;
+    self.backgroundColor = [UIColor clearColor];
+    self.maskview.backgroundColor = [UIColor clearColor];
+    UIView *view = [self getSourceView];
+    view.hidden = YES;
+}
+
+//做颜色渐变动画的view，让退出动画更加柔和
+- (UIView *)coverView
+{
+    if (!_coverView) {
+        _coverView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        _coverView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
+    }
+    return _coverView;
+}
+
+-(void)hideAction:(UIButton *)sender
+{
+    if (_removeImg)
+    {
+        _removeImg();
+    }
 }
 
 -(void)removeFromSuperview
@@ -177,11 +494,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 break;
         }
     }
-    //TODO:隐藏
-    if (_removeImg)
-    {
-        _removeImg();
-    }
+    
+    [UIView animateWithDuration:.4f animations:^(){
+        self.navView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
+        self.bottomView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
+        self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        self.hideNavAndBottom = !self.hideNavAndBottom;
+    } completion:^(BOOL finished) {
+        
+    }];
 }
 
 - (CGRect)zoomRectForScale:(CGFloat)newscale withCenter:(CGPoint)center andScrollView:(UIScrollView *)scrollV
@@ -198,24 +519,24 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 - (void)showWithFinish:(didRemoveImage)tempBlock
 {
-    UIView *maskview = [UIView new];
-    maskview.backgroundColor = self.showImageBackgroundColor;
-    [self.window addSubview:maskview];
-    [maskview mas_makeConstraints:^(MASConstraintMaker *make) {
+    self.maskview = [UIView new];
+    self.maskview.backgroundColor = self.showImageBackgroundColor;
+    [self.window addSubview:self.maskview];
+    [self.maskview mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.window);
     }];
 
-    [self show:maskview didFinish:^{
+    [self show:self.maskview didFinish:^{
         [UIView animateWithDuration:0.5f animations:^{
             self.alpha = 0.0f;
-            maskview.alpha = 0.0f;
+            self.maskview.alpha = 0.0f;
         } completion:^(BOOL finished) {
             if (tempBlock)
             {
                 tempBlock();
             }
             [self removeFromSuperview];
-            [maskview removeFromSuperview];
+            [self.maskview removeFromSuperview];
             self.nilViews = nil;
             self.scrollView = nil;
             self.imageScrollViews = nil;
@@ -246,42 +567,43 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
         
         self.fullViewLabel.text = [self fullImageHidden];
+        self.pageView.numberOfPages = self.modelArr.count;
+        self.pageView.currentPage = self.page;
+        
+        UIScrollView *scroller = [UIScrollView new];
+        scroller.backgroundColor = kClearColor;
+        [self.bottomView addSubview:scroller];
         
         PooShowImageModel *model = self.modelArr[0];
-        
+        PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
+        [currentImageS setImageWithModel:model];
+
         self.titleLabel = [UILabel new];
         self.titleLabel.textAlignment = NSTextAlignmentLeft;
         self.titleLabel.textColor     = self.titleColor;
         self.titleLabel.numberOfLines = 0;
         self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
         self.titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
-        self.titleLabel.text          = model.imageTitle;
+        self.titleLabel.text          = model.imageInfo;
         self.titleLabel.hidden        = self.titleLabel.text.length == 0;
-        [self addSubview:self.titleLabel];
-        [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self).offset(10);
-            make.bottom.equalTo(self).offset(-40);
-            make.height.offset(40);
-            make.right.equalTo(self).offset(-110);
-        }];
-        
-        self.infoLabel = [UILabel new];
-        self.infoLabel.textAlignment = NSTextAlignmentLeft;
-        self.infoLabel.textColor     = self.titleColor;
-        self.infoLabel.numberOfLines = 0;
-        self.infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        self.infoLabel.font = kDEFAULT_FONT(self.fontName, 16);
-        self.infoLabel.text          = model.imageInfo;
-        self.infoLabel.hidden        = self.infoLabel.text.length == 0;
-        [self addSubview:self.infoLabel];
-        [self.infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.height.right.equalTo(self.titleLabel);
-            make.bottom.equalTo(self);
-        }];
-        
+        [scroller addSubview:self.titleLabel];
+
         switch (self.moreType)
         {
             case MoreActionTypeNoMore:
+            {
+                [scroller mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.top.equalTo(self.bottomView).offset(10);
+                    make.right.bottom.equalTo(self.bottomView).offset(-10);
+                }];
+
+                scroller.contentSize = CGSizeMake(self.size.width-20,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
+                
+                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.top.equalTo(scroller);
+                    make.width.offset(self.size.width-20);
+                }];
+            }
                 break;
             default:
             {
@@ -289,11 +611,25 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 self.deleteButton.showsTouchWhenHighlighted = YES;
                 [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
                 [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
-                [self addSubview:self.deleteButton];
+                [self.bottomView addSubview:self.deleteButton];
                 [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.height.offset(44);
-                    make.right.bottom.equalTo(self).offset(-10);
+                    make.width.height.offset(HEIGHT_BUTTON);
+                    make.right.bottom.equalTo(self.bottomView).offset(-10);
                 }];
+                
+                [scroller mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.top.equalTo(self.bottomView).offset(10);
+                    make.bottom.equalTo(self.bottomView).offset(-10);
+                    make.right.equalTo(self.deleteButton.mas_left).offset(-10);
+                }];
+                
+                scroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-30-HEIGHT_BUTTON)].height);
+                
+                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.top.equalTo(scroller);
+                    make.width.offset(self.size.width-30-HEIGHT_BUTTON);
+                }];
+
             }
                 break;
         }
@@ -331,9 +667,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
 
     [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-    PooShowImageModel *model = self.modelArr[self.page];
+//    PooShowImageModel *model = self.modelArr[self.page];
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
-    [currentImageS setImageWithModel:model];
+//    [currentImageS setImageWithModel:model];
     
     switch (currentImageS.showMode) {
         case PShowModeGif:
@@ -354,19 +690,24 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
     if (self.modelArr.count > 1) {
         [self.indexLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(80);
+            make.width.offset(self.indexLabel.text.length*20);
             make.height.offset(hIndexTitleHeight);
-            make.top.equalTo(self).offset(kScreenStatusBottom + (self.navH - kScreenStatusBottom - hIndexTitleHeight)/2);
-            make.centerX.equalTo(self.mas_centerX);
+            make.centerX.equalTo(self.navView);
+            make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-hIndexTitleHeight)/2);
         }];
         
         [self.fullViewLabel mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.offset(50);
             make.height.offset(hIndexTitleHeight);
-            make.top.equalTo(self.indexLabel);
             make.right.equalTo(self).offset(-20);
+            make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-hIndexTitleHeight)/2);
         }];
     }
+    [self.hideButton mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.height.offset(28);
+        make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-28)/2);
+        make.left.equalTo(self.navView).offset(10);
+    }];
 }
 
 -(NSString *)fullImageHidden
@@ -402,14 +743,14 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     {
         int page = (scrollView.contentOffset.x)/scrollView.width;
         self.page = page;
-        
+        self.pageView.currentPage = self.page;
+
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
         self.fullViewLabel.text = [self fullImageHidden];
         
         PooShowImageModel *model = self.modelArr[page];
-        self.titleLabel.text = model.imageTitle;
-        self.infoLabel.text = model.imageInfo;
+        self.titleLabel.text = model.imageInfo;
     
         for (int i = 0 ; i < self.modelArr.count; i++) {
             PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + i];
@@ -1140,11 +1481,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
         else if ([contentOBJ isKindOfClass:[UIImage class]])
         {
-            UIImageView *imageview = [UIImageView new];
-            imageview.contentMode = UIViewContentModeScaleAspectFit;
-            [_scrollview addSubview:imageview];
+            self.imageview = [UIImageView new];
+            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
+            [_scrollview addSubview:self.imageview];
             [waitingView removeFromSuperview];
-            self.imageview = imageview;
             self.showMode = PShowModeNormal;
             self.imageview.image = (UIImage *)contentOBJ;
             [self setNeedsLayout];

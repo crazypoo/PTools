@@ -58,7 +58,8 @@ showImageBackgroundColor:(UIColor *)sibc
            showWindow:(UIWindow *)w
      loadingImageName:(NSString *)li
            deleteAble:(BOOL)canDelete
-             saveAble:(BOOL)canSave moreActionImageName:(NSString *)main;
+             saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
+        hideImageName:(NSString *)hImage;
 
 /*! @brief 展示浏览图片View
  * @param tempBlock 当浏览图片的View消失时,做出的回调

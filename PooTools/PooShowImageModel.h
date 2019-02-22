@@ -16,7 +16,6 @@ typedef NS_ENUM(NSUInteger, PooShowImageModelType) {
 };
 
 @interface PooShowImageModel : NSObject
-@property (nonatomic, strong)NSString *imageTitle;
 @property (nonatomic, strong)NSString *imageInfo;
 @property (nonatomic, assign)PooShowImageModelType imageShowType;
 @property (nonatomic, strong)id imageUrl;

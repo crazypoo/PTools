@@ -314,8 +314,7 @@ static NSString *cellIdentifier = @"CELL";
                     PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
                     imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
                     imageModel2.imageShowType = PooShowImageModelTypeNormal;
-                    imageModel2.imageInfo = @"6666666";
-                    imageModel2.imageTitle = @"5555555";
+                    imageModel2.imageInfo = @"4444444444444";
 //
 //                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
 //                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
@@ -332,13 +331,12 @@ static NSString *cellIdentifier = @"CELL";
                     PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
                     imageModel4.imageUrl = kImageNamed(@"DemoImage");
                     imageModel4.imageShowType = PooShowImageModelTypeNormal;
-                    imageModel4.imageInfo = @"444444";
-                    imageModel4.imageTitle = @"333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
+                    imageModel4.imageInfo = @"333333333333333";
                     
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
                     NSArray *arr = @[imageModel4,imageModel2,imageModel2,imageModel2];
 
-                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage"];
+                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
                         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
                     }];
