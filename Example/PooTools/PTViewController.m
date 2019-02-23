@@ -331,10 +331,10 @@ static NSString *cellIdentifier = @"CELL";
                     PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
                     imageModel4.imageUrl = kImageNamed(@"DemoImage");
                     imageModel4.imageShowType = PooShowImageModelTypeNormal;
-                    imageModel4.imageInfo = @"333333333333333";
+                    imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
                     
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    NSArray *arr = @[imageModel4,imageModel2,imageModel2,imageModel2];
+                    NSArray *arr = @[imageModel4,imageModel4,imageModel2,imageModel2,imageModel2];
 
                     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{

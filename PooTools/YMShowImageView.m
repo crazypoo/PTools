@@ -65,6 +65,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic,strong) UIView *coverView;
 @property (nonatomic,strong) UIImageView *tempView;
 @property (nonatomic,strong) UIPanGestureRecognizer *pan;
+@property (nonatomic, strong) UIScrollView *labelScroller;
 @end
 
 @implementation YMShowImageView
@@ -137,14 +138,14 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         make.top.left.right.equalTo(self);
         make.height.offset(HEIGHT_NAVBAR);
     }];
-    
+
     self.bottomView = [UIView new];
     self.bottomView.backgroundColor = kRGBAColor(0.1, 0.1, 0.1, 0.4);
     [self addSubview:self.bottomView];
-    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.left.right.equalTo(self);
-        make.height.offset(HEIGHT_NAVBAR*2.5);
-    }];
+//    [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.bottom.left.right.equalTo(self);
+//        make.height.offset((HEIGHT_BUTTON*2));
+//    }];
     
     self.hideNavAndBottom = NO;
 
@@ -206,6 +207,17 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     self.userInteractionEnabled = YES;
 
+    self.labelScroller = [UIScrollView new];
+    self.labelScroller.backgroundColor = kClearColor;
+    [self.bottomView addSubview:self.labelScroller];
+
+    self.titleLabel = [UILabel new];
+    self.titleLabel.textAlignment = NSTextAlignmentLeft;
+    self.titleLabel.textColor     = self.titleColor;
+    self.titleLabel.numberOfLines = 0;
+    self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    self.titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
+    [self.labelScroller addSubview:self.titleLabel];
 }
 
 - (void)didMoveToSuperview
@@ -244,7 +256,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 }
 
 - (UIImageView *)tempView{
-    if (!_tempView) {
+    if (!_tempView)
+    {
         PShowImageSingleView *photoBrowserView = self.scrollView.subviews[self.page];
         UIImageView *currentImageView = photoBrowserView.imageview;
         CGFloat tempImageX = currentImageView.frame.origin.x - photoBrowserView.scrollOffset.x;
@@ -262,9 +275,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     tempImageY = 0;
                 }
             }
-            
         }
-        
         _tempView = [[UIImageView alloc] init];
         //这边的contentmode要跟 HZPhotoGrop里面的按钮的 contentmode保持一致（防止最后出现闪动的动画）
         _tempView.contentMode = UIViewContentModeScaleAspectFill;
@@ -305,7 +316,10 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 }
 
 #pragma mark 长按
-- (void)didPan:(UIPanGestureRecognizer *)panGesture {
+- (void)didPan:(UIPanGestureRecognizer *)panGesture
+{
+    self.scrollView.scrollEnabled = NO;
+
     UIDeviceOrientation orientation = [UIDevice currentDevice].orientation;
     if (UIDeviceOrientationIsLandscape(orientation)) {//横屏不允许拉动图片
         return;
@@ -337,7 +351,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
             break;
         case UIGestureRecognizerStateEnded:
-            //        case UIGestureRecognizerStateCancelled:
         {
             if (fabs(transPoint.y) > 220 || fabs(velocity.y) > 500)
             {//退出图片浏览器
@@ -347,6 +360,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             {//回到原来的位置
                 [self bounceToOrigin];
             }
+            self.scrollView.scrollEnabled = YES;
         }
             break;
         default:
@@ -371,7 +385,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
         self.maskview.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:1];
         UIView *view = [self getSourceView];
-        view.hidden = NO;
+        view.alpha = 1.0f;
     }];
 }
 
@@ -393,11 +407,13 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     if (!sourceView) {
         targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
     }
-    if (currentImageS.showMode == PShowModeNormal) {
+    if (currentImageS.showMode == PShowModeNormal)
+    {
         UIView *sourceView = [self getSourceView];
         targetTemp = [currentImageS convertRect:sourceView.frame toView:self];
     }
-    else if (currentImageS.showMode == PShowModeGif) {
+    else if (currentImageS.showMode == PShowModeGif)
+    {
         UIView *sourceView = [self getSourceView];
         targetTemp = [currentImageS convertRect:sourceView.frame toView:self];
     }
@@ -427,7 +443,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         [self.maskview removeFromSuperview];
         self.tempView = nil;
         self.maskview = nil;
-        sourceView.hidden = YES;
+        sourceView.alpha = 0.0f;
     }];
 }
 
@@ -440,16 +456,14 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 - (void)prepareForHide
 {
-    PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:self.page+SubViewBasicsIndex];
     [self.maskview insertSubview:self.coverView belowSubview:self];
     self.navView.alpha = 0.0f;
     self.bottomView.alpha = 0.0f;
-    [self addSubview:self.tempView];
-    currentImageS.hidden = YES;
+    [self.maskview addSubview:self.tempView];
     self.backgroundColor = [UIColor clearColor];
     self.maskview.backgroundColor = [UIColor clearColor];
     UIView *view = [self getSourceView];
-    view.hidden = YES;
+    view.alpha = 0.0f;
 }
 
 //做颜色渐变动画的view，让退出动画更加柔和
@@ -570,69 +584,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.pageView.numberOfPages = self.modelArr.count;
         self.pageView.currentPage = self.page;
         
-        UIScrollView *scroller = [UIScrollView new];
-        scroller.backgroundColor = kClearColor;
-        [self.bottomView addSubview:scroller];
-        
-        PooShowImageModel *model = self.modelArr[0];
+        PooShowImageModel *model = self.modelArr[self.page];
         PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
         [currentImageS setImageWithModel:model];
-
-        self.titleLabel = [UILabel new];
-        self.titleLabel.textAlignment = NSTextAlignmentLeft;
-        self.titleLabel.textColor     = self.titleColor;
-        self.titleLabel.numberOfLines = 0;
-        self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        self.titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
-        self.titleLabel.text          = model.imageInfo;
-        self.titleLabel.hidden        = self.titleLabel.text.length == 0;
-        [scroller addSubview:self.titleLabel];
-
-        switch (self.moreType)
-        {
-            case MoreActionTypeNoMore:
-            {
-                [scroller mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.top.equalTo(self.bottomView).offset(10);
-                    make.right.bottom.equalTo(self.bottomView).offset(-10);
-                }];
-
-                scroller.contentSize = CGSizeMake(self.size.width-20,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
-                
-                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.top.equalTo(scroller);
-                    make.width.offset(self.size.width-20);
-                }];
-            }
-                break;
-            default:
-            {
-                self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
-                self.deleteButton.showsTouchWhenHighlighted = YES;
-                [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
-                [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
-                [self.bottomView addSubview:self.deleteButton];
-                [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.height.offset(HEIGHT_BUTTON);
-                    make.right.bottom.equalTo(self.bottomView).offset(-10);
-                }];
-                
-                [scroller mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.top.equalTo(self.bottomView).offset(10);
-                    make.bottom.equalTo(self.bottomView).offset(-10);
-                    make.right.equalTo(self.deleteButton.mas_left).offset(-10);
-                }];
-                
-                scroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-30-HEIGHT_BUTTON)].height);
-                
-                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.top.equalTo(scroller);
-                    make.width.offset(self.size.width-30-HEIGHT_BUTTON);
-                }];
-
-            }
-                break;
-        }
     });
     
     _removeImg = tempBlock;
@@ -667,9 +621,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
 
     [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
-//    PooShowImageModel *model = self.modelArr[self.page];
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
-//    [currentImageS setImageWithModel:model];
     
     switch (currentImageS.showMode) {
         case PShowModeGif:
@@ -708,6 +660,92 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         make.top.equalTo(self.navView).offset(kScreenStatusBottom+(HEIGHT_NAV-28)/2);
         make.left.equalTo(self.navView).offset(10);
     }];
+    
+    PooShowImageModel *model = self.modelArr[self.page];
+    self.titleLabel.text = model.imageInfo;
+    self.titleLabel.hidden        = self.titleLabel.text.length == 0;
+    
+    switch (self.moreType)
+    {
+        case MoreActionTypeNoMore:
+        {
+            [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.left.right.equalTo(self);
+                CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
+                if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
+                    make.height.offset(infoH+20);
+                }
+                else if (infoH < HEIGHT_BUTTON)
+                {
+                    make.height.offset(HEIGHT_BUTTON+20);
+                }
+                else if ((HEIGHT_BUTTON *2) < infoH)
+                {
+                    make.height.offset(HEIGHT_BUTTON*2);
+                }
+            }];
+            
+            [self.labelScroller mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.equalTo(self.bottomView).offset(10);
+                make.right.bottom.equalTo(self.bottomView).offset(-10);
+            }];
+            
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-20,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
+            
+            [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.equalTo(self.labelScroller);
+                make.width.offset(self.size.width-20);
+            }];
+        }
+            break;
+        default:
+        {
+            CGFloat labelW = self.size.width-30-HEIGHT_BUTTON;
+            
+            [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.bottom.left.right.equalTo(self);
+                CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height;
+                if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
+                    make.height.offset(infoH+20);
+                }
+                else if (infoH < HEIGHT_BUTTON)
+                {
+                    make.height.offset(HEIGHT_BUTTON+20);
+                }
+                else if ((HEIGHT_BUTTON *2) < infoH)
+                {
+                    make.height.offset(HEIGHT_BUTTON*2+20);
+                }
+            }];
+            
+            if (!self.deleteButton)
+            {
+                self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
+                self.deleteButton.showsTouchWhenHighlighted = YES;
+                [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
+                [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
+                [self.bottomView addSubview:self.deleteButton];
+                [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.height.offset(HEIGHT_BUTTON);
+                    make.right.bottom.equalTo(self.bottomView).offset(-10);
+                }];
+            }
+            
+            [self.labelScroller mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.equalTo(self.bottomView).offset(10);
+                make.bottom.equalTo(self.bottomView).offset(-10);
+                make.right.equalTo(self.deleteButton.mas_left).offset(-10);
+            }];
+            
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height);
+            
+            [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.top.equalTo(self.labelScroller);
+                make.width.offset(labelW);
+            }];
+        }
+            break;
+    }
 }
 
 -(NSString *)fullImageHidden
@@ -744,22 +782,23 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         int page = (scrollView.contentOffset.x)/scrollView.width;
         self.page = page;
         self.pageView.currentPage = self.page;
-
+        
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
         self.fullViewLabel.text = [self fullImageHidden];
         
-        PooShowImageModel *model = self.modelArr[page];
+        PooShowImageModel *model = self.modelArr[self.page];
         self.titleLabel.text = model.imageInfo;
+        self.titleLabel.hidden = self.titleLabel.text.length == 0;
     
         for (int i = 0 ; i < self.modelArr.count; i++) {
             PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + i];
             if (i == page) {
                 switch (currentImageS.showMode) {
                     case PShowModeGif:
-                        {
-                            [currentImageS.imageview startAnimating];
-                        }
+                    {
+                        [currentImageS.imageview startAnimating];
+                    }
                         break;
                     case PShowModeVideo:
                     {
@@ -789,7 +828,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 }
             }
         }
-
+        
         PShowImageSingleView *current = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + page];
         if (current.beginLoadingImage) return;
         if (!current.hasLoadedImage)
@@ -797,7 +836,89 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             [current setImageWithModel:model];
             current.beginLoadingImage = YES;
         }
+        
+        [self updateView];
     }
+}
+
+-(void)updateView
+{
+//    PooShowImageModel *model = self.modelArr[self.page];
+//    switch (self.moreType)
+//    {
+//        case MoreActionTypeNoMore:
+//        {
+//            //                [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+//            //                    make.bottom.left.right.equalTo(self);
+//            //                    CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
+//            //                    if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
+//            //                        make.height.offset(infoH+20);
+//            //                    }
+//            //                    else if (infoH < HEIGHT_BUTTON)
+//            //                    {
+//            //                        make.height.offset(HEIGHT_BUTTON+20);
+//            //                    }
+//            //                    else if ((HEIGHT_BUTTON *2) < infoH)
+//            //                    {
+//            //                        make.height.offset(HEIGHT_BUTTON*2);
+//            //                    }
+//            //                }];
+//
+//            //                [self.labelScroller mas_makeConstraints:^(MASConstraintMaker *make) {
+//            //                    make.left.top.equalTo(self.bottomView).offset(10);
+//            //                    make.right.bottom.equalTo(self.bottomView).offset(-10);
+//            //                }];
+//            //
+//            //                self.labelScroller.contentSize = CGSizeMake(self.size.width-20,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
+//            //
+//            //                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//            //                    make.left.top.equalTo(self.labelScroller);
+//            //                    make.width.offset(self.size.width-20);
+//            //                }];
+//        }
+//            break;
+//        default:
+//        {
+//            CGFloat labelW = self.size.width-30-HEIGHT_BUTTON;
+//            CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height;
+//            CGFloat labelH = 0.0f;
+//            if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
+//                labelH = infoH+20;
+//            }
+//            else if (infoH < HEIGHT_BUTTON)
+//            {
+//                labelH = HEIGHT_BUTTON+20;
+//            }
+//            else if ((HEIGHT_BUTTON *2) < infoH)
+//            {
+//                labelH = HEIGHT_BUTTON*2+20;
+//            }
+//            [self.bottomView mas_updateConstraints:^(MASConstraintMaker *make) {
+//                make.bottom.left.right.equalTo(self);
+//                make.height.offset(labelH);
+//            }];
+//
+//            //                [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
+//            //                    make.width.height.offset(HEIGHT_BUTTON);
+//            //                    make.right.bottom.equalTo(self.bottomView).offset(-10);
+//            //                }];
+//            //
+//            //                [self.labelScroller mas_makeConstraints:^(MASConstraintMaker *make) {
+//            //                    make.left.top.equalTo(self.bottomView).offset(10);
+//            //                    make.bottom.equalTo(self.bottomView).offset(-10);
+//            //                    make.right.equalTo(self.deleteButton.mas_left).offset(-10);
+//            //                }];
+//            //
+//            //                self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height);
+//            //
+//            //                [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+//            //                    make.left.top.equalTo(self.labelScroller);
+//            //                    make.width.offset(labelW);
+//            //                }];
+//        }
+//            break;
+//    }
+
 }
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
