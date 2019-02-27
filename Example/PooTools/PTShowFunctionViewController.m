@@ -213,6 +213,7 @@
             config.isMulti = YES;
             config.selectedDefaultTags = titleS;
             config.borderColor = kRandomColor;
+            config.borderColorSelected = [UIColor whiteColor];
             config.borderWidth = 2;
             config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
             
@@ -479,14 +480,23 @@
             break;
         case 1:
         {
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:self.view alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222"] viewTag:1 setCustomView:^(YXCustomAlertView *alertView) {
                 
-                UILabel *aaa = [UILabel new];
-                aaa.backgroundColor = kRandomColor;
-                aaa.text = @"1123123123123";
-                [alertView.customView addSubview:aaa];
-                [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.right.top.bottom.equalTo(alertView.customView);
+//                UILabel *aaa = [UILabel new];
+//                aaa.backgroundColor = kRandomColor;
+//                aaa.text = @"1123123123123";
+//                [alertView.customView addSubview:aaa];
+//                [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.right.top.bottom.equalTo(alertView.customView);
+//                }];
+                
+                UITextField *textField = [UITextField new];
+                textField.placeholder = @"用来展示数字键盘";
+                [alertView.customView addSubview:textField];
+                [textField mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.top.equalTo(alertView.customView).offset(10);
+                    make.left.right.equalTo(alertView.customView);
+                    make.height.offset(44);
                 }];
                 
             } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
@@ -511,8 +521,9 @@
                 
             }];
             [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.offset(310);
-                make.centerX.centerY.equalTo(self.view);
+                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalH]);
+                make.width.offset(kSCREEN_WIDTH-20);
+                make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];
             
         }

@@ -82,6 +82,9 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 边框颜色 (默认[UIColor redColor])
  */
 @property (nonatomic) UIColor *borderColor;
+/*! @brief 边框颜色已选 (默认[UIColor redColor])
+ */
+@property (nonatomic) UIColor *borderColorSelected;
 /*! @brief 边框弧度 (默认item高度/2)
  */
 @property (nonatomic) CGFloat cornerRadius;

@@ -397,6 +397,19 @@
         }
     }
     
+    if (self.curConfig.hasBorder) {
+        if (sender.selected)
+        {
+            UIColor *borderC = self.curConfig.borderColorSelected ? self.curConfig.borderColorSelected : [UIColor redColor];
+            sender.layer.borderColor = borderC.CGColor;
+        }
+        else
+        {
+            UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor redColor];
+            sender.layer.borderColor = borderC.CGColor;
+        }
+    }
+    
     //点击回调
     NSInteger index = sender.tag - BTN_Tags_Tag;
     if (self.tagBtnClickedBlock)
