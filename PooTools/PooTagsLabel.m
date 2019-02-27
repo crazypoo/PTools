@@ -231,16 +231,12 @@
                 self.frame = frame;
                 self.bgImageView.frame = self.bounds;
                 
-                ///边框
                 if (config.hasBorder)
                 {
                     btn.clipsToBounds = YES;
                     btn.layer.cornerRadius = config.cornerRadius > 0 ? config.cornerRadius : config.itemHeight / 2.0;
-                    UIColor *borderC = config.borderColor ? config.borderColor : [UIColor redColor];
-                    btn.layer.borderColor = borderC.CGColor;
                     btn.layer.borderWidth = config.borderWidth > 0.0 ? config.borderWidth : 0.5;
                 }
-                
                 ///可选中
                 if (config.isCanSelected)
                 {
@@ -252,6 +248,20 @@
                             if ([title isEqualToString:str])
                             {
                                 btn.selected = YES;
+                                ///边框
+                                if (config.hasBorder)
+                                {
+                                    UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
+                                    btn.layer.borderColor = borderC.CGColor;
+                                }
+                            }
+                            else
+                            {
+                                if (config.hasBorder)
+                                {
+                                    UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
+                                    btn.layer.borderColor = borderC.CGColor;
+                                }
                             }
                         }
                     }
@@ -261,6 +271,19 @@
                         {
                             btn.selected = YES;
                             self.selectedBtn = btn;
+                            if (config.hasBorder)
+                            {
+                                UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
+                                btn.layer.borderColor = borderC.CGColor;
+                            }
+                        }
+                        else
+                        {
+                            if (config.hasBorder)
+                            {
+                                UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
+                                btn.layer.borderColor = borderC.CGColor;
+                            }
                         }
                     }
                 }
@@ -400,12 +423,12 @@
     if (self.curConfig.hasBorder) {
         if (sender.selected)
         {
-            UIColor *borderC = self.curConfig.borderColorSelected ? self.curConfig.borderColorSelected : [UIColor redColor];
+            UIColor *borderC = self.curConfig.borderColorSelected ? self.curConfig.borderColorSelected : [UIColor grayColor];
             sender.layer.borderColor = borderC.CGColor;
         }
         else
         {
-            UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor redColor];
+            UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor grayColor];
             sender.layer.borderColor = borderC.CGColor;
         }
     }
