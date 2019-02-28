@@ -25,6 +25,9 @@
 //
 
 #import "RCDraggableButton.h"
+
+#import "PMacros.h"
+
 #define RC_DEFAULT_DELAY_TIME 0.f
 #define RC_DEFAULT_ANIMATE_DURATION 0.2f
 #define RC_DOUBLE_TAP_TIME_INTERVAL 0.36f
@@ -93,7 +96,7 @@
 #pragma mark Add Button To KeyWindow
 
 - (void)addButtonToKeyWindow {
-    [[UIApplication sharedApplication].keyWindow addSubview:self];
+    [kAppDelegateWindow addSubview:self];
 }
 
 #pragma mark - Gesture Recognizer Handle

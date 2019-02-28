@@ -40,7 +40,7 @@
     if(self)
     {
         self.frame =CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT);
-        self.backgroundColor = kRGBAColor(0, 0, 0, 0.4);
+        self.backgroundColor = kDevMaskBackgroundColor;
         self.userInteractionEnabled = YES;
     }
     return self;
@@ -79,7 +79,7 @@
 {
     self.maskView = [UIButton buttonWithType:UIButtonTypeCustom];
     self.maskView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT);
-    self.maskView.backgroundColor = kRGBAColor(0, 0, 0, 0.4);
+    self.maskView.backgroundColor = kDevMaskBackgroundColor;
     self.maskView.userInteractionEnabled = YES;
     [self addSubview:self.maskView];
     [self.maskView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -226,12 +226,10 @@
     [self hide];
 }
 
-- (void)show {
-    [UIView animateWithDuration:0.5 animations:^{
-        UIWindow* window = [UIApplication sharedApplication].keyWindow;
-        [window addSubview:self];
-        [self setupView];
-    }];
+- (void)show
+{
+    [kAppDelegateWindow addSubview:self];
+    [self setupView];
 }
 
 - (void)onSignatureWriteAction {

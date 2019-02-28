@@ -12,6 +12,7 @@
 #import "WMHubWindow.h"
 #import "WMHubViewController.h"
 #import "UIColor+Helper.h"
+#import "PMacros.h"
 
 @implementation WMHub
 
@@ -30,7 +31,7 @@
     [[self hudWindow].rootViewController performSelector:@selector(hide:) withObject: ^{
         [self hudWindow].hidden = YES;
         [self setHudWindow:nil];
-        [[UIApplication sharedApplication].keyWindow makeKeyWindow];
+        [kAppDelegateWindow makeKeyWindow];
     }];
 }
 

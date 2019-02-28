@@ -58,7 +58,7 @@
     UIFont *subTitleFont = self.viewFont ? kDEFAULT_FONT(self.viewFont.familyName, self.viewFont.pointSize+5) : kDEFAULT_FONT(kDevLikeFont, 20);
 
     UIView *viewBG = [UIView new];
-    viewBG.backgroundColor = kRGBAColor(1, 1, 1, 0.6);
+    viewBG.backgroundColor = kDevMaskBackgroundColor;
     [self addSubview:viewBG];
     [viewBG mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);

@@ -61,8 +61,8 @@
         self.setBlock = setViewBlock;
         
         self.middleView.frame = superView.frame;
-        [superView addSubview:_middleView];
-        [_middleView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [superView addSubview:self.middleView];
+        [self.middleView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(superView);
         }];
         
@@ -76,19 +76,19 @@
         UITapGestureRecognizer *tapBackgroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dissMiss)];
         tapBackgroundView.numberOfTouchesRequired = 1;
         tapBackgroundView.numberOfTapsRequired = 1;
-        [_middleView addGestureRecognizer:tapBackgroundView];
-
+        [self.middleView addGestureRecognizer:tapBackgroundView];
+        
         self.backgroundColor = [UIColor whiteColor];
         self.layer.cornerRadius = 8;
         
         [self.superViews addSubview:self];
-
+        
         self.titleLabel.text = title;
-        [self addSubview:_titleLabel];
-
+        [self addSubview:self.titleLabel];
+        
         self.customView = [UIView new];
         [self addSubview:self.customView];
-
+        
         if (btFont.pointSize*title.length > self.frame.size.width) {
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(TitleViewH*2);
@@ -101,7 +101,8 @@
             }];
             
         }
-        else{
+        else
+        {
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(TitleViewH);
                 make.left.top.right.equalTo(self);
@@ -112,7 +113,7 @@
                 make.left.right.equalTo(self);
             }];
         }
-
+        
         
         if (self.setBlock) {
             self.setBlock(self);
@@ -247,7 +248,9 @@
 
 -(void)showView
 {
-    [self.superViews addSubview:self];
+    [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+        [self.superViews addSubview:self];
+    } completion:NULL];
 }
 
 #pragma mark - 注销视图
@@ -272,8 +275,7 @@
 {
     if (_middleView == nil) {
         _middleView = [[UIView alloc] init];
-        _middleView.backgroundColor = [UIColor blackColor];
-        _middleView.alpha = 0.65;
+        _middleView.backgroundColor = kDevMaskBackgroundColor;
     }
     
     return _middleView;

@@ -399,13 +399,12 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 {
     self.userInteractionEnabled = NO;
     CGRect targetTemp;
-    UIWindow *window = [UIApplication sharedApplication].keyWindow;
-
+    
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:self.page+SubViewBasicsIndex];
 
     UIView *sourceView = [self getSourceView];
     if (!sourceView) {
-        targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
+        targetTemp = CGRectMake(kAppDelegateWindow.center.x, kAppDelegateWindow.center.y, 0, 0);
     }
     if (currentImageS.showMode == PShowModeNormal)
     {
@@ -420,7 +419,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     else
     {
         //默认回到屏幕中央
-        targetTemp = CGRectMake(window.center.x, window.center.y, 0, 0);
+        targetTemp = CGRectMake(kAppDelegateWindow.center.x, kAppDelegateWindow.center.y, 0, 0);
     }
     self.window.windowLevel = UIWindowLevelNormal;//显示状态栏
     [UIView animateWithDuration:0.35f animations:^{

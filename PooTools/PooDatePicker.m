@@ -76,7 +76,7 @@
     {
         self.pickerFonts = pf;
         self.pickerType = pT;
-        self.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
+        self.backgroundColor = kDevMaskBackgroundColor;
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
         tapGesture.numberOfTapsRequired = 1;
@@ -543,7 +543,7 @@
     if (self)
     {
         self.pickerFonts = pf;
-        self.backgroundColor = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
+        self.backgroundColor = kDevMaskBackgroundColor;
         
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
         tapGesture.numberOfTapsRequired = 1;

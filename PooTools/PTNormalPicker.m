@@ -45,7 +45,7 @@
 -(void)configViewWithPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont pickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr
 {
     self.pickerBackground = [UIView new];
-    self.pickerBackground.backgroundColor    = [UIColor colorWithRed:0.1 green:0.1 blue:0.1 alpha:0.5];
+    self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
     [self addSubview:self.pickerBackground];
     [self.pickerBackground mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);

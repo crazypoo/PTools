@@ -13,6 +13,9 @@
 #define kDevLikeFont @"HelveticaNeue-Light"
 #define kDevLikeFont_Bold @"HelveticaNeue-Medium"
 
+#define kDevAlpha 0.45
+#define kDevMaskBackgroundColor kRGBAColorDecimals(0, 0, 0, kDevAlpha)
+
 #pragma mark ---------------> 判断当前的iPhone设备/系统版本
 /*! @brief 当前系统版本与系统v是否匹配
  */

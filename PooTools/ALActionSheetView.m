@@ -84,7 +84,7 @@
 -(void)loadView
 {
     _backView = [UIView new];
-    _backView.backgroundColor = kRGBAColorDecimals(0, 0, 0, 0.2);
+    _backView.backgroundColor = kDevMaskBackgroundColor;
     _backView.alpha = 0.0f;
     [self addSubview:_backView];
     
@@ -240,7 +240,7 @@
     
     [self.actionSheetView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.backView);
-        make.top.offset(kSCREEN_HEIGHT-[self actionSheetHeight]);
+        make.top.offset(kSCREEN_HEIGHT-[self actionSheetHeight]-(isIPhoneXSeries() ? HEIGHT_TABBAR_SAFEAREA : 0));
         make.height.offset([self actionSheetHeight]);
     }];
     

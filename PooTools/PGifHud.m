@@ -10,7 +10,6 @@
 #import <ImageIO/ImageIO.h>
 #import "PMacros.h"
 
-
 #define Size            150
 #define FadeDuration    0.3
 #define GifSpeed        0.3
@@ -271,7 +270,7 @@ static PGifHud *instance = nil;
         [self.overlayView setAlpha:0];
         
         [UIView animateWithDuration:FadeDuration animations:^{
-            [self.overlayView setAlpha:0.3];
+            [self.overlayView setAlpha:kDevAlpha];
         }];
     }
     return self.overlayView;

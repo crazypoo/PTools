@@ -633,7 +633,7 @@
             break;
         case 1:
         {
-            [PGifHud gifHUDShowIn:self.view];
+            [PGifHud gifHUDShowIn:kAppDelegateWindow];
             [PGifHud setGifWithURL:[NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif"]];
             [PGifHud setInfoLabelText:@"我是谁!!!!!!!!"];
             [PGifHud showWithOverlay];
