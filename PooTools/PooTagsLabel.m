@@ -248,20 +248,6 @@
                             if ([title isEqualToString:str])
                             {
                                 btn.selected = YES;
-                                ///边框
-                                if (config.hasBorder)
-                                {
-                                    UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
-                                    btn.layer.borderColor = borderC.CGColor;
-                                }
-                            }
-                            else
-                            {
-                                if (config.hasBorder)
-                                {
-                                    UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
-                                    btn.layer.borderColor = borderC.CGColor;
-                                }
                             }
                         }
                     }
@@ -271,19 +257,22 @@
                         {
                             btn.selected = YES;
                             self.selectedBtn = btn;
-                            if (config.hasBorder)
-                            {
-                                UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
-                                btn.layer.borderColor = borderC.CGColor;
-                            }
                         }
-                        else
+                    }
+                    
+                    if (btn.selected) {
+                        if (config.hasBorder)
                         {
-                            if (config.hasBorder)
-                            {
-                                UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
-                                btn.layer.borderColor = borderC.CGColor;
-                            }
+                            UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
+                            btn.layer.borderColor = borderC.CGColor;
+                        }
+                    }
+                    else
+                    {
+                        if (config.hasBorder)
+                        {
+                            UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
+                            btn.layer.borderColor = borderC.CGColor;
                         }
                     }
                 }

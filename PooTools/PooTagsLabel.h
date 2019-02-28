@@ -22,26 +22,26 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 @interface PooTagsLabelConfig : NSObject
 /*! @brief item之间的左右间距
  */
-@property (nonatomic) CGFloat itemHerMargin;
+@property (nonatomic,assign) CGFloat itemHerMargin;
 /*! @brief item之间的上下间距
  */
-@property (nonatomic) CGFloat itemVerMargin;
+@property (nonatomic,assign) CGFloat itemVerMargin;
 /*! @brief item的高度
  */
-@property (nonatomic) CGFloat itemHeight;
+@property (nonatomic,assign) CGFloat itemHeight;
 /*! @brief item的长度 (只在图片模式使用)
  */
-@property (nonatomic) CGFloat itemWidth;
+@property (nonatomic,assign) CGFloat itemWidth;
 /*! @brief item标题距左右边缘的距离 (默认10)
  */
-@property (nonatomic) CGFloat itemContentEdgs;
+@property (nonatomic,assign) CGFloat itemContentEdgs;
 /*! @brief 最顶部的item层到本view最顶部的距离,最底部的item层到本view最底部的距离 (0.1基本可看作无距离)
  */
-@property (nonatomic) CGFloat topBottomSpace;
+@property (nonatomic,assign) CGFloat topBottomSpace;
 
 /*! @brief item字体大小 (默认12)
  */
-@property (nonatomic) CGFloat fontSize;
+@property (nonatomic,assign) CGFloat fontSize;
 /*! @brief item字体 (默认HelveticaNeue-Medium)
  */
 @property (nonatomic,strong) NSString *fontName;
@@ -70,34 +70,34 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 @property (nonatomic,assign) MKButtonEdgeInsetsStyle insetsStyle;
 /*! @brief 图片与文字之间展间隙 (图片模式下使用)
  */
-@property (nonatomic) CGFloat imageAndTitleSpace;
+@property (nonatomic,assign) CGFloat imageAndTitleSpace;
 
 
 /*! @brief 是否有边框  (默认没有边框)
  */
-@property (nonatomic) BOOL hasBorder;
+@property (nonatomic,assign) BOOL hasBorder;
 /*! @brief 边框宽度 (默认0.5)
  */
-@property (nonatomic) CGFloat borderWidth;
+@property (nonatomic,assign) CGFloat borderWidth;
 /*! @brief 边框颜色 (默认[UIColor redColor])
  */
-@property (nonatomic) UIColor *borderColor;
+@property (nonatomic,strong) UIColor *borderColor;
 /*! @brief 边框颜色已选 (默认[UIColor redColor])
  */
-@property (nonatomic) UIColor *borderColorSelected;
+@property (nonatomic,strong) UIColor *borderColorSelected;
 /*! @brief 边框弧度 (默认item高度/2)
  */
-@property (nonatomic) CGFloat cornerRadius;
+@property (nonatomic,assign) CGFloat cornerRadius;
 
 /*! @brief 是否可以选中 (默认为NO (YES时为单选))
  */
-@property (nonatomic) BOOL isCanSelected;
+@property (nonatomic,assign) BOOL isCanSelected;
 /*! @brief 是否可以取消选中
  */
-@property (nonatomic) BOOL isCanCancelSelected;
+@property (nonatomic,assign) BOOL isCanCancelSelected;
 /*! @brief 是否可以多选
  */
-@property (nonatomic) BOOL isMulti;
+@property (nonatomic,assign) BOOL isMulti;
 /*! @brief 单个选中对应的标题 (初始化时默认选中的)
  */
 @property (nonatomic,copy) NSString *singleSelectedTitle;
