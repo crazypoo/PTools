@@ -17,5 +17,7 @@
 @interface PGetIpAddresses : NSObject
 + (NSString *)getIPAddress:(BOOL)preferIPv4;
 + (NSDictionary *)getIPAddresses;
+/*! @brief 此方法是同步请求,必须配合gcd去异步请求
+ */
 + (NSString *)deviceWANIPAddress;
 @end

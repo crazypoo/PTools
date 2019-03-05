@@ -73,7 +73,8 @@ normalBackgroundColor:(UIColor *)nbc
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         
         self.scroller = [[UIScrollView alloc] initWithFrame:self.bounds];
-        self.scroller.showsVerticalScrollIndicator = YES;
+        self.scroller.showsVerticalScrollIndicator = NO;
+        self.scroller.showsHorizontalScrollIndicator = NO;
         [self addSubview:self.scroller];
         self.scroller.scrollEnabled = YES;
         
