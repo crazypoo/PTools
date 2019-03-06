@@ -555,7 +555,7 @@
         [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
             make.height.offset(HEIGHT_BUTTON);
-            make.top.equalTo(self.mas_bottom).offset(-HEIGHT_BUTTON-HEIGHT_PICKER);
+            make.top.equalTo(self.mas_bottom).offset(-(HEIGHT_BUTTON+HEIGHT_PICKER));
         }];
         
         UILabel *nameTitle = [UILabel new];

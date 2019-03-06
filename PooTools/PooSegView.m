@@ -267,8 +267,19 @@ normalBackgroundColor:(UIColor *)nbc
         }
     }
     
-    UIButton *button1 = (UIButton *)[self viewWithTag:sender.tag+1];
-    [self.scroller scrollRectToVisible:CGRectMake(sender.frame.origin.x+button1.frame.size.width/2, 0, sender.frame.size.width, self.frame.size.height) animated:YES];
+    switch ((sender.tag - ButtonTag)) {
+        case 0:
+            {
+                [self.scroller scrollRectToVisible:CGRectMake(0, 0, sender.frame.size.width, self.frame.size.height) animated:YES];
+            }
+            break;
+        default:
+        {
+            UIButton *button1 = (UIButton *)[self viewWithTag:sender.tag+1];
+            [self.scroller scrollRectToVisible:CGRectMake(sender.frame.origin.x+button1.frame.size.width/2, 0, sender.frame.size.width, self.frame.size.height) animated:YES];
+        }
+            break;
+    }
 
     for (int i= 0; i < self.titlesArr.count; i++)
     {
