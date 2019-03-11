@@ -134,6 +134,7 @@
 		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
+		CCA57328223605E4005A6764 /* IGFileDownLoadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA57326223605E4005A6764 /* IGFileDownLoadManager.m */; };
 		CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E320A9A3D800943107 /* YMShowImageView.m */; };
 		CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB433E420A9A3D800943107 /* PooShowImageModel.m */; };
 		CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */; };
@@ -147,7 +148,6 @@
 		CCD660BA21DCCD3B004AA57D /* IGJSONResponseObjectParserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A521DCCD35004AA57D /* IGJSONResponseObjectParserManager.m */; };
 		CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A621DCCD35004AA57D /* IGTestParser.m */; };
 		CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A821DCCD36004AA57D /* IGHTTPClient.m */; };
-		CCD660BD21DCCD3B004AA57D /* IGFileUploadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */; };
 		CCD660BE21DCCD3B004AA57D /* IGJSONModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AA21DCCD37004AA57D /* IGJSONModel.m */; };
 		CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AB21DCCD37004AA57D /* IGJSONResponseSerializer.m */; };
 		CCD660C021DCCD3B004AA57D /* IGHTTPRequestBuilderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD660AE21DCCD38004AA57D /* IGHTTPRequestBuilderManager.m */; };
@@ -404,6 +404,8 @@
 		CC96809C20B042B800AA07F5 /* PBiologyID.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBiologyID.m; sourceTree = "<group>"; };
 		CC9C606220A1537800F06B92 /* PooDatePicker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooDatePicker.h; sourceTree = "<group>"; };
 		CC9C606320A1537900F06B92 /* PooDatePicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooDatePicker.m; sourceTree = "<group>"; };
+		CCA57326223605E4005A6764 /* IGFileDownLoadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGFileDownLoadManager.m; sourceTree = "<group>"; };
+		CCA57327223605E4005A6764 /* IGFileDownLoadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGFileDownLoadManager.h; sourceTree = "<group>"; };
 		CCB433E120A9A3D700943107 /* PooShowImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooShowImageModel.h; sourceTree = "<group>"; };
 		CCB433E220A9A3D700943107 /* YMShowImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMShowImageView.h; sourceTree = "<group>"; };
 		CCB433E320A9A3D800943107 /* YMShowImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMShowImageView.m; sourceTree = "<group>"; };
@@ -425,7 +427,6 @@
 		CCD6609A21DCCD32004AA57D /* IGHTTPRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilder.h; sourceTree = "<group>"; };
 		CCD6609B21DCCD32004AA57D /* IGHTTPClient+Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IGHTTPClient+Download.m"; sourceTree = "<group>"; };
 		CCD6609C21DCCD33004AA57D /* IGHTTPClient+Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IGHTTPClient+Download.h"; sourceTree = "<group>"; };
-		CCD6609D21DCCD33004AA57D /* IGFileUploadManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGFileUploadManager.h; sourceTree = "<group>"; };
 		CCD6609E21DCCD33004AA57D /* IGBatchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBatchTask.h; sourceTree = "<group>"; };
 		CCD6609F21DCCD33004AA57D /* NSURLSessionTask+IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSessionTask+IGHTTPClient.m"; sourceTree = "<group>"; };
 		CCD660A021DCCD34004AA57D /* IGHTTPJSONResponseParserList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPJSONResponseParserList.h; sourceTree = "<group>"; };
@@ -437,7 +438,6 @@
 		CCD660A621DCCD35004AA57D /* IGTestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGTestParser.m; sourceTree = "<group>"; };
 		CCD660A721DCCD36004AA57D /* IGHTTPClientProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPClientProfile.h; sourceTree = "<group>"; };
 		CCD660A821DCCD36004AA57D /* IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPClient.m; sourceTree = "<group>"; };
-		CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGFileUploadManager.m; sourceTree = "<group>"; };
 		CCD660AA21DCCD37004AA57D /* IGJSONModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONModel.m; sourceTree = "<group>"; };
 		CCD660AB21DCCD37004AA57D /* IGJSONResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONResponseSerializer.m; sourceTree = "<group>"; };
 		CCD660AC21DCCD38004AA57D /* IGTestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGTestParser.h; sourceTree = "<group>"; };
@@ -641,6 +641,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CCA57327223605E4005A6764 /* IGFileDownLoadManager.h */,
+				CCA57326223605E4005A6764 /* IGFileDownLoadManager.m */,
 				CC35017721FE935300E64074 /* PObject2Json.h */,
 				CC35017621FE935300E64074 /* PObject2Json.m */,
 				CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */,
@@ -655,8 +657,6 @@
 				CCD6609521DCCD31004AA57D /* IGBatchTask.m */,
 				CCD660B221DCCD3A004AA57D /* IGBatchTaskManager.h */,
 				CCD660B421DCCD3B004AA57D /* IGBatchTaskManager.m */,
-				CCD6609D21DCCD33004AA57D /* IGFileUploadManager.h */,
-				CCD660A921DCCD36004AA57D /* IGFileUploadManager.m */,
 				CCD6609621DCCD31004AA57D /* IGHTTPClient.h */,
 				CCD660A821DCCD36004AA57D /* IGHTTPClient.m */,
 				CCD6609C21DCCD33004AA57D /* IGHTTPClient+Download.h */,
@@ -1148,6 +1148,7 @@
 				CC1257BB2098319300E31A38 /* NSString+Encryption.m in Sources */,
 				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
+				CCA57328223605E4005A6764 /* IGFileDownLoadManager.m in Sources */,
 				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
@@ -1155,7 +1156,6 @@
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
 				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
-				CCD660BD21DCCD3B004AA57D /* IGFileUploadManager.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
