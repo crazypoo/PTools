@@ -12,7 +12,8 @@ typedef NS_ENUM(NSUInteger, PooShowImageModelType) {
     PooShowImageModelTypeNormal = 0,
     PooShowImageModelTypeGIF = 1,
     PooShowImageModelTypeVideo = 2,
-    PooShowImageModelTypeFullView = 3
+    PooShowImageModelTypeFullView = 3,
+    PooShowImageModelType3D = 4
 };
 
 @interface PooShowImageModel : NSObject

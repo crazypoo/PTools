@@ -17,11 +17,13 @@
 #import "UIView+ViewShaking.h"
 #import "SensitiveWordTools.h"
 #import "PopSignatureView.h"
+#import "UIButton+Block.h"
 
 #import "PTShowFunctionViewController.h"
 
 #import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
+#import <WebKit/WebKit.h>
 
 #import "PCarrie.h"
 #import "PooSystemInfo.h"
@@ -311,10 +313,10 @@ static NSString *cellIdentifier = @"CELL";
                     //    imageModel1.imageInfo = @"444444";
                     //    imageModel1.imageTitle = @"333333";
                     
-                    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-                    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-                    imageModel2.imageShowType = PooShowImageModelTypeNormal;
-                    imageModel2.imageInfo = @"4444444444444";
+//                    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+//                    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+//                    imageModel2.imageShowType = PooShowImageModelTypeNormal;
+//                    imageModel2.imageInfo = @"4444444444444";
 //
 //                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
 //                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
@@ -330,11 +332,21 @@ static NSString *cellIdentifier = @"CELL";
                     
                     PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
                     imageModel4.imageUrl = kImageNamed(@"DemoImage");
-                    imageModel4.imageShowType = PooShowImageModelTypeNormal;
+                    imageModel4.imageShowType = PooShowImageModelType3D;
                     imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
                     
+                    PooShowImageModel *imageModel100 = [[PooShowImageModel alloc] init];
+                    imageModel100.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
+                    imageModel100.imageShowType = PooShowImageModelTypeFullView;
+                    imageModel100.imageInfo = @"5655555555555";
+                    
+                    PooShowImageModel *imageModel1001 = [[PooShowImageModel alloc] init];
+                    imageModel1001.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
+                    imageModel1001.imageShowType = PooShowImageModelTypeNormal;
+                    imageModel1001.imageInfo = @"5655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555";
+                    
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    NSArray *arr = @[imageModel4,imageModel4,imageModel2,imageModel2,imageModel2];
+                    NSArray *arr = @[imageModel100,imageModel1001,imageModel4];
 
                     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
@@ -342,6 +354,40 @@ static NSString *cellIdentifier = @"CELL";
                     }];
                     [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+                    }];
+                    [ymImageV setOtherBlock:^(NSInteger index) {
+                        PNSLog(@"%d",index);
+                        
+                        WKWebView *webView = [WKWebView new];
+                        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
+                        [webView loadRequest:request];
+                        [kAppDelegateWindow addSubview:webView];
+                        [webView mas_makeConstraints:^(MASConstraintMaker *make) {
+                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+                        }];
+//                        UIWebView *webView = [UIWebView new];
+//                        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
+//                        [webView loadRequest:request];
+//                        [kAppDelegateWindow addSubview:webView];
+//                        [webView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+//                        }];
+//                        UIView *aaaaa = [UIView new];
+//                        aaaaa.backgroundColor = kRandomColor;
+//                        [kAppDelegateWindow addSubview:aaaaa];
+//                        [aaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+//                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+//                        }];
+                        
+                        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+                        pBtn.frame = CGRectMake(0, 0, 50, 50);
+                        pBtn.backgroundColor = kRandomColor;
+                        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+                        [pBtn setTitle:@"1111" forState:UIControlStateNormal];
+                        [pBtn addActionHandler:^(UIButton *sender) {
+                            [webView removeFromSuperview];
+                        }];
+                        [webView addSubview:pBtn];
                     }];
                     ymImageV.saveImageStatus = ^(BOOL saveStatus) {
                         PNSLog(@"%d",saveStatus);

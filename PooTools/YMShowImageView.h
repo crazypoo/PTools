@@ -22,6 +22,7 @@
 
 typedef void(^didRemoveImage)(void);
 typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
+typedef void(^YMShowImageViewShowOtherAction) (NSInteger index);
 
 @interface YMShowImageView : UIView<UIScrollViewDelegate>
 {
@@ -37,6 +38,9 @@ typedef void(^YMShowImageViewDidDeleted) (YMShowImageView *siv,NSInteger index);
 /*! @brief 保存图片/视频的回调
  */
 @property (nonatomic, copy) void(^saveImageStatus)(BOOL saveStatus);
+/*! @brief 图片其他动作
+ */
+@property (nonatomic, copy) YMShowImageViewShowOtherAction otherBlock;
 
 /*! @brief 初始化浏览图片的View
  * @param clickTag 图片的Tag (默认要选择YMShowImageViewClickTagAppend)
@@ -74,7 +78,8 @@ typedef enum {
     PShowModeGif, // gif
     PShowModeVideo, // 视频
     PShowModeNormal, //普通
-    PShowModeFullView //全景
+    PShowModeFullView, //全景
+    PShowModeFull3D //全景
 } PShowMode;
 
 @interface PShowImageSingleView : UIView
