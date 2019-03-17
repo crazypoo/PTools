@@ -128,6 +128,8 @@
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
+		CC6D9C57223E432B00B6B561 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6D9C54223E432A00B6B561 /* NSDate+Category.m */; };
+		CC6D9C58223E432B00B6B561 /* NSDateFormatter+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */; };
 		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
 		CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */; };
 		CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */; };
@@ -392,6 +394,10 @@
 		CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UITextField_Shake.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UIViewController_Swizzled.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = YCXMenu.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC6D9C53223E432A00B6B561 /* NSDate+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Category.h"; sourceTree = "<group>"; };
+		CC6D9C54223E432A00B6B561 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
+		CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+Category.h"; sourceTree = "<group>"; };
+		CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+Category.m"; sourceTree = "<group>"; };
 		CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MLScreenshot.h"; sourceTree = "<group>"; };
 		CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MLScreenshot.m"; sourceTree = "<group>"; };
 		CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
@@ -641,6 +647,10 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
+				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
+				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
+				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
 				CCA57327223605E4005A6764 /* IGFileDownLoadManager.h */,
 				CCA57326223605E4005A6764 /* IGFileDownLoadManager.m */,
 				CC35017721FE935300E64074 /* PObject2Json.h */,
@@ -1091,6 +1101,7 @@
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */,
+				CC6D9C57223E432B00B6B561 /* NSDate+Category.m in Sources */,
 				CC1257B92098319300E31A38 /* NSMutableArray+Shuffle.m in Sources */,
 				CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */,
 				CC1D38BC211D706400FD29F4 /* MAThermometerBorder.m in Sources */,
@@ -1157,6 +1168,7 @@
 				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
+				CC6D9C58223E432B00B6B561 /* NSDateFormatter+Category.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
 				CC1257D22098319300E31A38 /* PSpeech.m in Sources */,

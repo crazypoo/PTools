@@ -64,4 +64,8 @@
 /*! @brief 判断字符串是否银行卡号并返回属于哪个银行
  */
 - (NSString *)returnBankName;
+
+/*! @brief 判断字符串是否中文
+ */
+- (BOOL)isChinese;
 @end

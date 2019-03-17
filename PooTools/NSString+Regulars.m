@@ -28,6 +28,13 @@ static NSString *IpAddress = @"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\
 static NSString *URL = @"[a-zA-z]+://.*";
 static NSString *MoneyString = @"(\\+|\\-)?(([0]|(0[.]\\d{0,2}))|([1-9]\\d{0,4}(([.]\\d{0,2})?)))?";
 
+static NSString *Chinese = @"(^[\u4e00-\u9fa5]+$)";
+
+- (BOOL)isChinese
+{
+    return [self checkWithRegular:Chinese];
+}
+
 - (BOOL)isUrlString
 {
     return [self checkWithRegular:URL];
