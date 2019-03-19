@@ -130,6 +130,7 @@
 		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
 		CC6D9C57223E432B00B6B561 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6D9C54223E432A00B6B561 /* NSDate+Category.m */; };
 		CC6D9C58223E432B00B6B561 /* NSDateFormatter+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */; };
+		CC7E05372240E42100EAFEA4 /* NSString+MoneyString.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */; };
 		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
 		CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */; };
 		CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */; };
@@ -398,6 +399,8 @@
 		CC6D9C54223E432A00B6B561 /* NSDate+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Category.m"; sourceTree = "<group>"; };
 		CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDateFormatter+Category.h"; sourceTree = "<group>"; };
 		CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDateFormatter+Category.m"; sourceTree = "<group>"; };
+		CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MoneyString.m"; sourceTree = "<group>"; };
+		CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MoneyString.h"; sourceTree = "<group>"; };
 		CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+MLScreenshot.h"; sourceTree = "<group>"; };
 		CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+MLScreenshot.m"; sourceTree = "<group>"; };
 		CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
@@ -647,6 +650,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */,
+				CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */,
 				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
 				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
 				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
@@ -1123,6 +1128,7 @@
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
+				CC7E05372240E42100EAFEA4 /* NSString+MoneyString.m in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,

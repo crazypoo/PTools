@@ -233,7 +233,7 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief iOS更换App图标
  * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
  */
-+(void)changeAPPIcon:(NSString * _Nonnull)IconName;
++(void)changeAPPIcon:(NSString * _Nullable)IconName;
 
 /*! @brief 生成二维码
  */
