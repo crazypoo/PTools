@@ -335,13 +335,7 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 #pragma mark ---------------> 打印
 /*! @brief 强化NSLog
  */
-#define PNSLog(format, ...) do {                                                                          \
-fprintf(stderr, "<%s : %d> %s\n",                                           \
-[[[NSString stringWithUTF8String:__FILE__] lastPathComponent] UTF8String],  \
-__LINE__, __func__);                                                        \
-(NSLog)((format), ##__VA_ARGS__);                                           \
-fprintf(stderr, "我这里是打印,不要慌,我路过的😂😂😂😂😂😂😂😂😂😂😂😂\n");                                               \
-} while (0)
+#define PNSLog(format, ...) do {fprintf(stderr, "%s:%d\t%s\n", [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat: format, ## __VA_ARGS__] UTF8String]);fprintf(stderr, "我这里是打印,不要慌,我路过的😂😂😂😂😂😂😂😂😂😂😂😂\n");}while (0)
 
 #pragma mark ---------------> NSUserDefaults 实例化
 /*! @brief NSUserDefaults 实例化

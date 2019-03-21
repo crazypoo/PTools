@@ -138,7 +138,7 @@ static inline BOOL isIPhoneXSeries() {
                 message:(NSString * _Nullable)m
             cancelTitle:(NSString * _Nullable)cT
                 okTitle:(NSString * _Nullable)okT
-       otherButtonArrow:(NSArray * _Nonnull)titleArr
+       otherButtonArray:(NSArray * _Nonnull)titleArr
                  shouIn:(UIViewController * _Nonnull)vC
              alertStyle:(UIAlertControllerStyle)style
                okAction:(void (^ _Nullable)(void))okBlock

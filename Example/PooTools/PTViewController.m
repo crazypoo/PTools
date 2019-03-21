@@ -356,7 +356,7 @@ static NSString *cellIdentifier = @"CELL";
                         make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
                     }];
                     [ymImageV setOtherBlock:^(NSInteger index) {
-                        PNSLog(@"%d",index);
+                        PNSLog(@"%ld",(long)index);
                         
                         WKWebView *webView = [WKWebView new];
                         NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];

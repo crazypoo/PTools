@@ -530,7 +530,7 @@
             break;
         case 2:
         {
-            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArrow:nil shouIn:self alertStyle:UIAlertControllerStyleActionSheet
+            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
                            okAction:^{
                                
                            } cancelAction:^{

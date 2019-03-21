@@ -11,6 +11,7 @@
 #import "IGJSONResponseObjectParserManager.h"
 #import "NSURLSessionTask+IGHTTPClient.h"
 
+#import "PMacros.h"
 
 #ifndef __OPTIMIZE__
 #define IGJSONResponseSerializerDefaultShowLog YES
@@ -43,16 +44,18 @@
                            task:(NSURLSessionTask*)task
                           error:(NSError *__autoreleasing *)error{
     NSString *respString = data?[[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]:@"";
-    if (data && _showLog) {
-        
-        NSLog(@"\n∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆\nResponse String：\n%@\n\n\n",respString);
+    if (data && _showLog)
+    {
+        PNSLog(@"\n∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆∆\nResponse String：\n%@\n\n\n",respString);
     }
     
     id responseObject = [super responseObjectForResponse:response data:data error:error];
 
     // 定制Response处理
-    if (responseObject && task){
-        if ([task ig_saveResponseString]) {
+    if (responseObject && task)
+    {
+        if ([task ig_saveResponseString])
+        {
             [task ig_setResponseString:respString];
         }
         
@@ -68,13 +71,17 @@
                 if (obj || parserError) {
                     *error = parserError;
                     return obj;
-                }else{
-                    if (_showLog)
-                        NSLog(@"parser give up");
                 }
-            }else{
+                else
+                {
+                    if (_showLog)
+                        PNSLog(@"parser give up");
+                }
+            }
+            else
+            {
                 if (_showLog)
-                    NSLog(@"not find parser");
+                    PNSLog(@"not find parser");
             }
         }
     }
