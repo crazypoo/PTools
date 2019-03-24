@@ -102,6 +102,7 @@
 		CC4C717E218AD4F6008B1804 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC4C717D218AD4F6008B1804 /* UICountingLabel.m */; };
 		CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */; };
 		CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */; };
+		CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */; };
 		CC658CD420AC3D4500949DF6 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD320AC3D4400949DF6 /* PADView.m */; };
 		CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */; };
 		CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = CC658CD920AC3D6D00949DF6 /* CGLayout.m */; };
@@ -364,6 +365,8 @@
 		CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIView+ViewRectCorner.m"; sourceTree = "<group>"; };
 		CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
 		CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
+		CC634FA722464B9B007BBD1A /* PTOpenSystemFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTOpenSystemFunction.h; sourceTree = "<group>"; };
+		CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTOpenSystemFunction.m; sourceTree = "<group>"; };
 		CC658CD220AC3D4400949DF6 /* PADView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PADView.h; sourceTree = "<group>"; };
 		CC658CD320AC3D4400949DF6 /* PADView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PADView.m; sourceTree = "<group>"; };
 		CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGAdBannerModel.h; sourceTree = "<group>"; };
@@ -890,6 +893,8 @@
 				CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */,
 				CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */,
 				CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */,
+				CC634FA722464B9B007BBD1A /* PTOpenSystemFunction.h */,
+				CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -1104,6 +1109,7 @@
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
+				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */,
 				CC6D9C57223E432B00B6B561 /* NSDate+Category.m in Sources */,

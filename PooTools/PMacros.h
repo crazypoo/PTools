@@ -143,6 +143,9 @@
 /*! @brief nav高度
  */
 #define HEIGHT_NAV 44.f
+/*! @brief 横屏nav高度
+ */
+#define HEIGHT_NAV_LandSpaceLeftOrRight 32.f
 /*! @brief status高度 (iPhoneX除外)
  */
 #define HEIGHT_STATUS (isIPhoneXSeries() ? 44.f : 20.f)
