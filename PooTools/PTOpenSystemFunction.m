@@ -322,6 +322,14 @@
         default:
             break;
     }
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    if (@available(iOS 10.0, *)) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]
+                                           options:@{}
+                                 completionHandler:nil];
+    }
+    else
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:urlString]];
+    }
 }
 @end
