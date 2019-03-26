@@ -21,6 +21,9 @@
     AFHTTPSessionManager *manager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:configuration];
     //构造URL对象
     NSURL *url = [NSURL URLWithString:fileURL];
+#if DEBUG
+    PNSLog(@"CurrentDownURL:%@",url.description);
+#endif
     //构造request对象
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     //使用系统类创建downLoad Task对象
