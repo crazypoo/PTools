@@ -12,7 +12,7 @@
 
 @implementation IGFileDownLoadManager
 
-+(void)fileDownloadWithUrl:(NSString * _Nonnull)fileURL withFileSavePath:(NSString * _Nonnull)savePath progress:(void (^)(NSProgress *downloadProgress))downloadProgressBlock completionHandler:(void (^)(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error))block
++(void)fileDownloadWithUrl:(NSString * _Nonnull)fileURL withFileSavePath:(NSString * _Nonnull)savePath withTimeOut:(NSTimeInterval)timeout progress:(void (^)(NSProgress *downloadProgress))downloadProgressBlock completionHandler:(void (^)(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error))block
 {
     kShowNetworkActivityIndicator();
 
@@ -25,7 +25,8 @@
     PNSLog(@"CurrentDownURL:%@",url.description);
 #endif
     //构造request对象
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:timeout];
+    
     //使用系统类创建downLoad Task对象
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
         dispatch_async(dispatch_get_main_queue(), ^{
