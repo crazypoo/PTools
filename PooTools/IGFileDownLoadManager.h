@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface IGFileDownLoadManager : NSObject
-+(void)fileDownloadWithUrl:(NSString * _Nonnull)fileURL withFileSavePath:(NSString * _Nonnull)savePath withTimeOut:(NSTimeInterval _Nonnull)timeout progress:(void (^)(NSProgress *downloadProgress))downloadProgressBlock completionHandler:(void (^)(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error))block;
++(void)fileDownloadWithUrl:(NSString * _Nonnull)fileURL withFileSavePath:(NSString * _Nonnull)savePath withTimeOut:(NSTimeInterval)timeout progress:(void (^)(NSProgress *downloadProgress))downloadProgressBlock completionHandler:(void (^)(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error))block;
 @end
 
 NS_ASSUME_NONNULL_END
