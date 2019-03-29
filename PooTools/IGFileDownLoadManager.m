@@ -25,8 +25,9 @@
     PNSLog(@"CurrentDownURL:%@",url.description);
 #endif
     //构造request对象
-    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url cachePolicy:0 timeoutInterval:timeout];
-    
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+    [request setTimeoutInterval:timeout];
+
     //使用系统类创建downLoad Task对象
     NSURLSessionDownloadTask *task = [manager downloadTaskWithRequest:request progress:^(NSProgress * _Nonnull downloadProgress) {
         dispatch_async(dispatch_get_main_queue(), ^{
