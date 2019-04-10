@@ -324,7 +324,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
         CGRect rect1 = CGRectMake((rect.size.width -labelW)/2, (rect.size.height -StrHeight)/2,labelW, StrHeight);
         origionX = rect1.origin.x;
         totalWidth = rect1.origin.x+labelW;
-        UIFont  *font = kDEFAULT_FONT(self.placeholderFont, 15);//设置字体
+        UIFont  *font = kDEFAULT_FONT(self.placeholderFont, kAdaptedWidth(15));//设置字体
 
         CGFloat labelX;
         switch ([UIApplication sharedApplication].statusBarOrientation) {

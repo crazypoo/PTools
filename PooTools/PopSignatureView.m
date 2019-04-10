@@ -28,6 +28,7 @@
 @property (nonatomic,strong) NSString *navFontName;
 @property (nonatomic,strong) UIButton *maskView;
 @property (nonatomic,strong) UIButton *btn3;
+@property (nonatomic,strong) UIButton *cancelBtn;
 @property (nonatomic,strong) EasySignatureView *signatureView;
 
 @end
@@ -78,13 +79,9 @@
 - (void)setupView
 {
     self.maskView = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.maskView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT);
     self.maskView.backgroundColor = kDevMaskBackgroundColor;
     self.maskView.userInteractionEnabled = YES;
     [self addSubview:self.maskView];
-    [self.maskView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self);
-    }];
     
     self.backGroundView = [UIView new];
     self.backGroundView.userInteractionEnabled = YES;
@@ -103,7 +100,6 @@
     
     UIFont *viewBtnFont = kDEFAULT_FONT(self.fontName ? self.fontName : kDevLikeFont, 16);
     
-    CGFloat navSpace = 10;
     NSString *cleanString = @"清除";
     clearBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     clearBtn.titleLabel.font = viewBtnFont;
@@ -112,10 +108,10 @@
     [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
     [self.navView addSubview:clearBtn];
 
-    UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    cancelBtn.titleLabel.font = viewBtnFont;
-    [cancelBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
-    [self.navView addSubview:cancelBtn];
+    self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.cancelBtn.titleLabel.font = viewBtnFont;
+    [self.cancelBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
+    [self.navView addSubview:self.cancelBtn];
     
     self.btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btn3 setTitle:@"提交" forState:UIControlStateNormal];
@@ -125,6 +121,21 @@
     [self.btn3 addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
     [self.backGroundView addSubview:self.btn3];
     
+    [self layoutIfNeeded];
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.maskView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
+    
+    CGFloat navSpace = 10;
+    NSString *cleanString = @"清除";
+    UIFont *viewBtnFont = kDEFAULT_FONT(self.fontName ? self.fontName : kDevLikeFont, 16);
+
     UIDevice *device = [UIDevice currentDevice];
     if (device.orientation == UIDeviceOrientationLandscapeLeft || device.orientation ==  UIDeviceOrientationLandscapeRight)
     {
@@ -166,9 +177,9 @@
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
         
-        [cancelBtn setTitle:@"返回" forState:UIControlStateNormal];
-        [cancelBtn addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
-        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.cancelBtn setTitle:@"返回" forState:UIControlStateNormal];
+        [self.cancelBtn addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
+        [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.navView).offset(navSpace);
             make.top.bottom.equalTo(self.navView);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
@@ -191,13 +202,13 @@
         
         [self.btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.bottom.equalTo(self.backGroundView);
+            make.bottom.equalTo(self.backGroundView).offset(isIPhoneXSeries() ? (-HEIGHT_TABBAR_SAFEAREA) : 0);
             make.height.offset(HEIGHT_BUTTON);
         }];
         
         [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(SignatureViewHeight - HEIGHT_BUTTON*2);
+            make.height.offset(216);
             make.bottom.equalTo(self.btn3.mas_top);
         }];
         
@@ -213,8 +224,8 @@
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
         
-        [cancelBtn setTitle:@"签名" forState:UIControlStateNormal];
-        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.cancelBtn setTitle:@"签名" forState:UIControlStateNormal];
+        [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.navView).offset(navSpace);
             make.top.bottom.equalTo(self.navView);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
@@ -229,6 +240,9 @@
 - (void)show
 {
     [kAppDelegateWindow addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
     [self setupView];
 }
 
@@ -237,17 +251,17 @@
     switch ([UIApplication sharedApplication].statusBarOrientation) {
         case UIInterfaceOrientationLandscapeRight:
         {
-            [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 1) forState:UIControlStateNormal];
+            [clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
             break;
         case UIInterfaceOrientationLandscapeLeft:
         {
-            [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 1) forState:UIControlStateNormal];
+            [clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
             break;
         default:
         {
-            [clearBtn setTitleColor:kRGBAColor(155, 155, 155, 1) forState:UIControlStateNormal];
+            [clearBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         }
             break;
     }
