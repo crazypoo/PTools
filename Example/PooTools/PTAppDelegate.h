@@ -8,9 +8,14 @@
 
 @import UIKit;
 
+#import "PTCheckAppStatus.h"
+#import "RCDraggableButton.h"
+#import <Masonry/Masonry.h>
+
 @interface PTAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) RCDraggableButton *floatBtn;
 + (PTAppDelegate *)appDelegate;
 
 @end

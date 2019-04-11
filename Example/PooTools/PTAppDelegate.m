@@ -45,6 +45,48 @@
 
     PNSLog(@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]);
     
+    [[PTCheckAppStatus sharedInstance] open];
+    self.floatBtn = [[RCDraggableButton alloc] initInView:self.window WithFrame:CGRectMake(0, 100, 50, 50)];
+    self.floatBtn.backgroundColor = kRandomColor;
+    self.floatBtn.adjustsImageWhenHighlighted = NO;
+    
+    UILabel *titleLabel = [UILabel new];
+    titleLabel.textColor = [UIColor whiteColor];
+    titleLabel.numberOfLines = 0;
+    titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
+    titleLabel.text = @"Dev\nTools";
+    [self.floatBtn addSubview:titleLabel];
+    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.floatBtn);
+    }];
+    
+    [self.floatBtn setLongPressBlock:^(RCDraggableButton *avatar) {
+        //        NSLog(@"\n\tAvatar in keyWindow ===  LongPress!!! ===");
+        //More todo here.
+
+    }];
+    [self.floatBtn setTapBlock:^(RCDraggableButton *avatar) {
+        //        NSLog(@"\n\tAvatar in keyWindow ===  Tap!!! ===");
+        //More todo here.
+    }];
+    [self.floatBtn setDoubleTapBlock:^(RCDraggableButton *avatar) {
+        //        NSLog(@"\n\tAvatar in keyWindow ===  DoubleTap!!! ===");
+        //More todo here.
+        if ([PTCheckAppStatus sharedInstance].closed)
+        {
+            [[PTCheckAppStatus sharedInstance] open];
+        }
+        else{
+            [[PTCheckAppStatus sharedInstance] close];
+        }
+    }];
+    [self.floatBtn setDraggingBlock:^(RCDraggableButton *avatar) {
+        //        NSLog(@"\n\tAvatar in keyWindow === Dragging!!! ===");
+    }];
+    [self.floatBtn setAutoDockingBlock:^(RCDraggableButton *avatar) {
+        //        NSLog(@"\n\tAvatar in keyWindow === AutoDocking!!! ===");
+    }];
+
     return YES;
 }
 

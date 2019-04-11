@@ -55,10 +55,19 @@
                                                  selector: @selector(applicationWillResignActiveNotification)
                                                      name: UIApplicationWillResignActiveNotification
                                                    object: nil];
-        
+        [self createUI];
+    }
+    return self;
+}
+
+-(void)createUI
+{
+    if (!self.avatar)
+    {
         self.avatar = [[RCDraggableButton alloc] initInView:kAppDelegateWindow WithFrame:CGRectMake(0, HEIGHT_STATUS, kSCREEN_WIDTH, 30)];
         self.avatar.adjustsImageWhenHighlighted = NO;
-
+        self.avatar.tag = 9999;
+        
         // Track FPS using display link
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkTick:)];
         [displayLink setPaused:YES];
@@ -78,7 +87,7 @@
             make.left.right.top.bottom.equalTo(self.avatar);
         }];
     }
-    return self;
+    self.closed = NO;
 }
 
 - (void)displayLinkTick:(CADisplayLink *)link
@@ -107,6 +116,7 @@
 - (void)open
 {
     [displayLink setPaused:NO];
+    [self createUI];
 }
 
 - (void)openWithHandler:(void (^)(NSInteger fpsValue))handler
@@ -118,7 +128,9 @@
 - (void)close
 {
     [displayLink setPaused:YES];
-    [RCDraggableButton removeAllFromView:kAppDelegateWindow];
+    self.closed = YES;
+    [self.avatar removeFromSuperview];
+    self.avatar = nil;
 }
 
 - (void)applicationDidBecomeActiveNotification

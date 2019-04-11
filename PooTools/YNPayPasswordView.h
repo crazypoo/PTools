@@ -25,7 +25,7 @@ typedef void (^InputViewDismissBlock)(void);
  * @param block 输入框按钮回调
  * @param dismissBlock 输入框消失回调
  */
--(instancetype)initWithTitle:(NSString * _Nonnull)title
+-(instancetype _Nonnull)initWithTitle:(NSString * _Nonnull)title
                 WithSubTitle:(NSString * _Nonnull)subTitle
                   WithButton:(NSArray * _Nonnull )bttonArray
                withTitleFont:(UIFont * _Nullable)font

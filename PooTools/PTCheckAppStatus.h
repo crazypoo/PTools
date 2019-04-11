@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PTCheckAppStatus : NSObject
 @property (nonatomic,strong)UILabel *fpsLabel;
+@property (nonatomic,assign)BOOL closed;
 + (PTCheckAppStatus *)sharedInstance;
 - (void)open;
 - (void)openWithHandler:(void (^)(NSInteger fpsValue))handler;
