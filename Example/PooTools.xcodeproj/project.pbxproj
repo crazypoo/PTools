@@ -24,6 +24,7 @@
 		64F95E322099374200858FED /* IGBannerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 64F95E302099374200858FED /* IGBannerView.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0908103225F4A18005243E7 /* NSString+Extension.m */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */; };
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
@@ -208,6 +209,8 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
+		C0908102225F4A18005243E7 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
+		C0908103225F4A18005243E7 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UINavigation_SXFixSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -900,6 +903,8 @@
 				CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */,
 				CC634FA722464B9B007BBD1A /* PTOpenSystemFunction.h */,
 				CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */,
+				C0908102225F4A18005243E7 /* NSString+Extension.h */,
+				C0908103225F4A18005243E7 /* NSString+Extension.m */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -948,6 +953,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -1163,6 +1169,7 @@
 				CC1257DE2098319300E31A38 /* UIImage+Size.m in Sources */,
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
+				C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */,
 				CC1257B82098319300E31A38 /* MethodSwizzle.m in Sources */,
 				CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */,
 				CC1257DD2098319300E31A38 /* UIImage+BlurGlass.m in Sources */,
