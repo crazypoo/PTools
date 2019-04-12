@@ -59,6 +59,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) UIView *bottomView;
 @property (nonatomic, assign) BOOL hideNavAndBottom;
 @property (nonatomic, strong) UIPageControl *pageView;
+@property (nonatomic, strong) UILabel *pageView_label;
+@property (nonatomic, assign) BOOL showLabel;
 @property (nonatomic, strong) UITapGestureRecognizer *singleTap;
 @property (nonatomic, strong) UITapGestureRecognizer *doubleTap;
 @property (nonatomic, strong) UIView *maskview;
@@ -208,18 +210,40 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         make.left.equalTo(self.navView).offset(10);
     }];
     
-    self.pageView = [UIPageControl new];
-    self.pageView.backgroundColor = kClearColor;
-    self.pageView.pageIndicatorTintColor = [UIColor lightGrayColor];
-    self.pageView.currentPageIndicatorTintColor = [UIColor whiteColor];
-    [self addSubview:self.pageView];
-    [self.pageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.offset(100);
-        make.height.offset(20);
-        make.centerX.equalTo(self);
-        make.bottom.equalTo(self).offset(-20);
-    }];
-    self.pageView.alpha = 0.0f;
+    if (appendArray.count > 10) {
+        self.showLabel = YES;
+        self.pageView_label = [[UILabel alloc] init];
+        self.pageView_label.textAlignment = NSTextAlignmentCenter;
+        self.pageView_label.textColor = self.titleColor;
+        self.pageView_label.font = kDEFAULT_FONT(self.fontName, 20);
+        self.pageView_label.backgroundColor = cIndexTitleBackgroundColor;
+        self.pageView_label.layer.cornerRadius = 15;
+        self.pageView_label.clipsToBounds = YES;
+        self.pageView_label.text = [NSString stringWithFormat:@"1/%ld", (long)appendArray.count];
+        [self addSubview:self.pageView_label];
+        [self.pageView_label mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(self.pageView_label.text.length*20);
+            make.height.offset(hIndexTitleHeight);
+            make.centerX.equalTo(self);
+            make.bottom.equalTo(self).offset(-20);
+        }];
+        self.pageView_label.alpha = 0.0f;
+    }
+    else
+    {
+        self.showLabel = NO;
+        self.pageView = [UIPageControl new];
+        self.pageView.backgroundColor = kClearColor;
+        self.pageView.pageIndicatorTintColor = [UIColor lightGrayColor];
+        self.pageView.currentPageIndicatorTintColor = [UIColor whiteColor];
+        [self addSubview:self.pageView];
+        [self.pageView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self);
+            make.height.offset(20);
+            make.bottom.equalTo(self).offset(-20);
+        }];
+        self.pageView.alpha = 0.0f;
+    }
     
     self.userInteractionEnabled = YES;
 
@@ -316,7 +340,14 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     [UIView animateWithDuration:.4f animations:^(){
         self.navView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
         self.bottomView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
-        self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        if (self.showLabel)
+        {
+            self.pageView_label.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        }
+        else
+        {
+            self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        }
         self.hideNavAndBottom = !self.hideNavAndBottom;
     } completion:^(BOOL finished) {
         
@@ -534,7 +565,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     [UIView animateWithDuration:.4f animations:^(){
         self.navView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
         self.bottomView.alpha = self.hideNavAndBottom ? 1.0f : 0.0f;
-        self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        if (self.showLabel)
+        {
+            self.pageView_label.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        }
+        else
+        {
+            self.pageView.alpha = self.hideNavAndBottom ? 0.0f : 1.0f;
+        }
+
         self.hideNavAndBottom = !self.hideNavAndBottom;
     } completion:^(BOOL finished) {
         
@@ -611,8 +650,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
         [self.fullViewLabel setTitle:[self fullImageHidden] forState:UIControlStateNormal];
         
-        self.pageView.numberOfPages = self.modelArr.count;
-        self.pageView.currentPage = self.page;
+        if (self.showLabel)
+        {
+            self.pageView_label.text = [NSString stringWithFormat:@"%ld/%ld", (long)self.page + 1,(long)self.modelArr.count];
+        }
+        else
+        {
+            self.pageView.numberOfPages = self.modelArr.count;
+            self.pageView.currentPage = self.page;
+        }
         
         PooShowImageModel *model = self.modelArr[self.page];
         PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
@@ -816,7 +862,15 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     {
         int page = (scrollView.contentOffset.x)/scrollView.width;
         self.page = page;
-        self.pageView.currentPage = self.page;
+        
+        if (self.showLabel)
+        {
+            self.pageView_label.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
+        }
+        else
+        {
+            self.pageView.currentPage = self.page;
+        }
         
         self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld", page + 1, (long)self.modelArr.count];
         
