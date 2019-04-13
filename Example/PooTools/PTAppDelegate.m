@@ -87,6 +87,8 @@
         //        NSLog(@"\n\tAvatar in keyWindow === AutoDocking!!! ===");
     }];
 
+    
+    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract]);
     return YES;
 }
 

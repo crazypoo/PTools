@@ -58,7 +58,7 @@
 }
 
 +(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName{
-
+    
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:aDeleagte cancelButtonTitle:cancelName otherButtonTitles:otherbuttonName, nil];
     [alert show];
     return alert;
@@ -205,14 +205,14 @@
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     NSTimeZone* timeZone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-
+    
     switch (type) {
         case GetTimeTypeYMD:
-            {
-                [formatter setDateFormat:@"YYYY-MM-dd"];
-                [formatter setTimeZone:timeZone];
-                return [formatter stringFromDate:date];
-            }
+        {
+            [formatter setDateFormat:@"YYYY-MM-dd"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
             break;
         case GetTimeTypeYMDHHS:
         {
@@ -374,7 +374,7 @@
     [dic setObject:language forKey:LANGUAGEENGLISH];
     [dic setObject:[NSLocale canonicalLanguageIdentifierFromString:language] forKey:LANGUAGEANDCHINESE];
     [dic setObject:[[[NSLocale alloc] initWithLocaleIdentifier:language] displayNameForKey:NSLocaleIdentifier value:language] forKey:LANGUAGECHINESE];
-
+    
     return dic;
 }
 
@@ -517,7 +517,7 @@
 }
 
 + (ToolsAboutImageType)contentTypeForImageData:(NSData *)data
-{    
+{
     uint8_t c;
     
     [data getBytes:&c length:1];
@@ -882,7 +882,7 @@
         }
     }
 }
-    
+
 //得到整数部分
 +(NSString *)getIntPartUper:(int)digit
 {
@@ -908,54 +908,54 @@
         return tmpStr;
     }
 }
-    
+
 +(NSString *)getPartAfterDot:(NSString *)digitStr
-    {
-        if (digitStr.length > 0) {
-            NSArray *uperArray = @[@"零", @"壹", @"贰", @"叁", @"肆", @"伍", @"陆", @"柒", @"捌", @"玖"];
-            NSString *digitStr1 = nil;
-            if (digitStr.length == 1) {
-                digitStr1 = [NSString stringWithFormat:@"%@0",digitStr];
-                int digit = [[digitStr1 substringToIndex:2]intValue];
-                int one = digit/10;
-                int two = digit%10;
-                if (one != 0 && two != 0) {
-                    return [NSString stringWithFormat:@"%@角%@分",[uperArray objectAtIndex:one],[uperArray objectAtIndex:two]];
-                }
-                else if(one == 0 && two != 0) {
-                    return [NSString stringWithFormat:@"%@分",[uperArray objectAtIndex:two]];
-                }if(one != 0 && two == 0) {
-                    return [NSString stringWithFormat:@"%@角",[uperArray objectAtIndex:one]];
-                }
-                else
-                {
-                    return @"";
-                }
+{
+    if (digitStr.length > 0) {
+        NSArray *uperArray = @[@"零", @"壹", @"贰", @"叁", @"肆", @"伍", @"陆", @"柒", @"捌", @"玖"];
+        NSString *digitStr1 = nil;
+        if (digitStr.length == 1) {
+            digitStr1 = [NSString stringWithFormat:@"%@0",digitStr];
+            int digit = [[digitStr1 substringToIndex:2]intValue];
+            int one = digit/10;
+            int two = digit%10;
+            if (one != 0 && two != 0) {
+                return [NSString stringWithFormat:@"%@角%@分",[uperArray objectAtIndex:one],[uperArray objectAtIndex:two]];
+            }
+            else if(one == 0 && two != 0) {
+                return [NSString stringWithFormat:@"%@分",[uperArray objectAtIndex:two]];
+            }if(one != 0 && two == 0) {
+                return [NSString stringWithFormat:@"%@角",[uperArray objectAtIndex:one]];
             }
             else
             {
-                int digit = [[digitStr substringToIndex:2]intValue];
-                int one = digit/10;
-                int two = digit%10;
-                if (one != 0 && two != 0) {
-                    return [NSString stringWithFormat:@"%@角%@分",[uperArray objectAtIndex:one],[uperArray objectAtIndex:two]];
-                }
-                else if(one == 0 && two != 0) {
-                    return [NSString stringWithFormat:@"%@分",[uperArray objectAtIndex:two]];
-                }if(one != 0 && two == 0) {
-                    return [NSString stringWithFormat:@"%@角",[uperArray objectAtIndex:one]];
-                }
-                else
-                {
-                    return @"";
-                }
+                return @"";
             }
         }
-        else{
-            return @"";
+        else
+        {
+            int digit = [[digitStr substringToIndex:2]intValue];
+            int one = digit/10;
+            int two = digit%10;
+            if (one != 0 && two != 0) {
+                return [NSString stringWithFormat:@"%@角%@分",[uperArray objectAtIndex:one],[uperArray objectAtIndex:two]];
+            }
+            else if(one == 0 && two != 0) {
+                return [NSString stringWithFormat:@"%@分",[uperArray objectAtIndex:two]];
+            }if(one != 0 && two == 0) {
+                return [NSString stringWithFormat:@"%@角",[uperArray objectAtIndex:one]];
+            }
+            else
+            {
+                return @"";
+            }
         }
     }
-    
+    else{
+        return @"";
+    }
+}
+
 +(NSString *)dealWithDigit:(int)digit grade:(GradeType)grade
 {
     if (digit > 0) {
@@ -1125,15 +1125,52 @@
     [adcomps setYear:0];
     switch (type) {
         case FewMonthLaterTypeNormal:
-            {
-                [adcomps setMonth:month];
-                [adcomps setDay:0];
-            }
+        {
+            [adcomps setMonth:month];
+            [adcomps setDay:0];
+        }
             break;
         case FewMonthLaterTypeContract:
         {
             [adcomps setMonth:(month-1)];
-            [adcomps setDay:30];
+            
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            [formatter setDateStyle:NSDateFormatterMediumStyle];
+            [formatter setTimeStyle:NSDateFormatterShortStyle];
+            [formatter setDateFormat:@"MM"];
+            
+            NSDateFormatter *formatterYear = [[NSDateFormatter alloc] init];
+            [formatterYear setDateStyle:NSDateFormatterMediumStyle];
+            [formatterYear setTimeStyle:NSDateFormatterShortStyle];
+            [formatterYear setDateFormat:@"YYYY"];
+
+            
+            NSString *monthString = [formatter stringFromDate:[calendar dateByAddingComponents:adcomps toDate:thisTime options:0]];
+            if ([monthString isEqualToString:@"01"] || [monthString isEqualToString:@"03"] || [monthString isEqualToString:@"05"] || [monthString isEqualToString:@"07"] || [monthString isEqualToString:@"08"] || [monthString isEqualToString:@"10"] || [monthString isEqualToString:@"12"])
+            {
+                [adcomps setDay:30];
+            }
+            else if ([monthString isEqualToString:@"04"] || [monthString isEqualToString:@"06"] || [monthString isEqualToString:@"09"] || [monthString isEqualToString:@"11"])
+            {
+                [adcomps setDay:29];
+            }
+            else
+            {
+                NSString *yearString = [formatterYear stringFromDate:[calendar dateByAddingComponents:adcomps toDate:thisTime options:0]];
+
+                if([yearString integerValue]%4 == 0 && [yearString integerValue]%100 != 0)//普通年份，非100整数倍
+                {
+                    [adcomps setDay:28];
+                }
+                else if ([yearString integerValue]%400 == 0)
+                {
+                    [adcomps setDay:28];
+                }
+                else
+                {
+                    [adcomps setDay:27];
+                }
+            }
         }
             break;
         default:
@@ -1186,7 +1223,7 @@
     UIImage *newImage = [UIImage imageWithCGImage:scaledImage];
     //FIX:释放
     CFRelease(scaledImage);
-
+    
     return newImage;
 }
 
