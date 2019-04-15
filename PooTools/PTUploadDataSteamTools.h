@@ -20,6 +20,8 @@ typedef NS_ENUM(NSUInteger, CGUploadType) {
     CGUploadTypeFULLVIEW
 };
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef void (^PTUploadDataToServerSuccessBlock)(NSDictionary * _Nonnull result);
 typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
 
@@ -30,8 +32,6 @@ typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
 @property (nonatomic,strong) NSData *imageData;
 @property (nonatomic,strong) NSString *imageDataName;
 @end
-
-NS_ASSUME_NONNULL_BEGIN
 
 @interface PTUploadDataSteamTools : NSObject
 +(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock;
