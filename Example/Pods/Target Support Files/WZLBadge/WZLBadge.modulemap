@@ -1,0 +1,6 @@
+framework module WZLBadge {
+  umbrella header "WZLBadge-umbrella.h"
+
+  export *
+  module * { export * }
+}

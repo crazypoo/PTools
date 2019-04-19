@@ -7,9 +7,9 @@
 //
 
 #import "DoubleSliderView.h"
-#import <PooTools/UIView+ModifyFrame.h>
+#import "UIView+ModifyFrame.h"
 #import <Masonry/Masonry.h>
-#import <PooTools/PMacros.h>
+#import "PMacros.h"
 
 @interface DoubleSliderView ()
 

@@ -2,10 +2,69 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'PooTools_Example' do
-  pod 'PooTools', :path => '../'
-  pod 'SDWebImage'
-  pod 'Masonry'
-  pod 'SSZipArchive'
+#  pod 'PooTools', :path => '../'
+#  pod 'SDWebImage'
+#  pod 'Masonry'
+#  pod 'SSZipArchive'
+  pod 'WZLBadge'
+#  pod 'Mantle'
+#  pod 'IQKeyboardManager'
+#  pod 'AFNetworking'
+#  pod 'TextFieldEffects'
+#  pod 'AFNetworking'
+#  pod 'CYLTabBarController'
+#  pod 'DHSmartScreenshot'
+#  pod 'DZNEmptyDataSet'
+#  pod 'FDFullscreenPopGesture'
+#  pod 'FMDB'
+#  pod 'HTAutocompleteTextField'
+#  pod 'IQKeyboardManager'
+#  pod 'JMHoledView'
+#  pod 'LTNavigationBar'
+#  pod 'MBProgressHUD'
+#  pod 'MJExtension'
+#  pod 'MJRefresh'
+#  pod 'MYBlurIntroductionView'
+#  pod 'Mantle'
+#  pod 'TOWebViewController'
+#  pod 'UINavigation-SXFixSpace'
+#  pod 'UITableView+FDTemplateLayoutCell'
+#  pod 'UITextField+Shake'
+#  pod 'UIViewController+Swizzled'
+#  pod 'YCXMenu'
+#  pod 'lottie-ios'
+#  pod 'pop'
+  pod 'PooTools'
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   pod "GCDWebServer/WebUploader", "~> 3.0"
 #  target 'PooTools_Tests' do
 #    inherit! :search_paths

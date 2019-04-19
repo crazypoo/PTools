@@ -7,15 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
+//@class YNPayPasswordView;
 
-@class YNPayPasswordView;
+//typedef void (^InputViewBtnBlock)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText);
 
-typedef void (^InputViewBtnBlock)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText);
-
-typedef void (^InputViewDismissBlock)(void);
+//typedef void (^InputViewDismissBlock)(void);
 
 @interface YNPayPasswordView : UIView <UITextFieldDelegate>
+
 
 /*! @brief 初始化
  * @param title 输入框标题
@@ -26,11 +27,11 @@ typedef void (^InputViewDismissBlock)(void);
  * @param dismissBlock 输入框消失回调
  */
 -(instancetype _Nonnull)initWithTitle:(NSString * _Nonnull)title
-                WithSubTitle:(NSString * _Nonnull)subTitle
-                  WithButton:(NSArray * _Nonnull )bttonArray
-               withTitleFont:(UIFont * _Nullable)font
-                      handle:(InputViewBtnBlock _Nonnull)block
-                     dismiss:(InputViewDismissBlock _Nonnull)dismissBlock;
+                         WithSubTitle:(NSString * _Nonnull)subTitle
+                           WithButton:(NSArray * _Nonnull )bttonArray
+                        withTitleFont:(UIFont * _Nullable)font
+                               handle:(void (^_Nonnull)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText))block
+                              dismiss:(void (^_Nonnull)(void))dismissBlock;
 
 /*! @brief 密码点
  */

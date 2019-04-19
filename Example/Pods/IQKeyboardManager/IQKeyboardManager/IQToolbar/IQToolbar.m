@@ -31,7 +31,7 @@
 
 @interface IQTitleBarButtonItem (PrivateAccessor)
 
-@property(nonatomic, strong) UIButton *titleButton;
+@property(nonnull, nonatomic, strong) UIButton *titleButton;
 
 @end
 
@@ -89,11 +89,6 @@
 -(void)dealloc
 {
     self.items = nil;
-    _previousBarButton = nil;
-    _nextBarButton = nil;
-    _titleBarButton = nil;
-    _doneBarButton = nil;
-    _fixedSpaceBarButton = nil;
 }
 
 -(IQBarButtonItem *)previousBarButton
@@ -101,7 +96,7 @@
     if (_previousBarButton == nil)
     {
         _previousBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
-        _previousBarButton.accessibilityLabel = @"Toolbar Previous Button";
+        _previousBarButton.accessibilityLabel = @"Previous";
     }
     
     return _previousBarButton;
@@ -112,7 +107,7 @@
     if (_nextBarButton == nil)
     {
         _nextBarButton = [[IQBarButtonItem alloc] initWithImage:nil style:UIBarButtonItemStylePlain target:nil action:nil];
-        _nextBarButton.accessibilityLabel = @"Toolbar Next Button";
+        _nextBarButton.accessibilityLabel = @"Next";
     }
     
     return _nextBarButton;
@@ -123,7 +118,7 @@
     if (_titleBarButton == nil)
     {
         _titleBarButton = [[IQTitleBarButtonItem alloc] initWithTitle:nil];
-        _titleBarButton.accessibilityLabel = @"Toolbar Title Button";
+        _titleBarButton.accessibilityLabel = @"Title";
     }
     
     return _titleBarButton;
@@ -134,7 +129,7 @@
     if (_doneBarButton == nil)
     {
         _doneBarButton = [[IQBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:nil action:nil];
-        _doneBarButton.accessibilityLabel = @"Toolbar Done Button";
+        _doneBarButton.accessibilityLabel = @"Done";
     }
     
     return _doneBarButton;

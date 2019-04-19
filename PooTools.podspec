@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.10.15'
+    s.version     = '1.10.16'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -50,4 +50,5 @@ Pod::Spec.new do |s|
     s.dependency 'GCDWebServer'
     s.dependency 'GCDWebServer/WebUploader'
     s.dependency 'MBProgressHUD'
+    s.dependency 'WZLBadge'
 end

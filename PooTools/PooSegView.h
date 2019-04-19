@@ -8,9 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+//#define kReceiveTagBadgeNofitication @"ReceiveTagBadgeNofitication"
+
 typedef NS_ENUM(NSInteger,PooSegShowType){
     PooSegShowTypeNormal = 0,
     PooSegShowTypeUnderLine
+};
+
+typedef NS_ENUM(NSInteger,PooSegBadgeShowType){
+    PooSegBadgeShowTypeTopLeft = 0,
+    PooSegBadgeShowTypeTopMiddle,
+    PooSegBadgeShowTypeTopRight,
+    PooSegBadgeShowTypeMiddleLeft,
+    PooSegBadgeShowTypeMiddleRight,
+    PooSegBadgeShowTypeBottomLeft,
+    PooSegBadgeShowTypeBottomMiddle,
+    PooSegBadgeShowTypeBottomRight
 };
 
 @class PooSegView;
@@ -47,4 +60,8 @@ normalBackgroundColor:(UIColor *)nbc
          clickBlock:(PooSegViewClickBlock)block;
 
 -(void)setSegCurrentIndex:(NSInteger)index;
+
+-(void)setSegBadgeAtIndex:(NSInteger)index where:(PooSegBadgeShowType)type;
+-(void)removeSegBadgeAtIndex:(NSInteger)index;
+-(void)removeAllSegBadgeAtIndex;
 @end

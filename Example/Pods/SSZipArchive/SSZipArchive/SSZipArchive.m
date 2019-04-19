@@ -7,9 +7,9 @@
 //
 
 #import "SSZipArchive.h"
-#include "unzip.h"
-#include "zip.h"
-#include "minishared.h"
+#include "minizip/unzip.h"
+#include "minizip/zip.h"
+#include "minizip/minishared.h"
 
 #include <sys/stat.h>
 
@@ -28,6 +28,10 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
 @interface NSData(SSZipArchive)
 - (NSString *)_base64RFC4648 API_AVAILABLE(macos(10.9), ios(7.0), watchos(2.0), tvos(9.0));
 - (NSString *)_hexString;
+@end
+
+@interface NSString (SSZipArchive)
+- (NSString *)_sanitizedPath;
 @end
 
 @interface SSZipArchive ()
@@ -50,6 +54,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
         return NO;
     }
     
+    BOOL passwordProtected = NO;
     int ret = unzGoToFirstFile(zip);
     if (ret == UNZ_OK) {
         do {
@@ -59,24 +64,26 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                 ret = unzOpenCurrentFilePassword(zip, "");
                 unzCloseCurrentFile(zip);
                 if (ret == UNZ_OK || ret == UNZ_BADPASSWORD) {
-                    return YES;
+                    passwordProtected = YES;
                 }
-                return NO;
+                break;
             }
             unz_file_info fileInfo = {};
             ret = unzGetCurrentFileInfo(zip, &fileInfo, NULL, 0, NULL, 0, NULL, 0);
             unzCloseCurrentFile(zip);
             if (ret != UNZ_OK) {
-                return NO;
+                break;
             } else if ((fileInfo.flag & 1) == 1) {
-                return YES;
+                passwordProtected = YES;
+                break;
             }
             
             ret = unzGoToNextFile(zip);
         } while (ret == UNZ_OK);
     }
     
-    return NO;
+    unzClose(zip);
+    return passwordProtected;
 }
 
 + (BOOL)isPasswordValidForArchiveAtPath:(NSString *)path password:(NSString *)pw error:(NSError **)error {
@@ -94,6 +101,8 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
         return NO;
     }
 
+    // Initialize passwordValid to YES (No password required)
+    BOOL passwordValid = YES;
     int ret = unzGoToFirstFile(zip);
     if (ret == UNZ_OK) {
         do {
@@ -110,7 +119,8 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                                                  userInfo:@{NSLocalizedDescriptionKey: @"failed to open first file in zip file"}];
                     }
                 }
-                return NO;
+                passwordValid = NO;
+                break;
             }
             unz_file_info fileInfo = {};
             ret = unzGetCurrentFileInfo(zip, &fileInfo, NULL, 0, NULL, 0, NULL, 0);
@@ -120,7 +130,8 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                                                  code:SSZipArchiveErrorCodeFileInfoNotLoadable
                                              userInfo:@{NSLocalizedDescriptionKey: @"failed to retrieve info for file"}];
                 }
-                return NO;
+                passwordValid = NO;
+                break;
             } else if ((fileInfo.flag & 1) == 1) {
                 unsigned char buffer[10] = {0};
                 int readBytes = unzReadCurrentFile(zip, buffer, (unsigned)MIN(10UL,fileInfo.uncompressed_size));
@@ -134,9 +145,11 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                                                      userInfo:@{NSLocalizedDescriptionKey: @"failed to read contents of file entry"}];
                         }
                     }
-                    return NO;
+                    passwordValid = NO;
+                    break;
                 }
-                return YES;
+                passwordValid = YES;
+                break;
             }
             
             unzCloseCurrentFile(zip);
@@ -144,8 +157,8 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
         } while (ret == UNZ_OK);
     }
     
-    // No password required
-    return YES;
+    unzClose(zip);
+    return passwordValid;
 }
 
 #pragma mark - Unzipping
@@ -283,6 +296,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
         {
             completionHandler(nil, NO, err);
         }
+        unzClose(zip);
         return NO;
     }
     
@@ -305,8 +319,9 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     NSError *unzippingError;
     do {
         currentFileNumber++;
-        if (ret == UNZ_END_OF_LIST_OF_FILE)
+        if (ret == UNZ_END_OF_LIST_OF_FILE) {
             break;
+        }
         @autoreleasepool {
             if (password.length == 0) {
                 ret = unzOpenCurrentFile(zip);
@@ -376,10 +391,6 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                 free(filename);
                 continue;
             }
-            if (!strPath.length) {
-                // if filename data is unsalvageable, we default to currentFileNumber
-                strPath = @(currentFileNumber).stringValue;
-            }
             
             // Check if it contains directory
             BOOL isDirectory = NO;
@@ -388,15 +399,11 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
             }
             free(filename);
             
-            // Contains a path
-            if ([strPath rangeOfCharacterFromSet:[NSCharacterSet characterSetWithCharactersInString:@"/\\"]].location != NSNotFound) {
-                strPath = [strPath stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
-            }
-            
-            // Sanitize path traversal characters if they're present in the file name to prevent directory backtracking. Ignoring these characters mimicks the default behavior of the Unarchiving tool on macOS.
-            if ([strPath rangeOfString:@"../"].location != NSNotFound) {
-                // "../../../../../../../../../../../tmp/test.txt" -> "tmp/test.txt"
-                strPath = [[[NSURL URLWithString:strPath] standardizedURL] absoluteString];
+            // Sanitize paths in the file name.
+            strPath = [strPath _sanitizedPath];
+            if (!strPath.length) {
+                // if filename data is unsalvageable, we default to currentFileNumber
+                strPath = @(currentFileNumber).stringValue;
             }
             
             NSString *fullPath = [destination stringByAppendingPathComponent:strPath];
@@ -890,7 +897,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     uint16_t made_by = version_made_by >> 8;
     BOOL made_on_dos = made_by == 0;
     BOOL languageEncoding = (flag & (1 << 11)) != 0;
-    if(!languageEncoding && made_on_dos) {
+    if (!languageEncoding && made_on_dos) {
         // APPNOTE.TXT D.1:
         //   D.2 If general purpose bit 11 is unset, the file name and comment should conform
         //   to the original ZIP character encoding.  If general purpose bit 11 is set, the
@@ -903,7 +910,9 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
         //  Code Page 437 corresponds to kCFStringEncodingDOSLatinUS
         NSStringEncoding encoding = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingDOSLatinUS);
         NSString* strPath = [NSString stringWithCString:filename encoding:encoding];
-        if(strPath) return strPath;
+        if (strPath) {
+            return strPath;
+        }
     }
     
     // attempting unicode encoding
@@ -955,7 +964,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
             [self zipInfo:zipInfo setDate:fileDate];
         }
         
-        // Write permissions into the external attributes, for details on this see here: http://unix.stackexchange.com/a/14727
+        // Write permissions into the external attributes, for details on this see here: https://unix.stackexchange.com/a/14727
         // Get the permissions value from the files attributes
         NSNumber *permissionsValue = (NSNumber *)[attr objectForKey:NSFilePosixPermissions];
         if (permissionsValue != nil) {
@@ -1051,13 +1060,13 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
     //
     // Determine whether this is a symbolic link:
     // - File is stored with 'version made by' value of UNIX (3),
-    //   as per http://www.pkware.com/documents/casestudies/APPNOTE.TXT
+    //   as per https://www.pkware.com/documents/casestudies/APPNOTE.TXT
     //   in the upper byte of the version field.
     // - BSD4.4 st_mode constants are stored in the high 16 bits of the
     //   external file attributes (defacto standard, verified against libarchive)
     //
     // The original constants can be found here:
-    //    http://minnie.tuhs.org/cgi-bin/utree.pl?file=4.4BSD/usr/include/sys/stat.h
+    //    https://minnie.tuhs.org/cgi-bin/utree.pl?file=4.4BSD/usr/include/sys/stat.h
     //
     const uLong ZipUNIXVersion = 3;
     const uLong BSD_SFMT = 0170000;
@@ -1109,6 +1118,73 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
                                                  encoding:NSASCIIStringEncoding
                                              freeWhenDone:YES];
     return str;
+}
+
+@end
+
+#pragma mark Private tools for security
+
+@implementation NSString (SSZipArchive)
+
+// One implementation alternative would be to use the algorithm found at mz_path_resolve from https://github.com/nmoinvaz/minizip/blob/dev/mz_os.c,
+// but making sure to work with unichar values and not ascii values to avoid breaking Unicode characters containing 2E ('.') or 2F ('/') in their decomposition
+/// Sanitize path traversal characters to prevent directory backtracking. Ignoring these characters mimicks the default behavior of the Unarchiving tool on macOS.
+- (NSString *)_sanitizedPath
+{
+    // Change Windows paths to Unix paths: https://en.wikipedia.org/wiki/Path_(computing)
+    // Possible improvement: only do this if the archive was created on a non-Unix system
+    NSString *strPath = [self stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
+    
+    // Percent-encode file path (where path is defined by https://tools.ietf.org/html/rfc8089)
+    // The key part is to allow characters "." and "/" and disallow "%".
+    // CharacterSet.urlPathAllowed seems to do the job
+    // Testing availability of @available (https://stackoverflow.com/a/46927445/1033581)
+#if __clang_major__ < 9
+    // Xcode 8-
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber10_8_4) {
+#else
+    // Xcode 9+
+    if (@available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, *)) {
+#endif
+        strPath = [strPath stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet];
+    } else {
+        strPath = [strPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
+    
+    // `NSString.stringByAddingPercentEncodingWithAllowedCharacters:` may theorically fail: https://stackoverflow.com/questions/33558933/
+    // But because we auto-detect encoding using `NSString.stringEncodingForData:encodingOptions:convertedString:usedLossyConversion:`,
+    // we likely already prevent UTF-16, UTF-32 and invalid Unicode in the form of unpaired surrogate chars: https://stackoverflow.com/questions/53043876/
+    // To be on the safe side, we will still perform a guard check.
+    if (strPath == nil) {
+        return nil;
+    }
+    
+    // Add scheme "file:///" to support sanitation on names with a colon like "file:a/../../../usr/bin"
+    strPath = [@"file:///" stringByAppendingString:strPath];
+    
+    // Sanitize path traversal characters to prevent directory backtracking. Ignoring these characters mimicks the default behavior of the Unarchiving tool on macOS.
+    // "../../../../../../../../../../../tmp/test.txt" -> "tmp/test.txt"
+    // "a/b/../c.txt" -> "a/c.txt"
+    strPath = [NSURL URLWithString:strPath].standardizedURL.absoluteString;
+    
+    // Remove the "file:///" scheme
+    strPath = [strPath substringFromIndex:8];
+    
+    // Remove the percent-encoding
+    // Testing availability of @available (https://stackoverflow.com/a/46927445/1033581)
+#if __clang_major__ < 9
+    // Xcode 8-
+    if (floor(NSFoundationVersionNumber) > NSFoundationVersionNumber10_8_4) {
+#else
+    // Xcode 9+
+    if (@available(macOS 10.9, iOS 7.0, watchOS 2.0, tvOS 9.0, *)) {
+#endif
+        strPath = strPath.stringByRemovingPercentEncoding;
+    } else {
+        strPath = [strPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
+    }
+    
+    return strPath;
 }
 
 @end

@@ -1,9 +1,10 @@
-# CYLTabBarController【低耦合集成TabBarController】
+![enter image description here](http://i68.tinypic.com/ifyhoo.jpg)
 
-
+# [CN]CYLTabBarController【低耦合集成TabBarController】
+# [EN]CYLTabBarController [Low coupling] 
 
 <p align="center">
-<a href=""><img src="https://img.shields.io/badge/pod-v1.17.4-brightgreen.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/pod-v1.21.x-brightgreen.svg"></a>
 <a href=""><img src="https://img.shields.io/badge/Swift-compatible-orange.svg"></a>
 <a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg"></a>
 <a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
@@ -11,11 +12,19 @@
 <p align="center">
 <a href="https://twitter.com/stevechen1010"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
 <a href="http://weibo.com/luohanchenyilong"><img src="http://i67.tinypic.com/wbulbr.jpg"></a>
-<a href="https://gitter.im/ChenYilong/CYLTabBarController?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge"><img src="https://badges.gitter.im/ChenYilong/CYLTabBarController.svg"></a>
+</a><a href="https://t.me/CYLTabBarController"><img src="http://i66.tinypic.com/of2hbn.jpg"></a></a> 
 </p>
 
+## [CN]阅读须知 
+## [EN]Before Reading 
 
-## 导航
+ - [CN] mark means Chinese language by default.
+ - [EN] mark means English language.
+ - [CN] [点此获取 QQ 群,Telegram 群交流信息]( https://github.com/ChenYilong/iOSBlog/issues/21) 。
+ - [EN]Telegram Group to communicate the features or bugs: https://t.me/CYLTabBarController 
+
+## [CN]导航 
+## [EN]CONTENTS 
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -47,16 +56,18 @@
 
 
 ## 与其他自定义TabBarController的区别
+## Comparetion with
 
- 特点 |解释
+[CN]特点 </p>[EN]Features |[CN]解释 </p>[EN]Explanation
 -------------|-------------
- 低耦合，易删除 | 1、TabBar设置与业务完全分离，最低只需传两个数组即可完成主流App框架搭建。</p> 2、 PlusButton 的所有设置都在单独的一个类（ `CYLPlusButton` 的子类）中实现：删除该特定的类，就能完全将 PlusButton 从项目中删除掉。
- `TabBar` 以及 `TabBar` 内的 `TabBarItem` 均使用系统原生的控件 | 因为使用原生的控件，并非 `UIButton` 或 `UIView` 。好处如下：</p> 1. 无需反复调“间距位置等”来接近系统效果。</p> 2. 在push到下一页时 `TabBar`  的隐藏和显示之间的过渡效果跟系统一致（详见“ [集成后的效果](https://github.com/ChenYilong/CYLTabBarController#集成后的效果) ”部分，给出了效果图） </p> 3. 原生控件，所以可以使用诸多系统API，比如：可以使用 ` [UITabBar appearance];` 、` [UITabBarItem appearance];` 设置样式。（详见“[补充说明](https://github.com/ChenYilong/CYLTabBarController#补充说明) ”部分，给出了响应代码示例）
- 自动监测是否需要添加“加号”按钮，</p>并能自动设置位置 |[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 既支持类似微信的“中规中矩”的 `TabBarController` 样式，并且默认就是微信这种样式，同时又支持类似“微博”或“淘宝闲鱼”这种具有不规则加号按钮的 `TabBarController` 。想支持这种样式，只需自定义一个加号按钮，[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 能检测到它的存在并自动将 `tabBar` 排序好，无需多余操作，并且也预留了一定接口来满足自定义需求。</p>“加号”按钮的样式、frame均在自定义的类中独立实现，不会涉及tabbar相关设置。
+[CN]低耦合，易删除</p>[EN]Loose coupling  | [CN]1、TabBar设置与业务完全分离，最低只需传两个数组即可完成主流App框架搭建。</p>[EN]1. This library is independent of your business codes which only needs two array parameters to be passed.   </p> [CN]2、 PlusButton 的所有设置都在单独的一个类（ `CYLPlusButton` 的子类）中实现：删除该特定的类，就能完全将 PlusButton 从项目中删除掉。</p>[EN]2.PlusButton is also independent. If you delete the code of this class, you remove the PlusButton feature from your UI on screen completely.  
+[CN]`TabBar` 以及 `TabBar` 内的 `TabBarItem` 均使用系统原生的控件</p>[EN]`TabBar` and `TabBarItem` those parts of this library both are system objects. | [CN]因为使用原生的控件，并非 `UIButton` 或 `UIView` 。好处如下：</p>[EN]Advantages of quitting choosing `UIButton` or `UIView`: </p> 1. 无需反复调“间距位置等”来接近系统效果。</p>[EN]There is not need to adjust those object to make them close to a system  object appearance. </p> 2. 在push到下一页时 `TabBar`  的隐藏和显示之间的过渡效果跟系统一致（详见“ [集成后的效果](https://github.com/ChenYilong/CYLTabBarController#集成后的效果) ”部分，给出了效果图）</p>[EN]2. A push animation is same to a system objects appearance. </p> 3. 原生控件，所以可以使用诸多系统API，比如：可以使用 ` [UITabBar appearance];` 、` [UITabBarItem appearance];` 设置样式。（详见“[补充说明](https://github.com/ChenYilong/CYLTabBarController#补充说明) ”部分，给出了响应代码示例）</p>[EN]3.It is convenient to use the system API such as ` [UITabBar appearance];`,` [UITabBarItem appearance];`, etc.
+ 自动监测是否需要添加“加号”按钮，</p>并能自动设置位置</p>[EN] It is able to check if need to add a PlusButton automatically. |[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 既支持类似微信的“中规中矩”的 `TabBarController` 样式，并且默认就是微信这种样式，同时又支持类似“微博”或“淘宝闲鱼”这种具有不规则加号按钮的 `TabBarController` 。想支持这种样式，只需自定义一个加号按钮，[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 能检测到它的存在并自动将 `tabBar` 排序好，无需多余操作，并且也预留了一定接口来满足自定义需求。</p>“加号”按钮的样式、frame均在自定义的类中独立实现，不会涉及tabbar相关设置。
+  支持动态更新 | 可动态删除PlusButton ，可以动态更新样式 </p> ![enter image description here](http://i63.tinypic.com/208ba7a.jpg)
 即使加号按钮超出了tabbar的区域，</p>超出部分依然能响应点击事件 | 红线内的区域均能响应tabbar相关的点击事件，</p>![enter image description here](http://i57.tinypic.com/2r7ndzk.jpg)
 允许指定加号按钮位置 | 效果如下：</p>![enter image description here](http://a64.tinypic.com/2mo0h.jpg) </p>Airbnb-app效果：</p>![enter image description here](http://a63.tinypic.com/2mgk02v.gif)
 支持让 `TabBarItem` 仅显示图标，并自动使图标垂直居中，支持自定义TabBar高度 | 效果可见Airbnb-app效果，或者下图</p>![enter image description here](https://cloud.githubusercontent.com/assets/7238866/10777333/5d7811c8-7d55-11e5-88be-8cb11bbeaf90.png)
- 支持自定义动画 | ![](https://ww1.sinaimg.cn/large/006tNbRwly1fg9hu6qnwbg308v0gctcc.gif)
+ 支持自定义动画 | 兼容 Lottie 动画 用法见：https://github.com/ChenYilong/CYLTabBarController/issues/341 </p>  ![enter image description here](http://i64.tinypic.com/2h835ae.jpg) </p> ![](https://ww1.sinaimg.cn/large/006tNbRwly1fg9hu6qnwbg308v0gctcc.gif) 
  支持角标自定义View | ![enter image description here](https://ws4.sinaimg.cn/large/006tKfTcly1fgl0yxcaboj30yi06at8t.jpg) 
  支持多TabBar嵌套，并指定PlusButton位置 | ![enter image description here](https://ws4.sinaimg.cn/large/006tNc79ly1fmn3005isfg308r0iltl6.gif)
 支持CocoaPods |容易集成
@@ -133,7 +144,7 @@
   在终端依次运行以下命令：
 
   ```
-     gem sources --add https://gems.ruby-china.org/ --remove https://rubygems.org/
+     gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
      sudo gem install cocoapods
   ```
 
@@ -165,12 +176,12 @@
     gem install cocoapods
  ```
 
-  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v1.6.7 版本为例）
+  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v1.17.22 版本为例）
 
   在文件 `Podfile` 中加入以下内容：
 
  ```
-    pod 'CYLTabBarController', '~> 1.17.4'
+    pod 'CYLTabBarController', '~> 1.17.22'
  ```
 
   然后在终端中运行以下命令：
@@ -188,7 +199,7 @@
 
   如果提示找不到库，则可去掉 `--no-repo-update`。
 
-  完成后1.17.4，CocoaPods 会在您的工程根目录下生成一个 `.xcworkspace` 文件。您需要通过此文件打开您的工程，而不是之前的 `.xcodeproj`。
+  完成后1.17.22，CocoaPods 会在您的工程根目录下生成一个 `.xcworkspace` 文件。您需要通过此文件打开您的工程，而不是之前的 `.xcodeproj`。
 
 **CocoaPods 使用说明**
 
@@ -196,14 +207,14 @@
 
 CocoaPods 中，有几种设置 CYLTabBarController 版本的方法。如：
 
-`>= 1.16.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.18.X` 版本的 CYLTabBarController。
+`>= 1.17.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.18.X` 版本的 CYLTabBarController。
 
-`~> 1.16.X` 会根据您本地的 CocoaPods 源列表，介于 1.16.X~1.18.0 之前版本的 CYLTabBarController。
-我们建议您锁定版本，便于团队开发。如，指定 1.17.4 版本。
+`~> 1.17.X` 会根据您本地的 CocoaPods 源列表，介于 1.17.X~1.18.0 之前版本的 CYLTabBarController。
+我们建议您锁定版本，便于团队开发。如，指定 1.17.22 版本。
 
  
 ```
-    pod 'CYLTabBarController', '~> 1.17.4'
+    pod 'CYLTabBarController', '~> 1.17.22'
 ```
 
  - 升级本地 CocoaPods 源
@@ -927,12 +938,17 @@ button.frame = CGRectMake(0.0, 0.0, w, h);
  ```Objective-C
  [UIScreen mainScreen].bounds.size.width / [CYLTabBarController allItemsInTabBarCount]
  ```
+ 
+ 
+Q：如何兼容 Lottie 动画？
+A：用法见：https://github.com/ChenYilong/CYLTabBarController/issues/341
+
 
 （更多iOS开发干货，欢迎关注  [微博@iOS程序犭袁](http://weibo.com/luohanchenyilong/) ）
 
 ----------
 Posted by [微博@iOS程序犭袁](http://weibo.com/luohanchenyilong/)  
-原创文章，版权声明：自由转载-非商用-非衍生-保持署名 | [Creative Commons BY-NC-ND 3.0](http://creativecommons.org/licenses/by-nc-nd/3.0/deed.zh)
+原创作品，版权声明：License MIT
 <p align="center"><a href="http://weibo.com/u/1692391497?s=6uyXnP" target="_blank"><img border="0" src="http://service.t.sina.com.cn/widget/qmd/1692391497/b46c844b/1.png"/></a></a>
 
 

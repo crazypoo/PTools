@@ -71,16 +71,16 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
 /*******************************************/
 
 /** To save UITextField/UITextView object voa textField/textView notifications. */
-@property(nonatomic, weak) UIView       *textFieldView;
+@property(nullable, nonatomic, weak) UIView       *textFieldView;
 
 /** To save rootViewController.view.frame.origin. */
 @property(nonatomic, assign) CGPoint    topViewBeginOrigin;
 
 /** To save rootViewController */
-@property(nonatomic, weak) UIViewController *rootViewController;
+@property(nullable, nonatomic, weak) UIViewController *rootViewController;
 
 /** To overcome with popGestureRecognizer issue Bug ID: #1361 */
-@property(nonatomic, weak) UIViewController *rootViewControllerWhilePopGestureRecognizerActive;
+@property(nullable, nonatomic, weak) UIViewController *rootViewControllerWhilePopGestureRecognizerActive;
 @property(nonatomic, assign) CGPoint    topViewBeginOriginWhilePopGestureRecognizerActive;
 
 /** To know if we have any pending request to adjust view position. */
@@ -89,7 +89,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
 /*******************************************/
 
 /** Variable to save lastScrollView that was scrolled. */
-@property(nonatomic, weak) UIScrollView     *lastScrollView;
+@property(nullable, nonatomic, weak) UIScrollView     *lastScrollView;
 
 /** LastScrollView's initial contentInsets. */
 @property(nonatomic, assign) UIEdgeInsets   startingContentInsets;
@@ -168,7 +168,6 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
 @synthesize shouldToolbarUsesTextFieldTintColor =   _shouldToolbarUsesTextFieldTintColor;
 @synthesize toolbarTintColor                    =   _toolbarTintColor;
 @synthesize toolbarBarTintColor                 =   _toolbarBarTintColor;
-@dynamic shouldShowTextFieldPlaceholder;
 @synthesize shouldShowToolbarPlaceholder        =   _shouldShowToolbarPlaceholder;
 @synthesize placeholderFont                     =   _placeholderFont;
 @synthesize placeholderColor                    =   _placeholderColor;
@@ -290,7 +289,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
     if (enable == YES &&
         _enable == NO)
     {
-		//Setting NO to _enable.
+		//Setting YES to _enable.
 		_enable = enable;
         
 		//If keyboard is currently showing. Sending a fake notification for keyboardWillShow to adjust view according to keyboard.
@@ -385,16 +384,6 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
     }
     
     return enable;
-}
-
--(BOOL)shouldShowTextFieldPlaceholder
-{
-    return _shouldShowToolbarPlaceholder;
-}
-
--(void)setShouldShowTextFieldPlaceholder:(BOOL)shouldShowTextFieldPlaceholder
-{
-    _shouldShowToolbarPlaceholder = shouldShowTextFieldPlaceholder;
 }
 
 //	Setting keyboard distance from text field.
@@ -626,7 +615,7 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
     CGFloat specialKeyboardDistanceFromTextField = textFieldView.keyboardDistanceFromTextField;
 
     {
-        UISearchBar *searchBar = textFieldView.searchBar;
+        UISearchBar *searchBar = textFieldView.textFieldSearchBar;
         
         if (searchBar)
         {
@@ -1926,25 +1915,27 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
         BOOL isAcceptAsFirstResponder = [self goPrevious];
         
         NSInvocation *invocation = barButton.invocation;
+        UIView *sender = currentTextFieldView;
 
         //Handling search bar special case
         {
-            UISearchBar *searchBar = currentTextFieldView.searchBar;
+            UISearchBar *searchBar = currentTextFieldView.textFieldSearchBar;
             
             if (searchBar)
             {
                 invocation = searchBar.keyboardToolbar.previousBarButton.invocation;
+                sender = searchBar;
             }
         }
 
-        if (isAcceptAsFirstResponder == YES && barButton.invocation)
+        if (isAcceptAsFirstResponder == YES && invocation)
         {
-            if (barButton.invocation.methodSignature.numberOfArguments > 2)
+            if (invocation.methodSignature.numberOfArguments > 2)
             {
-                [barButton.invocation setArgument:&currentTextFieldView atIndex:2];
+                [invocation setArgument:&sender atIndex:2];
             }
 
-            [barButton.invocation invoke];
+            [invocation invoke];
         }
     }
 }
@@ -1964,25 +1955,27 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
         BOOL isAcceptAsFirstResponder = [self goNext];
         
         NSInvocation *invocation = barButton.invocation;
+        UIView *sender = currentTextFieldView;
 
         //Handling search bar special case
         {
-            UISearchBar *searchBar = currentTextFieldView.searchBar;
+            UISearchBar *searchBar = currentTextFieldView.textFieldSearchBar;
             
             if (searchBar)
             {
                 invocation = searchBar.keyboardToolbar.nextBarButton.invocation;
+                sender = searchBar;
             }
         }
 
-        if (isAcceptAsFirstResponder == YES && barButton.invocation)
+        if (isAcceptAsFirstResponder == YES && invocation)
         {
-            if (barButton.invocation.methodSignature.numberOfArguments > 2)
+            if (invocation.methodSignature.numberOfArguments > 2)
             {
-                [barButton.invocation setArgument:&currentTextFieldView atIndex:2];
+                [invocation setArgument:&sender atIndex:2];
             }
 
-            [barButton.invocation invoke];
+            [invocation invoke];
         }
     }
 }
@@ -2000,25 +1993,27 @@ NSInteger const kIQPreviousNextButtonToolbarTag     =   -1005;
     BOOL isResignedFirstResponder = [self resignFirstResponder];
     
     NSInvocation *invocation = barButton.invocation;
+    UIView *sender = currentTextFieldView;
 
     //Handling search bar special case
     {
-        UISearchBar *searchBar = currentTextFieldView.searchBar;
+        UISearchBar *searchBar = currentTextFieldView.textFieldSearchBar;
         
         if (searchBar)
         {
             invocation = searchBar.keyboardToolbar.doneBarButton.invocation;
+            sender = searchBar;
         }
     }
 
-    if (isResignedFirstResponder == YES && barButton.invocation)
+    if (isResignedFirstResponder == YES && invocation)
     {
-        if (barButton.invocation.methodSignature.numberOfArguments > 2)
+        if (invocation.methodSignature.numberOfArguments > 2)
         {
-            [barButton.invocation setArgument:&currentTextFieldView atIndex:2];
+            [invocation setArgument:&sender atIndex:2];
         }
 
-        [barButton.invocation invoke];
+        [invocation invoke];
     }
 }
 

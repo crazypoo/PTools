@@ -8,7 +8,7 @@
 
 #import "YNPayPasswordView.h"
 #import <Masonry/Masonry.h>
-#import <PooTools/PMacros.h>
+#import "PMacros.h"
 
 #define boxWidth  40//密码框的宽度
 #define HLDefaultBGColor [UIColor colorWithRed:248.0f/255.0f green:248.0f/255.0f blue:248.0f/255.0f alpha:1.0f]
@@ -23,8 +23,10 @@
 
 @property (nonatomic,strong) UITextField *inputTextField;
 
-@property (nonatomic,copy) InputViewBtnBlock block;
-@property (nonatomic,copy) InputViewDismissBlock dismissBlock;
+//@property (nonatomic,copy) InputViewBtnBlock block;
+//@property (nonatomic,copy) InputViewDismissBlock dismissBlock;
+@property (nonatomic) void (^ _Nonnull InputViewBtnBlock)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText);
+@property (nonatomic) void (^ _Nonnull InputViewDismissBlock)(void);
 
 @property (nonatomic,strong) UIFont *viewFont;
 
@@ -32,22 +34,24 @@
 
 @implementation YNPayPasswordView
 
--(instancetype)initWithTitle:(NSString * _Nonnull)title
-                WithSubTitle:(NSString * _Nonnull)subTitle
-                  WithButton:(NSArray * _Nonnull )bttonArray
-               withTitleFont:(UIFont * _Nullable)font
-                      handle:(InputViewBtnBlock _Nonnull)block
-                     dismiss:(InputViewDismissBlock _Nonnull)dismissBlock
+-(instancetype _Nonnull)initWithTitle:(NSString * _Nonnull)title
+                         WithSubTitle:(NSString * _Nonnull)subTitle
+                           WithButton:(NSArray * _Nonnull )bttonArray
+                        withTitleFont:(UIFont * _Nullable)font
+                               handle:(void (^_Nonnull)(YNPayPasswordView * _Nonnull inputView, NSInteger buttonIndex, NSString * _Nonnull inputText))block
+                              dismiss:(void (^_Nonnull)(void))dismissBlock
 {
     self = [super init];
     if (self)
     {
+        self.InputViewBtnBlock = block;
         self.viewTitleString = title;
         self.subTitleString = subTitle;
         self.buttonArray = bttonArray;
-        self.block = block;
+//        self.block = block;
         self.viewFont = font ? font : kDEFAULT_FONT(kDevLikeFont, 16);
-        self.dismissBlock = dismissBlock;
+//        self.dismissBlock = dismissBlock;
+        self.InputViewDismissBlock = dismissBlock;
     }
     return self;
 }
@@ -307,7 +311,7 @@
 
 - (void)btnClick:(UIButton *)btn
 {
-    self.block(self, btn.tag , self.inputTextField.text);
+    self.InputViewBtnBlock(self, btn.tag , self.inputTextField.text);
 }
 
 - (void)hiddenAllPoint
@@ -321,7 +325,7 @@
 - (void)removeFromView
 {
     [self removeFromSuperview];
-    self.dismissBlock();
+    self.InputViewDismissBlock();
 }
 
 -(void)inputTap:(UIGestureRecognizer *)gesture

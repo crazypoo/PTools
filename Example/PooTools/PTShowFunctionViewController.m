@@ -177,6 +177,30 @@
             
             self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223",@"22223",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
+                switch (buttonIndex) {
+                        case 0:
+                    {
+                        [segViewView setSegBadgeAtIndex:0 where:PooSegBadgeShowTypeBottomRight];
+                    }
+                        break;
+                        case 1:
+                    {
+                        [segViewView setSegBadgeAtIndex:3 where:PooSegBadgeShowTypeBottomMiddle];
+                    }
+                        break;
+                        case 2:
+                    {
+                        [segViewView removeAllSegBadgeAtIndex];
+                    }
+                        break;
+                        case 3:
+                    {
+                        [segViewView removeSegBadgeAtIndex:0];
+                    }
+                        break;
+                    default:
+                        break;
+                }
             }];
             [self.view addSubview:self.seg];
             [self.seg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -193,7 +217,6 @@
                 make.left.right.height.equalTo(self.seg);
                 make.top.equalTo(self.seg.mas_bottom).offset(44);
             }];
-
         }
             break;
             case ShowFunctionTagLabel:
@@ -226,7 +249,8 @@
             tag.backgroundColor = kRandomColor;
             [self.view addSubview:tag];
             [tag mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo(self.view);
+                make.left.right.bottom.equalTo(self.view);
+                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
             }];
             tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
                 PNSLog(@"%f",viewHeight);

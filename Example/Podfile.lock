@@ -14,40 +14,48 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - AFNetworking/UIKit (3.2.1):
     - AFNetworking/NSURLSession
-  - CYLTabBarController (1.17.16)
+  - CYLTabBarController (1.23.0):
+    - lottie-ios (~> 2.5.0)
   - DHSmartScreenshot (1.3.1)
   - DZNEmptyDataSet (1.8.1)
   - FDFullscreenPopGesture (1.1)
-  - FMDB (2.7.2):
-    - FMDB/standard (= 2.7.2)
-  - FMDB/standard (2.7.2)
-  - GCDWebServer/Core (3.4.2)
-  - GCDWebServer/WebUploader (3.4.2):
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - GCDWebServer (3.5.2):
+    - GCDWebServer/Core (= 3.5.2)
+  - GCDWebServer/Core (3.5.2)
+  - GCDWebServer/WebUploader (3.5.2):
     - GCDWebServer/Core
   - HTAutocompleteTextField (1.3.2)
-  - IQKeyboardManager (6.1.1)
+  - IQKeyboardManager (6.2.1)
   - JMHoledView (0.2.1)
+  - lottie-ios (2.5.3)
   - LTNavigationBar (2.1.9)
   - Mantle (2.1.0):
     - Mantle/extobjc (= 2.1.0)
   - Mantle/extobjc (2.1.0)
   - Masonry (1.1.0)
-  - MJExtension (3.0.15.1)
-  - MJRefresh (3.1.15.7)
+  - MBProgressHUD (1.1.0)
+  - MJExtension (3.0.16)
+  - MJRefresh (3.1.16)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.8.7):
+  - PooTools (1.10.15):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
     - DZNEmptyDataSet
     - FDFullscreenPopGesture
     - FMDB
+    - GCDWebServer
+    - GCDWebServer/WebUploader
     - HTAutocompleteTextField
     - IQKeyboardManager
     - JMHoledView
     - LTNavigationBar
     - Mantle
     - Masonry
+    - MBProgressHUD
     - MJExtension
     - MJRefresh
     - MYBlurIntroductionView
@@ -61,27 +69,26 @@ PODS:
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
     - YCXMenu
-  - pop (1.0.10)
-  - SDWebImage (4.3.3):
-    - SDWebImage/Core (= 4.3.3)
-  - SDWebImage/Core (4.3.3)
-  - SSZipArchive (2.1.4)
-  - TextFieldEffects (1.5.0)
+  - pop (1.0.12)
+  - SDWebImage (5.0.1):
+    - SDWebImage/Core (= 5.0.1)
+  - SDWebImage/Core (5.0.1)
+  - SSZipArchive (2.1.5)
+  - TextFieldEffects (1.5.1)
   - TOWebViewController (2.2.8):
     - TOWebViewController/Core (= 2.2.8)
   - TOWebViewController/Core (2.2.8)
-  - UINavigation-SXFixSpace (1.0.7)
+  - UINavigation-SXFixSpace (1.1.4)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
   - "UIViewController+Swizzled (1.4)"
+  - WZLBadge (1.2.6)
   - YCXMenu (0.0.11)
 
 DEPENDENCIES:
   - GCDWebServer/WebUploader (~> 3.0)
-  - Masonry
-  - PooTools (from `../`)
-  - SDWebImage
-  - SSZipArchive
+  - PooTools
+  - WZLBadge
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -95,12 +102,15 @@ SPEC REPOS:
     - HTAutocompleteTextField
     - IQKeyboardManager
     - JMHoledView
+    - lottie-ios
     - LTNavigationBar
     - Mantle
     - Masonry
+    - MBProgressHUD
     - MJExtension
     - MJRefresh
     - MYBlurIntroductionView
+    - PooTools
     - pop
     - SDWebImage
     - SSZipArchive
@@ -110,41 +120,41 @@ SPEC REPOS:
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
+    - WZLBadge
     - YCXMenu
-
-EXTERNAL SOURCES:
-  PooTools:
-    :path: "../"
 
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  CYLTabBarController: fb72c648645336953d522407892c4f61b7b3f898
+  CYLTabBarController: 90b9f07c3da451bdb33eb6bf96062f68818cb2fd
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
-  FMDB: 6198a90e7b6900cfc046e6bc0ef6ebb7be9236aa
-  GCDWebServer: 8d67ee9f634b4bb91eb4b8aee440318a5fc6debd
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  GCDWebServer: ead88cd14596dd4eae4f5830b8877c87c8728990
   HTAutocompleteTextField: ce809f04875e843e20f214ab973bb496ba7a93b1
-  IQKeyboardManager: 79c57795f5c2408d259d37b9da2ed07efcbb5225
+  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
   JMHoledView: fe5b140dd053a58ce551f3c7cbd674602d9aca23
+  lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   LTNavigationBar: c278785bed344862e18146b5f06792932e4feacc
   Mantle: 2fa750afa478cd625a94230fbf1c13462f29395b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJExtension: 19bc33ce2eee2d319760f5622562cf581a6ff756
-  MJRefresh: 697f8ec75ebdbe9207767bb682cf0f51b0d8a41f
+  MBProgressHUD: e7baa36a220447d8aeb12769bf0585582f3866d9
+  MJExtension: 54dbbf6ee728f1a88e9aad904353d007831c7847
+  MJRefresh: 7798e16e53a5ef7f332dd05b27664db4e29530fd
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 2b7b91951c88c6d1f72c0409861b87ebf3620c85
-  pop: 82ca6b068ce9278fd350fd9dd09482a0ce9492e6
-  SDWebImage: de4d90b5bff3571eae7bd16202b1f43135409fa5
-  SSZipArchive: 41455d4b8d2b6ab93990820b50dc697c2554a322
-  TextFieldEffects: bf9e9cac7cb1a97d632fbcd0724bb6347dd86633
+  PooTools: 81d8f7b4a5976636b45a5bc279f3142802d7ac93
+  pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
+  SDWebImage: 27dd2c9ea07a2252f94557c9fbb6105ee94b74c9
+  SSZipArchive: cefe1364104a0231268a5deb8495bdf2861f52f0
+  TextFieldEffects: 7d372f58aeaf9acd9626bbf962680aef926b085d
   TOWebViewController: 953a24619d32f7aa1d9d4098a74885a9236f7348
-  UINavigation-SXFixSpace: 02323ab6d50f3719bf0829afa22995acb9b2486b
+  UINavigation-SXFixSpace: f009839c984cc10b9b779d67fb0b32e15a6f580e
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb
+  WZLBadge: 9ec779dcfd94c825518b395e8315fccaabff1bfa
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
 
-PODFILE CHECKSUM: 67bd7f0b199bcf2003eec79a271e473e4d155d95
+PODFILE CHECKSUM: 7777656478c23d70c880348dd97d960449b77e52
 
-COCOAPODS: 1.5.2
+COCOAPODS: 1.7.0.beta.3

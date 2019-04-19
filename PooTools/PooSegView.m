@@ -9,6 +9,8 @@
 #import "PooSegView.h"
 #import <Masonry/Masonry.h>
 #import "PMacros.h"
+#import <WZLBadge/UIView+WZLBadge.h>
+#import "UIView+ModifyFrame.h"
 
 #define ButtonTag 2000
 #define UnderLabelTag 1000
@@ -51,6 +53,8 @@ normalBackgroundColor:(UIColor *)nbc
     self = [super init];
     if (self)
     {
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(receiveNotifi:) name:kReceiveTagBadgeNofitication object:nil];
+
         self.clickBlock = block;
         self.titlesArr = titleArr;
         self.titleNormalColor = nColor;
@@ -309,4 +313,81 @@ normalBackgroundColor:(UIColor *)nbc
     UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+index];
     [self btnTap:button];
 }
+
+-(void)setSegBadgeAtIndex:(NSInteger)index where:(PooSegBadgeShowType)type
+{
+    GCDAfter(0.1, ^{
+        UIButton *btn = [self viewWithTag:ButtonTag + index];
+        btn.badgeBgColor = [UIColor redColor];
+        CGPoint badgePoint;
+        switch (type) {
+                case PooSegBadgeShowTypeTopLeft:
+            {
+                badgePoint = CGPointMake(-btn.width+5, -5);
+            }
+                break;
+                case PooSegBadgeShowTypeTopMiddle:
+            {
+                badgePoint = CGPointMake(-(btn.width/2), 5);
+            }
+                break;
+                case PooSegBadgeShowTypeTopRight:
+            {
+                badgePoint = CGPointMake(0, -5);
+            }
+                break;
+                case PooSegBadgeShowTypeMiddleLeft:
+            {
+                badgePoint = CGPointMake(-btn.width+5, btn.height/2);
+            }
+                break;
+                case PooSegBadgeShowTypeMiddleRight:
+            {
+                badgePoint = CGPointMake(-5, btn.height/2);
+            }
+                break;
+                case PooSegBadgeShowTypeBottomLeft:
+            {
+                badgePoint = CGPointMake(-btn.width+5, btn.height-5);
+            }
+                break;
+                case PooSegBadgeShowTypeBottomMiddle:
+            {
+                badgePoint = CGPointMake(-(btn.width/2), btn.height-5);
+            }
+                break;
+                case PooSegBadgeShowTypeBottomRight:
+            {
+                badgePoint = CGPointMake(-5, btn.height-5);
+            }
+                break;
+            default:
+            {
+                badgePoint = CGPointMake(0, 0);
+            }
+                break;
+        }
+        btn.badgeCenterOffset = badgePoint;
+        [btn showBadgeWithStyle:WBadgeStyleRedDot value:1 animationType:WBadgeAnimTypeBreathe];
+    });
+}
+
+-(void)removeSegBadgeAtIndex:(NSInteger)index
+{
+    GCDAfter(0.1, ^{
+        UIButton *btn = [self viewWithTag:ButtonTag + index];
+        [btn clearBadge];
+    });
+}
+
+-(void)removeAllSegBadgeAtIndex
+{
+    GCDAfter(0.1, ^{
+        for (int i = 0; i < self.titlesArr.count; i++) {
+            UIButton *btn = [self viewWithTag:ButtonTag + i];
+            [btn clearBadge];
+        }
+    });
+}
+
 @end

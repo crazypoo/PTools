@@ -9,8 +9,8 @@
 #import "PopSignatureView.h"
 #import "EasySignatureView.h"
 #import <Masonry/Masonry.h>
-#import <PooTools/NSString+WPAttributedMarkup.h>
-#import <PooTools/PMacros.h>
+#import "NSString+WPAttributedMarkup.h"
+#import "PMacros.h"
 
 #define SignatureViewHeight ((kSCREEN_WIDTH*(350))/(375))
 
