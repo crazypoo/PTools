@@ -12,6 +12,12 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
+#import "IGHTTPClient.h"
+#import "IGBatchTaskManager.h"
+
+@implementation PTGetIpModel
+@end
+
 @implementation PGetIpAddresses
 //获取设备当前网络IP地址
 + (NSString *)getIPAddress:(BOOL)preferIPv4
@@ -73,17 +79,58 @@
     return [addresses count] ? addresses : nil;
 }
 
-+ (NSString *)deviceWANIPAddress
++ (void)deviceWANIPAddress:(GetIPModel)block
 {
-    NSURL *ipURL = [NSURL URLWithString:@"http://ip.taobao.com/service/getIpInfo.php?ip=myip"];
-    NSData *data = [NSData dataWithContentsOfURL:ipURL];
-    if (data != nil) {
-        NSDictionary *ipDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        return (ipDic[@"data"][@"ip"] ? ipDic[@"data"][@"ip"] : @"0.0.0.0");
-    }
-    else
-    {
-        return @"0.0.0.0";
-    }
+//    NSURL *ipURL = [NSURL URLWithString:@"http://ip.taobao.com/service/getIpInfo.php?ip=myip"];
+//    NSData *data = [NSData dataWithContentsOfURL:ipURL];
+//    if (data != nil) {
+//        NSDictionary *ipDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
+//        model.country_id =
+//        return (ipDic[@"data"][@"ip"] ? ipDic[@"data"][@"ip"] : @"0.0.0.0");
+//    }
+//    else
+//    {
+//        return model;
+//    }
+    
+    RespDictionaryBlock dBlock = ^(NSMutableDictionary *infoDict, NSError *error) {
+        if (!error)
+        {
+            if (infoDict && [infoDict isKindOfClass:[NSMutableDictionary class]])
+            {
+                PTGetIpModel *model = [PTGetIpModel new];
+                model.country_id = infoDict[@"data"][@"country_id"];
+                model.county_id = infoDict[@"data"][@"county_id"];
+                model.isp = infoDict[@"data"][@"isp"];
+                model.area = infoDict[@"data"][@"area"];
+                model.area_id = infoDict[@"data"][@"area_id"];
+                model.city_id = infoDict[@"data"][@"city_id"];
+                model.ip = infoDict[@"data"][@"ip"];
+                model.city = infoDict[@"data"][@"city"];
+                model.region = infoDict[@"data"][@"region"];
+                model.county = infoDict[@"data"][@"county"];
+                model.region_id = infoDict[@"data"][@"region_id"];
+                model.isp_id = infoDict[@"data"][@"isp_id"];
+                model.country = infoDict[@"data"][@"country"];
+                block(YES,model);
+            }
+            else
+            {
+                block(NO,nil);
+            }
+        }
+        else
+        {
+            block(NO,nil);
+        }
+    };
+    
+    [HTTPClient(@"ip.taobao.com") POSTApi:@"/service/getIpInfo.php"
+                               parameters:@{
+                                            @"ip":@"myip"
+                                            }
+                 parserKey:pkIGTestParserApp
+                   success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
+                   failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
 }
 @end

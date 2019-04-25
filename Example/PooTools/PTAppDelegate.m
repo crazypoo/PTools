@@ -11,6 +11,7 @@
 #import "PTViewController.h"
 
 #import "PMacros.h"
+#import "PGetIpAddresses.h"
 
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
@@ -87,6 +88,9 @@
         //        NSLog(@"\n\tAvatar in keyWindow === AutoDocking!!! ===");
     }];
 
+    [PGetIpAddresses deviceWANIPAddress:^(BOOL success, PTGetIpModel *ipModel) {
+        PNSLog(@">>>>>>>>%@",ipModel.city);
+    }];
     
     PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract]);
     return YES;
