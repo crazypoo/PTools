@@ -659,31 +659,22 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		CC1257332098319200E31A38 /* PooTools */ = {
+		C08D9DCB22768854001417F1 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
+				CC1D38B6211D620D00FD29F4 /* PSlider.h */,
+				CC1D38B5211D620C00FD29F4 /* PSlider.m */,
 				C004647422647CE3004F946F /* DoubleSliderView.h */,
 				C004647322647CE3004F946F /* DoubleSliderView.m */,
-				CC87F7FF224C5B33003EA1FF /* PTCheckAppStatus.h */,
-				CC87F800224C5B33003EA1FF /* PTCheckAppStatus.m */,
-				CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */,
-				CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */,
-				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
-				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
-				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
-				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
+			);
+			path = Slider;
+			sourceTree = "<group>";
+		};
+		C08D9DCC2276886B001417F1 /* NetWork */ = {
+			isa = PBXGroup;
+			children = (
 				CCA57327223605E4005A6764 /* IGFileDownLoadManager.h */,
 				CCA57326223605E4005A6764 /* IGFileDownLoadManager.m */,
-				CC35017721FE935300E64074 /* PObject2Json.h */,
-				CC35017621FE935300E64074 /* PObject2Json.m */,
-				CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */,
-				CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */,
-				CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */,
-				CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */,
-				CC15EB1921FC54680033D99F /* EasySignatureView.h */,
-				CC15EB1B21FC54690033D99F /* EasySignatureView.m */,
-				CC15EB1C21FC54690033D99F /* PopSignatureView.h */,
-				CC15EB1A21FC54680033D99F /* PopSignatureView.m */,
 				CCD6609E21DCCD33004AA57D /* IGBatchTask.h */,
 				CCD6609521DCCD31004AA57D /* IGBatchTask.m */,
 				CCD660B221DCCD3A004AA57D /* IGBatchTaskManager.h */,
@@ -715,78 +706,30 @@
 				CCD660B521DCCD3B004AA57D /* NSError+HTTPClient.m */,
 				CCD660A421DCCD34004AA57D /* NSURLSessionTask+IGHTTPClient.h */,
 				CCD6609F21DCCD33004AA57D /* NSURLSessionTask+IGHTTPClient.m */,
-				CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */,
-				CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */,
-				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
-				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
-				CC3838CB214364CF00453548 /* PVideoConfig.h */,
-				CC3838D1214364D100453548 /* PVideoConfig.m */,
-				CC3838CF214364D000453548 /* PVideoListViewController.h */,
-				CC3838CD214364D000453548 /* PVideoListViewController.m */,
-				CC3838D0214364D000453548 /* PVideoPlayer.h */,
-				CC3838CE214364D000453548 /* PVideoPlayer.m */,
-				CC3838D2214364D100453548 /* PVideoSupport.h */,
-				CC3838C9214364CF00453548 /* PVideoSupport.m */,
-				CC3838CA214364CF00453548 /* PVideoViewController.h */,
-				CC3838CC214364D000453548 /* PVideoViewController.m */,
-				C8FCB8F921308328000BB281 /* PooTools.bundle */,
-				CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */,
-				CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */,
-				CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */,
-				CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */,
-				CC1D38BA211D706300FD29F4 /* MAThermometer.h */,
-				CC1D38BB211D706400FD29F4 /* MAThermometer.m */,
-				CC1D38B8211D706300FD29F4 /* MAThermometerBorder.h */,
-				CC1D38B9211D706300FD29F4 /* MAThermometerBorder.m */,
-				CC1D38B6211D620D00FD29F4 /* PSlider.h */,
-				CC1D38B5211D620C00FD29F4 /* PSlider.m */,
+				CC29C9F921CE1F9100786FF1 /* PTUploadDataSteamTools.h */,
+				CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */,
+			);
+			path = NetWork;
+			sourceTree = "<group>";
+		};
+		C08D9DCD227688FE001417F1 /* DevTools */ = {
+			isa = PBXGroup;
+			children = (
+				CC87F7FF224C5B33003EA1FF /* PTCheckAppStatus.h */,
+				CC87F800224C5B33003EA1FF /* PTCheckAppStatus.m */,
+			);
+			path = DevTools;
+			sourceTree = "<group>";
+		};
+		C08D9DCE2276890F001417F1 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
+				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
 				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
 				CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */,
-				CC96809B20B042B700AA07F5 /* PBiologyID.h */,
-				CC96809C20B042B800AA07F5 /* PBiologyID.m */,
-				CC658CDB20AC3D8300949DF6 /* CGADCollectionViewCell.h */,
-				CC658CDC20AC3D8400949DF6 /* CGADCollectionViewCell.m */,
-				CC658CD820AC3D6C00949DF6 /* CGLayout.h */,
-				CC658CD920AC3D6D00949DF6 /* CGLayout.m */,
-				CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */,
-				CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */,
-				CC658CD220AC3D4400949DF6 /* PADView.h */,
-				CC658CD320AC3D4400949DF6 /* PADView.m */,
-				64E0599520AB6D0100E434CD /* PooCleanCache.h */,
-				64E0599620AB6D0200E434CD /* PooCleanCache.m */,
-				64E0598920A9E06500E434CD /* NSData+AES.h */,
-				64E0598720A9E06500E434CD /* NSData+AES.m */,
-				64E0598820A9E06500E434CD /* SecurityUtil.h */,
-				64E0598A20A9E06600E434CD /* SecurityUtil.m */,
-				CCB433E220A9A3D700943107 /* YMShowImageView.h */,
-				CCB433E320A9A3D800943107 /* YMShowImageView.m */,
-				CCB433E120A9A3D700943107 /* PooShowImageModel.h */,
-				CCB433E420A9A3D800943107 /* PooShowImageModel.m */,
-				64CF39DF20A627C2003F64BF /* PooPieChart.h */,
-				64CF39E020A627C3003F64BF /* PooPieChart.m */,
-				643252C220A26819003A0228 /* YXCustomAlertView.h */,
-				643252C320A26819003A0228 /* YXCustomAlertView.m */,
-				CC9C606220A1537800F06B92 /* PooDatePicker.h */,
-				CC9C606320A1537900F06B92 /* PooDatePicker.m */,
-				64F95E2F2099374200858FED /* IGBannerItem.h */,
-				64F95E2D2099374200858FED /* IGBannerItem.m */,
-				64F95E2E2099374200858FED /* IGBannerView.h */,
-				64F95E302099374200858FED /* IGBannerView.m */,
-				CC1257362098319200E31A38 /* ALActionSheetView.h */,
-				CC1257372098319200E31A38 /* ALActionSheetView.m */,
-				CC1257382098319200E31A38 /* CustomTextField.h */,
-				CC1257392098319200E31A38 /* CustomTextField.m */,
-				CC12573C2098319200E31A38 /* GPKeyChain.h */,
-				CC12573D2098319200E31A38 /* GPKeyChain.m */,
-				CC12573E2098319200E31A38 /* HPGrowingTextView.h */,
-				CC12573F2098319200E31A38 /* HPGrowingTextView.m */,
-				CC1257402098319200E31A38 /* HPTextViewInternal.h */,
-				CC1257412098319200E31A38 /* HPTextViewInternal.m */,
-				CC1257442098319200E31A38 /* LGTMBase64.h */,
-				CC1257452098319200E31A38 /* LGTMBase64.m */,
-				CC1257462098319200E31A38 /* LGTMDefines.h */,
-				CC1257472098319200E31A38 /* MethodSwizzle.h */,
-				CC1257482098319200E31A38 /* MethodSwizzle.m */,
+				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
+				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
 				CC1257492098319200E31A38 /* NSMutableArray+Shuffle.h */,
 				CC12574A2098319200E31A38 /* NSMutableArray+Shuffle.m */,
 				CC12574B2098319200E31A38 /* NSMutableString+TagReplace.h */,
@@ -797,56 +740,6 @@
 				CC1257502098319200E31A38 /* NSString+Regulars.m */,
 				CC1257512098319200E31A38 /* NSString+WPAttributedMarkup.h */,
 				CC1257522098319200E31A38 /* NSString+WPAttributedMarkup.m */,
-				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
-				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
-				CC1257552098319200E31A38 /* PBugReporter.h */,
-				CC1257562098319200E31A38 /* PBugReporter.m */,
-				CC1257572098319200E31A38 /* PCarrie.h */,
-				CC1257582098319200E31A38 /* PCarrie.m */,
-				CC1257592098319200E31A38 /* PGifHud.h */,
-				CC12575A2098319200E31A38 /* PGifHud.m */,
-				CC12575B2098319200E31A38 /* PHealthKit.h */,
-				CC12575C2098319200E31A38 /* PHealthKit.m */,
-				CC12575D2098319200E31A38 /* PLabel.h */,
-				CC12575E2098319200E31A38 /* PLabel.m */,
-				CC12575F2098319200E31A38 /* PLaunchAdMonitor.h */,
-				CC1257602098319200E31A38 /* PLaunchAdMonitor.m */,
-				CC1257612098319200E31A38 /* PMacros.h */,
-				CC1257622098319200E31A38 /* PMotion.h */,
-				CC1257632098319200E31A38 /* PMotion.m */,
-				CC1257642098319200E31A38 /* PooActionOnCalendar.h */,
-				CC1257652098319200E31A38 /* PooActionOnCalendar.m */,
-				CC1257682098319200E31A38 /* PooCodeView.h */,
-				CC1257692098319200E31A38 /* PooCodeView.m */,
-				CC12576A2098319200E31A38 /* PooLoadingView.h */,
-				CC12576B2098319200E31A38 /* PooLoadingView.m */,
-				CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */,
-				CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */,
-				CC12576E2098319200E31A38 /* PooPhoneBlock.h */,
-				CC12576F2098319200E31A38 /* PooPhoneBlock.m */,
-				CC1257702098319200E31A38 /* PooSearchBar.h */,
-				CC1257712098319200E31A38 /* PooSearchBar.m */,
-				CC1257722098319200E31A38 /* PooSegView.h */,
-				CC1257732098319200E31A38 /* PooSegView.m */,
-				CC1257742098319200E31A38 /* PooSystemInfo.h */,
-				CC1257752098319200E31A38 /* PooSystemInfo.m */,
-				CC1257762098319200E31A38 /* PooTagsLabel.h */,
-				CC1257772098319200E31A38 /* PooTagsLabel.m */,
-				CC1257782098319200E31A38 /* PooTextView.h */,
-				CC1257792098319200E31A38 /* PooTextView.m */,
-				CC12577A2098319200E31A38 /* PooUDIDInfo.h */,
-				CC12577B2098319200E31A38 /* PooUDIDInfo.m */,
-				CC12577C2098319200E31A38 /* PSpeech.h */,
-				CC12577D2098319200E31A38 /* PSpeech.m */,
-				CC12577E2098319200E31A38 /* PStarRateView.h */,
-				CC12577F2098319200E31A38 /* PStarRateView.m */,
-				CC1257802098319200E31A38 /* PTextField.h */,
-				CC1257812098319200E31A38 /* PTextField.m */,
-				CC1257822098319200E31A38 /* PTInputAll.h */,
-				CC1257852098319200E31A38 /* RCDraggableButton.h */,
-				CC1257862098319200E31A38 /* RCDraggableButton.m */,
-				CC1257872098319200E31A38 /* SecurityStrategy.h */,
-				CC1257882098319200E31A38 /* SecurityStrategy.m */,
 				CC1257892098319200E31A38 /* UIButton+Block.h */,
 				CC12578A2098319200E31A38 /* UIButton+Block.m */,
 				CC12578D2098319200E31A38 /* UIColor+Colours.h */,
@@ -867,22 +760,6 @@
 				CC12579C2098319200E31A38 /* UIView+ModifyFrame.m */,
 				CC12579D2098319200E31A38 /* UIViewController+TopBarMessage.h */,
 				CC12579E2098319200E31A38 /* UIViewController+TopBarMessage.m */,
-				CC12579F2098319200E31A38 /* Utils.h */,
-				CC1257A02098319200E31A38 /* Utils.m */,
-				CC1257A12098319200E31A38 /* WMHub.h */,
-				CC1257A22098319200E31A38 /* WMHub.m */,
-				CC1257A32098319200E31A38 /* WMHubView.h */,
-				CC1257A42098319200E31A38 /* WMHubView.m */,
-				CC1257A52098319200E31A38 /* WMHubViewController.h */,
-				CC1257A62098319200E31A38 /* WMHubViewController.m */,
-				CC1257A72098319200E31A38 /* WMHubWindow.h */,
-				CC1257A82098319200E31A38 /* WMHubWindow.m */,
-				CC1257A92098319200E31A38 /* WPAttributedStyleAction.h */,
-				CC1257AA2098319200E31A38 /* WPAttributedStyleAction.m */,
-				CC1257AB2098319200E31A38 /* WPHotspotLabel.h */,
-				CC1257AC2098319200E31A38 /* WPHotspotLabel.m */,
-				CC1257AD2098319200E31A38 /* WPTappableLabel.h */,
-				CC1257AE2098319200E31A38 /* WPTappableLabel.m */,
 				CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */,
 				CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */,
 				CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */,
@@ -891,25 +768,500 @@
 				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
 				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
 				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
-				CCDD3CD4217EFBF30021BC19 /* PGetIpAddresses.h */,
-				CCDD3CD5217EFBF40021BC19 /* PGetIpAddresses.m */,
 				CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */,
 				CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */,
-				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
-				CCBC5C54217B127400B205CF /* CountryCodes.h */,
-				CCBC5C55217B127400B205CF /* CountryCodes.m */,
-				CC4C717C218AD4F6008B1804 /* UICountingLabel.h */,
-				CC4C717D218AD4F6008B1804 /* UICountingLabel.m */,
 				CC1E610A21C4E0060092559A /* UIImage+UIColorEX.h */,
 				CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */,
-				CC29C9F921CE1F9100786FF1 /* PTUploadDataSteamTools.h */,
-				CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */,
-				CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */,
-				CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */,
-				CC634FA722464B9B007BBD1A /* PTOpenSystemFunction.h */,
-				CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */,
 				C0908102225F4A18005243E7 /* NSString+Extension.h */,
 				C0908103225F4A18005243E7 /* NSString+Extension.m */,
+				CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */,
+				CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */,
+				CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */,
+				CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */,
+				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
+				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
+				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
+				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
+		C08D9DCF22768991001417F1 /* SignView */ = {
+			isa = PBXGroup;
+			children = (
+				CC15EB1921FC54680033D99F /* EasySignatureView.h */,
+				CC15EB1B21FC54690033D99F /* EasySignatureView.m */,
+				CC15EB1C21FC54690033D99F /* PopSignatureView.h */,
+				CC15EB1A21FC54680033D99F /* PopSignatureView.m */,
+			);
+			path = SignView;
+			sourceTree = "<group>";
+		};
+		C08D9DD0227689B0001417F1 /* WeChatLittleVideo */ = {
+			isa = PBXGroup;
+			children = (
+				CC3838CB214364CF00453548 /* PVideoConfig.h */,
+				CC3838D1214364D100453548 /* PVideoConfig.m */,
+				CC3838CF214364D000453548 /* PVideoListViewController.h */,
+				CC3838CD214364D000453548 /* PVideoListViewController.m */,
+				CC3838D0214364D000453548 /* PVideoPlayer.h */,
+				CC3838CE214364D000453548 /* PVideoPlayer.m */,
+				CC3838D2214364D100453548 /* PVideoSupport.h */,
+				CC3838C9214364CF00453548 /* PVideoSupport.m */,
+				CC3838CA214364CF00453548 /* PVideoViewController.h */,
+				CC3838CC214364D000453548 /* PVideoViewController.m */,
+			);
+			path = WeChatLittleVideo;
+			sourceTree = "<group>";
+		};
+		C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */ = {
+			isa = PBXGroup;
+			children = (
+				CC96809B20B042B700AA07F5 /* PBiologyID.h */,
+				CC96809C20B042B800AA07F5 /* PBiologyID.m */,
+			);
+			path = FaceIDAndTouchID;
+			sourceTree = "<group>";
+		};
+		C08D9DD2227689F1001417F1 /* AdBanner */ = {
+			isa = PBXGroup;
+			children = (
+				CC12575F2098319200E31A38 /* PLaunchAdMonitor.h */,
+				CC1257602098319200E31A38 /* PLaunchAdMonitor.m */,
+				64F95E2F2099374200858FED /* IGBannerItem.h */,
+				64F95E2D2099374200858FED /* IGBannerItem.m */,
+				64F95E2E2099374200858FED /* IGBannerView.h */,
+				64F95E302099374200858FED /* IGBannerView.m */,
+				CC658CDB20AC3D8300949DF6 /* CGADCollectionViewCell.h */,
+				CC658CDC20AC3D8400949DF6 /* CGADCollectionViewCell.m */,
+				CC658CD820AC3D6C00949DF6 /* CGLayout.h */,
+				CC658CD920AC3D6D00949DF6 /* CGLayout.m */,
+				CC658CD520AC3D5D00949DF6 /* CGAdBannerModel.h */,
+				CC658CD620AC3D5D00949DF6 /* CGAdBannerModel.m */,
+				CC658CD220AC3D4400949DF6 /* PADView.h */,
+				CC658CD320AC3D4400949DF6 /* PADView.m */,
+			);
+			path = AdBanner;
+			sourceTree = "<group>";
+		};
+		C08D9DD322768A19001417F1 /* Picker */ = {
+			isa = PBXGroup;
+			children = (
+				CCC06CFD21D4A2A000DB93B0 /* PTNormalPicker.h */,
+				CCC06CFE21D4A2A000DB93B0 /* PTNormalPicker.m */,
+				CC9C606220A1537800F06B92 /* PooDatePicker.h */,
+				CC9C606320A1537900F06B92 /* PooDatePicker.m */,
+			);
+			path = Picker;
+			sourceTree = "<group>";
+		};
+		C08D9DD422768A62001417F1 /* AlertView */ = {
+			isa = PBXGroup;
+			children = (
+				643252C220A26819003A0228 /* YXCustomAlertView.h */,
+				643252C320A26819003A0228 /* YXCustomAlertView.m */,
+			);
+			path = AlertView;
+			sourceTree = "<group>";
+		};
+		C08D9DD522768A72001417F1 /* ActionSheet */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257362098319200E31A38 /* ALActionSheetView.h */,
+				CC1257372098319200E31A38 /* ALActionSheetView.m */,
+			);
+			path = ActionSheet;
+			sourceTree = "<group>";
+		};
+		C08D9DD622768A9D001417F1 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257642098319200E31A38 /* PooActionOnCalendar.h */,
+				CC1257652098319200E31A38 /* PooActionOnCalendar.m */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		C08D9DD722768AD1001417F1 /* BlackMagic */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257472098319200E31A38 /* MethodSwizzle.h */,
+				CC1257482098319200E31A38 /* MethodSwizzle.m */,
+			);
+			path = BlackMagic;
+			sourceTree = "<group>";
+		};
+		C08D9DD822768AE9001417F1 /* CheckBox */ = {
+			isa = PBXGroup;
+			children = (
+				CC1D38C2211D70C100FD29F4 /* MUCheckbox.h */,
+				CC1D38C1211D70C100FD29F4 /* MUCheckbox.m */,
+			);
+			path = CheckBox;
+			sourceTree = "<group>";
+		};
+		C08D9DD922768B2B001417F1 /* Segmented */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257722098319200E31A38 /* PooSegView.h */,
+				CC1257732098319200E31A38 /* PooSegView.m */,
+			);
+			path = Segmented;
+			sourceTree = "<group>";
+		};
+		C08D9DDA22768B3D001417F1 /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257382098319200E31A38 /* CustomTextField.h */,
+				CC1257392098319200E31A38 /* CustomTextField.m */,
+				CC12573E2098319200E31A38 /* HPGrowingTextView.h */,
+				CC12573F2098319200E31A38 /* HPGrowingTextView.m */,
+				CC1257402098319200E31A38 /* HPTextViewInternal.h */,
+				CC1257412098319200E31A38 /* HPTextViewInternal.m */,
+				CC1257782098319200E31A38 /* PooTextView.h */,
+				CC1257792098319200E31A38 /* PooTextView.m */,
+				CC1257802098319200E31A38 /* PTextField.h */,
+				CC1257812098319200E31A38 /* PTextField.m */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		C08D9DDB22768B99001417F1 /* Label */ = {
+			isa = PBXGroup;
+			children = (
+				CC12575D2098319200E31A38 /* PLabel.h */,
+				CC12575E2098319200E31A38 /* PLabel.m */,
+				CC1257762098319200E31A38 /* PooTagsLabel.h */,
+				CC1257772098319200E31A38 /* PooTagsLabel.m */,
+				CC1257A92098319200E31A38 /* WPAttributedStyleAction.h */,
+				CC1257AA2098319200E31A38 /* WPAttributedStyleAction.m */,
+				CC1257AB2098319200E31A38 /* WPHotspotLabel.h */,
+				CC1257AC2098319200E31A38 /* WPHotspotLabel.m */,
+				CC1257AD2098319200E31A38 /* WPTappableLabel.h */,
+				CC1257AE2098319200E31A38 /* WPTappableLabel.m */,
+				CC4C717C218AD4F6008B1804 /* UICountingLabel.h */,
+				CC4C717D218AD4F6008B1804 /* UICountingLabel.m */,
+			);
+			path = Label;
+			sourceTree = "<group>";
+		};
+		C08D9DDC22768BC8001417F1 /* HealKit */ = {
+			isa = PBXGroup;
+			children = (
+				CC12575B2098319200E31A38 /* PHealthKit.h */,
+				CC12575C2098319200E31A38 /* PHealthKit.m */,
+			);
+			path = HealKit;
+			sourceTree = "<group>";
+		};
+		C08D9DDD22768BE9001417F1 /* Loading */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257592098319200E31A38 /* PGifHud.h */,
+				CC12575A2098319200E31A38 /* PGifHud.m */,
+				CC12576A2098319200E31A38 /* PooLoadingView.h */,
+				CC12576B2098319200E31A38 /* PooLoadingView.m */,
+				CC1257A12098319200E31A38 /* WMHub.h */,
+				CC1257A22098319200E31A38 /* WMHub.m */,
+				CC1257A32098319200E31A38 /* WMHubView.h */,
+				CC1257A42098319200E31A38 /* WMHubView.m */,
+				CC1257A52098319200E31A38 /* WMHubViewController.h */,
+				CC1257A62098319200E31A38 /* WMHubViewController.m */,
+				CC1257A72098319200E31A38 /* WMHubWindow.h */,
+				CC1257A82098319200E31A38 /* WMHubWindow.m */,
+			);
+			path = Loading;
+			sourceTree = "<group>";
+		};
+		C08D9DDE22768C53001417F1 /* WeChatPassWord */ = {
+			isa = PBXGroup;
+			children = (
+				CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */,
+				CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */,
+			);
+			path = WeChatPassWord;
+			sourceTree = "<group>";
+		};
+		C08D9DDF22768C81001417F1 /* Thermometer */ = {
+			isa = PBXGroup;
+			children = (
+				CC1D38BA211D706300FD29F4 /* MAThermometer.h */,
+				CC1D38BB211D706400FD29F4 /* MAThermometer.m */,
+				CC1D38B8211D706300FD29F4 /* MAThermometerBorder.h */,
+				CC1D38B9211D706300FD29F4 /* MAThermometerBorder.m */,
+			);
+			path = Thermometer;
+			sourceTree = "<group>";
+		};
+		C08D9DE022768C9B001417F1 /* ImageReviewer */ = {
+			isa = PBXGroup;
+			children = (
+				CCB433E220A9A3D700943107 /* YMShowImageView.h */,
+				CCB433E320A9A3D800943107 /* YMShowImageView.m */,
+				CCB433E120A9A3D700943107 /* PooShowImageModel.h */,
+				CCB433E420A9A3D800943107 /* PooShowImageModel.m */,
+			);
+			path = ImageReviewer;
+			sourceTree = "<group>";
+		};
+		C08D9DE122768CBE001417F1 /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */,
+				CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */,
+			);
+			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		C08D9DE222768CDC001417F1 /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257702098319200E31A38 /* PooSearchBar.h */,
+				CC1257712098319200E31A38 /* PooSearchBar.m */,
+			);
+			path = SearchBar;
+			sourceTree = "<group>";
+		};
+		C08D9DE322768D2D001417F1 /* Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257442098319200E31A38 /* LGTMBase64.h */,
+				CC1257452098319200E31A38 /* LGTMBase64.m */,
+				CC1257462098319200E31A38 /* LGTMDefines.h */,
+			);
+			path = Base64;
+			sourceTree = "<group>";
+		};
+		C08D9DE422768D3F001417F1 /* KeyChain */ = {
+			isa = PBXGroup;
+			children = (
+				CC12573C2098319200E31A38 /* GPKeyChain.h */,
+				CC12573D2098319200E31A38 /* GPKeyChain.m */,
+			);
+			path = KeyChain;
+			sourceTree = "<group>";
+		};
+		C08D9DE522768D7C001417F1 /* Motion */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257622098319200E31A38 /* PMotion.h */,
+				CC1257632098319200E31A38 /* PMotion.m */,
+			);
+			path = Motion;
+			sourceTree = "<group>";
+		};
+		C08D9DE622768D8E001417F1 /* PhoneInfo */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257572098319200E31A38 /* PCarrie.h */,
+				CC1257582098319200E31A38 /* PCarrie.m */,
+				CC1257742098319200E31A38 /* PooSystemInfo.h */,
+				CC1257752098319200E31A38 /* PooSystemInfo.m */,
+				CC12577A2098319200E31A38 /* PooUDIDInfo.h */,
+				CC12577B2098319200E31A38 /* PooUDIDInfo.m */,
+				CCDD3CD4217EFBF30021BC19 /* PGetIpAddresses.h */,
+				CCDD3CD5217EFBF40021BC19 /* PGetIpAddresses.m */,
+			);
+			path = PhoneInfo;
+			sourceTree = "<group>";
+		};
+		C08D9DE722768DC1001417F1 /* AESAndDES */ = {
+			isa = PBXGroup;
+			children = (
+				64E0598920A9E06500E434CD /* NSData+AES.h */,
+				64E0598720A9E06500E434CD /* NSData+AES.m */,
+				64E0598820A9E06500E434CD /* SecurityUtil.h */,
+				64E0598A20A9E06600E434CD /* SecurityUtil.m */,
+			);
+			path = AESAndDES;
+			sourceTree = "<group>";
+		};
+		C08D9DE822768DF2001417F1 /* Json */ = {
+			isa = PBXGroup;
+			children = (
+				CC35017721FE935300E64074 /* PObject2Json.h */,
+				CC35017621FE935300E64074 /* PObject2Json.m */,
+			);
+			path = Json;
+			sourceTree = "<group>";
+		};
+		C08D9DE922768E0C001417F1 /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				CC12577C2098319200E31A38 /* PSpeech.h */,
+				CC12577D2098319200E31A38 /* PSpeech.m */,
+			);
+			path = Speech;
+			sourceTree = "<group>";
+		};
+		C08D9DEA22768E6E001417F1 /* PhoneCall */ = {
+			isa = PBXGroup;
+			children = (
+				CC12576E2098319200E31A38 /* PooPhoneBlock.h */,
+				CC12576F2098319200E31A38 /* PooPhoneBlock.m */,
+			);
+			path = PhoneCall;
+			sourceTree = "<group>";
+		};
+		C08D9DEB22768E91001417F1 /* LineView */ = {
+			isa = PBXGroup;
+			children = (
+				CC1D38BF211D707E00FD29F4 /* CGImaginaryLine.h */,
+				CC1D38BE211D707E00FD29F4 /* CGImaginaryLine.m */,
+			);
+			path = LineView;
+			sourceTree = "<group>";
+		};
+		C08D9DEC22768EA8001417F1 /* Country */ = {
+			isa = PBXGroup;
+			children = (
+				CCBC5C54217B127400B205CF /* CountryCodes.h */,
+				CCBC5C55217B127400B205CF /* CountryCodes.m */,
+			);
+			path = Country;
+			sourceTree = "<group>";
+		};
+		C08D9DED22768ED8001417F1 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				64CF39DF20A627C2003F64BF /* PooPieChart.h */,
+				64CF39E020A627C3003F64BF /* PooPieChart.m */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		C08D9DEE22768F3E001417F1 /* RateView */ = {
+			isa = PBXGroup;
+			children = (
+				CC12577E2098319200E31A38 /* PStarRateView.h */,
+				CC12577F2098319200E31A38 /* PStarRateView.m */,
+			);
+			path = RateView;
+			sourceTree = "<group>";
+		};
+		C08D9DEF22768F69001417F1 /* BugReport */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257552098319200E31A38 /* PBugReporter.h */,
+				CC1257562098319200E31A38 /* PBugReporter.m */,
+			);
+			path = BugReport;
+			sourceTree = "<group>";
+		};
+		C08D9DF022768F8A001417F1 /* FloatingView */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257852098319200E31A38 /* RCDraggableButton.h */,
+				CC1257862098319200E31A38 /* RCDraggableButton.m */,
+			);
+			path = FloatingView;
+			sourceTree = "<group>";
+		};
+		C08D9DF122768FE6001417F1 /* CheckDirtyWord */ = {
+			isa = PBXGroup;
+			children = (
+				CC84BD3221CA31C40091C8E8 /* SensitiveWordTools.h */,
+				CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */,
+			);
+			path = CheckDirtyWord;
+			sourceTree = "<group>";
+		};
+		C08D9DF22276900E001417F1 /* CleanMemory */ = {
+			isa = PBXGroup;
+			children = (
+				64E0599520AB6D0100E434CD /* PooCleanCache.h */,
+				64E0599620AB6D0200E434CD /* PooCleanCache.m */,
+			);
+			path = CleanMemory;
+			sourceTree = "<group>";
+		};
+		C08D9DF32276904D001417F1 /* UniTool */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257612098319200E31A38 /* PMacros.h */,
+				CC12579F2098319200E31A38 /* Utils.h */,
+				CC1257A02098319200E31A38 /* Utils.m */,
+			);
+			path = UniTool;
+			sourceTree = "<group>";
+		};
+		C08D9DF42276906A001417F1 /* OpenFunction */ = {
+			isa = PBXGroup;
+			children = (
+				CC634FA722464B9B007BBD1A /* PTOpenSystemFunction.h */,
+				CC634FA822464B9B007BBD1A /* PTOpenSystemFunction.m */,
+			);
+			path = OpenFunction;
+			sourceTree = "<group>";
+		};
+		C08D9DF522769085001417F1 /* CodeView */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257682098319200E31A38 /* PooCodeView.h */,
+				CC1257692098319200E31A38 /* PooCodeView.m */,
+			);
+			path = CodeView;
+			sourceTree = "<group>";
+		};
+		C08D9DF6227690EF001417F1 /* SecurityView */ = {
+			isa = PBXGroup;
+			children = (
+				CC1257872098319200E31A38 /* SecurityStrategy.h */,
+				CC1257882098319200E31A38 /* SecurityStrategy.m */,
+			);
+			path = SecurityView;
+			sourceTree = "<group>";
+		};
+		CC1257332098319200E31A38 /* PooTools */ = {
+			isa = PBXGroup;
+			children = (
+				C08D9DF6227690EF001417F1 /* SecurityView */,
+				C08D9DF522769085001417F1 /* CodeView */,
+				C08D9DF42276906A001417F1 /* OpenFunction */,
+				C08D9DF32276904D001417F1 /* UniTool */,
+				C08D9DF22276900E001417F1 /* CleanMemory */,
+				C08D9DF122768FE6001417F1 /* CheckDirtyWord */,
+				C08D9DF022768F8A001417F1 /* FloatingView */,
+				C08D9DEF22768F69001417F1 /* BugReport */,
+				C08D9DEE22768F3E001417F1 /* RateView */,
+				C08D9DED22768ED8001417F1 /* Chat */,
+				C08D9DEC22768EA8001417F1 /* Country */,
+				C08D9DEB22768E91001417F1 /* LineView */,
+				C08D9DEA22768E6E001417F1 /* PhoneCall */,
+				C08D9DE922768E0C001417F1 /* Speech */,
+				C08D9DE822768DF2001417F1 /* Json */,
+				C08D9DE722768DC1001417F1 /* AESAndDES */,
+				C08D9DE622768D8E001417F1 /* PhoneInfo */,
+				C08D9DE522768D7C001417F1 /* Motion */,
+				C08D9DE422768D3F001417F1 /* KeyChain */,
+				C08D9DE322768D2D001417F1 /* Base64 */,
+				C08D9DE222768CDC001417F1 /* SearchBar */,
+				C08D9DE122768CBE001417F1 /* Keyboard */,
+				C08D9DE022768C9B001417F1 /* ImageReviewer */,
+				C08D9DDF22768C81001417F1 /* Thermometer */,
+				C08D9DDE22768C53001417F1 /* WeChatPassWord */,
+				C08D9DDD22768BE9001417F1 /* Loading */,
+				C08D9DDC22768BC8001417F1 /* HealKit */,
+				C08D9DDB22768B99001417F1 /* Label */,
+				C08D9DDA22768B3D001417F1 /* Input */,
+				C08D9DD922768B2B001417F1 /* Segmented */,
+				C08D9DD822768AE9001417F1 /* CheckBox */,
+				C08D9DD722768AD1001417F1 /* BlackMagic */,
+				C08D9DD622768A9D001417F1 /* Calendar */,
+				C08D9DD522768A72001417F1 /* ActionSheet */,
+				C08D9DD422768A62001417F1 /* AlertView */,
+				C08D9DD322768A19001417F1 /* Picker */,
+				C08D9DD2227689F1001417F1 /* AdBanner */,
+				C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */,
+				C08D9DD0227689B0001417F1 /* WeChatLittleVideo */,
+				C08D9DCF22768991001417F1 /* SignView */,
+				C08D9DCE2276890F001417F1 /* Category */,
+				C08D9DCD227688FE001417F1 /* DevTools */,
+				C08D9DCC2276886B001417F1 /* NetWork */,
+				C08D9DCB22768854001417F1 /* Slider */,
+				C8FCB8F921308328000BB281 /* PooTools.bundle */,
+				CC1257822098319200E31A38 /* PTInputAll.h */,
+				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
 			);
 			name = PooTools;
 			path = ../../PooTools;
@@ -944,7 +1296,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = PT;
-				LastUpgradeCheck = 0930;
+				LastUpgradeCheck = 1020;
 				ORGANIZATIONNAME = crazypoo;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
@@ -955,10 +1307,9 @@
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "PooTools" */;
 			compatibilityVersion = "Xcode 3.2";
-			developmentRegion = English;
+			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				English,
 				en,
 				Base,
 			);
@@ -1249,6 +1600,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -1302,6 +1654,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
