@@ -11,9 +11,17 @@
 #import "UIView+CYLTabBarControllerExtention.h"
 #import "CYLConstants.h"
 #import "CYLTabBarController.h"
+#if __has_include(<Lottie/Lottie.h>)
 #import <Lottie/Lottie.h>
+#else
+#endif
 
 @implementation UIControl (CYLTabBarControllerExtention)
+
+- (BOOL)cyl_isChildViewControllerPlusButton {
+    BOOL isChildViewControllerPlusButton = ([self cyl_isPlusButton] && CYLPlusChildViewController.cyl_plusViewControllerEverAdded);
+    return isChildViewControllerPlusButton;
+}
 
 - (BOOL)cyl_shouldNotSelect {
     NSNumber *shouldNotSelectObject = objc_getAssociatedObject(self, @selector(cyl_shouldNotSelect));
@@ -321,9 +329,7 @@
     lottieView.translatesAutoresizingMaskIntoConstraints = NO;
     [lottieView setClipsToBounds:NO];
     [tabButton cyl_replaceTabImageViewWithNewView:lottieView show:YES];
-
 #else
-    return;
 #endif
 
 }

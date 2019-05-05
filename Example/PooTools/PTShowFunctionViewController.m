@@ -575,10 +575,7 @@
         case 0:
         {
             PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeYMD inPutDataString:@"2018-07-08"];
-            [[PTAppDelegate appDelegate].window addSubview:view];
-            [view mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-            }];
+            [view pickerShow];
             view.block = ^(NSString *dateString) {
                 PNSLog(@">>>>>>>>>>>%@",dateString);
             };
@@ -588,10 +585,7 @@
         {
             PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
             view.delegate = self;
-            [[PTAppDelegate appDelegate].window addSubview:view];
-            [view mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-            }];
+            [view pickerShow];
             //    view.block = ^(NSString *dateString) {
             //        PNSLog(@">>>>>>>>>>>%@",dateString);
             //    };
@@ -619,10 +613,11 @@
             nP.returnBlock = ^(PTNormalPicker *normalPicker, PTNormalPickerModel *pickerModel) {
                 PNSLog(@">>>>>>>>>>>>%@>>>>>>>>>>%@>>>>>>>>>>>>>>>%@",normalPicker,pickerModel.pickerTitle,pickerModel.pickerIndexPath);
             };
-            [[PTAppDelegate appDelegate].window addSubview:nP];
-            [nP mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-            }];
+            [nP pickerShow];
+//            [[PTAppDelegate appDelegate].window addSubview:nP];
+//            [nP mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+//            }];
         }
             break;
         default:

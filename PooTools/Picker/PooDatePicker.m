@@ -24,6 +24,12 @@
 @property (nonatomic, assign) NSInteger dayIndex;
 @property (nonatomic, strong) UIView *topV;
 @property (nonatomic, assign) PPickerType pickerType;
+@property (nonatomic,strong) UIView *pickerBackground;
+@property (nonatomic,strong) UILabel *nameTitle;
+@property (nonatomic,strong) UIButton *cancelBtn;
+@property (nonatomic,strong) UIButton *yesBtn;
+@property (nonatomic, strong) UIFont *labelFont;
+
 @end
 
 @implementation PooDatePicker
@@ -76,121 +82,100 @@
     {
         self.pickerFonts = pf;
         self.pickerType = pT;
-        self.backgroundColor = kDevMaskBackgroundColor;
+        self.labelFont = font;
         
+        self.pickerBackground = [UIView new];
+        self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
+        [self addSubview:self.pickerBackground];
+
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
         tapGesture.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:tapGesture];
+        [self.pickerBackground addGestureRecognizer:tapGesture];
         
         self.topV = [UIView new];
         self.topV.backgroundColor = tbbc;
-        [self addSubview:self.topV];
-        [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.height.offset(HEIGHT_BUTTON);
-            make.top.equalTo(self.mas_bottom).offset(-HEIGHT_BUTTON-HEIGHT_PICKER);
-        }];
+        [self.pickerBackground addSubview:self.topV];
         
-        UILabel *nameTitle = [UILabel new];
-        nameTitle.textAlignment = NSTextAlignmentCenter;
-        nameTitle.textColor = tbtc;
-        nameTitle.font = font;
-        nameTitle.numberOfLines = 0;
-        nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
-        nameTitle.text = title;
-        [self.topV addSubview:nameTitle];
+        self.nameTitle = [UILabel new];
+        self.nameTitle.textAlignment = NSTextAlignmentCenter;
+        self.nameTitle.textColor = tbtc;
+        self.nameTitle.font = font;
+        self.nameTitle.numberOfLines = 0;
+        self.nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
+        self.nameTitle.text = title;
+        [self.topV addSubview:self.nameTitle];
         
-        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelBtn.titleLabel setFont:font];
-        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-        [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [self.topV addSubview:cancelBtn];
-        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.topV).offset(10);
-            make.top.bottom.equalTo(self.topV);
-            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
-        }];
+        self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.cancelBtn.titleLabel setFont:font];
+        [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:self.cancelBtn];
         
-        UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [yesBtn.titleLabel setFont:font];
-        [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
-        [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [self.topV addSubview:yesBtn];
-        [yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.topV).offset(-10);
-            make.top.bottom.equalTo(self.topV);
-            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
-        }];
+        self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.yesBtn.titleLabel setFont:font];
+        [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:self.yesBtn];
         
-        [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.bottom.equalTo(self.topV);
-            make.centerX.equalTo(self.topV.mas_centerX);
-            make.left.equalTo(cancelBtn.mas_right).offset(5);
-            make.right.equalTo(yesBtn.mas_left).offset(-5);
-        }];
-        
-        [cancelBtn addActionHandler:^(UIButton *sender) {
-            if (self.block)
+        kWeakSelf(self);
+
+        [self.cancelBtn addActionHandler:^(UIButton *sender) {
+            if (weakself.block)
             {
-                self.block(nil);
+                weakself.block(nil);
             }
-            [self remove];
+            [weakself remove];
         }];
         
-        [yesBtn addActionHandler:^(UIButton *sender) {
-            if (self.block)
+        [self.yesBtn addActionHandler:^(UIButton *sender) {
+            if (weakself.block)
             {
-                switch (self.pickerType)
+                switch (weakself.pickerType)
                 {
                     case PPickerTypeYMD:
                     {
-                        NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text, ((UILabel *)[self.pickerView viewForRow:self.dayIndex forComponent:2]).text];
+                        NSString *timeStr = [NSString stringWithFormat:@"%@%@%@",((UILabel *)[weakself.pickerView viewForRow:weakself.yearIndex forComponent:0]).text, ((UILabel *)[weakself.pickerView viewForRow:weakself.monthIndex forComponent:1]).text, ((UILabel *)[weakself.pickerView viewForRow:weakself.dayIndex forComponent:2]).text];
                         
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"月" withString:@"-"];
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"日" withString:@""];
                         
-                        self.block(timeStr);
+                        weakself.block(timeStr);
                     }
                         break;
                     case PPickerTypeYM:
                     {
-                        NSString *timeStr = [NSString stringWithFormat:@"%@%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text, ((UILabel *)[self.pickerView viewForRow:self.monthIndex forComponent:1]).text];
+                        NSString *timeStr = [NSString stringWithFormat:@"%@%@",((UILabel *)[weakself.pickerView viewForRow:weakself.yearIndex forComponent:0]).text, ((UILabel *)[weakself.pickerView viewForRow:weakself.monthIndex forComponent:1]).text];
                         
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"月" withString:@"-"];
                         
                         NSString *newTime = [timeStr substringToIndex:timeStr.length-1];
                         
-                        self.block(newTime);
+                        weakself.block(newTime);
                     }
                         break;
                     default:
                     {
-                        NSString *timeStr = [NSString stringWithFormat:@"%@",((UILabel *)[self.pickerView viewForRow:self.yearIndex forComponent:0]).text];
+                        NSString *timeStr = [NSString stringWithFormat:@"%@",((UILabel *)[weakself.pickerView viewForRow:weakself.yearIndex forComponent:0]).text];
                         
                         timeStr = [timeStr stringByReplacingOccurrencesOfString:@"年" withString:@"-"];
                         
                         NSString *newTime = [timeStr substringToIndex:timeStr.length-1];
                         
-                        self.block(newTime);
+                        weakself.block(newTime);
                     }
                         break;
                 }
             }
-            [self remove];
+            [weakself remove];
         }];
         
         _pickerView = [UIPickerView new];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
         _pickerView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:_pickerView];
-        [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.height.offset(HEIGHT_PICKER);
-            make.bottom.equalTo(self);
-        }];
+        [self.pickerBackground addSubview:_pickerView];
         
         NSString *yearStr;
         NSString *monthStr;
@@ -304,6 +289,54 @@
         });
     }
     return self;
+}
+
+-(void)pickerShow
+{
+    [kAppDelegateWindow addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.pickerBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
+    
+    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(HEIGHT_PICKER);
+        make.bottom.equalTo(self);
+    }];
+    
+    [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(HEIGHT_BUTTON);
+        make.bottom.equalTo(self.pickerView.mas_top);
+    }];
+
+    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.topV).offset(10);
+        make.top.bottom.equalTo(self.topV);
+        make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
+    }];
+    
+    [self.yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.topV).offset(-10);
+        make.top.bottom.equalTo(self.topV);
+        make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
+    }];
+    
+    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(self.topV);
+        make.centerX.equalTo(self.topV.mas_centerX);
+        make.left.equalTo(self.cancelBtn.mas_right).offset(5);
+        make.right.equalTo(self.yesBtn.mas_left).offset(-5);
+    }];
 }
 
 - (void)hideViewAction:(UITapGestureRecognizer *)gesture {
@@ -493,6 +526,11 @@
 @property (nonatomic, strong) UIFont *pickerFonts;
 @property (nonatomic, assign) NSInteger hourIndex;
 @property (nonatomic, assign) NSInteger minuteIndex;
+@property (nonatomic,strong) UIView *pickerBackground;
+@property (nonatomic,strong) UILabel *nameTitle;
+@property (nonatomic,strong) UIButton *cancelBtn;
+@property (nonatomic,strong) UIButton *yesBtn;
+@property (nonatomic, strong) UIFont *labelFont;
 @end
 
 @implementation PooTimePicker
@@ -543,90 +581,74 @@
     if (self)
     {
         self.pickerFonts = pf;
-        self.backgroundColor = kDevMaskBackgroundColor;
-        
+        self.labelFont = font;
+
+        self.pickerBackground = [UIView new];
+        self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
+        [self addSubview:self.pickerBackground];
+
         UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
         tapGesture.numberOfTapsRequired = 1;
-        [self addGestureRecognizer:tapGesture];
+        [self.pickerBackground addGestureRecognizer:tapGesture];
         
         self.topV = [UIView new];
         self.topV.backgroundColor = tbbc;
-        [self addSubview:self.topV];
-        [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.height.offset(HEIGHT_BUTTON);
-            make.top.equalTo(self.mas_bottom).offset(-(HEIGHT_BUTTON+HEIGHT_PICKER));
+        [self.pickerBackground addSubview:self.topV];
+        
+        self.nameTitle = [UILabel new];
+        self.nameTitle.textAlignment = NSTextAlignmentCenter;
+        self.nameTitle.textColor = tbtc;
+        self.nameTitle.font = font;
+        self.nameTitle.numberOfLines = 0;
+        self.nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
+        self.nameTitle.text = title;
+        [self.topV addSubview:self.nameTitle];
+        
+        self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.cancelBtn.titleLabel setFont:font];
+        [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
+        [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:self.cancelBtn];
+        
+        self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.yesBtn.titleLabel setFont:font];
+        [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
+        [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
+        [self.topV addSubview:self.yesBtn];
+        
+        kWeakSelf(self);
+        
+        [self.cancelBtn addActionHandler:^(UIButton *sender) {
+            [weakself remove];
         }];
         
-        UILabel *nameTitle = [UILabel new];
-        nameTitle.textAlignment = NSTextAlignmentCenter;
-        nameTitle.textColor = tbtc;
-        nameTitle.font = font;
-        nameTitle.numberOfLines = 0;
-        nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
-        nameTitle.text = title;
-        [self.topV addSubview:nameTitle];
-        
-        UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelBtn.titleLabel setFont:font];
-        [cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
-        [cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [self.topV addSubview:cancelBtn];
-        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.topV).offset(10);
-            make.top.bottom.equalTo(self.topV);
-            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
-        }];
-        
-        UIButton *yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [yesBtn.titleLabel setFont:font];
-        [yesBtn setTitle:@"完成" forState:UIControlStateNormal];
-        [yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
-        [self.topV addSubview:yesBtn];
-        [yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.equalTo(self.topV).offset(-10);
-            make.top.bottom.equalTo(self.topV);
-            make.width.offset(font.pointSize*cancelBtn.titleLabel.text.length+5*2);
-        }];
-        
-        [nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.bottom.equalTo(self.topV);
-            make.centerX.equalTo(self.topV.mas_centerX);
-            make.left.equalTo(cancelBtn.mas_right).offset(5);
-            make.right.equalTo(yesBtn.mas_left).offset(-5);
-        }];
-        
-        [cancelBtn addActionHandler:^(UIButton *sender) {
-            [self remove];
-        }];
-        
-        [yesBtn addActionHandler:^(UIButton *sender) {
-            UIView *pickerViewCom0 = (UIView *)[self.pickerView viewForRow:self.hourIndex forComponent:0];
+        [self.yesBtn addActionHandler:^(UIButton *sender) {
+            UIView *pickerViewCom0 = (UIView *)[weakself.pickerView viewForRow:weakself.hourIndex forComponent:0];
             UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
             
-            UIView *pickerViewCom1 = (UIView *)[self.pickerView viewForRow:self.minuteIndex forComponent:1];
+            UIView *pickerViewCom1 = (UIView *)[weakself.pickerView viewForRow:weakself.minuteIndex forComponent:1];
             UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
             
             NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
             
-            if (self.block)
+            if (weakself.block)
             {
                 
-                self.block(timeStr);
+                weakself.block(timeStr);
             }
             
-            if ([self.delegate respondsToSelector:@selector(timePickerReturnStr:timePicker:)]) {
-                [self.delegate timePickerReturnStr:timeStr timePicker:self];
+            if ([weakself.delegate respondsToSelector:@selector(timePickerReturnStr:timePicker:)]) {
+                [weakself.delegate timePickerReturnStr:timeStr timePicker:weakself];
             }
             
-            [self remove];
+            [weakself remove];
         }];
         
         _pickerView = [UIPickerView new];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
         _pickerView.backgroundColor = [UIColor whiteColor];
-        [self addSubview:_pickerView];
+        [self.pickerBackground addSubview:_pickerView];
         [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
             make.height.offset(HEIGHT_PICKER);
@@ -652,6 +674,54 @@
         if ([self.delegate respondsToSelector:@selector(timePickerDismiss:)]) {
             [self.delegate timePickerDismiss:self];
         }
+    }];
+}
+
+-(void)pickerShow
+{
+    [kAppDelegateWindow addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    [self.pickerBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
+    
+    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(HEIGHT_PICKER);
+        make.bottom.equalTo(self);
+    }];
+    
+    [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.height.offset(HEIGHT_BUTTON);
+        make.bottom.equalTo(self.pickerView.mas_top);
+    }];
+    
+    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.topV).offset(10);
+        make.top.bottom.equalTo(self.topV);
+        make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
+    }];
+    
+    [self.yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.right.equalTo(self.topV).offset(-10);
+        make.top.bottom.equalTo(self.topV);
+        make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
+    }];
+    
+    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(self.topV);
+        make.centerX.equalTo(self.topV.mas_centerX);
+        make.left.equalTo(self.cancelBtn.mas_right).offset(5);
+        make.right.equalTo(self.yesBtn.mas_left).offset(-5);
     }];
 }
 

@@ -47,9 +47,6 @@
     self.pickerBackground = [UIView new];
     self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
     [self addSubview:self.pickerBackground];
-    [self.pickerBackground mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self);
-    }];
     
     UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(hideViewAction:)];
     tapGesture.numberOfTapsRequired    = 1;
@@ -60,19 +57,10 @@
     self.viewPicker.delegate = self;
     self.viewPicker.dataSource = self;
     [self.pickerBackground addSubview:self.viewPicker];
-    [self.viewPicker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.pickerBackground);
-        make.height.offset(HEIGHT_PICKER);
-    }];
     
     self.tbar_picker                = [UIView new];
     self.tbar_picker.backgroundColor        = tabColor;
     [self.pickerBackground addSubview:self.tbar_picker];
-    [self.tbar_picker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.pickerBackground);
-        make.height.offset(HEIGHT_BUTTON);
-        make.bottom.equalTo(self.viewPicker.mas_top);
-    }];
     
     self.cancelBtn                = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.titleLabel.font = titleFont;
@@ -80,11 +68,7 @@
     [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(hideViewAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tbar_picker addSubview:self.cancelBtn];
-    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.tbar_picker).offset(10);
-        make.width.offset(titleFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
-        make.top.bottom.equalTo(self.tbar_picker);
-    }];
+    
 
     self.doneBtn                  = [UIButton buttonWithType:UIButtonTypeCustom];
     self.doneBtn.titleLabel.font = titleFont;
@@ -92,10 +76,7 @@
     [self.doneBtn setTitle:@"完成" forState:UIControlStateNormal];
     [self.doneBtn addTarget:self action:@selector(pickerSelectDoneAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tbar_picker addSubview:self.doneBtn];
-    [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.width.equalTo(self.cancelBtn);
-        make.right.equalTo(self.tbar_picker).offset(-10);
-    }];
+    
 
     self.nameTitle = [UILabel new];
     self.nameTitle.textAlignment = NSTextAlignmentCenter;
@@ -105,11 +86,7 @@
     self.nameTitle.lineBreakMode = NSLineBreakByCharWrapping;
     self.nameTitle.text = pT;
     [self.tbar_picker addSubview:self.nameTitle];
-    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.bottom.equalTo(self.cancelBtn);
-        make.left.equalTo(self.cancelBtn.mas_right).offset(5);
-        make.right.equalTo(self.doneBtn.mas_left).offset(-5);
-    }];
+    
 
     if (!kStringIsEmpty(currentStr)) {
         [self.viewPicker selectRow:[self getIndexWithString:currentStr] inComponent:0 animated:YES];
@@ -120,8 +97,43 @@
         [self.viewPicker selectRow:0 inComponent:0 animated:YES];
         [self pickerView:self.viewPicker didSelectRow:0 inComponent:0];
     }
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
     
-    [self layoutIfNeeded];
+    [self.pickerBackground mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self);
+    }];
+    
+    [self.viewPicker mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.bottom.equalTo(self.pickerBackground);
+        make.height.offset(HEIGHT_PICKER);
+    }];
+    
+    [self.tbar_picker mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.pickerBackground);
+        make.height.offset(HEIGHT_BUTTON);
+        make.bottom.equalTo(self.viewPicker.mas_top);
+    }];
+    
+    [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.tbar_picker).offset(10);
+        make.width.offset(self.pickerFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
+        make.top.bottom.equalTo(self.tbar_picker);
+    }];
+    
+    [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.width.equalTo(self.cancelBtn);
+        make.right.equalTo(self.tbar_picker).offset(-10);
+    }];
+    
+    [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.bottom.equalTo(self.cancelBtn);
+        make.left.equalTo(self.cancelBtn.mas_right).offset(5);
+        make.right.equalTo(self.doneBtn.mas_left).offset(-5);
+    }];
 }
 
 -(NSInteger)getIndexWithString:(NSString*)str
@@ -209,6 +221,13 @@
         }
         [self removeFromSuperview];
     }];
-    
+}
+
+-(void)pickerShow
+{
+    [kAppDelegateWindow addSubview:self];
+    [self mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
 }
 @end

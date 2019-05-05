@@ -1,14 +1,18 @@
 ![enter image description here](http://i68.tinypic.com/ifyhoo.jpg)
 
-# [CN]CYLTabBarController【低耦合集成TabBarController】
-# [EN]CYLTabBarController [Low coupling] 
+# [CN]CYLTabBarController【一行代码实现 Lottie 动画 TabBar】
+# [EN]CYLTabBarController [An animated tabBar supported by Lottie with one line of code] 
+
 
 <p align="center">
-<a href=""><img src="https://img.shields.io/badge/pod-v1.21.x-brightgreen.svg"></a>
+<a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/CYLTabBarController.podspec"><img src="https://img.shields.io/badge/Pod-GetLatestVersion-green.svg?style=flat"></a>
 <a href=""><img src="https://img.shields.io/badge/Swift-compatible-orange.svg"></a>
-<a href=""><img src="https://img.shields.io/badge/platform-iOS%207.0%2B-ff69b5152950834.svg"></a>
+<a href=""><img src="https://img.shields.io/badge/platform-iOS%208.0%2B-ff69b5152950834.svg"></a>
 <a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat"></a>
+ <a href="https://github.com/ChenYilong/iOSBlog/issues/21"><img src="https://img.shields.io/static/v1.svg?label=Consider%20donating!&color=blue&message=%E7%82%B9%E5%87%BB%E6%8D%90%E8%B5%A0&color=green"></a>
+
 </p>
+
 <p align="center">
 <a href="https://twitter.com/stevechen1010"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
 <a href="http://weibo.com/luohanchenyilong"><img src="http://i67.tinypic.com/wbulbr.jpg"></a>
@@ -56,10 +60,11 @@
 
 
 ## 与其他自定义TabBarController的区别
-## Comparetion with
+## Comparetion with other Libraries
 
 [CN]特点 </p>[EN]Features |[CN]解释 </p>[EN]Explanation
--------------|-------------
+:-------------:|:-------------:
+[CN]一行代码支持Lottie动画TabBar样式 </p> [EN] It only needs one line of code to have an animated TabBar with Lottie. |[CN][使用方法]( https://github.com/ChenYilong/CYLTabBarController/issues/341) </p>  [EN][How to add animation of Lottie with one line of code.]( https://github.com/ChenYilong/CYLTabBarController/issues/341)  </p> ![enter image description here](http://i66.tinypic.com/25oxkqo.jpg)  </p>  ![enter image description here](http://i64.tinypic.com/2h835ae.jpg) 
 [CN]低耦合，易删除</p>[EN]Loose coupling  | [CN]1、TabBar设置与业务完全分离，最低只需传两个数组即可完成主流App框架搭建。</p>[EN]1. This library is independent of your business codes which only needs two array parameters to be passed.   </p> [CN]2、 PlusButton 的所有设置都在单独的一个类（ `CYLPlusButton` 的子类）中实现：删除该特定的类，就能完全将 PlusButton 从项目中删除掉。</p>[EN]2.PlusButton is also independent. If you delete the code of this class, you remove the PlusButton feature from your UI on screen completely.  
 [CN]`TabBar` 以及 `TabBar` 内的 `TabBarItem` 均使用系统原生的控件</p>[EN]`TabBar` and `TabBarItem` those parts of this library both are system objects. | [CN]因为使用原生的控件，并非 `UIButton` 或 `UIView` 。好处如下：</p>[EN]Advantages of quitting choosing `UIButton` or `UIView`: </p> 1. 无需反复调“间距位置等”来接近系统效果。</p>[EN]There is not need to adjust those object to make them close to a system  object appearance. </p> 2. 在push到下一页时 `TabBar`  的隐藏和显示之间的过渡效果跟系统一致（详见“ [集成后的效果](https://github.com/ChenYilong/CYLTabBarController#集成后的效果) ”部分，给出了效果图）</p>[EN]2. A push animation is same to a system objects appearance. </p> 3. 原生控件，所以可以使用诸多系统API，比如：可以使用 ` [UITabBar appearance];` 、` [UITabBarItem appearance];` 设置样式。（详见“[补充说明](https://github.com/ChenYilong/CYLTabBarController#补充说明) ”部分，给出了响应代码示例）</p>[EN]3.It is convenient to use the system API such as ` [UITabBar appearance];`,` [UITabBarItem appearance];`, etc.
  自动监测是否需要添加“加号”按钮，</p>并能自动设置位置</p>[EN] It is able to check if need to add a PlusButton automatically. |[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 既支持类似微信的“中规中矩”的 `TabBarController` 样式，并且默认就是微信这种样式，同时又支持类似“微博”或“淘宝闲鱼”这种具有不规则加号按钮的 `TabBarController` 。想支持这种样式，只需自定义一个加号按钮，[CYLTabBarController](https://github.com/ChenYilong/CYLTabBarController) 能检测到它的存在并自动将 `tabBar` 排序好，无需多余操作，并且也预留了一定接口来满足自定义需求。</p>“加号”按钮的样式、frame均在自定义的类中独立实现，不会涉及tabbar相关设置。
@@ -67,7 +72,6 @@
 即使加号按钮超出了tabbar的区域，</p>超出部分依然能响应点击事件 | 红线内的区域均能响应tabbar相关的点击事件，</p>![enter image description here](http://i57.tinypic.com/2r7ndzk.jpg)
 允许指定加号按钮位置 | 效果如下：</p>![enter image description here](http://a64.tinypic.com/2mo0h.jpg) </p>Airbnb-app效果：</p>![enter image description here](http://a63.tinypic.com/2mgk02v.gif)
 支持让 `TabBarItem` 仅显示图标，并自动使图标垂直居中，支持自定义TabBar高度 | 效果可见Airbnb-app效果，或者下图</p>![enter image description here](https://cloud.githubusercontent.com/assets/7238866/10777333/5d7811c8-7d55-11e5-88be-8cb11bbeaf90.png)
- 支持自定义动画 | 兼容 Lottie 动画 用法见：https://github.com/ChenYilong/CYLTabBarController/issues/341 </p>  ![enter image description here](http://i64.tinypic.com/2h835ae.jpg) </p> ![](https://ww1.sinaimg.cn/large/006tNbRwly1fg9hu6qnwbg308v0gctcc.gif) 
  支持角标自定义View | ![enter image description here](https://ws4.sinaimg.cn/large/006tKfTcly1fgl0yxcaboj30yi06at8t.jpg) 
  支持多TabBar嵌套，并指定PlusButton位置 | ![enter image description here](https://ws4.sinaimg.cn/large/006tNc79ly1fmn3005isfg308r0iltl6.gif)
 支持CocoaPods |容易集成
@@ -136,7 +140,7 @@
   如果您的网络已经翻墙，在终端中运行如下命令直接安装：
 
   ```
-     sudo gem install cocoapods
+  sudo gem install cocoapods
   ```
 
   如果您的网络不能翻墙，可以通过国内 Ruby China 的 RubyGems 镜像进行安装。
@@ -144,8 +148,9 @@
   在终端依次运行以下命令：
 
   ```
-     gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
-     sudo gem install cocoapods
+  gem sources --add https://gems.ruby-china.com/ --remove https://rubygems.org/
+  
+  sudo gem install cocoapods
   ```
 
  2. 查询 CocoaPods 源中的本库
@@ -153,13 +158,13 @@
   在终端中运行以下命令：
 
   ```
-     pod search CYLTabBarController
+  pod search CYLTabBarController
   ```
  
    这里注意，这个命令搜索的是本机上的最新版本，并没有联网查询。如果运行以上命令，没有搜到或者搜不到最新版本，您可以运行以下命令，更新一下您本地的 CocoaPods 源列表。
 
   ```
-     pod repo update
+  pod repo update
   ```
  
  3. 使用 CocoaPods 导入
@@ -167,39 +172,39 @@
   打开终端，进入到您的工程目录，执行以下命令，会自动生成一个 Podfile 文件。
 
   ```
-     pod init
+  pod init
   ```
 
   然后使用 CocoaPods 进行安装。如果尚未安装 CocoaPods，运行以下命令进行安装：
 
  ```
-    gem install cocoapods
+ gem install cocoapods
  ```
 
-  打开 Podfile，在您项目的 target 下加入以下内容。（在此以 v1.17.22 版本为例）
+  打开 Podfile，在您项目的 target 下加入以下内容。（此处示例可能是旧版本，使用时请替换为最新版，最新版信息可以从这里获取：<a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/CYLTabBarController.podspec"><img src="https://img.shields.io/badge/Pod-GetLatestVersion-green.svg?style=flat"></a>）
 
   在文件 `Podfile` 中加入以下内容：
 
  ```
-    pod 'CYLTabBarController', '~> 1.17.22'
+ pod 'CYLTabBarController', '~> 1.24.0'
  ```
 
   然后在终端中运行以下命令：
 
  ```
-    pod install
+ pod install
  ```
 
   或者这个命令：
 
  ```
-    # 禁止升级 CocoaPods 的 spec 仓库，否则会卡在 Analyzing dependencies，非常慢
-    pod update --verbose --no-repo-update
+ # 禁止升级 CocoaPods 的 spec 仓库，否则会卡在 Analyzing dependencies，非常慢
+ pod update --verbose --no-repo-update
  ```
 
   如果提示找不到库，则可去掉 `--no-repo-update`。
 
-  完成后1.17.22，CocoaPods 会在您的工程根目录下生成一个 `.xcworkspace` 文件。您需要通过此文件打开您的工程，而不是之前的 `.xcodeproj`。
+  完成后1.24.0，CocoaPods 会在您的工程根目录下生成一个 `.xcworkspace` 文件。您需要通过此文件打开您的工程，而不是之前的 `.xcodeproj`。
 
 **CocoaPods 使用说明**
 
@@ -207,15 +212,19 @@
 
 CocoaPods 中，有几种设置 CYLTabBarController 版本的方法。如：
 
-`>= 1.17.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.18.X` 版本的 CYLTabBarController。
+`>= 1.n.X` 会根据您本地的 CocoaPods 源列表，导入不低于 `1.(n+1).X` 版本的 CYLTabBarController。
 
-`~> 1.17.X` 会根据您本地的 CocoaPods 源列表，介于 1.17.X~1.18.0 之前版本的 CYLTabBarController。
-我们建议您锁定版本，便于团队开发。如，指定 1.17.22 版本。
+`~> 1.n.X` 会根据您本地的 CocoaPods 源列表，介于 1.n.X~1.(n+1).0 之前版本的 CYLTabBarController。
+
+建议选择后者：锁定版本，便于团队开发。如：
+
+（此处示例可能是旧版本，使用时请替换为最新版，最新版信息可以从这里获取：<a href="https://github.com/ChenYilong/CYLTabBarController/blob/master/CYLTabBarController.podspec"><img src="https://img.shields.io/badge/Pod-GetLatestVersion-green.svg?style=flat"></a>）
 
  
 ```
-    pod 'CYLTabBarController', '~> 1.17.22'
+pod 'CYLTabBarController', '~> 1.24.0'
 ```
+
 
  - 升级本地 CocoaPods 源
 
@@ -224,7 +233,7 @@ CocoaPods 中，有几种设置 CYLTabBarController 版本的方法。如：
  如果搜索的时候没有搜到或者搜不到最新版本，可以执行以下命令更新一下本地的缓存。
 
  ```
-pod repo update
+ pod repo update
  ```
  
  - 升级工程的 CYLTabBarController 版本
@@ -232,7 +241,7 @@ pod repo update
  更新您工程目录中 Podfile 指定的 CYLTabBarController 版本后，在终端中执行以下命令。
 
  ```
-pod update
+ pod update
  ```
 
 
@@ -252,54 +261,76 @@ pod update
 ###  第二步：设置CYLTabBarController的两个数组：控制器数组和TabBar属性数组
 
  ```Objective-C
- - (void)setupViewControllers {
-    CYLHomeViewController *firstViewController = [[CYLHomeViewController alloc] init];
-    UIViewController *firstNavigationController = [[UINavigationController alloc]
-                                                   initWithRootViewController:firstViewController];
-    
-    CYLSameFityViewController *secondViewController = [[CYLSameFityViewController alloc] init];
-    UIViewController *secondNavigationController = [[UINavigationController alloc]
-                                                    initWithRootViewController:secondViewController];
-    
+ //MainTabBarController
+ 
+@interface MainTabBarController : CYLTabBarController
+@end
 
-    CYLTabBarController *tabBarController = [[CYLTabBarController alloc] init];
-    [self customizeTabBarForController:tabBarController];
-    
-    [tabBarController setViewControllers:@[
-                                           firstNavigationController,
-                                           secondNavigationController,
-                                           ]];
-    self.tabBarController = tabBarController;
+
+- (instancetype)init {
+    if (!(self = [super init])) {
+        return nil;
+    }
+    /**
+     * 以下两行代码目的在于手动设置让TabBarItem只显示图标，不显示文字，并让图标垂直居中。
+     * 等效于在 `-tabBarItemsAttributesForController` 方法中不传 `CYLTabBarItemTitle` 字段。
+     * 更推荐后一种做法。
+     */
+    UIEdgeInsets imageInsets = UIEdgeInsetsZero;//UIEdgeInsetsMake(4.5, 0, -4.5, 0);
+    UIOffset titlePositionAdjustment = UIOffsetMake(0, -3.5);
+    CYLTabBarController *tabBarController = [CYLTabBarController tabBarControllerWithViewControllers:self.viewControllers
+                                                                               tabBarItemsAttributes:self.tabBarItemsAttributesForController
+                                                                                         imageInsets:imageInsets
+                                                                             titlePositionAdjustment:titlePositionAdjustment
+                                                                                             context:nil
+                                             ];
+    [self customizeTabBarAppearance:tabBarController];
+    self.navigationController.navigationBar.hidden = YES;
+    return (self = (MainTabBarController *)tabBarController);
 }
 
-/*
- *
- 在`-setViewControllers:`之前设置TabBar的属性，
- *
- */
-- (void)customizeTabBarForController:(CYLTabBarController *)tabBarController {
-    
-    NSDictionary *dict1 = @{
-                            CYLTabBarItemTitle : @"首页",
-                            CYLTabBarItemImage : @"home_normal",
-                            CYLTabBarItemSelectedImage : @"home_highlight",
-                            };
-    NSDictionary *dict2 = @{
-                            CYLTabBarItemTitle : @"同城",
-                            CYLTabBarItemImage : @"mycity_normal",
-                            CYLTabBarItemSelectedImage : @"mycity_highlight",
-                            };
+- (NSArray *)viewControllers {
+    CYLHomeViewController *firstViewController = [[CYLHomeViewController alloc] init];
+    UIViewController *firstNavigationController = [[CYLBaseNavigationController alloc]
+                                                   initWithRootViewController:firstViewController];
+    [firstViewController cyl_setHideNavigationBarSeparator:YES];
+    CYLSameCityViewController *secondViewController = [[CYLSameCityViewController alloc] init];
+    UIViewController *secondNavigationController = [[CYLBaseNavigationController alloc]
+                                                    initWithRootViewController:secondViewController];
+    [secondViewController cyl_setHideNavigationBarSeparator:YES];
+    NSArray *viewControllers = @[
+                                 firstNavigationController,
+                                 secondNavigationController,
+                                 ];
+    return viewControllers;
+}
 
-    NSArray *tabBarItemsAttributes = @[ dict1, dict2 ];
-    tabBarController.tabBarItemsAttributes = tabBarItemsAttributes;
+- (NSArray *)tabBarItemsAttributesForController {
+    NSDictionary *firstTabBarItemsAttributes = @{
+                                                 CYLTabBarItemTitle : @"首页",
+                                                 CYLTabBarItemImage : self.darkMode ? @"home_highlight" : @"home_normal",  /* NSString and UIImage are supported*/
+                                                 CYLTabBarItemSelectedImage : @"home_highlight",  /* NSString and UIImage are supported*/
+                                                 };
+    NSDictionary *secondTabBarItemsAttributes = @{
+                                                  CYLTabBarItemTitle : @"鱼塘",
+                                                  CYLTabBarItemImage : self.darkMode ? @"fishpond_highlight" : @"fishpond_normal",
+                                                  CYLTabBarItemSelectedImage : @"fishpond_highlight",
+                                                  };
+    
+
+    NSArray *tabBarItemsAttributes = @[
+                                       firstTabBarItemsAttributes,
+                                       secondTabBarItemsAttributes,
+                                       ];
+    return tabBarItemsAttributes;
 }
  ```
 
 在这个字典中，`CYLTabBarItemImage` 和 `CYLTabBarItemSelectedImage` 支持 `NSString`、`UIImage`
 两种格式。`CYLTabBarItemTitle` 不设置将只展示图标，并会对布局作出居中处理。
 
-
 ###  第三步：将CYLTabBarController设置为window的RootViewController
+
 
  ```Objective-C
  - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -309,6 +340,8 @@ pod update
     return YES;
 }
  ```
+ 
+或者将 CYLTabBarController 的子类设为 RootViewCOntroller ，也可以将CYLTabBarController子类的 NavigationViewController 作为 RootViewCOntroller，方便动态更新，Demo 中就是采用后者。
 
 
 ###  第四步（可选）：创建自定义的形状不规则加号按钮
@@ -319,9 +352,9 @@ pod update
 
  1. 实现  `CYLPlusButtonSubclassing`  协议 
 
- 2. 子类将自身类型进行注册，需要在 `-application:didFinishLaunchingWithOptions:` 方法里面调用 `[YourClass registerPlusButton]` 
+ 2. 子类将自身类型进行注册：调用 `[YourClass registerPlusButton]`，需要在 RootViewCOntroller 的 ViewDidLoad 中注册，也可以在 `-application:didFinishLaunchingWithOptions:` 方法里面操作。 
 
-   这里注意，不能在子类的 `+load` 方法中调用，比如像下面这样做，在 iOS10 系统上有 Crash 的风险：
+   这里注意，不建议在子类的 `+load` 方法中调用，比如像下面这样做，在 iOS10 系统上有 Crash 的风险：
 
  ```Objective-C
  + (void)load {
@@ -343,6 +376,7 @@ pod update
  ```Objective-C
  + (NSUInteger)indexOfPlusButtonInTabBar;
  ```
+ 
 用来自定义加号按钮的位置，如果不实现默认居中，但是如果 `tabbar` 的个数是奇数则必须实现该方法，否则 `CYLTabBarController` 会抛出 `exception` 来进行提示。
 
 主要适用于如下情景：
@@ -423,7 +457,7 @@ Airbnb-app效果：
  ```
 
 效果如下，
-1.17.4
+1.24.0
 ![enter image description here](http://i64.tinypic.com/vx16r5.jpg)
 
 同时你也可以顺便测试下 `CYLTabBarController` 的这一个特性：
@@ -756,7 +790,7 @@ Demo 演示的效果图：
 
 ### 多TabBar嵌套，并指定PlusButton位置 
 
-该功能的版本需要 >= v1.17.4。
+该功能旧版本可能并不支持，建议更新最新版中使用。
 
 效果图：
 
@@ -785,13 +819,16 @@ Demo 演示的效果图：
 
 具体的编写步骤参考热心网友提供的教程： [《从头开始swift2.1 仿搜材通项目（三） 主流框架Tabbed的搭建》]( http://www.jianshu.com/p/c5bc2eae0f55?nomobile=yes ) 
 
-这里注意，文章的示例代码有问题，少了设置 PlusButton 大小的代码：
+这里注意，文章的早期一个版本的示例代码有问题（笔者注：现在已经更新了），少了设置 PlusButton 大小的代码：
 这将导致 PlusButton 点击事件失效，具体修改代码如下：
 ![enter image description here](http://i67.tinypic.com/118ottv.jpg)
 
 ### 搭配 Storyboard 使用 CYLTabBarController
 
-[这里](https://github.com/ChenYilong/CYLDeallocBlockExecutor) ，里面有个文件夹CYLTabBarControllerTestDemo，这个Demo演示了如何搭配 Storyboard 使用。
+参考：
+
+ - 见这里 [issue讨论]( https://github.com/ChenYilong/CYLTabBarController/issues/170 ) 
+ - [这里](https://github.com/ChenYilong/CYLDeallocBlockExecutor) ，里面有个文件夹CYLTabBarControllerTestDemo，这个Demo演示了如何搭配 Storyboard 使用。
 
 ### 源码实现原理
 

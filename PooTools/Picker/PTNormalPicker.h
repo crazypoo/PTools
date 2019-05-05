@@ -19,7 +19,27 @@ typedef void(^PickerReturnBlock) (PTNormalPicker *normalPicker,PTNormalPickerMod
 @end
 
 @interface PTNormalPicker : UIView
--(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr withPickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr;
+
+/*! @brief Picker初始化
+ * @param pickerBGC 背景颜色
+ * @param tabColor tabbar的背景颜色
+ * @param textColor Bar字体
+ * @param titleFont picker字体
+ * @param dataArr 数据
+ * @param pT Bar标题
+ * @param currentStr 当前所选
+ */
+-(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC
+                                 withTapBarBGColor:(UIColor *)tabColor
+                         withTitleAndBtnTitleColor:(UIColor *)textColor
+                                     withTitleFont:(UIFont *)titleFont
+                                    withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr
+                                   withPickerTitle:(NSString *)pT
+                             checkPickerCurrentRow:(NSString *)currentStr;
+/*! @brief 显示Picker
+ */
+-(void)pickerShow;
+
 @property (nonatomic, copy) PickerReturnBlock returnBlock;
 
 @end

@@ -2,7 +2,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'PooTools_Example' do
-#  pod 'PooTools', :path => '../'
+  pod 'PooTools', :path => '../'
 #  pod 'SDWebImage'
 #  pod 'Masonry'
 #  pod 'SSZipArchive'
@@ -34,8 +34,8 @@ target 'PooTools_Example' do
 #  pod 'YCXMenu'
 #  pod 'lottie-ios'
 #  pod 'pop'
-  pod 'PooTools'
-  
+#  pod 'PooTools'
+
   
   
   

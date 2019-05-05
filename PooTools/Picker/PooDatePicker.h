@@ -35,6 +35,8 @@ typedef NS_ENUM(NSInteger,PPickerType){
 /*! @brief 选取回调
  */
 @property (nonatomic, copy) void (^block)(NSString *dateString);
+
+-(void)pickerShow;
 @end
 
 @class PooTimePicker;
@@ -75,4 +77,6 @@ typedef NS_ENUM(NSInteger,PPickerType){
 
 +(NSInteger)getEditHourIndexWithTimeString:(NSString*)str;
 +(NSInteger)getEditMinuteIndexWithTimeString:(NSString*)str;
+
+-(void)pickerShow;
 @end
