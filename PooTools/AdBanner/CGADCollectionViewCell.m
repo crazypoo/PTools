@@ -27,8 +27,8 @@
     [self.contentView addSubview:self.adImage];
     [self.adImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.contentView);
-        make.left.equalTo(self.contentView).offset(20);
-        make.right.equalTo(self.contentView).offset(-20);
+        make.left.equalTo(self.contentView);
+        make.right.equalTo(self.contentView);
     }];
     
     self.adTitle = [UILabel new];
