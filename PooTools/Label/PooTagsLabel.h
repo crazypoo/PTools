@@ -52,9 +52,13 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 选中字体颜色 (默认[UIColor greenColor])
  */
 @property (nonatomic,strong) UIColor *selectedTitleColor;
-/*! @brief 选中字体颜色 (默认[UIColor clearColor])
+/*! @brief 默认背景颜色 (默认[UIColor clearColor])
  */
 @property (nonatomic,strong) UIColor *backgroundColor;
+/*! @brief 选中背景颜色 (默认[UIColor clearColor])
+ */
+@property (nonatomic,strong) UIColor *backgroundSelectedColor;
+
 /*! @brief 没选中背景图片 (只在纯文字模式下使用)
  */
 @property (nonatomic,strong) NSString *normalBgImage;

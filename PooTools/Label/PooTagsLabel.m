@@ -51,8 +51,7 @@
             
             CGRect lastBtnRect = CGRectZero;
             CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
-            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0)
-;
+            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
             
             for (int i = 0; i < tagsNormalArr.count; i++)
             {
@@ -222,7 +221,6 @@
                     [btn setBackgroundImage:[UIImage imageNamed:config.selectedBgImage] forState:UIControlStateSelected];
                 }
                 
-                btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
                 btn.titleLabel.font = font;
                 [btn addTarget:self action:@selector(tagBtnAction:) forControlEvents:UIControlEventTouchUpInside];
                 
@@ -266,6 +264,7 @@
                             UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
                             btn.layer.borderColor = borderC.CGColor;
                         }
+                        btn.backgroundColor = config.backgroundSelectedColor ? config.backgroundSelectedColor : kClearColor;
                     }
                     else
                     {
@@ -274,6 +273,7 @@
                             UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
                             btn.layer.borderColor = borderC.CGColor;
                         }
+                        btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
                     }
                 }
                 else
@@ -421,6 +421,16 @@
             sender.layer.borderColor = borderC.CGColor;
         }
     }
+    
+    if (sender.selected)
+    {
+        sender.backgroundColor = self.curConfig.backgroundSelectedColor ? self.curConfig.backgroundSelectedColor : kClearColor;
+    }
+    else
+    {
+        sender.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+    }
+
     
     //点击回调
     NSInteger index = sender.tag - BTN_Tags_Tag;

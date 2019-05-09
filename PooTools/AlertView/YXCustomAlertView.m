@@ -118,7 +118,6 @@
         if (self.setBlock) {
             self.setBlock(self);
         }
-        [self setBottomView];
     }
     
     return self;
@@ -141,23 +140,22 @@
             make.bottom.equalTo(self);
             make.left.offset(btnW*i+1*i);
         }];
-    }
-    
-    if (self.bottomBtnArr.count != 1) {
-        for (int j = 0; j < (self.bottomBtnArr.count-1); j++) {
-            UIView *verLine = [UIView new];
-            verLine.backgroundColor = self.verLineColor;
-            verLine.tag = 200 + j;
-            [self addSubview:verLine];
-            [verLine mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.offset(btnW+0.5*j+btnW*j);
-                make.top.equalTo(self.customView.mas_bottom);
-                make.bottom.equalTo(self);
-                make.width.offset(0.5);
-            }];
+        
+        if (i != (self.bottomBtnArr.count -1)) {
+            if (self.bottomBtnArr.count > 1) {
+                UIView *verLine = [UIView new];
+                verLine.backgroundColor = self.verLineColor;
+                verLine.tag = 200 + i;
+                [self addSubview:verLine];
+                [verLine mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.left.equalTo(cancelBtn.mas_right);
+                    make.top.equalTo(self.customView.mas_bottom);
+                    make.bottom.equalTo(self);
+                    make.width.offset(0.5);
+                }];
+            }
         }
     }
-
     
     UIView *horLine = [UIView new];
     horLine.backgroundColor = self.verLineColor;
@@ -208,34 +206,8 @@
         make.bottom.equalTo(self).offset(-BottomButtonH);
         make.left.right.equalTo(self);
     }];
-    CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*0.5)/self.bottomBtnArr.count;
-    for (int i = 0; i < self.bottomBtnArr.count; i++) {
-        UIButton *cancelBtn =  (UIButton *)[self viewWithTag:100+i];
-        [cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(btnW);
-            make.top.equalTo(self.customView.mas_bottom);
-            make.bottom.equalTo(self);
-            make.left.offset(btnW*i+1*i);
-        }];
-    }
     
-    for (int j = 0; j < (self.bottomBtnArr.count-1); j++)
-    {
-        UIView *verLine =  (UIView *)[self viewWithTag:200+j];
-        [verLine mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.offset(btnW+0.5*j+btnW*j);
-            make.top.equalTo(self.customView.mas_bottom);
-            make.bottom.equalTo(self);
-            make.width.offset(0.5);
-        }];
-    }
-    
-    UIView *horLine = (UIView *)[self viewWithTag:1000];
-    [horLine mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
-        make.top.equalTo(self.customView.mas_bottom);
-        make.height.offset(0.5);
-    }];
+    [self setBottomView];
 }
 
 #pragma mark - Action

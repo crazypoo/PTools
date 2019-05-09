@@ -87,11 +87,11 @@
     _backView.backgroundColor = kDevMaskBackgroundColor;
     _backView.alpha = 0.0f;
     [self addSubview:_backView];
-    
+
     self.actionSheetView = [UIView new];
     self.actionSheetView.backgroundColor = kRGBAColor(230, 230, 230, 1);
     [self addSubview:self.actionSheetView];
-    
+
     UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
     UIImage *highlightedImage = [Utils createImageWithColor:kRGBAColor(242, 242, 242, 1)];
     
@@ -233,95 +233,7 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-    
-    [_backView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
-    }];
-    
-    [self.actionSheetView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.backView);
-        make.top.offset(kSCREEN_HEIGHT-[self actionSheetHeight]-(isIPhoneXSeries() ? HEIGHT_TABBAR_SAFEAREA : 0));
-        make.height.offset([self actionSheetHeight]);
-    }];
-    
-    if (_title && _title.length>0)
-    {
-        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.equalTo(self.actionSheetView);
-            make.height.offset([self titleHeight]);
-        }];
-        
-        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
-        {
-            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self.titleLabel.mas_bottom).offset(kRowLineHeight);
-                make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
-            }];
-        }
-        else
-        {
-            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
-            }];
-        }
-    }
-    else
-    {
-        if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
-        {
-            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.top.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
-            }];
-        }
-        else
-        {
-            [self.actionSheetScroll mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.top.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
-            }];
-        }
-    }
-    
-    self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
-    
-    if ([self.otherButtonTitles count] > 0)
-    {
-        for (int i = 0; i < self.otherButtonTitles.count; i++)
-        {
-            UIButton *btn = [self.actionSheetScroll viewWithTag:i+100];
-            [btn mas_updateConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self.actionSheetView);
-                make.top.offset(kRowHeight*i+kRowLineHeight*i);
-                make.height.offset(kRowHeight);
-            }];
-        }
-    }
-    
-    if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
-    {
-        [self.destructiveButton mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.actionSheetView);
-            make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
-            make.height.offset(kRowHeight);
-        }];
-    }
-    
-    [self.separatorView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.actionSheetView);
-        make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight));
-        make.height.offset(kSeparatorHeight);
-    }];
-    
-    [self.cancelBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.actionSheetView);
-        make.height.offset(kRowHeight);
-    }];
+    [self loadView];
 }
 
 #pragma mark ------> SubViewHeight
@@ -429,7 +341,7 @@
     
     _isShow = YES;
     
-    [self loadView];
+    [self layoutSubviews];
 
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
         
