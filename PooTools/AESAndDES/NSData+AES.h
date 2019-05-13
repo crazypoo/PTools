@@ -12,11 +12,15 @@
 
 @interface NSData (Encryption)
 /*! @brief 加密(AES)
+ * @param key key
+ * @param Iv iv
  */
 - (NSData *)AES128EncryptWithKey:(NSString *)key
                              gIv:(NSString *)Iv;
 
 /*! @brief 解密(AES)
+ * @param key key
+ * @param Iv iv
  */
 - (NSData *)AES128DecryptWithKey:(NSString *)key
                              gIv:(NSString *)Iv;

@@ -16,23 +16,58 @@
 typedef void (^BannerViewDidTapBlock)(IGBannerView *bannerView, IGBannerItem *bannerItem);
 
 @interface IGBannerView : UIView
-@property (nonatomic, assign) BOOL autoScrolling; // default is YES;
-@property (nonatomic) NSTimeInterval switchTimeInterval; // default for 5s;
-
+/*! @brief 是否滑动
+ * @attention 默认YES
+ */
+@property (nonatomic, assign) BOOL autoScrolling;
+/*! @brief 滑动时间
+ * @attention 默认5s
+ */
+@property (nonatomic) NSTimeInterval switchTimeInterval;
+/*! @brief 广告代理
+ */
 @property (nonatomic, unsafe_unretained) id<IGBannerViewDelegate> delegate;
 
-/* 标题栏属性 */
-@property (nonatomic, strong) UIColor *titleColor; // default is white
-@property (nonatomic, strong) UIColor *titleBackgroundColor; // default is black(alpha is 35%)
-@property (nonatomic, strong) UIFont *titleFont; // default is system(14)
-@property (nonatomic, assign) float titleHeight; // default is 20
-/* Page Control属性 */
-@property (nonatomic, assign) float pageControlHeight; // default is 14;
-@property (nonatomic, strong) UIColor *pageControlBackgroundColor; // default is black(alpha is 35%)
+/*! @brief 广告标题颜色
+ * @attention 默认白色
+ */
+@property (nonatomic, strong) UIColor *titleColor;
+/*! @brief 广告标题背景颜色
+ * @attention 默认黑色(alpha is 35%)
+ */
+@property (nonatomic, strong) UIColor *titleBackgroundColor;
+/*! @brief 广告标题字体
+ * @attention 默认system14
+ */
+@property (nonatomic, strong) UIFont *titleFont;
+/*! @brief 广告标题高度
+ * @attention 默认20
+ */
+@property (nonatomic, assign) float titleHeight;
 
+/*! @brief 广告PageControl高度
+ * @attention 默认14
+ */
+@property (nonatomic, assign) float pageControlHeight;
+/*! @brief 广告PageControl高度
+ * @attention 默认黑色(alpha is 35%)
+ */
+@property (nonatomic, strong) UIColor *pageControlBackgroundColor;
+
+/*! @brief 广告初始化
+ * @param frame 广告frame
+ * @param items 广告item
+ */
 - (id)initWithFrame:(CGRect)frame bannerItem:(IGBannerItem *)items, ... NS_REQUIRES_NIL_TERMINATION;
+/*! @brief 广告初始化
+ * @param frame 广告frame
+ * @param items 广告item
+ * @param pI 广告placeholder图片
+ */
 - (id)initWithFrame:(CGRect)frame bannerItems:(NSArray *)items bannerPlaceholderImage:(UIImage *)pI;
 
+/*! @brief 广告点击回调
+ */
 @property (nonatomic,strong) BannerViewDidTapBlock bannerTapBlock;
 
 @end

@@ -33,6 +33,17 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
 +(CGFloat)titleAndBottomViewNormalH;
 
 /*! @brief 初始化View,带回调
+ * @param superView 加载在哪里
+ * @param title 标题
+ * @param btFont 选择按钮字体
+ * @param tColor 标题颜色
+ * @param bbtColor 选择按钮字体颜色
+ * @param vlColor 线颜色
+ * @param mbtArray 选择按钮数组
+ * @param tag tag
+ * @param setViewBlock 设置自定义view
+ * @param clickBlock 设置自定义view的点击回调
+ * @param didDismissBlock 弹出框小时回调
  */
 - (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
                                            alertTitle:(NSString * _Nullable)title

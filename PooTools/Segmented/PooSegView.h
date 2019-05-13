@@ -59,9 +59,19 @@ normalBackgroundColor:(UIColor *)nbc
    firstSelectIndex:(NSInteger)fSelect
          clickBlock:(PooSegViewClickBlock)block;
 
+/*! @brief 设置当前选项
+ */
 -(void)setSegCurrentIndex:(NSInteger)index;
 
--(void)setSegBadgeAtIndex:(NSInteger)index where:(PooSegBadgeShowType)type;
+/*! @brief 设置某一项有提示
+ * @param type 提示type
+ */
+-(void)setSegBadgeAtIndex:(NSInteger)index
+                    where:(PooSegBadgeShowType)type;
+/*! @brief 移除某一个提示
+ */
 -(void)removeSegBadgeAtIndex:(NSInteger)index;
+/*! @brief 移除所有提示
+ */
 -(void)removeAllSegBadgeAtIndex;
 @end

@@ -24,18 +24,49 @@ typedef NS_ENUM(NSInteger, IGBannerItemStyle) {
 
 @interface IGBannerItem : NSObject
 
+/*! @brief 广告标题
+ */
 @property (nonatomic, strong) NSString  *title;
+/*! @brief 广告风格
+ */
 @property (nonatomic, assign) IGBannerItemStyle style;
+/*! @brief 广告图片
+ */
 @property (nonatomic, strong) UIImage   *image;
+/*! @brief 广告图片URL
+ */
 @property (nonatomic, strong) NSString  *imageUrl;
-
+/*! @brief 广告对象
+ */
 @property (nonatomic, strong) NSObject  *obj;
+/*! @brief 广告tag
+ */
 @property (nonatomic, assign) int tag;
 
+/*! @brief 广告初始化(加载图片)-
+ * @param title 标题
+ * @param image 图片
+ * @param tag tag
+ */
 - (id)initWithTitle:(NSString *)title image:(UIImage *)image tag:(int)tag;
-- (id)initWithTitle:(NSString *)title imageUrl:(NSString *)imageUrl tag:(int)tag;
-
+/*! @brief 广告初始化(加载图片)+
+ * @param title 标题
+ * @param image 图片
+ * @param tag tag
+ */
 + (id)itemWithTitle:(NSString *)title image:(UIImage *)image tag:(int)tag;
+
+/*! @brief 广告初始化(加载图片URL)-
+ * @param title 标题
+ * @param imageUrl 图片URL
+ * @param tag tag
+ */
+- (id)initWithTitle:(NSString *)title imageUrl:(NSString *)imageUrl tag:(int)tag;
+/*! @brief 广告初始化(加载图片URL)+
+ * @param title 标题
+ * @param imageUrl 图片URL
+ * @param tag tag
+ */
 + (id)itemWithTitle:(NSString *)title imageUrl:(NSString *)imageUrl tag:(int)tag;
 
 @end

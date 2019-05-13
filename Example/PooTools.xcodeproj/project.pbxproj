@@ -26,6 +26,7 @@
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		C004647522647CE4004F946F /* DoubleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = C004647322647CE3004F946F /* DoubleSliderView.m */; };
 		C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0908103225F4A18005243E7 /* NSString+Extension.m */; };
+		C0B5E12422890E6900D32503 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B5E12322890E6900D32503 /* MXRotationManager.m */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */; };
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
@@ -214,6 +215,8 @@
 		C004647422647CE3004F946F /* DoubleSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleSliderView.h; sourceTree = "<group>"; };
 		C0908102225F4A18005243E7 /* NSString+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
 		C0908103225F4A18005243E7 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
+		C0B5E12222890E6900D32503 /* MXRotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXRotationManager.h; sourceTree = "<group>"; };
+		C0B5E12322890E6900D32503 /* MXRotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRotationManager.m; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UINavigation_SXFixSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1212,53 +1215,63 @@
 			path = SecurityView;
 			sourceTree = "<group>";
 		};
+		C0B5E12122890E2700D32503 /* Rotamation */ = {
+			isa = PBXGroup;
+			children = (
+				C0B5E12222890E6900D32503 /* MXRotationManager.h */,
+				C0B5E12322890E6900D32503 /* MXRotationManager.m */,
+			);
+			path = Rotamation;
+			sourceTree = "<group>";
+		};
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				C08D9DD2227689F1001417F1 /* AdBanner */,
 				C08D9DE722768DC1001417F1 /* AESAndDES */,
 				C08D9DD522768A72001417F1 /* ActionSheet */,
 				C08D9DD422768A62001417F1 /* AlertView */,
-				C08D9DF6227690EF001417F1 /* SecurityView */,
-				C08D9DF522769085001417F1 /* CodeView */,
-				C08D9DF42276906A001417F1 /* OpenFunction */,
-				C08D9DF32276904D001417F1 /* UniTool */,
-				C08D9DF22276900E001417F1 /* CleanMemory */,
-				C08D9DF122768FE6001417F1 /* CheckDirtyWord */,
-				C08D9DF022768F8A001417F1 /* FloatingView */,
-				C08D9DEF22768F69001417F1 /* BugReport */,
-				C08D9DEE22768F3E001417F1 /* RateView */,
-				C08D9DED22768ED8001417F1 /* Chat */,
-				C08D9DEC22768EA8001417F1 /* Country */,
-				C08D9DEB22768E91001417F1 /* LineView */,
-				C08D9DEA22768E6E001417F1 /* PhoneCall */,
-				C08D9DE922768E0C001417F1 /* Speech */,
-				C08D9DE822768DF2001417F1 /* Json */,
-				C08D9DE622768D8E001417F1 /* PhoneInfo */,
-				C08D9DE522768D7C001417F1 /* Motion */,
-				C08D9DE422768D3F001417F1 /* KeyChain */,
 				C08D9DE322768D2D001417F1 /* Base64 */,
-				C08D9DE222768CDC001417F1 /* SearchBar */,
-				C08D9DE122768CBE001417F1 /* Keyboard */,
-				C08D9DE022768C9B001417F1 /* ImageReviewer */,
-				C08D9DDF22768C81001417F1 /* Thermometer */,
-				C08D9DDE22768C53001417F1 /* WeChatPassWord */,
-				C08D9DDD22768BE9001417F1 /* Loading */,
-				C08D9DDC22768BC8001417F1 /* HealKit */,
-				C08D9DDB22768B99001417F1 /* Label */,
-				C08D9DDA22768B3D001417F1 /* Input */,
-				C08D9DD922768B2B001417F1 /* Segmented */,
-				C08D9DD822768AE9001417F1 /* CheckBox */,
 				C08D9DD722768AD1001417F1 /* BlackMagic */,
-				C08D9DD622768A9D001417F1 /* Calendar */,
-				C08D9DD322768A19001417F1 /* Picker */,
-				C08D9DD2227689F1001417F1 /* AdBanner */,
-				C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */,
-				C08D9DD0227689B0001417F1 /* WeChatLittleVideo */,
-				C08D9DCF22768991001417F1 /* SignView */,
+				C08D9DEF22768F69001417F1 /* BugReport */,
 				C08D9DCE2276890F001417F1 /* Category */,
+				C08D9DD622768A9D001417F1 /* Calendar */,
+				C08D9DED22768ED8001417F1 /* Chat */,
+				C08D9DD822768AE9001417F1 /* CheckBox */,
+				C08D9DF122768FE6001417F1 /* CheckDirtyWord */,
+				C08D9DF22276900E001417F1 /* CleanMemory */,
+				C08D9DF522769085001417F1 /* CodeView */,
+				C08D9DEC22768EA8001417F1 /* Country */,
 				C08D9DCD227688FE001417F1 /* DevTools */,
+				C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */,
+				C08D9DF022768F8A001417F1 /* FloatingView */,
+				C08D9DDC22768BC8001417F1 /* HealKit */,
+				C08D9DE022768C9B001417F1 /* ImageReviewer */,
+				C08D9DDA22768B3D001417F1 /* Input */,
+				C08D9DE822768DF2001417F1 /* Json */,
+				C08D9DE122768CBE001417F1 /* Keyboard */,
+				C08D9DE422768D3F001417F1 /* KeyChain */,
+				C08D9DDB22768B99001417F1 /* Label */,
+				C08D9DEB22768E91001417F1 /* LineView */,
+				C08D9DDD22768BE9001417F1 /* Loading */,
+				C08D9DE522768D7C001417F1 /* Motion */,
 				C08D9DCC2276886B001417F1 /* NetWork */,
+				C08D9DF42276906A001417F1 /* OpenFunction */,
+				C08D9DEA22768E6E001417F1 /* PhoneCall */,
+				C08D9DE622768D8E001417F1 /* PhoneInfo */,
+				C08D9DD322768A19001417F1 /* Picker */,
+				C08D9DEE22768F3E001417F1 /* RateView */,
+				C0B5E12122890E2700D32503 /* Rotamation */,
+				C08D9DF6227690EF001417F1 /* SecurityView */,
 				C08D9DCB22768854001417F1 /* Slider */,
+				C08D9DE222768CDC001417F1 /* SearchBar */,
+				C08D9DD922768B2B001417F1 /* Segmented */,
+				C08D9DE922768E0C001417F1 /* Speech */,
+				C08D9DCF22768991001417F1 /* SignView */,
+				C08D9DDF22768C81001417F1 /* Thermometer */,
+				C08D9DF32276904D001417F1 /* UniTool */,
+				C08D9DD0227689B0001417F1 /* WeChatLittleVideo */,
+				C08D9DDE22768C53001417F1 /* WeChatPassWord */,
 				C8FCB8F921308328000BB281 /* PooTools.bundle */,
 				CC1257822098319200E31A38 /* PTInputAll.h */,
 				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
@@ -1524,6 +1537,7 @@
 				64F95E322099374200858FED /* IGBannerView.m in Sources */,
 				64F95E312099374200858FED /* IGBannerItem.m in Sources */,
 				CCD660B821DCCD3B004AA57D /* NSURLSessionTask+IGHTTPClient.m in Sources */,
+				C0B5E12422890E6900D32503 /* MXRotationManager.m in Sources */,
 				CC29C9FB21CE1F9100786FF1 /* PTUploadDataSteamTools.m in Sources */,
 				CC1257B12098319300E31A38 /* CustomTextField.m in Sources */,
 				CCD660B921DCCD3B004AA57D /* IGHTTPRequestSerializer.m in Sources */,
