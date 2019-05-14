@@ -446,6 +446,7 @@
     {
         UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
         btn.selected = NO;
+        btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
     }
 }
 @end
