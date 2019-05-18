@@ -167,7 +167,10 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 #pragma mark ------> UIScrollViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self removeTimer];
-    self.pageControl.currentPage = (NSInteger)(scrollView.contentOffset.x / scrollView.frame.size.width);
+    
+    NSInteger currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
+    self.pageControl.currentPage = currentPage;
+    self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",currentPage+1,(unsigned long)viewData.count];
 }
 
 -(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
