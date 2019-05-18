@@ -8,6 +8,10 @@
 
 #import "Utils.h"
 #import "UIImage+UIColorEX.h"
+#import "PMacros.h"
+
+#import <CoreTelephony/CTTelephonyNetworkInfo.h>
+#import <CoreTelephony/CTCarrier.h>
 
 #define HORIZONTAL_SPACE 30//水平间距
 #define VERTICAL_SPACE 50//竖直间距
@@ -1321,4 +1325,14 @@
     return returnValue;
 }
 
++(BOOL)isSIMInstalled
+{
+    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
+    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
+    if (!carrier.isoCountryCode) {
+        PNSLog(@"No sim present Or No cellular coverage or phone is on airplane mode.");
+        return NO;
+    }
+    return YES;
+}
 @end

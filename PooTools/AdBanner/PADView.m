@@ -19,6 +19,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 @property (nonatomic,assign)CGFloat viewY;
 @property (nonatomic,strong)UIFont *titleFont;
 @property (nonatomic,strong)UIPageControl *pageControl;
+@property (nonatomic,strong)UILabel *pageLabel;
 @end
 
 @implementation PADView
@@ -48,17 +49,25 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
             make.left.right.top.bottom.equalTo(self);
         }];
         
-        self.pageControl = [UIPageControl new];
-        self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
-        self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
-        self.pageControl.numberOfPages = adArr.count;
-        self.pageControl.currentPage = 0;
-        [self addSubview:self.pageControl];
-        [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.bottom.equalTo(self);
-            make.height.equalTo(@(20));
-            make.width.equalTo(@(100));
-        }];
+        if (viewData.count > 5) {
+            self.pageLabel = [UILabel new];
+            self.pageLabel.font = self.titleFont ? self.titleFont : kDEFAULT_FONT(kDevLikeFont, 18);
+            self.pageLabel.textAlignment = NSTextAlignmentCenter;
+            self.pageLabel.textColor = [UIColor whiteColor];
+            self.pageLabel.backgroundColor = kDevMaskBackgroundColor;
+            self.pageLabel.text = [NSString stringWithFormat:@"1/%lu",(unsigned long)viewData.count];
+            [self addSubview:self.pageLabel];
+            kViewBorderRadius(self.pageLabel, 10, 0, kClearColor);
+        }
+        else
+        {
+            self.pageControl = [UIPageControl new];
+            self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
+            self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
+            self.pageControl.numberOfPages = adArr.count;
+            self.pageControl.currentPage = 0;
+            [self addSubview:self.pageControl];
+        }
 
         if (pT != 0) {
             [self addTimer];
@@ -84,6 +93,23 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     [adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);
     }];
+    
+    if (viewData.count > 5) {
+        [self.pageLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self).offset(-self.viewY);
+            make.right.equalTo(self).offset(-self.viewX);
+            make.height.equalTo(@(20));
+            make.width.equalTo(@(self.pageLabel.text.length*self.pageLabel.font.pointSize+5));
+        }];
+    }
+    else
+    {
+        [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.right.bottom.equalTo(self);
+            make.height.equalTo(@(20));
+            make.width.equalTo(@(100));
+        }];
+    }
 }
 
 #pragma mark ---------------> UICollectionViewDataSource
@@ -163,5 +189,6 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
     [self.pageControl setCurrentPage:nextIndexPath.item];
     [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+    self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",nextIndexPath.row+1,(unsigned long)viewData.count];
 }
 @end

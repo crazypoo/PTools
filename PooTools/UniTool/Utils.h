@@ -348,4 +348,7 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(BOOL)stringContainsEmoji:(NSString * _Nonnull)string;
 
+/*! @brief 判断是否存在SIM卡
+ */
++(BOOL)isSIMInstalled;
 @end
