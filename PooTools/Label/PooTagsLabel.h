@@ -150,5 +150,5 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 
 /*! @brief 重新加载Tag
  */
--(void)reloadTag;
+-(void)reloadTag:(PooTagsLabelConfig *)config;
 @end

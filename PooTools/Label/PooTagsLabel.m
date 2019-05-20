@@ -20,6 +20,8 @@
 @property (nonatomic,strong) NSArray *normalTagsArr;
 @property (nonatomic,assign) BOOL showImage;
 @property (nonatomic,assign) CGFloat viewW;
+@property (nonatomic,strong) NSArray *selectedTagsArr;
+@property (nonatomic,strong) NSArray *tagsTitleArr;
 @end
 
 @implementation PooTagsLabel
@@ -36,6 +38,8 @@
         self.tag = sectionIndex;
         self.showImage = YES;
         self.normalTagsArr = tagsNormalArr;
+        self.selectedTagsArr = tagsSelectArr;
+        self.tagsTitleArr = tagsTitleArr;
         _curConfig = config;
         _multiSelectedTags = [NSMutableArray array];
         if (config.selectedDefaultTags.count)
@@ -67,7 +71,7 @@
                     lastBtnRect.size.width = 0.0;
                     orgin_Y += (config.itemHeight + config.itemVerMargin);
                 }
-
+                
                 UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, config.itemWidth, config.itemHeight)];
                 lastBtnRect = btn.frame;
                 hMargin = config.itemHerMargin;
@@ -185,7 +189,7 @@
             CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
             
             UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
-
+            
             for (int i = 0; i < tagsArr.count; i++)
             {
                 NSString *title = tagsArr[i];
@@ -282,7 +286,7 @@
                 }
                 [self addSubview:btn];
             }
-
+            
             if (self.tagHeightBlock) {
                 self.tagHeightBlock(self, self.frame.size.height);
             }
@@ -299,7 +303,7 @@
     CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
     
     UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
-
+    
     for (int i = 0; i < self.normalTagsArr.count; i++)
     {
         NSString *title = self.normalTagsArr[i];
@@ -312,7 +316,7 @@
         {
             titleWidth = [title sizeWithAttributes:@{NSFontAttributeName : font}].width;
         }
-
+        
         if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
         {
             lastBtnRect.origin.x = 0.0;
@@ -430,7 +434,7 @@
     {
         sender.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
     }
-
+    
     
     //点击回调
     NSInteger index = sender.tag - BTN_Tags_Tag;
@@ -450,22 +454,27 @@
     }
 }
 
--(void)reloadTag
+-(void)reloadTag:(PooTagsLabelConfig *)config
 {
+    [self clearTag];
+    
     for (int i = 0; i < self.normalTagsArr.count; i++)
     {
-        NSString *title = self.normalTagsArr[i];
+        NSString *title = self.showImage ? self.tagsTitleArr[i] : self.normalTagsArr[i];
 
         UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
-
-        btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+        
+        [_multiSelectedTags removeAllObjects];
+        [_multiSelectedTags addObjectsFromArray:config.selectedDefaultTags];
+        
+        btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
         ///可选中
-        if (self.curConfig.isCanSelected)
+        if (config.isCanSelected)
         {
             //多选
-            if (self.curConfig.isMulti)
+            if (config.isMulti)
             {
-                for (NSString *str in self.curConfig.selectedDefaultTags)
+                for (NSString *str in config.selectedDefaultTags)
                 {
                     if ([title isEqualToString:str])
                     {
@@ -475,7 +484,7 @@
             }
             else
             {  //单选
-                if ([title isEqualToString:self.curConfig.singleSelectedTitle])
+                if ([title isEqualToString:config.singleSelectedTitle])
                 {
                     btn.selected = YES;
                     self.selectedBtn = btn;
@@ -483,21 +492,21 @@
             }
             
             if (btn.selected) {
-                if (self.curConfig.hasBorder)
+                if (config.hasBorder)
                 {
-                    UIColor *borderC = self.curConfig.borderColorSelected ? self.curConfig.borderColorSelected : [UIColor grayColor];
+                    UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
                     btn.layer.borderColor = borderC.CGColor;
                 }
-                btn.backgroundColor = self.curConfig.backgroundSelectedColor ? self.curConfig.backgroundSelectedColor : kClearColor;
+                btn.backgroundColor = config.backgroundSelectedColor ? config.backgroundSelectedColor : kClearColor;
             }
             else
             {
                 if (self.curConfig.hasBorder)
                 {
-                    UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor grayColor];
+                    UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
                     btn.layer.borderColor = borderC.CGColor;
                 }
-                btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+                btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
             }
         }
         else

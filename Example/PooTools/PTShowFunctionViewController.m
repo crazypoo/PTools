@@ -6,6 +6,19 @@
 //  Copyright © 2018年 crazypoo. All rights reserved.
 //
 
+#define iPhone6SPViewPointW 414
+#define PSViewPointToiOSViewPoint(x) (x/3)
+#define ViewSpace PSViewPointToiOSViewPoint(77)*ViewScale
+//Cell的上下Space
+#define CellSpace PSViewPointToiOSViewPoint(63)*ViewScale
+#define AppOrange kColorFromHex(0xff7112)
+#define ViewScale (kSCREEN_WIDTH/iPhone6SPViewPointW)
+
+CGFloat const tagItemH = PSViewPointToiOSViewPoint(102);
+CGFloat const tagItemSpace = 5;
+
+
+
 #import "PTShowFunctionViewController.h"
 
 #import "PMacros.h"
@@ -66,9 +79,26 @@
 @property (nonatomic, strong) UIButton *cornerBtn;
 
 @property (nonatomic, strong) PooSegView *seg;
+
+@property (nonatomic, strong) NSArray *titleS;
 @end
 
 @implementation PTShowFunctionViewController
+
+-(NSArray *)roomSetArray
+{
+    return @[@"空调",@"床",@"热水器",@"洗衣机",@"沙发",@"电视机",@"冰箱",@"天然气",@"宽带",@"衣柜"];
+}
+
+-(NSArray *)taglabelNormalArr
+{
+    return @[@"image_aircondition_gray",@"image_bed_gray",@"image_heater_gray",@"image_washer_gray",@"image_sofa_gray",@"image_televition_gray",@"image_fridge_gray",@"image_gas_gray",@"image_web_gray",@"image_closet_gray"];
+}
+
+-(NSArray *)taglabelSelected
+{
+    return @[@"image_aircondition",@"image_bed",@"image_heater",@"image_washer",@"image_sofa",@"image_televition",@"image_fridge",@"image_gas",@"image_web",@"image_closet"];
+}
 
 -(instancetype)initWithShowFunctionType:(ShowFunction)type
 {
@@ -85,6 +115,31 @@
     [self.webServer stop];
     self.webServer = nil;
 }
+
+-(PooTagsLabelConfig *)tagConfig
+{
+    CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
+    
+    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+    config.itemHeight = tagItemH * ViewScale;
+    config.itemWidth = smallScreen;
+    config.itemHerMargin = tagItemSpace;
+    config.itemVerMargin = tagItemSpace;
+    config.hasBorder = NO;
+    config.topBottomSpace = tagItemSpace;
+    config.itemContentEdgs = tagItemSpace;
+    config.isCanSelected = YES;
+    config.isCanCancelSelected = NO;
+    config.isMulti = YES;
+    config.selectedDefaultTags = self.titleS;
+    config.selectedTitleColor = AppOrange;
+    config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+    config.borderColor = [UIColor grayColor];
+    config.borderColorSelected = AppOrange;
+
+    return config;
+}
+
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -223,32 +278,34 @@
             break;
             case ShowFunctionTagLabel:
         {
-            NSArray *titleS = @[@"7"];
             
-            PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-            config.itemHeight = 40;
-            config.itemWidth = 40;
-            config.itemHerMargin = 10;
-            config.itemVerMargin = 10;
-            config.hasBorder = YES;
-            config.topBottomSpace = 5.0;
-            config.itemContentEdgs = 20;
-            config.isCanSelected = YES;
-            config.isCanCancelSelected = YES;
-            config.isMulti = YES;
-            config.selectedDefaultTags = titleS;
-            config.borderColor = kRandomColor;
-            config.borderColorSelected = [UIColor whiteColor];
-            config.borderWidth = 2;
-            config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
-            config.backgroundColor = [UIColor redColor];
-            config.backgroundSelectedColor = [UIColor blackColor];
-            //    NSArray *normalImage = @[@"image_day_normal_7",@"image_day_normal_1",@"image_day_normal_2",@"image_day_normal_3",@"image_day_normal_4",@"image_day_normal_5",@"image_day_normal_6"];
-            //    NSArray *selectImage = @[@"image_day_select_7",@"image_day_select_1",@"image_day_select_2",@"image_day_select_3",@"image_day_select_4",@"image_day_select_5",@"image_day_select_6"];
-            NSArray *title = @[@"7",@"1",@"2",@"3",@"1231231231314124"];
+            self.titleS = @[@"空调",@"床",@"热水器",@"洗衣机"];
+
+//            NSArray *titleS = @[@"空调",@"床",@"热水器",@"洗衣机"];
+//
+//            CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
+//
+//            PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
+//            config.itemHeight = tagItemH * ViewScale;
+//            config.itemWidth = smallScreen;
+//            config.itemHerMargin = tagItemSpace;
+//            config.itemVerMargin = tagItemSpace;
+//            config.hasBorder = NO;
+//            config.topBottomSpace = tagItemSpace;
+//            config.itemContentEdgs = tagItemSpace;
+//            config.isCanSelected = YES;
+//            config.isCanCancelSelected = NO;
+//            config.isMulti = YES;
+//            config.selectedDefaultTags = titleS;
+//            config.selectedTitleColor = AppOrange;
+//            config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+//            config.borderColor = [UIColor grayColor];
+//            config.borderColorSelected = AppOrange;
+
+//            NSArray *title = @[@"7",@"1",@"2",@"3",@"1231231231314124"];
             
-            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
-            //    PooTagsLabel *tag = [[PooTagsLabel alloc] initWithFrame:CGRectZero tagsNormalArray:normalImage tagsSelectArray:selectImage tagsTitleArray:title config:config wihtSection:0];
+//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
             tag.backgroundColor = kRandomColor;
             [self.view addSubview:tag];
             [tag mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -262,8 +319,8 @@
             UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
             pBtnsssss.backgroundColor = kRandomColor;
             [pBtnsssss addActionHandler:^(UIButton *sender) {
-                [tag clearTag];
-                [tag reloadTag];
+                self.titleS = @[@"空调",@"床",@"热水器"];
+                [tag reloadTag:[self tagConfig]];
             }];
             [self.view addSubview:pBtnsssss];
             [pBtnsssss mas_makeConstraints:^(MASConstraintMaker *make) {
