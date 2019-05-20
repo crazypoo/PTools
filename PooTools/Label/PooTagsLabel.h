@@ -143,7 +143,12 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
                                 config:(PooTagsLabelConfig *)config
                            wihtSection:(NSInteger)sectionIndex;
 
-/*! @brief 重置界面
+/*! @brief 清除Tag
+ @attention 全部Tag重置到未选中状态
  */
 -(void)clearTag;
+
+/*! @brief 重新加载Tag
+ */
+-(void)reloadTag;
 @end

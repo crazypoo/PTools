@@ -48,6 +48,7 @@
 
 #import "UIImage+BlurGlass.h"
 
+#import "UIButton+Block.h"
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -134,6 +135,7 @@
         {
             CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
             aaaaa.bannerTitle = @"111111";
+            aaaaa.bannerImage = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
             
             PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:[UIColor lightGrayColor] currentPageIndicatorTintColor:[UIColor redColor]];
             [self.view addSubview:adaaaa];
@@ -251,11 +253,23 @@
             [self.view addSubview:tag];
             [tag mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.bottom.equalTo(self.view);
-                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
+                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
             }];
             tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
                 PNSLog(@"%f",viewHeight);
             };
+            
+            UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
+            pBtnsssss.backgroundColor = kRandomColor;
+            [pBtnsssss addActionHandler:^(UIButton *sender) {
+                [tag clearTag];
+                [tag reloadTag];
+            }];
+            [self.view addSubview:pBtnsssss];
+            [pBtnsssss mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.offset(100);
+                make.centerX.centerY.equalTo(self.view);
+            }];
         }
             break;
             case ShowFunctionInputView:

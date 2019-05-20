@@ -449,5 +449,62 @@
         btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
     }
 }
+
+-(void)reloadTag
+{
+    for (int i = 0; i < self.normalTagsArr.count; i++)
+    {
+        NSString *title = self.normalTagsArr[i];
+
+        UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
+
+        btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+        ///可选中
+        if (self.curConfig.isCanSelected)
+        {
+            //多选
+            if (self.curConfig.isMulti)
+            {
+                for (NSString *str in self.curConfig.selectedDefaultTags)
+                {
+                    if ([title isEqualToString:str])
+                    {
+                        btn.selected = YES;
+                    }
+                }
+            }
+            else
+            {  //单选
+                if ([title isEqualToString:self.curConfig.singleSelectedTitle])
+                {
+                    btn.selected = YES;
+                    self.selectedBtn = btn;
+                }
+            }
+            
+            if (btn.selected) {
+                if (self.curConfig.hasBorder)
+                {
+                    UIColor *borderC = self.curConfig.borderColorSelected ? self.curConfig.borderColorSelected : [UIColor grayColor];
+                    btn.layer.borderColor = borderC.CGColor;
+                }
+                btn.backgroundColor = self.curConfig.backgroundSelectedColor ? self.curConfig.backgroundSelectedColor : kClearColor;
+            }
+            else
+            {
+                if (self.curConfig.hasBorder)
+                {
+                    UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor grayColor];
+                    btn.layer.borderColor = borderC.CGColor;
+                }
+                btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+            }
+        }
+        else
+        {  //不可选中
+            btn.enabled = NO;
+        }
+    }
+}
 @end
 
