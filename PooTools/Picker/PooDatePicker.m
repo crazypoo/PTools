@@ -10,6 +10,7 @@
 #import "UIButton+Block.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
+#import "Utils.h"
 
 #pragma mark ------> DatePicker
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
@@ -128,6 +129,12 @@
         }];
         
         [self.yesBtn addActionHandler:^(UIButton *sender) {
+            
+            if ([Utils isRolling:weakself.pickerView])
+            {
+                return;
+            }
+            
             if (weakself.block)
             {
                 switch (weakself.pickerType)
@@ -623,6 +630,10 @@
         }];
         
         [self.yesBtn addActionHandler:^(UIButton *sender) {
+            if ([Utils isRolling:weakself.pickerView])
+            {
+                return;
+            }
             UIView *pickerViewCom0 = (UIView *)[weakself.pickerView viewForRow:weakself.hourIndex forComponent:0];
             UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
             

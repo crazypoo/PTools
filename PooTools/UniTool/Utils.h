@@ -351,4 +351,8 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief 判断是否存在SIM卡
  */
 +(BOOL)isSIMInstalled;
+
+/*! @brief 此方法用来鉴定picker是否在滑动
+ */
++(BOOL)isRolling:(UIView *)view;
 @end

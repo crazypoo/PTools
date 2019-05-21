@@ -1335,4 +1335,27 @@
     }
     return YES;
 }
+
++ (BOOL)isRolling:(UIView *)view
+{
+    
+    if ([view isKindOfClass:[UIScrollView class]]) {
+        UIScrollView *scrollView = (UIScrollView *)view;
+        
+        if (scrollView.dragging || scrollView.decelerating) return YES;
+        // 如果UIPickerView正在拖拽或者是正在减速，返回YES
+        
+    }
+    
+    for (UIView *subView in view.subviews) {
+        
+        if ([self isRolling:subView]) {
+            return YES;
+            
+        }
+        
+    }
+    return NO;
+    
+}
 @end

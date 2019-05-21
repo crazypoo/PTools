@@ -9,6 +9,7 @@
 #import "PTNormalPicker.h"
 #import <Masonry/Masonry.h>
 #import "PMacros.h"
+#import "Utils.h"
 
 #define pickerCellH 30.0f
 #define pickerCellW kSCREEN_WIDTH
@@ -213,6 +214,11 @@
 
 -(void)pickerSelectDoneAction:(UIButton *)sender
 {
+    if ([Utils isRolling:self.viewPicker])
+    {
+        return;
+    }
+    
     [UIView animateWithDuration:0.25 animations:^{
         
     } completion:^(BOOL finished) {
