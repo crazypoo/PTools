@@ -47,7 +47,6 @@
 		CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257562098319200E31A38 /* PBugReporter.m */; };
 		CC1257C02098319300E31A38 /* PCarrie.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257582098319200E31A38 /* PCarrie.m */; };
 		CC1257C12098319300E31A38 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575A2098319200E31A38 /* PGifHud.m */; };
-		CC1257C22098319300E31A38 /* PHealthKit.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575C2098319200E31A38 /* PHealthKit.m */; };
 		CC1257C32098319300E31A38 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575E2098319200E31A38 /* PLabel.m */; };
 		CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257602098319200E31A38 /* PLaunchAdMonitor.m */; };
 		CC1257C52098319300E31A38 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257632098319200E31A38 /* PMotion.m */; };
@@ -62,7 +61,6 @@
 		CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257772098319200E31A38 /* PooTagsLabel.m */; };
 		CC1257D02098319300E31A38 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257792098319200E31A38 /* PooTextView.m */; };
 		CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12577B2098319200E31A38 /* PooUDIDInfo.m */; };
-		CC1257D22098319300E31A38 /* PSpeech.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12577D2098319200E31A38 /* PSpeech.m */; };
 		CC1257D32098319300E31A38 /* PStarRateView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12577F2098319200E31A38 /* PStarRateView.m */; };
 		CC1257D42098319300E31A38 /* PTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257812098319200E31A38 /* PTextField.m */; };
 		CC1257D62098319300E31A38 /* RCDraggableButton.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257862098319200E31A38 /* RCDraggableButton.m */; };
@@ -258,8 +256,6 @@
 		CC1257582098319200E31A38 /* PCarrie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCarrie.m; sourceTree = "<group>"; };
 		CC1257592098319200E31A38 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
 		CC12575A2098319200E31A38 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
-		CC12575B2098319200E31A38 /* PHealthKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PHealthKit.h; sourceTree = "<group>"; };
-		CC12575C2098319200E31A38 /* PHealthKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PHealthKit.m; sourceTree = "<group>"; };
 		CC12575D2098319200E31A38 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
 		CC12575E2098319200E31A38 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
 		CC12575F2098319200E31A38 /* PLaunchAdMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLaunchAdMonitor.h; sourceTree = "<group>"; };
@@ -289,8 +285,6 @@
 		CC1257792098319200E31A38 /* PooTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooTextView.m; sourceTree = "<group>"; };
 		CC12577A2098319200E31A38 /* PooUDIDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
 		CC12577B2098319200E31A38 /* PooUDIDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
-		CC12577C2098319200E31A38 /* PSpeech.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSpeech.h; sourceTree = "<group>"; };
-		CC12577D2098319200E31A38 /* PSpeech.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSpeech.m; sourceTree = "<group>"; };
 		CC12577E2098319200E31A38 /* PStarRateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PStarRateView.h; sourceTree = "<group>"; };
 		CC12577F2098319200E31A38 /* PStarRateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PStarRateView.m; sourceTree = "<group>"; };
 		CC1257802098319200E31A38 /* PTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTextField.h; sourceTree = "<group>"; };
@@ -951,15 +945,6 @@
 			path = Label;
 			sourceTree = "<group>";
 		};
-		C08D9DDC22768BC8001417F1 /* HealKit */ = {
-			isa = PBXGroup;
-			children = (
-				CC12575B2098319200E31A38 /* PHealthKit.h */,
-				CC12575C2098319200E31A38 /* PHealthKit.m */,
-			);
-			path = HealKit;
-			sourceTree = "<group>";
-		};
 		C08D9DDD22768BE9001417F1 /* Loading */ = {
 			isa = PBXGroup;
 			children = (
@@ -1089,15 +1074,6 @@
 				CC35017621FE935300E64074 /* PObject2Json.m */,
 			);
 			path = Json;
-			sourceTree = "<group>";
-		};
-		C08D9DE922768E0C001417F1 /* Speech */ = {
-			isa = PBXGroup;
-			children = (
-				CC12577C2098319200E31A38 /* PSpeech.h */,
-				CC12577D2098319200E31A38 /* PSpeech.m */,
-			);
-			path = Speech;
 			sourceTree = "<group>";
 		};
 		C08D9DEA22768E6E001417F1 /* PhoneCall */ = {
@@ -1250,7 +1226,6 @@
 				C08D9DCD227688FE001417F1 /* DevTools */,
 				C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */,
 				C08D9DF022768F8A001417F1 /* FloatingView */,
-				C08D9DDC22768BC8001417F1 /* HealKit */,
 				C08D9DE022768C9B001417F1 /* ImageReviewer */,
 				C08D9DDA22768B3D001417F1 /* Input */,
 				C08D9DE822768DF2001417F1 /* Json */,
@@ -1275,7 +1250,6 @@
 				C08D9DD922768B2B001417F1 /* Segmented */,
 				C08D9DCF22768991001417F1 /* SignView */,
 				C08D9DCB22768854001417F1 /* Slider */,
-				C08D9DE922768E0C001417F1 /* Speech */,
 				C08D9DDF22768C81001417F1 /* Thermometer */,
 				C08D9DF32276904D001417F1 /* UniTool */,
 				C08D9DD0227689B0001417F1 /* WeChatLittleVideo */,
@@ -1483,7 +1457,6 @@
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
-				CC1257C22098319300E31A38 /* PHealthKit.m in Sources */,
 				CC4C717E218AD4F6008B1804 /* UICountingLabel.m in Sources */,
 				CC1257E62098319300E31A38 /* WMHubViewController.m in Sources */,
 				CC1257E22098319300E31A38 /* UIViewController+TopBarMessage.m in Sources */,
@@ -1577,7 +1550,6 @@
 				CC6D9C58223E432B00B6B561 /* NSDateFormatter+Category.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
-				CC1257D22098319300E31A38 /* PSpeech.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */,
 				CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */,

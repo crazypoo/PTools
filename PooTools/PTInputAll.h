@@ -30,7 +30,6 @@
 
 //导入次工具时，一定要在Build Settings->other links flags加入-ObjC
 //lipo -create xxxxxxxx/xxxxxxxxx(真机) xxxxxxxxx/xxxxxxxxx(模拟器) -output (输出路径)
-//HealthKit(调用此工具，需在项目TagertS->Capabilities-勾选HealthKit)
 #ifndef PTools_PTInputAll_h
 #define PTools_PTInputAll_h
 #endif
