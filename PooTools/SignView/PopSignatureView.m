@@ -143,15 +143,21 @@
             make.left.right.top.bottom.equalTo(self.maskView);
         }];
         
-        [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(kSCREEN_HEIGHT - HEIGHT_BUTTON*2);
-            make.top.offset(HEIGHT_BUTTON);
+            make.bottom.equalTo(self.backGroundView).offset(isIPhoneXSeries() ? -20 : 0);
+            make.height.offset(HEIGHT_BUTTON);
         }];
         
         [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self.backGroundView);
             make.height.offset(HEIGHT_BUTTON);
+        }];
+        
+        [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(self.backGroundView);
+            make.bottom.equalTo(self.btn3.mas_top);
+            make.top.equalTo(self.navView.mas_bottom);
         }];
         
         NSDictionary *style = @{
@@ -183,12 +189,6 @@
             make.left.equalTo(self.navView).offset(navSpace);
             make.top.bottom.equalTo(self.navView);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
-        }];
-        
-        [self.btn3 mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.backGroundView);
-            make.bottom.equalTo(self.backGroundView);
-            make.height.offset(HEIGHT_BUTTON);
         }];
     }
     else
@@ -233,7 +233,8 @@
     }
 }
 
-- (void)cancelAction {
+- (void)cancelAction
+{
     [self hide];
 }
 
@@ -246,7 +247,8 @@
     [self setupView];
 }
 
-- (void)onSignatureWriteAction {
+- (void)onSignatureWriteAction
+{
     [self.btn3 setTitleColor:kRGBAColor(255, 255, 255, 1) forState:UIControlStateNormal];
     switch ([UIApplication sharedApplication].statusBarOrientation) {
         case UIInterfaceOrientationLandscapeRight:
@@ -270,7 +272,8 @@
 
 - (void)hide
 {
-    if ([self.delegate respondsToSelector:@selector(cancelSign)]) {
+    if ([self.delegate respondsToSelector:@selector(cancelSign)])
+    {
         [self.delegate cancelSign];
     }
     [UIView animateWithDuration:0.3 animations:^{
@@ -284,14 +287,14 @@
     }];
 }
 
-
-- (void)onTapMaskView:(id)sender {
+- (void)onTapMaskView:(id)sender
+{
     [self hide];
 }
 
-
 //清除
-- (void)onClear {
+- (void)onClear
+{
     [self.signatureView clear];
     [self.btn3 setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
     [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
@@ -300,7 +303,7 @@
 
 - (void)okAction
 {
-     [self.signatureView sure];
+    [self.signatureView sure];
     if(self.signatureView.SignatureImg)
     {
         self.hidden = YES;

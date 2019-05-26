@@ -317,6 +317,9 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     
 //    CGContextRef context =UIGraphicsGetCurrentContext();
     
+    
+    PNSLog(@">>>>>>>>>>%f",rect.size.width);
+    
     if(!isSure && !self.isHaveDraw)
     {
         NSString *str = @"请在白色区域手写签名:正楷,工整书写";
@@ -325,26 +328,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
         origionX = rect1.origin.x;
         totalWidth = rect1.origin.x+labelW;
         UIFont  *font = kDEFAULT_FONT(self.placeholderFont, kAdaptedWidth(15));//设置字体
-
-        CGFloat labelX;
-        switch ([UIApplication sharedApplication].statusBarOrientation) {
-            case UIInterfaceOrientationLandscapeRight:
-            {
-                labelX = kSCREEN_WIDTH-rect1.size.width;
-            }
-                break;
-            case UIInterfaceOrientationLandscapeLeft:
-            {
-                labelX = kSCREEN_WIDTH-rect1.size.width;
-            }
-                break;
-            default:
-            {
-                labelX = kSCREEN_WIDTH/2-rect1.size.width/2;
-            }
-                break;
-        }
-        [str drawAtPoint:CGPointMake(labelX, rect1.origin.y-rect1.size.height/2) withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:kRGBAColor(199, 199, 199, 1)}];
+        [str drawAtPoint:CGPointMake(rect1.origin.x, rect1.origin.y-rect1.size.height/2) withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:kRGBAColor(199, 199, 199, 1)}];
     }
     else
     {

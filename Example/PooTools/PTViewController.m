@@ -37,7 +37,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,PopSignatureViewDelegate>
 {
     UITableView *tbView;
 }
@@ -444,8 +444,9 @@ static NSString *cellIdentifier = @"CELL";
             break;
         case 9:
         {
+//            [MXRotationManager defaultManager].orientation = UIDeviceOrientationLandscapeRight;
             PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold];
-//            socialSingnatureView.delegate = self;
+            socialSingnatureView.delegate = self;
             [socialSingnatureView show];
         }
             break;
@@ -462,6 +463,20 @@ static NSString *cellIdentifier = @"CELL";
         }
             break;
     }
+}
+
+
+#pragma mark ---------------> PopSignatureViewDelegate
+
+-(void)onSubmitBtn:(UIImage *)signatureImg
+{
+    [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
+
+}
+
+-(void)cancelSign
+{
+    [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
 }
 
 @end
