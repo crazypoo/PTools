@@ -258,10 +258,10 @@
 
 -(CGFloat)actionSheetHeight
 {
-    CGFloat realH = [self actionSheetRealHeight];
+    CGFloat realH = [self actionSheetRealHeight] - HEIGHT_TABBAR_SAFEAREA;
     if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
     {
-        return kSCREEN_HEIGHT-kScreenStatusBottom;
+        return kSCREEN_HEIGHT-kScreenStatusBottom - HEIGHT_TABBAR_SAFEAREA;
     }
     else
     {
@@ -353,7 +353,7 @@
         
         [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self);
-            make.top.offset(kSCREEN_HEIGHT-self.actionSheetHeight);
+            make.top.offset(kSCREEN_HEIGHT-self.actionSheetHeight-HEIGHT_TABBAR_SAFEAREA);
             make.height.offset(self.actionSheetHeight);
         }];
         
