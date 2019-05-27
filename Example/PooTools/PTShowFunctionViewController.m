@@ -192,7 +192,7 @@ CGFloat const tagItemSpace = 5;
             aaaaa.bannerTitle = @"111111";
             aaaaa.bannerImage = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
             
-            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:[UIColor lightGrayColor] currentPageIndicatorTintColor:[UIColor redColor]];
+            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:[UIColor lightGrayColor] currentPageIndicatorTintColor:[UIColor redColor] pageEnable:NO];
             [self.view addSubview:adaaaa];
             [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);

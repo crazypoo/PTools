@@ -23,7 +23,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 @end
 
 @implementation PADView
--(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT adTitleFont:(UIFont *)adTitleFont pageIndicatorTintColor:(UIColor *)pageTColor currentPageIndicatorTintColor:(UIColor *)pageCColor
+-(instancetype)initWithAdArray:(NSArray <CGAdBannerModel *> *)adArr singleADW:(CGFloat)sw singleADH:(CGFloat)sh paddingY:(CGFloat)py paddingX:(CGFloat)px placeholderImage:(NSString *)pI pageTime:(int)pT adTitleFont:(UIFont *)adTitleFont pageIndicatorTintColor:(UIColor *)pageTColor currentPageIndicatorTintColor:(UIColor *)pageCColor pageEnable:(BOOL)pEnable
 {
     self = [super init];
     if (self) {
@@ -42,7 +42,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         adCollectionView.delegate                       = self;
         adCollectionView.showsHorizontalScrollIndicator = NO;
         adCollectionView.showsVerticalScrollIndicator   = NO;
-        adCollectionView.pagingEnabled                  = NO;
+        adCollectionView.pagingEnabled                  = pEnable;
         [adCollectionView registerClass:[CGADCollectionViewCell class] forCellWithReuseIdentifier:ADBannerCollectionViewCell];
         [self addSubview:adCollectionView];
         [adCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -155,8 +155,10 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 #pragma mark ------> NSTimer
 -(void)addTimer
 {
-    timer = [NSTimer scheduledTimerWithTimeInterval:pageTime target:self selector:@selector(nextpage) userInfo:nil repeats:YES];
-    [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    if (pageTime > 0) {
+        timer = [NSTimer scheduledTimerWithTimeInterval:pageTime target:self selector:@selector(nextpage) userInfo:nil repeats:YES];
+        [[NSRunLoop mainRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];
+    }
 }
 
 -(void) removeTimer{
@@ -177,12 +179,25 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     [self addTimer];
 }
 
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
+{
+    if (scrollView == adCollectionView)
+    {
+        NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
+        NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
+        NSInteger nextItem = currentIndexPathReset.item +1;
+        NSInteger nextSection = currentIndexPathReset.section;
+        NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
+        [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    }
+}
+
 #pragma mark ------> 下一张
 -(void)nextpage
 {
     NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
     NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
-    [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
+    [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 
     NSInteger nextItem = currentIndexPathReset.item +1;
     NSInteger nextSection = currentIndexPathReset.section;
@@ -191,7 +206,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     }
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
     [self.pageControl setCurrentPage:nextIndexPath.item];
-    [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionLeft animated:YES];
+    [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",nextIndexPath.row+1,(unsigned long)viewData.count];
 }
 @end

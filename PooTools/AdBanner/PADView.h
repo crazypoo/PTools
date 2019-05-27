@@ -43,5 +43,6 @@
                       pageTime:(int)pT
                    adTitleFont:(UIFont *)adTitleFont
         pageIndicatorTintColor:(UIColor *)pageTColor
- currentPageIndicatorTintColor:(UIColor *)pageCColor;
+ currentPageIndicatorTintColor:(UIColor *)pageCColor
+                    pageEnable:(BOOL)pEnable;
 @end
