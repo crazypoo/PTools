@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
     s.dependency 'MYBlurIntroductionView'
     s.dependency 'TextFieldEffects'
     s.dependency 'pop'
-    s.dependency 'JMHoledView'
+    #s.dependency 'JMHoledView'
     s.dependency 'UITextField+Shake'
     s.dependency 'UINavigation-SXFixSpace'
     s.dependency 'MJExtension'
