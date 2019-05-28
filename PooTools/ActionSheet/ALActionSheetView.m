@@ -166,7 +166,6 @@
         for (int i = 0; i < _otherButtonTitles.count; i++)
         {
             UIButton *btn = [[UIButton alloc] init];
-            btn.frame = CGRectMake(0, kRowHeight*i+kRowLineHeight*i, kSCREEN_WIDTH, kRowHeight);
             btn.tag = i+100;
             btn.backgroundColor = [UIColor whiteColor];
             btn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
@@ -176,6 +175,11 @@
             [btn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
             [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.actionSheetScroll addSubview:btn];
+            [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self);
+                make.top.offset(kRowHeight*i+kRowLineHeight*i);
+                make.height.offset(kRowHeight);
+            }];
         }
     }
     
@@ -258,10 +262,10 @@
 
 -(CGFloat)actionSheetHeight
 {
-    CGFloat realH = [self actionSheetRealHeight] - HEIGHT_TABBAR_SAFEAREA;
+    CGFloat realH = [self actionSheetRealHeight];
     if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
     {
-        return kSCREEN_HEIGHT-kScreenStatusBottom - HEIGHT_TABBAR_SAFEAREA;
+        return kSCREEN_HEIGHT-kScreenStatusBottom-HEIGHT_TABBAR_SAFEAREA;
     }
     else
     {

@@ -187,6 +187,9 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
         NSInteger nextItem = currentIndexPathReset.item +1;
         NSInteger nextSection = currentIndexPathReset.section;
+        if (nextItem == viewData.count) {
+            nextItem = viewData.count-1;
+        }
         NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
         [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }
