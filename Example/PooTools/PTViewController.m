@@ -352,7 +352,6 @@ static NSString *cellIdentifier = @"CELL";
 
                     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
-                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
                     }];
                     [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
