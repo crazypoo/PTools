@@ -626,14 +626,15 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
-                           okAction:^{
-                               
-                           } cancelAction:^{
-                               
-                           } otherButtonAction:^(NSInteger aaaaaaaaaa) {
-                               PNSLog(@"%ld",(long)aaaaaaaaaa);
-                           }];
+            [Utils alertVCOnlyShowWithTitle:nil andMessage:@"1111111"];
+//            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[@"1",@"2"] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
+//                           okAction:^{
+//
+//                           } cancelAction:^{
+//
+//                           } otherButtonAction:^(NSInteger aaaaaaaaaa) {
+//                               PNSLog(@"%ld",(long)aaaaaaaaaa);
+//                           }];
         }
             break;
         default:

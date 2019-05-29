@@ -61,18 +61,12 @@
     return size;
 }
 
-+(UIAlertView *)alertTitle:(NSString *)title message:(NSString *)msg delegate:(id)aDeleagte cancelBtn:(NSString *)cancelName otherBtnName:(NSString *)otherbuttonName{
-    
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:title message:msg delegate:aDeleagte cancelButtonTitle:cancelName otherButtonTitles:otherbuttonName, nil];
-    [alert show];
-    return alert;
-}
-
-+(UIAlertView *)alertShowWithMessage:(NSString *)message
++(void)alertVCOnlyShowWithTitle:(NSString *_Nullable)title
+                     andMessage:(NSString *_Nullable)message
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"提示" message:message delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
-    [alert show];
-    return alert;
+    [Utils alertVCWithTitle:title message:message cancelTitle:@"确定" shouIn:kAppDelegateWindow.rootViewController cancelAction:^{
+        
+    }];
 }
 
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT shouIn:(UIViewController *)vC okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock
@@ -400,7 +394,7 @@
         if ([UIApplication sharedApplication].supportsAlternateIcons) {
             NSLog(@"you can change this app's icon");
         }else{
-            [Utils alertShowWithMessage:@"你不能更换此APP的Icon"];
+            [Utils alertVCOnlyShowWithTitle:nil andMessage:@"你不能更换此APP的Icon"];
             return;
         }
         
@@ -410,7 +404,7 @@
             // change to primary icon
             [[UIApplication sharedApplication] setAlternateIconName:nil completionHandler:^(NSError * _Nullable error) {
                 if (error) {
-                    [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
+                    [Utils alertVCOnlyShowWithTitle:nil andMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
                 }
                 NSLog(@"The alternate icon's name is %@",iconName);
             }];
@@ -420,7 +414,7 @@
             // change to alterante icon
             [[UIApplication sharedApplication] setAlternateIconName:IconName completionHandler:^(NSError * _Nullable error) {
                 if (error) {
-                    [Utils alertShowWithMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
+                    [Utils alertVCOnlyShowWithTitle:nil andMessage:[NSString stringWithFormat:@"set icon error: %@",error]];
                 }
                 NSLog(@"The alternate icon's name is %@",iconName);
             }];
@@ -1336,7 +1330,7 @@
     return YES;
 }
 
-+ (BOOL)isRolling:(UIView *)view
++ (BOOL)isRolling:(UIView * _Nonnull)view
 {
     
     if ([view isKindOfClass:[UIScrollView class]]) {

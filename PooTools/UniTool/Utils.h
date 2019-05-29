@@ -102,17 +102,10 @@ static inline BOOL isIPhoneXSeries() {
                  alignment:(NSTextAlignment)textAlignment;
 
 #pragma mark ------> UIAlertView/UIViewController
-/*! @brief AlertView Normal
+/*! @brief AlertController + Only Show
  */
-+(UIAlertView * _Nonnull)alertTitle:(NSString * _Nullable)title
-                   message:(NSString * _Nullable)msg
-                  delegate:(id _Nonnull)aDeleagte
-                 cancelBtn:(NSString * _Nullable)cancelName
-              otherBtnName:(NSString * _Nullable)otherbuttonName;
-
-/*! @brief AlertView + Only cancel
- */
-+(UIAlertView * _Nonnull)alertShowWithMessage:(NSString * _Nonnull)message;
++(void)alertVCOnlyShowWithTitle:(NSString *_Nullable)title
+                     andMessage:(NSString *_Nullable)message;
 
 /*! @brief AlertController Normal
  */
@@ -354,5 +347,5 @@ static inline BOOL isIPhoneXSeries() {
 
 /*! @brief 此方法用来鉴定picker是否在滑动
  */
-+(BOOL)isRolling:(UIView *)view;
++(BOOL)isRolling:(UIView * _Nonnull)view;
 @end

@@ -19,7 +19,7 @@
         case SystemFunctionTypeCall:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写电话号码"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写电话号码"];
                 return;
             }
             else
@@ -31,7 +31,7 @@
         case SystemFunctionTypeSMS:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写电话号码"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写电话号码"];
                 return;
             }
             else
@@ -43,7 +43,8 @@
         case SystemFunctionTypeMail:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写邮箱"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写邮箱"];
+
                 return;
             }
             else
@@ -55,7 +56,7 @@
         case SystemFunctionTypeAppStore:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写AppID"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写AppID"];
                 return;
             }
             else
@@ -67,7 +68,7 @@
         case SystemFunctionTypeSafari:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写网址"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写网址"];
                 return;
             }
             else
@@ -84,7 +85,7 @@
         case SystemFunctionTypeFaceTime:
         {
             if (kStringIsEmpty(ex)) {
-                [Utils alertShowWithMessage:@"请填写电话号码"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请填写电话号码"];
                 return;
             }
             else
@@ -106,7 +107,7 @@
         case SystemFunctionTypeSetting:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -118,7 +119,7 @@
         case SystemFunctionTypeCastle:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -130,7 +131,7 @@
         case SystemFunctionTypeWIFI:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -142,7 +143,7 @@
         case SystemFunctionTypeBluetooth:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -154,7 +155,7 @@
         case SystemFunctionTypeMobileData:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -166,7 +167,7 @@
         case SystemFunctionTypeNotification:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -178,7 +179,7 @@
         case SystemFunctionTypeGeneral:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -190,7 +191,7 @@
         case SystemFunctionTypeAbout:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -202,7 +203,7 @@
         case SystemFunctionTypeAccessibilly:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -214,7 +215,7 @@
         case SystemFunctionTypeDateAndTime:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -226,7 +227,7 @@
         case SystemFunctionTypeKeyboard:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -238,7 +239,7 @@
         case SystemFunctionTypeDisplay:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -250,7 +251,7 @@
         case SystemFunctionTypeWallpaper:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -262,7 +263,7 @@
         case SystemFunctionTypeSounds:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -274,7 +275,7 @@
         case SystemFunctionTypeBattery:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -286,7 +287,7 @@
         case SystemFunctionTypeLocation:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -298,7 +299,7 @@
         case SystemFunctionTypePrivace:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else
@@ -310,7 +311,7 @@
         case SystemFunctionTypeSiri:
         {
             if (kStringIsEmpty(scheme)) {
-                [Utils alertShowWithMessage:@"请在Xcode设置Scheme"];
+                [Utils alertVCOnlyShowWithTitle:nil andMessage:@"请在Xcode设置Scheme"];
                 return;
             }
             else

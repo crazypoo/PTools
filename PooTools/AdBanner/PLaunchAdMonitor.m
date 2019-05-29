@@ -17,17 +17,16 @@ NSString *PLaunchAdDetailDisplayNotification = @"PShowLaunchAdDetailNotification
 
 static PLaunchAdMonitor *monitor = nil;
 
-@interface PLaunchAdMonitor()<NSURLConnectionDataDelegate, NSURLConnectionDelegate>
+@interface PLaunchAdMonitor()
 
 @property (nonatomic, assign) BOOL imgLoaded;
 @property (nonatomic, strong) NSMutableData *imgData;
-@property (nonatomic, strong) NSURLConnection *conn;
 @property (nonatomic, strong) NSMutableDictionary *detailParam;
 @property (nonatomic, copy) void(^callback)(void);
 @property (nonatomic, assign) ToolsAboutImageType imageType;
 @property (nonatomic, assign) BOOL playMovie;
 @property (nonatomic, strong) NSURL *videoUrl;
-@property (nonatomic, strong) MPMoviePlayerController *player;
+@property (nonatomic, strong)AVPlayerViewController *player;
 @end
 
 
@@ -128,19 +127,22 @@ static PLaunchAdMonitor *monitor = nil;
     
     if (monitor.playMovie)
     {
-        monitor.player = [[MPMoviePlayerController alloc] initWithContentURL:monitor.videoUrl];
-        monitor.player.controlStyle = MPMovieControlStyleNone;
-        monitor.player.shouldAutoplay = YES;
-        monitor.player.repeatMode = MPMovieRepeatModeOne;
-        [monitor.player setFullscreen:YES animated:YES];
-        monitor.player.scalingMode = MPMovieScalingModeAspectFit;
-        [monitor.player prepareToPlay];
-        [v addSubview: monitor.player.view];
+//        [kNotificationCenter addObserver:self selector:@selector(playerItemDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:v];
+
+        monitor.player = [[AVPlayerViewController alloc] init];
+        monitor.player.player = [AVPlayer playerWithURL:monitor.videoUrl];
+        monitor.player.showsPlaybackControls = NO;
+        if (@available(iOS 11.0, *)) {
+            monitor.player.entersFullScreenWhenPlaybackBegins = YES;
+        } else {
+            // Fallback on earlier versions
+        }
+        [v addSubview:monitor.player.view];
         [monitor.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo(v);
-            make.height.offset(bottomViewHeight);
+            make.bottom.equalTo(v).offset(-bottomViewHeight);
         }];
-        [monitor.player play];
+        [monitor.player.player play];
 
         UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
@@ -203,7 +205,6 @@ static PLaunchAdMonitor *monitor = nil;
                 UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
                 [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
                 [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
-                monitor.conn = nil;
                 [monitor.imgData setLength:0];
                 imageBtn.userInteractionEnabled = yesOrNo;
                 [v addSubview:imageBtn];
@@ -304,6 +305,7 @@ static PLaunchAdMonitor *monitor = nil;
                          sup.alpha = 0.0f;
                      }
                      completion:^(BOOL finished) {
+                         [monitor.player.player pause];
                          [sup removeFromSuperview];
                      }];
 }
@@ -337,6 +339,7 @@ static PLaunchAdMonitor *monitor = nil;
                      }
                      completion:^(BOOL finished) {
                          [sup removeFromSuperview];
+                         [monitor.player.player pause];
                          [[NSNotificationCenter defaultCenter] postNotificationName:PLaunchAdDetailDisplayNotification object:monitor.detailParam];
                          [monitor.detailParam removeAllObjects];
                      }];
@@ -350,26 +353,19 @@ static PLaunchAdMonitor *monitor = nil;
         {
             self.playMovie = YES;
             self.imgLoaded = YES;
-            self.videoUrl = ([imageStr rangeOfString:@"/var"].length>0) ? [NSURL fileURLWithPath:imageStr] : [NSURL URLWithString:[imageStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+            self.videoUrl = ([imageStr rangeOfString:@"/var"].length>0) ? [NSURL fileURLWithPath:imageStr] : [NSURL URLWithString:[imageStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
         }
         else
         {
             self.playMovie = NO;
 
-            if ([imageStr isKindOfClass:[NSString class]]) {
-                NSURL *URL = [NSURL URLWithString:imageStr];
-                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-                self.conn = [NSURLConnection connectionWithRequest:request delegate:self];
-                if (self.conn) {
-                    [self.conn start];
-                }
-            }else if([imageStr isKindOfClass:[NSURL class]]){
-                NSURL *URL = [NSURL URLWithString:imageStr];
-                NSURLRequest *request = [NSURLRequest requestWithURL:URL];
-                self.conn = [NSURLConnection connectionWithRequest:request delegate:self];
-                if (self.conn) {
-                    [self.conn start];
-                }
+            if ([imageStr isKindOfClass:[NSString class]])
+            {
+                [self loadImage:imageStr];
+            }
+            else if([imageStr isKindOfClass:[NSURL class]])
+            {
+                [self loadImage:[(NSURL *)imageStr description]];
             }
             else if([imageStr isKindOfClass:[UIImage class]]){
                 self.imgData = [NSMutableData data];
@@ -378,29 +374,30 @@ static PLaunchAdMonitor *monitor = nil;
             }
         }
     }
-    
 }
 
-#pragma mark - NSURLConnectionDataDelegate method
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response
+-(void)loadImage:(NSString *)imageStr
 {
-    NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
-    if (resp.statusCode != 200) {
+    NSURL *URL = [NSURL URLWithString:imageStr];
+    NSURLRequest *request = [NSURLRequest requestWithURL:URL];
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+        NSHTTPURLResponse *resp = (NSHTTPURLResponse *)response;
+        if (resp.statusCode != 200) {
+            self.imgLoaded = YES;
+            return ;
+        }
+        self.imgData = [NSMutableData data];
+        self.imageType = [Utils contentTypeForImageData:data];
+        [self.imgData appendData:data];
         self.imgLoaded = YES;
-        return ;
-    }
-    self.imgData = [NSMutableData data];
+    }];
+    [dataTask resume];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
-{
-    self.imageType = [Utils contentTypeForImageData:data];
-    [self.imgData appendData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection
-{
-    self.imgLoaded = YES;
-}
+//- (void)playerItemDidPlayToEnd:(NSNotification *)notification
+//{
+//
+//}
 @end
 

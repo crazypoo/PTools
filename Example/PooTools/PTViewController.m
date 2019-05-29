@@ -303,11 +303,10 @@ static NSString *cellIdentifier = @"CELL";
 //                    imageModel.imageInfo = @"11111111241241241241928390128309128";
 //                    imageModel.imageTitle = @"22222212312312312312312312312";
 //
-//                    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
-//                    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-//                    imageModelV.imageShowType = PooShowImageModelTypeVideo;
-//                    imageModelV.imageInfo = @"11111111241241241241928390128309128";
-//                    imageModelV.imageTitle = @"22222212312312312312312312312";
+                    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
+                    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                    imageModelV.imageShowType = PooShowImageModelTypeVideo;
+                    imageModelV.imageInfo = @"11111111241241241241928390128309128";
                     
                     
                     //    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
@@ -333,10 +332,10 @@ static NSString *cellIdentifier = @"CELL";
 //                    imageModel3.imageInfo = @"444444";
 //                    imageModel3.imageTitle = @"333333";
                     
-                    PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
-                    imageModel4.imageUrl = kImageNamed(@"DemoImage");
-                    imageModel4.imageShowType = PooShowImageModelType3D;
-                    imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
+//                    PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
+//                    imageModel4.imageUrl = kImageNamed(@"DemoImage");
+//                    imageModel4.imageShowType = PooShowImageModelType3D;
+//                    imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
                     
                     PooShowImageModel *imageModel100 = [[PooShowImageModel alloc] init];
                     imageModel100.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
@@ -349,7 +348,7 @@ static NSString *cellIdentifier = @"CELL";
                     imageModel1001.imageInfo = @"5655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555";
                     
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    NSArray *arr = @[imageModel100,imageModel1001];
+                    NSArray *arr = @[imageModel100,imageModel1001,imageModelV];
 
                     YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
@@ -432,7 +431,7 @@ static NSString *cellIdentifier = @"CELL";
                 case 2:
                 {
                     if ([PooCleanCache clearCaches]) {
-                        [Utils alertShowWithMessage:@"清理成功"];
+                        [Utils alertVCOnlyShowWithTitle:nil andMessage:@"清理成功"];
                         [tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
                     }
                 }

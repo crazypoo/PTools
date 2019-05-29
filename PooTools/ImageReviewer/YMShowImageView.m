@@ -555,7 +555,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 break;
             case PShowModeVideo:
             {
-                [currentImageS.player stop];
+                [currentImageS.player.player pause];
             }
             default:
                 break;
@@ -711,9 +711,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         case PShowModeVideo:
         {
             currentImageS.video1STImage.hidden = NO;
-            currentImageS.playBtn.hidden = NO;
-            currentImageS.stopBtn.hidden = YES;
-            currentImageS.videoSlider.hidden = YES;
+//            currentImageS.playBtn.hidden = NO;
+//            currentImageS.stopBtn.hidden = YES;
+//            currentImageS.videoSlider.hidden = YES;
         }
         default:
             break;
@@ -902,9 +902,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     case PShowModeVideo:
                     {
                         currentImageS.video1STImage.hidden = NO;
-                        currentImageS.playBtn.hidden = NO;
-                        currentImageS.stopBtn.hidden = YES;
-                        currentImageS.videoSlider.hidden = YES;
+//                        currentImageS.playBtn.hidden = NO;
+//                        currentImageS.stopBtn.hidden = YES;
+//                        currentImageS.videoSlider.hidden = YES;
                     }
                     default:
                         break;
@@ -920,7 +920,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                         break;
                     case PShowModeVideo:
                     {
-                        [currentImageS.player stop];
+                        [currentImageS.player.player pause];
                     }
                     default:
                         break;
@@ -940,8 +940,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
 }
 
--(void)updateView
-{
+//-(void)updateView
+//{
     //    PooShowImageModel *model = self.modelArr[self.page];
     //    switch (self.moreType)
     //    {
@@ -1017,8 +1017,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     //        }
     //            break;
     //    }
-    
-}
+//}
 
 - (CGPoint)centerOfScrollViewContent:(UIScrollView *)scrollView
 {
@@ -1221,7 +1220,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     {
         for (int i = 0 ; i < self.modelArr.count; i++) {
             PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
-            [imageScroll.player stop];
+            [imageScroll.player.player pause];
             [imageScroll removeFromSuperview];
         }
         
@@ -1367,187 +1366,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     
     CGFloat navH = 0.0f;
     navH = HEIGHT_NAVBAR;
-    
-    //    [waitingView removeFromSuperview];
-    
-    //    id contentOBJ = model.imageUrl;
-    //    if ([contentOBJ isKindOfClass:[NSString class]]) {
-    //        if([Utils contentTypeForUrlString:model.imageUrl] == ToolsUrlStringVideoTypeMP4)
-    //        {
-    //            NSURL *videoUrl;
-    //
-    //            self.showMode = PShowModeVideo;
-    //
-    //            if ([model.imageUrl rangeOfString:@"/var"].length>0)
-    //            {
-    //                videoUrl = [NSURL fileURLWithPath:model.imageUrl];
-    //            }
-    //            else
-    //            {
-    //                videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
-    //            }
-    //            self.player = [[MPMoviePlayerController alloc] initWithContentURL:videoUrl];
-    //            self.player.controlStyle = MPMovieControlStyleNone;
-    //            self.player.shouldAutoplay = YES;
-    //            self.player.repeatMode = MPMovieRepeatModeNone;
-    //            [self.player setFullscreen:YES animated:YES];
-    //            self.player.scalingMode = MPMovieScalingModeAspectFit;
-    //            [_scrollview addSubview: self.player.view];
-    //            [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
-    //                make.left.right.equalTo(self);
-    //                make.height.offset(self.height-navH-80);
-    //                make.top.equalTo(self).offset(navH);
-    //            }];
-    //
-    //            UIImage *firstImage = [Utils thumbnailImageForVideo:videoUrl atTime:1];
-    //            self.video1STImage = [UIImageView new];
-    //            self.video1STImage.contentMode = UIViewContentModeScaleAspectFit;
-    //            self.video1STImage.image = firstImage;
-    //            [self.player.view addSubview:self.video1STImage];
-    //            [self.video1STImage mas_makeConstraints:^(MASConstraintMaker *make) {
-    //                make.left.right.equalTo(self.player.view);
-    //                make.centerY.equalTo(self.player.view);
-    //            }];
-    //
-    //            NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
-    //
-    //            UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-    //            self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //            [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
-    //            [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-    //            [self.player.view addSubview:self.playBtn];
-    //            [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-    //                make.width.height.offset(44);
-    //                make.centerX.centerY.equalTo(self.player.view);
-    //            }];
-    //
-    //            UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-    //            self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //            [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
-    //            [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-    //            [self.player.view addSubview:self.stopBtn];
-    //            [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-    //                make.width.height.offset(44);
-    //                make.left.equalTo(self.player.view).offset(10);
-    //                make.bottom.equalTo(self.player.view).offset(-10);
-    //            }];
-    //            self.stopBtn.hidden = YES;
-    //
-    //            self.videoSlider = [UISlider new];
-    //            [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
-    //            [self.player.view addSubview:self.videoSlider];
-    //            [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-    //                make.left.equalTo(self.stopBtn.mas_right).offset(10);
-    //                make.right.equalTo(self.player.view).offset(-10);
-    //                make.height.offset(20);
-    //                make.centerY.equalTo(self.stopBtn.mas_centerY);
-    //            }];
-    //            self.videoSlider.hidden = YES;
-    //            self.hasLoadedImage = YES;
-    //
-    //            [self setNeedsLayout];
-    //        }
-    //        else
-    //        {
-    //            self.imageview = [UIImageView new];
-    //            //            NSString *imageURLString = model.imageUrl;
-    //            self.imageview.contentMode = UIViewContentModeScaleAspectFit;
-    //
-    //            [_scrollview addSubview:self.imageview];
-    //
-    //            [self addSubview:waitingView];
-    //
-    //            id urlObject = model.imageUrl;
-    //            __weak __typeof(self)weakself = self;
-    //            [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:(NSString *)urlObject] options:SDWebImageRetryFailed progress:^(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL) {
-    //                __strong __typeof(weakself)strongself = weakself;
-    //                dispatch_async(dispatch_get_main_queue(), ^{
-    //                    waitingView.progress = (CGFloat)receivedSize / expectedSize;
-    //                    strongself.imageview.image = nil;
-    //                });
-    //
-    //            } completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-    //                __strong __typeof(weakself)strongself = weakself;
-    //
-    //                //                dispatch_async(dispatch_get_main_queue(), ^{
-    //                [waitingView removeFromSuperview];
-    //                //                });
-    //                //                PNSLog(@">>>>>>>>>>>>>>%@",[Utils mostColor:[UIImage imageWithData:data]]);
-    //
-    //                if (error) {
-    //                    //图片加载失败的处理，此处可以自定义各种操作（...）
-    //                    weakself.hasLoadedImage = NO;//图片加载失败
-    //                    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-    //                    weakself.reloadButton = button;
-    //                    button.layer.cornerRadius = 2;
-    //                    button.clipsToBounds = YES;
-    //                    button.titleLabel.font = [UIFont systemFontOfSize:14];
-    //                    button.backgroundColor = [UIColor colorWithRed:0.1f green:0.1f blue:0.1f alpha:0.3f];
-    //                    [button setTitle:@"图片加载失败，点击重新加载" forState:UIControlStateNormal];
-    //                    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    //                    [button addTarget:self action:@selector(reloadImage) forControlEvents:UIControlEventTouchUpInside];
-    //                    [self addSubview:button];
-    //                    return;
-    //                }
-    //
-    //                switch ([Utils contentTypeForImageData:data]) {
-    //                    case ToolsAboutImageTypeGIF:
-    //                    {
-    //                        strongself.showMode = PShowModeGif;
-    //
-    //                        CGImageSourceRef source = CGImageSourceCreateWithData((CFDataRef)data, NULL);
-    //                        size_t frameCout = CGImageSourceGetCount(source);
-    //                        NSMutableArray* frames = [[NSMutableArray alloc] init];
-    //                        for (size_t i=0; i<frameCout; i++)
-    //                        {
-    //                            CGImageRef imageRef = CGImageSourceCreateImageAtIndex(source, i, NULL);
-    //                            UIImage* imageName = [UIImage imageWithCGImage:imageRef];
-    //                            [frames addObject:imageName];
-    //                            CGImageRelease(imageRef);
-    //                        }
-    //                        strongself.imageview.animationImages = frames;
-    //                        strongself.imageview.animationDuration = 2;
-    //                        [strongself.imageview startAnimating];
-    //                        strongself.imageview.image = image;
-    //                        //FIX:内存释放
-    //                        CFRelease(source);
-    //                    }
-    //                        break;
-    //                    default:
-    //                    {
-    //                        switch (model.imageShowType) {
-    //                            case PooShowImageModelTypeFullView:
-    //                            {
-    //                                strongself.showMode = PShowModeFullView;
-    //                            }
-    //                                break;
-    //                            default:
-    //                            {
-    //                                strongself.showMode = PShowModeNormal;
-    //                            }
-    //                                break;
-    //                        }
-    //                        strongself.imageview.image = image;
-    //                    }
-    //                        break;
-    //                }
-    //                [self setNeedsLayout];
-    //                strongself.hasLoadedImage = YES;//图片加载成功
-    //            }];
-    //        }
-    //
-    //    }
-    //    else if ([contentOBJ isKindOfClass:[UIImage class]])
-    //    {
-    //        self.imageview = [UIImageView new];
-    //        self.imageview.contentMode = UIViewContentModeScaleAspectFit;
-    //        [_scrollview addSubview:self.imageview];
-    //        [waitingView removeFromSuperview];
-    //        self.showMode = PShowModeNormal;
-    //        self.imageview.image = (UIImage *)contentOBJ;
-    //        [self setNeedsLayout];
-    //        self.hasLoadedImage = YES;//图片加载成功
-    //    }
     
     if (model.imageShowType == PooShowImageModelType3D)
     {
@@ -1738,20 +1556,19 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 }
                 else
                 {
-                    videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+                    videoUrl = [NSURL URLWithString:[model.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
                 }
-                self.player = [[MPMoviePlayerController alloc] initWithContentURL:videoUrl];
-                self.player.controlStyle = MPMovieControlStyleNone;
-                self.player.shouldAutoplay = YES;
-                self.player.repeatMode = MPMovieRepeatModeNone;
-                [self.player setFullscreen:YES animated:YES];
-                self.player.scalingMode = MPMovieScalingModeAspectFit;
-                [_scrollview addSubview: self.player.view];
+                
+                self.player = [[AVPlayerViewController alloc] init];
+                self.player.player = [AVPlayer playerWithURL:videoUrl];
+                self.player.showsPlaybackControls = YES;
+                [_scrollview addSubview:self.player.view];
                 [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.right.equalTo(self);
                     make.height.offset(self.height-navH-80);
                     make.top.equalTo(self).offset(navH);
                 }];
+                [self.player.player play];
                 
                 UIImage *firstImage = [Utils thumbnailImageForVideo:videoUrl atTime:1];
                 self.video1STImage = [UIImageView new];
@@ -1763,40 +1580,40 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                     make.centerY.equalTo(self.player.view);
                 }];
                 
-                NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
-                
-                UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-                self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
-                [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-                [self.player.view addSubview:self.playBtn];
-                [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.height.offset(44);
-                    make.centerX.centerY.equalTo(self.player.view);
-                }];
-                
-                UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
-                self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
-                [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
-                [self.player.view addSubview:self.stopBtn];
-                [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.height.offset(44);
-                    make.left.equalTo(self.player.view).offset(10);
-                    make.bottom.equalTo(self.player.view).offset(-10);
-                }];
-                self.stopBtn.hidden = YES;
-                
-                self.videoSlider = [UISlider new];
-                [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
-                [self.player.view addSubview:self.videoSlider];
-                [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.left.equalTo(self.stopBtn.mas_right).offset(10);
-                    make.right.equalTo(self.player.view).offset(-10);
-                    make.height.offset(20);
-                    make.centerY.equalTo(self.stopBtn.mas_centerY);
-                }];
-                self.videoSlider.hidden = YES;
+//                NSBundle *bundlePath = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[self class]] pathForResource:@"PooTools" ofType:@"bundle"]];
+//
+//                UIImage *playImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_play" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+//                self.playBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//                [self.playBtn setImage:playImageFile forState:UIControlStateNormal];
+//                [self.playBtn addTarget:self action:@selector(playVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+//                [self.player.view addSubview:self.playBtn];
+//                [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.width.height.offset(44);
+//                    make.centerX.centerY.equalTo(self.player.view);
+//                }];
+//
+//                UIImage *pauseImageFile = [[UIImage imageWithContentsOfFile:[bundlePath pathForResource:@"p_pause" ofType:@"png"]] imageWithRenderingMode:UIImageRenderingModeAutomatic];
+//                self.stopBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//                [self.stopBtn setImage:pauseImageFile forState:UIControlStateNormal];
+//                [self.stopBtn addTarget:self action:@selector(stopVideoAction:) forControlEvents:UIControlEventTouchUpInside];
+//                [self.player.view addSubview:self.stopBtn];
+//                [self.stopBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.width.height.offset(44);
+//                    make.left.equalTo(self.player.view).offset(10);
+//                    make.bottom.equalTo(self.player.view).offset(-10);
+//                }];
+//                self.stopBtn.hidden = YES;
+//
+//                self.videoSlider = [UISlider new];
+//                [self.videoSlider addTarget:self action:@selector(playVideoSomeTime:) forControlEvents:UIControlEventTouchDragInside];
+//                [self.player.view addSubview:self.videoSlider];
+//                [self.videoSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(self.stopBtn.mas_right).offset(10);
+//                    make.right.equalTo(self.player.view).offset(-10);
+//                    make.height.offset(20);
+//                    make.centerY.equalTo(self.stopBtn.mas_centerY);
+//                }];
+//                self.videoSlider.hidden = YES;
                 self.hasLoadedImage = YES;
                 
                 [self setNeedsLayout];
@@ -1908,16 +1725,16 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 -(void)playVideoAction:(UIButton *)sender
 {
     self.video1STImage.hidden = YES;
-    self.stopBtn.hidden = NO;
-    self.videoSlider.hidden = NO;
+//    self.stopBtn.hidden = NO;
+//    self.videoSlider.hidden = NO;
     sender.hidden = YES;
-    [self.player play];
-    
+    [self.player.player play];
+
     NSDictionary *opts = [NSDictionary dictionaryWithObject:[NSNumber numberWithBool:NO] forKey:AVURLAssetPreferPreciseDurationAndTimingKey];
     AVURLAsset *urlAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:self.imageModels.imageUrl] options:opts];  // 初始化视频媒体文件
     videoTime = urlAsset.duration.value / urlAsset.duration.timescale;
-    self.videoSlider.maximumValue = videoTime;
-    self.videoSlider.minimumValue = 0.0;
+//    self.videoSlider.maximumValue = videoTime;
+//    self.videoSlider.minimumValue = 0.0;
     [self addTime];
 }
 
@@ -1929,26 +1746,26 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 -(void)nextpage
 {
-    if (self.videoSlider.value >= videoTime) {
-        [timer invalidate];
-    }
-    self.videoSlider.value = self.player.currentPlaybackTime;
+//    if (self.videoSlider.value >= videoTime) {
+//        [timer invalidate];
+//    }
+//    self.videoSlider.value = self.player.currentPlaybackTime;
 }
 
 -(void)stopVideoAction:(UIButton *)sender
 {
     sender.hidden = YES;
-    self.playBtn.hidden = NO;
-    [self.player pause];
+//    self.playBtn.hidden = NO;
+    [self.player.player pause];
     [timer invalidate];
 }
 
 -(void)playVideoSomeTime:(UISlider *)sender
 {
-    [self.player pause];
+    [self.player.player pause];
     [timer invalidate];
-    [self.player setCurrentPlaybackTime:sender.value];
-    [self.player play];
+//    [self.player setCurrentPlaybackTime:sender.value];
+    [self.player.player play];
     [self addTime];
 }
 
