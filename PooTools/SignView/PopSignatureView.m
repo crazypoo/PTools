@@ -30,6 +30,8 @@
 @property (nonatomic,strong) UIButton *btn3;
 @property (nonatomic,strong) UIButton *cancelBtn;
 @property (nonatomic,strong) EasySignatureView *signatureView;
+@property (nonatomic,copy) PooSignDoneBlock doneBlock;
+@property (nonatomic,copy) PooSignCancelBlock cancelBlock;
 
 @end
 
@@ -58,7 +60,7 @@
     return self;
 }
 
--(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName
+-(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName handleDone:(PooSignDoneBlock)doneBlock handleCancle:(PooSignCancelBlock)cancelBlock
 {
     self = [super init];
     if (self)
@@ -67,6 +69,8 @@
         self.maskString = mString;
         self.fontName = fName;
         self.navFontName = nfName;
+        self.doneBlock = doneBlock;
+        self.cancelBlock = cancelBlock;
     }
     return self;
 }
@@ -272,9 +276,8 @@
 
 - (void)hide
 {
-    if ([self.delegate respondsToSelector:@selector(cancelSign)])
-    {
-        [self.delegate cancelSign];
+    if (self.cancelBlock) {
+        self.cancelBlock(self);
     }
     [UIView animateWithDuration:0.3 animations:^{
         [self.backGroundView mas_updateConstraints:^(MASConstraintMaker *make) {
@@ -308,8 +311,9 @@
     {
         self.hidden = YES;
         [self hide];
-        if (self.delegate != nil &&[self.delegate respondsToSelector:@selector(onSubmitBtn:)]) {
-            [self.delegate onSubmitBtn:self.signatureView.SignatureImg];
+        if (self.doneBlock)
+        {
+            self.doneBlock(self, self.signatureView.SignatureImg);
         }
     }
     else

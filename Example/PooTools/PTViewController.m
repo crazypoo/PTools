@@ -37,7 +37,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,PopSignatureViewDelegate>
+@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
     UITableView *tbView;
 }
@@ -443,8 +443,11 @@ static NSString *cellIdentifier = @"CELL";
         case 9:
         {
 //            [MXRotationManager defaultManager].orientation = UIDeviceOrientationLandscapeRight;
-            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold];
-            socialSingnatureView.delegate = self;
+            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold handleDone:^(PopSignatureView *signView, UIImage *signImage) {
+                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
+            } handleCancle:^(PopSignatureView *signView) {
+                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
+            }];
             [socialSingnatureView show];
         }
             break;
@@ -461,20 +464,6 @@ static NSString *cellIdentifier = @"CELL";
         }
             break;
     }
-}
-
-
-#pragma mark ---------------> PopSignatureViewDelegate
-
--(void)onSubmitBtn:(UIImage *)signatureImg
-{
-    [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
-
-}
-
--(void)cancelSign
-{
-    [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
 }
 
 @end

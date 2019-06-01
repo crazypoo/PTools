@@ -8,18 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol  PopSignatureViewDelegate <NSObject>
+@class PopSignatureView;
 
-- (void)onSubmitBtn:(UIImage*)signatureImg;
-@optional
-- (void)cancelSign;
-@end
+typedef void (^PooSignDoneBlock)(PopSignatureView *signView, UIImage *signImage);
+typedef void (^PooSignCancelBlock)(PopSignatureView *signView);
 
 @interface PopSignatureView : UIView
 
-@property (nonatomic, assign) id<PopSignatureViewDelegate> delegate;
-
--(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName;
+-(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName handleDone:(PooSignDoneBlock)doneBlock handleCancle:(PooSignCancelBlock)cancelBlock;
 
 - (void)show;
 - (void)showInView:(UIView *)view;
