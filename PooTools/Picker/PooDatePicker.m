@@ -108,16 +108,20 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
+        [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
-        
+        kViewBorderRadius(self.cancelBtn, 5, 0, kClearColor);
+
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [self.yesBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.yesBtn.titleLabel setFont:font];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.yesBtn];
-        
+        kViewBorderRadius(self.yesBtn, 5, 0, kClearColor);
+
         kWeakSelf(self);
 
         [self.cancelBtn addActionHandler:^(UIButton *sender) {
@@ -328,13 +332,15 @@
 
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topV).offset(10);
-        make.top.bottom.equalTo(self.topV);
+        make.bottom.equalTo(self.topV).offset(-5);
+        make.top.equalTo(self.topV).offset(5);
         make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
     }];
     
     [self.yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.topV).offset(-10);
-        make.top.bottom.equalTo(self.topV);
+        make.bottom.equalTo(self.topV).offset(-5);
+        make.top.equalTo(self.topV).offset(5);
         make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
     }];
     
@@ -613,16 +619,20 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
+        [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
-        
+        kViewBorderRadius(self.cancelBtn, 5, 0, kClearColor);
+
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.yesBtn.titleLabel setFont:font];
+        [self.yesBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.yesBtn];
-        
+        kViewBorderRadius(self.yesBtn, 5, 0, kClearColor);
+
         kWeakSelf(self);
         
         [self.cancelBtn addActionHandler:^(UIButton *sender) {
@@ -718,13 +728,15 @@
     
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topV).offset(10);
-        make.top.bottom.equalTo(self.topV);
+        make.bottom.equalTo(self.topV).offset(-5);
+        make.top.equalTo(self.topV).offset(5);
         make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
     }];
     
     [self.yesBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.topV).offset(-10);
-        make.top.bottom.equalTo(self.topV);
+        make.bottom.equalTo(self.topV).offset(-5);
+        make.top.equalTo(self.topV).offset(5);
         make.width.offset(self.labelFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
     }];
     

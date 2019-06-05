@@ -65,19 +65,21 @@
     
     self.cancelBtn                = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.titleLabel.font = titleFont;
+    [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [self.cancelBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(hideViewAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tbar_picker addSubview:self.cancelBtn];
-    
+    kViewBorderRadius(self.cancelBtn, 5, 0, kClearColor);
 
     self.doneBtn                  = [UIButton buttonWithType:UIButtonTypeCustom];
     self.doneBtn.titleLabel.font = titleFont;
+    [self.doneBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [self.doneBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.doneBtn setTitle:@"完成" forState:UIControlStateNormal];
     [self.doneBtn addTarget:self action:@selector(pickerSelectDoneAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.tbar_picker addSubview:self.doneBtn];
-    
+    kViewBorderRadius(self.doneBtn, 5, 0, kClearColor);
 
     self.nameTitle = [UILabel new];
     self.nameTitle.textAlignment = NSTextAlignmentCenter;
@@ -122,7 +124,8 @@
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.tbar_picker).offset(10);
         make.width.offset(self.pickerFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
-        make.top.bottom.equalTo(self.tbar_picker);
+        make.bottom.equalTo(self.tbar_picker).offset(-5);
+        make.top.equalTo(self.tbar_picker).offset(5);
     }];
     
     [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {

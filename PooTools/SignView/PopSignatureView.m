@@ -109,9 +109,11 @@
     clearBtn.titleLabel.font = viewBtnFont;
     [clearBtn setTitle:cleanString forState:UIControlStateNormal];
     [clearBtn addTarget:self action:@selector(onClear) forControlEvents:UIControlEventTouchUpInside];
+    [clearBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
     [self.navView addSubview:clearBtn];
-
+    kViewBorderRadius(clearBtn, 5, 0, kClearColor);
+    
     self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.titleLabel.font = viewBtnFont;
     [self.cancelBtn setTitleColor:UIColor.whiteColor forState:UIControlStateNormal];
@@ -124,7 +126,8 @@
     self.btn3.backgroundColor = self.navColor ? self.navColor : kRandomColor;
     [self.btn3 addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
     [self.backGroundView addSubview:self.btn3];
-    
+    [self.btn3 setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+
     [self layoutIfNeeded];
 }
 
@@ -183,7 +186,8 @@
         
         [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.navView).offset(-navSpace);
-            make.top.bottom.equalTo(self.navView);
+            make.top.equalTo(self.navView).offset(5);
+            make.bottom.equalTo(self.navView).offset(-5);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
         
@@ -224,7 +228,8 @@
         
         [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.navView).offset(-navSpace);
-            make.top.bottom.equalTo(self.navView);
+            make.top.equalTo(self.navView).offset(5);
+            make.bottom.equalTo(self.navView).offset(-5);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
         

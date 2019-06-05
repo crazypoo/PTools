@@ -128,6 +128,8 @@
     CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*0.5)/self.bottomBtnArr.count;
     for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
         UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelBtn setBackgroundImage:[Utils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
+        [cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [cancelBtn setTitleColor:self.alertBottomButtonColor forState:UIControlStateNormal];
         [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
         cancelBtn.titleLabel.font = self.viewFont;

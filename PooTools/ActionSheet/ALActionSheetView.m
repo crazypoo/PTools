@@ -93,7 +93,7 @@
     [self addSubview:self.actionSheetView];
 
     UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImage = [Utils createImageWithColor:kRGBAColor(242, 242, 242, 1)];
+    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
     
     self.actionSheetScroll = [UIScrollView new];
     [self.actionSheetView addSubview:self.actionSheetScroll];
