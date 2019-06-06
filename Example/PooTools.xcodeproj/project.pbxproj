@@ -117,7 +117,6 @@
 		CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE820AC3F7C00949DF6 /* FMDB.framework */; };
 		CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEA20AC3F7C00949DF6 /* HTAutocompleteTextField.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
-		CC658CEF20AC3F7C00949DF6 /* JMHoledView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEE20AC3F7C00949DF6 /* JMHoledView.framework */; };
 		CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF020AC3F7C00949DF6 /* LTNavigationBar.framework */; };
 		CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF220AC3F7C00949DF6 /* Mantle.framework */; };
 		CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF420AC3F7C00949DF6 /* Masonry.framework */; };
@@ -501,7 +500,6 @@
 				CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */,
 				CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */,
 				CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */,
-				CC658CEF20AC3F7C00949DF6 /* JMHoledView.framework in Frameworks */,
 				CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */,
 				CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */,
 				CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */,

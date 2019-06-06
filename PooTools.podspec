@@ -8,19 +8,19 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.11.23'
+    s.version     = '1.11.24'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
-    s.platform = :ios, '9.3'
+    s.platform = :ios, '8.0'
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m,swift}'
     s.resource     = 'PooTools/PooTools.bundle'
-    s.ios.deployment_target = '9.3'
-    s.swift_versions = ['3.0', '3.2', '4.0', '4.2','5.0']
+    s.ios.deployment_target = '8.0'
+    s.swift_versions = ['4.2','5.0']
     s.frameworks            = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','LocalAuthentication','CoreMotion','SceneKit','CoreImage','AssetsLibrary','Photos'
     s.dependency 'AFNetworking'
     s.dependency 'SDWebImage'
