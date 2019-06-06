@@ -11,6 +11,8 @@
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 
+#define AlertRadius 8
+
 @interface YXCustomAlertView()
 {
     UIColor *alertTitleColor;
@@ -79,7 +81,7 @@
         [self.middleView addGestureRecognizer:tapBackgroundView];
         
         self.backgroundColor = [UIColor whiteColor];
-        self.layer.cornerRadius = 8;
+        self.layer.cornerRadius = AlertRadius;
         
         [self.superViews addSubview:self];
         
@@ -125,7 +127,7 @@
 
 -(void)setBottomView
 {
-    CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*0.5)/self.bottomBtnArr.count;
+    CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*1)/self.bottomBtnArr.count;
     for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
         UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelBtn setBackgroundImage:[Utils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
@@ -157,7 +159,9 @@
                 }];
             }
         }
+        kViewBorderRadius(cancelBtn, AlertRadius, 0, kClearColor);
     }
+    
     
     UIView *horLine = [UIView new];
     horLine.backgroundColor = self.verLineColor;

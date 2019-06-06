@@ -39,7 +39,7 @@ PODS:
   - MJExtension (3.0.17)
   - MJRefresh (3.1.16)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.11.22):
+  - PooTools (1.11.25):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -140,7 +140,7 @@ SPEC CHECKSUMS:
   MJExtension: 74ec83124a68891619fb7ba9c5c811bbf1691076
   MJRefresh: 7798e16e53a5ef7f332dd05b27664db4e29530fd
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: b370bf03b1545a9d0ecf2d8e1783662795eb71e6
+  PooTools: 7d5913e60a9d70c592e669ccce558697fa8348dc
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: 6764b5fa0f73c203728052955dbefa2bf1f33282
   SSZipArchive: cefe1364104a0231268a5deb8495bdf2861f52f0
