@@ -20,6 +20,16 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
+
+/*
+ pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
+ //重装后先登录
+ git tag 1.11.23//版本设置
+ git push --tags//版本推送
+ pod spec lint PooTools.podspec --allow-warnings --verbose //第一次验证
+ pod trunk push /Users/crazypoo/ST/PTools/PooTools.podspec --verbose --allow-warnings//通过第一次验证后提交
+ */
+
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 @implementation PTAppDelegate
