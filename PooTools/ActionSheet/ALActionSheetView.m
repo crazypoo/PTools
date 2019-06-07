@@ -77,6 +77,7 @@
         _otherButtonTitles = otherButtonTitles;
         _selectRowBlock = block;
         self.btnFontName = bfName ? bfName : kDevLikeFont;
+        [self loadView];
     }
     
     return self;
@@ -84,14 +85,23 @@
 
 -(void)loadView
 {
+    [kAppDelegateWindow addSubview:self];
+    
     _backView = [UIView new];
     _backView.backgroundColor = kDevMaskBackgroundColor;
-    _backView.alpha = 0.0f;
     [self addSubview:_backView];
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
 
     self.actionSheetView = [UIView new];
     self.actionSheetView.backgroundColor = kRGBAColor(230, 230, 230, 1);
     [self addSubview:self.actionSheetView];
+    [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self);
+        make.top.offset(kSCREEN_HEIGHT-self.actionSheetHeight-HEIGHT_TABBAR_SAFEAREA);
+        make.height.offset(self.actionSheetHeight);
+    }];
 
     UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
     UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
@@ -235,12 +245,6 @@
     return actionSheetView;
 }
 
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    [self loadView];
-}
-
 #pragma mark ------> SubViewHeight
 -(CGFloat)titleHeight
 {
@@ -346,44 +350,30 @@
     
     _isShow = YES;
     
-    [self layoutSubviews];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+    self.actionSheetView.layer.transform = CATransform3DMakeTranslation(0, [self actionSheetRealHeight], 0);
+    animation.toValue = @(0);
+    animation.springBounciness = 1.0f;
+    [self.actionSheetView.layer pop_addAnimation:animation forKey:@"ActionSheetAnimation"];
 
-    [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
-
-        [kAppDelegateWindow addSubview:self];
-        
-        [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
-        }];
-        
-        [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.top.offset(kSCREEN_HEIGHT-self.actionSheetHeight-HEIGHT_TABBAR_SAFEAREA);
-            make.height.offset(self.actionSheetHeight);
-        }];
-        
-        self.backView.alpha = 1.0;
-        
-        POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
-        self.actionSheetView.layer.transform = CATransform3DMakeTranslation(0, -[self actionSheetRealHeight], 0);
-        animation.toValue = @(0);
-        animation.springBounciness = 1.0f;
-        [self.actionSheetView.layer pop_addAnimation:animation forKey:@"ActionSheetAnimation"];
-
-    } completion:NULL];
 }
 
 - (void)dismiss
 {
     _isShow = NO;
     
-    [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
-        
-        self.backView.alpha = 0.0;
-        [self removeFromSuperview];
-
-    } completion:^(BOOL finished) {
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+    offscreenAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerTranslationY];
+    offscreenAnimation.toValue = @([self actionSheetRealHeight]);
+    offscreenAnimation.duration = 0.35f;
+    [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+            self.backView.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            [self removeFromSuperview];
+        }];
     }];
+    [self.actionSheetView.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
 @end

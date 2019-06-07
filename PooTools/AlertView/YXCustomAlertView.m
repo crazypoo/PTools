@@ -29,6 +29,7 @@
 @property (nonatomic, strong) UIColor *verLineColor;
 @property (nonatomic, strong) NSMutableArray *bottomBtnArr;
 @property (nonatomic, strong) NSString *titleStr;
+@property (nonatomic, assign) AlertAnimationType viewAnimationType;
 @end
 
 
@@ -86,15 +87,17 @@
         self.layer.cornerRadius = AlertRadius;
         
         [self.superViews addSubview:self];
-                
+        
+        self.viewAnimationType = animationType;
+        
         NSString *propertyNamed;
         CATransform3D transform = CATransform3DMakeTranslation(0, 0, 0);
         switch (animationType) {
             case AlertAnimationTypeTop:
-                {
-                    propertyNamed = kPOPLayerTranslationY;
-                    transform = CATransform3DMakeTranslation(0, -(kSCREEN_HEIGHT/2), 0);
-                }
+            {
+                propertyNamed = kPOPLayerTranslationY;
+                transform = CATransform3DMakeTranslation(0, -(kSCREEN_HEIGHT/2), 0);
+            }
                 break;
             case AlertAnimationTypeBottom:
             {
@@ -127,6 +130,7 @@
         animation.toValue = @(0);
         animation.springBounciness = 1.0f;
         [self.layer pop_addAnimation:animation forKey:@"AlertAnimation"];
+
 
         self.titleLabel.text = title;
         [self addSubview:self.titleLabel];
@@ -275,12 +279,58 @@
         self.didDismissBlock(self);
     }
     
-    if (_middleView) {
-        [_middleView removeFromSuperview];
-        _middleView = nil;
+    NSString *propertyNamed;
+    CGFloat offsetValue = 0.0f;
+    switch (self.viewAnimationType) {
+        case AlertAnimationTypeTop:
+        {
+            propertyNamed = kPOPLayerTranslationY;
+            offsetValue = -self.layer.position.y;
+        }
+            break;
+        case AlertAnimationTypeBottom:
+        {
+            propertyNamed = kPOPLayerTranslationY;
+            offsetValue = self.layer.position.y;
+        }
+            break;
+        case AlertAnimationTypeLeft:
+        {
+            propertyNamed = kPOPLayerTranslationX;
+            offsetValue = -self.layer.position.x-self.frame.size.width/2;
+        }
+            break;
+        case AlertAnimationTypeRight:
+        {
+            propertyNamed = kPOPLayerTranslationX;
+            offsetValue = self.layer.position.x+self.frame.size.width/2;
+        }
+            break;
+        default:
+        {
+            propertyNamed = kPOPLayerTranslationX;
+            offsetValue = -self.layer.position.x;
+        }
+            break;
     }
-    
-    [self removeFromSuperview];
+
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+    offscreenAnimation.property = [POPAnimatableProperty propertyWithName:propertyNamed];
+    offscreenAnimation.toValue = @(offsetValue);
+    offscreenAnimation.duration = 0.35f;
+    [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+            self.middleView.alpha = 0;
+            self.alpha = 0;
+        } completion:^(BOOL finished) {
+            if (self.middleView) {
+                [self.middleView removeFromSuperview];
+                self.middleView = nil;
+            }
+            [self removeFromSuperview];
+        }];
+    }];
+    [self.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
 #pragma mark - getter And setter
