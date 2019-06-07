@@ -10,6 +10,7 @@
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 #import "Utils.h"
+#import <pop/POP.h>
 
 #define kRowHeight 44.0f
 #define kRowLineHeight 0.5f
@@ -118,7 +119,7 @@
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
                 make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight-kRowLineHeight);
             }];
         }
         else
@@ -126,7 +127,7 @@
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
                 make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight-kRowLineHeight);
             }];
         }
     }
@@ -137,7 +138,7 @@
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.right.equalTo(self.actionSheetView);
                 make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight);
+                make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight-kRowLineHeight);
             }];
         }
         else
@@ -145,7 +146,7 @@
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.right.equalTo(self.actionSheetView);
                 make.height.offset([self scrollH]);
-                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
+                make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight-kRowLineHeight);
             }];
         }
     }
@@ -348,7 +349,7 @@
     [self layoutSubviews];
 
     [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
-        
+
         [kAppDelegateWindow addSubview:self];
         
         [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -363,6 +364,12 @@
         
         self.backView.alpha = 1.0;
         
+        POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+        self.actionSheetView.layer.transform = CATransform3DMakeTranslation(0, -[self actionSheetRealHeight], 0);
+        animation.toValue = @(0);
+        animation.springBounciness = 1.0f;
+        [self.actionSheetView.layer pop_addAnimation:animation forKey:@"ActionSheetAnimation"];
+
     } completion:NULL];
 }
 

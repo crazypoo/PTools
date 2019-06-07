@@ -14,6 +14,13 @@
 
 @class YXCustomAlertView;
 
+typedef NS_ENUM(NSUInteger, AlertAnimationType) {
+    AlertAnimationTypeTop = 0,
+    AlertAnimationTypeBottom,
+    AlertAnimationTypeLeft,
+    AlertAnimationTypeRight
+};
+
 typedef void (^YXCustomAlertViewSetCustomViewBlock)(YXCustomAlertView * _Nonnull alertView);
 typedef void (^YXCustomAlertViewClickBlock)(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex);
 typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull alertView);
@@ -53,6 +60,7 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
                                          verLineColor:(UIColor * _Nullable)vlColor
                                  moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
                                               viewTag:(NSInteger)tag
+                                        viewAnimation:(AlertAnimationType)animationType
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
                                           clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
                                       didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock;

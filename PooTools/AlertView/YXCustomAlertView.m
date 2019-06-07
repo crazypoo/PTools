@@ -10,6 +10,7 @@
 #import "YXCustomAlertView.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
+#import <pop/POP.h>
 
 #define AlertRadius 8
 
@@ -46,6 +47,7 @@
                                          verLineColor:(UIColor * _Nullable)vlColor
                                  moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
                                               viewTag:(NSInteger)tag
+                                        viewAnimation:(AlertAnimationType)animationType
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
                                           clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
                                       didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock
@@ -84,7 +86,48 @@
         self.layer.cornerRadius = AlertRadius;
         
         [self.superViews addSubview:self];
+                
+        NSString *propertyNamed;
+        CATransform3D transform = CATransform3DMakeTranslation(0, 0, 0);
+        switch (animationType) {
+            case AlertAnimationTypeTop:
+                {
+                    propertyNamed = kPOPLayerTranslationY;
+                    transform = CATransform3DMakeTranslation(0, -(kSCREEN_HEIGHT/2), 0);
+                }
+                break;
+            case AlertAnimationTypeBottom:
+            {
+                propertyNamed = kPOPLayerTranslationY;
+                transform = CATransform3DMakeTranslation(0, kSCREEN_HEIGHT/2, 0);
+            }
+                break;
+            case AlertAnimationTypeLeft:
+            {
+                propertyNamed = kPOPLayerTranslationX;
+                transform = CATransform3DMakeTranslation(-(kSCREEN_WIDTH/2), 0, 0);
+            }
+                break;
+            case AlertAnimationTypeRight:
+            {
+                propertyNamed = kPOPLayerTranslationX;
+                transform = CATransform3DMakeTranslation((kSCREEN_WIDTH/2), 0, 0);
+            }
+                break;
+            default:
+            {
+                propertyNamed = kPOPLayerTranslationX;
+                transform = CATransform3DMakeTranslation(0, 0, 0);
+            }
+                break;
+        }
         
+        POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:propertyNamed];
+        self.layer.transform = transform;
+        animation.toValue = @(0);
+        animation.springBounciness = 1.0f;
+        [self.layer pop_addAnimation:animation forKey:@"AlertAnimation"];
+
         self.titleLabel.text = title;
         [self addSubview:self.titleLabel];
         
@@ -222,13 +265,6 @@
     if (self.clickBlock) {
         self.clickBlock(self, sender.tag-100);
     }
-}
-
--(void)showView
-{
-    [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseInOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
-        [self.superViews addSubview:self];
-    } completion:NULL];
 }
 
 #pragma mark - 注销视图
