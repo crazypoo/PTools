@@ -11,6 +11,7 @@
 #import <Masonry/Masonry.h>
 #import "NSString+WPAttributedMarkup.h"
 #import "PMacros.h"
+#import <pop/POP.h>
 
 #define SignatureViewHeight ((kSCREEN_WIDTH*(350))/(375))
 
@@ -216,7 +217,7 @@
         
         [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(216);
+            make.height.offset(HEIGHT_PICKER);
             make.bottom.equalTo(self.btn3.mas_top);
         }];
         
@@ -254,6 +255,21 @@
         make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
     [self setupView];
+    
+    UIDevice *device = [UIDevice currentDevice];
+    if (device.orientation == UIDeviceOrientationPortrait || device.orientation ==  UIDeviceOrientationPortraitUpsideDown)
+    {
+        POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+        self.signatureView.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_PICKER, 0);
+        self.navView.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_BUTTON, 0);
+        self.btn3.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_BUTTON, 0);
+        animation.toValue = @(0);
+        animation.springBounciness = 1.0f;
+        [self.signatureView.layer pop_addAnimation:animation forKey:@"SignAnimation"];
+        [self.navView.layer pop_addAnimation:animation forKey:@"SignAnimation"];
+        [self.btn3.layer pop_addAnimation:animation forKey:@"SignAnimation"];
+
+    }
 }
 
 - (void)onSignatureWriteAction
@@ -284,15 +300,35 @@
     if (self.cancelBlock) {
         self.cancelBlock(self);
     }
-    [UIView animateWithDuration:0.3 animations:^{
-        [self.backGroundView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(self.maskView);
+    
+    UIDevice *device = [UIDevice currentDevice];
+    if (device.orientation == UIDeviceOrientationPortrait || device.orientation ==  UIDeviceOrientationPortraitUpsideDown)
+    {
+        POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+        offscreenAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerTranslationY];
+        offscreenAnimation.toValue = @(HEIGHT_PICKER);
+        offscreenAnimation.duration = 0.35f;
+        [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+            [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+                self.maskView.alpha = 0.0;
+                self.alpha = 0;
+            } completion:^(BOOL finished) {
+                [self removeFromSuperview];
+            }];
         }];
-        self.alpha = 0;
-    } completion:^(BOOL finished){
-        
-        [self removeFromSuperview];
-    }];
+        [self.signatureView.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+        [self.navView.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+        [self.btn3.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+    }
+    else
+    {
+        [UIView animateWithDuration:0.3 animations:^{
+            self.maskView.alpha = 0;
+            self.alpha = 0;
+        } completion:^(BOOL finished){
+            [self removeFromSuperview];
+        }];
+    }
 }
 
 - (void)onTapMaskView:(id)sender
@@ -326,6 +362,5 @@
         PNSLog(@"NoImage");
     }
 }
-
 
 @end

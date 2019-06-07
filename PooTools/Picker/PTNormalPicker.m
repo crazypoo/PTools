@@ -10,6 +10,7 @@
 #import <Masonry/Masonry.h>
 #import "PMacros.h"
 #import "Utils.h"
+#import <pop/POP.h>
 
 #define pickerCellH 30.0f
 #define pickerCellW kSCREEN_WIDTH
@@ -204,15 +205,9 @@
     self.pickerSelectModel.pickerIndexPath = [NSIndexPath indexPathForRow:row inSection:component];
 }
 
-- (void)hideViewAction:(UITapGestureRecognizer *)gesture {
-    [UIView animateWithDuration:0.25 animations:^{
-        
-    } completion:^(BOOL finished) {
-        if (self.returnBlock) {
-            self.returnBlock(self, nil);
-        }
-        [self removeFromSuperview];
-    }];
+- (void)hideViewAction:(UITapGestureRecognizer *)gesture
+{
+    [self pickerHideWithModel:nil];
 }
 
 -(void)pickerSelectDoneAction:(UIButton *)sender
@@ -222,14 +217,27 @@
         return;
     }
     
-    [UIView animateWithDuration:0.25 animations:^{
-        
-    } completion:^(BOOL finished) {
-        if (self.returnBlock) {
-            self.returnBlock(self, self.pickerSelectModel);
-        }
-        [self removeFromSuperview];
+    [self pickerHideWithModel:self.pickerSelectModel];
+}
+
+-(void)pickerHideWithModel:(PTNormalPickerModel *)model
+{
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+    offscreenAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerTranslationY];
+    offscreenAnimation.toValue = @(HEIGHT_PICKER);
+    offscreenAnimation.duration = 0.35f;
+    [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+            self.pickerBackground.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            if (self.returnBlock) {
+                self.returnBlock(self, model);
+            }
+            [self removeFromSuperview];
+        }];
     }];
+    [self.viewPicker.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+    [self.tbar_picker.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
 -(void)pickerShow
@@ -238,5 +246,13 @@
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
+    
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+    self.viewPicker.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_PICKER, 0);
+    self.tbar_picker.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_BUTTON, 0);
+    animation.toValue = @(0);
+    animation.springBounciness = 1.0f;
+    [self.viewPicker.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
+    [self.tbar_picker.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
 }
 @end

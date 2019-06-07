@@ -11,6 +11,7 @@
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 #import "Utils.h"
+#import <pop/POP.h>
 
 #pragma mark ------> DatePicker
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
@@ -308,6 +309,14 @@
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
+    
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+    self.pickerView.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_PICKER, 0);
+    self.topV.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_BUTTON, 0);
+    animation.toValue = @(0);
+    animation.springBounciness = 1.0f;
+    [self.pickerView.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
+    [self.topV.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
 }
 
 -(void)layoutSubviews
@@ -420,11 +429,20 @@
 
 - (void)remove
 {
-    [UIView animateWithDuration:0.25 animations:^{
-        
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+    offscreenAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerTranslationY];
+    offscreenAnimation.toValue = @(HEIGHT_PICKER);
+    offscreenAnimation.duration = 0.35f;
+    [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+            self.pickerBackground.alpha = 0.0;
+        } completion:^(BOOL finished) {
+
+            [self removeFromSuperview];
+        }];
     }];
+    [self.pickerView.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+    [self.topV.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
 #pragma mark -UIPickerView的代理
@@ -685,17 +703,31 @@
 
 - (void)remove
 {
-    [UIView animateWithDuration:0.25 animations:^{
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-        if (self.dismissBlock) {
-            self.dismissBlock(self);
-        }
-        
-        if ([self.delegate respondsToSelector:@selector(timePickerDismiss:)]) {
-            [self.delegate timePickerDismiss:self];
-        }
+    [self pickerHide];
+}
+
+-(void)pickerHide
+{
+    POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
+    offscreenAnimation.property = [POPAnimatableProperty propertyWithName:kPOPLayerTranslationY];
+    offscreenAnimation.toValue = @(HEIGHT_PICKER);
+    offscreenAnimation.duration = 0.35f;
+    [offscreenAnimation setCompletionBlock:^(POPAnimation *anim, BOOL finished) {
+        [UIView animateWithDuration:0.35f delay:0 usingSpringWithDamping:0.9f initialSpringVelocity:0.7f options:UIViewAnimationOptionCurveEaseOut | UIViewAnimationOptionBeginFromCurrentState | UIViewAnimationOptionLayoutSubviews animations:^{
+            self.pickerBackground.alpha = 0.0;
+        } completion:^(BOOL finished) {
+            if (self.dismissBlock) {
+                self.dismissBlock(self);
+            }
+            
+            if ([self.delegate respondsToSelector:@selector(timePickerDismiss:)]) {
+                [self.delegate timePickerDismiss:self];
+            }
+            [self removeFromSuperview];
+        }];
     }];
+    [self.pickerView.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
+    [self.topV.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
 -(void)pickerShow
@@ -704,6 +736,14 @@
     [self mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
+    POPSpringAnimation *animation = [POPSpringAnimation animationWithPropertyNamed:kPOPLayerTranslationY];
+    self.pickerView.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_PICKER, 0);
+    self.topV.layer.transform = CATransform3DMakeTranslation(0, HEIGHT_BUTTON, 0);
+    animation.toValue = @(0);
+    animation.springBounciness = 1.0f;
+    [self.pickerView.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
+    [self.topV.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
+
 }
 
 -(void)layoutSubviews
