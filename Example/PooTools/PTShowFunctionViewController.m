@@ -576,7 +576,9 @@ CGFloat const tagItemSpace = 5;
             break;
         case 1:
         {
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:@"111123123" withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:@[@"111",@"222",@"123123123",@"5555"] viewTag:1 viewAnimation:2 setCustomView:^(YXCustomAlertView *alertView) {
+            NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123";
+            NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:1 viewAnimation:2 setCustomView:^(YXCustomAlertView *alertView) {
                 
 //                UILabel *aaa = [UILabel new];
 //                aaa.backgroundColor = kRandomColor;
@@ -614,14 +616,13 @@ CGFloat const tagItemSpace = 5;
                 }
                 
             } didDismissBlock:^(YXCustomAlertView *alertView) {
-                
+                alertView = nil;
             }];
             [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalH]);
+                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:title withTitleFontSize:[UIFont systemFontOfSize:20].pointSize withButtonArr:btnArrs]);
                 make.width.offset(kSCREEN_WIDTH-20);
                 make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];
-            
         }
             break;
         case 2:

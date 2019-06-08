@@ -262,7 +262,7 @@
 
 -(CGFloat)actionSheetRealHeight
 {
-    return [self scrollContentH] + ([self titleHeight] + kRowLineHeight) +(kSeparatorHeight + kRowHeight) + [self destRowH] + [self destLineH];
+    return [self scrollContentH] + ([self titleHeight] + kRowLineHeight) +(kSeparatorHeight + kRowHeight) + [self destRowH] + [self destLineH]+kRowLineHeight;
 }
 
 -(CGFloat)actionSheetHeight

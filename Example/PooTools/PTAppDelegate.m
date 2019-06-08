@@ -20,6 +20,7 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
+#import "NSString+PassStrength.h"
 
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
@@ -110,7 +111,7 @@
         PNSLog(@">>>>>>>>%@",ipModel.city);
     }];
     
-    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract]);
+    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]);
     return YES;
 }
 

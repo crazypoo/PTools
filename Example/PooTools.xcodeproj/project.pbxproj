@@ -28,6 +28,7 @@
 		C009FA42228FDF590072C043 /* SQFloatWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = C009FA40228FDF580072C043 /* SQFloatWindow.m */; };
 		C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = C0908103225F4A18005243E7 /* NSString+Extension.m */; };
 		C0B5E12422890E6900D32503 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B5E12322890E6900D32503 /* MXRotationManager.m */; };
+		C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */; };
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
@@ -217,6 +218,8 @@
 		C0908103225F4A18005243E7 /* NSString+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		C0B5E12222890E6900D32503 /* MXRotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXRotationManager.h; sourceTree = "<group>"; };
 		C0B5E12322890E6900D32503 /* MXRotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRotationManager.m; sourceTree = "<group>"; };
+		C0DB2BCE22AB561B00A7D017 /* NSString+PassStrength.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSString+PassStrength.h"; sourceTree = "<group>"; };
+		C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSString+PassStrength.m"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UINavigation_SXFixSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -780,6 +783,8 @@
 				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
 				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
 				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
+				C0DB2BCE22AB561B00A7D017 /* NSString+PassStrength.h */,
+				C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1485,6 +1490,7 @@
 				CC1257E42098319300E31A38 /* WMHub.m in Sources */,
 				CC1257DF2098319300E31A38 /* UILabel+FlickerNumber.m in Sources */,
 				CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */,
+				C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */,
 				C004647522647CE4004F946F /* DoubleSliderView.m in Sources */,
 				64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */,
 				CC1257C12098319300E31A38 /* PGifHud.m in Sources */,
