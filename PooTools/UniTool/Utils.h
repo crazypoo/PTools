@@ -54,6 +54,7 @@ typedef NS_ENUM(NSInteger,FewMonthLaterType){
 
 typedef NS_ENUM(NSInteger,GetTimeType){
     GetTimeTypeYMD = 0,
+    GetTimeTypeY,
     GetTimeTypeMD,
     GetTimeTypeTimeStamp,
     GetTimeTypeYMDHHS,
