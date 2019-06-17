@@ -164,6 +164,11 @@
             [formatter setDateFormat:@"YYYY-MM-dd"];
         }
             break;
+        case GetTimeTypeYM:
+        {
+            [formatter setDateFormat:@"YYYY-MM"];
+        }
+            break;
         case GetTimeTypeYMDHHS:
         {
             [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
@@ -177,6 +182,16 @@
         case GetTimeTypeY:
         {
             [formatter setDateFormat:@"YYYY"];
+        }
+            break;
+        case GetTimeTypeM:
+        {
+            [formatter setDateFormat:@"MM"];
+        }
+            break;
+        case GetTimeTypeD:
+        {
+            [formatter setDateFormat:@"dd"];
         }
             break;
         case GetTimeTypeHHS:
