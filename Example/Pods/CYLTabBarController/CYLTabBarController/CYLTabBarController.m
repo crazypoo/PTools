@@ -54,6 +54,8 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
     [super viewDidLoad];
     if (CYL_IS_IPHONE_X) {
         self.tabBarHeight = 83;
+    } else {
+        self.tabBarHeight = 49;
     }
     // 处理tabBar，使用自定义 tabBar 添加 发布按钮
     [self setUpTabBar];
@@ -96,10 +98,12 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
         }
         SEL actin = @selector(didSelectControl:);
         [control addTarget:self action:actin forControlEvents:UIControlEventTouchUpInside];
+        if (idx == self.selectedIndex) {
+            control.selected = YES;
+        }
     }];
-    
+
     do {
-        
         if (self.isLottieViewAdded) {
             break;
         }
@@ -113,11 +117,11 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
         dispatch_async(dispatch_get_main_queue(),^{
             [subTabBarButtonsWithoutPlusButton enumerateObjectsUsingBlock:^(UIControl * _Nonnull control, NSUInteger idx, BOOL * _Nonnull stop) {
                 UIControl *tabButton = control;
-                BOOL animation = NO;
+                BOOL defaultSelected = NO;
                 if (idx == self.selectedIndex) {
-                    animation = YES;
+                    defaultSelected = YES;
                 }
-                [self addLottieImageWithControl:tabButton animation:animation];
+                [self addLottieImageWithControl:tabButton animation:defaultSelected defaultSelected:defaultSelected];
             }];
             self.lottieViewAdded = YES;
         });
@@ -218,9 +222,6 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
         _tabBarItemsAttributes = tabBarItemsAttributes;
         self.context = context;
         self.viewControllers = viewControllers;
-//        if ([self hasPlusChildViewController]) {
-//            self.delegate = self;
-//        }
     }
     return self;
 }
@@ -265,8 +266,14 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
 }
 
 - (void)hideTabBadgeBackgroundSeparator {
+    [self hideTabBarShadowImageView];
+}
+
+- (void)hideTabBarShadowImageView {
     [self.tabBar layoutIfNeeded];
-    self.tabBar.cyl_tabBadgeBackgroundSeparator.alpha = 0;
+    UIImageView *imageView = self.tabBar.cyl_tabShadowImageView;
+    imageView.hidden = YES;//iOS13+
+    imageView.alpha = 0;
 }
 
 + (BOOL)havePlusButton {
@@ -356,7 +363,6 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
         if ((!_tabBarItemsAttributes) || (_tabBarItemsAttributes.count != viewControllers.count)) {
             [NSException raise:NSStringFromClass([CYLTabBarController class]) format:@"The count of CYLTabBarControllers is not equal to the count of tabBarItemsAttributes.【Chinese】设置_tabBarItemsAttributes属性时，请确保元素个数与控制器的个数相同，并在方法`-setViewControllers:`之前设置"];
         }
-        //TODO:
         BOOL isAdded = [self isPlusViewControllerAdded:_viewControllers];
         BOOL addedFlag = [CYLPlusChildViewController cyl_plusViewControllerEverAdded];
         BOOL hasPlusChildViewController = [self hasPlusChildViewController] && !isAdded && !addedFlag;
@@ -615,7 +621,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
 
     BOOL shouldSelectViewController =  YES;
     @try {
-       shouldSelectViewController = (!control.cyl_shouldNotSelect) &&  (!control.hidden) ;
+       shouldSelectViewController = (!control.cyl_shouldNotSelect) && (!control.hidden) ;
     } @catch (NSException *exception) {
         NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
     }
@@ -643,6 +649,10 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
 }
 
 - (void)addLottieImageWithControl:(UIControl *)control animation:(BOOL)animation {
+    [self addLottieImageWithControl:control animation:animation defaultSelected:NO];
+}
+
+- (void)addLottieImageWithControl:(UIControl *)control animation:(BOOL)animation defaultSelected:(BOOL)defaultSelected {
      NSUInteger index = [self.tabBar.cyl_subTabBarButtonsWithoutPlusButton indexOfObject:control];
     if (NSNotFound == index) {
         return;
@@ -655,7 +665,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
     CGSize lottieSize = [lottieSizeValue CGSizeValue];
     [control cyl_addLottieImageWithLottieURL:lottieURL size:lottieSize];
     if (animation) {
-        [self.tabBar cyl_animationLottieImageWithSelectedControl:control lottieURL:lottieURL size:lottieSize];
+        [self.tabBar cyl_animationLottieImageWithSelectedControl:control lottieURL:lottieURL size:lottieSize defaultSelected:defaultSelected];
     }
 }
 

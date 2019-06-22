@@ -13,7 +13,6 @@
 #import <pop/POP.h>
 
 #define pickerCellH 30.0f
-#define pickerCellW kSCREEN_WIDTH
 
 @implementation PTNormalPickerModel
 @end
@@ -111,29 +110,39 @@
         make.left.right.top.bottom.equalTo(self);
     }];
     
+    UIDevice *device = [UIDevice currentDevice];
     [self.viewPicker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self.pickerBackground);
+        make.centerX.equalTo(self.pickerBackground);
+        if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+        {
+            make.width.offset(kSCREEN_HEIGHT);
+        }
+        else
+        {
+            make.width.offset(kSCREEN_WIDTH);
+        }
+        make.bottom.equalTo(self.pickerBackground);
         make.height.offset(HEIGHT_PICKER);
     }];
     
     [self.tbar_picker mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.pickerBackground);
+        make.left.right.equalTo(self.viewPicker);
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.viewPicker.mas_top);
     }];
-    
+
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.tbar_picker).offset(10);
         make.width.offset(self.pickerFont.pointSize*self.cancelBtn.titleLabel.text.length+5*2);
         make.bottom.equalTo(self.tbar_picker).offset(-5);
         make.top.equalTo(self.tbar_picker).offset(5);
     }];
-    
+
     [self.doneBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.width.equalTo(self.cancelBtn);
         make.right.equalTo(self.tbar_picker).offset(-10);
     }];
-    
+
     [self.nameTitle mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.cancelBtn);
         make.left.equalTo(self.cancelBtn.mas_right).offset(5);
@@ -176,12 +185,6 @@
     return pickerCellH;
 }
 
-//返回指定列的宽度
-- (CGFloat) pickerView:(UIPickerView *)pickerView widthForComponent:(NSInteger)component
-{
-    return  pickerCellW;
-}
-
 //自定义指定列的每行的视图，即指定列的每行的视图行为一致
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
@@ -190,11 +193,15 @@
         view = [UIView new];
     }
     PTNormalPickerModel *model = self.viewDataArr[row];
-    UILabel *text = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, pickerCellW, pickerCellH)];
+    UILabel *text = [UILabel new];
     text.font = self.pickerFont;
     text.textAlignment = NSTextAlignmentCenter;
     text.text = model.pickerTitle;
     [view addSubview:text];
+    [text mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.equalTo(view);
+        make.height.offset(pickerCellH);
+    }];
 
     return view;
 }

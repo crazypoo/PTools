@@ -569,7 +569,7 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题" cancelButtonTitle:@"取消" destructiveButtonTitle:@"红色" otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题" cancelButtonTitle:@"取消" destructiveButtonTitle:@"红色" otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
             }];
             [actionSheet show];
         }

@@ -7,10 +7,9 @@
 //
 
 #import "SSZipArchive.h"
-#include "minizip/unzip.h"
-#include "minizip/zip.h"
-#include "minizip/minishared.h"
-
+#include "minizip/mz_compat.h"
+#include "minizip/mz_zip.h"
+#include <zlib.h>
 #include <sys/stat.h>
 
 NSString *const SSZipArchiveErrorDomain = @"SSZipArchiveErrorDomain";
@@ -63,7 +62,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                 // attempting with an arbitrary password to workaround `unzOpenCurrentFile` limitation on AES encrypted files
                 ret = unzOpenCurrentFilePassword(zip, "");
                 unzCloseCurrentFile(zip);
-                if (ret == UNZ_OK || ret == UNZ_BADPASSWORD) {
+                if (ret == UNZ_OK || ret == MZ_PASSWORD_ERROR) {
                     passwordProtected = YES;
                 }
                 break;
@@ -73,7 +72,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
             unzCloseCurrentFile(zip);
             if (ret != UNZ_OK) {
                 break;
-            } else if ((fileInfo.flag & 1) == 1) {
+            } else if ((fileInfo.flag & MZ_ZIP_FLAG_ENCRYPTED) == 1) {
                 passwordProtected = YES;
                 break;
             }
@@ -112,7 +111,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                 ret = unzOpenCurrentFilePassword(zip, [pw cStringUsingEncoding:NSUTF8StringEncoding]);
             }
             if (ret != UNZ_OK) {
-                if (ret != UNZ_BADPASSWORD) {
+                if (ret != MZ_PASSWORD_ERROR) {
                     if (error) {
                         *error = [NSError errorWithDomain:SSZipArchiveErrorDomain
                                                      code:SSZipArchiveErrorCodeFailedOpenFileInZip
@@ -284,7 +283,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     // Begin unzipping
     int ret = 0;
     ret = unzGoToFirstFile(zip);
-    if (ret != UNZ_OK && ret != UNZ_END_OF_LIST_OF_FILE)
+    if (ret != UNZ_OK && ret != MZ_END_OF_LIST)
     {
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"failed to open first file in zip file"};
         NSError *err = [NSError errorWithDomain:SSZipArchiveErrorDomain code:SSZipArchiveErrorCodeFailedOpenFileInZip userInfo:userInfo];
@@ -319,7 +318,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     NSError *unzippingError;
     do {
         currentFileNumber++;
-        if (ret == UNZ_END_OF_LIST_OF_FILE) {
+        if (ret == MZ_END_OF_LIST) {
             break;
         }
         @autoreleasepool {
@@ -410,7 +409,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
             NSError *err = nil;
             NSDictionary *directoryAttr;
             if (preserveAttributes) {
-                NSDate *modDate = [[self class] _dateWithMSDOSFormat:(UInt32)fileInfo.dos_date];
+                NSDate *modDate = [[self class] _dateWithMSDOSFormat:(UInt32)fileInfo.mz_dos_date];
                 directoryAttr = @{NSFileCreationDate: modDate, NSFileModificationDate: modDate};
                 [directoriesModificationDates addObject: @{@"path": fullPath, @"modDate": modDate}];
             }
@@ -486,8 +485,8 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                         } else if (preserveAttributes) {
                             
                             // Set the original datetime property
-                            if (fileInfo.dos_date != 0) {
-                                NSDate *orgDate = [[self class] _dateWithMSDOSFormat:(UInt32)fileInfo.dos_date];
+                            if (fileInfo.mz_dos_date != 0) {
+                                NSDate *orgDate = [[self class] _dateWithMSDOSFormat:(UInt32)fileInfo.mz_dos_date];
                                 NSDictionary *attr = @{NSFileModificationDate: orgDate};
                                 
                                 if (attr) {
@@ -521,12 +520,44 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
                     else
                     {
                         // if we couldn't open file descriptor we can validate global errno to see the reason
-                        if (errno == ENOSPC) {
-                            NSError *enospcError = [NSError errorWithDomain:NSPOSIXErrorDomain
-                                                                       code:ENOSPC
-                                                                   userInfo:nil];
-                            unzippingError = enospcError;
+                        int errnoSave = errno;
+                        BOOL isSeriousError = NO;
+                        switch (errnoSave) {
+                            case EISDIR:
+                                // Is a directory
+                                // assumed case
+                                break;
+                                
+                            case ENOSPC:
+                            case EMFILE:
+                                // No space left on device
+                                //  or
+                                // Too many open files
+                                isSeriousError = YES;
+                                break;
+                                
+                            default:
+                                // ignore case
+                                // Just log the error
+                            {
+                                NSError *errorObject = [NSError errorWithDomain:NSPOSIXErrorDomain
+                                                                           code:errnoSave
+                                                                       userInfo:nil];
+                                NSLog(@"[SSZipArchive] Failed to open file on unzipping.(%@)", errorObject);
+                            }
+                                break;
+                        }
+                        
+                        if (isSeriousError) {
+                            // serious case
+                            unzippingError = [NSError errorWithDomain:NSPOSIXErrorDomain
+                                                                 code:errnoSave
+                                                             userInfo:nil];
                             unzCloseCurrentFile(zip);
+                            // Log the error
+                            NSLog(@"[SSZipArchive] Failed to open file on unzipping.(%@)", unzippingError);
+
+                            // Break unzipping
                             success = NO;
                             break;
                         }
@@ -587,7 +618,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
             }
             
             crc_ret = unzCloseCurrentFile(zip);
-            if (crc_ret == UNZ_CRCERROR) {
+            if (crc_ret == MZ_CRC_ERROR) {
                 // CRC ERROR
                 success = NO;
                 break;
@@ -638,7 +669,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     }
     
     NSError *retErr = nil;
-    if (crc_ret == UNZ_CRCERROR)
+    if (crc_ret == MZ_CRC_ERROR)
     {
         NSDictionary *userInfo = @{NSLocalizedDescriptionKey: @"crc check failed for file"};
         retErr = [NSError errorWithDomain:SSZipArchiveErrorDomain code:SSZipArchiveErrorCodeFileInfoNotLoadable userInfo:userInfo];
@@ -790,7 +821,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     
     [SSZipArchive zipInfo:&zipInfo setAttributesOfItemAtPath:path];
     
-    int error = _zipOpenEntry(_zip, [folderName stringByAppendingString:@"/"], &zipInfo, Z_NO_COMPRESSION, password, 0);
+    int error = _zipOpenEntry(_zip, [folderName stringByAppendingString:@"/"], &zipInfo, Z_NO_COMPRESSION, password, NO);
     const void *buffer = NULL;
     zipWriteInFileInZip(_zip, buffer, 0);
     zipCloseFileInZip(_zip);
@@ -999,7 +1030,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
     tmz_date.tm_mon = (unsigned int)components.month - 1;
     // ISO/IEC 9899 struct tm is 0-indexed for AD 1900 but NSDateComponents for gregorianCalendar is 1-indexed for AD 1
     tmz_date.tm_year = (unsigned int)components.year - 1900;
-    zipInfo->dos_date = tm_to_dosdate(&tmz_date);
+    zipInfo->mz_dos_date = mz_zip_tm_to_dosdate(&tmz_date);
 }
 
 + (NSCalendar *)_gregorian
@@ -1050,7 +1081,9 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo);
 
 int _zipOpenEntry(zipFile entry, NSString *name, const zip_fileinfo *zipfi, int level, NSString *password, BOOL aes)
 {
-    return zipOpenNewFileInZip5(entry, name.fileSystemRepresentation, zipfi, NULL, 0, NULL, 0, NULL, 0, 0, Z_DEFLATED, level, 0, -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY, password.UTF8String, aes, 0);
+    // https://pkware.cachefly.net/webdocs/casestudies/APPNOTE.TXT
+    uint16_t made_on_darwin = 19 << 8;
+    return zipOpenNewFileInZip5(entry, name.fileSystemRepresentation, zipfi, NULL, 0, NULL, 0, NULL, Z_DEFLATED, level, 0, -MAX_WBITS, DEF_MEM_LEVEL, Z_DEFAULT_STRATEGY, password.UTF8String, aes, made_on_darwin, 0, 0);
 }
 
 #pragma mark - Private tools for file info
@@ -1138,6 +1171,9 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
     // Percent-encode file path (where path is defined by https://tools.ietf.org/html/rfc8089)
     // The key part is to allow characters "." and "/" and disallow "%".
     // CharacterSet.urlPathAllowed seems to do the job
+#if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 1090 || __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000 || __WATCH_OS_VERSION_MIN_REQUIRED >= 20000 || __TV_OS_VERSION_MIN_REQUIRED >= 90000)
+    strPath = [strPath stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLPathAllowedCharacterSet];
+#else
     // Testing availability of @available (https://stackoverflow.com/a/46927445/1033581)
 #if __clang_major__ < 9
     // Xcode 8-
@@ -1150,6 +1186,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
     } else {
         strPath = [strPath stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }
+#endif
     
     // `NSString.stringByAddingPercentEncodingWithAllowedCharacters:` may theorically fail: https://stackoverflow.com/questions/33558933/
     // But because we auto-detect encoding using `NSString.stringEncodingForData:encodingOptions:convertedString:usedLossyConversion:`,
@@ -1171,6 +1208,9 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
     strPath = [strPath substringFromIndex:8];
     
     // Remove the percent-encoding
+#if (__MAC_OS_X_VERSION_MIN_REQUIRED >= 1090 || __IPHONE_OS_VERSION_MIN_REQUIRED >= 70000 || __WATCH_OS_VERSION_MIN_REQUIRED >= 20000 || __TV_OS_VERSION_MIN_REQUIRED >= 90000)
+    strPath = strPath.stringByRemovingPercentEncoding;
+#else
     // Testing availability of @available (https://stackoverflow.com/a/46927445/1033581)
 #if __clang_major__ < 9
     // Xcode 8-
@@ -1183,6 +1223,7 @@ BOOL _fileIsSymbolicLink(const unz_file_info *fileInfo)
     } else {
         strPath = [strPath stringByReplacingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
     }
+#endif
     
     return strPath;
 }

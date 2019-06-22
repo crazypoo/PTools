@@ -65,7 +65,91 @@
     return isTabBackgroundView;
 }
 
+- (UIImageView *)cyl_tabImageView {
+    for (UIImageView *subview in self.cyl_allSubviews) {
+        if ([subview cyl_isTabImageView]) {
+            return (UIImageView *)subview;
+        }
+    }
+    return nil;
+}
+
+- (NSArray *)cyl_allSubviews {
+    __block NSArray* allSubviews = [NSArray arrayWithObject:self];
+    [self.subviews enumerateObjectsUsingBlock:^(UIView* view, NSUInteger idx, BOOL*stop) {
+        allSubviews = [allSubviews arrayByAddingObjectsFromArray:[view cyl_allSubviews]];
+    }];
+    return allSubviews;
+}
+
+- (UIView *)cyl_tabBadgeView {
+    for (UIView *subview in self.cyl_allSubviews) {
+        if ([subview cyl_isTabBadgeView]) {
+            return (UIView *)subview;
+        }
+    }
+    return nil;
+}
+
+- (UILabel *)cyl_tabLabel {
+    for (UILabel *subview in self.cyl_allSubviews) {
+        if ([subview cyl_isTabLabel]) {
+            return (UILabel *)subview;
+        }
+    }
+    return nil;
+}
+
+//UIVisualEffectView
+- (BOOL)cyl_isTabEffectView {
+    BOOL isClass = [self isMemberOfClass:[UIVisualEffectView class]];
+    return isClass;
+}
+
+//_UIVisualEffectContentView
+- (BOOL)cyl_isTabEffectContentView {
+    BOOL isKindOfClass = [self isKindOfClass:[UIView class]];
+    BOOL isClass = [self isMemberOfClass:[UIView class]];
+    BOOL isKind = isKindOfClass && !isClass;
+    if (!isKind) {
+        return NO;
+    }
+    NSString *tabBackgroundViewString = [NSString stringWithFormat:@"%@IVisualE%@", @"_U" , @"ffectC"];
+    BOOL isTabBackgroundView = [self cyl_classStringHasPrefix:tabBackgroundViewString] && [self cyl_classStringHasSuffix:@"entView"];
+    return isTabBackgroundView;
+}
+
+//UIVisualEffectView
+- (UIVisualEffectView *)cyl_tabEffectView {
+    for (UIView *subview in self.subviews) {
+        if ([subview cyl_isTabEffectView]) {
+            return (UIVisualEffectView *)subview;
+        }
+    }
+    return nil;
+}
+
 - (UIView *)cyl_tabBadgeBackgroundView {
+    return [self cyl_tabBackgroundView];
+}
+
+- (UIImageView *)cyl_tabShadowImageView {
+    UIView *subview = [self cyl_tabBackgroundView];
+    if (!subview) {
+        return nil;
+    }
+    NSArray<__kindof UIView *> *backgroundSubviews = subview.subviews;
+    if (backgroundSubviews.count > 1) {
+        for (UIView *subview in backgroundSubviews) {
+            if (CGRectGetHeight(subview.bounds) <= 1.0 ) {
+                return (UIImageView *)subview;
+            }
+        }
+    }
+    return nil;
+}
+
+- (UIView *)cyl_tabBackgroundView {
     for (UIImageView *subview in self.subviews) {
         if ([subview cyl_isTabBackgroundView]) {
             return (UIImageView *)subview;
@@ -87,19 +171,7 @@
 }
 
 - (UIView *)cyl_tabBadgeBackgroundSeparator {
-    UIView *subview = [self cyl_tabBadgeBackgroundView];
-    if (!subview) {
-        return nil;
-    }
-    NSArray<__kindof UIView *> *backgroundSubviews = subview.subviews;
-    if (backgroundSubviews.count > 1) {
-        for (UIView *tabBadgeBackgroundSeparator in backgroundSubviews) {
-            if (CGRectGetHeight(tabBadgeBackgroundSeparator.bounds) <= 1.0 ) {
-                return tabBadgeBackgroundSeparator;
-            }
-        }
-    }
-    return nil;
+    return [self cyl_tabShadowImageView];
 }
 
 - (BOOL)cyl_isKindOfClass:(Class)class {

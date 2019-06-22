@@ -18,7 +18,6 @@
 #else
 #endif
 
-
 @implementation CYLTabBar (CYLTabBarControllerExtention)
 
 - (BOOL)cyl_hasPlusChildViewController {
@@ -132,15 +131,18 @@
 
 - (UIControl *)cyl_tabBarButtonWithTabIndex:(NSUInteger)tabIndex {
     UIControl *selectedControl = [self cyl_visibleControlWithIndex:tabIndex];
+    
     NSInteger plusViewControllerIndex = [self.cyl_tabBarController.viewControllers indexOfObject:CYLPlusChildViewController];
-    BOOL isPlusButton = selectedControl.cyl_isPlusButton;
-    BOOL shouldSelect = (plusViewControllerIndex <= self.cyl_tabBarController.viewControllers.count) && isPlusButton;
-    if (!shouldSelect) {
-        @try {
-            selectedControl = [self cyl_subTabBarButtonsWithoutPlusButton][tabIndex];
-        } @catch (NSException *exception) {
-            NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
-        }
+    BOOL isPlusViewControllerAdded =  CYLPlusChildViewController.cyl_plusViewControllerEverAdded && (plusViewControllerIndex != NSNotFound);
+    
+    if (isPlusViewControllerAdded) {
+        return selectedControl;
+    }
+    
+    @try {
+        selectedControl = [self cyl_subTabBarButtonsWithoutPlusButton][tabIndex];
+    } @catch (NSException *exception) {
+        NSLog(@"🔴类名与方法名：%@（在第%@行），描述：%@", @(__PRETTY_FUNCTION__), @(__LINE__), exception.reason);
     }
     return selectedControl;
 }
@@ -155,10 +157,10 @@
     }
     return selectedControl;
 }
-
 - (void)cyl_animationLottieImageWithSelectedControl:(UIControl *)selectedControl
                                           lottieURL:(NSURL *)lottieURL
-                                               size:(CGSize)size {
+                                               size:(CGSize)size
+                                    defaultSelected:(BOOL)defaultSelected {
 #if __has_include(<Lottie/Lottie.h>)
     [selectedControl cyl_addLottieImageWithLottieURL:lottieURL size:size];
     [self cyl_stopAnimationOfAllLottieView];
@@ -167,6 +169,11 @@
         [selectedControl cyl_addLottieImageWithLottieURL:lottieURL size:size];
     }
     if (lottieView && [lottieView isKindOfClass:[LOTAnimationView class]]) {
+        if (defaultSelected) {
+            lottieView.animationProgress = 1;
+            [lottieView forceDrawingUpdate];
+            return;
+        }
         lottieView.animationProgress = 0;
         [lottieView play];
     }

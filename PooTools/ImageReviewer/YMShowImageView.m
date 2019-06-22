@@ -1561,7 +1561,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 
                 self.player = [[AVPlayerViewController alloc] init];
                 self.player.player = [AVPlayer playerWithURL:videoUrl];
-                self.player.showsPlaybackControls = YES;
+                self.player.showsPlaybackControls = NO;
                 [_scrollview addSubview:self.player.view];
                 [self.player.view mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.left.right.equalTo(self);

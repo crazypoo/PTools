@@ -12,18 +12,22 @@ ZipArchive is a simple utility class for zipping and unzipping files on iOS, mac
 - Create password protected zip files;
 - Create AES encrypted zip files;
 - Choose compression level;
-- Append to existing zip files;
 - Zip-up NSData instances. (with a filename)
 
 ## Installation and Setup
 
 *The main release branch is configured to support Objective-C and Swift 3+.*
 
-SSZipArchive works on Xcode 7-10 and above, iOS 8-12 and above.
+SSZipArchive works on Xcode 7-10 and above, iOS 8-12 and above, tvOS 9 and above, macOS 10.8-10.14 and above, watchOS 2 and above.
 
 ### CocoaPods
 In your Podfile:  
 `pod 'SSZipArchive'`
+
+You should define your minimum deployment target explicitly, like:
+`platform :ios, '8.0'`
+
+CocoaPods version should be at least CocoaPods 1.6.0.
 
 ### Carthage
 In your Cartfile:  
@@ -32,7 +36,9 @@ In your Cartfile:
 ### Manual
 
 1. Add the `SSZipArchive` and `minizip` folders to your project.
-2. Add the `libz` library to your target
+2. Add the `libz` and `libiconv` libraries to your target.
+3. Add the `Security` framework to your target.
+4. Add the following GCC_PREPROCESSOR_DEFINITIONS: `HAVE_INTTYPES_H HAVE_PKCRYPT HAVE_STDINT_H HAVE_WZAES HAVE_ZLIB MZ_ZIP_NO_SIGNING $(inherited)`.
 
 SSZipArchive requires ARC.
 
@@ -68,3 +74,5 @@ SSZipArchive is protected under the [MIT license](https://github.com/samsoffes/s
 * Thank you [@soffes](https://github.com/soffes) for the actual name of SSZipArchive.
 * Thank you [@randomsequence](https://github.com/randomsequence) for implementing the creation support tech.
 * Thank you [@johnezang](https://github.com/johnezang) for all his amazing help along the way.
+* Thank you [@nmoinvaz](https://github.com/nmoinvaz) for minizip, the core of ZipArchive.
+* Thank you to [all the contributors](https://github.com/ZipArchive/ZipArchive/graphs/contributors).

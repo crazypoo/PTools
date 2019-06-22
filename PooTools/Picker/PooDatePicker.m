@@ -327,14 +327,24 @@
         make.left.right.top.bottom.equalTo(self);
     }];
     
+    UIDevice *device = [UIDevice currentDevice];
+
     [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
+        make.centerX.equalTo(self.pickerBackground);
+        if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+        {
+            make.width.offset(kSCREEN_HEIGHT);
+        }
+        else
+        {
+            make.width.offset(kSCREEN_WIDTH);
+        }
+        make.bottom.equalTo(self.pickerBackground);
         make.height.offset(HEIGHT_PICKER);
-        make.bottom.equalTo(self);
     }];
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
+        make.left.right.equalTo(_pickerView);
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];
@@ -754,14 +764,23 @@
         make.left.right.top.bottom.equalTo(self);
     }];
     
+    UIDevice *device = [UIDevice currentDevice];
     [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
+        make.centerX.equalTo(self.pickerBackground);
+        if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+        {
+            make.width.offset(kSCREEN_HEIGHT);
+        }
+        else
+        {
+            make.width.offset(kSCREEN_WIDTH);
+        }
+        make.bottom.equalTo(self.pickerBackground);
         make.height.offset(HEIGHT_PICKER);
-        make.bottom.equalTo(self);
     }];
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
+        make.left.right.equalTo(_pickerView);
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];

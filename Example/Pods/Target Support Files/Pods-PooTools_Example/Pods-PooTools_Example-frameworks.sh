@@ -187,6 +187,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework"
+  install_framework "${PODS_ROOT}/WoodPeckeriOS/WoodPeckeriOS.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/pop/pop.framework"
 fi
@@ -217,6 +218,7 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework"
+  install_framework "${PODS_ROOT}/WoodPeckeriOS/WoodPeckeriOS.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/pop/pop.framework"
 fi

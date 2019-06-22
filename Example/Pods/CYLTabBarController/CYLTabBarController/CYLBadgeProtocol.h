@@ -21,8 +21,7 @@
 #define CYLBadgeScaleAnimationKey       @"scale"
 #define CYLBadgeBounceAnimationKey      @"bounce"
 
-typedef NS_ENUM(NSUInteger, CYLBadgeStyle)
-{
+typedef NS_ENUM(NSUInteger, CYLBadgeStyle) {
     CYLBadgeStyleRedDot = 1,          /* red dot style */
     CYLBadgeStyleNumber,              /* badge with number */
     CYLBadgeStyleNew,                  /* badge with a fixed text "new" */
@@ -65,7 +64,9 @@ typedef NS_ENUM(NSUInteger, CYLBadgeAnimationType) {
 
 @property (nonatomic, assign, getter=cyl_badgeRadius, setter=cyl_setBadgeRadius:) CGFloat cyl_badgeRadius;
 
-@property (nonatomic, assign, getter=cyl_badgeMargin, setter=cyl_setBadgeMargin:) CGFloat cyl_badgeMargin; /**< // nomal use for red dot style of badge */
+@property (nonatomic, assign, getter=cyl_badgeMargin, setter=cyl_setBadgeMargin:) CGFloat cyl_badgeMargin; /**< // normal use for text and number style of badge */
+
+@property (nonatomic, assign, getter=cyl_badgeCornerRadius, setter=cyl_setBadgeCornerRadius:) CGFloat cyl_badgeCornerRadius;
 
 - (BOOL)cyl_isShowBadge;
 
@@ -77,7 +78,7 @@ typedef NS_ENUM(NSUInteger, CYLBadgeAnimationType) {
 /**
  *
  *  @param value String value, default is `nil`. if value equal @"" means red dot style.
- *  @param animationType
+ *  @param animationType  animationType
  *  @attention
  - 调用该方法前已经添加了系统的角标，调用该方法后，系统的角标并未被移除，只是被隐藏，调用 `-cyl_removeTabBadgePoint` 后会重新展示。
  - 不支持 CYLPlusChildViewController 对应的 TabBarItem 角标设置，调用会被忽略。

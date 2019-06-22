@@ -35,6 +35,7 @@
 #import "NSString+Encryption.h"
 #import "NSString+Extension.h"
 #import "NSString+MoneyString.h"
+#import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 #import "NSString+WPAttributedMarkup.h"
 #import "NSURLResponse+Help.h"

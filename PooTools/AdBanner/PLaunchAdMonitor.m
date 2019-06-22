@@ -212,7 +212,7 @@ static PLaunchAdMonitor *monitor = nil;
                     make.top.left.right.equalTo(v);
                     make.bottom.equalTo(v).offset(-bottomViewHeight);
                 }];
-                imageBtn.imageView.contentMode = UIViewContentModeScaleToFill;
+                imageBtn.imageView.contentMode = UIViewContentModeScaleAspectFit;
                 [imageBtn setAdjustsImageWhenHighlighted:NO];
             }
                 break;

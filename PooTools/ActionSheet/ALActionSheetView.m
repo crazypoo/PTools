@@ -77,34 +77,23 @@
         _otherButtonTitles = otherButtonTitles;
         _selectRowBlock = block;
         self.btnFontName = bfName ? bfName : kDevLikeFont;
-        [self loadView];
+        [self createView];
     }
     
     return self;
 }
 
--(void)loadView
+-(void)createView
 {
     [kAppDelegateWindow addSubview:self];
     
     _backView = [UIView new];
     _backView.backgroundColor = kDevMaskBackgroundColor;
     [self addSubview:_backView];
-    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
-    }];
 
     self.actionSheetView = [UIView new];
     self.actionSheetView.backgroundColor = kRGBAColor(230, 230, 230, 1);
     [self addSubview:self.actionSheetView];
-    [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self);
-        make.top.offset(kSCREEN_HEIGHT-self.actionSheetHeight-HEIGHT_TABBAR_SAFEAREA);
-        make.height.offset(self.actionSheetHeight);
-    }];
-
-    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
     
     self.actionSheetScroll = [UIScrollView new];
     [self.actionSheetView addSubview:self.actionSheetScroll];
@@ -119,16 +108,79 @@
         self.titleLabel.numberOfLines = 0;
         self.titleLabel.text = _title;
         [self.actionSheetView addSubview:self.titleLabel];
+    }
+    
+    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
+    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
+
+    if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
+    {
+        self.destructiveButton = [UIButton new];
+        self.destructiveButton.tag = [_otherButtonTitles count] ?: 0;
+        self.destructiveButton.backgroundColor = [UIColor whiteColor];
+        self.destructiveButton.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
+        [self.destructiveButton setTitleColor:kRGBAColor(255, 10, 10, 1) forState:UIControlStateNormal];
+        [self.destructiveButton setTitle:_destructiveButtonTitle forState:UIControlStateNormal];
+        [self.destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
+        [self.destructiveButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
+        [self.destructiveButton addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionSheetView addSubview:self.destructiveButton];
+    }
+    
+    self.separatorView = [UIView new];
+    self.separatorView.backgroundColor = kRGBAColor(238, 238, 238, 1);
+    [self.actionSheetView addSubview:self.separatorView];
+
+    self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    self.cancelBtn.tag = kCancelBtnTag;
+    self.cancelBtn.backgroundColor = [UIColor whiteColor];
+    self.cancelBtn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
+    [self.cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.cancelBtn setTitle:_cancelButtonTitle ?: @"取消" forState:UIControlStateNormal];
+    [self.cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
+    [self.cancelBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
+    [self.cancelBtn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
+    [self.actionSheetView addSubview:self.cancelBtn];
+
+}
+
+-(void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    
+    [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+    }];
+
+    UIDevice *device = [UIDevice currentDevice];
+
+    [self.actionSheetView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.backView);
+        if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+        {
+            make.width.offset(kSCREEN_HEIGHT);
+        }
+        else
+        {
+            make.width.offset(kSCREEN_WIDTH);
+        }
+        make.bottom.equalTo(self.backView);
+        make.height.offset([self actionSheetHeight:device.orientation]);
+    }];
+
+    if (_title && _title.length>0)
+    {
         [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.left.right.equalTo(self.actionSheetView);
             make.height.offset([self titleHeight]);
         }];
-        
+
         if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
+                make.height.offset([self scrollH:device.orientation]);
                 make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight-kRowLineHeight);
             }];
         }
@@ -136,7 +188,7 @@
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
+                make.height.offset([self scrollH:device.orientation]);
                 make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight-kRowLineHeight);
             }];
         }
@@ -147,7 +199,7 @@
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
+                make.height.offset([self scrollH:device.orientation]);
                 make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight*2)-kSeparatorHeight-kRowLineHeight);
             }];
         }
@@ -155,13 +207,22 @@
         {
             [self.actionSheetScroll mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.right.equalTo(self.actionSheetView);
-                make.height.offset([self scrollH]);
+                make.height.offset([self scrollH:device.orientation]);
                 make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight-kRowLineHeight);
             }];
         }
     }
-    
-    self.actionSheetScroll.contentSize = CGSizeMake(kSCREEN_WIDTH, [self scrollContentH]);
+
+    CGFloat contentW;
+    if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+    {
+        contentW = kSCREEN_HEIGHT;
+    }
+    else
+    {
+        contentW = kSCREEN_WIDTH;
+    }
+    self.actionSheetScroll.contentSize = CGSizeMake(contentW, [self scrollContentH]);
     self.actionSheetScroll.showsVerticalScrollIndicator = NO;
     if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
     {
@@ -171,7 +232,10 @@
     {
         self.actionSheetScroll.scrollEnabled = NO;
     }
-    
+
+    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
+    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
+
     if ([_otherButtonTitles count] > 0)
     {
         for (int i = 0; i < _otherButtonTitles.count; i++)
@@ -187,51 +251,36 @@
             [btn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
             [self.actionSheetScroll addSubview:btn];
             [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.equalTo(self);
+                make.centerX.equalTo(self.actionSheetScroll);
+                if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+                {
+                    make.width.offset(kSCREEN_HEIGHT);
+                }
+                else
+                {
+                    make.width.offset(kSCREEN_WIDTH);
+                }
                 make.top.offset(kRowHeight*i+kRowLineHeight*i);
                 make.height.offset(kRowHeight);
             }];
         }
     }
-    
+
     if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
     {
-        self.destructiveButton = [UIButton new];
-        self.destructiveButton.tag = [_otherButtonTitles count] ?: 0;
-        self.destructiveButton.backgroundColor = [UIColor whiteColor];
-        self.destructiveButton.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-        [self.destructiveButton setTitleColor:kRGBAColor(255, 10, 10, 1) forState:UIControlStateNormal];
-        [self.destructiveButton setTitle:_destructiveButtonTitle forState:UIControlStateNormal];
-        [self.destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
-        [self.destructiveButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-        [self.destructiveButton addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionSheetView addSubview:self.destructiveButton];
         [self.destructiveButton mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.actionSheetView);
             make.bottom.equalTo(self.actionSheetView).offset(-kRowHeight-kSeparatorHeight);
             make.height.offset(kRowHeight);
         }];
     }
- 
-    self.separatorView = [UIView new];
-    self.separatorView.backgroundColor = kRGBAColor(238, 238, 238, 1);
-    [self.actionSheetView addSubview:self.separatorView];
+
     [self.separatorView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.actionSheetView);
         make.bottom.equalTo(self.actionSheetView).offset(-(kRowHeight));
         make.height.offset(kSeparatorHeight);
     }];
-    
-    self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.cancelBtn.tag = kCancelBtnTag;
-    self.cancelBtn.backgroundColor = [UIColor whiteColor];
-    self.cancelBtn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-    [self.cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [self.cancelBtn setTitle:_cancelButtonTitle ?: @"取消" forState:UIControlStateNormal];
-    [self.cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
-    [self.cancelBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
-    [self.cancelBtn addTarget:self action:@selector(didSelectAction:) forControlEvents:UIControlEventTouchUpInside];
-    [self.actionSheetView addSubview:self.cancelBtn];
+
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.actionSheetView);
         make.height.offset(kRowHeight);
@@ -265,12 +314,23 @@
     return [self scrollContentH] + ([self titleHeight] + kRowLineHeight) +(kSeparatorHeight + kRowHeight) + [self destRowH] + [self destLineH]+kRowLineHeight;
 }
 
--(CGFloat)actionSheetHeight
+-(CGFloat)actionSheetHeight:(UIDeviceOrientation)orientation
 {
     CGFloat realH = [self actionSheetRealHeight];
+    
+    CGFloat viewH;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
+    {
+        viewH = kSCREEN_HEIGHT;
+    }
+    else
+    {
+        viewH = kSCREEN_HEIGHT;
+    }
+    
     if ([self actionSheetRealHeight] >= kSCREEN_HEIGHT)
     {
-        return kSCREEN_HEIGHT-kScreenStatusBottom-HEIGHT_TABBAR_SAFEAREA;
+        return viewH-kScreenStatusBottom-HEIGHT_TABBAR_SAFEAREA;
     }
     else
     {
@@ -284,12 +344,20 @@
     return realH;
 }
 
--(CGFloat)scrollH
+-(CGFloat)scrollH:(UIDeviceOrientation)orientation
 {
-    int a = [self actionSheetHeight];
-    int b = kSCREEN_HEIGHT;
+    int a = [self actionSheetHeight:orientation];
+    int b ;
+    if (orientation == UIDeviceOrientationLandscapeLeft || orientation == UIDeviceOrientationLandscapeRight)
+    {
+        b = kSCREEN_HEIGHT;
+    }
+    else
+    {
+        b = kSCREEN_HEIGHT;
+    }
     if (a - b <= 0) {
-        return [self actionSheetHeight] - ([self titleHeight] + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - ([self destRowH] + [self destLineH]);
+        return [self actionSheetHeight:orientation] - ([self titleHeight] + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - ([self destRowH] + [self destLineH]);
     }
     else
     {
