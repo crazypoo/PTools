@@ -165,7 +165,7 @@
         {
             make.width.offset(kSCREEN_WIDTH);
         }
-        make.bottom.equalTo(self.backView);
+        make.bottom.equalTo(self.backView).offset(-HEIGHT_TABBAR_SAFEAREA);
         make.height.offset([self actionSheetHeight:device.orientation]);
     }];
 
