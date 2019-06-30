@@ -12,6 +12,7 @@
 #import <Masonry/Masonry.h>
 #import "Utils.h"
 #import <pop/POP.h>
+#import "UIView+ViewRectCorner.h"
 
 #pragma mark ------> DatePicker
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
@@ -329,7 +330,7 @@
     
     UIDevice *device = [UIDevice currentDevice];
 
-    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.pickerBackground);
         if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
         {
@@ -344,11 +345,17 @@
     }];
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(_pickerView);
+        make.left.right.equalTo(self.pickerView);
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];
 
+    if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+    {
+        self.topV.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
+        self.pickerView.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+    }
+    
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topV).offset(10);
         make.bottom.equalTo(self.topV).offset(-5);
@@ -672,13 +679,11 @@
             {
                 return;
             }
-            UIView *pickerViewCom0 = (UIView *)[weakself.pickerView viewForRow:weakself.hourIndex forComponent:0];
-            UILabel *pickerLabel0 = (UILabel *)[pickerViewCom0 subviews].lastObject;
+            UILabel *pickerViewCom0 = (UILabel *)[weakself.pickerView viewForRow:weakself.hourIndex forComponent:0];
             
-            UIView *pickerViewCom1 = (UIView *)[weakself.pickerView viewForRow:weakself.minuteIndex forComponent:1];
-            UILabel *pickerLabel1 = (UILabel *)[pickerViewCom1 subviews].lastObject;
+            UILabel *pickerViewCom1 = (UILabel *)[weakself.pickerView viewForRow:weakself.minuteIndex forComponent:1];
             
-            NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerLabel0.text, pickerLabel1.text];
+            NSString *timeStr = [NSString stringWithFormat:@"%@:%@",pickerViewCom0.text, pickerViewCom1.text];
             
             if (weakself.block)
             {
@@ -698,11 +703,7 @@
         _pickerView.delegate = self;
         _pickerView.backgroundColor = [UIColor whiteColor];
         [self.pickerBackground addSubview:_pickerView];
-        [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self);
-            make.height.offset(HEIGHT_PICKER);
-            make.bottom.equalTo(self);
-        }];
+  
     }
     return self;
 }
@@ -753,7 +754,6 @@
     animation.springBounciness = 1.0f;
     [self.pickerView.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
     [self.topV.layer pop_addAnimation:animation forKey:@"PickerAnimation"];
-
 }
 
 -(void)layoutSubviews
@@ -765,7 +765,7 @@
     }];
     
     UIDevice *device = [UIDevice currentDevice];
-    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.pickerBackground);
         if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
         {
@@ -780,10 +780,16 @@
     }];
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(_pickerView);
+        make.left.right.equalTo(self.pickerView);
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];
+    
+    if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+    {
+        self.topV.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
+        self.pickerView.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+    }
     
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.topV).offset(10);
@@ -833,12 +839,7 @@
 // 自定义指定列的每行的视图，即指定列的每行的视图行为一致
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
-    if (!view)
-    {
-        view = [[UIView alloc]init];
-    }
-    
-    UILabel *text = [UILabel new];
+    UILabel *text = [[UILabel alloc] init];
     text.textColor = [UIColor blackColor];
     text.textAlignment = NSTextAlignmentCenter;
     text.font = self.pickerFonts;
@@ -858,12 +859,7 @@
         default:
             break;
     }
-    [view addSubview:text];
-    [text mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.height.equalTo(view);
-    }];
-    
-    return view;
+    return text;
 }
 
 -(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -872,19 +868,17 @@
         case 0:
         {
             self.hourIndex = row;
-            UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
-            UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
-            pickerLabel.textColor = [UIColor blackColor];
-            pickerLabel.font = self.pickerFonts;
+            UILabel *pickerViews = (UILabel *)[pickerView viewForRow:row forComponent:component];
+            pickerViews.textColor = [UIColor blackColor];
+            pickerViews.font = self.pickerFonts;
         }
             break;
         case 1:
         {
             self.minuteIndex = row;
-            UIView *pickerViews = (UIView *)[pickerView viewForRow:row forComponent:component];
-            UILabel *pickerLabel = (UILabel *)[pickerViews subviews].lastObject;
-            pickerLabel.textColor = [UIColor blackColor];
-            pickerLabel.font = self.pickerFonts;
+            UILabel *pickerViews = (UILabel *)[pickerView viewForRow:row forComponent:component];
+            pickerViews.textColor = [UIColor blackColor];
+            pickerViews.font = self.pickerFonts;
         }
             break;
         default:

@@ -168,6 +168,11 @@
         make.bottom.equalTo(self.backView).offset(-HEIGHT_TABBAR_SAFEAREA);
         make.height.offset([self actionSheetHeight:device.orientation]);
     }];
+    
+    if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+    {
+        kViewBorderRadius(self.actionSheetView, 5, 0, kClearColor);
+    }
 
     if (_title && _title.length>0)
     {

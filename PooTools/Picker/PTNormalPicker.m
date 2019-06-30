@@ -11,6 +11,7 @@
 #import "PMacros.h"
 #import "Utils.h"
 #import <pop/POP.h>
+#import "UIView+ViewRectCorner.h"
 
 #define pickerCellH 30.0f
 
@@ -130,6 +131,12 @@
         make.height.offset(HEIGHT_BUTTON);
         make.bottom.equalTo(self.viewPicker.mas_top);
     }];
+    
+    if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
+    {
+        self.tbar_picker.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
+        self.viewPicker.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+    }
 
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.tbar_picker).offset(10);
