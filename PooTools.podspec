@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.11.33'
+    s.version     = '1.11.34'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -43,7 +43,7 @@ Pod::Spec.new do |s|
     s.dependency 'TextFieldEffects'
     s.dependency 'pop'
     s.dependency 'UITextField+Shake'
-    s.dependency 'UINavigation-SXFixSpace'
+    #s.dependency 'UINavigation-SXFixSpace'
     s.dependency 'MJExtension'
     s.dependency 'SSZipArchive'
     s.dependency 'GCDWebServer'

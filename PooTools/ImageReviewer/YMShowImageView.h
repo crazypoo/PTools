@@ -101,18 +101,21 @@ typedef enum {
  */
 //@property (nonatomic, strong) MPMoviePlayerController *player;
 @property (nonatomic, strong) AVPlayerViewController *player;
-///*! @brief 单个浏览图片的媒体播放器播放按钮
-// */
-//@property (nonatomic,strong) UIButton *playBtn;
-///*! @brief 单个浏览图片的媒体播放器停止播放按钮
-// */
-//@property (nonatomic,strong) UIButton *stopBtn;
+/*! @brief 是否播放过视频
+ */
+@property (nonatomic, assign) BOOL playedVideo;
+/*! @brief 单个浏览图片的媒体播放器播放按钮
+ */
+@property (nonatomic,strong) UIButton *playBtn;
+/*! @brief 单个浏览图片的媒体播放器停止播放按钮
+ */
+@property (nonatomic,strong) UIButton *stopBtn;
 /*! @brief 单个浏览图片的媒体播放器第一秒画面
  */
 @property (nonatomic,strong) UIImageView *video1STImage;
-///*! @brief 单个浏览图片的媒体播放器的进度条
-// */
-//@property (nonatomic, strong) UISlider *videoSlider;
+/*! @brief 单个浏览图片的媒体播放器的进度条
+ */
+@property (nonatomic, strong) UISlider *videoSlider;
 /*! @brief 单个浏览图片的panoramaNode
  */
 @property (nonatomic, strong) SCNNode *panoramaNode;
