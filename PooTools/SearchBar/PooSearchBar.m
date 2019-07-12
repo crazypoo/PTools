@@ -17,7 +17,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         // Initialization code
-        self.tintColor = [UIColor whiteColor];
+//        self.tintColor = [UIColor whiteColor];
     }
     return self;
 }
@@ -34,7 +34,7 @@
     UIImage *searchBarImageSelect = self.searchBarImage ? self.searchBarImage : [Utils createImageWithColor:kClearColor];
     UIColor *searchFieldCursorColor = self.cursorColor ? self.cursorColor : [UIColor lightGrayColor];
     UIColor *searchFieldPlaceHolderColor = self.searchPlaceholderColor ? self.searchPlaceholderColor : kRandomColor;
-    UIColor *searchFieldColor = self.searchTextColor ? self.searchTextColor :kRandomColor;
+    UIColor *searchFieldColor = self.searchTextColor ? self.searchTextColor : kRandomColor;
     UIColor *searchBarOutSideViewColor = self.searchBarOutViewColor ? self.searchBarOutViewColor : kRandomColor;
     UIColor *searchTextFieldBackgroundColors = self.searchTextFieldBackgroundColor ? self.searchTextFieldBackgroundColor :kRandomColor;
     
@@ -69,7 +69,7 @@
                 }
             }
         }
-        
+
         if(searchField)
         {
             searchField.placeholder = placeholderStr;
@@ -81,8 +81,8 @@
             searchField.layer.borderColor = searchBarTextFieldBorderColorSelect.CGColor;
             searchField.layer.borderWidth = searchBarFieldBorderWidth;
             searchField.layer.cornerRadius = searchBarFieldCornerRadius;
-            
-            
+
+
             if ([UIImagePNGRepresentation(searchBarImageSelect) isEqual:UIImagePNGRepresentation([Utils createImageWithColor:kClearColor])])
             {
                 searchField.leftView = nil;
@@ -93,14 +93,13 @@
                 [iView setFrame:CGRectMake(0.0, 0.0, 16.0, 16.0)];
                 searchField.leftView = iView;
             }
-            
+
             [[[self.subviews objectAtIndex:0].subviews objectAtIndex:1] setTintColor:searchFieldCursorColor];
         }
-        
+
         UIView *outView = [[UIView alloc] initWithFrame:self.bounds];
         [outView setBackgroundColor:searchBarOutSideViewColor];
         [self insertSubview:outView atIndex:1];
-
     }
 }
 

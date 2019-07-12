@@ -367,7 +367,7 @@ CGFloat const tagItemSpace = 5;
             searchBar.searchTextColor = [UIColor brownColor];
             //    searchBar.searchBarImage = kImageNamed(@"Search");
             searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
-            searchBar.searchBarOutViewColor = kClearColor;
+            searchBar.searchBarOutViewColor = kRandomColor;
             searchBar.searchBarTextFieldCornerRadius = 15;
             searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
