@@ -33,24 +33,24 @@
     UIColor *searchBarTextFieldBorderColorSelect = self.searchBarTextFieldBorderColor ? self.searchBarTextFieldBorderColor : kRandomColor;
     UIImage *searchBarImageSelect = self.searchBarImage ? self.searchBarImage : [Utils createImageWithColor:kClearColor];
     UIColor *searchFieldCursorColor = self.cursorColor ? self.cursorColor : [UIColor lightGrayColor];
-    UIColor *searchPlaceHolderColor = self.searchPlaceholderColor ? self.searchPlaceholderColor : kRandomColor;
-    UIColor *searchTextColor = self.searchTextColor ? self.searchTextColor :kRandomColor;
-    UIColor *searchBarOutViewColor = self.searchBarOutViewColor ? self.searchBarOutViewColor : kRandomColor;
-    UIColor *searchTextFieldBackgroundColor = self.searchTextFieldBackgroundColor ? self.searchTextFieldBackgroundColor :kRandomColor;
+    UIColor *searchFieldPlaceHolderColor = self.searchPlaceholderColor ? self.searchPlaceholderColor : kRandomColor;
+    UIColor *searchFieldColor = self.searchTextColor ? self.searchTextColor :kRandomColor;
+    UIColor *searchBarOutSideViewColor = self.searchBarOutViewColor ? self.searchBarOutViewColor : kRandomColor;
+    UIColor *searchTextFieldBackgroundColors = self.searchTextFieldBackgroundColor ? self.searchTextFieldBackgroundColor :kRandomColor;
     
-    CGFloat searchBarTextFieldCornerRadius = self.searchBarTextFieldCornerRadius ? self.searchBarTextFieldCornerRadius : 5;
-    CGFloat searchBarTextFieldBorderWidth = self.searchBarTextFieldBorderWidth ? self.searchBarTextFieldBorderWidth : 0.5;
+    CGFloat searchBarFieldCornerRadius = self.searchBarTextFieldCornerRadius ? self.searchBarTextFieldCornerRadius : 5;
+    CGFloat searchBarFieldBorderWidth = self.searchBarTextFieldBorderWidth ? self.searchBarTextFieldBorderWidth : 0.5;
 
     if (@available(iOS 13.0, *))
     {
-        [self.searchTextField setBackgroundColor:searchTextFieldBackgroundColor];
+        [self.searchTextField setBackgroundColor:searchTextFieldBackgroundColors];
         [self.searchTextField setTintColor:searchFieldCursorColor];
-        self.searchTextField.textColor = searchTextColor;
+        self.searchTextField.textColor = searchFieldColor;
         self.searchTextField.font = searchFieldFont;
-        self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchPlaceHolderColor}];
-        self.backgroundImage = [Utils createImageWithColor:searchBarOutViewColor];
+        self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchFieldPlaceHolderColor}];
+        self.backgroundImage = [Utils createImageWithColor:searchBarOutSideViewColor];
         [self setImage:searchBarImageSelect forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
-        kViewBorderRadius(self.searchTextField, searchBarTextFieldCornerRadius, searchBarTextFieldBorderWidth, searchBarTextFieldBorderColorSelect);
+        kViewBorderRadius(self.searchTextField, searchBarFieldCornerRadius, searchBarFieldBorderWidth, searchBarTextFieldBorderColorSelect);
     }
     else
     {
@@ -74,13 +74,13 @@
         {
             searchField.placeholder = placeholderStr;
             [searchField setBorderStyle:UITextBorderStyleRoundedRect];
-            [searchField setBackgroundColor:searchTextFieldBackgroundColor];
-            searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchPlaceHolderColor}];
-            [searchField setTextColor:searchTextColor];
+            [searchField setBackgroundColor:searchTextFieldBackgroundColors];
+            searchField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchFieldPlaceHolderColor}];
+            [searchField setTextColor:searchFieldColor];
             [searchField setFont:searchFieldFont];
             searchField.layer.borderColor = searchBarTextFieldBorderColorSelect.CGColor;
-            searchField.layer.borderWidth = searchBarTextFieldBorderWidth;
-            searchField.layer.cornerRadius = searchBarTextFieldCornerRadius;
+            searchField.layer.borderWidth = searchBarFieldBorderWidth;
+            searchField.layer.cornerRadius = searchBarFieldCornerRadius;
             
             
             if ([UIImagePNGRepresentation(searchBarImageSelect) isEqual:UIImagePNGRepresentation([Utils createImageWithColor:kClearColor])])
@@ -98,7 +98,7 @@
         }
         
         UIView *outView = [[UIView alloc] initWithFrame:self.bounds];
-        [outView setBackgroundColor:searchBarOutViewColor];
+        [outView setBackgroundColor:searchBarOutSideViewColor];
         [self insertSubview:outView atIndex:1];
 
     }
