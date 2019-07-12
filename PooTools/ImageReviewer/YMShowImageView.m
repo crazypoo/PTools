@@ -1185,6 +1185,12 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                                               destructiveButtonTitle:nil
                                                                    otherButtonTitles:self.actionSheetOtherBtnArr
                                                                       buttonFontName:self.fontName
+                                                           singleCellBackgroundColor:[UIColor whiteColor]
+                                                                normalCellTitleColor:[UIColor blackColor]
+                                                           destructiveCellTitleColor:nil
+                                                                 titleCellTitleColor:nil
+                                                                      separatorColor:nil
+                                                                    heightlightColor:nil
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
                                               switch (self.moreType)

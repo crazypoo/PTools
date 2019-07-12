@@ -33,7 +33,8 @@
 @property (nonatomic,strong) EasySignatureView *signatureView;
 @property (nonatomic,copy) PooSignDoneBlock doneBlock;
 @property (nonatomic,copy) PooSignCancelBlock cancelBlock;
-
+@property (nonatomic,assign) CGFloat linePathWidth;
+@property (nonatomic,strong) UIButton *btnTitleColor;
 @end
 
 @implementation PopSignatureView
@@ -61,7 +62,13 @@
     return self;
 }
 
--(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName handleDone:(PooSignDoneBlock)doneBlock handleCancle:(PooSignCancelBlock)cancelBlock
+-(instancetype)initWithNavColor:(UIColor *)navC
+                     maskString:(NSString *)mString
+               withViewFontName:(NSString *)fName
+                withNavFontName:(NSString *)nfName
+              withLinePathWidth:(CGFloat)linePathWidth
+                     handleDone:(PooSignDoneBlock)doneBlock
+                   handleCancle:(PooSignCancelBlock)cancelBlock
 {
     self = [super init];
     if (self)
@@ -70,8 +77,10 @@
         self.maskString = mString;
         self.fontName = fName;
         self.navFontName = nfName;
+        self.linePathWidth = linePathWidth;
         self.doneBlock = doneBlock;
         self.cancelBlock = cancelBlock;
+        self.btnTitleColor = kRGBAColor(255, 255, 255, 0.5);
     }
     return self;
 }
@@ -92,7 +101,7 @@
     self.backGroundView.userInteractionEnabled = YES;
     [self.maskView addSubview:self.backGroundView];
 
-    self.signatureView = [EasySignatureView new];
+    self.signatureView = [[EasySignatureView alloc] initWithLinePathWidth:self.linePathWidth];
     self.signatureView.backgroundColor = UIColor.whiteColor;
     self.signatureView.delegate = self;
     self.signatureView.showMessage = self.maskString ? self.maskString : @"";
@@ -111,7 +120,7 @@
     [clearBtn setTitle:cleanString forState:UIControlStateNormal];
     [clearBtn addTarget:self action:@selector(onClear) forControlEvents:UIControlEventTouchUpInside];
     [clearBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
-    [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
+    [clearBtn setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
     [self.navView addSubview:clearBtn];
     kViewBorderRadius(clearBtn, 5, 0, kClearColor);
     
@@ -122,7 +131,7 @@
     
     self.btn3 = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.btn3 setTitle:@"提交" forState:UIControlStateNormal];
-    [self.btn3 setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
+    [self.btn3 setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
     self.btn3.titleLabel.font = viewBtnFont;
     self.btn3.backgroundColor = self.navColor ? self.navColor : kRandomColor;
     [self.btn3 addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
@@ -340,8 +349,8 @@
 - (void)onClear
 {
     [self.signatureView clear];
-    [self.btn3 setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
-    [clearBtn setTitleColor:kRGBAColor(255, 255, 255, 0.5) forState:UIControlStateNormal];
+    [self.btn3 setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
+    [clearBtn setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
     navTitle.hidden = YES;
 }
 

@@ -30,7 +30,6 @@
 		C0B5E12422890E6900D32503 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = C0B5E12322890E6900D32503 /* MXRotationManager.m */; };
 		C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
-		C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */; };
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
 		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
@@ -493,7 +492,6 @@
 				CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */,
 				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
 				C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */,
-				C8AFD6F42155E96400F2FA10 /* UINavigation_SXFixSpace.framework in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
 				CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */,
 				CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */,
@@ -1362,7 +1360,6 @@
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/TOWebViewController/TOWebViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
-				"${BUILT_PRODUCTS_DIR}/UINavigation-SXFixSpace/UINavigation_SXFixSpace.framework",
 				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
@@ -1394,7 +1391,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOWebViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UINavigation_SXFixSpace.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",

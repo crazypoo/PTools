@@ -37,6 +37,12 @@
 @property (nonatomic, strong) UIButton *destructiveButton;
 @property (nonatomic, strong) UIView *separatorView;
 @property (nonatomic, strong) UIButton *cancelBtn;
+@property (nonatomic, strong) UIColor *singleCellBGColor;
+@property (nonatomic, strong) UIColor *normalTitleColor;
+@property (nonatomic, strong) UIColor *destructiveTitleColor;
+@property (nonatomic, strong) UIColor *titleCellTitleColor;
+@property (nonatomic, strong) UIColor *separatorColor;
+@property (nonatomic, strong) UIColor *heightlightColor;
 @end
 
 
@@ -65,7 +71,18 @@
     return self;
 }
 
-- (instancetype)initWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
+- (instancetype)initWithTitle:(NSString *)title
+            cancelButtonTitle:(NSString *)cancelButtonTitle
+       destructiveButtonTitle:(NSString *)destructiveButtonTitle
+            otherButtonTitles:(NSArray *)otherButtonTitles
+               buttonFontName:(NSString *)bfName
+    singleCellBackgroundColor:(UIColor *)cellBGColor
+         normalCellTitleColor:(UIColor *)normalTitleColor
+    destructiveCellTitleColor:(UIColor *)destructiveTitleColor
+          titleCellTitleColor:(UIColor *)titleCellTitleColor
+               separatorColor:(UIColor *)separatorColor
+             heightlightColor:(UIColor *)heightlightColor
+                      handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
     self = [self init];
     
@@ -77,6 +94,12 @@
         _otherButtonTitles = otherButtonTitles;
         _selectRowBlock = block;
         self.btnFontName = bfName ? bfName : kDevLikeFont;
+        self.singleCellBGColor = cellBGColor ? cellBGColor : kRandomColor;
+        self.normalTitleColor = normalTitleColor ? normalTitleColor : kRandomColor;
+        self.destructiveTitleColor = destructiveTitleColor ? destructiveTitleColor : kRGBAColor(255, 10, 10, 1);
+        self.titleCellTitleColor = titleCellTitleColor ? titleCellTitleColor : kRGBAColor(111, 111, 111, 1);
+        self.separatorColor = separatorColor ? separatorColor : kRGBAColor(230, 230, 230, 1);
+        self.heightlightColor = heightlightColor ? heightlightColor : kDevButtonHighlightedColor;
         [self createView];
     }
     
@@ -92,7 +115,7 @@
     [self addSubview:_backView];
 
     self.actionSheetView = [UIView new];
-    self.actionSheetView.backgroundColor = kRGBAColor(230, 230, 230, 1);
+    self.actionSheetView.backgroundColor = self.separatorColor;
     [self addSubview:self.actionSheetView];
     
     self.actionSheetScroll = [UIScrollView new];
@@ -101,8 +124,8 @@
     if (_title && _title.length>0)
     {
         self.titleLabel = [UILabel new];
-        self.titleLabel.backgroundColor = [UIColor whiteColor];
-        self.titleLabel.textColor = kRGBAColor(111, 111, 111, 1);
+        self.titleLabel.backgroundColor = self.singleCellBGColor;
+        self.titleLabel.textColor = self.titleCellTitleColor;
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kTitleFontSize);
         self.titleLabel.numberOfLines = 0;
@@ -110,16 +133,16 @@
         [self.actionSheetView addSubview:self.titleLabel];
     }
     
-    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
+    UIImage *normalImage = [Utils createImageWithColor:self.singleCellBGColor];
+    UIImage *highlightedImage = [Utils createImageWithColor:self.heightlightColor];
 
     if (_destructiveButtonTitle && _destructiveButtonTitle.length>0)
     {
         self.destructiveButton = [UIButton new];
         self.destructiveButton.tag = [_otherButtonTitles count] ?: 0;
-        self.destructiveButton.backgroundColor = [UIColor whiteColor];
+        self.destructiveButton.backgroundColor = self.singleCellBGColor;
         self.destructiveButton.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-        [self.destructiveButton setTitleColor:kRGBAColor(255, 10, 10, 1) forState:UIControlStateNormal];
+        [self.destructiveButton setTitleColor:self.destructiveTitleColor forState:UIControlStateNormal];
         [self.destructiveButton setTitle:_destructiveButtonTitle forState:UIControlStateNormal];
         [self.destructiveButton setBackgroundImage:normalImage forState:UIControlStateNormal];
         [self.destructiveButton setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
@@ -128,14 +151,14 @@
     }
     
     self.separatorView = [UIView new];
-    self.separatorView.backgroundColor = kRGBAColor(238, 238, 238, 1);
+    self.separatorView.backgroundColor = self.separatorColor;
     [self.actionSheetView addSubview:self.separatorView];
 
     self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.tag = kCancelBtnTag;
-    self.cancelBtn.backgroundColor = [UIColor whiteColor];
+    self.cancelBtn.backgroundColor = self.singleCellBGColor;
     self.cancelBtn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-    [self.cancelBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.cancelBtn setTitleColor:self.normalTitleColor forState:UIControlStateNormal];
     [self.cancelBtn setTitle:_cancelButtonTitle ?: @"取消" forState:UIControlStateNormal];
     [self.cancelBtn setBackgroundImage:normalImage forState:UIControlStateNormal];
     [self.cancelBtn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
@@ -238,8 +261,8 @@
         self.actionSheetScroll.scrollEnabled = NO;
     }
 
-    UIImage *normalImage = [Utils createImageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImage = [Utils createImageWithColor:kDevButtonHighlightedColor];
+    UIImage *normalImage = [Utils createImageWithColor:self.singleCellBGColor];
+    UIImage *highlightedImage = [Utils createImageWithColor:self.heightlightColor];
 
     if ([_otherButtonTitles count] > 0)
     {
@@ -247,9 +270,9 @@
         {
             UIButton *btn = [[UIButton alloc] init];
             btn.tag = i+100;
-            btn.backgroundColor = [UIColor whiteColor];
+            btn.backgroundColor = self.singleCellBGColor;
             btn.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kButtonTitleFontSize);
-            [btn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+            [btn setTitleColor:self.normalTitleColor forState:UIControlStateNormal];
             [btn setTitle:_otherButtonTitles[i] forState:UIControlStateNormal];
             [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
             [btn setBackgroundImage:highlightedImage forState:UIControlStateHighlighted];
@@ -292,9 +315,20 @@
     }];
 }
 
-+ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title cancelButtonTitle:(NSString *)cancelButtonTitle destructiveButtonTitle:(NSString *)destructiveButtonTitle otherButtonTitles:(NSArray *)otherButtonTitles buttonFontName:(NSString *)bfName handler:(ALActionSheetViewDidSelectButtonBlock)block;
++ (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title
+                              cancelButtonTitle:(NSString *)cancelButtonTitle
+                         destructiveButtonTitle:(NSString *)destructiveButtonTitle
+                              otherButtonTitles:(NSArray *)otherButtonTitles
+                                 buttonFontName:(NSString *)bfName
+                      singleCellBackgroundColor:(UIColor *)cellBGColor
+                           normalCellTitleColor:(UIColor *)normalTitleColor
+                      destructiveCellTitleColor:(UIColor *)destructiveTitleColor
+                            titleCellTitleColor:(UIColor *)titleCellTitleColor
+                                 separatorColor:(UIColor *)separatorColor
+                               heightlightColor:(UIColor *)heightlightColor
+                                        handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
-    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName handler:block];
+    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName                       singleCellBackgroundColor:cellBGColor normalCellTitleColor:normalTitleColor destructiveCellTitleColor:destructiveTitleColor titleCellTitleColor:titleCellTitleColor separatorColor:separatorColor heightlightColor:heightlightColor handler:block];
     
     return actionSheetView;
 }

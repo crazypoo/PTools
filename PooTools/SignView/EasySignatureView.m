@@ -24,15 +24,25 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     CGPoint previousPoint;
 }
 @property (nonatomic,assign) BOOL isHaveDraw;
-
+@property (assign,nonatomic) CGFloat pathWidth;
 @end
 
 @implementation EasySignatureView
 
+-(instancetype)initWithLinePathWidth:(CGFloat)linePathWidth
+{
+    self = [super init];
+    if (self) {
+        self.pathWidth = linePathWidth;
+        [self commonInit];
+    }
+    return self;
+}
+
 - (void)commonInit {
     
     path = [UIBezierPath bezierPath];
-    [path setLineWidth:2];
+    [path setLineWidth:self.pathWidth];
     
     max = 0;
     min = 0;
@@ -46,7 +56,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 -(void)clearPan
 {
     path = [UIBezierPath bezierPath];
-    [path setLineWidth:3];
+    [path setLineWidth:self.pathWidth+1];
     
     [self setNeedsDisplay];
 }
@@ -153,10 +163,15 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     
 //    NSLog(@"width:%f,height:%f",image.size.width,image.size.height);
     
-    UIImage *img = [self cutImage:image];
-    
-    //[self.delegate getSignatureImg:[self scaleToSize:img]];
-    self.SignatureImg = [self scaleToSize:img];
+    if (kStringIsEmpty(self.showMessage))
+    {
+        self.SignatureImg = [self scaleToSize:image];
+    }
+    else
+    {
+        UIImage *img = [self cutImage:image];
+        self.SignatureImg = [self scaleToSize:img];
+    }
 }
 
 //压缩图片,最长边为128(根据不同的比例来压缩)
@@ -345,7 +360,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     max = 0;
     min = 0;
     path = [UIBezierPath bezierPath];
-    [path setLineWidth:2];
+    [path setLineWidth:self.pathWidth];
     self.isHaveDraw = NO;
     [self setNeedsDisplay];
     

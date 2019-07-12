@@ -28,23 +28,37 @@
 @property (nonatomic,strong) UILabel *nameTitle;
 @property (nonatomic,strong) UIButton *cancelBtn;
 @property (nonatomic,strong) UIButton *doneBtn;
+@property (nonatomic,strong) UIColor *pickerTitleColor;
 @end
 
 @implementation PTNormalPicker
 
--(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr withPickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr
+-(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC
+                                 withTapBarBGColor:(UIColor *)tabColor
+                         withTitleAndBtnTitleColor:(UIColor *)textColor
+                              withPickerTitleColor:(UIColor *)ptColor
+                                     withTitleFont:(UIFont *)titleFont
+                                    withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr
+                                   withPickerTitle:(NSString *)pT
+                             checkPickerCurrentRow:(NSString *)currentStr
 {
     self = [super init];
     if (self) {
         self.viewDataArr = [NSMutableArray array];
         [self.viewDataArr addObjectsFromArray:dataArr];
-        self.pickerFont = titleFont;
+        self.pickerFont = titleFont ? titleFont : kDEFAULT_FONT(kDevLikeFont, 16);
+        self.pickerTitleColor = ptColor ? ptColor : [UIColor blackColor];
         [self configViewWithPickerBackgroundColor:pickerBGC withTapBarBGColor:tabColor withTitleAndBtnTitleColor:textColor withTitleFont:titleFont pickerTitle:pT checkPickerCurrentRow:currentStr];
     }
     return self;
 }
 
--(void)configViewWithPickerBackgroundColor:(UIColor *)pickerBGC withTapBarBGColor:(UIColor *)tabColor withTitleAndBtnTitleColor:(UIColor *)textColor withTitleFont:(UIFont *)titleFont pickerTitle:(NSString *)pT checkPickerCurrentRow:(NSString *)currentStr
+-(void)configViewWithPickerBackgroundColor:(UIColor *)pickerBGC
+                         withTapBarBGColor:(UIColor *)tabColor
+                 withTitleAndBtnTitleColor:(UIColor *)textColor
+                             withTitleFont:(UIFont *)titleFont
+                               pickerTitle:(NSString *)pT
+                     checkPickerCurrentRow:(NSString *)currentStr
 {
     self.pickerBackground = [UIView new];
     self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
@@ -55,7 +69,7 @@
     [self.pickerBackground addGestureRecognizer:tapGesture];
     
     self.viewPicker = [UIPickerView new];
-    self.viewPicker.backgroundColor = pickerBGC;
+    self.viewPicker.backgroundColor = pickerBGC ? pickerBGC : [UIColor whiteColor];
     self.viewPicker.delegate = self;
     self.viewPicker.dataSource = self;
     [self.pickerBackground addSubview:self.viewPicker];
@@ -202,6 +216,7 @@
     PTNormalPickerModel *model = self.viewDataArr[row];
     UILabel *text = [UILabel new];
     text.font = self.pickerFont;
+    text.textColor = self.pickerTitleColor;
     text.textAlignment = NSTextAlignmentCenter;
     text.text = model.pickerTitle;
     [view addSubview:text];

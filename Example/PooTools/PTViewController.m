@@ -443,7 +443,7 @@ static NSString *cellIdentifier = @"CELL";
         case 9:
         {
 //            [MXRotationManager defaultManager].orientation = UIDeviceOrientationLandscapeRight;
-            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold handleDone:^(PopSignatureView *signView, UIImage *signImage) {
+            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold withLinePathWidth:10 handleDone:^(PopSignatureView *signView, UIImage *signImage) {
                 [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
             } handleCancle:^(PopSignatureView *signView) {
                 [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;

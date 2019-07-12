@@ -23,6 +23,9 @@ typedef NS_ENUM(NSInteger,PPickerType){
  * @param tbtc tabbar上的字体颜色
  * @param pf picker的字体
  * @param pT picker显示类型 (年月日/年月/年)
+ * @param pBGColor picker背景颜色
+ * @param pfColor picker内字体颜色
+ * @param ipds 跳转到当前已选择文字
  */
 - (instancetype)initWithTitle:(NSString *)title
        toolBarBackgroundColor:(UIColor *)tbbc
@@ -30,6 +33,8 @@ typedef NS_ENUM(NSInteger,PPickerType){
             toolBarTitleColor:(UIColor *)tbtc
                    pickerFont:(UIFont *)pf
                    pickerType:(PPickerType)pT
+        pickerBackgroundColor:(UIColor *)pBGColor
+              pickerFontColor:(UIColor *)pfColor
               inPutDataString:(NSString *)ipds;
 
 /*! @brief 选取回调
@@ -53,12 +58,16 @@ typedef NS_ENUM(NSInteger,PPickerType){
  * @param font 字体
  * @param tbtc tabbar上的字体颜色
  * @param pf picker的字体
+ * @param pBGColor picker背景颜色
+ * @param pfColor picker内字体颜色
  */
 - (instancetype)initWithTitle:(NSString *)title
        toolBarBackgroundColor:(UIColor *)tbbc
                     labelFont:(UIFont *)font
             toolBarTitleColor:(UIColor *)tbtc
-                   pickerFont:(UIFont *)pf;
+                   pickerFont:(UIFont *)pf
+        pickerBackgroundColor:(UIColor *)pBGColor
+              pickerFontColor:(UIColor *)pfColor;
 
 @property (nonatomic, copy) void (^block)(NSString *timeString);
 @property (nonatomic, copy) void (^dismissBlock)(PooTimePicker *timePicker);

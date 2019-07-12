@@ -47,6 +47,8 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
  * @param bbtColor 选择按钮字体颜色
  * @param vlColor 线颜色
  * @param mbtArray 选择按钮数组
+ * @param aBGColor Alertview背景颜色
+ * @param heightlightedColorColor 点击后背景颜色
  * @param tag tag
  * @param setViewBlock 设置自定义view
  * @param clickBlock 设置自定义view的点击回调
@@ -56,9 +58,11 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
                                            alertTitle:(NSString * _Nullable)title
                                withButtonAndTitleFont:(UIFont * _Nullable)btFont
                                            titleColor:(UIColor * _Nullable)tColor
-                               bottomButtonTitleColor:(UIColor * _Nullable)bbtColor
+                               bottomButtonTitleColor:(NSArray <UIColor *>* _Nullable)bbtColor
                                          verLineColor:(UIColor * _Nullable)vlColor
-                                 moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
+                             alertViewBackgroundColor:(UIColor * _Nullable)aBGColor
+                                   heightlightedColor:(UIColor * _Nullable)heightlightedColorColor
+                                 moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock

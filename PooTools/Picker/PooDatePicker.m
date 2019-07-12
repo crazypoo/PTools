@@ -32,6 +32,8 @@
 @property (nonatomic,strong) UIButton *cancelBtn;
 @property (nonatomic,strong) UIButton *yesBtn;
 @property (nonatomic, strong) UIFont *labelFont;
+@property (nonatomic, strong) UIColor *pickerBackgroundColor;
+@property (nonatomic, strong) UIColor *pickerFontColor;
 
 @end
 
@@ -78,7 +80,15 @@
     return _dayArray;
 }
 
-- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf pickerType:(PPickerType)pT inPutDataString:(NSString *)ipds
+- (instancetype)initWithTitle:(NSString *)title
+       toolBarBackgroundColor:(UIColor *)tbbc
+                    labelFont:(UIFont *)font
+            toolBarTitleColor:(UIColor *)tbtc
+                   pickerFont:(UIFont *)pf
+                   pickerType:(PPickerType)pT
+        pickerBackgroundColor:(UIColor *)pBGColor
+              pickerFontColor:(UIColor *)pfColor
+              inPutDataString:(NSString *)ipds
 {
     self = [super init];
     if (self)
@@ -86,6 +96,8 @@
         self.pickerFonts = pf;
         self.pickerType = pT;
         self.labelFont = font;
+        self.pickerBackgroundColor = pBGColor ? pBGColor : [UIColor whiteColor];
+        self.pickerFontColor = pfColor ? pfColor : [UIColor blackColor];
         
         self.pickerBackground = [UIView new];
         self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
@@ -187,7 +199,7 @@
         _pickerView = [UIPickerView new];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
-        _pickerView.backgroundColor = [UIColor whiteColor];
+        _pickerView.backgroundColor = self.pickerBackgroundColor;
         [self.pickerBackground addSubview:_pickerView];
         
         NSString *yearStr;
@@ -472,7 +484,7 @@
         self.yearIndex = row;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
-            label.textColor = [UIColor blackColor];
+            label.textColor = self.pickerFontColor;
             label.font = self.pickerFonts;
         });
     }
@@ -513,13 +525,13 @@
             
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
-                label.textColor = [UIColor blackColor];
+                label.textColor = self.pickerFontColor;
                 label.font = self.pickerFonts;
                 
                 if (self.pickerType == PPickerTypeYMD)
                 {
                     label = (UILabel *)[pickerView viewForRow:self.dayIndex forComponent:2];
-                    label.textColor = [UIColor blackColor];
+                    label.textColor = self.pickerFontColor;
                     label.font = self.pickerFonts;
                 }
             });
@@ -532,7 +544,7 @@
             self.dayIndex = row;
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 UILabel *label = (UILabel *)[pickerView viewForRow:row forComponent:component];
-                label.textColor = [UIColor blackColor];
+                label.textColor = self.pickerFontColor;
                 label.font = self.pickerFonts;
             });
         }
@@ -544,7 +556,7 @@
     //设置文字的属性
     UILabel *genderLabel = [[UILabel alloc] init];
     genderLabel.textAlignment = NSTextAlignmentCenter;
-    genderLabel.textColor = [UIColor blackColor];
+    genderLabel.textColor = self.pickerFontColor;
     genderLabel.font = self.pickerFonts;
     if (component == 0)
     {
@@ -579,6 +591,8 @@
 @property (nonatomic,strong) UIButton *cancelBtn;
 @property (nonatomic,strong) UIButton *yesBtn;
 @property (nonatomic, strong) UIFont *labelFont;
+@property (nonatomic, strong) UIColor *pickerBackgroundColor;
+@property (nonatomic, strong) UIColor *pickerFontColor;
 @end
 
 @implementation PooTimePicker
@@ -623,14 +637,22 @@
     return minute;
 }
 
-- (instancetype)initWithTitle:(NSString *)title toolBarBackgroundColor:(UIColor *)tbbc labelFont:(UIFont *)font toolBarTitleColor:(UIColor *)tbtc pickerFont:(UIFont *)pf
+- (instancetype)initWithTitle:(NSString *)title
+       toolBarBackgroundColor:(UIColor *)tbbc
+                    labelFont:(UIFont *)font
+            toolBarTitleColor:(UIColor *)tbtc
+                   pickerFont:(UIFont *)pf
+        pickerBackgroundColor:(UIColor *)pBGColor
+              pickerFontColor:(UIColor *)pfColor
 {
     self = [super init];
     if (self)
     {
         self.pickerFonts = pf;
         self.labelFont = font;
-
+        self.pickerBackgroundColor = pBGColor ? pBGColor : [UIColor whiteColor];
+        self.pickerFontColor = pfColor ? pfColor : [UIColor blackColor];
+        
         self.pickerBackground = [UIView new];
         self.pickerBackground.backgroundColor    = kDevMaskBackgroundColor;
         [self addSubview:self.pickerBackground];
@@ -701,7 +723,7 @@
         _pickerView = [UIPickerView new];
         _pickerView.dataSource = self;
         _pickerView.delegate = self;
-        _pickerView.backgroundColor = [UIColor whiteColor];
+        _pickerView.backgroundColor = self.pickerBackgroundColor;
         [self.pickerBackground addSubview:_pickerView];
   
     }
@@ -840,7 +862,7 @@
 - (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
 {
     UILabel *text = [[UILabel alloc] init];
-    text.textColor = [UIColor blackColor];
+    text.textColor = self.pickerFontColor;
     text.textAlignment = NSTextAlignmentCenter;
     text.font = self.pickerFonts;
     
@@ -869,7 +891,7 @@
         {
             self.hourIndex = row;
             UILabel *pickerViews = (UILabel *)[pickerView viewForRow:row forComponent:component];
-            pickerViews.textColor = [UIColor blackColor];
+            pickerViews.textColor = self.pickerFontColor;
             pickerViews.font = self.pickerFonts;
         }
             break;
@@ -877,7 +899,7 @@
         {
             self.minuteIndex = row;
             UILabel *pickerViews = (UILabel *)[pickerView viewForRow:row forComponent:component];
-            pickerViews.textColor = [UIColor blackColor];
+            pickerViews.textColor = self.pickerFontColor;
             pickerViews.font = self.pickerFonts;
         }
             break;

@@ -26,12 +26,14 @@
 @property (nonatomic, copy) YXCustomAlertViewClickBlock clickBlock;
 @property (nonatomic, copy) YXCustomAlertViewDidDismissBlock didDismissBlock;
 @property (nonatomic, strong) UIView *superViews;
-@property (nonatomic, strong) UIColor *alertBottomButtonColor;
+@property (nonatomic, strong) NSMutableArray *alertBottomButtonColor;
 @property (nonatomic, strong) UIFont *viewFont;
 @property (nonatomic, strong) UIColor *verLineColor;
 @property (nonatomic, strong) NSMutableArray *bottomBtnArr;
 @property (nonatomic, strong) NSString *titleStr;
 @property (nonatomic, assign) AlertAnimationType viewAnimationType;
+@property (nonatomic, strong) UIColor *alertViewBackgroundColor;
+@property (nonatomic, strong) UIColor *heightlightedColorColor;
 @end
 
 
@@ -68,9 +70,11 @@
                                            alertTitle:(NSString * _Nullable)title
                                withButtonAndTitleFont:(UIFont * _Nullable)btFont
                                            titleColor:(UIColor * _Nullable)tColor
-                               bottomButtonTitleColor:(UIColor * _Nullable)bbtColor
+                               bottomButtonTitleColor:(NSArray <UIColor *>* _Nullable)bbtColor
                                          verLineColor:(UIColor * _Nullable)vlColor
-                                 moreButtonTitleArray:(NSArray * _Nonnull) mbtArray
+                             alertViewBackgroundColor:(UIColor * _Nullable)aBGColor
+                                   heightlightedColor:(UIColor * _Nullable)heightlightedColorColor
+                                 moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
@@ -97,17 +101,38 @@
         
         self.viewFont = btFont ? btFont : kDEFAULT_FONT(kDevLikeFont, 18);
         alertTitleColor = tColor ? tColor : kRGBColor(0 , 84, 166);
-        self.alertBottomButtonColor = bbtColor ? bbtColor : kRGBColor(0 , 84, 166);
+        
+        self.alertBottomButtonColor = [NSMutableArray array];
+        
+        if (kArrayIsEmpty(bbtColor)) {
+            for (int i = 0; i < mbtArray.count; i++) {
+                [self.alertBottomButtonColor addObject:kRGBColor(0 , 84, 166)];
+            }
+        }
+        else if (bbtColor.count == 1)
+        {
+            for (int i = 0; i < mbtArray.count; i++) {
+                [self.alertBottomButtonColor addObject:bbtColor[0]];
+            }
+        }
+        else
+        {
+            for (int i = 0; i < mbtArray.count; i++) {
+                [self.alertBottomButtonColor addObject:bbtColor[i]];
+            }
+        }
         self.verLineColor = vlColor ? vlColor : kRGBColor(213, 213, 215);
         self.tag = tag;
         self.titleStr = title;
+        self.alertViewBackgroundColor = aBGColor ? aBGColor : [UIColor whiteColor];
+        self.heightlightedColorColor = heightlightedColorColor ? heightlightedColorColor : kDevButtonHighlightedColor;
         
         UITapGestureRecognizer *tapBackgroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dissMiss)];
         tapBackgroundView.numberOfTouchesRequired = 1;
         tapBackgroundView.numberOfTapsRequired = 1;
         [self.middleView addGestureRecognizer:tapBackgroundView];
         
-        self.backgroundColor = [UIColor whiteColor];
+        self.backgroundColor = self.alertViewBackgroundColor;
         self.layer.cornerRadius = AlertRadius;
         
         [self.superViews addSubview:self];
@@ -194,45 +219,31 @@
     }];
     kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
 
-    if (isEX)
-    {
-        
-        for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
-            UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
-            [cancelBtn setBackgroundImage:[Utils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
-            [cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
-            [cancelBtn setTitleColor:self.alertBottomButtonColor forState:UIControlStateNormal];
-            [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
-            cancelBtn.titleLabel.font = self.viewFont;
-            cancelBtn.tag = 100+i;
-            [cancelBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [btnView addSubview:cancelBtn];
-            [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
+        UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
+        [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.alertViewBackgroundColor] forState:UIControlStateNormal];
+        [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.heightlightedColorColor] forState:UIControlStateHighlighted];
+        [cancelBtn setTitleColor:self.alertBottomButtonColor[i] forState:UIControlStateNormal];
+        [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
+        cancelBtn.titleLabel.font = self.viewFont;
+        cancelBtn.tag = 100+i;
+        [cancelBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+        [btnView addSubview:cancelBtn];
+        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            if (isEX)
+            {
                 make.left.right.equalTo(btnView);
                 make.top.equalTo(btnView).offset(HEIGHT_BUTTON*i+AlertLine*i+AlertLine);
                 make.height.offset(HEIGHT_BUTTON);
-            }];
-        }
-    }
-    else
-    {
-        for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
-            UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
-            [cancelBtn setBackgroundImage:[Utils createImageWithColor:[UIColor whiteColor]] forState:UIControlStateNormal];
-            [cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
-            [cancelBtn setTitleColor:self.alertBottomButtonColor forState:UIControlStateNormal];
-            [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
-            cancelBtn.titleLabel.font = self.viewFont;
-            cancelBtn.tag = 100+i;
-            [cancelBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-            [btnView addSubview:cancelBtn];
-            [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            }
+            else
+            {
                 make.width.offset(btnW);
                 make.top.equalTo(btnView).offset(AlertLine);
                 make.bottom.equalTo(btnView);
                 make.left.offset(btnW*i+AlertLine*i);
-            }];
-        }
+            }
+        }];
     }
 }
 

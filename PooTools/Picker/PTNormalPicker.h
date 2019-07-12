@@ -23,7 +23,8 @@ typedef void(^PickerReturnBlock) (PTNormalPicker *normalPicker,PTNormalPickerMod
 /*! @brief Picker初始化
  * @param pickerBGC 背景颜色
  * @param tabColor tabbar的背景颜色
- * @param textColor Bar字体
+ * @param textColor Bar字体颜色
+ * @param ptColor picker字体颜色
  * @param titleFont picker字体
  * @param dataArr 数据
  * @param pT Bar标题
@@ -32,6 +33,7 @@ typedef void(^PickerReturnBlock) (PTNormalPicker *normalPicker,PTNormalPickerMod
 -(instancetype)initWithNormalPickerBackgroundColor:(UIColor *)pickerBGC
                                  withTapBarBGColor:(UIColor *)tabColor
                          withTitleAndBtnTitleColor:(UIColor *)textColor
+                              withPickerTitleColor:(UIColor *)ptColor
                                      withTitleFont:(UIFont *)titleFont
                                     withPickerData:(NSArray <PTNormalPickerModel *>*)dataArr
                                    withPickerTitle:(NSString *)pT

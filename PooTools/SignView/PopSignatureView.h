@@ -15,7 +15,13 @@ typedef void (^PooSignCancelBlock)(PopSignatureView *signView);
 
 @interface PopSignatureView : UIView
 
--(instancetype)initWithNavColor:(UIColor *)navC maskString:(NSString *)mString withViewFontName:(NSString *)fName withNavFontName:(NSString *)nfName handleDone:(PooSignDoneBlock)doneBlock handleCancle:(PooSignCancelBlock)cancelBlock;
+-(instancetype)initWithNavColor:(UIColor *)navC
+                     maskString:(NSString *)mString
+               withViewFontName:(NSString *)fName
+                withNavFontName:(NSString *)nfName
+              withLinePathWidth:(CGFloat)linePathWidth
+                     handleDone:(PooSignDoneBlock)doneBlock
+                   handleCancle:(PooSignCancelBlock)cancelBlock;
 
 - (void)show;
 - (void)showInView:(UIView *)view;

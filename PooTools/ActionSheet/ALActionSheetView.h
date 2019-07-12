@@ -23,6 +23,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @param destructiveButtonTitle (特殊选择行,字体颜色为红色)
  * @param otherButtonTitles (其他选项,数组形式填入)
  * @param bfName 字体 (默认HelveticaNeue-Light)
+ * @param cellBGColor 单独一行的背景颜色
+ * @param normalTitleColor 普通标题颜色
+ * @param destructiveTitleColor 特殊标题颜色
+ * @param titleCellTitleColor 界面标题颜色
+ * @param separatorColor 间距颜色
+ * @param heightlightColor 点击后颜色
  * @return block 按钮点击回调tag
  */
 - (instancetype)initWithTitle:(NSString *)title
@@ -30,6 +36,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
        destructiveButtonTitle:(NSString *)destructiveButtonTitle
             otherButtonTitles:(NSArray *)otherButtonTitles
                buttonFontName:(NSString *)bfName
+    singleCellBackgroundColor:(UIColor *)cellBGColor
+         normalCellTitleColor:(UIColor *)normalTitleColor
+    destructiveCellTitleColor:(UIColor *)destructiveTitleColor
+          titleCellTitleColor:(UIColor *)titleCellTitleColor
+               separatorColor:(UIColor *)separatorColor
+             heightlightColor:(UIColor *)heightlightColor
                       handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 展示
@@ -42,6 +54,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @param destructiveButtonTitle (特殊选择行,字体颜色为红色)
  * @param otherButtonTitles (其他选项,数组形式填入)
  * @param bfName 字体 (默认HelveticaNeue-Light)
+ * @param cellBGColor 单独一行的背景颜色
+ * @param normalTitleColor 普通标题颜色
+ * @param destructiveTitleColor 特殊标题颜色
+ * @param titleCellTitleColor 界面标题颜色
+ * @param separatorColor 间距颜色
+ * @param heightlightColor 点击后颜色
  * @return block 按钮点击回调tag
  */
 + (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title
@@ -49,6 +67,12 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
                          destructiveButtonTitle:(NSString *)destructiveButtonTitle
                               otherButtonTitles:(NSArray *)otherButtonTitles
                                  buttonFontName:(NSString *)bfName
+                      singleCellBackgroundColor:(UIColor *)cellBGColor
+                           normalCellTitleColor:(UIColor *)normalTitleColor
+                      destructiveCellTitleColor:(UIColor *)destructiveTitleColor
+                            titleCellTitleColor:(UIColor *)titleCellTitleColor
+                                 separatorColor:(UIColor *)separatorColor
+                               heightlightColor:(UIColor *)heightlightColor
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 消失

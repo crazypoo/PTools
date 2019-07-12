@@ -362,14 +362,14 @@ CGFloat const tagItemSpace = 5;
             //    searchBar.delegate     = self;
             searchBar.keyboardType = UIKeyboardTypeDefault;
             searchBar.searchPlaceholder = @"点击此处查找地市名字";
-            searchBar.searchPlaceholderColor = kRandomColor;
+            searchBar.searchPlaceholderColor = [UIColor purpleColor];
             searchBar.searchPlaceholderFont = [UIFont systemFontOfSize:24];
-            searchBar.searchTextColor = kRandomColor;
+            searchBar.searchTextColor = [UIColor brownColor];
             //    searchBar.searchBarImage = kImageNamed(@"Search");
-            searchBar.searchTextFieldBackgroundColor = kRandomColor;
-            searchBar.searchBarOutViewColor = kRandomColor;
+            searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
+            searchBar.searchBarOutViewColor = kClearColor;
             searchBar.searchBarTextFieldCornerRadius = 15;
-            searchBar.cursorColor = kRandomColor;
+            searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
             [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.textField.mas_bottom).offset(10);
@@ -569,7 +569,18 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题" cancelButtonTitle:@"取消" destructiveButtonTitle:@"红色" otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"] buttonFontName:FontNameBold handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题"
+                                                                    cancelButtonTitle:@"取消"
+                                                               destructiveButtonTitle:nil
+                                                                    otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"]
+                                                                       buttonFontName:FontNameBold
+                                                            singleCellBackgroundColor:kRandomColor
+                                                                 normalCellTitleColor:kRandomColor
+                                                            destructiveCellTitleColor:kRandomColor
+                                                                  titleCellTitleColor:kRandomColor
+                                                                       separatorColor:kRandomColor
+                                                                     heightlightColor:kRandomColor
+                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
             }];
             [actionSheet show];
         }
@@ -578,7 +589,7 @@ CGFloat const tagItemSpace = 5;
         {
             NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123";
             NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:kRandomColor verLineColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:1 viewAnimation:2 setCustomView:^(YXCustomAlertView *alertView) {
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:1 viewAnimation:2 setCustomView:^(YXCustomAlertView *alertView) {
                 
 //                UILabel *aaa = [UILabel new];
 //                aaa.backgroundColor = kRandomColor;
@@ -648,7 +659,7 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeYMD inPutDataString:nil];
+            PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeYMD pickerBackgroundColor:kRandomColor pickerFontColor:kRandomColor inPutDataString:nil];
             [view pickerShow];
             view.block = ^(NSString *dateString) {
                 PNSLog(@">>>>>>>>>>>%@",dateString);
@@ -657,7 +668,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 1:
         {
-            PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16)];
+            PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerBackgroundColor:kRandomColor pickerFontColor:kRandomColor];
             view.delegate = self;
             [view pickerShow];
             //    view.block = ^(NSString *dateString) {
@@ -683,7 +694,7 @@ CGFloat const tagItemSpace = 5;
             PTNormalPickerModel *bbbbbb = [PTNormalPickerModel new];
             bbbbbb.pickerTitle = @"222222222";
 
-            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:[UIColor whiteColor] withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb] withPickerTitle:@"111111111111312312312312312312312312312312312312312312312" checkPickerCurrentRow:@"1111111"];
+            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:kRandomColor withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withPickerTitleColor:kRandomColor withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb] withPickerTitle:@"111111111111312312312312312312312312312312312312312312312" checkPickerCurrentRow:@"1111111"];
             nP.returnBlock = ^(PTNormalPicker *normalPicker, PTNormalPickerModel *pickerModel) {
                 PNSLog(@">>>>>>>>>>>>%@>>>>>>>>>>%@>>>>>>>>>>>>>>>%@",normalPicker,pickerModel.pickerTitle,pickerModel.pickerIndexPath);
             };

@@ -41,6 +41,7 @@
     BOOL  isSure;
 }
 
+-(instancetype)initWithLinePathWidth:(CGFloat)linePathWidth;
 
 @property (strong,nonatomic) NSString *showMessage; //签名完成后的水印文字
 @property(nonatomic,assign)id<SignatureViewDelegate> delegate;

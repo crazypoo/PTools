@@ -54,9 +54,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
     [super viewDidLoad];
     if (CYL_IS_IPHONE_X) {
         self.tabBarHeight = 83;
-    } else {
-        self.tabBarHeight = 49;
-    }
+    } 
     // 处理tabBar，使用自定义 tabBar 添加 发布按钮
     [self setUpTabBar];
     // KVO注册监听
@@ -85,10 +83,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
 }
 
 - (void)viewDidLayoutSubviews {
-    CGFloat deviceVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
-    if (deviceVersion >= 10 && deviceVersion < 10.2) {
-        [self.tabBar layoutSubviews];//Fix issue #93
-    }
+    [self.tabBar layoutSubviews];//Fix issue #93 #392
     CYLTabBar *tabBar =  (CYLTabBar *)self.tabBar;
     // add callback for visiable control, included all plusButton.
     [tabBar.cyl_visibleControls enumerateObjectsUsingBlock:^(UIControl * _Nonnull control, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -718,6 +713,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
                              block, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
+//TODO: 更新实现，多实例场景下进行栈操作，弹出最新一个。
 - (CYLTabBarController *)cyl_tabBarController {
     CYLTabBarController *tabBarController;
     id (^block)(void) = objc_getAssociatedObject(self, @selector(cyl_tabBarController));

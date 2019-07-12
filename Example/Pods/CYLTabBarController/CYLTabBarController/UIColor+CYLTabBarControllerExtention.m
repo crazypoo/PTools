@@ -117,21 +117,6 @@
             ];
 }
 
-+ (UIColor *)cyl_systemBrownColor {
-    if (@available(iOS 13.0, *)) {
-#if __has_include(<UIKit/UIScene.h>)
-        return [UIColor systemBlueColor];
-#else
-#endif
-    }
-    return [UIColor
-            colorWithRed:0.6352941176470588
-            green:0.5176470588235295
-            blue:0.3686274509803922
-            alpha:1.0
-            ];
-}
-
 + (UIColor *)cyl_systemTealColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -254,8 +239,6 @@
 
 #pragma mark Foreground colors
 
-/* Foreground colors for static text and related elements.
- */
 + (UIColor *)cyl_labelColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -335,8 +318,6 @@
             ];
 }
 
-/* Foreground color for placeholder text in controls or text fields or text views.
- */
 + (UIColor *)cyl_placeholderTextColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -352,11 +333,6 @@
             ];
 }
 
-/* Foreground colors for separators (thin border or divider lines).
- * `separatorColor` may be partially transparent, so it can go on top of any content.
- * `opaqueSeparatorColor` is intended to look similar, but is guaranteed to be opaque, so it will
- * completely cover anything behind it. Depending on the situation, you may need one or the other.
- */
 + (UIColor *)cyl_separatorColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -511,9 +487,6 @@
             ];
 }
 
-/* tertiarySystemFillColor is appropriate for filling large shapes.
- * Examples: Input fields, search bars, buttons.
- */
 + (UIColor *)cyl_tertiarySystemFillColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -529,9 +502,6 @@
             ];
 }
 
-/* quaternarySystemFillColor is appropriate for filling large areas containing complex content.
- * Example: Expanded table cells.
- */
 + (UIColor *)cyl_quaternarySystemFillColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -549,9 +519,6 @@
 
 #pragma mark Other colors
 
-/* lightTextColor is always light, and darkTextColor is always dark, regardless of the current UIUserInterfaceStyle.
- * When possible, we recommend using `labelColor` and its variants, instead.
- */
 + (UIColor *)cyl_lightTextColor {
     if (@available(iOS 13.0, *)) {
 #if __has_include(<UIKit/UIScene.h>)
@@ -582,5 +549,11 @@
             ];
 }
 
+#pragma mark - Deprecated API
+
+//Apple remove this API in iOS13 beta 2
++ (UIColor *)cyl_systemBrownColor {
+    return nil;
+}
 
 @end
