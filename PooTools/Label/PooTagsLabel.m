@@ -54,56 +54,56 @@
             [self addSubview:bgImageView];
             
             CGRect lastBtnRect = CGRectZero;
-            CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
-            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
+            CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
+            UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
             
-            for (int i = 0; i < tagsNormalArr.count; i++)
+            for (int i = 0; i < self.normalTagsArr.count; i++)
             {
-                UIImage *normalImage = kImageNamed(tagsNormalArr[i]);
-                NSString *title = tagsTitleArr[i];
+                UIImage *normalImage = kImageNamed(self.normalTagsArr[i]);
+                NSString *title = self.tagsTitleArr[i];
                 
-                CGFloat titleWidth = config.itemWidth;
+                CGFloat titleWidth = self.curConfig.itemWidth;
                 
-                if ((CGRectGetMaxX(lastBtnRect) + config.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
+                if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
                 {
                     lastBtnRect.origin.x = 0.0;
                     hMargin = 0.0;
                     lastBtnRect.size.width = 0.0;
-                    orgin_Y += (config.itemHeight + config.itemVerMargin);
+                    orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
                 }
                 
-                UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, config.itemWidth, config.itemHeight)];
+                UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight)];
                 lastBtnRect = btn.frame;
-                hMargin = config.itemHerMargin;
+                hMargin = self.curConfig.itemHerMargin;
                 btn.tag = BTN_Tags_Tag + i;
                 
                 ///标题设置
-                switch (config.showStatus) {
+                switch (self.curConfig.showStatus) {
                     case PooTagsLabelShowWithImageStatusNoTitle:
                     {
                         [btn setTitleColor:kClearColor forState:UIControlStateNormal];
                         [btn setTitle:title forState:UIControlStateNormal];
                         [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
-                        [btn setBackgroundImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
+                        [btn setBackgroundImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
                     }
                         break;
                     default:
                     {
-                        UIColor *normorTitleColor = config.normalTitleColor ? config.normalTitleColor : [UIColor grayColor];
-                        UIColor *selectedTitleColor = config.selectedTitleColor ? config.selectedTitleColor : [UIColor greenColor];
+                        UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
+                        UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
                         
                         [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
                         [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
                         [btn setTitle:title forState:UIControlStateNormal];
                         [btn setTitle:title forState:UIControlStateSelected];
                         [btn setImage:normalImage forState:UIControlStateNormal];
-                        [btn setImage:kImageNamed(tagsSelectArr[i]) forState:UIControlStateSelected];
-                        [btn layoutButtonWithEdgeInsetsStyle:config.insetsStyle imageTitleSpace:config.imageAndTitleSpace];
+                        [btn setImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
+                        [btn layoutButtonWithEdgeInsetsStyle:self.curConfig.insetsStyle imageTitleSpace:self.curConfig.imageAndTitleSpace];
                     }
                         break;
                 }
                 
-                btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
+                btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
                 btn.titleLabel.font = font;
                 [btn addTarget:self action:@selector(tagBtnAction:) forControlEvents:UIControlEventTouchUpInside];
                 
@@ -113,21 +113,21 @@
                 self.bgImageView.frame = self.bounds;
                 
                 ///边框
-                if (config.hasBorder)
+                if (self.curConfig.hasBorder)
                 {
                     btn.clipsToBounds = YES;
-                    btn.layer.cornerRadius = config.cornerRadius > 0 ? config.cornerRadius : config.itemHeight / 2.0;
-                    btn.layer.borderColor = config.borderColor.CGColor;
-                    btn.layer.borderWidth = config.borderWidth > 0.0 ? config.borderWidth : 0.5;
+                    btn.layer.cornerRadius = self.curConfig.cornerRadius > 0 ? self.curConfig.cornerRadius : self.curConfig.itemHeight / 2.0;
+                    btn.layer.borderColor = self.curConfig.borderColor.CGColor;
+                    btn.layer.borderWidth = self.curConfig.borderWidth > 0.0 ? self.curConfig.borderWidth : 0.5;
                 }
                 
                 ///可选中
-                if (config.isCanSelected)
+                if (self.curConfig.isCanSelected)
                 {
                     //多选
-                    if (config.isMulti)
+                    if (self.curConfig.isMulti)
                     {
-                        for (NSString *str in config.selectedDefaultTags)
+                        for (NSString *str in self.curConfig.selectedDefaultTags)
                         {
                             if ([title isEqualToString:str])
                             {
@@ -137,7 +137,7 @@
                     }
                     else
                     {  //单选
-                        if ([title isEqualToString:config.singleSelectedTitle])
+                        if ([title isEqualToString:self.curConfig.singleSelectedTitle])
                         {
                             btn.selected = YES;
                             self.selectedBtn = btn;
@@ -154,6 +154,7 @@
             if (self.tagHeightBlock) {
                 self.tagHeightBlock(self, self.frame.size.height);
             }
+
         });
     }
     return self;
@@ -180,6 +181,7 @@
         }
         
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            
             UIImageView *bgImageView = [UIImageView new];
             bgImageView.userInteractionEnabled = YES;
             self.bgImageView = bgImageView;
@@ -286,62 +288,62 @@
                 }
                 [self addSubview:btn];
             }
-            
-            if (self.tagHeightBlock) {
-                self.tagHeightBlock(self, self.frame.size.height);
-            }
         });
     }
     return self;
 }
 
--(void)layoutSubviews
-{
-    [super layoutSubviews];
-    
-    CGRect lastBtnRect = CGRectZero;
-    CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
-    
-    UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
-    
-    for (int i = 0; i < self.normalTagsArr.count; i++)
-    {
-        NSString *title = self.normalTagsArr[i];
-        CGFloat titleWidth;
-        if (self.showImage)
-        {
-            titleWidth = self.curConfig.itemWidth;
-        }
-        else
-        {
-            titleWidth = [title sizeWithAttributes:@{NSFontAttributeName : font}].width;
-        }
-        
-        if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
-        {
-            lastBtnRect.origin.x = 0.0;
-            hMargin = 0.0;
-            lastBtnRect.size.width = 0.0;
-            orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
-        }
-        
-        UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
-        if (self.showImage) {
-            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight);
-        }
-        else
-        {
-            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth+2*itemContentMargin, self.curConfig.itemHeight);
-        }
-        lastBtnRect = btn.frame;
-        hMargin = self.curConfig.itemHerMargin;
-        
-        CGRect frame = self.frame;
-        frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
-        self.frame = frame;
-        self.bgImageView.frame = self.bounds;
-    }
-}
+//-(void)layoutSubviews
+//{
+//    [super layoutSubviews];
+//
+//    CGRect lastBtnRect = CGRectZero;
+//    CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
+//
+//    UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
+//
+//    for (int i = 0; i < self.normalTagsArr.count; i++)
+//    {
+//        NSString *title = self.normalTagsArr[i];
+//        CGFloat titleWidth;
+//        if (self.showImage)
+//        {
+//            titleWidth = self.curConfig.itemWidth;
+//        }
+//        else
+//        {
+//            titleWidth = [title sizeWithAttributes:@{NSFontAttributeName : font}].width;
+//        }
+//
+//        if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
+//        {
+//            lastBtnRect.origin.x = 0.0;
+//            hMargin = 0.0;
+//            lastBtnRect.size.width = 0.0;
+//            orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
+//        }
+//
+//        UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
+//        if (self.showImage) {
+//            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight);
+//        }
+//        else
+//        {
+//            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth+2*itemContentMargin, self.curConfig.itemHeight);
+//        }
+//        lastBtnRect = btn.frame;
+//        hMargin = self.curConfig.itemHerMargin;
+//
+//        CGRect frame = self.frame;
+//        frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
+//        self.frame = frame;
+//        self.bgImageView.frame = self.bounds;
+//    }
+//
+//    if (self.tagHeightBlock) {
+//        self.tagHeightBlock(self, self.frame.size.height);
+//    }
+//}
 
 - (void)tagBtnAction:(UIButton *)sender
 {

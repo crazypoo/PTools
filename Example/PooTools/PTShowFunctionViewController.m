@@ -129,7 +129,7 @@ CGFloat const tagItemSpace = 5;
     config.topBottomSpace = tagItemSpace;
     config.itemContentEdgs = tagItemSpace;
     config.isCanSelected = YES;
-    config.isCanCancelSelected = NO;
+    config.isCanCancelSelected = YES;
     config.isMulti = YES;
     config.selectedDefaultTags = self.titleS;
     config.selectedTitleColor = AppOrange;
@@ -319,6 +319,7 @@ CGFloat const tagItemSpace = 5;
             UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
             pBtnsssss.backgroundColor = kRandomColor;
             [pBtnsssss addActionHandler:^(UIButton *sender) {
+                PNSLog(@"1111111111");
                 self.titleS = @[@"空调",@"床",@"热水器"];
                 [tag reloadTag:[self tagConfig]];
             }];
