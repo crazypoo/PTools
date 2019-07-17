@@ -12,6 +12,8 @@
 
 #import "PMacros.h"
 #import "PGetIpAddresses.h"
+#import "IGHTTPClient.h"
+#import "IGBatchTaskManager.h"
 
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
@@ -112,6 +114,45 @@
     }];
     
     PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]);
+    
+    
+    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
+    [dic setObject:@"true" forKey:@"isLogin"];
+    [dic setObject:@"1" forKey:@"phoneType"];//手机型号
+    [dic setObject:@"2" forKey:@"phoneSystem"];//手机系统版本
+    [dic setObject:@"" forKey:@"tokenID"];//tokenid
+    [dic setObject:@"1" forKey:@"appVersion"];//app版本
+    [dic setObject:@"1" forKey:@"systemType"];//手机系统
+    [dic setObject:@"" forKey:@"landingPhone"];
+    [dic setObject:@"" forKey:@"phone"];
+    [dic setObject:@"2" forKey:@"appName"];//app代号 0:工人,1房东,2房客
+    [dic setObject:@"0.00" forKey:@"userLat"];//经度
+    [dic setObject:@"0.00" forKey:@"userLon"];//纬度
+    
+//    [CGBaseGobalTools apiServerAddress:@"www.cloudgategz.com" apiURL:@"/chl/enteringAdver/findFirstPic" withParmars:dic hideHub:YES hubColor:kRandomColor handle:^(BOOL success, NSMutableDictionary *infoDict) {
+//
+//    }];
+    RespDictionaryBlock dBlock = ^(NSMutableDictionary *infoDict, NSError *error) {
+        kHideNetworkActivityIndicator();
+        if (!error)
+        {
+            if (infoDict && [infoDict isKindOfClass:[NSMutableDictionary class]])
+            {
+//                block(YES,infoDict);
+            }
+        }
+        else
+        {
+//            block(NO,nil);
+        }
+    };
+    
+    [HTTPClient(@"www.cloudgategz.com",YES) POSTApi:@"/chl/enteringAdver/findFirstPic"
+                                parameters:dic
+                                 parserKey:pkIGTestParserApp
+                                   success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
+                                   failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
+
     return YES;
 }
 

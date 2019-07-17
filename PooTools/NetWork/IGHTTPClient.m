@@ -38,7 +38,6 @@ static NSString * const FrameWorkServerAddress = @"123.207.91.208:80";
     self.requestSerializer  = [IGHTTPRequestSerializer serializer];
     self.responseSerializer = [IGJSONResponseSerializer serializer];
     
-    self.securityPolicy.allowInvalidCertificates    = YES;
     self.operationQueue.maxConcurrentOperationCount = 3;
     
 }
