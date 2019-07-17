@@ -21,11 +21,11 @@
 #import "IGHTTPClientProfile.h"
 
 
-#define HTTPClient(s) [IGHTTPClient sharedClient:s]
+#define HTTPClient(s,h) [IGHTTPClient sharedClient:s https:h]
 
 @interface IGHTTPClient : AFHTTPSessionManager
 
-+ (instancetype)sharedClient:(NSString *)serverStr;
++ (instancetype)sharedClient:(NSString *)serverStr https:(BOOL)https;
 
 /**
  *  创建网络请求任务

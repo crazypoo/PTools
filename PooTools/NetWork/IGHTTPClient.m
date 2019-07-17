@@ -14,12 +14,12 @@ static NSString * const FrameWorkServerAddress = @"123.207.91.208:80";
 
 @implementation IGHTTPClient
 
-+ (instancetype)sharedClient:(NSString *)serverStr
++ (instancetype)sharedClient:(NSString *)serverStr https:(BOOL)https
 {
     static IGHTTPClient *_sharedClient = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        NSString *address  = [NSString stringWithFormat:@"http://%@",serverStr ? serverStr : FrameWorkServerAddress];
+        NSString *address  = [NSString stringWithFormat:@"%@://%@",https ? @"https" : @"http", serverStr ? serverStr : FrameWorkServerAddress];
         _sharedClient = [[IGHTTPClient alloc] initWithBaseURL:[NSURL URLWithString:address]];
     });
     
