@@ -1181,6 +1181,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 - (void)removeCurrImage
 {
     ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:@"图片操作"
+                                                                        titleMessage:nil
                                                                    cancelButtonTitle:@"取消"
                                                               destructiveButtonTitle:nil
                                                                    otherButtonTitles:self.actionSheetOtherBtnArr

@@ -25,6 +25,7 @@
 }
 
 @property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy) NSString *titleMessage;
 @property (nonatomic, copy) NSString *cancelButtonTitle;
 @property (nonatomic, copy) NSString *destructiveButtonTitle;
 @property (nonatomic, copy) NSArray *otherButtonTitles;
@@ -51,6 +52,7 @@
 - (void)dealloc
 {
     self.title= nil;
+    self.titleMessage = nil;
     self.cancelButtonTitle = nil;
     self.destructiveButtonTitle = nil;
     self.otherButtonTitles = nil;
@@ -72,6 +74,7 @@
 }
 
 - (instancetype)initWithTitle:(NSString *)title
+                 titleMessage:(NSString *)titleMessage
             cancelButtonTitle:(NSString *)cancelButtonTitle
        destructiveButtonTitle:(NSString *)destructiveButtonTitle
             otherButtonTitles:(NSArray *)otherButtonTitles
@@ -89,6 +92,7 @@
     if (self)
     {
         _title = title;
+        self.titleMessage = titleMessage;
         _cancelButtonTitle = cancelButtonTitle;
         _destructiveButtonTitle = destructiveButtonTitle;
         _otherButtonTitles = otherButtonTitles;
@@ -100,7 +104,35 @@
         self.titleCellTitleColor = titleCellTitleColor ? titleCellTitleColor : kRGBAColor(111, 111, 111, 1);
         self.separatorColor = separatorColor ? separatorColor : kRGBAColor(230, 230, 230, 1);
         self.heightlightColor = heightlightColor ? heightlightColor : kDevButtonHighlightedColor;
-        [self createView];
+        
+        if (@available(iOS 13.0, *))
+        {
+            [Utils alertVCWithTitle:title message:titleMessage cancelTitle:cancelButtonTitle okTitle:nil destructiveTitle:destructiveButtonTitle otherButtonArray:otherButtonTitles shouIn:kAppDelegateWindow.rootViewController alertStyle:UIAlertControllerStyleActionSheet okAction:^{
+                
+            } cancelAction:^{
+                self.selectRowBlock(self, -1);
+            } destructiveAction:^{
+                
+                if (!kStringIsEmpty(destructiveButtonTitle))
+                {
+                    self.selectRowBlock(self, 0);
+                }
+                
+            } otherButtonAction:^(NSInteger index) {
+                if (!kStringIsEmpty(destructiveButtonTitle))
+                {
+                    self.selectRowBlock(self, index+1);
+                }
+                else
+                {
+                    self.selectRowBlock(self, index);
+                }
+            }];
+        }
+        else
+        {
+            [self createView];
+        }
     }
     
     return self;
@@ -129,7 +161,7 @@
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kTitleFontSize);
         self.titleLabel.numberOfLines = 0;
-        self.titleLabel.text = _title;
+        self.titleLabel.text = [NSString stringWithFormat:@"%@\n%@",_title,self.titleMessage];
         [self.actionSheetView addSubview:self.titleLabel];
     }
     
@@ -316,6 +348,7 @@
 }
 
 + (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title
+                                   titleMessage:(NSString *)titleMessage
                               cancelButtonTitle:(NSString *)cancelButtonTitle
                          destructiveButtonTitle:(NSString *)destructiveButtonTitle
                               otherButtonTitles:(NSArray *)otherButtonTitles
@@ -328,7 +361,7 @@
                                heightlightColor:(UIColor *)heightlightColor
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
-    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName                       singleCellBackgroundColor:cellBGColor normalCellTitleColor:normalTitleColor destructiveCellTitleColor:destructiveTitleColor titleCellTitleColor:titleCellTitleColor separatorColor:separatorColor heightlightColor:heightlightColor handler:block];
+    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title titleMessage:titleMessage  cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName                       singleCellBackgroundColor:cellBGColor normalCellTitleColor:normalTitleColor destructiveCellTitleColor:destructiveTitleColor titleCellTitleColor:titleCellTitleColor separatorColor:separatorColor heightlightColor:heightlightColor handler:block];
     
     return actionSheetView;
 }

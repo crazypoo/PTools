@@ -32,6 +32,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @return block 按钮点击回调tag
  */
 - (instancetype)initWithTitle:(NSString *)title
+                 titleMessage:(NSString *)titleMessage
             cancelButtonTitle:(NSString *)cancelButtonTitle
        destructiveButtonTitle:(NSString *)destructiveButtonTitle
             otherButtonTitles:(NSArray *)otherButtonTitles
@@ -63,6 +64,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
  * @return block 按钮点击回调tag
  */
 + (ALActionSheetView *)showActionSheetWithTitle:(NSString *)title
+                                   titleMessage:(NSString *)titleMessage
                               cancelButtonTitle:(NSString *)cancelButtonTitle
                          destructiveButtonTitle:(NSString *)destructiveButtonTitle
                               otherButtonTitles:(NSArray *)otherButtonTitles

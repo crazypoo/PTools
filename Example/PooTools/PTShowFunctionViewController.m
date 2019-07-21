@@ -571,6 +571,7 @@ CGFloat const tagItemSpace = 5;
         case 0:
         {
             ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题"
+                                                                         titleMessage:@"123123131313131313"
                                                                     cancelButtonTitle:@"取消"
                                                                destructiveButtonTitle:nil
                                                                     otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"]
@@ -582,6 +583,7 @@ CGFloat const tagItemSpace = 5;
                                                                        separatorColor:kRandomColor
                                                                      heightlightColor:kRandomColor
                                                                               handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+                PNSLog(@">>>>>>>>>>%ld",(long)buttonIndex);
             }];
             [actionSheet show];
         }

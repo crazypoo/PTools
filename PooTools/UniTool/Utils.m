@@ -99,19 +99,32 @@
     }];
 }
 
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT otherButtonArray:(NSArray *)titleArr shouIn:(UIViewController *)vC  alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock otherButtonAction:(void (^) (NSInteger))buttonIndexPath
++(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT destructiveTitle:(NSString *)dT otherButtonArray:(NSArray *)titleArr shouIn:(UIViewController *)vC alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock destructiveAction:(void (^ _Nullable)(void))destructiveBlock otherButtonAction:(void (^) (NSInteger index))buttonIndexPath
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
                                                                              message:m
                                                                       preferredStyle:style];
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:okT style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        okBlock();
-    }];
-    [alertController addAction:okAction];
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cT style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-        cancelBlock();
-    }];
-    [alertController addAction:cancelAction];
+    
+    if (!kStringIsEmpty(okT)) {
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:okT style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            okBlock();
+        }];
+        [alertController addAction:okAction];
+    }
+    
+    if (!kStringIsEmpty(cT)) {
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:cT style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            cancelBlock();
+        }];
+        [alertController addAction:cancelAction];
+    }
+    
+    if (!kStringIsEmpty(dT)) {
+        UIAlertAction *destructiveAction = [UIAlertAction actionWithTitle:dT style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            destructiveBlock();
+        }];
+        [alertController addAction:destructiveAction];
+    }
     
     for (int i = 0; i < titleArr.count; i++) {
         UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:titleArr[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {

@@ -135,12 +135,14 @@ static inline BOOL isIPhoneXSeries() {
                 message:(NSString * _Nullable)m
             cancelTitle:(NSString * _Nullable)cT
                 okTitle:(NSString * _Nullable)okT
+       destructiveTitle:(NSString * _Nullable)dT
        otherButtonArray:(NSArray * _Nonnull)titleArr
                  shouIn:(UIViewController * _Nonnull)vC
              alertStyle:(UIAlertControllerStyle)style
                okAction:(void (^ _Nullable)(void))okBlock
            cancelAction:(void (^ _Nullable)(void))cancelBlock
-      otherButtonAction:(void (^ _Nonnull) (NSInteger))buttonIndexPath;
+      destructiveAction:(void (^ _Nullable)(void))destructiveBlock
+      otherButtonAction:(void (^_Nonnull) (NSInteger index))buttonIndexPath;
 
 #pragma mark ------> 计算字符串高度或者宽度
 /*! @brief Compute string heigh or width
