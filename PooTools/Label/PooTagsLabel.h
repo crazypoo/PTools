@@ -65,7 +65,6 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 选中背景图片 (只在纯文字模式下使用)
  */
 @property (nonatomic,strong) NSString *selectedBgImage;
-
 /*! @brief 展示样式 (图片模式下使用)
  */
 @property (nonatomic,assign) PooTagsLabelShowWithImageStatus showStatus;
@@ -75,8 +74,6 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 图片与文字之间展间隙 (图片模式下使用)
  */
 @property (nonatomic,assign) CGFloat imageAndTitleSpace;
-
-
 /*! @brief 是否有边框  (默认没有边框)
  */
 @property (nonatomic,assign) BOOL hasBorder;
@@ -108,7 +105,6 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 多个选中对应的标题数组(初始化时默认选中的)
  */
 @property (nonatomic,copy) NSArray *selectedDefaultTags;
-
 @end
 
 @interface PooTagsLabel : UIView
