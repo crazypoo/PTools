@@ -65,6 +65,8 @@ CGFloat const tagItemSpace = 5;
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
+#import "PooTools_Example-Swift.h"
+
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 #define DelaySecond 1

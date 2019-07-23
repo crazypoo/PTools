@@ -25,9 +25,24 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 }
 @property (nonatomic,assign) BOOL isHaveDraw;
 @property (assign,nonatomic) CGFloat pathWidth;
+@property (assign,nonatomic) CGFloat touchForce;
 @end
 
 @implementation EasySignatureView
+
+-(BOOL)check3DTouch
+{
+    if(self.traitCollection.forceTouchCapability == UIForceTouchCapabilityAvailable)
+    {
+        //ok
+        return YES;
+    }
+    else
+    {
+        return NO;
+        //notok
+    }
+}
 
 -(instancetype)initWithLinePathWidth:(CGFloat)linePathWidth
 {
@@ -43,7 +58,9 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     
     path = [UIBezierPath bezierPath];
     [path setLineWidth:self.pathWidth];
-    
+    [path setLineCapStyle:kCGLineCapRound];
+    [path setLineJoinStyle:kCGLineJoinRound];
+
     max = 0;
     min = 0;
     // Capture touches
@@ -144,6 +161,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 {
     return [self imageRepresentation];
 }
+
 -(void) imageRepresentation {
     
     if(&UIGraphicsBeginImageContextWithOptions !=NULL)
@@ -179,15 +197,16 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     CGRect rect ;
     CGFloat imageWidth = img.size.width;
     //判断图片宽度
-    if(imageWidth >= 128)
-    {
-        rect =CGRectMake(0,0, 128, self.frame.size.height);
-    }
-    else
-    {
-        rect =CGRectMake(0,0, img.size.width,self.frame.size.height);
-        
-    }
+//    if(imageWidth >= 128)
+//    {
+//        rect = CGRectMake(0,0, 128, self.frame.size.height);
+//    }
+//    else
+//    {
+//        rect = CGRectMake(0,0, img.size.width,self.frame.size.height);
+//    }
+    rect = CGRectMake(0,0, img.size.width,self.frame.size.height);
+
     CGSize size = rect.size;
     UIGraphicsBeginImageContext(size);
     [img drawInRect:rect];
@@ -272,6 +291,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     UIGraphicsEndImageContext();
     return aimg;
 }
+
 - (void)pan:(UIPanGestureRecognizer *)pan {
     CGPoint currentPoint = [pan locationInView:self];
     CGPoint midPoint = midpoint(previousPoint, currentPoint);
@@ -280,13 +300,13 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     self.hasSignatureImg = YES;
     CGFloat viewHeight = self.frame.size.height;
     CGFloat currentY = currentPoint.y;
-    if (pan.state ==UIGestureRecognizerStateBegan) {
+    if (pan.state ==UIGestureRecognizerStateBegan)
+    {
         [path moveToPoint:currentPoint];
-        
-    } else if (pan.state ==UIGestureRecognizerStateChanged) {
+    }
+    else if (pan.state ==UIGestureRecognizerStateChanged)
+    {
         [path addQuadCurveToPoint:midPoint controlPoint:previousPoint];
-        
-        
     }
     
     if(0 <= currentY && currentY <= viewHeight)
@@ -322,7 +342,15 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 - (void)drawRect:(CGRect)rect
 {
     self.backgroundColor = UIColor.whiteColor;
-    [UIColor.blackColor setStroke];
+    PNSLog(@">>>>>>>>%f",self.touchForce);
+    if ([self check3DTouch])
+    {
+        [UIColor colorWithWhite:0 alpha:self.pathWidth*(1-self.touchForce)];
+    }
+    else
+    {
+        [UIColor.blackColor setStroke];
+    }
     [path stroke];
     
     /*self.layer.cornerRadius =5.0;
@@ -351,6 +379,34 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     }
 }
 
+-(void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    if ([self check3DTouch])
+    {
+        self.touchForce = touch.force;
+//        NSString * touchForce = [NSString stringWithFormat:@"%f",touch.force];
+//        self.pointForces = @[touchForce,touchForce,touchForce];
+    }
+}
+
+-(void)touchesMoved:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    UITouch *touch = [touches anyObject];
+    if ([self check3DTouch])
+    {
+        NSLog(@"%f",touch.force);
+    }
+    
+    if ([self check3DTouch])
+    {
+        self.touchForce = touch.force;
+//        NSString * touchForce = [NSString stringWithFormat:@"%f",touch.force];
+//        self.pointForces = @[self.pointForces[1],self.pointForces[2],touchForce];
+    }
+}
+
+
 - (void)clear
 {
     if (self.currentPointArr && self.currentPointArr.count > 0) {
@@ -365,6 +421,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     [self setNeedsDisplay];
     
 }
+
 - (void)sure
 {
     //没有签名发生时

@@ -18,7 +18,7 @@
 @interface PopSignatureView () <SignatureViewDelegate> {
     UIView* _mainView;
     UILabel *navTitle;
-    UIButton *clearBtn;;
+    UIButton *clearBtn;
 }
 
 @property (nonatomic,strong) UIView *backGroundView;
