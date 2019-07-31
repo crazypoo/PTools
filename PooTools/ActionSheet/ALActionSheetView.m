@@ -161,7 +161,14 @@
         self.titleLabel.textAlignment = NSTextAlignmentCenter;
         self.titleLabel.font = kDEFAULT_FONT(self.btnFontName, kTitleFontSize);
         self.titleLabel.numberOfLines = 0;
-        self.titleLabel.text = [NSString stringWithFormat:@"%@\n%@",_title,self.titleMessage];
+        if (kStringIsEmpty(self.titleMessage))
+        {
+            self.titleLabel.text = [NSString stringWithFormat:@"%@",_title];
+        }
+        else
+        {
+            self.titleLabel.text = [NSString stringWithFormat:@"%@\n%@",_title,self.titleMessage];
+        }
         [self.actionSheetView addSubview:self.titleLabel];
     }
     
