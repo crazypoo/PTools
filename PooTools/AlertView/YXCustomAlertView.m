@@ -34,6 +34,7 @@
 @property (nonatomic, assign) AlertAnimationType viewAnimationType;
 @property (nonatomic, strong) UIColor *alertViewBackgroundColor;
 @property (nonatomic, strong) UIColor *heightlightedColorColor;
+@property (nonatomic, assign) BOOL isDismiss;//是否关闭
 @end
 
 
@@ -179,8 +180,8 @@
         animation.toValue = @(0);
         animation.springBounciness = 1.0f;
         [self.layer pop_addAnimation:animation forKey:@"AlertAnimation"];
-
-
+        
+        
         self.titleLabel.text = title;
         [self addSubview:self.titleLabel];
         
@@ -218,7 +219,7 @@
         make.top.equalTo(self.customView.mas_bottom);
     }];
     kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
-
+    
     for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
         UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.alertViewBackgroundColor] forState:UIControlStateNormal];
@@ -260,7 +261,7 @@
     {
         textH = TitleViewH;
     }
-
+    
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.offset(textH);
         make.top.left.right.equalTo(self);
@@ -288,6 +289,11 @@
     }];
     
     [self setBottomView];
+    
+    if (self.isDismiss) {//判断是否要隐藏
+        [self dissMiss];
+    }
+    
 }
 
 #pragma mark - Action
@@ -301,9 +307,11 @@
 #pragma mark - 注销视图
 - (void) dissMiss
 {
+    
     if (self.didDismissBlock) {
         self.didDismissBlock(self);
     }
+    
     
     NSString *propertyNamed;
     CGFloat offsetValue = 0.0f;
@@ -339,7 +347,7 @@
         }
             break;
     }
-
+    
     POPBasicAnimation *offscreenAnimation = [POPBasicAnimation easeOutAnimation];
     offscreenAnimation.property = [POPAnimatableProperty propertyWithName:propertyNamed];
     offscreenAnimation.toValue = @(offsetValue);
@@ -356,6 +364,7 @@
             [self removeFromSuperview];
         }];
     }];
+    self.isDismiss = YES;
     [self.layer pop_addAnimation:offscreenAnimation forKey:@"offscreenAnimation"];
 }
 
