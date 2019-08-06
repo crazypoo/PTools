@@ -77,6 +77,7 @@
                                  moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
+                                      touchBackGround:(BOOL)canTouch
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
                                           clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
                                       didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock
@@ -127,10 +128,13 @@
         self.alertViewBackgroundColor = aBGColor ? aBGColor : [UIColor whiteColor];
         self.heightlightedColorColor = heightlightedColorColor ? heightlightedColorColor : kDevButtonHighlightedColor;
         
-        UITapGestureRecognizer *tapBackgroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dissMiss)];
-        tapBackgroundView.numberOfTouchesRequired = 1;
-        tapBackgroundView.numberOfTapsRequired = 1;
-        [self.middleView addGestureRecognizer:tapBackgroundView];
+        if (canTouch)
+        {
+            UITapGestureRecognizer *tapBackgroundView = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dissMiss)];
+            tapBackgroundView.numberOfTouchesRequired = 1;
+            tapBackgroundView.numberOfTapsRequired = 1;
+            [self.middleView addGestureRecognizer:tapBackgroundView];
+        }
         
         self.backgroundColor = self.alertViewBackgroundColor;
         self.layer.cornerRadius = AlertRadius;

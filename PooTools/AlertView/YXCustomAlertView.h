@@ -65,6 +65,7 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
                                  moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
+                                      touchBackGround:(BOOL)canTouch
                                         setCustomView:(YXCustomAlertViewSetCustomViewBlock _Nonnull )setViewBlock
                                           clickAction:(YXCustomAlertViewClickBlock _Nonnull )clickBlock
                                       didDismissBlock:(YXCustomAlertViewDidDismissBlock _Nonnull )didDismissBlock;
