@@ -40,19 +40,19 @@
     CGFloat searchBarFieldCornerRadius = self.searchBarTextFieldCornerRadius ? self.searchBarTextFieldCornerRadius : 5;
     CGFloat searchBarFieldBorderWidth = self.searchBarTextFieldBorderWidth ? self.searchBarTextFieldBorderWidth : 0.5;
 
-    if (@available(iOS 13.0, *))
-    {
-        [self.searchTextField setBackgroundColor:searchTextFieldBackgroundColors];
-        [self.searchTextField setTintColor:searchFieldCursorColor];
-        self.searchTextField.textColor = searchFieldColor;
-        self.searchTextField.font = searchFieldFont;
-        self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchFieldPlaceHolderColor}];
-        self.backgroundImage = [Utils createImageWithColor:searchBarOutSideViewColor];
-        [self setImage:searchBarImageSelect forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
-        kViewBorderRadius(self.searchTextField, searchBarFieldCornerRadius, searchBarFieldBorderWidth, searchBarTextFieldBorderColorSelect);
-    }
-    else
-    {
+//    if (@available(iOS 13.0, *))
+//    {
+//        [self.searchTextField setBackgroundColor:searchTextFieldBackgroundColors];
+//        [self.searchTextField setTintColor:searchFieldCursorColor];
+//        self.searchTextField.textColor = searchFieldColor;
+//        self.searchTextField.font = searchFieldFont;
+//        self.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:placeholderStr attributes:@{NSFontAttributeName: searchFieldFont,NSForegroundColorAttributeName:searchFieldPlaceHolderColor}];
+//        self.backgroundImage = [Utils createImageWithColor:searchBarOutSideViewColor];
+//        [self setImage:searchBarImageSelect forSearchBarIcon:UISearchBarIconSearch state:UIControlStateNormal];
+//        kViewBorderRadius(self.searchTextField, searchBarFieldCornerRadius, searchBarFieldBorderWidth, searchBarTextFieldBorderColorSelect);
+//    }
+//    else
+//    {
         UITextField *searchField;
         NSArray *subviewArr = self.subviews;
         for(int i = 0; i < subviewArr.count ; i++)
@@ -98,7 +98,7 @@
             [outView setBackgroundColor:searchBarOutSideViewColor];
             [self insertSubview:outView atIndex:1];
         }
-    }
+//    }
 }
 
 @end
