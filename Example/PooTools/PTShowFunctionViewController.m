@@ -65,8 +65,6 @@ CGFloat const tagItemSpace = 5;
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-#import "PooTools_Example-Swift.h"
-
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 #define DelaySecond 1
@@ -594,16 +592,7 @@ CGFloat const tagItemSpace = 5;
         {
             NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123";
             NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:1 viewAnimation:2 setCustomView:^(YXCustomAlertView *alertView) {
-                
-//                UILabel *aaa = [UILabel new];
-//                aaa.backgroundColor = kRandomColor;
-//                aaa.text = @"1123123123123";
-//                [alertView.customView addSubview:aaa];
-//                [aaa mas_makeConstraints:^(MASConstraintMaker *make) {
-//                    make.left.right.top.bottom.equalTo(alertView.customView);
-//                }];
-                
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:[UIFont systemFontOfSize:20] titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
                 UITextField *textField = [UITextField new];
                 textField.placeholder = @"用来展示数字键盘";
                 [alertView.customView addSubview:textField];
@@ -612,8 +601,7 @@ CGFloat const tagItemSpace = 5;
                     make.left.right.equalTo(alertView.customView);
                     make.height.offset(44);
                 }];
-                
-            } clickAction:^(YXCustomAlertView *alertView, NSInteger buttonIndex) {
+            } clickAction:^(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex) {
                 switch (buttonIndex) {
                     case 0:
                     {
@@ -630,9 +618,9 @@ CGFloat const tagItemSpace = 5;
                     default:
                         break;
                 }
-                
-            } didDismissBlock:^(YXCustomAlertView *alertView) {
+            } didDismissBlock:^(YXCustomAlertView * _Nonnull alertView) {
                 alertView = nil;
+
             }];
             [alert mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:title withTitleFontSize:[UIFont systemFontOfSize:20].pointSize withButtonArr:btnArrs]);
