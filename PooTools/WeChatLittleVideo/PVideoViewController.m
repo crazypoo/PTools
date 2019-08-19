@@ -52,7 +52,10 @@
 @property (nonatomic, strong) PControllerBar *ctrlBar;
 @property (nonatomic, assign) NSTimeInterval customRecordTime;
 @property (nonatomic, strong) AVCaptureSession *videoSession;
-@property (nonatomic, strong) UIWindow *keyWindow;
+@property (nonatomic, assign) CGRect viewBaseRect;
+@property (nonatomic, assign) BOOL isSmallStyle;
+@property (nonatomic, assign) CGSize videoViewSize;
+@property (nonatomic, assign) CGFloat topHeight;
 @end
 
 static PVideoViewController *__currentVideoVC = nil;
@@ -62,11 +65,13 @@ static PVideoViewController *__currentVideoVC = nil;
 -(instancetype)initWithRecordTime:(NSTimeInterval)recordTime video_W_H:(CGFloat)video_W_H withVideoWidthPX:(CGFloat)videoWidthPX withControViewHeight:(CGFloat)controViewHeight
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         self.customRecordTime = recordTime ? recordTime : 20;
         self.customVideo_W_H = video_W_H ? video_W_H : (4.0/3);
-        customVideoWidthPX = videoWidthPX ? videoWidthPX :200;
+        customVideoWidthPX = videoWidthPX ? videoWidthPX : 200;
         self.customControViewHeight = controViewHeight ? controViewHeight : 120;
+        self.viewBaseRect = [PVideoConfig viewFrameWithType:self.showType video_W_H:self.customVideo_W_H withControViewHeight:self.customControViewHeight];
     }
     return self;
 }
@@ -76,45 +81,52 @@ static PVideoViewController *__currentVideoVC = nil;
     self.showType = showType;
     __currentVideoVC = self;
     
-    [self setupSubViews];
+    _view = [UIView new];
+    self.view.backgroundColor = [UIColor clearColor];
+    UIPanGestureRecognizer *ges = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTopBarAction:)];
+    [self.view addGestureRecognizer:ges];
+
     self.view.hidden = YES;
     BOOL videoExist = [PVideoUtil existVideo];
-    self.keyWindow = [UIApplication sharedApplication].delegate.window;
-    [self.keyWindow addSubview:self.view];
+    [kAppDelegateWindow addSubview:self.view];
     [self.view mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.keyWindow);
+        make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
-    if (self.showType == PVideoViewShowTypeSingle && videoExist) {
-        
+    
+    [self layoutSubviews];
+
+    if (self.showType == PVideoViewShowTypeSingle && videoExist)
+    {
         [self ctrollVideoOpenVideoList:nil];
         kz_dispatch_after(0.4, ^{
             self.view.hidden = NO;
         });
-        
     }
-    else {
+    else
+    {
         self.view.hidden = NO;
         self.actionView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, CGRectGetHeight([PVideoConfig viewFrameWithType:showType video_W_H:self.customVideo_W_H withControViewHeight:self.customControViewHeight]));
         [UIView animateWithDuration:0.3 delay:0.1 options:UIViewAnimationOptionCurveLinear animations:^{
             self.actionView.transform = CGAffineTransformIdentity;
-            self.view.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha: 0.4];
+            self.view.backgroundColor = kDevMaskBackgroundColor;
         } completion:^(BOOL finished) {
             [self viewDidAppear];
         }];
     }
-    [self setupVideo];
 }
 
-- (void)endAniamtion {
+- (void)endAniamtion
+{
     [UIView animateWithDuration:0.3 animations:^{
         self.view.backgroundColor = [UIColor clearColor];
-        self.actionView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, CGRectGetHeight([PVideoConfig viewFrameWithType:self.showType video_W_H:self.customVideo_W_H withControViewHeight:self.customControViewHeight]));
+        self.actionView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, CGRectGetHeight(self.viewBaseRect));
     } completion:^(BOOL finished) {
         [self closeView];
     }];
 }
 
-- (void)closeView {
+- (void)closeView
+{
     [self.videoSession stopRunning];
     [self.videoPreLayer removeFromSuperlayer];
     self.videoPreLayer = nil;
@@ -131,111 +143,105 @@ static PVideoViewController *__currentVideoVC = nil;
     __currentVideoVC = nil;
 }
 
-- (void)setupSubViews {
-    _view = [UIView new];
-    self.view.backgroundColor = [UIColor clearColor];
-    
-    UIPanGestureRecognizer *ges = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(moveTopBarAction:)];
-    [self.view addGestureRecognizer:ges];
-    
-    CGRect actionRect = [PVideoConfig viewFrameWithType:self.showType video_W_H:self.customVideo_W_H withControViewHeight:self.customControViewHeight];
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
     
     _actionView = [UIView new];
     [self.view addSubview:_actionView];
-    _actionView.backgroundColor = kThemeBlackColor;
+    _actionView.backgroundColor = kThemeBlackColor;//kThemeBlackColor
     _actionView.clipsToBounds = YES;
     [_actionView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.view).offset(actionRect.origin.x);
-        make.top.equalTo(self.view).offset(actionRect.origin.y);
-        make.height.offset(actionRect.size.height);
-        make.width.offset(actionRect.size.width);
+        make.left.right.equalTo(self.view);
+        make.top.equalTo(self.view).offset(self.viewBaseRect.origin.y);
+        make.height.offset(self.viewBaseRect.size.height);
     }];
     
-    BOOL isSmallStyle = self.showType == PVideoViewShowTypeSmall;
+    self.isSmallStyle = self.showType == PVideoViewShowTypeSmall;
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        CGSize videoViewSize = [PVideoConfig videoViewDefaultSizeWithVideo_W_H:self.customVideo_W_H];
-        CGFloat topHeight = isSmallStyle ? 20.0 : 64.0;
-        
-        CGFloat allHeight = self.actionView.frame.size.height;
-        
-        CGFloat buttomHeight =  isSmallStyle ? self.customControViewHeight : allHeight - topHeight - videoViewSize.height;
-        
-        self.topSlideView = [[PStatusBar alloc] initWithFrame:CGRectZero style:self.showType];
-        if (!isSmallStyle) {
-            [self.topSlideView addCancelTarget:self selector:@selector(endAniamtion)];
-        }
-        [self.actionView addSubview:self.topSlideView];
-        [self.topSlideView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.left.right.equalTo(self.actionView);
-            make.height.offset(topHeight);
-        }];
-        
-        self.ctrlBar = [PControllerBar new];
-        [self.ctrlBar setupSubViewsWithStyle:self.showType recordTime:self.customRecordTime];
-        self.ctrlBar.delegate = self;
-        [self.actionView addSubview:self.ctrlBar];
-        [self.ctrlBar mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.actionView);
-            make.bottom.equalTo(self.actionView);
-            make.height.offset(buttomHeight);
-        }];
-        
-        self.videoView = [UIView new];
-        [self.actionView addSubview:self.videoView];
-        [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self.actionView);
-            make.top.equalTo(self.topSlideView.mas_bottom);
-            make.width.offset(videoViewSize.width);
-            make.height.offset(videoViewSize.height);
-            
-        }];
-        
-        UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focusAction:)];
-        tapGesture.delaysTouchesBegan = YES;
-        [self.videoView addGestureRecognizer:tapGesture];
-        
-        UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(zoomVideo:)];
-        doubleTapGesture.numberOfTapsRequired = 2;
-        doubleTapGesture.numberOfTouchesRequired = 1;
-        doubleTapGesture.delaysTouchesBegan = YES;
-        [self.videoView addGestureRecognizer:doubleTapGesture];
-        [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
-        
-        
-        self.focusView = [[PFocusView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
-        self.focusView.backgroundColor = [UIColor clearColor];
-        
-        self.statusInfo = [UILabel new];
-        self.statusInfo.textAlignment = NSTextAlignmentCenter;
-        self.statusInfo.font = [UIFont systemFontOfSize:14.0];
-        self.statusInfo.textColor = [UIColor whiteColor];
-        self.statusInfo.hidden = NO;
-        [self.actionView addSubview:self.statusInfo];
-        [self.statusInfo mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.equalTo(self.videoView);
-            make.height.offset(20);
-            make.bottom.equalTo(self.videoView.mas_bottom).offset(-30);
-        }];
-        
-        self.cancelInfo = [UILabel new];
-        self.cancelInfo.textAlignment = NSTextAlignmentCenter;
-        self.cancelInfo.textColor = kThemeWhiteColor;
-        self.cancelInfo.backgroundColor = kThemeWaringColor;
-        self.cancelInfo.hidden = YES;
-        [self.actionView addSubview:self.cancelInfo];
-        [self.cancelInfo mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(120);
-            make.height.offset(24);
-            make.centerX.centerY.equalTo(self.videoView);
-        }];
-        
-        [self.actionView sendSubviewToBack:self.videoView];
+    self.videoViewSize = [PVideoConfig videoViewDefaultSizeWithVideo_W_H:self.customVideo_W_H];
+    self.topHeight = self.isSmallStyle ? 20.0 : 64.0;
+    
+    CGFloat allHeight = self.actionView.frame.size.height;
+    
+    CGFloat buttomHeight =  self.isSmallStyle ? self.customControViewHeight : allHeight - self.topHeight - self.videoViewSize.height;
+    
+    self.topSlideView = [[PStatusBar alloc] initWithFrame:CGRectZero style:self.showType];
+    if (!self.isSmallStyle)
+    {
+        [self.topSlideView addCancelTarget:self selector:@selector(endAniamtion)];
+    }
+    [self.actionView addSubview:self.topSlideView];
+    [self.topSlideView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.left.right.equalTo(self.actionView);
+        make.height.offset(self.topHeight);
+    }];
+    
+    self.ctrlBar = [PControllerBar new];
+    [self.ctrlBar setupSubViewsWithStyle:self.showType recordTime:self.customRecordTime];
+    self.ctrlBar.delegate = self;
+    [self.actionView addSubview:self.ctrlBar];
+    [self.ctrlBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.actionView);
+        make.bottom.equalTo(self.actionView);
+        make.height.offset(buttomHeight);
+    }];
+    
+    self.videoView = [UIView new];
+    [self.actionView addSubview:self.videoView];
+    [self.videoView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.actionView);
+        make.top.equalTo(self.topSlideView.mas_bottom);
+        make.bottom.equalTo(self.ctrlBar.mas_top);
+    }];
+    
+    UITapGestureRecognizer *tapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(focusAction:)];
+    tapGesture.delaysTouchesBegan = YES;
+    [self.videoView addGestureRecognizer:tapGesture];
+    
+    UITapGestureRecognizer *doubleTapGesture = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(zoomVideo:)];
+    doubleTapGesture.numberOfTapsRequired = 2;
+    doubleTapGesture.numberOfTouchesRequired = 1;
+    doubleTapGesture.delaysTouchesBegan = YES;
+    [self.videoView addGestureRecognizer:doubleTapGesture];
+    [tapGesture requireGestureRecognizerToFail:doubleTapGesture];
+    
+    
+    self.focusView = [[PFocusView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
+    self.focusView.backgroundColor = [UIColor clearColor];
+    
+    self.statusInfo = [UILabel new];
+    self.statusInfo.textAlignment = NSTextAlignmentCenter;
+    self.statusInfo.font = kDEFAULT_FONT(kDevLikeFont, 14);
+    self.statusInfo.textColor = [UIColor whiteColor];
+    self.statusInfo.hidden = NO;
+    [self.actionView addSubview:self.statusInfo];
+    [self.statusInfo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.videoView);
+        make.height.offset(20);
+        make.bottom.equalTo(self.videoView.mas_bottom).offset(-30);
+    }];
+    
+    self.cancelInfo = [UILabel new];
+    self.cancelInfo.textAlignment = NSTextAlignmentCenter;
+    self.cancelInfo.textColor = kThemeWhiteColor;
+    self.cancelInfo.backgroundColor = kThemeWaringColor;
+    self.cancelInfo.hidden = YES;
+    [self.actionView addSubview:self.cancelInfo];
+    [self.cancelInfo mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(120);
+        make.height.offset(24);
+        make.centerX.centerY.equalTo(self.videoView);
+    }];
+    
+    [self.actionView sendSubviewToBack:self.videoView];
 
-    });
+    [self setupVideo];
+
 }
 
-- (void)setupVideo {
+- (void)setupVideo
+{
     NSString *unUseInfo = nil;
     if (TARGET_IPHONE_SIMULATOR) {
         unUseInfo = @"模拟器不可以的..";
@@ -301,86 +307,73 @@ static PVideoViewController *__currentVideoVC = nil;
     if ([self.videoSession canAddOutput:_audioDataOut]) {
         [self.videoSession addOutput:_audioDataOut];
     }
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        CGFloat viewWidth = CGRectGetWidth(self.actionView.frame);
-        self.videoPreLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.videoSession];
-        self.videoPreLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        [self.videoView.layer addSublayer:self.videoPreLayer];
-        kWeakSelf(self);
-        self.videoView.layoutSubviewsCallback = ^(UIView *view) {
-            weakself.videoPreLayer.frame = CGRectMake(0, -CGRectGetMinY(weakself.videoView.frame), viewWidth, viewWidth*weakself.customVideo_W_H);
-            weakself.videoPreLayer.position = CGPointMake(viewWidth/2, CGRectGetHeight(weakself.videoView.frame)/2);
-        };
 
-    });
-    
+    self.videoPreLayer = [[AVCaptureVideoPreviewLayer alloc] initWithSession:self.videoSession];
+    self.videoPreLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+    [self.videoView.layer addSublayer:self.videoPreLayer];
+    self.videoPreLayer.frame = CGRectMake(0, self.viewBaseRect.origin.y+self.topHeight, self.viewBaseRect.size.width, self.viewBaseRect.size.width*self.customVideo_W_H);
+    self.videoPreLayer.position = CGPointMake(self.viewBaseRect.size.width/2, self.viewBaseRect.size.height/2);
+
     [self.videoSession startRunning];
     
     [self viewWillAppear];
 }
 
-- (void)viewWillAppear {
-    
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        CGSize videoViewSize = [PVideoConfig videoViewDefaultSizeWithVideo_W_H:self.customVideo_W_H];
-        
-        self.eyeView = [[PEyeView alloc] initWithFrame:CGRectMake(0, 0, videoViewSize.width, videoViewSize.height)];
-        [self.videoView addSubview:self.eyeView];
-
-    });
+- (void)viewWillAppear
+{
+    self.eyeView = [[PEyeView alloc] initWithFrame:CGRectMake(0, 0, self.videoViewSize.width, self.videoViewSize.height)];
+    [self.videoView addSubview:self.eyeView];
 }
 
-- (void)viewDidAppear {
-    
+- (void)viewDidAppear
+{
     if (TARGET_IPHONE_SIMULATOR)  return;
     
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        UIView *sysSnapshot = [self.eyeView snapshotViewAfterScreenUpdates:NO];
-        CGFloat videoViewHeight = CGRectGetHeight(self.videoView.frame);
-        CGFloat viewViewWidth = CGRectGetWidth(self.videoView.frame);
-        self.eyeView.alpha = 0;
-        UIView *topView = [sysSnapshot resizableSnapshotViewFromRect:CGRectMake(0, 0, viewViewWidth, videoViewHeight/2) afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
-        CGRect btmFrame = CGRectMake(0, videoViewHeight/2, viewViewWidth, videoViewHeight/2);
-        UIView *btmView = [sysSnapshot resizableSnapshotViewFromRect:btmFrame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
-        btmView.frame = btmFrame;
-        [self.videoView addSubview:topView];
-        [self.videoView addSubview:btmView];
-        
-        [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
-            topView.transform = CGAffineTransformMakeTranslation(0,-videoViewHeight/2);
-            btmView.transform = CGAffineTransformMakeTranslation(0, videoViewHeight);
-            topView.alpha = 0.3;
-            btmView.alpha = 0.3;
-        } completion:^(BOOL finished) {
-            [topView removeFromSuperview];
-            [btmView removeFromSuperview];
-            [self.eyeView removeFromSuperview];
-            self.eyeView = nil;
-            [self focusInPointAtVideoView:CGPointMake(self.videoView.bounds.size.width/2, self.videoView.bounds.size.height/2)];
-        }];
-        
-        __block UILabel *zoomLab = [UILabel new];
-        zoomLab.font = [UIFont boldSystemFontOfSize:14];
-        zoomLab.text = @"双击放大";
-        zoomLab.textColor = [UIColor whiteColor];
-        zoomLab.textAlignment = NSTextAlignmentCenter;
-        [self.videoView addSubview:zoomLab];
-        [self.videoView bringSubviewToFront:zoomLab];
-        [zoomLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.offset(200);
-            make.height.offset(20);
-            make.centerX.equalTo(self.videoView);
-            make.bottom.equalTo(self.videoView).offset(-50);
-        }];
-        
-        kz_dispatch_after(1.6, ^{
-            [zoomLab removeFromSuperview];
-        });
+    UIView *sysSnapshot = [self.eyeView snapshotViewAfterScreenUpdates:NO];
+    CGFloat videoViewHeight = CGRectGetHeight(self.videoView.frame);
+    CGFloat viewViewWidth = CGRectGetWidth(self.videoView.frame);
+    self.eyeView.alpha = 0;
+    UIView *topView = [sysSnapshot resizableSnapshotViewFromRect:CGRectMake(0, 0, viewViewWidth, videoViewHeight/2) afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
+    CGRect btmFrame = CGRectMake(0, videoViewHeight/2, viewViewWidth, videoViewHeight/2);
+    UIView *btmView = [sysSnapshot resizableSnapshotViewFromRect:btmFrame afterScreenUpdates:NO withCapInsets:UIEdgeInsetsZero];
+    btmView.frame = btmFrame;
+    [self.videoView addSubview:topView];
+    [self.videoView addSubview:btmView];
+    
+    [UIView animateWithDuration:0.3 delay:0.0 options:UIViewAnimationOptionCurveEaseIn animations:^{
+        topView.transform = CGAffineTransformMakeTranslation(0,-videoViewHeight/2);
+        btmView.transform = CGAffineTransformMakeTranslation(0, videoViewHeight);
+        topView.alpha = 0.3;
+        btmView.alpha = 0.3;
+    } completion:^(BOOL finished) {
+        [topView removeFromSuperview];
+        [btmView removeFromSuperview];
+        [self.eyeView removeFromSuperview];
+        self.eyeView = nil;
+        [self focusInPointAtVideoView:CGPointMake(self.videoView.bounds.size.width/2, self.videoView.bounds.size.height/2)];
+    }];
+    
+    __block UILabel *zoomLab = [UILabel new];
+    zoomLab.font = kDEFAULT_FONT(kDevLikeFont, 14);
+    zoomLab.text = @"双击放大";
+    zoomLab.textColor = [UIColor whiteColor];
+    zoomLab.textAlignment = NSTextAlignmentCenter;
+    [self.videoView addSubview:zoomLab];
+    [self.videoView bringSubviewToFront:zoomLab];
+    [zoomLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(200);
+        make.height.offset(20);
+        make.centerX.equalTo(self.videoView);
+        make.bottom.equalTo(self.videoView).offset(-50);
+    }];
+    
+    kz_dispatch_after(1.6, ^{
+        [zoomLab removeFromSuperview];
     });
 }
 
-- (void)focusInPointAtVideoView:(CGPoint)point {
+- (void)focusInPointAtVideoView:(CGPoint)point
+{
     CGPoint cameraPoint= [self.videoPreLayer captureDevicePointOfInterestForPoint:point];
     self.focusView.center = point;
     [self.videoView addSubview:self.focusView];
@@ -388,23 +381,29 @@ static PVideoViewController *__currentVideoVC = nil;
     [self.focusView focusing];
     
     NSError *error = nil;
-    if ([_videoDevice lockForConfiguration:&error]) {
-        if ([_videoDevice isFocusPointOfInterestSupported]) {
+    if ([_videoDevice lockForConfiguration:&error])
+    {
+        if ([_videoDevice isFocusPointOfInterestSupported])
+        {
             _videoDevice.focusPointOfInterest = cameraPoint;
         }
-        if ([_videoDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus]) {
+        if ([_videoDevice isFocusModeSupported:AVCaptureFocusModeAutoFocus])
+        {
             _videoDevice.focusMode = AVCaptureFocusModeAutoFocus;
         }
-        if ([_videoDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose]) {
+        if ([_videoDevice isExposureModeSupported:AVCaptureExposureModeAutoExpose])
+        {
             _videoDevice.exposureMode = AVCaptureExposureModeAutoExpose;
         }
-        if ([_videoDevice isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeAutoWhiteBalance]) {
+        if ([_videoDevice isWhiteBalanceModeSupported:AVCaptureWhiteBalanceModeAutoWhiteBalance])
+        {
             _videoDevice.whiteBalanceMode = AVCaptureWhiteBalanceModeAutoWhiteBalance;
         }
         [_videoDevice unlockForConfiguration];
     }
-    if (error) {
-        NSLog(@"聚焦失败:%@",error);
+    if (error)
+    {
+        PNSLog(@"聚焦失败:%@",error);
     }
     kz_dispatch_after(1.0, ^{
         [self.focusView removeFromSuperview];
@@ -412,30 +411,36 @@ static PVideoViewController *__currentVideoVC = nil;
 }
 
 #pragma mark ---------------> Actions
-- (void)focusAction:(UITapGestureRecognizer *)gesture {
+- (void)focusAction:(UITapGestureRecognizer *)gesture
+{
     CGPoint point = [gesture locationInView:self.videoView];
     [self focusInPointAtVideoView:point];
 }
 
-- (void)zoomVideo:(UITapGestureRecognizer *)gesture {
+- (void)zoomVideo:(UITapGestureRecognizer *)gesture
+{
     NSError *error = nil;
-    if ([_videoDevice lockForConfiguration:&error]) {
-        CGFloat zoom = _videoDevice.videoZoomFactor == 2.0?1.0:2.0;
+    if ([_videoDevice lockForConfiguration:&error])
+    {
+        CGFloat zoom = _videoDevice.videoZoomFactor == 2.0 ? 1.0 : 2.0;
         _videoDevice.videoZoomFactor = zoom;
         [_videoDevice unlockForConfiguration];
     }
 }
 
-- (void)moveTopBarAction:(UIPanGestureRecognizer *)gesture {
+- (void)moveTopBarAction:(UIPanGestureRecognizer *)gesture
+{
     CGPoint pointAtView = [gesture locationInView:self.view];
-    CGRect dafultFrame = [PVideoConfig viewFrameWithType:self.showType video_W_H:self.customVideo_W_H withControViewHeight:self.customControViewHeight];
+    CGRect dafultFrame = self.viewBaseRect;
     
-    if (pointAtView.y < dafultFrame.origin.y) {
+    if (pointAtView.y < dafultFrame.origin.y)
+    {
         return;
     }
     
     CGPoint pointAtTop = [gesture locationInView:self.topSlideView];
-    if (pointAtTop.y > -10 && pointAtTop.y < 30) {
+    if (pointAtTop.y > -10 && pointAtTop.y < 30)
+    {
         CGRect actionFrame = _actionView.frame;
         actionFrame.origin.y = pointAtView.y;
         _actionView.frame = actionFrame;
@@ -443,21 +448,25 @@ static PVideoViewController *__currentVideoVC = nil;
         CGFloat alpha = 0.4*(kSCREEN_HEIGHT - pointAtView.y)/CGRectGetHeight(_actionView.frame);
         self.view.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha: alpha];
     }
-    if (gesture.state == UIGestureRecognizerStateEnded) {
-        if (pointAtView.y >= CGRectGetMidY(dafultFrame)) {
+    if (gesture.state == UIGestureRecognizerStateEnded)
+    {
+        if (pointAtView.y >= CGRectGetMidY(dafultFrame))
+        {
             [self endAniamtion];
         }
-        else {
+        else
+        {
             [UIView animateWithDuration:0.3 animations:^{
                 self.actionView.frame = dafultFrame;
-                self.view.backgroundColor = [UIColor colorWithRed: 0.0 green: 0.0 blue: 0.0 alpha: 0.4];
+                self.view.backgroundColor = kDevMaskBackgroundColor;
             }];
         }
     }
 }
 
 #pragma mark ---------------> controllerBarDelegate
-- (void)ctrollVideoDidStart:(PControllerBar *)controllerBar {
+- (void)ctrollVideoDidStart:(PControllerBar *)controllerBar
+{
     self.currentRecord = [PVideoUtil createNewVideo];
     self.currentRecordIsCancel = NO;
     NSURL *outURL = [NSURL fileURLWithPath:self.currentRecord.videoAbsolutePath];
@@ -473,7 +482,7 @@ static PVideoViewController *__currentVideoVC = nil;
     });
     
     _recoding = YES;
-    //    NSLog(@"视频开始录制");
+    PNSLog(@"视频开始录制");
 }
 
 - (void)ctrollVideoDidEnd:(PControllerBar *)controllerBar {
@@ -486,7 +495,7 @@ static PVideoViewController *__currentVideoVC = nil;
         }
     }];
     
-    //    NSLog(@"视频录制结束");
+    PNSLog(@"视频录制结束");
 }
 
 - (void)ctrollVideoDidCancel:(PControllerBar *)controllerBar reason:(PRecordCancelReason)reason{
@@ -496,7 +505,7 @@ static PVideoViewController *__currentVideoVC = nil;
     if (reason == PRecordCancelReasonTimeShort) {
         [PVideoConfig showHinInfo:@"录制时间过短" inView:self.videoView frame:CGRectMake(0,CGRectGetHeight(self.videoView.frame)/3*2,CGRectGetWidth(self.videoView.frame),20) timeLong:1.0];
     }
-    //    NSLog(@"当前视频录制取消");
+    PNSLog(@"当前视频录制取消");
 }
 
 - (void)ctrollVideoWillCancel:(PControllerBar *)controllerBar {
@@ -512,11 +521,11 @@ static PVideoViewController *__currentVideoVC = nil;
 
 - (void)ctrollVideoDidRecordSEC:(PControllerBar *)controllerBar {
     self.topSlideView.isRecoding = YES;
-    //    NSLog(@"视频录又过了 1 秒");
+    PNSLog(@"视频录又过了 1 秒");
 }
 
 - (void)ctrollVideoDidClose:(PControllerBar *)controllerBar {
-    //    NSLog(@"录制界面关闭");
+    PNSLog(@"录制界面关闭");
     if (self.delegate && [self.delegate respondsToSelector:@selector(videoViewControllerDidCancel:)]) {
         [self.delegate videoViewControllerDidCancel:self];
     }
@@ -524,19 +533,21 @@ static PVideoViewController *__currentVideoVC = nil;
 }
 
 - (void)ctrollVideoOpenVideoList:(PControllerBar *)controllerBar {
-    //    NSLog(@"查看视频列表");
+    PNSLog(@"查看视频列表");
     PVideoListViewController *listVC = [[PVideoListViewController alloc] initWithVideo_H_W:self.customVideo_W_H withControViewHeight:self.customControViewHeight];
     __weak typeof(self) blockSelf = self;
     listVC.selectBlock = ^(PVideoModel *selectModel) {
         self.currentRecord = selectModel;
-        if (self.delegate) {
+        if (self.delegate)
+        {
             [self.delegate videoViewController:blockSelf didRecordVideo:self.currentRecord];
         }
         [blockSelf closeView];
     };
     
     listVC.didCloseBlock = ^{
-        if (self.showType == PVideoViewShowTypeSingle) {
+        if (self.showType == PVideoViewShowTypeSingle)
+        {
             [blockSelf viewDidAppear];
         }
     };
@@ -550,20 +561,25 @@ static PVideoViewController *__currentVideoVC = nil;
     
     @autoreleasepool {
         _currentSampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer);
-        if (_assetWriter.status != AVAssetWriterStatusWriting) {
+        if (_assetWriter.status != AVAssetWriterStatusWriting)
+        {
             [_assetWriter startWriting];
             [_assetWriter startSessionAtSourceTime:_currentSampleTime];
         }
-        if (captureOutput == _videoDataOut) {
-            if (_assetWriterPixelBufferInput.assetWriterInput.isReadyForMoreMediaData) {
+        if (captureOutput == _videoDataOut)
+        {
+            if (_assetWriterPixelBufferInput.assetWriterInput.isReadyForMoreMediaData)
+            {
                 CVPixelBufferRef pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
                 BOOL success = [_assetWriterPixelBufferInput appendPixelBuffer:pixelBuffer withPresentationTime:_currentSampleTime];
-                if (!success) {
-                    NSLog(@"Pixel Buffer没有append成功");
+                if (!success)
+                {
+                    PNSLog(@"Pixel Buffer没有append成功");
                 }
             }
         }
-        if (captureOutput == _audioDataOut) {
+        if (captureOutput == _audioDataOut)
+        {
             [_assetWriterAudioInput appendSampleBuffer:sampleBuffer];
         }
     }
@@ -573,7 +589,8 @@ static PVideoViewController *__currentVideoVC = nil;
     
 }
 
-- (void)createWriter:(NSURL *)assetUrl {
+- (void)createWriter:(NSURL *)assetUrl
+{
     _assetWriter = [AVAssetWriter assetWriterWithURL:assetUrl fileType:AVFileTypeQuickTimeMovie error:nil];
     int videoWidth = [PVideoConfig defualtVideoSizeWithVideo_W_H:self.customVideo_W_H withVideoWidthPX:customVideoWidthPX].width;
     int videoHeight = [PVideoConfig defualtVideoSizeWithVideo_W_H:self.customVideo_W_H withVideoWidthPX:customVideoWidthPX].height;
@@ -628,13 +645,18 @@ static PVideoViewController *__currentVideoVC = nil;
     _assetWriterPixelBufferInput = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:_assetWriterVideoInput sourcePixelBufferAttributes:SPBADictionary];
     if ([_assetWriter canAddInput:_assetWriterVideoInput]) {
         [_assetWriter addInput:_assetWriterVideoInput];
-    }else {
-        NSLog(@"不能添加视频writer的input \(assetWriterVideoInput)");
     }
-    if ([_assetWriter canAddInput:_assetWriterAudioInput]) {
+    else
+    {
+        PNSLog(@"不能添加视频writer的input \(assetWriterVideoInput)");
+    }
+    if ([_assetWriter canAddInput:_assetWriterAudioInput])
+    {
         [_assetWriter addInput:_assetWriterAudioInput];
-    }else {
-        NSLog(@"不能添加视频writer的input \(assetWriterVideoInput)");
+    }
+    else
+    {
+        PNSLog(@"不能添加视频writer的input \(assetWriterVideoInput)");
     }
     
 }
@@ -643,7 +665,8 @@ static PVideoViewController *__currentVideoVC = nil;
     
     if (_recoding) return;
     
-    if (!_recoding_queue){
+    if (!_recoding_queue)
+    {
         complier(nil);
         return;
     };
@@ -665,11 +688,13 @@ static PVideoViewController *__currentVideoVC = nil;
                 [[PHPhotoLibrary sharedPhotoLibrary] performChanges:^{
                     [PHAssetChangeRequest creationRequestForAssetFromVideoAtFileURL:outputFileURL];
                 } completionHandler:^(BOOL success, NSError * _Nullable error) {
-                    if (!error && success) {
-                        NSLog(@"保存相册成功!");
+                    if (!error && success)
+                    {
+                        PNSLog(@"保存相册成功!");
                     }
-                    else {
-                        NSLog(@"保存相册失败! :%@",error);
+                    else
+                    {
+                        PNSLog(@"保存相册失败! :%@",error);
                     }
                 }];
             }

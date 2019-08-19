@@ -548,9 +548,10 @@ CGFloat angleToRadian(CGFloat angle)
         self.progressLine.hidden = YES;
         [self addSubview:self.progressLine];
         [self.progressLine mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.top.equalTo(self);
             make.width.offset(selfWidth);
+            make.top.equalTo(self);
             make.height.offset(4);
+            make.centerX.equalTo(self);
         }];
         
         self.surplusTime = self.customRecordTime;
@@ -601,7 +602,13 @@ CGFloat angleToRadian(CGFloat angle)
 {
     self.startBtn.alpha = 1.0;
     
-    self.progressLine.frame = CGRectMake(0, 0, self.bounds.size.width, 2);
+    [self.progressLine mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(self.bounds.size.width);
+        make.top.equalTo(self);
+        make.height.offset(4);
+        make.centerX.equalTo(self);
+    }];
+
     self.progressLine.backgroundColor = kThemeTineColor;
     self.progressLine.hidden = NO;
     
@@ -723,6 +730,12 @@ CGFloat angleToRadian(CGFloat angle)
 
 - (void)videoCancelAction:(PRecordCancelReason)reason
 {
+    [self.progressLine mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.offset(self.bounds.size.width);
+        make.top.equalTo(self);
+        make.height.offset(4);
+        make.centerX.equalTo(self);
+    }];
     if (_delegate && [_delegate respondsToSelector:@selector(ctrollVideoDidCancel:reason:)])
     {
         [_delegate ctrollVideoDidCancel:self reason:reason];
@@ -763,8 +776,12 @@ CGFloat angleToRadian(CGFloat angle)
     CGRect oldFrame = self.progressLine.frame;
     
     [UIView animateWithDuration:1.0 delay: 0.0 options: UIViewAnimationOptionCurveLinear animations:^{
-        self.progressLine.frame = CGRectMake(oldFrame.origin.x, oldFrame.origin.y, oldLineLen - reduceLen, oldFrame.size.height);
-        self.progressLine.center = CGPointMake(self.bounds.size.width/2, self.progressLine.bounds.size.height/2);
+        [self.progressLine mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.offset(oldLineLen - reduceLen);
+            make.top.equalTo(self).offset(oldFrame.origin.y);
+            make.height.offset(oldFrame.size.height);
+            make.centerX.equalTo(self);
+        }];
     } completion:^(BOOL finished) {
         self.surplusTime --;
         if (self.recording) {
