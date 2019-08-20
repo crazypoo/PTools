@@ -17,7 +17,8 @@ typedef NS_ENUM(NSUInteger, CGUploadType) {
     CGUploadTypeAUDIO,
     CGUploadTypeFLV,
     CGUploadTypeMP3,
-    CGUploadTypeFULLVIEW
+    CGUploadTypeFULLVIEW,
+    CGUploadTypeZIPFILE
 };
 
 NS_ASSUME_NONNULL_BEGIN

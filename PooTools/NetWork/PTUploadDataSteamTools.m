@@ -22,12 +22,15 @@
 +(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
 {
     HZWaitingView *waitingView = [[HZWaitingView alloc] init];
-    waitingView.mode = HZWaitingViewModeLoopDiagram;
-    [view addSubview:waitingView];
-    [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.offset(kSCREEN_WIDTH * 0.5);
-        make.centerX.centerY.equalTo(view);
-    }];
+    if (view)
+    {
+        waitingView.mode = HZWaitingViewModeLoopDiagram;
+        [view addSubview:waitingView];
+        [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.width.height.offset(kSCREEN_WIDTH * 0.5);
+            make.centerX.centerY.equalTo(view);
+        }];
+    }
     
     kShowNetworkActivityIndicator();
     
@@ -36,7 +39,7 @@
     manager.requestSerializer = [AFJSONRequestSerializer serializer];//请求
     manager.responseSerializer = [AFHTTPResponseSerializer serializer];//响应
     manager.requestSerializer.timeoutInterval = timeoutInterval;
-    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"textml",@"text/css",@"text/plain", @"application/javascript",@"application/json", @"application/x-www-form-urlencoded",@"multipart/form-data",@"image/jpg",@"image/png",@"image/jpeg",@"video/mp4",@"audio/mpeg",@"flv/qsv",@"mp3/mp3",@"application/octet-stream",@"text/html", nil]];
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"application/json", @"text/json", @"text/javascript",@"textml",@"text/css",@"text/plain", @"application/javascript",@"application/json", @"application/x-www-form-urlencoded",@"multipart/form-data",@"image/jpg",@"image/png",@"image/jpeg",@"video/mp4",@"audio/mpeg",@"flv/qsv",@"mp3/mp3",@"application/octet-stream",@"text/html",@"groupFile/zip", nil]];
     
 #if DEBUG
     PNSLog(@"Address:%@\nParameters:%@",serverAddress,parameters);
@@ -50,10 +53,16 @@
         }
     }progress:^(NSProgress *uploadProgress){
         dispatch_async(dispatch_get_main_queue(), ^{
-            waitingView.progress = uploadProgress.fractionCompleted;
+            if (view)
+            {
+                waitingView.progress = uploadProgress.fractionCompleted;
+            }
         });
     }success:^(NSURLSessionDataTask *task, id responseObject){
-        [waitingView removeFromSuperview];
+        if (view)
+        {
+            [waitingView removeFromSuperview];
+        }
         kHideNetworkActivityIndicator();
         NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
 #if DEBUG
@@ -120,6 +129,11 @@
         case CGUploadTypeMP3:
         {
             return @"mp3/mp3";
+        }
+            break;
+        case CGUploadTypeZIPFILE:
+        {
+            return @"groupFile/zip";
         }
             break;
         default:
