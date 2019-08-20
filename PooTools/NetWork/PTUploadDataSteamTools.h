@@ -21,17 +21,15 @@ typedef NS_ENUM(NSUInteger, CGUploadType) {
     CGUploadTypeZIPFILE
 };
 
-NS_ASSUME_NONNULL_BEGIN
-
 typedef void (^PTUploadDataToServerSuccessBlock)(NSDictionary * _Nonnull result);
-typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
+typedef void (^PTUploadDataToServerFailureBlock)(NSError * _Nonnull error);
 
 @interface PTUploadDataModel : NSObject
-@property (nonatomic,strong) UIImage *uploadImage;
+@property (nonatomic,strong) UIImage * _Nullable uploadImage;
 @property (nonatomic,assign) CGUploadType imageType;
-@property (nonatomic,strong) NSString *imageName;
-@property (nonatomic,strong) NSData *imageData;
-@property (nonatomic,strong) NSString *imageDataName;
+@property (nonatomic,strong) NSString * _Nonnull imageName;
+@property (nonatomic,strong) NSData * _Nonnull imageData;
+@property (nonatomic,strong) NSString * _Nonnull imageDataName;
 @end
 
 @interface PTUploadDataSteamTools : NSObject
@@ -44,13 +42,11 @@ typedef void (^PTUploadDataToServerFailureBlock)(NSError *error);
  * @param successBlock 成功回调
  * @param failureBlock 失败回调
  */
-+(void)uploadComboDataSteamProgressInView:(UIView *)view
-                           withParameters:(NSDictionary *)parameters
-                        withServerAddress:(NSString *)serverAddress
-                               imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr
++(void)uploadComboDataSteamProgressInView:(UIView  * _Nullable )view
+                           withParameters:(NSDictionary * _Nullable)parameters
+                        withServerAddress:(NSString * _Nonnull)serverAddress
+                               imageArray:(NSArray <PTUploadDataModel *>* _Nonnull)dataModelArr
                                   timeOut:(NSTimeInterval)timeoutInterval
-                                  success:(PTUploadDataToServerSuccessBlock)successBlock
-                                  failure:(PTUploadDataToServerFailureBlock)failureBlock;
+                                  success:(PTUploadDataToServerSuccessBlock _Nonnull)successBlock
+                                  failure:(PTUploadDataToServerFailureBlock _Nonnull)failureBlock;
 @end
-
-NS_ASSUME_NONNULL_END
