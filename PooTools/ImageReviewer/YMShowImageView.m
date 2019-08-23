@@ -1305,9 +1305,6 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             }
             [self layoutSubviews];
         }];
-        if (self.didDeleted) {
-            self.didDeleted(self, index);
-        }
     }
 }
 @end
