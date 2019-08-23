@@ -1240,72 +1240,76 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 -(void)deleteImage
 {
-    NSInteger index = self.page;
-    
-    if (self.didDeleted)
-    {
-        self.didDeleted(self,index);
-    }
-    
-    if (_scrollView.subviews.count == 1 && self.imageScrollViews.count == 1)
-    {
-        [self disappear];
-    }
-    else
-    {
-        for (int i = 0 ; i < self.modelArr.count; i++) {
-            PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
-            [imageScroll.player.player pause];
-//            [imageScroll.player pause];
-            [imageScroll removeFromSuperview];
+        NSInteger index = self.page;
+            
+        if (_scrollView.subviews.count == 1 && self.imageScrollViews.count == 1)
+        {
+            [self disappear];
+            if (self.didDeleted)
+            {
+                self.didDeleted(self,0);
+            }
         }
-        
-        [UIView animateWithDuration:0.1 animations:^{
-            
-            NSInteger newIndex = index - 1;
-            if (newIndex < 0)
-            {
-                newIndex = 0;
-            }
-            else if (newIndex == 0)
-            {
-                newIndex = 0;
-            }
-            else
-            {
-                newIndex = index-1;
-            }
-            self.page = newIndex;
-            
-            self.scrollView.contentSize = CGSizeMake(self.imageScrollViews.count*kSCREEN_WIDTH, self.scrollView.contentSize.height);
-            [self.scrollView setContentOffset:CGPointMake(self.page * kSCREEN_WIDTH, 0) animated:YES];
-            [self.modelArr removeObjectAtIndex:index];
-            [self.imageScrollViews removeAllObjects];
-            
-            for (int i = 0 ; i < self.modelArr.count; i++)
-            {
-                PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
-                imageScroll.isFullWidthForLandScape = NO;
-                imageScroll.tag = SubViewBasicsIndex+i;
-                [self.scrollView addSubview:imageScroll];
-                [self.imageScrollViews addObject:imageScroll];
+        else
+        {
+            for (int i = 0 ; i < self.modelArr.count; i++) {
+                PShowImageSingleView *imageScroll = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex+i];
+                [imageScroll.player.player pause];
+    //            [imageScroll.player pause];
+                [imageScroll removeFromSuperview];
             }
             
-            if (self.modelArr.count > 1)
-            {
-                int textIndex = self.scrollView.contentOffset.x / self.scrollView.bounds.size.width;
-                if (textIndex == 0) {
-                    textIndex = 1;
+            [UIView animateWithDuration:0.1 animations:^{
+                
+                NSInteger newIndex = index - 1;
+                if (newIndex < 0)
+                {
+                    newIndex = 0;
                 }
-                self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld",textIndex,(long)self.modelArr.count];
-            }
-            else
+                else if (newIndex == 0)
+                {
+                    newIndex = 0;
+                }
+                else
+                {
+                    newIndex = index-1;
+                }
+                self.page = newIndex;
+                
+                self.scrollView.contentSize = CGSizeMake(self.imageScrollViews.count*kSCREEN_WIDTH, self.scrollView.contentSize.height);
+                [self.scrollView setContentOffset:CGPointMake(self.page * kSCREEN_WIDTH, 0) animated:YES];
+                [self.modelArr removeObjectAtIndex:index];
+                [self.imageScrollViews removeAllObjects];
+                
+                for (int i = 0 ; i < self.modelArr.count; i++)
+                {
+                    PShowImageSingleView *imageScroll = [[PShowImageSingleView alloc] initWithFrame:CGRectMake(self.width*i, 0, self.width, self.height)];
+                    imageScroll.isFullWidthForLandScape = NO;
+                    imageScroll.tag = SubViewBasicsIndex+i;
+                    [self.scrollView addSubview:imageScroll];
+                    [self.imageScrollViews addObject:imageScroll];
+                }
+                
+                if (self.modelArr.count > 1)
+                {
+                    int textIndex = self.scrollView.contentOffset.x / self.scrollView.bounds.size.width;
+                    if (textIndex == 0) {
+                        textIndex = 1;
+                    }
+                    self.indexLabel.text = [NSString stringWithFormat:@"%d/%ld",textIndex,(long)self.modelArr.count];
+                }
+                else
+                {
+                    [self.indexLabel removeFromSuperview];
+                }
+                [self layoutSubviews];
+            }];
+            
+            if (self.didDeleted)
             {
-                [self.indexLabel removeFromSuperview];
+                self.didDeleted(self,self.page);
             }
-            [self layoutSubviews];
-        }];
-    }
+        }
 }
 @end
 
