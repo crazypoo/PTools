@@ -21,17 +21,20 @@
 
 +(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
 {
-    HZWaitingView *waitingView = [[HZWaitingView alloc] init];
-    if (view)
-    {
-        waitingView.mode = HZWaitingViewModeLoopDiagram;
-        [view addSubview:waitingView];
-        [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.width.height.offset(kSCREEN_WIDTH * 0.5);
-            make.centerX.centerY.equalTo(view);
-        }];
-    }
-    
+    HZWaitingView *orView = [[HZWaitingView alloc] init];
+    __weak HZWaitingView *waitingView = orView;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (view)
+        {
+            waitingView.mode = HZWaitingViewModeLoopDiagram;
+            [view addSubview:waitingView];
+            [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.width.height.offset(kSCREEN_WIDTH * 0.5);
+                make.centerX.centerY.equalTo(view);
+            }];
+        }
+    });
+
     kShowNetworkActivityIndicator();
     
     //表单请求，上传文件

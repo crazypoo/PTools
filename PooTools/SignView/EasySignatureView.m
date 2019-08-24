@@ -195,7 +195,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 //压缩图片,最长边为128(根据不同的比例来压缩)
 - (UIImage *)scaleToSize:(UIImage *)img {
     CGRect rect ;
-    CGFloat imageWidth = img.size.width;
+//    CGFloat imageWidth = img.size.width;
     //判断图片宽度
 //    if(imageWidth >= 128)
 //    {

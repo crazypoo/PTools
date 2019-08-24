@@ -20,6 +20,7 @@ typedef void (^PooSignCancelBlock)(PopSignatureView *signView);
                withViewFontName:(NSString *)fName
                 withNavFontName:(NSString *)nfName
               withLinePathWidth:(CGFloat)linePathWidth
+              withBtnTitleColor:(UIColor *)btnColor
                      handleDone:(PooSignDoneBlock)doneBlock
                    handleCancle:(PooSignCancelBlock)cancelBlock;
 

@@ -34,7 +34,7 @@
 @property (nonatomic,copy) PooSignDoneBlock doneBlock;
 @property (nonatomic,copy) PooSignCancelBlock cancelBlock;
 @property (nonatomic,assign) CGFloat linePathWidth;
-@property (nonatomic,strong) UIButton *btnTitleColor;
+@property (nonatomic,strong) UIColor *btnTitleColor;
 @end
 
 @implementation PopSignatureView
@@ -67,6 +67,7 @@
                withViewFontName:(NSString *)fName
                 withNavFontName:(NSString *)nfName
               withLinePathWidth:(CGFloat)linePathWidth
+              withBtnTitleColor:(UIColor *)btnColor
                      handleDone:(PooSignDoneBlock)doneBlock
                    handleCancle:(PooSignCancelBlock)cancelBlock
 {
@@ -80,7 +81,7 @@
         self.linePathWidth = linePathWidth;
         self.doneBlock = doneBlock;
         self.cancelBlock = cancelBlock;
-        self.btnTitleColor = kRGBAColor(255, 255, 255, 0.5);
+        self.btnTitleColor = btnColor ? btnColor : kRGBAColor(255, 255, 255, 0.5);
     }
     return self;
 }
