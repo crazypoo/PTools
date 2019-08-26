@@ -45,7 +45,7 @@
                                   withButtonArr:(NSArray *)btns
 {
     
-    UIFont titleAndBottomFont = tf ? tf : kDEFAULT_FONT(kDevLikeFont, 18);
+    UIFont *titleAndBottomFont = tf ? tf : kDEFAULT_FONT(kDevLikeFont, 18);
     
     CGFloat titleH = 0.0f;
     if (titleAndBottomFont.pointSize*title.length > w)
