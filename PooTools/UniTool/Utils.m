@@ -54,10 +54,27 @@
     return newStr.uppercaseString;
 }
 
-+(CGSize)sizeForString:(NSString *)string fontToSize:(float)fontToSize andHeigh:(float)heigh andWidth:(float)width
++(CGSize)sizeForString:(NSString  * _Nonnull)string
+                  font:(UIFont * _Nonnull)stringFont
+              andHeigh:(CGFloat)heigh
+              andWidth:(CGFloat)width
 {
-    NSDictionary *dic = @{NSFontAttributeName: [UIFont systemFontOfSize:fontToSize]};
-    CGSize size = [string boundingRectWithSize:CGSizeMake(width, heigh) options:NSStringDrawingTruncatesLastVisibleLine | NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    NSDictionary *dic = @{NSFontAttributeName: stringFont};
+    NSStringDrawingOptions options = NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading;
+    CGSize size = [string boundingRectWithSize:CGSizeMake(width, heigh) options:options attributes:dic context:nil].size;
+    return size;
+}
+
++(CGSize)sizeForString:(NSString * _Nonnull)string
+                  font:(UIFont * _Nonnull)stringFont
+           lineSpacing:(CGFloat)lineSpacing
+              andWidth:(CGFloat)width
+              andHeigh:(CGFloat)height
+{
+    NSMutableParagraphStyle *paraStyle = [[NSMutableParagraphStyle alloc] init];
+    paraStyle.lineSpacing = lineSpacing;
+    NSDictionary *dic = @{ NSFontAttributeName:stringFont, NSParagraphStyleAttributeName:paraStyle };
+    CGSize size = [string boundingRectWithSize:CGSizeMake(width, height) options: NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
     return size;
 }
 

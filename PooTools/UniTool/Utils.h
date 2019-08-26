@@ -147,10 +147,18 @@ static inline BOOL isIPhoneXSeries() {
 #pragma mark ------> 计算字符串高度或者宽度
 /*! @brief Compute string heigh or width
  */
++(CGSize)sizeForString:(NSString  * _Nonnull)string
+                  font:(UIFont * _Nonnull)stringFont
+              andHeigh:(CGFloat)heigh
+              andWidth:(CGFloat)width;
+
+/*! @brief Compute string heigh or width(含有字行间距)
+*/
 +(CGSize)sizeForString:(NSString * _Nonnull)string
-            fontToSize:(float)fontToSize
-              andHeigh:(float)heigh
-              andWidth:(float)width;
+                  font:(UIFont * _Nonnull)stringFont
+           lineSpacing:(CGFloat)lineSpacing
+              andWidth:(CGFloat)width
+              andHeigh:(CGFloat)height;
 
 #pragma mark ------> UIButton
 /*! @brief 按钮简易生成
