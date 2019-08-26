@@ -36,8 +36,15 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
 @property (nonatomic, strong, nullable) UIView *customView;
 
 /*! @brief AlertView默认Title加底部按钮高度
+ * @param w 界面宽度
+ * @param title 标题i字符串
+ * @param tf 标题字体(u有默认)
+ * @param btns 按钮数组
  */
-+(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w withTitle:(NSString *_Nonnull)title withTitleFontSize:(CGFloat)tfs withButtonArr:(NSArray *_Nonnull)btns;
++(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w
+                                      withTitle:(NSString *_Nonnull)title
+                                  withTitleFont:(UIFont * _Nullable)tf
+                                  withButtonArr:(NSArray *_Nonnull)btns;
 
 /*! @brief 初始化View,带回调
  * @param superView 加载在哪里

@@ -766,7 +766,8 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         {
             [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.bottom.left.right.equalTo(self);
-                CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
+                CGFloat infoH = [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
+
                 if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
                     make.height.offset(infoH+20);
                 }
@@ -784,8 +785,9 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 make.left.top.equalTo(self.bottomView).offset(10);
                 make.right.bottom.equalTo(self.bottomView).offset(-10);
             }];
-            
-            self.labelScroller.contentSize = CGSizeMake(self.size.width-20,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
+           
+             
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-20, [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
             
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.equalTo(self.labelScroller);
@@ -799,7 +801,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.bottom.left.right.equalTo(self);
-                CGFloat infoH = [Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height;
+                CGFloat infoH = [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:labelW].height;
                 if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
                     make.height.offset(infoH+20);
                 }
@@ -832,7 +834,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 make.right.equalTo(self.deleteButton.mas_left).offset(-10);
             }];
             
-            self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo fontToSize:16 andHeigh:CGFLOAT_MAX andWidth:labelW].height);
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:labelW].height);
             
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.equalTo(self.labelScroller);

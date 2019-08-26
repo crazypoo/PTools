@@ -39,12 +39,18 @@
 
 @implementation YXCustomAlertView
 
-+(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w withTitle:(NSString *)title withTitleFontSize:(CGFloat)tfs withButtonArr:(NSArray *)btns
++(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w
+                                      withTitle:(NSString * _Nonnull)title
+                                  withTitleFont:(UIFont *)tf
+                                  withButtonArr:(NSArray *)btns
 {
+    
+    UIFont titleAndBottomFont = tf ? tf : kDEFAULT_FONT(kDevLikeFont, 18);
+    
     CGFloat titleH = 0.0f;
-    if (tfs*title.length > w)
+    if (titleAndBottomFont.pointSize*title.length > w)
     {
-        titleH = [Utils sizeForString:title fontToSize:tfs andHeigh:CGFLOAT_MAX andWidth:w].height;
+        titleH = [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:w].height;
     }
     else
     {
@@ -54,7 +60,7 @@
     CGFloat btnW = (w - (btns.count-1)*AlertLine)/btns.count;
     BOOL isEX = NO;
     for (NSString *string in btns) {
-        if ((tfs*string.length+10) > btnW) {
+        if ((tf.pointSize*string.length+10) > btnW) {
             isEX = YES;
             break;
         }
@@ -258,7 +264,7 @@
     CGFloat textH;
     if (self.viewFont.pointSize*self.titleLabel.text.length > self.frame.size.width)
     {
-        textH = [Utils sizeForString:self.titleLabel.text fontToSize:self.viewFont.pointSize andHeigh:CGFLOAT_MAX andWidth:self.frame.size.width].height;
+        textH = [Utils sizeForString:self.titleLabel.text font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:self.frame.size.width].height;
     }
     else
     {
