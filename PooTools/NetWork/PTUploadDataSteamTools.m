@@ -22,7 +22,7 @@
 +(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            HZWaitingView *orView = [[HZWaitingView alloc] init];
+            HZWaitingView *orView = [HZWaitingView new];
             __strong HZWaitingView *waitingView = orView;
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (view)
