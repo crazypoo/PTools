@@ -33,6 +33,9 @@ typedef void (^PTUploadDataToServerFailureBlock)(NSError * _Nonnull error);
 @end
 
 @interface PTUploadDataSteamTools : NSObject
+
++ (instancetype _Nonnull )sharedInstance;
+
 /*! @brief 上传方法
  * @param view 初始化在哪个界面
  * @param parameters 上传数据字典
@@ -42,7 +45,7 @@ typedef void (^PTUploadDataToServerFailureBlock)(NSError * _Nonnull error);
  * @param successBlock 成功回调
  * @param failureBlock 失败回调
  */
-+(void)uploadComboDataSteamProgressInView:(UIView  * _Nullable )view
+-(void)uploadComboDataSteamProgressInView:(UIView  * _Nullable )view
                            withParameters:(NSDictionary * _Nullable)parameters
                         withServerAddress:(NSString * _Nonnull)serverAddress
                                imageArray:(NSArray <PTUploadDataModel *>* _Nonnull)dataModelArr

@@ -17,19 +17,32 @@
 @implementation PTUploadDataModel
 @end
 
+@interface PTUploadDataSteamTools ()
+@property (nonatomic,strong)HZWaitingView *waitingView;
+@end
+
 @implementation PTUploadDataSteamTools
 
-+(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
++ (instancetype)sharedInstance {
+    static dispatch_once_t onceToken;
+    static PTUploadDataSteamTools *cls;
+    dispatch_once(&onceToken, ^{
+        cls = [[[self class] alloc] init];
+    });
+    return cls;
+}
+
+-(void)uploadComboDataSteamProgressInView:(UIView *)view withParameters:(NSDictionary *)parameters withServerAddress:(NSString *)serverAddress imageArray:(NSArray <PTUploadDataModel *>*)dataModelArr timeOut:(NSTimeInterval)timeoutInterval success:(PTUploadDataToServerSuccessBlock)successBlock failure:(PTUploadDataToServerFailureBlock)failureBlock
 {
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            HZWaitingView *orView = [HZWaitingView new];
-            __strong HZWaitingView *waitingView = orView;
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (view)
                 {
-                    waitingView.mode = HZWaitingViewModeLoopDiagram;
-                    [view addSubview:waitingView];
-                    [waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
+                    self.waitingView = [HZWaitingView new];
+                    self.waitingView.mode = HZWaitingViewModeLoopDiagram;
+                    [view addSubview:self.waitingView];
+                    [self.waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.width.height.offset(kSCREEN_WIDTH * 0.5);
                         make.centerX.centerY.equalTo(view);
                     }];
@@ -59,13 +72,13 @@
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (view)
                     {
-                        waitingView.progress = uploadProgress.fractionCompleted;
+                        self.waitingView.progress = uploadProgress.fractionCompleted;
                     }
                 });
             }success:^(NSURLSessionDataTask *task, id responseObject){
                 if (view)
                 {
-                    [waitingView removeFromSuperview];
+                    [self.waitingView removeFromSuperview];
                 }
                 kHideNetworkActivityIndicator();
                 NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
@@ -76,7 +89,7 @@
                     successBlock(dic);
                 }
             }failure:^(NSURLSessionDataTask *task, NSError *error){
-                [waitingView removeFromSuperview];
+                [self.waitingView removeFromSuperview];
                 kHideNetworkActivityIndicator();
         #if DEBUG
                 PNSLog(@"ServerFailureReturn:%@",error);
