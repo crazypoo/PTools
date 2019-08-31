@@ -47,9 +47,9 @@
                         make.centerX.centerY.equalTo(view);
                     }];
                 }
+                kShowNetworkActivityIndicator();
             });
 
-            kShowNetworkActivityIndicator();
             
             //表单请求，上传文件
             AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
