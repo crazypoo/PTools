@@ -87,7 +87,7 @@ CGFloat const tagItemSpace = 5;
 
 -(NSArray *)roomSetArray
 {
-    return @[@"空调",@"床",@"热水器",@"洗衣机",@"沙发",@"电视机",@"冰箱",@"天然气",@"宽带",@"衣柜"];
+    return @[@"空调",@"床",@"热水器",@"洗衣机",@"沙发",@"电视机",@"冰箱",@"天然气",@"宽带",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"11",@"12",@"13",@"14"];
 }
 
 -(NSArray *)taglabelNormalArr
@@ -136,7 +136,7 @@ CGFloat const tagItemSpace = 5;
     config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
     config.borderColor = [UIColor grayColor];
     config.borderColorSelected = AppOrange;
-
+    config.tagPosition = PooTagPositionLeft;
     return config;
 }
 
@@ -305,6 +305,7 @@ CGFloat const tagItemSpace = 5;
 //            NSArray *title = @[@"7",@"1",@"2",@"3",@"1231231231314124"];
             
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
+//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
             PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
             tag.backgroundColor = kRandomColor;
             [self.view addSubview:tag];
@@ -320,8 +321,9 @@ CGFloat const tagItemSpace = 5;
             pBtnsssss.backgroundColor = kRandomColor;
             [pBtnsssss addActionHandler:^(UIButton *sender) {
                 PNSLog(@"1111111111");
-                self.titleS = @[@"空调",@"床",@"热水器"];
-                [tag reloadTag:[self tagConfig]];
+//                self.titleS = @[@"空调",@"床",@"热水器"];
+//                [tag reloadTag:[self tagConfig]];
+                [tag setTagPosition:PooTagPositionCenter];
             }];
             [self.view addSubview:pBtnsssss];
             [pBtnsssss mas_makeConstraints:^(MASConstraintMaker *make) {

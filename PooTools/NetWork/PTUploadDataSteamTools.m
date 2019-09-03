@@ -62,7 +62,6 @@
             PNSLog(@"Address:%@\nParameters:%@",serverAddress,parameters);
         #endif
             [manager POST:serverAddress parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData){
-                [WMHub hide];
                 for (int i = 0; i < dataModelArr.count; i++)
                 {
                     PTUploadDataModel *model = dataModelArr[i];
@@ -76,10 +75,12 @@
                     }
                 });
             }success:^(NSURLSessionDataTask *task, id responseObject){
-                if (view)
-                {
-                    [self.waitingView removeFromSuperview];
-                }
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (view)
+                    {
+                        [self.waitingView removeFromSuperview];
+                    }
+                });
                 kHideNetworkActivityIndicator();
                 NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
         #if DEBUG
@@ -89,7 +90,12 @@
                     successBlock(dic);
                 }
             }failure:^(NSURLSessionDataTask *task, NSError *error){
-                [self.waitingView removeFromSuperview];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    if (view)
+                    {
+                        [self.waitingView removeFromSuperview];
+                    }
+                });
                 kHideNetworkActivityIndicator();
         #if DEBUG
                 PNSLog(@"ServerFailureReturn:%@",error);

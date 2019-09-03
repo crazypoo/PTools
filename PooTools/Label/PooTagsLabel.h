@@ -11,6 +11,12 @@ typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
     PooTagsLabelShowWithImageStatusNoTitle
 };
 
+typedef NS_ENUM(NSInteger,PooTagPosition){
+    PooTagPositionLeft = 0,
+    PooTagPositionCenter = 1,
+    PooTagPositionRight
+};
+
 #import <UIKit/UIKit.h>
 #import "UIButton+ImageTitleSpacing.h"
 
@@ -18,6 +24,7 @@ typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
 
 typedef void(^tagBtnClicked)(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag);
 typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
+typedef void(^tagViewHadSectionAndSetcionLastTagAndTagInSectionCount) (PooTagsLabel *aTagsView,NSInteger section,NSMutableArray <NSNumber *>*lastTagArr,NSMutableArray <NSNumber *>*sectionCountArr);
 
 @interface PooTagsLabelConfig : NSObject
 /*! @brief item之间的左右间距
@@ -105,6 +112,9 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 多个选中对应的标题数组(初始化时默认选中的)
  */
 @property (nonatomic,copy) NSArray *selectedDefaultTags;
+/*! @brief Tag的展示位置默认左边
+*/
+@property (nonatomic,assign) PooTagPosition tagPosition;
 @end
 
 @interface PooTagsLabel : UIView
@@ -114,6 +124,10 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 点击block
  */
 @property (nonatomic,copy) tagBtnClicked tagBtnClickedBlock;
+/*! @brief 视图数据回调
+    @see 包含自己,最后一行的section,每行tag最后一个的数组,每一行有多少个
+*/
+@property (nonatomic,copy) tagViewHadSectionAndSetcionLastTagAndTagInSectionCount tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock;
 
 /*! @brief 设置view的背景图片
  */
@@ -147,4 +161,8 @@ typedef void(^tagViewHeightBlock) (PooTagsLabel *aTagsView,CGFloat viewHeight);
 /*! @brief 重新加载Tag
  */
 -(void)reloadTag:(PooTagsLabelConfig *)config;
+
+/*! @brief 设置tag展示位置
+*/
+-(void)setTagPosition:(PooTagPosition)position;
 @end

@@ -9,6 +9,7 @@
 #import "PooTagsLabel.h"
 #import "PMacros.h"
 #import "Utils.h"
+#import <Masonry/Masonry.h>
 
 #define BTN_Tags_Tag        784843
 
@@ -22,6 +23,10 @@
 @property (nonatomic,assign) CGFloat viewW;
 @property (nonatomic,strong) NSArray *selectedTagsArr;
 @property (nonatomic,strong) NSArray *tagsTitleArr;
+
+@property (nonatomic,assign) NSInteger section;
+@property (nonatomic,strong) NSMutableArray <NSNumber *>*rowLastTagArr;
+@property (nonatomic,strong) NSMutableArray <NSNumber *>*sectionCountArr;
 @end
 
 @implementation PooTagsLabel
@@ -57,6 +62,11 @@
             CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
             UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
             
+            self.section = 0;
+            NSInteger row = 0;
+
+            self.rowLastTagArr = [NSMutableArray array];
+
             for (int i = 0; i < self.normalTagsArr.count; i++)
             {
                 UIImage *normalImage = kImageNamed(self.normalTagsArr[i]);
@@ -64,19 +74,27 @@
                 
                 CGFloat titleWidth = self.curConfig.itemWidth;
                 
+
                 if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
                 {
                     lastBtnRect.origin.x = 0.0;
                     hMargin = 0.0;
                     lastBtnRect.size.width = 0.0;
                     orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
+                    
+                    NSInteger currentRowLastTag = row - BTN_Tags_Tag;
+                    [self.rowLastTagArr addObject:[NSNumber numberWithInteger:currentRowLastTag]];
+                    
+                    self.section += 1;
                 }
                 
                 UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight)];
                 lastBtnRect = btn.frame;
                 hMargin = self.curConfig.itemHerMargin;
                 btn.tag = BTN_Tags_Tag + i;
-                
+                row = BTN_Tags_Tag + i;
+                [self addSubview:btn];
+
                 ///标题设置
                 switch (self.curConfig.showStatus) {
                     case PooTagsLabelShowWithImageStatusNoTitle:
@@ -149,11 +167,35 @@
                     btn.enabled = NO;
                 }
                 
-                [self addSubview:btn];
             }
             if (self.tagHeightBlock) {
                 self.tagHeightBlock(self, self.frame.size.height);
             }
+            
+            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
+
+            [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
+            
+            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
+
+            self.sectionCountArr = [NSMutableArray array];
+            for (int i = 0; i < self.rowLastTagArr.count; i++) {
+                if (i == 0) {
+                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
+                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
+                }
+                else
+                {
+                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue] - [self.rowLastTagArr[i-1] integerValue];
+                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
+                }
+            }
+            
+            if (self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock)
+            {
+                self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
+            }
+            [self setTagPosition:config.tagPosition];
 
         });
     }
@@ -192,6 +234,11 @@
             
             UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
             
+            self.section = 0;
+            NSInteger row = 0;
+
+            self.rowLastTagArr = [NSMutableArray array];
+            
             for (int i = 0; i < tagsArr.count; i++)
             {
                 NSString *title = tagsArr[i];
@@ -203,13 +250,28 @@
                     hMargin = 0.0;
                     lastBtnRect.size.width = 0.0;
                     orgin_Y += (config.itemHeight + config.itemVerMargin);
+
+                    NSInteger currentRowLastTag = row - BTN_Tags_Tag;
+                    [self.rowLastTagArr addObject:[NSNumber numberWithInteger:currentRowLastTag]];
+                    
+                    self.section += 1;
                 }
-                
+
                 UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth+2*itemContentMargin, config.itemHeight)];
                 lastBtnRect = btn.frame;
                 hMargin = config.itemHerMargin;
                 btn.tag = BTN_Tags_Tag + i;
+                row = BTN_Tags_Tag + i;
+                [self addSubview:btn];
+//                [btn mas_makeConstraints:^(MASConstraintMaker *make) {
+//                    make.left.equalTo(self).offset(hMargin+lastBtnRect.origin.x);
+//                    make.top.equalTo(self).offset(topBottomSpace + orgin_Y);
+//                    make.width.offset(titleWidth+2*itemContentMargin);
+//                    make.height.offset(config.itemHeight);
+//                }];
                 
+//                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>%@",NSStringFromCGRect(btn.frame));
+
                 ///标题设置
                 UIColor *normorTitleColor = config.normalTitleColor ? config.normalTitleColor : [UIColor grayColor];
                 UIColor *selectedTitleColor = config.selectedTitleColor ? config.selectedTitleColor : [UIColor greenColor];
@@ -286,16 +348,104 @@
                 {  //不可选中
                     btn.enabled = NO;
                 }
-                [self addSubview:btn];
             }
             if (self.tagHeightBlock) {
                 self.tagHeightBlock(self, self.frame.size.height);
             }
+            
+            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
+
+            [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
+            
+            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
+
+            self.sectionCountArr = [NSMutableArray array];
+            for (int i = 0; i < self.rowLastTagArr.count; i++) {
+                if (i == 0) {
+                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
+                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
+                }
+                else
+                {
+                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue] - [self.rowLastTagArr[i-1] integerValue];
+                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
+                }
+            }
+            
+            if (self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock)
+            {
+                self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
+            }
+            [self setTagPosition:config.tagPosition];
         });
     }
     return self;
 }
 
+
+-(void)setTagPosition:(PooTagPosition)position
+{
+    for (int j = 0; j < (self.section+1); j++) {
+        CGFloat totalW = 0.0;
+                                
+        for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < ([self.rowLastTagArr[j] intValue]+1); i++) {
+            UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
+
+            totalW += CGRectGetWidth(currentBtn.frame);
+        }
+        PNSLog(@"当行(%d)总w:%f",j,totalW);
+
+        CGFloat currentSectionTotalW = totalW+self.curConfig.itemHerMargin*([self.sectionCountArr[j] integerValue]+1);
+        
+        CGFloat xxxxxxxxx;
+        switch (position) {
+            case PooTagPositionCenter:
+            {
+                
+                if ((self.frame.size.width - currentSectionTotalW) < 0)
+                {
+                    xxxxxxxxx = 0;
+                }
+                else
+                {
+                    xxxxxxxxx = (self.frame.size.width - currentSectionTotalW)/2;
+                }
+            }
+                break;
+            case PooTagPositionLeft:
+            {
+                xxxxxxxxx = 0;
+            }
+                break;
+            case PooTagPositionRight:
+            {
+                xxxxxxxxx = self.frame.size.width - currentSectionTotalW + self.curConfig.itemHerMargin;
+            }
+                break;
+            default:
+            {
+                xxxxxxxxx = self.curConfig.itemHerMargin;
+            }
+                break;
+        }
+        PNSLog(@"当行(%d)x位置::%f",j,xxxxxxxxx);
+        
+        for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < [self.rowLastTagArr[j] intValue]+1; i++) {
+                UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
+                UIButton *lastBtn = [self viewWithTag:i-1+BTN_Tags_Tag];//上一个
+            if (i == ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)))
+            {
+                currentBtn.frame = CGRectMake(xxxxxxxxx, currentBtn.frame.origin.y, currentBtn.frame.size.width, currentBtn.frame.size.height);
+            }
+            else
+            {
+                currentBtn.frame = CGRectMake(lastBtn.frame.origin.x+lastBtn.frame.size.width+self.curConfig.itemHerMargin, currentBtn.frame.origin.y, currentBtn.frame.size.width, currentBtn.frame.size.height);
+            }
+        }
+
+    }
+    
+}
 //-(void)layoutSubviews
 //{
 //    [super layoutSubviews];
