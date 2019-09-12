@@ -372,16 +372,24 @@
     NSDate *create = [formater dateFromString:contractDate];
     NSDate *now = [NSDate date];
     NSTimeInterval timeDifference = [create timeIntervalSinceDate:now];
-    float thirty = [[NSNumber numberWithInt: timeStamp] floatValue];
-    if (timeDifference - thirty <= 0.000000)
+    double thirty = [[NSNumber numberWithInt: timeStamp] doubleValue];
+    double result = timeDifference - thirty;
+    if (result > (-thirty)) {
+        return CheckNowTimeAndPastTimeRelationshipsReadyExpire;
+    }
+    else if (result < (-thirty))
     {
         return CheckNowTimeAndPastTimeRelationshipsExpire;
     }
-    else
+    else if (result > 0)
     {
         return CheckNowTimeAndPastTimeRelationshipsNormal;
     }
-    return CheckNowTimeAndPastTimeRelationshipsError;
+    else
+    {
+        return CheckNowTimeAndPastTimeRelationshipsError;
+    }
+
 }
 
 +(CheckNowTimeAndPastTimeRelationships)checkStartDateExpireEndDataWithStartDate:(NSString *)sD withEndDate:(NSString *)eD expTimeStamp:(int)timeStamp

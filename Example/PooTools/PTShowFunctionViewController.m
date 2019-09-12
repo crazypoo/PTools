@@ -129,7 +129,7 @@ CGFloat const tagItemSpace = 5;
     config.topBottomSpace = tagItemSpace;
     config.itemContentEdgs = tagItemSpace;
     config.isCanSelected = YES;
-    config.isCanCancelSelected = YES;
+    config.isCanCancelSelected = NO;
     config.isMulti = YES;
     config.selectedDefaultTags = self.titleS;
     config.selectedTitleColor = AppOrange;
@@ -315,6 +315,9 @@ CGFloat const tagItemSpace = 5;
             }];
             tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
                 PNSLog(@"%f",viewHeight);
+            };
+            tag.tagBtnClickedBlock = ^(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag) {
+                PNSLog(@"%d",tag);
             };
             
             UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];

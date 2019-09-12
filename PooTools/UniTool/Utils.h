@@ -43,8 +43,10 @@ typedef NS_ENUM(NSInteger,ToolsUrlStringVideoType){
 
 typedef NS_ENUM(NSInteger,CheckNowTimeAndPastTimeRelationships){
     CheckNowTimeAndPastTimeRelationshipsExpire = 0,
+    CheckNowTimeAndPastTimeRelationshipsReadyExpire,
     CheckNowTimeAndPastTimeRelationshipsNormal,
     CheckNowTimeAndPastTimeRelationshipsError
+
 };
 
 typedef NS_ENUM(NSInteger,FewMonthLaterType){
