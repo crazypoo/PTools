@@ -374,7 +374,7 @@
     NSTimeInterval timeDifference = [create timeIntervalSinceDate:now];
     double thirty = [[NSNumber numberWithInt: timeStamp] doubleValue];
     double result = timeDifference - thirty;
-    if (result > (-thirty)) {
+    if (result > (-thirty) && result < thirty) {
         return CheckNowTimeAndPastTimeRelationshipsReadyExpire;
     }
     else if (result < (-thirty))
@@ -389,7 +389,6 @@
     {
         return CheckNowTimeAndPastTimeRelationshipsError;
     }
-
 }
 
 +(CheckNowTimeAndPastTimeRelationships)checkStartDateExpireEndDataWithStartDate:(NSString *)sD withEndDate:(NSString *)eD expTimeStamp:(int)timeStamp
@@ -400,16 +399,24 @@
     NSDate *endDate = [formater dateFromString:eD];
     
     NSTimeInterval timeDifference = [endDate timeIntervalSinceDate:startDate];
-    float thirty = [[NSNumber numberWithInt:timeStamp] floatValue];
-    if (timeDifference - thirty <= 0.000000)
+    double thirty = [[NSNumber numberWithInt:timeStamp] floatValue];
+    double result = timeDifference - thirty;
+
+    if (result > (-thirty) && result < thirty) {
+        return CheckNowTimeAndPastTimeRelationshipsReadyExpire;
+    }
+    else if (result < (-thirty))
     {
         return CheckNowTimeAndPastTimeRelationshipsExpire;
     }
-    else
+    else if (result > 0)
     {
         return CheckNowTimeAndPastTimeRelationshipsNormal;
     }
-    return CheckNowTimeAndPastTimeRelationshipsError;
+    else
+    {
+        return CheckNowTimeAndPastTimeRelationshipsError;
+    }
 }
 
 #pragma mark ------> 获取地区

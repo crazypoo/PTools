@@ -153,6 +153,13 @@
                                    success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
                                    failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
 
+    
+//    CheckNowTimeAndPastTimeRelationshipsExpire = 0,
+//       CheckNowTimeAndPastTimeRelationshipsReadyExpire,
+//       CheckNowTimeAndPastTimeRelationshipsNormal,
+//       CheckNowTimeAndPastTimeRelationshipsError
+    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%ld",(long)[Utils checkContractDateExpireContractDate:@"2019-08-28" expTimeStamp:2592000]);
+    
     return YES;
 }
 
