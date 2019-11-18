@@ -46,4 +46,7 @@
         pageIndicatorTintColor:(UIColor *)pageTColor
  currentPageIndicatorTintColor:(UIColor *)pageCColor
                     pageEnable:(BOOL)pEnable;
+
+-(void)addTimer;
+-(void)removeTimer;
 @end

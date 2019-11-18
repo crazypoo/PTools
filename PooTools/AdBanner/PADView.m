@@ -170,7 +170,8 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     }
 }
 
--(void) removeTimer{
+-(void)removeTimer
+{
     [timer invalidate];
     timer = nil;
 }
