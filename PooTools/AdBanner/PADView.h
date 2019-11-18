@@ -21,6 +21,7 @@
 }
 
 @property (nonatomic, copy) void(^adTouchBlock)(CGAdBannerModel *touchModel);
+@property (nonatomic, copy) void(^adCurrentIndexBlock)(NSInteger index);
 
 /*! @brief 广告初始化
  * @param adArr 广告数组

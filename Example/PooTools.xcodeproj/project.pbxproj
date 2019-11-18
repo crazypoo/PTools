@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A4128B3234D79D6006DCBA7 /* UITextView+KJLimitCounter.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A4128B1234D79D6006DCBA7 /* UITextView+KJLimitCounter.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -171,6 +172,8 @@
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		5A4128B1234D79D6006DCBA7 /* UITextView+KJLimitCounter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextView+KJLimitCounter.m"; sourceTree = "<group>"; };
+		5A4128B2234D79D6006DCBA7 /* UITextView+KJLimitCounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextView+KJLimitCounter.h"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -723,6 +726,8 @@
 		C08D9DCE2276890F001417F1 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				5A4128B2234D79D6006DCBA7 /* UITextView+KJLimitCounter.h */,
+				5A4128B1234D79D6006DCBA7 /* UITextView+KJLimitCounter.m */,
 				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
 				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
 				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
@@ -1538,6 +1543,7 @@
 				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
 				CCA57328223605E4005A6764 /* IGFileDownLoadManager.m in Sources */,
+				5A4128B3234D79D6006DCBA7 /* UITextView+KJLimitCounter.m in Sources */,
 				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
 				C009FA42228FDF590072C043 /* SQFloatWindow.m in Sources */,

@@ -288,6 +288,13 @@
             return [formatter stringFromDate:date];
         }
             break;
+        case GetTimeTypeD:
+        {
+            [formatter setDateFormat:@"dd"];
+            [formatter setTimeZone:timeZone];
+            return [formatter stringFromDate:date];
+        }
+            break;
         case GetTimeTypeHHS:
         {
             [formatter setDateFormat:@"HH:mm:ss"];

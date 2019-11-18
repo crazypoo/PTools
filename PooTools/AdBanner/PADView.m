@@ -61,16 +61,22 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         }
         else
         {
-            self.pageControl = [UIPageControl new];
-            self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
-            self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
-            self.pageControl.numberOfPages = adArr.count;
-            self.pageControl.currentPage = 0;
-            [self addSubview:self.pageControl];
+            if (viewData.count > 1)
+            {
+                self.pageControl = [UIPageControl new];
+                self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
+                self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
+                self.pageControl.numberOfPages = adArr.count;
+                self.pageControl.currentPage = 0;
+                [self addSubview:self.pageControl];
+            }
         }
 
         if (pT != 0) {
-            [self addTimer];
+            if (viewData.count > 1)
+            {
+                [self addTimer];
+            }
         }
     }
     return self;
@@ -104,11 +110,14 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     }
     else
     {
-        [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.right.bottom.equalTo(self);
-            make.height.equalTo(@(20));
-            make.width.equalTo(@(100));
-        }];
+        if (viewData.count > 1)
+        {
+            [self.pageControl mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.right.bottom.equalTo(self);
+                make.height.equalTo(@(20));
+                make.width.equalTo(@(100));
+            }];
+        }
     }
 }
 
@@ -169,13 +178,17 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 #pragma mark ------> UIScrollViewDelegate
 -(void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
     [self removeTimer];
-    
+}
+
+-(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
+{
     NSInteger currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
     self.pageControl.currentPage = currentPage;
     self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",currentPage+1,(unsigned long)viewData.count];
-}
-
--(void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate{
+    if (self.adCurrentIndexBlock)
+    {
+        self.adCurrentIndexBlock(currentPage);
+    }
     [self addTimer];
 }
 
@@ -183,15 +196,17 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 {
     if (scrollView == adCollectionView)
     {
-        NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
-        NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
-        NSInteger nextItem = currentIndexPathReset.item +1;
-        NSInteger nextSection = currentIndexPathReset.section;
-        if (nextItem == viewData.count) {
-            nextItem = viewData.count-1;
-        }
-        NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
-        [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+        NSInteger currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
+        self.pageControl.currentPage = currentPage;
+//        NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
+//        NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
+//        NSInteger nextItem = currentIndexPathReset.item +1;
+//        NSInteger nextSection = currentIndexPathReset.section;
+//        if (nextItem == viewData.count) {
+//            nextItem = viewData.count-1;
+//        }
+//        NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
+//        [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     }
 }
 
@@ -211,5 +226,9 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     [self.pageControl setCurrentPage:nextIndexPath.item];
     [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",nextIndexPath.row+1,(unsigned long)viewData.count];
+    if (self.adCurrentIndexBlock)
+    {
+        self.adCurrentIndexBlock(nextIndexPath.row);
+    }
 }
 @end

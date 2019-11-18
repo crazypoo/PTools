@@ -26,7 +26,7 @@ extern NSString * _Nullable PLaunchAdDetailDisplayNotification;
  * @param callback 点击广告回调
  */
 + (void)showAdAtPath:(nonnull NSArray *)path
-              onView:(nonnull UIView *)container
+              onView:(nonnull id)container
         timeInterval:(NSTimeInterval)interval
     detailParameters:(nullable NSDictionary *)param
                years:(nullable NSString *)year

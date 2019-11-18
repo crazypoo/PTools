@@ -33,7 +33,7 @@ static PLaunchAdMonitor *monitor = nil;
 @implementation PLaunchAdMonitor
 
 + (void)showAdAtPath:(nonnull NSArray *)path
-              onView:(nonnull UIView *)container
+              onView:(nonnull id)container
         timeInterval:(NSTimeInterval)interval
     detailParameters:(nullable NSDictionary *)param
                years:(nullable NSString *)year
@@ -83,16 +83,29 @@ static PLaunchAdMonitor *monitor = nil;
     return url != nil;
 }
 
-+ (void)showImageOnView:(UIView *)container forTime:(NSTimeInterval)time years:(NSString *)year comName:(NSString *)comname dic:(BOOL)yesOrNo comLabel:(BOOL)hide skipButtonFont:(UIFont *)sbFont comNameFont:(UIFont *)cFont
++ (void)showImageOnView:(id)container forTime:(NSTimeInterval)time years:(NSString *)year comName:(NSString *)comname dic:(BOOL)yesOrNo comLabel:(BOOL)hide skipButtonFont:(UIFont *)sbFont comNameFont:(UIFont *)cFont
 {
     CGRect f = [UIScreen mainScreen].bounds;
     UIView *v = [UIView new];
     v.backgroundColor = [UIColor lightGrayColor];
-    [container addSubview:v];
-    [container bringSubviewToFront:v];
-    [v mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(container);
-    }];
+    
+    if ([container isKindOfClass:[UIView class]])
+    {
+        
+        [(UIView *)container addSubview:v];
+        [(UIView *)container bringSubviewToFront:v];
+        [v mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo((UIView *)container);
+        }];
+    }
+    else if ([container isKindOfClass:[UIWindow class]])
+    {
+        [(UIWindow *)container addSubview:v];
+        [(UIWindow *)container bringSubviewToFront:v];
+        [v mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.bottom.equalTo((UIWindow *)container);
+        }];
+    }
     
     f.size.height -= 50;
     
