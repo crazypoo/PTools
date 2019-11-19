@@ -23,7 +23,7 @@
 -(void)confingSubViews
 {
     self.adImage = [UIImageView new];
-    self.adImage.contentMode = UIViewContentModeScaleAspectFit;
+    self.adImage.contentMode = UIViewContentModeScaleAspectFill;
     [self.contentView addSubview:self.adImage];
     [self.adImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.bottom.equalTo(self.contentView);

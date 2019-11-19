@@ -317,7 +317,7 @@ CGFloat const tagItemSpace = 5;
                 PNSLog(@"%f",viewHeight);
             };
             tag.tagBtnClickedBlock = ^(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag) {
-                PNSLog(@"%d",tag);
+                PNSLog(@"%ld",(long)tag);
             };
             
             UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -636,7 +636,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-            [Utils alertVCOnlyShowWithTitle:nil andMessage:@"1111111"];
+            [Utils alertVCOnlyShowWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" andMessage:@"11111111111111111111111111111111111234234234234234234234243"];
 //            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[@"1",@"2"] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
 //                           okAction:^{
 //

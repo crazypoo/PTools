@@ -50,7 +50,7 @@
     CGFloat titleH = 0.0f;
     if (titleAndBottomFont.pointSize*title.length > w)
     {
-        titleH = [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:w].height;
+        titleH = [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
     }
     else
     {
@@ -69,7 +69,7 @@
             isEX = NO;
         }
     }
-    return isEX ? (titleH + BottomButtonH * btns.count + AlertLine * btns.count) : (titleH + BottomButtonH + AlertLine);
+    return isEX ? (titleH + BottomButtonH * btns.count + AlertLine * btns.count) : (titleH + BottomButtonH + AlertLine)+10;
 }
 
 - (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
@@ -264,7 +264,7 @@
     CGFloat textH;
     if (self.viewFont.pointSize*self.titleLabel.text.length > self.frame.size.width)
     {
-        textH = [Utils sizeForString:self.titleLabel.text font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:self.frame.size.width].height;
+        textH = [Utils sizeForString:self.titleLabel.text font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:(self.frame.size.width-20)].height;
     }
     else
     {
@@ -273,7 +273,9 @@
 
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.offset(textH);
-        make.top.left.right.equalTo(self);
+        make.top.equalTo(self).offset(10);
+        make.left.equalTo(self).offset(10);
+        make.right.equalTo(self).offset(-10);
     }];
     
     CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*AlertLine)/self.bottomBtnArr.count;
