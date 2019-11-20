@@ -11,6 +11,7 @@
 #import "PMacros.h"
 #import <WZLBadge/UIView+WZLBadge.h>
 #import "UIView+ModifyFrame.h"
+#import "UIButton+Block.h"
 
 #define ButtonTag 2000
 #define UnderLabelTag 1000
@@ -34,6 +35,7 @@
 @property (nonatomic, assign) CGFloat btnW;
 @property (nonatomic, assign) CGFloat scrollerContentSizeW;
 @property (nonatomic, strong) UIScrollView *scroller;
+@property (nonatomic, assign) BOOL withBlock;
 @end
 
 @implementation PooSegView
@@ -95,8 +97,11 @@ normalBackgroundColor:(UIColor *)nbc
             btn.titleLabel.font = self.titleFont;
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
             [self.scroller addSubview:btn];
-            [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
-            
+//            [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
+            [btn addActionHandler:^(UIButton *sender) {
+                self.withBlock = YES;
+                [self btnTap:sender];
+            }];
             UIView *underLIneView = [[UIView alloc] initWithFrame:CGRectMake(self.scrollerContentSizeW, self.frame.size.height-2, btnWNormal, 2)];
             underLIneView.tag = UnderLabelTag+i;
             if (i == self.firstSelect)
@@ -301,14 +306,18 @@ normalBackgroundColor:(UIColor *)nbc
         }
     }
     
-    if (self.clickBlock)
+    if (self.withBlock)
     {
-        self.clickBlock(self, (sender.tag-ButtonTag));
+        if (self.clickBlock)
+        {
+            self.clickBlock(self, (sender.tag-ButtonTag));
+        }
     }
 }
 
--(void)setSegCurrentIndex:(NSInteger)index
+-(void)setSegCurrentIndex:(NSInteger)index withBlock:(BOOL)block
 {
+    self.withBlock = block;
     self.firstSelect = index;
     UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+index];
     [self btnTap:button];

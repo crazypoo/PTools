@@ -61,7 +61,8 @@ normalBackgroundColor:(UIColor *)nbc
 
 /*! @brief 设置当前选项
  */
--(void)setSegCurrentIndex:(NSInteger)index;
+-(void)setSegCurrentIndex:(NSInteger)index
+                withBlock:(BOOL)block;
 
 /*! @brief 设置某一项有提示
  * @param type 提示type
