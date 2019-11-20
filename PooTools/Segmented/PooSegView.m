@@ -69,6 +69,7 @@ normalBackgroundColor:(UIColor *)nbc
         self.normalBackgroundColor = nbc;
         self.showViewType = viewType;
         self.firstSelect = (fSelect > titleArr.count) ? 0 : fSelect;
+        self.withBlock = YES;
         [self initUI];
     }
     return self;
