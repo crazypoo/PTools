@@ -36,50 +36,59 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         self.viewY = py;
         self.titleFont = adTitleFont;
         
-        adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:sw itemH:sh paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
-        adCollectionView.backgroundColor                = [UIColor whiteColor];
-        adCollectionView.dataSource                     = self;
-        adCollectionView.delegate                       = self;
-        adCollectionView.showsHorizontalScrollIndicator = NO;
-        adCollectionView.showsVerticalScrollIndicator   = NO;
-        adCollectionView.pagingEnabled                  = pEnable;
-        [adCollectionView registerClass:[CGADCollectionViewCell class] forCellWithReuseIdentifier:ADBannerCollectionViewCell];
-        [self addSubview:adCollectionView];
-        [adCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.left.right.top.bottom.equalTo(self);
-        }];
-        
-        if (viewData.count > 5) {
-            self.pageLabel = [UILabel new];
-            self.pageLabel.font = self.titleFont ? self.titleFont : kDEFAULT_FONT(kDevLikeFont, 18);
-            self.pageLabel.textAlignment = NSTextAlignmentCenter;
-            self.pageLabel.textColor = [UIColor whiteColor];
-            self.pageLabel.backgroundColor = kDevMaskBackgroundColor;
-            self.pageLabel.text = [NSString stringWithFormat:@"1/%lu",(unsigned long)viewData.count];
-            [self addSubview:self.pageLabel];
-            kViewBorderRadius(self.pageLabel, 10, 0, kClearColor);
-        }
-        else
+        if (!self.adCollectionView)
         {
-            if (viewData.count > 1)
-            {
-                self.pageControl = [UIPageControl new];
-                self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
-                self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
-                self.pageControl.numberOfPages = adArr.count;
-                self.pageControl.currentPage = 0;
-                [self addSubview:self.pageControl];
+            self.adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:sw itemH:sh paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
+            self.adCollectionView.backgroundColor                = [UIColor whiteColor];
+            self.adCollectionView.dataSource                     = self;
+            self.adCollectionView.delegate                       = self;
+            self.adCollectionView.showsHorizontalScrollIndicator = NO;
+            self.adCollectionView.showsVerticalScrollIndicator   = NO;
+            self.adCollectionView.pagingEnabled                  = pEnable;
+            [self.adCollectionView registerClass:[CGADCollectionViewCell class] forCellWithReuseIdentifier:ADBannerCollectionViewCell];
+            [self addSubview:self.adCollectionView];
+            [self.adCollectionView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.top.bottom.equalTo(self);
+            }];
+            
+            if (viewData.count > 5) {
+                self.pageLabel = [UILabel new];
+                self.pageLabel.font = self.titleFont ? self.titleFont : kDEFAULT_FONT(kDevLikeFont, 18);
+                self.pageLabel.textAlignment = NSTextAlignmentCenter;
+                self.pageLabel.textColor = [UIColor whiteColor];
+                self.pageLabel.backgroundColor = kDevMaskBackgroundColor;
+                self.pageLabel.text = [NSString stringWithFormat:@"1/%lu",(unsigned long)viewData.count];
+                [self addSubview:self.pageLabel];
+                kViewBorderRadius(self.pageLabel, 10, 0, kClearColor);
             }
-        }
-
-        if (pT != 0) {
-            if (viewData.count > 1)
+            else
             {
-                [self addTimer];
+                if (viewData.count > 1)
+                {
+                    self.pageControl = [UIPageControl new];
+                    self.pageControl.currentPageIndicatorTintColor = pageCColor ? pageCColor : kRandomColor;
+                    self.pageControl.pageIndicatorTintColor = pageTColor ? pageTColor :  kRandomColor;
+                    self.pageControl.numberOfPages = adArr.count;
+                    self.pageControl.currentPage = 0;
+                    [self addSubview:self.pageControl];
+                }
+            }
+
+            if (pT != 0) {
+                if (viewData.count > 1)
+                {
+                    [self addTimer];
+                }
             }
         }
     }
     return self;
+}
+
+-(void)adViewReload:(NSArray <CGAdBannerModel *> *)adArr
+{
+    viewData = adArr;
+    [self.adCollectionView reloadData];
 }
 
 -(void)layoutSubviews
@@ -95,8 +104,8 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         self.viewW = self.viewW;
     }
     
-    adCollectionView.collectionViewLayout = [CGLayout createLayoutItemW:self.viewW itemH:self.viewH paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
-    [adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
+    self.adCollectionView.collectionViewLayout = [CGLayout createLayoutItemW:self.viewW itemH:self.viewH paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
+    [self.adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);
     }];
     
@@ -195,7 +204,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    if (scrollView == adCollectionView)
+    if (scrollView == self.adCollectionView)
     {
         NSInteger currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
         self.pageControl.currentPage = currentPage;
@@ -214,9 +223,9 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
 #pragma mark ------> 下一张
 -(void)nextpage
 {
-    NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
+    NSIndexPath *currentIndexPath = [[self.adCollectionView indexPathsForVisibleItems] lastObject];
     NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
-    [adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
+    [self.adCollectionView scrollToItemAtIndexPath:currentIndexPathReset atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:NO];
 
     NSInteger nextItem = currentIndexPathReset.item +1;
     NSInteger nextSection = currentIndexPathReset.section;
@@ -225,7 +234,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     }
     NSIndexPath *nextIndexPath = [NSIndexPath indexPathForItem:nextItem inSection:nextSection];
     [self.pageControl setCurrentPage:nextIndexPath.item];
-    [adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
+    [self.adCollectionView scrollToItemAtIndexPath:nextIndexPath atScrollPosition:UICollectionViewScrollPositionCenteredHorizontally animated:YES];
     self.pageLabel.text = [NSString stringWithFormat:@"%ld/%lu",nextIndexPath.row+1,(unsigned long)viewData.count];
     if (self.adCurrentIndexBlock)
     {

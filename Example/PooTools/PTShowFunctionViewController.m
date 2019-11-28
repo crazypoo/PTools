@@ -851,6 +851,6 @@ CGFloat const tagItemSpace = 5;
 
 -(void)segAction:(UIButton *)sender
 {
-    [self.seg setSegCurrentIndex:3];
+    [self.seg setSegCurrentIndex:3 withBlock:YES];
 }
 @end

@@ -292,6 +292,7 @@ static PLaunchAdMonitor *monitor = nil;
         label.numberOfLines = 0;
         label.lineBreakMode = NSLineBreakByCharWrapping;
         label.font = cFont ? cFont : kDEFAULT_FONT(kDevLikeFont, 12);
+        label.textColor = [UIColor blackColor];
         label.text = [NSString stringWithFormat:@"Copyright (c) %@年 %@.\n All rights reserved.",year,comname];
         label.textAlignment = NSTextAlignmentCenter;
         [v addSubview:label];
