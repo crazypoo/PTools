@@ -10,10 +10,13 @@
 
 @implementation CGLayout
 
-+(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h paddingY:(CGFloat)pY paddingX:(CGFloat)pX scrollDirection:(UICollectionViewScrollDirection)sd
++(UICollectionViewFlowLayout *)createLayoutItemSize:(CGSize)itemSize
+                                           paddingY:(CGFloat)pY
+                                           paddingX:(CGFloat)pX
+                                    scrollDirection:(UICollectionViewScrollDirection)sd
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize                    = CGSizeMake(w, h);
+    layout.itemSize                    = itemSize;
     layout.scrollDirection = sd;
     
     CGFloat paddingY                   = pY;
@@ -24,10 +27,14 @@
     return layout;
 }
 
-+(UICollectionViewFlowLayout *)createLayoutItemW:(CGFloat)w itemH:(CGFloat)h sectionInset:(UIEdgeInsets)inset  minimumLineSpacing:(CGFloat)mls minimumInteritemSpacing:(CGFloat)mis scrollDirection:(UICollectionViewScrollDirection)sd
++(UICollectionViewFlowLayout *)createLayoutItemSize:(CGSize)itemSize
+                                       sectionInset:(UIEdgeInsets)inset
+                                 minimumLineSpacing:(CGFloat)mls
+                            minimumInteritemSpacing:(CGFloat)mis
+                                    scrollDirection:(UICollectionViewScrollDirection)sd
 {
     UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-    layout.itemSize                    = CGSizeMake(w, h);
+    layout.itemSize                    = itemSize;
     layout.scrollDirection = sd;
     
     layout.sectionInset                = inset;

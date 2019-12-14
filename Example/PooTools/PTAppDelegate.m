@@ -23,6 +23,7 @@
 #define FontNameBold @"HelveticaNeue-Medium"
 
 #import "NSString+PassStrength.h"
+#import "NSString+Regulars.h"
 
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
@@ -160,6 +161,9 @@
 //       CheckNowTimeAndPastTimeRelationshipsError
     PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%ld",(long)[Utils checkContractDateExpireContractDate:@"2019-08-28" expTimeStamp:2592000]);
     
+    
+    
+    PNSLog(@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]);
     return YES;
 }
 

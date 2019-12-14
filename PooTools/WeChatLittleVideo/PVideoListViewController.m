@@ -142,7 +142,7 @@ static NSString *footerId = @"footer";
     self.dataArr = [NSMutableArray arrayWithArray:[PVideoUtil getSortVideoList]];
     CGFloat itemWidth = (_actionView.frame.size.width - 40)/3;
 
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:itemWidth itemH:itemWidth/customVideo_W_H sectionInset:UIEdgeInsetsMake(10, 8, 10, 8) minimumLineSpacing:8 minimumInteritemSpacing:0 scrollDirection:UICollectionViewScrollDirectionVertical]];
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemSize:CGSizeMake(itemWidth, itemWidth/customVideo_W_H) sectionInset:UIEdgeInsetsMake(10, 8, 10, 8) minimumLineSpacing:8 minimumInteritemSpacing:0 scrollDirection:UICollectionViewScrollDirectionVertical]];
     collectionView.delegate = self;
     collectionView.dataSource = self;
     [collectionView registerClass:[PVideoListCell class] forCellWithReuseIdentifier:cellId];

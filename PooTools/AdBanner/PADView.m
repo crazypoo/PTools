@@ -38,7 +38,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         
         if (!self.adCollectionView)
         {
-            self.adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemW:sw itemH:sh paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
+            self.adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemSize:CGSizeMake(sw, sh) paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
             self.adCollectionView.backgroundColor                = [UIColor whiteColor];
             self.adCollectionView.dataSource                     = self;
             self.adCollectionView.delegate                       = self;
@@ -104,7 +104,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         self.viewW = self.viewW;
     }
     
-    self.adCollectionView.collectionViewLayout = [CGLayout createLayoutItemW:self.viewW itemH:self.viewH paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.adCollectionView.collectionViewLayout = [CGLayout createLayoutItemSize:CGSizeMake(self.viewW, self.viewH) paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
     [self.adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);
     }];
