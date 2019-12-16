@@ -133,18 +133,19 @@ static inline BOOL isIPhoneXSeries() {
 
 /*! @brief AlertController Normal + Other Buttons + Can switch alert style
  */
-+(void)alertVCWithTitle:(NSString * _Nullable)title
-                message:(NSString * _Nullable)m
-            cancelTitle:(NSString * _Nullable)cT
-                okTitle:(NSString * _Nullable)okT
-       destructiveTitle:(NSString * _Nullable)dT
-       otherButtonArray:(NSArray * _Nonnull)titleArr
-                 shouIn:(UIViewController * _Nonnull)vC
++(void)alertVCWithTitle:(NSString *_Nullable)title
+                message:(NSString *_Nullable)m
+            cancelTitle:(NSString *_Nullable)cT
+                okTitle:(NSString *_Nullable)okT
+       destructiveTitle:(NSString *_Nullable)dT
+       otherButtonArray:(NSArray *_Nullable)titleArr
+                 shouIn:(UIViewController *_Nonnull)vC
+      sourceViewForiPad:(UIView *_Nullable)sView
              alertStyle:(UIAlertControllerStyle)style
                okAction:(void (^ _Nullable)(void))okBlock
            cancelAction:(void (^ _Nullable)(void))cancelBlock
       destructiveAction:(void (^ _Nullable)(void))destructiveBlock
-      otherButtonAction:(void (^_Nonnull) (NSInteger index))buttonIndexPath;
+      otherButtonAction:(void (^_Nullable)(NSInteger index))buttonIndexPath;
 
 #pragma mark ------> 计算字符串高度或者宽度
 /*! @brief Compute string heigh or width

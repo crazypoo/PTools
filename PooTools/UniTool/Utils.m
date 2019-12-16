@@ -116,7 +116,19 @@
     }];
 }
 
-+(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT okTitle:(NSString *)okT destructiveTitle:(NSString *)dT otherButtonArray:(NSArray *)titleArr shouIn:(UIViewController *)vC alertStyle:(UIAlertControllerStyle)style okAction:(void (^ _Nullable)(void))okBlock cancelAction:(void (^ _Nullable)(void))cancelBlock destructiveAction:(void (^ _Nullable)(void))destructiveBlock otherButtonAction:(void (^) (NSInteger index))buttonIndexPath
++(void)alertVCWithTitle:(NSString *_Nullable)title
+                message:(NSString *_Nullable)m
+            cancelTitle:(NSString *_Nullable)cT
+                okTitle:(NSString *_Nullable)okT
+       destructiveTitle:(NSString *_Nullable)dT
+       otherButtonArray:(NSArray *_Nullable)titleArr
+                 shouIn:(UIViewController *_Nonnull)vC
+      sourceViewForiPad:(UIView *_Nullable)sView
+             alertStyle:(UIAlertControllerStyle)style
+               okAction:(void (^ _Nullable)(void))okBlock
+           cancelAction:(void (^ _Nullable)(void))cancelBlock
+      destructiveAction:(void (^ _Nullable)(void))destructiveBlock
+      otherButtonAction:(void (^_Nullable)(NSInteger index))buttonIndexPath
 {
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
                                                                              message:m
@@ -148,6 +160,26 @@
             buttonIndexPath(i);
         }];
         [alertController addAction:cancelAction];
+    }
+    
+    if (style == UIAlertControllerStyleActionSheet)
+    {
+        if (IS_IPAD) {
+            if (!sView)
+            {
+                [Utils alertVCOnlyShowWithTitle:@"提示" andMessage:@"在iPad上使用UIAlertControllerStyleActionSheet,须要填入popover的数据源"];
+            }
+            else
+            {
+                UIPopoverPresentationController *popover = alertController.popoverPresentationController;
+                if (popover)
+                {
+                    popover.sourceView = sView;
+                    popover.sourceRect = sView.frame;
+                    popover.permittedArrowDirections = UIPopoverArrowDirectionAny;
+                }
+            }
+        }
     }
     
     [vC presentViewController:alertController animated:YES completion:^{

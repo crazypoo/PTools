@@ -587,6 +587,7 @@ CGFloat const tagItemSpace = 5;
                                                                   titleCellTitleColor:kRandomColor
                                                                        separatorColor:kRandomColor
                                                                      heightlightColor:kRandomColor
+                                                                    sourceViewForiPad:sender
                                                                               handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
                 PNSLog(@">>>>>>>>>>%ld",(long)buttonIndex);
             }];

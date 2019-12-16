@@ -43,6 +43,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
           titleCellTitleColor:(UIColor *)titleCellTitleColor
                separatorColor:(UIColor *)separatorColor
              heightlightColor:(UIColor *)heightlightColor
+            sourceViewForiPad:(UIView *)sourceView
                       handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 展示
@@ -75,6 +76,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
                             titleCellTitleColor:(UIColor *)titleCellTitleColor
                                  separatorColor:(UIColor *)separatorColor
                                heightlightColor:(UIColor *)heightlightColor
+                              sourceViewForiPad:(UIView *)sourceView
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 消失

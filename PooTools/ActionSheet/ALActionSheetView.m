@@ -85,6 +85,7 @@
           titleCellTitleColor:(UIColor *)titleCellTitleColor
                separatorColor:(UIColor *)separatorColor
              heightlightColor:(UIColor *)heightlightColor
+            sourceViewForiPad:(UIView *)sourceView
                       handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
     self = [self init];
@@ -107,7 +108,15 @@
         
         if (@available(iOS 13.0, *))
         {
-            [Utils alertVCWithTitle:title message:titleMessage cancelTitle:cancelButtonTitle okTitle:nil destructiveTitle:destructiveButtonTitle otherButtonArray:otherButtonTitles shouIn:kAppDelegateWindow.rootViewController alertStyle:UIAlertControllerStyleActionSheet okAction:^{
+            [Utils alertVCWithTitle:title
+                            message:titleMessage
+                        cancelTitle:cancelButtonTitle
+                            okTitle:nil
+                   destructiveTitle:destructiveButtonTitle
+                   otherButtonArray:otherButtonTitles
+                             shouIn:kAppDelegateWindow.rootViewController
+                  sourceViewForiPad:sourceView
+                         alertStyle:UIAlertControllerStyleActionSheet okAction:^{
                 
             } cancelAction:^{
                 self.selectRowBlock(self, -1);
@@ -366,9 +375,23 @@
                             titleCellTitleColor:(UIColor *)titleCellTitleColor
                                  separatorColor:(UIColor *)separatorColor
                                heightlightColor:(UIColor *)heightlightColor
+                              sourceViewForiPad:(UIView *)sourceView
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
-    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title titleMessage:titleMessage  cancelButtonTitle:cancelButtonTitle destructiveButtonTitle:destructiveButtonTitle otherButtonTitles:otherButtonTitles buttonFontName:bfName                       singleCellBackgroundColor:cellBGColor normalCellTitleColor:normalTitleColor destructiveCellTitleColor:destructiveTitleColor titleCellTitleColor:titleCellTitleColor separatorColor:separatorColor heightlightColor:heightlightColor handler:block];
+    ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title
+                                                                     titleMessage:titleMessage
+                                                                cancelButtonTitle:cancelButtonTitle
+                                                           destructiveButtonTitle:destructiveButtonTitle
+                                                                otherButtonTitles:otherButtonTitles
+                                                                   buttonFontName:bfName
+                                                        singleCellBackgroundColor:cellBGColor
+                                                             normalCellTitleColor:normalTitleColor
+                                                        destructiveCellTitleColor:destructiveTitleColor
+                                                              titleCellTitleColor:titleCellTitleColor
+                                                                   separatorColor:separatorColor
+                                                                 heightlightColor:heightlightColor
+                                                                sourceViewForiPad:sourceView
+                                                                          handler:block];
     
     return actionSheetView;
 }

@@ -820,7 +820,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 self.deleteButton = [UIButton buttonWithType:UIButtonTypeCustom];
                 self.deleteButton.showsTouchWhenHighlighted = YES;
                 [self.deleteButton setImage:kImageNamed(self.moreActionImageNames) forState:UIControlStateNormal];
-                [self.deleteButton addTarget:self action:@selector(removeCurrImage) forControlEvents:UIControlEventTouchUpInside];
+                [self.deleteButton addTarget:self action:@selector(removeCurrImage:) forControlEvents:UIControlEventTouchUpInside];
                 [self.bottomView addSubview:self.deleteButton];
                 [self.deleteButton mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.width.height.offset(HEIGHT_BUTTON);
@@ -1180,7 +1180,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 }
 
 #pragma mark - ----> 删除图片
-- (void)removeCurrImage
+- (void)removeCurrImage:(UIButton *)sender
 {
     ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:@"图片操作"
                                                                         titleMessage:nil
@@ -1194,6 +1194,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                                                  titleCellTitleColor:nil
                                                                       separatorColor:nil
                                                                     heightlightColor:nil
+                                                                   sourceViewForiPad:sender
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
                                               switch (self.moreType)
