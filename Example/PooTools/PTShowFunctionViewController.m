@@ -598,7 +598,7 @@ CGFloat const tagItemSpace = 5;
         {
             NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123";
             NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 20) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 50) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
                 UITextField *textField = [UITextField new];
                 textField.placeholder = @"用来展示数字键盘";
                 [alertView.customView addSubview:textField];
@@ -629,7 +629,7 @@ CGFloat const tagItemSpace = 5;
 
             }];
             [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:title withTitleFont:kDEFAULT_FONT(FontName, 20) withButtonArr:btnArrs]);
+                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:title withTitleFont:kDEFAULT_FONT(FontName, 50) withButtonArr:btnArrs]);
                 make.width.offset(kSCREEN_WIDTH-20);
                 make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];

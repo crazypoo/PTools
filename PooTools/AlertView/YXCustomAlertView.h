@@ -46,6 +46,13 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
                                   withTitleFont:(UIFont * _Nullable)tf
                                   withButtonArr:(NSArray *_Nonnull)btns;
 
++(CGFloat)bottomButtonHeight:(UIFont *_Nonnull)titleAndBottomFont
+                   withWidth:(CGFloat)w;
+
++(CGFloat)alertTitleHeight:(UIFont *_Nonnull)titleAndBottomFont
+                 withWidth:(CGFloat)w
+                 withTitle:(NSString *_Nullable)title;
+
 /*! @brief 初始化View,带回调
  * @param superView 加载在哪里
  * @param title 标题

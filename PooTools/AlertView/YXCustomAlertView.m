@@ -48,14 +48,8 @@
     UIFont *titleAndBottomFont = tf ? tf : kDEFAULT_FONT(kDevLikeFont, 18);
     
     CGFloat titleH = 0.0f;
-    if (titleAndBottomFont.pointSize*title.length > w)
-    {
-        titleH = [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
-    }
-    else
-    {
-        titleH = TitleViewH;
-    }
+
+    titleH = [YXCustomAlertView alertTitleHeight:titleAndBottomFont withWidth:w withTitle:title];
     
     CGFloat btnW = (w - (btns.count-1)*AlertLine)/btns.count;
     BOOL isEX = NO;
@@ -69,7 +63,20 @@
             isEX = NO;
         }
     }
-    return isEX ? (titleH + BottomButtonH * btns.count + AlertLine * btns.count) : (titleH + BottomButtonH + AlertLine)+10;
+    
+    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:titleAndBottomFont withWidth:w];
+    
+    return isEX ? (titleH + bottomButtonH * btns.count + AlertLine * btns.count) : (titleH + bottomButtonH + AlertLine)+10;
+}
+
++(CGFloat)bottomButtonHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w
+{
+    return [Utils sizeForString:@"HOLA" font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height+5;
+}
+
++(CGFloat)alertTitleHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w withTitle:(NSString *)title
+{
+    return [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
 }
 
 - (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
@@ -229,6 +236,8 @@
     }];
     kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
 
+    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width];
+
     for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
         UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
         [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.alertViewBackgroundColor] forState:UIControlStateNormal];
@@ -243,8 +252,8 @@
             if (isEX)
             {
                 make.left.right.equalTo(btnView);
-                make.top.equalTo(btnView).offset(HEIGHT_BUTTON*i+AlertLine*i+AlertLine);
-                make.height.offset(HEIGHT_BUTTON);
+                make.top.equalTo(btnView).offset(bottomButtonH*i+AlertLine*i+AlertLine);
+                make.height.offset(bottomButtonH);
             }
             else
             {
@@ -262,14 +271,7 @@
     [super layoutSubviews];
     
     CGFloat textH;
-    if (self.viewFont.pointSize*self.titleLabel.text.length > self.frame.size.width)
-    {
-        textH = [Utils sizeForString:self.titleLabel.text font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:(self.frame.size.width-20)].height;
-    }
-    else
-    {
-        textH = TitleViewH;
-    }
+    textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text];
 
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.offset(textH);
@@ -291,7 +293,9 @@
         }
     }
     
-    CGFloat bottomH = isEX ? BottomButtonH * self.bottomBtnArr.count + AlertLine * self.bottomBtnArr.count: BottomButtonH + AlertLine;
+    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width];
+
+    CGFloat bottomH = isEX ? bottomButtonH * self.bottomBtnArr.count + AlertLine * self.bottomBtnArr.count: bottomButtonH + AlertLine;
     
     [self.customView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.titleLabel.mas_bottom);
