@@ -18,6 +18,7 @@
 #define ButtonTag 2000
 #define UnderLabelTag 1000
 #define VerLineTag 3000
+#define ImageButtonSpace 5.0f
 
 @interface PooSegView()
 
@@ -101,17 +102,19 @@ normalBackgroundColor:(UIColor *)nbc
             UIImage *normalImage;
             
             CGFloat imageHeight = self.frame.size.height-10;
-            CGFloat btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+5;//[(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
+            CGFloat btnWNormal = 0.0f;//[(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
-            btn.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
             btn.tag = ButtonTag+i;
             if (kArrayIsEmpty(self.normalImageArr) || kArrayIsEmpty(self.selectedImageArr)) {
                 PNSLog(@"没有使用图片");
+                btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15;
             }
             else
             {
                 if (self.titlesArr.count == self.normalImageArr.count && self.titlesArr.count == self.selectedImageArr.count)
                 {
+                    btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+ImageButtonSpace;
+
                     selectedImage = kImageNamed(self.selectedImageArr[i]);
                     normalImage = kImageNamed(self.normalImageArr[i]);
                     [btn setImage:[normalImage transformWidth:imageHeight height:imageHeight] forState:UIControlStateNormal];
@@ -119,9 +122,11 @@ normalBackgroundColor:(UIColor *)nbc
                 }
                 else
                 {
+                    btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+ImageButtonSpace;
                     PNSLog(@"图片数量与标题数量不一致");
                 }
             }
+            btn.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
             [btn setTitleColor:self.titleNormalColor forState:UIControlStateNormal];
             [btn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
             btn.titleLabel.font = self.titleFont;
