@@ -57,6 +57,8 @@ selectedBackgroundColor:(UIColor *)sbc
 normalBackgroundColor:(UIColor *)nbc
            showType:(PooSegShowType)viewType
    firstSelectIndex:(NSInteger)fSelect
+     normalImageArr:(NSArray *)nIArr
+   selectedImageArr:(NSArray *)sIArr
          clickBlock:(PooSegViewClickBlock)block;
 
 /*! @brief 设置当前选项

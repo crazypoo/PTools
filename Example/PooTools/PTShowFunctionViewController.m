@@ -232,7 +232,7 @@ CGFloat const tagItemSpace = 5;
         case ShowFunctionSegmented:
         {
             
-            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223",@"22223",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 normalImageArr:nil selectedImageArr:nil clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
                 switch (buttonIndex) {
                         case 0:
@@ -575,8 +575,8 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@"标题"
-                                                                         titleMessage:@"123123131313131313"
+            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@" "
+                                                                         titleMessage:@"22222222"
                                                                     cancelButtonTitle:@"取消"
                                                                destructiveButtonTitle:nil
                                                                     otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"]

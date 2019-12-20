@@ -12,6 +12,8 @@
 #import <WZLBadge/UIView+WZLBadge.h>
 #import "UIView+ModifyFrame.h"
 #import "UIButton+Block.h"
+#import "UIImage+Size.h"
+#import "UIButton+ImageTitleSpacing.h"
 
 #define ButtonTag 2000
 #define UnderLabelTag 1000
@@ -36,6 +38,8 @@
 @property (nonatomic, assign) CGFloat scrollerContentSizeW;
 @property (nonatomic, strong) UIScrollView *scroller;
 @property (nonatomic, assign) BOOL withBlock;
+@property (nonatomic, strong) NSArray *selectedImageArr;
+@property (nonatomic, strong) NSArray *normalImageArr;
 @end
 
 @implementation PooSegView
@@ -50,6 +54,8 @@ selectedBackgroundColor:(UIColor *)sbc
 normalBackgroundColor:(UIColor *)nbc
            showType:(PooSegShowType)viewType
    firstSelectIndex:(NSInteger)fSelect
+     normalImageArr:(NSArray *)nIArr
+   selectedImageArr:(NSArray *)sIArr
          clickBlock:(PooSegViewClickBlock)block
 {
     self = [super init];
@@ -70,6 +76,8 @@ normalBackgroundColor:(UIColor *)nbc
         self.showViewType = viewType;
         self.firstSelect = (fSelect > titleArr.count) ? 0 : fSelect;
         self.withBlock = YES;
+        self.selectedImageArr = sIArr;
+        self.normalImageArr = nIArr;
         [self initUI];
     }
     return self;
@@ -84,19 +92,41 @@ normalBackgroundColor:(UIColor *)nbc
         self.scroller.showsHorizontalScrollIndicator = NO;
         [self addSubview:self.scroller];
         self.scroller.scrollEnabled = YES;
-        
+                
         self.btnW = 0.0f;
         self.scrollerContentSizeW = 0.0f;
         for (int i= 0; i < self.titlesArr.count; i++)
         {
-            CGFloat btnWNormal = [(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
+            UIImage *selectedImage;
+            UIImage *normalImage;
+            
+            CGFloat imageHeight = self.frame.size.height-10;
+            CGFloat btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+5;//[(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
             btn.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
             btn.tag = ButtonTag+i;
+            if (kArrayIsEmpty(self.normalImageArr) || kArrayIsEmpty(self.selectedImageArr)) {
+                PNSLog(@"没有使用图片");
+            }
+            else
+            {
+                if (self.titlesArr.count == self.normalImageArr.count && self.titlesArr.count == self.selectedImageArr.count)
+                {
+                    selectedImage = kImageNamed(self.selectedImageArr[i]);
+                    normalImage = kImageNamed(self.normalImageArr[i]);
+                    [btn setImage:[normalImage transformWidth:imageHeight height:imageHeight] forState:UIControlStateNormal];
+                    [btn setImage:[selectedImage transformWidth:imageHeight height:imageHeight] forState:UIControlStateSelected];
+                }
+                else
+                {
+                    PNSLog(@"图片数量与标题数量不一致");
+                }
+            }
             [btn setTitleColor:self.titleNormalColor forState:UIControlStateNormal];
             [btn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
             btn.titleLabel.font = self.titleFont;
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
+            [btn layoutButtonWithEdgeInsetsStyle:MKButtonEdgeInsetsStyleLeft imageTitleSpace:5];
             [self.scroller addSubview:btn];
 //            [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
             [btn addActionHandler:^(UIButton *sender) {
