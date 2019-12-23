@@ -11,11 +11,14 @@
 #import "PMacros.h"
 #import "Utils.h"
 
+#define kButtonSpaceLeft 5
+#define kButtonSpaceTop 5
+#define kKeyBoardRadius 5
 #define kLineWidth 1
 #define kNumFont [UIFont systemFontOfSize:27]
 #define kKeyBoardH 216
-#define kKeyH (kKeyBoardH - kLineWidth*3)/4
-#define kKeyW (self.bounds.size.width-2)/3
+#define kKeyH (kKeyBoardH - kLineWidth*3-kButtonSpaceTop*5)/4
+#define kKeyW (self.bounds.size.width-kLineWidth*2-kButtonSpaceLeft*4)/3
 
 @interface PooNumberKeyBoard()
 @property (nonatomic, copy) PooNumberKeyBoardBackSpace backSpaceBlock;
@@ -61,9 +64,10 @@
                 [button mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.height.offset(kKeyH);
                     make.width.offset(kKeyW);
-                    make.top.offset(kKeyH*i+i*kLineWidth);
-                    make.left.offset(kKeyW*j);
+                    make.top.offset(kKeyH*i+i*kLineWidth+kButtonSpaceTop*(i+1));
+                    make.left.offset(kKeyW*j+j*kLineWidth+kButtonSpaceLeft*(j+1));
                 }];
+                kViewBorderRadius(button, kKeyBoardRadius, 0, kClearColor);
                 
                 UIColor *cN;
                 UIColor *cH;
@@ -120,35 +124,6 @@
                 [button setBackgroundImage:[Utils createImageWithColor:cH] forState:UIControlStateHighlighted];
             }
         }
-        
-        UIColor *color = [UIColor colorWithRed:188/255.0 green:192/255.0 blue:199/255.0 alpha:1];
-        
-        for (int i = 1 ; i < 3; i++) {
-            UIView *line1 = [UIView new];
-            line1.backgroundColor = color;
-            line1.tag = 1000+i;
-            [self addSubview:line1];
-            [line1 mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self).offset(kKeyW * i);
-                make.width.offset(kLineWidth);
-                make.height.offset(kKeyBoardH);
-                make.top.equalTo(self);
-            }];
-        }
-        
-        for (int i = 1; i < 4; i++)
-        {
-            UIView *line = [UIView new];
-            line.backgroundColor = color;
-            line.tag = 2000+i;
-            [self addSubview:line];
-            [line mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.equalTo(self);
-                make.width.offset(self.bounds.size.width);
-                make.height.offset(kLineWidth);
-                make.top.offset(kKeyH*i+i*kLineWidth);
-            }];
-        }
     }
     return self;
 }
@@ -164,30 +139,10 @@
             [button mas_updateConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(kKeyH);
                 make.width.offset(kKeyW);
-                make.top.offset(kKeyH*i+i*kLineWidth);
-                make.left.offset(kKeyW*j);
+                make.top.offset(kKeyH*i+i*kLineWidth+kButtonSpaceTop*(i+1));
+                make.left.offset(kKeyW*j+j*kLineWidth+kButtonSpaceLeft*(j+1));
             }];
         }
-    }
-    for (int i = 1 ; i < 3; i++) {
-        UIView *line1 = (UIView *)[self viewWithTag:1000+i];
-        [line1 mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self).offset(kKeyW * i);
-            make.width.offset(kLineWidth);
-            make.height.offset(kKeyBoardH);
-            make.top.equalTo(self);
-        }];
-    }
-    
-    for (int i = 1; i < 4; i++)
-    {
-        UIView *line = (UIView *)[self viewWithTag:2000+i];
-        [line mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.left.equalTo(self);
-            make.width.offset(self.bounds.size.width);
-            make.height.offset(kLineWidth);
-            make.top.offset(kKeyH*i+i*kLineWidth);
-        }];
     }
 }
 
