@@ -71,7 +71,8 @@
 
 +(CGFloat)bottomButtonHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w
 {
-    return [Utils sizeForString:@"HOLA" font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height+5;
+    CGFloat buttonH = [Utils sizeForString:@"HOLA" font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height+5;
+    return (buttonH > BottomButtonH) ? buttonH : BottomButtonH;
 }
 
 +(CGFloat)alertTitleHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w withTitle:(NSString *)title

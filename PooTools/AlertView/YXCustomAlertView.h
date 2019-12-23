@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 
 #define TitleViewH 35
-#define BottomButtonH 42
+#define BottomButtonH 44
 
 @class YXCustomAlertView;
 
