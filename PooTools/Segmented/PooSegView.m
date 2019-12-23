@@ -14,6 +14,7 @@
 #import "UIButton+Block.h"
 #import "UIImage+Size.h"
 #import "UIButton+ImageTitleSpacing.h"
+#import <SDWebImage/UIButton+WebCache.h>
 
 #define ButtonTag 2000
 #define UnderLabelTag 1000
@@ -77,6 +78,7 @@ normalBackgroundColor:(UIColor *)nbc
         self.showViewType = viewType;
         self.firstSelect = (fSelect > titleArr.count) ? 0 : fSelect;
         self.withBlock = YES;
+        
         self.selectedImageArr = sIArr;
         self.normalImageArr = nIArr;
         [self initUI];
@@ -98,9 +100,6 @@ normalBackgroundColor:(UIColor *)nbc
         self.scrollerContentSizeW = 0.0f;
         for (int i= 0; i < self.titlesArr.count; i++)
         {
-            UIImage *selectedImage;
-            UIImage *normalImage;
-            
             CGFloat imageHeight = self.frame.size.height-10;
             CGFloat btnWNormal = 0.0f;//[(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -114,11 +113,6 @@ normalBackgroundColor:(UIColor *)nbc
                 if (self.titlesArr.count == self.normalImageArr.count && self.titlesArr.count == self.selectedImageArr.count)
                 {
                     btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+ImageButtonSpace;
-
-                    selectedImage = kImageNamed(self.selectedImageArr[i]);
-                    normalImage = kImageNamed(self.normalImageArr[i]);
-                    [btn setImage:[normalImage transformWidth:imageHeight height:imageHeight] forState:UIControlStateNormal];
-                    [btn setImage:[selectedImage transformWidth:imageHeight height:imageHeight] forState:UIControlStateSelected];
                 }
                 else
                 {
@@ -131,7 +125,6 @@ normalBackgroundColor:(UIColor *)nbc
             [btn setTitleColor:self.titleSelectedColor forState:UIControlStateSelected];
             btn.titleLabel.font = self.titleFont;
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
-            [btn layoutButtonWithEdgeInsetsStyle:MKButtonEdgeInsetsStyleLeft imageTitleSpace:5];
             [self.scroller addSubview:btn];
 //            [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
             [btn addActionHandler:^(UIButton *sender) {
@@ -192,9 +185,60 @@ normalBackgroundColor:(UIColor *)nbc
         self.scrollerContentSizeW = 0.0f;
         for (int i= 0; i < self.titlesArr.count; i++)
         {
-            CGFloat btnWNormal = [(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
+            CGFloat imageHeight = self.frame.size.height-10;
+            CGFloat btnWNormal = 0.0f;//[(NSString *)self.titlesArr[i] length] * self.titleFont.pointSize+30.f;
+            if (kArrayIsEmpty(self.normalImageArr) || kArrayIsEmpty(self.selectedImageArr)) {
+                PNSLog(@"没有使用图片");
+                btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15;
+            }
+            else
+            {
+                if (self.titlesArr.count == self.normalImageArr.count && self.titlesArr.count == self.selectedImageArr.count)
+                {
+                    btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15+imageHeight+ImageButtonSpace;
+                }
+                else
+                {
+                    btnWNormal = [Utils sizeForString:(NSString *)self.titlesArr[i] font:self.titleFont andHeigh:self.frame.size.height andWidth:CGFLOAT_MAX].width+15;
+                    PNSLog(@"图片数量与标题数量不一致");
+                }
+            }
+
             UIButton *button = (UIButton *)[self viewWithTag:ButtonTag+i];
             button.frame = CGRectMake(self.scrollerContentSizeW, 0, btnWNormal, self.frame.size.height);
+            if (kArrayIsEmpty(self.normalImageArr) || kArrayIsEmpty(self.selectedImageArr)) {
+            }
+            else
+            {
+                if (self.titlesArr.count == self.normalImageArr.count && self.titlesArr.count == self.selectedImageArr.count)
+                {
+                    if ([self.normalImageArr[i] isKindOfClass:[UIImage class]])
+                    {
+                        [button setImage:(UIImage *)self.normalImageArr[i] forState:UIControlStateNormal];
+                    }
+                    else if ([self.selectedImageArr[i] isKindOfClass:[UIImage class]])
+                    {
+                        [button setImage:(UIImage *)self.selectedImageArr[i] forState:UIControlStateSelected];
+                    }
+                    else if ([self.normalImageArr[i] isKindOfClass:[NSString class]])
+                    {
+                        [button sd_setImageWithURL:[NSURL URLWithString:(NSString *)self.normalImageArr[i]] forState:UIControlStateNormal];
+                    }
+                    else if ([self.selectedImageArr[i] isKindOfClass:[NSString class]])
+                    {
+                        [button sd_setImageWithURL:[NSURL URLWithString:(NSString *)self.selectedImageArr[i]] forState:UIControlStateSelected];
+                    }
+                    else if ([self.normalImageArr[i] isKindOfClass:[NSURL class]])
+                    {
+                        [button sd_setImageWithURL:(NSURL *)self.normalImageArr[i] forState:UIControlStateNormal];
+                    }
+                    else if ([self.selectedImageArr[i] isKindOfClass:[NSURL class]])
+                    {
+                        [button sd_setImageWithURL:(NSURL *)self.selectedImageArr[i] forState:UIControlStateSelected];
+                    }
+                    [button layoutButtonWithEdgeInsetsStyle:MKButtonEdgeInsetsStyleLeft imageTitleSpace:ImageButtonSpace];
+                }
+            }
             UIView *underLineV = [self viewWithTag:UnderLabelTag+i];
             underLineV.frame = CGRectMake(self.scrollerContentSizeW, self.frame.size.height-2, btnWNormal, 2);
             if (self.setLines)

@@ -231,8 +231,8 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionSegmented:
         {
-            
-            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 normalImageArr:nil selectedImageArr:nil clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
+            NSArray *aaaaaaaa = @[@"DemoImage",@"DemoImage"];
+            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 normalImageArr:aaaaaaaa selectedImageArr:aaaaaaaa clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
                 switch (buttonIndex) {
                         case 0:
