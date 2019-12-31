@@ -289,21 +289,21 @@
     switch (type) {
         case GetTimeTypeYMD:
         {
-            [formatter setDateFormat:@"YYYY-MM-dd"];
+            [formatter setDateFormat:@"yyyy-MM-dd"];
             [formatter setTimeZone:timeZone];
             return [formatter stringFromDate:date];
         }
             break;
         case GetTimeTypeY:
         {
-            [formatter setDateFormat:@"YYYY"];
+            [formatter setDateFormat:@"yyyy"];
             [formatter setTimeZone:timeZone];
             return [formatter stringFromDate:date];
         }
             break;
         case GetTimeTypeYMDHHS:
         {
-            [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [formatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             [formatter setTimeZone:timeZone];
             return [formatter stringFromDate:date];
         }
@@ -362,7 +362,7 @@
             break;
         case GetTimeTypeYMDHHS:
         {
-            [formater setDateFormat:@"YYYY-MM-dd HH:mm:ss"];
+            [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             NSDate *create = [formater dateFromString:timeString];
             return [formater stringFromDate:create];
         }
