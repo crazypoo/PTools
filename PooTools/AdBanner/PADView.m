@@ -208,6 +208,10 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
     {
         NSInteger currentPage = scrollView.contentOffset.x / scrollView.frame.size.width;
         self.pageControl.currentPage = currentPage;
+        if (self.adCurrentIndexBlock)
+        {
+            self.adCurrentIndexBlock(currentPage);
+        }
 //        NSIndexPath *currentIndexPath = [[adCollectionView indexPathsForVisibleItems] lastObject];
 //        NSIndexPath *currentIndexPathReset = [NSIndexPath indexPathForItem:currentIndexPath.item inSection:currentIndexPath.section];
 //        NSInteger nextItem = currentIndexPathReset.item +1;

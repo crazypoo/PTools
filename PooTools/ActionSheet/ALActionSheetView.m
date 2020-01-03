@@ -219,7 +219,6 @@
 {
     [super layoutSubviews];
     
-    
     [self.backView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(kAppDelegateWindow);
     }];
