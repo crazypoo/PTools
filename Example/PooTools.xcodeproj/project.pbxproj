@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -171,6 +172,8 @@
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
+		5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -533,6 +536,15 @@
 				77F5D0446CAF22C1C8B37FBE /* Pods-PooTools_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		5A8B2E9D23C568A9003FEF2E /* PopoverViewForiPad */ = {
+			isa = PBXGroup;
+			children = (
+				5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */,
+				5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */,
+			);
+			path = PopoverViewForiPad;
 			sourceTree = "<group>";
 		};
 		6003F581195388D10070C39A = {
@@ -1209,6 +1221,7 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				5A8B2E9D23C568A9003FEF2E /* PopoverViewForiPad */,
 				C08D9DD522768A72001417F1 /* ActionSheet */,
 				C08D9DD2227689F1001417F1 /* AdBanner */,
 				C08D9DE722768DC1001417F1 /* AESAndDES */,
@@ -1523,6 +1536,7 @@
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
 				C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */,
+				5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */,
 				CC1257B82098319300E31A38 /* MethodSwizzle.m in Sources */,
 				CCB433E520A9A3D800943107 /* YMShowImageView.m in Sources */,
 				CC1257DD2098319300E31A38 /* UIImage+BlurGlass.m in Sources */,

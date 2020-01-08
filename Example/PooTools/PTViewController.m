@@ -35,6 +35,8 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
+#import "PTPopoverFunction.h"
+
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
 @interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource>
@@ -44,7 +46,7 @@
 @property (nonatomic, strong) PBiologyID *touchID;
 @property (nonatomic, strong) NSMutableArray *tableArr;
 @property (nonatomic, strong) NSMutableArray *tableHeaderTitle;
-
+@property (nonatomic, strong) id popover;
 @end
 
 @implementation PTViewController
@@ -80,6 +82,71 @@
     
     kAdaptedOtherFontSize(@"", 16);
     
+    
+    UIView *views = [UIView new];
+    views.backgroundColor = kRandomColor;
+    
+    UIButton *views2 = [UIButton buttonWithType:UIButtonTypeCustom];
+    views2.backgroundColor = kRandomColor;
+    [views addSubview:views2];
+    [views2 mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.offset(50);
+        make.centerY.centerX.equalTo(views);
+    }];
+    [views2 addActionHandler:^(UIButton *sender) {
+        if ([self.popover isKindOfClass:[YXCustomAlertView class]])
+        {
+            [(YXCustomAlertView *)self.popover dissMiss];
+        }
+        else
+        {
+            [(UIViewController *)self.popover dismissViewControllerAnimated:YES completion:^{
+                PNSLog(@"4444444444");
+            }];
+        }
+    }];
+    
+    UIButton *aaaaaaaa = [UIButton buttonWithType:UIButtonTypeCustom];
+    [aaaaaaaa setTitleColor:kRandomColor forState:UIControlStateNormal];
+    [aaaaaaaa setTitle:@"11111" forState:UIControlStateNormal];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:aaaaaaaa];
+    [aaaaaaaa addActionHandler:^(UIButton *sender) {
+        PNSLog(@"111111");
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 400) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny
+                                       withPopover:^(id  _Nonnull popoverView) {
+            self.popover = popoverView;
+        }];
+    }];
+
+    UIButton *bbbbbbbbb = [UIButton buttonWithType:UIButtonTypeCustom];
+    [bbbbbbbbb setTitleColor:kRandomColor forState:UIControlStateNormal];
+    [bbbbbbbbb setTitle:@"222222222" forState:UIControlStateNormal];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
+    [bbbbbbbbb addActionHandler:^(UIButton *sender) {
+        PNSLog(@"222222222");
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 300) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+            self.popover = popoverView;
+        }];
+    }];
+
+    
+    UIButton *cccccccc = [UIButton buttonWithType:UIButtonTypeCustom];
+    cccccccc.backgroundColor = kRandomColor;
+    [cccccccc setTitleColor:kRandomColor forState:UIControlStateNormal];
+    [cccccccc setTitle:@"3333333333" forState:UIControlStateNormal];
+    [self.view addSubview:cccccccc];
+    [cccccccc mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.width.height.offset(100);
+        make.centerX.equalTo(self.view);
+//        make.right.equalTo(self.view);
+        make.top.equalTo(self.view).offset(400);
+    }];
+    [cccccccc addActionHandler:^(UIButton *sender) {
+        PNSLog(@"33333");
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+            self.popover = popoverView;
+        }];
+    }];
 }
 
 -(void)aaaaa

@@ -365,4 +365,8 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief 此方法用来鉴定picker是否在滑动
  */
 +(BOOL)isRolling:(UIView * _Nonnull)view;
+
+/*! @brief 获取当前ViewController
+*/
++(UIViewController *_Nonnull)getCurrentVC;
 @end

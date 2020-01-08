@@ -42,12 +42,13 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
  * @param btns 按钮数组
  */
 +(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w
-                                      withTitle:(NSString *_Nonnull)title
+                                      withTitle:(NSString *_Nullable)title
                                   withTitleFont:(UIFont * _Nullable)tf
                                   withButtonArr:(NSArray *_Nonnull)btns;
 
 +(CGFloat)bottomButtonHeight:(UIFont *_Nonnull)titleAndBottomFont
-                   withWidth:(CGFloat)w;
+                   withWidth:(CGFloat)w
+                  moreButton:(NSArray *_Nullable)btnArr;
 
 +(CGFloat)alertTitleHeight:(UIFont *_Nonnull)titleAndBottomFont
                  withWidth:(CGFloat)w
@@ -76,7 +77,7 @@ typedef void (^YXCustomAlertViewDidDismissBlock)(YXCustomAlertView * _Nonnull al
                                          verLineColor:(UIColor * _Nullable)vlColor
                              alertViewBackgroundColor:(UIColor * _Nullable)aBGColor
                                    heightlightedColor:(UIColor * _Nullable)heightlightedColorColor
-                                 moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
+                                 moreButtonTitleArray:(NSArray * _Nullable)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
                                       touchBackGround:(BOOL)canTouch

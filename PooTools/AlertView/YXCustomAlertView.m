@@ -40,7 +40,7 @@
 @implementation YXCustomAlertView
 
 +(CGFloat)titleAndBottomViewNormalHeighEXAlertW:(CGFloat)w
-                                      withTitle:(NSString * _Nonnull)title
+                                      withTitle:(NSString *)title
                                   withTitleFont:(UIFont *)tf
                                   withButtonArr:(NSArray *)btns
 {
@@ -51,33 +51,42 @@
 
     titleH = [YXCustomAlertView alertTitleHeight:titleAndBottomFont withWidth:w withTitle:title];
     
+    PNSLog(@">>>>>>>>>>>>%f",titleH);
+    
     CGFloat btnW = (w - (btns.count-1)*AlertLine)/btns.count;
     BOOL isEX = NO;
-    for (NSString *string in btns) {
-        if ((tf.pointSize*string.length+10) > btnW) {
-            isEX = YES;
-            break;
-        }
-        else
-        {
-            isEX = NO;
+    if (!kArrayIsEmpty(btns))
+    {
+        for (NSString *string in btns) {
+            if ((tf.pointSize*string.length+10) > btnW) {
+                isEX = YES;
+                break;
+            }
+            else
+            {
+                isEX = NO;
+            }
         }
     }
+    else
+    {
+        isEX = YES;
+    }
     
-    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:titleAndBottomFont withWidth:w];
+    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:titleAndBottomFont withWidth:w moreButton:btns];
     
     return isEX ? (titleH + bottomButtonH * btns.count + AlertLine * btns.count) : (titleH + bottomButtonH + AlertLine)+10;
 }
 
-+(CGFloat)bottomButtonHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w
++(CGFloat)bottomButtonHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w moreButton:(NSArray *)btnArr
 {
-    CGFloat buttonH = [Utils sizeForString:@"HOLA" font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height+5;
-    return (buttonH > BottomButtonH) ? buttonH : BottomButtonH;
+    CGFloat buttonH = ([Utils sizeForString:@"HOLA" font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height+5);
+    return kArrayIsEmpty(btnArr) ? 0 : (buttonH > BottomButtonH) ? buttonH : BottomButtonH;
 }
 
 +(CGFloat)alertTitleHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w withTitle:(NSString *)title
 {
-    return [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
+    return kStringIsEmpty(title)? 0: [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
 }
 
 - (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
@@ -88,7 +97,7 @@
                                          verLineColor:(UIColor * _Nullable)vlColor
                              alertViewBackgroundColor:(UIColor * _Nullable)aBGColor
                                    heightlightedColor:(UIColor * _Nullable)heightlightedColorColor
-                                 moreButtonTitleArray:(NSArray * _Nonnull)mbtArray
+                                 moreButtonTitleArray:(NSArray * _Nullable)mbtArray
                                               viewTag:(NSInteger)tag
                                         viewAnimation:(AlertAnimationType)animationType
                                       touchBackGround:(BOOL)canTouch
@@ -228,42 +237,45 @@
         }
     }
     
-    UIView *btnView = [UIView new];
-    btnView.backgroundColor = self.verLineColor;
-    [self addSubview:btnView];
-    [btnView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.bottom.equalTo(self);
-        make.top.equalTo(self.customView.mas_bottom);
-    }];
-    kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
-
-    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width];
-
-    for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
-        UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
-        [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.alertViewBackgroundColor] forState:UIControlStateNormal];
-        [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.heightlightedColorColor] forState:UIControlStateHighlighted];
-        [cancelBtn setTitleColor:self.alertBottomButtonColor[i] forState:UIControlStateNormal];
-        [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
-        cancelBtn.titleLabel.font = self.viewFont;
-        cancelBtn.tag = 100+i;
-        [cancelBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
-        [btnView addSubview:cancelBtn];
-        [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            if (isEX)
-            {
-                make.left.right.equalTo(btnView);
-                make.top.equalTo(btnView).offset(bottomButtonH*i+AlertLine*i+AlertLine);
-                make.height.offset(bottomButtonH);
-            }
-            else
-            {
-                make.width.offset(btnW);
-                make.top.equalTo(btnView).offset(AlertLine);
-                make.bottom.equalTo(btnView);
-                make.left.offset(btnW*i+AlertLine*i);
-            }
+    if (!kArrayIsEmpty(self.bottomBtnArr))
+    {
+        UIView *btnView = [UIView new];
+        btnView.backgroundColor = self.verLineColor;
+        [self addSubview:btnView];
+        [btnView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.bottom.equalTo(self);
+            make.top.equalTo(self.customView.mas_bottom);
         }];
+        kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
+        
+        CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width moreButton:[self.bottomBtnArr copy]];
+
+        for (int i = 0 ; i < self.bottomBtnArr.count; i++) {
+            UIButton *cancelBtn =  [UIButton buttonWithType:UIButtonTypeCustom];
+            [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.alertViewBackgroundColor] forState:UIControlStateNormal];
+            [cancelBtn setBackgroundImage:[Utils createImageWithColor:self.heightlightedColorColor] forState:UIControlStateHighlighted];
+            [cancelBtn setTitleColor:self.alertBottomButtonColor[i] forState:UIControlStateNormal];
+            [cancelBtn setTitle:self.bottomBtnArr[i] forState:UIControlStateNormal];
+            cancelBtn.titleLabel.font = self.viewFont;
+            cancelBtn.tag = 100+i;
+            [cancelBtn addTarget:self action:@selector(confirmBtnClick:) forControlEvents:UIControlEventTouchUpInside];
+            [btnView addSubview:cancelBtn];
+            [cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                if (isEX)
+                {
+                    make.left.right.equalTo(btnView);
+                    make.top.equalTo(btnView).offset(bottomButtonH*i+AlertLine*i+AlertLine);
+                    make.height.offset(bottomButtonH);
+                }
+                else
+                {
+                    make.width.offset(btnW);
+                    make.top.equalTo(btnView).offset(AlertLine);
+                    make.bottom.equalTo(btnView);
+                    make.left.offset(btnW*i+AlertLine*i);
+                }
+            }];
+        }
     }
 }
 
@@ -271,12 +283,11 @@
 {
     [super layoutSubviews];
     
-    CGFloat textH;
-    textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text];
+    CGFloat textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text];
 
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.offset(textH);
-        make.top.equalTo(self).offset(10);
+        make.top.equalTo(self).offset(kStringIsEmpty(self.titleLabel.text) ? 0 : 10);
         make.left.equalTo(self).offset(10);
         make.right.equalTo(self).offset(-10);
     }];
@@ -294,8 +305,8 @@
         }
     }
     
-    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width];
-
+    CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width moreButton:[self.bottomBtnArr copy]];
+        
     CGFloat bottomH = isEX ? bottomButtonH * self.bottomBtnArr.count + AlertLine * self.bottomBtnArr.count: bottomButtonH + AlertLine;
     
     [self.customView mas_updateConstraints:^(MASConstraintMaker *make) {
