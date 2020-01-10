@@ -102,6 +102,7 @@
         {
             [(UIViewController *)self.popover dismissViewControllerAnimated:YES completion:^{
                 PNSLog(@"4444444444");
+                self.popover = nil;
             }];
         }
     }];
@@ -112,7 +113,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:aaaaaaaa];
     [aaaaaaaa addActionHandler:^(UIButton *sender) {
         PNSLog(@"111111");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 400) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 400) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny
                                        withPopover:^(id  _Nonnull popoverView) {
             self.popover = popoverView;
         }];
@@ -124,7 +125,7 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
     [bbbbbbbbb addActionHandler:^(UIButton *sender) {
         PNSLog(@"222222222");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 300) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionRight withPopover:^(id  _Nonnull popoverView) {
             self.popover = popoverView;
         }];
     }];
@@ -143,7 +144,7 @@
     }];
     [cccccccc addActionHandler:^(UIButton *sender) {
         PNSLog(@"33333");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:[sender convertRect:sender.frame toView:kAppDelegateWindow] withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
             self.popover = popoverView;
         }];
     }];
