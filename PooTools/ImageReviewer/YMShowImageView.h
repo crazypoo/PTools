@@ -63,7 +63,8 @@ showImageBackgroundColor:(UIColor *)sibc
            showWindow:(UIWindow *)w
      loadingImageName:(NSString *)li
            deleteAble:(BOOL)canDelete
-             saveAble:(BOOL)canSave moreActionImageName:(NSString *)main
+             saveAble:(BOOL)canSave
+  moreActionImageName:(NSString *)main
         hideImageName:(NSString *)hImage;
 
 /*! @brief 展示浏览图片View

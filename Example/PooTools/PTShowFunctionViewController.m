@@ -62,6 +62,9 @@ CGFloat const tagItemSpace = 5;
 #import "UIImage+BlurGlass.h"
 
 #import "UIButton+Block.h"
+
+#import "PTPopoverFunction.h"
+
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -81,6 +84,9 @@ CGFloat const tagItemSpace = 5;
 @property (nonatomic, strong) PooSegView *seg;
 
 @property (nonatomic, strong) NSArray *titleS;
+
+@property (nonatomic, strong) id popover;
+
 @end
 
 @implementation PTShowFunctionViewController
@@ -442,8 +448,8 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionShowAlert:
         {
-            NSArray *arr = @[@"ActionSheet",@"CustomAlert",@"SystemAlert"];
-            
+            NSArray *arr = @[@"ActionSheet",@"CustomAlert",@"SystemAlert",@"Popover"];
+
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
                 pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, HEIGHT_NAVBAR*2, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
@@ -646,6 +652,15 @@ CGFloat const tagItemSpace = 5;
 //                           } otherButtonAction:^(NSInteger aaaaaaaaaa) {
 //                               PNSLog(@"%ld",(long)aaaaaaaaaa);
 //                           }];
+        }
+            break;
+        case 3:
+        {
+            UIView *views = [UIView new];
+            views.backgroundColor = kRandomColor;
+
+            [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+            }];
         }
             break;
         default:

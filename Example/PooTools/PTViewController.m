@@ -131,23 +131,23 @@
     }];
 
     
-    UIButton *cccccccc = [UIButton buttonWithType:UIButtonTypeCustom];
-    cccccccc.backgroundColor = kRandomColor;
-    [cccccccc setTitleColor:kRandomColor forState:UIControlStateNormal];
-    [cccccccc setTitle:@"3333333333" forState:UIControlStateNormal];
-    [self.view addSubview:cccccccc];
-    [cccccccc mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.width.height.offset(100);
-        make.centerX.equalTo(self.view);
-//        make.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(400);
-    }];
-    [cccccccc addActionHandler:^(UIButton *sender) {
-        PNSLog(@"33333");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
-            self.popover = popoverView;
-        }];
-    }];
+//    UIButton *cccccccc = [UIButton buttonWithType:UIButtonTypeCustom];
+//    cccccccc.backgroundColor = kRandomColor;
+//    [cccccccc setTitleColor:kRandomColor forState:UIControlStateNormal];
+//    [cccccccc setTitle:@"3333333333" forState:UIControlStateNormal];
+//    [self.view addSubview:cccccccc];
+//    [cccccccc mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.width.height.offset(100);
+//        make.centerX.equalTo(self.view);
+////        make.right.equalTo(self.view);
+//        make.top.equalTo(self.view).offset(400);
+//    }];
+//    [cccccccc addActionHandler:^(UIButton *sender) {
+//        PNSLog(@"33333");
+//        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
+//            self.popover = popoverView;
+//        }];
+//    }];
 }
 
 -(void)aaaaa
