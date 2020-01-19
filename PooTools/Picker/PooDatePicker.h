@@ -35,7 +35,8 @@ typedef NS_ENUM(NSInteger,PPickerType){
                    pickerType:(PPickerType)pT
         pickerBackgroundColor:(UIColor *)pBGColor
               pickerFontColor:(UIColor *)pfColor
-              inPutDataString:(NSString *)ipds;
+              inPutDataString:(NSString *)ipds
+              pickerStartTime:(NSString *)startTime;
 
 /*! @brief 选取回调
  */

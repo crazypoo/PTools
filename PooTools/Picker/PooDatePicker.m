@@ -34,6 +34,7 @@
 @property (nonatomic, strong) UIFont *labelFont;
 @property (nonatomic, strong) UIColor *pickerBackgroundColor;
 @property (nonatomic, strong) UIColor *pickerFontColor;
+@property (nonatomic, strong) NSString *pickerStartTime;
 
 @end
 
@@ -43,10 +44,22 @@
     if (_yearArray == nil)
     {
         _yearArray = [NSMutableArray array];
-        for (int year = 1950; year < 2050; year++)
+        if (kStringIsEmpty(self.pickerStartTime))
         {
-            NSString *str = [NSString stringWithFormat:@"%d年", year];
-            [_yearArray addObject:str];
+            for (int year = 1950; year < 2050; year++)
+            {
+                NSString *str = [NSString stringWithFormat:@"%d年", year];
+                [_yearArray addObject:str];
+            }
+        }
+        else
+        {
+            NSString *nowYear = [Utils getTimeWithType:GetTimeTypeY];
+            for (int year = [self.pickerStartTime intValue]; year < ([nowYear intValue]+1); year++)
+            {
+                NSString *str = [NSString stringWithFormat:@"%d年", year];
+                [_yearArray addObject:str];
+            }
         }
     }
     return _yearArray;
@@ -89,10 +102,12 @@
         pickerBackgroundColor:(UIColor *)pBGColor
               pickerFontColor:(UIColor *)pfColor
               inPutDataString:(NSString *)ipds
+              pickerStartTime:(NSString *)startTime
 {
     self = [super init];
     if (self)
     {
+        self.pickerStartTime = startTime;
         self.pickerFonts = pf;
         self.pickerType = pT;
         self.labelFont = font;
