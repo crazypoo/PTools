@@ -422,12 +422,18 @@ CGFloat const tagItemSpace = 5;
             
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, BOTTOM(self.cornerBtn)+20, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
                 [pBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [pBtn setTitle:arr[i] forState:UIControlStateNormal];
                 pBtn.tag = i;
                 [pBtn addTarget:self action:@selector(cornerAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.view addSubview:pBtn];
+                [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.view);
+                    make.left.offset((kSCREEN_WIDTH/arr.count)*i);
+                    make.width.offset(kSCREEN_WIDTH/arr.count);
+                    make.height.offset(kSCREEN_WIDTH/arr.count);
+                }];
+                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
             }
             
         }
@@ -474,12 +480,19 @@ CGFloat const tagItemSpace = 5;
             
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, HEIGHT_NAVBAR*2, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
                 [pBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [pBtn setTitle:arr[i] forState:UIControlStateNormal];
                 pBtn.tag = i;
                 [pBtn addTarget:self action:@selector(showPickerAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.view addSubview:pBtn];
+                [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.view);
+                    make.left.offset((kSCREEN_WIDTH/arr.count)*i);
+                    make.width.offset(kSCREEN_WIDTH/arr.count);
+                    make.height.offset(kSCREEN_WIDTH/arr.count);
+                }];
+                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
+
             }
         }
             break;
@@ -500,12 +513,18 @@ CGFloat const tagItemSpace = 5;
             
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, HEIGHT_NAVBAR*2, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
                 [pBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [pBtn setTitle:arr[i] forState:UIControlStateNormal];
                 pBtn.tag = i;
                 [pBtn addTarget:self action:@selector(showLoadingHubAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.view addSubview:pBtn];
+                [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.view);
+                    make.left.offset((kSCREEN_WIDTH/arr.count)*i);
+                    make.width.offset(kSCREEN_WIDTH/arr.count);
+                    make.height.offset(kSCREEN_WIDTH/arr.count);
+                }];
+                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
             }
         }
             break;

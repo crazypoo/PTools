@@ -261,7 +261,7 @@ static PLaunchAdMonitor *monitor = nil;
             default:
             {
                 UIButton *imageBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                [imageBtn setBackgroundImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
+                [imageBtn setImage:[UIImage imageWithData:monitor.imgData] forState:UIControlStateNormal];
                 [imageBtn addTarget:self action:@selector(showAdDetail:) forControlEvents:UIControlEventTouchUpInside];
                 [monitor.imgData setLength:0];
                 imageBtn.userInteractionEnabled = yesOrNo;
