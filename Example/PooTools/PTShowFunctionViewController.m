@@ -452,12 +452,19 @@ CGFloat const tagItemSpace = 5;
 
             for (int i = 0; i < arr.count; i++) {
                 UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, HEIGHT_NAVBAR*2, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
+//                pBtn.frame = CGRectMake((kSCREEN_WIDTH/arr.count)*i, HEIGHT_NAVBAR*2, kSCREEN_WIDTH/arr.count, kSCREEN_WIDTH/arr.count);
                 [pBtn setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
                 [pBtn setTitle:arr[i] forState:UIControlStateNormal];
                 pBtn.tag = i;
                 [pBtn addTarget:self action:@selector(showAlertAction:) forControlEvents:UIControlEventTouchUpInside];
                 [self.view addSubview:pBtn];
+                [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.centerY.equalTo(self.view);
+                    make.left.offset((kSCREEN_WIDTH/arr.count)*i);
+                    make.width.offset(kSCREEN_WIDTH/arr.count);
+                    make.height.offset(kSCREEN_WIDTH/arr.count);
+                }];
+                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
             }
         }
             break;
@@ -602,7 +609,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 1:
         {
-            NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123";
+            NSString *title = @"1111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231";
             NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
             YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 50) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
                 UITextField *textField = [UITextField new];

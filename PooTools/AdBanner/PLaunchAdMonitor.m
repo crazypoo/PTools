@@ -138,6 +138,51 @@ static PLaunchAdMonitor *monitor = nil;
         }
     }
     
+    UIFont *newFont;
+
+    if (IS_IPAD)
+    {
+        UIInterfaceOrientation orientation = [[UIApplication sharedApplication] statusBarOrientation];
+        switch (orientation) {
+            case UIInterfaceOrientationLandscapeLeft:
+            {
+                newFont = sbFont ? kDEFAULT_FONT(sbFont.familyName, sbFont.pointSize/2.5) : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+            case UIInterfaceOrientationLandscapeRight:
+            {
+                newFont = sbFont ? kDEFAULT_FONT(sbFont.familyName, sbFont.pointSize/2.5) : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+            default:
+            {
+                newFont = sbFont ? sbFont : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+        }
+    }
+    else
+    {
+        switch (device.orientation) {
+            case UIDeviceOrientationLandscapeLeft:
+            {
+                newFont = sbFont ? kDEFAULT_FONT(sbFont.familyName, sbFont.pointSize/2) : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+            case UIDeviceOrientationLandscapeRight:
+            {
+                newFont = sbFont ? kDEFAULT_FONT(sbFont.familyName, sbFont.pointSize/2) : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+            default:
+            {
+                newFont = sbFont ? sbFont : kDEFAULT_FONT(kDevLikeFont, 16);
+            }
+                break;
+        }
+
+    }
+    
     if (monitor.playMovie)
     {
 //        [kNotificationCenter addObserver:self selector:@selector(playerItemDidPlayToEnd:) name:AVPlayerItemDidPlayToEndTimeNotification object:v];
@@ -164,11 +209,11 @@ static PLaunchAdMonitor *monitor = nil;
         [imageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(monitor.player.view);
         }];
-
+        
         UIButton *exit = [UIButton buttonWithType:UIButtonTypeCustom];
         exit.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.2];
         [exit setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        exit.titleLabel.font = sbFont ? sbFont : kDEFAULT_FONT(kDevLikeFont, 16);
+        exit.titleLabel.font = newFont;
         [exit setTitle:@"跳过" forState:UIControlStateNormal];
         [exit addTarget:self action:@selector(hideView:) forControlEvents:UIControlEventTouchUpInside];
         kViewBorderRadius(exit, 5, 0, [UIColor clearColor]);
@@ -238,7 +283,7 @@ static PLaunchAdMonitor *monitor = nil;
         exit.titleLabel.textAlignment = NSTextAlignmentCenter;
         exit.titleLabel.numberOfLines = 0;
         exit.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-        exit.titleLabel.font = sbFont;
+        exit.titleLabel.font = newFont;
         [v addSubview:exit];
         [exit mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(v).offset(-10);
