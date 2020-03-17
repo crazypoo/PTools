@@ -442,13 +442,25 @@ CGFloat const tagItemSpace = 5;
         {
             PLabel *aaaaaaaaaaaaaa = [PLabel new];
             aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
-            [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentMiddle setStrikeThroughEnabled:YES];
+            [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentBottom setStrikeThroughEnabled:YES];
             aaaaaaaaaaaaaa.text = @"111111111111111";
             [self.view addSubview:aaaaaaaaaaaaaa];
             [aaaaaaaaaaaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
                 make.left.right.equalTo(self.view);
                 make.height.offset(44);
+            }];
+            
+            UIButton *randomLineBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+            [randomLineBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+            [randomLineBtn setTitle:@"随机画线" forState:UIControlStateNormal];
+            [randomLineBtn addActionHandler:^(UIButton *sender) {
+                [aaaaaaaaaaaaaa setVerticalAlignment:random()%4 strikeThroughAlignment:random()%4 setStrikeThroughEnabled:random()%2];
+            }];
+            [self.view addSubview:randomLineBtn];
+            [randomLineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.height.width.offset(100);
+                make.centerX.centerY.equalTo(self.view);
             }];
         }
             break;
