@@ -8,6 +8,7 @@
 
 #import "EasySignatureView.h"
 #import <QuartzCore/QuartzCore.h>
+#import <Masonry/Masonry.h>
 
 #define StrWidth 350
 #define StrHeight 25
@@ -26,6 +27,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 @property (nonatomic,assign) BOOL isHaveDraw;
 @property (assign,nonatomic) CGFloat pathWidth;
 @property (assign,nonatomic) CGFloat touchForce;
+@property (nonatomic,strong) UILabel *stringLabel;
 @end
 
 @implementation EasySignatureView
@@ -68,6 +70,18 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     pan.maximumNumberOfTouches = pan.minimumNumberOfTouches =1;
     [self addGestureRecognizer:pan];
     
+    if (!self.stringLabel)
+    {
+        self.stringLabel = [UILabel new];
+        self.stringLabel.font = kDEFAULT_FONT(self.placeholderFont, kAdaptedWidth(15));;
+        self.stringLabel.textAlignment = NSTextAlignmentCenter;
+        self.stringLabel.textColor = kRGBAColor(199, 199, 199, 1);
+        self.stringLabel.text = @"请在白色区域手写签名:正楷,工整书写";
+        [self addSubview:self.stringLabel];
+        [self.stringLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.centerX.equalTo(self);
+        }];
+    }
 }
 
 -(void)clearPan
@@ -342,7 +356,7 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
 - (void)drawRect:(CGRect)rect
 {
     self.backgroundColor = UIColor.whiteColor;
-    PNSLog(@">>>>>>>>%f",self.touchForce);
+//    PNSLog(@">>>>>>>>%f",self.touchForce);
     if ([self check3DTouch])
     {
         [UIColor colorWithWhite:0 alpha:self.pathWidth*(1-self.touchForce)];
@@ -360,21 +374,15 @@ static CGPoint midpoint(CGPoint p0,CGPoint p1) {
     
 //    CGContextRef context =UIGraphicsGetCurrentContext();
     
-    
-    PNSLog(@">>>>>>>>>>%f",rect.size.width);
-    
+//    PNSLog(@">>>>>>>>>>%f",rect.size.width);
+
     if(!isSure && !self.isHaveDraw)
     {
-        NSString *str = @"请在白色区域手写签名:正楷,工整书写";
-        CGFloat labelW = kAdaptedWidth(15)*str.length;
-        CGRect rect1 = CGRectMake((rect.size.width -labelW)/2, (rect.size.height -StrHeight)/2,labelW, StrHeight);
-        origionX = rect1.origin.x;
-        totalWidth = rect1.origin.x+labelW;
-        UIFont  *font = kDEFAULT_FONT(self.placeholderFont, kAdaptedWidth(15));//设置字体
-        [str drawAtPoint:CGPointMake(rect1.origin.x, rect1.origin.y-rect1.size.height/2) withAttributes:@{NSFontAttributeName:font,NSForegroundColorAttributeName:kRGBAColor(199, 199, 199, 1)}];
+        self.stringLabel.hidden = NO;
     }
     else
     {
+        self.stringLabel.hidden = YES;
         isSure = NO;
     }
 }
