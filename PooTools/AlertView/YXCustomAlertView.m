@@ -86,7 +86,9 @@
 
 +(CGFloat)alertTitleHeight:(UIFont *)titleAndBottomFont withWidth:(CGFloat)w withTitle:(NSString *)title
 {
-    return kStringIsEmpty(title)? 0: [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
+    CGFloat height = [Utils sizeForString:title font:titleAndBottomFont andHeigh:CGFLOAT_MAX andWidth:(w-20)].height;
+    CGFloat viewHeight = kSCREEN_HEIGHT/3;
+    return kStringIsEmpty(title)? 0: (( height >= viewHeight) ? viewHeight : height);
 }
 
 - (instancetype _Nonnull ) initAlertViewWithSuperView:(UIView * _Nonnull)superView
@@ -209,6 +211,11 @@
 
 
         self.titleLabel.text = title;
+        if ([YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text]>=kSCREEN_HEIGHT/3)
+        {
+            self.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
+            self.titleLabel.numberOfLines = 0;
+        }
         [self addSubview:self.titleLabel];
         
         self.customView = [UIView new];
@@ -284,7 +291,7 @@
     [super layoutSubviews];
     
     CGFloat textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text];
-
+    
     [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
         make.height.offset(textH);
         make.top.equalTo(self).offset(kStringIsEmpty(self.titleLabel.text) ? 0 : 10);

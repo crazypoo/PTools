@@ -642,7 +642,7 @@ CGFloat const tagItemSpace = 5;
         {
             NSString *title = @"1111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231111231231";
             NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 50) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
+            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 25) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
                 UITextField *textField = [UITextField new];
                 textField.placeholder = @"用来展示数字键盘";
                 [alertView.customView addSubview:textField];
