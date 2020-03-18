@@ -7,6 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
+@class PooCodeView;
+
+typedef void (^CodeViewBlock)(PooCodeView *codeView, NSString *codeString);
 
 @interface PooCodeView : UIView
 @property (nonatomic, retain) NSArray *changeArray;
@@ -14,6 +17,7 @@
 @property (nonatomic, assign) NSUInteger numberOfCodes;
 @property (nonatomic, assign) int numberOfLines;
 @property (nonatomic, assign) NSTimeInterval changeTimes;
+@property (nonatomic, copy) CodeViewBlock codeBlock;
 
 /*! @brief 验证码初始化
  * @param frame frame设置

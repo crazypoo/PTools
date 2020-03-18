@@ -93,6 +93,10 @@
         tempString = (NSMutableString *)[tempString stringByAppendingString:[self.changeArray objectAtIndex:index]];
     }
     self.changeString= [[NSString alloc] initWithFormat:@"%@", tempString];
+    if (self.codeBlock)
+    {
+        self.codeBlock(self, self.changeString);
+    }
 }
 
 

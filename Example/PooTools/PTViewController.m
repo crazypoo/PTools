@@ -18,6 +18,9 @@
 #import "SensitiveWordTools.h"
 #import "PopSignatureView.h"
 #import "UIButton+Block.h"
+#import "PooCodeView.h"
+#import "PSlider.h"
+#import "DoubleSliderView.h"
 
 #import "PTShowFunctionViewController.h"
 
@@ -47,6 +50,7 @@
 @property (nonatomic, strong) NSMutableArray *tableHeaderTitle;
 @property (nonatomic, strong) id popover;
 @property (nonatomic, strong) UITableView *tbView;
+@property (nonatomic, strong) NSArray *tableNameArr;
 @end
 
 @implementation PTViewController
@@ -66,8 +70,9 @@
     NSString *string = [NSString stringWithFormat:@"含有敏感词汇：%@",[[SensitiveWordTools sharedInstance]filter:@"裸体"]];
     PNSLog(@"%@",string);
    
-    self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片"],@[@"签名"],@[@"屏幕旋转"]]];
-    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading",@"图片",@"签名",@"屏幕旋转"]];
+    self.tableNameArr = @[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片",@"验证码图片"],@[@"签名"],@[@"屏幕旋转"],@[@"Slider"]];
+    self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
+    self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading",@"图片",@"签名",@"屏幕旋转",@"Slider"]];
     
     self.tbView    = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStyleGrouped];
     self.tbView.dataSource                     = self;
@@ -499,7 +504,7 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     if ([PooCleanCache clearCaches]) {
                         [Utils alertVCOnlyShowWithTitle:nil andMessage:@"清理成功"];
-                        self.tableArr = [[NSMutableArray alloc] initWithArray:@[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片"],@[@"签名"],@[@"屏幕旋转"]]];
+                        self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
                         GCDAfter(0.1, ^{
                             [self.tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
                         });
@@ -511,6 +516,35 @@ static NSString *cellIdentifier = @"CELL";
                 }
                     break;
                 default:
+                    break;
+            }
+        }
+            break;
+        case 8:
+        {
+            switch (indexPath.row) {
+                case 1:
+                {
+                    [self createAlertViewWithTitle:@"验证码图片" withAlertBtns:@[@"222"] initCustomView:^(UIView *customView) {
+                        PooCodeView *codeView = [[PooCodeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) NumberOfCode:4 NumberOfLines:3 ChangeTime:3];
+                        [customView addSubview:codeView];
+                        [codeView mas_makeConstraints:^(MASConstraintMaker *make) {
+                            make.centerX.centerY.equalTo(customView);
+                            make.width.height.offset(100);
+                        }];
+                        codeView.codeBlock = ^(PooCodeView *codeView, NSString *codeString) {
+                            PNSLog(@">>>>>>>>%@",codeString);
+                        };
+                    } alertBtnTapBlock:^(NSInteger btnIndex) {
+                        
+                    }];
+                }
+                    break;
+                default:
+                {
+                    PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:[self.typeArr[indexPath.section][indexPath.row] integerValue]];
+                    [self.navigationController pushViewController:view animated:YES];
+                }
                     break;
             }
         }
@@ -532,6 +566,31 @@ static NSString *cellIdentifier = @"CELL";
             [MXRotationManager defaultManager].orientation = r;
         }
             break;
+        case 11:
+        {
+            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] initCustomView:^(UIView *customView) {
+                PSlider *slider = [PSlider new];
+                [customView addSubview:slider];
+                [slider mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.offset(100);
+                    make.height.offset(50);
+                    make.centerX.equalTo(customView);
+                    make.top.equalTo(customView).offset(5);
+                }];
+                
+                DoubleSliderView *dSlider = [DoubleSliderView new];
+                [customView addSubview:dSlider];
+                [dSlider mas_makeConstraints:^(MASConstraintMaker *make) {
+                    make.width.offset(100);
+                    make.height.offset(50);
+                    make.centerX.equalTo(customView);
+                    make.top.equalTo(slider.mas_bottom).offset(5);
+                }];
+            } alertBtnTapBlock:^(NSInteger btnIndex) {
+                
+            }];
+        }
+            break;
         default:
         {
             PTShowFunctionViewController *view  = [[PTShowFunctionViewController alloc] initWithShowFunctionType:[self.typeArr[indexPath.section][indexPath.row] integerValue]];
@@ -544,6 +603,24 @@ static NSString *cellIdentifier = @"CELL";
 -(BOOL)shouldAutorotate
 {
     return YES;
+}
+
+-(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock
+{
+    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle withButtonAndTitleFont:kDEFAULT_FONT(FontName, 15) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btns viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
+        createBlock(alertView.customView);
+    } clickAction:^(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex) {
+        tapBlock(buttonIndex);
+        [alertView dissMiss];
+        alertView = nil;
+    } didDismissBlock:^(YXCustomAlertView * _Nonnull alertView) {
+        alertView = nil;
+    }];
+    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:alertTitle withTitleFont:kDEFAULT_FONT(FontName, 50) withButtonArr:btns]);
+        make.width.offset(kSCREEN_WIDTH-20);
+        make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
+    }];
 }
 
 @end
