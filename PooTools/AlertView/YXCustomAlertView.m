@@ -34,6 +34,7 @@
 @property (nonatomic, assign) AlertAnimationType viewAnimationType;
 @property (nonatomic, strong) UIColor *alertViewBackgroundColor;
 @property (nonatomic, strong) UIColor *heightlightedColorColor;
+@property (nonatomic, strong) UIScrollView *titleScroller;
 @end
 
 
@@ -50,9 +51,7 @@
     CGFloat titleH = 0.0f;
 
     titleH = [YXCustomAlertView alertTitleHeight:titleAndBottomFont withWidth:w withTitle:title];
-    
-    PNSLog(@">>>>>>>>>>>>%f",titleH);
-    
+        
     CGFloat btnW = (w - (btns.count-1)*AlertLine)/btns.count;
     BOOL isEX = NO;
     if (!kArrayIsEmpty(btns))
@@ -208,15 +207,13 @@
         animation.toValue = @(0);
         animation.springBounciness = 1.0f;
         [self.layer pop_addAnimation:animation forKey:@"AlertAnimation"];
-
-
-        self.titleLabel.text = title;
-        if ([YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text]>=kSCREEN_HEIGHT/3)
+        
+        if (!([YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:title]>=kSCREEN_HEIGHT/3))
         {
-            self.titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
-            self.titleLabel.numberOfLines = 0;
+            self.titleLabel.text = title;
+            [self addSubview:self.titleLabel];
+            self.titleLabel.backgroundColor = kRandomColor;
         }
-        [self addSubview:self.titleLabel];
         
         self.customView = [UIView new];
         [self addSubview:self.customView];
@@ -290,15 +287,46 @@
 {
     [super layoutSubviews];
     
-    CGFloat textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleLabel.text];
+    CGFloat textH = [YXCustomAlertView alertTitleHeight:self.viewFont withWidth:self.frame.size.width withTitle:self.titleStr];
     
-    [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.height.offset(textH);
-        make.top.equalTo(self).offset(kStringIsEmpty(self.titleLabel.text) ? 0 : 10);
-        make.left.equalTo(self).offset(10);
-        make.right.equalTo(self).offset(-10);
-    }];
-    
+    if (textH>=kSCREEN_HEIGHT/3)
+    {
+        if (!self.titleScroller)
+        {
+            self.titleScroller = [UIScrollView new];
+            [self addSubview:self.titleScroller];
+            self.titleScroller.scrollEnabled = YES;
+            self.titleScroller.contentSize = CGSizeMake(self.frame.size.width-20, [Utils sizeForString:self.titleStr font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:(self.frame.size.width-20)].height);
+            self.titleLabel.text = self.titleStr;
+            [self.titleScroller addSubview:self.titleLabel];
+            self.titleLabel.backgroundColor = kRandomColor;
+        }
+
+        [self.titleScroller mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.height.offset(textH);
+            make.top.equalTo(self).offset(kStringIsEmpty(self.titleStr) ? 0 : 10);
+            make.left.equalTo(self).offset(10);
+            make.right.equalTo(self).offset(-10);
+        }];
+        
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.offset([Utils sizeForString:self.titleLabel.text font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:(self.frame.size.width-20)].height);
+            make.top.offset(0);
+            make.width.offset((self.frame.size.width-20));
+            make.centerX.equalTo(self.titleScroller);
+        }];
+
+    }
+    else
+    {
+        [self.titleLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.offset(textH);
+            make.top.equalTo(self).offset(kStringIsEmpty(self.titleLabel.text) ? 0 : 10);
+            make.left.equalTo(self).offset(10);
+            make.right.equalTo(self).offset(-10);
+        }];
+    }
+
     CGFloat btnW = (self.frame.size.width - (self.bottomBtnArr.count-1)*AlertLine)/self.bottomBtnArr.count;
     BOOL isEX = NO;
     for (NSString *string in self.bottomBtnArr) {
@@ -317,7 +345,15 @@
     CGFloat bottomH = isEX ? bottomButtonH * self.bottomBtnArr.count + AlertLine * self.bottomBtnArr.count: bottomButtonH + AlertLine;
     
     [self.customView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLabel.mas_bottom);
+        if (textH>=kSCREEN_HEIGHT/3)
+        {
+            make.top.equalTo(self.titleScroller.mas_bottom);
+        }
+        else
+        {
+            make.top.equalTo(self.titleLabel.mas_bottom);
+
+        }
         make.bottom.equalTo(self).offset(-bottomH);
         make.left.right.equalTo(self);
     }];
@@ -406,7 +442,7 @@
     return _middleView;
 }
 
-- (UILabel *) titleLabel{
+- (UILabel *)titleLabel{
     
     if (_titleLabel == nil) {
         _titleLabel = [[UILabel alloc] init];
@@ -420,4 +456,5 @@
     
     return _titleLabel;
 }
+
 @end

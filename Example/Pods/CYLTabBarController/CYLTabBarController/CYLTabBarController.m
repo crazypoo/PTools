@@ -93,7 +93,7 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
         }
         SEL actin = @selector(didSelectControl:);
         [control addTarget:self action:actin forControlEvents:UIControlEventTouchUpInside];
-        if (idx == self.selectedIndex) {
+        if (idx == self.selectedIndex && ![control isKindOfClass:[CYLPlusButton class]]) {
             control.selected = YES;
         }
     }];
@@ -178,7 +178,9 @@ static void * const CYLTabImageViewDefaultOffsetContext = (void*)&CYLTabImageVie
     }
     // KVO反注册
     if (self.isObservingTabImageViewDefaultOffset) {
-        [self.tabBar removeObserver:self forKeyPath:@"tabImageViewDefaultOffset"];
+        @try {
+            [self.tabBar removeObserver:self forKeyPath:@"tabImageViewDefaultOffset"];
+        } @catch(NSException *e) { }
     }
 }
 
