@@ -299,7 +299,6 @@
             self.titleScroller.contentSize = CGSizeMake(self.frame.size.width-20, [Utils sizeForString:self.titleStr font:self.viewFont andHeigh:CGFLOAT_MAX andWidth:(self.frame.size.width-20)].height);
             self.titleLabel.text = self.titleStr;
             [self.titleScroller addSubview:self.titleLabel];
-            self.titleLabel.backgroundColor = kRandomColor;
         }
 
         [self.titleScroller mas_makeConstraints:^(MASConstraintMaker *make) {

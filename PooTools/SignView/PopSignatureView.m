@@ -169,7 +169,7 @@
         
         [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.equalTo(self.backGroundView);
-            make.height.offset(HEIGHT_BUTTON);
+            make.height.offset(IS_IPAD ? (HEIGHT_BUTTON+HEIGHT_STATUS) : HEIGHT_BUTTON);
         }];
         
         [self.signatureView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -197,7 +197,7 @@
         
         [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.navView).offset(-navSpace);
-            make.top.equalTo(self.navView).offset(5);
+            make.top.equalTo(self.navView).offset(5+(IS_IPAD ? HEIGHT_STATUS : 0));
             make.bottom.equalTo(self.navView).offset(-5);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
@@ -206,8 +206,7 @@
         [self.cancelBtn addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
         [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.navView).offset(navSpace);
-            make.top.bottom.equalTo(self.navView);
-            make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
+            make.width.centerY.equalTo(clearBtn);
         }];
     }
     else
@@ -233,13 +232,13 @@
         
         [self.navView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.equalTo(self.backGroundView);
-            make.height.offset(HEIGHT_BUTTON);
+            make.height.offset(IS_IPAD ? (HEIGHT_BUTTON+HEIGHT_STATUS) : HEIGHT_BUTTON);
             make.bottom.equalTo(self.signatureView.mas_top);
         }];
         
         [clearBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.right.equalTo(self.navView).offset(-navSpace);
-            make.top.equalTo(self.navView).offset(5);
+            make.top.equalTo(self.navView).offset(5+(IS_IPAD ? HEIGHT_STATUS : 0));
             make.bottom.equalTo(self.navView).offset(-5);
             make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
         }];
@@ -247,8 +246,7 @@
         [self.cancelBtn setTitle:@"签名" forState:UIControlStateNormal];
         [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.equalTo(self.navView).offset(navSpace);
-            make.top.bottom.equalTo(self.navView);
-            make.width.offset(cleanString.length*viewBtnFont.pointSize+10);
+            make.width.centerY.equalTo(clearBtn);
         }];
     }
 }

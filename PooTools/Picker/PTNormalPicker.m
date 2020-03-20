@@ -13,7 +13,6 @@
 #import <pop/POP.h>
 #import "UIView+ViewRectCorner.h"
 
-#define pickerCellH 30.0f
 
 @implementation PTNormalPickerModel
 @end
@@ -142,7 +141,7 @@
     
     [self.tbar_picker mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.viewPicker);
-        make.height.offset(HEIGHT_BUTTON);
+        make.height.offset(self.doneBtn.titleLabel.font.pointSize+5);
         make.bottom.equalTo(self.viewPicker.mas_top);
     }];
     
@@ -203,7 +202,7 @@
 
 //返回指定列，行的高度，就是自定义行的高度
 - (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
-    return pickerCellH;
+    return self.pickerFont.pointSize+5;
 }
 
 //自定义指定列的每行的视图，即指定列的每行的视图行为一致
@@ -222,7 +221,7 @@
     [view addSubview:text];
     [text mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.equalTo(view);
-        make.height.offset(pickerCellH);
+        make.height.offset(self.pickerFont.pointSize+5);
     }];
 
     return view;

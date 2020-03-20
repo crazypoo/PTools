@@ -373,7 +373,7 @@
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.pickerView);
-        make.height.offset(HEIGHT_BUTTON);
+        make.height.offset(self.cancelBtn.titleLabel.font.pointSize+10);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];
 
@@ -490,6 +490,9 @@
 }
 
 #pragma mark -UIPickerView的代理
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return self.pickerFonts.pointSize+5;
+}
 
 // 滚动UIPickerView就会调用
 - (void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
@@ -818,7 +821,7 @@
     
     [self.topV mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.pickerView);
-        make.height.offset(HEIGHT_BUTTON);
+        make.height.offset(self.cancelBtn.titleLabel.font.pointSize+10);
         make.bottom.equalTo(self.pickerView.mas_top);
     }];
     
@@ -871,6 +874,10 @@
         return  [PooTimePicker minuteArray].count;
     }
     return 0;
+}
+
+- (CGFloat)pickerView:(UIPickerView *)pickerView rowHeightForComponent:(NSInteger)component{
+    return self.pickerFonts.pointSize+5;
 }
 
 // 自定义指定列的每行的视图，即指定列的每行的视图行为一致
