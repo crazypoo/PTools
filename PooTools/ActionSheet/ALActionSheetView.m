@@ -136,7 +136,7 @@
                 {
                     self.selectRowBlock(self, index);
                 }
-            }];
+            }]; 
         }
         else
         {

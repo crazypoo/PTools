@@ -40,9 +40,6 @@ static const CGFloat colorsReflect [] = {
 @property (nonatomic, assign) CGPoint upperCircleMiddle;
 @property (nonatomic, assign) CGPoint upperCircleSecond;
 
-
-
-
 @end
 
 
