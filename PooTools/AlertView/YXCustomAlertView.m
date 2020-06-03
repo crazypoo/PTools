@@ -212,7 +212,6 @@
         {
             self.titleLabel.text = title;
             [self addSubview:self.titleLabel];
-            self.titleLabel.backgroundColor = kRandomColor;
         }
         
         self.customView = [UIView new];
