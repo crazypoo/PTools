@@ -61,49 +61,50 @@
         #if DEBUG
             PNSLog(@"Address:%@\nParameters:%@",serverAddress,parameters);
         #endif
-            [manager POST:serverAddress parameters:parameters constructingBodyWithBlock:^(id<AFMultipartFormData> _Nonnull formData){
-                for (int i = 0; i < dataModelArr.count; i++)
+        [manager POST:serverAddress parameters:parameters headers:nil constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+            for (int i = 0; i < dataModelArr.count; i++)
+            {
+                PTUploadDataModel *model = dataModelArr[i];
+                [formData appendPartWithFileData:model.imageData name:model.imageDataName fileName:model.imageName mimeType:[PTUploadDataSteamTools imageMimeTypeWith:model.imageType]];
+            }
+        } progress:^(NSProgress * _Nonnull uploadProgress) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (view)
                 {
-                    PTUploadDataModel *model = dataModelArr[i];
-                    [formData appendPartWithFileData:model.imageData name:model.imageDataName fileName:model.imageName mimeType:[PTUploadDataSteamTools imageMimeTypeWith:model.imageType]];
+                    self.waitingView.progress = uploadProgress.fractionCompleted;
                 }
-            }progress:^(NSProgress *uploadProgress){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (view)
-                    {
-                        self.waitingView.progress = uploadProgress.fractionCompleted;
-                    }
-                });
-            }success:^(NSURLSessionDataTask *task, id responseObject){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (view)
-                    {
-                        [self.waitingView removeFromSuperview];
-                    }
-                });
-                kHideNetworkActivityIndicator();
-                NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
-        #if DEBUG
-                PNSLog(@"ServerSuccessReturn:%@",dic);
-        #endif
-                if (successBlock) {
-                    successBlock(dic);
+            });
+        } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (view)
+                {
+                    [self.waitingView removeFromSuperview];
                 }
-            }failure:^(NSURLSessionDataTask *task, NSError *error){
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (view)
-                    {
-                        [self.waitingView removeFromSuperview];
-                    }
-                });
-                kHideNetworkActivityIndicator();
-        #if DEBUG
-                PNSLog(@"ServerFailureReturn:%@",error);
-        #endif
-                if (failureBlock) {
-                    failureBlock(error);
+            });
+            kHideNetworkActivityIndicator();
+            NSDictionary *dic = [NSJSONSerialization JSONObjectWithData:responseObject options:NSJSONReadingMutableContainers error:nil];
+#if DEBUG
+            PNSLog(@"ServerSuccessReturn:%@",dic);
+#endif
+            if (successBlock) {
+                successBlock(dic);
+            }
+        } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (view)
+                {
+                    [self.waitingView removeFromSuperview];
                 }
-            }];
+            });
+            kHideNetworkActivityIndicator();
+#if DEBUG
+            PNSLog(@"ServerFailureReturn:%@",error);
+#endif
+            if (failureBlock) {
+                failureBlock(error);
+            }
+
+        }];
     });
 }
 
