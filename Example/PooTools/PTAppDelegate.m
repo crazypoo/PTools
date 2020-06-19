@@ -166,6 +166,26 @@
     
     
     PNSLog(@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]);
+    
+    
+    
+    NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"clientStatus":@0,
+    }];
+
+    NSMutableDictionary * aaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
+        @"userKey":@"3QzN2kjM4YTO2gjNx0SOhZmNhVWM1AzYyYTZjRDZ1cDMhVWY0YGZhNjMmBTZwojclNXdtEWO4MWN0UzY1ETZiBTYxIGNkFGNzkjZ3kTNkFTM5UGNtMkMENjRxMTN3MjN0UzQxIUNBhjR0IzQwYDMxQDRzkjM",
+        @"debug":@""
+    }];
+    
+    [HTTPClient(@"https://diou.user.gdupb.com", YES) POST:@"https://diou.user.gdupb.com/banner/showBannerButtons" parameters:dicaaaaaa headers:aaaaa progress:^(NSProgress * _Nonnull uploadProgress) {
+        
+    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        PNSLog(@">>>%@",responseObject);
+    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+    }];
+    
     return YES;
 }
 

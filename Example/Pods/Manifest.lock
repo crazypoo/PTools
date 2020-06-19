@@ -39,7 +39,7 @@ PODS:
   - MJExtension (3.2.1)
   - MJRefresh (3.4.3)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.80.11):
+  - PooTools (1.80.12):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -61,21 +61,17 @@ PODS:
     - SDWebImage
     - SSZipArchive
     - TextFieldEffects
-    - TOWebViewController
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
     - WZLBadge
     - YCXMenu
   - pop (1.0.12)
-  - SDWebImage (5.8.0):
-    - SDWebImage/Core (= 5.8.0)
-  - SDWebImage/Core (5.8.0)
+  - SDWebImage (5.8.1):
+    - SDWebImage/Core (= 5.8.1)
+  - SDWebImage/Core (5.8.1)
   - SSZipArchive (2.2.3)
   - TextFieldEffects (1.6.0)
-  - TOWebViewController (2.2.8):
-    - TOWebViewController/Core (= 2.2.8)
-  - TOWebViewController/Core (2.2.8)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
   - "UIViewController+Swizzled (1.4)"
@@ -111,7 +107,6 @@ SPEC REPOS:
     - SDWebImage
     - SSZipArchive
     - TextFieldEffects
-    - TOWebViewController
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
@@ -140,12 +135,11 @@ SPEC CHECKSUMS:
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 7b1277be0aa6ed0b888431bb16de91f91ee8edf8
+  PooTools: 4011885ad6950fc5bda2a4b5f695f7ef105d078d
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
-  TOWebViewController: 953a24619d32f7aa1d9d4098a74885a9236f7348
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb

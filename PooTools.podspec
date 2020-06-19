@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '1.80.12'
+    s.version     = '1.80.13'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
     s.dependency 'SDWebImage'
     s.dependency 'CYLTabBarController'
     s.dependency 'Mantle'
-    s.dependency 'TOWebViewController'
+#    s.dependency 'TOWebViewController'
     s.dependency 'DZNEmptyDataSet'
     s.dependency 'IQKeyboardManager'
     s.dependency 'UITableView+FDTemplateLayoutCell'

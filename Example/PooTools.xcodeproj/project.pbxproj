@@ -126,7 +126,6 @@
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
 		CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFE20AC3F7C00949DF6 /* SDWebImage.framework */; };
-		CC658D0320AC3F7C00949DF6 /* TOWebViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0220AC3F7C00949DF6 /* TOWebViewController.framework */; };
 		CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0420AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework */; };
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
@@ -512,7 +511,6 @@
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
 				CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */,
-				CC658D0320AC3F7C00949DF6 /* TOWebViewController.framework in Frameworks */,
 				CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */,
 				CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */,
 				CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */,
@@ -1371,7 +1369,6 @@
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
-				"${BUILT_PRODUCTS_DIR}/TOWebViewController/TOWebViewController.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
@@ -1402,7 +1399,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TOWebViewController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
