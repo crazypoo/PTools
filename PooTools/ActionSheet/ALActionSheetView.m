@@ -86,6 +86,7 @@
                separatorColor:(UIColor *)separatorColor
              heightlightColor:(UIColor *)heightlightColor
             sourceViewForiPad:(UIView *)sourceView
+              actionSheetType:(ActionSheetType)type
                       handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
     self = [self init];
@@ -106,41 +107,52 @@
         self.separatorColor = separatorColor ? separatorColor : kRGBAColor(230, 230, 230, 1);
         self.heightlightColor = heightlightColor ? heightlightColor : kDevButtonHighlightedColor;
         
-        if (@available(iOS 13.0, *))
-        {
-            [Utils alertVCWithTitle:title
-                            message:titleMessage
-                        cancelTitle:cancelButtonTitle
-                            okTitle:nil
-                   destructiveTitle:destructiveButtonTitle
-                   otherButtonArray:otherButtonTitles
-                             shouIn:kAppDelegateWindow.rootViewController
-                  sourceViewForiPad:sourceView
-                         alertStyle:UIAlertControllerStyleActionSheet okAction:^{
-                
-            } cancelAction:^{
-                self.selectRowBlock(self, -1);
-            } destructiveAction:^{
-                
-                if (!kStringIsEmpty(destructiveButtonTitle))
+        switch (type) {
+            case ActionSheetTypeAuto:
+            {
+                if (@available(iOS 13.0, *))
                 {
-                    self.selectRowBlock(self, 0);
-                }
-                
-            } otherButtonAction:^(NSInteger index) {
-                if (!kStringIsEmpty(destructiveButtonTitle))
-                {
-                    self.selectRowBlock(self, index+1);
+                    [Utils alertVCWithTitle:title
+                                    message:titleMessage
+                                cancelTitle:cancelButtonTitle
+                                    okTitle:nil
+                           destructiveTitle:destructiveButtonTitle
+                           otherButtonArray:otherButtonTitles
+                                     shouIn:kAppDelegateWindow.rootViewController
+                          sourceViewForiPad:sourceView
+                                 alertStyle:UIAlertControllerStyleActionSheet okAction:^{
+                        
+                    } cancelAction:^{
+                        self.selectRowBlock(self, -1);
+                    } destructiveAction:^{
+                        
+                        if (!kStringIsEmpty(destructiveButtonTitle))
+                        {
+                            self.selectRowBlock(self, 0);
+                        }
+                        
+                    } otherButtonAction:^(NSInteger index) {
+                        if (!kStringIsEmpty(destructiveButtonTitle))
+                        {
+                            self.selectRowBlock(self, index+1);
+                        }
+                        else
+                        {
+                            self.selectRowBlock(self, index);
+                        }
+                    }];
                 }
                 else
                 {
-                    self.selectRowBlock(self, index);
+                    [self createView];
                 }
-            }]; 
-        }
-        else
-        {
-            [self createView];
+            }
+                break;
+            default:
+            {
+                [self createView];
+            }
+                break;
         }
     }
     
@@ -375,6 +387,7 @@
                                  separatorColor:(UIColor *)separatorColor
                                heightlightColor:(UIColor *)heightlightColor
                               sourceViewForiPad:(UIView *)sourceView
+                                actionSheetType:(ActionSheetType)type
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 {
     ALActionSheetView *actionSheetView = [[ALActionSheetView alloc] initWithTitle:title
@@ -390,6 +403,7 @@
                                                                    separatorColor:separatorColor
                                                                  heightlightColor:heightlightColor
                                                                 sourceViewForiPad:sourceView
+                                                                  actionSheetType:type
                                                                           handler:block];
     
     return actionSheetView;

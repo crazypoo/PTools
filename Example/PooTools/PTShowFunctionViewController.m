@@ -632,6 +632,7 @@ CGFloat const tagItemSpace = 5;
                                                                        separatorColor:kRandomColor
                                                                      heightlightColor:kRandomColor
                                                                     sourceViewForiPad:sender
+                                                                      actionSheetType:ActionSheetTypeBase
                                                                               handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
                 PNSLog(@">>>>>>>>>>%ld",(long)buttonIndex);
             }];

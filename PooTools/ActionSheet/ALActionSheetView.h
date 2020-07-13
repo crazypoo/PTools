@@ -15,6 +15,11 @@
 
 typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionSheetView, NSInteger buttonIndex);
 
+typedef NS_ENUM(NSInteger,ActionSheetType){
+    ActionSheetTypeAuto = 0,
+    ActionSheetTypeBase,
+};
+
 @interface ALActionSheetView : UIView
 
 /*! @brief 初始化
@@ -44,6 +49,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
                separatorColor:(UIColor *)separatorColor
              heightlightColor:(UIColor *)heightlightColor
             sourceViewForiPad:(UIView *)sourceView
+              actionSheetType:(ActionSheetType)type
                       handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 展示
@@ -77,6 +83,7 @@ typedef void (^ALActionSheetViewDidSelectButtonBlock)(ALActionSheetView *actionS
                                  separatorColor:(UIColor *)separatorColor
                                heightlightColor:(UIColor *)heightlightColor
                               sourceViewForiPad:(UIView *)sourceView
+                                actionSheetType:(ActionSheetType)type
                                         handler:(ALActionSheetViewDidSelectButtonBlock)block;
 
 /*! @brief 消失

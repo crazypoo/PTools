@@ -1195,6 +1195,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                                                                       separatorColor:nil
                                                                     heightlightColor:nil
                                                                    sourceViewForiPad:sender
+                                                                     actionSheetType:ActionSheetTypeAuto
                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
                                           {
                                               switch (self.moreType)
