@@ -172,11 +172,11 @@
                 self.tagHeightBlock(self, self.frame.size.height);
             }
             
-            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
+//            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
 
             [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
             
-            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
+//            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
 
             self.sectionCountArr = [NSMutableArray array];
             for (int i = 0; i < self.rowLastTagArr.count; i++) {
@@ -353,11 +353,11 @@
                 self.tagHeightBlock(self, self.frame.size.height);
             }
             
-            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
+//            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
 
             [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
             
-            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
+//            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
 
             self.sectionCountArr = [NSMutableArray array];
             for (int i = 0; i < self.rowLastTagArr.count; i++) {
@@ -393,7 +393,7 @@
 
             totalW += CGRectGetWidth(currentBtn.frame);
         }
-        PNSLog(@"当行(%d)总w:%f",j,totalW);
+//        PNSLog(@"当行(%d)总w:%f",j,totalW);
 
         CGFloat currentSectionTotalW = totalW+self.curConfig.itemHerMargin*([self.sectionCountArr[j] integerValue]+1);
         
@@ -428,7 +428,7 @@
             }
                 break;
         }
-        PNSLog(@"当行(%d)x位置::%f",j,xxxxxxxxx);
+//        PNSLog(@"当行(%d)x位置::%f",j,xxxxxxxxx);
         
         for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < [self.rowLastTagArr[j] intValue]+1; i++) {
                 UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
@@ -606,6 +606,11 @@
         UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
         btn.selected = NO;
         btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
+        
+        if (self.curConfig.hasBorder) {
+            UIColor *borderC = self.curConfig.borderColor ? self.curConfig.borderColor : [UIColor grayColor];
+            btn.layer.borderColor = borderC.CGColor;
+        }
     }
 }
 
