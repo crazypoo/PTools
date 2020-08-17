@@ -562,12 +562,25 @@
             {
                 //不可以取消选中
                 self.selectedBtn.selected = NO;
+                [self btnBackgroundColorAndBorderColor:self.selectedBtn];
                 sender.selected = YES;
                 self.selectedBtn = sender;
             }
         }
     }
     
+    [self btnBackgroundColorAndBorderColor:sender];
+    
+    //点击回调
+    NSInteger index = sender.tag - BTN_Tags_Tag;
+    if (self.tagBtnClickedBlock)
+    {
+        self.tagBtnClickedBlock(self, sender, index);
+    }
+}
+
+-(void)btnBackgroundColorAndBorderColor:(UIButton *)sender
+{
     if (self.curConfig.hasBorder) {
         if (sender.selected)
         {
@@ -588,14 +601,6 @@
     else
     {
         sender.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
-    }
-    
-    
-    //点击回调
-    NSInteger index = sender.tag - BTN_Tags_Tag;
-    if (self.tagBtnClickedBlock)
-    {
-        self.tagBtnClickedBlock(self, sender, index);
     }
 }
 
