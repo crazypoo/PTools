@@ -68,4 +68,8 @@
 /*! @brief 判断字符串是否中文
  */
 - (BOOL)isChinese;
+
+/*! @brief 判断字符串是否社会统一信用代码
+ */
+-(BOOL)isCOLTDCode;
 @end
