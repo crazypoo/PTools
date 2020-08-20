@@ -30,7 +30,7 @@ static NSString *MoneyString = @"(\\+|\\-)?(([0]|(0[.]\\d{0,2}))|([1-9]\\d{0,4}(
 
 static NSString *Chinese = @"(^[\u4e00-\u9fa5]+$)";
 
-static NSString *COLTDCode = @"^([0-9A-HJ-NPQRTUWXY]{2}\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\d{14})$";
+static NSString *COLTDCode = @"^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$";
 
 -(BOOL)isCOLTDCode
 {

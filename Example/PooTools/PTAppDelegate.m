@@ -168,7 +168,8 @@
     
     PNSLog(@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]);
     
-    
+    PNSLog(@"是否信用代码%d",[@"91440705MA54R5NK0X" isCOLTDCode]);
+
     
     NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
         @"clientStatus":@0,
