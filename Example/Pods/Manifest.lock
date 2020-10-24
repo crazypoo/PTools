@@ -39,7 +39,7 @@ PODS:
   - MJExtension (3.2.1)
   - MJRefresh (3.4.3)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.80.12):
+  - PooTools (1.80.17):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -135,7 +135,7 @@ SPEC CHECKSUMS:
   MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 4011885ad6950fc5bda2a4b5f695f7ef105d078d
+  PooTools: 77018b51d8d1ed288c6d36c4606c53c838ef8184
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
@@ -149,4 +149,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: ad1aef8edfa37f58732c107674cb7a260d544eb3
 
-COCOAPODS: 1.9.3
+COCOAPODS: 1.10.0.rc.1

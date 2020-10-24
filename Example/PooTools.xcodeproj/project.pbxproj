@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
+		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
+		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
 		5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -170,6 +173,12 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
+		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
+		2352EA722543BDB9002AE25C /* PurchaseCarAnimationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseCarAnimationTool.h; sourceTree = "<group>"; };
+		2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseCarAnimationTool.m; sourceTree = "<group>"; };
+		2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
+		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
 		5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
@@ -536,6 +545,24 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		2352EA6C2543BD09002AE25C /* BankCard */ = {
+			isa = PBXGroup;
+			children = (
+				2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */,
+				2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */,
+			);
+			path = BankCard;
+			sourceTree = "<group>";
+		};
+		2352EA712543BD9E002AE25C /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				2352EA722543BDB9002AE25C /* PurchaseCarAnimationTool.h */,
+				2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
 		5A8B2E9D23C568A9003FEF2E /* PopoverViewForiPad */ = {
 			isa = PBXGroup;
 			children = (
@@ -548,6 +575,7 @@
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
+				2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */,
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for PooTools */,
 				6003F5B5195388D20070C39A /* Tests */,
@@ -733,6 +761,7 @@
 		C08D9DCE2276890F001417F1 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */,
 				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
 				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
 				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
@@ -1219,6 +1248,8 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				2352EA712543BD9E002AE25C /* Animation */,
+				2352EA6C2543BD09002AE25C /* BankCard */,
 				C08D9DD522768A72001417F1 /* ActionSheet */,
 				C08D9DD2227689F1001417F1 /* AdBanner */,
 				C08D9DE722768DC1001417F1 /* AESAndDES */,
@@ -1514,6 +1545,7 @@
 				CC35017821FE935300E64074 /* PObject2Json.m in Sources */,
 				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
+				2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
 				CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */,
@@ -1531,6 +1563,7 @@
 				CC1257DE2098319300E31A38 /* UIImage+Size.m in Sources */,
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
+				2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */,
 				C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */,
 				5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */,
 				CC1257B82098319300E31A38 /* MethodSwizzle.m in Sources */,
@@ -1554,6 +1587,7 @@
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
 				CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
+				2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */,
 				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
@@ -1704,6 +1738,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9RF6V24RNJ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1719,6 +1754,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1736,6 +1772,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
+				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9RF6V24RNJ;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -1751,6 +1788,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
 				SWIFT_VERSION = 5.0;

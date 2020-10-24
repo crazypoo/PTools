@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "1.80.12",
+  "version": "1.80.17",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "1.80.12"
+    "tag": "1.80.17"
   },
   "license": {
     "type": "MIT",
