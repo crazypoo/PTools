@@ -11,10 +11,13 @@
 
 #import "PVideoSupport.h"
 #import <AVFoundation/AVFoundation.h>
+#if !TARGET_OS_MACCATALYST
 #import <AssetsLibrary/AssetsLibrary.h>
+#endif
 #import <Photos/Photos.h>
 #import <Masonry/Masonry.h>
 #import "UIView+LayoutSubviewsCallback.h"
+
 
 @interface PVideoViewController()<PControllerBarDelegate,AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate> {
     
@@ -640,7 +643,11 @@ static PVideoViewController *__currentVideoVC = nil;
                                      (__bridge NSString *)kCVPixelBufferPixelFormatTypeKey : @(kCVPixelFormatType_32BGRA),
                                      (__bridge NSString *)kCVPixelBufferWidthKey : @(videoWidth),
                                      (__bridge NSString *)kCVPixelBufferHeightKey  : @(videoHeight),
+#if !TARGET_OS_MACCATALYST
                                      (__bridge NSString *)kCVPixelFormatOpenGLESCompatibility : ((__bridge NSNumber *)kCFBooleanTrue)
+#else
+                                     (id)kCVPixelBufferOpenGLCompatibilityKey: [NSNumber numberWithBool:YES]
+#endif
                                      };
     _assetWriterPixelBufferInput = [AVAssetWriterInputPixelBufferAdaptor assetWriterInputPixelBufferAdaptorWithAssetWriterInput:_assetWriterVideoInput sourcePixelBufferAttributes:SPBADictionary];
     if ([_assetWriter canAddInput:_assetWriterVideoInput]) {

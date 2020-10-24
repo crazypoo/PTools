@@ -29,17 +29,17 @@ PODS:
   - GCDWebServer/WebUploader (3.5.4):
     - GCDWebServer/Core
   - HTAutocompleteTextField (1.3.2)
-  - IQKeyboardManager (6.5.5)
+  - IQKeyboardManager (6.5.6)
   - LTNavigationBar (2.1.9)
-  - Mantle (2.1.1):
-    - Mantle/extobjc (= 2.1.1)
-  - Mantle/extobjc (2.1.1)
+  - Mantle (2.1.6):
+    - Mantle/extobjc (= 2.1.6)
+  - Mantle/extobjc (2.1.6)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
-  - MJExtension (3.2.1)
-  - MJRefresh (3.4.3)
+  - MJExtension (3.2.2)
+  - MJRefresh (3.5.0)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.80.17):
+  - PooTools (1.80.18):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -67,22 +67,20 @@ PODS:
     - WZLBadge
     - YCXMenu
   - pop (1.0.12)
-  - SDWebImage (5.8.1):
-    - SDWebImage/Core (= 5.8.1)
-  - SDWebImage/Core (5.8.1)
+  - SDWebImage (5.9.4):
+    - SDWebImage/Core (= 5.9.4)
+  - SDWebImage/Core (5.9.4)
   - SSZipArchive (2.2.3)
   - TextFieldEffects (1.6.0)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
   - "UIViewController+Swizzled (1.4)"
-  - WoodPeckeriOS (1.2.5)
   - WZLBadge (1.2.6)
   - YCXMenu (0.0.11)
 
 DEPENDENCIES:
   - GCDWebServer/WebUploader (~> 3.0)
   - PooTools (from `../`)
-  - WoodPeckeriOS
   - WZLBadge
 
 SPEC REPOS:
@@ -110,7 +108,6 @@ SPEC REPOS:
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
-    - WoodPeckeriOS
     - WZLBadge
     - YCXMenu
 
@@ -127,26 +124,25 @@ SPEC CHECKSUMS:
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   HTAutocompleteTextField: ce809f04875e843e20f214ab973bb496ba7a93b1
-  IQKeyboardManager: 3a8b9e603f8b0eeaf5f096a1f2b2cfcf121992ef
+  IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   LTNavigationBar: c278785bed344862e18146b5f06792932e4feacc
-  Mantle: 35238ae6f2e2b2d474fa7b67fee82a59fea71915
+  Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
-  MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
+  MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
+  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 77018b51d8d1ed288c6d36c4606c53c838ef8184
+  PooTools: a0064995108f21c47b5b44811d075575bb7ca568
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: e3eae2eda88578db0685a0c88597fdadd9433f05
+  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
   SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb
-  WoodPeckeriOS: 72b8d8ea7213c009279fd3f96e7576a30879a693
   WZLBadge: 9ec779dcfd94c825518b395e8315fccaabff1bfa
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
 
-PODFILE CHECKSUM: ad1aef8edfa37f58732c107674cb7a260d544eb3
+PODFILE CHECKSUM: c752be15fed158372181677198abadba69836595
 
-COCOAPODS: 1.10.0.rc.1
+COCOAPODS: 1.10.0

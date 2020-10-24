@@ -19,7 +19,8 @@
             break;
         case UTF8StringTypeC:
         {
-            return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)self,NULL,NULL,kCFStringEncodingUTF8));
+            return (NSString *)CFBridgingRelease(CFBridgingRetain([self stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet characterSetWithCharactersInString:@"`#%^{}\"[]|\\<> "].invertedSet]));
+//            return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(kCFAllocatorDefault,(CFStringRef)self,NULL,NULL,kCFStringEncodingUTF8));
         }
             break;
         default:

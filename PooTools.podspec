@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
     s.resource     = 'PooTools/PooTools.bundle'
     s.ios.deployment_target = '9.3'
     s.swift_versions = ['4.2','5.0']
-    s.frameworks            = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','LocalAuthentication','CoreMotion','SceneKit','CoreImage','AssetsLibrary','Photos'
+    s.frameworks            = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','LocalAuthentication','CoreMotion','SceneKit','CoreImage','Photos'#,'AssetsLibrary'
     s.dependency 'AFNetworking'
     s.dependency 'SDWebImage'
     s.dependency 'CYLTabBarController'

@@ -179,6 +179,8 @@
 		2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PurchaseCarAnimationTool.m; sourceTree = "<group>"; };
 		2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
+		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
+		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
 		5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
@@ -596,6 +598,8 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				23898D872543FAEB004DDE1A /* Photos.framework */,
+				23898D852543FAD7004DDE1A /* AssetsLibrary.framework */,
 				CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */,
 				CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */,
 				CCDD3CC8217EC3530021BC19 /* libz.tbd */,
@@ -1405,7 +1409,6 @@
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
 				"${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework",
-				"${PODS_ROOT}/WoodPeckeriOS/WoodPeckeriOS.framework",
 				"${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
@@ -1435,7 +1438,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WZLBadge.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WoodPeckeriOS.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCXMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
@@ -1735,12 +1737,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9RF6V24RNJ;
+				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
@@ -1754,7 +1759,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1769,12 +1776,15 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */;
 			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
 				DEVELOPMENT_TEAM = 9RF6V24RNJ;
+				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
@@ -1788,7 +1798,9 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.demo.${PRODUCT_NAME:rfc1034identifier}";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				SUPPORTS_MACCATALYST = NO;
+				SDKROOT = iphoneos;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
 				SWIFT_VERSION = 5.0;
