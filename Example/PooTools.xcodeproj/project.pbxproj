@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
 		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
@@ -173,6 +174,7 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
 		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
 		2352EA722543BDB9002AE25C /* PurchaseCarAnimationTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PurchaseCarAnimationTool.h; sourceTree = "<group>"; };
@@ -545,6 +547,14 @@
 				77F5D0446CAF22C1C8B37FBE /* Pods-PooTools_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		2334398225AA82EB00C2203A /* AppDeviceInfo */ = {
+			isa = PBXGroup;
+			children = (
+				2334398325AA831000C2203A /* PTAppDeviceInfo.swift */,
+			);
+			path = AppDeviceInfo;
 			sourceTree = "<group>";
 		};
 		2352EA6C2543BD09002AE25C /* BankCard */ = {
@@ -1252,6 +1262,7 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				2334398225AA82EB00C2203A /* AppDeviceInfo */,
 				2352EA712543BD9E002AE25C /* Animation */,
 				2352EA6C2543BD09002AE25C /* BankCard */,
 				C08D9DD522768A72001417F1 /* ActionSheet */,
@@ -1515,6 +1526,7 @@
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
+				2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */,
 				CC3838D6214364D100453548 /* PVideoPlayer.m in Sources */,
 				CC6D9C57223E432B00B6B561 /* NSDate+Category.m in Sources */,
 				CC1257B92098319300E31A38 /* NSMutableArray+Shuffle.m in Sources */,
@@ -1682,6 +1694,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1728,6 +1741,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
 				SDKROOT = iphoneos;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
