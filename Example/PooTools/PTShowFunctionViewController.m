@@ -93,7 +93,7 @@ CGFloat const tagItemSpace = 5;
 
 -(NSArray *)roomSetArray
 {
-    return @[@"空调",@"床",@"热水器",@"洗衣机",@"沙发",@"电视机",@"冰箱",@"天然气",@"宽带",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"11",@"12",@"13",@"14"];
+    return @[@"空调lllllllllllllllllllllllllllllllllllllllllllll...................;",@"床",@"热水器",@"洗衣机",@"沙发",@"电视机",@"冰箱",@"天然气",@"宽带",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"衣柜",@"11",@"12",@"13",@"14"];
 }
 
 -(NSArray *)taglabelNormalArr
@@ -128,7 +128,7 @@ CGFloat const tagItemSpace = 5;
     
     PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
     config.itemHeight = tagItemH * ViewScale;
-    config.itemWidth = smallScreen;
+    config.itemWidth = 90;
     config.itemHerMargin = tagItemSpace;
     config.itemVerMargin = tagItemSpace;
     config.hasBorder = NO;
@@ -139,10 +139,16 @@ CGFloat const tagItemSpace = 5;
     config.isMulti = YES;
     config.selectedDefaultTags = self.titleS;
     config.selectedTitleColor = AppOrange;
-    config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
+    config.showStatus = PooTagsLabelShowWithImage;
     config.borderColor = [UIColor grayColor];
     config.borderColorSelected = AppOrange;
-    config.tagPosition = PooTagPositionLeft;
+    config.tagPosition = PooTagPositionCenter;
+    config.normalImage = self.taglabelNormalArr;
+    config.selectedImage = self.taglabelSelected;
+    config.titleNormal = self.roomSetArray;
+    config.tagImageSize = CGSizeMake(100, tagItemH * ViewScale);
+    config.insetsStyle = MKButtonEdgeInsetsStyleBottom;
+    config.lockWidth = YES;
     return config;
 }
 
@@ -312,7 +318,8 @@ CGFloat const tagItemSpace = 5;
             
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
-            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
+//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
+            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithConfig:[self tagConfig] wihtSection:0];
             tag.backgroundColor = kRandomColor;
             [self.view addSubview:tag];
             [tag mas_makeConstraints:^(MASConstraintMaker *make) {

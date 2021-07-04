@@ -6,9 +6,15 @@
 //  Copyright © 2017年 邓杰豪. All rights reserved.
 //
 
-typedef NS_ENUM(NSInteger,PooTagsLabelShowWithImageStatus){
-    PooTagsLabelShowWithImageStatusNormal = 0,
-    PooTagsLabelShowWithImageStatusNoTitle
+typedef NS_ENUM(NSInteger,PooTagsLabelShowStatus){
+    PooTagsLabelShowWithNormal = 0,
+    PooTagsLabelShowWithImage
+};
+
+typedef NS_ENUM(NSInteger,PooTagsLabelShowSubStatus){
+    PooTagsLabelShowSubStatusNormal = 0,
+    PooTagsLabelShowSubStatusAllSameWidth,
+    PooTagsLabelShowSubStatusNoTitle
 };
 
 typedef NS_ENUM(NSInteger,PooTagPosition){
@@ -74,7 +80,7 @@ typedef void(^tagViewHadSectionAndSetcionLastTagAndTagInSectionCount) (PooTagsLa
 @property (nonatomic,strong) NSString *selectedBgImage;
 /*! @brief 展示样式 (图片模式下使用)
  */
-@property (nonatomic,assign) PooTagsLabelShowWithImageStatus showStatus;
+@property (nonatomic,assign) PooTagsLabelShowStatus showStatus;
 /*! @brief 图片与文字之间展示排版样式 (图片模式下使用)
  */
 @property (nonatomic,assign) MKButtonEdgeInsetsStyle insetsStyle;
@@ -115,6 +121,24 @@ typedef void(^tagViewHadSectionAndSetcionLastTagAndTagInSectionCount) (PooTagsLa
 /*! @brief Tag的展示位置默认左边
 */
 @property (nonatomic,assign) PooTagPosition tagPosition;
+/*! @brief Tag普通图片
+*/
+@property (nonatomic,assign) NSArray *normalImage;
+/*! @brief Tag已选图片
+*/
+@property (nonatomic,assign) NSArray *selectedImage;
+/*! @brief Tag标题
+*/
+@property (nonatomic,assign) NSArray *titleNormal;
+/*! @brief TagImageSize
+*/
+@property (nonatomic,assign) CGSize tagImageSize;
+/*! @brief Tag子展示属性
+*/
+@property (nonatomic,assign) PooTagsLabelShowSubStatus showSubStatus;
+/*! @brief Tag锁定按钮宽度
+*/
+@property (nonatomic,assign) BOOL lockWidth;
 @end
 
 @interface PooTagsLabel : UIView
@@ -142,16 +166,18 @@ typedef void(^tagViewHadSectionAndSetcionLastTagAndTagInSectionCount) (PooTagsLa
 
 /*! @brief 初始化,必须给view设置一个宽度 (最普通模式)
  */
--(instancetype)initWithTagsArray:(NSArray *)tagsArr
-                          config:(PooTagsLabelConfig *)config
-                     wihtSection:(NSInteger)sectionIndex;
-/*! @brief 初始化,必须给view设置一个宽度 (图片模式)
- */
--(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr
-                       tagsSelectArray:(NSArray *)tagsSelectArr
-                        tagsTitleArray:(NSArray *)tagsTitleArr
-                                config:(PooTagsLabelConfig *)config
-                           wihtSection:(NSInteger)sectionIndex;
+//-(instancetype)initWithTagsArray:(NSArray *)tagsArr
+//                          config:(PooTagsLabelConfig *)config
+//                     wihtSection:(NSInteger)sectionIndex;
+///*! @brief 初始化,必须给view设置一个宽度 (图片模式)
+// */
+//-(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr
+//                       tagsSelectArray:(NSArray *)tagsSelectArr
+//                        tagsTitleArray:(NSArray *)tagsTitleArr
+//                                config:(PooTagsLabelConfig *)config
+//                           wihtSection:(NSInteger)sectionIndex;
+
+-(instancetype)initWithConfig:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex;
 
 /*! @brief 清除Tag
  @attention 全部Tag重置到未选中状态
