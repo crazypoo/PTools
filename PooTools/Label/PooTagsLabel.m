@@ -575,7 +575,7 @@
 
 -(void)clearTag
 {
-    for (int i = 0; i < self.normalTagsArr.count; i++)
+    for (int i = 0; i < self.tagsTitleArr.count; i++)
     {
         UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
         btn.selected = NO;
