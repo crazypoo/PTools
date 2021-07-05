@@ -382,7 +382,7 @@
                 self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
             }
             [self setTagPosition:config.tagPosition];
-
+            [self reloadTag:config];
         });
 
     }
@@ -393,15 +393,22 @@
 {
     for (int j = 0; j < (self.section+1); j++) {
         CGFloat totalW = 0.0;
-                                
-        for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < ([self.rowLastTagArr[j] intValue]+1); i++) {
-            UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
+        CGFloat currentSectionTotalW = 0.0f;
+        if (self.curConfig.lockWidth)
+        {
+            totalW = self.curConfig.itemWidth*[self.sectionCountArr[j] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j] integerValue]-1);
+            currentSectionTotalW = totalW;
+        }
+        else
+        {
+            for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < ([self.rowLastTagArr[j] intValue]+1); i++) {
+                UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
 
-            totalW += CGRectGetWidth(currentBtn.frame);
+                totalW += CGRectGetWidth(currentBtn.frame);
+            }
+            currentSectionTotalW = totalW+self.curConfig.itemHerMargin*([self.sectionCountArr[j] integerValue]+1);
         }
 //        PNSLog(@"当行(%d)总w:%f",j,totalW);
-
-        CGFloat currentSectionTotalW = totalW+self.curConfig.itemHerMargin*([self.sectionCountArr[j] integerValue]+1);
         
         CGFloat xxxxxxxxx;
         switch (position) {
@@ -414,7 +421,15 @@
                 }
                 else
                 {
-                    xxxxxxxxx = (self.frame.size.width - currentSectionTotalW)/2;
+                    if (j == self.section)
+                    {
+                        
+                        xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[j-1] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j-1] integerValue]-1)))/2;
+                    }
+                    else
+                    {
+                        xxxxxxxxx = (self.frame.size.width - currentSectionTotalW)/2;
+                    }
                 }
             }
                 break;
