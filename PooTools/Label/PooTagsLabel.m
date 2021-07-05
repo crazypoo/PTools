@@ -179,7 +179,7 @@
                                     if (self.curConfig.lockWidth)
                                     {
                                         titleWidth = self.curConfig.itemWidth;
-                                        titleHeight = self.curConfig.tagImageSize.height+[Utils sizeForString:self.tagsTitleArr[i] font:font andHeigh:CGFLOAT_MAX andWidth:self.curConfig.itemWidth].height;
+                                        titleHeight = self.curConfig.tagImageSize.height+maxValue+2*10;
                                     }
                                     else
                                     {
@@ -230,6 +230,14 @@
                     self.section += 1;
                 }
                 
+                if (i == (self.tagsTitleArr.count - 1))
+                {
+                    if (![self.rowLastTagArr containsObject:[NSNumber numberWithInteger:i]])
+                    {
+                        [self.rowLastTagArr addObject:[NSNumber numberWithInteger:i]];
+                    }
+                }
+                
                 UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth, titleHeight)];
                 lastBtnRect = btn.frame;
                 hMargin = self.curConfig.itemHerMargin;
@@ -249,6 +257,8 @@
                         [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
                         [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
 
+                        btn.titleLabel.textAlignment = self.curConfig.textAlignment ? self.curConfig.textAlignment : NSTextAlignmentCenter;
+                        
                         ///图片设置
                         if (config.normalBgImage)
                         {
@@ -276,6 +286,11 @@
                                 UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
                                 UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
 
+                                if (self.curConfig.insetsStyle == MKButtonEdgeInsetsStyleBottom || self.curConfig.insetsStyle == MKButtonEdgeInsetsStyleTop)
+                                {
+                                    btn.titleLabel.textAlignment = self.curConfig.textAlignment ? self.curConfig.textAlignment : NSTextAlignmentCenter;
+                                }
+
                                 [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
                                 [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
                                 [btn setTitle:title forState:UIControlStateNormal];
@@ -291,49 +306,6 @@
                     default:
                         break;
                 }
-
-//                switch (self.curConfig.showStatus) {
-//                    case PooTagsLabelShowWithImageStatusNoTitle:
-//                    {
-//                        [btn setTitleColor:kClearColor forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
-//                        [btn setBackgroundImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                    }
-//                        break;
-//                    case PooTagsLabelShowWithImageStatusNormalAllSameWidth:
-//                    {
-//                        UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
-//                        UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
-//
-//                        [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                        [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateSelected];
-//                        [btn setImage:normalImage forState:UIControlStateNormal];
-//                        [btn setImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                        [btn layoutButtonWithEdgeInsetsStyle:self.curConfig.insetsStyle imageTitleSpace:self.curConfig.imageAndTitleSpace];
-//                    }
-//                        break;
-//                    case PooTagsLabelShowWithImageStatusNormal:
-//                    {
-//                        UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
-//                        UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
-//
-//                        [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                        [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateSelected];
-//                        [btn setImage:normalImage forState:UIControlStateNormal];
-//                        [btn setImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                        [btn layoutButtonWithEdgeInsetsStyle:self.curConfig.insetsStyle imageTitleSpace:self.curConfig.imageAndTitleSpace];
-//                    }
-//                        break;
-//                    default:
-//                    {
-//                    }
-//                        break;
-//                }
 
                 btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
                 btn.titleLabel.font = font;
@@ -417,392 +389,6 @@
     return self;
 }
 
-//-(instancetype)initWithTagsNormalArray:(NSArray *)tagsNormalArr tagsSelectArray:(NSArray *)tagsSelectArr tagsTitleArray:(NSArray *)tagsTitleArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex
-//{
-//    if (self = [super init])
-//    {
-//        for (UIView *subView in self.subviews)
-//        {
-//            [subView removeFromSuperview];
-//        }
-//
-//        self.tag = sectionIndex;
-//        self.showImage = YES;
-//        self.normalTagsArr = tagsNormalArr;
-//        self.selectedTagsArr = tagsSelectArr;
-//        self.tagsTitleArr = tagsTitleArr;
-//        _curConfig = config;
-//        _multiSelectedTags = [NSMutableArray array];
-//        if (config.selectedDefaultTags.count)
-//        {
-//            [_multiSelectedTags addObjectsFromArray:config.selectedDefaultTags];
-//        }
-//
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//            UIImageView *bgImageView = [UIImageView new];
-//            bgImageView.userInteractionEnabled = YES;
-//            self.bgImageView = bgImageView;
-//            [self addSubview:bgImageView];
-//
-//            CGRect lastBtnRect = CGRectZero;
-//            CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
-//            UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
-//
-//            self.section = 0;
-//            NSInteger row = 0;
-//
-//            self.rowLastTagArr = [NSMutableArray array];
-//
-//            for (int i = 0; i < self.normalTagsArr.count; i++)
-//            {
-//                UIImage *normalImage = kImageNamed(self.normalTagsArr[i]);
-//                NSString *title = self.tagsTitleArr[i];
-//
-//                CGFloat titleWidth = self.curConfig.itemWidth;
-//
-//
-//                if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
-//                {
-//                    lastBtnRect.origin.x = 0.0;
-//                    hMargin = 0.0;
-//                    lastBtnRect.size.width = 0.0;
-//                    orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
-//
-//                    NSInteger currentRowLastTag = row - BTN_Tags_Tag;
-//                    [self.rowLastTagArr addObject:[NSNumber numberWithInteger:currentRowLastTag]];
-//
-//                    self.section += 1;
-//                }
-//
-//                UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight)];
-//                lastBtnRect = btn.frame;
-//                hMargin = self.curConfig.itemHerMargin;
-//                btn.tag = BTN_Tags_Tag + i;
-//                row = BTN_Tags_Tag + i;
-//                [self addSubview:btn];
-//
-//                ///标题设置
-//                switch (self.curConfig.showStatus) {
-//                    case PooTagsLabelShowWithImageStatusNoTitle:
-//                    {
-//                        [btn setTitleColor:kClearColor forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setBackgroundImage:normalImage forState:UIControlStateNormal];
-//                        [btn setBackgroundImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                    }
-//                        break;
-//                    case PooTagsLabelShowWithImageStatusNormalAllSameWidth:
-//                    {
-//                        UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
-//                        UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
-//
-//                        [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                        [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateSelected];
-//                        [btn setImage:normalImage forState:UIControlStateNormal];
-//                        [btn setImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                        [btn layoutButtonWithEdgeInsetsStyle:self.curConfig.insetsStyle imageTitleSpace:self.curConfig.imageAndTitleSpace];
-//                    }
-//                        break;
-//                    case PooTagsLabelShowWithImageStatusNormal:
-//                    {
-//                        UIColor *normorTitleColor = self.curConfig.normalTitleColor ? self.curConfig.normalTitleColor : [UIColor grayColor];
-//                        UIColor *selectedTitleColor = self.curConfig.selectedTitleColor ? self.curConfig.selectedTitleColor : [UIColor greenColor];
-//
-//                        [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                        [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setTitle:title forState:UIControlStateSelected];
-//                        [btn setImage:normalImage forState:UIControlStateNormal];
-//                        [btn setImage:kImageNamed(self.selectedTagsArr[i]) forState:UIControlStateSelected];
-//                        [btn layoutButtonWithEdgeInsetsStyle:self.curConfig.insetsStyle imageTitleSpace:self.curConfig.imageAndTitleSpace];
-//                    }
-//                        break;
-//                    default:
-//                    {
-//                        ///标题设置
-//                        UIColor *normorTitleColor = config.normalTitleColor ? config.normalTitleColor : [UIColor grayColor];
-//                        UIColor *selectedTitleColor = config.selectedTitleColor ? config.selectedTitleColor : [UIColor greenColor];
-//                        [btn setTitle:title forState:UIControlStateNormal];
-//                        [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                        [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//
-//                        ///图片设置
-//                        if (config.normalBgImage)
-//                        {
-//                            [btn setBackgroundImage:[UIImage imageNamed:config.normalBgImage] forState:UIControlStateNormal];
-//                        }
-//                        if (config.selectedBgImage)
-//                        {
-//                            [btn setBackgroundImage:[UIImage imageNamed:config.selectedBgImage] forState:UIControlStateSelected];
-//                        }
-//                    }
-//                        break;
-//                }
-//
-//                btn.backgroundColor = self.curConfig.backgroundColor ? self.curConfig.backgroundColor : kClearColor;
-//                btn.titleLabel.font = font;
-//                [btn addTarget:self action:@selector(tagBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-//
-//                CGRect frame = self.frame;
-//                frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
-//                self.frame = frame;
-//                self.bgImageView.frame = self.bounds;
-//
-//                ///边框
-//                if (self.curConfig.hasBorder)
-//                {
-//                    btn.clipsToBounds = YES;
-//                    btn.layer.cornerRadius = self.curConfig.cornerRadius > 0 ? self.curConfig.cornerRadius : self.curConfig.itemHeight / 2.0;
-//                    btn.layer.borderColor = self.curConfig.borderColor.CGColor;
-//                    btn.layer.borderWidth = self.curConfig.borderWidth > 0.0 ? self.curConfig.borderWidth : 0.5;
-//                }
-//
-//                ///可选中
-//                if (self.curConfig.isCanSelected)
-//                {
-//                    //多选
-//                    if (self.curConfig.isMulti)
-//                    {
-//                        for (NSString *str in self.curConfig.selectedDefaultTags)
-//                        {
-//                            if ([title isEqualToString:str])
-//                            {
-//                                btn.selected = YES;
-//                            }
-//                        }
-//                    }
-//                    else
-//                    {  //单选
-//                        if ([title isEqualToString:self.curConfig.singleSelectedTitle])
-//                        {
-//                            btn.selected = YES;
-//                            self.selectedBtn = btn;
-//                        }
-//                    }
-//                }
-//                else
-//                {  //不可选中
-//                    btn.enabled = NO;
-//                }
-//
-//            }
-//            if (self.tagHeightBlock) {
-//                self.tagHeightBlock(self, self.frame.size.height);
-//            }
-//
-////            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
-//
-//            [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
-//
-////            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
-//
-//            self.sectionCountArr = [NSMutableArray array];
-//            for (int i = 0; i < self.rowLastTagArr.count; i++) {
-//                if (i == 0) {
-//                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
-//                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
-//                }
-//                else
-//                {
-//                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue] - [self.rowLastTagArr[i-1] integerValue];
-//                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
-//                }
-//            }
-//
-//            if (self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock)
-//            {
-//                self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
-//            }
-//            [self setTagPosition:config.tagPosition];
-//
-//        });
-//    }
-//    return self;
-//}
-//
-//-(instancetype)initWithTagsArray:(NSArray *)tagsArr config:(PooTagsLabelConfig *)config wihtSection:(NSInteger)sectionIndex
-//{
-//
-//    if (self = [super init])
-//    {
-//        for (UIView *subView in self.subviews)
-//        {
-//            [subView removeFromSuperview];
-//        }
-//
-//        self.tag = sectionIndex;
-//        self.showImage = NO;
-//        self.normalTagsArr = tagsArr;
-//        _curConfig = config;
-//        _multiSelectedTags = [NSMutableArray array];
-//        if (config.selectedDefaultTags.count)
-//        {
-//            [_multiSelectedTags addObjectsFromArray:config.selectedDefaultTags];
-//        }
-//
-//        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//
-//            UIImageView *bgImageView = [UIImageView new];
-//            bgImageView.userInteractionEnabled = YES;
-//            self.bgImageView = bgImageView;
-//            [self addSubview:bgImageView];
-//
-//            CGRect lastBtnRect = CGRectZero;
-//            CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = config.itemContentEdgs > 0 ? config.itemContentEdgs : 10.0, topBottomSpace = (config.topBottomSpace > 0 ? config.topBottomSpace : 15.0);
-//
-//            UIFont *font = kDEFAULT_FONT(config.fontName ? config.fontName:kDevLikeFont_Bold, config.fontSize > 0 ? config.fontSize : 12.0);
-//
-//            self.section = 0;
-//            NSInteger row = 0;
-//
-//            self.rowLastTagArr = [NSMutableArray array];
-//
-//            for (int i = 0; i < tagsArr.count; i++)
-//            {
-//                NSString *title = tagsArr[i];
-//                CGFloat titleWidth = [title sizeWithAttributes:@{NSFontAttributeName : font}].width;
-//
-//                if ((CGRectGetMaxX(lastBtnRect) + config.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
-//                {
-//                    lastBtnRect.origin.x = 0.0;
-//                    hMargin = 0.0;
-//                    lastBtnRect.size.width = 0.0;
-//                    orgin_Y += (config.itemHeight + config.itemVerMargin);
-//
-//                    NSInteger currentRowLastTag = row - BTN_Tags_Tag;
-//                    [self.rowLastTagArr addObject:[NSNumber numberWithInteger:currentRowLastTag]];
-//
-//                    self.section += 1;
-//                }
-//
-//                UIButton *btn = [[UIButton alloc] initWithFrame:CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth+2*itemContentMargin, config.itemHeight)];
-//                lastBtnRect = btn.frame;
-//                hMargin = config.itemHerMargin;
-//                btn.tag = BTN_Tags_Tag + i;
-//                row = BTN_Tags_Tag + i;
-//                [self addSubview:btn];
-////                [btn mas_makeConstraints:^(MASConstraintMaker *make) {
-////                    make.left.equalTo(self).offset(hMargin+lastBtnRect.origin.x);
-////                    make.top.equalTo(self).offset(topBottomSpace + orgin_Y);
-////                    make.width.offset(titleWidth+2*itemContentMargin);
-////                    make.height.offset(config.itemHeight);
-////                }];
-//
-////                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>%@",NSStringFromCGRect(btn.frame));
-//
-//                ///标题设置
-//                UIColor *normorTitleColor = config.normalTitleColor ? config.normalTitleColor : [UIColor grayColor];
-//                UIColor *selectedTitleColor = config.selectedTitleColor ? config.selectedTitleColor : [UIColor greenColor];
-//                [btn setTitle:title forState:UIControlStateNormal];
-//                [btn setTitleColor:normorTitleColor forState:UIControlStateNormal];
-//                [btn setTitleColor:selectedTitleColor forState:UIControlStateSelected];
-//
-//                ///图片设置
-//                if (config.normalBgImage)
-//                {
-//                    [btn setBackgroundImage:[UIImage imageNamed:config.normalBgImage] forState:UIControlStateNormal];
-//                }
-//                if (config.selectedBgImage)
-//                {
-//                    [btn setBackgroundImage:[UIImage imageNamed:config.selectedBgImage] forState:UIControlStateSelected];
-//                }
-//
-//                btn.titleLabel.font = font;
-//                [btn addTarget:self action:@selector(tagBtnAction:) forControlEvents:UIControlEventTouchUpInside];
-//
-//                CGRect frame = self.frame;
-//                frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
-//                self.frame = frame;
-//                self.bgImageView.frame = self.bounds;
-//
-//                if (config.hasBorder)
-//                {
-//                    btn.clipsToBounds = YES;
-//                    btn.layer.cornerRadius = config.cornerRadius > 0 ? config.cornerRadius : config.itemHeight / 2.0;
-//                    btn.layer.borderWidth = config.borderWidth > 0.0 ? config.borderWidth : 0.5;
-//                }
-//                ///可选中
-//                if (config.isCanSelected)
-//                {
-//                    //多选
-//                    if (config.isMulti)
-//                    {
-//                        for (NSString *str in config.selectedDefaultTags)
-//                        {
-//                            if ([title isEqualToString:str])
-//                            {
-//                                btn.selected = YES;
-//                            }
-//                        }
-//                    }
-//                    else
-//                    {  //单选
-//                        if ([title isEqualToString:config.singleSelectedTitle])
-//                        {
-//                            btn.selected = YES;
-//                            self.selectedBtn = btn;
-//                        }
-//                    }
-//
-//                    if (btn.selected) {
-//                        if (config.hasBorder)
-//                        {
-//                            UIColor *borderC = config.borderColorSelected ? config.borderColorSelected : [UIColor grayColor];
-//                            btn.layer.borderColor = borderC.CGColor;
-//                        }
-//                        btn.backgroundColor = config.backgroundSelectedColor ? config.backgroundSelectedColor : kClearColor;
-//                    }
-//                    else
-//                    {
-//                        if (config.hasBorder)
-//                        {
-//                            UIColor *borderC = config.borderColor ? config.borderColor : [UIColor grayColor];
-//                            btn.layer.borderColor = borderC.CGColor;
-//                        }
-//                        btn.backgroundColor = config.backgroundColor ? config.backgroundColor : kClearColor;
-//                    }
-//                }
-//                else
-//                {  //不可选中
-//                    btn.enabled = NO;
-//                }
-//            }
-//            if (self.tagHeightBlock) {
-//                self.tagHeightBlock(self, self.frame.size.height);
-//            }
-//
-////            PNSLog(@"最后一行section>>>>>%ld",(long)self.section);
-//
-//            [self.rowLastTagArr addObject:[NSNumber numberWithInteger:self.normalTagsArr.count-1]];
-//
-////            PNSLog(@"每行最后一个的tag数组>>>>>>>%@",self.rowLastTagArr);
-//
-//            self.sectionCountArr = [NSMutableArray array];
-//            for (int i = 0; i < self.rowLastTagArr.count; i++) {
-//                if (i == 0) {
-//                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
-//                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
-//                }
-//                else
-//                {
-//                    NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue] - [self.rowLastTagArr[i-1] integerValue];
-//                    [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
-//                }
-//            }
-//
-//            if (self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock)
-//            {
-//                self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
-//            }
-//            [self setTagPosition:config.tagPosition];
-//        });
-//    }
-//    return self;
-//}
-
-
 -(void)setTagPosition:(PooTagPosition)position
 {
     for (int j = 0; j < (self.section+1); j++) {
@@ -864,59 +450,7 @@
         }
 
     }
-    
 }
-//-(void)layoutSubviews
-//{
-//    [super layoutSubviews];
-//
-//    CGRect lastBtnRect = CGRectZero;
-//    CGFloat hMargin = 0.0, orgin_Y = 0.0, itemContentMargin = self.curConfig.itemContentEdgs > 0 ? self.curConfig.itemContentEdgs : 10.0, topBottomSpace = (self.curConfig.topBottomSpace > 0 ? self.curConfig.topBottomSpace : 15.0);
-//
-//    UIFont *font = kDEFAULT_FONT(self.curConfig.fontName ? self.curConfig.fontName:kDevLikeFont_Bold, self.curConfig.fontSize > 0 ? self.curConfig.fontSize : 12.0);
-//
-//    for (int i = 0; i < self.normalTagsArr.count; i++)
-//    {
-//        NSString *title = self.normalTagsArr[i];
-//        CGFloat titleWidth;
-//        if (self.showImage)
-//        {
-//            titleWidth = self.curConfig.itemWidth;
-//        }
-//        else
-//        {
-//            titleWidth = [title sizeWithAttributes:@{NSFontAttributeName : font}].width;
-//        }
-//
-//        if ((CGRectGetMaxX(lastBtnRect) + self.curConfig.itemHerMargin + titleWidth + 2 * itemContentMargin) > CGRectGetWidth(self.frame))
-//        {
-//            lastBtnRect.origin.x = 0.0;
-//            hMargin = 0.0;
-//            lastBtnRect.size.width = 0.0;
-//            orgin_Y += (self.curConfig.itemHeight + self.curConfig.itemVerMargin);
-//        }
-//
-//        UIButton *btn = [self viewWithTag:BTN_Tags_Tag + i];
-//        if (self.showImage) {
-//            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, self.curConfig.itemWidth, self.curConfig.itemHeight);
-//        }
-//        else
-//        {
-//            btn.frame = CGRectMake(hMargin + CGRectGetMaxX(lastBtnRect), topBottomSpace + orgin_Y, titleWidth+2*itemContentMargin, self.curConfig.itemHeight);
-//        }
-//        lastBtnRect = btn.frame;
-//        hMargin = self.curConfig.itemHerMargin;
-//
-//        CGRect frame = self.frame;
-//        frame.size.height = CGRectGetMaxY(btn.frame) + topBottomSpace;
-//        self.frame = frame;
-//        self.bgImageView.frame = self.bounds;
-//    }
-//
-//    if (self.tagHeightBlock) {
-//        self.tagHeightBlock(self, self.frame.size.height);
-//    }
-//}
 
 - (void)tagBtnAction:(UIButton *)sender
 {
@@ -1043,7 +577,7 @@
 {
     [self clearTag];
     
-    for (int i = 0; i < self.normalTagsArr.count; i++)
+    for (int i = 0; i < self.tagsTitleArr.count; i++)
     {
         NSString *title = self.showImage ? self.tagsTitleArr[i] : self.normalTagsArr[i];
 

@@ -135,11 +135,11 @@ CGFloat const tagItemSpace = 5;
     config.topBottomSpace = tagItemSpace;
     config.itemContentEdgs = tagItemSpace;
     config.isCanSelected = YES;
-    config.isCanCancelSelected = NO;
+    config.isCanCancelSelected = YES;
     config.isMulti = YES;
     config.selectedDefaultTags = self.titleS;
     config.selectedTitleColor = AppOrange;
-    config.showStatus = PooTagsLabelShowWithImage;
+    config.showStatus = PooTagsLabelShowWithNormal;
     config.borderColor = [UIColor grayColor];
     config.borderColorSelected = AppOrange;
     config.tagPosition = PooTagPositionCenter;
@@ -147,8 +147,10 @@ CGFloat const tagItemSpace = 5;
     config.selectedImage = self.taglabelSelected;
     config.titleNormal = self.roomSetArray;
     config.tagImageSize = CGSizeMake(100, tagItemH * ViewScale);
-    config.insetsStyle = MKButtonEdgeInsetsStyleBottom;
+    config.insetsStyle = MKButtonEdgeInsetsStyleTop;
     config.lockWidth = YES;
+    config.backgroundColor = AppOrange;
+    config.backgroundSelectedColor = [UIColor grayColor];
     return config;
 }
 

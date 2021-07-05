@@ -139,6 +139,10 @@ typedef void(^tagViewHadSectionAndSetcionLastTagAndTagInSectionCount) (PooTagsLa
 /*! @brief Tag锁定按钮宽度
 */
 @property (nonatomic,assign) BOOL lockWidth;
+/*! @brief Tag字符对齐情况
+*/
+@property (nonatomic,assign) NSTextAlignment textAlignment;
+
 @end
 
 @interface PooTagsLabel : UIView
