@@ -321,6 +321,7 @@ CGFloat const tagItemSpace = 5;
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
 //            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
+            self.titleS = @[@"空调",@"衣柜"];
             PooTagsLabel *tag = [[PooTagsLabel alloc] initWithConfig:[self tagConfig] wihtSection:0];
             tag.backgroundColor = kRandomColor;
             [self.view addSubview:tag];
@@ -341,7 +342,8 @@ CGFloat const tagItemSpace = 5;
                 PNSLog(@"1111111111");
 //                self.titleS = @[@"空调",@"床",@"热水器"];
 //                [tag reloadTag:[self tagConfig]];
-                [tag setTagPosition:PooTagPositionCenter];
+//                [tag setTagPosition:PooTagPositionCenter];
+                [tag clearTag];
             }];
             [self.view addSubview:pBtnsssss];
             [pBtnsssss mas_makeConstraints:^(MASConstraintMaker *make) {

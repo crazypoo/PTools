@@ -61,7 +61,7 @@
         }
 
         _multiSelectedTags = [NSMutableArray array];
-        if (config.selectedDefaultTags.count)
+        if (config.selectedDefaultTags.count > 0)
         {
             [_multiSelectedTags addObjectsFromArray:config.selectedDefaultTags];
         }
@@ -331,7 +331,7 @@
                     //多选
                     if (self.curConfig.isMulti)
                     {
-                        for (NSString *str in self.curConfig.selectedDefaultTags)
+                        for (NSString *str in self.multiSelectedTags)
                         {
                             if ([title isEqualToString:str])
                             {
@@ -352,7 +352,7 @@
                 {  //不可选中
                     btn.enabled = NO;
                 }
-                
+                [self btnBackgroundColorAndBorderColor:btn];
             }
             if (self.tagHeightBlock) {
                 self.tagHeightBlock(self, self.frame.size.height);
@@ -382,7 +382,6 @@
                 self.tagViewHadSectionAndSetcionLastTagAndTagInSectionCountBlock(self, self.section, self.rowLastTagArr, self.sectionCountArr);
             }
             [self setTagPosition:config.tagPosition];
-            [self reloadTag:config];
         });
 
     }
