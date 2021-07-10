@@ -36,10 +36,10 @@ PODS:
   - Mantle/extobjc (2.1.6)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
-  - MJExtension (3.2.2)
-  - MJRefresh (3.5.0)
+  - MJExtension (3.3.0)
+  - MJRefresh (3.6.1)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.80.18):
+  - PooTools (1.80.23):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -67,10 +67,10 @@ PODS:
     - WZLBadge
     - YCXMenu
   - pop (1.0.12)
-  - SDWebImage (5.9.4):
-    - SDWebImage/Core (= 5.9.4)
-  - SDWebImage/Core (5.9.4)
-  - SSZipArchive (2.2.3)
+  - SDWebImage (5.11.1):
+    - SDWebImage/Core (= 5.11.1)
+  - SDWebImage/Core (5.11.1)
+  - SSZipArchive (2.4.2)
   - TextFieldEffects (1.6.0)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
@@ -129,13 +129,13 @@ SPEC CHECKSUMS:
   Mantle: 4c0ed6ce47c96eccc4dc3bb071deb3def0e2c3be
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
-  MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
-  MJRefresh: 6afc955813966afb08305477dd7a0d9ad5e79a16
+  MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
+  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: a0064995108f21c47b5b44811d075575bb7ca568
+  PooTools: 0ca0e54cd583e0ca1e92eb28f3b4181f955a15c4
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: b69257f4ab14e9b6a2ef53e910fdf914d8f757c1
-  SSZipArchive: 62d4947b08730e4cda640473b0066d209ff033c9
+  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
@@ -145,4 +145,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: c752be15fed158372181677198abadba69836595
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
