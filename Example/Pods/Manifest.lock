@@ -37,9 +37,9 @@ PODS:
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.3.0)
-  - MJRefresh (3.6.1)
+  - MJRefresh (3.7.2)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (1.80.23):
+  - PooTools (1.80.24):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -59,6 +59,7 @@ PODS:
     - MYBlurIntroductionView
     - pop
     - SDWebImage
+    - SnapKit
     - SSZipArchive
     - TextFieldEffects
     - "UITableView+FDTemplateLayoutCell"
@@ -66,10 +67,12 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YCXMenu
+    - YYKit
   - pop (1.0.12)
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
+  - SnapKit (4.2.0)
   - SSZipArchive (2.4.2)
   - TextFieldEffects (1.6.0)
   - "UITableView+FDTemplateLayoutCell (1.6)"
@@ -77,11 +80,16 @@ PODS:
   - "UIViewController+Swizzled (1.4)"
   - WZLBadge (1.2.6)
   - YCXMenu (0.0.11)
+  - YYKit (1.0.9):
+    - YYKit/no-arc (= 1.0.9)
+  - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
   - GCDWebServer/WebUploader (~> 3.0)
   - PooTools (from `../`)
+  - SnapKit
   - WZLBadge
+  - YYKit
 
 SPEC REPOS:
   trunk:
@@ -103,6 +111,7 @@ SPEC REPOS:
     - MYBlurIntroductionView
     - pop
     - SDWebImage
+    - SnapKit
     - SSZipArchive
     - TextFieldEffects
     - "UITableView+FDTemplateLayoutCell"
@@ -110,6 +119,7 @@ SPEC REPOS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YCXMenu
+    - YYKit
 
 EXTERNAL SOURCES:
   PooTools:
@@ -130,11 +140,12 @@ SPEC CHECKSUMS:
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
-  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 0ca0e54cd583e0ca1e92eb28f3b4181f955a15c4
+  PooTools: 1d765dfcb25a8574f5cb431170909d138692200b
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SnapKit: fe8a619752f3f27075cc9a90244d75c6c3f27e2a
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
@@ -142,7 +153,8 @@ SPEC CHECKSUMS:
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb
   WZLBadge: 9ec779dcfd94c825518b395e8315fccaabff1bfa
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
+  YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: c752be15fed158372181677198abadba69836595
+PODFILE CHECKSUM: 6ce3f9323c189e76e49b9cd5600751ca1b32b69e
 
 COCOAPODS: 1.10.1

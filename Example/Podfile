@@ -4,6 +4,8 @@ use_frameworks!
 target 'PooTools_Example' do
   pod 'PooTools', :path => '../'
   pod 'WZLBadge'
+  pod 'SnapKit'
+  pod 'YYKit'
 #  pod 'WoodPeckeriOS'
   pod "GCDWebServer/WebUploader", "~> 3.0"
 end

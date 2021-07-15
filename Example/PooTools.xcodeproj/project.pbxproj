@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		233340FA26A033AB00E4DF25 /* PooSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233340F926A033AA00E4DF25 /* PooSegmentView.swift */; };
+		233340FC26A0353A00E4DF25 /* BKCutsomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233340FB26A0353900E4DF25 /* BKCutsomButton.swift */; };
+		2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 233340FF26A0369100E4DF25 /* PTBridgeObject.m */; };
+		2333410226A03A7000E4DF25 /* UIView+ViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */; };
+		2333410426A03C0400E4DF25 /* CommonMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2333410326A03C0400E4DF25 /* CommonMacro.swift */; };
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
@@ -174,6 +179,12 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		233340F926A033AA00E4DF25 /* PooSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PooSegmentView.swift; sourceTree = "<group>"; };
+		233340FB26A0353900E4DF25 /* BKCutsomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BKCutsomButton.swift; sourceTree = "<group>"; };
+		233340FE26A0369100E4DF25 /* PTBridgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTBridgeObject.h; sourceTree = "<group>"; };
+		233340FF26A0369100E4DF25 /* PTBridgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTBridgeObject.m; sourceTree = "<group>"; };
+		2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ViewEx.swift"; sourceTree = "<group>"; };
+		2333410326A03C0400E4DF25 /* CommonMacro.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonMacro.swift; sourceTree = "<group>"; };
 		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
 		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
@@ -549,6 +560,18 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		233340FD26A0367700E4DF25 /* Bridge */ = {
+			isa = PBXGroup;
+			children = (
+				2333410326A03C0400E4DF25 /* CommonMacro.swift */,
+				233340FB26A0353900E4DF25 /* BKCutsomButton.swift */,
+				2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */,
+				233340FE26A0369100E4DF25 /* PTBridgeObject.h */,
+				233340FF26A0369100E4DF25 /* PTBridgeObject.m */,
+			);
+			path = Bridge;
+			sourceTree = "<group>";
+		};
 		2334398225AA82EB00C2203A /* AppDeviceInfo */ = {
 			isa = PBXGroup;
 			children = (
@@ -775,25 +798,32 @@
 		C08D9DCE2276890F001417F1 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */,
-				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
-				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
-				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
-				CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */,
-				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
-				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
+				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
+				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
+				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
+				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
 				CC1257492098319200E31A38 /* NSMutableArray+Shuffle.h */,
 				CC12574A2098319200E31A38 /* NSMutableArray+Shuffle.m */,
 				CC12574B2098319200E31A38 /* NSMutableString+TagReplace.h */,
 				CC12574C2098319200E31A38 /* NSMutableString+TagReplace.m */,
 				CC12574D2098319200E31A38 /* NSString+Encryption.h */,
 				CC12574E2098319200E31A38 /* NSString+Encryption.m */,
+				C0908102225F4A18005243E7 /* NSString+Extension.h */,
+				C0908103225F4A18005243E7 /* NSString+Extension.m */,
+				CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */,
+				CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */,
+				C0DB2BCE22AB561B00A7D017 /* NSString+PassStrength.h */,
+				C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */,
 				CC12574F2098319200E31A38 /* NSString+Regulars.h */,
 				CC1257502098319200E31A38 /* NSString+Regulars.m */,
 				CC1257512098319200E31A38 /* NSString+WPAttributedMarkup.h */,
 				CC1257522098319200E31A38 /* NSString+WPAttributedMarkup.m */,
+				CC1257532098319200E31A38 /* NSURLResponse+Help.h */,
+				CC1257542098319200E31A38 /* NSURLResponse+Help.m */,
 				CC1257892098319200E31A38 /* UIButton+Block.h */,
 				CC12578A2098319200E31A38 /* UIButton+Block.m */,
+				CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */,
+				CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */,
 				CC12578D2098319200E31A38 /* UIColor+Colours.h */,
 				CC12578E2098319200E31A38 /* UIColor+Colours.m */,
 				CC12578F2098319200E31A38 /* UIColor+Helper.h */,
@@ -804,38 +834,31 @@
 				CC1257942098319200E31A38 /* UIImage+BlurGlass.m */,
 				CC1257952098319200E31A38 /* UIImage+Size.h */,
 				CC1257962098319200E31A38 /* UIImage+Size.m */,
+				CC1E610A21C4E0060092559A /* UIImage+UIColorEX.h */,
+				CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */,
 				CC1257972098319200E31A38 /* UILabel+FlickerNumber.h */,
 				CC1257982098319200E31A38 /* UILabel+FlickerNumber.m */,
 				CC1257992098319200E31A38 /* UINavigationItem+Excursion.h */,
 				CC12579A2098319200E31A38 /* UINavigationItem+Excursion.m */,
-				CC12579B2098319200E31A38 /* UIView+ModifyFrame.h */,
-				CC12579C2098319200E31A38 /* UIView+ModifyFrame.m */,
-				CC12579D2098319200E31A38 /* UIViewController+TopBarMessage.h */,
-				CC12579E2098319200E31A38 /* UIViewController+TopBarMessage.m */,
-				CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */,
-				CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */,
-				CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */,
-				CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */,
-				CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */,
-				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
-				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
-				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
-				CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */,
-				CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */,
-				CC1E610A21C4E0060092559A /* UIImage+UIColorEX.h */,
-				CC1E610B21C4E0060092559A /* UIImage+UIColorEX.m */,
-				C0908102225F4A18005243E7 /* NSString+Extension.h */,
-				C0908103225F4A18005243E7 /* NSString+Extension.m */,
 				CC35017421FE90DC00E64074 /* UITableView+WWFoldableTableView.h */,
 				CC35017321FE90DC00E64074 /* UITableView+WWFoldableTableView.m */,
-				CC7E05362240E42100EAFEA4 /* NSString+MoneyString.h */,
-				CC7E05352240E42100EAFEA4 /* NSString+MoneyString.m */,
-				CC6D9C53223E432A00B6B561 /* NSDate+Category.h */,
-				CC6D9C54223E432A00B6B561 /* NSDate+Category.m */,
-				CC6D9C55223E432A00B6B561 /* NSDateFormatter+Category.h */,
-				CC6D9C56223E432A00B6B561 /* NSDateFormatter+Category.m */,
-				C0DB2BCE22AB561B00A7D017 /* NSString+PassStrength.h */,
-				C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */,
+				CCBC5C4C217AF90D00B205CF /* UITextField+Limit.h */,
+				CCBC5C4D217AF90D00B205CF /* UITextField+Limit.m */,
+				CC54C2EA215A2D22004283D9 /* UITextField+ModifyPlaceholder.h */,
+				CC54C2EB215A2D22004283D9 /* UITextField+ModifyPlaceholder.m */,
+				CC3838D82144C29700453548 /* UIView+LayoutSubviewsCallback.h */,
+				CC3838D92144C29700453548 /* UIView+LayoutSubviewsCallback.m */,
+				CC84794B2192D06100E89B79 /* UIView+MLScreenshot.h */,
+				CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */,
+				CC12579B2098319200E31A38 /* UIView+ModifyFrame.h */,
+				CC12579C2098319200E31A38 /* UIView+ModifyFrame.m */,
+				CC54C2E7215A2041004283D9 /* UIView+ViewRectCorner.h */,
+				CC54C2E8215A2041004283D9 /* UIView+ViewRectCorner.m */,
+				CCC01E07215B341300874BDF /* UIView+ViewShaking.h */,
+				CCC01E08215B341300874BDF /* UIView+ViewShaking.m */,
+				2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */,
+				CC12579D2098319200E31A38 /* UIViewController+TopBarMessage.h */,
+				CC12579E2098319200E31A38 /* UIViewController+TopBarMessage.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -957,6 +980,7 @@
 		C08D9DD922768B2B001417F1 /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
+				233340F926A033AA00E4DF25 /* PooSegmentView.swift */,
 				CC1257722098319200E31A38 /* PooSegView.h */,
 				CC1257732098319200E31A38 /* PooSegView.m */,
 			);
@@ -1262,6 +1286,7 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				233340FD26A0367700E4DF25 /* Bridge */,
 				2334398225AA82EB00C2203A /* AppDeviceInfo */,
 				2352EA712543BD9E002AE25C /* Animation */,
 				2352EA6C2543BD09002AE25C /* BankCard */,
@@ -1415,12 +1440,14 @@
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
 				"${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework",
 				"${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework",
+				"${BUILT_PRODUCTS_DIR}/YYKit/YYKit.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -1444,12 +1471,14 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WZLBadge.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCXMenu.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1502,6 +1531,7 @@
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
+				2333410226A03A7000E4DF25 /* UIView+ViewEx.swift in Sources */,
 				CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */,
 				CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
@@ -1523,7 +1553,9 @@
 				CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */,
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
+				233340FA26A033AB00E4DF25 /* PooSegmentView.swift in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
+				2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */,
 				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */,
@@ -1560,10 +1592,12 @@
 				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */,
+				2333410426A03C0400E4DF25 /* CommonMacro.swift in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
 				CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */,
 				CCD660C121DCCD3B004AA57D /* IGHTTPTools.m in Sources */,
+				233340FC26A0353A00E4DF25 /* BKCutsomButton.swift in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
