@@ -77,11 +77,11 @@ public enum BKLayoutButtonStyle : Int {
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
 public class BKLayoutButton: UIButton {
     /// 布局方式
-    var layoutStyle: BKLayoutButtonStyle!
+    public var layoutStyle: BKLayoutButtonStyle!
     /// 图片和文字的间距，默认值5
-    var midSpacing: CGFloat = 5.0
+    public var midSpacing: CGFloat = 5.0
     /// 指定图片size
-    var imageSize = CGSize.zero
+    public var imageSize = CGSize.zero
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -117,7 +117,7 @@ public class BKLayoutButton: UIButton {
         
     }
 
-    func layoutHorizontal(withLeftView leftView: UIView?, rightView: UIView?) {
+    public func layoutHorizontal(withLeftView leftView: UIView?, rightView: UIView?) {
         
         guard var leftViewFrame = leftView?.frame,
             var rightViewFrame = rightView?.frame else { return }
@@ -135,7 +135,7 @@ public class BKLayoutButton: UIButton {
         
     }
     
-    func layoutVertical(withUp upView: UIView?, downView: UIView?) {
+    public func layoutVertical(withUp upView: UIView?, downView: UIView?) {
         
         guard var upViewFrame = upView?.frame,
             var downViewFrame = downView?.frame else { return }
@@ -163,12 +163,12 @@ public class BKLayoutButton: UIButton {
         setNeedsLayout()
     }
 
-    func setMidSpacing(_ midSpacing: CGFloat) {
+    public func setMidSpacing(_ midSpacing: CGFloat) {
         self.midSpacing = midSpacing
         setNeedsLayout()
     }
 
-    func setImageSize(_ imageSize: CGSize) {
+    public func setImageSize(_ imageSize: CGSize) {
         self.imageSize = imageSize
         setNeedsLayout()
     }
