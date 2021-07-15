@@ -13,58 +13,58 @@ import Foundation
 /*
  4  4s  320*480
  */
-func iPhone4() -> Bool {
+public func iPhone4() -> Bool {
     return kScreenHeight == 480.0
 }
 
 /*
  5  5s SE  320*568
  */
-func iPhone5() -> Bool {
+public func iPhone5() -> Bool {
     return kScreenHeight == 568.0
 }
 
 /*
  6  6s  7 8  375*667
  */
-func iPhone6() -> Bool {
+public func iPhone6() -> Bool {
     return kScreenHeight == 667.0
 }
 
 /*
  6p  6sp 7p 8p  414*736
  */
-func iPhone6plus() -> Bool {
+public func iPhone6plus() -> Bool {
     return kScreenHeight == 736.0
 }
 
 /*
  x xs  375*812
 */
-func iPhoneX() -> Bool {
+public func iPhoneX() -> Bool {
     return kScreenHeight == 812.0
 }
 
 /*
  xr xsMax 11 11pro 11proMax  414*896
 */
-func iPhoneXR() -> Bool {
+public func iPhoneXR() -> Bool {
     return kScreenHeight == 896.0
 }
 
 
 // MARK: - 屏幕、导航栏、Tabbar尺寸
-let kScreenBounds = UIScreen.main.bounds
+public let kScreenBounds = UIScreen.main.bounds
 
 /// 屏幕大小
-let kScreenSize                           = kScreenBounds.size
+public let kScreenSize                           = kScreenBounds.size
 /// 屏幕宽度
-let kScreenWidth:CGFloat                  = kScreenSize.width
+public let kScreenWidth:CGFloat                  = kScreenSize.width
 /// 屏幕高度
-let kScreenHeight:CGFloat                 = kScreenSize.height
+public let kScreenHeight:CGFloat                 = kScreenSize.height
 
 /// 是否刘海屏
-var isFullScreen: Bool {
+public var isFullScreen: Bool {
     if #available(iOS 11, *) {
         guard let w = UIApplication.shared.delegate?.window, let unwrapedWindow = w else {
             return false
@@ -78,47 +78,47 @@ var isFullScreen: Bool {
 }
 
 /// 状态栏默认高度
-var kStatusBarHeight: CGFloat {
+public var kStatusBarHeight: CGFloat {
     return isFullScreen ? 44 : 20
 }
 
 /// 获取导航栏高度，刘海屏88，普通屏64。
-var kNavigationBarHeight: CGFloat {
+public var kNavigationBarHeight: CGFloat {
     return isFullScreen ? 88 : 64
 }
 
 // MARK: - app版本&设备系统版本
-let infoDictionary            = Bundle.main.infoDictionary
+public let infoDictionary            = Bundle.main.infoDictionary
 /* App名称 */
-let kAppName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
+public let kAppName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
 /* App版本号 */
-let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
+public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
 /* Appbuild版本号 */
-let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
+public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
 /* app bundleId */
-let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
+public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
 
 /* 平台名称（iphonesimulator 、 iphone）*/
-let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
+public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
 /* iOS系统版本 */
-let kiOSVersion: String       = UIDevice.current.systemVersion
+public let kiOSVersion: String       = UIDevice.current.systemVersion
 /* 系统名称+版本，e.g. @"iOS 12.1" */
-let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion
+public let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion
 
 
 // MARK: - 颜色相关
-func kRGBColor(_ R: CGFloat, _ G: CGFloat, _ B: CGFloat) -> UIColor {
+public func kRGBColor(_ R: CGFloat, _ G: CGFloat, _ B: CGFloat) -> UIColor {
     return kRGBAColor(R: R, G: G, B: B, A: 1.0)
 }
 
-func kRGBAColor(R: CGFloat, G: CGFloat, B: CGFloat, A: CGFloat) -> UIColor {
+public func kRGBAColor(R: CGFloat, G: CGFloat, B: CGFloat, A: CGFloat) -> UIColor {
     return UIColor.init(red: R/255.0, green: G/255.0, blue: B/255.0, alpha: A)
 }
 
 /// 颜色扩展
 extension UIColor {
     
-    var toHexString: String {
+    public var toHexString: String {
         var r: CGFloat = 0
         var g: CGFloat = 0
         var b: CGFloat = 0
@@ -166,15 +166,15 @@ extension UIColor {
 }
 
 // MARK: - 常用沙盒路径
-func kPathHome() -> String {
+public func kPathHome() -> String {
     return NSHomeDirectory()
 }
 
-func kPathTemp() -> String {
+public func kPathTemp() -> String {
     return NSTemporaryDirectory()
 }
 
-func kPathDocument() -> String {
+public func kPathDocument() -> String {
     let array = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
     return array[0]
 }
@@ -188,7 +188,7 @@ private func kPathDocumentForFile(_ pathName: String) -> String {
 }
 
 // MARK: - ========把数组存入.plist文件 从沙盒中读取文件=========
-func kSaveWithFile(pathName: String, forArray arr: NSArray) {
+public func kSaveWithFile(pathName: String, forArray arr: NSArray) {
     
     let filePath = kPathDocumentForFile(pathName)
     // 将数据写入文件中
@@ -196,7 +196,7 @@ func kSaveWithFile(pathName: String, forArray arr: NSArray) {
     
 }
 
-func kReadWithFile(pathName: String) -> NSArray {
+public func kReadWithFile(pathName: String) -> NSArray {
     
     let filePath = kPathDocumentForFile(pathName)
     // 读取文件
@@ -212,7 +212,7 @@ func kReadWithFile(pathName: String) -> NSArray {
 ///   - bundleName: bundle名称，默认是imageBD（imageBD.bundle是保存图片的文件,可以根据项目情况自行修改）
 ///   - picName: 图片名称
 /// - Returns: UIImage对象，没有对应的图片则返回nil
-func kImage(from bundleName: String = "imageBD", name picName: String) -> UIImage? {
+public func kImage(from bundleName: String = "imageBD", name picName: String) -> UIImage? {
     let imagepath = Bundle.main.path(forResource: "\(bundleName).bundle/\(picName)", ofType: "png")
     let img = UIImage(contentsOfFile: imagepath ?? "")
     return img
@@ -230,7 +230,7 @@ extension String {
     /// "\n "  -> true
     ///
     /// - Returns: true or false
-    func isBlank() -> Bool {
+    public func isBlank() -> Bool {
         var tmpStr = self
         //去掉空格&换行
         tmpStr = tmpStr.trimmingCharacters(in: NSCharacterSet.whitespacesAndNewlines)
@@ -239,7 +239,7 @@ extension String {
 }
 
 // MARK: - 打印日志
-func DPrint<T>(_ msg: T, file: String = #file, function: String = #function, lineNum: Int = #line) {
+public func DPrint<T>(_ msg: T, file: String = #file, function: String = #function, lineNum: Int = #line) {
     let url:NSURL = NSURL.fileURL(withPath: file) as NSURL
     #if DEBUG
     print("<<<DEBUG环境>>>\(url.lastPathComponent!)-->[LINE: \(lineNum)]-->\(msg)")
@@ -258,7 +258,7 @@ func DPrint<T>(_ msg: T, file: String = #file, function: String = #function, lin
 /// - Parameters:
 ///   - date: Date类型
 ///   - dateFormat: 格式化样式默认“yyyy-MM-dd HH:mm:ss”
-func dateToString(_ date: Date, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> String {
+public func dateToString(_ date: Date, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> String {
     
     let timeZone = NSTimeZone.local
     let formatter = DateFormatter()
@@ -275,7 +275,7 @@ func dateToString(_ date: Date, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> S
 ///   - str: 日期字符串
 ///   - dateFormat: 格式化样式，默认为“yyyy-MM-dd HH:mm:ss”
 /// - Returns: Date类型
-func stringToDate(_ str: String, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> Date {
+public func stringToDate(_ str: String, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> Date {
     
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = dateFormat
@@ -286,7 +286,7 @@ func stringToDate(_ str: String, dateFormat: String = "yyyy-MM-dd HH:mm:ss") -> 
 }
 
 /// 比较时间先后
-func compareDate(_ startDate: Date, _ endDate: Date) -> Int {
+public func compareDate(_ startDate: Date, _ endDate: Date) -> Int {
     
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -307,7 +307,7 @@ func compareDate(_ startDate: Date, _ endDate: Date) -> Int {
 }
 
 /// 世界时间转化为中国区时间
-func worldTimeToChinaTime(_ date: Date) -> Date {
+public func worldTimeToChinaTime(_ date: Date) -> Date {
     
     let timeZone = NSTimeZone.local
     let interval = timeZone.secondsFromGMT(for: date)
@@ -317,7 +317,7 @@ func worldTimeToChinaTime(_ date: Date) -> Date {
 }
 
 /// 获取当前的年月日
-func getCurrentYearMonthDay() -> String? {
+public func getCurrentYearMonthDay() -> String? {
     
     let date = Date()
     let caledar = Calendar.current
@@ -336,7 +336,7 @@ func getCurrentYearMonthDay() -> String? {
  *  deadlineStr : 截止时间
  *  @return 时间戳差值
  */
-func getDateDifference(withNowDateStr nowDateStr: String?, deadlineStr: String?) -> Int {
+public func getDateDifference(withNowDateStr nowDateStr: String?, deadlineStr: String?) -> Int {
 
     var timeDifference = 0
 
@@ -352,7 +352,7 @@ func getDateDifference(withNowDateStr nowDateStr: String?, deadlineStr: String?)
 }
 
 /// 秒数转化为时间字符串 格式HH:mm:ss
-func secondsToTimeString(seconds: Int) -> String {
+public func secondsToTimeString(seconds: Int) -> String {
     // 天数计算
 //    let days = (seconds)/(24*3600)
     // 小时计算
@@ -367,7 +367,7 @@ func secondsToTimeString(seconds: Int) -> String {
 }
 
 /// 秒数转化为时间字符串 格式HH:mm:ss(分开获取时分秒)
-func secondsToTimeStringPart(seconds: Int) -> (hours: String, mins: String, seconds: String) {
+public func secondsToTimeStringPart(seconds: Int) -> (hours: String, mins: String, seconds: String) {
     // 天数计算
 //    let days = (seconds)/(24*3600)
     // 小时计算
@@ -381,7 +381,7 @@ func secondsToTimeStringPart(seconds: Int) -> (hours: String, mins: String, seco
 }
 
 // MARK: - 打印属性列表
-func DPrintIvarList(_ classString: String) {
+public func DPrintIvarList(_ classString: String) {
     
     DPrint("\n\n///////////// \(classString)  IvarList /////////////\n")
     var count : UInt32 = 0
@@ -395,7 +395,7 @@ func DPrintIvarList(_ classString: String) {
     
 }
 
-func DPrintPropertyList(_ classString: String) {
+public func DPrintPropertyList(_ classString: String) {
     
     DPrint("\n\n///////////// \(classString)  PropertyList /////////////\n")
     var count : UInt32 = 0
@@ -415,7 +415,7 @@ func DPrintPropertyList(_ classString: String) {
 /// - Parameters:
 ///   - str: 带Float的字符串
 /// - Returns: Float类型
-func getFloatFromString(str: String) -> Float? {
+public func getFloatFromString(str: String) -> Float? {
     
     let nonDigits = CharacterSet.decimalDigits.inverted
     let numStr = str.trimmingCharacters(in: nonDigits)
@@ -430,7 +430,7 @@ func getFloatFromString(str: String) -> Float? {
 /// - Parameters:
 ///   - str: 带Int的字符串
 /// - Returns: Int类型
-func getIntFromString(str: String) -> Int? {
+public func getIntFromString(str: String) -> Int? {
     
     let nonDigits = CharacterSet.decimalDigits.inverted
     let numStr = str.trimmingCharacters(in: nonDigits)

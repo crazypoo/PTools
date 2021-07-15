@@ -11,7 +11,7 @@ import UIKit
 
 extension UIView {
     
-    var x: CGFloat{
+    public var x: CGFloat{
         get{
             return frame.origin.x
         }
@@ -19,7 +19,7 @@ extension UIView {
             frame.origin.x = newValue
         }
     }
-    var y: CGFloat{
+    public var y: CGFloat{
         get{
             return frame.origin.y
         }
@@ -27,7 +27,7 @@ extension UIView {
             frame.origin.y = newValue
         }
     }
-    var width: CGFloat{
+    public var width: CGFloat{
         get{
             return frame.size.width
         }
@@ -35,7 +35,7 @@ extension UIView {
             frame.size.width = newValue
         }
     }
-    var height: CGFloat{
+    public var height: CGFloat{
         get{
             return frame.size.height
         }
@@ -44,13 +44,13 @@ extension UIView {
         }
     }
     
-    var viewCenter: CGPoint{
+    public var viewCenter: CGPoint{
         get{
             return CGPoint(x: width * 0.5, y: height * 0.5)
         }
     }
     
-    var centerX: CGFloat{
+    public var centerX: CGFloat{
         get{
             return width * 0.5
         }
@@ -58,7 +58,7 @@ extension UIView {
             center.x = newValue
         }
     }
-    var setCenterY: CGFloat{
+    public var setCenterY: CGFloat{
         get{
             return height * 0.5
         }
@@ -67,7 +67,7 @@ extension UIView {
         }
     }
     
-    var centerY: CGFloat{
+    public var centerY: CGFloat{
         get{
             return height * 0.5
         }
@@ -76,11 +76,11 @@ extension UIView {
         }
     }
     
-    var inSuperViewCenterY: CGFloat{
+    public var inSuperViewCenterY: CGFloat{
         return y + centerY
     }
     
-    var maxX: CGFloat{
+    public var maxX: CGFloat{
         get{
             return self.x + self.width
         }
@@ -88,7 +88,7 @@ extension UIView {
             x = newValue - self.width
         }
     }
-    var maxY: CGFloat{
+    public var maxY: CGFloat{
         get{
             return self.y + self.height
         }
@@ -102,7 +102,7 @@ extension UIView {
 extension UIView {
     
     /// 寻找当前视图所在的控制器
-    var responderController: UIViewController? {
+    public var responderController: UIViewController? {
         var nextReponder: UIResponder? = self.next
         while nextReponder != nil {
             if let viewController = nextReponder as? UIViewController {
@@ -114,7 +114,7 @@ extension UIView {
     }
     
     /// 生成视图的截图
-    func displayViewToImage() -> UIImage? {
+    public func displayViewToImage() -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0)
         if let context = UIGraphicsGetCurrentContext() {
             self.layer.render(in: context)
@@ -129,7 +129,7 @@ extension UIView {
 extension UIView {
     
     // MARK: 添加渐变色图层(例如添加至label上)
-    func bk_gradientColor(_ startPoint: CGPoint, _ endPoint: CGPoint, _ colors: [UIColor]) {
+    public func bk_gradientColor(_ startPoint: CGPoint, _ endPoint: CGPoint, _ colors: [UIColor]) {
         
         guard startPoint.x >= 0, startPoint.x <= 1, startPoint.y >= 0, startPoint.y <= 1, endPoint.x >= 0, endPoint.x <= 1, endPoint.y >= 0, endPoint.y <= 1 else {
             return
