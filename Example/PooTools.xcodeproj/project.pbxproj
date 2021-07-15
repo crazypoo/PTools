@@ -7,11 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		233340FA26A033AB00E4DF25 /* PooSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233340F926A033AA00E4DF25 /* PooSegmentView.swift */; };
-		233340FC26A0353A00E4DF25 /* BKCutsomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 233340FB26A0353900E4DF25 /* BKCutsomButton.swift */; };
 		2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 233340FF26A0369100E4DF25 /* PTBridgeObject.m */; };
-		2333410226A03A7000E4DF25 /* UIView+ViewEx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */; };
-		2333410426A03C0400E4DF25 /* CommonMacro.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2333410326A03C0400E4DF25 /* CommonMacro.swift */; };
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
@@ -179,12 +175,8 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		233340F926A033AA00E4DF25 /* PooSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PooSegmentView.swift; sourceTree = "<group>"; };
-		233340FB26A0353900E4DF25 /* BKCutsomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BKCutsomButton.swift; sourceTree = "<group>"; };
 		233340FE26A0369100E4DF25 /* PTBridgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTBridgeObject.h; sourceTree = "<group>"; };
 		233340FF26A0369100E4DF25 /* PTBridgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTBridgeObject.m; sourceTree = "<group>"; };
-		2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ViewEx.swift"; sourceTree = "<group>"; };
-		2333410326A03C0400E4DF25 /* CommonMacro.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonMacro.swift; sourceTree = "<group>"; };
 		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
 		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
@@ -563,9 +555,6 @@
 		233340FD26A0367700E4DF25 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
-				2333410326A03C0400E4DF25 /* CommonMacro.swift */,
-				233340FB26A0353900E4DF25 /* BKCutsomButton.swift */,
-				2333410126A03A7000E4DF25 /* UIView+ViewEx.swift */,
 				233340FE26A0369100E4DF25 /* PTBridgeObject.h */,
 				233340FF26A0369100E4DF25 /* PTBridgeObject.m */,
 			);
@@ -980,7 +969,6 @@
 		C08D9DD922768B2B001417F1 /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
-				233340F926A033AA00E4DF25 /* PooSegmentView.swift */,
 				CC1257722098319200E31A38 /* PooSegView.h */,
 				CC1257732098319200E31A38 /* PooSegView.m */,
 			);
@@ -1531,7 +1519,6 @@
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
-				2333410226A03A7000E4DF25 /* UIView+ViewEx.swift in Sources */,
 				CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */,
 				CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
@@ -1553,7 +1540,6 @@
 				CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */,
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
-				233340FA26A033AB00E4DF25 /* PooSegmentView.swift in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */,
 				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
@@ -1592,12 +1578,10 @@
 				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */,
-				2333410426A03C0400E4DF25 /* CommonMacro.swift in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
 				CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */,
 				CCD660C121DCCD3B004AA57D /* IGHTTPTools.m in Sources */,
-				233340FC26A0353A00E4DF25 /* BKCutsomButton.swift in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,

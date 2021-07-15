@@ -9,9 +9,9 @@
 import Foundation
 import UIKit
 
-extension UIView {
+public extension UIView {
     
-    public var x: CGFloat{
+    var x: CGFloat{
         get{
             return frame.origin.x
         }
@@ -19,7 +19,7 @@ extension UIView {
             frame.origin.x = newValue
         }
     }
-    public var y: CGFloat{
+    var y: CGFloat{
         get{
             return frame.origin.y
         }
@@ -27,7 +27,7 @@ extension UIView {
             frame.origin.y = newValue
         }
     }
-    public var width: CGFloat{
+    var width: CGFloat{
         get{
             return frame.size.width
         }
@@ -35,7 +35,7 @@ extension UIView {
             frame.size.width = newValue
         }
     }
-    public var height: CGFloat{
+    var height: CGFloat{
         get{
             return frame.size.height
         }
@@ -44,13 +44,13 @@ extension UIView {
         }
     }
     
-    public var viewCenter: CGPoint{
+    var viewCenter: CGPoint{
         get{
             return CGPoint(x: width * 0.5, y: height * 0.5)
         }
     }
     
-    public var centerX: CGFloat{
+    var centerX: CGFloat{
         get{
             return width * 0.5
         }
@@ -58,7 +58,7 @@ extension UIView {
             center.x = newValue
         }
     }
-    public var setCenterY: CGFloat{
+    var setCenterY: CGFloat{
         get{
             return height * 0.5
         }
@@ -67,7 +67,7 @@ extension UIView {
         }
     }
     
-    public var centerY: CGFloat{
+    var centerY: CGFloat{
         get{
             return height * 0.5
         }
@@ -76,11 +76,11 @@ extension UIView {
         }
     }
     
-    public var inSuperViewCenterY: CGFloat{
+    var inSuperViewCenterY: CGFloat{
         return y + centerY
     }
     
-    public var maxX: CGFloat{
+    var maxX: CGFloat{
         get{
             return self.x + self.width
         }
@@ -88,7 +88,7 @@ extension UIView {
             x = newValue - self.width
         }
     }
-    public var maxY: CGFloat{
+    var maxY: CGFloat{
         get{
             return self.y + self.height
         }
@@ -126,10 +126,10 @@ extension UIView {
     
 }
 
-extension UIView {
+public extension UIView {
     
     // MARK: 添加渐变色图层(例如添加至label上)
-    public func bk_gradientColor(_ startPoint: CGPoint, _ endPoint: CGPoint, _ colors: [UIColor]) {
+    func bk_gradientColor(_ startPoint: CGPoint, _ endPoint: CGPoint, _ colors: [UIColor]) {
         
         guard startPoint.x >= 0, startPoint.x <= 1, startPoint.y >= 0, startPoint.y <= 1, endPoint.x >= 0, endPoint.x <= 1, endPoint.y >= 0, endPoint.y <= 1 else {
             return
@@ -162,7 +162,7 @@ extension UIView {
     
     // MARK: 移除渐变图层
     // （当希望只使用backgroundColor的颜色时，需要先移除之前加过的渐变图层）
-    public func removeGradientLayer() {
+    func removeGradientLayer() {
         if let sl = self.layer.sublayers {
             for layer in sl {
                 if layer.isKind(of: CAGradientLayer.self) {
