@@ -25,14 +25,14 @@ public class BKRightImageButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         var titleRect = super.titleRect(forContentRect: contentRect)
         let imgRect = super.imageRect(forContentRect: contentRect)
         titleRect.size.width = contentRect.size.width - (space + 2*margin + imgRect.size.width)
         return CGRect(origin: CGPoint(x: margin, y: titleRect.origin.y), size: titleRect.size)
     }
     
-    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         let imgRect = super.imageRect(forContentRect: contentRect)
         let imgX = contentRect.size.width - imgRect.size.width - margin
         return CGRect(origin: CGPoint(x: imgX, y: imgRect.origin.y), size: imgRect.size)
@@ -45,7 +45,7 @@ public class BKTopImageButton: UIButton {
     
     private let space: CGFloat = 7.0
     
-    override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
+    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
         let titleRect = super.titleRect(forContentRect: contentRect)
         let imgRect = super.imageRect(forContentRect: contentRect)
         let titleX = (contentRect.size.width - titleRect.size.width) / 2.0
@@ -55,7 +55,7 @@ public class BKTopImageButton: UIButton {
         return CGRect(origin: CGPoint(x: titleX, y: titleY), size: titleRect.size)
     }
      
-    override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
+    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
         let titleRect = super.titleRect(forContentRect: contentRect)
         let imgRect = super.imageRect(forContentRect: contentRect)
         let imgX = (contentRect.size.width - imgRect.size.width) / 2.0
@@ -66,7 +66,7 @@ public class BKTopImageButton: UIButton {
     
 }
 
-enum BKLayoutButtonStyle : Int {
+public enum BKLayoutButtonStyle : Int {
     case leftImageRightTitle // 系统默认
     case leftTitleRightImage
     case upImageDownTitle
@@ -92,7 +92,7 @@ public class BKLayoutButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         if CGSize.zero.equalTo(imageSize) {
@@ -153,12 +153,12 @@ public class BKLayoutButton: UIButton {
         
     }
 
-    override func setImage(_ image: UIImage?, for state: UIControl.State) {
+    public override func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
         setNeedsLayout()
     }
 
-    override func setTitle(_ title: String?, for state: UIControl.State) {
+    public override func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         setNeedsLayout()
     }

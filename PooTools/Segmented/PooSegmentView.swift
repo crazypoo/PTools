@@ -59,7 +59,7 @@ public class PooSegmentModel:NSObject
     var selectedImageURL:String?
 }
 
-class PooSegmentSubView:UIView
+public class PooSegmentSubView:UIView
 {
     private var viewConfig = PooSegmentConfig()
 
@@ -264,7 +264,7 @@ class PooSegmentSubView:UIView
     }
 }
 
-class PooSegmentView: UIView {
+public class PooSegmentView: UIView {
     
     private var viewConfig = PooSegmentConfig()
     private var subViewArr = [UIView]()
