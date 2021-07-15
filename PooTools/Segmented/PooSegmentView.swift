@@ -16,7 +16,7 @@ enum PooSegmentSelectedType {
     case Dog
 }
 
-class PooSegmentConfig: NSObject {
+public class PooSegmentConfig: NSObject {
     ///选中字体
     var selectedFont:UIFont? = .systemFont(ofSize: 16)
     ///未选中字体
@@ -49,7 +49,7 @@ class PooSegmentConfig: NSObject {
     var segImageLoadOption:SDWebImageOptions? = .retryFailed
 }
 
-class PooSegmentModel:NSObject
+public class PooSegmentModel:NSObject
 {
     ///标题
     var titles:String?

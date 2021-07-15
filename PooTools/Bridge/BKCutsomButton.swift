@@ -9,7 +9,7 @@
 import UIKit
 
 //MARK: 左文右图（间隔5，Label的文字居左。）
-class BKRightImageButton: UIButton {
+public class BKRightImageButton: UIButton {
 
     private let space: CGFloat = 5.0
     private var margin: CGFloat = 5.0
@@ -41,7 +41,7 @@ class BKRightImageButton: UIButton {
 }
 
 //MARK: 上图下文（间隔7，文字和图片水平垂直都居中）
-class BKTopImageButton: UIButton {
+public class BKTopImageButton: UIButton {
     
     private let space: CGFloat = 7.0
     
@@ -75,7 +75,7 @@ enum BKLayoutButtonStyle : Int {
 
 // MARK: - 上图下文 上文下图 左图右文(系统默认) 右图左文
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
-class BKLayoutButton: UIButton {
+public class BKLayoutButton: UIButton {
     /// 布局方式
     var layoutStyle: BKLayoutButtonStyle!
     /// 图片和文字的间距，默认值5
