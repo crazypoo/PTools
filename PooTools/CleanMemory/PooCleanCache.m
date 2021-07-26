@@ -11,6 +11,7 @@
 
 #import "PooCleanCache.h"
 #import "PMacros.h"
+#import <SDWebImage/SDImageCache.h>
 
 @implementation PooCleanCache
 // 获取cachePath路径下文件夹大小
@@ -52,6 +53,7 @@
         long long fileSize = [[fileManager attributesOfItemAtPath:filePath error:nil] fileSize];
         totalSize += fileSize;
     }
+    totalSize += [[SDImageCache sharedImageCache] totalDiskSize];
     
     // 将文件夹大小转换为 M/KB/B
     NSString *totalSizeString = nil;
@@ -88,7 +90,7 @@
     }
     NSError *error = nil;
     NSString *filePath = nil;
-    BOOL flag = NO;
+    __block BOOL flag = NO;
     
     for (NSString *subpath in subpathArray)
     {
@@ -106,6 +108,10 @@
         }
     }
     
+    [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+        flag = YES;
+    }];
+    
     if (NO == flag)
     {
 #ifdef DEBUG
@@ -113,6 +119,7 @@
 #else
 #endif
     }
+    
     return flag;
 }
 
