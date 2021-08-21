@@ -366,6 +366,7 @@
 
             self.sectionCountArr = [NSMutableArray array];
             for (int i = 0; i < self.rowLastTagArr.count; i++) {
+                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@",self.rowLastTagArr);
                 if (i == 0) {
                     NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
                     [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
@@ -427,8 +428,14 @@
                     {
                         if (j == self.section)
                         {
-                            PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%@",self.sectionCountArr);
-                            xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[j-1] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j-1] integerValue]-1)))/2;
+                            if (self.section == 0)
+                            {
+                                xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[0] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[0] integerValue]-1)))/2;
+                            }
+                            else
+                            {
+                                xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[j-1] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j-1] integerValue]-1)))/2;
+                            }
                         }
                         else
                         {
@@ -440,7 +447,7 @@
                 break;
             case PooTagPositionLeft:
             {
-                xxxxxxxxx = 0;
+                xxxxxxxxx = self.curConfig.itemHerMargin;
             }
                 break;
             case PooTagPositionRight:
@@ -454,7 +461,6 @@
             }
                 break;
         }
-//        PNSLog(@"当行(%d)x位置::%f",j,xxxxxxxxx);
         
         for (int i = ((j == 0) ? 0 : ([self.rowLastTagArr[j-1] intValue]+1)); i < [self.rowLastTagArr[j] intValue]+1; i++) {
                 UIButton *currentBtn = [self viewWithTag:i+BTN_Tags_Tag];//当前
