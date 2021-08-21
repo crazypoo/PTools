@@ -413,21 +413,27 @@
         switch (position) {
             case PooTagPositionCenter:
             {
-                
                 if ((self.frame.size.width - currentSectionTotalW) < 0)
                 {
                     xxxxxxxxx = 0;
                 }
                 else
                 {
-                    if (j == self.section)
+                    if (self.curConfig.titleNormal.count == 1)
                     {
-                        
-                        xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[j-1] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j-1] integerValue]-1)))/2;
+                        xxxxxxxxx = (self.frame.size.width - self.curConfig.itemWidth)/2;
                     }
                     else
                     {
-                        xxxxxxxxx = (self.frame.size.width - currentSectionTotalW)/2;
+                        if (j == self.section)
+                        {
+                            PNSLog(@">>>>>>>>>>>>>>>>>>>>>>%@",self.sectionCountArr);
+                            xxxxxxxxx = (self.frame.size.width - (self.curConfig.itemWidth*[self.sectionCountArr[j-1] integerValue]+self.curConfig.itemHerMargin*([self.sectionCountArr[j-1] integerValue]-1)))/2;
+                        }
+                        else
+                        {
+                            xxxxxxxxx = (self.frame.size.width - currentSectionTotalW)/2;
+                        }
                     }
                 }
             }
