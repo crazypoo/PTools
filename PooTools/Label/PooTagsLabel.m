@@ -366,7 +366,6 @@
 
             self.sectionCountArr = [NSMutableArray array];
             for (int i = 0; i < self.rowLastTagArr.count; i++) {
-                PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@",self.rowLastTagArr);
                 if (i == 0) {
                     NSInteger currentRowCount = [self.rowLastTagArr[i] integerValue]+1;
                     [self.sectionCountArr addObject:[NSNumber numberWithInteger:currentRowCount]];
