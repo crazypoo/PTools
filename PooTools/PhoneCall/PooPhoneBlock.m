@@ -46,8 +46,10 @@
           [[NSCharacterSet decimalDigitCharacterSet] invertedSet]] componentsJoinedByString:@""];
         
         NSString *stringURL = [@"telprompt://" stringByAppendingString:simplePhoneNumber];
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringURL]];
-        
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:stringURL]
+                                           options:@{}
+                                 completionHandler:nil];
+
         return YES;
     }
     return NO;

@@ -125,7 +125,7 @@ CGFloat const tagItemSpace = 5;
 
 -(PooTagsLabelConfig *)tagConfig
 {
-    CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
+//    CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
     
     PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
     config.itemHeight = tagItemH * ViewScale;

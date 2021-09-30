@@ -202,7 +202,7 @@
                     {
                         minMinFloat = 0;
                     }
-                    else if (minMinFloat >= self.maxSliderBtn.x+35)
+                    else if (minMinFloat >= self.maxSliderBtn.x)
                     {
                         minMinFloat = self.maxSliderBtn.x;
                     }
@@ -240,11 +240,11 @@
                     CGFloat maxMaxFloat = self.maxCenter.x + translation.x;
                     if ( maxMaxFloat >= (self.width-35.f))
                     {
-                        maxMaxFloat = self.width-35;
+                        maxMaxFloat = self.width-35.f;
                     }
-                    else if (maxMaxFloat <= self.minSliderBtn.x-35)
+                    else if (maxMaxFloat <= self.minSliderBtn.x)
                     {
-                        maxMaxFloat = self.minSliderBtn.x-35;
+                        maxMaxFloat = self.minSliderBtn.x;
                     }
                     make.left.equalTo(self).offset(maxMaxFloat);
                 }];

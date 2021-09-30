@@ -249,7 +249,6 @@
             make.left.right.bottom.equalTo(self);
             make.top.equalTo(self.customView.mas_bottom);
         }];
-        kViewBorderRadius(btnView, AlertRadius, 0, kClearColor);
         
         CGFloat bottomButtonH = [YXCustomAlertView bottomButtonHeight:self.viewFont withWidth:self.frame.size.width moreButton:[self.bottomBtnArr copy]];
 
@@ -279,6 +278,9 @@
                 }
             }];
         }
+        GCDAfter(0.1, ^{
+            btnView.viewUI_rectCorner = UIRectCornerBottomLeft | UIRectCornerBottomRight;
+        })
     }
 }
 

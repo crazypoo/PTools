@@ -581,7 +581,7 @@ static NSString *cellIdentifier = @"CELL";
                 DoubleSliderView *dSlider = [DoubleSliderView new];
                 [customView addSubview:dSlider];
                 [dSlider mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.width.offset(100);
+                    make.width.offset(kSCREEN_WIDTH - 40);
                     make.height.offset(50);
                     make.centerX.equalTo(customView);
                     make.top.equalTo(slider.mas_bottom).offset(5);

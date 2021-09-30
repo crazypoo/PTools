@@ -153,7 +153,7 @@
     }
     
     CADisplayLink *timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateValue:)];
-    timer.frameInterval = 2;
+    timer.preferredFramesPerSecond = 60;
     [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     [timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:UITrackingRunLoopMode];
     self.timer = timer;
