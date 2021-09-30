@@ -14,9 +14,9 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
-  - CYLTabBarController (1.29.0):
-    - CYLTabBarController/Core (= 1.29.0)
-  - CYLTabBarController/Core (1.29.0)
+  - CYLTabBarController (1.29.2):
+    - CYLTabBarController/Core (= 1.29.2)
+  - CYLTabBarController/Core (1.29.2)
   - DHSmartScreenshot (1.3.1)
   - DZNEmptyDataSet (1.8.1)
   - FDFullscreenPopGesture (1.1)
@@ -39,7 +39,7 @@ PODS:
   - MJExtension (3.3.0)
   - MJRefresh (3.7.2)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (2.0.9):
+  - PooTools (2.0.12):
     - AFNetworking
     - CYLTabBarController
     - DHSmartScreenshot
@@ -127,7 +127,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
-  CYLTabBarController: f5460b8446f82d016945d4d53895a1ef185b79e3
+  CYLTabBarController: db44b5901a28693a8a4279e4721b3aafdd36c178
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
@@ -142,7 +142,7 @@ SPEC CHECKSUMS:
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 975cb5c19ddb0eb44341548f3179ad493a5d8b7d
+  PooTools: dfdb9a1a910a327961f34225f36f4edab1531e1c
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
@@ -157,4 +157,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8b87c1672a4d8cfd8f3a0e81899360ea7d7c65b7
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2
