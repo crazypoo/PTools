@@ -64,9 +64,14 @@
 {
     if (!self.avatar)
     {
-        self.avatar = [[RCDraggableButton alloc] initInView:kAppDelegateWindow WithFrame:CGRectMake(0, HEIGHT_STATUS, kSCREEN_WIDTH, 30)];
+        self.avatar = [[RCDraggableButton alloc] initInView:kAppDelegateWindow WithFrame:CGRectZero];
         self.avatar.adjustsImageWhenHighlighted = NO;
         self.avatar.tag = 9999;
+        [self.avatar mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.equalTo(kAppDelegateWindow);
+            make.top.equalTo(kAppDelegateWindow).offset(HEIGHT_STATUS);
+            make.height.equalTo(@30);
+        }];
         
         // Track FPS using display link
         displayLink = [CADisplayLink displayLinkWithTarget:self selector:@selector(displayLinkTick:)];
