@@ -20,7 +20,7 @@
 
 @interface UIView (Ext)
 
-@property CGFloat x;
+@property(nonatomic) CGFloat x;
 @property CGFloat y;
 @property CGFloat width;
 @property CGFloat height;
