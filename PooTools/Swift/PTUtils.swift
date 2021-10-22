@@ -420,19 +420,19 @@ public class PTUtils: NSObject {
     }
     
     @available(iOS 11.0, *)
-    public class func color(name:String,traitCollection:UITraitCollection,buldle:Bundle? = PTUtils.cgBaseBundle())->UIColor
+    public class func color(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIColor
     {
-        return UIColor(named: name, in: buldle, compatibleWith: traitCollection) ?? .randomColor
+        return UIColor(named: name, in: bundle!, compatibleWith: traitCollection) ?? .randomColor
     }
     
-    public class func image(name:String,traitCollection:UITraitCollection,buldle:Bundle? = PTUtils.cgBaseBundle())->UIImage
+    public class func image(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
     {
-        return UIImage(named: name, in: buldle, compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
+        return UIImage(named: name, in: bundle!, compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
     }
     
-    public class func darkModeImage(name:String)->UIImage
+    public class func darkModeImage(name:String,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
     {
-        return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!)
+        return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,bundle: bundle!)
     }
 
     //Mark:越狱检测
