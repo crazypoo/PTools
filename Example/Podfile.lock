@@ -41,7 +41,7 @@ PODS:
   - MJExtension (3.3.0)
   - MJRefresh (3.7.2)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (2.1.5):
+  - PooTools (2.1.10):
     - AFNetworking
     - CYLTabBarController
     - DeviceKit
@@ -74,9 +74,9 @@ PODS:
     - YCXMenu
     - YYKit
   - pop (1.0.12)
-  - SDWebImage (5.11.1):
-    - SDWebImage/Core (= 5.11.1)
-  - SDWebImage/Core (5.11.1)
+  - SDWebImage (5.12.1):
+    - SDWebImage/Core (= 5.12.1)
+  - SDWebImage/Core (5.12.1)
   - SnapKit (5.0.1)
   - SSZipArchive (2.4.2)
   - SwifterSwift (5.2.0):
@@ -180,9 +180,9 @@ SPEC CHECKSUMS:
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 5c7558875708ba1c71ff02dff58654f808ae5554
+  PooTools: c269cc036428a67915c32450c3c6bd219894891d
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
+  SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2

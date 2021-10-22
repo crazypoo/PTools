@@ -8,8 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "YXCustomAlertView.h"
-
 typedef void (^ReturnView)(id _Nonnull popoverView);
 
 NS_ASSUME_NONNULL_BEGIN

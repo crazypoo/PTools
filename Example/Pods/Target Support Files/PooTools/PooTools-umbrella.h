@@ -12,7 +12,6 @@
 
 #import "PooTools_Example-Bridging-Header.h"
 #import "PTInputAll.h"
-#import "ALActionSheetView.h"
 #import "CGAdBannerModel.h"
 #import "CGADCollectionViewCell.h"
 #import "CGLayout.h"
@@ -22,7 +21,6 @@
 #import "PLaunchAdMonitor.h"
 #import "NSData+AES.h"
 #import "SecurityUtil.h"
-#import "YXCustomAlertView.h"
 #import "PurchaseCarAnimationTool.h"
 #import "JYBDBankCardSearch.h"
 #import "LGTMBase64.h"

@@ -59,7 +59,6 @@
 		6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F59D195388D20070C39A /* PTAppDelegate.m */; };
 		6003F5A7195388D20070C39A /* PTViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5A6195388D20070C39A /* PTViewController.m */; };
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
-		643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 643252C320A26819003A0228 /* YXCustomAlertView.m */; };
 		64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 64CF39E020A627C3003F64BF /* PooPieChart.m */; };
 		64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E0598720A9E06500E434CD /* NSData+AES.m */; };
 		64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 64E0598A20A9E06600E434CD /* SecurityUtil.m */; };
@@ -75,7 +74,6 @@
 		C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */ = {isa = PBXBuildFile; fileRef = C0DB2BCF22AB561B00A7D017 /* NSString+PassStrength.m */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		C8FCB8FA21308328000BB281 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = C8FCB8F921308328000BB281 /* PooTools.bundle */; };
-		CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257372098319200E31A38 /* ALActionSheetView.m */; };
 		CC1257B12098319300E31A38 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257392098319200E31A38 /* CustomTextField.m */; };
 		CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573D2098319200E31A38 /* GPKeyChain.m */; };
 		CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12573F2098319200E31A38 /* HPGrowingTextView.m */; };
@@ -283,8 +281,6 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		643252C220A26819003A0228 /* YXCustomAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YXCustomAlertView.h; sourceTree = "<group>"; };
-		643252C320A26819003A0228 /* YXCustomAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YXCustomAlertView.m; sourceTree = "<group>"; };
 		64CF39DF20A627C2003F64BF /* PooPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooPieChart.h; sourceTree = "<group>"; };
 		64CF39E020A627C3003F64BF /* PooPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooPieChart.m; sourceTree = "<group>"; };
 		64E0598720A9E06500E434CD /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
@@ -318,8 +314,6 @@
 		C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UINavigation_SXFixSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8FCB8F921308328000BB281 /* PooTools.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PooTools.bundle; sourceTree = "<group>"; };
 		CC1256B42098286400E31A38 /* PooTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PooTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CC1257362098319200E31A38 /* ALActionSheetView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ALActionSheetView.h; sourceTree = "<group>"; };
-		CC1257372098319200E31A38 /* ALActionSheetView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ALActionSheetView.m; sourceTree = "<group>"; };
 		CC1257382098319200E31A38 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
 		CC1257392098319200E31A38 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		CC12573C2098319200E31A38 /* GPKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPKeyChain.h; sourceTree = "<group>"; };
@@ -1040,24 +1034,6 @@
 			path = Picker;
 			sourceTree = "<group>";
 		};
-		C08D9DD422768A62001417F1 /* AlertView */ = {
-			isa = PBXGroup;
-			children = (
-				643252C220A26819003A0228 /* YXCustomAlertView.h */,
-				643252C320A26819003A0228 /* YXCustomAlertView.m */,
-			);
-			path = AlertView;
-			sourceTree = "<group>";
-		};
-		C08D9DD522768A72001417F1 /* ActionSheet */ = {
-			isa = PBXGroup;
-			children = (
-				CC1257362098319200E31A38 /* ALActionSheetView.h */,
-				CC1257372098319200E31A38 /* ALActionSheetView.m */,
-			);
-			path = ActionSheet;
-			sourceTree = "<group>";
-		};
 		C08D9DD622768A9D001417F1 /* Calendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -1400,10 +1376,8 @@
 				2334398225AA82EB00C2203A /* AppDeviceInfo */,
 				2352EA712543BD9E002AE25C /* Animation */,
 				2352EA6C2543BD09002AE25C /* BankCard */,
-				C08D9DD522768A72001417F1 /* ActionSheet */,
 				C08D9DD2227689F1001417F1 /* AdBanner */,
 				C08D9DE722768DC1001417F1 /* AESAndDES */,
-				C08D9DD422768A62001417F1 /* AlertView */,
 				C08D9DE322768D2D001417F1 /* Base64 */,
 				C08D9DD722768AD1001417F1 /* BlackMagic */,
 				C08D9DEF22768F69001417F1 /* BugReport */,
@@ -1690,7 +1664,6 @@
 				CC1257B92098319300E31A38 /* NSMutableArray+Shuffle.m in Sources */,
 				CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */,
 				CC1D38BC211D706400FD29F4 /* MAThermometerBorder.m in Sources */,
-				CC1257B02098319300E31A38 /* ALActionSheetView.m in Sources */,
 				CC3838D7214364D100453548 /* PVideoConfig.m in Sources */,
 				CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */,
 				64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */,
@@ -1792,7 +1765,6 @@
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */,
 				230FC558272268E0005A8D08 /* PTGuidePageHUD.swift in Sources */,
 				CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */,
 			);
@@ -1937,6 +1909,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
@@ -1961,7 +1934,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
-				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1976,6 +1949,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
@@ -2000,7 +1974,7 @@
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "../PooTools/PooTools_Example-Bridging-Header.h";
-				SWIFT_OBJC_INTERFACE_HEADER_NAME = "$(SWIFT_MODULE_NAME)-Swift.h";
+				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "$(SRCROOT)/**";

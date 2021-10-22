@@ -10,12 +10,12 @@
 
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "UIView+ModifyFrame.h"
-#import "ALActionSheetView.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 #import "Utils.h"
 #import <AFNetworking/AFNetworking.h>
 #import <CoreMotion/CoreMotion.h>
+#import <PooTools/PooTools-Swift.h>
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f
@@ -1182,64 +1182,50 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 #pragma mark - ----> 删除图片
 - (void)removeCurrImage:(UIButton *)sender
 {
-    ALActionSheetView *actionSheetView = [ALActionSheetView showActionSheetWithTitle:@"图片操作"
-                                                                        titleMessage:nil
-                                                                   cancelButtonTitle:@"取消"
-                                                              destructiveButtonTitle:nil
-                                                                   otherButtonTitles:self.actionSheetOtherBtnArr
-                                                                      buttonFontName:self.fontName
-                                                           singleCellBackgroundColor:[UIColor whiteColor]
-                                                                normalCellTitleColor:[UIColor blackColor]
-                                                           destructiveCellTitleColor:nil
-                                                                 titleCellTitleColor:nil
-                                                                      separatorColor:nil
-                                                                    heightlightColor:nil
-                                                                   sourceViewForiPad:sender
-                                                                     actionSheetType:ActionSheetTypeAuto
-                                                                             handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex)
-                                          {
-                                              switch (self.moreType)
-                                              {
-                                                  case MoreActionTypeOnlyDelete:
-                                                  {
-                                                      if (buttonIndex == 0)
-                                                      {
-                                                          [self deleteImage];
-                                                      }
-                                                  }
-                                                      break;
-                                                  case MoreActionTypeOnlySave:
-                                                  {
-                                                      if (buttonIndex == 0)
-                                                      {
-                                                          [self saveImage];
-                                                      }
-                                                  }
-                                                      break;
-                                                  case MoreActionTypeMoreNormal:
-                                                  {
-                                                      switch (buttonIndex)
-                                                      {
-                                                          case 0:
-                                                          {
-                                                              [self saveImage];
-                                                          }
-                                                              break;
-                                                          case 1:
-                                                          {
-                                                              [self deleteImage];
-                                                          }
-                                                              break;
-                                                          default:
-                                                              break;
-                                                      }
-                                                  }
-                                                      break;
-                                                  default:
-                                                      break;
-                                              }
-                                          }];
-    [actionSheetView show];
+    PTActionSheetView * aaaaa = [[PTActionSheetView alloc] initWithTitle:@"图片操作" subTitle:@"" cancelButton:@"取消" destructiveButton:@"" otherButtonTitles:self.actionSheetOtherBtnArr];
+    aaaaa.actionSheetSelectBlock = ^(PTActionSheetView * sheet, NSInteger buttonIndex) {
+        switch (self.moreType)
+        {
+            case MoreActionTypeOnlyDelete:
+            {
+                if (buttonIndex == 0)
+                {
+                    [self deleteImage];
+                }
+            }
+                break;
+            case MoreActionTypeOnlySave:
+            {
+                if (buttonIndex == 0)
+                {
+                    [self saveImage];
+                }
+            }
+                break;
+            case MoreActionTypeMoreNormal:
+            {
+                switch (buttonIndex)
+                {
+                    case 0:
+                    {
+                        [self saveImage];
+                    }
+                        break;
+                    case 1:
+                    {
+                        [self deleteImage];
+                    }
+                        break;
+                    default:
+                        break;
+                }
+            }
+                break;
+            default:
+                break;
+        }
+    };
+    [aaaaa show];
 }
 
 -(void)deleteImage

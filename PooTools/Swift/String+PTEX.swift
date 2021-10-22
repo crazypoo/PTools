@@ -280,7 +280,7 @@ public extension String
 {
     func stringIsEmpty()->Bool
     {
-        return (self.charactersArray.count < 1) ? true : false
+        return (self as NSString).length == 0 || (self.charactersArray.count < 1) ? true : false
     }
     
     func toMoney()->String

@@ -24,7 +24,8 @@ public enum PTAlertAnimationType {
     case Normal
 }
 
-public class PTCustomBottomButtonModel:PTBaseModel
+@objcMembers
+public class PTCustomBottomButtonModel:NSObject
 {
     public var titleName:String? = ""
     public var titleColor:UIColor? = UIColor.systemBlue
@@ -118,6 +119,19 @@ public class PTCustomAlertView: UIView {
         return view
     }()
     
+    @objc public init(superView:UIView,
+                      alertTitle:String? = "",
+                      font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
+                      titleColor:UIColor? = UIColor.black,
+                      alertVerLineColor:UIColor? = UIColor.lightGray,
+                      alertBackgroundColor:UIColor? = UIColor.white,
+                      heightlightedColor:UIColor? = UIColor.lightGray,
+                      moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel]())
+    {
+        super.init(frame: .zero)
+        self.createAlertView(superView: superView, alertTitle: alertTitle!, font: font!, titleColor: titleColor!, alertVerLineColor: alertVerLineColor!, alertBackgroundColor: alertBackgroundColor!, heightlightedColor: heightlightedColor!, moreButtons: moreButtons!, alertAnimationType: .Top)
+    }
+    
     public init(superView:UIView,
          alertTitle:String? = "",
          font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
@@ -130,7 +144,21 @@ public class PTCustomAlertView: UIView {
          touchBackground:Bool? = true,
          cornerSize:CGFloat? = 15) {
         super.init(frame: .zero)
-        
+        self.createAlertView(superView: superView, alertTitle: alertTitle!, font: font!, titleColor: titleColor!, alertVerLineColor: alertVerLineColor!, alertBackgroundColor: alertBackgroundColor!, heightlightedColor: heightlightedColor!, moreButtons: moreButtons!, alertAnimationType: alertAnimationType, touchBackground: touchBackground!, cornerSize: cornerSize!)
+    }
+    
+    func createAlertView(superView:UIView,
+                         alertTitle:String? = "",
+                         font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
+                         titleColor:UIColor? = UIColor.black,
+                         alertVerLineColor:UIColor? = UIColor.lightGray,
+                         alertBackgroundColor:UIColor? = UIColor.white,
+                         heightlightedColor:UIColor? = UIColor.lightGray,
+                         moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel](),
+                         alertAnimationType:PTAlertAnimationType,
+                         touchBackground:Bool? = true,
+                         cornerSize:CGFloat? = 15)
+    {
         bottombuttonArray = moreButtons!
         mainView = superView
         
@@ -170,6 +198,8 @@ public class PTCustomAlertView: UIView {
             self.viewCornerRectCorner(cornerRadii: cornerSize!, corner: .allCorners)
         }
                 
+        addSubview(customView)
+
         var propertyNamed = ""
         var transform = CATransform3DMakeTranslation(0, 0, 0)
 
@@ -213,7 +243,7 @@ public class PTCustomAlertView: UIView {
     {
         super.layoutSubviews()
         
-        let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width, title: self.titleString)
+        let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width - 20, title: self.titleString)
         if textH >= (kSCREEN_HEIGHT / 3)
         {
             titleLabel.text = titleString
@@ -259,9 +289,8 @@ public class PTCustomAlertView: UIView {
         }
         let bottomButtonHeight = PTCustomAlertView.getBottomButtonHiehgt(font: viewFont, alertWidth: frame.size.width, moreButtonTitles: bottombuttonArray)
         let bottomHeight = isEX! ? (bottomButtonHeight * CGFloat(bottombuttonArray.count) + AlertLine * CGFloat(bottombuttonArray.count)) : (bottomButtonHeight + AlertLine)
-        addSubview(customView)
         customView.snp.makeConstraints { make in
-            if textH > (kSCREEN_HEIGHT / 3)
+            if textH >= (kSCREEN_HEIGHT / 3)
             {
                 make.top.equalTo(self.titleScroller.snp.bottom)
             }

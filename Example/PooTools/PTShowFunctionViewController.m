@@ -47,9 +47,6 @@ CGFloat const tagItemSpace = 5;
 #import "PLabel.h"
 #import "UICountingLabel.h"
 
-#import "ALActionSheetView.h"
-#import "YXCustomAlertView.h"
-
 #import "PooDatePicker.h"
 #import "PTNormalPicker.h"
 
@@ -64,6 +61,8 @@ CGFloat const tagItemSpace = 5;
 #import "UIButton+Block.h"
 
 #import "PTPopoverFunction.h"
+
+#import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
@@ -631,65 +630,58 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            ALActionSheetView *actionSheet = [[ALActionSheetView alloc] initWithTitle:@" "
-                                                                         titleMessage:@"22222222"
-                                                                    cancelButtonTitle:@"取消"
-                                                               destructiveButtonTitle:nil
-                                                                    otherButtonTitles:@[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"]
-                                                                       buttonFontName:FontNameBold
-                                                            singleCellBackgroundColor:kRandomColor
-                                                                 normalCellTitleColor:kRandomColor
-                                                            destructiveCellTitleColor:kRandomColor
-                                                                  titleCellTitleColor:kRandomColor
-                                                                       separatorColor:kRandomColor
-                                                                     heightlightColor:kRandomColor
-                                                                    sourceViewForiPad:sender
-                                                                      actionSheetType:ActionSheetTypeBase
-                                                                              handler:^(ALActionSheetView *actionSheetView, NSInteger buttonIndex) {
+            NSArray<NSString *> * titles = @[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"];
+            PTActionSheetView * aaaaa = [[PTActionSheetView alloc] initWithTitle:@"" subTitle:@"" cancelButton:@"取消" destructiveButton:@"" otherButtonTitles:titles];
+            aaaaa.actionSheetSelectBlock = ^(PTActionSheetView * sheet, NSInteger buttonIndex) {
                 PNSLog(@">>>>>>>>>>%ld",(long)buttonIndex);
-            }];
-            [actionSheet show];
+            };
+            [aaaaa show];
         }
             break;
         case 1:
         {
             NSString *title = @"111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123111123123112312312312312312312312312312334313123123sdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsdsdsfsdfsdfsdfsdfsfsd";
-            NSArray *btnArrs = @[@"111",@"222",@"8888888",@"5555"];
-            YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title withButtonAndTitleFont:kDEFAULT_FONT(FontName, 25) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btnArrs viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
+            
+            PTCustomBottomButtonModel *models = [[PTCustomBottomButtonModel alloc] init];
+            models.titleColor = UIColor.redColor;
+            models.titleName = @"123123";
+            
+            NSArray <PTCustomBottomButtonModel *>* titles = @[models];
+            
+            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:kDEFAULT_FONT(FontName, 25) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:titles];
+            [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.height.offset(64+[PTCustomAlertView getBottomButtonHiehgtWithFont:kDEFAULT_FONT(FontName, 50) alertWidth:kSCREEN_WIDTH-20 moreButtonTitles:titles]);
+                make.width.offset(kSCREEN_WIDTH-20);
+                make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
+            }];
+            alerts.customerBlock = ^(UIView * customerView) {
                 UITextField *textField = [UITextField new];
                 textField.placeholder = @"用来展示数字键盘";
-                [alertView.customView addSubview:textField];
+                [customerView addSubview:textField];
                 [textField mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.top.equalTo(alertView.customView).offset(10);
-                    make.left.right.equalTo(alertView.customView);
+                    make.top.equalTo(customerView).offset(10);
+                    make.left.right.equalTo(customerView);
                     make.height.offset(44);
                 }];
-            } clickAction:^(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex) {
+            };
+            alerts.buttonClick = ^(PTCustomAlertView * alertView, NSInteger buttonIndex) {
                 switch (buttonIndex) {
                     case 0:
                     {
-                        [alertView dissMiss];
-                        alertView = nil;
+                        [alertView dismiss];
                     }
                         break;
                     case 1:
                     {
-                        [alertView dissMiss];
-                        alertView = nil;
                     }
                         break;
                     default:
                         break;
                 }
-            } didDismissBlock:^(YXCustomAlertView * _Nonnull alertView) {
-                alertView = nil;
-
-            }];
-            [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:title withTitleFont:kDEFAULT_FONT(FontName, 50) withButtonArr:btnArrs]);
-                make.width.offset(kSCREEN_WIDTH-20);
-                make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
-            }];
+            };
+            alerts.didDismissBlock = ^(PTCustomAlertView * alertView) {
+                
+            };
         }
             break;
         case 2:

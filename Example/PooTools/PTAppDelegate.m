@@ -25,7 +25,7 @@
 #import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 
-#import "PooTools_Example-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
@@ -193,7 +193,7 @@
     LocalConsole *aaaa = [LocalConsole shared];
     [aaaa print:@"123123123123123123"];
     [aaaa createSystemLogView];
-    
+        
     return YES;
 }
 

@@ -35,6 +35,8 @@
 
 #import "MXRotationManager.h"
 
+#import <PooTools/PooTools-Swift.h>
+
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -99,9 +101,9 @@
         make.centerY.centerX.equalTo(views);
     }];
     [views2 addActionHandler:^(UIButton *sender) {
-        if ([self.popover isKindOfClass:[YXCustomAlertView class]])
+        if ([self.popover isKindOfClass:[PTCustomAlertView class]])
         {
-            [(YXCustomAlertView *)self.popover dissMiss];
+            [(PTCustomAlertView *)self.popover dismiss];
         }
         else
         {
@@ -607,20 +609,30 @@ static NSString *cellIdentifier = @"CELL";
 
 -(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock
 {
-    YXCustomAlertView *alert = [[YXCustomAlertView alloc] initAlertViewWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle withButtonAndTitleFont:kDEFAULT_FONT(FontName, 15) titleColor:kRandomColor bottomButtonTitleColor:nil verLineColor:kRandomColor alertViewBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtonTitleArray:btns viewTag:0 viewAnimation:0 touchBackGround:NO setCustomView:^(YXCustomAlertView * _Nonnull alertView) {
-        createBlock(alertView.customView);
-    } clickAction:^(YXCustomAlertView * _Nonnull alertView, NSInteger buttonIndex) {
-        tapBlock(buttonIndex);
-        [alertView dissMiss];
-        alertView = nil;
-    } didDismissBlock:^(YXCustomAlertView * _Nonnull alertView) {
-        alertView = nil;
-    }];
-    [alert mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.offset(64+[YXCustomAlertView titleAndBottomViewNormalHeighEXAlertW:kSCREEN_WIDTH-20 withTitle:alertTitle withTitleFont:kDEFAULT_FONT(FontName, 50) withButtonArr:btns]);
+    NSMutableArray <PTCustomBottomButtonModel *>*arr = [NSMutableArray array];
+    for (NSString *title in btns) {
+        PTCustomBottomButtonModel *models = [[PTCustomBottomButtonModel alloc] init];
+        models.titleColor = UIColor.redColor;
+        models.titleName = title;
+        [arr addObject:models];
+    }
+        
+    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:kDEFAULT_FONT(FontName, 15) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:arr];
+    [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.height.offset(64+[PTCustomAlertView getBottomButtonHiehgtWithFont:kDEFAULT_FONT(FontName, 50) alertWidth:kSCREEN_WIDTH-20 moreButtonTitles:arr]);
         make.width.offset(kSCREEN_WIDTH-20);
         make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
     }];
+    alerts.customerBlock = ^(UIView * customerView) {
+        createBlock(customerView);
+    };
+    alerts.buttonClick = ^(PTCustomAlertView * alertView, NSInteger buttonIndex) {
+        tapBlock(buttonIndex);
+        [alertView dismiss];
+    };
+    alerts.didDismissBlock = ^(PTCustomAlertView * alertView) {
+        
+    };
 }
 
 @end
