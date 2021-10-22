@@ -153,15 +153,8 @@ class LocalConsole: NSObject {
     {
         if terminal == nil
         {
-            terminal = PTTerminal.init()
+            terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
             terminal?.tag = SystemLogViewTag
-            AppWindows!.addSubview(terminal!)
-            terminal!.snp.makeConstraints({ make in
-                make.width.equalTo(systemLog_base_width)
-                make.height.equalTo(systemLog_base_height)
-                make.left.equalToSuperview()
-                make.top.equalToSuperview().inset(kNavBarHeight_Total)
-            })
             terminal!.menuButton.addActionHandlers { sender in
                 let actionSheet = PTActionSheetView.init(title: "调试功能", destructiveButton: "关闭",otherButtonTitles: self.popoverTitles,dismissWithTapBG: false)
                 actionSheet.show()
@@ -205,7 +198,7 @@ class LocalConsole: NSObject {
             }
             else
             {
-                let fileArr = manager.subpaths(atPath: DOGobalFileManager.gobalLogFileURL())
+                _ = manager.subpaths(atPath: DOGobalFileManager.gobalLogFileURL())
                 try? manager.removeItem(at: URL.init(string: "file:///" + DOGobalFileManager.gobalLogFileURL())!)
                 manager.createFile(atPath: file, contents: data, attributes: nil)
             }
@@ -272,9 +265,9 @@ class LocalConsole: NSObject {
             var volumesString = ""
             if #available(iOS 11.0, *)
             {
-                volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage as! CVarArg)
-                volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage as! CVarArg)
-                volumesString = String.init(format: "%d", Device.volumes as! CVarArg)
+                volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+                volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+                volumesString = String.init(format: "%d", Device.volumes!)
             }
             else
             {
@@ -305,23 +298,23 @@ class LocalConsole: NSObject {
                     Has3dTouchSupport: \(Device.current.has3dTouchSupport ? "Yes" : "No")
                     SupportsWirelessCharging: \(Device.current.supportsWirelessCharging ? "Yes" : "No")
                     HasLidarSensor: \(Device.current.hasLidarSensor ? "Yes" : "No")
-                    PPI: \(Device.current.ppi)
+                    PPI: \(Device.current.ppi ?? 0)
                     ScreenSize: \(UIScreen.main.bounds.size)
                     ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
                     ScreenScale: \(UIScreen.main.scale)
                     MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz
                     Brightness: \(String(format: "%.2f", UIScreen.main.brightness))
                     IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
-                    BatteryState: \(Device.current.batteryState)
-                    BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel as! CVarArg))
-                    VolumeTotalCapacity: \(String.init(format: "%d", Device.volumeTotalCapacity as! CVarArg))
-                    VolumeAvailableCapacity: \(String.init(format: "%d", Device.volumeAvailableCapacity as! CVarArg))
+                    BatteryState: \(Device.current.batteryState!)
+                    BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel!))
+                    VolumeTotalCapacity: \(String.init(format: "%d", Device.volumeTotalCapacity!))
+                    VolumeAvailableCapacity: \(String.init(format: "%d", Device.volumeAvailableCapacity!))
                     VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
                     VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
                     Volumes: \(volumesString)
                     ApplePencilSupport: \(Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) ? (Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) ? "Support First Generation" : "Not Support Second Generation") : "Both Not Support Second Generation")
                     HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
-                    HasNormalCamera: \(Device.current.hasNormalCamera ? "Yes" : "No")
+                    HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
                     HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
                     HasTelephotoCamera: \(Device.current.hasTelephotoCamera ? "Yes" : "No")
                     HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
@@ -348,7 +341,7 @@ class LocalConsole: NSObject {
         }
         else if dataName == LocalConsole.DEBUGKey || dataName == LocalConsole.NORMALKey
         {
-            let newBool:Bool = !App_UI_Debug_Bool as! Bool
+            let newBool:Bool = !App_UI_Debug_Bool
             UserDefaults.standard.set(newBool, forKey: LocalConsole.ConsoleDebug)
             
             popoverTitles.enumerated().forEach { (index,value) in
@@ -393,83 +386,91 @@ extension TimeInterval {
     }
 }
 
-class PTTerminal:UIView
+class PTTerminal:PFloatingButton
 {
     var systemView : PFloatingButton?
     var systemText : PTInvertedTextView?
     lazy var menuButton = UIButton()
     var systemIsVisible : Bool? = false
 
-    override init(frame:CGRect)
+    override init(view:Any,frame:CGRect)
     {
-        super.init(frame: frame)
-        
-        if systemView == nil
-        {
-            systemView = PFloatingButton.init(view: self, frame: .zero)
-            systemView?.backgroundColor = .black
-            systemView?.draggable = true
-            systemView?.layer.shadowRadius = 16
-            systemView?.layer.shadowOpacity = 0.5
-            systemView?.shadowOffset = CGSize.init(width: 0, height: 2)
-            systemView?.layer.cornerRadius = 22
-            systemView!.tag = 999999
-            if #available(iOS 13.0, *) {
-                systemView?.layer.cornerCurve = .continuous
-            }
-            systemView?.snp.makeConstraints({ make in
-                make.edges.equalToSuperview()
-            })
-            
-            let borderView = UIView()
-            borderView.layer.borderWidth = borderLine
-            borderView.layer.borderColor = UIColor.randomColor.cgColor
-            borderView.layer.cornerRadius = (systemView?.layer.cornerRadius)! + 1
-            if #available(iOS 13.0, *) {
-                borderView.layer.cornerCurve = .continuous
-            }
-            borderView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            systemView?.addSubview(borderView)
-            borderView.snp.makeConstraints { (make) in
-                make.left.right.top.bottom.equalToSuperview()
-            }
-            
-            systemText = PTInvertedTextView()
-            systemText?.isEditable = false
-            systemText?.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
-            systemText?.isSelectable = false
-            systemText?.showsVerticalScrollIndicator = false
-            systemText?.contentInsetAdjustmentBehavior = .never
-            systemText?.backgroundColor = .clear
-            systemView!.addSubview(systemText!)
-            systemText?.snp.makeConstraints { (make) in
-                make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
-            }
-            systemText?.layer.cornerRadius = (systemView?.layer.cornerRadius)! - 2
-            if #available(iOS 13.0, *) {
-                systemText?.layer.cornerCurve = .continuous
-            }
-
-            menuButton = UIButton.init(type: .custom)
-            menuButton.backgroundColor = UIColor(white: 0.2, alpha: 0.95)
-            if #available(iOS 13.0, *) {
-                menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
-            } else {
-                menuButton.setImage(UIImage.init(named: "icon_category"), for: .normal)
-            }
-            menuButton.imageView?.contentMode = .scaleAspectFit
-            menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-            systemView!.addSubview(menuButton)
-            menuButton.snp.makeConstraints { make in
-                make.width.equalTo(44)
-                make.height.equalTo(40)
-                make.right.bottom.equalToSuperview().inset(borderLine)
-            }
-            menuButton.viewCorner(radius: diameter / 2)
-            
-            menuButton.tintColor = UIColor(white: 1, alpha: 0.75)
-            systemIsVisible = true
+        super.init(view: view, frame: frame)
+        self.backgroundColor = .black
+        self.draggable = true
+        self.layer.shadowRadius = 16
+        self.layer.shadowOpacity = 0.5
+        self.shadowOffset = CGSize.init(width: 0, height: 2)
+        self.layer.cornerRadius = 22
+        self.tag = SystemLogViewTag
+        if #available(iOS 13.0, *) {
+            self.layer.cornerCurve = .continuous
         }
+        
+        let borderView = UIView()
+        borderView.layer.borderWidth = borderLine
+        borderView.layer.borderColor = UIColor.randomColor.cgColor
+        borderView.layer.cornerRadius = (self.layer.cornerRadius) + 1
+        if #available(iOS 13.0, *) {
+            borderView.layer.cornerCurve = .continuous
+        }
+        borderView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.addSubview(borderView)
+        borderView.snp.makeConstraints { (make) in
+            make.left.right.top.bottom.equalToSuperview()
+        }
+        
+        systemText = PTInvertedTextView()
+        systemText?.isEditable = false
+        systemText?.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
+        systemText?.isSelectable = false
+        systemText?.showsVerticalScrollIndicator = false
+        systemText?.contentInsetAdjustmentBehavior = .never
+        systemText?.backgroundColor = .clear
+        self.addSubview(systemText!)
+        systemText?.snp.makeConstraints { (make) in
+            make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
+        }
+        systemText?.layer.cornerRadius = (self.layer.cornerRadius) - 2
+        if #available(iOS 13.0, *) {
+            systemText?.layer.cornerCurve = .continuous
+        }
+
+        menuButton = UIButton.init(type: .custom)
+        menuButton.backgroundColor = UIColor(white: 0.2, alpha: 0.95)
+        if #available(iOS 13.0, *) {
+            menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
+        } else {
+            menuButton.setImage(UIImage.init(named: "icon_category"), for: .normal)
+        }
+        menuButton.imageView?.contentMode = .scaleAspectFit
+        menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
+        self.addSubview(menuButton)
+        menuButton.snp.makeConstraints { make in
+            make.width.equalTo(44)
+            make.height.equalTo(40)
+            make.right.bottom.equalToSuperview().inset(borderLine)
+        }
+        menuButton.viewCorner(radius: diameter / 2)
+        
+        menuButton.tintColor = UIColor(white: 1, alpha: 0.75)
+        systemIsVisible = true
+
+    }
+        
+    override func layoutIfNeeded() {
+        super.layoutIfNeeded()
+        
+        systemText?.snp.makeConstraints { (make) in
+            make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
+        }
+
+        menuButton.snp.makeConstraints { make in
+            make.width.equalTo(44)
+            make.height.equalTo(40)
+            make.right.bottom.equalToSuperview().inset(borderLine)
+        }
+
     }
     
     var fontSize: CGFloat? = LocalConsoleFontBaseSize {

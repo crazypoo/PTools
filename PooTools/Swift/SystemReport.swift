@@ -7,7 +7,6 @@
 
 import Foundation
 import MachO
-import CoreFoundation
 
 class SystemReport {
     static let shared = SystemReport()

@@ -122,7 +122,7 @@ class ResizeController {
             
             // Ensure initial autolayout is performed unanimated.
             
-            AppWindows!.bringSubviewToFront(terminalView.systemView!)
+            AppWindows!.bringSubviewToFront(terminalView)
             
             terminalView.menuButton.isHidden = isActive
             
@@ -142,8 +142,8 @@ class ResizeController {
                 
                 
                 if #available(iOS 12.0, *) {
-                    if terminalView.systemView!.traitCollection.userInterfaceStyle == .light {
-                        terminalView.systemView!.layer.shadowOpacity = 0.25
+                    if terminalView.traitCollection.userInterfaceStyle == .light {
+                        terminalView.layer.shadowOpacity = 0.25
                     }
                 }
                 
@@ -151,7 +151,7 @@ class ResizeController {
                 AppWindows!.backgroundColor = .clear
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                    self.terminalView.systemView!.center = self.consoleCenterPoint
+                    self.terminalView.center = self.consoleCenterPoint
                     
                     // Update grabbers (layout constraints)
                     AppWindows!.backgroundColor = .randomColor
@@ -176,10 +176,10 @@ class ResizeController {
                 consoleOutlineView.isUserInteractionEnabled = true
             } else {
                 
-                terminalView.systemView!.layer.shadowOpacity = 0.5
+                terminalView.layer.shadowOpacity = 0.5
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                    self.terminalView.systemView!.center = CGPoint.init(x: Double(self.terminalView.systemView!.bounds.width)/2, y: Double(self.terminalView.systemView!.bounds.height)/2 + Double(kStatusBarHeight))
+                    self.terminalView.center = CGPoint.init(x: Double(self.terminalView.bounds.width)/2, y: Double(self.terminalView.bounds.height)/2 + Double(kStatusBarHeight))
 //
 //                    // Update grabbers (layout constraints)
                     AppWindows!.backgroundColor = .clear
@@ -212,7 +212,7 @@ class ResizeController {
         
         switch recognizer.state {
         case .began:
-            initialHeight = terminalView.systemView!.height
+            initialHeight = terminalView.height
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                 bottomGrabberPillView.alpha = 0.6
@@ -238,21 +238,22 @@ class ResizeController {
                 }
             }()
             
-            terminalView.systemView!.bounds.size.height = resolvedHeight
-            terminalView.systemView!.center.y = consoleCenterPoint.y
+            terminalView.bounds.size.height = resolvedHeight
+            terminalView.center.y = consoleCenterPoint.y
 
         case .ended, .cancelled:
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
-                if self.terminalView.systemView!.bounds.size.height > maxHeight {
-                    self.terminalView.systemView!.bounds.size.height = maxHeight
+                if self.terminalView.bounds.size.height > maxHeight {
+                    self.terminalView.bounds.size.height = maxHeight
                 }
-                if self.terminalView.systemView!.bounds.size.height < minHeight {
-                    self.terminalView.systemView!.bounds.size.height = minHeight
+                if self.terminalView.bounds.size.height < minHeight {
+                    self.terminalView.bounds.size.height = minHeight
                 }
                 
-                self.terminalView.systemView!.center.y = self.consoleCenterPoint.y
+                self.terminalView.center.y = self.consoleCenterPoint.y
                 
                 // Animate autolayout updates.
+                self.terminalView.layoutIfNeeded()
                 AppWindows!.layoutIfNeeded()
             }.startAnimation()
             
@@ -278,7 +279,7 @@ class ResizeController {
         
         switch recognizer.state {
         case .began:
-            initialWidth = terminalView.systemView!.bounds.size.width
+            initialWidth = terminalView.bounds.size.width
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                 rightGrabberPillView.alpha = 0.6
@@ -304,22 +305,23 @@ class ResizeController {
                 }
             }()
             
-            terminalView.systemView!.bounds.size.width = resolvedWidth
-            terminalView.systemView!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+            terminalView.bounds.size.width = resolvedWidth
+            terminalView.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
 
         case .ended, .cancelled:
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
-                if self.terminalView.systemView!.bounds.size.width > maxWidth {
-                    self.terminalView.systemView!.bounds.size.width = maxWidth
+                if self.terminalView.bounds.size.width > maxWidth {
+                    self.terminalView.bounds.size.width = maxWidth
                 }
-                if self.terminalView.systemView!.bounds.size.width < minWidth {
-                    self.terminalView.systemView!.bounds.size.width = minWidth
+                if self.terminalView.bounds.size.width < minWidth {
+                    self.terminalView.bounds.size.width = minWidth
                 }
                 
-                self.terminalView.systemView!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+                self.terminalView.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
                 
                 // Animate autolayout updates.
+                self.terminalView.layoutIfNeeded()
                 AppWindows!.layoutIfNeeded()
             }.startAnimation()
             
@@ -502,13 +504,13 @@ class PlatterView: UIView,UITextFieldDelegate {
         
         button.addActionHandlers { sender in
             // Resolves a text view frame animation bug that occurs when *decreasing* text view width.
-            if self.terminalView.systemView!.bounds.size.width > systemLog_base_width {
+            if self.terminalView.bounds.size.width > systemLog_base_width {
                 self.terminalView.systemText!.frame.size.width = systemLog_base_width - borderLine * 4
             }
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-                self.terminalView.systemView!.bounds.size = CGSize.init(width: systemLog_base_width, height: systemLog_base_height)
-                self.terminalView.systemView!.center = ResizeController.shared.consoleCenterPoint
+                self.terminalView.bounds.size = CGSize.init(width: systemLog_base_width, height: systemLog_base_height)
+                self.terminalView.center = ResizeController.shared.consoleCenterPoint
                 self.terminalView.fontSize = LocalConsoleFontBaseSize
                 AppWindows!.layoutIfNeeded()
             }.startAnimation()
@@ -586,7 +588,7 @@ class PlatterView: UIView,UITextFieldDelegate {
                     // Stick buttons to bottom.
                     [fontText,doneButton, resetButton,
                      ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                     self.terminalView.systemView!
+                     self.terminalView
                     ].forEach {
                         $0.transform = .identity
                     }
@@ -602,7 +604,7 @@ class PlatterView: UIView,UITextFieldDelegate {
                     
                     ResizeController.shared.bottomGrabber.transform = .init(translationX: 0, y: -excess / 2.5)
                     ResizeController.shared.rightGrabber.transform = .init(translationX: 0, y: -excess / 2)
-                    self.terminalView.systemView!.transform = .init(translationX: 0, y: -excess / 2)
+                    self.terminalView.transform = .init(translationX: 0, y: -excess / 2)
                     
                     return possibleEndpoints[0].y - excess
                 }
@@ -642,7 +644,7 @@ class PlatterView: UIView,UITextFieldDelegate {
 
                 [fontText,doneButton, resetButton,
                  ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                 self.terminalView.systemView!
+                 self.terminalView
                 ].forEach {
                     $0.transform = .identity
                 }
