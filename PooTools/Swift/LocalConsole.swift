@@ -10,14 +10,14 @@ import UIKit
 import DeviceKit
 import CoreFoundation
 
-let LocalConsoleFontBaseSize:CGFloat = 7.5
-let LocalConsoleFontMin:CGFloat = 4
-let LocalConsoleFontMax:CGFloat = 20
-let SystemLogViewTag = 999999
-let systemLog_base_width:CGFloat = 228
-let systemLog_base_height:CGFloat = 142
-let borderLine:CGFloat = 5
-let diameter:CGFloat = 28
+public let LocalConsoleFontBaseSize:CGFloat = 7.5
+public let LocalConsoleFontMin:CGFloat = 4
+public let LocalConsoleFontMax:CGFloat = 20
+public let SystemLogViewTag = 999999
+public let systemLog_base_width:CGFloat = 228
+public let systemLog_base_height:CGFloat = 142
+public let borderLine:CGFloat = 5
+public let diameter:CGFloat = 28
 
 public var App_UI_Debug_Bool:Bool
 {
@@ -41,7 +41,7 @@ class ConsoleWindow: UIWindow {
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
 
-    enum LocalConsoleActionType {
+    public enum LocalConsoleActionType {
         case CopyLog
         case ShareLog
         case RestoreUserDefult
@@ -51,11 +51,11 @@ public class LocalConsole: NSObject {
         case NoActionCallBack
     }
     
-    static let ConsoleDebug = "UI_debug"
+    public static let ConsoleDebug = "UI_debug"
     
-    var consoleActionBlock:((_ actionType:LocalConsoleActionType,_ debug:Bool?,_ logUrl:URL?)->Void)?
+    public var consoleActionBlock:((_ actionType:LocalConsoleActionType,_ debug:Bool?,_ logUrl:URL?)->Void)?
     
-    var terminal:PTTerminal?
+    public var terminal:PTTerminal?
     var currentText: String = "" {
         didSet {
             DispatchQueue.main.async {
@@ -130,7 +130,7 @@ public class LocalConsole: NSObject {
         super.init()
     }
     
-    func cleanSystemLogView()
+    public func cleanSystemLogView()
     {
         terminal?.removeFromSuperview()
         terminal = nil
@@ -149,7 +149,7 @@ public class LocalConsole: NSObject {
         terminal!.systemText!.contentOffset.y = terminal!.systemText!.contentSize.height
     }
         
-    func createSystemLogView()
+    public func createSystemLogView()
     {
         if terminal == nil
         {
@@ -369,7 +369,7 @@ public class LocalConsole: NSObject {
         }
     }
 
-    func print(_ items: Any) {
+    public func print(_ items: Any) {
         if currentText == "" {
             currentText = "\(items)"
         } else {
@@ -386,12 +386,11 @@ extension TimeInterval {
     }
 }
 
-class PTTerminal:PFloatingButton
+public class PTTerminal:PFloatingButton
 {
-    var systemView : PFloatingButton?
-    var systemText : PTInvertedTextView?
-    lazy var menuButton = UIButton()
-    var systemIsVisible : Bool? = false
+    public var systemText : PTInvertedTextView?
+    public lazy var menuButton = UIButton()
+    public var systemIsVisible : Bool? = false
 
     override init(view:Any,frame:CGRect)
     {
@@ -458,7 +457,7 @@ class PTTerminal:PFloatingButton
 
     }
         
-    override func layoutIfNeeded() {
+    public override func layoutIfNeeded() {
         super.layoutIfNeeded()
         
         systemText?.snp.makeConstraints { (make) in
@@ -473,7 +472,7 @@ class PTTerminal:PFloatingButton
 
     }
     
-    var fontSize: CGFloat? = LocalConsoleFontBaseSize {
+    public var fontSize: CGFloat? = LocalConsoleFontBaseSize {
         didSet {
             guard fontSize! >= LocalConsoleFontMin else { fontSize = LocalConsoleFontMin; return }
             guard fontSize! <= LocalConsoleFontMax else { fontSize = LocalConsoleFontMax; return }
@@ -481,7 +480,7 @@ class PTTerminal:PFloatingButton
         }
     }
 
-    func setAttributedText(_ string: String) {
+    public func setAttributedText(_ string: String) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.headIndent = 7
         

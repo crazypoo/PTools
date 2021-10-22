@@ -8,12 +8,12 @@
 
 import UIKit
 
-class PTInvertedTextView: UITextView {
+public class PTInvertedTextView: UITextView {
 
-    var pendingOffsetChange = false
+    public var pendingOffsetChange = false
     
     // Thanks to WWDC21 Lab!
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
 
         if panGestureRecognizer.numberOfTouches == 0 && pendingOffsetChange {
@@ -23,9 +23,9 @@ class PTInvertedTextView: UITextView {
         }
     }
     
-    var cancelNextContentSizeDidSet = false
+    public var cancelNextContentSizeDidSet = false
     
-    override var contentSize: CGSize {
+    public override var contentSize: CGSize {
         didSet {
             cancelNextContentSizeDidSet = true
             

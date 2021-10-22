@@ -8,12 +8,12 @@
 
 import UIKit
 
-class PFloatingButton: UIButton {
+public class PFloatingButton: UIButton {
     
-    static let RC_POINT_NULL = CGPoint.init(x: CGFloat(MAXFLOAT), y: -CGFloat(MAXFLOAT))
-    static let RC_TRACES_NUMBER = 10
-    static let RC_TRACE_DISMISS_TIME_INTERVAL = 0.5
-    static let RC_DEFAULT_ANIMATE_DURATION = 0.2
+    public static let RC_POINT_NULL = CGPoint.init(x: CGFloat(MAXFLOAT), y: -CGFloat(MAXFLOAT))
+    public static let RC_TRACES_NUMBER = 10
+    public static let RC_TRACE_DISMISS_TIME_INTERVAL = 0.5
+    public static let RC_DEFAULT_ANIMATE_DURATION = 0.2
     
     var longPressBlock:((_ button:PFloatingButton)->Void)?
     {
@@ -149,7 +149,7 @@ class PFloatingButton: UIButton {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
     {
         isDragging = false
         super.touchesBegan(touches, with: event)
@@ -168,7 +168,7 @@ class PFloatingButton: UIButton {
         touchBeginPoint = touch.location(in: self)
     }
     
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if draggable!
         {
             isDragging = true
@@ -198,7 +198,7 @@ class PFloatingButton: UIButton {
         }
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         if (isDragging! && dragEndedBlock != nil) {
             dragEndedBlock!(self);
@@ -225,7 +225,7 @@ class PFloatingButton: UIButton {
         isDragging = false
     }
 
-    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         isDragging = false
         singleTapCanceled = true
