@@ -9,3 +9,4 @@
 #import "PTBridgeObject.h"
 #import <SDWebImage/UIButton+WebCache.h>
 #import "UIButton+Block.h"
+#import "DOGobalFileManager.h"

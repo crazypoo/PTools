@@ -135,6 +135,7 @@
 #import "PSlider.h"
 #import "MAThermometer.h"
 #import "MAThermometerBorder.h"
+#import "DOGobalFileManager.h"
 #import "PMacros.h"
 #import "Utils.h"
 #import "PVideoConfig.h"

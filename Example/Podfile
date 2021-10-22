@@ -6,6 +6,9 @@ target 'PooTools_Example' do
   pod 'WZLBadge'
   pod 'SnapKit'
   pod 'YYKit'
+  pod 'SwifterSwift'
 #  pod 'WoodPeckeriOS'
   pod "GCDWebServer/WebUploader", "~> 3.0"
+  pod 'HandyJSON' #JSON处理
+  pod 'DeviceKit', '~> 4.0'
 end

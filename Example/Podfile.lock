@@ -17,6 +17,7 @@ PODS:
   - CYLTabBarController (1.29.2):
     - CYLTabBarController/Core (= 1.29.2)
   - CYLTabBarController/Core (1.29.2)
+  - DeviceKit (4.5.1)
   - DHSmartScreenshot (1.3.1)
   - DZNEmptyDataSet (1.8.1)
   - FDFullscreenPopGesture (1.1)
@@ -28,6 +29,7 @@ PODS:
   - GCDWebServer/Core (3.5.4)
   - GCDWebServer/WebUploader (3.5.4):
     - GCDWebServer/Core
+  - HandyJSON (5.0.2)
   - HTAutocompleteTextField (1.3.2)
   - IQKeyboardManager (6.5.6)
   - LTNavigationBar (2.1.9)
@@ -39,15 +41,17 @@ PODS:
   - MJExtension (3.3.0)
   - MJRefresh (3.7.2)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (2.0.12):
+  - PooTools (2.0.13):
     - AFNetworking
     - CYLTabBarController
+    - DeviceKit
     - DHSmartScreenshot
     - DZNEmptyDataSet
     - FDFullscreenPopGesture
     - FMDB
     - GCDWebServer
     - GCDWebServer/WebUploader
+    - HandyJSON
     - HTAutocompleteTextField
     - IQKeyboardManager
     - LTNavigationBar
@@ -61,6 +65,7 @@ PODS:
     - SDWebImage
     - SnapKit
     - SSZipArchive
+    - SwifterSwift
     - TextFieldEffects
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
@@ -74,6 +79,31 @@ PODS:
   - SDWebImage/Core (5.11.1)
   - SnapKit (5.0.1)
   - SSZipArchive (2.4.2)
+  - SwifterSwift (5.2.0):
+    - SwifterSwift/AppKit (= 5.2.0)
+    - SwifterSwift/CoreAnimation (= 5.2.0)
+    - SwifterSwift/CoreGraphics (= 5.2.0)
+    - SwifterSwift/CoreLocation (= 5.2.0)
+    - SwifterSwift/Dispatch (= 5.2.0)
+    - SwifterSwift/Foundation (= 5.2.0)
+    - SwifterSwift/MapKit (= 5.2.0)
+    - SwifterSwift/SceneKit (= 5.2.0)
+    - SwifterSwift/SpriteKit (= 5.2.0)
+    - SwifterSwift/StoreKit (= 5.2.0)
+    - SwifterSwift/SwiftStdlib (= 5.2.0)
+    - SwifterSwift/UIKit (= 5.2.0)
+  - SwifterSwift/AppKit (5.2.0)
+  - SwifterSwift/CoreAnimation (5.2.0)
+  - SwifterSwift/CoreGraphics (5.2.0)
+  - SwifterSwift/CoreLocation (5.2.0)
+  - SwifterSwift/Dispatch (5.2.0)
+  - SwifterSwift/Foundation (5.2.0)
+  - SwifterSwift/MapKit (5.2.0)
+  - SwifterSwift/SceneKit (5.2.0)
+  - SwifterSwift/SpriteKit (5.2.0)
+  - SwifterSwift/StoreKit (5.2.0)
+  - SwifterSwift/SwiftStdlib (5.2.0)
+  - SwifterSwift/UIKit (5.2.0)
   - TextFieldEffects (1.6.0)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
@@ -85,9 +115,12 @@ PODS:
   - YYKit/no-arc (1.0.9)
 
 DEPENDENCIES:
+  - DeviceKit (~> 4.0)
   - GCDWebServer/WebUploader (~> 3.0)
+  - HandyJSON
   - PooTools (from `../`)
   - SnapKit
+  - SwifterSwift
   - WZLBadge
   - YYKit
 
@@ -95,11 +128,13 @@ SPEC REPOS:
   trunk:
     - AFNetworking
     - CYLTabBarController
+    - DeviceKit
     - DHSmartScreenshot
     - DZNEmptyDataSet
     - FDFullscreenPopGesture
     - FMDB
     - GCDWebServer
+    - HandyJSON
     - HTAutocompleteTextField
     - IQKeyboardManager
     - LTNavigationBar
@@ -113,6 +148,7 @@ SPEC REPOS:
     - SDWebImage
     - SnapKit
     - SSZipArchive
+    - SwifterSwift
     - TextFieldEffects
     - "UITableView+FDTemplateLayoutCell"
     - "UITextField+Shake"
@@ -128,11 +164,13 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   CYLTabBarController: db44b5901a28693a8a4279e4721b3aafdd36c178
+  DeviceKit: 8664c09f619f53e48000b41ee3bb7573158a333b
   DHSmartScreenshot: ee749048bd7126c4826748f98df3a4adc6ad6c78
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
+  HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   HTAutocompleteTextField: ce809f04875e843e20f214ab973bb496ba7a93b1
   IQKeyboardManager: 2a6e97afdafc7becf0cb17a9a8d795e3a980717f
   LTNavigationBar: c278785bed344862e18146b5f06792932e4feacc
@@ -142,11 +180,12 @@ SPEC CHECKSUMS:
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: dfdb9a1a910a327961f34225f36f4edab1531e1c
+  PooTools: 1e3b4c2900e13bcff8f744d94943fa9d67102a78
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
+  SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
   "UITableView+FDTemplateLayoutCell": 5c949b4a5059c404b442926c0e80f81d10a2d66f
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
@@ -155,6 +194,6 @@ SPEC CHECKSUMS:
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 8b87c1672a4d8cfd8f3a0e81899360ea7d7c65b7
+PODFILE CHECKSUM: 8ff64cecbb2b7b89eb020a3b7b8728ccce9fc981
 
 COCOAPODS: 1.11.2

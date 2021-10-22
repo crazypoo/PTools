@@ -7,6 +7,45 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		230FC54C272268E0005A8D08 /* PTTagsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC52C272268DC005A8D08 /* PTTagsLabel.swift */; };
+		230FC54D272268E0005A8D08 /* PTBiologyID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC52D272268DC005A8D08 /* PTBiologyID.swift */; };
+		230FC54E272268E0005A8D08 /* SSBlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC52E272268DC005A8D08 /* SSBlurView.swift */; };
+		230FC54F272268E0005A8D08 /* PTInvertedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC52F272268DC005A8D08 /* PTInvertedTextView.swift */; };
+		230FC550272268E0005A8D08 /* UIApplication+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC530272268DC005A8D08 /* UIApplication+PTEX.swift */; };
+		230FC551272268E0005A8D08 /* PTDevMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC531272268DC005A8D08 /* PTDevMaskView.swift */; };
+		230FC552272268E0005A8D08 /* PTCustomAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC532272268DC005A8D08 /* PTCustomAlertView.swift */; };
+		230FC553272268E0005A8D08 /* PTLaunchAdMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC533272268DD005A8D08 /* PTLaunchAdMonitor.swift */; };
+		230FC554272268E0005A8D08 /* NSMutableArray+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC534272268DD005A8D08 /* NSMutableArray+PTEX.swift */; };
+		230FC555272268E0005A8D08 /* PTLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC535272268DD005A8D08 /* PTLabel.swift */; };
+		230FC557272268E0005A8D08 /* PSecurityStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC537272268DD005A8D08 /* PSecurityStrategy.swift */; };
+		230FC558272268E0005A8D08 /* PTGuidePageHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC538272268DD005A8D08 /* PTGuidePageHUD.swift */; };
+		230FC559272268E0005A8D08 /* PTFileDownLoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC539272268DD005A8D08 /* PTFileDownLoadManager.swift */; };
+		230FC55A272268E0005A8D08 /* PTCheckAppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53A272268DE005A8D08 /* PTCheckAppStatus.swift */; };
+		230FC55B272268E0005A8D08 /* PTActionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53B272268DE005A8D08 /* PTActionSheetView.swift */; };
+		230FC55C272268E0005A8D08 /* String+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53C272268DE005A8D08 /* String+PTEX.swift */; };
+		230FC55D272268E0005A8D08 /* PTMarcos_swift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53D272268DE005A8D08 /* PTMarcos_swift.swift */; };
+		230FC55E272268E0005A8D08 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53E272268DE005A8D08 /* PTUrlChange.swift */; };
+		230FC55F272268E0005A8D08 /* UIView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC53F272268DE005A8D08 /* UIView+PTEX.swift */; };
+		230FC560272268E0005A8D08 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC540272268DE005A8D08 /* Data+PTEX.swift */; };
+		230FC561272268E0005A8D08 /* PTCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC541272268DE005A8D08 /* PTCollectionLayout.swift */; };
+		230FC562272268E0005A8D08 /* PCleanCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC542272268DF005A8D08 /* PCleanCache.swift */; };
+		230FC563272268E0005A8D08 /* UIImage+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC543272268DF005A8D08 /* UIImage+PTEX.swift */; };
+		230FC564272268E0005A8D08 /* PTUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC544272268DF005A8D08 /* PTUtils.swift */; };
+		230FC565272268E0005A8D08 /* UIColor+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC545272268DF005A8D08 /* UIColor+PTEX.swift */; };
+		230FC566272268E0005A8D08 /* NSDictionary+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC546272268DF005A8D08 /* NSDictionary+PTEX.swift */; };
+		230FC567272268E0005A8D08 /* PTPurchaseCarAnimationTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC547272268DF005A8D08 /* PTPurchaseCarAnimationTool.swift */; };
+		230FC568272268E0005A8D08 /* PooSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC548272268DF005A8D08 /* PooSegmentView.swift */; };
+		230FC569272268E0005A8D08 /* UIButton+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC549272268DF005A8D08 /* UIButton+PTEX.swift */; };
+		230FC56A272268E0005A8D08 /* PFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC54A272268E0005A8D08 /* PFloatingButton.swift */; };
+		230FC56B272268E0005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC54B272268E0005A8D08 /* Shared.swift */; };
+		230FC5772722716D005A8D08 /* BKCutsomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC5762722716D005A8D08 /* BKCutsomButton.swift */; };
+		230FC5792722734D005A8D08 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC5782722734D005A8D08 /* PTBaseModel.swift */; };
+		230FC58427227959005A8D08 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58227227958005A8D08 /* DOGobalFileManager.m */; };
+		230FC58B27227ED9005A8D08 /* GestureEndpointPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */; };
+		230FC58C27227ED9005A8D08 /* BorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58827227ED9005A8D08 /* BorderManager.swift */; };
+		230FC58D27227ED9005A8D08 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58927227ED9005A8D08 /* Extensions.swift */; };
+		230FC58E27227ED9005A8D08 /* SystemReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58A27227ED9005A8D08 /* SystemReport.swift */; };
+		230FC592272280F4005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC591272280F4005A8D08 /* Shared.swift */; };
 		2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 233340FF26A0369100E4DF25 /* PTBridgeObject.m */; };
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
@@ -175,6 +214,46 @@
 
 /* Begin PBXFileReference section */
 		09F5E848A8A1AA0F548F1C11 /* Pods_PooTools_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		230FC52C272268DC005A8D08 /* PTTagsLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTagsLabel.swift; sourceTree = "<group>"; };
+		230FC52D272268DC005A8D08 /* PTBiologyID.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBiologyID.swift; sourceTree = "<group>"; };
+		230FC52E272268DC005A8D08 /* SSBlurView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SSBlurView.swift; sourceTree = "<group>"; };
+		230FC52F272268DC005A8D08 /* PTInvertedTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTInvertedTextView.swift; sourceTree = "<group>"; };
+		230FC530272268DC005A8D08 /* UIApplication+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIApplication+PTEX.swift"; sourceTree = "<group>"; };
+		230FC531272268DC005A8D08 /* PTDevMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDevMaskView.swift; sourceTree = "<group>"; };
+		230FC532272268DC005A8D08 /* PTCustomAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCustomAlertView.swift; sourceTree = "<group>"; };
+		230FC533272268DD005A8D08 /* PTLaunchAdMonitor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTLaunchAdMonitor.swift; sourceTree = "<group>"; };
+		230FC534272268DD005A8D08 /* NSMutableArray+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSMutableArray+PTEX.swift"; sourceTree = "<group>"; };
+		230FC535272268DD005A8D08 /* PTLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTLabel.swift; sourceTree = "<group>"; };
+		230FC537272268DD005A8D08 /* PSecurityStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSecurityStrategy.swift; sourceTree = "<group>"; };
+		230FC538272268DD005A8D08 /* PTGuidePageHUD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTGuidePageHUD.swift; sourceTree = "<group>"; };
+		230FC539272268DD005A8D08 /* PTFileDownLoadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFileDownLoadManager.swift; sourceTree = "<group>"; };
+		230FC53A272268DE005A8D08 /* PTCheckAppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCheckAppStatus.swift; sourceTree = "<group>"; };
+		230FC53B272268DE005A8D08 /* PTActionSheetView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTActionSheetView.swift; sourceTree = "<group>"; };
+		230FC53C272268DE005A8D08 /* String+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "String+PTEX.swift"; sourceTree = "<group>"; };
+		230FC53D272268DE005A8D08 /* PTMarcos_swift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMarcos_swift.swift; sourceTree = "<group>"; };
+		230FC53E272268DE005A8D08 /* PTUrlChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUrlChange.swift; sourceTree = "<group>"; };
+		230FC53F272268DE005A8D08 /* UIView+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+PTEX.swift"; sourceTree = "<group>"; };
+		230FC540272268DE005A8D08 /* Data+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+PTEX.swift"; sourceTree = "<group>"; };
+		230FC541272268DE005A8D08 /* PTCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCollectionLayout.swift; sourceTree = "<group>"; };
+		230FC542272268DF005A8D08 /* PCleanCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PCleanCache.swift; sourceTree = "<group>"; };
+		230FC543272268DF005A8D08 /* UIImage+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIImage+PTEX.swift"; sourceTree = "<group>"; };
+		230FC544272268DF005A8D08 /* PTUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUtils.swift; sourceTree = "<group>"; };
+		230FC545272268DF005A8D08 /* UIColor+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+PTEX.swift"; sourceTree = "<group>"; };
+		230FC546272268DF005A8D08 /* NSDictionary+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDictionary+PTEX.swift"; sourceTree = "<group>"; };
+		230FC547272268DF005A8D08 /* PTPurchaseCarAnimationTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPurchaseCarAnimationTool.swift; sourceTree = "<group>"; };
+		230FC548272268DF005A8D08 /* PooSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PooSegmentView.swift; sourceTree = "<group>"; };
+		230FC549272268DF005A8D08 /* UIButton+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+PTEX.swift"; sourceTree = "<group>"; };
+		230FC54A272268E0005A8D08 /* PFloatingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFloatingButton.swift; sourceTree = "<group>"; };
+		230FC54B272268E0005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		230FC5762722716D005A8D08 /* BKCutsomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BKCutsomButton.swift; sourceTree = "<group>"; };
+		230FC5782722734D005A8D08 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
+		230FC58227227958005A8D08 /* DOGobalFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOGobalFileManager.m; sourceTree = "<group>"; };
+		230FC58327227959005A8D08 /* DOGobalFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOGobalFileManager.h; sourceTree = "<group>"; };
+		230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GestureEndpointPredictor.swift; sourceTree = "<group>"; };
+		230FC58827227ED9005A8D08 /* BorderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderManager.swift; sourceTree = "<group>"; };
+		230FC58927227ED9005A8D08 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		230FC58A27227ED9005A8D08 /* SystemReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SystemReport.swift; path = ../../../upbong_ios/Diou/Common/Main/Gobal/ViewController/SystemReport.swift; sourceTree = "<group>"; };
+		230FC591272280F4005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 		233340FE26A0369100E4DF25 /* PTBridgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTBridgeObject.h; sourceTree = "<group>"; };
 		233340FF26A0369100E4DF25 /* PTBridgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTBridgeObject.m; sourceTree = "<group>"; };
 		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
@@ -550,6 +629,51 @@
 				77F5D0446CAF22C1C8B37FBE /* Pods-PooTools_Tests.release.xcconfig */,
 			);
 			name = Pods;
+			sourceTree = "<group>";
+		};
+		230FC52B272268D0005A8D08 /* Swift */ = {
+			isa = PBXGroup;
+			children = (
+				230FC591272280F4005A8D08 /* Shared.swift */,
+				230FC58827227ED9005A8D08 /* BorderManager.swift */,
+				230FC58927227ED9005A8D08 /* Extensions.swift */,
+				230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */,
+				230FC58A27227ED9005A8D08 /* SystemReport.swift */,
+				230FC5762722716D005A8D08 /* BKCutsomButton.swift */,
+				230FC540272268DE005A8D08 /* Data+PTEX.swift */,
+				230FC546272268DF005A8D08 /* NSDictionary+PTEX.swift */,
+				230FC534272268DD005A8D08 /* NSMutableArray+PTEX.swift */,
+				230FC542272268DF005A8D08 /* PCleanCache.swift */,
+				230FC54A272268E0005A8D08 /* PFloatingButton.swift */,
+				230FC548272268DF005A8D08 /* PooSegmentView.swift */,
+				230FC537272268DD005A8D08 /* PSecurityStrategy.swift */,
+				230FC53B272268DE005A8D08 /* PTActionSheetView.swift */,
+				230FC52D272268DC005A8D08 /* PTBiologyID.swift */,
+				230FC53A272268DE005A8D08 /* PTCheckAppStatus.swift */,
+				230FC541272268DE005A8D08 /* PTCollectionLayout.swift */,
+				230FC532272268DC005A8D08 /* PTCustomAlertView.swift */,
+				230FC531272268DC005A8D08 /* PTDevMaskView.swift */,
+				230FC539272268DD005A8D08 /* PTFileDownLoadManager.swift */,
+				230FC538272268DD005A8D08 /* PTGuidePageHUD.swift */,
+				230FC52F272268DC005A8D08 /* PTInvertedTextView.swift */,
+				230FC535272268DD005A8D08 /* PTLabel.swift */,
+				230FC533272268DD005A8D08 /* PTLaunchAdMonitor.swift */,
+				230FC53D272268DE005A8D08 /* PTMarcos_swift.swift */,
+				230FC547272268DF005A8D08 /* PTPurchaseCarAnimationTool.swift */,
+				230FC52C272268DC005A8D08 /* PTTagsLabel.swift */,
+				230FC53E272268DE005A8D08 /* PTUrlChange.swift */,
+				230FC544272268DF005A8D08 /* PTUtils.swift */,
+				230FC54B272268E0005A8D08 /* Shared.swift */,
+				230FC52E272268DC005A8D08 /* SSBlurView.swift */,
+				230FC53C272268DE005A8D08 /* String+PTEX.swift */,
+				230FC530272268DC005A8D08 /* UIApplication+PTEX.swift */,
+				230FC549272268DF005A8D08 /* UIButton+PTEX.swift */,
+				230FC545272268DF005A8D08 /* UIColor+PTEX.swift */,
+				230FC543272268DF005A8D08 /* UIImage+PTEX.swift */,
+				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
+				230FC5782722734D005A8D08 /* PTBaseModel.swift */,
+			);
+			path = Swift;
 			sourceTree = "<group>";
 		};
 		233340FD26A0367700E4DF25 /* Bridge */ = {
@@ -1228,6 +1352,8 @@
 		C08D9DF32276904D001417F1 /* UniTool */ = {
 			isa = PBXGroup;
 			children = (
+				230FC58327227959005A8D08 /* DOGobalFileManager.h */,
+				230FC58227227958005A8D08 /* DOGobalFileManager.m */,
 				CC1257612098319200E31A38 /* PMacros.h */,
 				CC12579F2098319200E31A38 /* Utils.h */,
 				CC1257A02098319200E31A38 /* Utils.m */,
@@ -1274,6 +1400,7 @@
 		CC1257332098319200E31A38 /* PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				230FC52B272268D0005A8D08 /* Swift */,
 				233340FD26A0367700E4DF25 /* Bridge */,
 				2334398225AA82EB00C2203A /* AppDeviceInfo */,
 				2352EA712543BD9E002AE25C /* Animation */,
@@ -1413,10 +1540,12 @@
 				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
 				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
+				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/HTAutocompleteTextField/HTAutocompleteTextField.framework",
+				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/LTNavigationBar/LTNavigationBar.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
@@ -1429,6 +1558,7 @@
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
@@ -1444,10 +1574,12 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTAutocompleteTextField.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTNavigationBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
@@ -1460,6 +1592,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
@@ -1505,6 +1638,8 @@
 				CCD660C021DCCD3B004AA57D /* IGHTTPRequestBuilderManager.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */,
+				230FC55B272268E0005A8D08 /* PTActionSheetView.swift in Sources */,
+				230FC553272268E0005A8D08 /* PTLaunchAdMonitor.swift in Sources */,
 				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */,
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
@@ -1514,18 +1649,24 @@
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC1257C42098319300E31A38 /* PLaunchAdMonitor.m in Sources */,
 				CC35017521FE90DC00E64074 /* UITableView+WWFoldableTableView.m in Sources */,
+				230FC55F272268E0005A8D08 /* UIView+PTEX.swift in Sources */,
+				230FC555272268E0005A8D08 /* PTLabel.swift in Sources */,
 				CC15EB1E21FC54690033D99F /* EasySignatureView.m in Sources */,
+				230FC55A272268E0005A8D08 /* PTCheckAppStatus.swift in Sources */,
 				CC3838D5214364D100453548 /* PVideoListViewController.m in Sources */,
 				CC1257E52098319300E31A38 /* WMHubView.m in Sources */,
 				CC1257D42098319300E31A38 /* PTextField.m in Sources */,
 				CC658CDD20AC3D8400949DF6 /* CGADCollectionViewCell.m in Sources */,
 				CCDD3CD6217EFBF40021BC19 /* PGetIpAddresses.m in Sources */,
+				230FC5772722716D005A8D08 /* BKCutsomButton.swift in Sources */,
 				CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
 				CC87F801224C5B33003EA1FF /* PTCheckAppStatus.m in Sources */,
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,
+				230FC559272268E0005A8D08 /* PTFileDownLoadManager.swift in Sources */,
+				230FC552272268E0005A8D08 /* PTCustomAlertView.swift in Sources */,
 				CC4C717E218AD4F6008B1804 /* UICountingLabel.m in Sources */,
 				CC1257E62098319300E31A38 /* WMHubViewController.m in Sources */,
 				CC1257E22098319300E31A38 /* UIViewController+TopBarMessage.m in Sources */,
@@ -1534,14 +1675,19 @@
 				CC1257B72098319300E31A38 /* LGTMBase64.m in Sources */,
 				CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */,
 				CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */,
+				230FC56B272268E0005A8D08 /* Shared.swift in Sources */,
 				CC1257BA2098319300E31A38 /* NSMutableString+TagReplace.m in Sources */,
 				CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */,
 				CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */,
+				230FC58D27227ED9005A8D08 /* Extensions.swift in Sources */,
 				CCD660BB21DCCD3B004AA57D /* IGTestParser.m in Sources */,
+				230FC563272268E0005A8D08 /* UIImage+PTEX.swift in Sources */,
 				CC1257B52098319300E31A38 /* HPTextViewInternal.m in Sources */,
+				230FC560272268E0005A8D08 /* Data+PTEX.swift in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
 				2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */,
+				230FC562272268E0005A8D08 /* PCleanCache.swift in Sources */,
 				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */,
@@ -1557,43 +1703,62 @@
 				CC658CDA20AC3D6D00949DF6 /* CGLayout.m in Sources */,
 				CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */,
 				CC1257CD2098319300E31A38 /* PooSegView.m in Sources */,
+				230FC54E272268E0005A8D08 /* SSBlurView.swift in Sources */,
 				CC1257E42098319300E31A38 /* WMHub.m in Sources */,
 				CC1257DF2098319300E31A38 /* UILabel+FlickerNumber.m in Sources */,
 				CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */,
 				C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */,
+				230FC5792722734D005A8D08 /* PTBaseModel.swift in Sources */,
+				230FC55C272268E0005A8D08 /* String+PTEX.swift in Sources */,
 				C004647522647CE4004F946F /* DoubleSliderView.m in Sources */,
 				64E0598B20A9E06600E434CD /* NSData+AES.m in Sources */,
 				CC1257C12098319300E31A38 /* PGifHud.m in Sources */,
 				CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */,
 				CCBC5C56217B127400B205CF /* CountryCodes.m in Sources */,
+				230FC54F272268E0005A8D08 /* PTInvertedTextView.swift in Sources */,
+				230FC550272268E0005A8D08 /* UIApplication+PTEX.swift in Sources */,
 				CCD660C221DCCD3B004AA57D /* IGBatchTaskManager.m in Sources */,
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
 				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC7E05372240E42100EAFEA4 /* NSString+MoneyString.m in Sources */,
+				230FC554272268E0005A8D08 /* NSMutableArray+PTEX.swift in Sources */,
+				230FC54C272268E0005A8D08 /* PTTagsLabel.swift in Sources */,
 				CC1257DC2098319300E31A38 /* UIColor+Random.m in Sources */,
+				230FC565272268E0005A8D08 /* UIColor+PTEX.swift in Sources */,
+				230FC566272268E0005A8D08 /* NSDictionary+PTEX.swift in Sources */,
 				CC1D38C3211D70C200FD29F4 /* MUCheckbox.m in Sources */,
 				CC54C2EC215A2D22004283D9 /* UITextField+ModifyPlaceholder.m in Sources */,
 				CC35017821FE935300E64074 /* PObject2Json.m in Sources */,
 				CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */,
+				230FC568272268E0005A8D08 /* PooSegmentView.swift in Sources */,
 				CC1257B42098319300E31A38 /* HPGrowingTextView.m in Sources */,
 				2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */,
 				CC3838D4214364D100453548 /* PVideoViewController.m in Sources */,
 				CCBC5C4E217AF90D00B205CF /* UITextField+Limit.m in Sources */,
 				CCD660BC21DCCD3B004AA57D /* IGHTTPClient.m in Sources */,
 				CCD660C121DCCD3B004AA57D /* IGHTTPTools.m in Sources */,
+				230FC567272268E0005A8D08 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				64CF39E120A627C3003F64BF /* PooPieChart.m in Sources */,
+				230FC564272268E0005A8D08 /* PTUtils.swift in Sources */,
 				CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */,
 				CC1257D32098319300E31A38 /* PStarRateView.m in Sources */,
 				64F95E322099374200858FED /* IGBannerView.m in Sources */,
+				230FC55D272268E0005A8D08 /* PTMarcos_swift.swift in Sources */,
 				64F95E312099374200858FED /* IGBannerItem.m in Sources */,
 				CCD660B821DCCD3B004AA57D /* NSURLSessionTask+IGHTTPClient.m in Sources */,
 				C0B5E12422890E6900D32503 /* MXRotationManager.m in Sources */,
+				230FC56A272268E0005A8D08 /* PFloatingButton.swift in Sources */,
+				230FC55E272268E0005A8D08 /* PTUrlChange.swift in Sources */,
 				CC29C9FB21CE1F9100786FF1 /* PTUploadDataSteamTools.m in Sources */,
 				CC1257B12098319300E31A38 /* CustomTextField.m in Sources */,
+				230FC569272268E0005A8D08 /* UIButton+PTEX.swift in Sources */,
+				230FC557272268E0005A8D08 /* PSecurityStrategy.swift in Sources */,
 				CCD660B921DCCD3B004AA57D /* IGHTTPRequestSerializer.m in Sources */,
+				230FC58B27227ED9005A8D08 /* GestureEndpointPredictor.swift in Sources */,
 				CC1257DE2098319300E31A38 /* UIImage+Size.m in Sources */,
 				CC1257C32098319300E31A38 /* PLabel.m in Sources */,
+				230FC561272268E0005A8D08 /* PTCollectionLayout.swift in Sources */,
 				CC1257DB2098319300E31A38 /* UIColor+Helper.m in Sources */,
 				2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */,
 				C0908104225F4A18005243E7 /* NSString+Extension.m in Sources */,
@@ -1603,31 +1768,38 @@
 				CC1257DD2098319300E31A38 /* UIImage+BlurGlass.m in Sources */,
 				CC1257C52098319300E31A38 /* PMotion.m in Sources */,
 				CC1257E92098319300E31A38 /* WPHotspotLabel.m in Sources */,
+				230FC58C27227ED9005A8D08 /* BorderManager.swift in Sources */,
 				CCD660C321DCCD3B004AA57D /* NSError+HTTPClient.m in Sources */,
 				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
 				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
+				230FC592272280F4005A8D08 /* Shared.swift in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				CC1257BB2098319300E31A38 /* NSString+Encryption.m in Sources */,
 				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
+				230FC54D272268E0005A8D08 /* PTBiologyID.swift in Sources */,
 				CCA57328223605E4005A6764 /* IGFileDownLoadManager.m in Sources */,
 				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
+				230FC58E27227ED9005A8D08 /* SystemReport.swift in Sources */,
 				C009FA42228FDF590072C043 /* SQFloatWindow.m in Sources */,
+				230FC58427227959005A8D08 /* DOGobalFileManager.m in Sources */,
 				CC1257E82098319300E31A38 /* WPAttributedStyleAction.m in Sources */,
 				CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */,
 				CC1257D72098319300E31A38 /* SecurityStrategy.m in Sources */,
 				2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */,
 				CCC06CFF21D4A2A000DB93B0 /* PTNormalPicker.m in Sources */,
 				CC1E610C21C4E0060092559A /* UIImage+UIColorEX.m in Sources */,
+				230FC551272268E0005A8D08 /* PTDevMaskView.swift in Sources */,
 				CC1D38B7211D620D00FD29F4 /* PSlider.m in Sources */,
 				CC6D9C58223E432B00B6B561 /* NSDateFormatter+Category.m in Sources */,
 				CC54C2E9215A2041004283D9 /* UIView+ViewRectCorner.m in Sources */,
 				CC1257CC2098319300E31A38 /* PooSearchBar.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				643252C420A26819003A0228 /* YXCustomAlertView.m in Sources */,
+				230FC558272268E0005A8D08 /* PTGuidePageHUD.swift in Sources */,
 				CC1D38C0211D707E00FD29F4 /* CGImaginaryLine.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1781,7 +1953,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
@@ -1820,7 +1992,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (

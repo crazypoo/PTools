@@ -15,11 +15,11 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
     s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
-    s.platform = :ios, '10.0'
+    s.platform = :ios, '13.0'
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m,swift}'
     s.resource     = 'PooTools/PooTools.bundle'
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '13.0'
     s.swift_versions = ['4.2','5.0']
     s.frameworks            = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','LocalAuthentication','CoreMotion','SceneKit','CoreImage','Photos'#,'AssetsLibrary'
     s.dependency 'AFNetworking'
@@ -52,5 +52,8 @@ Pod::Spec.new do |s|
     s.dependency 'WZLBadge'
     s.dependency 'SnapKit'
     s.dependency 'YYKit'
+    s.dependency 'SwifterSwift'
+    s.dependency 'HandyJSON'
+    s.dependency 'DeviceKit'
 
 end
