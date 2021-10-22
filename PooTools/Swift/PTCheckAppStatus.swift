@@ -8,11 +8,11 @@
 
 import UIKit
 
-class PCheckAppStatus: NSObject {
+public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
 
-    var fpsHandle:((_ fps:NSInteger)->Void)?
-    var closed:Bool? = true
+    public var fpsHandle:((_ fps:NSInteger)->Void)?
+    public var closed:Bool? = true
     
     private var avatar : PFloatingButton?
     private var displayLink : CADisplayLink?
@@ -32,7 +32,7 @@ class PCheckAppStatus: NSObject {
         displayLink?.invalidate()
     }
     
-    override init()
+    public override init()
     {
         super.init()
         createUI()
@@ -96,13 +96,13 @@ class PCheckAppStatus: NSObject {
         }
     }
     
-    func open()
+    public func open()
     {
         createUI()
         displayLink?.isPaused = false
     }
     
-    func close()
+    public func close()
     {
         displayLink?.isPaused = true
         closed = true

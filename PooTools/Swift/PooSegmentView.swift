@@ -10,64 +10,64 @@ import UIKit
 import SnapKit
 import YYKit
 
-enum PooSegmentSelectedType {
+public enum PooSegmentSelectedType {
     case UnderLine
     case Background
     case Dog
 }
 
-class PooSegmentConfig: NSObject {
+public class PooSegmentConfig: NSObject {
     ///选中字体
-    var selectedFont:UIFont? = .systemFont(ofSize: 16)
+    public var selectedFont:UIFont? = .systemFont(ofSize: 16)
     ///未选中字体
-    var normalFont:UIFont? = .boldSystemFont(ofSize: 14)
+    public var normalFont:UIFont? = .boldSystemFont(ofSize: 14)
     ///显示类型
-    var showType:PooSegmentSelectedType? = .UnderLine
+    public var showType:PooSegmentSelectedType? = .UnderLine
     ///选中颜色
-    var selectedColor:UIColor? = UIColor.red
+    public var selectedColor:UIColor? = UIColor.red
     ///普通颜色
-    var normalColor:UIColor? = UIColor.black
+    public var normalColor:UIColor? = UIColor.black
     ///选中颜色(背景)
-    var selectedColor_BG:UIColor? = UIColor.red
+    public var selectedColor_BG:UIColor? = UIColor.red
     ///底线height
-    var underHight:CGFloat? = 3
+    public var underHight:CGFloat? = 3
     ///默认选中第X
-    var normalSelecdIndex:Int? = 0
+    public var normalSelecdIndex:Int? = 0
     ///子界面到他的父界面的左右距离总和
-    var subViewInContentSpace:CGFloat? = 20.0
+    public var subViewInContentSpace:CGFloat? = 20.0
     ///设置底线角
-    var underlineRadius:Bool? = true
+    public var underlineRadius:Bool? = true
     ///文字图片位置
-    var imagePosition:BKLayoutButtonStyle? = .leftImageRightTitle
+    public var imagePosition:BKLayoutButtonStyle? = .leftImageRightTitle
     ///文字图片间距
-    var imageTitleSpace:CGFloat? = 5.0
+    public var imageTitleSpace:CGFloat? = 5.0
     ///留给展示dog/或者underline的空间
-    var bottomSquare:CGFloat? = 5.0
+    public var bottomSquare:CGFloat? = 5.0
 }
 
-class PooSegmentModel:NSObject
+public class PooSegmentModel:NSObject
 {
     ///标题
-    var titles:String?
+    public var titles:String?
     ///图片
-    var imageURL:String?
+    public var imageURL:String?
     ///选中图片
-    var selectedImageURL:String?
+    public var selectedImageURL:String?
 }
 
-class PooSegmentSubView:UIView
+public class PooSegmentSubView:UIView
 {
     private var viewConfig = PooSegmentConfig()
 
 //    private let lineSqare:CGFloat = 5
     
-    enum ButtonShowType {
+    public enum ButtonShowType {
         case OnlyTitle
         case OnlyImage
         case TitleImage
     }
     
-    var buttonShowType:ButtonShowType? = .OnlyTitle
+    public var buttonShowType:ButtonShowType? = .OnlyTitle
 
     lazy var imageBtn:BKLayoutButton = {
         let btn = BKLayoutButton()
@@ -160,12 +160,12 @@ class PooSegmentSubView:UIView
             imageBtn.snp.makeConstraints { (make) in
                 switch config.showType {
                 case .UnderLine:
-                    make.width.equalTo(contentW as! ConstraintRelatableTarget)
+                    make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
                     make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
                     make.top.equalToSuperview()
                 case .Dog:
-                    make.width.equalTo(contentW as! ConstraintRelatableTarget)
+                    make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
                     make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
                     make.top.equalToSuperview()
@@ -180,12 +180,12 @@ class PooSegmentSubView:UIView
             label.snp.makeConstraints { (make) in
                 switch config.showType {
                 case .UnderLine:
-                    make.width.equalTo(contentW as! ConstraintRelatableTarget)
+                    make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
                     make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
                     make.top.equalToSuperview()
                 case .Dog:
-                    make.width.equalTo(contentW as! ConstraintRelatableTarget)
+                    make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
                     make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
                     make.top.equalToSuperview()
@@ -211,7 +211,7 @@ class PooSegmentSubView:UIView
                 if self.viewConfig.underHight! >= self.viewConfig.bottomSquare!
                 {
                     lineHight = self.viewConfig.bottomSquare
-                    make.height.equalTo(self.viewConfig.bottomSquare as! ConstraintRelatableTarget)
+                    make.height.equalTo(self.viewConfig.bottomSquare!)
                 }
                 else
                 {
@@ -231,7 +231,7 @@ class PooSegmentSubView:UIView
                 if self.viewConfig.underHight! >= self.viewConfig.bottomSquare!
                 {
                     lineHight = self.viewConfig.bottomSquare
-                    make.width.height.equalTo(self.viewConfig.bottomSquare as! ConstraintRelatableTarget)
+                    make.width.height.equalTo(self.viewConfig.bottomSquare!)
                 }
                 else
                 {
@@ -261,14 +261,14 @@ class PooSegmentSubView:UIView
     }
 }
 
-class PooSegmentView: UIView {
+public class PooSegmentView: UIView {
     
     private var viewConfig = PooSegmentConfig()
     private var subViewArr = [UIView]()
     
     var viewDatas = [PooSegmentModel]()
 
-    enum PooSegmentBadgePosition {
+    public enum PooSegmentBadgePosition {
         case TopLeft
         case TopMiddle
         case TopRight
@@ -279,7 +279,7 @@ class PooSegmentView: UIView {
         case BottomRight
     }
     
-    var selectedIndex:Int?
+    public var selectedIndex:Int?
     {
         didSet
         {
@@ -287,7 +287,7 @@ class PooSegmentView: UIView {
         }
     }
 
-    var segTapBlock:((_ currentIndex:Int)->Void)?
+    public var segTapBlock:((_ currentIndex:Int)->Void)?
 
     lazy var scrolView : UIScrollView = {
         let view = UIScrollView()
@@ -297,12 +297,12 @@ class PooSegmentView: UIView {
         return view
     }()
         
-    init(config:PooSegmentConfig? = PooSegmentConfig()) {
+    public init(config:PooSegmentConfig? = PooSegmentConfig()) {
         super.init(frame: .zero)
         viewConfig = config!
     }
     
-    func reloadViewData(block:((_ index:Int)->Void)?)
+    public func reloadViewData(block:((_ index:Int)->Void)?)
     {
         subViewArr.forEach { (value) in
             let subV = value as! PooSegmentSubView
@@ -412,7 +412,7 @@ class PooSegmentView: UIView {
         }
     }
     
-    func setSelectItem(indexs:Int)
+    public func setSelectItem(indexs:Int)
     {
         if indexs <= (subViewArr.count - 1)
         {
@@ -464,7 +464,7 @@ class PooSegmentView: UIView {
         }
     }
     
-    func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1)
+    public func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1)
     {
         PTUtils.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
@@ -499,7 +499,7 @@ class PooSegmentView: UIView {
         }
     }
     
-    func removeBadgeAtIndex(indexView:Int)
+    public func removeBadgeAtIndex(indexView:Int)
     {
         subViewArr.enumerated().forEach { (index,value) in
             if index == indexView
@@ -510,7 +510,7 @@ class PooSegmentView: UIView {
         }
     }
     
-    func removeAllBadge()
+    public func removeAllBadge()
     {
         subViewArr.enumerated().forEach { (index,value) in
             let subViews = (value as! PooSegmentSubView)

@@ -9,15 +9,15 @@
 import UIKit
 import AFNetworking
 
-class PTFileDownLoadManager: NSObject {
-    class open func fileDownload(fileUrl:String,savePath:String,timeOut:TimeInterval,progress:((_ progress:Progress)->Void)?,completionHandler:((_ response:URLResponse?,_ filePath:URL?,_ error:Error?)->Void)?)
+public class PTFileDownLoadManager: NSObject {
+    class public func fileDownload(fileUrl:String,savePath:String,timeOut:TimeInterval,progress:((_ progress:Progress)->Void)?,completionHandler:((_ response:URLResponse?,_ filePath:URL?,_ error:Error?)->Void)?)
     {
         UIApplication.shared.isNetworkActivityIndicatorVisible = true
         
         let configuration = URLSessionConfiguration.default
         let manager = AFHTTPSessionManager.init(sessionConfiguration: configuration)
         let url = URL.init(string: fileUrl)
-        print("\(url)")
+        print("\(url!)")
         var requset = URLRequest.init(url: url!)
         requset.timeoutInterval = timeOut
         

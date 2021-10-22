@@ -8,14 +8,14 @@
 
 import UIKit
 
-typealias AnimationFinishBlock = (_ finish:Bool) -> Void
+public typealias AnimationFinishBlock = (_ finish:Bool) -> Void
 
-class PTPurchaseCarAnimationTool: NSObject {
+public class PTPurchaseCarAnimationTool: NSObject {
     public static let shared = PTPurchaseCarAnimationTool.init()
-    var block:AnimationFinishBlock?
-    var layer:CALayer?
+    public var block:AnimationFinishBlock?
+    public var layer:CALayer?
     
-    func startAnimationand(view:UIView,rect:CGRect,finishPoint:CGPoint,handle: AnimationFinishBlock?)
+    public func startAnimationand(view:UIView,rect:CGRect,finishPoint:CGPoint,handle: AnimationFinishBlock?)
     {
         var newRect = rect
         layer = CALayer()
@@ -34,7 +34,7 @@ class PTPurchaseCarAnimationTool: NSObject {
         block = handle
     }
     
-    class open func shakeAnimation(view:UIView)
+    public class func shakeAnimation(view:UIView)
     {
         let animation = CABasicAnimation.init(keyPath: "transform.translation.y")
         animation.duration = 0.25
@@ -44,7 +44,7 @@ class PTPurchaseCarAnimationTool: NSObject {
         view.layer.add(animation, forKey: nil)
     }
     
-    func createAnimation(rect:CGRect,finishPoint:CGPoint)
+    public func createAnimation(rect:CGRect,finishPoint:CGPoint)
     {
         let path = UIBezierPath()
         path.move(to: layer!.position)
@@ -70,7 +70,7 @@ class PTPurchaseCarAnimationTool: NSObject {
 
 extension PTPurchaseCarAnimationTool:CAAnimationDelegate
 {
-    func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
         if anim == layer?.animation(forKey: "group")
         {
             layer!.removeFromSuperlayer()

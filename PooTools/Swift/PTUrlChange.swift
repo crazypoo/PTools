@@ -8,21 +8,21 @@
 
 import UIKit
 
-class PTUrlChange: NSObject {
-    open class func unicodeURLChange_chinese(url:String)->String
+public class PTUrlChange: NSObject {
+    public class func unicodeURLChange_chinese(url:String)->String
     {
         return url.addingPercentEncoding(withAllowedCharacters: Foundation.CharacterSet.lowercaseLetters)!
     }
     
-    open class func getRange(text:String,findText:String)->NSMutableArray
+    public class func getRange(text:String,findText:String)->NSMutableArray
     {
-        var arrayRanges = NSMutableArray.init(capacity: 3)
+        let arrayRanges = NSMutableArray.init(capacity: 3)
         if (text).stringIsEmpty()
         {
             return NSMutableArray()
         }
         
-        let rang : NSRange = (text as! NSString).range(of: findText)
+        let rang : NSRange = (text as NSString).range(of: findText)
         if rang.location != NSNotFound && rang.length != 0
         {
             arrayRanges.add(NSNumber.init(value: rang.location))
@@ -46,7 +46,7 @@ class PTUrlChange: NSObject {
                     rang1 = NSRange.init(location: location, length: length)
                 }
                 
-                rang1 = (text as! NSString).range(of: findText, options: NSString.CompareOptions.caseInsensitive, range: rang1)
+                rang1 = (text as NSString).range(of: findText, options: NSString.CompareOptions.caseInsensitive, range: rang1)
                 
                 if rang1.location == NSNotFound && rang1.length == 0
                 {

@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension UIScreen {
+public extension UIScreen {
     
     /// Screen size.
     static var size: CGSize {
@@ -22,8 +22,9 @@ extension UIScreen {
     static var hasRoundedCorners = UIScreen.main.value(forKey: "_" + "display" + "Corner" + "Radius") as! CGFloat > 0
 }
 
+@available(iOS 11.0, *)
 @available(iOSApplicationExtension, unavailable)
-extension UIApplication {
+public extension UIApplication {
     var statusBarHeight: CGFloat {
         if let window = UIApplication.shared.windows.first {
             return window.safeAreaInsets.top
@@ -33,7 +34,7 @@ extension UIApplication {
     }
 }
 
-extension UIFont {
+public extension UIFont {
     @available(iOS 13.0, *)
     class func systemFont(ofSize size: CGFloat, weight: UIFont.Weight, design: UIFontDescriptor.SystemDesign) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
@@ -42,7 +43,7 @@ extension UIFont {
     }
 }
 
-extension UIControl {
+public extension UIControl {
     @available(iOS 13.0, *)
     func addActions(highlightAction: UIAction, unhighlightAction: UIAction) {
         if #available(iOS 14.0, *) {
@@ -55,7 +56,7 @@ extension UIControl {
     }
 }
 
-extension UIView {
+public extension UIView {
     func roundOriginToPixel() {
         frame.origin.x = (round(frame.origin.x * UIScreen.main.scale)) / UIScreen.main.scale
         frame.origin.y = (round(frame.origin.y * UIScreen.main.scale)) / UIScreen.main.scale

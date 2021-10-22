@@ -9,7 +9,7 @@ import UIKit
 
 /// 高斯模糊
 @objcMembers
-open class SSBlurView {
+public class SSBlurView {
     
     private var superview: UIView
     private var blur: UIVisualEffectView?

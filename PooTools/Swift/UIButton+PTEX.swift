@@ -8,9 +8,9 @@
 
 import UIKit
 
-typealias TouchedBlock = (_ seder:UIButton) -> Void
+public typealias TouchedBlock = (_ seder:UIButton) -> Void
 
-extension UIButton
+public extension UIButton
 {
     static var UIButtonBlockKey = "UIButtonBlockKey"
     
@@ -23,9 +23,6 @@ extension UIButton
     @objc func actionTouched(sender:UIButton)
     {
         let block:TouchedBlock = objc_getAssociatedObject(self, &UIButton.UIButtonBlockKey) as! TouchedBlock
-        if block != nil
-        {
-            block(sender)
-        }
+        block(sender)
     }
 }

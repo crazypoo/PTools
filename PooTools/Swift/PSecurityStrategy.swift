@@ -8,11 +8,11 @@
 
 import UIKit
 
-let effectTag = 19999
+public let effectTag = 19999
 
-class PSecurityStrategy: NSObject {
+public class PSecurityStrategy: NSObject {
     
-    class open func addBlurEffect()
+    class public func addBlurEffect()
     {
         PTUtils.gcdMain {
             let imageView = UIImageView.init(frame: UIScreen.main.bounds)
@@ -29,7 +29,7 @@ class PSecurityStrategy: NSObject {
         }
     }
     
-    class open func removeBlurEffect()
+    class public func removeBlurEffect()
     {
         let subViews = UIApplication.shared.keyWindow?.subviews
         subViews!.enumerated().forEach { (index,value) in
@@ -46,13 +46,13 @@ class PSecurityStrategy: NSObject {
         }
     }
     
-    class open func blurImage()->UIImage
+    class public func blurImage()->UIImage
     {
         let image = PSecurityStrategy.screenShot().blurImage()
         return image
     }
     
-    class open func screenShot()->UIImage
+    class public func screenShot()->UIImage
     {
         UIGraphicsBeginImageContextWithOptions(CGSize.init(width: kSCREEN_WIDTH * UIScreen.main.scale, height: kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
         UIApplication.shared.keyWindow?.layer.render(in: UIGraphicsGetCurrentContext()!)

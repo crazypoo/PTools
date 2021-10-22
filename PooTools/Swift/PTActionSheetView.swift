@@ -9,7 +9,7 @@
 import UIKit
 import pop
 
-class PTActionCell:UIView
+public class PTActionCell:UIView
 {
     private var blur:SSBlurView?
     
@@ -18,7 +18,7 @@ class PTActionCell:UIView
         return view
     }()
 
-    override func layoutSubviews()
+    public override func layoutSubviews()
     {
         super.layoutSubviews()
         
@@ -29,24 +29,31 @@ class PTActionCell:UIView
                 
         blur = SSBlurView.init(to: self)
         blur!.alpha = 0.9
-        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        if #available(iOS 13.0, *) {
+            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        } else {
+            blur!.style = .extraLight
+            // Fallback on earlier versions
+        }
         blur!.enable()
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            // 适配代码
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        if #available(iOS 13.0, *) {
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                // 适配代码
+                blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+            }
         }
     }
 }
 
-class PTActionSheetView: UIView {
-    static let CancelButtonTag = 99999
-    static let DestructiveButtonTag = 99998
+public class PTActionSheetView: UIView {
+    public static let CancelButtonTag = 99999
+    public static let DestructiveButtonTag = 99998
     
-    var actionSheetSelectBlock:((_ sheet:PTActionSheetView,_ selectIndex:Int)->Void)?
+    public var actionSheetSelectBlock:((_ sheet:PTActionSheetView,_ selectIndex:Int)->Void)?
     
     private let kRowLineHeight:CGFloat = 0.5
     private let kRowHeight:CGFloat = 54
@@ -118,7 +125,7 @@ class PTActionSheetView: UIView {
         return view
     }()
         
-    init(title:String? = "",
+    public init(title:String? = "",
          subTitle:String? = "",
          cancelButton:String? = "取消",
          destructiveButton:String? = "",
@@ -169,7 +176,7 @@ class PTActionSheetView: UIView {
         
         if !actionSheetTitle.stringIsEmpty()
         {
-            var titleStr = actionSheetMessage.stringIsEmpty() ? actionSheetTitle : String(format: "%@\n%@", actionSheetTitle as! CVarArg,actionSheetMessage as! CVarArg)
+            let titleStr = actionSheetMessage.stringIsEmpty() ? actionSheetTitle : String(format: "%@\n%@", actionSheetTitle as CVarArg,actionSheetMessage as CVarArg)
             titleLbale.cellButton.setTitle(titleStr, for: .normal)
             actionSheetView.addSubview(titleLbale)
         }
@@ -216,7 +223,7 @@ class PTActionSheetView: UIView {
     func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat
     {
         let realH = actionSheetRealHeight()
-        var canshowViewH:CGFloat = kSCREEN_HEIGHT - kTabbarSaveAreaHeight - kStatusBarHeight - 10
+        let canshowViewH:CGFloat = kSCREEN_HEIGHT - kTabbarSaveAreaHeight - kStatusBarHeight - 10
         if actionSheetRealHeight() >= canshowViewH
         {
             return canshowViewH
@@ -241,7 +248,7 @@ class PTActionSheetView: UIView {
         }
     }
     
-    override func layoutSubviews()
+    public override func layoutSubviews()
     {
         super.layoutSubviews()
         
@@ -290,7 +297,7 @@ class PTActionSheetView: UIView {
             }
         }
         
-        var contentW : CGFloat = kSCREEN_WIDTH - LeftAndRightviewSpace * 2
+        let contentW : CGFloat = kSCREEN_WIDTH - LeftAndRightviewSpace * 2
         actionSheetScroll.contentSize = CGSize.init(width: contentW, height: self.scrollContentHeight())
         actionSheetScroll.showsVerticalScrollIndicator = false
         actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= kSCREEN_HEIGHT) ? true : false
@@ -359,7 +366,7 @@ class PTActionSheetView: UIView {
         }
     }
     
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let view = touches.first
         let point = view!.location(in: backgroundView)
         if !actionSheetView.frame.contains(point)
@@ -373,10 +380,10 @@ class PTActionSheetView: UIView {
         }
     }
     
-    func dismiss(block:(()->Void)?)
+    public func dismiss(block:(()->Void)?)
     {
         let offscreenAnimation = POPBasicAnimation.easeOut()
-        offscreenAnimation?.property = POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty
+        offscreenAnimation?.property = (POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty)
         offscreenAnimation?.toValue = actionSheetRealHeight() + 10
         offscreenAnimation!.duration = 0.35
         offscreenAnimation?.completionBlock = { (anim,finish) in
@@ -393,7 +400,7 @@ class PTActionSheetView: UIView {
         actionSheetView.layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
     }
     
-    func show()
+    public func show()
     {
         let animation = POPSpringAnimation.init(propertyNamed: kPOPLayerTranslationY)
         actionSheetView.layer.transform = CATransform3DMakeTranslation(0, self.actionSheetRealHeight(), 0)

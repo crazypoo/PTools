@@ -37,14 +37,12 @@
 		230FC568272268E0005A8D08 /* PooSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC548272268DF005A8D08 /* PooSegmentView.swift */; };
 		230FC569272268E0005A8D08 /* UIButton+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC549272268DF005A8D08 /* UIButton+PTEX.swift */; };
 		230FC56A272268E0005A8D08 /* PFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC54A272268E0005A8D08 /* PFloatingButton.swift */; };
-		230FC56B272268E0005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC54B272268E0005A8D08 /* Shared.swift */; };
 		230FC5772722716D005A8D08 /* BKCutsomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC5762722716D005A8D08 /* BKCutsomButton.swift */; };
 		230FC5792722734D005A8D08 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC5782722734D005A8D08 /* PTBaseModel.swift */; };
 		230FC58427227959005A8D08 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58227227958005A8D08 /* DOGobalFileManager.m */; };
 		230FC58B27227ED9005A8D08 /* GestureEndpointPredictor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */; };
 		230FC58C27227ED9005A8D08 /* BorderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58827227ED9005A8D08 /* BorderManager.swift */; };
 		230FC58D27227ED9005A8D08 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58927227ED9005A8D08 /* Extensions.swift */; };
-		230FC592272280F4005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC591272280F4005A8D08 /* Shared.swift */; };
 		23114E3C27229AE6001CF3F5 /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23114E3B27229AE6001CF3F5 /* LocalConsole.swift */; };
 		23114E3E27229AF5001CF3F5 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23114E3D27229AF5001CF3F5 /* ResizeController.swift */; };
 		23114E432722BD3F001CF3F5 /* SystemReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23114E422722BD3F001CF3F5 /* SystemReport.swift */; };
@@ -245,7 +243,6 @@
 		230FC548272268DF005A8D08 /* PooSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PooSegmentView.swift; sourceTree = "<group>"; };
 		230FC549272268DF005A8D08 /* UIButton+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+PTEX.swift"; sourceTree = "<group>"; };
 		230FC54A272268E0005A8D08 /* PFloatingButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PFloatingButton.swift; sourceTree = "<group>"; };
-		230FC54B272268E0005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 		230FC5762722716D005A8D08 /* BKCutsomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BKCutsomButton.swift; sourceTree = "<group>"; };
 		230FC5782722734D005A8D08 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		230FC58227227958005A8D08 /* DOGobalFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOGobalFileManager.m; sourceTree = "<group>"; };
@@ -253,7 +250,6 @@
 		230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GestureEndpointPredictor.swift; sourceTree = "<group>"; };
 		230FC58827227ED9005A8D08 /* BorderManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BorderManager.swift; sourceTree = "<group>"; };
 		230FC58927227ED9005A8D08 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		230FC591272280F4005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
 		23114E3B27229AE6001CF3F5 /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
 		23114E3D27229AF5001CF3F5 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
 		23114E422722BD3F001CF3F5 /* SystemReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SystemReport.swift; sourceTree = "<group>"; };
@@ -638,7 +634,6 @@
 				23114E422722BD3F001CF3F5 /* SystemReport.swift */,
 				23114E3D27229AF5001CF3F5 /* ResizeController.swift */,
 				23114E3B27229AE6001CF3F5 /* LocalConsole.swift */,
-				230FC591272280F4005A8D08 /* Shared.swift */,
 				230FC58827227ED9005A8D08 /* BorderManager.swift */,
 				230FC58927227ED9005A8D08 /* Extensions.swift */,
 				230FC58727227ED9005A8D08 /* GestureEndpointPredictor.swift */,
@@ -666,7 +661,6 @@
 				230FC52C272268DC005A8D08 /* PTTagsLabel.swift */,
 				230FC53E272268DE005A8D08 /* PTUrlChange.swift */,
 				230FC544272268DF005A8D08 /* PTUtils.swift */,
-				230FC54B272268E0005A8D08 /* Shared.swift */,
 				230FC52E272268DC005A8D08 /* SSBlurView.swift */,
 				230FC53C272268DE005A8D08 /* String+PTEX.swift */,
 				230FC530272268DC005A8D08 /* UIApplication+PTEX.swift */,
@@ -1677,7 +1671,6 @@
 				CC1257B72098319300E31A38 /* LGTMBase64.m in Sources */,
 				CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */,
 				CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */,
-				230FC56B272268E0005A8D08 /* Shared.swift in Sources */,
 				CC1257BA2098319300E31A38 /* NSMutableString+TagReplace.m in Sources */,
 				CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */,
 				CCD660BF21DCCD3B004AA57D /* IGJSONResponseSerializer.m in Sources */,
@@ -1775,7 +1768,6 @@
 				CCD660C321DCCD3B004AA57D /* NSError+HTTPClient.m in Sources */,
 				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
 				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
-				230FC592272280F4005A8D08 /* Shared.swift in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
@@ -1955,7 +1947,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
@@ -1994,7 +1986,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (

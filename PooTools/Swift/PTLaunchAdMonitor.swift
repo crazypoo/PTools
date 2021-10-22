@@ -9,11 +9,11 @@
 import UIKit
 import AVKit
 
-typealias PTLaunchAdMonitorCallBack = () -> Void
+public typealias PTLaunchAdMonitorCallBack = () -> Void
 
-let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
+public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 
-class PTLaunchAdMonitor: NSObject {
+public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
     public static let monitor : PTLaunchAdMonitor = PTLaunchAdMonitor.shared
 
@@ -26,7 +26,7 @@ class PTLaunchAdMonitor: NSObject {
     private var player:AVPlayerViewController?
     private var detailParam:NSMutableDictionary?
 
-    class open func showAt(path:NSArray,onView:Any,timeInterval:TimeInterval,param:NSDictionary?,year:String?,skipFont:UIFont?,comName:String?,comNameFont:UIFont,callBack:PTLaunchAdMonitorCallBack?)
+    public class func showAt(path:NSArray,onView:Any,timeInterval:TimeInterval,param:NSDictionary?,year:String?,skipFont:UIFont?,comName:String?,comNameFont:UIFont,callBack:PTLaunchAdMonitorCallBack?)
     {
         PTLaunchAdMonitor.shared.loadImageAtPath(path: path)
         while !monitor.imgLoaded! {
@@ -53,7 +53,7 @@ class PTLaunchAdMonitor: NSObject {
         PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel!, comNameFont: comNameFont, skipFont: skipFont)
     }
     
-    class open func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?)
+    public class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?)
     {
         var f = UIScreen.main.bounds
         let v = UIView()
@@ -129,7 +129,9 @@ class PTLaunchAdMonitor: NSObject {
             monitor.player = AVPlayerViewController()
             monitor.player?.player = AVPlayer.init(url: monitor.videoUrl!)
             monitor.player?.showsPlaybackControls = false
-            monitor.player?.entersFullScreenWhenPlaybackBegins = true
+            if #available(iOS 11.0, *) {
+                monitor.player?.entersFullScreenWhenPlaybackBegins = true
+            }
             v.addSubview((monitor.player?.view)!)
             monitor.player?.view.snp.makeConstraints({ make in
                 make.left.top.right.equalToSuperview()
@@ -157,8 +159,8 @@ class PTLaunchAdMonitor: NSObject {
             }
             exit.viewCorner(radius: 5)
             v.addSubview(exit)
-            let w = skipFont!.pointSize * CGFloat((exit.titleLabel!.text! as! NSString).length) + 10 * 2
-            let h = skipFont!.pointSize * CGFloat((exit.titleLabel!.text! as! NSString).length) + 10 * 2
+            let w = skipFont!.pointSize * CGFloat((exit.titleLabel!.text! as NSString).length) + 10 * 2
+            let h = skipFont!.pointSize * CGFloat((exit.titleLabel!.text! as NSString).length) + 10 * 2
             exit.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(10)
                 make.top.equalToSuperview().inset(kStatusBarHeight)
@@ -194,7 +196,7 @@ class PTLaunchAdMonitor: NSObject {
                 imageView.addGestureRecognizer(tapGesture)
             default:
                 let imageBtn = UIButton.init(type: .custom)
-                imageBtn.setImage(UIImage(data: monitor.imgData as! Data), for: .normal)
+                imageBtn.setImage(UIImage(data: monitor.imgData! as Data), for: .normal)
                 imageBtn.addActionHandlers { sender in
                     PTLaunchAdMonitor.showDetail(sender: sender)
                 }
@@ -262,7 +264,7 @@ class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    class open func hideView(sender:Any)
+    public class func hideView(sender:Any)
     {
         let sup = (sender as! UIButton).superview
         sup?.isUserInteractionEnabled = false
@@ -279,7 +281,7 @@ class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    @objc class open func showDetail(sender:Any)
+    @objc class public func showDetail(sender:Any)
     {
         var sup:UIView?
         switch monitor.imageType {

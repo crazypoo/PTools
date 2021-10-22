@@ -9,11 +9,11 @@
 import UIKit
 import SDWebImage
 
-class PCleanCache: NSObject {
+public class PCleanCache: NSObject {
     static let fileManager = FileManager.default
     static let cachePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last
     
-    class open func getCacheSize()->String
+    class public func getCacheSize()->String
     {
         #if DEBUG
         var isDirectory:ObjCBool = false
@@ -29,7 +29,7 @@ class PCleanCache: NSObject {
         var filePath = ""
         var totalSize : Float = 0
         
-        for subpath in subpathArray as! [String]
+        for subpath in subpathArray!
         {
             filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
             var isDirectory:ObjCBool = false
@@ -67,7 +67,7 @@ class PCleanCache: NSObject {
         return totalSizeString
     }
     
-    class open func clearCaches()->Bool
+    class public func clearCaches()->Bool
     {
         var filePath = ""
         var flag = false
@@ -80,7 +80,7 @@ class PCleanCache: NSObject {
                 return false
             }
             
-            for subpath in subpathArray as! [String]
+            for subpath in subpathArray
             {
                 filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
                 if PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!)
@@ -110,7 +110,7 @@ class PCleanCache: NSObject {
         return flag
     }
     
-    class open func fileSizeAtPath(path:String)->Float
+    class public func fileSizeAtPath(path:String)->Float
     {
         if PCleanCache.fileManager.fileExists(atPath: path)
         {
@@ -125,7 +125,7 @@ class PCleanCache: NSObject {
         return 0
     }
     
-    class open func folderSizeAtPath(path:String)->Float
+    class public func folderSizeAtPath(path:String)->Float
     {
         if !PCleanCache.fileManager.fileExists(atPath: path)
         {
@@ -146,13 +146,13 @@ class PCleanCache: NSObject {
         return Float(folderSize/(1024*1024))
     }
     
-    class open func cleanDocumentAtPath(path:String)->Bool
+    class public func cleanDocumentAtPath(path:String)->Bool
     {
         let enumerator = PCleanCache.fileManager.enumerator(atPath: path)
         for subPath in enumerator as! [String]
         {
             do {
-                try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(subPath as! String))
+                try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(subPath))
             } catch {
                 print("\(error)")
             }

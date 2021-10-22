@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension CGPoint {
+public extension CGPoint {
     
     /// Calculates the distance between two points in 2D space.
     /// + returns: The distance from this point to the given point.
@@ -17,7 +17,7 @@ extension CGPoint {
     }
 }
 
-extension UISpringTimingParameters {
+public extension UISpringTimingParameters {
     
     /**
      Simplified spring animation timing parameters.
@@ -48,7 +48,7 @@ extension UISpringTimingParameters {
  This function can be used to form a CGVector to be used in UISpringTimingParameters.
  For more information, see [UISpringTimingParameters](https://developer.apple.com/documentation/uikit/uispringtimingparameters).
  */
-func relativeVelocity(forVelocity velocity: CGFloat, from currentLocation: CGFloat, to targetLocation: CGFloat) -> CGFloat {
+public func relativeVelocity(forVelocity velocity: CGFloat, from currentLocation: CGFloat, to targetLocation: CGFloat) -> CGFloat {
     let travelDistance = (targetLocation - currentLocation)
     
     // Returns an intitial velocity of 0 if
@@ -60,12 +60,12 @@ func relativeVelocity(forVelocity velocity: CGFloat, from currentLocation: CGFlo
 }
 
 /// Distance traveled after decelerating to zero velocity at a constant rate.
-func project(initialVelocity: CGFloat, decelerationRate: CGFloat) -> CGFloat {
+public func project(initialVelocity: CGFloat, decelerationRate: CGFloat) -> CGFloat {
     (initialVelocity / 1000.0) * decelerationRate / (1.0 - decelerationRate)
 }
 
 /// Calculates the nearest point from a specified array to the specified point.
-func nearestTargetTo(_ point: CGPoint, possibleTargets: [CGPoint]) -> CGPoint {
+public func nearestTargetTo(_ point: CGPoint, possibleTargets: [CGPoint]) -> CGPoint {
     
     var currentShortestDistance = CGFloat.greatestFiniteMagnitude
     var nearestEndpoint = CGPoint.zero

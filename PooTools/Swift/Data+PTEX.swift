@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension Data
+public extension Data
 {
     enum ImageType {
         case unknown

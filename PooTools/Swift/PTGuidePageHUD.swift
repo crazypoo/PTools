@@ -9,19 +9,19 @@
 import UIKit
 import AVKit
 
-class PTGuidePageHUD: UIView {
+public class PTGuidePageHUD: UIView {
     fileprivate var imageArray : [String]?
     fileprivate var imagePageControl = UIPageControl()
     fileprivate var slideIntoNumber : Int = 0
     fileprivate var player = AVPlayerViewController()
     
-    var slideInto : Bool? = false
-    var animationTime : CGFloat? = 3.0
-    var adHadRemove:(()->Void)?
+    public var slideInto : Bool? = false
+    public var animationTime : CGFloat? = 3.0
+    public var adHadRemove:(()->Void)?
     
     let StartString = "开始体验"
     
-    init(mainView:UIView,imageNameArray:[String],tapHidden:Bool) {
+    public init(mainView:UIView,imageNameArray:[String],tapHidden:Bool) {
         super.init(frame: mainView.frame)
         if tapHidden
         {
@@ -64,7 +64,7 @@ class PTGuidePageHUD: UIView {
             let data = contentImage!.pngData()
             if data?.detectImageType() == .gif
             {
-                let source = CGImageSourceCreateWithData(data as! CFData, nil)
+                let source = CGImageSourceCreateWithData(data! as CFData, nil)
                 let frameCount = CGImageSourceGetCount(source!)
                 var frames = [UIImage]()
                 for i in 0...frameCount
@@ -122,11 +122,13 @@ class PTGuidePageHUD: UIView {
         }
     }
     
-    init(mainView:UIView,videlURL:URL) {
+    public init(mainView:UIView,videlURL:URL) {
         super.init(frame: mainView.frame)
         player.player = AVPlayer.init(url: videlURL)
         player.showsPlaybackControls = false
-        player.entersFullScreenWhenPlaybackBegins = true
+        if #available(iOS 11.0, *) {
+            player.entersFullScreenWhenPlaybackBegins = true
+        }
         self.addSubview(player.view)
         player.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -169,7 +171,7 @@ class PTGuidePageHUD: UIView {
         }
     }
     
-    func removeGuidePageHUD()
+    public func removeGuidePageHUD()
     {
         self.removeFromSuperview()
         if adHadRemove != nil
@@ -181,7 +183,7 @@ class PTGuidePageHUD: UIView {
 
 extension PTGuidePageHUD : UIScrollViewDelegate
 {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto!
         {
@@ -207,7 +209,7 @@ extension PTGuidePageHUD : UIScrollViewDelegate
         }
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView)
+    public func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
         imagePageControl.currentPage = Int((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)
     }

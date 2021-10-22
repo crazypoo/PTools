@@ -276,6 +276,13 @@ public class LocalConsole: NSObject {
                 volumesString = "Not Support"
             }
             
+            var hzString = ""
+            if #available(iOS 10.3, *)
+            {
+                hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
+            }
+            
+            
             currentText = """
                     ModelName: \(SystemReport.shared.gestaltMarketingName)
                     ModelIdentifier: \(SystemReport.shared.gestaltModelIdentifier)
@@ -302,7 +309,7 @@ public class LocalConsole: NSObject {
                     ScreenSize: \(UIScreen.main.bounds.size)
                     ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
                     ScreenScale: \(UIScreen.main.scale)
-                    MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz
+                    \(hzString)
                     Brightness: \(String(format: "%.2f", UIScreen.main.brightness))
                     IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
                     BatteryState: \(Device.current.batteryState!)
@@ -378,7 +385,7 @@ public class LocalConsole: NSObject {
     }
 }
 
-extension TimeInterval {
+public extension TimeInterval {
     var formattedString: String? {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute, .second]
@@ -424,7 +431,9 @@ public class PTTerminal:PFloatingButton
         systemText?.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
         systemText?.isSelectable = false
         systemText?.showsVerticalScrollIndicator = false
-        systemText?.contentInsetAdjustmentBehavior = .never
+        if #available(iOS 11.0, *) {
+            systemText?.contentInsetAdjustmentBehavior = .never
+        }
         systemText?.backgroundColor = .clear
         self.addSubview(systemText!)
         systemText?.snp.makeConstraints { (make) in

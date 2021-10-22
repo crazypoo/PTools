@@ -132,7 +132,7 @@ public extension UIView {
 
 }
 
-extension UILabel
+public extension UILabel
 {
     func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
     {
@@ -150,7 +150,7 @@ extension UILabel
     }
 }
 
-extension UIButton
+public extension UIButton
 {
     func getButtonSize(width:CGFloat,height:CGFloat)->CGSize
     {
@@ -168,7 +168,7 @@ extension UIButton
     }
 }
 
-extension UITextView
+public extension UITextView
 {
     func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize
     {

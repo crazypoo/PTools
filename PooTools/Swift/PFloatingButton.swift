@@ -15,7 +15,7 @@ public class PFloatingButton: UIButton {
     public static let RC_TRACE_DISMISS_TIME_INTERVAL = 0.5
     public static let RC_DEFAULT_ANIMATE_DURATION = 0.2
     
-    var longPressBlock:((_ button:PFloatingButton)->Void)?
+    public var longPressBlock:((_ button:PFloatingButton)->Void)?
     {
         didSet
         {
@@ -33,23 +33,23 @@ public class PFloatingButton: UIButton {
             self.addGestureRecognizer(longPressGestureRecognizer)
         }
     }
-    var longPressEndedBlock:((_ button:PFloatingButton)->Void)?
-    var tapBlock:((_ button:PFloatingButton)->Void)?
-    var doubleTapBlock:((_ button:PFloatingButton)->Void)?
-    var layerConfigBlock:((_ button:PFloatingButton)->Void)?
-    var draggingBlock:((_ button:PFloatingButton)->Void)?
-    var dragEndedBlock:((_ button:PFloatingButton)->Void)?
-    var autoDockEndedBlock:((_ button:PFloatingButton)->Void)?
-    var dragCancelledBlock:((_ button:PFloatingButton)->Void)?
-    var autoDockingBlock:((_ button:PFloatingButton)->Void)?
-    var willBeRemovedBlock:((_ button:PFloatingButton)->Void)?
+    public var longPressEndedBlock:((_ button:PFloatingButton)->Void)?
+    public var tapBlock:((_ button:PFloatingButton)->Void)?
+    public var doubleTapBlock:((_ button:PFloatingButton)->Void)?
+    public var layerConfigBlock:((_ button:PFloatingButton)->Void)?
+    public var draggingBlock:((_ button:PFloatingButton)->Void)?
+    public var dragEndedBlock:((_ button:PFloatingButton)->Void)?
+    public var autoDockEndedBlock:((_ button:PFloatingButton)->Void)?
+    public var dragCancelledBlock:((_ button:PFloatingButton)->Void)?
+    public var autoDockingBlock:((_ button:PFloatingButton)->Void)?
+    public var willBeRemovedBlock:((_ button:PFloatingButton)->Void)?
     
-    var draggable : Bool? = true
-    var autoDocking : Bool? = false
-    var dragOutOfBoundsEnabled : Bool? = false
-    var dockPoint : CGPoint? = PFloatingButton.RC_POINT_NULL
-    var limitedDistance : CGFloat? = -1.0
-    var isTraceEnabled : Bool? = false
+    public var draggable : Bool? = true
+    public var autoDocking : Bool? = false
+    public var dragOutOfBoundsEnabled : Bool? = false
+    public var dockPoint : CGPoint? = PFloatingButton.RC_POINT_NULL
+    public var limitedDistance : CGFloat? = -1.0
+    public var isTraceEnabled : Bool? = false
     
     private var singleTapCanceled : Bool? = false
     private var skipTapEventOnce : Bool? = false
@@ -87,7 +87,7 @@ public class PFloatingButton: UIButton {
         self.defultSetting()
     }
     
-    init(view:Any,frame:CGRect)
+    public init(view:Any,frame:CGRect)
     {
         super.init(frame: frame)
         if view is UIView

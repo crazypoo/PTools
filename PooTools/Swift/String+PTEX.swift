@@ -28,7 +28,7 @@ let OTHER_CHAR = 4
 
 let commonUsers = ["password", "abc123", "iloveyou", "adobe123", "123123", "sunshine", "1314520", "a1b2c3", "123qwe", "aaa111", "qweasd", "admin", "passwd"]
 
-enum PStrengthLevel {
+public enum PStrengthLevel {
     case Easy
     case Midium
     case Strong
@@ -36,7 +36,7 @@ enum PStrengthLevel {
     case Extremely_Strong
 }
 
-extension String
+public extension String
 {
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
@@ -54,7 +54,7 @@ extension String
             return false
         }
         
-        if ((self as! NSString).length > 4) && ((self as! NSString).substring(to: 4) == "www.")
+        if ((self as NSString).length > 4) && ((self as NSString).substring(to: 4) == "www.")
         {
             newString = "http://" + newString
         }
@@ -98,8 +98,8 @@ extension String
             return false
         }
         
-        let range1 = (self as! NSString).range(of: "·")
-        let range2 = (self as! NSString).range(of: "•")
+        let range1 = (self as NSString).range(of: "·")
+        let range2 = (self as NSString).range(of: "•")
         
         if range1.location != NSNotFound || range2.location != NSNotFound
         {
@@ -292,23 +292,23 @@ public extension String {
     }
 }
 
-extension String
+public extension String
 {
     func stringIsEmpty()->Bool
     {
-        return (self is NSNull || self == nil || self.charactersArray.count < 1) ? true : false
+        return (self.charactersArray.count < 1) ? true : false
     }
     
     func toMoney()->String
     {
-        return String(format: "%.2f", self.float() as! CVarArg)
+        return String(format: "%.2f", self.float()!)
     }
     
     func toSecurityPhone()->String
     {
-        if (self ?? "").stringIsEmpty() && self.charactersArray.count > 10
+        if (self).stringIsEmpty() && self.charactersArray.count > 10
         {
-            return (self as! NSString).replacingCharacters(in: NSRange.init(location: 3, length: 4), with: "****")
+            return (self as NSString).replacingCharacters(in: NSRange.init(location: 3, length: 4), with: "****")
         }
         return self
     }
@@ -325,7 +325,7 @@ extension String
         let jsonData = self.data(using: Encoding.utf8)
         do {
             let dic = try JSONSerialization.jsonObject(with: jsonData!, options: JSONSerialization.ReadingOptions.mutableContainers)
-            return dic as! NSDictionary
+            return (dic as! NSDictionary)
         } catch  {
             return nil
         }
@@ -364,7 +364,7 @@ extension String
      */
     private func checkCharacterType(string:String)->Int
     {
-        let asciiCode = (string as! NSString).character(at: 0)
+        let asciiCode = (string as NSString).character(at: 0)
         if asciiCode >= 48 && asciiCode <= 57
         {
             return NUM
@@ -390,11 +390,11 @@ extension String
     private func countLetter(type:Int)->Int
     {
         var count = 0
-        if self != nil && (self as! NSString).length > 0
+        if (self as NSString).length > 0
         {
-            for i in 0...((self as! NSString).length - 1)
+            for i in 0...((self as NSString).length - 1)
             {
-                let character = (self as! NSString).substring(with: NSRange.init(location: i, length: 1))
+                let character = (self as NSString).substring(with: NSRange.init(location: i, length: 1))
                 if self.checkCharacterType(string: character) == type
                 {
                     count += 1
@@ -411,7 +411,7 @@ extension String
             return 0
         }
         
-        let len = (self as! NSString).length
+        let len = (self as NSString).length
         var level : Int = 0
         
         if self.countLetter(type: NUM) > 0
@@ -513,8 +513,8 @@ extension String
         
         if len % 2 == 0
         {
-            let part1 = (self as! NSString).substring(with: NSRange.init(location: 0, length: len / 2))
-            let part2 = (self as! NSString).substring(from: len / 2)
+            let part1 = (self as NSString).substring(with: NSRange.init(location: 0, length: len / 2))
+            let part2 = (self as NSString).substring(from: len / 2)
             if part1 == part2
             {
                 level -= 1
@@ -528,9 +528,9 @@ extension String
         
         if len % 3 == 0
         {
-            let part1 = (self as! NSString).substring(with: NSRange.init(location: 0, length: len / 3))
-            let part2 = (self as! NSString).substring(with: NSRange.init(location: len / 3, length: len / 3))
-            let part3 = (self as! NSString).substring(from: len / 3)
+            let part1 = (self as NSString).substring(with: NSRange.init(location: 0, length: len / 3))
+            let part2 = (self as NSString).substring(with: NSRange.init(location: len / 3, length: len / 3))
+            let part3 = (self as NSString).substring(from: len / 3)
             if part1 == part2 && part2 == part3
             {
                 level -= 1
@@ -542,11 +542,11 @@ extension String
             var year : Int = 0
             if len == 8 || len == 6
             {
-                year = (self as! NSString).substring(to: (self as! NSString).length - 4).int!
+                year = (self as NSString).substring(to: (self as NSString).length - 4).int!
             }
             let size = len - 4
-            let month = (self as! NSString).substring(with: NSRange.init(location: size, length: 2)).int!
-            let day = (self as! NSString).substring(with: NSRange.init(location: size + 2, length: 2)).int!
+            let month = (self as NSString).substring(with: NSRange.init(location: size, length: 2)).int!
+            let day = (self as NSString).substring(with: NSRange.init(location: size + 2, length: 2)).int!
             if (year >= 1950 && year < 2050) && (month >= 1 && month <= 12) && (day >= 1 && day <= 31)
             {
                 level -= 1
@@ -554,7 +554,7 @@ extension String
         }
         
         commonUsers.enumerated().forEach { (index,value) in
-            if value == self || (value as! NSString).contains(self)
+            if value == self || (value as NSString).contains(self)
             {
                 level -= 1
             }
@@ -582,24 +582,24 @@ extension String
     
     private func isNull()->Bool
     {
-        return (self ?? "").stringIsEmpty()
+        return (self).stringIsEmpty()
     }
     
     private func isCharEqual()->Bool
     {
-        if (self as! NSString).length < 1
+        if (self as NSString).length < 1
         {
             return true
         }
         
-        let character = (self as! NSString).substring(with: NSRange.init(location: 0, length: 1))
+        let character = (self as NSString).substring(with: NSRange.init(location: 0, length: 1))
         let string = self.replacingOccurrences(of: character, with: "")
-        return ((string as! NSString).length < 1)
+        return ((string as NSString).length < 1)
     }
     
     private func isNumeric()->Bool
     {
-        if (self as! NSString).length < 1
+        if (self as NSString).length < 1
         {
             return false
         }

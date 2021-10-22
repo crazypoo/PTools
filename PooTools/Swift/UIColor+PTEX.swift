@@ -9,7 +9,7 @@
 import UIKit
 
 /// 颜色扩展
-extension UIColor {
+public extension UIColor {
     
     var toHexString: String {
         var r: CGFloat = 0
@@ -28,7 +28,7 @@ extension UIColor {
     }
     
     /// hex 色值
-    public class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
+    class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         let hexint = intFromHexString(tempStr)
         let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
@@ -36,7 +36,7 @@ extension UIColor {
     }
 
     /// UIColor -> Hex String
-    public var hex: String? {
+    var hex: String? {
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
@@ -77,7 +77,7 @@ extension UIColor {
     }
 
     /// 返回随机颜色
-    open class var randomColor:UIColor{
+    class var randomColor:UIColor{
         get
         {
             let red = CGFloat(arc4random()%256)/255.0
@@ -87,7 +87,7 @@ extension UIColor {
         }
     }
     
-    open class var DevMaskColor:UIColor {
+    class var DevMaskColor:UIColor {
         return UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
     }
 }

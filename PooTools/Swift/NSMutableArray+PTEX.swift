@@ -8,7 +8,7 @@
 
 import UIKit
 
-extension NSMutableArray
+public extension NSMutableArray
 {
     func shuffle()
     {

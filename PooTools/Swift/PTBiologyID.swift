@@ -10,13 +10,13 @@ import UIKit
 import LocalAuthentication
 import Security
 
-enum PTBiologyStatus {
+public enum PTBiologyStatus {
     case None
     case TouchID
     case FaceID
 }
 
-enum PTBiologyVerifyStatus {
+public enum PTBiologyVerifyStatus {
     case Success
     case DuplicateItem
     case ItemNotFound
@@ -32,13 +32,13 @@ enum PTBiologyVerifyStatus {
     case SystemCancel
 }
 
-class PTBiologyID: NSObject {
+public class PTBiologyID: NSObject {
     public static let shared = PTBiologyID()
 
     private var security = LAContext()
         
-    var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
-    var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
+    public var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
+    public var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
 
     private override init()
     {
@@ -116,7 +116,7 @@ class PTBiologyID: NSObject {
         }
     }
     
-    func biologyStart(alertTitle:String? = "生物技术验证")
+    public func biologyStart(alertTitle:String? = "生物技术验证")
     {        
         var evaluatePolicyType : LAPolicy?
         if #available(iOS 9.0, *)

@@ -8,14 +8,14 @@
 
 import UIKit
 
-enum PTUrlStringVideoType {
+public enum PTUrlStringVideoType {
     case MP4
     case MOV
     case ThreeGP
     case UNKNOW
 }
 
-enum PTAboutImageType {
+public enum PTAboutImageType {
     case JPEG
     case PNG
     case GIF
@@ -24,10 +24,10 @@ enum PTAboutImageType {
     case UNKNOW
 }
 
-class PTUtils: NSObject {
+public class PTUtils: NSObject {
     
     ///ALERT真正基类
-    class open func base_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
+    public class func base_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
                                  msg:String? = "",
                                  okBtns:[String]? = [String]() ,
                                  cancelBtn:String? = "",
@@ -70,7 +70,7 @@ class PTUtils: NSObject {
                 {
                     let count = okBtns!.count - (doneBtnColors?.count ?? 0)
                     dontArrColor = doneBtnColors!
-                    for i in 0...(count - 1)
+                    for _ in 0..<(count)
                     {
                         dontArrColor.append(.systemBlue)
                     }
@@ -79,7 +79,7 @@ class PTUtils: NSObject {
                 {
                     let count = (doneBtnColors?.count ?? 0) - okBtns!.count
                     dontArrColor = doneBtnColors!
-                    for i in 0...(count - 1)
+                    for _ in 0..<(count)
                     {
                         dontArrColor.removeLast()
                     }
@@ -143,7 +143,7 @@ class PTUtils: NSObject {
         showIn.present(alert, animated: true, completion: nil)
     }
 
-    class open func base_textfiele_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
+    public class func base_textfiele_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
                                            okBtn:String,
                                            cancelBtn:String,
                                            showIn:UIViewController,
@@ -175,7 +175,7 @@ class PTUtils: NSObject {
             placeHolders.enumerated().forEach({ (index,value) in
                 alert.addTextField { (textField : UITextField) -> Void in
                     textField.placeholder = value
-                    textField.delegate = textFieldDelegate as! UITextFieldDelegate
+                    textField.delegate = (textFieldDelegate as! UITextFieldDelegate)
                     textField.tag = index
                     textField.text = textFieldTexts[index]
                     if keyboardType?.count == placeHolders.count
@@ -225,20 +225,20 @@ class PTUtils: NSObject {
         showIn.present(alert, animated: true, completion: nil)
     }
 
-    class open func showNetworkActivityIndicator(_ show:Bool)
+    public class func showNetworkActivityIndicator(_ show:Bool)
     {
         PTUtils.gcdMain {
             UIApplication.shared.isNetworkActivityIndicatorVisible = show
         }
     }
     
-    class open func gcdAfter(time:TimeInterval,
+    public class func gcdAfter(time:TimeInterval,
                              block:@escaping (()->Void))
     {
         DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: block)
     }
     
-    class open func gcdMain(block:@escaping (()->Void))
+    public class func gcdMain(block:@escaping (()->Void))
     {
         DispatchQueue.global(qos: .userInitiated).async {
             DispatchQueue.main.sync(execute: block)
@@ -247,7 +247,7 @@ class PTUtils: NSObject {
     
     /// 判断是否是越狱设备
     /// - Returns: true 表示设备越狱
-    class open func isBrokenDevice() -> Bool {
+    public class func isBrokenDevice() -> Bool {
 
         var isBroken = false
 
@@ -266,7 +266,7 @@ class PTUtils: NSObject {
         return isBroken
     }
     
-    class open func getTimeStamp()->String
+    public class func getTimeStamp()->String
     {
         let date = Date()
         let formatter = DateFormatter()
@@ -276,7 +276,7 @@ class PTUtils: NSObject {
         return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
     }
 
-    class open func thumbnailImage(videoURL:String)->UIImage
+    public class func thumbnailImage(videoURL:String)->UIImage
     {
         if videoURL.isEmpty {
             //默认封面图
@@ -294,7 +294,7 @@ class PTUtils: NSObject {
         }
     }
     
-    class open func timeRunWithTime(timeInterval:TimeInterval,
+    public class func timeRunWithTime(timeInterval:TimeInterval,
                                     sender:UIButton,
                                     originalTitle:String,
                                     canTap:Bool)
@@ -325,7 +325,7 @@ class PTUtils: NSObject {
         timer.resume()
     }
     
-    class open func createImageWithColor(color:UIColor)->UIImage
+    public class func createImageWithColor(color:UIColor)->UIImage
     {
         let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
@@ -337,7 +337,7 @@ class PTUtils: NSObject {
         return image!
     }
 
-    class open func contentTypeForUrl(url:String)->PTUrlStringVideoType
+    public class func contentTypeForUrl(url:String)->PTUrlStringVideoType
     {
         let pathEX = url.pathExtension.lowercased()
         
@@ -356,7 +356,7 @@ class PTUtils: NSObject {
         return .UNKNOW
     }
     
-    class open func sizeFor(string:String,
+    public class func sizeFor(string:String,
                             font:UIFont,
                             height:CGFloat,
                             width:CGFloat)->CGSize
@@ -366,7 +366,7 @@ class PTUtils: NSObject {
         return size
     }
     
-    class open func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
+    public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
     {
         var newRoot:UIViewController?
         var currentVC : UIViewController?
@@ -394,13 +394,13 @@ class PTUtils: NSObject {
         return currentVC!
     }
     
-    class open func getCurrentVC(anyClass:UIViewController? = UIViewController())->UIViewController
+    public class func getCurrentVC(anyClass:UIViewController? = UIViewController())->UIViewController
     {
         let currentVC = PTUtils.getCurrentVCFrom(rootVC: (UIApplication.shared.keyWindow?.rootViewController ?? anyClass!))
         return currentVC
     }
     
-    class open func returnFrontVC()
+    public class func returnFrontVC()
     {
         let vc = PTUtils.getCurrentVC()
         if vc.presentingViewController != nil
@@ -413,30 +413,31 @@ class PTUtils: NSObject {
         }
     }
     
-    class open func cgBaseBundle()->Bundle
+    public class func cgBaseBundle()->Bundle
     {
         let bundle = Bundle.init(for: self)
         return bundle
     }
     
-    class open func color(name:String,traitCollection:UITraitCollection)->UIColor
+    @available(iOS 11.0, *)
+    public class func color(name:String,traitCollection:UITraitCollection)->UIColor
     {
         return UIColor(named: name, in: PTUtils.cgBaseBundle(), compatibleWith: traitCollection) ?? .randomColor
     }
     
-    class open func image(name:String,traitCollection:UITraitCollection)->UIImage
+    public class func image(name:String,traitCollection:UITraitCollection)->UIImage
     {
         return UIImage(named: name, in: PTUtils.cgBaseBundle(), compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
     }
     
-    class open func darkModeImage(name:String)->UIImage
+    public class func darkModeImage(name:String)->UIImage
     {
         return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!)
     }
 
     //Mark:越狱检测
     ///越狱检测
-    class open func isJailBroken()->Bool
+    public class func isJailBroken()->Bool
     {
         let apps = ["/Applications/Cydia.app",
                   "/Applications/limera1n.app",
@@ -455,7 +456,7 @@ class PTUtils: NSObject {
         return false
     }
     
-    class open func watermark(originalImage:UIImage,title:String,font:UIFont? = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
+    public class func watermark(originalImage:UIImage,title:String,font:UIFont? = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
     {
         
         let HORIZONTAL_SPACE = 30
@@ -464,19 +465,19 @@ class PTUtils: NSObject {
         let viewWidth = originalImage.size.width
         let viewHeight = originalImage.size.height
         
-        var newColor = (color == nil) ? originalImage.imageMostColor() : color
+        let newColor = (color == nil) ? originalImage.imageMostColor() : color
         
         UIGraphicsBeginImageContext(CGSize.init(width: viewWidth, height: viewHeight))
         originalImage.draw(in: CGRect.init(x: 0, y: 0, width: viewWidth, height: viewHeight))
         let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
         let attr = [NSAttributedString.Key.font:font!,NSAttributedString.Key.foregroundColor:newColor!]
         let mark : NSString = title as NSString
-        let attrStr = NSMutableAttributedString.init(string: mark as! String, attributes: attr)
+        let attrStr = NSMutableAttributedString.init(string: mark as String, attributes: attr)
         let strWidth = attrStr.size().width
         let strHeight = attrStr.size().height
         let context = UIGraphicsGetCurrentContext()!
         context.concatenate(CGAffineTransform(translationX: viewWidth/2, y: viewHeight/2))
-        context.concatenate(CGAffineTransform(rotationAngle: (M_PI_2 / 3)))
+        context.concatenate(CGAffineTransform(rotationAngle: (Double.pi / 2 / 3)))
         context.concatenate(CGAffineTransform(translationX: -viewWidth/2, y: -viewHeight/2))
         
         let horCount : Int = Int(sqrtLength / (strWidth + CGFloat(HORIZONTAL_SPACE)) + 1)
@@ -511,7 +512,7 @@ class PTUtils: NSObject {
     
     //MARK:SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
-    class open func gobalWebImageLoadOption()->SDWebImageOptions
+    public class func gobalWebImageLoadOption()->SDWebImageOptions
     {
         #if DEBUG
         let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")

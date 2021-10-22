@@ -8,42 +8,45 @@
 
 import UIKit
 
-enum PTVerticalAlignment {
+public enum PTVerticalAlignment {
     case Top
     case Middle
     case Bottom
 }
 
-enum PTStrikeThroughAlignment {
+public enum PTStrikeThroughAlignment {
     case Top
     case Middle
     case Bottom
 }
 
-class PTLabel: UILabel {
+public class PTLabel: UILabel {
         
-    var verticalAlignment : PTVerticalAlignment? = .Middle
+    public var verticalAlignment : PTVerticalAlignment? = .Middle
     {
         didSet
         {
             self.setNeedsDisplay()
         }
     }
-    var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
+    
+    public var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
     {
         didSet
         {
             self.setNeedsDisplay()
         }
     }
-    var strikeThroughEnabled : Bool? = false
+    
+    public var strikeThroughEnabled : Bool? = false
     {
         didSet
         {
             self.setNeedsDisplay()
         }
     }
-    var strikeThroughColor : UIColor = UIColor.systemRed
+    
+    public var strikeThroughColor : UIColor = UIColor.systemRed
     
     override init(frame: CGRect)
     {
@@ -54,7 +57,7 @@ class PTLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
+    public override func textRect(forBounds bounds: CGRect, limitedToNumberOfLines numberOfLines: Int) -> CGRect {
         var textRect = super.textRect(forBounds: bounds, limitedToNumberOfLines: numberOfLines)
         switch verticalAlignment {
         case .Top:
@@ -87,7 +90,7 @@ class PTLabel: UILabel {
         return textRect
     }
     
-    override func drawText(in rect: CGRect)
+    public override func drawText(in rect: CGRect)
     {
         let actualRect = self.textRect(forBounds: rect, limitedToNumberOfLines: self.numberOfLines)
         super.drawText(in: actualRect)

@@ -9,11 +9,11 @@
 import UIKit
 import SnapKit
 
-class PTDevMaskView: UIView {
+public class PTDevMaskView: UIView {
 
-    var isMask : Bool? = true
+    public var isMask : Bool? = true
     
-    init(maskImage:String,maskString:String)
+    public init(maskImage:String,maskString:String)
     {
         super.init(frame: .zero)
         
@@ -32,7 +32,7 @@ class PTDevMaskView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
     {
         if isMask!
         {
@@ -44,7 +44,7 @@ class PTDevMaskView: UIView {
             {
                 if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event)
                 {
-                    return responder as! UIView
+                    return responder
                 }
             }
             return nil

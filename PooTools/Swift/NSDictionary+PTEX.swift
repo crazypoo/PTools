@@ -8,19 +8,13 @@
 
 import UIKit
 
-extension NSDictionary
+public extension NSDictionary
 {
     func jsonDataToString()->String
     {
-        var error : NSError? = nil
         var jsonData : Data? = nil
-        
-        if self == nil
-        {
-            return ""
-        }
-        
-        var dic = NSMutableDictionary()
+                
+        let dic = NSMutableDictionary()
         self.enumerateKeysAndObjects { keys, obj, stop in
             var keyString = ""
             var valueString = ""
@@ -46,7 +40,7 @@ extension NSDictionary
         
         do {
             jsonData = try JSONSerialization.data(withJSONObject: dic, options: .prettyPrinted)
-            let jsonString : NSString = String(data: jsonData!, encoding: .utf8) as! NSString
+            let jsonString : NSString = String(data: jsonData!, encoding: .utf8)! as NSString
             let mutableString = NSMutableString.init(string: jsonString)
             let range : NSRange = NSRange.init(location: 0, length: jsonString.length)
             mutableString.replaceOccurrences(of: " ", with: "", options: .literal, range: range)

@@ -9,15 +9,15 @@
 import UIKit
 import DeviceKit
 
-let AppWindows = UIApplication.shared.delegate?.window!
+public let AppWindows = UIApplication.shared.delegate?.window!
 
-let Gobal_device_info = Device.current
-let Gobal_group_of_all_iPad:[Device] = Device.allPads
-let Gobal_group_of_all_plus_device:[Device] = Device.allPlusSizedDevices
-let Gobal_group_of_all_X_device:[Device] = Device.allDevicesWithSensorHousing
-let Gobal_group_of_all_small_device:[Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini)]
+public let Gobal_device_info = Device.current
+public let Gobal_group_of_all_iPad:[Device] = Device.allPads
+public let Gobal_group_of_all_plus_device:[Device] = Device.allPlusSizedDevices
+public let Gobal_group_of_all_X_device:[Device] = Device.allDevicesWithSensorHousing
+public let Gobal_group_of_all_small_device:[Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini)]
 
-var isXModel: Bool {
+public var isXModel: Bool {
     if #available(iOS 11, *) {
         guard let w = UIApplication.shared.delegate?.window, let unwrapedWindow = w else {
             return false
@@ -31,23 +31,23 @@ var isXModel: Bool {
 
 /*! @brief 当前屏幕宽度
  */
-let kSCREEN_WIDTH = UIScreen.main.bounds.size.width
+public let kSCREEN_WIDTH = UIScreen.main.bounds.size.width
 /*! @brief 当前屏幕高度
  */
-let kSCREEN_HEIGHT = UIScreen.main.bounds.size.height
+public let kSCREEN_HEIGHT = UIScreen.main.bounds.size.height
 /*! @brief 当前屏幕Bounds
  */
-let kSCREEN_BOUNDS = UIScreen.main.bounds
+public let kSCREEN_BOUNDS = UIScreen.main.bounds
 /*! @brief 当前屏幕Size
  */
-let kSCREEN_SIZE = kSCREEN_BOUNDS.size
+public let kSCREEN_SIZE = kSCREEN_BOUNDS.size
 /*! @brief 当前屏幕比例
  */
-let kSCREEN_SCALE = UIScreen.main.scale
+public let kSCREEN_SCALE = UIScreen.main.scale
 
-let kNavBarHeight : CGFloat = 44
+public let kNavBarHeight : CGFloat = 44
 /// 状态栏默认高度
-var kStatusBarHeight: CGFloat {
+public var kStatusBarHeight: CGFloat {
     if #available(iOS 14.0, *)
     {
         return isXModel ? 48 : 20
@@ -55,27 +55,27 @@ var kStatusBarHeight: CGFloat {
     return isXModel ? 44 : 20
 }
 
-let kNavBarHeight_Total : CGFloat = kNavBarHeight + kStatusBarHeight
+public let kNavBarHeight_Total : CGFloat = kNavBarHeight + kStatusBarHeight
 
-let kTabbarSaveAreaHeight : CGFloat = isXModel ? 34 : 0
+public let kTabbarSaveAreaHeight : CGFloat = isXModel ? 34 : 0
 
-let kTabbarHeight : CGFloat = 49
+public let kTabbarHeight : CGFloat = 49
 
-let kTabbarHeight_Total : CGFloat = kTabbarSaveAreaHeight + kTabbarHeight
+public let kTabbarHeight_Total : CGFloat = kTabbarSaveAreaHeight + kTabbarHeight
 
 // MARK: - app版本&设备系统版本
-let infoDictionary            = Bundle.main.infoDictionary
+public let infoDictionary            = Bundle.main.infoDictionary
 /* App名称 */
-let kAppName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
+public let kAppName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
 /* App版本号 */
-let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
+public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
 /* Appbuild版本号 */
-let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
+public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
 /* app bundleId */
-let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
+public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
 /* 平台名称（iphonesimulator 、 iphone）*/
-let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
+public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
 /* iOS系统版本 */
-let kiOSVersion: String       = UIDevice.current.systemVersion
+public let kiOSVersion: String       = UIDevice.current.systemVersion
 /* 系统名称+版本，e.g. @"iOS 12.1" */
-let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion
+public let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion

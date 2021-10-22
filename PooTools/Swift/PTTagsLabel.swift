@@ -8,139 +8,138 @@
 
 import UIKit
 
-let BTN_Tags_Tag = 784843
-enum PTTagsLabelShowStatus {
+public let BTN_Tags_Tag = 784843
+public enum PTTagsLabelShowStatus {
     case Normal
     case Image
 }
 
-enum PTTagsLabelShowSubStatus {
+public enum PTTagsLabelShowSubStatus {
     case Normal
     case AllSameWidth
     case NoTitle
 }
 
-enum PTTagPosition {
+public enum PTTagPosition {
     case Left
     case Center
     case Right
 }
 
-class PTTagsConfig:PTBaseModel
+public class PTTagsConfig:PTBaseModel
 {
     /*! @brief item之间的左右间距
      */
-    var itemHerMargin : CGFloat? = 0
+    public var itemHerMargin : CGFloat? = 0
     /*! @brief item之间的上下间距
      */
-    var itemVerMargin : CGFloat? = 0
+    public var itemVerMargin : CGFloat? = 0
     /*! @brief item的高度
      */
-    var itemHeight : CGFloat? = 0
+    public var itemHeight : CGFloat? = 0
     /*! @brief item的长度 (只在图片模式使用)
      */
-    var itemWidth : CGFloat? = 0
+    public var itemWidth : CGFloat? = 0
     /*! @brief item标题距左右边缘的距离 (默认10)
      */
-    var itemContentEdgs : CGFloat? = 10
+    public var itemContentEdgs : CGFloat? = 10
     /*! @brief 最顶部的item层到本view最顶部的距离,最底部的item层到本view最底部的距离 (0.1基本可看作无距离)
      */
-    var topBottomSpace : CGFloat? = 0.1
+    public var topBottomSpace : CGFloat? = 0.1
     /*! @brief item字体 (默认系统12)
      */
-    var tagsFont : UIFont? = .systemFont(ofSize: 12)
+    public var tagsFont : UIFont? = .systemFont(ofSize: 12)
     /*! @brief 没选中字体颜色 (默认[UIColor grayColor])
      */
-    var normalTitleColor : UIColor? = .gray
+    public var normalTitleColor : UIColor? = .gray
     /*! @brief 选中字体颜色 (默认[UIColor greenColor])
      */
-    var selectedTitleColor : UIColor? = .green
+    public var selectedTitleColor : UIColor? = .green
     /*! @brief 默认背景颜色 (默认[UIColor clearColor])
      */
-    var backgroundColor : UIColor? = .clear
+    public var backgroundColor : UIColor? = .clear
     /*! @brief 选中背景颜色 (默认[UIColor clearColor])
      */
-    var backgroundSelectedColor : UIColor? = .clear
+    public var backgroundSelectedColor : UIColor? = .clear
     /*! @brief 没选中背景图片 (只在纯文字模式下使用)
      */
-    var normalBgImage : String? = ""
+    public var normalBgImage : String? = ""
     /*! @brief 选中背景图片 (只在纯文字模式下使用)
      */
-    var selectedBgImage : String? = ""
+    public var selectedBgImage : String? = ""
     /*! @brief 展示样式 (图片模式下使用)
      */
-    var showStatus : PTTagsLabelShowStatus? = .Normal
+    public var showStatus : PTTagsLabelShowStatus? = .Normal
     /*! @brief 图片与文字之间展示排版样式 (图片模式下使用)
      */
-    var insetsStyle : BKLayoutButtonStyle? = .leftImageRightTitle
+    public var insetsStyle : BKLayoutButtonStyle? = .leftImageRightTitle
     /*! @brief 图片与文字之间展间隙 (图片模式下使用)
      */
-    var imageAndTitleSpace :CGFloat?
+    public var imageAndTitleSpace :CGFloat?
     /*! @brief 是否有边框  (默认没有边框)
      */
-    var hasBorder : Bool? = false
+    public var hasBorder : Bool? = false
     /*! @brief 边框宽度 (默认0.5)
      */
-    var borderWidth : CGFloat? = 0.5
+    public var borderWidth : CGFloat? = 0.5
     /*! @brief 边框颜色 (默认[UIColor redColor])
      */
-    var borderColor : UIColor? = .red
+    public var borderColor : UIColor? = .red
     /*! @brief 边框颜色已选 (默认[UIColor redColor])
      */
-    var borderColorSelected : UIColor? = .red
+    public var borderColorSelected : UIColor? = .red
     /*! @brief 边框弧度 (默认item高度/2)
      */
-    var cornerRadius : CGFloat? = 0
-
+    public var cornerRadius : CGFloat? = 0
     /*! @brief 是否可以选中 (默认为NO (YES时为单选))
      */
-    var isCanSelected : Bool? = false
+    public var isCanSelected : Bool? = false
     /*! @brief 是否可以取消选中
      */
-    var isCanCancelSelected : Bool? = false
+    public var isCanCancelSelected : Bool? = false
     /*! @brief 是否可以多选
      */
-    var isMulti : Bool? = false
+    public var isMulti : Bool? = false
     /*! @brief 单个选中对应的标题 (初始化时默认选中的)
      */
-    var singleSelectedTitle : String? = ""
+    public var singleSelectedTitle : String? = ""
     /*! @brief 多个选中对应的标题数组(初始化时默认选中的)
      */
-    var selectedDefaultTags : [String]?
+    public var selectedDefaultTags : [String]?
     /*! @brief Tag的展示位置默认左边
     */
-    var tagPosition : PTTagPosition? = .Left
+    public var tagPosition : PTTagPosition? = .Left
     /*! @brief Tag普通图片
     */
-    var normalImage : [String]?
+    public var normalImage : [String]?
     /*! @brief Tag已选图片
     */
-    var selectedImage : [String]?
+    public var selectedImage : [String]?
     /*! @brief Tag标题
     */
-    var titleNormal : [String]?
+    public var titleNormal : [String]?
     /*! @brief TagImageSize
     */
-    var tagImageSize : CGSize?
+    public var tagImageSize : CGSize?
     /*! @brief Tag子展示属性
     */
-    var showSubStatus : PTTagsLabelShowSubStatus? = .Normal
+    public var showSubStatus : PTTagsLabelShowSubStatus? = .Normal
     /*! @brief Tag锁定按钮宽度
     */
-    var lockWidth : Bool? = false
+    public var lockWidth : Bool? = false
     /*! @brief Tag字符对齐情况
     */
-    var textAlignment : NSTextAlignment? = .center
+    public var textAlignment : NSTextAlignment? = .center
     /*! @brief 最后一行是否居中(仅限tagPosition时使用)
     */
-    var LastRowCenter:Bool? = false
+    public var LastRowCenter:Bool? = false
 }
 
-class PTTagsLabel: UIView {
+public class PTTagsLabel: UIView {
     
-    var tagHeightBlock:((_ tags:PTTagsLabel,_ viewHeight:CGFloat)->Void)?
-    var tagViewHadSectionAndSetcionLastTagAndTagInSectionCount:((_ tags:PTTagsLabel,_ section:Int,_ lastRowTagArr:[Int],_ sectionCountArr:[Int])->Void)?
-    var tagBtnClickedBlock:((_ tags:PTTagsLabel,_ currentTag:BKLayoutButton,_ index:Int)->Void)?
+    public var tagHeightBlock:((_ tags:PTTagsLabel,_ viewHeight:CGFloat)->Void)?
+    public var tagViewHadSectionAndSetcionLastTagAndTagInSectionCount:((_ tags:PTTagsLabel,_ section:Int,_ lastRowTagArr:[Int],_ sectionCountArr:[Int])->Void)?
+    public var tagBtnClickedBlock:((_ tags:PTTagsLabel,_ currentTag:BKLayoutButton,_ index:Int)->Void)?
     
     private var section:Int = 0
     private var rowLastTagArr = [Int]()
@@ -174,7 +173,7 @@ class PTTagsLabel: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func createTag()
+    public func createTag()
     {
         subviews.enumerated().forEach { (index,value) in
             value.removeFromSuperview()
@@ -210,7 +209,7 @@ class PTTagsLabel: UIView {
         
 //        var tagCountMax : Int = tagsTitleArr.count - 1
         
-        var floatArr = NSMutableArray()
+        let floatArr = NSMutableArray()
         tagsTitleArr.enumerated().forEach { (index,value) in
             if tagConfig!.lockWidth!
             {
@@ -413,7 +412,7 @@ class PTTagsLabel: UIView {
                                 sender.isSelected = !sender.isSelected
                                 if sender.isSelected
                                 {
-                                    self.selectedBtn = sender as! BKLayoutButton
+                                    self.selectedBtn = (sender as! BKLayoutButton)
                                 }
                                 else
                                 {
@@ -424,7 +423,7 @@ class PTTagsLabel: UIView {
                             {
                                 self.selectedBtn?.isSelected = false
                                 sender.isSelected = false
-                                self.selectedBtn = sender as! BKLayoutButton
+                                self.selectedBtn = (sender as! BKLayoutButton)
                             }
                         }
                         else
@@ -432,7 +431,7 @@ class PTTagsLabel: UIView {
                             self.selectedBtn?.isSelected = false
                             self.btnBackgroundColorAndBorderColor(sender: self.selectedBtn!)
                             sender.isSelected = true
-                            self.selectedBtn = sender as! BKLayoutButton
+                            self.selectedBtn = (sender as! BKLayoutButton)
                         }
                     }
                 }
@@ -664,7 +663,7 @@ class PTTagsLabel: UIView {
         }
     }
     
-    func clearTag()
+    public func clearTag()
     {
         self.tagsTitleArr.enumerated().forEach { (index,value) in
             let btn = self.viewWithTag(index + BTN_Tags_Tag) as! BKLayoutButton

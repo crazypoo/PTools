@@ -9,14 +9,14 @@
 import UIKit
 import pop
 
-let BottomButtonHeight : CGFloat = 44
-let AlertLine : CGFloat = 0.5
+public let BottomButtonHeight : CGFloat = 44
+public let AlertLine : CGFloat = 0.5
 
-typealias PTCustomerAlertClickBlock = (_ alert:PTCustomAlertView,_ index:Int) -> Void
-typealias PTCustomerDidDismissBlock = (_ alert:PTCustomAlertView) -> Void
-typealias PTCustomerCustomerBlock = (_ alertCustomerView:UIView) -> Void
+public typealias PTCustomerAlertClickBlock = (_ alert:PTCustomAlertView,_ index:Int) -> Void
+public typealias PTCustomerDidDismissBlock = (_ alert:PTCustomAlertView) -> Void
+public typealias PTCustomerCustomerBlock = (_ alertCustomerView:UIView) -> Void
 
-enum PTAlertAnimationType {
+public enum PTAlertAnimationType {
     case Top
     case Bottom
     case Left
@@ -24,33 +24,33 @@ enum PTAlertAnimationType {
     case Normal
 }
 
-class PTCustomBottomButtonModel:PTBaseModel
+public class PTCustomBottomButtonModel:PTBaseModel
 {
     var titleName:String? = ""
     var titleColor:UIColor? = UIColor.systemBlue
 }
 
 @objcMembers
-class PTCustomAlertView: UIView {
+public class PTCustomAlertView: UIView {
 
-    var buttonClick:PTCustomerAlertClickBlock?
-    var didDismissBlock:PTCustomerDidDismissBlock?
-    var customerBlock:PTCustomerCustomerBlock?
+    public var buttonClick:PTCustomerAlertClickBlock?
+    public var didDismissBlock:PTCustomerDidDismissBlock?
+    public var customerBlock:PTCustomerCustomerBlock?
 
-    class open func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat
+    class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat
     {
         let height = PTUtils.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         let viewHeight = kSCREEN_HEIGHT / 3
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
-    class open func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat
+    class public func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat
     {
         let buttonH = PTUtils.sizeFor(string: "HOLA", font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         return (moreButtonTitles.count == 0 || moreButtonTitles.isEmpty) ? 0 : ((buttonH > BottomButtonHeight) ? buttonH : BottomButtonHeight)
     }
     
-    class open func titleAndBottomViewNormalHeight(width:CGFloat,title:String,font:UIFont,buttonArray:[PTCustomBottomButtonModel])->CGFloat
+    class public func titleAndBottomViewNormalHeight(width:CGFloat,title:String,font:UIFont,buttonArray:[PTCustomBottomButtonModel])->CGFloat
     {
         var titleH : CGFloat? = 0
         titleH = PTCustomAlertView.getAlertTitleHeight(font: font, alertWidth: width, title: title)
@@ -60,7 +60,7 @@ class PTCustomAlertView: UIView {
         {
             for string in buttonArray
             {
-                if (font.pointSize * CGFloat((string.titleName as! NSString).length) + 10) > btnW
+                if (font.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
                 {
                     isEX = true
                     break
@@ -118,7 +118,7 @@ class PTCustomAlertView: UIView {
         return view
     }()
     
-    init(superView:UIView,
+    public init(superView:UIView,
          alertTitle:String? = "",
          font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
          titleColor:UIColor? = UIColor.black,
@@ -156,7 +156,12 @@ class PTCustomAlertView: UIView {
         }
         
         blur = SSBlurView.init(to: self)
-        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        if #available(iOS 13.0, *) {
+            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        } else {
+            blur!.style = .extraLight
+            // Fallback on earlier versions
+        }
         blur!.alpha = 0.9
         blur!.enable()
 
@@ -204,7 +209,7 @@ class PTCustomAlertView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews()
+    public override func layoutSubviews()
     {
         super.layoutSubviews()
         
@@ -242,7 +247,7 @@ class PTCustomAlertView: UIView {
         var isEX : Bool?  = false
         for string in bottombuttonArray
         {
-            if (viewFont.pointSize * CGFloat((string.titleName as! NSString).length) + 10) > btnW
+            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
             {
                 isEX = true
                 break
@@ -277,7 +282,7 @@ class PTCustomAlertView: UIView {
         var isEX : Bool?  = false
         for string in bottombuttonArray
         {
-            if (viewFont.pointSize * CGFloat((string.titleName as! NSString).length) + 10) > btnW
+            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
             {
                 isEX = true
                 break
@@ -358,7 +363,7 @@ class PTCustomAlertView: UIView {
         }
     }
     
-    @objc func dismiss()
+    @objc public func dismiss()
     {
         if didDismissBlock != nil
         {
@@ -387,7 +392,7 @@ class PTCustomAlertView: UIView {
         }
         
         let offscreenAnimation = POPBasicAnimation.easeOut()
-        offscreenAnimation?.property = POPAnimatableProperty.property(withName: propertyNamed) as! POPAnimatableProperty
+        offscreenAnimation?.property = (POPAnimatableProperty.property(withName: propertyNamed) as! POPAnimatableProperty)
         offscreenAnimation?.toValue = offsetValue
         offscreenAnimation?.duration = 0.35
         offscreenAnimation?.completionBlock = { (anim,finish) in
@@ -402,11 +407,13 @@ class PTCustomAlertView: UIView {
         layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
     }
     
-    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            // 适配代码
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        if #available(iOS 13.0, *) {
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                // 适配代码
+                blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+            }
         }
     }
 }

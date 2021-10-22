@@ -9,7 +9,7 @@
 import UIKit
 import Accelerate
 
-extension UIImage
+public extension UIImage
 {
     func transformImage(size:CGSize)->UIImage
     {
@@ -52,8 +52,8 @@ extension UIImage
     {
         let imageRect = CGRect.init(origin: .zero, size: self.size)
         var effectImage = self
-        let hadBlur = blurRadius > FLT_EPSILON
-        let hasSaturationChange = fabs(saturationDeltaFactor - 1) > FLT_EPSILON
+        let hadBlur = blurRadius > Float.ulpOfOne
+        let hasSaturationChange = abs(saturationDeltaFactor - 1) > Float.ulpOfOne
         if hadBlur || hasSaturationChange
         {
             UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
@@ -80,7 +80,7 @@ extension UIImage
             if hadBlur
             {
                 let inputRadius = blurRadius * Float(UIScreen.main.scale)
-                let sqartReslut = sqrt(2 * M_PI)
+                let sqartReslut = sqrt(2 * Double.pi)
                 var radius:NSInteger = NSInteger(floor(Double(inputRadius) * 3.0 * sqartReslut / 4.0 + 0.5))
                 if radius % 2 != 1
                 {
@@ -132,7 +132,7 @@ extension UIImage
         }
         
         UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
-        var outputContext = UIGraphicsGetCurrentContext()
+        let outputContext = UIGraphicsGetCurrentContext()
         outputContext?.scaleBy(x: 1, y: -1)
         outputContext?.translateBy(x: 0, y: -self.size.height)
         outputContext?.draw(self.cgImage!, in: imageRect)
@@ -167,7 +167,7 @@ extension UIImage
         let pixelData = self.cgImage!.dataProvider!.data
         if let data:UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
         {
-            var cls = NSCountedSet.init(capacity: Int(thumbSize.width * thumbSize.height))
+            let cls = NSCountedSet.init(capacity: Int(thumbSize.width * thumbSize.height))
             for x in 0..<Int(thumbSize.width)
             {
                 for y in 0..<Int(thumbSize.height)

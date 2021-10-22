@@ -11,10 +11,10 @@ import UIKit
 var isSwizzed: Bool = false
 var logTag: String = ""
 
-extension UIViewController {
+public extension UIViewController {
     
     // MARK: - Public Methods
-    public class func swizzIt() {
+    class func swizzIt() {
         if (isSwizzed) {
             return
         }
@@ -24,7 +24,7 @@ extension UIViewController {
         isSwizzed = true
     }
     
-    public class func swizzItWithTag(tag: String?) {
+    class func swizzItWithTag(tag: String?) {
         if (tag == nil) {
             return
         }
@@ -33,7 +33,7 @@ extension UIViewController {
         self.swizzIt()
     }
     
-    public class func undoSwizz() {
+    class func undoSwizz() {
         if (!isSwizzed) {
             return
         }
