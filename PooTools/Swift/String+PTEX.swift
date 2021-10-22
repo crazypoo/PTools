@@ -36,7 +36,7 @@ public enum PStrengthLevel {
     case Extremely_Strong
 }
 
-public extension String
+extension String
 {
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
@@ -46,7 +46,7 @@ public extension String
     static let HomePhone = "^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$"
     static let ISNUMBER = "^[0-9]*$"
     
-    func checkURL()->Bool
+    public func checkURL()->Bool
     {
         var newString : String = self
         if newString.countOfChars() < 1
@@ -61,37 +61,37 @@ public extension String
         return newString.checkWithString(expression: String.URLCHECKSTRING)
     }
     
-    func isNumberString()->Bool
+    public func isNumberString()->Bool
     {
         return self.checkWithString(expression:String.ISNUMBER)
     }
     
-    func isHomePhone()->Bool
+    public func isHomePhone()->Bool
     {
         return self.checkWithString(expression:String.HomePhone)
     }
 
-    func isPooPhoneNum()->Bool
+    public func isPooPhoneNum()->Bool
     {
         return self.checkWithString(expression:String.POOPHONE)
     }
 
-    func isCOLTDCode()->Bool
+    public func isCOLTDCode()->Bool
     {
         return self.checkWithString(expression: String.COLTDCode)
     }
     
-    func isURL()->Bool
+    public func isURL()->Bool
     {
         return self.checkWithString(expression: String.URL)
     }
     
-    func isIP()->Bool
+    public func isIP()->Bool
     {
         return self.checkWithString(expression: String.IpAddress)
     }
     
-    func isAChineseName()->Bool
+    public func isAChineseName()->Bool
     {
         if (self).stringIsEmpty()
         {
@@ -135,13 +135,13 @@ public extension String
         }
     }
     
-    func checkWithString(expression:String)->Bool
+    public func checkWithString(expression:String)->Bool
     {
         let regextest = NSPredicate.init(format: "SELF MATCHES %@", expression)
         return regextest.evaluate(with: self)
     }
 
-    func checkWithArray(expression:NSArray)->Bool
+    public func checkWithArray(expression:NSArray)->Bool
     {
         var res = false
         for value in expression
@@ -156,7 +156,7 @@ public extension String
         return true
     }
     
-    func copyToPasteboard()
+    public func copyToPasteboard()
     {
         #if os(iOS)
         UIPasteboard.general.string = self
@@ -167,7 +167,7 @@ public extension String
     }
     
     /// base64 解码
-    var base64Decoded: String? {
+    public var base64Decoded: String? {
         let remainder = count % 4
         
         var padding = ""
@@ -182,12 +182,12 @@ public extension String
     }
     
     /// base64 编码
-    var base64Encoded: String? {
+    public var base64Encoded: String? {
         let plainData = data(using: .utf8)
         return plainData?.base64EncodedString()
     }
     
-    var md5555:String
+    public var md5555:String
     {
         let utf8 = cString(using: .utf8)
         var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
@@ -196,7 +196,7 @@ public extension String
     }
     
     /// 是否包含emoji
-    var isContainEmoji: Bool {
+    public var isContainEmoji: Bool {
         for scalar in unicodeScalars {
             return self.containEmoji(scalar)
         }
@@ -206,7 +206,7 @@ public extension String
     /// 是否包含表情
     /// - Parameter scalar: unicode 字符
     /// - Returns: 是表情返回true
-    func containEmoji(_ scalar: Unicode.Scalar) -> Bool {
+    public func containEmoji(_ scalar: Unicode.Scalar) -> Bool {
         switch Int(scalar.value) {
         case 0x1F600...0x1F64F: return true     // Emoticons
         case 0x1F300...0x1F5FF: return true  // Misc Symbols and Pictographs
@@ -226,7 +226,7 @@ public extension String
     }
     
     /// 移除表情
-    func removeEmoji() -> String {
+    public func removeEmoji() -> String {
         var scalars = self.unicodeScalars
         scalars.removeAll(where: containEmoji(_:))
         return String(scalars)
@@ -234,7 +234,7 @@ public extension String
     
     /// 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
     /// - Returns: 返回字符的个数
-    func countOfChars() -> Int {
+    public func countOfChars() -> Int {
         var count = 0
         guard self.count > 0 else { return 0}
         
@@ -250,7 +250,7 @@ public extension String
     }
     
     /// 根据字符个数返回从指定位置向后截取的字符串（英文 = 1，数字 = 1，汉语 = 2）
-    func sub(from index: Int) -> String {
+    public func sub(from index: Int) -> String {
         if self.count == 0 {
             return ""
         }
@@ -276,7 +276,7 @@ public extension String
 }
 
 // MARK: - Initializers
-public extension String {
+extension String {
     /// 初始化 base64
     init?(base64: String) {
         guard let decodedData = Data(base64Encoded: base64) else { return nil }
@@ -285,26 +285,26 @@ public extension String {
     }
 }
 
-public extension String {
+extension String {
     /// 初始化 base64
-    func toModel<T>(_ type: T.Type) -> T? where T: Decodable {
+    public func toModel<T>(_ type: T.Type) -> T? where T: Decodable {
        return self.data(using: .utf8)?.toModel(type)
     }
 }
 
-public extension String
+extension String
 {
-    func stringIsEmpty()->Bool
+    public func stringIsEmpty()->Bool
     {
         return (self.charactersArray.count < 1) ? true : false
     }
     
-    func toMoney()->String
+    public func toMoney()->String
     {
         return String(format: "%.2f", self.float()!)
     }
     
-    func toSecurityPhone()->String
+    public func toSecurityPhone()->String
     {
         if (self).stringIsEmpty() && self.charactersArray.count > 10
         {
@@ -315,7 +315,7 @@ public extension String
     
     //MARK:字符串转Dic
     ///字符串转Dic
-    func jsonStringToDic()->NSDictionary?
+    public func jsonStringToDic()->NSDictionary?
     {
         if self.isEmpty
         {
@@ -331,7 +331,7 @@ public extension String
         }
     }
         
-    func passwordLevel()->PStrengthLevel
+    public func passwordLevel()->PStrengthLevel
     {
         let level = self.checkPasswordStrength()
         if level > 0 && level < 4

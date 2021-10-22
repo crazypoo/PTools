@@ -157,7 +157,7 @@ public class PTTagsLabel: UIView {
     }()
     
     
-    var tagConfig : PTTagsConfig?
+    public var tagConfig : PTTagsConfig?
 //    {
 //        didSet
 //        {
