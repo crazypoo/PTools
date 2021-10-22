@@ -19,7 +19,7 @@ let systemLog_base_height:CGFloat = 142
 let borderLine:CGFloat = 5
 let diameter:CGFloat = 28
 
-var App_UI_Debug_Bool:Bool
+public var App_UI_Debug_Bool:Bool
 {
     let userDefaults = UserDefaults.standard.value(forKey: LocalConsole.ConsoleDebug)
     let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
@@ -38,7 +38,7 @@ class ConsoleWindow: UIWindow {
 }
 
 @objcMembers
-class LocalConsole: NSObject {
+public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
 
     enum LocalConsoleActionType {
