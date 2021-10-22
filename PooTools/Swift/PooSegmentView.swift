@@ -266,7 +266,7 @@ public class PooSegmentView: UIView {
     private var viewConfig = PooSegmentConfig()
     private var subViewArr = [UIView]()
     
-    var viewDatas = [PooSegmentModel]()
+    public var viewDatas = [PooSegmentModel]()
 
     public enum PooSegmentBadgePosition {
         case TopLeft

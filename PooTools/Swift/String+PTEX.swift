@@ -170,13 +170,7 @@ public extension String
         
         return String(data: data, encoding: .utf8)
     }
-    
-    /// base64 编码
-    var base64Encoded: String? {
-        let plainData = data(using: .utf8)
-        return plainData?.base64EncodedString()
-    }
-    
+        
     var md5555:String
     {
         let utf8 = cString(using: .utf8)

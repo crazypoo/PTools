@@ -26,8 +26,8 @@ public enum PTAlertAnimationType {
 
 public class PTCustomBottomButtonModel:PTBaseModel
 {
-    var titleName:String? = ""
-    var titleColor:UIColor? = UIColor.systemBlue
+    public var titleName:String? = ""
+    public var titleColor:UIColor? = UIColor.systemBlue
 }
 
 @objcMembers
