@@ -30,6 +30,7 @@ class PTCustomBottomButtonModel:PTBaseModel
     var titleColor:UIColor? = UIColor.systemBlue
 }
 
+@objcMembers
 class PTCustomAlertView: UIView {
 
     var buttonClick:PTCustomerAlertClickBlock?

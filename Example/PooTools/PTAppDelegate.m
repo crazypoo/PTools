@@ -25,6 +25,8 @@
 #import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 
+#import "PooTools-Swift.h"
+
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
  //重装后先登录
@@ -187,7 +189,7 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
-    
+        
     return YES;
 }
 

@@ -46,6 +46,8 @@
 		230FC58D27227ED9005A8D08 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58927227ED9005A8D08 /* Extensions.swift */; };
 		230FC58E27227ED9005A8D08 /* SystemReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58A27227ED9005A8D08 /* SystemReport.swift */; };
 		230FC592272280F4005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC591272280F4005A8D08 /* Shared.swift */; };
+		23114E3C27229AE6001CF3F5 /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23114E3B27229AE6001CF3F5 /* LocalConsole.swift */; };
+		23114E3E27229AF5001CF3F5 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23114E3D27229AF5001CF3F5 /* ResizeController.swift */; };
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
@@ -253,6 +255,8 @@
 		230FC58927227ED9005A8D08 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		230FC58A27227ED9005A8D08 /* SystemReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SystemReport.swift; path = ../../../upbong_ios/Diou/Common/Main/Gobal/ViewController/SystemReport.swift; sourceTree = "<group>"; };
 		230FC591272280F4005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
+		23114E3B27229AE6001CF3F5 /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
+		23114E3D27229AF5001CF3F5 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
 		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
 		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
@@ -631,6 +635,8 @@
 		230FC52B272268D0005A8D08 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
+				23114E3D27229AF5001CF3F5 /* ResizeController.swift */,
+				23114E3B27229AE6001CF3F5 /* LocalConsole.swift */,
 				230FC591272280F4005A8D08 /* Shared.swift */,
 				230FC58827227ED9005A8D08 /* BorderManager.swift */,
 				230FC58927227ED9005A8D08 /* Extensions.swift */,
@@ -1636,6 +1642,7 @@
 				230FC55B272268E0005A8D08 /* PTActionSheetView.swift in Sources */,
 				230FC553272268E0005A8D08 /* PTLaunchAdMonitor.swift in Sources */,
 				CC3838DA2144C29700453548 /* UIView+LayoutSubviewsCallback.m in Sources */,
+				23114E3E27229AF5001CF3F5 /* ResizeController.swift in Sources */,
 				CC1257D82098319300E31A38 /* UIButton+Block.m in Sources */,
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
 				CC15EB1D21FC54690033D99F /* PopSignatureView.m in Sources */,
@@ -1698,6 +1705,7 @@
 				CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */,
 				CC1257CD2098319300E31A38 /* PooSegView.m in Sources */,
 				230FC54E272268E0005A8D08 /* SSBlurView.swift in Sources */,
+				23114E3C27229AE6001CF3F5 /* LocalConsole.swift in Sources */,
 				CC1257E42098319300E31A38 /* WMHub.m in Sources */,
 				CC1257DF2098319300E31A38 /* UILabel+FlickerNumber.m in Sources */,
 				CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */,
