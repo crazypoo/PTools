@@ -420,14 +420,14 @@ public class PTUtils: NSObject {
     }
     
     @available(iOS 11.0, *)
-    public class func color(name:String,traitCollection:UITraitCollection)->UIColor
+    public class func color(name:String,traitCollection:UITraitCollection,buldle:Bundle? = PTUtils.cgBaseBundle())->UIColor
     {
-        return UIColor(named: name, in: PTUtils.cgBaseBundle(), compatibleWith: traitCollection) ?? .randomColor
+        return UIColor(named: name, in: buldle, compatibleWith: traitCollection) ?? .randomColor
     }
     
-    public class func image(name:String,traitCollection:UITraitCollection)->UIImage
+    public class func image(name:String,traitCollection:UITraitCollection,buldle:Bundle? = PTUtils.cgBaseBundle())->UIImage
     {
-        return UIImage(named: name, in: PTUtils.cgBaseBundle(), compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
+        return UIImage(named: name, in: buldle, compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
     }
     
     public class func darkModeImage(name:String)->UIImage
