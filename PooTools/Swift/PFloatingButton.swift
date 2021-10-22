@@ -108,7 +108,7 @@ class PFloatingButton: UIButton {
     
     func defultSetting()
     {
-        self.addActionHandler { sender in
+        self.addActionHandlers { sender in
             if !self.singleTapCanceled! && self.tapBlock != nil && !self.isDragging! && !self.skipTapEventOnce!
             {
                 self.tapBlock!(self)

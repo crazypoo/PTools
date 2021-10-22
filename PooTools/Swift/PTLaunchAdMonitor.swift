@@ -138,7 +138,7 @@ class PTLaunchAdMonitor: NSObject {
             monitor.player?.player?.play()
             
             let imageBtn = UIButton.init(type: .custom)
-            imageBtn.addActionHandler { sender in
+            imageBtn.addActionHandlers { sender in
                 PTLaunchAdMonitor.showDetail(sender: sender)
             }
             imageBtn.isUserInteractionEnabled = dic
@@ -152,7 +152,7 @@ class PTLaunchAdMonitor: NSObject {
             exit.setTitleColor(.white, for: .normal)
             exit.titleLabel?.font = newFont
             exit.setTitle("跳过", for: .normal)
-            exit.addActionHandler { sender in
+            exit.addActionHandlers { sender in
                 PTLaunchAdMonitor.hideView(sender: sender)
             }
             exit.viewCorner(radius: 5)
@@ -195,7 +195,7 @@ class PTLaunchAdMonitor: NSObject {
             default:
                 let imageBtn = UIButton.init(type: .custom)
                 imageBtn.setImage(UIImage(data: monitor.imgData as! Data), for: .normal)
-                imageBtn.addActionHandler { sender in
+                imageBtn.addActionHandlers { sender in
                     PTLaunchAdMonitor.showDetail(sender: sender)
                 }
                 monitor.imgData?.length = 0
@@ -212,7 +212,7 @@ class PTLaunchAdMonitor: NSObject {
             let exit = UIButton.init(type: .custom)
             exit.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.2)
             exit.setTitleColor(.white, for: .normal)
-            exit.addActionHandler { sender in
+            exit.addActionHandlers { sender in
                 PTLaunchAdMonitor.hideView(sender: sender)
             }
             exit.titleLabel!.textAlignment = .center

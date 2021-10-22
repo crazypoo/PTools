@@ -14,7 +14,7 @@ extension UIButton
 {
     static var UIButtonBlockKey = "UIButtonBlockKey"
     
-    func addActionHandler(handler:@escaping TouchedBlock)
+    func addActionHandlers(handler:@escaping TouchedBlock)
     {
         objc_setAssociatedObject(self, &UIButton.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)

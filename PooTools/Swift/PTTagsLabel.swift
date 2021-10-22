@@ -372,7 +372,7 @@ class PTTagsLabel: UIView {
             }
             btn.backgroundColor = tagConfig?.backgroundColor
             btn.titleLabel?.font = font
-            btn.addActionHandler { sender in
+            btn.addActionHandlers { sender in
                 if self.tagConfig!.isCanSelected!
                 {
                     if self.tagConfig!.isMulti!

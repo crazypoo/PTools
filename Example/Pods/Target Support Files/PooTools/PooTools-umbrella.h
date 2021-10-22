@@ -28,7 +28,6 @@
 #import "LGTMBase64.h"
 #import "LGTMDefines.h"
 #import "MethodSwizzle.h"
-#import "PTBridgeObject.h"
 #import "PBugReporter.h"
 #import "PooActionOnCalendar.h"
 #import "NSDate+Category.h"

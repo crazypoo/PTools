@@ -312,7 +312,7 @@ class PTCustomAlertView: UIView {
                 cancelBtn.setTitle(value.titleName, for: .normal)
                 cancelBtn.titleLabel?.font = self.viewFont
                 cancelBtn.tag = 100 + index
-                cancelBtn.addActionHandler { sender in
+                cancelBtn.addActionHandlers { sender in
                     if self.buttonClick != nil
                     {
                         self.buttonClick!(self,(sender.tag - 100))

@@ -363,7 +363,7 @@ class PooSegmentView: UIView {
                     switch subView.buttonShowType {
                     case .TitleImage:
                         subView.imageBtn.tag = index
-                        subView.imageBtn.addActionHandler { (sender) in
+                        subView.imageBtn.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
                             if self.segTapBlock != nil
                             {
@@ -372,7 +372,7 @@ class PooSegmentView: UIView {
                         }
                     default:
                         subView.label.tag = index
-                        subView.label.addActionHandler { (sender) in
+                        subView.label.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
                             if self.segTapBlock != nil
                             {

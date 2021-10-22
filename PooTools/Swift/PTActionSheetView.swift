@@ -96,7 +96,7 @@ class PTActionSheetView: UIView {
 
     private lazy var destructiveButton : PTActionCell = {
         let view = PTActionCell()
-        view.cellButton.addActionHandler(handler: { (sender) in
+        view.cellButton.addActionHandlers(handler: { (sender) in
             self.didSelection(sender: sender)
         })
         view.cellButton.tag = PTActionSheetView.DestructiveButtonTag
@@ -108,7 +108,7 @@ class PTActionSheetView: UIView {
     
     private lazy var cancelBtn : PTActionCell = {
         let view = PTActionCell()
-        view.cellButton.addActionHandler(handler: { (sender) in
+        view.cellButton.addActionHandlers(handler: { (sender) in
             self.didSelection(sender: sender)
         })
         view.cellButton.tag = PTActionSheetView.CancelButtonTag
@@ -315,7 +315,7 @@ class PTActionSheetView: UIView {
                 btn.cellButton.setTitleColor(normalTitleColor, for: .normal)
                 btn.cellButton.setTitle(value, for: .normal)
                 btn.cellButton.setBackgroundImage(highlightedImage, for: .highlighted)
-                btn.cellButton.addActionHandler { sender in
+                btn.cellButton.addActionHandlers { sender in
                     self.didSelection(sender: sender)
                 }
                 self.actionSheetScroll.addSubview(btn)

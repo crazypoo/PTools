@@ -46,7 +46,6 @@
 		230FC58D27227ED9005A8D08 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58927227ED9005A8D08 /* Extensions.swift */; };
 		230FC58E27227ED9005A8D08 /* SystemReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC58A27227ED9005A8D08 /* SystemReport.swift */; };
 		230FC592272280F4005A8D08 /* Shared.swift in Sources */ = {isa = PBXBuildFile; fileRef = 230FC591272280F4005A8D08 /* Shared.swift */; };
-		2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 233340FF26A0369100E4DF25 /* PTBridgeObject.m */; };
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA742543BDB9002AE25C /* PurchaseCarAnimationTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA732543BDB9002AE25C /* PurchaseCarAnimationTool.m */; };
@@ -254,8 +253,6 @@
 		230FC58927227ED9005A8D08 /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		230FC58A27227ED9005A8D08 /* SystemReport.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SystemReport.swift; path = ../../../upbong_ios/Diou/Common/Main/Gobal/ViewController/SystemReport.swift; sourceTree = "<group>"; };
 		230FC591272280F4005A8D08 /* Shared.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Shared.swift; sourceTree = "<group>"; };
-		233340FE26A0369100E4DF25 /* PTBridgeObject.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTBridgeObject.h; sourceTree = "<group>"; };
-		233340FF26A0369100E4DF25 /* PTBridgeObject.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTBridgeObject.m; sourceTree = "<group>"; };
 		2334398325AA831000C2203A /* PTAppDeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDeviceInfo.swift; sourceTree = "<group>"; };
 		2352EA6D2543BD3A002AE25C /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
@@ -679,8 +676,6 @@
 		233340FD26A0367700E4DF25 /* Bridge */ = {
 			isa = PBXGroup;
 			children = (
-				233340FE26A0369100E4DF25 /* PTBridgeObject.h */,
-				233340FF26A0369100E4DF25 /* PTBridgeObject.m */,
 			);
 			path = Bridge;
 			sourceTree = "<group>";
@@ -1686,7 +1681,6 @@
 				230FC560272268E0005A8D08 /* Data+PTEX.swift in Sources */,
 				CC1257E32098319300E31A38 /* Utils.m in Sources */,
 				CC1257E12098319300E31A38 /* UIView+ModifyFrame.m in Sources */,
-				2333410026A0369100E4DF25 /* PTBridgeObject.m in Sources */,
 				230FC562272268E0005A8D08 /* PCleanCache.swift in Sources */,
 				CC634FA922464B9B007BBD1A /* PTOpenSystemFunction.m in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,

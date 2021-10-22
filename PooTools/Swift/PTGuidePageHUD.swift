@@ -46,8 +46,8 @@ class PTGuidePageHUD: UIView {
         skipButton.backgroundColor = .gray
         skipButton.setTitleColor(.white, for: .normal)
         skipButton.layer.cornerRadius =  skipButton.frame.height * 0.5
-        skipButton.addActionHandler { sender in
-            self.buttonClick(sender: sender!)
+        skipButton.addActionHandlers { sender in
+            self.buttonClick(sender: sender)
         }
         self.addSubview(skipButton)
         skipButton.snp.makeConstraints { make in
@@ -97,8 +97,8 @@ class PTGuidePageHUD: UIView {
                 startButton.setTitleColor(UIColor(red: 164/255, green: 201/255, blue: 67/255, alpha: 1), for: .normal)
                 startButton.titleLabel?.font = .systemFont(ofSize: 21)
                 startButton.setBackgroundImage(UIImage(named: "GuideImage.bundle/guideImage_button_backgound"), for: .normal)
-                startButton.addActionHandler { sender in
-                    self.buttonClick(sender: sender!)
+                startButton.addActionHandlers { sender in
+                    self.buttonClick(sender: sender)
                 }
                 imageView.addSubview(startButton)
                 startButton.snp.makeConstraints { make in
@@ -140,8 +140,8 @@ class PTGuidePageHUD: UIView {
         movieStartButton.setTitle(StartString, for: .normal)
         movieStartButton.alpha = 0
         player.view.addSubview(movieStartButton)
-        movieStartButton.addActionHandler { sender in
-            self.buttonClick(sender: sender!)
+        movieStartButton.addActionHandlers { sender in
+            self.buttonClick(sender: sender)
         }
         UIView.animate(withDuration: animationTime!) {
             movieStartButton.alpha = 1
