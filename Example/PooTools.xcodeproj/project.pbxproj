@@ -177,7 +177,6 @@
 		CC84794D2192D06100E89B79 /* UIView+MLScreenshot.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84794C2192D06100E89B79 /* UIView+MLScreenshot.m */; };
 		CC84BD3421CA31C40091C8E8 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */; };
 		CC87F03221FDBCB400CE0640 /* YNPayPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */; };
-		CC87F801224C5B33003EA1FF /* PTCheckAppStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = CC87F800224C5B33003EA1FF /* PTCheckAppStatus.m */; };
 		CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */; };
 		CC96809D20B042B800AA07F5 /* PBiologyID.m in Sources */ = {isa = PBXBuildFile; fileRef = CC96809C20B042B800AA07F5 /* PBiologyID.m */; };
 		CC9C606420A1537900F06B92 /* PooDatePicker.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9C606320A1537900F06B92 /* PooDatePicker.m */; };
@@ -506,8 +505,6 @@
 		CC84BD3321CA31C40091C8E8 /* SensitiveWordTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitiveWordTools.m; sourceTree = "<group>"; };
 		CC87F03021FDBCB300CE0640 /* YNPayPasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNPayPasswordView.h; sourceTree = "<group>"; };
 		CC87F03121FDBCB300CE0640 /* YNPayPasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNPayPasswordView.m; sourceTree = "<group>"; };
-		CC87F7FF224C5B33003EA1FF /* PTCheckAppStatus.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTCheckAppStatus.h; sourceTree = "<group>"; };
-		CC87F800224C5B33003EA1FF /* PTCheckAppStatus.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTCheckAppStatus.m; sourceTree = "<group>"; };
 		CC95771F21003A5F00EAB71E /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		CC95772021003A6000EAB71E /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
 		CC96809B20B042B700AA07F5 /* PBiologyID.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBiologyID.h; sourceTree = "<group>"; };
@@ -886,15 +883,6 @@
 				CC29C9FA21CE1F9100786FF1 /* PTUploadDataSteamTools.m */,
 			);
 			path = NetWork;
-			sourceTree = "<group>";
-		};
-		C08D9DCD227688FE001417F1 /* DevTools */ = {
-			isa = PBXGroup;
-			children = (
-				CC87F7FF224C5B33003EA1FF /* PTCheckAppStatus.h */,
-				CC87F800224C5B33003EA1FF /* PTCheckAppStatus.m */,
-			);
-			path = DevTools;
 			sourceTree = "<group>";
 		};
 		C08D9DCE2276890F001417F1 /* Category */ = {
@@ -1389,7 +1377,6 @@
 				C08D9DF22276900E001417F1 /* CleanMemory */,
 				C08D9DF522769085001417F1 /* CodeView */,
 				C08D9DEC22768EA8001417F1 /* Country */,
-				C08D9DCD227688FE001417F1 /* DevTools */,
 				C08D9DD1227689DD001417F1 /* FaceIDAndTouchID */,
 				C08D9DF022768F8A001417F1 /* FloatingView */,
 				C08D9DE022768C9B001417F1 /* ImageReviewer */,
@@ -1631,7 +1618,6 @@
 				230FC5772722716D005A8D08 /* BKCutsomButton.swift in Sources */,
 				CCD660B721DCCD3B004AA57D /* IGHTTPClient+Download.m in Sources */,
 				64E0599720AB6D0300E434CD /* PooCleanCache.m in Sources */,
-				CC87F801224C5B33003EA1FF /* PTCheckAppStatus.m in Sources */,
 				CC3838D3214364D100453548 /* PVideoSupport.m in Sources */,
 				CC1D38BD211D706400FD29F4 /* MAThermometer.m in Sources */,
 				CC1257BC2098319300E31A38 /* NSString+Regulars.m in Sources */,

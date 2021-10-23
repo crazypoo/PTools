@@ -650,7 +650,7 @@ CGFloat const tagItemSpace = 5;
             
             PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:kDEFAULT_FONT(FontName, 25) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:titles];
             [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[PTCustomAlertView getBottomButtonHiehgtWithFont:kDEFAULT_FONT(FontName, 50) alertWidth:kSCREEN_WIDTH-20 moreButtonTitles:titles]);
+                make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:kDEFAULT_FONT(FontName, 25) buttonArray:titles]);
                 make.width.offset(kSCREEN_WIDTH-20);
                 make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];

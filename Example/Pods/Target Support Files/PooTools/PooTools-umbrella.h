@@ -64,7 +64,6 @@
 #import "PooCleanCache.h"
 #import "PooCodeView.h"
 #import "CountryCodes.h"
-#import "PTCheckAppStatus.h"
 #import "PBiologyID.h"
 #import "RCDraggableButton.h"
 #import "SQFloatWindow.h"

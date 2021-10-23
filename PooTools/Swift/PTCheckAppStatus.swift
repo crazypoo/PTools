@@ -8,11 +8,21 @@
 
 import UIKit
 
+@objcMembers
 public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
 
     public var fpsHandle:((_ fps:NSInteger)->Void)?
-    public var closed:Bool? = true
+    public var closed:Bool
+    {
+        get{
+            true
+        }
+        set
+        {
+           newValue
+        }
+    }
     
     private var avatar : PFloatingButton?
     private var displayLink : CADisplayLink?

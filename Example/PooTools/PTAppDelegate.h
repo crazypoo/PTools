@@ -8,7 +8,6 @@
 
 @import UIKit;
 
-#import "PTCheckAppStatus.h"
 #import "RCDraggableButton.h"
 #import <Masonry/Masonry.h>
 

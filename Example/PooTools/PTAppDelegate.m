@@ -73,7 +73,8 @@
 
     PNSLog(@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]);
     
-    [[PTCheckAppStatus sharedInstance] open];
+    [[PCheckAppStatus shared] open];
+//    [[PTCheckAppStatus sharedInstance] open];
     self.floatBtn = [[RCDraggableButton alloc] initInView:self.window WithFrame:CGRectMake(0, 100, 50, 50)];
     self.floatBtn.backgroundColor = kRandomColor;
     self.floatBtn.adjustsImageWhenHighlighted = NO;
@@ -99,13 +100,13 @@
     }];
     [self.floatBtn setDoubleTapBlock:^(RCDraggableButton *avatar) {
         //        NSLog(@"\n\tAvatar in keyWindow ===  DoubleTap!!! ===");
-        //More todo here.
-        if ([PTCheckAppStatus sharedInstance].closed)
+        //More todo here.        
+        if ([[PCheckAppStatus shared] closed])
         {
-            [[PTCheckAppStatus sharedInstance] open];
+            [[PCheckAppStatus shared] open];
         }
         else{
-            [[PTCheckAppStatus sharedInstance] close];
+            [[PCheckAppStatus shared] close];
         }
     }];
     [self.floatBtn setDraggingBlock:^(RCDraggableButton *avatar) {
