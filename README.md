@@ -13,7 +13,7 @@
 
 ## About
 
-PooTools是一款积累了好多比较适合本人开发的工具类,现在已经慢慢转向swift开发,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码,或者有些代码年份可能跨度有点大作者忘记了(估计也是12年到现在的代码).如有侵犯,请issue.希望大家喜欢
+PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码,或者有些代码年份可能跨度有点大作者忘记了(估计也是12年到现在的代码).如有侵犯,请issue.希望大家喜欢
 
 ## About iOS Kit
 本工具运用到以下系统工具框架:</br>
@@ -39,7 +39,7 @@ PooTools是一款积累了好多比较适合本人开发的工具类,现在已�
 
 ## Assist
 
-本工具集成了以下辅助第三方工具:</br>
+推荐以下辅助第三方工具:</br>
 'AFNetworking':https://github.com/AFNetworking/AFNetworking</br>
 'CYLTabBarController':https://github.com/ChenYilong/CYLTabBarController</br>
 'DHSmartScreenshot':https://github.com/davidman/DHSmartScreenshot</br>
@@ -60,26 +60,25 @@ PooTools是一款积累了好多比较适合本人开发的工具类,现在已�
 'SDWebImage':https://github.com/rs/SDWebImage</br>
 'TextFieldEffects':https://github.com/raulriera/TextFieldEffects</br>
 'UITextField+Shake':https://github.com/andreamazz/UITextField-Shake</br>
-'UINavigation-SXFixSpace':https://github.com/spicyShrimp/UINavigation-SXFixSpace</br>
 'UITableView+FDTemplateLayoutCell':https://github.com/forkingdog/UITableView-FDTemplateLayoutCell</br>
 'UIViewController+Swizzled':https://github.com/RuiAAPeres/UIViewController-Swizzled</br>
 'YCXMenu':https://github.com/Aster0id/YCXMenuDemo_ObjC</br>
 'ZipArchive':https://github.com/ZipArchive/ZipArchive</br>
 'CocoaLumberjack/Swift':https://github.com/ryan7cruise/YCSymbolTracker</br>
-'SPPermissions':
-'SkeletonView':
-'FaceAware':
-'CDDGroupAvatar':
-'SwipeCellKit':
-'JXPagingView/Paging':
-'JXSegmentedView':
-'NotificationBannerSwift':
-'FloatingPanel':
-'SnapshotKit':
-'Aspects':
-'FluentDarkModeKit':
-'DeviceKit':
-'SwiftDate':
+'SPPermissions':https://github.com/ivanvorobei/SPPermissions</br>
+'SkeletonView':https://github.com/Juanpe/SkeletonView</br>
+'FaceAware':https://github.com/BeauNouvelle/FaceAware</br>
+'CDDGroupAvatarSwift':https://github.com/RocketsChen/CDDGroupAvatarSwift</br>
+'SwipeCellKit':https://github.com/SwipeCellKit/SwipeCellKit</br>
+'JXPagingView/Paging':https://github.com/pujiaxin33/JXPagingView</br>
+'JXSegmentedView':https://github.com/pujiaxin33/JXSegmentedView</br>
+'NotificationBannerSwift':https://github.com/maheshbutani/NotificationBannerSwift-customizable-in-app-notification-</br>
+'FloatingPanel':https://github.com/scenee/FloatingPanel</br>
+'SnapshotKit':https://github.com/YK-Unit/SnapshotKit</br>
+'Aspects':https://github.com/steipete/Aspects</br>
+'FluentDarkModeKit':https://github.com/microsoft/FluentDarkModeKit</br>
+'DeviceKit':https://github.com/devicekit/DeviceKit</br>
+'SwiftDate':https://github.com/malcommac/SwiftDate</br>
 'YCSymbolTracker':https://github.com/ryan7cruise/YCSymbolTracker</br>
 ## Requirements
 
