@@ -10,6 +10,7 @@ import UIKit
 
 public let effectTag = 19999
 
+@objcMembers
 public class PSecurityStrategy: NSObject {
     
     class public func addBlurEffect()

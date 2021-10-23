@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 public class PTCollectionLayout: NSObject {
     
     class public func createLayout(itemSize:CGSize,paddingY:CGFloat,paddingX:CGFloat,sd:UICollectionView.ScrollDirection)->UICollectionViewFlowLayout

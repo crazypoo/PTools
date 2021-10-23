@@ -9,6 +9,7 @@
 import UIKit
 import AFNetworking
 
+@objcMembers
 public class PTFileDownLoadManager: NSObject {
     class public func fileDownload(fileUrl:String,savePath:String,timeOut:TimeInterval,progress:((_ progress:Progress)->Void)?,completionHandler:((_ response:URLResponse?,_ filePath:URL?,_ error:Error?)->Void)?)
     {

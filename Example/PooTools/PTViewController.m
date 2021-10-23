@@ -9,7 +9,6 @@
 #import "PTViewController.h"
 #import "Utils.h"
 #import "PMacros.h"
-#import "PBiologyID.h"
 #import "YMShowImageView.h"
 #import "PTAppDelegate.h"
 #import "PVideoViewController.h"
@@ -31,7 +30,6 @@
 #import "PCarrie.h"
 #import "PooSystemInfo.h"
 #import "PooPhoneBlock.h"
-#import "PooCleanCache.h"
 
 #import "MXRotationManager.h"
 
@@ -47,7 +45,7 @@
 @interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource>
 {
 }
-@property (nonatomic, strong) PBiologyID *touchID;
+@property (nonatomic, strong) PTBiologyID *touchID;
 @property (nonatomic, strong) NSMutableArray *tableArr;
 @property (nonatomic, strong) NSMutableArray *tableHeaderTitle;
 @property (nonatomic, strong) id popover;
@@ -72,7 +70,7 @@
     NSString *string = [NSString stringWithFormat:@"含有敏感词汇：%@",[[SensitiveWordTools sharedInstance]filter:@"裸体"]];
     PNSLog(@"%@",string);
    
-    self.tableNameArr = @[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PooCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片",@"验证码图片"],@[@"签名"],@[@"屏幕旋转"],@[@"Slider"]];
+    self.tableNameArr = @[@[@"网页上传文件",@"广告展示功能",@"简单的评价界面",@"Segment",@"TagLabel",@"拍摄小视频",@"图片展示",@"生物识别",@"国家/国家代号选择"],@[@"手机判断",@"打电话到13800138000",[NSString stringWithFormat:@"获取缓存%@,并清理",[PCleanCache getCacheSize]]],@[@"输入控件"],@[@"界面展示某个圆角"],@[@"Label的下划线",@"数字跳动Label"],@[@"各种弹出框"],@[@"Picker"],@[@"Loading"],@[@"关于图片",@"验证码图片"],@[@"签名"],@[@"屏幕旋转"],@[@"Slider"]];
     self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
     self.tableHeaderTitle = [[NSMutableArray alloc] initWithArray:@[@"其他",@"关于手机",@"文字输入",@"View的处理",@"Label",@"弹出框",@"Picker",@"Loading",@"图片",@"签名",@"屏幕旋转",@"Slider"]];
     
@@ -473,11 +471,16 @@ static NSString *cellIdentifier = @"CELL";
                     break;
                 case 7:
                 {
-                    self.touchID = [PBiologyID defaultBiologyID];
-                    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
+                    self.touchID = [PTBiologyID shared];
+                    self.touchID.biologyStatusBlock = ^(PTBiologyStatus biologyIDType) {
                         PNSLog(@"%ld",(long)biologyIDType);
                     };
-                    [self.touchID biologyAction];
+                    [self.touchID biologyStartWithAlertTitle:@"123123123123123"];
+//                    self.touchID = [PBiologyID defaultBiologyID];
+//                    self.touchID.biologyIDBlock = ^(BiologyIDType biologyIDType) {
+//                        PNSLog(@"%ld",(long)biologyIDType);
+//                    };
+//                    [self.touchID biologyAction];
                 }
                     break;
                     
@@ -504,7 +507,7 @@ static NSString *cellIdentifier = @"CELL";
                     break;
                 case 2:
                 {
-                    if ([PooCleanCache clearCaches]) {
+                    if ([PCleanCache clearCaches]) {
                         [Utils alertVCOnlyShowWithTitle:nil andMessage:@"清理成功"];
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
                         GCDAfter(0.1, ^{

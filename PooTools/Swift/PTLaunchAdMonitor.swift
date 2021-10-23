@@ -13,6 +13,7 @@ public typealias PTLaunchAdMonitorCallBack = () -> Void
 
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 
+@objcMembers
 public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
     public static let monitor : PTLaunchAdMonitor = PTLaunchAdMonitor.shared
@@ -53,7 +54,7 @@ public class PTLaunchAdMonitor: NSObject {
         PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel!, comNameFont: comNameFont, skipFont: skipFont)
     }
     
-    public class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?)
+    class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?)
     {
         var f = UIScreen.main.bounds
         let v = UIView()
@@ -237,9 +238,11 @@ public class PTLaunchAdMonitor: NSObject {
                     let strTime = String.init(format: "%.2d", newCount)
                     let buttonTime = String.init(format: "跳过\n%@s", strTime)
                     exit.setTitle(buttonTime, for: .normal)
-                }
-                if newCount < 1 {
-                    timer.cancel()
+                    
+                    if newCount < 1 {
+                        timer.cancel()
+                        PTLaunchAdMonitor.hideView(sender: exit)
+                    }
                 }
             }
             timer.resume()

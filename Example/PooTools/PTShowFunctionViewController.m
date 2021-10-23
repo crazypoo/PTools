@@ -451,6 +451,12 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionLabelThroughLine:
         {
+//            PTLabel *aaaaaaaaaaaaaa = [PTLabel new];
+//            aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
+//            aaaaaaaaaaaaaa.verticalAlignment = PTVerticalAlignmentMiddle;
+//            aaaaaaaaaaaaaa.strikeThroughAlignment = PTStrikeThroughAlignmentMiddle;
+//            aaaaaaaaaaaaaa.strikeThroughEnabled = YES;
+
             PLabel *aaaaaaaaaaaaaa = [PLabel new];
             aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
             [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentBottom setStrikeThroughEnabled:YES];
@@ -467,6 +473,10 @@ CGFloat const tagItemSpace = 5;
             [randomLineBtn setTitle:@"随机画线" forState:UIControlStateNormal];
             [randomLineBtn addActionHandler:^(UIButton *sender) {
                 [aaaaaaaaaaaaaa setVerticalAlignment:random()%4 strikeThroughAlignment:random()%4 setStrikeThroughEnabled:random()%2];
+//                aaaaaaaaaaaaaa.verticalAlignment = random()%4;
+//                aaaaaaaaaaaaaa.strikeThroughAlignment = random()%4;
+//                aaaaaaaaaaaaaa.strikeThroughEnabled = random()%2;
+
             }];
             [self.view addSubview:randomLineBtn];
             [randomLineBtn mas_makeConstraints:^(MASConstraintMaker *make) {

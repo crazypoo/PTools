@@ -10,6 +10,7 @@
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
+#import <PooTools/PooTools-Swift.h>
 
 static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCell";
 @interface PADView ()
@@ -38,7 +39,8 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         
         if (!self.adCollectionView)
         {
-            self.adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemSize:CGSizeMake(sw, sh) paddingY:py paddingX:px scrollDirection:UICollectionViewScrollDirectionHorizontal]];
+            
+            self.adCollectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[PTCollectionLayout createLayoutWithItemSize:CGSizeMake(sw, sh) paddingY:py paddingX:px sd:UICollectionViewScrollDirectionHorizontal]];
             self.adCollectionView.backgroundColor                = [UIColor whiteColor];
             self.adCollectionView.dataSource                     = self;
             self.adCollectionView.delegate                       = self;
@@ -104,7 +106,7 @@ static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCel
         self.viewW = self.viewW;
     }
     
-    self.adCollectionView.collectionViewLayout = [CGLayout createLayoutItemSize:CGSizeMake(self.viewW, self.viewH) paddingY:self.viewY paddingX:self.viewX scrollDirection:UICollectionViewScrollDirectionHorizontal];
+    self.adCollectionView.collectionViewLayout = [PTCollectionLayout createLayoutWithItemSize:CGSizeMake(self.viewW, self.viewH) paddingY:self.viewY paddingX:self.viewX sd:UICollectionViewScrollDirectionHorizontal];
     [self.adCollectionView mas_updateConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self);
     }];

@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "CGAdBannerModel.h"
-#import "CGLayout.h"
 #import "CGADCollectionViewCell.h"
 
 @interface PADView : UIView <UICollectionViewDelegate,UICollectionViewDataSource>

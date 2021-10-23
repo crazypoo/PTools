@@ -8,40 +8,56 @@
 
 import UIKit
 
-public enum PTVerticalAlignment {
+@objc public enum PTVerticalAlignment:Int {
     case Top
     case Middle
     case Bottom
 }
 
-public enum PTStrikeThroughAlignment {
+@objc public enum PTStrikeThroughAlignment:Int {
     case Top
     case Middle
     case Bottom
 }
 
+@objcMembers
 public class PTLabel: UILabel {
         
-    public var verticalAlignment : PTVerticalAlignment? = .Middle
+    public var verticalAlignment : PTVerticalAlignment
     {
-        didSet
+        get
         {
+            .Middle
+        }
+        set
+        {
+            newValue
             self.setNeedsDisplay()
         }
     }
     
-    public var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
+    public var strikeThroughAlignment : PTStrikeThroughAlignment
     {
-        didSet
+        get
         {
+            .Middle
+        }
+        set
+        {
+            newValue
             self.setNeedsDisplay()
         }
     }
     
-    public var strikeThroughEnabled : Bool? = false
+    public var strikeThroughEnabled : Bool
     {
-        didSet
+        get
         {
+            false
+        }
+        set
+        {
+            newValue
             self.setNeedsDisplay()
         }
     }
@@ -70,7 +86,7 @@ public class PTLabel: UILabel {
             textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0
         }
         
-        if strikeThroughEnabled!
+        if strikeThroughEnabled
         {
             let strikeWidth = textRect.size.width
             var lineRect : CGRect? = .zero

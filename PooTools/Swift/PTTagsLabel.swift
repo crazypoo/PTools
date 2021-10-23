@@ -9,43 +9,105 @@
 import UIKit
 
 public let BTN_Tags_Tag = 784843
-public enum PTTagsLabelShowStatus {
+
+@objc public enum PTTagsLabelShowStatus:Int {
     case Normal
     case Image
 }
 
-public enum PTTagsLabelShowSubStatus {
+@objc public enum PTTagsLabelShowSubStatus:Int {
     case Normal
     case AllSameWidth
     case NoTitle
 }
 
-public enum PTTagPosition {
+@objc public enum PTTagPosition:Int {
     case Left
     case Center
     case Right
 }
 
-public class PTTagsConfig:PTBaseModel
+@objcMembers
+public class PTTagsConfig:NSObject
 {
     /*! @brief item之间的左右间距
      */
-    public var itemHerMargin : CGFloat? = 0
+    public var itemHerMargin : CGFloat
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief item之间的上下间距
      */
-    public var itemVerMargin : CGFloat? = 0
+    public var itemVerMargin : CGFloat
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief item的高度
      */
-    public var itemHeight : CGFloat? = 0
+    public var itemHeight : CGFloat
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief item的长度 (只在图片模式使用)
      */
-    public var itemWidth : CGFloat? = 0
+    public var itemWidth : CGFloat
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief item标题距左右边缘的距离 (默认10)
      */
-    public var itemContentEdgs : CGFloat? = 10
+    public var itemContentEdgs : CGFloat
+    {
+        get
+        {
+            10
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 最顶部的item层到本view最顶部的距离,最底部的item层到本view最底部的距离 (0.1基本可看作无距离)
      */
-    public var topBottomSpace : CGFloat? = 0.1
+    public var topBottomSpace : CGFloat
+    {
+        get
+        {
+            0.1
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief item字体 (默认系统12)
      */
     public var tagsFont : UIFont? = .systemFont(ofSize: 12)
@@ -69,19 +131,69 @@ public class PTTagsConfig:PTBaseModel
     public var selectedBgImage : String? = ""
     /*! @brief 展示样式 (图片模式下使用)
      */
-    public var showStatus : PTTagsLabelShowStatus? = .Normal
+    public var showStatus : PTTagsLabelShowStatus
+    {
+        get
+        {
+            .Normal
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 图片与文字之间展示排版样式 (图片模式下使用)
      */
-    public var insetsStyle : BKLayoutButtonStyle? = .leftImageRightTitle
+    public var insetsStyle : BKLayoutButtonStyle
+    {
+        get
+        {
+            .leftImageRightTitle
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 图片与文字之间展间隙 (图片模式下使用)
      */
-    public var imageAndTitleSpace :CGFloat?
+    public var imageAndTitleSpace :CGFloat
+    {
+        get
+        {
+            1
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 是否有边框  (默认没有边框)
      */
-    public var hasBorder : Bool? = false
+    public var hasBorder : Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 边框宽度 (默认0.5)
      */
-    public var borderWidth : CGFloat? = 0.5
+    public var borderWidth : CGFloat
+    {
+        get
+        {
+            0.5
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 边框颜色 (默认[UIColor redColor])
      */
     public var borderColor : UIColor? = .red
@@ -90,16 +202,56 @@ public class PTTagsConfig:PTBaseModel
     public var borderColorSelected : UIColor? = .red
     /*! @brief 边框弧度 (默认item高度/2)
      */
-    public var cornerRadius : CGFloat? = 0
+    public var cornerRadius : CGFloat
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 是否可以选中 (默认为NO (YES时为单选))
      */
-    public var isCanSelected : Bool? = false
+    public var isCanSelected : Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 是否可以取消选中
      */
-    public var isCanCancelSelected : Bool? = false
+    public var isCanCancelSelected : Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 是否可以多选
      */
-    public var isMulti : Bool? = false
+    public var isMulti : Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief 单个选中对应的标题 (初始化时默认选中的)
      */
     public var singleSelectedTitle : String? = ""
@@ -108,7 +260,17 @@ public class PTTagsConfig:PTBaseModel
     public var selectedDefaultTags : [String]?
     /*! @brief Tag的展示位置默认左边
     */
-    public var tagPosition : PTTagPosition? = .Left
+    public var tagPosition : PTTagPosition
+    {
+        get
+        {
+            .Left
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief Tag普通图片
     */
     public var normalImage : [String]?
@@ -120,21 +282,62 @@ public class PTTagsConfig:PTBaseModel
     public var titleNormal : [String]?
     /*! @brief TagImageSize
     */
-    public var tagImageSize : CGSize?
+    public var tagImageSize : CGSize
+    {
+        get
+        {
+            .zero
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief Tag子展示属性
     */
-    public var showSubStatus : PTTagsLabelShowSubStatus? = .Normal
+    public var showSubStatus : PTTagsLabelShowSubStatus
+    {
+        get
+        {
+            .Normal
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief Tag锁定按钮宽度
     */
-    public var lockWidth : Bool? = false
+    public var lockWidth : Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
     /*! @brief Tag字符对齐情况
     */
     public var textAlignment : NSTextAlignment? = .center
     /*! @brief 最后一行是否居中(仅限tagPosition时使用)
     */
-    public var LastRowCenter:Bool? = false
+    public var LastRowCenter:Bool
+    {
+        get
+        {
+            false
+        }
+        set
+        {
+            newValue
+        }
+    }
 }
 
+@objcMembers
 public class PTTagsLabel: UIView {
     
     public var tagHeightBlock:((_ tags:PTTagsLabel,_ viewHeight:CGFloat)->Void)?
@@ -158,11 +361,6 @@ public class PTTagsLabel: UIView {
     
     
     public var tagConfig : PTTagsConfig?
-//    {
-//        didSet
-//        {
-//        }
-//    }
     
     override init(frame: CGRect)
     {
@@ -201,8 +399,8 @@ public class PTTagsLabel: UIView {
         var lastBtnRect = CGRect.zero
         var hMargin : CGFloat = 0.0
         var orgin_Y : CGFloat = 0.0
-        let itemContentMargin : CGFloat = tagConfig!.itemContentEdgs!
-        let topBottomSpace : CGFloat = tagConfig!.topBottomSpace!
+        let itemContentMargin : CGFloat = tagConfig!.itemContentEdgs
+        let topBottomSpace : CGFloat = tagConfig!.topBottomSpace
         let font : UIFont = tagConfig!.tagsFont!
         
         var row:Int = 0
@@ -211,9 +409,9 @@ public class PTTagsLabel: UIView {
         
         let floatArr = NSMutableArray()
         tagsTitleArr.enumerated().forEach { (index,value) in
-            if tagConfig!.lockWidth!
+            if tagConfig!.lockWidth
             {
-                floatArr.add(PTUtils.sizeFor(string: value, font: font, height: CGFloat(MAXFLOAT), width: tagConfig!.itemWidth!).height)
+                floatArr.add(PTUtils.sizeFor(string: value, font: font, height: CGFloat(MAXFLOAT), width: tagConfig!.itemWidth).height)
             }
         }
         
@@ -231,71 +429,71 @@ public class PTTagsLabel: UIView {
             
             switch tagConfig!.showStatus {
             case .Normal:
-                if tagConfig!.lockWidth!
+                if tagConfig!.lockWidth
                 {
-                    titleWidth = tagConfig!.itemWidth!
-                    if maxValue > tagConfig!.itemHeight!
+                    titleWidth = tagConfig!.itemWidth
+                    if maxValue > tagConfig!.itemHeight
                     {
                         titleHeight = maxValue
                     }
                     else
                     {
-                        titleHeight = tagConfig!.itemHeight!
+                        titleHeight = tagConfig!.itemHeight
                     }
                 }
             case .Image:
                 switch tagConfig!.showSubStatus {
                 case .Normal:
-                    if tagConfig!.insetsStyle == .leftImageRightTitle || tagConfig?.insetsStyle == .leftTitleRightImage
+                    if tagConfig!.insetsStyle == .leftImageRightTitle || tagConfig!.insetsStyle == .leftTitleRightImage
                     {
-                        if tagConfig!.lockWidth!
+                        if tagConfig!.lockWidth
                         {
-                            let leftWidth = tagConfig!.itemWidth! - 2 * itemContentMargin + tagConfig!.tagImageSize!.width
+                            let leftWidth = tagConfig!.itemWidth - 2 * itemContentMargin + tagConfig!.tagImageSize.width
                             let leftHieght = PTUtils.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: leftWidth).height
-                            titleWidth = tagConfig!.itemWidth!
-                            if leftHieght > tagConfig!.itemHeight!
+                            titleWidth = tagConfig!.itemWidth
+                            if leftHieght > tagConfig!.itemHeight
                             {
                                 titleHeight = leftHieght
                             }
                             else
                             {
-                                titleHeight = tagConfig!.itemHeight!
+                                titleHeight = tagConfig!.itemHeight
                             }
                         }
                         else
                         {
                             
-                            titleWidth = PTUtils.sizeFor(string: title, font: font, height: tagConfig!.itemHeight!, width: CGFloat(MAXFLOAT)).width + 2 * itemContentMargin
-                            titleHeight = tagConfig!.itemHeight!
+                            titleWidth = PTUtils.sizeFor(string: title, font: font, height: tagConfig!.itemHeight, width: CGFloat(MAXFLOAT)).width + 2 * itemContentMargin
+                            titleHeight = tagConfig!.itemHeight
                         }
                     }
                     else
                     {
                         let titleSize = title.size(withAttributes: [NSAttributedString.Key.font:font])
-                        if tagConfig!.lockWidth!
+                        if tagConfig!.lockWidth
                         {
-                            titleWidth = tagConfig!.itemWidth!
-                            titleHeight = tagConfig!.tagImageSize!.height + maxValue + 2 * 10
+                            titleWidth = tagConfig!.itemWidth
+                            titleHeight = tagConfig!.tagImageSize.height + maxValue + 2 * 10
                         }
                         else
                         {
-                            if titleSize.width > tagConfig!.tagImageSize!.width
+                            if titleSize.width > tagConfig!.tagImageSize.width
                             {
                                 titleWidth = titleSize.width + 2 * itemContentMargin
                             }
                             else
                             {
-                                titleWidth = tagConfig!.tagImageSize!.width + 2 * itemContentMargin
+                                titleWidth = tagConfig!.tagImageSize.width + 2 * itemContentMargin
                             }
-                            titleHeight = tagConfig!.itemHeight!
+                            titleHeight = tagConfig!.itemHeight
                         }
                     }
                 case .AllSameWidth:
-                    titleWidth = tagConfig!.itemWidth!
+                    titleWidth = tagConfig!.itemWidth
                     titleHeight = maxValue
                 case .NoTitle:
-                    titleWidth = tagConfig!.tagImageSize!.width + 2 * itemContentMargin
-                    titleHeight = tagConfig!.itemHeight!
+                    titleWidth = tagConfig!.tagImageSize.width + 2 * itemContentMargin
+                    titleHeight = tagConfig!.itemHeight
                 default:
                     break
                 }
@@ -303,12 +501,12 @@ public class PTTagsLabel: UIView {
                 break
             }
             
-            if (lastBtnRect.maxX + tagConfig!.itemHerMargin! + titleWidth + 2 * itemContentMargin) > self.frame.width
+            if (lastBtnRect.maxX + tagConfig!.itemHerMargin + titleWidth + 2 * itemContentMargin) > self.frame.width
             {
                 lastBtnRect.origin.x = 0
                 hMargin = 0
                 lastBtnRect.size.width = 0
-                orgin_Y += titleHeight + tagConfig!.itemVerMargin!
+                orgin_Y += titleHeight + tagConfig!.itemVerMargin
                 
                 let currentRowLastTag = row - BTN_Tags_Tag
                 rowLastTagArr.append(currentRowLastTag)
@@ -326,7 +524,7 @@ public class PTTagsLabel: UIView {
             
             let btn = BKLayoutButton.init(frame: CGRect.init(x: hMargin + lastBtnRect.maxX, y: topBottomSpace + orgin_Y, width: titleWidth, height: titleHeight))
             lastBtnRect = btn.frame
-            hMargin = tagConfig!.itemHerMargin!
+            hMargin = tagConfig!.itemHerMargin
             btn.tag = BTN_Tags_Tag + index
             row = BTN_Tags_Tag + index
             btn.titleLabel?.numberOfLines = 0
@@ -364,7 +562,7 @@ public class PTTagsLabel: UIView {
                     btn.setTitle(title, for: .selected)
                     btn.setImage(normalImage, for: .normal)
                     btn.setImage(UIImage(named: selectedTagsArr[index]), for: .normal)
-                    btn.setMidSpacing(tagConfig!.imageAndTitleSpace!)
+                    btn.setMidSpacing(tagConfig!.imageAndTitleSpace)
                 }
             default:
                 break
@@ -372,11 +570,11 @@ public class PTTagsLabel: UIView {
             btn.backgroundColor = tagConfig?.backgroundColor
             btn.titleLabel?.font = font
             btn.addActionHandlers { sender in
-                if self.tagConfig!.isCanSelected!
+                if self.tagConfig!.isCanSelected
                 {
-                    if self.tagConfig!.isMulti!
+                    if self.tagConfig!.isMulti
                     {
-                        if self.tagConfig!.isCanCancelSelected!
+                        if self.tagConfig!.isCanCancelSelected
                         {
                             sender.isSelected = !sender.isSelected
                             if sender.isSelected
@@ -405,7 +603,7 @@ public class PTTagsLabel: UIView {
                     }
                     else
                     {
-                        if self.tagConfig!.isCanCancelSelected!
+                        if self.tagConfig!.isCanCancelSelected
                         {
                             if self.selectedBtn == sender
                             {
@@ -449,14 +647,14 @@ public class PTTagsLabel: UIView {
             self.frame = frame
             bgImageView.frame = self.bounds
             
-            if tagConfig!.hasBorder!
+            if tagConfig!.hasBorder
             {
-                btn.viewCorner(radius: ((tagConfig!.cornerRadius! > 0) ? tagConfig!.cornerRadius! : (tagConfig!.itemHeight! / 2)),borderWidth: tagConfig!.borderWidth!,borderColor: tagConfig!.borderColor!)
+                btn.viewCorner(radius: ((tagConfig!.cornerRadius > 0) ? tagConfig!.cornerRadius : (tagConfig!.itemHeight / 2)),borderWidth: tagConfig!.borderWidth,borderColor: tagConfig!.borderColor)
             }
             
-            if tagConfig!.isCanSelected!
+            if tagConfig!.isCanSelected
             {
-                if tagConfig!.isMulti!
+                if tagConfig!.isMulti
                 {
                     multiSelectedTags.enumerated().forEach { (index,value) in
                         if title == value
@@ -506,12 +704,12 @@ public class PTTagsLabel: UIView {
             tagViewHadSectionAndSetcionLastTagAndTagInSectionCount!(self,section,rowLastTagArr,sectionCountArr)
         }
 
-        self.createTagPosition(position: tagConfig!.tagPosition!)
+        self.createTagPosition(position: tagConfig!.tagPosition)
     }
     
     func btnBackgroundColorAndBorderColor(sender:UIButton)
     {
-        if tagConfig!.hasBorder!
+        if tagConfig!.hasBorder
         {
             if sender.isSelected
             {
@@ -539,9 +737,9 @@ public class PTTagsLabel: UIView {
         {
             var totalW:CGFloat = 0
             var currentSectionTotalW:CGFloat = 0
-            if tagConfig!.lockWidth!
+            if tagConfig!.lockWidth
             {
-                totalW = tagConfig!.itemWidth! * CGFloat(sectionCountArr[j]) + tagConfig!.itemHerMargin! * CGFloat(sectionCountArr[j] - 1)
+                totalW = tagConfig!.itemWidth * CGFloat(sectionCountArr[j]) + tagConfig!.itemHerMargin * CGFloat(sectionCountArr[j] - 1)
                 currentSectionTotalW = totalW
             }
             else
@@ -555,13 +753,13 @@ public class PTTagsLabel: UIView {
                         totalW += currentBtn.frame.width
                     }
                 }
-                currentSectionTotalW = totalW + tagConfig!.itemHerMargin! * CGFloat(sectionCountArr[j] + 1)
+                currentSectionTotalW = totalW + tagConfig!.itemHerMargin * CGFloat(sectionCountArr[j] + 1)
             }
                         
             var xxxxx : CGFloat = 0
             switch position {
             case .Left:
-                xxxxx = tagConfig!.itemHerMargin!
+                xxxxx = tagConfig!.itemHerMargin
             case .Center:
                 if (kSCREEN_WIDTH - currentSectionTotalW) < 0
                 {
@@ -569,7 +767,7 @@ public class PTTagsLabel: UIView {
                 }
                 else
                 {
-                    if tagConfig!.LastRowCenter!
+                    if tagConfig!.LastRowCenter
                     {
                         xxxxx = (kSCREEN_WIDTH - currentSectionTotalW) / 2
                     }
@@ -579,19 +777,19 @@ public class PTTagsLabel: UIView {
                         {
                             if section == 0
                             {
-                                if tagConfig!.lockWidth!
+                                if tagConfig!.lockWidth
                                 {
-                                    let c = floor(kSCREEN_WIDTH / (tagConfig!.itemWidth! + tagConfig!.itemHerMargin!))
-                                    xxxxx = (kSCREEN_WIDTH - (tagConfig!.itemWidth! * CGFloat(c) + tagConfig!.itemHerMargin! * CGFloat(c - 1)))/2
+                                    let c = floor(kSCREEN_WIDTH / (tagConfig!.itemWidth + tagConfig!.itemHerMargin))
+                                    xxxxx = (kSCREEN_WIDTH - (tagConfig!.itemWidth * CGFloat(c) + tagConfig!.itemHerMargin * CGFloat(c - 1)))/2
                                 }
                                 else
                                 {
-                                    xxxxx = tagConfig!.itemHerMargin! * 2
+                                    xxxxx = tagConfig!.itemHerMargin * 2
                                 }
                             }
                             else
                             {
-                                xxxxx = (kSCREEN_WIDTH - (tagConfig!.itemWidth! * CGFloat(sectionCountArr[j - 1]) + tagConfig!.itemHerMargin! * CGFloat(sectionCountArr[j - 1] - 1)))/2
+                                xxxxx = (kSCREEN_WIDTH - (tagConfig!.itemWidth * CGFloat(sectionCountArr[j - 1]) + tagConfig!.itemHerMargin * CGFloat(sectionCountArr[j - 1] - 1)))/2
                             }
                         }
                         else
@@ -623,7 +821,7 @@ public class PTTagsLabel: UIView {
 //                    }
                 }
             case .Right:
-                xxxxx = kSCREEN_WIDTH - currentSectionTotalW + tagConfig!.itemHerMargin!
+                xxxxx = kSCREEN_WIDTH - currentSectionTotalW + tagConfig!.itemHerMargin
             }
             
             let a = (j == 0) ? 0 : (rowLastTagArr[j - 1] + 1)
@@ -639,7 +837,7 @@ public class PTTagsLabel: UIView {
                     else
                     {
                         guard let lastBtn = self.viewWithTag(i - 1 + BTN_Tags_Tag) else{ return }
-                        currentBtn.frame = CGRect.init(x: lastBtn.frame.origin.x + lastBtn.frame.size.width + tagConfig!.itemHerMargin!, y: currentBtn.frame.origin.y, width: currentBtn.frame.size.width, height: currentBtn.frame.size.height)
+                        currentBtn.frame = CGRect.init(x: lastBtn.frame.origin.x + lastBtn.frame.size.width + tagConfig!.itemHerMargin, y: currentBtn.frame.origin.y, width: currentBtn.frame.size.width, height: currentBtn.frame.size.height)
                     }
                 }
             }
@@ -656,7 +854,7 @@ public class PTTagsLabel: UIView {
                     else
                     {
                         guard let lastBtn = self.viewWithTag(i - 1 + BTN_Tags_Tag) else{ return }
-                        currentBtn.frame = CGRect.init(x: lastBtn.frame.origin.x + lastBtn.frame.size.width + tagConfig!.itemHerMargin!, y: currentBtn.frame.origin.y, width: currentBtn.frame.size.width, height: currentBtn.frame.size.height)
+                        currentBtn.frame = CGRect.init(x: lastBtn.frame.origin.x + lastBtn.frame.size.width + tagConfig!.itemHerMargin, y: currentBtn.frame.origin.y, width: currentBtn.frame.size.width, height: currentBtn.frame.size.height)
                     }
                 }
             }
@@ -669,7 +867,7 @@ public class PTTagsLabel: UIView {
             let btn = self.viewWithTag(index + BTN_Tags_Tag) as! BKLayoutButton
             btn.isSelected = false
             btn.backgroundColor = self.tagConfig!.backgroundColor!
-            if self.tagConfig!.hasBorder!
+            if self.tagConfig!.hasBorder
             {
                 btn.layer.borderColor = self.tagConfig!.borderColor!.cgColor
             }

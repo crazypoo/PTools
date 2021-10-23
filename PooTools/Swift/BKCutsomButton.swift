@@ -66,7 +66,7 @@ public class BKTopImageButton: UIButton {
     
 }
 
-public enum BKLayoutButtonStyle : Int {
+@objc public enum BKLayoutButtonStyle : Int {
     case leftImageRightTitle // 系统默认
     case leftTitleRightImage
     case upImageDownTitle

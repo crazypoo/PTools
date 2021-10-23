@@ -9,6 +9,7 @@
 import UIKit
 import SDWebImage
 
+@objcMembers
 public class PCleanCache: NSObject {
     static let fileManager = FileManager.default
     static let cachePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last

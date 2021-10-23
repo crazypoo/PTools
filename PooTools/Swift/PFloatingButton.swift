@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 public class PFloatingButton: UIButton {
     
     public static let RC_POINT_NULL = CGPoint.init(x: CGFloat(MAXFLOAT), y: -CGFloat(MAXFLOAT))

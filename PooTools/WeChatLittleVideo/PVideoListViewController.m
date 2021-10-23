@@ -9,7 +9,7 @@
 #import "PVideoListViewController.h"
 #import "PVideoSupport.h"
 #import <Masonry/Masonry.h>
-#import "CGLayout.h"
+#import <PooTools/PooTools-Swift.h>
 
 @interface PVideoListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>
 {
@@ -141,8 +141,8 @@ static NSString *footerId = @"footer";
 
     self.dataArr = [NSMutableArray arrayWithArray:[PVideoUtil getSortVideoList]];
     CGFloat itemWidth = (_actionView.frame.size.width - 40)/3;
-
-    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[CGLayout createLayoutItemSize:CGSizeMake(itemWidth, itemWidth/customVideo_W_H) sectionInset:UIEdgeInsetsMake(10, 8, 10, 8) minimumLineSpacing:8 minimumInteritemSpacing:0 scrollDirection:UICollectionViewScrollDirectionVertical]];
+    
+    UICollectionView *collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[PTCollectionLayout createLayoutBaseWithItemSize:CGSizeMake(itemWidth, itemWidth/customVideo_W_H) inset:UIEdgeInsetsMake(10, 8, 10, 8) minimumLineSpaceing:8 minimumInteritemSpacing:0 sd:UICollectionViewScrollDirectionVertical]];
     collectionView.delegate = self;
     collectionView.dataSource = self;
     [collectionView registerClass:[PVideoListCell class] forCellWithReuseIdentifier:cellId];

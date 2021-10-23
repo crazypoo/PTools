@@ -7,7 +7,6 @@
 //
 
 #import "PTAppDelegate.h"
-#import "PLaunchAdMonitor.h"
 #import "PTViewController.h"
 
 #import "PMacros.h"
@@ -24,8 +23,6 @@
 
 #import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
-
-#import <PooTools/PooTools-Swift.h>
 
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
@@ -52,33 +49,35 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-    PNSLog(@"当前时间>>>>>>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS]);
-    
-    
+        
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 50;
     
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-
     PTViewController *view = [[PTViewController alloc] init];
     UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:view];
     self.window.rootViewController = mainNav;
     [self.window makeKeyAndVisible];
     
+    self.localConsoles = [LocalConsole shared];
+    [self.localConsoles createSystemLogView];
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS]]];
+
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
-    [PLaunchAdMonitor showAdAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:3 detailParameters:@{} years:@"2000" skipButtonFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callback:^{
-    }];
 
-    PNSLog(@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]);
+    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:3 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
+        
+    }];
+    
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]]];
     
     [[PCheckAppStatus shared] open];
-//    [[PTCheckAppStatus sharedInstance] open];
-    self.floatBtn = [[RCDraggableButton alloc] initInView:self.window WithFrame:CGRectMake(0, 100, 50, 50)];
+    
+    self.floatBtn = [[PFloatingButton alloc] initWithView:self.window frame:CGRectMake(0, 100, 50, 50)];
     self.floatBtn.backgroundColor = kRandomColor;
     self.floatBtn.adjustsImageWhenHighlighted = NO;
-    
     UILabel *titleLabel = [UILabel new];
     titleLabel.textColor = [UIColor whiteColor];
     titleLabel.numberOfLines = 0;
@@ -89,18 +88,15 @@
         make.left.right.top.bottom.equalTo(self.floatBtn);
     }];
     
-    [self.floatBtn setLongPressBlock:^(RCDraggableButton *avatar) {
-        //        NSLog(@"\n\tAvatar in keyWindow ===  LongPress!!! ===");
-        //More todo here.
-
-    }];
-    [self.floatBtn setTapBlock:^(RCDraggableButton *avatar) {
-        //        NSLog(@"\n\tAvatar in keyWindow ===  Tap!!! ===");
-        //More todo here.
-    }];
-    [self.floatBtn setDoubleTapBlock:^(RCDraggableButton *avatar) {
-        //        NSLog(@"\n\tAvatar in keyWindow ===  DoubleTap!!! ===");
-        //More todo here.        
+    self.floatBtn.longPressBlock = ^(PFloatingButton * sender) {
+        
+    };
+    
+    self.floatBtn.tapBlock = ^(PFloatingButton * sender) {
+        
+    };
+    
+    self.floatBtn.doubleTapBlock = ^(PFloatingButton * sender) {
         if ([[PCheckAppStatus shared] closed])
         {
             [[PCheckAppStatus shared] open];
@@ -108,19 +104,22 @@
         else{
             [[PCheckAppStatus shared] close];
         }
-    }];
-    [self.floatBtn setDraggingBlock:^(RCDraggableButton *avatar) {
-        //        NSLog(@"\n\tAvatar in keyWindow === Dragging!!! ===");
-    }];
-    [self.floatBtn setAutoDockingBlock:^(RCDraggableButton *avatar) {
-        //        NSLog(@"\n\tAvatar in keyWindow === AutoDocking!!! ===");
-    }];
+    };
+    
+    self.floatBtn.draggingBlock = ^(PFloatingButton * sender) {
+        
+    };
+    
+    self.floatBtn.autoDockingBlock = ^(PFloatingButton * sender) {
+        
+    };
 
     [PGetIpAddresses deviceWANIPAddress:^(BOOL success, PTGetIpModel *ipModel) {
-        PNSLog(@">>>>>>>>%@",ipModel.city);
+        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>%@",ipModel.city]];
+
     }];
     
-    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]);
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
     
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -165,14 +164,9 @@
 //       CheckNowTimeAndPastTimeRelationshipsReadyExpire,
 //       CheckNowTimeAndPastTimeRelationshipsNormal,
 //       CheckNowTimeAndPastTimeRelationshipsError
-    PNSLog(@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%ld",(long)[Utils checkContractDateExpireContractDate:@"2019-08-28" expTimeStamp:2592000]);
-    
-    
-    
-    PNSLog(@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]);
-    
-    PNSLog(@"是否信用代码%d",[@"91440705MA54R5NK0X" isCOLTDCode]);
-
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%ld",(long)[Utils checkContractDateExpireContractDate:@"2019-08-28" expTimeStamp:2592000]]];
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]]];
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否信用代码%d",[@"91440705MA54R5NK0X" isCOLTDCode]]];
     
     NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
         @"clientStatus":@0,
@@ -186,14 +180,10 @@
     [HTTPClient(@"https://diou.user.gdupb.com", YES) POST:@"https://diou.user.gdupb.com/banner/showBannerButtons" parameters:dicaaaaaa headers:aaaaa progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        PNSLog(@">>>%@",responseObject);
+        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>%@",responseObject]];
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
-        
-    LocalConsole *aaaa = [LocalConsole shared];
-    [aaaa print:@"123123123123123123"];
-    [aaaa createSystemLogView];
         
     return YES;
 }
@@ -213,11 +203,13 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+    [PSecurityStrategy addBlurEffect];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [PSecurityStrategy removeBlurEffect];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

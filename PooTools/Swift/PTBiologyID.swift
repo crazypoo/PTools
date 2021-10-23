@@ -10,13 +10,13 @@ import UIKit
 import LocalAuthentication
 import Security
 
-public enum PTBiologyStatus {
+@objc public enum PTBiologyStatus:Int {
     case None
     case TouchID
     case FaceID
 }
 
-public enum PTBiologyVerifyStatus {
+@objc public enum PTBiologyVerifyStatus:Int {
     case Success
     case DuplicateItem
     case ItemNotFound
@@ -32,6 +32,7 @@ public enum PTBiologyVerifyStatus {
     case SystemCancel
 }
 
+@objcMembers
 public class PTBiologyID: NSObject {
     public static let shared = PTBiologyID()
 

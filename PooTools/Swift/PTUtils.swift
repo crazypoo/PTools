@@ -309,17 +309,16 @@ public class PTUtils: NSObject {
                 let buttonTime = String.init(format: "%@", strTime)
                 sender.setTitle(buttonTime, for: .normal)
                 sender.isUserInteractionEnabled = false
-            }
-            
-            if newCount < 1 {
-                DispatchQueue.main.async {
-                    if canTap
-                    {
-                        sender.setTitle(originalTitle, for: .normal)
-                        sender.isUserInteractionEnabled = true
+                if newCount < 1 {
+                    DispatchQueue.main.async {
+                        if canTap
+                        {
+                            sender.setTitle(originalTitle, for: .normal)
+                            sender.isUserInteractionEnabled = true
+                        }
                     }
+                    timer.cancel()
                 }
-                timer.cancel()
             }
         }
         timer.resume()

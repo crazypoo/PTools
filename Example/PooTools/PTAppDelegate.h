@@ -8,13 +8,14 @@
 
 @import UIKit;
 
-#import "RCDraggableButton.h"
 #import <Masonry/Masonry.h>
+#import <PooTools/PooTools-Swift.h>
 
 @interface PTAppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-@property (strong, nonatomic) RCDraggableButton *floatBtn;
+@property (strong, nonatomic) PFloatingButton *floatBtn;
+@property (strong, nonatomic) LocalConsole *localConsoles;
 + (PTAppDelegate *)appDelegate;
 
 @end
