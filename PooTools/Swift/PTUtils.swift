@@ -8,14 +8,14 @@
 
 import UIKit
 
-public enum PTUrlStringVideoType {
+@objc public enum PTUrlStringVideoType:Int {
     case MP4
     case MOV
     case ThreeGP
     case UNKNOW
 }
 
-public enum PTAboutImageType {
+@objc public enum PTAboutImageType:Int {
     case JPEG
     case PNG
     case GIF
@@ -24,6 +24,7 @@ public enum PTAboutImageType {
     case UNKNOW
 }
 
+@objcMembers
 public class PTUtils: NSObject {
     
     ///ALERT真正基类
@@ -245,27 +246,6 @@ public class PTUtils: NSObject {
         }
     }
     
-    /// 判断是否是越狱设备
-    /// - Returns: true 表示设备越狱
-    public class func isBrokenDevice() -> Bool {
-
-        var isBroken = false
-
-        let cydiaPath = "/Applications/Cydia.app"
-
-        let aptPath = "/private/var/lib/apt"
-
-        if FileManager.default.fileExists(atPath: cydiaPath) {
-            isBroken = true
-        }
-
-        if FileManager.default.fileExists(atPath: aptPath) {
-            isBroken = true
-        }
-
-        return isBroken
-    }
-    
     public class func getTimeStamp()->String
     {
         let date = Date()
@@ -444,7 +424,8 @@ public class PTUtils: NSObject {
                   "/Applications/blackra1n.app",
                   "/Applications/blacksn0w.app",
                   "/Applications/redsn0w.app",
-                  "/Applications/Absinthe.app"]
+                  "/Applications/Absinthe.app",
+                    "/private/var/lib/apt"]
         for app in apps
         {
             if FileManager.default.fileExists(atPath: app)

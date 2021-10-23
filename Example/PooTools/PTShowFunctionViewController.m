@@ -696,6 +696,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
+            [PTUtils ];
             [Utils alertVCOnlyShowWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" andMessage:@"11111111111111111111111111111111111234234234234234234234243"];
 //            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[@"1",@"2"] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
 //                           okAction:^{

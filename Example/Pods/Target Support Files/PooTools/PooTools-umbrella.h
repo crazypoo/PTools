@@ -19,7 +19,6 @@
 #import "PADView.h"
 #import "NSData+AES.h"
 #import "SecurityUtil.h"
-#import "PurchaseCarAnimationTool.h"
 #import "JYBDBankCardSearch.h"
 #import "LGTMBase64.h"
 #import "LGTMDefines.h"
