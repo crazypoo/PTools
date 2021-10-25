@@ -8,7 +8,7 @@
 </p>
 <p align="center">
 <a href="https://twitter.com/crazypeepoo"><img src="https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000"></a>
-<a href="http://weibo.com/273277355"><img src="https://shutterstock.7eer.net/c/2204609/560528/1305?u=https%3A%2F%2Fwww.shutterstock.com%2Fimage-photo%2F1341179450"></a>
+<a href="https://img.shields.io/badge/weibo-@雀屎桑-red.svg?style=plastic"></a>
 </p>
 
 ## About
