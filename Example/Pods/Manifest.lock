@@ -41,7 +41,7 @@ PODS:
   - MJExtension (3.3.0)
   - MJRefresh (3.7.2)
   - MYBlurIntroductionView (1.0.3)
-  - PooTools (2.1.16):
+  - PooTools (2.1.19):
     - AFNetworking
     - CYLTabBarController
     - DeviceKit
@@ -72,7 +72,6 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YCXMenu
-    - YYKit
   - pop (1.0.12)
   - SDWebImage (5.12.1):
     - SDWebImage/Core (= 5.12.1)
@@ -92,18 +91,6 @@ PODS:
     - SwifterSwift/StoreKit (= 5.2.0)
     - SwifterSwift/SwiftStdlib (= 5.2.0)
     - SwifterSwift/UIKit (= 5.2.0)
-  - SwifterSwift/AppKit (5.2.0)
-  - SwifterSwift/CoreAnimation (5.2.0)
-  - SwifterSwift/CoreGraphics (5.2.0)
-  - SwifterSwift/CoreLocation (5.2.0)
-  - SwifterSwift/Dispatch (5.2.0)
-  - SwifterSwift/Foundation (5.2.0)
-  - SwifterSwift/MapKit (5.2.0)
-  - SwifterSwift/SceneKit (5.2.0)
-  - SwifterSwift/SpriteKit (5.2.0)
-  - SwifterSwift/StoreKit (5.2.0)
-  - SwifterSwift/SwiftStdlib (5.2.0)
-  - SwifterSwift/UIKit (5.2.0)
   - TextFieldEffects (1.6.0)
   - "UITableView+FDTemplateLayoutCell (1.6)"
   - "UITextField+Shake (1.2.1)"
@@ -180,7 +167,7 @@ SPEC CHECKSUMS:
   MJExtension: 01704cca2b60a214c10761b6491eab74069d68a9
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
-  PooTools: 6c510d610fd56da3190bc11bccff0ae9050b82a9
+  PooTools: 95858c24a0fbd5903aecf48ef30afc7f4a9f8fd9
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: 4dc3e42d9ec0c1028b960a33ac6b637bb432207b
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
@@ -194,6 +181,6 @@ SPEC CHECKSUMS:
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
   YYKit: 7cda43304a8dc3696c449041e2cb3107b4e236e7
 
-PODFILE CHECKSUM: 8ff64cecbb2b7b89eb020a3b7b8728ccce9fc981
+PODFILE CHECKSUM: ad0f35542a8227550895615043118523fa5b2c70
 
 COCOAPODS: 1.11.2

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '2.1.19'
+    s.version     = '2.1.20'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -16,11 +16,11 @@ Pod::Spec.new do |s|
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
 #    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
 #    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }
-    s.platform = :ios, '10.0'
+    s.platform = :ios, '9.0'
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m,swift}'
     s.resource     = 'PooTools/PooTools.bundle'
-    s.ios.deployment_target = '10.0'
+    s.ios.deployment_target = '9.0'
     s.swift_versions = '4.2'
     s.frameworks            = 'UIKit', 'AudioToolbox','ExternalAccessory','CoreText','SystemConfiguration','WebKit','QuartzCore','CoreTelephony','Security','Foundation','AVFoundation','LocalAuthentication','CoreMotion','SceneKit','CoreImage','Photos'#,'AssetsLibrary'
     s.dependency 'AFNetworking'
