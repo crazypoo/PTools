@@ -15,7 +15,7 @@ Pod::Spec.new do |s|
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
 #    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '4.2' }
-    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }
+#    s.pod_target_xcconfig = { 'SWIFT_VERSION' => '5.0' }
     s.platform = :ios, '10.0'
     s.requires_arc = true
     s.source_files = 'PooTools','PooTools/**/*.{h,m,swift}'
