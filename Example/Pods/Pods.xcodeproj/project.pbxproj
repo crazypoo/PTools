@@ -9695,37 +9695,6 @@
 			};
 			name = Release;
 		};
-		449C4981A44E0DA4BE0D1BA0F5E42F0C /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = B08085AF2B7FD9205AE787A5BF6097A8 /* PooTools.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
-				PRODUCT_MODULE_NAME = PooTools;
-				PRODUCT_NAME = PooTools;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
-		};
 		4E19E5A7339CBA6A1F580075DE9CBEFF /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 35CEF3577D4AFEAB22F3F2A87DB60D0D /* YYKit.release.xcconfig */;
@@ -9905,6 +9874,39 @@
 				MODULEMAP_FILE = "Target Support Files/UITableView+FDTemplateLayoutCell/UITableView+FDTemplateLayoutCell.modulemap";
 				PRODUCT_MODULE_NAME = UITableView_FDTemplateLayoutCell;
 				PRODUCT_NAME = UITableView_FDTemplateLayoutCell;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		5E9024DAD1330906F6BC8172B4A5BAA9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 65AFCB79B5AC90ABB673F0DF40CB6E33 /* PooTools.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
+				PRODUCT_MODULE_NAME = PooTools;
+				PRODUCT_NAME = PooTools;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
@@ -10469,6 +10471,38 @@
 				MODULEMAP_FILE = "Target Support Files/UITextField+Shake/UITextField+Shake.modulemap";
 				PRODUCT_MODULE_NAME = UITextField_Shake;
 				PRODUCT_NAME = UITextField_Shake;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		95A09C39F7EB4A45653833A9F3CBD665 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B08085AF2B7FD9205AE787A5BF6097A8 /* PooTools.debug.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
+				PRODUCT_MODULE_NAME = PooTools;
+				PRODUCT_NAME = PooTools;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
@@ -11213,38 +11247,6 @@
 			};
 			name = Release;
 		};
-		EACBEA77D6EB233524BB31BB4B57CE2A /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 65AFCB79B5AC90ABB673F0DF40CB6E33 /* PooTools.release.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
-				PRODUCT_MODULE_NAME = PooTools;
-				PRODUCT_NAME = PooTools;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
 		F166A8E9050C2A9429EF55B95EA0F1F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 707F61B9D2E26834FF12142DB673DDBC /* DHSmartScreenshot.debug.xcconfig */;
@@ -11398,8 +11400,8 @@
 		360DD5258FF59979D241389EC2F4B154 /* Build configuration list for PBXNativeTarget "PooTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				449C4981A44E0DA4BE0D1BA0F5E42F0C /* Debug */,
-				EACBEA77D6EB233524BB31BB4B57CE2A /* Release */,
+				95A09C39F7EB4A45653833A9F3CBD665 /* Debug */,
+				5E9024DAD1330906F6BC8172B4A5BAA9 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
