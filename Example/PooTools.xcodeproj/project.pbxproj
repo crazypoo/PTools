@@ -48,6 +48,8 @@
 		2334398425AA831000C2203A /* PTAppDeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2334398325AA831000C2203A /* PTAppDeviceInfo.swift */; };
 		2352EA6F2543BD3A002AE25C /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA6E2543BD3A002AE25C /* JYBDBankCardSearch.m */; };
 		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
+		23D4A5FF27278785005743A1 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A5FE27278785005743A1 /* PTCarrie.swift */; };
+		23D4A60127279629005743A1 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A60027279629005743A1 /* PTPhoneBlock.swift */; };
 		5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -84,7 +86,6 @@
 		CC1257BD2098319300E31A38 /* NSString+WPAttributedMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257522098319200E31A38 /* NSString+WPAttributedMarkup.m */; };
 		CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257542098319200E31A38 /* NSURLResponse+Help.m */; };
 		CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257562098319200E31A38 /* PBugReporter.m */; };
-		CC1257C02098319300E31A38 /* PCarrie.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257582098319200E31A38 /* PCarrie.m */; };
 		CC1257C12098319300E31A38 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575A2098319200E31A38 /* PGifHud.m */; };
 		CC1257C32098319300E31A38 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575E2098319200E31A38 /* PLabel.m */; };
 		CC1257C52098319300E31A38 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257632098319200E31A38 /* PMotion.m */; };
@@ -248,6 +249,8 @@
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		23D4A5FE27278785005743A1 /* PTCarrie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
+		23D4A60027279629005743A1 /* PTPhoneBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneBlock.swift; sourceTree = "<group>"; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
 		5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
@@ -327,8 +330,6 @@
 		CC1257542098319200E31A38 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
 		CC1257552098319200E31A38 /* PBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
 		CC1257562098319200E31A38 /* PBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
-		CC1257572098319200E31A38 /* PCarrie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCarrie.h; sourceTree = "<group>"; };
-		CC1257582098319200E31A38 /* PCarrie.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCarrie.m; sourceTree = "<group>"; };
 		CC1257592098319200E31A38 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
 		CC12575A2098319200E31A38 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
 		CC12575D2098319200E31A38 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
@@ -636,6 +637,8 @@
 				230FC545272268DF005A8D08 /* UIColor+PTEX.swift */,
 				230FC543272268DF005A8D08 /* UIImage+PTEX.swift */,
 				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
+				23D4A5FE27278785005743A1 /* PTCarrie.swift */,
+				23D4A60027279629005743A1 /* PTPhoneBlock.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1145,8 +1148,6 @@
 		C08D9DE622768D8E001417F1 /* PhoneInfo */ = {
 			isa = PBXGroup;
 			children = (
-				CC1257572098319200E31A38 /* PCarrie.h */,
-				CC1257582098319200E31A38 /* PCarrie.m */,
 				CC1257742098319200E31A38 /* PooSystemInfo.h */,
 				CC1257752098319200E31A38 /* PooSystemInfo.m */,
 				CC12577A2098319200E31A38 /* PooUDIDInfo.h */,
@@ -1528,6 +1529,7 @@
 			files = (
 				CC1257BD2098319300E31A38 /* NSString+WPAttributedMarkup.m in Sources */,
 				CCD660BE21DCCD3B004AA57D /* IGJSONModel.m in Sources */,
+				23D4A60127279629005743A1 /* PTPhoneBlock.swift in Sources */,
 				CCD660C021DCCD3B004AA57D /* IGHTTPRequestBuilderManager.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				CC1257B32098319300E31A38 /* GPKeyChain.m in Sources */,
@@ -1607,7 +1609,6 @@
 				CCD660C221DCCD3B004AA57D /* IGBatchTaskManager.m in Sources */,
 				CC95772121003A6000EAB71E /* UIButton+ImageTitleSpacing.m in Sources */,
 				CC1257E02098319300E31A38 /* UINavigationItem+Excursion.m in Sources */,
-				CC1257C02098319300E31A38 /* PCarrie.m in Sources */,
 				CC7E05372240E42100EAFEA4 /* NSString+MoneyString.m in Sources */,
 				230FC554272268E0005A8D08 /* NSMutableArray+PTEX.swift in Sources */,
 				230FC54C272268E0005A8D08 /* PTTagsLabel.swift in Sources */,
@@ -1639,6 +1640,7 @@
 				230FC55E272268E0005A8D08 /* PTUrlChange.swift in Sources */,
 				CC29C9FB21CE1F9100786FF1 /* PTUploadDataSteamTools.m in Sources */,
 				CC1257B12098319300E31A38 /* CustomTextField.m in Sources */,
+				23D4A5FF27278785005743A1 /* PTCarrie.swift in Sources */,
 				230FC569272268E0005A8D08 /* UIButton+PTEX.swift in Sources */,
 				230FC557272268E0005A8D08 /* PSecurityStrategy.swift in Sources */,
 				CCD660B921DCCD3B004AA57D /* IGHTTPRequestSerializer.m in Sources */,

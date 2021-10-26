@@ -607,19 +607,16 @@ CGFloat const tagItemSpace = 5;
         case 0:
         {
             self.cornerBtn.viewUI_rectCorner = UIRectCornerTopLeft;
-
         }
             break;
         case 1:
         {
             self.cornerBtn.viewUI_rectCorner = UIRectCornerTopRight;
-
         }
             break;
         case 2:
         {
             self.cornerBtn.viewUI_rectCorner = UIRectCornerBottomLeft;
-
         }
             break;
         case 3:

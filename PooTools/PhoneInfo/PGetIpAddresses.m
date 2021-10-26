@@ -12,10 +12,6 @@
 #include <arpa/inet.h>
 #include <net/if.h>
 
-
-@implementation PTGetIpModel
-@end
-
 @implementation PGetIpAddresses
 //获取设备当前网络IP地址
 + (NSString *)getIPAddress:(BOOL)preferIPv4
@@ -75,35 +71,5 @@
         freeifaddrs(interfaces);
     }
     return [addresses count] ? addresses : nil;
-}
-
-+ (void)deviceWANIPAddress:(GetIPModel)block
-{
-    NSURL *ipURL = [NSURL URLWithString:@"http://ip.taobao.com/service/getIpInfo.php?ip=myip"];
-    NSData *data = [NSData dataWithContentsOfURL:ipURL];
-    if (data != nil) {
-        NSDictionary *ipDic = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:nil];
-        
-        PTGetIpModel *model = [PTGetIpModel new];
-        model.country_id = ipDic[@"data"][@"country_id"];
-        model.county_id = ipDic[@"data"][@"county_id"];
-        model.isp = ipDic[@"data"][@"isp"];
-        model.area = ipDic[@"data"][@"area"];
-        model.area_id = ipDic[@"data"][@"area_id"];
-        model.city_id = ipDic[@"data"][@"city_id"];
-        model.ip = ipDic[@"data"][@"ip"];
-        model.city = ipDic[@"data"][@"city"];
-        model.region = ipDic[@"data"][@"region"];
-        model.county = ipDic[@"data"][@"county"];
-        model.region_id = ipDic[@"data"][@"region_id"];
-        model.isp_id = ipDic[@"data"][@"isp_id"];
-        model.country = ipDic[@"data"][@"country"];
-
-        block(YES,model);
-    }
-    else
-    {
-        block(NO,nil);
-    }
 }
 @end

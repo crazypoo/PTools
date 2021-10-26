@@ -114,10 +114,7 @@
         
     };
 
-    [PGetIpAddresses deviceWANIPAddress:^(BOOL success, PTGetIpModel *ipModel) {
-        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>%@",ipModel.city]];
-
-    }];
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"ip>>>>>>>>%@",[PGetIpAddresses getIPAddress:YES]]];
     
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
     
