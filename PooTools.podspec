@@ -52,5 +52,5 @@ Pod::Spec.new do |s|
     s.dependency 'SwifterSwift'
     s.dependency 'HandyJSON'
     s.dependency 'DeviceKit'
-
+    s.dependency 'UIColor_Hex_Swift'
 end

@@ -50,6 +50,7 @@
 		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
 		23D4A5FF27278785005743A1 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A5FE27278785005743A1 /* PTCarrie.swift */; };
 		23D4A60127279629005743A1 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A60027279629005743A1 /* PTPhoneBlock.swift */; };
+		23D4A6032727CA4B005743A1 /* PTNumberKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */; };
 		5A8B2EA023C568CB003FEF2E /* PTPopoverFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -251,6 +252,7 @@
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		23D4A5FE27278785005743A1 /* PTCarrie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
 		23D4A60027279629005743A1 /* PTPhoneBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneBlock.swift; sourceTree = "<group>"; };
+		23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNumberKeyBoard.swift; sourceTree = "<group>"; };
 		3A64441D7EC15EC8366E3528 /* PooTools.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = PooTools.podspec; path = ../PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		5A8B2E9E23C568CB003FEF2E /* PTPopoverFunction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
 		5A8B2E9F23C568CB003FEF2E /* PTPopoverFunction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
@@ -639,6 +641,7 @@
 				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
 				23D4A5FE27278785005743A1 /* PTCarrie.swift */,
 				23D4A60027279629005743A1 /* PTPhoneBlock.swift */,
+				23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1660,6 +1663,7 @@
 				230FC58C27227ED9005A8D08 /* BorderManager.swift in Sources */,
 				CCD660C321DCCD3B004AA57D /* NSError+HTTPClient.m in Sources */,
 				CCB433E620A9A3D800943107 /* PooShowImageModel.m in Sources */,
+				23D4A6032727CA4B005743A1 /* PTNumberKeyBoard.swift in Sources */,
 				CC658CD720AC3D5D00949DF6 /* CGAdBannerModel.m in Sources */,
 				CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */,
 				CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */,

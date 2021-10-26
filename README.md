@@ -79,6 +79,7 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 'DeviceKit':https://github.com/devicekit/DeviceKit</br>
 'SwiftDate':https://github.com/malcommac/SwiftDate</br>
 'YCSymbolTracker':https://github.com/ryan7cruise/YCSymbolTracker</br>
+'UIColor_Hex_Swift':https://github.com/yeahdongcn/UIColor-Hex-Swift</br>
 ## Requirements
 
 使用工具时，一定要在Build Settings->other links flags加入-ObjC和-all_load,以防避免一些奇奇怪怪的问题发生.
