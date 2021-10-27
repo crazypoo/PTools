@@ -10,7 +10,7 @@ import UIKit
 
 public extension Data
 {
-    enum ImageType {
+    @objc enum ImageType : Int{
         case unknown
         case jpeg
         case jpeg2000

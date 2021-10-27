@@ -42,8 +42,6 @@ CGFloat const tagItemSpace = 5;
 #import "PooSearchBar.h"
 #import "PooTextView.h"
 
-#import "UIView+ViewRectCorner.h"
-
 #import "PLabel.h"
 #import "UICountingLabel.h"
 
@@ -57,8 +55,6 @@ CGFloat const tagItemSpace = 5;
 #import "PooLoadingView.h"
 
 #import "UIImage+BlurGlass.h"
-
-#import "UIButton+Block.h"
 
 #import "PTPopoverFunction.h"
 
@@ -338,7 +334,7 @@ CGFloat const tagItemSpace = 5;
             
             UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
             pBtnsssss.backgroundColor = kRandomColor;
-            [pBtnsssss addActionHandler:^(UIButton *sender) {
+            [pBtnsssss addActionHandlersWithHandler:^(UIButton * sender) {
                 PNSLog(@"1111111111");
 //                self.titleS = @[@"空调",@"床",@"热水器"];
 //                [tag reloadTag:[self tagConfig]];
@@ -420,15 +416,14 @@ CGFloat const tagItemSpace = 5;
         {
             self.cornerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             self.cornerBtn.frame = CGRectMake((kSCREEN_WIDTH-100)/2, HEIGHT_NAVBAR+HEIGHT_NAVBAR, 100, 100);
-            self.cornerBtn.viewUI_rectCornerRadii = 20;
             self.cornerBtn.backgroundColor = kRandomColor;
             [self.view addSubview:self.cornerBtn];
             
             //    NSMutableArray *_RectCornerArr = [NSMutableArray array];
             //    [_RectCornerArr addObject:@(UIRectCornerAllCorners)];
             
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerBottomRight;
-
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomRight];
+            
             NSArray *arr = @[@"左上",@"右上",@"左下",@"右下",@"全部"];
             
             for (int i = 0; i < arr.count; i++) {
@@ -444,7 +439,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
+                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:kRandomColor];
             }
             
         }
@@ -471,12 +466,11 @@ CGFloat const tagItemSpace = 5;
             UIButton *randomLineBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [randomLineBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
             [randomLineBtn setTitle:@"随机画线" forState:UIControlStateNormal];
-            [randomLineBtn addActionHandler:^(UIButton *sender) {
+            [randomLineBtn addActionHandlersWithHandler:^(UIButton * sender) {
+                //                aaaaaaaaaaaaaa.verticalAlignment = random()%4;
+                //                aaaaaaaaaaaaaa.strikeThroughAlignment = random()%4;
+                //                aaaaaaaaaaaaaa.strikeThroughEnabled = random()%2;
                 [aaaaaaaaaaaaaa setVerticalAlignment:random()%4 strikeThroughAlignment:random()%4 setStrikeThroughEnabled:random()%2];
-//                aaaaaaaaaaaaaa.verticalAlignment = random()%4;
-//                aaaaaaaaaaaaaa.strikeThroughAlignment = random()%4;
-//                aaaaaaaaaaaaaa.strikeThroughEnabled = random()%2;
-
             }];
             [self.view addSubview:randomLineBtn];
             [randomLineBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -564,9 +558,8 @@ CGFloat const tagItemSpace = 5;
         case ShowFunctionAboutImage:
         {
             UIImage *placeholderImage = kImageNamed(@"DemoImage");
-            
             UIImageView *blurGlassImage = [UIImageView new];
-            blurGlassImage.image = [placeholderImage imgWithBlur];
+            blurGlassImage.image = [[placeholderImage transformImageWithSize:CGSizeMake(30, 30)] imgWithBlur];
             [self.view addSubview:blurGlassImage];
             [blurGlassImage mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self.view);
@@ -606,27 +599,27 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerTopLeft;
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerTopLeft];
         }
             break;
         case 1:
         {
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerTopRight;
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerTopRight];
         }
             break;
         case 2:
         {
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerBottomLeft;
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomLeft];
         }
             break;
         case 3:
         {
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerBottomRight;
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomRight];
         }
             break;
         default:
         {
-            self.cornerBtn.viewUI_rectCorner = UIRectCornerAllCorners;
+            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerAllCorners];
         }
             break;
     }

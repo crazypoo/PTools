@@ -11,8 +11,7 @@
 #import "PMacros.h"
 #import <WZLBadge/UIView+WZLBadge.h>
 #import "UIView+ModifyFrame.h"
-#import "UIButton+Block.h"
-#import "UIImage+Size.h"
+#import <PooTools/PooTools-Swift.h>
 #import "UIButton+ImageTitleSpacing.h"
 #import <SDWebImage/UIButton+WebCache.h>
 
@@ -127,7 +126,7 @@ normalBackgroundColor:(UIColor *)nbc
             [btn setTitle:self.titlesArr[i] forState:UIControlStateNormal];
             [self.scroller addSubview:btn];
 //            [btn addTarget:self action:@selector(btnTap:) forControlEvents:UIControlEventTouchUpInside];
-            [btn addActionHandler:^(UIButton *sender) {
+            [btn addActionHandlersWithHandler:^(UIButton *sender) {
                 self.withBlock = YES;
                 [self btnTap:sender];
             }];

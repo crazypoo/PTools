@@ -8,13 +8,15 @@
 
 import UIKit
 
+
 public typealias TouchedBlock = (_ seder:UIButton) -> Void
+
 
 public extension UIButton
 {
     static var UIButtonBlockKey = "UIButtonBlockKey"
     
-    func addActionHandlers(handler:@escaping TouchedBlock)
+    @objc func addActionHandlers(handler:@escaping TouchedBlock)
     {
         objc_setAssociatedObject(self, &UIButton.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)

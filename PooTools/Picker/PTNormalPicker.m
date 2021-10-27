@@ -11,8 +11,7 @@
 #import "PMacros.h"
 #import "Utils.h"
 #import <pop/POP.h>
-#import "UIView+ViewRectCorner.h"
-
+#import <PooTools/PooTools-Swift.h>
 
 @implementation PTNormalPickerModel
 @end
@@ -147,8 +146,8 @@
     
     if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
     {
-        self.tbar_picker.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
-        self.viewPicker.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+        [self.tbar_picker viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [self.viewPicker viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerBottomRight | UIRectCornerBottomLeft];
     }
 
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {

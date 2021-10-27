@@ -10,7 +10,7 @@ import UIKit
 
 public extension UIApplication
 {
-    func clearLaunchScreenCache() {
+    @objc func clearLaunchScreenCache() {
         do {
             try FileManager.default.removeItem(atPath: NSHomeDirectory()+"/Library/SplashBoard")
         } catch {

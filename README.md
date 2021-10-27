@@ -63,7 +63,7 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 'UIViewController+Swizzled':https://github.com/RuiAAPeres/UIViewController-Swizzled</br>
 'YCXMenu':https://github.com/Aster0id/YCXMenuDemo_ObjC</br>
 'ZipArchive':https://github.com/ZipArchive/ZipArchive</br>
-'CocoaLumberjack/Swift':https://github.com/ryan7cruise/YCSymbolTracker</br>
+'CocoaLumberjack/Swift':https://github.com/CocoaLumberjack/CocoaLumberjack</br>
 'SPPermissions':https://github.com/ivanvorobei/SPPermissions</br>
 'SkeletonView':https://github.com/Juanpe/SkeletonView</br>
 'FaceAware':https://github.com/BeauNouvelle/FaceAware</br>

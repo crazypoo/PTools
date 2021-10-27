@@ -10,7 +10,7 @@ import UIKit
 
 public extension NSDictionary
 {
-    func jsonDataToString()->String
+    @objc func jsonDataToString()->String
     {
         var jsonData : Data? = nil
                 

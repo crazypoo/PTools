@@ -180,7 +180,7 @@ public extension String
     }
     
     /// 是否包含emoji
-    var isContainEmoji: Bool {
+   var isContainEmoji: Bool {
         for scalar in unicodeScalars {
             return self.containEmoji(scalar)
         }

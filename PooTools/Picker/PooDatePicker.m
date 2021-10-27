@@ -7,12 +7,11 @@
 //
 
 #import "PooDatePicker.h"
-#import "UIButton+Block.h"
+#import <PooTools/PooTools-Swift.h>
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 #import "Utils.h"
 #import <pop/POP.h>
-#import "UIView+ViewRectCorner.h"
 
 #pragma mark ------> DatePicker
 @interface PooDatePicker ()<UITextFieldDelegate,UIPickerViewDataSource,UIPickerViewDelegate>
@@ -153,15 +152,14 @@
 
         kWeakSelf(self);
 
-        [self.cancelBtn addActionHandler:^(UIButton *sender) {
+        [self.cancelBtn addActionHandlersWithHandler:^(UIButton * sender) {
             if (weakself.block)
             {
                 weakself.block(nil);
             }
             [weakself remove];
         }];
-        
-        [self.yesBtn addActionHandler:^(UIButton *sender) {
+        [self.yesBtn addActionHandlersWithHandler:^(UIButton *sender) {
             
             if ([Utils isRolling:weakself.pickerView])
             {
@@ -379,8 +377,8 @@
 
     if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
     {
-        self.topV.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
-        self.pickerView.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+        [self.topV viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [self.pickerView viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerBottomRight | UIRectCornerBottomLeft];
     }
     
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -710,11 +708,11 @@
 
         kWeakSelf(self);
         
-        [self.cancelBtn addActionHandler:^(UIButton *sender) {
+        [self.cancelBtn addActionHandlersWithHandler:^(UIButton *sender) {
             [weakself remove];
         }];
         
-        [self.yesBtn addActionHandler:^(UIButton *sender) {
+        [self.yesBtn addActionHandlersWithHandler:^(UIButton *sender) {
             if ([Utils isRolling:weakself.pickerView])
             {
                 return;
@@ -827,8 +825,8 @@
     
     if (device.orientation == UIDeviceOrientationLandscapeRight || device.orientation == UIDeviceOrientationLandscapeLeft)
     {
-        self.topV.viewUI_rectCorner = UIRectCornerTopLeft | UIRectCornerTopRight;
-        self.pickerView.viewUI_rectCorner = UIRectCornerBottomRight | UIRectCornerBottomLeft;
+        [self.topV viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerTopLeft | UIRectCornerTopRight];
+        [self.pickerView viewCornerRectCorner_ocWithCornerRadii:5 corner:UIRectCornerBottomRight | UIRectCornerBottomLeft];
     }
     
     [self.cancelBtn mas_makeConstraints:^(MASConstraintMaker *make) {

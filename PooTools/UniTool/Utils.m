@@ -844,46 +844,6 @@
     }
 }
 
-+(NSString *)convertToJsonData:(NSDictionary *)dictData
-{
-    NSError *error = nil;
-    NSData *jsonData = nil;
-    if (!self) {
-        return nil;
-    }
-    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
-    [dictData enumerateKeysAndObjectsUsingBlock:^(id  _Nonnull key, id  _Nonnull obj, BOOL * _Nonnull stop) {
-        NSString *keyString = nil;
-        NSString *valueString = nil;
-        if ([key isKindOfClass:[NSString class]]) {
-            keyString = key;
-        }else{
-            keyString = [NSString stringWithFormat:@"%@",key];
-        }
-        
-        if ([obj isKindOfClass:[NSString class]]) {
-            valueString = obj;
-        }else{
-            valueString = [NSString stringWithFormat:@"%@",obj];
-        }
-        
-        [dict setObject:valueString forKey:keyString];
-    }];
-    jsonData = [NSJSONSerialization dataWithJSONObject:dict options:NSJSONWritingPrettyPrinted error:&error];
-    if ([jsonData length] == 0 || error != nil) {
-        return nil;
-    }
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    NSMutableString *mutStr = [NSMutableString stringWithString:jsonString];
-    NSRange range = {0,jsonString.length};
-    //去掉字符串中的空格
-    [mutStr replaceOccurrencesOfString:@" " withString:@"" options:NSLiteralSearch range:range];
-    NSRange range2 = {0,mutStr.length};
-    //去掉字符串中的换行符
-    [mutStr replaceOccurrencesOfString:@"\n" withString:@"" options:NSLiteralSearch range:range2];
-    return mutStr;
-}
-
 + (NSString *)changeJsonStringToTrueJsonString:(NSString *)json
 {
     // 将没有双引号的替换成有双引号的

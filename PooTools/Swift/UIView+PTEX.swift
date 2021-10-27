@@ -12,12 +12,22 @@ var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 
 public extension UIView {
     
+    @objc func viewCorner_oc(radius:CGFloat,borderWidth:CGFloat,borderColor:UIColor)
+    {
+        self.viewCorner(radius: radius,borderWidth: borderWidth,borderColor:borderColor)
+    }
+    
     func viewCorner(radius:CGFloat,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
     {
         self.layer.cornerRadius = radius
         self.layer.masksToBounds = true
         self.layer.borderWidth = borderWidth!
         self.layer.borderColor = borderColor!.cgColor
+    }
+    
+    @objc func viewCornerRectCorner_oc(cornerRadii:CGFloat,corner:UIRectCorner)
+    {
+        self.viewCornerRectCorner(cornerRadii: cornerRadii, corner: corner)
     }
     
     func viewCornerRectCorner(cornerRadii:CGFloat? = 5,corner:UIRectCorner? = .allCorners)
@@ -44,7 +54,7 @@ public extension UIView {
         tracker.activate()
     }
     
-    var x: CGFloat{
+    @objc var x: CGFloat{
         get{
             frame.origin.x
         }
@@ -52,7 +62,7 @@ public extension UIView {
             frame.origin.x = newValue
         }
     }
-    var y: CGFloat{
+    @objc var y: CGFloat{
         get{
             frame.origin.y
         }
@@ -60,7 +70,7 @@ public extension UIView {
             frame.origin.y = newValue
         }
     }
-    var width: CGFloat{
+    @objc var width: CGFloat{
         get{
             frame.size.width
         }
@@ -68,7 +78,8 @@ public extension UIView {
             frame.size.width = newValue
         }
     }
-    var height: CGFloat{
+    
+    @objc var height: CGFloat{
         get{
             frame.size.height
         }
@@ -77,13 +88,13 @@ public extension UIView {
         }
     }
     
-    var viewCenter: CGPoint{
+    @objc var viewCenter: CGPoint{
         get{
             CGPoint(x: width * 0.5, y: height * 0.5)
         }
     }
     
-    var centerX: CGFloat{
+    @objc var centerX: CGFloat{
         get{
             width * 0.5
         }
@@ -91,7 +102,8 @@ public extension UIView {
             center.x = newValue
         }
     }
-    var setCenterY: CGFloat{
+    
+    @objc var centerY: CGFloat{
         get{
             height * 0.5
         }
@@ -100,20 +112,11 @@ public extension UIView {
         }
     }
     
-    var centerY: CGFloat{
-        get{
-            height * 0.5
-        }
-        set{
-            center.y = newValue
-        }
-    }
-    
-    var inSuperViewCenterY: CGFloat{
+    @objc var inSuperViewCenterY: CGFloat{
         y + centerY
     }
     
-    var maxX: CGFloat{
+    @objc var maxX: CGFloat{
         get{
             x + width
         }
@@ -121,7 +124,7 @@ public extension UIView {
             x = newValue - width
         }
     }
-    var maxY: CGFloat{
+    @objc var maxY: CGFloat{
         get{
             y + height
         }
@@ -134,17 +137,17 @@ public extension UIView {
 
 public extension UILabel
 {
-    func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
+    @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
     {
         return PTUtils.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
-    func getLabelWidth(height:CGFloat)->CGFloat
+    @objc func getLabelWidth(height:CGFloat)->CGFloat
     {
         return self.getLabelSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    func getLabelHeight(width:CGFloat)->CGFloat
+    @objc func getLabelHeight(width:CGFloat)->CGFloat
     {
         return self.getLabelSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
@@ -152,17 +155,17 @@ public extension UILabel
 
 public extension UIButton
 {
-    func getButtonSize(width:CGFloat,height:CGFloat)->CGSize
+    @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize
     {
         return PTUtils.sizeFor(string: self.titleLabel!.text!, font: self.titleLabel!.font!, height: height, width: width)
     }
     
-    func getButtonWidth(height:CGFloat)->CGFloat
+    @objc func getButtonWidth(height:CGFloat)->CGFloat
     {
         return self.getButtonSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    func getButtonHeight(width:CGFloat)->CGFloat
+    @objc func getButtonHeight(width:CGFloat)->CGFloat
     {
         return self.getButtonSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
@@ -170,17 +173,17 @@ public extension UIButton
 
 public extension UITextView
 {
-    func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize
+    @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize
     {
         return PTUtils.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
-    func getLabelWidth(height:CGFloat)->CGFloat
+    @objc func getLabelWidth(height:CGFloat)->CGFloat
     {
         return self.getTextViewSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    func getLabelHeight(width:CGFloat)->CGFloat
+    @objc func getLabelHeight(width:CGFloat)->CGFloat
     {
         return self.getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
     }

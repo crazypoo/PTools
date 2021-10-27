@@ -16,7 +16,6 @@
 #import "UIView+ViewShaking.h"
 #import "SensitiveWordTools.h"
 #import "PopSignatureView.h"
-#import "UIButton+Block.h"
 #import "PooCodeView.h"
 #import "PSlider.h"
 #import "DoubleSliderView.h"
@@ -97,7 +96,7 @@
         make.width.height.offset(50);
         make.centerY.centerX.equalTo(views);
     }];
-    [views2 addActionHandler:^(UIButton *sender) {
+    [views2 addActionHandlersWithHandler:^(UIButton *sender) {
         if ([self.popover isKindOfClass:[PTCustomAlertView class]])
         {
             [(PTCustomAlertView *)self.popover dismiss];
@@ -115,7 +114,7 @@
     [aaaaaaaa setTitleColor:kRandomColor forState:UIControlStateNormal];
     [aaaaaaaa setTitle:@"11111" forState:UIControlStateNormal];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:aaaaaaaa];
-    [aaaaaaaa addActionHandler:^(UIButton *sender) {
+    [aaaaaaaa addActionHandlersWithHandler:^(UIButton *sender) {
         PNSLog(@"111111");
         [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 400) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny
                                        withPopover:^(id  _Nonnull popoverView) {
@@ -127,7 +126,7 @@
     [bbbbbbbbb setTitleColor:kRandomColor forState:UIControlStateNormal];
     [bbbbbbbbb setTitle:@"222222222" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
-    [bbbbbbbbb addActionHandler:^(UIButton *sender) {
+    [bbbbbbbbb addActionHandlersWithHandler:^(UIButton *sender) {
         PNSLog(@"222222222");
         [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionRight withPopover:^(id  _Nonnull popoverView) {
             self.popover = popoverView;
@@ -457,7 +456,7 @@ static NSString *cellIdentifier = @"CELL";
                         pBtn.backgroundColor = kRandomColor;
                         [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
                         [pBtn setTitle:@"1111" forState:UIControlStateNormal];
-                        [pBtn addActionHandler:^(UIButton *sender) {
+                        [pBtn addActionHandlersWithHandler:^(UIButton *sender) {
                             [webView removeFromSuperview];
                         }];
                         [webView addSubview:pBtn];

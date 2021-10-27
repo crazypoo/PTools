@@ -11,7 +11,7 @@ import Accelerate
 
 public extension UIImage
 {
-    func transformImage(size:CGSize)->UIImage
+    @objc func transformImage(size:CGSize)->UIImage
     {
         if #available(iOS 15.0, *) {
             return self.preparingThumbnail(of: size)!
