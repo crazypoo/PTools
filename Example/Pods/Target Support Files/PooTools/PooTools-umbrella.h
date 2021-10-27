@@ -111,7 +111,6 @@
 #import "PTPopoverFunction.h"
 #import "PStarRateView.h"
 #import "MXRotationManager.h"
-#import "PooSearchBar.h"
 #import "SecurityStrategy.h"
 #import "PooSegView.h"
 #import "EasySignatureView.h"

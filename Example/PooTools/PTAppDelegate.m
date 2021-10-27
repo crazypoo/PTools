@@ -59,7 +59,7 @@
     UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:view];
     self.window.rootViewController = mainNav;
     [self.window makeKeyAndVisible];
-    
+        
     self.localConsoles = [LocalConsole shared];
     [self.localConsoles createSystemLogView];
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS]]];
@@ -67,9 +67,9 @@
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
 
-    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:3 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
-        
-    }];
+//    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:3 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
+//        
+//    }];
     
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]]];
     

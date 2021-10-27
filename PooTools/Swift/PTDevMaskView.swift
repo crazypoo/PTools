@@ -9,9 +9,20 @@
 import UIKit
 import SnapKit
 
+@objcMembers
 public class PTDevMaskView: UIView {
 
-    public var isMask : Bool? = true
+    public var isMask : Bool
+    {
+        get
+        {
+            true
+        }
+        set
+        {
+            newValue
+        }
+    }
     
     public init(maskImage:String,maskString:String)
     {
@@ -34,7 +45,7 @@ public class PTDevMaskView: UIView {
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
     {
-        if isMask!
+        if isMask
         {
             return super.hitTest(point, with: event)
         }

@@ -39,7 +39,6 @@ CGFloat const tagItemSpace = 5;
 #import "PooTagsLabel.h"
 
 #import "PooNumberKeyBoard.h"
-#import "PooSearchBar.h"
 #import "PooTextView.h"
 
 #import "PLabel.h"
@@ -375,7 +374,7 @@ CGFloat const tagItemSpace = 5;
                 make.height.offset(44);
             }];
             
-            PooSearchBar *searchBar = [PooSearchBar new];
+            PTSearchBar *searchBar = [PTSearchBar new];
             searchBar.barStyle     = UIBarStyleDefault;
             searchBar.translucent  = YES;
             //    searchBar.delegate     = self;
@@ -387,7 +386,7 @@ CGFloat const tagItemSpace = 5;
             //    searchBar.searchBarImage = kImageNamed(@"Search");
             searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
             searchBar.searchBarOutViewColor = kRandomColor;
-            searchBar.searchBarTextFieldCornerRadius = 15;
+            searchBar.searchBarTextFieldCornerRadius = @15;
             searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
             [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
