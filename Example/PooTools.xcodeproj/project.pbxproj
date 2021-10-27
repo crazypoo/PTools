@@ -50,7 +50,6 @@
 		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
 		2393690127291A410021F3D4 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2393690027291A410021F3D4 /* PTSearchBar.swift */; };
 		23936903272927110021F3D4 /* UITextView+BKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23936902272927110021F3D4 /* UITextView+BKExt.swift */; };
-		23936905272931CE0021F3D4 /* PTTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23936904272931CE0021F3D4 /* PTTextView.swift */; };
 		23D4A5FF27278785005743A1 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A5FE27278785005743A1 /* PTCarrie.swift */; };
 		23D4A60127279629005743A1 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A60027279629005743A1 /* PTPhoneBlock.swift */; };
 		23D4A6032727CA4B005743A1 /* PTNumberKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */; };
@@ -251,7 +250,6 @@
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		2393690027291A410021F3D4 /* PTSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
 		23936902272927110021F3D4 /* UITextView+BKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextView+BKExt.swift"; sourceTree = "<group>"; };
-		23936904272931CE0021F3D4 /* PTTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTextView.swift; sourceTree = "<group>"; };
 		23D4A5FE27278785005743A1 /* PTCarrie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
 		23D4A60027279629005743A1 /* PTPhoneBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneBlock.swift; sourceTree = "<group>"; };
 		23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNumberKeyBoard.swift; sourceTree = "<group>"; };
@@ -638,7 +636,6 @@
 				230FC543272268DF005A8D08 /* UIImage+PTEX.swift */,
 				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
 				2393690027291A410021F3D4 /* PTSearchBar.swift */,
-				23936904272931CE0021F3D4 /* PTTextView.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1566,7 +1563,6 @@
 				CC1D38BC211D706400FD29F4 /* MAThermometerBorder.m in Sources */,
 				CC3838D7214364D100453548 /* PVideoConfig.m in Sources */,
 				CC1257DA2098319300E31A38 /* UIColor+Colours.m in Sources */,
-				23936905272931CE0021F3D4 /* PTTextView.swift in Sources */,
 				64E0598C20A9E06600E434CD /* SecurityUtil.m in Sources */,
 				CC1257D12098319300E31A38 /* PooUDIDInfo.m in Sources */,
 				CC1257CD2098319300E31A38 /* PooSegView.m in Sources */,
