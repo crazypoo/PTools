@@ -24,6 +24,8 @@
 #import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 
+#import "SQFloatWindow.h"
+
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
  //重装后先登录
@@ -74,7 +76,7 @@
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStamp],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]]];
     
     [[PCheckAppStatus shared] open];
-    
+        
     self.floatBtn = [[PFloatingButton alloc] initWithView:self.window frame:CGRectMake(0, 100, 50, 50)];
     self.floatBtn.backgroundColor = kRandomColor;
     self.floatBtn.adjustsImageWhenHighlighted = NO;

@@ -16,7 +16,6 @@
 #import "UIView+ViewShaking.h"
 #import "SensitiveWordTools.h"
 #import "PopSignatureView.h"
-#import "PooCodeView.h"
 #import "PSlider.h"
 #import "DoubleSliderView.h"
 
@@ -528,14 +527,14 @@ static NSString *cellIdentifier = @"CELL";
             switch (indexPath.row) {
                 case 1:
                 {
-                    [self createAlertViewWithTitle:@"验证码图片" withAlertBtns:@[@"222"] initCustomView:^(UIView *customView) {
-                        PooCodeView *codeView = [[PooCodeView alloc] initWithFrame:CGRectMake(0, 0, 0, 0) NumberOfCode:4 NumberOfLines:3 ChangeTime:3];
+                    [self createAlertViewWithTitle:@"验证码图片" withAlertBtns:@[@"222"] customeViewHeight:100 initCustomView:^(UIView *customView) {
+                        PTCodeView *codeView = [[PTCodeView alloc] initWithFrame:CGRectZero numberOfCodes:4 numberOfLines:3 changeTimes:3];
                         [customView addSubview:codeView];
                         [codeView mas_makeConstraints:^(MASConstraintMaker *make) {
                             make.centerX.centerY.equalTo(customView);
                             make.width.height.offset(100);
                         }];
-                        codeView.codeBlock = ^(PooCodeView *codeView, NSString *codeString) {
+                        codeView.codeBlock = ^(PTCodeView * codeView, NSString * codeString) {
                             PNSLog(@">>>>>>>>%@",codeString);
                         };
                     } alertBtnTapBlock:^(NSInteger btnIndex) {
@@ -571,7 +570,7 @@ static NSString *cellIdentifier = @"CELL";
             break;
         case 11:
         {
-            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] initCustomView:^(UIView *customView) {
+            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:50 initCustomView:^(UIView *customView) {
                 PSlider *slider = [PSlider new];
                 [customView addSubview:slider];
                 [slider mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -608,7 +607,7 @@ static NSString *cellIdentifier = @"CELL";
     return YES;
 }
 
--(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock
+-(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns customeViewHeight:(CGFloat)cH initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock
 {
     NSMutableArray <PTCustomBottomButtonModel *>*arr = [NSMutableArray array];
     for (NSString *title in btns) {
@@ -617,10 +616,10 @@ static NSString *cellIdentifier = @"CELL";
         models.titleName = title;
         [arr addObject:models];
     }
-        
+            
     PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:kDEFAULT_FONT(FontName, 15) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:arr];
     [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.offset(64+[PTCustomAlertView getBottomButtonHiehgtWithFont:kDEFAULT_FONT(FontName, 50) alertWidth:kSCREEN_WIDTH-20 moreButtonTitles:arr]);
+        make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:kDEFAULT_FONT(FontName, 15) buttonArray:arr]);
         make.width.offset(kSCREEN_WIDTH-20);
         make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
     }];

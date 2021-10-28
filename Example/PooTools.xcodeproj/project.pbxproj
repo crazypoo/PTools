@@ -50,6 +50,7 @@
 		2352EA792543BE97002AE25C /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2352EA782543BE97002AE25C /* UIViewController+Swizzled.swift */; };
 		2393690127291A410021F3D4 /* PTSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2393690027291A410021F3D4 /* PTSearchBar.swift */; };
 		23936903272927110021F3D4 /* UITextView+BKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23936902272927110021F3D4 /* UITextView+BKExt.swift */; };
+		23936909272A98290021F3D4 /* PTCodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23936908272A98290021F3D4 /* PTCodeView.swift */; };
 		23D4A5FF27278785005743A1 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A5FE27278785005743A1 /* PTCarrie.swift */; };
 		23D4A60127279629005743A1 /* PTPhoneBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A60027279629005743A1 /* PTPhoneBlock.swift */; };
 		23D4A6032727CA4B005743A1 /* PTNumberKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */; };
@@ -93,7 +94,6 @@
 		CC1257C32098319300E31A38 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12575E2098319200E31A38 /* PLabel.m */; };
 		CC1257C52098319300E31A38 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257632098319200E31A38 /* PMotion.m */; };
 		CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257652098319200E31A38 /* PooActionOnCalendar.m */; };
-		CC1257C82098319300E31A38 /* PooCodeView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257692098319200E31A38 /* PooCodeView.m */; };
 		CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576B2098319200E31A38 /* PooLoadingView.m */; };
 		CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */; };
 		CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576F2098319200E31A38 /* PooPhoneBlock.m */; };
@@ -250,6 +250,7 @@
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		2393690027291A410021F3D4 /* PTSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSearchBar.swift; sourceTree = "<group>"; };
 		23936902272927110021F3D4 /* UITextView+BKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextView+BKExt.swift"; sourceTree = "<group>"; };
+		23936908272A98290021F3D4 /* PTCodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCodeView.swift; sourceTree = "<group>"; };
 		23D4A5FE27278785005743A1 /* PTCarrie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
 		23D4A60027279629005743A1 /* PTPhoneBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneBlock.swift; sourceTree = "<group>"; };
 		23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNumberKeyBoard.swift; sourceTree = "<group>"; };
@@ -341,8 +342,6 @@
 		CC1257632098319200E31A38 /* PMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
 		CC1257642098319200E31A38 /* PooActionOnCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooActionOnCalendar.h; sourceTree = "<group>"; };
 		CC1257652098319200E31A38 /* PooActionOnCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooActionOnCalendar.m; sourceTree = "<group>"; };
-		CC1257682098319200E31A38 /* PooCodeView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooCodeView.h; sourceTree = "<group>"; };
-		CC1257692098319200E31A38 /* PooCodeView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooCodeView.m; sourceTree = "<group>"; };
 		CC12576A2098319200E31A38 /* PooLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
 		CC12576B2098319200E31A38 /* PooLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
 		CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooNumberKeyBoard.h; sourceTree = "<group>"; };
@@ -636,6 +635,7 @@
 				230FC543272268DF005A8D08 /* UIImage+PTEX.swift */,
 				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
 				2393690027291A410021F3D4 /* PTSearchBar.swift */,
+				23936908272A98290021F3D4 /* PTCodeView.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1246,15 +1246,6 @@
 			path = OpenFunction;
 			sourceTree = "<group>";
 		};
-		C08D9DF522769085001417F1 /* CodeView */ = {
-			isa = PBXGroup;
-			children = (
-				CC1257682098319200E31A38 /* PooCodeView.h */,
-				CC1257692098319200E31A38 /* PooCodeView.m */,
-			);
-			path = CodeView;
-			sourceTree = "<group>";
-		};
 		C08D9DF6227690EF001417F1 /* SecurityView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1288,7 +1279,6 @@
 				C08D9DED22768ED8001417F1 /* Chat */,
 				C08D9DD822768AE9001417F1 /* CheckBox */,
 				C08D9DF122768FE6001417F1 /* CheckDirtyWord */,
-				C08D9DF522769085001417F1 /* CodeView */,
 				C08D9DEC22768EA8001417F1 /* Country */,
 				C08D9DF022768F8A001417F1 /* FloatingView */,
 				C08D9DE022768C9B001417F1 /* ImageReviewer */,
@@ -1515,7 +1505,6 @@
 				CC1257E72098319300E31A38 /* WMHubWindow.m in Sources */,
 				CC15EB1D21FC54690033D99F /* PopSignatureView.m in Sources */,
 				CCC01E09215B341300874BDF /* UIView+ViewShaking.m in Sources */,
-				CC1257C82098319300E31A38 /* PooCodeView.m in Sources */,
 				CC1257BE2098319300E31A38 /* NSURLResponse+Help.m in Sources */,
 				CC35017521FE90DC00E64074 /* UITableView+WWFoldableTableView.m in Sources */,
 				230FC55F272268E0005A8D08 /* UIView+PTEX.swift in Sources */,
@@ -1539,6 +1528,7 @@
 				CC1257E62098319300E31A38 /* WMHubViewController.m in Sources */,
 				CC1257E22098319300E31A38 /* UIViewController+TopBarMessage.m in Sources */,
 				CC1257D02098319300E31A38 /* PooTextView.m in Sources */,
+				23936909272A98290021F3D4 /* PTCodeView.swift in Sources */,
 				CCD660BA21DCCD3B004AA57D /* IGJSONResponseObjectParserManager.m in Sources */,
 				CC1257B72098319300E31A38 /* LGTMBase64.m in Sources */,
 				CCD660B621DCCD3B004AA57D /* IGBatchTask.m in Sources */,
