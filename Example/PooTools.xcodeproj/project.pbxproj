@@ -593,7 +593,6 @@
 		230FC52B272268D0005A8D08 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
-				23936902272927110021F3D4 /* UITextView+BKExt.swift */,
 				230FC5762722716D005A8D08 /* BKCutsomButton.swift */,
 				230FC58827227ED9005A8D08 /* BorderManager.swift */,
 				230FC540272268DE005A8D08 /* Data+PTEX.swift */,
@@ -610,6 +609,7 @@
 				230FC52D272268DC005A8D08 /* PTBiologyID.swift */,
 				23D4A5FE27278785005743A1 /* PTCarrie.swift */,
 				230FC53A272268DE005A8D08 /* PTCheckAppStatus.swift */,
+				23936908272A98290021F3D4 /* PTCodeView.swift */,
 				230FC541272268DE005A8D08 /* PTCollectionLayout.swift */,
 				230FC532272268DC005A8D08 /* PTCustomAlertView.swift */,
 				230FC531272268DC005A8D08 /* PTDevMaskView.swift */,
@@ -622,6 +622,7 @@
 				23D4A6022727CA4B005743A1 /* PTNumberKeyBoard.swift */,
 				23D4A60027279629005743A1 /* PTPhoneBlock.swift */,
 				230FC547272268DF005A8D08 /* PTPurchaseCarAnimationTool.swift */,
+				2393690027291A410021F3D4 /* PTSearchBar.swift */,
 				230FC52C272268DC005A8D08 /* PTTagsLabel.swift */,
 				230FC53E272268DE005A8D08 /* PTUrlChange.swift */,
 				230FC544272268DF005A8D08 /* PTUtils.swift */,
@@ -633,9 +634,8 @@
 				230FC549272268DF005A8D08 /* UIButton+PTEX.swift */,
 				230FC545272268DF005A8D08 /* UIColor+PTEX.swift */,
 				230FC543272268DF005A8D08 /* UIImage+PTEX.swift */,
+				23936902272927110021F3D4 /* UITextView+BKExt.swift */,
 				230FC53F272268DE005A8D08 /* UIView+PTEX.swift */,
-				2393690027291A410021F3D4 /* PTSearchBar.swift */,
-				23936908272A98290021F3D4 /* PTCodeView.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";

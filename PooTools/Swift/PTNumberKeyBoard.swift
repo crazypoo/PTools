@@ -34,7 +34,7 @@ public class PTNumberKeyBoard: UIView {
         }
         set
         {
-            newValue as CGFloat
+            newValue
         }
     }
             

@@ -495,11 +495,18 @@ static NSString *cellIdentifier = @"CELL";
             switch (indexPath.row) {
                 case 1:
                 {
-                    [PooPhoneBlock callPhoneNumber:@"13800138000" call:^(NSTimeInterval duration) {
+                    [PTPhoneBlock callPhoneNumberWithPhoneNumber:@"13800138000" call:^(NSTimeInterval duration) {
                         
                     } cancel:^{
                         
+                    } canCall:^(BOOL finish) {
+                        
                     }];
+//                    [PooPhoneBlock callPhoneNumber:@"13800138000" call:^(NSTimeInterval duration) {
+//
+//                    } cancel:^{
+//
+//                    }];
                 }
                     break;
                 case 2:

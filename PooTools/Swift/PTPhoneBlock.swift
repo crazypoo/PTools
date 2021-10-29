@@ -22,7 +22,7 @@ class PTPhoneBlock: NSObject {
     public var cancelBlock:CancelBlock?
     public var canCall:CanCall?
 
-    public func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping CancelBlock,canCall:@escaping CanCall)
+    public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping CancelBlock,canCall:@escaping CanCall)
     {
         var canCallSomeOne:Bool? = false
         if PTPhoneBlock.validPhone(phoneNumber: phoneNumber)
