@@ -197,7 +197,14 @@ public class PTLaunchAdMonitor: NSObject {
                 imageView.addGestureRecognizer(tapGesture)
             default:
                 let imageBtn = UIButton.init(type: .custom)
-                imageBtn.setImage(UIImage(data: monitor.imgData! as Data), for: .normal)
+                if monitor.imgData != nil
+                {
+                    imageBtn.setImage(UIImage(data: monitor.imgData! as Data), for: .normal)
+                }
+                else
+                {
+                    imageBtn.setImage(PTUtils.createImageWithColor(color: UIColor.randomColor), for: .normal)
+                }
                 imageBtn.addActionHandlers { sender in
                     PTLaunchAdMonitor.showDetail(sender: sender)
                 }
@@ -229,23 +236,9 @@ public class PTLaunchAdMonitor: NSObject {
                 make.width.height.equalTo(55)
             }
             exit.viewCorner(radius: 55/2)
-            var newCount = Int(timeInterval) + 1
-            let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-            timer.schedule(deadline: .now(), repeating: .seconds(1))
-            timer.setEventHandler {
-                DispatchQueue.main.async {
-                    newCount -= 1
-                    let strTime = String.init(format: "%.2d", newCount)
-                    let buttonTime = String.init(format: "跳过\n%@s", strTime)
-                    exit.setTitle(buttonTime, for: .normal)
-                    
-                    if newCount < 1 {
-                        timer.cancel()
-                        PTLaunchAdMonitor.hideView(sender: exit)
-                    }
-                }
+            PTUtils.timeRunWithTime(timeInterval: timeInterval, sender: exit, originalTitle: "", canTap: true) {
+                PTLaunchAdMonitor.hideView(sender: exit)
             }
-            timer.resume()
             
             if !comlabel
             {
@@ -346,8 +339,9 @@ public class PTLaunchAdMonitor: NSObject {
         let request = URLRequest.init(url: url!)
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request) { data, response, error in
-            let resp : HTTPURLResponse = response as! HTTPURLResponse
-            if resp.statusCode != 200
+            
+            let resp = response as? HTTPURLResponse
+            if resp?.statusCode != 200
             {
                 self.imgLoaded = true
                 return

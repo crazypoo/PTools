@@ -274,10 +274,7 @@ public class PTUtils: NSObject {
         }
     }
     
-    public class func timeRunWithTime(timeInterval:TimeInterval,
-                                    sender:UIButton,
-                                    originalTitle:String,
-                                    canTap:Bool)
+    public class func timeRunWithTime_base(timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
     {
         var newCount = Int(timeInterval) + 1
         let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
@@ -285,23 +282,43 @@ public class PTUtils: NSObject {
         timer.setEventHandler {
             DispatchQueue.main.async {
                 newCount -= 1
-                let strTime = String.init(format: "%.2d", newCount)
-                let buttonTime = String.init(format: "%@", strTime)
-                sender.setTitle(buttonTime, for: .normal)
-                sender.isUserInteractionEnabled = false
+                finishBlock(false,newCount)
                 if newCount < 1 {
                     DispatchQueue.main.async {
-                        if canTap
-                        {
-                            sender.setTitle(originalTitle, for: .normal)
-                            sender.isUserInteractionEnabled = true
-                        }
+                        finishBlock(true,0)
                     }
                     timer.cancel()
                 }
             }
         }
         timer.resume()
+    }
+
+    
+    public class func timeRunWithTime(timeInterval:TimeInterval,
+                                    sender:UIButton,
+                                    originalTitle:String,
+                                    canTap:Bool,
+                                timeFinish:(()->Void)?)
+    {
+        PTUtils.timeRunWithTime_base(timeInterval: timeInterval) { finish, time in
+            if finish
+            {
+                sender.setTitle(originalTitle, for: .normal)
+                sender.isUserInteractionEnabled = canTap
+                if timeFinish != nil
+                {
+                    timeFinish!()
+                }
+            }
+            else
+            {
+                let strTime = String.init(format: "%.2d", time)
+                let buttonTime = String.init(format: "%@", strTime)
+                sender.setTitle(buttonTime, for: .normal)
+                sender.isUserInteractionEnabled = canTap
+            }
+        }
     }
     
     public class func createImageWithColor(color:UIColor)->UIImage

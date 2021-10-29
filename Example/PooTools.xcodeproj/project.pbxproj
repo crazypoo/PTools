@@ -96,7 +96,6 @@
 		CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257652098319200E31A38 /* PooActionOnCalendar.m */; };
 		CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576B2098319200E31A38 /* PooLoadingView.m */; };
 		CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */; };
-		CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576F2098319200E31A38 /* PooPhoneBlock.m */; };
 		CC1257CD2098319300E31A38 /* PooSegView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257732098319200E31A38 /* PooSegView.m */; };
 		CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257752098319200E31A38 /* PooSystemInfo.m */; };
 		CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257772098319200E31A38 /* PooTagsLabel.m */; };
@@ -346,8 +345,6 @@
 		CC12576B2098319200E31A38 /* PooLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
 		CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooNumberKeyBoard.h; sourceTree = "<group>"; };
 		CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooNumberKeyBoard.m; sourceTree = "<group>"; };
-		CC12576E2098319200E31A38 /* PooPhoneBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooPhoneBlock.h; sourceTree = "<group>"; };
-		CC12576F2098319200E31A38 /* PooPhoneBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooPhoneBlock.m; sourceTree = "<group>"; };
 		CC1257722098319200E31A38 /* PooSegView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
 		CC1257732098319200E31A38 /* PooSegView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
 		CC1257742098319200E31A38 /* PooSystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSystemInfo.h; sourceTree = "<group>"; };
@@ -1153,15 +1150,6 @@
 			path = Json;
 			sourceTree = "<group>";
 		};
-		C08D9DEA22768E6E001417F1 /* PhoneCall */ = {
-			isa = PBXGroup;
-			children = (
-				CC12576E2098319200E31A38 /* PooPhoneBlock.h */,
-				CC12576F2098319200E31A38 /* PooPhoneBlock.m */,
-			);
-			path = PhoneCall;
-			sourceTree = "<group>";
-		};
 		C08D9DEB22768E91001417F1 /* LineView */ = {
 			isa = PBXGroup;
 			children = (
@@ -1292,7 +1280,6 @@
 				C08D9DE522768D7C001417F1 /* Motion */,
 				C08D9DCC2276886B001417F1 /* NetWork */,
 				C08D9DF42276906A001417F1 /* OpenFunction */,
-				C08D9DEA22768E6E001417F1 /* PhoneCall */,
 				C08D9DE622768D8E001417F1 /* PhoneInfo */,
 				C08D9DD322768A19001417F1 /* Picker */,
 				CCBC5C4F217B07D800B205CF /* PooTools_Example-Bridging-Header.h */,
@@ -1634,7 +1621,6 @@
 				CC658CD420AC3D4500949DF6 /* PADView.m in Sources */,
 				CC1257EA2098319300E31A38 /* WPTappableLabel.m in Sources */,
 				230FC54D272268E0005A8D08 /* PTBiologyID.swift in Sources */,
-				CC1257CB2098319300E31A38 /* PooPhoneBlock.m in Sources */,
 				CC1257BF2098319300E31A38 /* PBugReporter.m in Sources */,
 				C009FA42228FDF590072C043 /* SQFloatWindow.m in Sources */,
 				230FC58427227959005A8D08 /* DOGobalFileManager.m in Sources */,

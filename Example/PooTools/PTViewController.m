@@ -26,7 +26,6 @@
 #import <WebKit/WebKit.h>
 
 #import "PooSystemInfo.h"
-#import "PooPhoneBlock.h"
 
 #import "MXRotationManager.h"
 
@@ -502,11 +501,6 @@ static NSString *cellIdentifier = @"CELL";
                     } canCall:^(BOOL finish) {
                         
                     }];
-//                    [PooPhoneBlock callPhoneNumber:@"13800138000" call:^(NSTimeInterval duration) {
-//
-//                    } cancel:^{
-//
-//                    }];
                 }
                     break;
                 case 2:

@@ -33,11 +33,7 @@ class PTPhoneBlock: NSObject {
             share.cancelBlock = cancel
             
             let simplePhoneNumber = (phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted) as NSArray).componentsJoined(by: "")
-            let newString = NSMutableString()
-            simplePhoneNumber.enumerated().forEach { index,value in
-                newString.append(simplePhoneNumber)
-            }
-            let stringURL = ("telprompt://" as NSString).appending(newString.description)
+            let stringURL = ("telprompt://" as NSString).appending(simplePhoneNumber)
             UIApplication.shared.open(URL(string: stringURL)!, options: [:], completionHandler: nil)
             canCallSomeOne = true
         }
