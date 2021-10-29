@@ -95,7 +95,6 @@
 		CC1257C52098319300E31A38 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257632098319200E31A38 /* PMotion.m */; };
 		CC1257C62098319300E31A38 /* PooActionOnCalendar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257652098319200E31A38 /* PooActionOnCalendar.m */; };
 		CC1257C92098319300E31A38 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576B2098319200E31A38 /* PooLoadingView.m */; };
-		CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */ = {isa = PBXBuildFile; fileRef = CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */; };
 		CC1257CD2098319300E31A38 /* PooSegView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257732098319200E31A38 /* PooSegView.m */; };
 		CC1257CE2098319300E31A38 /* PooSystemInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257752098319200E31A38 /* PooSystemInfo.m */; };
 		CC1257CF2098319300E31A38 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1257772098319200E31A38 /* PooTagsLabel.m */; };
@@ -343,8 +342,6 @@
 		CC1257652098319200E31A38 /* PooActionOnCalendar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooActionOnCalendar.m; sourceTree = "<group>"; };
 		CC12576A2098319200E31A38 /* PooLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
 		CC12576B2098319200E31A38 /* PooLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
-		CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooNumberKeyBoard.h; sourceTree = "<group>"; };
-		CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooNumberKeyBoard.m; sourceTree = "<group>"; };
 		CC1257722098319200E31A38 /* PooSegView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
 		CC1257732098319200E31A38 /* PooSegView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
 		CC1257742098319200E31A38 /* PooSystemInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSystemInfo.h; sourceTree = "<group>"; };
@@ -1080,15 +1077,6 @@
 			path = ImageReviewer;
 			sourceTree = "<group>";
 		};
-		C08D9DE122768CBE001417F1 /* Keyboard */ = {
-			isa = PBXGroup;
-			children = (
-				CC12576C2098319200E31A38 /* PooNumberKeyBoard.h */,
-				CC12576D2098319200E31A38 /* PooNumberKeyBoard.m */,
-			);
-			path = Keyboard;
-			sourceTree = "<group>";
-		};
 		C08D9DE322768D2D001417F1 /* Base64 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1272,7 +1260,6 @@
 				C08D9DE022768C9B001417F1 /* ImageReviewer */,
 				C08D9DDA22768B3D001417F1 /* Input */,
 				C08D9DE822768DF2001417F1 /* Json */,
-				C08D9DE122768CBE001417F1 /* Keyboard */,
 				C08D9DE422768D3F001417F1 /* KeyChain */,
 				C08D9DDB22768B99001417F1 /* Label */,
 				C08D9DEB22768E91001417F1 /* LineView */,
@@ -1547,7 +1534,6 @@
 				23114E3C27229AE6001CF3F5 /* LocalConsole.swift in Sources */,
 				CC1257E42098319300E31A38 /* WMHub.m in Sources */,
 				CC1257DF2098319300E31A38 /* UILabel+FlickerNumber.m in Sources */,
-				CC1257CA2098319300E31A38 /* PooNumberKeyBoard.m in Sources */,
 				C0DB2BD022AB561B00A7D017 /* NSString+PassStrength.m in Sources */,
 				230FC55C272268E0005A8D08 /* String+PTEX.swift in Sources */,
 				C004647522647CE4004F946F /* DoubleSliderView.m in Sources */,

@@ -18,6 +18,14 @@ import UIKit
 typealias PTNumberKeyBoardBackSpace = (_ keyboard:PTNumberKeyBoard)->Void
 typealias PTNumberKeyBoardReturnSTH = (_ keyboard:PTNumberKeyBoard,_ result:String)->Void
 
+extension PTNumberKeyBoard
+{
+    @objc static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self
+     {
+         return PTNumberKeyBoard.init(type: type, backSpace: backSpace, returnSTH: returnSTH) as! Self
+     }
+}
+
 @objcMembers
 public class PTNumberKeyBoard: UIView {
     private static let kKeyBoardH : CGFloat = 216
@@ -37,7 +45,7 @@ public class PTNumberKeyBoard: UIView {
             newValue
         }
     }
-            
+                
     init(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) {
         super.init(frame: .zero)
         
@@ -68,7 +76,7 @@ public class PTNumberKeyBoard: UIView {
                         {
                             switch type {
                             case .Normal:
-                                break
+                                num = ""
                             case .Call:
                                 num = "+"
                             case .Point:
@@ -84,8 +92,8 @@ public class PTNumberKeyBoard: UIView {
                 button.snp.makeConstraints { make in
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)
                     make.width.equalTo(self.kKeyW)
-                    make.top.equalTo(PTNumberKeyBoard.kKeyH * CGFloat(i) + CGFloat(i) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i) + 1)
-                    make.left.equalTo(self.kKeyW * CGFloat(j) + CGFloat(j) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceLeft * CGFloat(j) + 1)
+                    make.top.equalToSuperview().inset(PTNumberKeyBoard.kKeyH * CGFloat(i) + CGFloat(i) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i + 1))
+                    make.left.equalTo(self.kKeyW * CGFloat(j) + CGFloat(j) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceLeft * CGFloat(j + 1))
                 }
                 button.viewCorner(radius: 5)
                 
@@ -149,8 +157,8 @@ public class PTNumberKeyBoard: UIView {
                 button!.snp.makeConstraints { make in
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)
                     make.width.equalTo(self.kKeyW)
-                    make.top.equalTo(PTNumberKeyBoard.kKeyH * CGFloat(i) + CGFloat(i) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i) + 1)
-                    make.left.equalTo(self.kKeyW * CGFloat(j) + CGFloat(j) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceLeft * CGFloat(j) + 1)
+                    make.top.equalToSuperview().inset(PTNumberKeyBoard.kKeyH * CGFloat(i) + CGFloat(i) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i + 1))
+                    make.left.equalTo(self.kKeyW * CGFloat(j) + CGFloat(j) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceLeft * CGFloat(j + 1))
                 }
             }
         }

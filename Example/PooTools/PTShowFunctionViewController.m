@@ -38,7 +38,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "PooTagsLabel.h"
 
-#import "PooNumberKeyBoard.h"
 #import "PooTextView.h"
 
 #import "PLabel.h"
@@ -349,24 +348,21 @@ CGFloat const tagItemSpace = 5;
             break;
             case ShowFunctionInputView:
         {
-            PooNumberKeyBoard *userNameKeyboard = [PooNumberKeyBoard pooNumberKeyBoardWithType:PKeyboardTypeInputID backSpace:^(PooNumberKeyBoard *keyboardView) {
+            PTNumberKeyBoard *aaaa = [PTNumberKeyBoard createKeyboardWithType:PTKeyboardTypeNormal backSpace:^(PTNumberKeyBoard * keyboard) {
                 if (self.textField.text.length != 0)
                 {
                     self.textField.text = [self.textField.text substringToIndex:self.textField.text.length -1];
                 }
-                
-            } returnSTH:^(PooNumberKeyBoard *keyboardView, NSString *returnSTH) {
+            } returnSTH:^(PTNumberKeyBoard * keyboard, NSString * returnSTH) {
                 self.textField.text = [self.textField.text stringByAppendingString:returnSTH];
-                
             }];
-            //
             self.textField = [UITextField new];
             self.textField.placeholder = @"用来展示数字键盘";
             //    self.textField.UI_PlaceholderLabel.text = @"11111";
             //    self.textField.UI_PlaceholderLabel.textAlignment = NSTextAlignmentCenter;
             //    self.textField.UI_PlaceholderLabel.textColor = kRandomColor;
             //    self.textField.UI_PlaceholderLabel.font = [UIFont systemFontOfSize:14];
-            self.textField.inputView = userNameKeyboard;
+            self.textField.inputView = aaaa;
             [self.view addSubview:self.textField];
             [self.textField mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);

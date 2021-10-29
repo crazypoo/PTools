@@ -24,6 +24,14 @@ import UIKit
     case UNKNOW
 }
 
+//extension PTUtils
+//{
+//    @objc static func oc_alert_base()
+//    {
+//        PTUtils.base_alertVC(showIn: <#T##UIViewController#>, moreBtn: <#T##((Int, String) -> Void)?##((Int, String) -> Void)?##(_ index: Int, _ title: String) -> Void#>)
+//    }
+//}
+
 @objcMembers
 public class PTUtils: NSObject {
     
