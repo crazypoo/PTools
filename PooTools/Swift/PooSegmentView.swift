@@ -10,51 +10,214 @@ import UIKit
 import SnapKit
 import YYKit
 
-public enum PooSegmentSelectedType {
+@objc public enum PooSegmentSelectedType : Int {
     case UnderLine
     case Background
     case Dog
 }
 
+@objcMembers
 public class PooSegmentConfig: NSObject {
     ///选中字体
-    public var selectedFont:UIFont? = .systemFont(ofSize: 16)
+    public var selectedFont:UIFont
+    {
+        get
+        {
+            .systemFont(ofSize: 16)
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///未选中字体
-    public var normalFont:UIFont? = .boldSystemFont(ofSize: 14)
+    public var normalFont:UIFont
+    {
+        get
+        {
+            .boldSystemFont(ofSize: 14)
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///显示类型
-    public var showType:PooSegmentSelectedType? = .UnderLine
+    public var showType:PooSegmentSelectedType
+    {
+        get
+        {
+            .UnderLine
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///选中颜色
-    public var selectedColor:UIColor? = UIColor.red
+    public var selectedColor:UIColor
+    {
+        get
+        {
+            .red
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///普通颜色
-    public var normalColor:UIColor? = UIColor.black
+    public var normalColor:UIColor
+    {
+        get
+        {
+            .black
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///选中颜色(背景)
-    public var selectedColor_BG:UIColor? = UIColor.red
+    public var selectedColor_BG:UIColor
+    {
+        get
+        {
+            .red
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///底线height
-    public var underHight:CGFloat? = 3
+    public var underHight:CGFloat
+    {
+        get
+        {
+            3
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///默认选中第X
-    public var normalSelecdIndex:Int? = 0
+    public var normalSelecdIndex:Int
+    {
+        get
+        {
+            0
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///子界面到他的父界面的左右距离总和
-    public var subViewInContentSpace:CGFloat? = 20.0
+    public var subViewInContentSpace:CGFloat
+    {
+        get
+        {
+            20
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///设置底线角
-    public var underlineRadius:Bool? = true
+    public var underlineRadius:Bool
+    {
+        get
+        {
+            true
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///文字图片位置
-    public var imagePosition:BKLayoutButtonStyle? = .leftImageRightTitle
+    public var imagePosition:BKLayoutButtonStyle
+    {
+        get
+        {
+            .leftImageRightTitle
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///文字图片间距
-    public var imageTitleSpace:CGFloat? = 5.0
+    public var imageTitleSpace:CGFloat
+    {
+        get
+        {
+            5
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///留给展示dog/或者underline的空间
-    public var bottomSquare:CGFloat? = 5.0
+    public var bottomSquare:CGFloat
+    {
+        get
+        {
+            5
+        }
+        set
+        {
+            newValue
+        }
+    }
 }
 
+@objcMembers
 public class PooSegmentModel:NSObject
 {
     ///标题
-    public var titles:String?
+    public var titles:String
+    {
+        get
+        {
+            ""
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///图片
-    public var imageURL:String?
+    public var imageURL:String
+    {
+        get
+        {
+            ""
+        }
+        set
+        {
+            newValue
+        }
+    }
     ///选中图片
-    public var selectedImageURL:String?
+    public var selectedImageURL:String
+    {
+        get
+        {
+            ""
+        }
+        set
+        {
+            newValue
+        }
+    }
 }
 
+@objcMembers
 public class PooSegmentSubView:UIView
 {
     private var viewConfig = PooSegmentConfig()
@@ -73,7 +236,7 @@ public class PooSegmentSubView:UIView
         let btn = BKLayoutButton()
         btn.setTitleColor(self.viewConfig.normalColor, for: .normal)
         btn.setTitleColor(self.viewConfig.selectedColor, for: .selected)
-        btn.setMidSpacing(self.viewConfig.imageTitleSpace!)
+        btn.setMidSpacing(self.viewConfig.imageTitleSpace)
         btn.imageView?.contentMode = .scaleAspectFit
         btn.layoutStyle = self.viewConfig.imagePosition
         return btn
@@ -91,11 +254,11 @@ public class PooSegmentSubView:UIView
         let label = UIButton(type: .custom)
         
         label.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-        label.setBackgroundImage(PTUtils.createImageWithColor(color: self.viewConfig.selectedColor_BG!), for: .selected)
+        label.setBackgroundImage(PTUtils.createImageWithColor(color: self.viewConfig.selectedColor_BG), for: .selected)
         return label
     }()
 
-    init(config:PooSegmentConfig,subViewModels:PooSegmentModel,contentW:CGFloat) {
+    public init(config:PooSegmentConfig,subViewModels:PooSegmentModel,contentW:CGFloat) {
         viewConfig = config
         super.init(frame: .zero)
 
@@ -110,22 +273,22 @@ public class PooSegmentSubView:UIView
             //MARK:图片地址判断
             buttonShowType = .OnlyImage
             label.contentMode = .scaleAspectFit
-            if subViewModels.imageURL!.isURL()
+            if subViewModels.imageURL.isURL()
             {
                 label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
-                label.setImage(UIImage.init(named: subViewModels.imageURL!), for: .normal)
+                label.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
 
-            if subViewModels.selectedImageURL!.isURL()
+            if subViewModels.selectedImageURL.isURL()
             {
                 label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
-                label.setImage(UIImage.init(named: subViewModels.selectedImageURL!), for: .selected)
+                label.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
         }
         else if !(subViewModels.imageURL ?? "").stringIsEmpty() && !(subViewModels.titles ?? "").stringIsEmpty() && !(subViewModels.selectedImageURL ?? "").stringIsEmpty()
@@ -135,22 +298,22 @@ public class PooSegmentSubView:UIView
             imageBtn.contentMode = .scaleAspectFit
             imageBtn.titleLabel?.font = config.normalFont
             imageBtn.setTitle(subViewModels.titles, for: .normal)
-            if subViewModels.imageURL!.isURL()
+            if subViewModels.imageURL.isURL()
             {
                 imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
-                imageBtn.setImage(UIImage.init(named: subViewModels.imageURL!), for: .normal)
+                imageBtn.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
 
-            if subViewModels.selectedImageURL!.isURL()
+            if subViewModels.selectedImageURL.isURL()
             {
                 imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
-                imageBtn.setImage(UIImage.init(named: subViewModels.selectedImageURL!), for: .selected)
+                imageBtn.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
         }
         
@@ -162,16 +325,16 @@ public class PooSegmentSubView:UIView
                 case .UnderLine:
                     make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                     make.top.equalToSuperview()
                 case .Dog:
                     make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                     make.top.equalToSuperview()
                 case .Background:
                     make.left.right.equalToSuperview().inset(10)
-                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
                 default:break
                 }
             }
@@ -182,16 +345,16 @@ public class PooSegmentSubView:UIView
                 case .UnderLine:
                     make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                     make.top.equalToSuperview()
                 case .Dog:
                     make.width.equalTo(contentW as ConstraintRelatableTarget)
                     make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                     make.top.equalToSuperview()
                 case .Background:
                     make.left.right.equalToSuperview().inset(10)
-                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare!)
+                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
                 default:break
                 }
             }
@@ -208,18 +371,18 @@ public class PooSegmentSubView:UIView
                     make.left.right.equalTo(self.label)
                 }
                 let lineHight:CGFloat?
-                if self.viewConfig.underHight! >= self.viewConfig.bottomSquare!
+                if self.viewConfig.underHight >= self.viewConfig.bottomSquare
                 {
                     lineHight = self.viewConfig.bottomSquare
-                    make.height.equalTo(self.viewConfig.bottomSquare!)
+                    make.height.equalTo(self.viewConfig.bottomSquare)
                 }
                 else
                 {
-                    lineHight = self.viewConfig.underHight!
-                    make.height.equalTo(self.viewConfig.underHight!)
+                    lineHight = self.viewConfig.underHight
+                    make.height.equalTo(self.viewConfig.underHight)
                 }
-                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare!-lineHight!)/2)
-                if self.viewConfig.underlineRadius!
+                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight!)/2)
+                if self.viewConfig.underlineRadius
                 {
                     underLine.viewCorner(radius: lineHight!/2)
                 }
@@ -228,18 +391,18 @@ public class PooSegmentSubView:UIView
             addSubview(underLine)
             underLine.snp.makeConstraints { (make) in
                 let lineHight:CGFloat?
-                if self.viewConfig.underHight! >= self.viewConfig.bottomSquare!
+                if self.viewConfig.underHight >= self.viewConfig.bottomSquare
                 {
                     lineHight = self.viewConfig.bottomSquare
-                    make.width.height.equalTo(self.viewConfig.bottomSquare!)
+                    make.width.height.equalTo(self.viewConfig.bottomSquare)
                 }
                 else
                 {
-                    lineHight = self.viewConfig.underHight!
-                    make.width.height.equalTo(self.viewConfig.underHight!)
+                    lineHight = self.viewConfig.underHight
+                    make.width.height.equalTo(self.viewConfig.underHight)
                 }
                 make.centerX.equalToSuperview()
-                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare!-lineHight!)/2)
+                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight!)/2)
                 underLine.viewCorner(radius: lineHight!/2)
             }
 
@@ -247,10 +410,10 @@ public class PooSegmentSubView:UIView
             switch buttonShowType {
             case .TitleImage:
                 imageBtn.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-                imageBtn.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG!), for: .selected)
+                imageBtn.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG), for: .selected)
             default:
                 label.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-                label.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG!), for: .selected)
+                label.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG), for: .selected)
             }
         default:break
         }
@@ -261,6 +424,7 @@ public class PooSegmentSubView:UIView
     }
 }
 
+@objcMembers
 public class PooSegmentView: UIView {
     
     private var viewConfig = PooSegmentConfig()
@@ -324,16 +488,16 @@ public class PooSegmentView: UIView {
             if datas.count > 0
             {
                 datas.enumerated().forEach { (index,value) in                    
-                    let normalW = PTUtils.sizeFor(string: value.titles!, font: self.viewConfig.normalFont!, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
-                    let selectedW = PTUtils.sizeFor(string: value.titles!, font: self.viewConfig.selectedFont!, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+                    let normalW = PTUtils.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+                    let selectedW = PTUtils.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
                     var subContentW:CGFloat?
                     if selectedW >= normalW
                     {
-                        subContentW = selectedW + self.viewConfig.subViewInContentSpace! + 10
+                        subContentW = selectedW + self.viewConfig.subViewInContentSpace + 10
                     }
                     else
                     {
-                        subContentW = normalW + self.viewConfig.subViewInContentSpace! + 10
+                        subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
                     }
                     
                     if (value.imageURL ?? "").stringIsEmpty() && !(value.titles ?? "").stringIsEmpty() && (value.selectedImageURL ?? "").stringIsEmpty()
@@ -342,20 +506,20 @@ public class PooSegmentView: UIView {
                     }
                     else if !(value.imageURL ?? "").stringIsEmpty() && (value.titles ?? "").stringIsEmpty() && !(value.selectedImageURL ?? "").stringIsEmpty()
                     {
-                        subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace!
+                        subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace
                     }
                     else if !(value.imageURL ?? "").stringIsEmpty() && !(value.titles ?? "").stringIsEmpty() && !(value.selectedImageURL ?? "").stringIsEmpty()
                     {
                         switch self.viewConfig.imagePosition {
                         case .leftImageRightTitle:
-                            subContentW = subContentW! + self.viewConfig.imageTitleSpace! + (self.frame.height-5)
+                            subContentW = subContentW! + self.viewConfig.imageTitleSpace + (self.frame.height-5)
                         case .leftTitleRightImage:
-                            subContentW = subContentW! + self.viewConfig.imageTitleSpace! + (self.frame.height-5)
+                            subContentW = subContentW! + self.viewConfig.imageTitleSpace + (self.frame.height-5)
                         default:break
                         }
                     }
 
-                    let subView = PooSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace!))
+                    let subView = PooSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
                     subView.tag = index
                     subView.frame = CGRect.init(x: scrolContentW, y: 0, width: subContentW!, height: self.frame.size.height)
                     scrolContentW += subContentW!
@@ -409,6 +573,7 @@ public class PooSegmentView: UIView {
                     self.scrolView.isScrollEnabled = false
                 }
             }
+            self.layoutSubviews()
         }
     }
     

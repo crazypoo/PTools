@@ -239,6 +239,28 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionSegmented:
         {
+            
+//            PooSegmentModel * segModel = [[PooSegmentModel alloc] init];
+//            segModel.titles = @"aaaaaa";
+//
+//            PooSegmentModel * segModels = [[PooSegmentModel alloc] init];
+//            segModels.titles = @"22222";
+//
+//            PooSegmentConfig *config = [[PooSegmentConfig alloc] init];
+//
+//            PooSegmentView *sgView = [[PooSegmentView alloc] initWithConfig:config];
+//            sgView.backgroundColor = kRandomColor;
+//            sgView.viewDatas = @[segModel,segModels];
+//            [sgView reloadViewDataWithBlock:^(NSInteger index) {
+//
+//            }];
+//            [self.view addSubview:sgView];
+//            [sgView mas_makeConstraints:^(MASConstraintMaker *make) {
+//                make.centerY.equalTo(self.view);
+//                make.height.offset(44);
+//                make.left.right.equalTo(self.view);
+//            }];
+
             NSArray *aaaaaaaa = @[@"DemoImage",@"DemoImage"];
             self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 normalImageArr:aaaaaaaa selectedImageArr:aaaaaaaa clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
                 PNSLog(@"%ld",(long)buttonIndex);
@@ -382,7 +404,7 @@ CGFloat const tagItemSpace = 5;
             //    searchBar.searchBarImage = kImageNamed(@"Search");
             searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
             searchBar.searchBarOutViewColor = kRandomColor;
-            searchBar.searchBarTextFieldCornerRadius = @15;
+            searchBar.searchBarTextFieldCornerRadius = @15.0;
             searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
             [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -681,16 +703,11 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-//            [PTUtils ];
-            [Utils alertVCOnlyShowWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" andMessage:@"11111111111111111111111111111111111234234234234234234234243"];
-//            [Utils alertVCWithTitle:@"123123" message:@"2123" cancelTitle:@"2" okTitle:@"1" otherButtonArray:@[@"1",@"2"] shouIn:self alertStyle:UIAlertControllerStyleActionSheet
-//                           okAction:^{
-//
-//                           } cancelAction:^{
-//
-//                           } otherButtonAction:^(NSInteger aaaaaaaaaa) {
-//                               PNSLog(@"%ld",(long)aaaaaaaaaa);
-//                           }];
+            [PTUtils oc_alert_baseWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" msg:@"11111111111111111111111111111111111234234234234234234234243" okBtns:@[] cancelBtn:@"qqqqq" showIn:self cancel:^{
+                
+            } moreBtn:^(NSInteger index, NSString * value) {
+                
+            }];
         }
             break;
         case 3:

@@ -82,7 +82,7 @@
                      andMessage:(NSString *_Nullable)message
 {
     [Utils alertVCWithTitle:title message:message cancelTitle:@"确定" shouIn:kAppDelegateWindow.rootViewController cancelAction:^{
-        
+
     }];
 }
 
@@ -100,7 +100,7 @@
     }];
     [alertController addAction:cancelAction];
     [vC presentViewController:alertController animated:YES completion:^{
-    }];
+    }];    
 }
 
 +(void)alertVCWithTitle:(NSString *)title message:(NSString *)m cancelTitle:(NSString *)cT shouIn:(UIViewController *)vC cancelAction:(void (^ _Nullable)(void))cancelBlock

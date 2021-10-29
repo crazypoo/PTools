@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
@@ -24,13 +25,13 @@ import UIKit
     case UNKNOW
 }
 
-//extension PTUtils
-//{
-//    @objc static func oc_alert_base()
-//    {
-//        PTUtils.base_alertVC(showIn: <#T##UIViewController#>, moreBtn: <#T##((Int, String) -> Void)?##((Int, String) -> Void)?##(_ index: Int, _ title: String) -> Void#>)
-//    }
-//}
+extension PTUtils
+{
+    @objc static func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
+    {
+        PTUtils.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
+    }
+}
 
 @objcMembers
 public class PTUtils: NSObject {
@@ -116,7 +117,7 @@ public class PTUtils: NSObject {
             if !(title ?? "").stringIsEmpty()
             {
                 let alertStr = NSMutableAttributedString(string: title!)
-                let alertStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+                let alertStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
                 alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
                 alert.setValue(alertStr, forKey: "attributedTitle")
             }
@@ -131,7 +132,7 @@ public class PTUtils: NSObject {
             if !(msg ?? "").stringIsEmpty()
             {
                 let alertMsgStr = NSMutableAttributedString(string: msg!)
-                let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.lightGray, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
+                let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
                 alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
                 alert.setValue(alertMsgStr, forKey: "attributedMessage")
             }
