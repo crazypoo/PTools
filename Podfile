@@ -2,7 +2,7 @@ platform :ios, '10.0'
 use_frameworks!
 
 target 'PooTools_Example' do
-  pod 'PooTools', :path => '../'
+  pod 'PooTools', :path => 'PooTools.podspec'
   pod 'WZLBadge'
   pod 'SnapKit'
   pod 'YYKit'

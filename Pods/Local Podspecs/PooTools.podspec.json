@@ -19,10 +19,10 @@
   },
   "requires_arc": true,
   "source_files": [
-    "PooTools",
-    "PooTools/**/*.{h,m,swift}"
+    "PooToolsSource",
+    "PooToolsSource/**/*.{h,m,swift}"
   ],
-  "resources": "PooTools/PooTools.bundle",
+  "resources": "PooToolsSource/PooTools.bundle",
   "swift_versions": "4.2",
   "frameworks": [
     "UIKit",
