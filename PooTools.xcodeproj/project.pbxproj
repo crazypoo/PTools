@@ -149,7 +149,6 @@
 		231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E0272CDEE9003D6F62 /* GPKeyChain.m */; };
 		231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */; };
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
-		231D1697272CDEEA003D6F62 /* PTOpenSystemFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E9272CDEE9003D6F62 /* PTOpenSystemFunction.m */; };
 		231D1698272CDEEA003D6F62 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EC272CDEE9003D6F62 /* SensitiveWordTools.m */; };
 		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
 		231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F2272CDEE9003D6F62 /* MXRotationManager.m */; };
@@ -162,6 +161,7 @@
 		231D16A1272CDEEA003D6F62 /* CGADCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1604272CDEE9003D6F62 /* CGADCollectionViewCell.m */; };
 		231D16A2272CDEEA003D6F62 /* CGAdBannerModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1605272CDEE9003D6F62 /* CGAdBannerModel.m */; };
 		231D16A3272CDEEA003D6F62 /* PADView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1608272CDEE9003D6F62 /* PADView.m */; };
+		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -446,8 +446,6 @@
 		231D15E5272CDEE9003D6F62 /* PMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
 		231D15E6272CDEE9003D6F62 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOGobalFileManager.h; sourceTree = "<group>"; };
-		231D15E9272CDEE9003D6F62 /* PTOpenSystemFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTOpenSystemFunction.m; sourceTree = "<group>"; };
-		231D15EA272CDEE9003D6F62 /* PTOpenSystemFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTOpenSystemFunction.h; sourceTree = "<group>"; };
 		231D15EC272CDEE9003D6F62 /* SensitiveWordTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitiveWordTools.m; sourceTree = "<group>"; };
 		231D15ED272CDEE9003D6F62 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
 		231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
@@ -476,6 +474,7 @@
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -613,7 +612,6 @@
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				231D1592272CDEE9003D6F62 /* Motion */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
-				231D15E8272CDEE9003D6F62 /* OpenFunction */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D152E272CDEE9003D6F62 /* Picker */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
@@ -1058,6 +1056,7 @@
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
+				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1081,15 +1080,6 @@
 				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
 			);
 			path = UniTool;
-			sourceTree = "<group>";
-		};
-		231D15E8272CDEE9003D6F62 /* OpenFunction */ = {
-			isa = PBXGroup;
-			children = (
-				231D15E9272CDEE9003D6F62 /* PTOpenSystemFunction.m */,
-				231D15EA272CDEE9003D6F62 /* PTOpenSystemFunction.h */,
-			);
-			path = OpenFunction;
 			sourceTree = "<group>";
 		};
 		231D15EB272CDEE9003D6F62 /* CheckDirtyWord */ = {
@@ -1572,7 +1562,6 @@
 				231D16A1272CDEEA003D6F62 /* CGADCollectionViewCell.m in Sources */,
 				231D162A272CDEE9003D6F62 /* NSString+Extension.m in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
-				231D1697272CDEEA003D6F62 /* PTOpenSystemFunction.m in Sources */,
 				231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */,
 				231D1634272CDEE9003D6F62 /* PTNormalPicker.m in Sources */,
 				231D164D272CDEEA003D6F62 /* NSError+HTTPClient.m in Sources */,
@@ -1585,6 +1574,7 @@
 				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */,
+				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				231D1667272CDEEA003D6F62 /* PTPopoverFunction.m in Sources */,
 				231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,

@@ -99,7 +99,6 @@
 #import "NSError+HTTPClient.h"
 #import "NSURLSessionTask+IGHTTPClient.h"
 #import "PTUploadDataSteamTools.h"
-#import "PTOpenSystemFunction.h"
 #import "PGetIpAddresses.h"
 #import "PooSystemInfo.h"
 #import "PooUDIDInfo.h"
