@@ -180,7 +180,7 @@ public class PTCustomAlertView: UIView {
             let tapBackgroundView = UITapGestureRecognizer.init(target: self, action: #selector(self.dismiss))
             tapBackgroundView.numberOfTouchesRequired = 1
             tapBackgroundView.numberOfTapsRequired = 1
-            mainView.addGestureRecognizer(tapBackgroundView)
+            backgroundView.addGestureRecognizer(tapBackgroundView)
         }
         
         blur = SSBlurView.init(to: self)
@@ -394,11 +394,6 @@ public class PTCustomAlertView: UIView {
     
     @objc public func dismiss()
     {
-        if didDismissBlock != nil
-        {
-            didDismissBlock!(self)
-        }
-        
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
 
@@ -432,6 +427,10 @@ public class PTCustomAlertView: UIView {
                 self.backgroundView.removeFromSuperview()
                 self.customView.removeAllSubviews()
                 self.removeFromSuperview()
+                if self.didDismissBlock != nil
+                {
+                    self.didDismissBlock!(self)
+                }
             }
         }
         layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
