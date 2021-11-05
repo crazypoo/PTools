@@ -430,6 +430,7 @@ public class PTCustomAlertView: UIView {
                 self.alpha = 0
             } completion: { ok in
                 self.backgroundView.removeFromSuperview()
+                self.customView.removeAllSubviews()
                 self.removeFromSuperview()
             }
         }

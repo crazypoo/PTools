@@ -528,8 +528,8 @@ static NSString *cellIdentifier = @"CELL";
             switch (indexPath.row) {
                 case 1:
                 {
+                    PTCodeView *codeView = [[PTCodeView alloc] initWithFrame:CGRectZero numberOfCodes:4 numberOfLines:3 changeTimes:3];
                     [self createAlertViewWithTitle:@"验证码图片" withAlertBtns:@[@"222"] customeViewHeight:100 initCustomView:^(UIView *customView) {
-                        PTCodeView *codeView = [[PTCodeView alloc] initWithFrame:CGRectZero numberOfCodes:4 numberOfLines:3 changeTimes:3];
                         [customView addSubview:codeView];
                         [codeView mas_makeConstraints:^(MASConstraintMaker *make) {
                             make.centerX.centerY.equalTo(customView);
@@ -540,6 +540,7 @@ static NSString *cellIdentifier = @"CELL";
                         };
                     } alertBtnTapBlock:^(NSInteger btnIndex) {
                         
+                    } alertDismissBlock:^{
                     }];
                 }
                     break;
@@ -591,6 +592,8 @@ static NSString *cellIdentifier = @"CELL";
                 }];
             } alertBtnTapBlock:^(NSInteger btnIndex) {
                 
+            } alertDismissBlock:^{
+                
             }];
         }
             break;
@@ -608,7 +611,7 @@ static NSString *cellIdentifier = @"CELL";
     return YES;
 }
 
--(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns customeViewHeight:(CGFloat)cH initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock
+-(void)createAlertViewWithTitle:(NSString *)alertTitle withAlertBtns:(NSArray *)btns customeViewHeight:(CGFloat)cH initCustomView:(void (^)(UIView *customView))createBlock alertBtnTapBlock:(void (^)(NSInteger btnIndex))tapBlock alertDismissBlock:(void (^)(void))dBlock
 {
     NSMutableArray <PTCustomBottomButtonModel *>*arr = [NSMutableArray array];
     for (NSString *title in btns) {
@@ -632,7 +635,7 @@ static NSString *cellIdentifier = @"CELL";
         [alertView dismiss];
     };
     alerts.didDismissBlock = ^(PTCustomAlertView * alertView) {
-        
+        dBlock();
     };
 }
 

@@ -20,7 +20,13 @@ public class PTCodeView: UIView {
     private var changeString = ""
 
     public var codeBlock:((_ codeView:PTCodeView, _ code:String)->Void)?
+
+    private var dismiss : Bool? = false
     
+    deinit {
+        self.removeFromSuperview()
+    }
+
     public init(frame: CGRect,numberOfCodes:Int,numberOfLines:Int,changeTimes:TimeInterval)
     {
         super.init(frame: frame)
@@ -50,6 +56,11 @@ public class PTCodeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func removeFromSuperview() {
+        super.removeFromSuperview()
+        self.dismiss = true
+    }
+
     private func timeChange()
     {
         var newCount = Int(changeTime) + 1
@@ -60,17 +71,24 @@ public class PTCodeView: UIView {
                 newCount -= 1
                 if newCount < 1 {
                     DispatchQueue.main.async {
-                        self.timeChange()
-                        self.changeResultString()
+                        if !self.dismiss!
+                        {
+                            timer.suspend()
+                            self.timeChange()
+                            self.changeResultString()
+                        }
+                        else
+                        {
+                            timer.suspend()
+                        }
                     }
                     timer.cancel()
                 }
             }
         }
         timer.resume()
-
     }
-    
+        
     public func changeCode()
     {
         changeResultString()
