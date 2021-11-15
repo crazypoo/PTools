@@ -63,6 +63,10 @@
     [self.window makeKeyAndVisible];
         
     self.localConsoles = [LocalConsole shared];
+    self.localConsoles.consoleActionBlock = ^(LocalConsoleActionType type, BOOL finish, NSURL * url) {
+        PNSLog(@"%ld>>>>>%d>>>>>%@",(long)type,finish,url);
+        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"%ld>>>>>%d>>>>>%@",(long)type,finish,url]];
+    };
     [self.localConsoles createSystemLogView];
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS]]];
 

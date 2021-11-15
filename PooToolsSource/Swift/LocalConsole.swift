@@ -37,23 +37,25 @@ class ConsoleWindow: UIWindow {
     }
 }
 
+@objc public enum LocalConsoleActionType : Int {
+    case CopyLog
+    case ShareLog
+    case RestoreUserDefult
+    case AppUpdate
+    case Debug
+    case DebugSetting
+    case NoActionCallBack
+}
+
+public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ debug:Bool,_ logUrl:URL)->Void
+
 @objcMembers
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
-
-    public enum LocalConsoleActionType {
-        case CopyLog
-        case ShareLog
-        case RestoreUserDefult
-        case AppUpdate
-        case Debug
-        case DebugSetting
-        case NoActionCallBack
-    }
     
     public static let ConsoleDebug = "UI_debug"
     
-    public var consoleActionBlock:((_ actionType:LocalConsoleActionType,_ debug:Bool?,_ logUrl:URL?)->Void)?
+    public var consoleActionBlock:PTLocalConsoleBlock?
     
     public var terminal:PTTerminal?
     var currentText: String = "" {
@@ -179,7 +181,7 @@ public class LocalConsole: NSObject {
             currentText.copyToPasteboard()
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.CopyLog,false,nil)
+                consoleActionBlock!(.CopyLog,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.ShareKey
@@ -217,7 +219,7 @@ public class LocalConsole: NSObject {
             ResizeController.shared.platterView.reveal()
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.NoActionCallBack,false,nil)
+                consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.RespringKey
@@ -239,7 +241,7 @@ public class LocalConsole: NSObject {
             animator.startAnimation()
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.NoActionCallBack,false,nil)
+                consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.CleanKey
@@ -247,7 +249,7 @@ public class LocalConsole: NSObject {
             currentText = ""
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.NoActionCallBack,false,nil)
+                consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.ViewFrameKey
@@ -255,7 +257,7 @@ public class LocalConsole: NSObject {
             debugBordersEnabled.toggle()
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.NoActionCallBack,false,nil)
+                consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.SystemReportKey
@@ -329,21 +331,21 @@ public class LocalConsole: NSObject {
                     """
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.NoActionCallBack,false,nil)
+                consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.RestoreFirstKey
         {
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.RestoreUserDefult,false,nil)
+                consoleActionBlock!(.RestoreUserDefult,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.AppUpdateKey
         {
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.AppUpdate,false,nil)
+                consoleActionBlock!(.AppUpdate,false,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.DEBUGKey || dataName == LocalConsole.NORMALKey
@@ -364,14 +366,14 @@ public class LocalConsole: NSObject {
             
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.Debug,newBool,nil)
+                consoleActionBlock!(.Debug,newBool,URL(string: "nil")!)
             }
         }
         else if dataName == LocalConsole.DEBUGSETTINGKey
         {
             if consoleActionBlock != nil
             {
-                consoleActionBlock!(.DebugSetting,false,nil)
+                consoleActionBlock!(.DebugSetting,false,URL(string: "nil")!)
             }
         }
     }
