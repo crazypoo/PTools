@@ -51,7 +51,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     
-        
+    PTTagsConfig * aaaaaa = [[PTTagsConfig alloc] init];
+    aaaaaa.itemVerMargin = 0;
+    PNSLog(@">>>>>>>>>>>>%@",[[PTUtils createImageWithColorWithColor:UIColor.redColor] transformImageWithSize:CGSizeMake(100, 100)]);
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 50;
     

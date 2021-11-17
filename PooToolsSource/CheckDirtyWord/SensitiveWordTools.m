@@ -7,6 +7,9 @@
 //
 
 #import "SensitiveWordTools.h"
+
+#import "PMacros.h"
+
 #define EXIST @"isExists"
 
 @interface SensitiveWordTools()
@@ -75,8 +78,6 @@ static SensitiveWordTools *instance;
         //插入字符，构造节点
         [self insertWords:str];
     }
-      
-
 }
 
 -(void)insertWords:(NSString *)words{
@@ -94,6 +95,7 @@ static SensitiveWordTools *instance;
     
     //敏感词最后一个字符标识
     node[EXIST] = [NSNumber numberWithInt:1];
+    
 }
 
 #pragma mark-将文本中含有的敏感词进行替换

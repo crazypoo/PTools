@@ -7,6 +7,7 @@
 //
 
 #import "PooDatePicker.h"
+
 #import <PooTools/PooTools-Swift.h>
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
@@ -136,14 +137,14 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
-        [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.cancelBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
         kViewBorderRadius(self.cancelBtn, 5, 0, kClearColor);
 
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.yesBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.yesBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.yesBtn.titleLabel setFont:font];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
@@ -692,7 +693,7 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
-        [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.cancelBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
@@ -700,7 +701,7 @@
 
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.yesBtn.titleLabel setFont:font];
-        [self.yesBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.yesBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.yesBtn];

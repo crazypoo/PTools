@@ -32,82 +32,22 @@ public class PTTagsConfig:NSObject
 {
     /*! @brief item之间的左右间距
      */
-    public var itemHerMargin : CGFloat
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var itemHerMargin : CGFloat = 0
     /*! @brief item之间的上下间距
      */
-    public var itemVerMargin : CGFloat
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var itemVerMargin : CGFloat = 0
     /*! @brief item的高度
      */
-    public var itemHeight : CGFloat
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var itemHeight : CGFloat = 0
     /*! @brief item的长度 (只在图片模式使用)
      */
-    public var itemWidth : CGFloat
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var itemWidth : CGFloat = 0
     /*! @brief item标题距左右边缘的距离 (默认10)
      */
-    public var itemContentEdgs : CGFloat
-    {
-        get
-        {
-            10
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var itemContentEdgs : CGFloat = 10
     /*! @brief 最顶部的item层到本view最顶部的距离,最底部的item层到本view最底部的距离 (0.1基本可看作无距离)
      */
-    public var topBottomSpace : CGFloat
-    {
-        get
-        {
-            0.1
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var topBottomSpace : CGFloat = 0.1
     /*! @brief item字体 (默认系统12)
      */
     public var tagsFont : UIFont? = .systemFont(ofSize: 12)
@@ -131,69 +71,19 @@ public class PTTagsConfig:NSObject
     public var selectedBgImage : String? = ""
     /*! @brief 展示样式 (图片模式下使用)
      */
-    public var showStatus : PTTagsLabelShowStatus
-    {
-        get
-        {
-            .Normal
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var showStatus : PTTagsLabelShowStatus = PTTagsLabelShowStatus(rawValue: 0)!
     /*! @brief 图片与文字之间展示排版样式 (图片模式下使用)
      */
-    public var insetsStyle : BKLayoutButtonStyle
-    {
-        get
-        {
-            .leftImageRightTitle
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var insetsStyle : BKLayoutButtonStyle = BKLayoutButtonStyle(rawValue: 0)!
     /*! @brief 图片与文字之间展间隙 (图片模式下使用)
      */
-    public var imageAndTitleSpace :CGFloat
-    {
-        get
-        {
-            1
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var imageAndTitleSpace :CGFloat = 1
     /*! @brief 是否有边框  (默认没有边框)
      */
-    public var hasBorder : Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var hasBorder : Bool = false
     /*! @brief 边框宽度 (默认0.5)
      */
-    public var borderWidth : CGFloat
-    {
-        get
-        {
-            0.5
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var borderWidth : CGFloat = 0.5
     /*! @brief 边框颜色 (默认[UIColor redColor])
      */
     public var borderColor : UIColor? = .red
@@ -202,56 +92,16 @@ public class PTTagsConfig:NSObject
     public var borderColorSelected : UIColor? = .red
     /*! @brief 边框弧度 (默认item高度/2)
      */
-    public var cornerRadius : CGFloat
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var cornerRadius : CGFloat = 0
     /*! @brief 是否可以选中 (默认为NO (YES时为单选))
      */
-    public var isCanSelected : Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var isCanSelected : Bool = false
     /*! @brief 是否可以取消选中
      */
-    public var isCanCancelSelected : Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var isCanCancelSelected : Bool = false
     /*! @brief 是否可以多选
      */
-    public var isMulti : Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var isMulti : Bool = false
     /*! @brief 单个选中对应的标题 (初始化时默认选中的)
      */
     public var singleSelectedTitle : String? = ""
@@ -260,17 +110,7 @@ public class PTTagsConfig:NSObject
     public var selectedDefaultTags : [String]?
     /*! @brief Tag的展示位置默认左边
     */
-    public var tagPosition : PTTagPosition
-    {
-        get
-        {
-            .Left
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var tagPosition : PTTagPosition = PTTagPosition(rawValue: 2)!
     /*! @brief Tag普通图片
     */
     public var normalImage : [String]?
@@ -282,59 +122,19 @@ public class PTTagsConfig:NSObject
     public var titleNormal : [String]?
     /*! @brief TagImageSize
     */
-    public var tagImageSize : CGSize
-    {
-        get
-        {
-            .zero
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var tagImageSize : CGSize = CGSize.zero
     /*! @brief Tag子展示属性
     */
-    public var showSubStatus : PTTagsLabelShowSubStatus
-    {
-        get
-        {
-            .Normal
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var showSubStatus : PTTagsLabelShowSubStatus = PTTagsLabelShowSubStatus(rawValue: 0)!
     /*! @brief Tag锁定按钮宽度
     */
-    public var lockWidth : Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var lockWidth : Bool = false
     /*! @brief Tag字符对齐情况
     */
     public var textAlignment : NSTextAlignment? = .center
     /*! @brief 最后一行是否居中(仅限tagPosition时使用)
     */
-    public var LastRowCenter:Bool
-    {
-        get
-        {
-            false
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var LastRowCenter:Bool = false
 }
 
 @objcMembers

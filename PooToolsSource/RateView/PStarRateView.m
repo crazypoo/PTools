@@ -12,6 +12,7 @@
 #import <Masonry/Masonry.h>
 #import "UIView+ModifyFrame.h"
 #import "PMacros.h"
+#import <PooTools/PooTools-Swift.h>
 
 #define DEFALUT_STAR_NUMBER        5
 #define ANIMATION_TIME_INTERVAL    0.2
@@ -38,7 +39,7 @@
 }
 
 - (instancetype)initWithRateBlock:(PStarRateViewRateBlock)block{
-    return [self initWithNumberOfStars:DEFALUT_STAR_NUMBER imageForeground:[Utils createImageWithColor:[UIColor redColor]] imageBackGround:[Utils createImageWithColor:[UIColor blueColor]] withTap:YES rateBlock:block];
+    return [self initWithNumberOfStars:DEFALUT_STAR_NUMBER imageForeground:[PTUtils createImageWithColorWithColor:[UIColor redColor]] imageBackGround:[PTUtils createImageWithColorWithColor:[UIColor blueColor]] withTap:YES rateBlock:block];
 }
 
 - (instancetype)initWithNumberOfStars:(NSInteger)numberOfStars imageForeground:(UIImage *)fStr imageBackGround:(UIImage *)bStr withTap:(BOOL)yesORno rateBlock:(PStarRateViewRateBlock)block

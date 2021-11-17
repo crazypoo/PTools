@@ -19,202 +19,42 @@ import YYKit
 @objcMembers
 public class PooSegmentConfig: NSObject {
     ///选中字体
-    public var selectedFont:UIFont
-    {
-        get
-        {
-            .systemFont(ofSize: 16)
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var selectedFont:UIFont = .systemFont(ofSize: 16)
     ///未选中字体
-    public var normalFont:UIFont
-    {
-        get
-        {
-            .boldSystemFont(ofSize: 14)
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var normalFont:UIFont = .boldSystemFont(ofSize: 14)
     ///显示类型
-    public var showType:PooSegmentSelectedType
-    {
-        get
-        {
-            .UnderLine
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var showType:PooSegmentSelectedType = PooSegmentSelectedType(rawValue: 0)!
     ///选中颜色
-    public var selectedColor:UIColor
-    {
-        get
-        {
-            .red
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var selectedColor:UIColor = .red
     ///普通颜色
-    public var normalColor:UIColor
-    {
-        get
-        {
-            .black
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var normalColor:UIColor = .black
     ///选中颜色(背景)
-    public var selectedColor_BG:UIColor
-    {
-        get
-        {
-            .red
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var selectedColor_BG:UIColor = .red
     ///底线height
-    public var underHight:CGFloat
-    {
-        get
-        {
-            3
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var underHight:CGFloat = 3
     ///默认选中第X
-    public var normalSelecdIndex:Int
-    {
-        get
-        {
-            0
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var normalSelecdIndex:Int = 0
     ///子界面到他的父界面的左右距离总和
-    public var subViewInContentSpace:CGFloat
-    {
-        get
-        {
-            20
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var subViewInContentSpace:CGFloat = 20
     ///设置底线角
-    public var underlineRadius:Bool
-    {
-        get
-        {
-            true
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var underlineRadius:Bool = true
     ///文字图片位置
-    public var imagePosition:BKLayoutButtonStyle
-    {
-        get
-        {
-            .leftImageRightTitle
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var imagePosition:BKLayoutButtonStyle = BKLayoutButtonStyle(rawValue: 0)!
     ///文字图片间距
-    public var imageTitleSpace:CGFloat
-    {
-        get
-        {
-            5
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
-    public var bottomSquare:CGFloat
-    {
-        get
-        {
-            5
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var bottomSquare:CGFloat = 5
 }
 
 @objcMembers
 public class PooSegmentModel:NSObject
 {
     ///标题
-    public var titles:String
-    {
-        get
-        {
-            ""
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var titles:String = ""
     ///图片
-    public var imageURL:String
-    {
-        get
-        {
-            ""
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var imageURL:String = ""
     ///选中图片
-    public var selectedImageURL:String
-    {
-        get
-        {
-            ""
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var selectedImageURL:String = ""
 }
 
 @objcMembers
@@ -262,13 +102,13 @@ public class PooSegmentSubView:UIView
         viewConfig = config
         super.init(frame: .zero)
 
-        if (subViewModels.imageURL ?? "").stringIsEmpty() && !(subViewModels.titles ?? "").stringIsEmpty() && (subViewModels.selectedImageURL ?? "").stringIsEmpty()
+        if subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && subViewModels.selectedImageURL.stringIsEmpty()
         {
             buttonShowType = .OnlyTitle
             label.titleLabel?.font = config.normalFont
             label.setTitle(subViewModels.titles, for: .normal)
         }
-        else if !(subViewModels.imageURL ?? "").stringIsEmpty() && (subViewModels.titles ?? "").stringIsEmpty() && !(subViewModels.selectedImageURL ?? "").stringIsEmpty()
+        else if !subViewModels.imageURL.stringIsEmpty() && subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty()
         {
             //MARK:图片地址判断
             buttonShowType = .OnlyImage
@@ -291,7 +131,7 @@ public class PooSegmentSubView:UIView
                 label.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
         }
-        else if !(subViewModels.imageURL ?? "").stringIsEmpty() && !(subViewModels.titles ?? "").stringIsEmpty() && !(subViewModels.selectedImageURL ?? "").stringIsEmpty()
+        else if !subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty()
         {
             //MARK:两个都有
             buttonShowType = .TitleImage
@@ -500,15 +340,15 @@ public class PooSegmentView: UIView {
                         subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
                     }
                     
-                    if (value.imageURL ?? "").stringIsEmpty() && !(value.titles ?? "").stringIsEmpty() && (value.selectedImageURL ?? "").stringIsEmpty()
+                    if value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty()
                     {
                         
                     }
-                    else if !(value.imageURL ?? "").stringIsEmpty() && (value.titles ?? "").stringIsEmpty() && !(value.selectedImageURL ?? "").stringIsEmpty()
+                    else if !value.imageURL.stringIsEmpty() && value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty()
                     {
                         subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace
                     }
-                    else if !(value.imageURL ?? "").stringIsEmpty() && !(value.titles ?? "").stringIsEmpty() && !(value.selectedImageURL ?? "").stringIsEmpty()
+                    else if !value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty()
                     {
                         switch self.viewConfig.imagePosition {
                         case .leftImageRightTitle:

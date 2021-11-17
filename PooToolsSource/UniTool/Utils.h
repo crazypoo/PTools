@@ -231,9 +231,6 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(UIImage * _Nonnull)thumbnailImageForVideo:(NSURL * _Nonnull)videoURL
                             atTime:(NSTimeInterval)time;
-/*! @brief 用颜色生成图片
- */
-+(UIImage * _Nonnull)createImageWithColor:(UIColor * _Nonnull)color;
 /*! @brief 获取图片格式
  */
 + (ToolsAboutImageType)contentTypeForImageData:(NSData * _Nonnull)data;

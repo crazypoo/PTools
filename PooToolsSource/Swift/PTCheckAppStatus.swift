@@ -13,16 +13,7 @@ public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
 
     public var fpsHandle:((_ fps:NSInteger)->Void)?
-    public var closed:Bool
-    {
-        get{
-            true
-        }
-        set
-        {
-           newValue
-        }
-    }
+    public var closed:Bool = true
     
     private var avatar : PFloatingButton?
     private var displayLink : CADisplayLink?

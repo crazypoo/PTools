@@ -43,39 +43,9 @@ import Foundation
 @objcMembers
 public class PTOpenSystemConfig:NSObject
 {
-    public var types : SystemFunctionType
-    {
-        get
-        {
-            .Unknow
-        }
-        set
-        {
-            newValue
-        }
-    }
-    public var content : String
-    {
-        get
-        {
-            ""
-        }
-        set
-        {
-            newValue
-        }
-    }
-    public var scheme : String
-    {
-        get
-        {
-            ""
-        }
-        set
-        {
-            newValue
-        }
-    }
+    public var types : SystemFunctionType = SystemFunctionType(rawValue: 27)!
+    public var content : String = ""
+    public var scheme : String = ""
 }
 
 @objcMembers

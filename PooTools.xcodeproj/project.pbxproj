@@ -1073,11 +1073,11 @@
 		231D15E2272CDEE9003D6F62 /* UniTool */ = {
 			isa = PBXGroup;
 			children = (
-				231D15E3272CDEE9003D6F62 /* Utils.h */,
+				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
 				231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */,
 				231D15E5272CDEE9003D6F62 /* PMacros.h */,
+				231D15E3272CDEE9003D6F62 /* Utils.h */,
 				231D15E6272CDEE9003D6F62 /* Utils.m */,
-				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
 			);
 			path = UniTool;
 			sourceTree = "<group>";

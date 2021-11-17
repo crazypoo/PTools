@@ -12,6 +12,7 @@
 #import "NSString+WPAttributedMarkup.h"
 #import "PMacros.h"
 #import <pop/POP.h>
+#import <PooTools/PooTools-Swift.h>
 
 #define SignatureViewHeight ((kSCREEN_WIDTH*(350))/(375))
 
@@ -120,7 +121,7 @@
     clearBtn.titleLabel.font = viewBtnFont;
     [clearBtn setTitle:cleanString forState:UIControlStateNormal];
     [clearBtn addTarget:self action:@selector(onClear) forControlEvents:UIControlEventTouchUpInside];
-    [clearBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+    [clearBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [clearBtn setTitleColor:self.btnTitleColor forState:UIControlStateNormal];
     [self.navView addSubview:clearBtn];
     kViewBorderRadius(clearBtn, 5, 0, kClearColor);
@@ -137,7 +138,7 @@
     self.btn3.backgroundColor = self.navColor ? self.navColor : kRandomColor;
     [self.btn3 addTarget:self action:@selector(okAction) forControlEvents:UIControlEventTouchUpInside];
     [self.backGroundView addSubview:self.btn3];
-    [self.btn3 setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+    [self.btn3 setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
 
     [self layoutIfNeeded];
 }

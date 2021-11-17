@@ -247,11 +247,13 @@ public class PFloatingButton: UIButton {
         
         if self.isDockPointAvailable() && self.isLimitedDistanceAvailable()
         {
-            self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
+            let bool = self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
+            print(bool)
         }
         else if !dragOutOfBoundsEnabled!
         {
-            self.checkIfOutOfBoundsThenFixIt(fixIt: true)
+            let bool = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
+            print(bool)
         }
     }
     
@@ -395,7 +397,7 @@ public class PFloatingButton: UIButton {
         if traceButtons.count > 0
         {
             (traceButtons.firstObject as! PFloatingButton).removeFromSuperview()
-            traceButtons.remove(traceButtons.firstObject)
+            traceButtons.remove(traceButtons.firstObject as Any)
         }
         else
         {

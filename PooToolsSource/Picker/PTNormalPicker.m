@@ -78,7 +78,7 @@
     
     self.cancelBtn                = [UIButton buttonWithType:UIButtonTypeCustom];
     self.cancelBtn.titleLabel.font = titleFont;
-    [self.cancelBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+    [self.cancelBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [self.cancelBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
     [self.cancelBtn addTarget:self action:@selector(hideViewAction:) forControlEvents:UIControlEventTouchUpInside];
@@ -87,7 +87,7 @@
 
     self.doneBtn                  = [UIButton buttonWithType:UIButtonTypeCustom];
     self.doneBtn.titleLabel.font = titleFont;
-    [self.doneBtn setBackgroundImage:[Utils createImageWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+    [self.doneBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
     [self.doneBtn setTitleColor:textColor forState:UIControlStateNormal];
     [self.doneBtn setTitle:@"完成" forState:UIControlStateNormal];
     [self.doneBtn addTarget:self action:@selector(pickerSelectDoneAction:) forControlEvents:UIControlEventTouchUpInside];

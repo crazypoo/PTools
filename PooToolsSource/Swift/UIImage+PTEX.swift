@@ -196,7 +196,7 @@ public extension UIImage
             var curColor : NSArray?
             var MaxColor : NSArray?
             var MaxCount : Int = 0
-            while (curColor = enumerator.nextObject() as! NSArray) != nil {
+            while (curColor = (enumerator.nextObject() as! NSArray)) != nil {
                 let tmpCount = cls.count(for: curColor)
                 if tmpCount < MaxCount
                 {
