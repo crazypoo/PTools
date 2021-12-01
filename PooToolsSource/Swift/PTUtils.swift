@@ -535,4 +535,22 @@ public class PTUtils: NSObject {
         return .retryFailed
         #endif
     }
+    
+    public class func jsonStringToArray(jsonStr:String)->NSArray
+    {
+        do {
+            let tmp = try JSONSerialization.jsonObject(with: jsonStr.data(using: String.Encoding.utf8)!, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
+            if tmp is NSArray
+            {
+                return (tmp as! NSArray)
+            }
+            else if (tmp is NSString) || (tmp is NSDictionary)
+            {
+                return NSArray.init(array: [tmp])
+            }
+        } catch {
+            return NSArray.init()
+        }
+        return NSArray.init()
+    }
 }

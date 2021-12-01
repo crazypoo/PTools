@@ -50,7 +50,12 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+//    [PTSensitiveWordTools shared];
+//    NSString *string = [NSString stringWithFormat:@"含有敏感词汇：%@",[[PTSensitiveWordTools shared]filter:@"裸体123123123裸体133333333"]];
+//    PNSLog(@"%@",string);
     
+    PNSLog(@">>>>>>>>>>>>>>>>>%@",[PTUtils jsonStringToArrayWithJsonStr:@"{\"json\":11111,\"b\"123344}"]);
+
     PTTagsConfig * aaaaaa = [[PTTagsConfig alloc] init];
     aaaaaa.itemVerMargin = 0;
     PNSLog(@">>>>>>>>>>>>%@",[[PTUtils createImageWithColorWithColor:UIColor.redColor] transformImageWithSize:CGSizeMake(100, 100)]);

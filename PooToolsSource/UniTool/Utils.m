@@ -805,33 +805,6 @@
     return dic;
 }
 
-+ (NSArray *)stringToJSON:(NSString *)jsonStr
-{
-    if (jsonStr) {
-        id tmp = [NSJSONSerialization JSONObjectWithData:[jsonStr dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments | NSJSONReadingMutableLeaves | NSJSONReadingMutableContainers error:nil];
-        
-        if (tmp) {
-            if ([tmp isKindOfClass:[NSArray class]]) {
-                
-                return tmp;
-                
-            } else if([tmp isKindOfClass:[NSString class]]
-                      || [tmp isKindOfClass:[NSDictionary class]]) {
-                
-                return [NSArray arrayWithObject:tmp];
-                
-            } else {
-                return nil;
-            }
-        } else {
-            return nil;
-        }
-        
-    } else {
-        return nil;
-    }
-}
-
 + (NSString *)changeJsonStringToTrueJsonString:(NSString *)json
 {
     // 将没有双引号的替换成有双引号的

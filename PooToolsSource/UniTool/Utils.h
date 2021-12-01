@@ -288,9 +288,6 @@ static inline BOOL isIPhoneXSeries() {
 /*! @brief Json字符串转字典
  */
 +(NSDictionary * _Nonnull)dictionaryWithJsonString:(NSString * _Nonnull)jsonString;
-/*! @brief Json字符串转数组
- */
-+(NSArray * _Nonnull)stringToJSON:(NSString * _Nonnull)jsonStr;
 /*! @brief 不规则Json字符串变换成规则字符串
  */
 +(NSString * _Nonnull)changeJsonStringToTrueJsonString:(NSString * _Nonnull)json;
