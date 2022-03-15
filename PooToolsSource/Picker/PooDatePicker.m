@@ -8,7 +8,7 @@
 
 #import "PooDatePicker.h"
 
-#import <PooTools/PooTools-Swift.h>
+#import "PooTools-Swift.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
 #import "Utils.h"

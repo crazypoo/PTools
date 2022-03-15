@@ -15,7 +15,7 @@
 #import "Utils.h"
 #import <AFNetworking/AFNetworking.h>
 #import <CoreMotion/CoreMotion.h>
-#import <PooTools/PooTools-Swift.h>
+#import "PooTools-Swift.h"
 
 #define kMinZoomScale 0.6f
 #define kMaxZoomScale 2.0f

@@ -9,7 +9,7 @@
 #import "PVideoListViewController.h"
 #import "PVideoSupport.h"
 #import <Masonry/Masonry.h>
-#import <PooTools/PooTools-Swift.h>
+#import "PooTools-Swift.h"
 
 @interface PVideoListViewController ()<UICollectionViewDelegate, UICollectionViewDataSource>
 {
