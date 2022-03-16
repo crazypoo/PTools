@@ -8,7 +8,7 @@
 
 import UIKit
 import SnapKit
-import YYKit
+import YYCategories
 
 @objc public enum PooSegmentSelectedType : Int {
     case UnderLine

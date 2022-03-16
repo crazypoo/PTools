@@ -5,7 +5,7 @@ target 'PooTools_Example' do
   pod 'PooTools', :path => 'PooTools.podspec'
   pod 'WZLBadge'
   pod 'SnapKit'
-  pod 'YYKit'
+  pod 'YYCategories'
   pod 'SwifterSwift'
 #  pod 'WoodPeckeriOS'
   pod "GCDWebServer/WebUploader", "~> 3.0"

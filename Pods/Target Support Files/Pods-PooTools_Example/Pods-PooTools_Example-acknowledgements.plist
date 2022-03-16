@@ -944,7 +944,7 @@ SOFTWARE.
 			<key>License</key>
 			<string>MIT</string>
 			<key>Title</key>
-			<string>YYKit</string>
+			<string>YYCategories</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>
