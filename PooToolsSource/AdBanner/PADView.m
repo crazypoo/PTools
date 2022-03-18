@@ -10,7 +10,7 @@
 #import "SDWebImage/UIImageView+WebCache.h"
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
-#import "PooTools-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 static NSString * const ADBannerCollectionViewCell = @"ADBannerCollectionViewCell";
 @interface PADView ()

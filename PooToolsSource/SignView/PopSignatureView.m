@@ -12,7 +12,7 @@
 #import "NSString+WPAttributedMarkup.h"
 #import "PMacros.h"
 #import <pop/POP.h>
-#import "PooTools-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 #define SignatureViewHeight ((kSCREEN_WIDTH*(350))/(375))
 

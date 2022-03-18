@@ -12,7 +12,7 @@
 #import <Masonry/Masonry.h>
 #import "UIView+ModifyFrame.h"
 #import "PMacros.h"
-#import "PooTools-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 #define DEFALUT_STAR_NUMBER        5
 #define ANIMATION_TIME_INTERVAL    0.2

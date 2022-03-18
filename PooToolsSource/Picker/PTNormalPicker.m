@@ -11,7 +11,7 @@
 #import "PMacros.h"
 #import "Utils.h"
 #import <pop/POP.h>
-#import "PooTools-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 @implementation PTNormalPickerModel
 @end

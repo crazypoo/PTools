@@ -194,7 +194,23 @@
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         
     }];
+    
+    PTGuidePageModel *model = [PTGuidePageModel new];
+    model.mainView = self.window;
+    model.imageArrays = @[@"DemoImage.png",@"image_aircondition_gray.png",@"DemoImage.png",@"DemoImage.png",@"DemoImage.png"];
+    model.tapHidden = YES;
+    model.forwardImage = @"image_aircondition_gray.png";
+    model.backImage = @"DemoImage.png";
+    model.pageControl = false;
+    model.skipShow = false;
+
+    PTGuidePageHUD *aasdasd = [[PTGuidePageHUD alloc] initWithViewModel:model];
+    aasdasd.animationTime = 1.5;
+    aasdasd.adHadRemove = ^{
         
+    };
+    [self.window addSubview:aasdasd];
+
     return YES;
 }
 
