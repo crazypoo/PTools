@@ -12,13 +12,13 @@ import AVKit
 @objcMembers
 public class PTGuidePageModel: NSObject
 {
-    var tapHidden:Bool = false
-    var imageArrays:[String] = []
-    var mainView:UIView = UIView()
-    var pageControl:Bool = false
-    var skipShow:Bool = false
-    var forwardImage:String = ""
-    var backImage:String = ""
+    public var tapHidden:Bool = false
+    public var imageArrays:[String] = []
+    public var mainView:UIView = UIView()
+    public var pageControl:Bool = false
+    public var skipShow:Bool = false
+    public var forwardImage:String = ""
+    public var backImage:String = ""
 }
 
 @objcMembers
