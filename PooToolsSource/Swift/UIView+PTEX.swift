@@ -54,7 +54,7 @@ public extension UIView {
         tracker.activate()
     }
     
-    @objc var x: CGFloat{
+    @objc var jx_x: CGFloat{
         get{
             frame.origin.x
         }
@@ -62,7 +62,7 @@ public extension UIView {
             frame.origin.x = newValue
         }
     }
-    @objc var y: CGFloat{
+    @objc var jx_y: CGFloat{
         get{
             frame.origin.y
         }
@@ -70,7 +70,7 @@ public extension UIView {
             frame.origin.y = newValue
         }
     }
-    @objc var width: CGFloat{
+    @objc var jx_width: CGFloat{
         get{
             frame.size.width
         }
@@ -79,7 +79,7 @@ public extension UIView {
         }
     }
     
-    @objc var height: CGFloat{
+    @objc var jx_height: CGFloat{
         get{
             frame.size.height
         }
@@ -88,48 +88,48 @@ public extension UIView {
         }
     }
     
-    @objc var viewCenter: CGPoint{
+    @objc var jx_viewCenter: CGPoint{
         get{
-            CGPoint(x: width * 0.5, y: height * 0.5)
+            CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
         }
     }
     
-    @objc var centerX: CGFloat{
+    @objc var jx_centerX: CGFloat{
         get{
-            width * 0.5
+            jx_width * 0.5
         }
         set{
             center.x = newValue
         }
     }
     
-    @objc var centerY: CGFloat{
+    @objc var jx_centerY: CGFloat{
         get{
-            height * 0.5
+            jx_height * 0.5
         }
         set{
             center.y = newValue
         }
     }
     
-    @objc var inSuperViewCenterY: CGFloat{
-        y + centerY
+    @objc var jx_inSuperViewCenterY: CGFloat{
+        jx_y + jx_centerY
     }
     
-    @objc var maxX: CGFloat{
+    @objc var jx_maxX: CGFloat{
         get{
-            x + width
+            jx_x + jx_width
         }
         set{
-            x = newValue - width
+            jx_x = newValue - jx_width
         }
     }
-    @objc var maxY: CGFloat{
+    @objc var jx_maxY: CGFloat{
         get{
-            y + height
+            jx_y + jx_height
         }
         set{
-            y = newValue - height
+            jx_y = newValue - jx_height
         }
     }
 
