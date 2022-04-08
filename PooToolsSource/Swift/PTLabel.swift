@@ -23,45 +23,30 @@ import UIKit
 @objcMembers
 public class PTLabel: UILabel {
         
-    public var verticalAlignment : PTVerticalAlignment
+    public var verticalAlignment : PTVerticalAlignment? = .Middle
     {
-        get
+        didSet
         {
-            .Middle
-        }
-        set
-        {
-            newValue
             self.setNeedsDisplay()
         }
     }
     
-    public var strikeThroughAlignment : PTStrikeThroughAlignment
+    public var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
     {
-        get
+        didSet
         {
-            .Middle
-        }
-        set
-        {
-            newValue
             self.setNeedsDisplay()
         }
     }
     
-    public var strikeThroughEnabled : Bool
+    public var strikeThroughEnabled : Bool? = false
     {
-        get
+        didSet
         {
-            false
-        }
-        set
-        {
-            newValue
             self.setNeedsDisplay()
         }
     }
-    
+
     public var strikeThroughColor : UIColor = UIColor.systemRed
     
     override init(frame: CGRect)
