@@ -71,7 +71,7 @@ public class PTLabel: UILabel {
             textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0
         }
         
-        if strikeThroughEnabled
+        if strikeThroughEnabled!
         {
             let strikeWidth = textRect.size.width
             var lineRect : CGRect? = .zero
