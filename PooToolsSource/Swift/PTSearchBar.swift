@@ -10,28 +10,28 @@ import UIKit
 
 @objcMembers
 public class PTSearchBar: UISearchBar {
-    @objc var searchPlaceholder : String? = "请输入文字"
+    public var searchPlaceholder : String? = "请输入文字"
 
-    @objc var searchPlaceholderFont : UIFont? = .systemFont(ofSize: 16)
-    
-    @objc var searchBarTextFieldBorderColor : UIColor? = UIColor.random
-    
-    @objc var searchBarImage : UIImage? = PTUtils.createImageWithColor(color: UIColor.clear)
-    
-    @objc var cursorColor : UIColor? = .lightGray
-    
-    @objc var searchPlaceholderColor : UIColor? = UIColor.random
-    
-    @objc var searchTextColor : UIColor? = UIColor.random
-    
-    @objc var searchBarOutViewColor : UIColor? = UIColor.random
-    
-    @objc var searchBarTextFieldCornerRadius : NSDecimalNumber?  = 5
-    
-    @objc var searchBarTextFieldBorderWidth : NSDecimalNumber? = 0.5
+    public var searchPlaceholderFont : UIFont? = .systemFont(ofSize: 16)
+   
+    public var searchBarTextFieldBorderColor : UIColor? = UIColor.random
+   
+    public var searchBarImage : UIImage? = PTUtils.createImageWithColor(color: UIColor.clear)
+   
+    public var cursorColor : UIColor? = .lightGray
+   
+    public var searchPlaceholderColor : UIColor? = UIColor.random
+   
+    public var searchTextColor : UIColor? = UIColor.random
+   
+    public var searchBarOutViewColor : UIColor? = UIColor.random
+   
+    public var searchBarTextFieldCornerRadius : NSDecimalNumber?  = 5
+   
+    public var searchBarTextFieldBorderWidth : NSDecimalNumber? = 0.5
 
-    @objc var searchTextFieldBackgroundColor : UIColor? = UIColor.random
-    
+    public var searchTextFieldBackgroundColor : UIColor? = UIColor.random
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         
