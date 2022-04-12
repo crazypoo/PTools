@@ -9,7 +9,7 @@
 import UIKit
 
 @objcMembers
-public class PFloatingButton: UIButton {
+open class PFloatingButton: UIButton {
     
     public static let RC_POINT_NULL = CGPoint.init(x: CGFloat(MAXFLOAT), y: -CGFloat(MAXFLOAT))
     public static let RC_TRACES_NUMBER = 10
@@ -121,7 +121,7 @@ public class PFloatingButton: UIButton {
         }
     }
     
-    required init?(coder: NSCoder) {
+    required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
