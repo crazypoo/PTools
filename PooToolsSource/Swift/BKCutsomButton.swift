@@ -77,7 +77,7 @@ public class BKTopImageButton: UIButton {
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
 public class BKLayoutButton: UIButton {
     /// 布局方式
-    var layoutStyle: BKLayoutButtonStyle = .leftImageRightTitle
+    public var layoutStyle: BKLayoutButtonStyle!
     /// 图片和文字的间距，默认值5
     private var midSpacing: CGFloat = 0.5
     /// 指定图片size
