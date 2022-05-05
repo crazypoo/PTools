@@ -75,10 +75,9 @@ public class BKTopImageButton: UIButton {
 
 // MARK: - 上图下文 上文下图 左图右文(系统默认) 右图左文
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
-@objcMembers
 public class BKLayoutButton: UIButton {
     /// 布局方式
-    private var layoutStyle: BKLayoutButtonStyle = .leftImageRightTitle
+    var layoutStyle: BKLayoutButtonStyle = .leftImageRightTitle
     /// 图片和文字的间距，默认值5
     private var midSpacing: CGFloat = 0.5
     /// 指定图片size
@@ -168,11 +167,6 @@ public class BKLayoutButton: UIButton {
         setNeedsLayout()
     }
     
-    public func setLayoutStyle(_ style: BKLayoutButtonStyle) {
-        self.layoutStyle = style
-        setNeedsLayout()
-    }
-
     public func setImageSize(_ imageSize: CGSize) {
         self.imageSize = imageSize
         setNeedsLayout()
