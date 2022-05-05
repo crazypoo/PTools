@@ -61,6 +61,8 @@
 	// Do any additional setup after loading the view, typically from a nib.
     self.view.backgroundColor = [UIColor whiteColor];
     
+    BKLayoutButton *asdasdasd = [BKLayoutButton new];
+    
     NSString *string = [NSString stringWithFormat:@"含有敏感词汇：%@",[[SensitiveWordTools sharedInstance]filter:@"裸体123123123裸体133333333"]];
     PNSLog(@"%@",string);
    

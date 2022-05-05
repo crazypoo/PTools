@@ -78,7 +78,7 @@ public class BKTopImageButton: UIButton {
 @objcMembers
 public class BKLayoutButton: UIButton {
     /// 布局方式
-    public var layoutStyle: BKLayoutButtonStyle!
+    private var layoutStyle: BKLayoutButtonStyle = .leftImageRightTitle
     /// 图片和文字的间距，默认值5
     private var midSpacing: CGFloat = 0.5
     /// 指定图片size
@@ -165,6 +165,11 @@ public class BKLayoutButton: UIButton {
 
     public func setMidSpacing(_ midSpacing: CGFloat) {
         self.midSpacing = midSpacing
+        setNeedsLayout()
+    }
+    
+    public func setLayoutStyle(_ style: BKLayoutButtonStyle) {
+        self.layoutStyle = style
         setNeedsLayout()
     }
 
