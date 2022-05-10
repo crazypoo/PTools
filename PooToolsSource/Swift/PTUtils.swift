@@ -38,18 +38,20 @@ public class PTUtils: NSObject {
     
     ///ALERT真正基类
     public class func base_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
-                                 msg:String? = "",
-                                 okBtns:[String]? = [String]() ,
-                                 cancelBtn:String? = "",
-                                 showIn:UIViewController,
-                                 cancelBtnColor:UIColor? = .systemBlue,
-                                 doneBtnColors:[UIColor]? = [UIColor](),
-                                 titleAttribute:NSAttributedString? = nil,
-                                 msgAttribute:NSAttributedString? = nil,
-                                 alertBGColor:UIColor? = .white,
-                                 alertCornerRadius:CGFloat? = 15,
-                                 cancel:(()->Void)? = nil,
-                                 moreBtn:((_ index:Int,_ title:String)->Void)?)
+                                   titleColor:UIColor? = UIColor.black,
+                                   titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                                   msg:String? = "",
+                                   msgColor:UIColor? = UIColor.black,
+                                   msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                                   okBtns:[String]? = [String](),
+                                   cancelBtn:String? = "",
+                                   showIn:UIViewController,
+                                   cancelBtnColor:UIColor? = .systemBlue,
+                                   doneBtnColors:[UIColor]? = [UIColor](),
+                                   alertBGColor:UIColor? = .white,
+                                   alertCornerRadius:CGFloat? = 15,
+                                   cancel:(()->Void)? = nil,
+                                   moreBtn:((_ index:Int,_ title:String)->Void)?)
     {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
@@ -112,36 +114,22 @@ public class PTUtils: NSObject {
         }
         
         // KVC修改系统弹框文字颜色字号
-        if titleAttribute == nil
+        if !(title ?? "").stringIsEmpty()
         {
-            if !(title ?? "").stringIsEmpty()
-            {
-                let alertStr = NSMutableAttributedString(string: title!)
-                let alertStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-                alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
-                alert.setValue(alertStr, forKey: "attributedTitle")
-            }
-        }
-        else
-        {
-            alert.setValue(titleAttribute, forKey: "attributedTitle")
+            let alertStr = NSMutableAttributedString(string: title!)
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
+            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
+            alert.setValue(alertStr, forKey: "attributedTitle")
         }
         
-        if msgAttribute == nil
+        if !(msg ?? "").stringIsEmpty()
         {
-            if !(msg ?? "").stringIsEmpty()
-            {
-                let alertMsgStr = NSMutableAttributedString(string: msg!)
-                let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-                alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
-                alert.setValue(alertMsgStr, forKey: "attributedMessage")
-            }
+            let alertMsgStr = NSMutableAttributedString(string: msg!)
+            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor!, NSAttributedString.Key.font: msgFont!]
+            alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
+            alert.setValue(alertMsgStr, forKey: "attributedMessage")
         }
-        else
-        {
-            alert.setValue(msgAttribute, forKey: "attributedMessage")
-        }
-        
+
         let subview = alert.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
         if alertBGColor != .white
@@ -154,20 +142,21 @@ public class PTUtils: NSObject {
     }
 
     public class func base_textfiele_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
-                                           okBtn:String,
-                                           cancelBtn:String,
-                                           showIn:UIViewController,
-                                           cancelBtnColor:UIColor? = .black,
-                                           doneBtnColor:UIColor? = .systemBlue,
-                                           titleAttribute:NSAttributedString? = nil,
-                                           placeHolders:[String],
-                                           textFieldTexts:[String],
-                                           keyboardType:[UIKeyboardType]?,
-                                           textFieldDelegate:Any? = nil,
-                                           alertBGColor:UIColor? = .white,
-                                           alertCornerRadius:CGFloat? = 15,
-                                           cancel:(()->Void)? = nil,
-                                           doneBtn:((_ result:[String:String])->Void)?)
+                                             titleColor:UIColor? = UIColor.black,
+                                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                                             okBtn:String,
+                                             cancelBtn:String,
+                                             showIn:UIViewController,
+                                             cancelBtnColor:UIColor? = .black,
+                                             doneBtnColor:UIColor? = .systemBlue,
+                                             placeHolders:[String],
+                                             textFieldTexts:[String],
+                                             keyboardType:[UIKeyboardType]?,
+                                             textFieldDelegate:Any? = nil,
+                                             alertBGColor:UIColor? = .white,
+                                             alertCornerRadius:CGFloat? = 15,
+                                             cancel:(()->Void)? = nil,
+                                             doneBtn:((_ result:[String:String])->Void)?)
     {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         
@@ -210,21 +199,14 @@ public class PTUtils: NSObject {
         doneAction.setValue(doneBtnColor, forKey: "titleTextColor")
 
         // KVC修改系统弹框文字颜色字号
-        if titleAttribute == nil
+        if !(title ?? "").stringIsEmpty()
         {
-            if !(title ?? "").stringIsEmpty()
-            {
-                let alertStr = NSMutableAttributedString(string: title!)
-                let alertStrAttr = [NSAttributedString.Key.foregroundColor: UIColor.black, NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15)]
-                alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
-                alert.setValue(alertStr, forKey: "attributedTitle")
-            }
+            let alertStr = NSMutableAttributedString(string: title!)
+            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
+            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
+            alert.setValue(alertStr, forKey: "attributedTitle")
         }
-        else
-        {
-            alert.setValue(titleAttribute, forKey: "attributedTitle")
-        }
-        
+
         let subview = alert.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
         if alertBGColor != .white
@@ -373,16 +355,16 @@ public class PTUtils: NSObject {
     
     public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
     {
-        var newRoot:UIViewController?
+//        var newRoot:UIViewController?
         var currentVC : UIViewController?
-        if rootVC.presentedViewController != nil
-        {
-            newRoot = rootVC.presentedViewController!
-        }
-        else
-        {
-            newRoot = rootVC
-        }
+//        if rootVC.presentedViewController != nil
+//        {
+//            newRoot = rootVC.presentedViewController!
+//        }
+//        else
+//        {
+//            newRoot = rootVC
+//        }
         
         if rootVC is UITabBarController
         {
