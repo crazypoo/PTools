@@ -42,7 +42,7 @@ public extension String
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
     static let URL = "[a-zA-z]+://.*"
     static let COLTDCode = "^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$"
-    static let POOPHONE = "^1[3|4|5|7|8][0-9]\\d{8}$"
+    static let POOPHONE = "^1[3|4|5|6|7|8][0-9]\\d{8}$"
     static let HomePhone = "^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$"
     static let ISNUMBER = "^[0-9]*$"
     
