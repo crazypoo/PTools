@@ -1040,6 +1040,7 @@
 				231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */,
+				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 				231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */,
 				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
 				231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */,
@@ -1056,7 +1057,6 @@
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
-				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";

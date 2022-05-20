@@ -415,11 +415,12 @@ CGFloat const tagItemSpace = 5;
             
             PooTextView *textView = [PooTextView new];
             textView.backgroundColor = kRandomColor;
-            textView.placeholder = @"我是TextView";
             textView.delegate = self;
             textView.returnKeyType = UIReturnKeyDone;
             textView.font = APPFONT(20);
             textView.textColor = kRandomColor;
+            textView.bk_placeholder = @"我是TextView";
+            textView.bk_maxWordCount = @"20";
             [self.view addSubview:textView];
             [textView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(searchBar.mas_bottom).offset(10);
