@@ -63,6 +63,7 @@ typedef NS_ENUM(NSInteger,GetTimeType){
     GetTimeTypeD,
     GetTimeTypeTimeStampFull,
     GetTimeTypeTimeStampYMDHM,
+    GetTimeTypeTimeStampYMD,
     GetTimeTypeYMDHHS,
     GetTimeTypeHHS,
     GetTimeTypeHH

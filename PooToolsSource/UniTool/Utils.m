@@ -369,7 +369,7 @@
             break;
         case GetTimeTypeTimeStampFull:
         {
-            NSTimeInterval interval    =[timeString doubleValue] / 1000.0;
+            NSTimeInterval interval = [timeString doubleValue] / 1000.0;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
             [formater setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
             return  [formater stringFromDate:date];
@@ -377,9 +377,17 @@
             break;
         case GetTimeTypeTimeStampYMDHM:
         {
-            NSTimeInterval interval    =[timeString doubleValue] / 1000.0;
+            NSTimeInterval interval = [timeString doubleValue] / 1000.0;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
             [formater setDateFormat:@"yyyy-MM-dd HH:mm"];
+            return  [formater stringFromDate:date];
+        }
+            break;
+        case GetTimeTypeTimeStampYMD:
+        {
+            NSTimeInterval interval = [timeString doubleValue] / 1000.0;
+            NSDate *date = [NSDate dateWithTimeIntervalSince1970:interval];
+            [formater setDateFormat:@"yyyy-MM-dd"];
             return  [formater stringFromDate:date];
         }
             break;
