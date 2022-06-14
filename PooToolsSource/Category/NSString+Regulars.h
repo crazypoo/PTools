@@ -48,6 +48,7 @@
 /*! @brief 正则表达式(是否URL)
  */
 -(BOOL)isUrlString;
+-(BOOL)checkUrlWithString;
 
 /*! @brief 正则表达式(是否中文名)
  */
@@ -72,4 +73,17 @@
 /*! @brief 判断字符串是否社会统一信用代码
  */
 -(BOOL)isCOLTDCode;
+/*! @brief 判断字符串是否护照
+ */
+-(BOOL)isPassportNumber;
+/*! @brief 判断字符串是否中国车牌号码
+ */
+-(BOOL)isCNCarNumber;
+/*! @brief 判断字符串是否第一个是英文字母
+ */
+-(BOOL)isLetterFirstAlphabet;
+
+/*! @brief 判断字符串是否全小写或者全大写
+ */
+-(BOOL)isAlphabet:(BOOL)Lowercased;
 @end

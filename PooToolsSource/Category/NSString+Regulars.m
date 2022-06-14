@@ -26,11 +26,60 @@ static NSString *HomePhone = @"^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$";
 // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
 static NSString *IpAddress = @"^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$";
 static NSString *URL = @"[a-zA-z]+://.*";
+static NSString *URL_Full = @"(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}";
 static NSString *MoneyString = @"(\\+|\\-)?(([0]|(0[.]\\d{0,2}))|([1-9]\\d{0,4}(([.]\\d{0,2})?)))?";
 
 static NSString *Chinese = @"(^[\u4e00-\u9fa5]+$)";
 
 static NSString *COLTDCode = @"^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$";
+/** 第一位是字母，后面都是数字
+ 
+ P:P开头的是因公普通护照
+ D:外交护照是D开头
+ E: 有电子芯片的普通护照为“E”字开头，
+ S: 后接8位阿拉伯数字公务护照
+ G:因私护照G开头
+ 14：
+ 15：
+ 
+ H:香港特区护照和香港公民所持回乡卡H开头,后接10位数字
+ M:澳门特区护照和澳门公民所持回乡卡M开头,后接10位数字
+ */
+static NSString *PASSPORT = @"^1[45][0-9]{7}|([P|p|S|s]\\d{7})|([S|s|G|g]\\d{8})|([Gg|Tt|Ss|Ll|Qq|Dd|Aa|Ff]\\d{8})|([H|h|M|m]\\d{8，10})$";
+
+static NSString *CNCARNUMBER = @"^[\u4e00-\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\u4e00-\u9fa5]$";
+
+static NSString *AlphabetLowercased = @"^[a-z]+$";
+static NSString *AlphabetUpperCased = @"^[A-Za-z0-9]+$";
+
+static NSString *LetterFirstAlphabet = @"^[A-Za-z]+$";
+
+-(BOOL)isLetterFirstAlphabet
+{
+    return [self checkWithRegular:LetterFirstAlphabet];
+}
+
+-(BOOL)isAlphabet:(BOOL)Lowercased
+{
+    if (Lowercased)
+    {
+        return [self checkWithRegular:AlphabetLowercased];
+    }
+    else
+    {
+        return [self checkWithRegular:AlphabetUpperCased];
+    }
+}
+
+-(BOOL)isCNCarNumber
+{
+    return [self checkWithRegular:CNCARNUMBER];
+}
+
+-(BOOL)isPassportNumber
+{
+    return [self checkWithRegular:PASSPORT];
+}
 
 -(BOOL)isCOLTDCode
 {
@@ -350,5 +399,21 @@ static NSString *COLTDCode = @"^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]
     {
         return @"该字符串不是银行卡号";
     }
+}
+
+- (BOOL)checkUrlWithString
+{
+    if(self.length < 1)
+        return NO;
+    
+    NSString *url = @"";
+    
+    if (self.length>4 && [[self substringToIndex:4] isEqualToString:@"www."]) {
+        url = [NSString stringWithFormat:@"http://%@",self];
+    } else {
+        url = self;
+    }
+
+    return  [url checkWithRegular:URL_Full];
 }
 @end

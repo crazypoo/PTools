@@ -9,7 +9,7 @@
 import UIKit
 
 
-public typealias TouchedBlock = (_ seder:UIButton) -> Void
+public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
 
 public extension UIButton

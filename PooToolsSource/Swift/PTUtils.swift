@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import NotificationBannerSwift
 
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
@@ -35,6 +36,30 @@ extension PTUtils
 
 @objcMembers
 public class PTUtils: NSObject {
+    
+    //MARK: 判断机型
+    ///小
+    class open func oneOfSmallDevice()->Bool
+    {
+        return Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
+    }
+    
+    ///大
+    class open func oneOfPlusDevice()->Bool
+    {
+        return Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
+    }
+
+    ///X
+    class open func oneOfXDevice()->Bool
+    {
+        return Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
+    }
+    
+    class open func oneOfPadDevice()->Bool
+    {
+        return Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
+    }
     
     ///ALERT真正基类
     public class func base_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
@@ -534,5 +559,155 @@ public class PTUtils: NSObject {
             return NSArray.init()
         }
         return NSArray.init()
+    }
+    
+    //MARK: 弹出框
+    class open func gobal_drop(title:String?,titleFont:UIFont? = UIFont.appfont(size: 16),subTitle:String? = nil,subTitleFont:UIFont? = UIFont.appfont(size: 16),notifiTap:(()->Void)? = nil)
+    {
+        var titleStr = ""
+        if title == nil || (title ?? "").stringIsEmpty()
+        {
+            titleStr = ""
+        }
+        else
+        {
+            titleStr = title!
+        }
+        
+        var subTitleStr = ""
+        if subTitle == nil || (subTitle ?? "").stringIsEmpty()
+        {
+            subTitleStr = ""
+        }
+        else
+        {
+            subTitleStr = subTitle!
+        }
+                
+        let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
+        banner.duration = 1.5
+        banner.backgroundColor = .white
+        banner.subtitleLabel?.textAlignment = PTUtils.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
+        banner.subtitleLabel?.font = subTitleFont
+        banner.subtitleLabel?.textColor = .black
+        banner.titleLabel?.textAlignment = PTUtils.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
+        banner.titleLabel?.font = titleFont
+        banner.titleLabel?.textColor = .black
+        banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
+        banner.onTap = {
+            if notifiTap != nil
+            {
+                notifiTap!()
+            }
+        }
+    }
+
+    //MARK: 生成CollectionView的Group
+    @available(iOS 13.0, *)
+    class open func gobal_collection_gird_layout(data:[AnyObject],
+                                                 size:CGSize? = CGSize.init(width: (kSCREEN_WIDTH - 10 * 2)/3, height: (kSCREEN_WIDTH - 10 * 2)/3),
+                                                 originalX:CGFloat? = 10,
+                                                 mainWidth:CGFloat? = kSCREEN_WIDTH,
+                                                 cellRowCount:NSInteger? = 3,
+                                                 sectionContentInsets:NSDirectionalEdgeInsets? = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0),
+                                                 contentTopAndBottom:CGFloat? = 0,
+                                                 cellLeadingSpace:CGFloat? = 0,
+                                                 cellTrailingSpace:CGFloat? = 0)->NSCollectionLayoutGroup
+    {
+        let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))
+        let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
+        var bannerGroupSize : NSCollectionLayoutSize
+
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+        var groupH:CGFloat = 0
+
+        let itemH = size!.height
+        let itemW = size!.width
+
+        var x:CGFloat = originalX!,y:CGFloat = 0 + contentTopAndBottom!
+        data.enumerated().forEach { (index,value) in
+            if index < cellRowCount!
+            {
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
+                x += itemW + cellLeadingSpace!
+                if index == (data.count - 1)
+                {
+                    groupH = y + itemH + contentTopAndBottom!
+                }
+            }
+            else
+            {
+                x += itemW + cellLeadingSpace!
+                if index > 0 && (index % cellRowCount! == 0)
+                {
+                    x = originalX!
+                    y += itemH + cellTrailingSpace!
+                }
+
+                if index == (data.count - 1)
+                {
+                    groupH = y + itemH + contentTopAndBottom!
+                }
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
+            }
+        }
+
+        bannerItem.contentInsets = sectionContentInsets!
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(mainWidth!-originalX!*2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
+    
+    //MARK: 计算CollectionView的Group高度
+    class open func gobal_collection_gird_layout_content_height(data:[AnyObject],
+                                                                size:CGSize? = CGSize.init(width: (kSCREEN_WIDTH - 10 * 2)/3, height: (kSCREEN_WIDTH - 10 * 2)/3),
+                                                                cellRowCount:NSInteger? = 3,
+                                                                originalX:CGFloat? = 10,
+                                                                contentTopAndBottom:CGFloat? = 0,
+                                                                cellLeadingSpace:CGFloat? = 0,
+                                                                cellTrailingSpace:CGFloat? = 0)->CGFloat
+    {
+        var groupH:CGFloat = 0
+        let itemH = size!.height
+        let itemW = size!.width
+        var x:CGFloat = originalX!,y:CGFloat = 0 + contentTopAndBottom!
+        data.enumerated().forEach { (index,value) in
+            if index < cellRowCount!
+            {
+                x += itemW + cellLeadingSpace!
+                if index == (data.count - 1)
+                {
+                    groupH = y + itemH + contentTopAndBottom!
+                }
+            }
+            else
+            {
+                x += itemW + cellLeadingSpace!
+                if index > 0 && (index % cellRowCount! == 0)
+                {
+                    x = originalX!
+                    y += itemH + cellTrailingSpace!
+                }
+
+                if index == (data.count - 1)
+                {
+                    groupH = y + itemH + contentTopAndBottom!
+                }
+            }
+        }
+        return groupH
+    }
+
+    //MARK: 获取一个输入内最大的一个值
+    ///获取一个输入内最大的一个值
+    class open func maxOne<T:Comparable>( _ seq:[T]) -> T{
+
+        assert(seq.count>0)
+        return seq.reduce(seq[0]){
+            max($0, $1)
+        }
     }
 }

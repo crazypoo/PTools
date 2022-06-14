@@ -8,6 +8,14 @@
 
 import UIKit
 
+@objc public enum Imagegradien:Int
+{
+    case LeftToRight
+    case TopToBottom
+    case RightToLeft
+    case BottomToTop
+}
+
 var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 
 public extension UIView {
@@ -133,6 +141,37 @@ public extension UIView {
         }
     }
 
+    //MARK: View的背景渐变
+    @objc func backgroundGradient(type:Imagegradien,colors:[UIColor])
+    {
+        self.backgroundColor = .clear
+        let maskLayer = CAGradientLayer()
+        
+        var cgColorsss = [CGColor]()
+        colors.enumerated().forEach { (index,value) in
+            cgColorsss.append(value.cgColor)
+        }
+        
+        maskLayer.colors = cgColorsss
+        switch type {
+        case .LeftToRight:
+            maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
+            maskLayer.endPoint = CGPoint.init(x: 1, y: 0)
+        case .TopToBottom:
+            maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
+            maskLayer.endPoint = CGPoint.init(x: 0, y: 1)
+        case .RightToLeft:
+            maskLayer.startPoint = CGPoint.init(x: 1, y: 0)
+            maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+        case .BottomToTop:
+            maskLayer.startPoint = CGPoint.init(x: 0, y: 1)
+            maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+        }
+        maskLayer.frame = self.bounds
+        self.layer.addSublayer(maskLayer)
+        self.layer.insertSublayer(maskLayer, at: 0)
+        self.setNeedsDisplay()
+    }
 }
 
 public extension UILabel

@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '2.1.42'
+    s.version     = '2.2.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -53,4 +53,7 @@ Pod::Spec.new do |s|
     s.dependency 'HandyJSON'
     s.dependency 'DeviceKit'
     s.dependency 'UIColor_Hex_Swift'
+    s.dependency 'SwifterSwift'
+    s.dependency 'NotificationBannerSwift'
+    s.dependency 'CocoaLumberjack/Swift'
 end

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 public extension UIApplication
 {
@@ -16,5 +17,10 @@ public extension UIApplication
         } catch {
             print("Failed to delete launch screen cache: \(error)")
         }
+    }
+    
+    class func applicationEnvironment()->Environment
+    {
+        return UIApplication.shared.inferredEnvironment
     }
 }

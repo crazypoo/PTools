@@ -172,6 +172,20 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467928585C26007DC2B5 /* Array+PTEX.swift */; };
+		9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */; };
+		9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */; };
+		9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */; };
+		9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */; };
+		9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446832858618C007DC2B5 /* StatusBarManager.swift */; };
+		9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */; };
+		9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */; };
+		9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE44689285862B0007DC2B5 /* Date+PTEX.swift */; };
+		9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */; };
+		9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */; };
+		9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469128586987007DC2B5 /* Character+PTEX.swift */; };
+		9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */; };
+		9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */; };
@@ -498,6 +512,20 @@
 		8547CFF61C7FE8C255805D38 /* Pods_PooTools_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		9AE4467928585C26007DC2B5 /* Array+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YBAttributedStringTools.swift; sourceTree = "<group>"; };
+		9AE446832858618C007DC2B5 /* StatusBarManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
+		9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PTEX.swift"; sourceTree = "<group>"; };
+		9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+PTEX.swift"; sourceTree = "<group>"; };
+		9AE44689285862B0007DC2B5 /* Date+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintBeautifulLog.m; sourceTree = "<group>"; };
+		9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintBeautifulLog.h; sourceTree = "<group>"; };
+		9AE4469128586987007DC2B5 /* Character+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+PTEX.swift"; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -589,6 +617,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				9AE4468D2858680A007DC2B5 /* Log */,
 				231D15FF272CDEE9003D6F62 /* AdBanner */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				231D1542272CDEE9003D6F62 /* AppDeviceInfo */,
@@ -1013,14 +1042,18 @@
 		231D15B2272CDEE9003D6F62 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
+				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
+				9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
+				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
 				231D15CD272CDEE9003D6F62 /* Extensions.swift */,
 				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
 				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
+				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
 				231D15C3272CDEE9003D6F62 /* PCleanCache.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
 				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
@@ -1049,14 +1082,22 @@
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
 				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,
 				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
+				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
+				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
+				9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */,
+				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
+				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
+				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
+				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
+				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1281,6 +1322,15 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
+		9AE4468D2858680A007DC2B5 /* Log */ = {
+			isa = PBXGroup;
+			children = (
+				9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */,
+				9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */,
+			);
+			path = Log;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1365,6 +1415,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
+				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
@@ -1380,7 +1431,9 @@
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
 				"${BUILT_PRODUCTS_DIR}/MYBlurIntroductionView/MYBlurIntroductionView.framework",
 				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
+				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
+				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
@@ -1400,6 +1453,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
@@ -1415,7 +1469,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MYBlurIntroductionView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
@@ -1461,10 +1517,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				231D1635272CDEE9003D6F62 /* PooDatePicker.m in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
+				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
+				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
 				231D161B272CDEE9003D6F62 /* UIColor+Random.m in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
@@ -1477,10 +1536,12 @@
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
 				231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */,
 				231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */,
+				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */,
 				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
 				231D1662272CDEEA003D6F62 /* PVideoPlayer.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
+				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1686272CDEEA003D6F62 /* PTFileDownLoadManager.swift in Sources */,
 				231D162D272CDEE9003D6F62 /* NSString+PassStrength.m in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
@@ -1494,6 +1555,7 @@
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
 				231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */,
+				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
 				231D1650272CDEEA003D6F62 /* MUCheckbox.m in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
@@ -1522,6 +1584,7 @@
 				231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */,
 				231D160E272CDEE9003D6F62 /* PooActionOnCalendar.m in Sources */,
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
+				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
 				231D1618272CDEE9003D6F62 /* NSDate+Category.m in Sources */,
 				231D1636272CDEE9003D6F62 /* SecurityStrategy.m in Sources */,
 				231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */,
@@ -1537,11 +1600,14 @@
 				231D1644272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m in Sources */,
 				231D1637272CDEE9003D6F62 /* PTextField.m in Sources */,
 				231D1628272CDEE9003D6F62 /* UIView+ViewShaking.m in Sources */,
+				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				231D162C272CDEE9003D6F62 /* NSDateFormatter+Category.m in Sources */,
+				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				231D165D272CDEEA003D6F62 /* SQFloatWindow.m in Sources */,
 				231D163D272CDEE9003D6F62 /* PStarRateView.m in Sources */,
 				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
+				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				231D164C272CDEEA003D6F62 /* IGHTTPClient.m in Sources */,
@@ -1572,6 +1638,8 @@
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				231D165C272CDEEA003D6F62 /* PMotion.m in Sources */,
 				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
+				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
+				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
@@ -1598,6 +1666,7 @@
 				231D1653272CDEEA003D6F62 /* WPTappableLabel.m in Sources */,
 				231D160C272CDEE9003D6F62 /* YMShowImageView.m in Sources */,
 				231D1682272CDEEA003D6F62 /* Extensions.swift in Sources */,
+				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				231D1646272CDEE9003D6F62 /* IGBatchTask.m in Sources */,
 				231D1648272CDEE9003D6F62 /* IGTestParser.m in Sources */,
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
@@ -1609,6 +1678,7 @@
 				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
+				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */,

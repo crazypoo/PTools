@@ -589,4 +589,61 @@ public extension String
         }
         return self.isNumberString()
     }
+    
+    //MARK: 获取当前时间
+    static func currentDate(dateFormatterString:String? = "YYYY-MM-dd")->String
+    {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormatterString
+        return dateFormatter.string(from: Date())
+    }
+    
+    //MARK: 时间字符串转化为时间戳
+    /// - Returns: 时间戳
+    func dateStrToTimeInterval(dateFormat:String = "yyyy-MM-dd") -> TimeInterval  {
+            let dateformatter = DateFormatter()
+            dateformatter.dateFormat = dateFormat
+            let date = dateformatter.date(from: self)
+            let dateTimeInterval:TimeInterval = date!.timeIntervalSince1970
+            return dateTimeInterval
+    }
+    
+    //MARK: JavaUnicode转苹果可以用的String
+    func javaUnicodeToString()->String
+    {
+        let string = self.nsString.mutableCopy()
+        CFStringTransform((string as! CFMutableString), nil, "Any-Hex/Java" as NSString, true)
+        return (string as! String)
+    }
+    
+    //MARK: emoji相关
+    /// 是否为单个emoji表情
+    var isSingleEmoji: Bool {
+        return count==1 && containsEmoji
+    }
+
+    /// 包含emoji表情
+    var containsEmoji: Bool {
+        return contains{$0.isEmoji}
+    }
+
+    /// 只包含emoji表情
+    var containsOnlyEmoji: Bool {
+        return !isEmpty && !contains{!$0.isEmoji}
+    }
+
+    /// 提取emoji表情字符串
+    var emojiString: String {
+        return emojis.map{ String($0) }.reduce("",+)
+    }
+
+    /// 提取emoji表情数组
+    var emojis: [Character] {
+        return filter{ $0.isEmoji }
+    }
+
+    /// 提取单元编码标量
+    var emojiScalars: [UnicodeScalar] {
+        return filter{$0.isEmoji}.flatMap{$0.unicodeScalars}
+    }
 }

@@ -80,8 +80,6 @@
     }];
     
     kAdaptedOtherFontSize(@"", 16);
-    
-    
     UIView *views = [UIView new];
     views.backgroundColor = kRandomColor;
     
