@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 /// 状态栏单一状态节点
-class StatusBarState: NSObject {
+public class StatusBarState: NSObject {
     
     static let defaultKey: String = "StatusBarState.default.root.key"
     
@@ -25,14 +25,14 @@ class StatusBarState: NSObject {
     // 下一个路径节点，为 nil 说明是叶子节点
     weak var nextState: StatusBarState?
     
-    override var description: String {
+    public override var description: String {
         "{ key=\(key) selected=\(String(describing: nextState?.key)) }"
     }
     
 }
 
 /// 全局状态栏状态管理单例类
-class StatusBarManager {
+public class StatusBarManager {
     
     static let shared = StatusBarManager()
     
