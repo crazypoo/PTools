@@ -12,7 +12,7 @@ import UIKit
 /// 状态栏单一状态节点
 public class StatusBarState: NSObject {
     
-    static let defaultKey: String = "StatusBarState.default.root.key"
+    public static let defaultKey: String = "StatusBarState.default.root.key"
     
     var isHidden: Bool = false
     var style: UIStatusBarStyle = .default
@@ -47,19 +47,19 @@ public class StatusBarManager {
     fileprivate var currentState: StatusBarState!
     
     /// 以下3个计算属性都是取当前状态显示以及更新当前状态
-    var isHidden: Bool {
+    public var isHidden: Bool {
         get {
             currentState.isHidden
         }
         set { setState(for: currentState.key, isHidden: newValue) }
     }
-    var style: UIStatusBarStyle {
+    public var style: UIStatusBarStyle {
         get {
             currentState.style
         }
         set { setState(for: currentState.key, style: newValue) }
     }
-    var animation: UIStatusBarAnimation {
+    public var animation: UIStatusBarAnimation {
         get {
             currentState.animation
         }
@@ -76,7 +76,7 @@ public class StatusBarManager {
     
     /// 为某个状态(root)添加子状态(key)，当 root = nil 时，表示添加到根状态上
     @discardableResult
-    func addSubState(with key: String, root: String? = nil) -> StatusBarState? {
+    public func addSubState(with key: String, root: String? = nil) -> StatusBarState? {
         
         guard !stateKeys.contains(key) else { return nil }
         stateKeys.insert(key)
@@ -112,7 +112,7 @@ public class StatusBarManager {
     }
     
     /// 删除某个状态及其子状态树
-    func removeState(with key: String) {
+    public func removeState(with key: String) {
         
         guard stateKeys.contains(key) else { return }
         let state = findState(key)
@@ -142,7 +142,7 @@ public class StatusBarManager {
     }
     
     /// 更改某个状态(root)下要显示直接的子状态节点(key)
-    func showState(for key: String, root: String? = nil) {
+    public func showState(for key: String, root: String? = nil) {
         
         guard stateKeys.contains(key) else { return }
         
@@ -165,7 +165,7 @@ public class StatusBarManager {
     }
     
     /// 删除某个状态下的子状态树
-    func clearSubStates(with key: String, isUpdate: Bool = true) {
+    public func clearSubStates(with key: String, isUpdate: Bool = true) {
         
         guard stateKeys.contains(key) else { return }
         let state = findState(key)
@@ -185,13 +185,13 @@ public class StatusBarManager {
     }
     
     /// 负责打印状态树结构
-    func printAllStates(_ method: String = #function) {
+    public func printAllStates(_ method: String = #function) {
         debugPrint("\(method): currentState = \(currentState.key)")
         printAllStatesInTree(rootState, deep: 0, method: method)
     }
     
     /// 更新栈中 key 对应的状态，key == nil 表示栈顶状态
-    func setState(for key: String? = nil, isHidden: Bool? = nil, style: UIStatusBarStyle? = nil, animation: UIStatusBarAnimation? = nil) {
+    public func setState(for key: String? = nil, isHidden: Bool? = nil, style: UIStatusBarStyle? = nil, animation: UIStatusBarAnimation? = nil) {
         
         var needUpdate: Bool = false
         let state = findState(key)

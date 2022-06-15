@@ -9,7 +9,7 @@
 import UIKit
 import MJRefresh
 
-extension UIScrollView {
+public extension UIScrollView {
     
     /// 自动判断上拉或下拉结束正在刷新状态
     func bk_endMJRefresh() {

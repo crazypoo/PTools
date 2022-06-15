@@ -255,24 +255,6 @@ public class PTUtils: NSObject {
         _ = NSTimeZone.init(name: "Asia/Shanghai")
         return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
     }
-
-    public class func thumbnailImage(videoURL:String)->UIImage
-    {
-        if videoURL.isEmpty {
-            //默认封面图
-            return UIColor.randomColor.createImageWithColor()
-        }
-        let aset = AVURLAsset(url: URL(fileURLWithPath: videoURL), options: nil)
-        let assetImg = AVAssetImageGenerator(asset: aset)
-        assetImg.appliesPreferredTrackTransform = true
-        assetImg.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
-        do{
-            let cgimgref = try assetImg.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
-            return UIImage(cgImage: cgimgref)
-        }catch{
-            return UIColor.randomColor.createImageWithColor()
-        }
-    }
     
     public class func timeRunWithTime_base(timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
     {

@@ -16,6 +16,8 @@ import AppKit
 
 import CommonCrypto
 import SwifterSwift
+import AVFoundation
+import Foundation
 
 /** 数字类型*/
 let NUM = 1
@@ -40,7 +42,7 @@ public extension String
 {
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
-    static let URL = "[a-zA-z]+://.*"
+    static let URLSTRING = "[a-zA-z]+://.*"
     static let COLTDCode = "^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$"
     static let POOPHONE = "^1[3|4|5|6|7|8|9][0-9]\\d{8}$"
     static let HomePhone = "^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$"
@@ -83,7 +85,7 @@ public extension String
     
     func isURL()->Bool
     {
-        return self.checkWithString(expression: String.URL)
+        return self.checkWithString(expression: String.URLSTRING)
     }
     
     func isIP()->Bool
@@ -677,5 +679,57 @@ public extension String
     /// 提取单元编码标量
     var emojiScalars: [UnicodeScalar] {
         return filter{$0.isEmoji}.flatMap{$0.unicodeScalars}
+    }
+    
+    //MARK: 获取视频的一个图片
+    func thumbnailImage()->UIImage
+    {
+        if self.isEmpty {
+            //默认封面图
+            return UIColor.randomColor.createImageWithColor()
+        }
+        let aset = AVURLAsset(url: URL(fileURLWithPath: self), options: nil)
+        let assetImg = AVAssetImageGenerator(asset: aset)
+        assetImg.appliesPreferredTrackTransform = true
+        assetImg.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
+        do{
+            let cgimgref = try assetImg.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
+            return UIImage(cgImage: cgimgref)
+        }catch{
+            return UIColor.randomColor.createImageWithColor()
+        }
+    }
+
+    //MARK: 根据00:00:00时间格式，转换成秒
+    ///
+    /// - Returns: Int
+    func getSecondsFromTimeStr() -> Int {
+        if self.isEmpty {
+            return 0
+        }
+
+        let timeArry = self.replacingOccurrences(of: "：", with: ":").components(separatedBy: ":")
+        var seconds:Int = 0
+        if timeArry.count > 0 && timeArry[0].isNumberString()
+        {
+            let hh = Int(timeArry[0])
+            if hh! > 0 {
+                seconds += hh!*60*60
+            }
+        }
+        if timeArry.count > 1 && timeArry[1].isNumberString(){
+            let mm = Int(timeArry[1])
+            if mm! > 0 {
+                seconds += mm!*60
+            }
+        }
+
+        if timeArry.count > 2 && timeArry[2].isNumberString(){
+            let ss = Int(timeArry[2])
+            if ss! > 0 {
+                seconds += ss!
+            }
+        }
+        return seconds
     }
 }
