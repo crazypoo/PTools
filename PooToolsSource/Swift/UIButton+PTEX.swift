@@ -8,9 +8,7 @@
 
 import UIKit
 
-
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
-
 
 public extension UIButton
 {
@@ -26,5 +24,27 @@ public extension UIButton
     {
         let block:TouchedBlock = objc_getAssociatedObject(self, &UIButton.UIButtonBlockKey) as! TouchedBlock
         block(sender)
+    }
+    
+    func timeRunWithTime(timeInterval:TimeInterval,originalTitle:String,canTap:Bool,timeFinish:(()->Void)?)
+    {
+        PTUtils.timeRunWithTime_base(timeInterval: timeInterval) { finish, time in
+            if finish
+            {
+                self.setTitle(originalTitle, for: .normal)
+                self.isUserInteractionEnabled = canTap
+                if timeFinish != nil
+                {
+                    timeFinish!()
+                }
+            }
+            else
+            {
+                let strTime = String.init(format: "%.2d", time)
+                let buttonTime = String.init(format: "%@", strTime)
+                self.setTitle(buttonTime, for: .normal)
+                self.isUserInteractionEnabled = canTap
+            }
+        }
     }
 }

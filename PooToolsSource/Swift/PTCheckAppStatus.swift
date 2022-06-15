@@ -45,7 +45,7 @@ public class PCheckAppStatus: NSObject {
     {
         if avatar == nil
         {
-            avatar = PFloatingButton.init(view: UIApplication.shared.keyWindow, frame: .zero)
+            avatar = PFloatingButton.init(view: AppWindows as Any, frame: .zero)
             avatar?.adjustsImageWhenHighlighted = false
             avatar?.tag = 9999
             avatar!.snp.makeConstraints { make in

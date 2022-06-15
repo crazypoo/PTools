@@ -203,7 +203,7 @@ public class PTLaunchAdMonitor: NSObject {
                 }
                 else
                 {
-                    imageBtn.setImage(PTUtils.createImageWithColor(color: UIColor.randomColor), for: .normal)
+                    imageBtn.setImage(UIColor.randomColor.createImageWithColor(), for: .normal)
                 }
                 imageBtn.addActionHandlers { sender in
                     PTLaunchAdMonitor.showDetail(sender: sender)

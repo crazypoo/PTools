@@ -150,14 +150,13 @@ public class PCleanCache: NSObject {
     class public func cleanDocumentAtPath(path:String)->Bool
     {
         let enumerator = PCleanCache.fileManager.enumerator(atPath: path)
-        for subPath in enumerator as! [String]
-        {
+        enumerator?.enumerated().forEach({ index,value in
             do {
-                try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(subPath))
+                try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(value as! String))
             } catch {
                 print("\(error)")
             }
-        }
+        })
         
         if PCleanCache.folderSizeAtPath(path: path) > 0
         {

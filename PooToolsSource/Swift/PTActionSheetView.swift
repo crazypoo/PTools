@@ -209,7 +209,7 @@ public class PTActionSheetView: UIView {
             actionSheetView.addSubview(titleLbale)
         }
         
-        let highlightedImage = PTUtils.createImageWithColor(color: heightlightColor)
+        let highlightedImage = heightlightColor.createImageWithColor()
         
         if !destructiveButtonTitle.stringIsEmpty()
         {
@@ -341,7 +341,7 @@ public class PTActionSheetView: UIView {
         actionSheetScroll.showsVerticalScrollIndicator = false
         actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= kSCREEN_HEIGHT) ? true : false
         
-        let highlightedImage = PTUtils.createImageWithColor(color: heightlightColor)
+        let highlightedImage = heightlightColor.createImageWithColor()
 
         if otherTitles.count > 0
         {

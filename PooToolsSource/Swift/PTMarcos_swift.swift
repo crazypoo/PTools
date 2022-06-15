@@ -11,6 +11,7 @@ import DeviceKit
 
 public let AppWindows = UIApplication.shared.delegate?.window!
 
+public let Gobal_device_isSimulator = Device.current.isSimulator
 public let Gobal_device_info = Device.current
 public let Gobal_group_of_all_iPad:[Device] = Device.allPads
 public let Gobal_group_of_all_plus_device:[Device] = Device.allPlusSizedDevices

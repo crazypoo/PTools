@@ -18,6 +18,90 @@ import UIKit
 
 var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 
+extension UIView: PTProtocolCompatible {}
+
+public extension PTProtocol where Base:UIView
+{
+    var jx_x: CGFloat{
+        get{
+            base.frame.origin.x
+        }
+        set{
+            base.frame.origin.x = newValue
+        }
+    }
+    var jx_y: CGFloat{
+        get{
+            base.frame.origin.y
+        }
+        set{
+            base.frame.origin.y = newValue
+        }
+    }
+    var jx_width: CGFloat{
+        get{
+            base.frame.size.width
+        }
+        set{
+            base.frame.size.width = newValue
+        }
+    }
+    
+    var jx_height: CGFloat{
+        get{
+            base.frame.size.height
+        }
+        set{
+            base.frame.size.height = newValue
+        }
+    }
+    
+    var jx_viewCenter: CGPoint{
+        get{
+            CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
+        }
+    }
+    
+    var jx_centerX: CGFloat{
+        get{
+            jx_width * 0.5
+        }
+        set{
+            base.center.x = newValue
+        }
+    }
+    
+    var jx_centerY: CGFloat{
+        get{
+            jx_height * 0.5
+        }
+        set{
+            base.center.y = newValue
+        }
+    }
+    
+    var inSuperViewCenterY: CGFloat{
+        jx_y + jx_centerY
+    }
+    
+    var maxX: CGFloat{
+        get{
+            jx_x + jx_width
+        }
+        set{
+            jx_x = newValue - jx_width
+        }
+    }
+    var maxY: CGFloat{
+        get{
+            jx_y + jx_height
+        }
+        set{
+            jx_y = newValue - jx_height
+        }
+    }
+}
+
 public extension UIView {
     
     @objc func viewCorner_oc(radius:CGFloat,borderWidth:CGFloat,borderColor:UIColor)
@@ -60,85 +144,6 @@ public extension UIView {
         let tracker = BorderManager(view: self)
         GLOBAL_BORDER_TRACKERS.append(tracker)
         tracker.activate()
-    }
-    
-    @objc var jx_x: CGFloat{
-        get{
-            frame.origin.x
-        }
-        set{
-            frame.origin.x = newValue
-        }
-    }
-    @objc var jx_y: CGFloat{
-        get{
-            frame.origin.y
-        }
-        set{
-            frame.origin.y = newValue
-        }
-    }
-    @objc var jx_width: CGFloat{
-        get{
-            frame.size.width
-        }
-        set{
-            frame.size.width = newValue
-        }
-    }
-    
-    @objc var jx_height: CGFloat{
-        get{
-            frame.size.height
-        }
-        set{
-            frame.size.height = newValue
-        }
-    }
-    
-    @objc var jx_viewCenter: CGPoint{
-        get{
-            CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
-        }
-    }
-    
-    @objc var jx_centerX: CGFloat{
-        get{
-            jx_width * 0.5
-        }
-        set{
-            center.x = newValue
-        }
-    }
-    
-    @objc var jx_centerY: CGFloat{
-        get{
-            jx_height * 0.5
-        }
-        set{
-            center.y = newValue
-        }
-    }
-    
-    @objc var jx_inSuperViewCenterY: CGFloat{
-        jx_y + jx_centerY
-    }
-    
-    @objc var jx_maxX: CGFloat{
-        get{
-            jx_x + jx_width
-        }
-        set{
-            jx_x = newValue - jx_width
-        }
-    }
-    @objc var jx_maxY: CGFloat{
-        get{
-            jx_y + jx_height
-        }
-        set{
-            jx_y = newValue - jx_height
-        }
     }
 
     //MARK: View的背景渐变

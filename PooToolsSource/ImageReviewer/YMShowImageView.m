@@ -202,7 +202,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     //    }];
     
     self.hideButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.hideButton setImage:(kStringIsEmpty(self.hideImageNames) ? [PTUtils createImageWithColorWithColor:kRandomColor] : kImageNamed(self.hideImageNames)) forState:UIControlStateNormal];
+    [self.hideButton setImage:(kStringIsEmpty(self.hideImageNames) ? [kRandomColor createImageWithColor] : kImageNamed(self.hideImageNames)) forState:UIControlStateNormal];
     [self.hideButton addTarget:self action:@selector(hideAction:) forControlEvents:UIControlEventTouchUpInside];
     [self.navView addSubview:self.hideButton];
     [self.hideButton mas_makeConstraints:^(MASConstraintMaker *make) {

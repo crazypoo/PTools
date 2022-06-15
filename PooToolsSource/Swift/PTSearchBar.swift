@@ -16,7 +16,7 @@ public class PTSearchBar: UISearchBar {
    
     public var searchBarTextFieldBorderColor : UIColor? = UIColor.random
    
-    public var searchBarImage : UIImage? = PTUtils.createImageWithColor(color: UIColor.clear)
+    public var searchBarImage : UIImage? = UIColor.clear.createImageWithColor()
    
     public var cursorColor : UIColor? = .lightGray
    
@@ -42,7 +42,7 @@ public class PTSearchBar: UISearchBar {
             searchTextField.textColor = searchTextColor!
             searchTextField.font = searchPlaceholderFont!
             searchTextField.attributedPlaceholder = NSAttributedString(string: searchPlaceholder!, attributes: [NSAttributedString.Key.font:searchPlaceholderFont!,NSAttributedString.Key.foregroundColor:searchPlaceholderColor!])
-            backgroundImage = PTUtils.createImageWithColor(color: searchBarOutViewColor!)
+            backgroundImage = searchBarOutViewColor!.createImageWithColor()
             setImage(searchBarImage!, for: .search, state: .normal)
             searchTextField.viewCorner(radius: (searchBarTextFieldCornerRadius as! CGFloat), borderWidth: (searchBarTextFieldBorderWidth as! CGFloat), borderColor: searchBarTextFieldBorderColor!)
         }
@@ -72,7 +72,7 @@ public class PTSearchBar: UISearchBar {
                 searchField?.font = searchPlaceholderFont!
                 searchField?.viewCorner(radius: (searchBarTextFieldCornerRadius as! CGFloat), borderWidth: (searchBarTextFieldBorderWidth as! CGFloat), borderColor: searchBarTextFieldBorderColor!)
 
-                if searchBarImage == PTUtils.createImageWithColor(color: UIColor.clear)
+                if searchBarImage == UIColor.clear.createImageWithColor()
                 {
                     searchField?.leftView = nil
                 }

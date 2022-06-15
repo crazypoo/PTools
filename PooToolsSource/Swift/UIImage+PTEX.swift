@@ -156,9 +156,9 @@ public extension UIImage
             outputContext?.restoreGState()
         }
         
-        let outputImage = UIGraphicsGetImageFromCurrentImageContext()
+        effectImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        return outputImage!
+        return effectImage
     }
     
     func imageMostColor()->UIColor?
@@ -196,8 +196,9 @@ public extension UIImage
             var curColor : NSArray?
             var MaxColor : NSArray?
             var MaxCount : Int = 0
+            
             while (curColor = (enumerator.nextObject() as! NSArray)) != nil {
-                let tmpCount = cls.count(for: curColor)
+                let tmpCount = cls.count(for: curColor as Any)
                 if tmpCount < MaxCount
                 {
                     continue
@@ -212,4 +213,61 @@ public extension UIImage
             return nil
         }
     }
+    
+    //MARK: 加水印
+    func watermark(title:String,font:UIFont? = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
+    {
+        let originalImage = self
+        
+        let HORIZONTAL_SPACE = 30
+        let VERTICAL_SPACE = 50
+        
+        let viewWidth = originalImage.size.width
+        let viewHeight = originalImage.size.height
+        
+        let newColor = (color == nil) ? originalImage.imageMostColor() : color
+        
+        UIGraphicsBeginImageContext(CGSize.init(width: viewWidth, height: viewHeight))
+        originalImage.draw(in: CGRect.init(x: 0, y: 0, width: viewWidth, height: viewHeight))
+        let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
+        let attr = [NSAttributedString.Key.font:font!,NSAttributedString.Key.foregroundColor:newColor!]
+        let mark : NSString = title as NSString
+        let attrStr = NSMutableAttributedString.init(string: mark as String, attributes: attr)
+        let strWidth = attrStr.size().width
+        let strHeight = attrStr.size().height
+        let context = UIGraphicsGetCurrentContext()!
+        context.concatenate(CGAffineTransform(translationX: viewWidth/2, y: viewHeight/2))
+        context.concatenate(CGAffineTransform(rotationAngle: (Double.pi / 2 / 3)))
+        context.concatenate(CGAffineTransform(translationX: -viewWidth/2, y: -viewHeight/2))
+        
+        let horCount : Int = Int(sqrtLength / (strWidth + CGFloat(HORIZONTAL_SPACE)) + 1)
+        let verCount : Int = Int(sqrtLength / (strWidth + CGFloat(VERTICAL_SPACE)) + 1)
+        
+        let orignX = -(sqrtLength - viewWidth)/2
+        let orignY = -(sqrtLength - viewHeight)/2
+
+        var tempOrignX = orignX
+        var tempOrignY = orignY
+
+        let totalCount : Int = Int(horCount * verCount)
+        for i in 0..<totalCount
+        {
+            mark.draw(in: CGRect.init(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
+            if i % horCount == 0 && i != 0
+            {
+                tempOrignX = orignX
+                tempOrignY += (strHeight + CGFloat(VERTICAL_SPACE))
+            }
+            else
+            {
+                tempOrignX += (strWidth + CGFloat(HORIZONTAL_SPACE))
+            }
+        }
+        
+        let finalImg = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        context.restoreGState()
+        return finalImg
+    }
+
 }

@@ -404,7 +404,7 @@ CGFloat const tagItemSpace = 5;
             //    searchBar.searchBarImage = kImageNamed(@"Search");
             searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
             searchBar.searchBarOutViewColor = kRandomColor;
-            searchBar.searchBarTextFieldCornerRadius = @15.0;
+            searchBar.searchBarTextFieldCornerRadius = [[NSDecimalNumber alloc] initWithString:@"15.0"];
             searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
             [searchBar mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -137,14 +137,14 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
-        [self.cancelBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.cancelBtn setBackgroundImage:[kDevButtonHighlightedColor createImageWithColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
         kViewBorderRadius(self.cancelBtn, 5, 0, kClearColor);
 
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [self.yesBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.yesBtn setBackgroundImage:[kDevButtonHighlightedColor createImageWithColor] forState:UIControlStateHighlighted];
         [self.yesBtn.titleLabel setFont:font];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
@@ -693,7 +693,7 @@
         
         self.cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.cancelBtn.titleLabel setFont:font];
-        [self.cancelBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.cancelBtn setBackgroundImage:[kDevButtonHighlightedColor createImageWithColor] forState:UIControlStateHighlighted];
         [self.cancelBtn setTitle:@"取消" forState:UIControlStateNormal];
         [self.cancelBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.cancelBtn];
@@ -701,7 +701,7 @@
 
         self.yesBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [self.yesBtn.titleLabel setFont:font];
-        [self.yesBtn setBackgroundImage:[PTUtils createImageWithColorWithColor:kDevButtonHighlightedColor] forState:UIControlStateHighlighted];
+        [self.yesBtn setBackgroundImage:[kDevButtonHighlightedColor createImageWithColor] forState:UIControlStateHighlighted];
         [self.yesBtn setTitle:@"完成" forState:UIControlStateNormal];
         [self.yesBtn setTitleColor:tbtc forState:UIControlStateNormal];
         [self.topV addSubview:self.yesBtn];

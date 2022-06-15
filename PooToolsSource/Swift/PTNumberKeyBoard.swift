@@ -34,7 +34,7 @@ public class PTNumberKeyBoard: UIView {
     private static let kButtonSpaceLeft : CGFloat = 5
     private static let kKeyH : CGFloat = (PTNumberKeyBoard.kKeyBoardH - CGFloat(PTNumberKeyBoard.kLineWidth * 3) - CGFloat(PTNumberKeyBoard.kButtonSpaceTop * 5)) / 4
     
-    private var kKeyW : CGFloat
+    fileprivate var kKeyW : CGFloat
     {
         get
         {
@@ -42,7 +42,7 @@ public class PTNumberKeyBoard: UIView {
         }
         set
         {
-            newValue
+            self.kKeyW = newValue
         }
     }
                 
@@ -137,8 +137,8 @@ public class PTNumberKeyBoard: UIView {
                 {
                     button.setTitle("删除", for: .normal)
                 }
-                button.setBackgroundImage(PTUtils.createImageWithColor(color: cN!), for: .normal)
-                button.setBackgroundImage(PTUtils.createImageWithColor(color: cH!), for: .highlighted)
+                button.setBackgroundImage(cN!.createImageWithColor(), for: .normal)
+                button.setBackgroundImage(cH!.createImageWithColor(), for: .highlighted)
             }
         }
     }

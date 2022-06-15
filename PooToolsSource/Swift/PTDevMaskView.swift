@@ -20,7 +20,7 @@ public class PTDevMaskView: UIView {
         }
         set
         {
-            newValue
+            self.isMask = newValue
         }
     }
     
@@ -36,7 +36,7 @@ public class PTDevMaskView: UIView {
             make.edges.equalToSuperview()
         }
         
-        imageContent.image = PTUtils.watermark(originalImage: image!, title: maskString, font: UIFont.systemFont(ofSize: 100), color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
+        imageContent.image = image!.watermark(title: maskString,font: UIFont.systemFont(ofSize: 100), color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
     }
     
     required init?(coder: NSCoder) {

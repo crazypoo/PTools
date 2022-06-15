@@ -90,4 +90,16 @@ public extension UIColor {
     class var DevMaskColor:UIColor {
         return UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
     }
+    
+    @objc func createImageWithColor()->UIImage
+    {
+        let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
+        UIGraphicsBeginImageContext(rect.size)
+        let ccontext = UIGraphicsGetCurrentContext()
+        ccontext?.setFillColor(self.cgColor)
+        ccontext!.fill(rect)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image!
+    }
 }

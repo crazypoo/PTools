@@ -297,7 +297,7 @@ public extension String
         return self
     }
     
-    //MARK:字符串转Dic
+    //MARK: 字符串转Dic
     ///字符串转Dic
     func jsonStringToDic()->NSDictionary?
     {
@@ -314,7 +314,39 @@ public extension String
             return nil
         }
     }
+    
+    // MARK: JSON 字符串 -> Array
+    /// JSON 字符串 ->  Array
+    /// - Returns: Array
+    func jsonStringToArray() -> Array<Any>? {
+        let jsonString = self
+        let jsonData:Data = jsonString.data(using: .utf8)!
+        let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        if array != nil {
+            return (array as! Array<Any>)
+        }
+        return nil
+    }
         
+    func jsonStringToArray()->NSArray
+    {
+        do {
+            let tmp = try JSONSerialization.jsonObject(with: self.data(using: String.Encoding.utf8)!, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
+            if tmp is NSArray
+            {
+                return (tmp as! NSArray)
+            }
+            else if (tmp is NSString) || (tmp is NSDictionary)
+            {
+                return NSArray.init(array: [tmp])
+            }
+        } catch {
+            return NSArray.init()
+        }
+        return NSArray.init()
+    }
+    
+    
     func passwordLevel()->PStrengthLevel
     {
         let level = self.checkPasswordStrength()

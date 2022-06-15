@@ -291,7 +291,7 @@ extension PTGuidePageHUD : UIScrollViewDelegate
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView)
     {
-        let currentInt = Int((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)
+        let currentInt = "\((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)".int ?? 0
         imagePageControl.currentPage = currentInt
         if currentInt >= 1
         {

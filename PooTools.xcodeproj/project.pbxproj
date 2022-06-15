@@ -186,6 +186,16 @@
 		9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469128586987007DC2B5 /* Character+PTEX.swift */; };
 		9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */; };
 		9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */; };
+		9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */; };
+		9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */; };
+		9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */; };
+		9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */; };
+		9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */; };
+		9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A428598A58007DC2B5 /* PTNSLog.swift */; };
+		9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */; };
+		9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */; };
+		9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */; };
+		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */; };
@@ -526,6 +536,16 @@
 		9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintBeautifulLog.h; sourceTree = "<group>"; };
 		9AE4469128586987007DC2B5 /* Character+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTProtocol.swift; sourceTree = "<group>"; };
+		9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FileManager+PTEX.swift"; sourceTree = "<group>"; };
+		9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVExport+PTEX.swift"; sourceTree = "<group>"; };
+		9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Device+PTEX.swift"; sourceTree = "<group>"; };
+		9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+PTEX.swift"; sourceTree = "<group>"; };
+		9AE446A428598A58007DC2B5 /* PTNSLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNSLog.swift; sourceTree = "<group>"; };
+		9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISwitch+PTEX.swift"; sourceTree = "<group>"; };
+		9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDrakModeOption.swift; sourceTree = "<group>"; };
+		9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTThemeProvider.swift; sourceTree = "<group>"; };
+		9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateFormatter+PTEX.swift"; sourceTree = "<group>"; };
 		BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.release.xcconfig"; sourceTree = "<group>"; };
 		C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = MJExtension.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1098,6 +1118,16 @@
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
+				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
+				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
+				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
+				9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */,
+				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
+				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
+				9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */,
+				9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */,
+				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
+				9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1520,12 +1550,14 @@
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				231D1635272CDEE9003D6F62 /* PooDatePicker.m in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
+				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
 				231D161B272CDEE9003D6F62 /* UIColor+Random.m in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
+				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
 				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */,
@@ -1535,9 +1567,11 @@
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
 				231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */,
+				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */,
+				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
 				231D1662272CDEEA003D6F62 /* PVideoPlayer.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
@@ -1557,6 +1591,7 @@
 				231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
+				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				231D1650272CDEEA003D6F62 /* MUCheckbox.m in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
@@ -1583,6 +1618,7 @@
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */,
 				231D160E272CDEE9003D6F62 /* PooActionOnCalendar.m in Sources */,
+				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
 				231D1618272CDEE9003D6F62 /* NSDate+Category.m in Sources */,
@@ -1605,6 +1641,7 @@
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				231D165D272CDEEA003D6F62 /* SQFloatWindow.m in Sources */,
 				231D163D272CDEE9003D6F62 /* PStarRateView.m in Sources */,
+				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
@@ -1643,11 +1680,13 @@
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
+				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				231D1667272CDEEA003D6F62 /* PTPopoverFunction.m in Sources */,
 				231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
+				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				231D161D272CDEE9003D6F62 /* NSString+Encryption.m in Sources */,
 				231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */,
 				231D1624272CDEE9003D6F62 /* UINavigationItem+Excursion.m in Sources */,
@@ -1665,6 +1704,7 @@
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				231D1653272CDEEA003D6F62 /* WPTappableLabel.m in Sources */,
 				231D160C272CDEE9003D6F62 /* YMShowImageView.m in Sources */,
+				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* Extensions.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				231D1646272CDEE9003D6F62 /* IGBatchTask.m in Sources */,

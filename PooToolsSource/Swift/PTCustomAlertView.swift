@@ -342,7 +342,7 @@ public class PTCustomAlertView: UIView {
             let bottomButtonHeight = PTCustomAlertView.getBottomButtonHiehgt(font: viewFont, alertWidth: frame.size.width, moreButtonTitles: bottombuttonArray)
             bottombuttonArray.enumerated().forEach { (index,value) in
                 let cancelBtn = UIButton.init(type: .custom)
-                cancelBtn.setBackgroundImage(PTUtils.createImageWithColor(color: heightlightedColorColor), for: .highlighted)
+                cancelBtn.setBackgroundImage(heightlightedColorColor.createImageWithColor(), for: .highlighted)
                 cancelBtn.setTitleColor(value.titleColor, for: .normal)
                 cancelBtn.setTitle(value.titleName, for: .normal)
                 cancelBtn.titleLabel?.font = self.viewFont

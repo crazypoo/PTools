@@ -284,6 +284,17 @@ public class LocalConsole: NSObject {
                 hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
             }
             
+            var supportApplePencilString = ""
+            switch UIDevice.pt.supportApplePencil {
+            case .Both:
+                supportApplePencilString = "Support All"
+            case .Second:
+                supportApplePencilString = "Only Support Second"
+            case .First:
+                supportApplePencilString = "Only Support First"
+            case .BothNot:
+                supportApplePencilString = "Both Not Support"
+            }
             
             currentText = """
                     ModelName: \(SystemReport.shared.gestaltMarketingName)
@@ -293,11 +304,11 @@ public class LocalConsole: NSObject {
                     KernelVersion: \(SystemReport.shared.kernel) \(SystemReport.shared.kernelVersion)
                     SystemVersion: \(SystemReport.shared.versionString)
                     OSCompileDate: \(SystemReport.shared.compileDate)
-                    Memory: \(round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100) GB
-                    ProcessorCores: \(Int(ProcessInfo.processInfo.processorCount))
+                    Memory: \(UIDevice.pt.memoryTotal) GB
+                    ProcessorCores: \(Int(UIDevice.pt.processorCount))
                     ThermalState: \(SystemReport.shared.thermalState)
-                    SystemUptime: \(ProcessInfo.processInfo.systemUptime.formattedString!)
-                    LowPowerMode: \(ProcessInfo.processInfo.isLowPowerModeEnabled)
+                    SystemUptime: \(UIDevice.pt.systemUptime)
+                    LowPowerMode: \(UIDevice.pt.lowPowerMode)
                     IsSimulator: \(Device.current.isSimulator ? "Yes" : "No")
                     IsTouchIDCapable: \(Device.current.isTouchIDCapable ? "Yes" : "No")
                     IsFaceIDCapable: \(Device.current.isFaceIDCapable ? "Yes" : "No")
@@ -312,7 +323,7 @@ public class LocalConsole: NSObject {
                     ScreenCornerRadius: \(UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat)
                     ScreenScale: \(UIScreen.main.scale)
                     \(hzString)
-                    Brightness: \(String(format: "%.2f", UIScreen.main.brightness))
+                    Brightness: \(String(format: "%.2f", UIDevice.pt.brightness))
                     IsGuidedAccessSessionActive: \(Device.current.isGuidedAccessSessionActive ? "Yes" : "No")
                     BatteryState: \(Device.current.batteryState!)
                     BatteryLevel: \(String.init(format: "%d", Device.current.batteryLevel!))
@@ -321,13 +332,13 @@ public class LocalConsole: NSObject {
                     VolumeAvailableCapacityForImportantUsage: \(volumeAvailableCapacityForImportantUsageString)
                     VolumeAvailableCapacityForOpportunisticUsage: \(volumeAvailableCapacityForOpportunisticUsageString)
                     Volumes: \(volumesString)
-                    ApplePencilSupport: \(Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) ? (Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) ? "Support First Generation" : "Not Support Second Generation") : "Both Not Support Second Generation")
+                    ApplePencilSupport: \(String.init(format: "%@", supportApplePencilString))
                     HasCamera: \(Device.current.hasCamera ? "Yes" : "No")
                     HasNormalCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
                     HasWideCamera: \(Device.current.hasWideCamera ? "Yes" : "No")
                     HasTelephotoCamera: \(Device.current.hasTelephotoCamera ? "Yes" : "No")
                     HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
-                    IsJailBroken: \(PTUtils.isJailBroken() ? "Yes" : "No")
+                    IsJailBroken: \(UIDevice.pt.isJailBroken ? "Yes" : "No")
                     """
             if consoleActionBlock != nil
             {

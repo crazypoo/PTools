@@ -36,33 +36,17 @@ extension PTUtils
 
 @objcMembers
 public class PTUtils: NSObject {
-    
-    //MARK: 判断机型
-    ///小
-    class open func oneOfSmallDevice()->Bool
+        
+    //MARK: 类似iPhone点击了Home键
+    public class func likeTapHome()
     {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
-    }
-    
-    ///大
-    class open func oneOfPlusDevice()->Bool
-    {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
-    }
-
-    ///X
-    class open func oneOfXDevice()->Bool
-    {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
-    }
-    
-    class open func oneOfPadDevice()->Bool
-    {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
+        PTUtils.gcdMain {
+            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
+        }
     }
     
     ///ALERT真正基类
-    public class func base_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
+    public class func base_alertVC(title:String? = "",
                                    titleColor:UIColor? = UIColor.black,
                                    titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                                    msg:String? = "",
@@ -166,7 +150,7 @@ public class PTUtils: NSObject {
         showIn.present(alert, animated: true, completion: nil)
     }
 
-    public class func base_textfiele_alertVC(title:String? = NSLocalizedString("OPPS", comment: ""),
+    public class func base_textfiele_alertVC(title:String? = "",
                                              titleColor:UIColor? = UIColor.black,
                                              titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                                              okBtn:String,
@@ -276,7 +260,7 @@ public class PTUtils: NSObject {
     {
         if videoURL.isEmpty {
             //默认封面图
-            return PTUtils.createImageWithColor(color: UIColor.randomColor)
+            return UIColor.randomColor.createImageWithColor()
         }
         let aset = AVURLAsset(url: URL(fileURLWithPath: videoURL), options: nil)
         let assetImg = AVAssetImageGenerator(asset: aset)
@@ -286,7 +270,7 @@ public class PTUtils: NSObject {
             let cgimgref = try assetImg.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
             return UIImage(cgImage: cgimgref)
         }catch{
-            return PTUtils.createImageWithColor(color: UIColor.randomColor)
+            return UIColor.randomColor.createImageWithColor()
         }
     }
     
@@ -309,7 +293,6 @@ public class PTUtils: NSObject {
         }
         timer.resume()
     }
-
     
     public class func timeRunWithTime(timeInterval:TimeInterval,
                                     sender:UIButton,
@@ -337,18 +320,6 @@ public class PTUtils: NSObject {
         }
     }
     
-    public class func createImageWithColor(color:UIColor)->UIImage
-    {
-        let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
-        UIGraphicsBeginImageContext(rect.size)
-        let ccontext = UIGraphicsGetCurrentContext()
-        ccontext?.setFillColor(color.cgColor)
-        ccontext!.fill(rect)
-        let image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        return image!
-    }
-
     public class func contentTypeForUrl(url:String)->PTUrlStringVideoType
     {
         let pathEX = url.pathExtension.lowercased()
@@ -380,16 +351,7 @@ public class PTUtils: NSObject {
     
     public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
     {
-//        var newRoot:UIViewController?
         var currentVC : UIViewController?
-//        if rootVC.presentedViewController != nil
-//        {
-//            newRoot = rootVC.presentedViewController!
-//        }
-//        else
-//        {
-//            newRoot = rootVC
-//        }
         
         if rootVC is UITabBarController
         {
@@ -439,90 +401,14 @@ public class PTUtils: NSObject {
     
     public class func image(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
     {
-        return UIImage(named: name, in: bundle!, compatibleWith: traitCollection) ?? PTUtils.createImageWithColor(color: UIColor.randomColor)
+        return UIImage(named: name, in: bundle!, compatibleWith: traitCollection) ?? UIColor.randomColor.createImageWithColor()
     }
     
     public class func darkModeImage(name:String,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
     {
         return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,bundle: bundle!)
     }
-
-    //Mark:越狱检测
-    ///越狱检测
-    public class func isJailBroken()->Bool
-    {
-        let apps = ["/Applications/Cydia.app",
-                  "/Applications/limera1n.app",
-                  "/Applications/greenpois0n.app",
-                  "/Applications/blackra1n.app",
-                  "/Applications/blacksn0w.app",
-                  "/Applications/redsn0w.app",
-                  "/Applications/Absinthe.app",
-                    "/private/var/lib/apt"]
-        for app in apps
-        {
-            if FileManager.default.fileExists(atPath: app)
-            {
-                return true
-            }
-        }
-        return false
-    }
-    
-    public class func watermark(originalImage:UIImage,title:String,font:UIFont? = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
-    {
         
-        let HORIZONTAL_SPACE = 30
-        let VERTICAL_SPACE = 50
-        
-        let viewWidth = originalImage.size.width
-        let viewHeight = originalImage.size.height
-        
-        let newColor = (color == nil) ? originalImage.imageMostColor() : color
-        
-        UIGraphicsBeginImageContext(CGSize.init(width: viewWidth, height: viewHeight))
-        originalImage.draw(in: CGRect.init(x: 0, y: 0, width: viewWidth, height: viewHeight))
-        let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
-        let attr = [NSAttributedString.Key.font:font!,NSAttributedString.Key.foregroundColor:newColor!]
-        let mark : NSString = title as NSString
-        let attrStr = NSMutableAttributedString.init(string: mark as String, attributes: attr)
-        let strWidth = attrStr.size().width
-        let strHeight = attrStr.size().height
-        let context = UIGraphicsGetCurrentContext()!
-        context.concatenate(CGAffineTransform(translationX: viewWidth/2, y: viewHeight/2))
-        context.concatenate(CGAffineTransform(rotationAngle: (Double.pi / 2 / 3)))
-        context.concatenate(CGAffineTransform(translationX: -viewWidth/2, y: -viewHeight/2))
-        
-        let horCount : Int = Int(sqrtLength / (strWidth + CGFloat(HORIZONTAL_SPACE)) + 1)
-        let verCount : Int = Int(sqrtLength / (strWidth + CGFloat(VERTICAL_SPACE)) + 1)
-        
-        let orignX = -(sqrtLength - viewWidth)/2
-        let orignY = -(sqrtLength - viewHeight)/2
-
-        var tempOrignX = orignX
-        var tempOrignY = orignY
-
-        let totalCount : Int = Int(horCount * verCount)
-        for i in 0..<totalCount
-        {
-            mark.draw(in: CGRect.init(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
-            if i % horCount == 0 && i != 0
-            {
-                tempOrignX = orignX
-                tempOrignY += (strHeight + CGFloat(VERTICAL_SPACE))
-            }
-            else
-            {
-                tempOrignX += (strWidth + CGFloat(HORIZONTAL_SPACE))
-            }
-        }
-        
-        let finalImg = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        context.restoreGState()
-        return finalImg
-    }
-    
     //MARK:SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public class func gobalWebImageLoadOption()->SDWebImageOptions
@@ -543,26 +429,8 @@ public class PTUtils: NSObject {
         #endif
     }
     
-    public class func jsonStringToArray(jsonStr:String)->NSArray
-    {
-        do {
-            let tmp = try JSONSerialization.jsonObject(with: jsonStr.data(using: String.Encoding.utf8)!, options: [JSONSerialization.ReadingOptions.mutableLeaves,JSONSerialization.ReadingOptions.mutableContainers])
-            if tmp is NSArray
-            {
-                return (tmp as! NSArray)
-            }
-            else if (tmp is NSString) || (tmp is NSDictionary)
-            {
-                return NSArray.init(array: [tmp])
-            }
-        } catch {
-            return NSArray.init()
-        }
-        return NSArray.init()
-    }
-    
     //MARK: 弹出框
-    class open func gobal_drop(title:String?,titleFont:UIFont? = UIFont.appfont(size: 16),subTitle:String? = nil,subTitleFont:UIFont? = UIFont.appfont(size: 16),notifiTap:(()->Void)? = nil)
+    class open func gobal_drop(title:String?,titleFont:UIFont? = UIFont.appfont(size: 16),titleColor:UIColor? = .black,subTitle:String? = nil,subTitleFont:UIFont? = UIFont.appfont(size: 16),subTitleColor:UIColor? = .black,bannerBackgroundColor:UIColor? = .white,notifiTap:(()->Void)? = nil)
     {
         var titleStr = ""
         if title == nil || (title ?? "").stringIsEmpty()
@@ -586,13 +454,13 @@ public class PTUtils: NSObject {
                 
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
         banner.duration = 1.5
-        banner.backgroundColor = .white
+        banner.backgroundColor = bannerBackgroundColor!
         banner.subtitleLabel?.textAlignment = PTUtils.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
         banner.subtitleLabel?.font = subTitleFont
-        banner.subtitleLabel?.textColor = .black
+        banner.subtitleLabel?.textColor = subTitleColor!
         banner.titleLabel?.textAlignment = PTUtils.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
         banner.titleLabel?.font = titleFont
-        banner.titleLabel?.textColor = .black
+        banner.titleLabel?.textColor = titleColor!
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
         banner.onTap = {
             if notifiTap != nil

@@ -93,8 +93,8 @@ public class PooSegmentSubView:UIView
     lazy var underLine:UIButton = {
         let label = UIButton(type: .custom)
         
-        label.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-        label.setBackgroundImage(PTUtils.createImageWithColor(color: self.viewConfig.selectedColor_BG), for: .selected)
+        label.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+        label.setBackgroundImage(self.viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
         return label
     }()
 
@@ -115,7 +115,7 @@ public class PooSegmentSubView:UIView
             label.contentMode = .scaleAspectFit
             if subViewModels.imageURL.isURL()
             {
-                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -124,7 +124,7 @@ public class PooSegmentSubView:UIView
 
             if subViewModels.selectedImageURL.isURL()
             {
-                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -140,7 +140,7 @@ public class PooSegmentSubView:UIView
             imageBtn.setTitle(subViewModels.titles, for: .normal)
             if subViewModels.imageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -149,7 +149,7 @@ public class PooSegmentSubView:UIView
 
             if subViewModels.selectedImageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: PTUtils.createImageWithColor(color: UIColor.randomColor), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -249,11 +249,11 @@ public class PooSegmentSubView:UIView
         case .Background:
             switch buttonShowType {
             case .TitleImage:
-                imageBtn.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-                imageBtn.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG), for: .selected)
+                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
             default:
-                label.setBackgroundImage(PTUtils.createImageWithColor(color: UIColor.clear), for: .normal)
-                label.setBackgroundImage(PTUtils.createImageWithColor(color: viewConfig.selectedColor_BG), for: .selected)
+                label.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+                label.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
             }
         default:break
         }
