@@ -34,7 +34,7 @@ public class StatusBarState: NSObject {
 /// 全局状态栏状态管理单例类
 public class StatusBarManager {
     
-    static let shared = StatusBarManager()
+    public static let shared = StatusBarManager()
     
     // MARK: - 属性
     /// 状态键集合，用来判断树中是否有某个状态
