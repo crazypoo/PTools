@@ -172,6 +172,15 @@
 		6003F5A9195388D20070C39A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5A8195388D20070C39A /* Images.xcassets */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */; };
+		9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */; };
+		9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */; };
+		9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */; };
+		9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */; };
+		9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */; };
+		9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */; };
+		9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */; };
+		9A14E98E28616B4E00D7E8EF /* LLCycleScrollView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */; };
 		9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467928585C26007DC2B5 /* Array+PTEX.swift */; };
 		9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */; };
 		9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */; };
@@ -522,6 +531,15 @@
 		8547CFF61C7FE8C255805D38 /* Pods_PooTools_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PooTools_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
+		9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+PTEX.swift"; sourceTree = "<group>"; };
+		9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollView.swift; sourceTree = "<group>"; };
+		9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLImagePageControl.swift; sourceTree = "<group>"; };
+		9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLSnakePageControl.swift; sourceTree = "<group>"; };
+		9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLViewExtensions.swift; sourceTree = "<group>"; };
+		9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLFilledPageControl.swift; sourceTree = "<group>"; };
+		9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollViewCell.swift; sourceTree = "<group>"; };
+		9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLPillPageControl.swift; sourceTree = "<group>"; };
+		9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LLCycleScrollView.bundle; sourceTree = "<group>"; };
 		9AE4467928585C26007DC2B5 /* Array+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+PTEX.swift"; sourceTree = "<group>"; };
@@ -1075,6 +1093,14 @@
 				231D15CD272CDEE9003D6F62 /* Extensions.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
+				9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */,
+				9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */,
+				9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */,
+				9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */,
+				9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */,
+				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
+				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
+				9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */,
 				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
@@ -1117,6 +1143,7 @@
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
+				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
@@ -1394,7 +1421,7 @@
 				ORGANIZATIONNAME = crazypoo;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = 986L673D8L;
+						DevelopmentTeam = F3769T9JM8;
 						LastSwiftMigration = 1100;
 					};
 				};
@@ -1425,6 +1452,7 @@
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
+				9A14E98E28616B4E00D7E8EF /* LLCycleScrollView.bundle in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				231D14D5272CDD2C003D6F62 /* README.md in Resources */,
@@ -1558,6 +1586,7 @@
 				231D161B272CDEE9003D6F62 /* UIColor+Random.m in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
+				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
 				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */,
@@ -1566,6 +1595,7 @@
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
+				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */,
@@ -1589,7 +1619,9 @@
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
 				231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */,
+				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
+				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				231D1650272CDEEA003D6F62 /* MUCheckbox.m in Sources */,
@@ -1609,6 +1641,7 @@
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				231D164B272CDEE9003D6F62 /* IGJSONModel.m in Sources */,
 				231D1633272CDEE9003D6F62 /* PooPieChart.m in Sources */,
+				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
 				231D165E272CDEEA003D6F62 /* YNPayPasswordView.m in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
@@ -1648,6 +1681,7 @@
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				231D164C272CDEEA003D6F62 /* IGHTTPClient.m in Sources */,
+				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
 				231D1616272CDEE9003D6F62 /* CGImaginaryLine.m in Sources */,
@@ -1673,6 +1707,7 @@
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
+				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
 				231D165C272CDEEA003D6F62 /* PMotion.m in Sources */,
 				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
@@ -1711,6 +1746,7 @@
 				231D1648272CDEE9003D6F62 /* IGTestParser.m in Sources */,
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
+				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				231D1611272CDEE9003D6F62 /* PooLoadingView.m in Sources */,
@@ -1874,7 +1910,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 986L673D8L;
+				DEVELOPMENT_TEAM = F3769T9JM8;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
@@ -1914,7 +1950,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 986L673D8L;
+				DEVELOPMENT_TEAM = F3769T9JM8;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";

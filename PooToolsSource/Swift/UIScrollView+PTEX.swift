@@ -12,7 +12,7 @@ import MJRefresh
 public extension UIScrollView {
     
     /// 自动判断上拉或下拉结束正在刷新状态
-    func bk_endMJRefresh() {
+   @objc func bk_endMJRefresh() {
         
         if mj_header != nil {
             if mj_header!.isRefreshing {
@@ -35,13 +35,3 @@ public extension UIScrollView {
     }
 }
 
-//MARK: 防止刷新时候屏幕闪一下
-public extension UICollectionView
-{
-    @objc func reloadDataWithOutAnimation()
-    {
-        UIView.performWithoutAnimation {
-            self.reloadData()
-        }
-    }
-}
