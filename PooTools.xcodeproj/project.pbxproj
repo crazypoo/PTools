@@ -180,7 +180,6 @@
 		9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */; };
 		9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */; };
 		9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */; };
-		9A14E98E28616B4E00D7E8EF /* LLCycleScrollView.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */; };
 		9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467928585C26007DC2B5 /* Array+PTEX.swift */; };
 		9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */; };
 		9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */; };
@@ -539,7 +538,6 @@
 		9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLFilledPageControl.swift; sourceTree = "<group>"; };
 		9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollViewCell.swift; sourceTree = "<group>"; };
 		9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLPillPageControl.swift; sourceTree = "<group>"; };
-		9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LLCycleScrollView.bundle; sourceTree = "<group>"; };
 		9AE4467928585C26007DC2B5 /* Array+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+PTEX.swift"; sourceTree = "<group>"; };
@@ -1093,7 +1091,6 @@
 				231D15CD272CDEE9003D6F62 /* Extensions.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
-				9A14E98D28616B4D00D7E8EF /* LLCycleScrollView.bundle */,
 				9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */,
 				9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */,
 				9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */,
@@ -1452,7 +1449,6 @@
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
-				9A14E98E28616B4E00D7E8EF /* LLCycleScrollView.bundle in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				231D14D5272CDD2C003D6F62 /* README.md in Resources */,

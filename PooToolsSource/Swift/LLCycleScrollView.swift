@@ -45,7 +45,7 @@ public enum PageControlPosition {
 public typealias LLdidSelectItemAtIndexClosure = (NSInteger) -> Void
 
 
-open class LLCycleScrollView: UIView {
+public class LLCycleScrollView: UIView {
     // MAKR: DataSource
     /// Image Paths
     open var imagePaths: Array<String> = [] {
@@ -292,10 +292,10 @@ open class LLCycleScrollView: UIView {
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
     
     /// 加载状态图
-    fileprivate var placeHolderViewImage: UIImage! = UIImage(named: "LLCycleScrollView.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
+    fileprivate var placeHolderViewImage: UIImage! = UIImage(named: "PooTools.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
     
     /// 空数据占位图
-    fileprivate var coverViewImage: UIImage! = UIImage(named: "LLCycleScrollView.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
+    fileprivate var coverViewImage: UIImage! = UIImage(named: "PooTools.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
     
     /// 计时器
     fileprivate var dtimer: DispatchSourceTimer?
