@@ -29,9 +29,6 @@ CGFloat const tagItemSpace = 5;
 #import <GCDWebServer/GCDWebUploader.h>
 #import "PGetIpAddresses.h"
 
-#import "PADView.h"
-#import "IGBannerView.h"
-
 #import "PStarRateView.h"
 
 #import "PooSegView.h"
@@ -42,9 +39,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "PLabel.h"
 #import "UICountingLabel.h"
-
-#import "PooDatePicker.h"
-#import "PTNormalPicker.h"
 
 #import "CountryCodes.h"
 
@@ -65,7 +59,7 @@ CGFloat const tagItemSpace = 5;
 
 #define DelaySecond 1
 
-@interface PTShowFunctionViewController ()<GCDWebUploaderDelegate,PooTimePickerDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextViewDelegate>
+@interface PTShowFunctionViewController ()<GCDWebUploaderDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextViewDelegate>
 @property (nonatomic,assign)ShowFunction showType;
 
 @property (nonatomic, strong) GCDWebUploader *webServer;
@@ -196,29 +190,6 @@ CGFloat const tagItemSpace = 5;
             break;
             case ShowFunctionCollectionAD:
         {
-            CGAdBannerModel *aaaaa = [[CGAdBannerModel alloc] init];
-            aaaaa.bannerTitle = @"111111";
-            aaaaa.bannerImage = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-            
-            PADView *adaaaa = [[PADView alloc] initWithAdArray:@[aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa,aaaaa] singleADW:kSCREEN_WIDTH singleADH:150 paddingY:5 paddingX:5 placeholderImage:@"DemoImage" pageTime:1 adTitleFont:kDEFAULT_FONT(FontName, 19) pageIndicatorTintColor:[UIColor lightGrayColor] currentPageIndicatorTintColor:[UIColor redColor] pageEnable:NO];
-            [self.view addSubview:adaaaa];
-            [adaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
-                make.height.offset(160);
-                make.left.right.equalTo(self.view);
-            }];
-            
-            IGBannerView *banner = [[IGBannerView alloc] initWithFrame:CGRectMake(0, HEIGHT_NAVBAR*2+160+10, kSCREEN_WIDTH, 100) bannerItems:@[[IGBannerItem itemWithTitle:@"广告1" imageUrl:@"" tag:0],[IGBannerItem itemWithTitle:@"广告2" imageUrl:@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg" tag:1]] bannerPlaceholderImage:kImageNamed(@"DemoImage")];
-            banner.pageControlBackgroundColor = [UIColor clearColor];
-            banner.titleBackgroundColor = [UIColor clearColor];
-            banner.titleColor = [UIColor clearColor];
-//            banner.delegate                   = self;
-            banner.autoScrolling              = YES;
-            banner.titleFont = kDEFAULT_FONT(FontName,14);
-            [self.view addSubview:banner];
-            banner.bannerTapBlock = ^(IGBannerView *bannerView, IGBannerItem *bannerItem) {
-                PNSLog(@">>>>>>>>>>%@",bannerItem);
-            };
         }
             break;
             case ShowFunctionStarRate:
@@ -730,46 +701,15 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            PooDatePicker *view = [[PooDatePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerType:PPickerTypeYMD pickerBackgroundColor:kRandomColor pickerFontColor:kRandomColor inPutDataString:nil pickerStartTime:@"2015"];
-            [view pickerShow];
-            view.block = ^(NSString *dateString) {
-                PNSLog(@">>>>>>>>>>>%@",dateString);
-            };
         }
             break;
         case 1:
         {
-            PooTimePicker *view = [[PooTimePicker alloc] initWithTitle:@"1111" toolBarBackgroundColor:kRandomColor labelFont:APPFONT(16) toolBarTitleColor:kRandomColor pickerFont:APPFONT(16) pickerBackgroundColor:kRandomColor pickerFontColor:kRandomColor];
-            view.delegate = self;
-            [view pickerShow];
-            //    view.block = ^(NSString *dateString) {
-            //        PNSLog(@">>>>>>>>>>>%@",dateString);
-            //    };
-            
-            [view customPickerView:view.pickerView didSelectRow:10 inComponent:0];
-            [view customSelectRow:10 inComponent:0 animated:YES];
-            
-            [view customPickerView:view.pickerView didSelectRow:1 inComponent:1];
-            [view customSelectRow:1 inComponent:1 animated:YES];
-            view.dismissBlock = ^(PooTimePicker *timePicker) {
-                [timePicker removeFromSuperview];
-                timePicker = nil;
-            };
             
         }
             break;
         case 2:
         {
-            PTNormalPickerModel *aaaaa = [PTNormalPickerModel new];
-            aaaaa.pickerTitle = @"1111111";
-            PTNormalPickerModel *bbbbbb = [PTNormalPickerModel new];
-            bbbbbb.pickerTitle = @"222222222";
-
-            PTNormalPicker *nP = [[PTNormalPicker alloc] initWithNormalPickerBackgroundColor:kRandomColor withTapBarBGColor:[UIColor blueColor] withTitleAndBtnTitleColor:[UIColor whiteColor] withPickerTitleColor:kRandomColor withTitleFont:APPFONT(18) withPickerData:@[aaaaa,bbbbbb] withPickerTitle:@"111111111111312312312312312312312312312312312312312312312" checkPickerCurrentRow:@"1111111"];
-            nP.returnBlock = ^(PTNormalPicker *normalPicker, PTNormalPickerModel *pickerModel) {
-                PNSLog(@">>>>>>>>>>>>%@>>>>>>>>>>%@>>>>>>>>>>>>>>>%@",normalPicker,pickerModel.pickerTitle,pickerModel.pickerIndexPath);
-            };
-            [nP pickerShow];
 //            [[PTAppDelegate appDelegate].window addSubview:nP];
 //            [nP mas_makeConstraints:^(MASConstraintMaker *make) {
 //                make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
@@ -851,17 +791,6 @@ CGFloat const tagItemSpace = 5;
 
 - (void)webUploader:(GCDWebUploader*)uploader didCreateDirectoryAtPath:(NSString*)path {
     NSLog(@"[CREATE] %@", path);
-}
-
-#pragma mark - <PooTimePickerDelegate>
--(void)timePickerReturnStr:(NSString *)timeStr timePicker:(PooTimePicker *)timePicker
-{
-    PNSLog(@">>>>>>>>>>>>>%@",timeStr);
-}
-
--(void)timePickerDismiss:(PooTimePicker *)timePicker
-{
-    PNSLog(@">>>>>>>>>>>>>%@",timePicker);
 }
 
 #pragma mark ------> UIPickerViewDataSource

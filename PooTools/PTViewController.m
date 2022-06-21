@@ -25,8 +25,6 @@
 #import <IQKeyboardManager/IQKeyboardManager.h>
 #import <WebKit/WebKit.h>
 
-#import "PooSystemInfo.h"
-
 #import "MXRotationManager.h"
 
 #import <PooTools/PooTools-Swift.h>
@@ -265,21 +263,14 @@ static NSString *cellIdentifier = @"CELL";
                         isiPhoneX = @"否";
                     }
                     
-                    NSString *isJailBroken;
-                    if ([PooSystemInfo isJailBroken]) {
-                        isJailBroken = @"是";
-                    }
-                    else
-                    {
-                        isJailBroken = @"否";
-                    }
+                    NSString *isJailBroken = @"";
                     
                     UILabel *infoLabel = [UILabel new];
                     infoLabel.textColor = [UIColor blackColor];
                     infoLabel.textAlignment = NSTextAlignmentCenter;
                     infoLabel.numberOfLines = 0;
                     infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,[PTCarrie currentRadioAccessTechnology],isJailBroken,[PooSystemInfo getDeviceVersion]];
+                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,[PTCarrie currentRadioAccessTechnology],isJailBroken,@"???"];
                     [cell.contentView addSubview:infoLabel];
                     [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.top.equalTo(functionName.mas_bottom);

@@ -24,8 +24,6 @@
 #import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 
-#import "SQFloatWindow.h"
-
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
  //重装后先登录
