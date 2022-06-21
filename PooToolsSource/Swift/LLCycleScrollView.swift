@@ -301,7 +301,7 @@ public class LLCycleScrollView: UIView {
     fileprivate var dtimer: DispatchSourceTimer?
     
     /// 容器组件 UICollectionView
-    var collectionView: UICollectionView!
+    open var collectionView: UICollectionView!
     
     // Identifier
     fileprivate let identifier = "LLCycleScrollViewCell"
