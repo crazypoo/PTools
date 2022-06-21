@@ -37,6 +37,9 @@ extension PTUtils
 @objcMembers
 public class PTUtils: NSObject {
         
+    public static let share = PTUtils()
+    public var timer:DispatchSourceTimer?
+
     //MARK: 类似iPhone点击了Home键
     public class func likeTapHome()
     {
@@ -259,9 +262,9 @@ public class PTUtils: NSObject {
     public class func timeRunWithTime_base(timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
     {
         var newCount = Int(timeInterval) + 1
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-        timer.schedule(deadline: .now(), repeating: .seconds(1))
-        timer.setEventHandler {
+        PTUtils.share.timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
+        PTUtils.share.timer!.schedule(deadline: .now(), repeating: .seconds(1))
+        PTUtils.share.timer!.setEventHandler {
             DispatchQueue.main.async {
                 newCount -= 1
                 finishBlock(false,newCount)
@@ -269,11 +272,12 @@ public class PTUtils: NSObject {
                     DispatchQueue.main.async {
                         finishBlock(true,0)
                     }
-                    timer.cancel()
+                    PTUtils.share.timer!.cancel()
+                    PTUtils.share.timer = nil
                 }
             }
         }
-        timer.resume()
+        PTUtils.share.timer!.resume()
     }
     
     public class func timeRunWithTime(timeInterval:TimeInterval,

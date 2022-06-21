@@ -180,6 +180,9 @@
 		9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */; };
 		9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */; };
 		9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */; };
+		9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */; };
+		9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */; };
+		9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */; };
 		9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467928585C26007DC2B5 /* Array+PTEX.swift */; };
 		9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */; };
 		9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */; };
@@ -538,6 +541,9 @@
 		9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLFilledPageControl.swift; sourceTree = "<group>"; };
 		9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollViewCell.swift; sourceTree = "<group>"; };
 		9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLPillPageControl.swift; sourceTree = "<group>"; };
+		9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+PTEX.swift"; sourceTree = "<group>"; };
+		9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float+PTEX.swift"; sourceTree = "<group>"; };
+		9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLanguage.swift; sourceTree = "<group>"; };
 		9AE4467928585C26007DC2B5 /* Array+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+PTEX.swift"; sourceTree = "<group>"; };
@@ -1152,6 +1158,9 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
+				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
+				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
+				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1587,6 +1596,7 @@
 				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */,
 				231D1666272CDEEA003D6F62 /* PVideoSupport.m in Sources */,
+				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1641272CDEE9003D6F62 /* IGBatchTaskManager.m in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
@@ -1643,6 +1653,7 @@
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D169F272CDEEA003D6F62 /* IGBannerItem.m in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
+				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				231D1623272CDEE9003D6F62 /* UIView+MLScreenshot.m in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */,
@@ -1728,6 +1739,7 @@
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */,
 				231D1658272CDEEA003D6F62 /* PSlider.m in Sources */,
+				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
 				231D1652272CDEEA003D6F62 /* WPHotspotLabel.m in Sources */,
 				231D1665272CDEEA003D6F62 /* PVideoViewController.m in Sources */,
