@@ -263,9 +263,9 @@ public class PTUtils: NSObject {
     {
         let customQueue = DispatchQueue(label: customQueName)
         var newCount = Int(timeInterval) + 1
-        let timer = DispatchSource.makeTimerSource(flags: [], queue: customQueue)
-        timer.schedule(deadline: .now(), repeating: .seconds(1))
-        timer.setEventHandler {
+        PTUtils.share.timer = DispatchSource.makeTimerSource(flags: [], queue: customQueue)
+        PTUtils.share.timer!.schedule(deadline: .now(), repeating: .seconds(1))
+        PTUtils.share.timer!.setEventHandler {
             DispatchQueue.main.async {
                 newCount -= 1
                 finishBlock(false,newCount)
@@ -273,29 +273,12 @@ public class PTUtils: NSObject {
                     DispatchQueue.main.async {
                         finishBlock(true,0)
                     }
-                    timer.cancel()
-//                    PTUtils.share.timer = nil
+                    PTUtils.share.timer!.cancel()
+                    PTUtils.share.timer = nil
                 }
             }
         }
-        timer.resume()
-//
-//        PTUtils.share.timer = DispatchSource.makeTimerSource(flags: [], queue: customQueue)
-//        PTUtils.share.timer!.schedule(deadline: .now(), repeating: .seconds(1))
-//        PTUtils.share.timer!.setEventHandler {
-//            DispatchQueue.main.async {
-//                newCount -= 1
-//                finishBlock(false,newCount)
-//                if newCount < 1 {
-//                    DispatchQueue.main.async {
-//                        finishBlock(true,0)
-//                    }
-//                    PTUtils.share.timer!.cancel()
-//                    PTUtils.share.timer = nil
-//                }
-//            }
-//        }
-//        PTUtils.share.timer!.resume()
+        PTUtils.share.timer!.resume()
     }
     
     public class func timeRunWithTime(timeInterval:TimeInterval,
