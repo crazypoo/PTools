@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // MARK: - 状态栏扩展
 public extension UIViewController {
@@ -123,4 +124,36 @@ public extension UIViewController {
         return false
     }
 
+    @objc func popover(popoverVC:UIViewController,contentView:UIView,sender:UIButton,arrowDirections:UIPopoverArrowDirection)
+    {
+        PTUtils.gcdAfter(time: 0.1) {
+            popoverVC.preferredContentSize = contentView.bounds.size
+            popoverVC.modalPresentationStyle = .popover
+            popoverVC.view.addSubview(contentView)
+            contentView.snp.makeConstraints { make in
+                make.edges.equalTo(popoverVC.view)
+            }
+            
+            let presentationCtr = popoverVC.popoverPresentationController
+            presentationCtr?.sourceView = sender
+            presentationCtr?.sourceRect = sender.bounds
+            presentationCtr?.permittedArrowDirections = arrowDirections
+            presentationCtr?.delegate = self
+            if (self.navigationController?.viewControllers.count ?? 0) > 0
+            {
+                self.navigationController?.present(popoverVC, animated: true)
+            }
+            else
+            {
+                self.present(popoverVC, animated: true)
+            }
+        }
+    }
+}
+
+extension UIViewController:UIPopoverPresentationControllerDelegate
+{
+    public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
+    }
 }

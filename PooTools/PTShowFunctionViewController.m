@@ -48,8 +48,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "UIImage+BlurGlass.h"
 
-#import "PTPopoverFunction.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -686,9 +684,8 @@ CGFloat const tagItemSpace = 5;
         {
             UIView *views = [UIView new];
             views.backgroundColor = kRandomColor;
-
-            [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
-            }];
+            views.bounds = CGRectMake(0, 0, 100, 300);
+            [self popoverWithPopoverVC:[[UIViewController alloc] init] contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
         }
             break;
         default:

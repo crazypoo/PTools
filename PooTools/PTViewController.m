@@ -32,11 +32,9 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-#import "PTPopoverFunction.h"
-
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource>
+@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate>
 {
 }
 @property (nonatomic, strong) PTBiologyID *touchID;
@@ -77,9 +75,12 @@
         make.left.right.top.bottom.equalTo(self.view);
     }];
     
+    self.popover = [[UIViewController alloc] init];
+    
     kAdaptedOtherFontSize(@"", 16);
     UIView *views = [UIView new];
-    views.backgroundColor = kRandomColor;
+    views.backgroundColor = [UIColor redColor];
+    views.bounds = CGRectMake(0, 0, 100, 300);
     
     UIButton *views2 = [UIButton buttonWithType:UIButtonTypeCustom];
     views2.backgroundColor = kRandomColor;
@@ -97,22 +98,11 @@
         {
             [(UIViewController *)self.popover dismissViewControllerAnimated:YES completion:^{
                 PNSLog(@"4444444444");
-                self.popover = nil;
+//                self.popover = nil;
             }];
         }
     }];
     
-    UIButton *aaaaaaaa = [UIButton buttonWithType:UIButtonTypeCustom];
-    [aaaaaaaa setTitleColor:kRandomColor forState:UIControlStateNormal];
-    [aaaaaaaa setTitle:@"11111" forState:UIControlStateNormal];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:aaaaaaaa];
-    [aaaaaaaa addActionHandlersWithHandler:^(UIButton *sender) {
-        PNSLog(@"111111");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 400) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny
-                                       withPopover:^(id  _Nonnull popoverView) {
-            self.popover = popoverView;
-        }];
-    }];
 
     UIButton *bbbbbbbbb = [UIButton buttonWithType:UIButtonTypeCustom];
     [bbbbbbbbb setTitleColor:kRandomColor forState:UIControlStateNormal];
@@ -120,29 +110,9 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
     [bbbbbbbbb addActionHandlersWithHandler:^(UIButton *sender) {
         PNSLog(@"222222222");
-        [PTPopoverFunction initWithContentViewSize:CGSizeMake(100, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionRight withPopover:^(id  _Nonnull popoverView) {
-            self.popover = popoverView;
-        }];
+        
+        [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
     }];
-
-    
-//    UIButton *cccccccc = [UIButton buttonWithType:UIButtonTypeCustom];
-//    cccccccc.backgroundColor = kRandomColor;
-//    [cccccccc setTitleColor:kRandomColor forState:UIControlStateNormal];
-//    [cccccccc setTitle:@"3333333333" forState:UIControlStateNormal];
-//    [self.view addSubview:cccccccc];
-//    [cccccccc mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.width.height.offset(100);
-//        make.centerX.equalTo(self.view);
-////        make.right.equalTo(self.view);
-//        make.top.equalTo(self.view).offset(400);
-//    }];
-//    [cccccccc addActionHandler:^(UIButton *sender) {
-//        PNSLog(@"33333");
-//        [PTPopoverFunction initWithContentViewSize:CGSizeMake(200, 300) withContentView:views withSender:sender withSenderFrame:sender.bounds withArrowDirections:UIPopoverArrowDirectionAny withPopover:^(id  _Nonnull popoverView) {
-//            self.popover = popoverView;
-//        }];
-//    }];
 }
 
 -(void)aaaaa
@@ -624,6 +594,11 @@ static NSString *cellIdentifier = @"CELL";
     alerts.didDismissBlock = ^(PTCustomAlertView * alertView) {
         dBlock();
     };
+}
+
+- (UIModalPresentationStyle)adaptivePresentationStyleForPresentationController:(UIPresentationController *)controller
+{
+    return UIModalPresentationNone;
 }
 
 @end

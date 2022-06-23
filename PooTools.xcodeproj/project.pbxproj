@@ -93,7 +93,6 @@
 		231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A9272CDEE9003D6F62 /* PVideoConfig.m */; };
 		231D1665272CDEEA003D6F62 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15AA272CDEE9003D6F62 /* PVideoViewController.m */; };
 		231D1666272CDEEA003D6F62 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15AD272CDEE9003D6F62 /* PVideoSupport.m */; };
-		231D1667272CDEEA003D6F62 /* PTPopoverFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B1272CDEE9003D6F62 /* PTPopoverFunction.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
 		231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B5272CDEE9003D6F62 /* PTLabel.swift */; };
@@ -400,8 +399,6 @@
 		231D15AC272CDEE9003D6F62 /* PVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoPlayer.h; sourceTree = "<group>"; };
 		231D15AD272CDEE9003D6F62 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
 		231D15AE272CDEE9003D6F62 /* PVideoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoConfig.h; sourceTree = "<group>"; };
-		231D15B0272CDEE9003D6F62 /* PTPopoverFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTPopoverFunction.h; sourceTree = "<group>"; };
-		231D15B1272CDEE9003D6F62 /* PTPopoverFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTPopoverFunction.m; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
 		231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUrlChange.swift; sourceTree = "<group>"; };
 		231D15B5272CDEE9003D6F62 /* PTLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTLabel.swift; sourceTree = "<group>"; };
@@ -645,7 +642,6 @@
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
-				231D15AF272CDEE9003D6F62 /* PopoverViewForiPad */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D1544272CDEE9003D6F62 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotamation */,
@@ -992,15 +988,6 @@
 				231D15AE272CDEE9003D6F62 /* PVideoConfig.h */,
 			);
 			path = WeChatLittleVideo;
-			sourceTree = "<group>";
-		};
-		231D15AF272CDEE9003D6F62 /* PopoverViewForiPad */ = {
-			isa = PBXGroup;
-			children = (
-				231D15B0272CDEE9003D6F62 /* PTPopoverFunction.h */,
-				231D15B1272CDEE9003D6F62 /* PTPopoverFunction.m */,
-			);
-			path = PopoverViewForiPad;
 			sourceTree = "<group>";
 		};
 		231D15B2272CDEE9003D6F62 /* Swift */ = {
@@ -1394,6 +1381,7 @@
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/LTNavigationBar/LTNavigationBar.framework",
+				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
@@ -1432,6 +1420,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTNavigationBar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
@@ -1618,7 +1607,6 @@
 				231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
-				231D1667272CDEEA003D6F62 /* PTPopoverFunction.m in Sources */,
 				231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
