@@ -28,6 +28,7 @@
  ░░░░░░░░░▒▒▒▒▒▒▒▒▒▒▀▀░░░░░░░░
  */
 
+//pod 'PhoneNumberKit', '~> 3.4'
 //导入次工具时，一定要在Build Settings->other links flags加入-ObjC
 //lipo -create xxxxxxxx/xxxxxxxxx(真机) xxxxxxxxx/xxxxxxxxx(模拟器) -output (输出路径)
 #ifndef PTools_PTInputAll_h
