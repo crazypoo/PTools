@@ -259,12 +259,13 @@ public class PTUtils: NSObject {
         return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
     }
     
-    public class func timeRunWithTime_base(timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
+    public class func timeRunWithTime_base(customQueName:String,timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
     {
+        let customQueue = DispatchQueue(label: customQueName)
         var newCount = Int(timeInterval) + 1
-        PTUtils.share.timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
-        PTUtils.share.timer!.schedule(deadline: .now(), repeating: .seconds(1))
-        PTUtils.share.timer!.setEventHandler {
+        let timer = DispatchSource.makeTimerSource(flags: [], queue: customQueue)
+        timer.schedule(deadline: .now(), repeating: .seconds(1))
+        timer.setEventHandler {
             DispatchQueue.main.async {
                 newCount -= 1
                 finishBlock(false,newCount)
@@ -272,12 +273,29 @@ public class PTUtils: NSObject {
                     DispatchQueue.main.async {
                         finishBlock(true,0)
                     }
-                    PTUtils.share.timer!.cancel()
-                    PTUtils.share.timer = nil
+                    timer.cancel()
+//                    PTUtils.share.timer = nil
                 }
             }
         }
-        PTUtils.share.timer!.resume()
+        timer.resume()
+//
+//        PTUtils.share.timer = DispatchSource.makeTimerSource(flags: [], queue: customQueue)
+//        PTUtils.share.timer!.schedule(deadline: .now(), repeating: .seconds(1))
+//        PTUtils.share.timer!.setEventHandler {
+//            DispatchQueue.main.async {
+//                newCount -= 1
+//                finishBlock(false,newCount)
+//                if newCount < 1 {
+//                    DispatchQueue.main.async {
+//                        finishBlock(true,0)
+//                    }
+//                    PTUtils.share.timer!.cancel()
+//                    PTUtils.share.timer = nil
+//                }
+//            }
+//        }
+//        PTUtils.share.timer!.resume()
     }
     
     public class func timeRunWithTime(timeInterval:TimeInterval,
@@ -286,7 +304,7 @@ public class PTUtils: NSObject {
                                     canTap:Bool,
                                 timeFinish:(()->Void)?)
     {
-        PTUtils.timeRunWithTime_base(timeInterval: timeInterval) { finish, time in
+        PTUtils.timeRunWithTime_base(customQueName:"TimeFunction",timeInterval: timeInterval) { finish, time in
             if finish
             {
                 sender.setTitle(originalTitle, for: .normal)

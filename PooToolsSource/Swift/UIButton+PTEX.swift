@@ -28,7 +28,7 @@ public extension UIButton
     
     func timeRunWithTime(timeInterval:TimeInterval,originalTitle:String,canTap:Bool,timeFinish:(()->Void)?)
     {
-        PTUtils.timeRunWithTime_base(timeInterval: timeInterval) { finish, time in
+        PTUtils.timeRunWithTime_base(customQueName:"ButtonFunction",timeInterval: timeInterval) { finish, time in
             if finish
             {
                 self.setTitle(originalTitle, for: .normal)

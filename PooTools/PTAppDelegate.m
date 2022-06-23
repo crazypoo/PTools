@@ -209,6 +209,14 @@
     };
     [self.window addSubview:aasdasd];
 
+    
+    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
+        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);
+    }];
+    
+    [PTUtils timeRunWithTime_baseWithCustomQueName:@"222222" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
+        PNSLog(@"2222222%d>>>>>>%ld",finish,(long)time);
+    }];
     return YES;
 }
 
