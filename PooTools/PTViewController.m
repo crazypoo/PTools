@@ -529,7 +529,7 @@ static NSString *cellIdentifier = @"CELL";
             break;
         case 11:
         {
-            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:50 initCustomView:^(UIView *customView) {
+            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:150 initCustomView:^(UIView *customView) {
                 PSlider *slider = [PSlider new];
                 [customView addSubview:slider];
                 [slider mas_makeConstraints:^(MASConstraintMaker *make) {

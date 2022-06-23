@@ -47,7 +47,6 @@
 #import "UIView+ModifyFrame.h"
 #import "UIView+ViewShaking.h"
 #import "UIViewController+TopBarMessage.h"
-#import "PooPieChart.h"
 #import "MUCheckbox.h"
 #import "SensitiveWordTools.h"
 #import "CountryCodes.h"
@@ -111,7 +110,6 @@
 #import "PVideoPlayer.h"
 #import "PVideoSupport.h"
 #import "PVideoViewController.h"
-#import "YNPayPasswordView.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];

@@ -49,7 +49,6 @@
 		231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1526272CDEE9003D6F62 /* UIColor+Colours.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D1632272CDEE9003D6F62 /* NSString+MoneyString.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D152A272CDEE9003D6F62 /* NSString+MoneyString.m */; };
-		231D1633272CDEE9003D6F62 /* PooPieChart.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D152D272CDEE9003D6F62 /* PooPieChart.m */; };
 		231D1636272CDEE9003D6F62 /* SecurityStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1536272CDEE9003D6F62 /* SecurityStrategy.m */; };
 		231D1637272CDEE9003D6F62 /* PTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1538272CDEE9003D6F62 /* PTextField.m */; };
 		231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153A272CDEE9003D6F62 /* HPGrowingTextView.m */; };
@@ -84,7 +83,6 @@
 		231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158E272CDEE9003D6F62 /* PGetIpAddresses.m */; };
 		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
 		231D165C272CDEEA003D6F62 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1593272CDEE9003D6F62 /* PMotion.m */; };
-		231D165E272CDEEA003D6F62 /* YNPayPasswordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159B272CDEE9003D6F62 /* YNPayPasswordView.m */; };
 		231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159E272CDEE9003D6F62 /* EasySignatureView.m */; };
 		231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159F272CDEE9003D6F62 /* PopSignatureView.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
@@ -304,8 +302,6 @@
 		231D1528272CDEE9003D6F62 /* NSString+Regulars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
 		231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
 		231D152A272CDEE9003D6F62 /* NSString+MoneyString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MoneyString.m"; sourceTree = "<group>"; };
-		231D152C272CDEE9003D6F62 /* PooPieChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooPieChart.h; sourceTree = "<group>"; };
-		231D152D272CDEE9003D6F62 /* PooPieChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooPieChart.m; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
 		231D1535272CDEE9003D6F62 /* SecurityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityStrategy.h; sourceTree = "<group>"; };
 		231D1536272CDEE9003D6F62 /* SecurityStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
@@ -381,8 +377,6 @@
 		231D1591272CDEE9003D6F62 /* PGetIpAddresses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGetIpAddresses.h; sourceTree = "<group>"; };
 		231D1593272CDEE9003D6F62 /* PMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
 		231D1594272CDEE9003D6F62 /* PMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMotion.h; sourceTree = "<group>"; };
-		231D159A272CDEE9003D6F62 /* YNPayPasswordView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YNPayPasswordView.h; sourceTree = "<group>"; };
-		231D159B272CDEE9003D6F62 /* YNPayPasswordView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YNPayPasswordView.m; sourceTree = "<group>"; };
 		231D159D272CDEE9003D6F62 /* PopSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopSignatureView.h; sourceTree = "<group>"; };
 		231D159E272CDEE9003D6F62 /* EasySignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasySignatureView.m; sourceTree = "<group>"; };
 		231D159F272CDEE9003D6F62 /* PopSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopSignatureView.m; sourceTree = "<group>"; };
@@ -626,7 +620,6 @@
 				231D14ED272CDEE9003D6F62 /* BugReport */,
 				231D14DD272CDEE9003D6F62 /* Calendar */,
 				231D14F3272CDEE9003D6F62 /* Category */,
-				231D152B272CDEE9003D6F62 /* Chat */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				231D15F9272CDEE9003D6F62 /* Country */,
@@ -653,7 +646,6 @@
 				231D154A272CDEE9003D6F62 /* Thermometer */,
 				231D15E2272CDEE9003D6F62 /* UniTool */,
 				231D15A4272CDEE9003D6F62 /* WeChatLittleVideo */,
-				231D1599272CDEE9003D6F62 /* WeChatPassWord */,
 			);
 			path = PooToolsSource;
 			sourceTree = SOURCE_ROOT;
@@ -775,15 +767,6 @@
 				231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */,
 			);
 			path = Category;
-			sourceTree = "<group>";
-		};
-		231D152B272CDEE9003D6F62 /* Chat */ = {
-			isa = PBXGroup;
-			children = (
-				231D152C272CDEE9003D6F62 /* PooPieChart.h */,
-				231D152D272CDEE9003D6F62 /* PooPieChart.m */,
-			);
-			path = Chat;
 			sourceTree = "<group>";
 		};
 		231D1534272CDEE9003D6F62 /* SecurityView */ = {
@@ -916,10 +899,10 @@
 		231D1586272CDEE9003D6F62 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
-				231D1587272CDEE9003D6F62 /* DoubleSliderView.m */,
-				231D1588272CDEE9003D6F62 /* PSlider.m */,
 				231D1589272CDEE9003D6F62 /* DoubleSliderView.h */,
+				231D1587272CDEE9003D6F62 /* DoubleSliderView.m */,
 				231D158A272CDEE9003D6F62 /* PSlider.h */,
+				231D1588272CDEE9003D6F62 /* PSlider.m */,
 			);
 			path = Slider;
 			sourceTree = "<group>";
@@ -942,15 +925,6 @@
 				231D1594272CDEE9003D6F62 /* PMotion.h */,
 			);
 			path = Motion;
-			sourceTree = "<group>";
-		};
-		231D1599272CDEE9003D6F62 /* WeChatPassWord */ = {
-			isa = PBXGroup;
-			children = (
-				231D159A272CDEE9003D6F62 /* YNPayPasswordView.h */,
-				231D159B272CDEE9003D6F62 /* YNPayPasswordView.m */,
-			);
-			path = WeChatPassWord;
 			sourceTree = "<group>";
 		};
 		231D159C272CDEE9003D6F62 /* SignView */ = {
@@ -1536,10 +1510,8 @@
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				231D164B272CDEE9003D6F62 /* IGJSONModel.m in Sources */,
-				231D1633272CDEE9003D6F62 /* PooPieChart.m in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
-				231D165E272CDEEA003D6F62 /* YNPayPasswordView.m in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
