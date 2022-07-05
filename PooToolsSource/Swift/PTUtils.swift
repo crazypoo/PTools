@@ -26,6 +26,12 @@ import NotificationBannerSwift
     case UNKNOW
 }
 
+@objc public enum TemperatureUnit:Int
+{
+    case Fahrenheit
+    case CentigradeDegree
+}
+
 extension PTUtils
 {
     @objc static func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
@@ -563,6 +569,37 @@ public class PTUtils: NSObject {
         assert(seq.count>0)
         return seq.reduce(seq[0]){
             max($0, $1)
+        }
+    }
+    
+    //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
+    ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
+    class open func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat
+    {
+        switch changeToType {
+        case .Fahrenheit:
+            return 32 + 1.8 * value
+        case .CentigradeDegree:
+            return (value - 32) / 1.8
+        default:
+            return 0
+        }
+    }
+    
+    //MARK: 判断是否白天
+    /// 判断是否白天
+    class open func isNowDayTime()->Bool
+    {
+        let date = NSDate()
+        let cal :NSCalendar = NSCalendar.current as NSCalendar
+        let components : NSDateComponents = cal.components(.hour, from: date as Date) as NSDateComponents
+        if components.hour >= 19 || components.hour < 6
+        {
+            return false
+        }
+        else
+        {
+            return true
         }
     }
 }

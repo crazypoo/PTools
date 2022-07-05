@@ -20,11 +20,6 @@ typedef NS_ENUM(NSInteger, GradeType) {
     GradeTypeYi
 };
 
-typedef NS_ENUM(NSInteger,TemperatureUnit){
-    Fahrenheit = 0,
-    CentigradeDegree
-};
-
 typedef NS_ENUM(NSInteger,ToolsAboutImageType){
     ToolsAboutImageTypeJPEG = 0,
     ToolsAboutImageTypePNG,
@@ -334,18 +329,9 @@ static inline BOOL isIPhoneXSeries() {
 + (NSArray * _Nonnull)rangeOfSubString:(NSString * _Nonnull)subStr
                      inString:(NSString * _Nonnull)string;
 
-/*! @brief 华氏转摄氏/摄氏转华氏
- */
-+ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value
-                               changeTo:(TemperatureUnit)unit;
-
 /*! @brief 英文星期几转中文星期几
  */
 +(NSString * _Nonnull)engDayCoverToZHCN:(NSString * _Nonnull)str;
-
-/*! @brief 判断是否白天
- */
-+(BOOL)isNowDayTime;
 
 /*! @brief 判断是否存在Emoji
  */

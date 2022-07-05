@@ -1273,19 +1273,6 @@
     return newImage;
 }
 
-#pragma mark ------>华氏转摄氏/摄氏转华氏
-+ (CGFloat)temperatureUnitExchangeValue:(CGFloat)value changeTo:(TemperatureUnit)unit
-{ //温度单位转换方法
-    if (unit == Fahrenheit)
-    {
-        return 32 + 1.8 * value; //华氏度
-    }
-    else
-    {
-        return (value - 32) / 1.8; //摄氏度
-    }
-}
-
 #pragma mark ------>英文星期几转中文星期几
 +(NSString *)engDayCoverToZHCN:(NSString *)str
 {
@@ -1312,19 +1299,6 @@
         realStr = @"周日";
     }
     return realStr;
-}
-
-#pragma mark ------>判断是否白天
-+(BOOL)isNowDayTime
-{
-    NSDate *date = [NSDate date];
-    NSCalendar *cal = [NSCalendar currentCalendar];
-    NSDateComponents *components = [cal components:NSCalendarUnitHour fromDate:date];
-    if ([components hour] >= 19 || [components hour] < 6) {
-        return NO;
-    }else{
-        return YES;
-    }
 }
 
 #pragma mark ------>String
