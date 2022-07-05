@@ -311,11 +311,14 @@ static NSString * kSDCGImageDestinationRequestedFileSize = @"kCGImageDestination
     // Which decode frames in time and reduce memory usage
     if (thumbnailSize.width == 0 || thumbnailSize.height == 0) {
         SDAnimatedImageRep *imageRep = [[SDAnimatedImageRep alloc] initWithData:data];
-        NSSize size = NSMakeSize(imageRep.pixelsWide / scale, imageRep.pixelsHigh / scale);
-        imageRep.size = size;
-        NSImage *animatedImage = [[NSImage alloc] initWithSize:size];
-        [animatedImage addRepresentation:imageRep];
-        return animatedImage;
+        if (imageRep) {
+            NSSize size = NSMakeSize(imageRep.pixelsWide / scale, imageRep.pixelsHigh / scale);
+            imageRep.size = size;
+            NSImage *animatedImage = [[NSImage alloc] initWithSize:size];
+            [animatedImage addRepresentation:imageRep];
+            animatedImage.sd_imageFormat = self.class.imageFormat;
+            return animatedImage;
+        }
     }
 #endif
     
@@ -499,7 +502,9 @@ static NSString * kSDCGImageDestinationRequestedFileSize = @"kCGImageDestination
     CGFloat pixelWidth = (CGFloat)CGImageGetWidth(imageRef);
     CGFloat pixelHeight = (CGFloat)CGImageGetHeight(imageRef);
     CGFloat finalPixelSize = 0;
-    if (maxPixelSize.width > 0 && maxPixelSize.height > 0 && pixelWidth > maxPixelSize.width && pixelHeight > maxPixelSize.height) {
+    BOOL encodeFullImage = maxPixelSize.width == 0 || maxPixelSize.height == 0 || pixelWidth == 0 || pixelHeight == 0 || (pixelWidth <= maxPixelSize.width && pixelHeight <= maxPixelSize.height);
+    if (!encodeFullImage) {
+        // Thumbnail Encoding
         CGFloat pixelRatio = pixelWidth / pixelHeight;
         CGFloat maxPixelSizeRatio = maxPixelSize.width / maxPixelSize.height;
         if (pixelRatio > maxPixelSizeRatio) {

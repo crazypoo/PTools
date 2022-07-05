@@ -85,9 +85,9 @@ PODS:
     - YCXMenu
     - YYCategories
   - pop (1.0.12)
-  - SDWebImage (5.12.6):
-    - SDWebImage/Core (= 5.12.6)
-  - SDWebImage/Core (5.12.6)
+  - SDWebImage (5.13.0):
+    - SDWebImage/Core (= 5.13.0)
+  - SDWebImage/Core (5.13.0)
   - SnapKit (5.0.1)
   - SSZipArchive (2.4.3)
   - SwifterSwift (5.2.0):
@@ -206,7 +206,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
   PooTools: 646eb86db7177ae85e958bbe703ea563ae0317e4
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: a47aea9e3d8816015db4e523daff50cfd294499d
+  SDWebImage: 0327043dbb9533e75f2eff8445b3df0f2ceca6ac
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2

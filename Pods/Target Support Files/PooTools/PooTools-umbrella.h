@@ -105,10 +105,6 @@
 #import "DOGobalFileManager.h"
 #import "PMacros.h"
 #import "Utils.h"
-#import "PVideoConfig.h"
-#import "PVideoListViewController.h"
-#import "PVideoPlayer.h"
-#import "PVideoSupport.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];
