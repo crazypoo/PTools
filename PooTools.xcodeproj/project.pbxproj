@@ -86,11 +86,6 @@
 		231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159E272CDEE9003D6F62 /* EasySignatureView.m */; };
 		231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159F272CDEE9003D6F62 /* PopSignatureView.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
-		231D1662272CDEEA003D6F62 /* PVideoPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A6272CDEE9003D6F62 /* PVideoPlayer.m */; };
-		231D1663272CDEEA003D6F62 /* PVideoListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A7272CDEE9003D6F62 /* PVideoListViewController.m */; };
-		231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A9272CDEE9003D6F62 /* PVideoConfig.m */; };
-		231D1665272CDEEA003D6F62 /* PVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15AA272CDEE9003D6F62 /* PVideoViewController.m */; };
-		231D1666272CDEEA003D6F62 /* PVideoSupport.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15AD272CDEE9003D6F62 /* PVideoSupport.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
 		231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B5272CDEE9003D6F62 /* PTLabel.swift */; };
@@ -383,16 +378,6 @@
 		231D15A0272CDEE9003D6F62 /* EasySignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EasySignatureView.h; sourceTree = "<group>"; };
 		231D15A2272CDEE9003D6F62 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
 		231D15A3272CDEE9003D6F62 /* PObject2Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PObject2Json.h; sourceTree = "<group>"; };
-		231D15A5272CDEE9003D6F62 /* PVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoViewController.h; sourceTree = "<group>"; };
-		231D15A6272CDEE9003D6F62 /* PVideoPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoPlayer.m; sourceTree = "<group>"; };
-		231D15A7272CDEE9003D6F62 /* PVideoListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoListViewController.m; sourceTree = "<group>"; };
-		231D15A8272CDEE9003D6F62 /* PVideoSupport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoSupport.h; sourceTree = "<group>"; };
-		231D15A9272CDEE9003D6F62 /* PVideoConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoConfig.m; sourceTree = "<group>"; };
-		231D15AA272CDEE9003D6F62 /* PVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoViewController.m; sourceTree = "<group>"; };
-		231D15AB272CDEE9003D6F62 /* PVideoListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoListViewController.h; sourceTree = "<group>"; };
-		231D15AC272CDEE9003D6F62 /* PVideoPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoPlayer.h; sourceTree = "<group>"; };
-		231D15AD272CDEE9003D6F62 /* PVideoSupport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVideoSupport.m; sourceTree = "<group>"; };
-		231D15AE272CDEE9003D6F62 /* PVideoConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVideoConfig.h; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
 		231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUrlChange.swift; sourceTree = "<group>"; };
 		231D15B5272CDEE9003D6F62 /* PTLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTLabel.swift; sourceTree = "<group>"; };
@@ -645,7 +630,6 @@
 				231D15B2272CDEE9003D6F62 /* Swift */,
 				231D154A272CDEE9003D6F62 /* Thermometer */,
 				231D15E2272CDEE9003D6F62 /* UniTool */,
-				231D15A4272CDEE9003D6F62 /* WeChatLittleVideo */,
 			);
 			path = PooToolsSource;
 			sourceTree = SOURCE_ROOT;
@@ -945,23 +929,6 @@
 				231D15A3272CDEE9003D6F62 /* PObject2Json.h */,
 			);
 			path = Json;
-			sourceTree = "<group>";
-		};
-		231D15A4272CDEE9003D6F62 /* WeChatLittleVideo */ = {
-			isa = PBXGroup;
-			children = (
-				231D15A5272CDEE9003D6F62 /* PVideoViewController.h */,
-				231D15A6272CDEE9003D6F62 /* PVideoPlayer.m */,
-				231D15A7272CDEE9003D6F62 /* PVideoListViewController.m */,
-				231D15A8272CDEE9003D6F62 /* PVideoSupport.h */,
-				231D15A9272CDEE9003D6F62 /* PVideoConfig.m */,
-				231D15AA272CDEE9003D6F62 /* PVideoViewController.m */,
-				231D15AB272CDEE9003D6F62 /* PVideoListViewController.h */,
-				231D15AC272CDEE9003D6F62 /* PVideoPlayer.h */,
-				231D15AD272CDEE9003D6F62 /* PVideoSupport.m */,
-				231D15AE272CDEE9003D6F62 /* PVideoConfig.h */,
-			);
-			path = WeChatLittleVideo;
 			sourceTree = "<group>";
 		};
 		231D15B2272CDEE9003D6F62 /* Swift */ = {
@@ -1293,7 +1260,7 @@
 				ORGANIZATIONNAME = crazypoo;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = F3769T9JM8;
+						DevelopmentTeam = 9RF6V24RNJ;
 						LastSwiftMigration = 1100;
 					};
 				};
@@ -1462,21 +1429,18 @@
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
 				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */,
-				231D1666272CDEEA003D6F62 /* PVideoSupport.m in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1641272CDEE9003D6F62 /* IGBatchTaskManager.m in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
-				231D1664272CDEEA003D6F62 /* PVideoConfig.m in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
-				231D1662272CDEEA003D6F62 /* PVideoPlayer.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1686272CDEEA003D6F62 /* PTFileDownLoadManager.swift in Sources */,
@@ -1590,13 +1554,11 @@
 				231D1622272CDEE9003D6F62 /* UIImage+BlurGlass.m in Sources */,
 				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
 				231D1612272CDEE9003D6F62 /* WMHub.m in Sources */,
-				231D1663272CDEEA003D6F62 /* PVideoListViewController.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */,
 				231D1658272CDEEA003D6F62 /* PSlider.m in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
-				231D1665272CDEEA003D6F62 /* PVideoViewController.m in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				231D160C272CDEE9003D6F62 /* YMShowImageView.m in Sources */,
@@ -1770,7 +1732,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = F3769T9JM8;
+				DEVELOPMENT_TEAM = 9RF6V24RNJ;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
@@ -1810,7 +1772,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = F3769T9JM8;
+				DEVELOPMENT_TEAM = 9RF6V24RNJ;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";

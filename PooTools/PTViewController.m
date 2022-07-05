@@ -11,7 +11,6 @@
 #import "PMacros.h"
 #import "YMShowImageView.h"
 #import "PTAppDelegate.h"
-#import "PVideoViewController.h"
 #import "UITextField+ModifyPlaceholder.h"
 #import "UIView+ViewShaking.h"
 #import "SensitiveWordTools.h"
@@ -34,7 +33,7 @@
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
-@interface PTViewController ()<PVideoViewControllerDelegate,UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate>
+@interface PTViewController ()<UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate>
 {
 }
 @property (nonatomic, strong) PTBiologyID *touchID;
@@ -124,45 +123,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-#pragma mark - PVideoViewControllerDelegate
-- (void)videoViewController:(PVideoViewController *)videoController didRecordVideo:(PVideoModel *)videoModel
-{
-    NSLog(@"%@>>>>>>>>>>%@>>>>>>>>>",videoController,videoModel);
-    
-    //    _videoModel = videoModel;
-    //
-    //    videoUrl = [NSURL fileURLWithPath:_videoModel.videoAbsolutePath];
-    //    NSLog(@"----------------------------VideoPath:%@",videoUrl);
-    //    [self.videoUrlArr addObject:videoUrl];
-    //    NSError *error = nil;
-    //    NSFileManager *fm = [NSFileManager defaultManager];
-    //    NSDictionary *attri = [fm attributesOfItemAtPath:_videoModel.videoAbsolutePath error:&error];
-    //    if (error) {
-    //        NSLog(@"error:%@",error);
-    //    }
-    //    else {
-    //        NSLog(@"%@",[NSString stringWithFormat:@"视频总大小:%.0fKB",attri.fileSize/1024.0]);
-    //    }
-    //
-    //    imageVideo = [[UIImageView alloc] initWithFrame:videoV.bounds];
-    //    imageVideo.image = [Utils thumbnailImageForVideo:videoUrl atTime:1];
-    //    [videoV addSubview:imageVideo];
-    //
-    //    UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:2]];
-    //
-    //    videoDeleteBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    //    videoDeleteBtn.frame = CGRectMake(imageVideo.width-30, 0, 30, 30);
-    //    [videoDeleteBtn setImage:kImageNamed(@"list_icon_delete") forState:UIControlStateNormal];
-    //    [videoDeleteBtn addTarget:self action:@selector(deleteVideoFirstView:) forControlEvents:UIControlEventTouchUpInside];
-    //    [cell.contentView addSubview:videoDeleteBtn];
-    //
-    //    [self movChangeMP4:videoUrl];
-}
-
-- (void)videoViewControllerDidCancel:(PVideoViewController *)videoController {
-    NSLog(@"没有录到视频");
 }
 
 #pragma mark ---------------> UITableViewDataSource
@@ -316,9 +276,7 @@ static NSString *cellIdentifier = @"CELL";
             switch (indexPath.row) {
                 case 5:
                 {
-                    PVideoViewController *videoVC = [[PVideoViewController alloc] initWithRecordTime:20 video_W_H:(4.0/3) withVideoWidthPX:200 withControViewHeight:120];
-                    videoVC.delegate = self;
-                    [videoVC startAnimationWithType:PVideoViewShowTypeSmall];
+                    PNSLog(@"123");
                 }
                     break;
                 case 6:

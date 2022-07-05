@@ -109,7 +109,6 @@
 #import "PVideoListViewController.h"
 #import "PVideoPlayer.h"
 #import "PVideoSupport.h"
-#import "PVideoViewController.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];
