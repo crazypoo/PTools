@@ -292,7 +292,7 @@ public extension String
     
     func toSecurityPhone()->String
     {
-        if (self).stringIsEmpty() && self.charactersArray.count > 10
+        if !(self).stringIsEmpty() && self.charactersArray.count > 10
         {
             return (self as NSString).replacingCharacters(in: NSRange.init(location: 3, length: 4), with: "****")
         }
