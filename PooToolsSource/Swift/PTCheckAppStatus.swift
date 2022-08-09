@@ -15,7 +15,7 @@ public class PCheckAppStatus: NSObject {
     public var fpsHandle:((_ fps:NSInteger)->Void)?
     public var closed:Bool = true
     
-    private var avatar : PFloatingButton?
+    public var avatar : PFloatingButton?
     private var displayLink : CADisplayLink?
     private var lastTime:TimeInterval? = 0
     private var count:NSInteger? = 0
