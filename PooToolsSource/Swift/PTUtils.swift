@@ -333,15 +333,22 @@ public class PTUtils: NSObject {
     }
     
     public class func sizeFor(string:String,
-                            font:UIFont,
-                            height:CGFloat,
-                            width:CGFloat)->CGSize
+                              font:UIFont,
+                              lineSpacing:CGFloat? = nil,
+                              height:CGFloat,
+                              width:CGFloat)->CGSize
     {
-        let dic = [NSAttributedString.Key.font:font]
+        var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
+        if lineSpacing != nil
+        {
+            let paraStyle = NSMutableParagraphStyle()
+            paraStyle.lineSpacing = lineSpacing!
+            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        }
         let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
         return size
     }
-    
+
     public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
     {
         var currentVC : UIViewController?
