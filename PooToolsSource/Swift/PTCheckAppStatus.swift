@@ -36,7 +36,6 @@ public class PCheckAppStatus: NSObject {
     public override init()
     {
         super.init()
-        createUI()
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
     }
