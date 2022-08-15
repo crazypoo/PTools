@@ -112,11 +112,17 @@ public class PCheckAppStatus: NSObject {
     
     @objc func applicationDidBecomeActiveNotification()
     {
-        displayLink!.isPaused = false
+        if avatar != nil
+        {
+            displayLink!.isPaused = false
+        }
     }
 
     @objc func applicationWillResignActiveNotification()
     {
-        displayLink!.isPaused = true
+        if avatar != nil
+        {
+            displayLink!.isPaused = true
+        }
     }
 }
