@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 /// Style
 public enum PageControlStyle {
@@ -598,57 +599,65 @@ extension LLCycleScrollView {
     override open func layoutSubviews() {
         super.layoutSubviews()
         // CollectionView
-        collectionView.frame = self.bounds
         
-        // Cell Height
-        cellHeight = collectionView.frame.height
-        
-        // 计算最大扩展区大小
-        if scrollDirection == .horizontal {
-            maxSwipeSize = CGFloat(imagePaths.count) * collectionView.frame.width
-        }else{
-            maxSwipeSize = CGFloat(imagePaths.count) * collectionView.frame.height
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
         
-        // Cell Size
-        flowLayout?.itemSize = self.frame.size
-        // Page Frame
-        if customPageControlStyle == .none || customPageControlStyle == .system || customPageControlStyle == .image {
-            if pageControlPosition == .center {
-                pageControl?.frame = CGRect.init(x: 0, y: self.ll_h-pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+        PTUtils.gcdAfter(time: 0.1) {
+            
+            // Cell Height
+            self.cellHeight = self.collectionView.frame.height
+            
+            // 计算最大扩展区大小
+            if self.scrollDirection == .horizontal {
+                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.width
             }else{
-                let pointSize = pageControl?.size(forNumberOfPages: self.imagePaths.count)
-                if pageControlPosition == .left {
-                    pageControl?.frame = CGRect.init(x: -(UIScreen.main.bounds.width - (pointSize?.width)! - pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+                self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.height
+            }
+            
+            // Cell Size
+            self.flowLayout?.itemSize = self.frame.size
+            // Page Frame
+            if self.customPageControlStyle == .none || self.customPageControlStyle == .system || self.customPageControlStyle == .image {
+                if self.pageControlPosition == .center {
+                    self.pageControl?.frame = CGRect.init(x: 0, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
                 }else{
-                    pageControl?.frame = CGRect.init(x: (UIScreen.main.bounds.width - (pointSize?.width)! - pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+                    let pointSize = self.pageControl?.size(forNumberOfPages: self.imagePaths.count)
+                    if self.pageControlPosition == .left {
+                        self.pageControl?.frame = CGRect.init(x: -(UIScreen.main.bounds.width - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+                    }else{
+                        self.pageControl?.frame = CGRect.init(x: (UIScreen.main.bounds.width - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+                    }
+                }
+            }else{
+                var y = self.ll_h-self.pageControlBottom
+                
+                // pill
+                if self.customPageControlStyle == .pill {
+                    y+=5
+                }
+                
+                let oldFrame = self.customPageControl?.frame
+                switch self.pageControlPosition {
+                case .left:
+                    self.customPageControl?.frame = CGRect.init(x: self.pageControlLeadingOrTrialingContact * 0.5, y: y, width: (oldFrame?.size.width)!, height: 10)
+                case.right:
+                    self.customPageControl?.frame = CGRect.init(x: UIScreen.main.bounds.width - (oldFrame?.size.width)! - self.pageControlLeadingOrTrialingContact * 0.5, y: y, width: (oldFrame?.size.width)!, height: 10)
+                default:
+                    self.customPageControl?.frame = CGRect.init(x: (oldFrame?.origin.x)!, y: y, width: (oldFrame?.size.width)!, height: 10)
                 }
             }
-        }else{
-            var y = self.ll_h-pageControlBottom
             
-            // pill
-            if customPageControlStyle == .pill {
-                y+=5
+            if self.collectionView.contentOffset.x == 0 && self.totalItemsCount > 0 {
+                var targetIndex = 0
+                if self.infiniteLoop {
+                    targetIndex = self.totalItemsCount/2
+                }
+                self.collectionView.scrollToItem(at: IndexPath.init(item: targetIndex, section: 0), at: self.position, animated: false)
             }
-            
-            let oldFrame = customPageControl?.frame
-            switch pageControlPosition {
-            case .left:
-                customPageControl?.frame = CGRect.init(x: pageControlLeadingOrTrialingContact * 0.5, y: y, width: (oldFrame?.size.width)!, height: 10)
-            case.right:
-                customPageControl?.frame = CGRect.init(x: UIScreen.main.bounds.width - (oldFrame?.size.width)! - pageControlLeadingOrTrialingContact * 0.5, y: y, width: (oldFrame?.size.width)!, height: 10)
-            default:
-                customPageControl?.frame = CGRect.init(x: (oldFrame?.origin.x)!, y: y, width: (oldFrame?.size.width)!, height: 10)
-            }
-        }
-        
-        if collectionView.contentOffset.x == 0 && totalItemsCount > 0 {
-            var targetIndex = 0
-            if infiniteLoop {
-                targetIndex = totalItemsCount/2
-            }
-            collectionView.scrollToItem(at: IndexPath.init(item: targetIndex, section: 0), at: position, animated: false)
+
+            self.collectionView.reloadData()
         }
     }
 }
@@ -766,6 +775,7 @@ extension LLCycleScrollView: UICollectionViewDelegate, UICollectionViewDataSourc
             let itemIndex = pageControlIndexWithCurrentCellIndex(index: indexPath.item)
             cell.title = titles[itemIndex]
         }else{
+            cell.titleLabelHeight = cellHeight
             // Mode
             if let imageViewContentMode = imageViewContentMode {
                 cell.imageView.contentMode = imageViewContentMode
