@@ -10,7 +10,7 @@ import UIKit
 import EventKit
 import SwiftDate
 
-class PTEventOnCalendar: NSObject {
+public class PTEventOnCalendar: NSObject {
     /*! @brief 把数据插入到日历作提醒
      * @param startDate 开始时间
      * @param endDate 结束时间
