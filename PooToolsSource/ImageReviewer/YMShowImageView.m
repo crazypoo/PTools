@@ -48,7 +48,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 @property (nonatomic, strong) UIButton *fullViewLabel;
 @property (nonatomic, strong) UIColor *showImageBackgroundColor;
 @property (nonatomic, strong) UIColor *titleColor;
-@property (nonatomic, strong) NSString *fontName;
+@property (nonatomic, strong) UIFont *fontName;
 @property (nonatomic, assign) MoreActionType moreType;
 @property (nonatomic, strong) NSArray *actionSheetOtherBtnArr;
 @property (nonatomic, strong) NSString *moreActionImageNames;
@@ -73,7 +73,17 @@ typedef NS_ENUM(NSInteger,MoreActionType){
 
 @implementation YMShowImageView
 
--(id)initWithByClick:(NSInteger)clickTag appendArray:(NSArray <PooShowImageModel*>*)appendArray titleColor:(UIColor *)tC fontName:(NSString *)fName showImageBackgroundColor:(UIColor *)sibc showWindow:(UIWindow *)w loadingImageName:(NSString *)li deleteAble:(BOOL)canDelete saveAble:(BOOL)canSave moreActionImageName:(NSString *)main hideImageName:(NSString *)hImage
+-(id)initWithByClick:(NSInteger)clickTag
+         appendArray:(NSArray <PooShowImageModel*>*)appendArray
+          titleColor:(UIColor *)tC
+                font:(UIFont *)fName
+showImageBackgroundColor:(UIColor *)sibc
+          showWindow:(UIWindow *)w
+    loadingImageName:(NSString *)li
+          deleteAble:(BOOL)canDelete
+            saveAble:(BOOL)canSave
+ moreActionImageName:(NSString *)main
+       hideImageName:(NSString *)hImage
 {
     self = [super init];
     if (self)
@@ -100,7 +110,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         }
         
         self.titleColor = tC ? tC : [UIColor whiteColor];
-        self.fontName = fName ? fName : kDevLikeFont;
+        self.fontName = fName ? fName : [UIFont fontWithName:kDevLikeFont size:20];
         self.showImageBackgroundColor = sibc ? sibc : [UIColor blackColor];
         self.window = w;
         self.loadingImageName = li;
@@ -155,7 +165,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.indexLabel = [[UILabel alloc] init];
     self.indexLabel.textAlignment = NSTextAlignmentCenter;
     self.indexLabel.textColor = self.titleColor;
-    self.indexLabel.font = kDEFAULT_FONT(self.fontName, 20);
+    self.indexLabel.font = self.fontName;
     self.indexLabel.backgroundColor = cIndexTitleBackgroundColor;
     self.indexLabel.layer.cornerRadius = 15;
     self.indexLabel.clipsToBounds = YES;
@@ -171,7 +181,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     }
     
     self.fullViewLabel = [UIButton buttonWithType:UIButtonTypeCustom];
-    self.fullViewLabel.titleLabel.font = kDEFAULT_FONT(self.fontName, 20);
+    self.fullViewLabel.titleLabel.font = self.fontName;
     [self.fullViewLabel setTitleColor:self.titleColor forState:UIControlStateNormal];
     self.fullViewLabel.userInteractionEnabled = NO;
     [self.fullViewLabel addTarget:self action:@selector(fullImageReview:) forControlEvents:UIControlEventTouchUpInside];
@@ -216,7 +226,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         self.pageView_label = [[UILabel alloc] init];
         self.pageView_label.textAlignment = NSTextAlignmentCenter;
         self.pageView_label.textColor = self.titleColor;
-        self.pageView_label.font = kDEFAULT_FONT(self.fontName, 20);
+        self.pageView_label.font = self.fontName;
         self.pageView_label.backgroundColor = cIndexTitleBackgroundColor;
         self.pageView_label.layer.cornerRadius = 15;
         self.pageView_label.clipsToBounds = YES;
@@ -257,7 +267,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
     self.titleLabel.textColor     = self.titleColor;
     self.titleLabel.numberOfLines = 0;
     self.titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    self.titleLabel.font = kDEFAULT_FONT(self.fontName, 16);
+    self.titleLabel.font = [UIFont fontWithName:self.fontName.familyName size:self.fontName.pointSize * 0.8];
     [self.labelScroller addSubview:self.titleLabel];
 }
 
@@ -766,7 +776,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
         {
             [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.bottom.left.right.equalTo(self);
-                CGFloat infoH = [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
+                CGFloat infoH = [Utils sizeForString:model.imageInfo font:[UIFont fontWithName:self.fontName.familyName size:self.fontName.pointSize * 0.8] andHeigh:CGFLOAT_MAX andWidth:kSCREEN_WIDTH-20].height;
 
                 if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
                     make.height.offset(infoH+20);
@@ -787,7 +797,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             }];
            
              
-            self.labelScroller.contentSize = CGSizeMake(self.size.width-20, [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-20, [Utils sizeForString:model.imageInfo font:[UIFont fontWithName:self.fontName.familyName size:self.fontName.pointSize * 0.8] andHeigh:CGFLOAT_MAX andWidth:(self.size.width-20)].height);
             
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.equalTo(self.labelScroller);
@@ -801,7 +811,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
             
             [self.bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.bottom.left.right.equalTo(self);
-                CGFloat infoH = [Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:labelW].height;
+                CGFloat infoH = [Utils sizeForString:model.imageInfo font:[UIFont fontWithName:self.fontName.familyName size:self.fontName.pointSize * 0.8] andHeigh:CGFLOAT_MAX andWidth:labelW].height;
                 if ((HEIGHT_BUTTON *2) > infoH > HEIGHT_BUTTON) {
                     make.height.offset(infoH+20);
                 }
@@ -834,7 +844,7 @@ typedef NS_ENUM(NSInteger,MoreActionType){
                 make.right.equalTo(self.deleteButton.mas_left).offset(-10);
             }];
             
-            self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo font:kDEFAULT_FONT(self.fontName, 16) andHeigh:CGFLOAT_MAX andWidth:labelW].height);
+            self.labelScroller.contentSize = CGSizeMake(self.size.width-30-HEIGHT_BUTTON,[Utils sizeForString:model.imageInfo font:[UIFont fontWithName:self.fontName.familyName size:self.fontName.pointSize * 0.8] andHeigh:CGFLOAT_MAX andWidth:labelW].height);
             
             [self.titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.top.equalTo(self.labelScroller);

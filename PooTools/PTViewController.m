@@ -334,7 +334,7 @@ static NSString *cellIdentifier = @"CELL";
 //                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
                     NSArray *arr = @[imageModelV,imageModel100];
 
-                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil fontName:FontName showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
+                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil font:[UIFont fontWithName:FontName size:20] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
                     [ymImageV showWithFinish:^{
                     }];
                     [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {

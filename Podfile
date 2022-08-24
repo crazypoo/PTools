@@ -15,4 +15,5 @@ target 'PooTools_Example' do
   pod 'NotificationBannerSwift'#类似推送的弹出框
   pod 'CocoaLumberjack/Swift'#Log工具
   pod 'LookinServer', :configurations => ['Debug']
+  pod 'SwiftDate'
 end

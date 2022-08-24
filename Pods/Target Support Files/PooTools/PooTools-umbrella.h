@@ -19,7 +19,6 @@
 #import "LGTMDefines.h"
 #import "MethodSwizzle.h"
 #import "PBugReporter.h"
-#import "PooActionOnCalendar.h"
 #import "NSDate+Category.h"
 #import "NSDateFormatter+Category.h"
 #import "NSMutableArray+Shuffle.h"

@@ -58,7 +58,7 @@ typedef void(^YMShowImageViewShowOtherAction) (NSInteger index);
 - (id)initWithByClick:(NSInteger)clickTag
           appendArray:(NSArray <PooShowImageModel*>*)appendArray
            titleColor:(UIColor *)tC
-             fontName:(NSString *)fName
+                 font:(UIFont *)fName
 showImageBackgroundColor:(UIColor *)sibc
            showWindow:(UIWindow *)w
      loadingImageName:(NSString *)li
