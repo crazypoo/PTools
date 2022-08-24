@@ -1250,7 +1250,7 @@
 				ORGANIZATIONNAME = crazypoo;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
-						DevelopmentTeam = 9RF6V24RNJ;
+						DevelopmentTeam = JL4FNX8668;
 						LastSwiftMigration = 1100;
 					};
 				};
@@ -1724,7 +1724,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9RF6V24RNJ;
+				DEVELOPMENT_TEAM = JL4FNX8668;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
@@ -1764,7 +1764,7 @@
 				CODE_SIGN_ENTITLEMENTS = PooTools_Example.entitlements;
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = 9RF6V24RNJ;
+				DEVELOPMENT_TEAM = JL4FNX8668;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";

@@ -659,7 +659,7 @@ showImageBackgroundColor:(UIColor *)sibc
             [self.scrollView addSubview:imageScroll];
             [self.imageScrollViews addObject:imageScroll];
         }
-        [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
+        [self.scrollView setContentOffset:CGPointMake(W * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:NO];
         
         if ([[self fullImageHidden] isEqualToString:@"全景"]) {
             self.fullViewLabel.userInteractionEnabled = YES;
@@ -716,7 +716,7 @@ showImageBackgroundColor:(UIColor *)sibc
         }];
     }
     
-    [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:YES];
+    [self.scrollView setContentOffset:CGPointMake(self.width * (self.viewClickTag - YMShowImageViewClickTagAppend), 0) animated:NO];
     PShowImageSingleView *currentImageS = (PShowImageSingleView *)[self.scrollView viewWithTag:SubViewBasicsIndex + self.page];
     
     switch (currentImageS.showMode) {
