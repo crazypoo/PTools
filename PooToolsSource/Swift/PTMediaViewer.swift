@@ -96,7 +96,7 @@ public class PTLoadingView: UIView {
             let h = w
             let x = (rect.size.width - 2) * 0.5
             let y = (rect.size.height - 2) * 0.5
-            ctx!.addEllipse(in: CGRectMake(x, y, w, h))
+            ctx!.addEllipse(in: CGRect.init(x: x, y: y, width: w, height: h))
             ctx!.fillPath()
             
             PTLoadingBackgroundColor.set()
