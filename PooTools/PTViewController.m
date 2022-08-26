@@ -281,102 +281,138 @@ static NSString *cellIdentifier = @"CELL";
                     break;
                 case 6:
                 {
-//                    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
-//                    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-//                    imageModel.imageShowType = PooShowImageModelTypeFullView;
-//                    imageModel.imageInfo = @"11111111241241241241928390128309128";
-//                    imageModel.imageTitle = @"22222212312312312312312312312";
-//
-                    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
-                    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                    imageModelV.imageShowType = PooShowImageModelTypeVideo;
-                    imageModelV.imageInfo = @"11111111241241241241928390128309128";
                     
                     
-                    //    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
-                    //    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-                    //    imageModel1.imageFullView = @"0";
-                    //    imageModel1.imageInfo = @"444444";
-                    //    imageModel1.imageTitle = @"333333";
+                    PTViewerModel *imageModelV = [[PTViewerModel alloc] init];
+                    imageModelV.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+                    imageModelV.imageShowType = PTViewerDataTypeNormal;
+                    imageModelV.imageInfo = @"56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551";
                     
-//                    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
-//                    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-//                    imageModel2.imageShowType = PooShowImageModelTypeNormal;
-//                    imageModel2.imageInfo = @"4444444444444";
-//
-//                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
-//                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
-//                    imageModelT.imageShowType = PooShowImageModelTypeNormal;
-//                    imageModelT.imageInfo = @"6666666";
-//                    imageModelT.imageTitle = @"5555555";
-//
-//                    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
-//                    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
-//                    imageModel3.imageShowType = PooShowImageModelTypeGIF;
-//                    imageModel3.imageInfo = @"444444";
-//                    imageModel3.imageTitle = @"333333";
-                    
-//                    PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
-//                    imageModel4.imageUrl = kImageNamed(@"DemoImage");
-//                    imageModel4.imageShowType = PooShowImageModelType3D;
-//                    imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
-                    
-                    PooShowImageModel *imageModel100 = [[PooShowImageModel alloc] init];
-                    imageModel100.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
-                    imageModel100.imageShowType = PooShowImageModelTypeFullView;
-                    imageModel100.imageInfo = @"5655555555555";
-                    
-                    PooShowImageModel *imageModel1001 = [[PooShowImageModel alloc] init];
-                    imageModel1001.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
-                    imageModel1001.imageShowType = PooShowImageModelTypeNormal;
-                    imageModel1001.imageInfo = @"5655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555";
-                    
-//                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
-                    NSArray *arr = @[imageModelV,imageModel100];
+                    PTViewerModel *imageModel1 = [[PTViewerModel alloc] init];
+                    imageModel1.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+                    imageModel1.imageShowType = PTViewerDataTypeNormal;
+                    imageModel1.imageInfo = @"123";
 
-                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil font:[UIFont fontWithName:FontName size:20] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
-                    [ymImageV showWithFinish:^{
-                    }];
-                    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
-                        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
-                    }];
-                    [ymImageV setOtherBlock:^(NSInteger index) {
-                        PNSLog(@"%ld",(long)index);
+                    PTViewerModel *imageModel1aaaa = [[PTViewerModel alloc] init];
+                    imageModel1aaaa.imageURL = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+                    imageModel1aaaa.imageShowType = PTViewerDataTypeVideo;
+                    imageModel1aaaa.imageInfo = @"123";
+
+                    PTViewerModel *imageModel1aaaag = [[PTViewerModel alloc] init];
+                    imageModel1aaaag.imageURL = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+                    imageModel1aaaag.imageShowType = PTViewerDataTypeGIF;
+                    imageModel1aaaag.imageInfo = @"12344444";
+
+                    PTViewerConfig *config = [[PTViewerConfig alloc] init];
+                    config.actionType = PTViewerActionTypeAll;
+                    config.closeViewerImageName = @"DemoImage";
+                    config.moreActionImageName = @"DemoImage";
+                    config.mediaData = @[imageModelV,imageModel1,imageModel1aaaa,imageModel1aaaag];
+                    
+                    PTMediaViewer *viewer = [[PTMediaViewer alloc] initWithViewConfig:config];
+                    [viewer showImageViewer];
+                    [viewer setViewerDismissBlock:^{
                         
-                        WKWebView *webView = [WKWebView new];
-                        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
-                        [webView loadRequest:request];
-                        [kAppDelegateWindow addSubview:webView];
-                        [webView mas_makeConstraints:^(MASConstraintMaker *make) {
-                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
-                        }];
-//                        UIWebView *webView = [UIWebView new];
-//                        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
+                    }];
+//
+//
+//
+////                    PooShowImageModel *imageModel = [[PooShowImageModel alloc] init];
+////                    imageModel.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+////                    imageModel.imageShowType = PooShowImageModelTypeFullView;
+////                    imageModel.imageInfo = @"11111111241241241241928390128309128";
+////                    imageModel.imageTitle = @"22222212312312312312312312312";
+////
+//                    PooShowImageModel *imageModelV = [[PooShowImageModel alloc] init];
+//                    imageModelV.imageUrl = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+//                    imageModelV.imageShowType = PooShowImageModelTypeVideo;
+//                    imageModelV.imageInfo = @"11111111241241241241928390128309128";
+//
+//
+//                    //    PooShowImageModel *imageModel1 = [[PooShowImageModel alloc] init];
+//                    //    imageModel1.imageUrl = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
+//                    //    imageModel1.imageFullView = @"0";
+//                    //    imageModel1.imageInfo = @"444444";
+//                    //    imageModel1.imageTitle = @"333333";
+//
+////                    PooShowImageModel *imageModel2 = [[PooShowImageModel alloc] init];
+////                    imageModel2.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+////                    imageModel2.imageShowType = PooShowImageModelTypeNormal;
+////                    imageModel2.imageInfo = @"4444444444444";
+////
+////                    PooShowImageModel *imageModelT = [[PooShowImageModel alloc] init];
+////                    imageModelT.imageUrl = @"http://ww4.sinaimg.cn/bmiddle/677febf5gw1erma1g5xd0j20k0esa7wj.jpg";
+////                    imageModelT.imageShowType = PooShowImageModelTypeNormal;
+////                    imageModelT.imageInfo = @"6666666";
+////                    imageModelT.imageTitle = @"5555555";
+////
+////                    PooShowImageModel *imageModel3 = [[PooShowImageModel alloc] init];
+////                    imageModel3.imageUrl = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+////                    imageModel3.imageShowType = PooShowImageModelTypeGIF;
+////                    imageModel3.imageInfo = @"444444";
+////                    imageModel3.imageTitle = @"333333";
+//
+////                    PooShowImageModel *imageModel4 = [[PooShowImageModel alloc] init];
+////                    imageModel4.imageUrl = kImageNamed(@"DemoImage");
+////                    imageModel4.imageShowType = PooShowImageModelType3D;
+////                    imageModel4.imageInfo = @"3333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333333";
+//
+//                    PooShowImageModel *imageModel100 = [[PooShowImageModel alloc] init];
+//                    imageModel100.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
+//                    imageModel100.imageShowType = PooShowImageModelTypeFullView;
+//                    imageModel100.imageInfo = @"5655555555555";
+//
+//                    PooShowImageModel *imageModel1001 = [[PooShowImageModel alloc] init];
+//                    imageModel1001.imageUrl = @"https://www.cloudgategz.com/chl/photo/allPic.jpg";
+//                    imageModel1001.imageShowType = PooShowImageModelTypeNormal;
+//                    imageModel1001.imageInfo = @"5655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555";
+//
+////                    NSArray *arr = @[imageModel2,imageModel3,imageModelT,imageModel4];
+//                    NSArray *arr = @[imageModelV,imageModel100];
+//
+//                    YMShowImageView *ymImageV = [[YMShowImageView alloc] initWithByClick:YMShowImageViewClickTagAppend+0 appendArray:arr titleColor:nil font:[UIFont fontWithName:FontName size:20] showImageBackgroundColor:[UIColor blackColor] showWindow:[PTAppDelegate appDelegate].window loadingImageName:@"DemoImage" deleteAble:YES saveAble:YES moreActionImageName:@"DemoImage" hideImageName:@"DemoImage"];
+//                    [ymImageV showWithFinish:^{
+//                    }];
+//                    [ymImageV mas_makeConstraints:^(MASConstraintMaker *make) {
+//                        make.left.right.top.bottom.equalTo([PTAppDelegate appDelegate].window);
+//                    }];
+//                    [ymImageV setOtherBlock:^(NSInteger index) {
+//                        PNSLog(@"%ld",(long)index);
+//
+//                        WKWebView *webView = [WKWebView new];
+//                        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
 //                        [webView loadRequest:request];
 //                        [kAppDelegateWindow addSubview:webView];
 //                        [webView mas_makeConstraints:^(MASConstraintMaker *make) {
 //                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
 //                        }];
-//                        UIView *aaaaa = [UIView new];
-//                        aaaaa.backgroundColor = kRandomColor;
-//                        [kAppDelegateWindow addSubview:aaaaa];
-//                        [aaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
-//                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+////                        UIWebView *webView = [UIWebView new];
+////                        NSURLRequest *request =[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://www.cloudgategz.com/chl/photo/photograph.html"]];
+////                        [webView loadRequest:request];
+////                        [kAppDelegateWindow addSubview:webView];
+////                        [webView mas_makeConstraints:^(MASConstraintMaker *make) {
+////                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+////                        }];
+////                        UIView *aaaaa = [UIView new];
+////                        aaaaa.backgroundColor = kRandomColor;
+////                        [kAppDelegateWindow addSubview:aaaaa];
+////                        [aaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
+////                            make.left.right.top.bottom.equalTo(kAppDelegateWindow);
+////                        }];
+//
+//                        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+//                        pBtn.frame = CGRectMake(0, 0, 50, 50);
+//                        pBtn.backgroundColor = kRandomColor;
+//                        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+//                        [pBtn setTitle:@"1111" forState:UIControlStateNormal];
+//                        [pBtn addActionHandlersWithHandler:^(UIButton *sender) {
+//                            [webView removeFromSuperview];
 //                        }];
-                        
-                        UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-                        pBtn.frame = CGRectMake(0, 0, 50, 50);
-                        pBtn.backgroundColor = kRandomColor;
-                        [pBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
-                        [pBtn setTitle:@"1111" forState:UIControlStateNormal];
-                        [pBtn addActionHandlersWithHandler:^(UIButton *sender) {
-                            [webView removeFromSuperview];
-                        }];
-                        [webView addSubview:pBtn];
-                    }];
-                    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
-                        PNSLog(@"%d",saveStatus);
-                    };
+//                        [webView addSubview:pBtn];
+//                    }];
+//                    ymImageV.saveImageStatus = ^(BOOL saveStatus) {
+//                        PNSLog(@"%d",saveStatus);
+//                    };
                     
                 }
                     break;
