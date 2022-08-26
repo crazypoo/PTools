@@ -1107,8 +1107,8 @@ public class PTMediaViewer: UIView {
                 delt = max(delt, 0)
                 let s = max(delt, 0.5)
                 let translation = CGAffineTransform(translationX: transPoint.x / s, y: transPoint.y / s)
-                let scale = CGAffineTransformMakeScale(s, s)
-                self.tempView.transform = CGAffineTransformConcat(translation, scale)
+                let scale = CGAffineTransform(scaleX: s, y: s)
+                self.tempView.transform = translation.concatenating(scale)
                 self.coverView.alpha = delt
             case .ended:
                 if abs(transPoint.y) > 220 || abs(veloctiy.y) > 500
@@ -1434,7 +1434,7 @@ public class PTMediaViewer: UIView {
     {
         self.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.35) {
-            self.tempView.transform = CGAffineTransformIdentity
+            self.tempView.transform = CGAffineTransform.identity
             self.backgroundView.alpha = 1
         } completion: { finish in
             self.isUserInteractionEnabled = true
@@ -1484,7 +1484,7 @@ public class PTMediaViewer: UIView {
         UIView.animate(withDuration: 0.35) {
             switch currentView.dataModel.imageShowType {
             case .Normal,.GIF:
-                self.tempView.transform = CGAffineTransformInvert(self.transform)
+                self.tempView.transform = self.transform.inverted()
             default:break
             }
             self.coverView.alpha = 0
