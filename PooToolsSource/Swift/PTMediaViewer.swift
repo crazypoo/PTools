@@ -42,9 +42,9 @@ public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void
 
 @objcMembers
 public class PTViewerModel: NSObject {
-    var imageInfo:String = ""
-    var imageShowType:PTViewerDataType = .Normal
-    var imageURL:Any!
+    public var imageInfo:String = ""
+    public var imageShowType:PTViewerDataType = .Normal
+    public var imageURL:Any!
 }
 
 @objc public enum PTLoadingViewMode:Int
@@ -126,23 +126,23 @@ public class PTLoadingView: UIView {
 @objcMembers
 public class PTViewerConfig: NSObject {
     ///默认到哪一页,默认0
-    var defultIndex:Int = PTViewerBaseTag
+    public var defultIndex:Int = PTViewerBaseTag
     ///数据源
-    var mediaData:[PTViewerModel]!
+    public var mediaData:[PTViewerModel]!
     ///内容的文字颜色
-    var titleColor:UIColor = UIColor.white
+    public var titleColor:UIColor = UIColor.white
     ///内容字体
-    var viewerFont:UIFont = UIFont.systemFont(ofSize: 18)
+    public var viewerFont:UIFont = UIFont.systemFont(ofSize: 18)
     ///内容的容器背景颜色
-    var viewerContentBackgroundColor:UIColor = UIColor.black
+    public var viewerContentBackgroundColor:UIColor = UIColor.black
     ///操作方式
-    var actionType:PTViewerActionType = .All
+    public var actionType:PTViewerActionType = .All
     ///关闭页面按钮图片连接/名字
-    var closeViewerImageName:String = ""
+    public var closeViewerImageName:String = ""
     ///更多操作按钮图片连接/名字
-    var moreActionImageName:String = ""
+    public var moreActionImageName:String = ""
     ///更多功能扩展,如果选择全部,则默认保存0删除1........
-    var moreActionEX:[String] = []
+    public var moreActionEX:[String] = []
 }
 
 public class PTMediaMediaView:UIView
@@ -941,7 +941,7 @@ public class PTMediaViewer: UIView {
         return view
     }()
 
-    init(viewConfig:PTViewerConfig!) {
+    public init(viewConfig:PTViewerConfig!) {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
         switch self.viewConfig.actionType {
