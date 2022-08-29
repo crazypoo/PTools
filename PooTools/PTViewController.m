@@ -9,7 +9,6 @@
 #import "PTViewController.h"
 #import "Utils.h"
 #import "PMacros.h"
-#import "YMShowImageView.h"
 #import "PTAppDelegate.h"
 #import "UITextField+ModifyPlaceholder.h"
 #import "UIView+ViewShaking.h"

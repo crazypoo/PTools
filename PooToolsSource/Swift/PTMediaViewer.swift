@@ -58,11 +58,11 @@ public let PTLoadingItemSpace :CGFloat = 10
 @objcMembers
 public class PTLoadingView: UIView {
     
-    public var progress:CGFloat? = 0
+    public var progress:CGFloat = 0
     {
         didSet{
             self.setNeedsDisplay()
-            if self.progress! >= 1
+            if self.progress >= 1
             {
                 self.removeFromSuperview()
             }
@@ -107,7 +107,7 @@ public class PTLoadingView: UIView {
             ctx!.move(to: CGPoint.init(x: xCenter, y: yCenter))
             ctx?.addLine(to: CGPoint.init(x: xCenter, y: 0))
             let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + self.progress! * .pi * 2 + 0.01)
+            let to = (piFloat * 0.5 + self.progress * .pi * 2 + 0.01)
             ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: yCenter / 2, startAngle: (piFloat * 0.5), endAngle: to, clockwise: true)
             ctx!.closePath()
             ctx!.fillPath()
@@ -115,7 +115,7 @@ public class PTLoadingView: UIView {
             ctx!.setLineWidth(4)
             ctx!.setLineCap(.round)
             let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + self.progress! * .pi * 2 + 0.05)
+            let to = (piFloat * 0.5 + self.progress * .pi * 2 + 0.05)
             let radius = min(rect.size.width, rect.self.size.height) * 0.5 - PTLoadingItemSpace
             ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
             ctx!.strokePath()

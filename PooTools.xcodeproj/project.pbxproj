@@ -10,8 +10,6 @@
 		231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D0272CDD19003D6F62 /* PooTools.podspec */; };
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
-		231D160C272CDEE9003D6F62 /* YMShowImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14DB272CDEE9003D6F62 /* YMShowImageView.m */; };
-		231D160D272CDEE9003D6F62 /* PooShowImageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14DC272CDEE9003D6F62 /* PooShowImageModel.m */; };
 		231D160F272CDEE9003D6F62 /* WMHubWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E2272CDEE9003D6F62 /* WMHubWindow.m */; };
 		231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E3272CDEE9003D6F62 /* WMHubViewController.m */; };
 		231D1611272CDEE9003D6F62 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E7272CDEE9003D6F62 /* PooLoadingView.m */; };
@@ -221,10 +219,6 @@
 		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		231D14D9272CDEE9003D6F62 /* PooShowImageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooShowImageModel.h; sourceTree = "<group>"; };
-		231D14DA272CDEE9003D6F62 /* YMShowImageView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMShowImageView.h; sourceTree = "<group>"; };
-		231D14DB272CDEE9003D6F62 /* YMShowImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMShowImageView.m; sourceTree = "<group>"; };
-		231D14DC272CDEE9003D6F62 /* PooShowImageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooShowImageModel.m; sourceTree = "<group>"; };
 		231D14E1272CDEE9003D6F62 /* PooLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
 		231D14E2272CDEE9003D6F62 /* WMHubWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubWindow.m; sourceTree = "<group>"; };
 		231D14E3272CDEE9003D6F62 /* WMHubViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubViewController.m; sourceTree = "<group>"; };
@@ -608,7 +602,6 @@
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				231D15F9272CDEE9003D6F62 /* Country */,
-				231D14D8272CDEE9003D6F62 /* ImageReviewer */,
 				231D1537272CDEE9003D6F62 /* Input */,
 				231D15A1272CDEE9003D6F62 /* Json */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
@@ -633,17 +626,6 @@
 			);
 			path = PooToolsSource;
 			sourceTree = SOURCE_ROOT;
-		};
-		231D14D8272CDEE9003D6F62 /* ImageReviewer */ = {
-			isa = PBXGroup;
-			children = (
-				231D14D9272CDEE9003D6F62 /* PooShowImageModel.h */,
-				231D14DC272CDEE9003D6F62 /* PooShowImageModel.m */,
-				231D14DA272CDEE9003D6F62 /* YMShowImageView.h */,
-				231D14DB272CDEE9003D6F62 /* YMShowImageView.m */,
-			);
-			path = ImageReviewer;
-			sourceTree = "<group>";
 		};
 		231D14E0272CDEE9003D6F62 /* Loading */ = {
 			isa = PBXGroup;
@@ -1557,7 +1539,6 @@
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
-				231D160C272CDEE9003D6F62 /* YMShowImageView.m in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* Extensions.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
@@ -1579,7 +1560,6 @@
 				231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */,
 				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
-				231D160D272CDEE9003D6F62 /* PooShowImageModel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

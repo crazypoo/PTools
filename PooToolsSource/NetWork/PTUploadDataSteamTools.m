@@ -9,16 +9,16 @@
 #import "PTUploadDataSteamTools.h"
 
 #import <AFNetworking/AFNetworking.h>
-#import "YMShowImageView.h"
 #import "WMHub.h"
 #import <Masonry/Masonry.h>
 #import "PMacros.h"
+#import <PooTools/PooTools-Swift.h>
 
 @implementation PTUploadDataModel
 @end
 
 @interface PTUploadDataSteamTools ()
-@property (nonatomic,strong)HZWaitingView *waitingView;
+@property (nonatomic,strong)PTLoadingView *waitingView;
 @end
 
 @implementation PTUploadDataSteamTools
@@ -39,8 +39,7 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (view)
                 {
-                    self.waitingView = [HZWaitingView new];
-                    self.waitingView.mode = HZWaitingViewModeLoopDiagram;
+                    self.waitingView = [[PTLoadingView alloc] initWithType:PTLoadingViewModeLoopDiagram];
                     [view addSubview:self.waitingView];
                     [self.waitingView mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.width.height.offset(kSCREEN_WIDTH * 0.5);

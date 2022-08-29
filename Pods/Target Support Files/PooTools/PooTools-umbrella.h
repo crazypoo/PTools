@@ -49,8 +49,6 @@
 #import "MUCheckbox.h"
 #import "SensitiveWordTools.h"
 #import "CountryCodes.h"
-#import "PooShowImageModel.h"
-#import "YMShowImageView.h"
 #import "CustomTextField.h"
 #import "HPGrowingTextView.h"
 #import "HPTextViewInternal.h"
