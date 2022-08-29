@@ -526,7 +526,7 @@ public class PTMediaMediaView:UIView
                                         for i in 0...frameCount
                                         {
                                             let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                            let imageName = UIImage.init(cgImage: imageref!)
+                                            let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
                                             frames.append(imageName)
                                         }
                                         self.imageView.animationImages = frames
@@ -946,12 +946,12 @@ public class PTMediaViewer: UIView {
         self.viewConfig = viewConfig
         switch self.viewConfig.actionType {
         case .All:
-            self.actionSheetTitle = ["保存图片","删除图片"]
+            self.actionSheetTitle = ["保存媒体","删除图片"]
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
                 self.actionSheetTitle.append(value)
             }
         case .Save:
-            self.actionSheetTitle = ["保存图片"]
+            self.actionSheetTitle = ["保存媒体"]
         case .Delete:
             self.actionSheetTitle = ["删除图片"]
         case .DIY:
@@ -1097,6 +1097,8 @@ public class PTMediaViewer: UIView {
             let transPoint = panGes.translation(in: self)
             let veloctiy = panGes.velocity(in: self)
             
+            print(">>>>>>>>>>>>>>>>>>.\(panGes.state)")
+            
             switch panGes.state {
             case .began:
                 self.prepareForHide()
@@ -1109,6 +1111,7 @@ public class PTMediaViewer: UIView {
                 let translation = CGAffineTransform(translationX: transPoint.x / s, y: transPoint.y / s)
                 let scale = CGAffineTransform(scaleX: s, y: s)
                 self.tempView.transform = translation.concatenating(scale)
+                print(">>>>>>>>>>>>>>>>>>.\(delt)")
                 self.coverView.alpha = delt
             case .ended:
                 if abs(transPoint.y) > 220 || abs(veloctiy.y) > 500
@@ -1296,7 +1299,7 @@ public class PTMediaViewer: UIView {
         let documentDirectory = FileManager.pt.DocumnetsDirectory()
         let managers = AFHTTPSessionManager()
         let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-        let fileUrl = URL.init(string: fullPath)!
+        let fileUrl = URL.init(string: url)!
         let request = URLRequest.init(url: fileUrl)
         let task = managers.downloadTask(with: request) { progress in
             PTUtils.gcdMain {
@@ -1313,11 +1316,11 @@ public class PTMediaViewer: UIView {
     
     func saveVideo(videoPath:String)
     {
-        let url = URL.init(string: videoPath)
-        let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url!.path)
+        let url = NSURL.fileURL(withPath: videoPath)
+        let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible
         {
-            UISaveVideoAtPathToSavedPhotosAlbum(url!.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
+            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
         }
         else
         {
@@ -1452,6 +1455,9 @@ public class PTMediaViewer: UIView {
     func prepareForHide()
     {
         self.backgroundView.insertSubview(self.coverView, belowSubview: self)
+        self.coverView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         self.fakeNav.alpha = 0
         self.bottomView.alpha = 0
         self.backgroundView.addSubview(self.tempView)
@@ -1591,7 +1597,7 @@ extension PTMediaViewer:UIScrollViewDelegate
             
             self.labelScroller.contentSize = CGSize.init(width: self.frame.size.width - 20, height: infoH)
             self.bottomView.snp.updateConstraints { make in
-                if (bottonH * 2) < infoH && infoH > bottonH
+                if (bottonH * 2) > infoH && infoH > bottonH
                 {
                     make.height.equalTo(infoH + kTabbarSaveAreaHeight)
                 }
@@ -1610,7 +1616,7 @@ extension PTMediaViewer:UIScrollViewDelegate
                 make.bottom.equalToSuperview().inset(kTabbarSaveAreaHeight + 10)
             }
             
-            if (bottonH * 2) < infoH && infoH > bottonH
+            if (bottonH * 2) > infoH && infoH > bottonH
             {
                 self.labelScroller.isScrollEnabled = false
             }
@@ -1634,7 +1640,7 @@ extension PTMediaViewer:UIScrollViewDelegate
             self.labelScroller.contentSize = CGSize.init(width: labelW, height: infoH)
 
             self.bottomView.snp.updateConstraints { make in
-                if (bottonH * 2) < infoH && infoH > bottonH
+                if (bottonH * 2) > infoH && infoH > bottonH
                 {
                     make.height.equalTo(infoH + kTabbarSaveAreaHeight)
                 }
@@ -1660,7 +1666,7 @@ extension PTMediaViewer:UIScrollViewDelegate
                 make.right.equalTo(self.moreActionButton.snp.left).offset(-10)
             }
             
-            if (bottonH * 2) < infoH && infoH > bottonH
+            if (bottonH * 2) > infoH && infoH > bottonH
             {
                 self.labelScroller.isScrollEnabled = false
             }

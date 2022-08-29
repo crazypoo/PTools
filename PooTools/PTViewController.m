@@ -286,7 +286,7 @@ static NSString *cellIdentifier = @"CELL";
                     PTViewerModel *imageModelV = [[PTViewerModel alloc] init];
                     imageModelV.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
                     imageModelV.imageShowType = PTViewerDataTypeNormal;
-                    imageModelV.imageInfo = @"56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551";
+                    imageModelV.imageInfo = @"56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551312333444444>>>>>>>>>>>>>>>>>>>>>";
                     
                     PTViewerModel *imageModel1 = [[PTViewerModel alloc] init];
                     imageModel1.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
@@ -299,7 +299,7 @@ static NSString *cellIdentifier = @"CELL";
                     imageModel1aaaa.imageInfo = @"123";
 
                     PTViewerModel *imageModel1aaaag = [[PTViewerModel alloc] init];
-                    imageModel1aaaag.imageURL = @"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif";
+                    imageModel1aaaag.imageURL = @"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif";
                     imageModel1aaaag.imageShowType = PTViewerDataTypeGIF;
                     imageModel1aaaag.imageInfo = @"12344444";
 
