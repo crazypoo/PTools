@@ -65,7 +65,7 @@ public class PTOpenSystemFunction: NSObject {
         var uriString : String? = ""
         switch config.types {
         case .Call:
-            if config.content.stringIsEmpty() || config.content.isPooPhoneNum()
+            if config.content.stringIsEmpty() || !config.content.isPooPhoneNum()
             {
                 PTOpenSystemFunction.functionAlert(msg: "请填写电话号码")
                 return
