@@ -1131,7 +1131,7 @@ public class PTMediaViewer: UIView {
         self.addGestureRecognizers([singleTap,doubleTap,pan])
     }
     
-    func showImageViewer()
+    public func showImageViewer()
     {
         let windows = UIApplication.shared.keyWindow
         windows?.addSubview(self.backgroundView)
