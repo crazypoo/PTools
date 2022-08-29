@@ -52,7 +52,6 @@
 		231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153C272CDEE9003D6F62 /* PooTextView.m */; };
 		231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153E272CDEE9003D6F62 /* HPTextViewInternal.m */; };
 		231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1540272CDEE9003D6F62 /* CustomTextField.m */; };
-		231D163D272CDEE9003D6F62 /* PStarRateView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1545272CDEE9003D6F62 /* PStarRateView.m */; };
 		231D163E272CDEE9003D6F62 /* PooSegView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1549272CDEE9003D6F62 /* PooSegView.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
@@ -139,6 +138,7 @@
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
+		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -303,8 +303,6 @@
 		231D153F272CDEE9003D6F62 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		231D1540272CDEE9003D6F62 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		231D1541272CDEE9003D6F62 /* PooTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooTextView.h; sourceTree = "<group>"; };
-		231D1545272CDEE9003D6F62 /* PStarRateView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PStarRateView.m; sourceTree = "<group>"; };
-		231D1546272CDEE9003D6F62 /* PStarRateView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PStarRateView.h; sourceTree = "<group>"; };
 		231D1548272CDEE9003D6F62 /* PooSegView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
 		231D1549272CDEE9003D6F62 /* PooSegView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
 		231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometerBorder.m; sourceTree = "<group>"; };
@@ -442,6 +440,7 @@
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
+		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -614,7 +613,6 @@
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
-				231D1544272CDEE9003D6F62 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotamation */,
 				231D1534272CDEE9003D6F62 /* SecurityView */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
@@ -750,15 +748,6 @@
 				231D1538272CDEE9003D6F62 /* PTextField.m */,
 			);
 			path = Input;
-			sourceTree = "<group>";
-		};
-		231D1544272CDEE9003D6F62 /* RateView */ = {
-			isa = PBXGroup;
-			children = (
-				231D1545272CDEE9003D6F62 /* PStarRateView.m */,
-				231D1546272CDEE9003D6F62 /* PStarRateView.h */,
-			);
-			path = RateView;
 			sourceTree = "<group>";
 		};
 		231D1547272CDEE9003D6F62 /* Segmented */ = {
@@ -986,6 +975,7 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
+				554CCBE028BC943700028597 /* PTRateView.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1314,6 +1304,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UIColor_Hex_Swift/UIColor_Hex_Swift.framework",
+				"${BUILT_PRODUCTS_DIR}/UIImageColors/UIImageColors.framework",
 				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
@@ -1354,6 +1345,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIColor_Hex_Swift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageColors.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
@@ -1480,7 +1472,6 @@
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				231D162C272CDEE9003D6F62 /* NSDateFormatter+Category.m in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
-				231D163D272CDEE9003D6F62 /* PStarRateView.m in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
@@ -1559,6 +1550,7 @@
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */,
 				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,
+				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

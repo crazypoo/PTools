@@ -89,7 +89,6 @@
 #import "PTUploadDataSteamTools.h"
 #import "PGetIpAddresses.h"
 #import "PooUDIDInfo.h"
-#import "PStarRateView.h"
 #import "MXRotationManager.h"
 #import "SecurityStrategy.h"
 #import "PooSegView.h"

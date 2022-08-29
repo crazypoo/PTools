@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "2.7.2",
+  "version": "2.8.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "2.7.2"
+    "tag": "2.8.0"
   },
   "license": {
     "type": "MIT",
@@ -146,6 +146,9 @@
 
     ],
     "SwiftDate": [
+
+    ],
+    "UIImageColors": [
 
     ]
   },

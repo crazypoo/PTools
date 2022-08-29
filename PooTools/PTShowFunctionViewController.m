@@ -29,8 +29,6 @@ CGFloat const tagItemSpace = 5;
 #import <GCDWebServer/GCDWebUploader.h>
 #import "PGetIpAddresses.h"
 
-#import "PStarRateView.h"
-
 #import "PooSegView.h"
 
 #import "PooTagsLabel.h"
@@ -192,18 +190,22 @@ CGFloat const tagItemSpace = 5;
             break;
             case ShowFunctionStarRate:
         {
-            PStarRateView *rV = [[PStarRateView alloc] initWithRateBlock:^(PStarRateView *rateView, CGFloat newScorePercent) {
-            }];
-            rV.backgroundColor = kRandomColor;
-            rV.scorePercent = 0.5;
-            rV.hasAnimation = NO;
-            rV.allowIncompleteStar = NO;
+            PTRateConfig *config = [[PTRateConfig alloc] init];
+            config.canTap = YES;
+            config.hadAnimation = YES;
+            config.scorePercent = 2.f;
+            
+            PTRateView *rV = [[PTRateView alloc] initWithViewConfig:config];
+            rV.rateBlock = ^(CGFloat score){
+                PNSLog(@"%f",score);
+            };
             [self.view addSubview:rV];
             [rV mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerX.centerY.equalTo(self.view);
                 make.height.offset(100);
                 make.left.right.equalTo(self.view);
             }];
+            
         }
             break;
         case ShowFunctionSegmented:
