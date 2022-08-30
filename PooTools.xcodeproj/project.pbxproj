@@ -46,7 +46,6 @@
 		231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1526272CDEE9003D6F62 /* UIColor+Colours.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D1632272CDEE9003D6F62 /* NSString+MoneyString.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D152A272CDEE9003D6F62 /* NSString+MoneyString.m */; };
-		231D1636272CDEE9003D6F62 /* SecurityStrategy.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1536272CDEE9003D6F62 /* SecurityStrategy.m */; };
 		231D1637272CDEE9003D6F62 /* PTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1538272CDEE9003D6F62 /* PTextField.m */; };
 		231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153A272CDEE9003D6F62 /* HPGrowingTextView.m */; };
 		231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153C272CDEE9003D6F62 /* PooTextView.m */; };
@@ -291,8 +290,6 @@
 		231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
 		231D152A272CDEE9003D6F62 /* NSString+MoneyString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+MoneyString.m"; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
-		231D1535272CDEE9003D6F62 /* SecurityStrategy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityStrategy.h; sourceTree = "<group>"; };
-		231D1536272CDEE9003D6F62 /* SecurityStrategy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityStrategy.m; sourceTree = "<group>"; };
 		231D1538272CDEE9003D6F62 /* PTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTextField.m; sourceTree = "<group>"; };
 		231D1539272CDEE9003D6F62 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
 		231D153A272CDEE9003D6F62 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
@@ -614,7 +611,6 @@
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D15F1272CDEE9003D6F62 /* Rotamation */,
-				231D1534272CDEE9003D6F62 /* SecurityView */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
@@ -722,15 +718,6 @@
 				231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */,
 			);
 			path = Category;
-			sourceTree = "<group>";
-		};
-		231D1534272CDEE9003D6F62 /* SecurityView */ = {
-			isa = PBXGroup;
-			children = (
-				231D1535272CDEE9003D6F62 /* SecurityStrategy.h */,
-				231D1536272CDEE9003D6F62 /* SecurityStrategy.m */,
-			);
-			path = SecurityView;
 			sourceTree = "<group>";
 		};
 		231D1537272CDEE9003D6F62 /* Input */ = {
@@ -1456,7 +1443,6 @@
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
 				231D1618272CDEE9003D6F62 /* NSDate+Category.m in Sources */,
-				231D1636272CDEE9003D6F62 /* SecurityStrategy.m in Sources */,
 				231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
