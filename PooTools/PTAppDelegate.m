@@ -86,6 +86,14 @@
     
     [[PCheckAppStatus shared] open];
         
+    PTImaginaryLineView *imageLine = [[PTImaginaryLineView alloc] init];
+    [self.window addSubview:imageLine];
+    [imageLine mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.equalTo(self.window);
+        make.height.equalTo(@3);
+        make.top.equalTo(self.window).offset(100);
+    }];
+    
     self.floatBtn = [[PFloatingButton alloc] initWithView:self.window frame:CGRectMake(0, 100, 50, 50)];
     self.floatBtn.backgroundColor = kRandomColor;
     self.floatBtn.adjustsImageWhenHighlighted = NO;
