@@ -66,7 +66,6 @@
 #import "WMHubViewController.h"
 #import "WMHubWindow.h"
 #import "PrintBeautifulLog.h"
-#import "PMotion.h"
 #import "IGBatchTask.h"
 #import "IGBatchTaskManager.h"
 #import "IGHTTPClient+Download.h"

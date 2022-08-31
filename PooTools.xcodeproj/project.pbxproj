@@ -76,7 +76,6 @@
 		231D1658272CDEEA003D6F62 /* PSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1588272CDEE9003D6F62 /* PSlider.m */; };
 		231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158E272CDEE9003D6F62 /* PGetIpAddresses.m */; };
 		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
-		231D165C272CDEEA003D6F62 /* PMotion.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1593272CDEE9003D6F62 /* PMotion.m */; };
 		231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159E272CDEE9003D6F62 /* EasySignatureView.m */; };
 		231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159F272CDEE9003D6F62 /* PopSignatureView.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
@@ -138,6 +137,7 @@
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
+		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -356,8 +356,6 @@
 		231D158E272CDEE9003D6F62 /* PGetIpAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGetIpAddresses.m; sourceTree = "<group>"; };
 		231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
 		231D1591272CDEE9003D6F62 /* PGetIpAddresses.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGetIpAddresses.h; sourceTree = "<group>"; };
-		231D1593272CDEE9003D6F62 /* PMotion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMotion.m; sourceTree = "<group>"; };
-		231D1594272CDEE9003D6F62 /* PMotion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMotion.h; sourceTree = "<group>"; };
 		231D159D272CDEE9003D6F62 /* PopSignatureView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopSignatureView.h; sourceTree = "<group>"; };
 		231D159E272CDEE9003D6F62 /* EasySignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EasySignatureView.m; sourceTree = "<group>"; };
 		231D159F272CDEE9003D6F62 /* PopSignatureView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopSignatureView.m; sourceTree = "<group>"; };
@@ -437,6 +435,7 @@
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
+		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -602,7 +601,6 @@
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				231D1579272CDEE9003D6F62 /* Label */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
-				231D1592272CDEE9003D6F62 /* Motion */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
@@ -840,15 +838,6 @@
 			path = PhoneInfo;
 			sourceTree = "<group>";
 		};
-		231D1592272CDEE9003D6F62 /* Motion */ = {
-			isa = PBXGroup;
-			children = (
-				231D1593272CDEE9003D6F62 /* PMotion.m */,
-				231D1594272CDEE9003D6F62 /* PMotion.h */,
-			);
-			path = Motion;
-			sourceTree = "<group>";
-		};
 		231D159C272CDEE9003D6F62 /* SignView */ = {
 			isa = PBXGroup;
 			children = (
@@ -953,6 +942,7 @@
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
 				554CCBE028BC943700028597 /* PTRateView.swift */,
 				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
+				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1428,6 +1418,7 @@
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				231D1623272CDEE9003D6F62 /* UIView+MLScreenshot.m in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
+				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
@@ -1479,7 +1470,6 @@
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
-				231D165C272CDEEA003D6F62 /* PMotion.m in Sources */,
 				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
