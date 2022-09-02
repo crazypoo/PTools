@@ -14,7 +14,6 @@
 #import "UIView+ViewShaking.h"
 #import "SensitiveWordTools.h"
 #import "PopSignatureView.h"
-#import "PSlider.h"
 #import "DoubleSliderView.h"
 
 #import "PTShowFunctionViewController.h"
@@ -522,16 +521,16 @@ static NSString *cellIdentifier = @"CELL";
             break;
         case 11:
         {
-            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:150 initCustomView:^(UIView *customView) {
-                PSlider *slider = [PSlider new];
+            [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:200 initCustomView:^(UIView *customView) {
+                PTSlider *slider = [[PTSlider alloc] initWithShowTitle:YES];
                 [customView addSubview:slider];
                 [slider mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.width.offset(100);
-                    make.height.offset(50);
+                    make.height.offset(80);
                     make.centerX.equalTo(customView);
                     make.top.equalTo(customView).offset(5);
                 }];
-                
+
                 DoubleSliderView *dSlider = [DoubleSliderView new];
                 [customView addSubview:dSlider];
                 [dSlider mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -12,7 +12,6 @@
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
 		231D160F272CDEE9003D6F62 /* WMHubWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E2272CDEE9003D6F62 /* WMHubWindow.m */; };
 		231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E3272CDEE9003D6F62 /* WMHubViewController.m */; };
-		231D1611272CDEE9003D6F62 /* PooLoadingView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E7272CDEE9003D6F62 /* PooLoadingView.m */; };
 		231D1612272CDEE9003D6F62 /* WMHub.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EA272CDEE9003D6F62 /* WMHub.m */; };
 		231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EB272CDEE9003D6F62 /* WMHubView.m */; };
 		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
@@ -73,7 +72,6 @@
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
 		231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1583272CDEE9003D6F62 /* UICountingLabel.m */; };
 		231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1587272CDEE9003D6F62 /* DoubleSliderView.m */; };
-		231D1658272CDEEA003D6F62 /* PSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1588272CDEE9003D6F62 /* PSlider.m */; };
 		231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158E272CDEE9003D6F62 /* PGetIpAddresses.m */; };
 		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
 		231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D159E272CDEE9003D6F62 /* EasySignatureView.m */; };
@@ -139,6 +137,8 @@
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
+		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
+		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -218,13 +218,11 @@
 		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		231D14E1272CDEE9003D6F62 /* PooLoadingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooLoadingView.h; sourceTree = "<group>"; };
 		231D14E2272CDEE9003D6F62 /* WMHubWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubWindow.m; sourceTree = "<group>"; };
 		231D14E3272CDEE9003D6F62 /* WMHubViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubViewController.m; sourceTree = "<group>"; };
 		231D14E4272CDEE9003D6F62 /* WMHub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHub.h; sourceTree = "<group>"; };
 		231D14E5272CDEE9003D6F62 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
 		231D14E6272CDEE9003D6F62 /* WMHubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubView.h; sourceTree = "<group>"; };
-		231D14E7272CDEE9003D6F62 /* PooLoadingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooLoadingView.m; sourceTree = "<group>"; };
 		231D14E8272CDEE9003D6F62 /* WMHubViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubViewController.h; sourceTree = "<group>"; };
 		231D14E9272CDEE9003D6F62 /* WMHubWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubWindow.h; sourceTree = "<group>"; };
 		231D14EA272CDEE9003D6F62 /* WMHub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHub.m; sourceTree = "<group>"; };
@@ -349,9 +347,7 @@
 		231D1583272CDEE9003D6F62 /* UICountingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
 		231D1584272CDEE9003D6F62 /* PooTagsLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooTagsLabel.h; sourceTree = "<group>"; };
 		231D1587272CDEE9003D6F62 /* DoubleSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleSliderView.m; sourceTree = "<group>"; };
-		231D1588272CDEE9003D6F62 /* PSlider.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PSlider.m; sourceTree = "<group>"; };
 		231D1589272CDEE9003D6F62 /* DoubleSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleSliderView.h; sourceTree = "<group>"; };
-		231D158A272CDEE9003D6F62 /* PSlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PSlider.h; sourceTree = "<group>"; };
 		231D158C272CDEE9003D6F62 /* PooUDIDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
 		231D158E272CDEE9003D6F62 /* PGetIpAddresses.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGetIpAddresses.m; sourceTree = "<group>"; };
 		231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
@@ -437,6 +433,8 @@
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
+		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
+		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -620,10 +618,9 @@
 		231D14E0272CDEE9003D6F62 /* Loading */ = {
 			isa = PBXGroup;
 			children = (
+				55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */,
 				231D14E5272CDEE9003D6F62 /* PGifHud.h */,
 				231D14EC272CDEE9003D6F62 /* PGifHud.m */,
-				231D14E1272CDEE9003D6F62 /* PooLoadingView.h */,
-				231D14E7272CDEE9003D6F62 /* PooLoadingView.m */,
 				231D14E4272CDEE9003D6F62 /* WMHub.h */,
 				231D14EA272CDEE9003D6F62 /* WMHub.m */,
 				231D14E6272CDEE9003D6F62 /* WMHubView.h */,
@@ -821,8 +818,7 @@
 			children = (
 				231D1589272CDEE9003D6F62 /* DoubleSliderView.h */,
 				231D1587272CDEE9003D6F62 /* DoubleSliderView.m */,
-				231D158A272CDEE9003D6F62 /* PSlider.h */,
-				231D1588272CDEE9003D6F62 /* PSlider.m */,
+				55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */,
 			);
 			path = Slider;
 			sourceTree = "<group>";
@@ -903,18 +899,21 @@
 				551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */,
 				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
 				231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */,
+				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
 				231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
+				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
 				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
 				231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */,
 				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 				231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */,
 				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
 				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
+				554CCBE028BC943700028597 /* PTRateView.swift */,
 				231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */,
 				231D15C9272CDEE9003D6F62 /* PTTagsLabel.swift */,
 				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
@@ -940,9 +939,6 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
-				554CCBE028BC943700028597 /* PTRateView.swift */,
-				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
-				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
 			);
 			path = Swift;
 			sourceTree = "<group>";
@@ -1407,6 +1403,7 @@
 				231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
+				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				231D164B272CDEE9003D6F62 /* IGJSONModel.m in Sources */,
@@ -1439,6 +1436,7 @@
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				231D162C272CDEE9003D6F62 /* NSDateFormatter+Category.m in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
+				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
@@ -1491,7 +1489,6 @@
 				231D1612272CDEE9003D6F62 /* WMHub.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */,
-				231D1658272CDEEA003D6F62 /* PSlider.m in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
@@ -1506,7 +1503,6 @@
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
-				231D1611272CDEE9003D6F62 /* PooLoadingView.m in Sources */,
 				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
 				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,

@@ -42,7 +42,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "WMHub.h"
 #import "PGifHud.h"
-#import "PooLoadingView.h"
 
 #import "UIImage+BlurGlass.h"
 
@@ -748,7 +747,7 @@ CGFloat const tagItemSpace = 5;
         case 1:
         {
             [PGifHud gifHUDShowIn:kAppDelegateWindow];
-            [PGifHud setGifWithURL:[NSURL URLWithString:@"https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1535114837724&di=c006441b6c288352e1fcdfc7b47db2b3&imgtype=0&src=http%3A%2F%2Fimg5.duitang.com%2Fuploads%2Fitem%2F201412%2F13%2F20141213142127_yXadz.thumb.700_0.gif"]];
+            [PGifHud setGifWithURL:[NSURL URLWithString:@"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"]];
             [PGifHud setInfoLabelText:@"我是谁!!!!!!!!"];
             [PGifHud showWithOverlay];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond*3), dispatch_get_main_queue(), ^{
@@ -758,7 +757,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-            PooLoadingView *loading = [[PooLoadingView alloc] initWithFrame:CGRectZero];
+            PTCycleLoadingView *loading = [[PTCycleLoadingView alloc] initWithFrame:CGRectZero];
             [self.view addSubview:loading];
             [loading mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.width.height.offset(100);
