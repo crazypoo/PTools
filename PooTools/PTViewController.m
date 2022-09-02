@@ -24,6 +24,8 @@
 
 #import "MXRotationManager.h"
 
+#import "MUCheckbox.h"
+
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -522,6 +524,7 @@ static NSString *cellIdentifier = @"CELL";
         case 11:
         {
             [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:200 initCustomView:^(UIView *customView) {
+                
                 PTSlider *slider = [[PTSlider alloc] initWithShowTitle:YES];
                 [customView addSubview:slider];
                 [slider mas_makeConstraints:^(MASConstraintMaker *make) {

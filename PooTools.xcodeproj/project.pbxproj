@@ -67,7 +67,6 @@
 		231D164D272CDEEA003D6F62 /* NSError+HTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1564272CDEE9003D6F62 /* NSError+HTTPClient.m */; };
 		231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D156A272CDEE9003D6F62 /* PTUploadDataSteamTools.m */; };
 		231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1575272CDEE9003D6F62 /* LGTMBase64.m */; };
-		231D1650272CDEEA003D6F62 /* MUCheckbox.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1578272CDEE9003D6F62 /* MUCheckbox.m */; };
 		231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D157D272CDEE9003D6F62 /* PooTagsLabel.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
 		231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1583272CDEE9003D6F62 /* UICountingLabel.m */; };
@@ -139,6 +138,7 @@
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
+		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -338,8 +338,6 @@
 		231D1573272CDEE9003D6F62 /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
 		231D1574272CDEE9003D6F62 /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
 		231D1575272CDEE9003D6F62 /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
-		231D1577272CDEE9003D6F62 /* MUCheckbox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MUCheckbox.h; sourceTree = "<group>"; };
-		231D1578272CDEE9003D6F62 /* MUCheckbox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MUCheckbox.m; sourceTree = "<group>"; };
 		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
 		231D157D272CDEE9003D6F62 /* PooTagsLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooTagsLabel.m; sourceTree = "<group>"; };
 		231D157E272CDEE9003D6F62 /* UICountingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICountingLabel.h; sourceTree = "<group>"; };
@@ -435,6 +433,7 @@
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
+		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -794,8 +793,7 @@
 		231D1576272CDEE9003D6F62 /* CheckBox */ = {
 			isa = PBXGroup;
 			children = (
-				231D1577272CDEE9003D6F62 /* MUCheckbox.h */,
-				231D1578272CDEE9003D6F62 /* MUCheckbox.m */,
+				55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */,
 			);
 			path = CheckBox;
 			sourceTree = "<group>";
@@ -1392,7 +1390,6 @@
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
-				231D1650272CDEEA003D6F62 /* MUCheckbox.m in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
 				231D164A272CDEE9003D6F62 /* IGJSONResponseSerializer.m in Sources */,
@@ -1433,6 +1430,7 @@
 				231D1644272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m in Sources */,
 				231D1637272CDEE9003D6F62 /* PTextField.m in Sources */,
 				231D1628272CDEE9003D6F62 /* UIView+ViewShaking.m in Sources */,
+				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				231D162C272CDEE9003D6F62 /* NSDateFormatter+Category.m in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
