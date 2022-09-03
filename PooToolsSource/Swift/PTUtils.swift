@@ -609,4 +609,9 @@ public class PTUtils: NSObject {
             return true
         }
     }
+    
+    class open func oc_font(fontSize:CGFloat)->UIFont
+    {
+        return UIFont.appfont(size: fontSize)
+    }
 }

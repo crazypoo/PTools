@@ -133,6 +133,7 @@
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
+		555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555A8B4328C2E7DA00692501 /* PTMaskView.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
@@ -428,6 +429,8 @@
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
+		555A8B4328C2E7DA00692501 /* PTMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTMaskView.m; sourceTree = "<group>"; };
+		555A8B4428C2E7DA00692501 /* PTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMaskView.h; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
@@ -583,6 +586,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				555A8B4228C2E7A700692501 /* DevMask */,
 				9AE4468D2858680A007DC2B5 /* Log */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
@@ -1018,6 +1022,15 @@
 			path = BlackMagic;
 			sourceTree = "<group>";
 		};
+		555A8B4228C2E7A700692501 /* DevMask */ = {
+			isa = PBXGroup;
+			children = (
+				555A8B4428C2E7DA00692501 /* PTMaskView.h */,
+				555A8B4328C2E7DA00692501 /* PTMaskView.m */,
+			);
+			path = DevMask;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -1434,6 +1447,7 @@
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				231D162C272CDEE9003D6F62 /* NSDateFormatter+Category.m in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
+				555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
