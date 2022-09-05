@@ -199,7 +199,7 @@ public class PTCheckBox: UIControl {
     func checkmarkRect(rect:CGRect)->CGRect
     {
         let width = rect.maxX * self.checkmarkSize
-        let height = CGRectGetMaxY(rect) * self.checkmarkSize
+        let height = rect.maxY * self.checkmarkSize
         let adjustedRect = CGRect.init(x: (rect.maxX - width) / 2, y: (rect.maxY - height) / 2, width: width, height: height)
         return adjustedRect
     }
@@ -208,6 +208,6 @@ public class PTCheckBox: UIControl {
         let relativeFrame = self.bounds
         let hitTestEdgeInsets = UIEdgeInsets.init(top: -self.increasedTouchRadius, left: -self.increasedTouchRadius, bottom: -self.increasedTouchRadius, right: -self.increasedTouchRadius)
         let hitFrame = relativeFrame.inset(by: hitTestEdgeInsets)
-        return CGRectContainsPoint(hitFrame, point)
+        return hitFrame.contains(point)
     }
 }
