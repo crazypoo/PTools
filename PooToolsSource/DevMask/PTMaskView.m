@@ -9,7 +9,6 @@
 #import "PTMaskView.h"
 #import <PooTools/Utils.h>
 #import <Masonry/Masonry.h>
-#import <PooTools/PooTools-Swift.h>
 
 @implementation PTMaskView
 
@@ -26,7 +25,7 @@
         [images mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(self);
         }];
-        images.image = [Utils getWaterMarkImage:image andTitle:@"测试模式-所有数据均为测试" andMarkFont:[PTUtils oc_fontWithFontSize:100] andMarkColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.2]];
+        images.image = [Utils getWaterMarkImage:image andTitle:@"测试模式-所有数据均为测试" andMarkFont:[UIFont systemFontOfSize:100] andMarkColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.2]];
     }
     return self;
 }

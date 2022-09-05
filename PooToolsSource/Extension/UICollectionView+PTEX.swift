@@ -21,4 +21,11 @@ public extension UICollectionView
             }
         }
     }
+    
+    @objc func cellInWindow(cellFrame:CGRect)->CGRect
+    {
+        let cellInCollectionViewRect = self.convert(cellFrame, to: self)
+        let cellRectInWindow = self.convert(cellInCollectionViewRect, to: UIApplication.shared.keyWindow!)
+        return cellRectInWindow
+    }
 }

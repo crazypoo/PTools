@@ -48,6 +48,7 @@
 #import "UIViewController+TopBarMessage.h"
 #import "SensitiveWordTools.h"
 #import "CountryCodes.h"
+#import "PTMaskView.h"
 #import "CustomTextField.h"
 #import "HPGrowingTextView.h"
 #import "HPTextViewInternal.h"

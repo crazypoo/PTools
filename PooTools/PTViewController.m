@@ -24,8 +24,6 @@
 
 #import "MXRotationManager.h"
 
-#import "MUCheckbox.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"

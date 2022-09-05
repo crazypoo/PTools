@@ -136,6 +136,7 @@
 		555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555A8B4328C2E7DA00692501 /* PTMaskView.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
+		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -433,6 +434,7 @@
 		555A8B4428C2E7DA00692501 /* PTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMaskView.h; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
+		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -586,8 +588,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				555A8B4228C2E7A700692501 /* DevMask */,
-				9AE4468D2858680A007DC2B5 /* Log */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
@@ -597,11 +597,14 @@
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				231D15F9272CDEE9003D6F62 /* Country */,
+				555A8B4228C2E7A700692501 /* DevMask */,
+				55660F3A28C5C18A00FB3E7C /* Extension */,
 				231D1537272CDEE9003D6F62 /* Input */,
 				231D15A1272CDEE9003D6F62 /* Json */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				231D1579272CDEE9003D6F62 /* Label */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
+				9AE4468D2858680A007DC2B5 /* Log */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
@@ -929,7 +932,6 @@
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
-				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
@@ -1029,6 +1031,15 @@
 				555A8B4328C2E7DA00692501 /* PTMaskView.m */,
 			);
 			path = DevMask;
+			sourceTree = "<group>";
+		};
+		55660F3A28C5C18A00FB3E7C /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
+				55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */,
+			);
+			path = Extension;
 			sourceTree = "<group>";
 		};
 		6003F581195388D10070C39A = {
@@ -1526,6 +1537,7 @@
 				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
+				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
