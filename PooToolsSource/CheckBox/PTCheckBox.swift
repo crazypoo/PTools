@@ -176,10 +176,10 @@ public class PTCheckBox: UIControl {
     func crossCheckmark(rect:CGRect)
     {
         let bezier4Path = UIBezierPath()
-        bezier4Path.move(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.06250 * rect.size.width, y: CGRectGetMinY(rect) + 0.06250 * rect.size.height))
-        bezier4Path.addLine(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.93750 * rect.size.width, y: CGRectGetMinY(rect) + 0.93548 * rect.size.height))
-        bezier4Path.move(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.93750 * rect.size.width, y: CGRectGetMinY(rect) + 0.06452 * rect.size.height))
-        bezier4Path.addLine(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.06250 * rect.size.width, y: CGRectGetMinY(rect) + 0.93548 * rect.size.height))
+        bezier4Path.move(to: CGPoint.init(x: rect.minX + 0.06250 * rect.size.width, y: rect.minY + 0.06250 * rect.size.height))
+        bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.93750 * rect.size.width, y: rect.minY + 0.93548 * rect.size.height))
+        bezier4Path.move(to: CGPoint.init(x: rect.minX + 0.93750 * rect.size.width, y: rect.minY + 0.06452 * rect.size.height))
+        bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.06250 * rect.size.width, y: rect.minY + 0.93548 * rect.size.height))
         self.checkmarkColor.setStroke()
         bezier4Path.lineWidth = self.checkmarkSize * 2
         bezier4Path.stroke()
@@ -188,9 +188,9 @@ public class PTCheckBox: UIControl {
     func tickCheckmark(rect:CGRect)
     {
         let bezier4Path = UIBezierPath()
-        bezier4Path.move(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.4688 * rect.size.width, y: CGRectGetMinY(rect) + 0.63548 * rect.size.height))
-        bezier4Path.addLine(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.34896 * rect.size.width, y: CGRectGetMinY(rect) + 0.95161 * rect.size.height))
-        bezier4Path.addLine(to: CGPoint.init(x: CGRectGetMinX(rect) + 0.95312 * rect.size.width, y: CGRectGetMinY(rect) + 0.04839 * rect.size.height))
+        bezier4Path.move(to: CGPoint.init(x: rect.minX + 0.4688 * rect.size.width, y: rect.minY + 0.63548 * rect.size.height))
+        bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.34896 * rect.size.width, y: rect.minY + 0.95161 * rect.size.height))
+        bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.95312 * rect.size.width, y: rect.minY + 0.04839 * rect.size.height))
         self.checkmarkColor.setStroke()
         bezier4Path.lineWidth = self.checkmarkSize * 2
         bezier4Path.stroke()
@@ -198,9 +198,9 @@ public class PTCheckBox: UIControl {
     
     func checkmarkRect(rect:CGRect)->CGRect
     {
-        let width = CGRectGetMaxX(rect) * self.checkmarkSize
+        let width = rect.maxX * self.checkmarkSize
         let height = CGRectGetMaxY(rect) * self.checkmarkSize
-        let adjustedRect = CGRect.init(x: (CGRectGetMaxX(rect) - width) / 2, y: (CGRectGetMaxY(rect) - height) / 2, width: width, height: height)
+        let adjustedRect = CGRect.init(x: (rect.maxX - width) / 2, y: (rect.maxY - height) / 2, width: width, height: height)
         return adjustedRect
     }
 

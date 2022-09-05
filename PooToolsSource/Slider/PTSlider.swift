@@ -31,7 +31,7 @@ public class PTSlider: UISlider {
     public var titleColor:UIColor = .systemBlue
     public var titleFont:UIFont = .appfont(size: 14)
     
-    fileprivate var lastBounds:CGRect? = CGRectZero
+    fileprivate var lastBounds:CGRect? = .zero
     fileprivate lazy var sliderValueLabel:UILabel = {
         let view = UILabel()
         view.textAlignment = .center

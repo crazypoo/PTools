@@ -103,7 +103,7 @@ public class PTCycleLoadingView: UIView {
         let context = UIGraphicsGetCurrentContext()
         context!.setLineWidth(self.lineWidth)
         context!.setStrokeColor(self.lineColor.cgColor)
-        context!.addArc(center: CGPoint(x: CGRectGetMidX(self.bounds), y: CGRectGetMidY(self.bounds)), radius: CGRectGetWidth(self.bounds) / 2 - self.lineWidth, startAngle: self.angle(float: 120), endAngle: self.angle(float: 120) + self.angle(float: 330) * self.anglePer!, clockwise: false)
+        context!.addArc(center: CGPoint(x: self.bounds.midX, y: self.bounds.midY), radius: self.bounds.width / 2 - self.lineWidth, startAngle: self.angle(float: 120), endAngle: self.angle(float: 120) + self.angle(float: 330) * self.anglePer!, clockwise: false)
         context!.strokePath()
     }
     
