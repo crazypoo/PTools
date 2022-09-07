@@ -287,10 +287,6 @@ public extension String
     
     func numberStringFormatter(decimal:Bool)->String
     {
-        if self.int == nil || self.float() == nil
-        {
-            return ""
-        }
         let numberFormat = NumberFormatter()
         numberFormat.numberStyle = .decimal
         var outputValue = ""
