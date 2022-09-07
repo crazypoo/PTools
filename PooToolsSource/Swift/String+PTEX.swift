@@ -296,11 +296,11 @@ public extension String
         var outputValue = ""
         if decimal
         {
-            outputValue = numberFormat.string(from: NSDecimalNumber.init(string: self))
+            outputValue = numberFormat.string(from: NSDecimalNumber.init(string: self))!
         }
         else
         {
-            outputValue = numberFormat.string(from: NSNumber.init(value: self.int!))
+            outputValue = numberFormat.string(from: NSNumber.init(value: self.int!))!
         }
         return outputValue
     }
