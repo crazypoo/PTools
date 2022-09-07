@@ -285,6 +285,26 @@ public extension String
         return (self as NSString).length == 0 || (self.charactersArray.count < 1) ? true : false
     }
     
+    func numberStringFormatter(decimal:Bool)->String
+    {
+        if self.int == nil || self.float() == nil
+        {
+            return ""
+        }
+        let numberFormat = NumberFormatter()
+        numberFormat.numberStyle = .decimal
+        var outputValue = ""
+        if decimal
+        {
+            outputValue = numberFormat.string(from: NSDecimalNumber.init(string: self))
+        }
+        else
+        {
+            outputValue = numberFormat.string(from: NSNumber.init(value: self.int!))
+        }
+        return outputValue
+    }
+    
     func toMoney()->String
     {
         return String(format: "%.2f", self.float()!)
