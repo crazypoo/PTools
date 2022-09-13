@@ -136,6 +136,9 @@
 		555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555A8B4328C2E7DA00692501 /* PTMaskView.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
+		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
+		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
+		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
@@ -434,6 +437,9 @@
 		555A8B4428C2E7DA00692501 /* PTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMaskView.h; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
+		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
+		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
+		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
@@ -604,6 +610,7 @@
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				231D1579272CDEE9003D6F62 /* Label */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
+				555E8FE628D01CF600AF5E63 /* LocalConsole */,
 				9AE4468D2858680A007DC2B5 /* Log */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
@@ -616,6 +623,7 @@
 				231D1586272CDEE9003D6F62 /* Slider */,
 				231D15B2272CDEE9003D6F62 /* Swift */,
 				231D154A272CDEE9003D6F62 /* Thermometer */,
+				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				231D15E2272CDEE9003D6F62 /* UniTool */,
 			);
 			path = PooToolsSource;
@@ -865,7 +873,6 @@
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
 				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
-				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
@@ -884,7 +891,6 @@
 				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
 				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
 				9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */,
-				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
@@ -905,7 +911,6 @@
 				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
 				231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */,
 				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
-				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
 				231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */,
@@ -1031,6 +1036,26 @@
 				555A8B4328C2E7DA00692501 /* PTMaskView.m */,
 			);
 			path = DevMask;
+			sourceTree = "<group>";
+		};
+		555E8FDF28D01B6C00AF5E63 /* TouchInspector */ = {
+			isa = PBXGroup;
+			children = (
+				555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */,
+				555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */,
+				555E8FE228D01BC200AF5E63 /* Utilities.swift */,
+			);
+			path = TouchInspector;
+			sourceTree = "<group>";
+		};
+		555E8FE628D01CF600AF5E63 /* LocalConsole */ = {
+			isa = PBXGroup;
+			children = (
+				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
+				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
+				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
+			);
+			path = LocalConsole;
 			sourceTree = "<group>";
 		};
 		55660F3A28C5C18A00FB3E7C /* Extension */ = {
@@ -1403,6 +1428,7 @@
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
 				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
+				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */,
 				231D1647272CDEE9003D6F62 /* IGHTTPTools.m in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
@@ -1512,6 +1538,7 @@
 				231D1612272CDEE9003D6F62 /* WMHub.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */,
+				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
@@ -1532,6 +1559,7 @@
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
+				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				231D165F272CDEEA003D6F62 /* EasySignatureView.m in Sources */,
 				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,
