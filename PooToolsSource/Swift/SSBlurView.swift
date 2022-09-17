@@ -82,7 +82,7 @@ public class SSBlurView {
         blurEffectView.alpha = blurAlpha
         
         superview.insertSubview(blurEffectView, at: 0)
-        
+        superview.bringSubviewToFront(blurEffectView)
         blurEffectView.snp.makeConstraints { maker in
             maker.edges.equalToSuperview()
         }
