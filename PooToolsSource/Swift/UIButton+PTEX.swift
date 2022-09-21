@@ -31,7 +31,7 @@ public extension UIButton
         PTUtils.timeRunWithTime_base(customQueName:"ButtonFunction",timeInterval: timeInterval) { finish, time in
             if finish
             {
-                self.setTitle(originalTitle, for: .normal)
+                self.setTitle(originalTitle, for: self.state)
                 self.isUserInteractionEnabled = canTap
                 if timeFinish != nil
                 {
@@ -42,8 +42,8 @@ public extension UIButton
             {
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)
-                self.setTitle(buttonTime, for: .normal)
-                self.isUserInteractionEnabled = canTap
+                self.setTitle(buttonTime, for: self.state)
+                self.isUserInteractionEnabled = false
             }
         }
     }

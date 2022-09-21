@@ -296,7 +296,7 @@ public class PTUtils: NSObject {
         PTUtils.timeRunWithTime_base(customQueName:"TimeFunction",timeInterval: timeInterval) { finish, time in
             if finish
             {
-                sender.setTitle(originalTitle, for: .normal)
+                sender.setTitle(originalTitle, for: sender.state)
                 sender.isUserInteractionEnabled = canTap
                 if timeFinish != nil
                 {
@@ -307,8 +307,8 @@ public class PTUtils: NSObject {
             {
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)
-                sender.setTitle(buttonTime, for: .normal)
-                sender.isUserInteractionEnabled = canTap
+                sender.setTitle(buttonTime, for: sender.state)
+                sender.isUserInteractionEnabled = false
             }
         }
     }
