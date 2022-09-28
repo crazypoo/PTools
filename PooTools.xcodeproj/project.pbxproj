@@ -123,7 +123,6 @@
 		231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E0272CDEE9003D6F62 /* GPKeyChain.m */; };
 		231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */; };
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
-		231D1698272CDEEA003D6F62 /* SensitiveWordTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EC272CDEE9003D6F62 /* SensitiveWordTools.m */; };
 		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
 		231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F2272CDEE9003D6F62 /* MXRotationManager.m */; };
 		231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F6272CDEE9003D6F62 /* SecurityUtil.m */; };
@@ -141,6 +140,7 @@
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
+		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -412,8 +412,6 @@
 		231D15E5272CDEE9003D6F62 /* PMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
 		231D15E6272CDEE9003D6F62 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOGobalFileManager.h; sourceTree = "<group>"; };
-		231D15EC272CDEE9003D6F62 /* SensitiveWordTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SensitiveWordTools.m; sourceTree = "<group>"; };
-		231D15ED272CDEE9003D6F62 /* SensitiveWordTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SensitiveWordTools.h; sourceTree = "<group>"; };
 		231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
 		231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		231D15F2272CDEE9003D6F62 /* MXRotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRotationManager.m; sourceTree = "<group>"; };
@@ -442,6 +440,7 @@
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
+		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -976,8 +975,7 @@
 		231D15EB272CDEE9003D6F62 /* CheckDirtyWord */ = {
 			isa = PBXGroup;
 			children = (
-				231D15EC272CDEE9003D6F62 /* SensitiveWordTools.m */,
-				231D15ED272CDEE9003D6F62 /* SensitiveWordTools.h */,
+				55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */,
 			);
 			path = CheckDirtyWord;
 			sourceTree = "<group>";
@@ -1445,7 +1443,6 @@
 				231D164A272CDEE9003D6F62 /* IGJSONResponseSerializer.m in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
-				231D1698272CDEEA003D6F62 /* SensitiveWordTools.m in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
@@ -1502,6 +1499,7 @@
 				231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */,
+				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1615272CDEE9003D6F62 /* PBugReporter.m in Sources */,
 				231D1645272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,

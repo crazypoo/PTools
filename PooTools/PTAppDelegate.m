@@ -54,6 +54,8 @@
     
 //    PNSLog(@">>>>>>>>>>>>>>>>>%@",[PTUtils jsonStringToArrayWithJsonStr:@"{\"json\":11111,\"b\"123344}"]);
 
+    PNSLog(@"有没有敏感词%d",[[PTCheckFWords share] haveFWordWithStr:@"公安局"]);
+
     PTTagsConfig * aaaaaa = [[PTTagsConfig alloc] init];
     aaaaaa.itemVerMargin = 0;
     PNSLog(@">>>>>>>>>>>>%@",[[UIColor.redColor createImageWithColor] transformImageWithSize:CGSizeMake(100, 100)]);

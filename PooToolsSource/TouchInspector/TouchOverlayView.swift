@@ -12,6 +12,7 @@
 import Foundation
 import UIKit
 
+@available(iOS 13.0, *)
 class TouchOverlayView: UIView {
     
     let touchIndicatorView = TouchIndicatorView(size: CGSize(width: 30, height: 30))

@@ -12,6 +12,7 @@
 import Foundation
 import UIKit
 
+@available(iOS 13.0, *)
 public var App_TouchInspect_Debug_Bool:Bool
 {
     let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorDebug)
@@ -19,6 +20,7 @@ public var App_TouchInspect_Debug_Bool:Bool
     return ui_debug
 }
 
+@available(iOS 13.0, *)
 public class TouchInspectorWindow: UIWindow {
     
     public static let TouchInspectorDebug = "TS_debug"
