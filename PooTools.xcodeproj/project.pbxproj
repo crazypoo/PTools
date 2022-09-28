@@ -15,7 +15,6 @@
 		231D1612272CDEE9003D6F62 /* WMHub.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EA272CDEE9003D6F62 /* WMHub.m */; };
 		231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EB272CDEE9003D6F62 /* WMHubView.m */; };
 		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
-		231D1615272CDEE9003D6F62 /* PBugReporter.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EE272CDEE9003D6F62 /* PBugReporter.m */; };
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
 		231D1618272CDEE9003D6F62 /* NSDate+Category.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14FA272CDEE9003D6F62 /* NSDate+Category.m */; };
 		231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */; };
@@ -233,8 +232,6 @@
 		231D14EA272CDEE9003D6F62 /* WMHub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHub.m; sourceTree = "<group>"; };
 		231D14EB272CDEE9003D6F62 /* WMHubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubView.m; sourceTree = "<group>"; };
 		231D14EC272CDEE9003D6F62 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
-		231D14EE272CDEE9003D6F62 /* PBugReporter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PBugReporter.m; sourceTree = "<group>"; };
-		231D14EF272CDEE9003D6F62 /* PBugReporter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PBugReporter.h; sourceTree = "<group>"; };
 		231D14F4272CDEE9003D6F62 /* UIView+ViewShaking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ViewShaking.h"; sourceTree = "<group>"; };
 		231D14F5272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		231D14F6272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
@@ -597,7 +594,6 @@
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
-				231D14ED272CDEE9003D6F62 /* BugReport */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
@@ -644,15 +640,6 @@
 				231D14E2272CDEE9003D6F62 /* WMHubWindow.m */,
 			);
 			path = Loading;
-			sourceTree = "<group>";
-		};
-		231D14ED272CDEE9003D6F62 /* BugReport */ = {
-			isa = PBXGroup;
-			children = (
-				231D14EE272CDEE9003D6F62 /* PBugReporter.m */,
-				231D14EF272CDEE9003D6F62 /* PBugReporter.h */,
-			);
-			path = BugReport;
 			sourceTree = "<group>";
 		};
 		231D14F3272CDEE9003D6F62 /* Category */ = {
@@ -1500,7 +1487,6 @@
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
-				231D1615272CDEE9003D6F62 /* PBugReporter.m in Sources */,
 				231D1645272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
 				231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */,
