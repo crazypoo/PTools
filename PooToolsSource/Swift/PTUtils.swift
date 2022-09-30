@@ -614,4 +614,35 @@ public class PTUtils: NSObject {
     {
         return UIFont.appfont(size: fontSize)
     }
+    
+    class open func findSuperViews(view:UIView)->[UIView]
+    {
+        var temp = view.superview
+        let result = NSMutableArray()
+        while temp != nil {
+            result.add(temp!)
+            temp = temp!.superview
+        }
+        return result as! [UIView]
+    }
+    
+    class open func findCommonSuperView(firstView:UIView,other:UIView)->[UIView]
+    {
+        let result = NSMutableArray()
+        let sOne = self.findSuperViews(view: firstView)
+        let sOther = self.findSuperViews(view: other)
+        var i = 0
+        while i < min(sOne.count, sOther.count) {
+            if sOne == sOther
+            {
+                result.add(sOne)
+                i += 1
+            }
+            else
+            {
+                break
+            }
+        }
+        return result as! [UIView]
+    }
 }

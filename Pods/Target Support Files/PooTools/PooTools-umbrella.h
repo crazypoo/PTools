@@ -18,7 +18,6 @@
 #import "LGTMBase64.h"
 #import "LGTMDefines.h"
 #import "MethodSwizzle.h"
-#import "PBugReporter.h"
 #import "NSDate+Category.h"
 #import "NSDateFormatter+Category.h"
 #import "NSMutableArray+Shuffle.h"
@@ -46,7 +45,6 @@
 #import "UIView+ModifyFrame.h"
 #import "UIView+ViewShaking.h"
 #import "UIViewController+TopBarMessage.h"
-#import "SensitiveWordTools.h"
 #import "CountryCodes.h"
 #import "PTMaskView.h"
 #import "CustomTextField.h"
@@ -95,6 +93,7 @@
 #import "MAThermometerBorder.h"
 #import "DOGobalFileManager.h"
 #import "PMacros.h"
+#import "PTCharReverse.h"
 #import "Utils.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;

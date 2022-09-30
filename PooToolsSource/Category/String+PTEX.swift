@@ -136,7 +136,7 @@ public extension String
             }
         }
     }
-    
+        
     func checkWithString(expression:String)->Bool
     {
         let regextest = NSPredicate.init(format: "SELF MATCHES %@", expression)

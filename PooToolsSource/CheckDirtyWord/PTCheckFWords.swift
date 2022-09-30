@@ -63,7 +63,7 @@ public class PTCheckFWords: NSObject {
     }
     
     public func haveFWord(str:NSString)->Bool
-    {
+    {        
         for i in stride(from: 0, to: str.length, by: 1)
         {
             let subString:NSString = str.substring(from: i) as NSString
