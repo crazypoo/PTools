@@ -270,4 +270,31 @@ public extension UIImage
         return finalImg
     }
 
+    func imageScale(scaleSize:CGFloat)->UIImage
+    {
+        UIGraphicsBeginImageContext(CGSize(width: self.size.width * scaleSize, height: self.size.height * scaleSize))
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width * scaleSize, height: self.size.height * scaleSize))
+        UIGraphicsEndImageContext()
+        return self
+    }
+    
+    func imageMask(text:NSString,point:CGPoint,attributed:NSDictionary)->UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
+    
+    func imageMask(maskImage:UIImage,maskRect:CGRect)->UIImage
+    {
+        UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
+        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        maskImage.draw(in: maskRect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage!
+    }
 }

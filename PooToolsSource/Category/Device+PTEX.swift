@@ -210,4 +210,23 @@ public extension PTProtocol where Base: UIDevice
     {
         return UIScreen.main.maximumFramesPerSecond
     }
+    
+    //MARK: 获取手机的第一个语言
+    static var currentDeviceLanguageInIos:String
+    {
+        return Bundle.main.preferredLocalizations.first!
+    }
+    
+    //MARK: 获取手机的第一个语言字典
+    static var currentDeviceLanguageInIosWithDic:[String:String]
+    {
+        var dic:[String:String] = [String:String]()
+        let arr = NSLocale.preferredLanguages
+        let language = arr.first!
+        dic["LANGUAGEENGLISH"] = language
+        dic["LANGUAGEANDCHINESE"] = NSLocale.canonicalLocaleIdentifier(from: language)
+        dic["LANGUAGECHINESE"] = NSLocale(localeIdentifier: language).displayName(forKey: NSLocale.Key.identifier, value: language)
+
+        return dic
+    }
 }

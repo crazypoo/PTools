@@ -19,6 +19,11 @@ public extension TimeInterval
         return Date.init(timeIntervalSince1970: timeSta)
     }
     
+    func toTimeString(dateFormat:String)->String
+    {
+        return self.msTimeToDate().getTimeStr(dateFormat: dateFormat)
+    }
+    
     func getFormatPlayTime()->String
     {
         if self.isNaN{

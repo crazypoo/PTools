@@ -18,6 +18,7 @@ import CommonCrypto
 import SwifterSwift
 import AVFoundation
 import Foundation
+import SwiftDate
 
 /** 数字类型*/
 let NUM = 1
@@ -259,6 +260,67 @@ public extension String
         }
         return resultStr
     }
+    
+    func chineseTransToMandarinAlphabet()->String
+    {
+        let pinyin:NSMutableString = self.nsString.mutableCopy() as! NSMutableString
+        CFStringTransform((pinyin as CFMutableString), nil, kCFStringTransformMandarinLatin, false)
+        CFStringTransform((pinyin as CFMutableString), nil, kCFStringTransformStripCombiningMarks, false)
+        var newString:NSString = pinyin as NSString
+        newString = newString.replacingOccurrences(of: " ", with: "") as NSString
+        return newString.uppercased
+    }
+    
+    //MARK: 暂时仅限英文换其他
+    func toOtherLanguage(otherLanguage:StringTransform)->String
+    {
+        return self.stringIsEmpty() ? "" : self.applyingTransform(otherLanguage, reverse: false)!
+    }
+    
+    func timeContrastStatus(timeInterval:TimeInterval)->String
+    {
+        let dateFormatter = "yyyy-MM-dd HH:mm:ss"
+        let timeString = timeInterval.toTimeString(dateFormat: dateFormatter)
+                
+        let regions = Region(calendar: Calendars.republicOfChina,zone: Zones.asiaMacau,locale: Locales.chineseChina)
+        var timeInterval = timeString.toDate(dateFormatter,region: regions)!.date.timeIntervalSinceNow
+        timeInterval = -timeInterval
+        var result = ""
+        if timeInterval < 60
+        {
+            result = "刚刚"
+        }
+        else if (timeInterval/60) < 60
+        {
+            result = "\((timeInterval/60))分钟前"
+        }
+        else if (timeInterval/3600) > 1 && (timeInterval/3600) < 24
+        {
+            result = "\((timeInterval/3600))小时前"
+        }
+        else if (timeInterval/3600) > 24 && (timeInterval/3600) < 48
+        {
+            result = "昨天"
+        }
+        else if (timeInterval/3600) > 48 && (timeInterval/3600) < 72
+        {
+            result = "前天"
+        }
+        else
+        {
+            result = timeString
+        }
+        return result
+    }
+    
+    func jsonToTrueJsonString()->String
+    {
+        var validString:NSString = self.nsString.replacingOccurrences(of: "(\\w+)\\s*:([^A-Za-z0-9_])", with: "\"$1\":$2",options: NSString.CompareOptions.regularExpression,range: NSRange(location: 0, length: self.nsString.length)) as NSString
+        validString = validString.replacingOccurrences(of: "([:\\[,\\{])'", with: "$1\"",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
+        validString = validString.replacingOccurrences(of: "'([:\\],\\}])", with: "\"$1",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
+        validString = validString.replacingOccurrences(of: "([:\\[,\\{])(\\w+)\\s*:", with: "$1\"$2\":",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
+        return validString as String
+    }
 }
 
 // MARK: - Initializers
@@ -308,7 +370,7 @@ public extension String
     
     func toSecurityPhone()->String
     {
-        if !(self).stringIsEmpty() && self.charactersArray.count > 10
+        if !(self).stringIsEmpty() && self.charactersArray.count > 10 && self.isPooPhoneNum()
         {
             return (self as NSString).replacingCharacters(in: NSRange.init(location: 3, length: 4), with: "****")
         }

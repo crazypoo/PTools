@@ -59,6 +59,15 @@ public extension Date {
         dformatter.dateFormat = dateFormat
         return dformatter.string(from: self)
     }
+    
+    func getCurrentDate(dateFormatterString:String)->TimeInterval
+    {
+        let dformatter = DateFormatter()
+        dformatter.dateFormat = dateFormatterString
+        let timeDate = dformatter.date(from: String.currentDate(dateFormatterString: dateFormatterString))
+        let timeInterval = timeDate!.timeIntervalSince1970
+        return timeInterval
+    }
 }
 
 public extension PTProtocol where Base == Date {

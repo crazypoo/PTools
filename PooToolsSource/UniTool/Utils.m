@@ -44,16 +44,6 @@
     return btn;
 }
 
-+(NSString *)chineseTransform:(NSString *)chinese
-{
-    NSMutableString *pinyin = [chinese mutableCopy];
-    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformMandarinLatin, NO);
-    CFStringTransform((__bridge CFMutableStringRef)pinyin, NULL, kCFStringTransformStripCombiningMarks, NO);
-    NSString *newStr = pinyin;
-    newStr = [newStr stringByReplacingOccurrencesOfString:@" " withString:@""];
-    return newStr.uppercaseString;
-}
-
 +(CGSize)sizeForString:(NSString  * _Nonnull)string
                   font:(UIFont * _Nonnull)stringFont
               andHeigh:(CGFloat)heigh
@@ -474,35 +464,6 @@
     }
 }
 
-#pragma mark ------> 获取地区
-+(NSString *)getCurrentApplicationLocale
-{
-    NSLocale *locale = [NSLocale currentLocale];
-    NSString *countryCode = [locale objectForKey: NSLocaleCountryCode];
-    
-    NSLocale *usLocale = [[NSLocale alloc] initWithLocaleIdentifier:@"en_US"];
-    NSString *country = [usLocale displayNameForKey: NSLocaleCountryCode value: countryCode];
-    return country;
-}
-
-+(NSString *)getCurrentDeviceLanguageInIOS
-{
-    NSString *language = [[[NSBundle mainBundle] preferredLocalizations] objectAtIndex:0];
-    return language;
-}
-
-+(NSDictionary *)getCurrentDeviceLanguageInIOSWithDic
-{
-    NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
-    NSArray *arr = [NSLocale preferredLanguages];
-    NSString *language = arr[0];
-    [dic setObject:language forKey:LANGUAGEENGLISH];
-    [dic setObject:[NSLocale canonicalLanguageIdentifierFromString:language] forKey:LANGUAGEANDCHINESE];
-    [dic setObject:[[[NSLocale alloc] initWithLocaleIdentifier:language] displayNameForKey:NSLocaleIdentifier value:language] forKey:LANGUAGECHINESE];
-    
-    return dic;
-}
-
 +(void)changeAPPIcon:(NSString *)IconName
 {
     if (@available(iOS 10.3, *)) {
@@ -537,14 +498,6 @@
     }
 }
 
-+(NSString *)stringToOtherLanguage:(NSString *)string otherLanguage:(NSStringTransform)language
-{
-    if (@available(iOS 9.0, *)) {
-        return [string stringByApplyingTransform:language reverse:NO];
-    }
-    return @"只支持iOS9.0以上";
-}
-
 +(NSString *)backbankenameWithBanknumber:(NSString *)banknumber
 {
     NSString *bankNumber = [banknumber stringByReplacingOccurrencesOfString:@" " withString:@""];
@@ -568,43 +521,6 @@
     }
     
     return bankname;
-}
-
-+(NSString *)theDayBeforeToday:(NSString *)dayStr
-{
-    NSString *createdTimeStr = dayStr;
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss"];
-    NSDate *timeDate = [dateFormatter dateFromString:createdTimeStr];
-    NSTimeInterval timeInterval = [timeDate timeIntervalSinceNow];
-    timeInterval = -timeInterval;
-    long temp = 0;
-    NSString *result;
-    if (timeInterval < 60)
-    {
-        result = [NSString stringWithFormat:@"刚刚"];
-    }
-    else if((temp = timeInterval/60) < 60)
-    {
-        result = [NSString stringWithFormat:@"%ld分钟前",temp];
-    }
-    else if((temp = timeInterval/3600) > 1 && (temp = timeInterval/3600) <24)
-    {
-        result = [NSString stringWithFormat:@"%ld小时前",temp];
-    }
-    else if ((temp = timeInterval/3600) > 24 && (temp = timeInterval/3600) < 48)
-    {
-        result = [NSString stringWithFormat:@"昨天"];
-    }
-    else if ((temp = timeInterval/3600) > 48 && (temp = timeInterval/3600) < 72)
-    {
-        result = [NSString stringWithFormat:@"前天"];
-    }
-    else
-    {
-        result = createdTimeStr;
-    }
-    return result;
 }
 
 #pragma mark ------> Image
@@ -688,48 +604,6 @@
         return ToolsUrlStringVideoType3GP;
     }
     return ToolsUrlStringVideoTypeUNKNOW;
-}
-
-+(UIImage *)scaleImage:(UIImage *)image toScale:(float)scaleSize
-{
-    UIGraphicsBeginImageContext(CGSizeMake(image.size.width * scaleSize, image.size.height * scaleSize));
-    [image drawInRect:CGRectMake(0, 0, image.size.width * scaleSize, image.size.height * scaleSize)];
-    UIImage *scaledImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return scaledImage;
-}
-
-+ (UIImage *)jx_WaterImageWithImage:(UIImage *)image text:(NSString *)text textPoint:(CGPoint)point attributedString:(NSDictionary * )attributed{
-    //1.开启上下文
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);
-    //2.绘制图片
-    [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
-    //添加水印文字
-    [text drawAtPoint:point withAttributes:attributed];
-    //3.从上下文中获取新图片
-    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
-    //4.关闭图形上下文
-    UIGraphicsEndImageContext();
-    //返回图片
-    return newImage;
-}
-
-+ (UIImage *)jx_WaterImageWithImage:(UIImage *)image waterImage:(UIImage *)waterImage waterImageRect:(CGRect)rect{
-    
-    //1.获取图片
-    
-    //2.开启上下文
-    UIGraphicsBeginImageContextWithOptions(image.size, NO, 0);
-    //3.绘制背景图片
-    [image drawInRect:CGRectMake(0, 0, image.size.width, image.size.height)];
-    //绘制水印图片到当前上下文
-    [waterImage drawInRect:rect];
-    //4.从上下文中获取新图片
-    UIImage * newImage = UIGraphicsGetImageFromCurrentImageContext();
-    //5.关闭图形上下文
-    UIGraphicsEndImageContext();
-    //返回图片
-    return newImage;
 }
 
 + (UIImage *)getWaterMarkImage:(UIImage *)originalImage andTitle:(NSString *)title andMarkFont:(UIFont *)markFont andMarkColor:(UIColor *)markColor{
@@ -821,42 +695,6 @@
     return dic;
 }
 
-+ (NSString *)changeJsonStringToTrueJsonString:(NSString *)json
-{
-    // 将没有双引号的替换成有双引号的
-    NSString *validString = [json stringByReplacingOccurrencesOfString:@"(\\w+)\\s*:([^A-Za-z0-9_])"
-                                                            withString:@"\"$1\":$2"
-                                                               options:NSRegularExpressionSearch
-                                                                 range:NSMakeRange(0, [json length])];
-    
-    
-    //把'单引号改为双引号"
-    validString = [validString stringByReplacingOccurrencesOfString:@"([:\\[,\\{])'"
-                                                         withString:@"$1\""
-                                                            options:NSRegularExpressionSearch
-                                                              range:NSMakeRange(0, [validString length])];
-    validString = [validString stringByReplacingOccurrencesOfString:@"'([:\\],\\}])"
-                                                         withString:@"\"$1"
-                                                            options:NSRegularExpressionSearch
-                                                              range:NSMakeRange(0, [validString length])];
-    
-    //再重复一次 将没有双引号的替换成有双引号的
-    validString = [validString stringByReplacingOccurrencesOfString:@"([:\\[,\\{])(\\w+)\\s*:"
-                                                         withString:@"$1\"$2\":"
-                                                            options:NSRegularExpressionSearch
-                                                              range:NSMakeRange(0, [validString length])];
-    return validString;
-}
-
-#pragma mark ------> 手机隐蔽
-+(NSString*)shoujibaomi:(NSString*)phone
-{
-    if (phone && phone.length>10) {
-        return [phone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-    }
-    return phone;
-}
-
 +(NSArray *)arraySortASC:(NSArray *)arr
 {
     NSArray *result = [arr sortedArrayUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
@@ -878,28 +716,6 @@
         
     }];
     return result;
-}
-
-+ (int)compareOneDay:(NSDate *)oneDay withAnotherDay:(NSDate *)anotherDay dateFormatter:(NSString *)df
-{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateFormat:df];
-    NSString *oneDayStr = [dateFormatter stringFromDate:oneDay];
-    NSString *anotherDayStr = [dateFormatter stringFromDate:anotherDay];
-    NSDate *dateA = [dateFormatter dateFromString:oneDayStr];
-    NSDate *dateB = [dateFormatter dateFromString:anotherDayStr];
-    NSComparisonResult result = [dateA compare:dateB];
-    //    NSLog(@"date1 : %@, date2 : %@", oneDay, anotherDay);
-    if (result == NSOrderedDescending) {
-        //NSLog(@"Date1  is in the future");
-        return 1;
-    }
-    else if (result == NSOrderedAscending){
-        //NSLog(@"Date1 is in the past");
-        return -1;
-    }
-    //NSLog(@"Both dates are the same");
-    return 0;
 }
 
 #pragma mark ------> 数字小写转大写
@@ -1161,71 +977,6 @@
     return rangeArray;
 }
 
-#pragma mark ------> DateAndTime
-+(NSDate *)fewMonthLater:(NSInteger)month
-                 fromNow:(NSDate *)thisTime
-                timeType:(FewMonthLaterType)type
-{
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *adcomps = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:thisTime];
-    [adcomps setYear:0];
-    switch (type) {
-        case FewMonthLaterTypeNormal:
-        {
-            [adcomps setMonth:month];
-            [adcomps setDay:0];
-        }
-            break;
-        case FewMonthLaterTypeContract:
-        {
-            [adcomps setMonth:(month-1)];
-            
-            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-            [formatter setDateStyle:NSDateFormatterMediumStyle];
-            [formatter setTimeStyle:NSDateFormatterShortStyle];
-            [formatter setDateFormat:@"MM"];
-            
-            NSDateFormatter *formatterYear = [[NSDateFormatter alloc] init];
-            [formatterYear setDateStyle:NSDateFormatterMediumStyle];
-            [formatterYear setTimeStyle:NSDateFormatterShortStyle];
-            [formatterYear setDateFormat:@"YYYY"];
-
-            
-            NSString *monthString = [formatter stringFromDate:[calendar dateByAddingComponents:adcomps toDate:thisTime options:0]];
-            if ([monthString isEqualToString:@"01"] || [monthString isEqualToString:@"03"] || [monthString isEqualToString:@"05"] || [monthString isEqualToString:@"07"] || [monthString isEqualToString:@"08"] || [monthString isEqualToString:@"10"] || [monthString isEqualToString:@"12"])
-            {
-                [adcomps setDay:30];
-            }
-            else if ([monthString isEqualToString:@"04"] || [monthString isEqualToString:@"06"] || [monthString isEqualToString:@"09"] || [monthString isEqualToString:@"11"])
-            {
-                [adcomps setDay:29];
-            }
-            else
-            {
-                NSString *yearString = [formatterYear stringFromDate:[calendar dateByAddingComponents:adcomps toDate:thisTime options:0]];
-
-                if([yearString integerValue]%4 == 0 && [yearString integerValue]%100 != 0)//普通年份，非100整数倍
-                {
-                    [adcomps setDay:28];
-                }
-                else if ([yearString integerValue]%400 == 0)
-                {
-                    [adcomps setDay:28];
-                }
-                else
-                {
-                    [adcomps setDay:27];
-                }
-            }
-        }
-            break;
-        default:
-            break;
-    }
-    
-    return [calendar dateByAddingComponents:adcomps toDate:thisTime options:0];
-}
-
 #pragma mark ------> 生成二维码
 +(UIImage *)createQRImageWithString:(NSString *)string withSize:(CGFloat)size
 {
@@ -1299,57 +1050,6 @@
         realStr = @"周日";
     }
     return realStr;
-}
-
-#pragma mark ------>String
-+(BOOL)stringContainsEmoji:(NSString *)string
-{
-    __block BOOL returnValue = NO;
-    
-    [string enumerateSubstringsInRange:NSMakeRange(0, [string length])
-                               options:NSStringEnumerationByComposedCharacterSequences
-                            usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
-                                const unichar hs = [substring characterAtIndex:0];
-                                if (0xd800 <= hs && hs <= 0xdbff) {
-                                    if (substring.length > 1) {
-                                        const unichar ls = [substring characterAtIndex:1];
-                                        const int uc = ((hs - 0xd800) * 0x400) + (ls - 0xdc00) + 0x10000;
-                                        if (0x1d000 <= uc && uc <= 0x1f77f) {
-                                            returnValue = YES;
-                                        }
-                                    }
-                                } else if (substring.length > 1) {
-                                    const unichar ls = [substring characterAtIndex:1];
-                                    if (ls == 0x20e3) {
-                                        returnValue = YES;
-                                    }
-                                } else {
-                                    if (0x2100 <= hs && hs <= 0x27ff) {
-                                        returnValue = YES;
-                                    } else if (0x2B05 <= hs && hs <= 0x2b07) {
-                                        returnValue = YES;
-                                    } else if (0x2934 <= hs && hs <= 0x2935) {
-                                        returnValue = YES;
-                                    } else if (0x3297 <= hs && hs <= 0x3299) {
-                                        returnValue = YES;
-                                    } else if (hs == 0xa9 || hs == 0xae || hs == 0x303d || hs == 0x3030 || hs == 0x2b55 || hs == 0x2b1c || hs == 0x2b1b || hs == 0x2b50) {
-                                        returnValue = YES;
-                                    }
-                                }
-                            }];
-    
-    return returnValue;
-}
-
-+(BOOL)isSIMInstalled
-{
-    CTTelephonyNetworkInfo *networkInfo = [[CTTelephonyNetworkInfo alloc] init];
-    CTCarrier *carrier = [networkInfo subscriberCellularProvider];
-    if (!carrier.isoCountryCode) {
-        PNSLog(@"No sim present Or No cellular coverage or phone is on airplane mode.");
-        return NO;
-    }
-    return YES;
 }
 
 + (BOOL)isRolling:(UIView * _Nonnull)view

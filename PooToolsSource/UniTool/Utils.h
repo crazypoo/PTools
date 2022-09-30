@@ -187,35 +187,6 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(NSString * _Nonnull)dateStringFormater:(NSString * _Nonnull)timeString withType:(GetTimeType)type;
 
-/*! @brief 某个时间的某时间之后或者之前
- */
-+(NSDate * _Nonnull)fewMonthLater:(NSInteger)month
-                 fromNow:(NSDate * _Nonnull)thisTime
-                timeType:(FewMonthLaterType)type;
-
-/*! @brief 日期时间对比
- */
-+ (int)compareOneDay:(NSDate * _Nonnull)oneDay
-      withAnotherDay:(NSDate * _Nonnull)anotherDay
-       dateFormatter:(NSString * _Nonnull)df;
-
-/*! @brief 类似朋友圈的时间显示
- */
-+(NSString * _Nonnull)theDayBeforeToday:(NSString * _Nonnull)dayStr;
-
-#pragma mark ------> 获取手机语言
-/*! @brief 获取手机App语言(根据定位)
- */
-+(NSString * _Nonnull)getCurrentApplicationLocale;
-
-/*! @brief 获取手机App语言(根据系统)
- */
-+(NSString * _Nonnull)getCurrentDeviceLanguageInIOS;
-
-/*! @brief 获取手机App语言(根据系统加强版)
- */
-+(NSMutableDictionary * _Nonnull)getCurrentDeviceLanguageInIOSWithDic;
-
 /*! @brief 用某个时间戳来判断当前时间与服务器获取的时间对比,是否快到期
  */
 +(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString * _Nonnull)contractDate expTimeStamp:(int)timeStamp;
@@ -244,23 +215,6 @@ static inline BOOL isIPhoneXSeries() {
 +(UIImage * _Nonnull)createQRImageWithString:(NSString * _Nonnull)string
                            withSize:(CGFloat)size;
 
-/*! @brief 图片按比例大小转换
- */
-+(UIImage * _Nonnull)scaleImage:(UIImage * _Nonnull)image
-               toScale:(float)scaleSize;
-
-/*! @brief 添加文字水印
- * @param image 原来的图片
- * @param text 水印内容
- * @param point 水印位置
- * @param attributed 水印设置
- */
-+ (UIImage * _Nonnull)jx_WaterImageWithImage:(UIImage * _Nonnull)image
-                               text:(NSString * _Nonnull)text
-                          textPoint:(CGPoint)point
-                   attributedString:(NSDictionary * _Nonnull)attributed;
-
-
 /*! @brief 添加文字水印(斜文字版)
  * @param originalImage 原来的图片
  * @param title 水印内容
@@ -272,22 +226,10 @@ static inline BOOL isIPhoneXSeries() {
                    andMarkFont:(UIFont * _Nonnull)markFont
                   andMarkColor:(UIColor * _Nonnull)markColor;
 
-/*! @brief 添加图片水印
- * @param image 原来的图片
- * @param waterImage 水印图片
- * @param rect 水印位置大小
- */
-+ (UIImage * _Nonnull)jx_WaterImageWithImage:(UIImage * _Nonnull)image
-                         waterImage:(UIImage * _Nonnull)waterImage
-                     waterImageRect:(CGRect)rect;
-
 #pragma mark ------> JSON
 /*! @brief Json字符串转字典
  */
 +(NSDictionary * _Nonnull)dictionaryWithJsonString:(NSString * _Nonnull)jsonString;
-/*! @brief 不规则Json字符串变换成规则字符串
- */
-+(NSString * _Nonnull)changeJsonStringToTrueJsonString:(NSString * _Nonnull)json;
 
 #pragma mark ------> 数组
 /*! @brief 数组升序
@@ -298,18 +240,9 @@ static inline BOOL isIPhoneXSeries() {
 +(NSArray * _Nonnull)arraySortINV:(NSArray * _Nonnull)arr;
 
 #pragma mark ------> 字符串
-/*! @brief 中文转拼音
- */
-+(NSString * _Nonnull)chineseTransform:(NSString * _Nonnull)chinese;
-
 /*! @brief 银行卡号辨别银行
  */
 +(NSString * _Nonnull)backbankenameWithBanknumber:(NSString * _Nonnull)banknumber;
-
-/*! @brief iOS9++，暂时仅限英文换其他
- */
-+(NSString * _Nonnull)stringToOtherLanguage:(NSString * _Nonnull)string
-                     otherLanguage:(NSStringTransform _Nonnull)language;
 
 /*! @brief 数字小写转大写
  */
@@ -320,10 +253,6 @@ static inline BOOL isIPhoneXSeries() {
                      grade:(GradeType)grade;
 +(NSString * _Nonnull)digitUppercase:(NSString * _Nonnull)numstr;
 
-/*! @brief 隐藏手机号码某一段
- */
-+(NSString * _Nonnull)shoujibaomi:(NSString * _Nonnull)phone;
-
 /*! @brief 查找某字符在字符串的位置
  */
 + (NSArray * _Nonnull)rangeOfSubString:(NSString * _Nonnull)subStr
@@ -333,15 +262,7 @@ static inline BOOL isIPhoneXSeries() {
  */
 +(NSString * _Nonnull)engDayCoverToZHCN:(NSString * _Nonnull)str;
 
-/*! @brief 判断是否存在Emoji
- */
-+(BOOL)stringContainsEmoji:(NSString * _Nonnull)string;
-
 /*! @brief 判断是否存在SIM卡
- */
-+(BOOL)isSIMInstalled;
-
-/*! @brief 此方法用来鉴定picker是否在滑动
  */
 +(BOOL)isRolling:(UIView * _Nonnull)view;
 
