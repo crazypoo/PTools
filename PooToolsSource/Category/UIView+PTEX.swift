@@ -179,6 +179,18 @@ public extension UIView {
     }
 }
 
+public extension UIView
+{
+    @objc func viewUI_shake()
+    {
+        let keyFrame = CAKeyframeAnimation(keyPath: "position.x")
+        keyFrame.duration = 0.3
+        let x = self.layer.position.x
+        keyFrame.values = [(x - 30),(x - 30),(x + 20),(x - 20),(x + 10),(x - 10),(x + 5),(x - 5)]
+        self.layer.add(keyFrame, forKey: "shake")
+    }
+}
+
 public extension UILabel
 {
     @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
@@ -232,3 +244,4 @@ public extension UITextView
         return self.getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
+
