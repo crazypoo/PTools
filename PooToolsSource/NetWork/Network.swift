@@ -25,11 +25,11 @@ public enum NetWorkEnvironment: String {
     case Distribution = "生产环境"
 }
 
-typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
-typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
-typealias NetWorkErrorBlock = () -> Void
-typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
-typealias UploadProgress = (_ progress: Progress) -> Void
+public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
+public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
+public typealias NetWorkErrorBlock = () -> Void
+public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
+public typealias UploadProgress = (_ progress: Progress) -> Void
 
 // MARK: - 网络运行状态监听
 public class XMNetWorkStatus {
