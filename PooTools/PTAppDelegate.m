@@ -11,8 +11,6 @@
 
 #import "PMacros.h"
 #import "PGetIpAddresses.h"
-#import "IGHTTPClient.h"
-#import "IGBatchTaskManager.h"
 
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
@@ -137,7 +135,7 @@
 
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"ip>>>>>>>>%@",[PGetIpAddresses getIPAddress:YES]]];
     
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
+//    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
     
     
     NSMutableDictionary *dic = [[NSMutableDictionary alloc] init];
@@ -156,27 +154,27 @@
 //    [CGBaseGobalTools apiServerAddress:@"www.cloudgategz.com" apiURL:@"/chl/enteringAdver/findFirstPic" withParmars:dic hideHub:YES hubColor:kRandomColor handle:^(BOOL success, NSMutableDictionary *infoDict) {
 //
 //    }];
-    RespDictionaryBlock dBlock = ^(NSMutableDictionary *infoDict, NSError *error) {
-        kHideNetworkActivityIndicator();
-        if (!error)
-        {
-            if (infoDict && [infoDict isKindOfClass:[NSMutableDictionary class]])
-            {
-//                block(YES,infoDict);
-            }
-        }
-        else
-        {
-//            block(NO,nil);
-        }
-    };
-    
-    [HTTPClient(@"www.cloudgategz.com",YES) POSTApi:@"/chl/enteringAdver/findFirstPic"
-                                parameters:dic
-                                 parserKey:pkIGTestParserApp
-                                   success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
-                                   failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
-
+//    RespDictionaryBlock dBlock = ^(NSMutableDictionary *infoDict, NSError *error) {
+//        kHideNetworkActivityIndicator();
+//        if (!error)
+//        {
+//            if (infoDict && [infoDict isKindOfClass:[NSMutableDictionary class]])
+//            {
+////                block(YES,infoDict);
+//            }
+//        }
+//        else
+//        {
+////            block(NO,nil);
+//        }
+//    };
+//
+//    [HTTPClient(@"www.cloudgategz.com",YES) POSTApi:@"/chl/enteringAdver/findFirstPic"
+//                                parameters:dic
+//                                 parserKey:pkIGTestParserApp
+//                                   success:[IGRespBlockGenerator taskSuccessBlockWithDictionaryBlock:dBlock]
+//                                   failure:[IGRespBlockGenerator taskFailureBlockWithDictionaryBlock:dBlock]];
+//
     
 //    CheckNowTimeAndPastTimeRelationshipsExpire = 0,
 //       CheckNowTimeAndPastTimeRelationshipsReadyExpire,
@@ -186,22 +184,22 @@
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]]];
     [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否信用代码%d",[@"91440705MA54R5NK0X" isCOLTDCode]]];
     
-    NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
-        @"clientStatus":@0,
-    }];
-
-    NSMutableDictionary * aaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
-        @"userKey":@"3QzN2kjM4YTO2gjNx0SOhZmNhVWM1AzYyYTZjRDZ1cDMhVWY0YGZhNjMmBTZwojclNXdtEWO4MWN0UzY1ETZiBTYxIGNkFGNzkjZ3kTNkFTM5UGNtMkMENjRxMTN3MjN0UzQxIUNBhjR0IzQwYDMxQDRzkjM",
-        @"debug":@""
-    }];
+//    NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
+//        @"clientStatus":@0,
+//    }];
+//
+//    NSMutableDictionary * aaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
+//        @"userKey":@"3QzN2kjM4YTO2gjNx0SOhZmNhVWM1AzYyYTZjRDZ1cDMhVWY0YGZhNjMmBTZwojclNXdtEWO4MWN0UzY1ETZiBTYxIGNkFGNzkjZ3kTNkFTM5UGNtMkMENjRxMTN3MjN0UzQxIUNBhjR0IzQwYDMxQDRzkjM",
+//        @"debug":@""
+//    }];
     
-    [HTTPClient(@"https://diou.user.gdupb.com", YES) POST:@"https://diou.user.gdupb.com/banner/showBannerButtons" parameters:dicaaaaaa headers:aaaaa progress:^(NSProgress * _Nonnull uploadProgress) {
-        
-    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>%@",responseObject]];
-    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-        
-    }];
+//    [HTTPClient(@"https://diou.user.gdupb.com", YES) POST:@"https://diou.user.gdupb.com/banner/showBannerButtons" parameters:dicaaaaaa headers:aaaaa progress:^(NSProgress * _Nonnull uploadProgress) {
+//
+//    } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+//        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>%@",responseObject]];
+//    } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+//
+//    }];
     
     PTGuidePageModel *model = [PTGuidePageModel new];
     model.mainView = self.window;

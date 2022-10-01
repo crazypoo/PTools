@@ -46,20 +46,6 @@
 		231D163E272CDEE9003D6F62 /* PooSegView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1549272CDEE9003D6F62 /* PooSegView.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
-		231D1641272CDEE9003D6F62 /* IGBatchTaskManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1552272CDEE9003D6F62 /* IGBatchTaskManager.m */; };
-		231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1554272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m */; };
-		231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1555272CDEE9003D6F62 /* IGHTTPClient+Download.m */; };
-		231D1644272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1556272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m */; };
-		231D1645272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1559272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m */; };
-		231D1646272CDEE9003D6F62 /* IGBatchTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D155A272CDEE9003D6F62 /* IGBatchTask.m */; };
-		231D1647272CDEE9003D6F62 /* IGHTTPTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D155B272CDEE9003D6F62 /* IGHTTPTools.m */; };
-		231D1648272CDEE9003D6F62 /* IGTestParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D155C272CDEE9003D6F62 /* IGTestParser.m */; };
-		231D1649272CDEE9003D6F62 /* IGHTTPRequestSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D155D272CDEE9003D6F62 /* IGHTTPRequestSerializer.m */; };
-		231D164A272CDEE9003D6F62 /* IGJSONResponseSerializer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D155E272CDEE9003D6F62 /* IGJSONResponseSerializer.m */; };
-		231D164B272CDEE9003D6F62 /* IGJSONModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1560272CDEE9003D6F62 /* IGJSONModel.m */; };
-		231D164C272CDEEA003D6F62 /* IGHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1562272CDEE9003D6F62 /* IGHTTPClient.m */; };
-		231D164D272CDEEA003D6F62 /* NSError+HTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1564272CDEE9003D6F62 /* NSError+HTTPClient.m */; };
-		231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D156A272CDEE9003D6F62 /* PTUploadDataSteamTools.m */; };
 		231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1575272CDEE9003D6F62 /* LGTMBase64.m */; };
 		231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D157D272CDEE9003D6F62 /* PooTagsLabel.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
@@ -134,6 +120,10 @@
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
+		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
+		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
+		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
+		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -290,39 +280,6 @@
 		231D154C272CDEE9003D6F62 /* MAThermometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometer.m; sourceTree = "<group>"; };
 		231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
 		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
-		231D1551272CDEE9003D6F62 /* IGJSONResponseObjectParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseObjectParser.h; sourceTree = "<group>"; };
-		231D1552272CDEE9003D6F62 /* IGBatchTaskManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBatchTaskManager.m; sourceTree = "<group>"; };
-		231D1553272CDEE9003D6F62 /* NSError+HTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+HTTPClient.h"; sourceTree = "<group>"; };
-		231D1554272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPRequestBuilderManager.m; sourceTree = "<group>"; };
-		231D1555272CDEE9003D6F62 /* IGHTTPClient+Download.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "IGHTTPClient+Download.m"; sourceTree = "<group>"; };
-		231D1556272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONResponseObjectParserManager.m; sourceTree = "<group>"; };
-		231D1557272CDEE9003D6F62 /* IGHTTPJSONResponseParserList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPJSONResponseParserList.h; sourceTree = "<group>"; };
-		231D1558272CDEE9003D6F62 /* PTUploadDataSteamTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTUploadDataSteamTools.h; sourceTree = "<group>"; };
-		231D1559272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLSessionTask+IGHTTPClient.m"; sourceTree = "<group>"; };
-		231D155A272CDEE9003D6F62 /* IGBatchTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGBatchTask.m; sourceTree = "<group>"; };
-		231D155B272CDEE9003D6F62 /* IGHTTPTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPTools.m; sourceTree = "<group>"; };
-		231D155C272CDEE9003D6F62 /* IGTestParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGTestParser.m; sourceTree = "<group>"; };
-		231D155D272CDEE9003D6F62 /* IGHTTPRequestSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPRequestSerializer.m; sourceTree = "<group>"; };
-		231D155E272CDEE9003D6F62 /* IGJSONResponseSerializer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONResponseSerializer.m; sourceTree = "<group>"; };
-		231D155F272CDEE9003D6F62 /* IGHTTPClientProfile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPClientProfile.h; sourceTree = "<group>"; };
-		231D1560272CDEE9003D6F62 /* IGJSONModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGJSONModel.m; sourceTree = "<group>"; };
-		231D1561272CDEE9003D6F62 /* IGHTTPRequestBuilderList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilderList.h; sourceTree = "<group>"; };
-		231D1562272CDEE9003D6F62 /* IGHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IGHTTPClient.m; sourceTree = "<group>"; };
-		231D1563272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilderManager.h; sourceTree = "<group>"; };
-		231D1564272CDEE9003D6F62 /* NSError+HTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+HTTPClient.m"; sourceTree = "<group>"; };
-		231D1565272CDEE9003D6F62 /* IGBatchTaskManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBatchTaskManager.h; sourceTree = "<group>"; };
-		231D1566272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseObjectParserManager.h; sourceTree = "<group>"; };
-		231D1567272CDEE9003D6F62 /* IGHTTPClient+Download.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "IGHTTPClient+Download.h"; sourceTree = "<group>"; };
-		231D1568272CDEE9003D6F62 /* IGHTTPTools.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPTools.h; sourceTree = "<group>"; };
-		231D1569272CDEE9003D6F62 /* IGBatchTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGBatchTask.h; sourceTree = "<group>"; };
-		231D156A272CDEE9003D6F62 /* PTUploadDataSteamTools.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTUploadDataSteamTools.m; sourceTree = "<group>"; };
-		231D156B272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLSessionTask+IGHTTPClient.h"; sourceTree = "<group>"; };
-		231D156C272CDEE9003D6F62 /* IGHTTPRequestBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestBuilder.h; sourceTree = "<group>"; };
-		231D156D272CDEE9003D6F62 /* IGHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPClient.h; sourceTree = "<group>"; };
-		231D156E272CDEE9003D6F62 /* IGJSONModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONModel.h; sourceTree = "<group>"; };
-		231D156F272CDEE9003D6F62 /* IGJSONResponseSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGJSONResponseSerializer.h; sourceTree = "<group>"; };
-		231D1570272CDEE9003D6F62 /* IGHTTPRequestSerializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGHTTPRequestSerializer.h; sourceTree = "<group>"; };
-		231D1571272CDEE9003D6F62 /* IGTestParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IGTestParser.h; sourceTree = "<group>"; };
 		231D1573272CDEE9003D6F62 /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
 		231D1574272CDEE9003D6F62 /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
 		231D1575272CDEE9003D6F62 /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
@@ -423,6 +380,10 @@
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
+		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
+		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
+		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -752,39 +713,9 @@
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
-				231D1569272CDEE9003D6F62 /* IGBatchTask.h */,
-				231D155A272CDEE9003D6F62 /* IGBatchTask.m */,
-				231D1565272CDEE9003D6F62 /* IGBatchTaskManager.h */,
-				231D1552272CDEE9003D6F62 /* IGBatchTaskManager.m */,
-				231D156D272CDEE9003D6F62 /* IGHTTPClient.h */,
-				231D1562272CDEE9003D6F62 /* IGHTTPClient.m */,
-				231D1567272CDEE9003D6F62 /* IGHTTPClient+Download.h */,
-				231D1555272CDEE9003D6F62 /* IGHTTPClient+Download.m */,
-				231D155F272CDEE9003D6F62 /* IGHTTPClientProfile.h */,
-				231D1557272CDEE9003D6F62 /* IGHTTPJSONResponseParserList.h */,
-				231D156C272CDEE9003D6F62 /* IGHTTPRequestBuilder.h */,
-				231D1561272CDEE9003D6F62 /* IGHTTPRequestBuilderList.h */,
-				231D1563272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.h */,
-				231D1554272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m */,
-				231D1570272CDEE9003D6F62 /* IGHTTPRequestSerializer.h */,
-				231D155D272CDEE9003D6F62 /* IGHTTPRequestSerializer.m */,
-				231D1568272CDEE9003D6F62 /* IGHTTPTools.h */,
-				231D155B272CDEE9003D6F62 /* IGHTTPTools.m */,
-				231D156E272CDEE9003D6F62 /* IGJSONModel.h */,
-				231D1560272CDEE9003D6F62 /* IGJSONModel.m */,
-				231D1551272CDEE9003D6F62 /* IGJSONResponseObjectParser.h */,
-				231D1566272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.h */,
-				231D1556272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m */,
-				231D156F272CDEE9003D6F62 /* IGJSONResponseSerializer.h */,
-				231D155E272CDEE9003D6F62 /* IGJSONResponseSerializer.m */,
-				231D1571272CDEE9003D6F62 /* IGTestParser.h */,
-				231D155C272CDEE9003D6F62 /* IGTestParser.m */,
-				231D1553272CDEE9003D6F62 /* NSError+HTTPClient.h */,
-				231D1564272CDEE9003D6F62 /* NSError+HTTPClient.m */,
-				231D156B272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.h */,
-				231D1559272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m */,
-				231D1558272CDEE9003D6F62 /* PTUploadDataSteamTools.h */,
-				231D156A272CDEE9003D6F62 /* PTUploadDataSteamTools.m */,
+				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
+				55C9CBA228E851DA00DB6200 /* Network.swift */,
+				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -1018,6 +949,7 @@
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
+				55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */,
 			);
 			path = LocalConsole;
 			sourceTree = "<group>";
@@ -1240,6 +1172,7 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
@@ -1251,6 +1184,7 @@
 				"${BUILT_PRODUCTS_DIR}/HTAutocompleteTextField/HTAutocompleteTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
+				"${BUILT_PRODUCTS_DIR}/KakaJSON/KakaJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/LTNavigationBar/LTNavigationBar.framework",
 				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
@@ -1267,6 +1201,7 @@
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UIColor_Hex_Swift/UIColor_Hex_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageColors/UIImageColors.framework",
@@ -1281,6 +1216,7 @@
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
@@ -1292,6 +1228,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTAutocompleteTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KakaJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTNavigationBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
@@ -1308,6 +1245,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIColor_Hex_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageColors.framework",
@@ -1364,13 +1302,11 @@
 				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				231D1638272CDEE9003D6F62 /* HPGrowingTextView.m in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
-				231D1641272CDEE9003D6F62 /* IGBatchTaskManager.m in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
-				231D1643272CDEE9003D6F62 /* IGHTTPClient+Download.m in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
@@ -1385,7 +1321,6 @@
 				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */,
-				231D1647272CDEE9003D6F62 /* IGHTTPTools.m in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
@@ -1397,7 +1332,7 @@
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
-				231D164A272CDEE9003D6F62 /* IGJSONResponseSerializer.m in Sources */,
+				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
@@ -1407,16 +1342,15 @@
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
-				231D164B272CDEE9003D6F62 /* IGJSONModel.m in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
+				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
-				231D164E272CDEEA003D6F62 /* PTUploadDataSteamTools.m in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
@@ -1427,9 +1361,8 @@
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
-				231D1649272CDEE9003D6F62 /* IGHTTPRequestSerializer.m in Sources */,
+				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				231D163E272CDEE9003D6F62 /* PooSegView.m in Sources */,
-				231D1644272CDEE9003D6F62 /* IGJSONResponseObjectParserManager.m in Sources */,
 				231D1637272CDEE9003D6F62 /* PTextField.m in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
@@ -1443,7 +1376,6 @@
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
-				231D164C272CDEEA003D6F62 /* IGHTTPClient.m in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
@@ -1454,13 +1386,11 @@
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
-				231D1645272CDEE9003D6F62 /* NSURLSessionTask+IGHTTPClient.m in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
 				231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */,
 				231D162A272CDEE9003D6F62 /* NSString+Extension.m in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */,
-				231D164D272CDEEA003D6F62 /* NSError+HTTPClient.m in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D160F272CDEE9003D6F62 /* WMHubWindow.m in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
@@ -1487,7 +1417,6 @@
 				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
 				231D1612272CDEE9003D6F62 /* WMHub.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
-				231D1642272CDEE9003D6F62 /* IGHTTPRequestBuilderManager.m in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
@@ -1496,8 +1425,7 @@
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* Extensions.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
-				231D1646272CDEE9003D6F62 /* IGBatchTask.m in Sources */,
-				231D1648272CDEE9003D6F62 /* IGTestParser.m in Sources */,
+				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,

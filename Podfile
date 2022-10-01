@@ -16,4 +16,9 @@ target 'PooTools_Example' do
   pod 'CocoaLumberjack/Swift'#Log工具
   pod 'LookinServer', :configurations => ['Debug']
   pod 'SwiftDate'
+  pod 'KakaJSON'
+  pod 'Alamofire'
+  pod 'HandyJSON'
+  pod 'SwiftyJSON'
+  pod 'CocoaLumberjack/Swift'#Log工具
 end

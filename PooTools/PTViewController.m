@@ -11,7 +11,6 @@
 #import "PMacros.h"
 #import "PTAppDelegate.h"
 #import "UITextField+ModifyPlaceholder.h"
-#import "UIView+ViewShaking.h"
 #import "PopSignatureView.h"
 #import "DoubleSliderView.h"
 

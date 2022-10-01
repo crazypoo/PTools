@@ -14,6 +14,7 @@ PODS:
   - AFNetworking/Serialization (4.0.1)
   - AFNetworking/UIKit (4.0.1):
     - AFNetworking/NSURLSession
+  - Alamofire (5.6.2)
   - CocoaLumberjack/Core (3.7.4)
   - CocoaLumberjack/Swift (3.7.4):
     - CocoaLumberjack/Core
@@ -35,6 +36,7 @@ PODS:
   - HandyJSON (5.0.2)
   - HTAutocompleteTextField (1.3.2)
   - IQKeyboardManager (6.5.10)
+  - KakaJSON (1.1.2)
   - LookinServer (1.0.6)
   - LTNavigationBar (2.1.9)
   - Mantle (2.2.0):
@@ -49,8 +51,9 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
-  - PooTools (2.16.6):
+  - PooTools (2.16.8):
     - AFNetworking
+    - Alamofire
     - CocoaLumberjack/Swift
     - CYLTabBarController
     - DeviceKit
@@ -63,6 +66,7 @@ PODS:
     - HandyJSON
     - HTAutocompleteTextField
     - IQKeyboardManager
+    - KakaJSON
     - LTNavigationBar
     - Mantle
     - Masonry
@@ -77,6 +81,7 @@ PODS:
     - SSZipArchive
     - SwiftDate
     - SwifterSwift
+    - SwiftyJSON
     - TextFieldEffects
     - UIColor_Hex_Swift
     - UIImageColors
@@ -118,6 +123,7 @@ PODS:
   - SwifterSwift/StoreKit (5.2.0)
   - SwifterSwift/SwiftStdlib (5.2.0)
   - SwifterSwift/UIKit (5.2.0)
+  - SwiftyJSON (5.0.1)
   - TextFieldEffects (1.6.0)
   - UIColor_Hex_Swift (5.1.7)
   - UIImageColors (2.1.0)
@@ -131,22 +137,26 @@ PODS:
   - YYCategories/no-arc (1.0.4)
 
 DEPENDENCIES:
+  - Alamofire
   - CocoaLumberjack/Swift
   - DeviceKit (~> 4.0)
   - GCDWebServer/WebUploader (~> 3.0)
   - HandyJSON
+  - KakaJSON
   - LookinServer
   - NotificationBannerSwift
   - PooTools (from `PooTools.podspec`)
   - SnapKit
   - SwiftDate
   - SwifterSwift
+  - SwiftyJSON
   - WZLBadge
   - YYCategories
 
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - Alamofire
     - CocoaLumberjack
     - CYLTabBarController
     - DeviceKit
@@ -158,6 +168,7 @@ SPEC REPOS:
     - HandyJSON
     - HTAutocompleteTextField
     - IQKeyboardManager
+    - KakaJSON
     - LookinServer
     - LTNavigationBar
     - Mantle
@@ -174,6 +185,7 @@ SPEC REPOS:
     - SSZipArchive
     - SwiftDate
     - SwifterSwift
+    - SwiftyJSON
     - TextFieldEffects
     - UIColor_Hex_Swift
     - UIImageColors
@@ -190,6 +202,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  Alamofire: d368e1ff8a298e6dde360e35a3e68e6c610e7204
   CocoaLumberjack: 543c79c114dadc3b1aba95641d8738b06b05b646
   CYLTabBarController: db44b5901a28693a8a4279e4721b3aafdd36c178
   DeviceKit: c870c34f7c0e0ac4caa6f052e6efe7ef1472c5a1
@@ -201,6 +214,7 @@ SPEC CHECKSUMS:
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   HTAutocompleteTextField: ce809f04875e843e20f214ab973bb496ba7a93b1
   IQKeyboardManager: 45a1fa55c1a5b02c61ac0fd7fd5b62bb4ad20d97
+  KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
   LookinServer: 18155b1e4a08213c236a1dd6b7ca52328a70a1e3
   LTNavigationBar: c278785bed344862e18146b5f06792932e4feacc
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d
@@ -211,13 +225,14 @@ SPEC CHECKSUMS:
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
-  PooTools: 0c7ac8f9e8e2428f81af6adfb6c73c83ab6bc329
+  PooTools: ff523716469a7895e194ccf72b05040604c4a079
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
   SwiftDate: 72d28954e8e1c6c1c0f917ccc8005e4f83c7d4b2
   SwifterSwift: 334181863c416882d97b7a60c05054d9e4d799e2
+  SwiftyJSON: 2f33a42c6fbc52764d96f13368585094bfd8aa5e
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
   UIColor_Hex_Swift: 31cd3e47440f07a20d2503a36bb0437a445b3c29
   UIImageColors: d2ef3b0877d203cbb06489eeb78ea8b7788caabe
@@ -228,6 +243,6 @@ SPEC CHECKSUMS:
   YCXMenu: 6003bcd20d8ac72e3eb3c442c97ed21948c6dc1f
   YYCategories: 6bcd4314c6661a561410dce4a793379ebd306abd
 
-PODFILE CHECKSUM: 752d6b40f973e75efd039023fba34b67405b1dbd
+PODFILE CHECKSUM: 56460eac4f29d504aa0c076fd7e2dfbfe9c32812
 
 COCOAPODS: 1.11.3
