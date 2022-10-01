@@ -8,14 +8,14 @@
 
 import UIKit
 
-class ResponseModel:PTBaseModel {
+public class ResponseModel:PTBaseModel {
     private(set) var status: Int = 0
-    var data: Any? = nil
-    var datas: [Any]? = nil
-    let msg: String = ""
-    let totalCount: Int = 0
+    public var data: Any? = nil
+    public var datas: [Any]? = nil
+    public let msg: String = ""
+    public let totalCount: Int = 0
     
-    var isSuccess:Bool {
+    public var isSuccess:Bool {
         get {
             return status == 200
         }

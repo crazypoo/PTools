@@ -10,15 +10,15 @@ import UIKit
 import CocoaLumberjack
 import SwifterSwift
 
-class PTLocalConsoleFunction: NSObject {
-    static let share = PTLocalConsoleFunction()
+public class PTLocalConsoleFunction: NSObject {
+    static public let share = PTLocalConsoleFunction()
     
-    var localconsole : LocalConsole = {
+    public var localconsole : LocalConsole = {
         let local = LocalConsole.shared
         return local
     }()
     
-    func pNSLog(_ any:Any,error:Bool? = false)
+    public func pNSLog(_ any:Any,error:Bool? = false)
     {
         var currentAppStatus = ""
         #if DEBUG
@@ -66,5 +66,4 @@ class PTLocalConsoleFunction: NSObject {
             }
         }
     }
-
 }
