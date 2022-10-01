@@ -899,9 +899,9 @@
 			isa = PBXGroup;
 			children = (
 				231D15F5272CDEE9003D6F62 /* NSData+AES.h */,
-				231D15F6272CDEE9003D6F62 /* SecurityUtil.m */,
 				231D15F7272CDEE9003D6F62 /* NSData+AES.m */,
 				231D15F8272CDEE9003D6F62 /* SecurityUtil.h */,
+				231D15F6272CDEE9003D6F62 /* SecurityUtil.m */,
 			);
 			path = AESAndDES;
 			sourceTree = "<group>";

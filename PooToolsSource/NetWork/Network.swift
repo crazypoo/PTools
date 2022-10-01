@@ -176,13 +176,7 @@ public class Network: NSObject {
                 guard let modelType = modelType else { resultBlock(responseModel,nil); return }
                 if responseModel.data is [String : Any] {
                     guard let reslut = responseModel.data as? [String : Any] else {resultBlock(responseModel,nil); return }
-//                    if reslut["list"] is Array<Any> {
-//                        responseModel.datas = (reslut["list"] as! Array<Any>).kj.modelArray(type: modelType)
-//                    }else if reslut["routine_my_menus"]is Array<Any> {//针对个人中心的功能菜单做转换
-//                        responseModel.datas = (reslut["routine_my_menus"] as! Array<Any>).kj.modelArray(type: modelType)
-//                    }else {
-                        responseModel.data = reslut.kj.model(type: modelType)
-//                    }
+                    responseModel.data = reslut.kj.model(type: modelType)
                 }else if responseModel.data is Array<Any> {
                     responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType)
                 }
@@ -267,6 +261,110 @@ public class Network: NSObject {
                 PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)",error: true)
                 resultBlock(nil,error)
 
+            }
+        }
+    }
+}
+
+@objcMembers
+public class PTFileDownloadApi: NSObject {
+    
+    public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progrss:Double)->()
+    public typealias FileDownloadSuccess = (_ reponse:Any)->()
+    public typealias FileDownloadFail = (_ error:Error?)->()
+    
+    @objc public var fileUrl:String = ""
+    @objc public var saveFilePath:String = "" // 文件下载保存的路径
+    public var cancelledData : Data?//用于停止下载时,保存已下载的部分
+    public var downloadRequest:DownloadRequest? //下载请求对象
+    public var destination:DownloadRequest.Destination!//下载文件的保存路径
+    
+    public var progress:FileDownloadProgress?
+    public var success:FileDownloadSuccess?
+    public var fail:FileDownloadFail?
+    
+    private var queue:DispatchQueue = DispatchQueue.main
+  
+    // 默认主线程
+    public convenience init(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?,success:FileDownloadSuccess?, fail:FileDownloadFail?) {
+        
+        self.init()
+        self.fileUrl = fileUrl
+        self.saveFilePath = saveFilePath
+        self.success = success
+        self.progress = progress
+        self.fail = fail
+        
+        if queue != nil {
+            self.queue = queue!
+        }
+        
+        // 配置下载存储路径
+        self.destination = {_,response in
+            let saveUrl = URL(fileURLWithPath: saveFilePath)
+            return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
+        }
+        // 这里直接就开始下载了
+        self.startDownloadFile()
+    }
+    
+    // 暂停下载
+    public func suspendDownload() {
+        self.downloadRequest?.task?.suspend()
+    }
+    // 取消下载
+    public func cancelDownload() {
+        self.downloadRequest?.cancel()
+        self.downloadRequest = nil;
+        self.progress = nil
+    }
+    
+    // 开始下载
+    public func startDownloadFile() {
+        if self.cancelledData != nil {
+            self.downloadRequest = AF.download(resumingWith: self.cancelledData!, to: self.destination)
+            self.downloadRequest?.downloadProgress { [weak self] (pro) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
+                }
+            }
+            self.downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
+            
+        }else if self.downloadRequest != nil {
+            self.downloadRequest?.task?.resume()
+        }else {
+            self.downloadRequest = AF.download(fileUrl, to: self.destination)
+            self.downloadRequest?.downloadProgress { [weak self] (pro) in
+                guard let `self` = self else {return}
+                DispatchQueue.main.async {
+                    self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
+                }
+            }
+            
+            self.downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
+        }
+    }
+    
+    //根据下载状态处理
+    private func downloadResponse(response:AFDownloadResponse<Data>){
+        switch response.result {
+        case .success:
+            if let data = response.value, data.count > 1000 {
+                if self.success != nil{
+                    DispatchQueue.main.async {
+                        self.success?(response)
+                    }
+                }
+            }else {
+                DispatchQueue.main.async {
+                    self.fail?(NSError(domain: "文件下载失败", code: 12345, userInfo: nil) as Error)
+                }
+            }
+        case .failure:
+            self.cancelledData = response.resumeData//意外停止的话,把已下载的数据存储起来
+            DispatchQueue.main.async {
+                self.fail?(response.error)
             }
         }
     }
