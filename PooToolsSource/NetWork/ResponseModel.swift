@@ -9,7 +9,7 @@
 import UIKit
 
 public class ResponseModel:PTBaseModel {
-    private(set) var status: Int = 0
+    public var status: Int = 0
     public var data: Any? = nil
     public var datas: [Any]? = nil
     public let msg: String = ""
