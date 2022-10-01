@@ -113,7 +113,7 @@ public class Network: NSObject {
     ///   - encoder: 编码方式，默认url编码
     ///   - showHud: 是否需要loading，默认true
     ///   - resultBlock: 方法回调
-    class func requestApi(urlStr:String,
+    class public func requestApi(urlStr:String,
                           method: HTTPMethod = .post,
                           parameters: Parameters? = nil,
                           modelType: Convertible.Type? = nil,
@@ -202,7 +202,7 @@ public class Network: NSObject {
     ///   - progressBlock: 进度回调
     ///   - success: 成功回调
     ///   - failure: 失败回调
-    class func imageUpload(images:[UIImage]?,
+    class public func imageUpload(images:[UIImage]?,
                            path:String? = "/api/project/ossImg",
                            fileKey:String? = "images",
                            parmas:[String:String]? = nil,
