@@ -107,7 +107,6 @@
 		231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F2272CDEE9003D6F62 /* MXRotationManager.m */; };
 		231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F6272CDEE9003D6F62 /* SecurityUtil.m */; };
 		231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F7272CDEE9003D6F62 /* NSData+AES.m */; };
-		231D169D272CDEEA003D6F62 /* CountryCodes.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FA272CDEE9003D6F62 /* CountryCodes.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
@@ -124,6 +123,7 @@
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
+		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -360,8 +360,6 @@
 		231D15F6272CDEE9003D6F62 /* SecurityUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityUtil.m; sourceTree = "<group>"; };
 		231D15F7272CDEE9003D6F62 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
 		231D15F8272CDEE9003D6F62 /* SecurityUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityUtil.h; sourceTree = "<group>"; };
-		231D15FA272CDEE9003D6F62 /* CountryCodes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CountryCodes.m; sourceTree = "<group>"; };
-		231D15FB272CDEE9003D6F62 /* CountryCodes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CountryCodes.h; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
 		231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -384,6 +382,7 @@
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
+		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -909,8 +908,7 @@
 		231D15F9272CDEE9003D6F62 /* Country */ = {
 			isa = PBXGroup;
 			children = (
-				231D15FA272CDEE9003D6F62 /* CountryCodes.m */,
-				231D15FB272CDEE9003D6F62 /* CountryCodes.h */,
+				55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */,
 			);
 			path = Country;
 			sourceTree = "<group>";
@@ -1304,6 +1302,7 @@
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */,
+				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				231D1660272CDEEA003D6F62 /* PopSignatureView.m in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
@@ -1381,7 +1380,6 @@
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
 				231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */,
 				231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */,
-				231D169D272CDEEA003D6F62 /* CountryCodes.m in Sources */,
 				231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */,

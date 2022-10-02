@@ -38,8 +38,6 @@ CGFloat const tagItemSpace = 5;
 #import "PLabel.h"
 #import "UICountingLabel.h"
 
-#import "CountryCodes.h"
-
 #import "WMHub.h"
 #import "PGifHud.h"
 
@@ -721,16 +719,16 @@ CGFloat const tagItemSpace = 5;
 
 -(void)showCountryPickerAction:(UIButton *)sender
 {
-    UIPickerView *_pickerView = [UIPickerView new];
-    _pickerView.dataSource = self;
-    _pickerView.delegate = self;
-    _pickerView.backgroundColor = [UIColor whiteColor];
-    [self.view addSubview:_pickerView];
-    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.equalTo(self.view);
-        make.height.offset(216);
-        make.bottom.equalTo(self.view);
-    }];
+//    UIPickerView *_pickerView = [UIPickerView new];
+//    _pickerView.dataSource = self;
+//    _pickerView.delegate = self;
+//    _pickerView.backgroundColor = [UIColor whiteColor];
+//    [self.view addSubview:_pickerView];
+//    [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.equalTo(self.view);
+//        make.height.offset(216);
+//        make.bottom.equalTo(self.view);
+//    }];
 }
 
 -(void)showLoadingHubAction:(UIButton *)sender
@@ -791,45 +789,45 @@ CGFloat const tagItemSpace = 5;
     NSLog(@"[CREATE] %@", path);
 }
 
-#pragma mark ------> UIPickerViewDataSource
-//返回有几列
--(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
-
-{
-    return 1;
-}
-
-//返回指定列的行数
--(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
-
-{
-    return  [[CountryCodes countryCodes] count];
-}
-
-// 自定义指定列的每行的视图，即指定列的每行的视图行为一致
-- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
-{
-    if (!view)
-    {
-        view = [[UIView alloc]init];
-    }
-    
-    UILabel *text = [UILabel new];
-    text.textColor = [UIColor blackColor];
-    text.textAlignment = NSTextAlignmentCenter;
-    text.font = kDEFAULT_FONT(FontName, 19);
-    
-    CountryCodeModel *model = [CountryCodes countryCodes][row];
-    
-    text.text = [NSString stringWithFormat:@"%@>>>>%@",model.countryName,model.countryCode];
-
-    [view addSubview:text];
-    [text mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.height.equalTo(view);
-    }];
-    
-    return view;
-}
+//#pragma mark ------> UIPickerViewDataSource
+////返回有几列
+//-(NSInteger)numberOfComponentsInPickerView:(UIPickerView *)pickerView
+//
+//{
+//    return 1;
+//}
+//
+////返回指定列的行数
+//-(NSInteger)pickerView:(UIPickerView *)pickerView numberOfRowsInComponent:(NSInteger)component
+//
+//{
+//    return  [[CountryCodes countryCodes] count];
+//}
+//
+//// 自定义指定列的每行的视图，即指定列的每行的视图行为一致
+//- (UIView *)pickerView:(UIPickerView *)pickerView viewForRow:(NSInteger)row forComponent:(NSInteger)component reusingView:(UIView *)view
+//{
+//    if (!view)
+//    {
+//        view = [[UIView alloc]init];
+//    }
+//
+//    UILabel *text = [UILabel new];
+//    text.textColor = [UIColor blackColor];
+//    text.textAlignment = NSTextAlignmentCenter;
+//    text.font = kDEFAULT_FONT(FontName, 19);
+//
+//    CountryCodeModel *model = [CountryCodes countryCodes][row];
+//
+//    text.text = [NSString stringWithFormat:@"%@>>>>%@",model.countryName,model.countryCode];
+//
+//    [view addSubview:text];
+//    [text mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.left.right.top.height.equalTo(view);
+//    }];
+//
+//    return view;
+//}
 
 //-(void)pickerView:(UIPickerView *)pickerView didSelectRow:(NSInteger)row inComponent:(NSInteger)component
 //{
