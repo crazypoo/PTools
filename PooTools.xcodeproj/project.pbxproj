@@ -110,6 +110,7 @@
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
+		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555A8B4328C2E7DA00692501 /* PTMaskView.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
@@ -369,6 +370,7 @@
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
+		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		555A8B4328C2E7DA00692501 /* PTMaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PTMaskView.m; sourceTree = "<group>"; };
 		555A8B4428C2E7DA00692501 /* PTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMaskView.h; sourceTree = "<group>"; };
@@ -539,7 +541,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
@@ -547,6 +548,7 @@
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
+				5528375A28EA8FD600D12202 /* CheckUpdate */,
 				231D15F9272CDEE9003D6F62 /* Country */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				231D1537272CDEE9003D6F62 /* Input */,
@@ -562,6 +564,7 @@
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D15F1272CDEE9003D6F62 /* Rotamation */,
+				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
@@ -914,6 +917,14 @@
 				231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */,
 			);
 			path = BlackMagic;
+			sourceTree = "<group>";
+		};
+		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
+			isa = PBXGroup;
+			children = (
+				5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */,
+			);
+			path = CheckUpdate;
 			sourceTree = "<group>";
 		};
 		555A8B4228C2E7A700692501 /* DevMask */ = {
@@ -1370,6 +1381,7 @@
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1632272CDEE9003D6F62 /* NSString+MoneyString.m in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
+				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
@@ -1609,6 +1621,7 @@
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -1649,6 +1662,7 @@
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

@@ -15,6 +15,8 @@ class PTSwiftViewController: UIViewController {
 
         _ = PTCountryCodes.share.codesModels()
         
+        PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "",force: true)
+                
         self.view.backgroundColor = .random
         // Do any additional setup after loading the view.
     }

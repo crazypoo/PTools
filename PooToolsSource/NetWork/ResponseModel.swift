@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import KakaJSON
 
 public class ResponseModel:PTBaseModel {
     public var status: Int = 0
@@ -14,7 +15,8 @@ public class ResponseModel:PTBaseModel {
     public var datas: [Any]? = nil
     public let msg: String = ""
     public let totalCount: Int = 0
-    
+    public var originalString: String = ""
+
     public var isSuccess:Bool {
         get {
             return status == 200

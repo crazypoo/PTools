@@ -167,7 +167,8 @@ public class Network: NSObject {
                 PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)\n😂😂😂😂😂😂😂😂😂😂😂😂")
 
                 guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
-
+                responseModel.originalString = jsonStr
+                
                 if netWorkServerStatusBlock != nil
                 {
                     netWorkServerStatusBlock!(responseModel)
@@ -180,7 +181,7 @@ public class Network: NSObject {
                 }else if responseModel.data is Array<Any> {
                     responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType)
                 }
-                
+
                 resultBlock(responseModel,nil)
 
             case .failure(let error):
