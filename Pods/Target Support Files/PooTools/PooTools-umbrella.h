@@ -29,8 +29,6 @@
 #import "NSURLResponse+Help.h"
 #import "UIButton+ImageTitleSpacing.h"
 #import "UIColor+Colours.h"
-#import "UIColor+Helper.h"
-#import "UIColor+Random.h"
 #import "UIImage+BlurGlass.h"
 #import "UIImage+UIColorEX.h"
 #import "UILabel+FlickerNumber.h"

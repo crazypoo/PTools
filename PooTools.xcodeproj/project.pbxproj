@@ -18,7 +18,6 @@
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
 		231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */; };
 		231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */; };
-		231D161B272CDEE9003D6F62 /* UIColor+Random.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1502272CDEE9003D6F62 /* UIColor+Random.m */; };
 		231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1504272CDEE9003D6F62 /* UIImage+UIColorEX.m */; };
 		231D161D272CDEE9003D6F62 /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1505272CDEE9003D6F62 /* NSString+Encryption.m */; };
 		231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */; };
@@ -29,7 +28,6 @@
 		231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */; };
 		231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */; };
 		231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1515272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m */; };
-		231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1517272CDEE9003D6F62 /* UIColor+Helper.m */; };
 		231D162A272CDEE9003D6F62 /* NSString+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1518272CDEE9003D6F62 /* NSString+Extension.m */; };
 		231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1519272CDEE9003D6F62 /* UITextField+Limit.m */; };
 		231D162D272CDEE9003D6F62 /* NSString+PassStrength.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D151F272CDEE9003D6F62 /* NSString+PassStrength.m */; };
@@ -227,10 +225,8 @@
 		231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+TopBarMessage.m"; sourceTree = "<group>"; };
 		231D14FD272CDEE9003D6F62 /* UITextField+Limit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Limit.h"; sourceTree = "<group>"; };
 		231D14FE272CDEE9003D6F62 /* NSString+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Extension.h"; sourceTree = "<group>"; };
-		231D14FF272CDEE9003D6F62 /* UIColor+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Helper.h"; sourceTree = "<group>"; };
 		231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
 		231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
-		231D1502272CDEE9003D6F62 /* UIColor+Random.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Random.m"; sourceTree = "<group>"; };
 		231D1503272CDEE9003D6F62 /* NSString+PassStrength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PassStrength.h"; sourceTree = "<group>"; };
 		231D1504272CDEE9003D6F62 /* UIImage+UIColorEX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIColorEX.m"; sourceTree = "<group>"; };
 		231D1505272CDEE9003D6F62 /* NSString+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encryption.m"; sourceTree = "<group>"; };
@@ -247,7 +243,6 @@
 		231D1513272CDEE9003D6F62 /* UITableView+WWFoldableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WWFoldableTableView.h"; sourceTree = "<group>"; };
 		231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
 		231D1515272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIButton+ImageTitleSpacing.m"; sourceTree = "<group>"; };
-		231D1517272CDEE9003D6F62 /* UIColor+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Helper.m"; sourceTree = "<group>"; };
 		231D1518272CDEE9003D6F62 /* NSString+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Extension.m"; sourceTree = "<group>"; };
 		231D1519272CDEE9003D6F62 /* UITextField+Limit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
 		231D151B272CDEE9003D6F62 /* UIViewController+TopBarMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TopBarMessage.h"; sourceTree = "<group>"; };
@@ -255,7 +250,6 @@
 		231D151D272CDEE9003D6F62 /* NSString+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encryption.h"; sourceTree = "<group>"; };
 		231D151E272CDEE9003D6F62 /* UIImage+UIColorEX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIColorEX.h"; sourceTree = "<group>"; };
 		231D151F272CDEE9003D6F62 /* NSString+PassStrength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PassStrength.m"; sourceTree = "<group>"; };
-		231D1520272CDEE9003D6F62 /* UIColor+Random.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Random.h"; sourceTree = "<group>"; };
 		231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
 		231D1522272CDEE9003D6F62 /* NSURLResponse+Help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Help.h"; sourceTree = "<group>"; };
 		231D1524272CDEE9003D6F62 /* NSMutableArray+Shuffle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffle.m"; sourceTree = "<group>"; };
@@ -640,11 +634,7 @@
 				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
 				231D150C272CDEE9003D6F62 /* UIColor+Colours.h */,
 				231D1526272CDEE9003D6F62 /* UIColor+Colours.m */,
-				231D14FF272CDEE9003D6F62 /* UIColor+Helper.h */,
-				231D1517272CDEE9003D6F62 /* UIColor+Helper.m */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
-				231D1520272CDEE9003D6F62 /* UIColor+Random.h */,
-				231D1502272CDEE9003D6F62 /* UIColor+Random.m */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				231D1525272CDEE9003D6F62 /* UIImage+BlurGlass.h */,
 				231D150D272CDEE9003D6F62 /* UIImage+BlurGlass.m */,
@@ -1314,7 +1304,6 @@
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
-				231D161B272CDEE9003D6F62 /* UIColor+Random.m in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
@@ -1393,7 +1382,6 @@
 				555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
-				231D1629272CDEE9003D6F62 /* UIColor+Helper.m in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,

@@ -11,8 +11,8 @@
 
 #import "WMHubWindow.h"
 #import "WMHubViewController.h"
-#import "UIColor+Helper.h"
 #import "PMacros.h"
+#import "UIColor+Colours.h"
 
 @implementation WMHub
 

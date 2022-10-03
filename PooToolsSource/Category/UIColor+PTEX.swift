@@ -77,17 +77,23 @@ public extension UIColor {
     }
 
     /// 返回随机颜色
-    class var randomColor:UIColor{
+    @objc class var randomColor:UIColor{
         get
         {
-            let red = CGFloat(arc4random()%256)/255.0
-            let green = CGFloat(arc4random()%256)/255.0
-            let blue = CGFloat(arc4random()%256)/255.0
-            return UIColor(red: red, green: green, blue: blue, alpha: 1.0)
+            return UIColor.randomColorWithAlpha(alpha: 1)
         }
     }
     
-    class var DevMaskColor:UIColor {
+    @objc class func randomColorWithAlpha(alpha:CGFloat)->UIColor
+    {
+        let red = CGFloat(arc4random()%256)/255.0
+        let green = CGFloat(arc4random()%256)/255.0
+        let blue = CGFloat(arc4random()%256)/255.0
+        return UIColor(red: red, green: green, blue: blue, alpha: alpha)
+
+    }
+    
+    @objc class var DevMaskColor:UIColor {
         return UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
     }
     
@@ -101,5 +107,10 @@ public extension UIColor {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return image!
+    }
+    
+    @objc func inverseColor()->UIColor {
+        let componentColors = self.cgColor.components
+        return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
     }
 }

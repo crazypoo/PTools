@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class PTSwiftViewController: UIViewController {
 
@@ -16,6 +17,15 @@ class PTSwiftViewController: UIViewController {
         _ = PTCountryCodes.share.codesModels()
         
         PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "",force: true)
+        
+        let view = UIView()
+        view.backgroundColor = UIColor.red.inverseColor()
+        self.view.addSubview(view)
+        view.snp.makeConstraints { make in
+            make.width.height.equalToSuperview()
+            make.top.equalToSuperview().inset(kNavBarHeight_Total)
+            make.left.equalToSuperview()
+        }
                 
         self.view.backgroundColor = .random
         // Do any additional setup after loading the view.
