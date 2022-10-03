@@ -89,8 +89,8 @@
         else
         {
             [(UIViewController *)self.popover dismissViewControllerAnimated:YES completion:^{
-                PNSLog(@"4444444444");
-//                self.popover = nil;
+                PTSwiftViewController *vc = [PTSwiftViewController new];
+                [self.navigationController pushViewController:vc animated:YES];
             }];
         }
     }];

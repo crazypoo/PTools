@@ -78,7 +78,7 @@
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
 
-    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:3 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
+    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:30 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
         
     }];
     
@@ -218,13 +218,13 @@
     [self.window addSubview:aasdasd];
 
     
-    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
-        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);
-    }];
-    
-    [PTUtils timeRunWithTime_baseWithCustomQueName:@"222222" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
-        PNSLog(@"2222222%d>>>>>>%ld",finish,(long)time);
-    }];
+//    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
+//        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);
+//    }];
+//
+//    [PTUtils timeRunWithTime_baseWithCustomQueName:@"222222" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
+//        PNSLog(@"2222222%d>>>>>>%ld",finish,(long)time);
+//    }];
     return YES;
 }
 

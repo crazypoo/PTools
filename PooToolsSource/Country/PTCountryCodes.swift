@@ -16,6 +16,8 @@ public class PTCountryCodeModel:PTBaseModel
 
 @objcMembers
 public class PTCountryCodes: NSObject {
+    static let share = PTCountryCodes()
+    
     let countryCodeDic = [
         "Abkhazia(1st)":"+7 840",
         "Abkhazia(2nd)":"+7 940",
@@ -260,7 +262,6 @@ public class PTCountryCodes: NSObject {
     public func codesModels()->[PTCountryCodeModel]
     {
         let arr = Array(self.countryCodeDic.keys).sorted(by: <)
-        
         var models = [PTCountryCodeModel]()
         arr.enumerated().forEach { index,value in
             let model = PTCountryCodeModel()

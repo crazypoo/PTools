@@ -125,6 +125,7 @@
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
+		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -384,6 +385,7 @@
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
+		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
@@ -795,14 +798,6 @@
 			isa = PBXGroup;
 			children = (
 				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
-				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
-				9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */,
-				9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */,
-				9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */,
-				9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */,
-				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
-				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
-				9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */,
 				231D15C3272CDEE9003D6F62 /* PCleanCache.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
 				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
@@ -838,7 +833,6 @@
 				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,
 				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
 				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
@@ -945,11 +939,27 @@
 			isa = PBXGroup;
 			children = (
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
-				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
+				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
 				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
+				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */,
+				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
+			isa = PBXGroup;
+			children = (
+				9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */,
+				9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */,
+				9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */,
+				9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */,
+				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
+				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
+				9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */,
+			);
+			path = ScrollBanner;
 			sourceTree = "<group>";
 		};
 		6003F581195388D10070C39A = {
@@ -1033,6 +1043,7 @@
 				6003F594195388D20070C39A /* Supporting Files */,
 				CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */,
 				CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */,
+				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -1345,6 +1356,7 @@
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
+				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
