@@ -18,8 +18,6 @@
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
 		231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14FB272CDEE9003D6F62 /* UIViewController+TopBarMessage.m */; };
 		231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */; };
-		231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1504272CDEE9003D6F62 /* UIImage+UIColorEX.m */; };
-		231D161D272CDEE9003D6F62 /* NSString+Encryption.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1505272CDEE9003D6F62 /* NSString+Encryption.m */; };
 		231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */; };
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
 		231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1509272CDEE9003D6F62 /* NSString+Regulars.m */; };
@@ -32,7 +30,6 @@
 		231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1519272CDEE9003D6F62 /* UITextField+Limit.m */; };
 		231D162D272CDEE9003D6F62 /* NSString+PassStrength.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D151F272CDEE9003D6F62 /* NSString+PassStrength.m */; };
 		231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */; };
-		231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1524272CDEE9003D6F62 /* NSMutableArray+Shuffle.m */; };
 		231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1526272CDEE9003D6F62 /* UIColor+Colours.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D1632272CDEE9003D6F62 /* NSString+MoneyString.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D152A272CDEE9003D6F62 /* NSString+MoneyString.m */; };
@@ -113,6 +110,7 @@
 		555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = 555A8B4328C2E7DA00692501 /* PTMaskView.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
+		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
 		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
 		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
@@ -228,8 +226,6 @@
 		231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
 		231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
 		231D1503272CDEE9003D6F62 /* NSString+PassStrength.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+PassStrength.h"; sourceTree = "<group>"; };
-		231D1504272CDEE9003D6F62 /* UIImage+UIColorEX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+UIColorEX.m"; sourceTree = "<group>"; };
-		231D1505272CDEE9003D6F62 /* NSString+Encryption.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Encryption.m"; sourceTree = "<group>"; };
 		231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+WPAttributedMarkup.m"; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
 		231D1508272CDEE9003D6F62 /* NSString+MoneyString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+MoneyString.h"; sourceTree = "<group>"; };
@@ -238,7 +234,6 @@
 		231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
 		231D150C272CDEE9003D6F62 /* UIColor+Colours.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colours.h"; sourceTree = "<group>"; };
 		231D150D272CDEE9003D6F62 /* UIImage+BlurGlass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurGlass.m"; sourceTree = "<group>"; };
-		231D150E272CDEE9003D6F62 /* NSMutableArray+Shuffle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+Shuffle.h"; sourceTree = "<group>"; };
 		231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
 		231D1513272CDEE9003D6F62 /* UITableView+WWFoldableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WWFoldableTableView.h"; sourceTree = "<group>"; };
 		231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
@@ -247,12 +242,9 @@
 		231D1519272CDEE9003D6F62 /* UITextField+Limit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
 		231D151B272CDEE9003D6F62 /* UIViewController+TopBarMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+TopBarMessage.h"; sourceTree = "<group>"; };
 		231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
-		231D151D272CDEE9003D6F62 /* NSString+Encryption.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Encryption.h"; sourceTree = "<group>"; };
-		231D151E272CDEE9003D6F62 /* UIImage+UIColorEX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+UIColorEX.h"; sourceTree = "<group>"; };
 		231D151F272CDEE9003D6F62 /* NSString+PassStrength.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+PassStrength.m"; sourceTree = "<group>"; };
 		231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
 		231D1522272CDEE9003D6F62 /* NSURLResponse+Help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Help.h"; sourceTree = "<group>"; };
-		231D1524272CDEE9003D6F62 /* NSMutableArray+Shuffle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+Shuffle.m"; sourceTree = "<group>"; };
 		231D1525272CDEE9003D6F62 /* UIImage+BlurGlass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurGlass.h"; sourceTree = "<group>"; };
 		231D1526272CDEE9003D6F62 /* UIColor+Colours.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
 		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
@@ -370,6 +362,7 @@
 		555A8B4428C2E7DA00692501 /* PTMaskView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTMaskView.h; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
+		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
 		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
 		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
@@ -606,12 +599,8 @@
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
-				231D150E272CDEE9003D6F62 /* NSMutableArray+Shuffle.h */,
-				231D1524272CDEE9003D6F62 /* NSMutableArray+Shuffle.m */,
 				231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */,
 				231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */,
-				231D151D272CDEE9003D6F62 /* NSString+Encryption.h */,
-				231D1505272CDEE9003D6F62 /* NSString+Encryption.m */,
 				231D14FE272CDEE9003D6F62 /* NSString+Extension.h */,
 				231D1518272CDEE9003D6F62 /* NSString+Extension.m */,
 				231D1508272CDEE9003D6F62 /* NSString+MoneyString.h */,
@@ -639,8 +628,7 @@
 				231D1525272CDEE9003D6F62 /* UIImage+BlurGlass.h */,
 				231D150D272CDEE9003D6F62 /* UIImage+BlurGlass.m */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
-				231D151E272CDEE9003D6F62 /* UIImage+UIColorEX.h */,
-				231D1504272CDEE9003D6F62 /* UIImage+UIColorEX.m */,
+				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
 				231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */,
 				231D150A272CDEE9003D6F62 /* UILabel+FlickerNumber.m */,
 				9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */,
@@ -1385,6 +1373,7 @@
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
+				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
@@ -1394,7 +1383,6 @@
 				231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */,
 				231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
-				231D162F272CDEE9003D6F62 /* NSMutableArray+Shuffle.m in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
 				231D1619272CDEE9003D6F62 /* UIViewController+TopBarMessage.m in Sources */,
@@ -1421,7 +1409,6 @@
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
-				231D161D272CDEE9003D6F62 /* NSString+Encryption.m in Sources */,
 				231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */,
 				231D1622272CDEE9003D6F62 /* UIImage+BlurGlass.m in Sources */,
 				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
@@ -1429,7 +1416,6 @@
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
-				231D161C272CDEE9003D6F62 /* UIImage+UIColorEX.m in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,

@@ -19,12 +19,11 @@ class PTSwiftViewController: UIViewController {
         PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "",force: true)
         
         let view = UIView()
-        view.backgroundColor = UIColor.red.inverseColor()
+        view.backgroundColor = UIImage(named: "DemoImage")?.imageMostColor()
         self.view.addSubview(view)
         view.snp.makeConstraints { make in
-            make.width.height.equalToSuperview()
             make.top.equalToSuperview().inset(kNavBarHeight_Total)
-            make.left.equalToSuperview()
+            make.left.right.bottom.equalToSuperview()
         }
                 
         self.view.backgroundColor = .random

@@ -160,60 +160,7 @@ public extension UIImage
         UIGraphicsEndImageContext()
         return effectImage
     }
-    
-    func imageMostColor()->UIColor?
-    {
-        let thumbSize = CGSize.init(width: self.size.width/2, height: self.size.height/2)
-        let pixelData = self.cgImage!.dataProvider!.data
-        if let data:UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
-        {
-            let cls = NSCountedSet.init(capacity: Int(thumbSize.width * thumbSize.height))
-            for x in 0..<Int(thumbSize.width)
-            {
-                for y in 0..<Int(thumbSize.height)
-                {
-                    let offset = 4 * (x * y)
-                    let red = data[offset]
-                    let green = data[offset + 1]
-                    let blue = data[offset + 2]
-                    let alpha = data[offset + 3]
-                    if alpha > 0
-                    {
-                        if red == 255 && green == 255 && blue == 255
-                        {
-
-                        }
-                        else
-                        {
-                            let clr = [red,green,blue,alpha]
-                            cls.add(clr)
-                        }
-                    }
-                }
-            }
-
-            let enumerator = cls.objectEnumerator()
-            var curColor : NSArray?
-            var MaxColor : NSArray?
-            var MaxCount : Int = 0
-            
-            while (curColor = (enumerator.nextObject() as! NSArray)) != nil {
-                let tmpCount = cls.count(for: curColor as Any)
-                if tmpCount < MaxCount
-                {
-                    continue
-                }
-                MaxCount = tmpCount
-                MaxColor = curColor
-            }
-            return UIColor(red:MaxColor![0] as! CGFloat / 255,green: MaxColor![1] as! CGFloat / 255,blue:MaxColor![2] as! CGFloat / 255,alpha:MaxColor![3] as! CGFloat / 255)
-        }
-        else
-        {
-            return nil
-        }
-    }
-    
+        
     //MARK: 加水印
     func watermark(title:String,font:UIFont? = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
     {
@@ -296,5 +243,79 @@ public extension UIImage
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         return newImage!
+    }
+    
+    @objc func imageMostColor()->UIColor
+    {
+        let context = self.getImageContext()
+                
+        let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
+
+        let cls = NSCountedSet.init(capacity: Int(self.size.width * self.size.height))
+        for i in 0...Int(self.size.width)
+        {
+            for j in 0...Int(self.size.height)
+            {
+                let offSet = 4 * (i * j)
+                let red = (newImgData + offSet).pointee
+                let green = (newImgData + (offSet + 1)).pointee
+                let blue = (newImgData + (offSet + 2)).pointee
+                let alpha = (newImgData + (offSet + 3)).pointee
+                if alpha > 0
+                {
+                    if red == 255 && green == 255 && blue == 255
+                    {
+                        
+                    }
+                    else
+                    {
+                        let clr = [red,green,blue,alpha]
+                        cls.add(clr)
+                    }
+                }
+            }
+        }
+        
+        var maxColor:NSArray? = nil
+        let enumerator = cls.enumerated()
+        enumerator.forEach { index,value in
+            maxColor = (value as! NSArray)
+        }
+        
+        return UIColor(red: maxColor![0] as! CGFloat / 255, green: maxColor![1] as! CGFloat / 255, blue: maxColor![2] as! CGFloat / 255, alpha: maxColor![3] as! CGFloat / 255)
+    }
+    
+    func getImgePointColor(point:CGPoint)->UIColor
+    {
+        let context = self.getImageContext()
+                
+        let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
+        
+        // 根据当前所选择的点计算出对应位图数据的index
+        let offset = Int(point.y * self.size.width + point.x) * 4
+        
+        // 获取4种信息
+        let alpha = (newImgData + offset).pointee
+        let red   = (newImgData + (offset + 1)).pointee
+        let green = (newImgData + (offset + 2)).pointee
+        let blue  = (newImgData + (offset + 3)).pointee
+        
+        // 得到颜色
+        return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha)/255.0)
+    }
+        
+    func getImageContext()-> CGContext
+    {
+        let currentImage = self.cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
+        
+        let bitmapInfo = CGBitmapInfo.byteOrderDefault.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
+        let thumbSize = CGSize(width: self.size.width, height: self.size.height)
+        let colorSpace = CGColorSpaceCreateDeviceRGB()
+        
+        let context = CGContext.init(data: nil, width: Int(thumbSize.width), height: Int(thumbSize.height), bitsPerComponent: 8, bytesPerRow: Int(thumbSize.width) * 4, space: colorSpace, bitmapInfo: bitmapInfo)
+        
+        let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
+        context?.draw(currentImage, in: drawRect)
+        return context!
     }
 }
