@@ -122,13 +122,18 @@ public extension UIView {
         self.viewCornerRectCorner(cornerRadii: cornerRadii, corner: corner)
     }
     
-    func viewCornerRectCorner(cornerRadii:CGFloat? = 5,corner:UIRectCorner? = .allCorners)
+    func viewCornerRectCorner(cornerRadii:CGFloat? = 5,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear,corner:UIRectCorner? = .allCorners)
     {
-        let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner!, cornerRadii: CGSize.init(width: cornerRadii!, height: cornerRadii!))
-        let maskLayer = CAShapeLayer()
-        maskLayer.frame = self.bounds
-        maskLayer.path = maskPath.cgPath
-        self.layer.mask = maskLayer
+        PTUtils.gcdMain {
+            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner!, cornerRadii: CGSize.init(width: cornerRadii!, height: cornerRadii!))
+            let maskLayer = CAShapeLayer()
+            maskLayer.frame = self.bounds
+            maskLayer.path = maskPath.cgPath
+            self.layer.mask = maskLayer
+            self.layer.masksToBounds = true
+            self.layer.borderWidth = borderWidth!
+            self.layer.borderColor = borderColor!.cgColor
+        }
     }
     
     /// Swizzle UIView to use custom frame system when needed.
@@ -147,35 +152,41 @@ public extension UIView {
     }
 
     //MARK: View的背景渐变
-    @objc func backgroundGradient(type:Imagegradien,colors:[UIColor])
+    func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
     {
-        self.backgroundColor = .clear
-        let maskLayer = CAGradientLayer()
-        
-        var cgColorsss = [CGColor]()
-        colors.enumerated().forEach { (index,value) in
-            cgColorsss.append(value.cgColor)
+        PTUtils.gcdMain {
+            self.backgroundColor = .clear
+            let maskLayer = CAGradientLayer()
+            
+            var cgColorsss = [CGColor]()
+            colors.enumerated().forEach { (index,value) in
+                cgColorsss.append(value.cgColor)
+            }
+            
+            maskLayer.colors = cgColorsss
+            switch type {
+            case .LeftToRight:
+                maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
+                maskLayer.endPoint = CGPoint.init(x: 1, y: 0)
+            case .TopToBottom:
+                maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
+                maskLayer.endPoint = CGPoint.init(x: 0, y: 1)
+            case .RightToLeft:
+                maskLayer.startPoint = CGPoint.init(x: 1, y: 0)
+                maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+            case .BottomToTop:
+                maskLayer.startPoint = CGPoint.init(x: 0, y: 1)
+                maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
+            }
+            maskLayer.frame = self.bounds
+            maskLayer.cornerRadius = radius!
+            maskLayer.masksToBounds = true
+            maskLayer.borderWidth = borderWidth!
+            maskLayer.borderColor = borderColor!.cgColor
+            self.layer.addSublayer(maskLayer)
+            self.layer.insertSublayer(maskLayer, at: 0)
+            self.setNeedsDisplay()
         }
-        
-        maskLayer.colors = cgColorsss
-        switch type {
-        case .LeftToRight:
-            maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
-            maskLayer.endPoint = CGPoint.init(x: 1, y: 0)
-        case .TopToBottom:
-            maskLayer.startPoint = CGPoint.init(x: 0, y: 0)
-            maskLayer.endPoint = CGPoint.init(x: 0, y: 1)
-        case .RightToLeft:
-            maskLayer.startPoint = CGPoint.init(x: 1, y: 0)
-            maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
-        case .BottomToTop:
-            maskLayer.startPoint = CGPoint.init(x: 0, y: 1)
-            maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
-        }
-        maskLayer.frame = self.bounds
-        self.layer.addSublayer(maskLayer)
-        self.layer.insertSublayer(maskLayer, at: 0)
-        self.setNeedsDisplay()
     }
 }
 
