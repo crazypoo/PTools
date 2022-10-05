@@ -19,7 +19,6 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-#import "NSString+PassStrength.h"
 #import "NSString+Regulars.h"
 
 /*

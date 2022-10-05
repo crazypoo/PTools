@@ -18,6 +18,7 @@ class PTSwiftViewController: UIViewController {
         
         PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "",force: true)
         
+        
         let view = UIView()
 //        view.backgroundColor = UIImage(named: "DemoImage")?.imageMostColor()
         view.backgroundGradient(type: .LeftToRight, colors: [UIColor.blue,UIColor.red])
@@ -27,8 +28,25 @@ class PTSwiftViewController: UIViewController {
             make.top.equalToSuperview().inset(kNavBarHeight_Total)
             make.left.right.bottom.equalToSuperview().inset(40)
         }
+        view.layoutSubviewsCallback = { view in
+            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
+        }
         
+//        UIView.swizzleLayoutSubviewsCallback_UNTRACKABLE_TOGGLE()
+//        view.layoutSubviewsCallback = { view in
+//            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
+//        }
+//        view.layoutSubviews()
         self.view.backgroundColor = .random
         // Do any additional setup after loading the view.
+        
+        let status = UIView()
+        status.backgroundColor = .random
+        AppWindows!.addSubview(status)
+        status.snp.makeConstraints { make in
+            make.left.top.equalToSuperview()
+            make.height.equalTo(kStatusBarHeight)
+            make.width.equalTo(CGFloat.ScaleW(w: 85))
+        }        
     }
 }

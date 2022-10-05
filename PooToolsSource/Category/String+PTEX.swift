@@ -39,6 +39,11 @@ public enum PStrengthLevel {
     case Extremely_Strong
 }
 
+public enum UTF8StringType:Int {
+    case UTF8StringTypeOC
+    case UTF8StringTypeC
+}
+
 public extension String
 {
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
@@ -320,6 +325,16 @@ public extension String
         validString = validString.replacingOccurrences(of: "'([:\\],\\}])", with: "\"$1",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
         validString = validString.replacingOccurrences(of: "([:\\[,\\{])(\\w+)\\s*:", with: "$1\"$2\":",options: NSString.CompareOptions.regularExpression, range: NSRange(location: 0, length: validString.length)) as NSString
         return validString as String
+    }
+    
+    func stringToUTF8String(type:UTF8StringType)->NSString
+    {
+        switch type {
+        case .UTF8StringTypeOC:
+            return NSString.init(cString: self.nsString.utf8String!, encoding: NSUnicodeStringEncoding)!
+        case .UTF8StringTypeC:
+            return self.nsString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet(charactersIn: "`#%^{}\"[]|\\<> ").inverted)! as NSString
+        }
     }
 }
 

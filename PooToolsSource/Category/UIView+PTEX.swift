@@ -102,6 +102,8 @@ public extension PTProtocol where Base:UIView
     }
 }
 
+public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
+
 public extension UIView {
     
     @objc func viewCorner_oc(radius:CGFloat,borderWidth:CGFloat,borderColor:UIColor)
@@ -150,7 +152,7 @@ public extension UIView {
         GLOBAL_BORDER_TRACKERS.append(tracker)
         tracker.activate()
     }
-
+    
     //MARK: View的背景渐变
     func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
     {
@@ -255,4 +257,3 @@ public extension UITextView
         return self.getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
-
