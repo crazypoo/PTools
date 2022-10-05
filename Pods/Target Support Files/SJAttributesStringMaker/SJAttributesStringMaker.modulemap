@@ -1,0 +1,6 @@
+framework module SJAttributesStringMaker {
+  umbrella header "SJAttributesStringMaker-umbrella.h"
+
+  export *
+  module * { export * }
+}

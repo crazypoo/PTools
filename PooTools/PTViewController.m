@@ -11,7 +11,6 @@
 #import "PMacros.h"
 #import "PTAppDelegate.h"
 #import "UITextField+ModifyPlaceholder.h"
-#import "PopSignatureView.h"
 #import "DoubleSliderView.h"
 
 #import "PTShowFunctionViewController.h"
@@ -500,12 +499,22 @@ static NSString *cellIdentifier = @"CELL";
         case 9:
         {
 //            [MXRotationManager defaultManager].orientation = UIDeviceOrientationLandscapeRight;
-            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold withLinePathWidth:10 withBtnTitleColor:kRandomColor handleDone:^(PopSignatureView *signView, UIImage *signImage) {
-                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
-            } handleCancle:^(PopSignatureView *signView) {
-                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
-            }];
-            [socialSingnatureView show];
+//            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold withLinePathWidth:10 withBtnTitleColor:kRandomColor handleDone:^(PopSignatureView *signView, UIImage *signImage) {
+//                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
+//            } handleCancle:^(PopSignatureView *signView) {
+//                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
+//            }];
+//            [socialSingnatureView show];
+            
+            PTSignatureConfig *signConfig = [PTSignatureConfig new];
+            PTSignView *socialSingnatureView = [[PTSignView alloc] initWithViewConfig:signConfig];
+            [socialSingnatureView showView];
+            socialSingnatureView.doneBlock = ^(UIImage * iamge) {
+                
+            };
+            socialSingnatureView.dismissBlock = ^{
+                
+            };
         }
             break;
         case 10:

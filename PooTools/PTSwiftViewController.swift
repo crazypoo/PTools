@@ -47,6 +47,18 @@ class PTSwiftViewController: UIViewController {
             make.left.top.equalToSuperview()
             make.height.equalTo(kStatusBarHeight)
             make.width.equalTo(CGFloat.ScaleW(w: 85))
+        }
+        
+        let sign = PTSignView(viewConfig: PTSignatureConfig())
+        sign.showView()
+        sign.doneBlock = { images in
+            let imagesssss = UIImageView(image: images)
+            self.view.addSubview(imagesssss)
+            imagesssss.snp.makeConstraints { make in
+                make.width.height.equalTo(100)
+                make.top.equalToSuperview()
+                make.right.equalToSuperview()
+            }
         }        
     }
 }

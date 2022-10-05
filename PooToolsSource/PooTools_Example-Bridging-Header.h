@@ -7,3 +7,4 @@
 #import <SDWebImage/UIButton+WebCache.h>
 #import "DOGobalFileManager.h"
 #import "UIView+LayoutSubviewsCallback.h"
+#import "PTImageBlackToTransparent.h"

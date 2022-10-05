@@ -21,4 +21,5 @@ target 'PooTools_Example' do
   pod 'HandyJSON'
   pod 'SwiftyJSON'
   pod 'CocoaLumberjack/Swift'#Log工具
+  pod 'SJAttributesStringMaker'
 end
