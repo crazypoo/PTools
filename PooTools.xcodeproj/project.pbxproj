@@ -518,6 +518,7 @@
 			isa = PBXGroup;
 			children = (
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
+				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
@@ -657,6 +658,7 @@
 		231D1547272CDEE9003D6F62 /* Segmented */ = {
 			isa = PBXGroup;
 			children = (
+				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
 				231D1548272CDEE9003D6F62 /* PooSegView.h */,
 				231D1549272CDEE9003D6F62 /* PooSegView.m */,
 			);
@@ -760,14 +762,11 @@
 			isa = PBXGroup;
 			children = (
 				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
-				231D15C3272CDEE9003D6F62 /* PCleanCache.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
-				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
 				231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */,
 				231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */,
 				231D15BA272CDEE9003D6F62 /* PTBiologyID.swift */,
 				231D15C8272CDEE9003D6F62 /* PTCarrie.swift */,
-				231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */,
 				231D15C0272CDEE9003D6F62 /* PTCodeView.swift */,
 				231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */,
 				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
@@ -797,7 +796,6 @@
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
 				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
 				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
-				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
 			);
 			path = Swift;
@@ -878,6 +876,15 @@
 			path = BlackMagic;
 			sourceTree = "<group>";
 		};
+		5503F9DA28F016CC00030F41 /* ApplicationFunction */ = {
+			isa = PBXGroup;
+			children = (
+				231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */,
+				231D15C3272CDEE9003D6F62 /* PCleanCache.swift */,
+			);
+			path = ApplicationFunction;
+			sourceTree = "<group>";
+		};
 		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
 			isa = PBXGroup;
 			children = (
@@ -914,6 +921,7 @@
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */,
 				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,
+				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
 			sourceTree = "<group>";
