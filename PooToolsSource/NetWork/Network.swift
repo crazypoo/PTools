@@ -95,7 +95,7 @@ public class Network: NSObject {
     }()
     
     /// manager
-    static var hud: MBProgressHUD = {
+    public static var hud: MBProgressHUD = {
         let hud = MBProgressHUD.init(view: AppWindows!)
         AppWindows!.addSubview(hud)
         hud.show(animated: true)
