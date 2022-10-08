@@ -51,7 +51,7 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
-  - PooTools (2.18.5):
+  - PooTools (2.20.0):
     - AFNetworking
     - Alamofire
     - CocoaLumberjack/Swift
@@ -231,7 +231,7 @@ SPEC CHECKSUMS:
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   MYBlurIntroductionView: b12651c25574580472ff34989a4c5b81c157009f
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
-  PooTools: f741602eed7150f529247310c9645ada0e99aa01
+  PooTools: 328e6cac1fa1a632fcfb8f462cd77b089f49ea69
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816

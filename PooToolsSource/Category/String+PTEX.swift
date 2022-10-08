@@ -53,6 +53,8 @@ public extension String
     static let POOPHONE = "^1[3|4|5|6|7|8|9][0-9]\\d{8}$"
     static let HomePhone = "^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$"
     static let ISNUMBER = "^[0-9]*$"
+    static let AMOUT1 = "^[0][0-9]+$"
+    static let AMOUT2 = "^(([1-9]{1}[0-9]*|[0])" + "\\." + "?[0-9]{0,2})$"
     
     func checkURL()->Bool
     {
@@ -97,6 +99,11 @@ public extension String
     func isIP()->Bool
     {
         return self.checkWithString(expression: String.IpAddress)
+    }
+    
+    func isMoneyString()->Bool
+    {
+        return !self.checkWithString(expression: String.AMOUT1) && self.checkWithString(expression: String.AMOUT2) ? true : false
     }
     
     func isAChineseName()->Bool
@@ -356,7 +363,55 @@ public extension String {
 }
 
 public extension String
-{
+{    
+    static func currencySymbol()->String
+    {
+        let locale:NSLocale = NSLocale.current as NSLocale
+        let currency = locale.object(forKey: NSLocale.Key.currencySymbol)
+        return currency as! String
+    }
+
+    ///金融字符串相关
+    /**
+     * 金额的格式转化
+     * str : 金额的字符串
+     * numberStyle : 金额转换的格式
+     * return  NSString : 转化后的金额格式字符串
+
+    * 94863
+    * NSNumberFormatterNoStyle = kCFNumberFormatterNoStyle,
+    
+    * 94,862.57
+    * NSNumberFormatterDecimalStyle = kCFNumberFormatterDecimalStyle,
+    
+    * ￥94,862.57
+    * NSNumberFormatterCurrencyStyle = kCFNumberFormatterCurrencyStyle,
+    
+    * 9,486,257%
+    * NSNumberFormatterPercentStyle = kCFNumberFormatterPercentStyle,
+    
+    * 9.486257E4
+    * NSNumberFormatterScientificStyle = kCFNumberFormatterScientificStyle,
+    
+    * 九万四千八百六十二点五七
+    * NSNumberFormatterSpellOutStyle = kCFNumberFormatterSpellOutStyle
+    
+    **/
+    func financeDataString(numberStyle:NumberFormatter.Style)->String
+    {
+        var str = self
+        if self.stringIsEmpty()
+        {
+            str = "0"
+        }
+        
+        let formatter = NumberFormatter()
+        formatter.locale = Locale.current
+        formatter.numberStyle = numberStyle
+        let money = formatter.string(from: NSNumber(value: str.double()!))
+        return money!
+    }
+    
     func stringIsEmpty()->Bool
     {
         return (self as NSString).length == 0 || (self.charactersArray.count < 1) ? true : false
@@ -440,7 +495,6 @@ public extension String
         }
         return NSArray.init()
     }
-    
     
     func passwordLevel()->PStrengthLevel
     {

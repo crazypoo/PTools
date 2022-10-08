@@ -116,6 +116,9 @@
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
+		55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */; };
+		55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */; };
+		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */; };
@@ -359,6 +362,9 @@
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
+		55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallMessageMailFunction.swift; sourceTree = "<group>"; };
+		55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+PTEX.swift"; sourceTree = "<group>"; };
+		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTImageBlackToTransparent.h; sourceTree = "<group>"; };
@@ -517,11 +523,13 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55D59C4C28F17DEA00B4FF76 /* AppStore */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
+				55D59C4728F14A3100B4FF76 /* CallMessageMail */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
@@ -583,6 +591,7 @@
 				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
 				9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */,
 				9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */,
+				55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */,
 				231D15CD272CDEE9003D6F62 /* Extensions.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
@@ -785,7 +794,6 @@
 				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
 				231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */,
 				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
-				231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */,
 				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
 				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
 				554CCBE028BC943700028597 /* PTRateView.swift */,
@@ -924,6 +932,23 @@
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		55D59C4728F14A3100B4FF76 /* CallMessageMail */ = {
+			isa = PBXGroup;
+			children = (
+				231D15DB272CDEE9003D6F62 /* PTPhoneBlock.swift */,
+				55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */,
+			);
+			path = CallMessageMail;
+			sourceTree = "<group>";
+		};
+		55D59C4C28F17DEA00B4FF76 /* AppStore */ = {
+			isa = PBXGroup;
+			children = (
+				55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */,
+			);
+			path = AppStore;
 			sourceTree = "<group>";
 		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
@@ -1278,6 +1303,7 @@
 			files = (
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
+				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
@@ -1307,6 +1333,7 @@
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
 				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
+				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
@@ -1422,6 +1449,7 @@
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
+				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,

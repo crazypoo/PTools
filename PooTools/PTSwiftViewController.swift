@@ -59,6 +59,15 @@ class PTSwiftViewController: UIViewController {
                 make.top.equalToSuperview()
                 make.right.equalToSuperview()
             }
-        }        
+        }
+        
+        
+//        PTUtils.gcdAfter(time: 5) {
+//            PTCallMessageMailFunction.sendMessage(content: "12312312312", users: ["15336934140"]) { sendResult in
+//                PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>\(sendResult)")
+//            }
+//        }
+        
+//        PTLocalConsoleFunction.share.pNSLog("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
     }
 }
