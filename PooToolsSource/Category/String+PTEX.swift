@@ -343,6 +343,16 @@ public extension String
             return self.nsString.addingPercentEncoding(withAllowedCharacters: NSCharacterSet(charactersIn: "`#%^{}\"[]|\\<> ").inverted)! as NSString
         }
     }
+    
+    func createQRImage(size:CGFloat)->UIImage
+    {
+        let filter = CIFilter(name: "CIQRCodeGenerator")
+        filter?.setDefaults()
+        let data = self.nsString.data(using: String.Encoding.utf8.rawValue)
+        filter?.setValue(data, forKey: "inputMessage")
+        let image = filter?.outputImage
+        return PTUtils.createNoneInterpolatedUIImage(image: image!, imageSize: size)
+    }
 }
 
 // MARK: - Initializers
@@ -772,7 +782,7 @@ public extension String
     }
     
     //MARK: 获取当前时间
-    static func currentDate(dateFormatterString:String? = "YYYY-MM-dd")->String
+    static func currentDate(dateFormatterString:String? = "yyyy-MM-dd")->String
     {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormatterString

@@ -51,7 +51,6 @@
 #import "PGetIpAddresses.h"
 #import "PooUDIDInfo.h"
 #import "MXRotationManager.h"
-#import "PooSegView.h"
 #import "PTImageBlackToTransparent.h"
 #import "DoubleSliderView.h"
 #import "MAThermometer.h"

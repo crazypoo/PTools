@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import NotificationBannerSwift
+import SwiftDate
 
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
@@ -30,14 +31,6 @@ import NotificationBannerSwift
 {
     case Fahrenheit
     case CentigradeDegree
-}
-
-extension PTUtils
-{
-    @objc static func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
-    {
-        PTUtils.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
-    }
 }
 
 @objcMembers
@@ -331,7 +324,7 @@ public class PTUtils: NSObject {
         }
         return .UNKNOW
     }
-    
+        
     public class func sizeFor(string:String,
                               font:UIFont,
                               lineSpacing:CGFloat? = nil,
@@ -609,12 +602,7 @@ public class PTUtils: NSObject {
             return true
         }
     }
-    
-    class open func oc_font(fontSize:CGFloat)->UIFont
-    {
-        return UIFont.appfont(size: fontSize)
-    }
-    
+        
     class open func findSuperViews(view:UIView)->[UIView]
     {
         var temp = view.superview
@@ -644,5 +632,70 @@ public class PTUtils: NSObject {
             }
         }
         return result as! [UIView]
+    }
+    
+    class open func createNoneInterpolatedUIImage(image:CIImage,imageSize:CGFloat)->UIImage
+    {
+        let extent = CGRectIntegral(image.extent)
+        let scale = min(imageSize / extent.width, imageSize / extent.height)
+        
+        let width = extent.width * scale
+        let height = extent.height * scale
+        let cs = CGColorSpaceCreateDeviceGray()
+        let bitmapRef:CGContext = CGContext(data: nil , width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: cs, bitmapInfo: CGImageAlphaInfo.none.rawValue)!
+        let context = CIContext.init()
+        let bitmapImage = context.createCGImage(image, from: extent)
+        bitmapRef.interpolationQuality = .none
+        bitmapRef.scaleBy(x: scale, y: scale)
+        bitmapRef.draw(bitmapImage!, in: extent)
+        
+        let scaledImage = bitmapRef.makeImage()
+        let newImage = UIImage(cgImage: scaledImage!)
+        return newImage
+    }
+}
+
+//MARK: OC-FUNCTION
+extension PTUtils
+{
+    public class func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
+    {
+        PTUtils.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
+    }
+
+    public class func oc_size(string:String,
+                              font:UIFont,
+                              lineSpacing:CGFloat = CGFloat.ScaleW(w: 3),
+                              height:CGFloat,
+                              width:CGFloat)->CGSize
+    {
+        return PTUtils.sizeFor(string: string, font: font,lineSpacing: lineSpacing, height: height, width: width)
+    }
+    
+    class open func oc_font(fontSize:CGFloat)->UIFont
+    {
+        return UIFont.appfont(size: fontSize)
+    }
+
+    //MARK: 时间
+    class open func oc_currentTimeFunction(dateFormatter:NSString)->String
+    {
+        return String.currentDate(dateFormatterString: dateFormatter as String)
+    }
+    
+    class open func oc_currentTimeToTimeInterval(dateFormatter:NSString)->TimeInterval
+    {
+        return String.currentDate(dateFormatterString: dateFormatter as String).dateStrToTimeInterval(dateFormat: dateFormatter as String)
+    }
+
+    class open func oc_dateStringFormat(dateString:String,formatString:String)->NSString
+    {
+        let regions = Region(calendar: Calendars.republicOfChina,zone: Zones.asiaHongKong,locale: Locales.chineseChina)
+        return dateString.toDate(formatString,region: regions)!.toString() as NSString
+    }
+    
+    class open func oc_dateFormat(date:Date,formatString:String)->String
+    {
+        return date.toFormat(formatString)
     }
 }

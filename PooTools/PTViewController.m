@@ -21,10 +21,13 @@
 
 #import "MXRotationManager.h"
 
+#import "PTMaskView.h"
+
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
+
 
 #define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
 
@@ -103,6 +106,12 @@
         PNSLog(@"222222222");
         
         [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
+    }];
+        
+    PTMaskView *mask = [PTMaskView new];
+    [self.view addSubview:mask];
+    [mask mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.right.top.bottom.equalTo(self.view);
     }];
 }
 

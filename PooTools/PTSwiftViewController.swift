@@ -40,7 +40,8 @@ class PTSwiftViewController: UIViewController {
         self.view.backgroundColor = .random
         // Do any additional setup after loading the view.
         
-        let status = UIView()
+        let status = UIImageView()
+        status.image = "123123123123123".createQRImage(size: 100)
         status.backgroundColor = .random
         AppWindows!.addSubview(status)
         status.snp.makeConstraints { make in
@@ -69,5 +70,7 @@ class PTSwiftViewController: UIViewController {
 //        }
         
 //        PTLocalConsoleFunction.share.pNSLog("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
+        
+        
     }
 }

@@ -29,8 +29,6 @@ CGFloat const tagItemSpace = 5;
 #import <GCDWebServer/GCDWebUploader.h>
 #import "PGetIpAddresses.h"
 
-#import "PooSegView.h"
-
 #import "PooTagsLabel.h"
 
 #import "PooTextView.h"
@@ -60,8 +58,6 @@ CGFloat const tagItemSpace = 5;
 @property (nonatomic, strong) UITextField *textField;
 
 @property (nonatomic, strong) UIButton *cornerBtn;
-
-@property (nonatomic, strong) PooSegView *seg;
 
 @property (nonatomic, strong) NSArray *titleS;
 
@@ -208,69 +204,28 @@ CGFloat const tagItemSpace = 5;
         case ShowFunctionSegmented:
         {
             
-//            PooSegmentModel * segModel = [[PooSegmentModel alloc] init];
-//            segModel.titles = @"aaaaaa";
-//
-//            PooSegmentModel * segModels = [[PooSegmentModel alloc] init];
-//            segModels.titles = @"22222";
-//
-//            PooSegmentConfig *config = [[PooSegmentConfig alloc] init];
-//
-//            PooSegmentView *sgView = [[PooSegmentView alloc] initWithConfig:config];
-//            sgView.backgroundColor = kRandomColor;
-//            sgView.viewDatas = @[segModel,segModels];
-//            [sgView reloadViewDataWithBlock:^(NSInteger index) {
-//
-//            }];
-//            [self.view addSubview:sgView];
-//            [sgView mas_makeConstraints:^(MASConstraintMaker *make) {
-//                make.centerY.equalTo(self.view);
-//                make.height.offset(44);
-//                make.left.right.equalTo(self.view);
-//            }];
+            PooSegmentModel * segModel = [[PooSegmentModel alloc] init];
+            segModel.titles = @"aaaaaa";
+            segModel.imageURL = @"DemoImage";
+            segModel.selectedImageURL = @"DemoImage";
 
-            NSArray *aaaaaaaa = @[@"DemoImage",@"DemoImage"];
-            self.seg = [[PooSegView alloc] initWithTitles:@[@"1",@"22223"] titleNormalColor:[UIColor lightGrayColor] titleSelectedColor:[UIColor redColor] titleFont:APPFONT(16) setLine:NO lineColor:[UIColor blackColor] lineWidth:1 selectedBackgroundColor:[UIColor yellowColor] normalBackgroundColor:[UIColor blueColor] showType:PooSegShowTypeUnderLine firstSelectIndex:1 normalImageArr:aaaaaaaa selectedImageArr:aaaaaaaa clickBlock:^(PooSegView *segViewView, NSInteger buttonIndex) {
-                PNSLog(@"%ld",(long)buttonIndex);
-                switch (buttonIndex) {
-                        case 0:
-                    {
-                        [segViewView setSegBadgeAtIndex:0 where:PooSegBadgeShowTypeBottomRight];
-                    }
-                        break;
-                        case 1:
-                    {
-                        [segViewView setSegBadgeAtIndex:3 where:PooSegBadgeShowTypeBottomMiddle];
-                    }
-                        break;
-                        case 2:
-                    {
-                        [segViewView removeAllSegBadgeAtIndex];
-                    }
-                        break;
-                        case 3:
-                    {
-                        [segViewView removeSegBadgeAtIndex:0];
-                    }
-                        break;
-                    default:
-                        break;
-                }
+            PooSegmentModel * segModels = [[PooSegmentModel alloc] init];
+            segModels.titles = @"22222";
+            segModels.imageURL = @"DemoImage";
+            segModels.selectedImageURL = @"DemoImage";
+            PooSegmentConfig *config = [[PooSegmentConfig alloc] init];
+
+            PooSegmentView *sgView = [[PooSegmentView alloc] initWithConfig:config];
+            sgView.backgroundColor = kRandomColor;
+            sgView.viewDatas = @[segModel,segModels];
+            [sgView reloadViewDataWithBlock:^(NSInteger index) {
+
             }];
-            [self.view addSubview:self.seg];
-            [self.seg mas_makeConstraints:^(MASConstraintMaker *make) {
+            [self.view addSubview:sgView];
+            [sgView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.centerY.equalTo(self.view);
                 make.height.offset(44);
                 make.left.right.equalTo(self.view);
-            }];
-            
-            UIButton *pBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            pBtn.backgroundColor = kRandomColor;
-            [pBtn addTarget:self action:@selector(segAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.view addSubview:pBtn];
-            [pBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.height.equalTo(self.seg);
-                make.top.equalTo(self.seg.mas_bottom).offset(44);
             }];
         }
             break;
@@ -847,8 +802,4 @@ CGFloat const tagItemSpace = 5;
 //    PNSLog(@"%@",item);
 //}
 
--(void)segAction:(UIButton *)sender
-{
-    [self.seg setSegCurrentIndex:3 withBlock:YES];
-}
 @end

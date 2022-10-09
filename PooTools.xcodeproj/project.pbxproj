@@ -34,7 +34,6 @@
 		231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153C272CDEE9003D6F62 /* PooTextView.m */; };
 		231D163A272CDEE9003D6F62 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153E272CDEE9003D6F62 /* HPTextViewInternal.m */; };
 		231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1540272CDEE9003D6F62 /* CustomTextField.m */; };
-		231D163E272CDEE9003D6F62 /* PooSegView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1549272CDEE9003D6F62 /* PooSegView.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
 		231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1575272CDEE9003D6F62 /* LGTMBase64.m */; };
@@ -254,8 +253,6 @@
 		231D153F272CDEE9003D6F62 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
 		231D1540272CDEE9003D6F62 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
 		231D1541272CDEE9003D6F62 /* PooTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooTextView.h; sourceTree = "<group>"; };
-		231D1548272CDEE9003D6F62 /* PooSegView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooSegView.h; sourceTree = "<group>"; };
-		231D1549272CDEE9003D6F62 /* PooSegView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooSegView.m; sourceTree = "<group>"; };
 		231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometerBorder.m; sourceTree = "<group>"; };
 		231D154C272CDEE9003D6F62 /* MAThermometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometer.m; sourceTree = "<group>"; };
 		231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
@@ -668,8 +665,6 @@
 			isa = PBXGroup;
 			children = (
 				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
-				231D1548272CDEE9003D6F62 /* PooSegView.h */,
-				231D1549272CDEE9003D6F62 /* PooSegView.m */,
 			);
 			path = Segmented;
 			sourceTree = "<group>";
@@ -1378,7 +1373,6 @@
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
-				231D163E272CDEE9003D6F62 /* PooSegView.m in Sources */,
 				231D1637272CDEE9003D6F62 /* PTextField.m in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,

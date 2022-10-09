@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import YYCategories
+import SwifterSwift
 
 @objc public enum PooSegmentSelectedType : Int {
     case UnderLine
@@ -53,8 +54,16 @@ public class PooSegmentModel:NSObject
     public var titles:String = ""
     ///图片
     public var imageURL:String = ""
+    ///图片
+    public var imagePlaceHolder:String = ""
     ///选中图片
     public var selectedImageURL:String = ""
+}
+
+public enum ButtonShowType:Int {
+    case OnlyTitle
+    case OnlyImage
+    case TitleImage
 }
 
 @objcMembers
@@ -64,13 +73,7 @@ public class PooSegmentSubView:UIView
 
 //    private let lineSqare:CGFloat = 5
     
-    public enum ButtonShowType {
-        case OnlyTitle
-        case OnlyImage
-        case TitleImage
-    }
-    
-    public var buttonShowType:ButtonShowType? = .OnlyTitle
+    public var buttonShowType:ButtonShowType = .OnlyTitle
 
     lazy var imageBtn:BKLayoutButton = {
         let btn = BKLayoutButton()
@@ -79,6 +82,7 @@ public class PooSegmentSubView:UIView
         btn.setMidSpacing(self.viewConfig.imageTitleSpace)
         btn.imageView?.contentMode = .scaleAspectFit
         btn.layoutStyle = self.viewConfig.imagePosition
+        btn.setImageSize(CGSize(width: 30, height: 30))
         return btn
     }()
     
@@ -113,18 +117,22 @@ public class PooSegmentSubView:UIView
             //MARK:图片地址判断
             buttonShowType = .OnlyImage
             label.contentMode = .scaleAspectFit
-            if subViewModels.imageURL.isURL()
+            
+            let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
+
+            if subViewModels.imageURL.isValidUrl
             {
-                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                
+                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
                 label.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
 
-            if subViewModels.selectedImageURL.isURL()
+            if subViewModels.selectedImageURL.isValidUrl
             {
-                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -133,6 +141,7 @@ public class PooSegmentSubView:UIView
         }
         else if !subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty()
         {
+            let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             //MARK:两个都有
             buttonShowType = .TitleImage
             imageBtn.contentMode = .scaleAspectFit
@@ -140,7 +149,7 @@ public class PooSegmentSubView:UIView
             imageBtn.setTitle(subViewModels.titles, for: .normal)
             if subViewModels.imageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -149,7 +158,7 @@ public class PooSegmentSubView:UIView
 
             if subViewModels.selectedImageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: UIColor.randomColor.createImageWithColor(), options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -360,6 +369,25 @@ public class PooSegmentView: UIView {
                     }
 
                     let subView = PooSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
+                    
+                    var subShowType:ButtonShowType!
+                    if value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty()
+                    {
+                        subShowType = .OnlyImage
+                    }
+                    else if !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() && value.imageURL.stringIsEmpty()
+                    {
+                        subShowType = .OnlyTitle
+                    }
+                    else if !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty()
+                    {
+                        subShowType = .TitleImage
+                    }
+                    else
+                    {
+                        subShowType = .OnlyTitle
+                    }
+                    subView.buttonShowType = subShowType
                     subView.tag = index
                     subView.frame = CGRect.init(x: scrolContentW, y: 0, width: subContentW!, height: self.frame.size.height)
                     scrolContentW += subContentW!
@@ -479,21 +507,21 @@ public class PooSegmentView: UIView {
                     var badgePoint = CGPoint.init(x: 0, y: 0)
                     switch badgePosition {
                     case .TopLeft:
-                        badgePoint = CGPoint(x: -subViews.width+5, y: 5)
+                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: 5)
                     case .TopMiddle:
-                        badgePoint = CGPoint(x: -(subViews.width/2), y: 5)
+                        badgePoint = CGPoint(x: -(subViews.pt.jx_width/2), y: 5)
                     case .TopRight:
                         badgePoint = CGPoint(x: 0, y: 5)
                     case .MiddleLeft:
-                        badgePoint = CGPoint(x: -subViews.width+5, y: subViews.height/2)
+                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: subViews.pt.jx_height/2)
                     case .MiddleRigh:
-                        badgePoint = CGPoint(x: -5, y: subViews.height/2)
+                        badgePoint = CGPoint(x: -5, y: subViews.pt.jx_height/2)
                     case .BottomLeft:
-                        badgePoint = CGPoint(x: -subViews.width+5, y: subViews.height-5)
+                        badgePoint = CGPoint(x: -subViews.pt.jx_width+5, y: subViews.pt.jx_height-5)
                     case .BottomMiddle:
-                        badgePoint = CGPoint(x: -(subViews.width/2), y: subViews.height-5)
+                        badgePoint = CGPoint(x: -(subViews.pt.jx_width/2), y: subViews.pt.jx_height-5)
                     case .BottomRight:
-                        badgePoint = CGPoint(x: -5, y: subViews.height-5)
+                        badgePoint = CGPoint(x: -5, y: subViews.pt.jx_height-5)
                     default:break
                     }
                     subViews.badgeCenterOffset = badgePoint

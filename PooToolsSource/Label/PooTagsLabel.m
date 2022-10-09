@@ -10,6 +10,7 @@
 #import "PMacros.h"
 #import "Utils.h"
 #import <Masonry/Masonry.h>
+#import <PooTools/PooTools-Swift.h>
 
 #define BTN_Tags_Tag        784843
 
@@ -105,7 +106,7 @@
             {
                 if (self.curConfig.lockWidth)
                 {
-                    NSDecimalNumber *dNumber = [[NSDecimalNumber alloc] initWithFloat:[Utils sizeForString:self.tagsTitleArr[i] font:font andHeigh:CGFLOAT_MAX andWidth:self.curConfig.itemWidth].height];
+                    NSDecimalNumber *dNumber = [[NSDecimalNumber alloc] initWithFloat:[PTUtils oc_sizeWithString:self.tagsTitleArr[i] font:font lineSpacing:3 height:CGFLOAT_MAX width:self.curConfig.itemWidth].height];
                     [floatArr addObject:dNumber];
                 }
             }
@@ -156,7 +157,7 @@
                                     if (self.curConfig.lockWidth)
                                     {
                                         CGFloat leftWidth = self.curConfig.itemWidth - 2*itemContentMargin + self.curConfig.tagImageSize.width;
-                                        CGFloat leftHeight = [Utils sizeForString:self.tagsTitleArr[i] font:font andHeigh:CGFLOAT_MAX andWidth:leftWidth].height;
+                                        CGFloat leftHeight = [PTUtils oc_sizeWithString:self.tagsTitleArr[i] font:font lineSpacing:3 height:CGFLOAT_MAX width:leftWidth].height;
                                         titleWidth = self.curConfig.itemWidth;
                                         if (leftHeight > self.curConfig.itemHeight)
                                         {

@@ -49,21 +49,6 @@ typedef NS_ENUM(NSInteger,FewMonthLaterType){
     FewMonthLaterTypeContract
 };
 
-typedef NS_ENUM(NSInteger,GetTimeType){
-    GetTimeTypeYMD = 0,
-    GetTimeTypeYM,
-    GetTimeTypeY,
-    GetTimeTypeM,
-    GetTimeTypeMD,
-    GetTimeTypeD,
-    GetTimeTypeTimeStampFull,
-    GetTimeTypeTimeStampYMDHM,
-    GetTimeTypeTimeStampYMD,
-    GetTimeTypeYMDHHS,
-    GetTimeTypeHHS,
-    GetTimeTypeHH
-};
-
 static NSString * _Nonnull LANGUAGEENGLISH = @"LANGUAGEENGLISH";
 static NSString * _Nonnull LANGUAGEANDCHINESE = @"LANGUAGEANDCHINESE";
 static NSString * _Nonnull LANGUAGECHINESE = @"LANGUAGECHINESE";
@@ -144,22 +129,6 @@ static inline BOOL isIPhoneXSeries() {
       destructiveAction:(void (^ _Nullable)(void))destructiveBlock
       otherButtonAction:(void (^_Nullable)(NSInteger index))buttonIndexPath;
 
-#pragma mark ------> 计算字符串高度或者宽度
-/*! @brief Compute string heigh or width
- */
-+(CGSize)sizeForString:(NSString  * _Nonnull)string
-                  font:(UIFont * _Nonnull)stringFont
-              andHeigh:(CGFloat)heigh
-              andWidth:(CGFloat)width;
-
-/*! @brief Compute string heigh or width(含有字行间距)
-*/
-+(CGSize)sizeForString:(NSString * _Nonnull)string
-                  font:(UIFont * _Nonnull)stringFont
-           lineSpacing:(CGFloat)lineSpacing
-              andWidth:(CGFloat)width
-              andHeigh:(CGFloat)height;
-
 #pragma mark ------> UIButton
 /*! @brief 按钮简易生成
  */
@@ -175,18 +144,6 @@ static inline BOOL isIPhoneXSeries() {
             setTapEnable:(BOOL)yesOrNo;
     
 #pragma mark ------> 时间日期
-/*! @brief 根据NSDate格式化时间
- */
-+(NSString * _Nonnull)formateTime:(NSDate * _Nonnull)date WithType:(GetTimeType)type;
-
-/*! @brief 获取当前时间
- */
-+(NSString * _Nonnull)getTimeWithType:(GetTimeType)type;
-
-/*! @brief 时间格式化
- */
-+(NSString * _Nonnull)dateStringFormater:(NSString * _Nonnull)timeString withType:(GetTimeType)type;
-
 /*! @brief 用某个时间戳来判断当前时间与服务器获取的时间对比,是否快到期
  */
 +(CheckNowTimeAndPastTimeRelationships)checkContractDateExpireContractDate:(NSString * _Nonnull)contractDate expTimeStamp:(int)timeStamp;
@@ -209,11 +166,6 @@ static inline BOOL isIPhoneXSeries() {
  * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
  */
 +(void)changeAPPIcon:(NSString * _Nullable)IconName;
-
-/*! @brief 生成二维码
- */
-+(UIImage * _Nonnull)createQRImageWithString:(NSString * _Nonnull)string
-                           withSize:(CGFloat)size;
 
 /*! @brief 添加文字水印(斜文字版)
  * @param originalImage 原来的图片
@@ -240,10 +192,6 @@ static inline BOOL isIPhoneXSeries() {
 +(NSArray * _Nonnull)arraySortINV:(NSArray * _Nonnull)arr;
 
 #pragma mark ------> 字符串
-/*! @brief 银行卡号辨别银行
- */
-+(NSString * _Nonnull)backbankenameWithBanknumber:(NSString * _Nonnull)banknumber;
-
 /*! @brief 数字小写转大写
  */
 +(NSString * _Nonnull)getUperDigit:(NSString * _Nonnull)inputStr;

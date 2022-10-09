@@ -25,6 +25,7 @@
         [images mas_makeConstraints:^(MASConstraintMaker *make) {
             make.left.right.top.bottom.equalTo(self);
         }];
+                        
         images.image = [Utils getWaterMarkImage:image andTitle:@"测试模式-所有数据均为测试" andMarkFont:[UIFont systemFontOfSize:100] andMarkColor:[UIColor colorWithRed:1 green:1 blue:1 alpha:0.2]];
     }
     return self;

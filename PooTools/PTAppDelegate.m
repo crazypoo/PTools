@@ -72,7 +72,7 @@
         [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"%ld>>>>>%d>>>>>%@",(long)type,finish,url]];
     };
     [self.localConsoles createSystemLogView];
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS]]];
+    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[PTUtils oc_currentTimeFunctionWithDateFormatter:@"yyyy-MM-dd HH:mm:ss"]]];
 
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
@@ -80,9 +80,7 @@
     [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:30 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
         
     }];
-    
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>%@>>>>>>%@>>>>%@>>>>%@>>>>%@>>>>%@",[Utils getTimeWithType:GetTimeTypeYMDHHS],[Utils getTimeWithType:GetTimeTypeYMD],[Utils getTimeWithType:GetTimeTypeMD],[Utils getTimeWithType:GetTimeTypeTimeStampYMD],[Utils getTimeWithType:GetTimeTypeHHS],[Utils getTimeWithType:GetTimeTypeHH]]];
-    
+                
     [[PCheckAppStatus shared] open];
         
     PTImaginaryLineView *imageLine = [[PTImaginaryLineView alloc] init];
