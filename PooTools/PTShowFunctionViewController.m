@@ -29,8 +29,6 @@ CGFloat const tagItemSpace = 5;
 #import <GCDWebServer/GCDWebUploader.h>
 #import "PGetIpAddresses.h"
 
-#import "PooTagsLabel.h"
-
 #import "PooTextView.h"
 
 #import "PLabel.h"
@@ -98,39 +96,6 @@ CGFloat const tagItemSpace = 5;
     [self.webServer stop];
     self.webServer = nil;
 }
-
--(PooTagsLabelConfig *)tagConfig
-{
-//    CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
-    
-    PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-    config.itemHeight = tagItemH * ViewScale;
-    config.itemWidth = 90;
-    config.itemHerMargin = tagItemSpace;
-    config.itemVerMargin = tagItemSpace;
-    config.hasBorder = NO;
-    config.topBottomSpace = tagItemSpace;
-    config.itemContentEdgs = tagItemSpace;
-    config.isCanSelected = YES;
-    config.isCanCancelSelected = YES;
-    config.isMulti = YES;
-    config.selectedDefaultTags = self.titleS;
-    config.selectedTitleColor = AppOrange;
-    config.showStatus = PooTagsLabelShowWithNormal;
-    config.borderColor = [UIColor grayColor];
-    config.borderColorSelected = AppOrange;
-    config.tagPosition = PooTagPositionCenter;
-    config.normalImage = self.taglabelNormalArr;
-    config.selectedImage = self.taglabelSelected;
-    config.titleNormal = self.roomSetArray;
-    config.tagImageSize = CGSizeMake(100, tagItemH * ViewScale);
-    config.insetsStyle = MKButtonEdgeInsetsStyleTop;
-    config.lockWidth = YES;
-    config.backgroundColor = AppOrange;
-    config.backgroundSelectedColor = [UIColor grayColor];
-    return config;
-}
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -231,64 +196,6 @@ CGFloat const tagItemSpace = 5;
             break;
             case ShowFunctionTagLabel:
         {
-            
-            self.titleS = @[@"空调",@"床",@"热水器",@"洗衣机"];
-
-//            NSArray *titleS = @[@"空调",@"床",@"热水器",@"洗衣机"];
-//
-//            CGFloat smallScreen = (kSCREEN_WIDTH < iPhone6SPViewPointW) ? ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5.5)/4) : ((kSCREEN_WIDTH-ViewSpace*2-tagItemSpace*5)/(IS_IPAD ? 4.5 : 4));
-//
-//            PooTagsLabelConfig *config = [[PooTagsLabelConfig alloc] init];
-//            config.itemHeight = tagItemH * ViewScale;
-//            config.itemWidth = smallScreen;
-//            config.itemHerMargin = tagItemSpace;
-//            config.itemVerMargin = tagItemSpace;
-//            config.hasBorder = NO;
-//            config.topBottomSpace = tagItemSpace;
-//            config.itemContentEdgs = tagItemSpace;
-//            config.isCanSelected = YES;
-//            config.isCanCancelSelected = NO;
-//            config.isMulti = YES;
-//            config.selectedDefaultTags = titleS;
-//            config.selectedTitleColor = AppOrange;
-//            config.showStatus = PooTagsLabelShowWithImageStatusNoTitle;
-//            config.borderColor = [UIColor grayColor];
-//            config.borderColorSelected = AppOrange;
-
-//            NSArray *title = @[@"7",@"1",@"2",@"3",@"1231231231314124"];
-            
-//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:title config:config wihtSection:0];
-//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
-//            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithTagsNormalArray:self.taglabelNormalArr tagsSelectArray:self.taglabelSelected tagsTitleArray:self.roomSetArray config:[self tagConfig] wihtSection:0];
-            self.titleS = @[@"空调",@"衣柜"];
-            PooTagsLabel *tag = [[PooTagsLabel alloc] initWithConfig:[self tagConfig] wihtSection:0];
-            tag.backgroundColor = kRandomColor;
-            [self.view addSubview:tag];
-            [tag mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.left.right.bottom.equalTo(self.view);
-                make.top.equalTo(self.view).offset(HEIGHT_NAVBAR*2);
-            }];
-            tag.tagHeightBlock = ^(PooTagsLabel *aTagsView, CGFloat viewHeight) {
-                PNSLog(@"%f",viewHeight);
-            };
-            tag.tagBtnClickedBlock = ^(PooTagsLabel *aTagsView, UIButton *sender, NSInteger tag) {
-                PNSLog(@"%ld",(long)tag);
-            };
-            
-            UIButton *pBtnsssss = [UIButton buttonWithType:UIButtonTypeCustom];
-            pBtnsssss.backgroundColor = kRandomColor;
-            [pBtnsssss addActionHandlersWithHandler:^(UIButton * sender) {
-                PNSLog(@"1111111111");
-//                self.titleS = @[@"空调",@"床",@"热水器"];
-//                [tag reloadTag:[self tagConfig]];
-//                [tag setTagPosition:PooTagPositionCenter];
-                [tag clearTag];
-            }];
-            [self.view addSubview:pBtnsssss];
-            [pBtnsssss mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.width.height.offset(100);
-                make.centerX.centerY.equalTo(self.view);
-            }];
         }
             break;
             case ShowFunctionInputView:

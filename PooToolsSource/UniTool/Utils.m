@@ -20,31 +20,6 @@
 
 @implementation Utils
 
-+ (UIImageView *)imageViewWithFrame:(CGRect)frame withImage:(UIImage *)image{
-    
-    UIImageView *imageView = [[UIImageView alloc] initWithFrame:frame];
-    imageView.image = image;
-    return imageView;
-}
-
-+ (UILabel *)labelWithFrame:(CGRect)frame withTitle:(NSString *)title titleFontSize:(UIFont *)font textColor:(UIColor *)color backgroundColor:(UIColor *)bgColor alignment:(NSTextAlignment)textAlignment{
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:frame];
-    label.text = title;
-    label.font = font;
-    label.textColor = color;
-    label.backgroundColor = bgColor;
-    label.textAlignment = textAlignment;
-    return label;
-}
-
-+(UIButton *)createBtnWithType:(UIButtonType)btnType frame:(CGRect)btnFrame backgroundColor:(UIColor*)bgColor{
-    UIButton *btn = [UIButton buttonWithType:btnType];
-    btn.frame = btnFrame;
-    [btn setBackgroundColor:bgColor];
-    return btn;
-}
-
 +(void)alertVCOnlyShowWithTitle:(NSString *)title
                      andMessage:(NSString *)message
 {
@@ -85,7 +60,7 @@
            cancelAction:(void (^ _Nullable)(void))cancelBlock
       destructiveAction:(void (^ _Nullable)(void))destructiveBlock
       otherButtonAction:(void (^_Nullable)(NSInteger index))buttonIndexPath
-{
+{    
     UIAlertController *alertController = [UIAlertController alertControllerWithTitle:title
                                                                              message:m
                                                                       preferredStyle:style];

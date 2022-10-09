@@ -72,23 +72,7 @@ static inline BOOL isIPhoneXSeries() {
 }
 
 @interface Utils : NSObject
-
-#pragma mark ------> UIImageView
-/*! @brief 图片简易生成
- */
-+(UIImageView * _Nonnull)imageViewWithFrame:(CGRect)frame
-                         withImage:(UIImage * _Nullable)image;
     
-#pragma mark ------> UILabel
-/*! @brief Label简易生成
- */
-+(UILabel * _Nonnull)labelWithFrame:(CGRect)frame
-                 withTitle:(NSString * _Nullable)title
-             titleFontSize:(UIFont * _Nullable)font
-                 textColor:(UIColor * _Nullable)color
-           backgroundColor:(UIColor * _Nullable)bgColor
-                 alignment:(NSTextAlignment)textAlignment;
-
 #pragma mark ------> UIAlertView/UIViewController
 /*! @brief AlertController + Only Show
  */
@@ -130,12 +114,6 @@ static inline BOOL isIPhoneXSeries() {
       otherButtonAction:(void (^_Nullable)(NSInteger index))buttonIndexPath;
 
 #pragma mark ------> UIButton
-/*! @brief 按钮简易生成
- */
-+(UIButton * _Nonnull)createBtnWithType:(UIButtonType)btnType
-                         frame:(CGRect)btnFrame
-               backgroundColor:(UIColor * _Nullable)bgColor;
-
 /*! @brief 按钮倒计时
  */
 +(void)timmerRunWithTime:(int)time

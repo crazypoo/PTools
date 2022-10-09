@@ -40,7 +40,6 @@
 #import "PObject2Json.h"
 #import "GPKeyChain.h"
 #import "PLabel.h"
-#import "PooTagsLabel.h"
 #import "UICountingLabel.h"
 #import "PGifHud.h"
 #import "WMHub.h"

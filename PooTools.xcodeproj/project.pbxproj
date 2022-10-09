@@ -37,7 +37,6 @@
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
 		231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1575272CDEE9003D6F62 /* LGTMBase64.m */; };
-		231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D157D272CDEE9003D6F62 /* PooTagsLabel.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
 		231D1655272CDEEA003D6F62 /* UICountingLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1583272CDEE9003D6F62 /* UICountingLabel.m */; };
 		231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1587272CDEE9003D6F62 /* DoubleSliderView.m */; };
@@ -66,7 +65,6 @@
 		231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */; };
 		231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */; };
 		231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C8272CDEE9003D6F62 /* PTCarrie.swift */; };
-		231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C9272CDEE9003D6F62 /* PTTagsLabel.swift */; };
 		231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */; };
 		231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */; };
 		231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */; };
@@ -261,11 +259,9 @@
 		231D1574272CDEE9003D6F62 /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
 		231D1575272CDEE9003D6F62 /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
 		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
-		231D157D272CDEE9003D6F62 /* PooTagsLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooTagsLabel.m; sourceTree = "<group>"; };
 		231D157E272CDEE9003D6F62 /* UICountingLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICountingLabel.h; sourceTree = "<group>"; };
 		231D1582272CDEE9003D6F62 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
 		231D1583272CDEE9003D6F62 /* UICountingLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICountingLabel.m; sourceTree = "<group>"; };
-		231D1584272CDEE9003D6F62 /* PooTagsLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooTagsLabel.h; sourceTree = "<group>"; };
 		231D1587272CDEE9003D6F62 /* DoubleSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleSliderView.m; sourceTree = "<group>"; };
 		231D1589272CDEE9003D6F62 /* DoubleSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleSliderView.h; sourceTree = "<group>"; };
 		231D158C272CDEE9003D6F62 /* PooUDIDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
@@ -296,7 +292,6 @@
 		231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDevMaskView.swift; sourceTree = "<group>"; };
 		231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextView+BKExt.swift"; sourceTree = "<group>"; };
 		231D15C8272CDEE9003D6F62 /* PTCarrie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
-		231D15C9272CDEE9003D6F62 /* PTTagsLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTagsLabel.swift; sourceTree = "<group>"; };
 		231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCheckAppStatus.swift; sourceTree = "<group>"; };
 		231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTInvertedTextView.swift; sourceTree = "<group>"; };
 		231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCollectionLayout.swift; sourceTree = "<group>"; };
@@ -520,12 +515,17 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55D59C4C28F17DEA00B4FF76 /* AppStore */,
+				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
+				55D59C5228F2971E00B4FF76 /* Animation */,
 				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
+				55D59C4C28F17DEA00B4FF76 /* AppStore */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
+				55D59C5128F296F600B4FF76 /* Blur */,
+				55D59C5028F279C200B4FF76 /* Button */,
+				55D59C5528F2984B00B4FF76 /* Calendar */,
 				55D59C4728F14A3100B4FF76 /* CallMessageMail */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
@@ -533,8 +533,10 @@
 				5528375A28EA8FD600D12202 /* CheckUpdate */,
 				231D15F9272CDEE9003D6F62 /* Country */,
 				555A8B4228C2E7A700692501 /* DevMask */,
+				55D59C5628F298CC00B4FF76 /* Guide */,
 				231D1537272CDEE9003D6F62 /* Input */,
 				231D15A1272CDEE9003D6F62 /* Json */,
+				55D59C5428F2980000B4FF76 /* Keyboard */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				231D1579272CDEE9003D6F62 /* Label */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
@@ -545,6 +547,7 @@
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
+				55D59C4F28F2799C00B4FF76 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotamation */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
@@ -561,9 +564,9 @@
 		231D14E0272CDEE9003D6F62 /* Loading */ = {
 			isa = PBXGroup;
 			children = (
-				55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */,
 				231D14E5272CDEE9003D6F62 /* PGifHud.h */,
 				231D14EC272CDEE9003D6F62 /* PGifHud.m */,
+				55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */,
 				231D14E4272CDEE9003D6F62 /* WMHub.h */,
 				231D14EA272CDEE9003D6F62 /* WMHub.m */,
 				231D14E6272CDEE9003D6F62 /* WMHubView.h */,
@@ -713,8 +716,6 @@
 			children = (
 				231D157C272CDEE9003D6F62 /* PLabel.h */,
 				231D1582272CDEE9003D6F62 /* PLabel.m */,
-				231D1584272CDEE9003D6F62 /* PooTagsLabel.h */,
-				231D157D272CDEE9003D6F62 /* PooTagsLabel.m */,
 				231D157E272CDEE9003D6F62 /* UICountingLabel.h */,
 				231D1583272CDEE9003D6F62 /* UICountingLabel.m */,
 			);
@@ -765,20 +766,12 @@
 		231D15B2272CDEE9003D6F62 /* Swift */ = {
 			isa = PBXGroup;
 			children = (
-				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
-				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
-				231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */,
-				231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */,
 				231D15BA272CDEE9003D6F62 /* PTBiologyID.swift */,
 				231D15C8272CDEE9003D6F62 /* PTCarrie.swift */,
 				231D15C0272CDEE9003D6F62 /* PTCodeView.swift */,
 				231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */,
-				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
-				231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */,
 				9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */,
-				551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */,
 				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
-				231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */,
 				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
@@ -786,18 +779,12 @@
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
 				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
-				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
-				231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */,
 				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
-				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
-				554CCBE028BC943700028597 /* PTRateView.swift */,
 				231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */,
-				231D15C9272CDEE9003D6F62 /* PTTagsLabel.swift */,
 				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
 				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
 				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
 			);
@@ -901,6 +888,7 @@
 			children = (
 				555A8B4428C2E7DA00692501 /* PTMaskView.h */,
 				555A8B4328C2E7DA00692501 /* PTMaskView.m */,
+				231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */,
 			);
 			path = DevMask;
 			sourceTree = "<group>";
@@ -944,6 +932,73 @@
 				55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */,
 			);
 			path = AppStore;
+			sourceTree = "<group>";
+		};
+		55D59C4F28F2799C00B4FF76 /* RateView */ = {
+			isa = PBXGroup;
+			children = (
+				554CCBE028BC943700028597 /* PTRateView.swift */,
+			);
+			path = RateView;
+			sourceTree = "<group>";
+		};
+		55D59C5028F279C200B4FF76 /* Button */ = {
+			isa = PBXGroup;
+			children = (
+				231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */,
+				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
+			);
+			path = Button;
+			sourceTree = "<group>";
+		};
+		55D59C5128F296F600B4FF76 /* Blur */ = {
+			isa = PBXGroup;
+			children = (
+				231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */,
+				231D15D6272CDEE9003D6F62 /* SSBlurView.swift */,
+			);
+			path = Blur;
+			sourceTree = "<group>";
+		};
+		55D59C5228F2971E00B4FF76 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
+		55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */ = {
+			isa = PBXGroup;
+			children = (
+				231D15BF272CDEE9003D6F62 /* PTCustomAlertView.swift */,
+				231D15BE272CDEE9003D6F62 /* PTActionSheetView.swift */,
+			);
+			path = ActionsheetAndAlert;
+			sourceTree = "<group>";
+		};
+		55D59C5428F2980000B4FF76 /* Keyboard */ = {
+			isa = PBXGroup;
+			children = (
+				231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */,
+			);
+			path = Keyboard;
+			sourceTree = "<group>";
+		};
+		55D59C5528F2984B00B4FF76 /* Calendar */ = {
+			isa = PBXGroup;
+			children = (
+				551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */,
+			);
+			path = Calendar;
+			sourceTree = "<group>";
+		};
+		55D59C5628F298CC00B4FF76 /* Guide */ = {
+			isa = PBXGroup;
+			children = (
+				231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */,
+			);
+			path = Guide;
 			sourceTree = "<group>";
 		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
@@ -1090,6 +1145,7 @@
 		9AE4468D2858680A007DC2B5 /* Log */ = {
 			isa = PBXGroup;
 			children = (
+				9AE446A428598A58007DC2B5 /* PTNSLog.swift */,
 				9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */,
 				9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */,
 			);
@@ -1346,7 +1402,6 @@
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
-				231D1651272CDEEA003D6F62 /* PooTagsLabel.m in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
@@ -1446,7 +1501,6 @@
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
-				231D167E272CDEEA003D6F62 /* PTTagsLabel.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
