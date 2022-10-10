@@ -21,8 +21,6 @@
 
 #import "MXRotationManager.h"
 
-#import "PTMaskView.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -108,7 +106,8 @@
         [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
     }];
         
-    PTMaskView *mask = [PTMaskView new];
+    PTDevMaskView *mask = [[PTDevMaskView alloc] initWithMaskImage:@"icon_clear" maskString:@"asdadadafffffffff"];
+    mask.isMask = true;
     [self.view addSubview:mask];
     [mask mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);

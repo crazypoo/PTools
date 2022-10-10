@@ -12,17 +12,7 @@ import SnapKit
 @objcMembers
 public class PTDevMaskView: UIView {
 
-    public var isMask : Bool
-    {
-        get
-        {
-            true
-        }
-        set
-        {
-            self.isMask = newValue
-        }
-    }
+    @objc public var isMask : Bool = false
     
     public init(maskImage:String,maskString:String)
     {
