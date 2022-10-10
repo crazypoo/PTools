@@ -173,7 +173,7 @@ Pod::Spec.new do |s|
     s.subspec 'CustomerLabel' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.frameworks = 'QuartzCore'
-        s.source_files = 'PooToolsSource/Label/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Label/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CUSTOMERLABEL POOTOOLS_COCOAPODS"
         }
