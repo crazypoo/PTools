@@ -8,6 +8,8 @@
 
 import UIKit
 import pop
+import SwifterSwift
+import YYCategories
 
 public let BottomButtonHeight : CGFloat = 44
 public let AlertLine : CGFloat = 0.5

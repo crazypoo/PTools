@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "2.22.0",
+  "version": "3.0.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,114 +8,24 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "2.22.0"
+    "tag": "3.0.0"
   },
   "license": {
     "type": "MIT",
     "file": "LICENSE"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "11.0"
   },
   "requires_arc": true,
-  "source_files": [
-    "PooToolsSource",
-    "PooToolsSource/**/*.{h,m,swift}"
-  ],
+  "swift_versions": "5.0",
   "resources": "PooToolsSource/PooTools.bundle",
-  "swift_versions": "4.2",
-  "frameworks": [
-    "UIKit",
-    "AudioToolbox",
-    "ExternalAccessory",
-    "CoreText",
-    "SystemConfiguration",
-    "WebKit",
-    "QuartzCore",
-    "CoreTelephony",
-    "Security",
-    "Foundation",
-    "AVFoundation",
-    "LocalAuthentication",
-    "CoreMotion",
-    "SceneKit",
-    "CoreImage",
-    "Photos"
-  ],
+  "default_subspecs": "Core",
   "dependencies": {
-    "AFNetworking": [
+    "SwiftDate": [
 
     ],
-    "SDWebImage": [
-
-    ],
-    "CYLTabBarController": [
-
-    ],
-    "Mantle": [
-
-    ],
-    "DZNEmptyDataSet": [
-
-    ],
-    "IQKeyboardManager": [
-
-    ],
-    "UITableView+FDTemplateLayoutCell": [
-
-    ],
-    "FDFullscreenPopGesture": [
-
-    ],
-    "LTNavigationBar": [
-
-    ],
-    "HTAutocompleteTextField": [
-
-    ],
-    "UIViewController+Swizzled": [
-
-    ],
-    "FMDB": [
-
-    ],
-    "DHSmartScreenshot": [
-
-    ],
-    "YCXMenu": [
-
-    ],
-    "Masonry": [
-
-    ],
-    "MJRefresh": [
-
-    ],
-    "MYBlurIntroductionView": [
-
-    ],
-    "TextFieldEffects": [
-
-    ],
-    "pop": [
-
-    ],
-    "UITextField+Shake": [
-
-    ],
-    "MJExtension": [
-
-    ],
-    "SSZipArchive": [
-
-    ],
-    "GCDWebServer": [
-
-    ],
-    "GCDWebServer/WebUploader": [
-
-    ],
-    "MBProgressHUD": [
+    "NotificationBannerSwift": [
 
     ],
     "WZLBadge": [
@@ -124,13 +34,10 @@
     "SnapKit": [
 
     ],
-    "YYCategories": [
-
-    ],
     "SwifterSwift": [
 
     ],
-    "HandyJSON": [
+    "CocoaLumberjack/Swift": [
 
     ],
     "DeviceKit": [
@@ -139,16 +46,43 @@
     "UIColor_Hex_Swift": [
 
     ],
-    "NotificationBannerSwift": [
+    "SJAttributesStringMaker": [
 
     ],
-    "CocoaLumberjack/Swift": [
+    "UIViewController+Swizzled": [
 
     ],
-    "SwiftDate": [
+    "IQKeyboardManager": [
 
     ],
-    "UIImageColors": [
+    "FDFullscreenPopGesture": [
+
+    ],
+    "YYCategories": [
+
+    ],
+    "pop": [
+
+    ],
+    "FluentDarkModeKit": [
+
+    ],
+    "SDWebImage": [
+
+    ],
+    "MJRefresh": [
+
+    ],
+    "TextFieldEffects": [
+
+    ],
+    "UITextField+Shake": [
+
+    ],
+    "Masonry": [
+
+    ],
+    "AFNetworking": [
 
     ],
     "KakaJSON": [
@@ -160,9 +94,335 @@
     "SwiftyJSON": [
 
     ],
-    "SJAttributesStringMaker": [
+    "HandyJSON": [
+
+    ],
+    "EmptyDataSet-Swift": [
+
+    ],
+    "LXFProtocolTool/LXFEmptyDataSetable": [
+
+    ],
+    "MJExtension": [
+
+    ],
+    "MBProgressHUD": [
+
+    ],
+    "CollectionViewPagingLayout": [
+
+    ],
+    "CYLTabBarController": [
+
+    ],
+    "DHSmartScreenshot": [
+
+    ],
+    "SSZipArchive": [
+
+    ],
+    "GCDWebServer": [
+
+    ],
+    "GCDWebServer/WebUploader": [
+
+    ],
+    "ChromaColorPicker": [
+
+    ],
+    "UIImageColors": [
 
     ]
   },
-  "swift_version": "4.2"
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "AVKit",
+    "CoreFoundation",
+    "CoreText",
+    "AVFoundation",
+    "LocalAuthentication",
+    "Security",
+    "EventKit",
+    "CoreTelephony",
+    "WebKit",
+    "MessageUI",
+    "CoreMotion",
+    "SceneKit",
+    "Photos"
+  ],
+  "source_files": [
+    "PooToolsSource",
+    "PooToolsSource/**/*.{h,m,swift}"
+  ],
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": [
+        "PooToolsSource/Core/*.{h,m,swift}",
+        "PooToolsSource/Blur/*.{h,m,swift}",
+        "PooToolsSource/Blur/*.{h,m,swift}",
+        "PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}",
+        "PooToolsSource/AppStore/*.{h,m,swift}",
+        "PooToolsSource/BlackMagic/*.{h,m,swift}",
+        "PooToolsSource/Button/*.{h,m,swift}",
+        "PooToolsSource/Category/*.{h,m,swift}",
+        "PooToolsSource/DevMask/*.{h,m,swift}",
+        "PooToolsSource/LocalConsole/*.{h,m,swift}",
+        "PooToolsSource/Log/*.{h,m,swift}",
+        "PooToolsSource/StatusBar/*.{h,m,swift}",
+        "PooToolsSource/TouchInspector/*.{h,m,swift}"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "DataEncrypt",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Animation",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "YB_Attributed",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_YBATTRIBUTED POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "BankCard",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BANKCARD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "BilogyID",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Calendar",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CALENDAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Telephony",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CheckBox",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKBOX POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CheckDirtyWord",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKDIRTYWORD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CodeView",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CODEVIEW POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Country",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COUNTRY POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "DarkModeSetting",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DARKMODESETTING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Guide",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_GUIDE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Input",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CustomerNumberKeyboard",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERNUMBERKEYWORD POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "KeyChain",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_KEYCHAIN POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CustomerLabel",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERLABEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "LanguageSetting",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LANGUAGESETTING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Line",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LINE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Loading",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOADING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "MediaViewer",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MEDIAVIEWER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Motion",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MOTION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PhoneInfo",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PHONEINFO POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "RateView",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_RATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Rotation",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ROTATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ScrollBanner",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCROLLBANNER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SearchBar",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEARCHBAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Segmented",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEGMENT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "HandSign",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HANDSIGN POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Slider",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Thermometer",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_THERMOMETER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "NetWork",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CheckUpdate",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Layout",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LAYOUT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "TABBAR",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TABBAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SmartScreenshot",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ZipArchive",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "GCDWebServer",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ColorPicker",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COLORPICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ImageColors",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGECOLORS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "InputAll",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
+      }
+    }
+  ],
+  "swift_version": "5.0"
 }

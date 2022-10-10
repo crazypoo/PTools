@@ -10,15 +10,27 @@ import UIKit
 import SnapKit
 
 @objcMembers
+public class PTDevMaskConfig:NSObject
+{
+    public var isMask:Bool = false
+    public var maskString:String = "测试模式"
+    public var maskFont:UIFont = .appfont(size: 100,bold: true)
+}
+
+@objcMembers
 public class PTDevMaskView: UIView {
 
-    @objc public var isMask : Bool = false
+    var viewConfig : PTDevMaskConfig = PTDevMaskConfig()
     
-    public init(maskImage:String,maskString:String)
+    public init(config:PTDevMaskConfig?)
     {
         super.init(frame: .zero)
+        self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
         
-        let image = UIImage(named: maskImage)
+        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
+        let filePath = bundlePath?.path(forResource: "icon_clear", ofType: "png")
+
+        let image = UIImage(contentsOfFile: filePath!)
         
         let imageContent = UIImageView()
         addSubview(imageContent)
@@ -26,7 +38,7 @@ public class PTDevMaskView: UIView {
             make.edges.equalToSuperview()
         }
         
-        imageContent.image = image!.watermark(title: maskString,font: UIFont.systemFont(ofSize: 100), color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
+        imageContent.image = image!.watermark(title: self.viewConfig.maskString,font: self.viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
     }
     
     required init?(coder: NSCoder) {
@@ -35,7 +47,7 @@ public class PTDevMaskView: UIView {
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
     {
-        if isMask
+        if self.viewConfig.isMask
         {
             return super.hitTest(point, with: event)
         }

@@ -1,12 +1,19 @@
-platform :ios, '10.0'
+platform :ios, '11.0'
 use_frameworks!
+
+post_install do |installer|
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings.delete 'IPHONEOS_DEPLOYMENT_TARGET'
+      end
+  end
+end
 
 target 'PooTools_Example' do
   pod 'PooTools', :path => 'PooTools.podspec'
   pod 'WZLBadge'
   pod 'SnapKit'
   pod 'YYCategories'
-  pod 'SwifterSwift'
 #  pod 'WoodPeckeriOS'
   pod "GCDWebServer/WebUploader", "~> 3.0"
   pod 'HandyJSON' #JSON处理
@@ -22,4 +29,6 @@ target 'PooTools_Example' do
   pod 'SwiftyJSON'
   pod 'CocoaLumberjack/Swift'#Log工具
   pod 'SJAttributesStringMaker'
+  pod 'SDWebImage'
+  pod 'MJRefresh'
 end

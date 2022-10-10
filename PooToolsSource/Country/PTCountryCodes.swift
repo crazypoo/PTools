@@ -8,10 +8,11 @@
 
 import UIKit
 
-public class PTCountryCodeModel:PTBaseModel
+@objcMembers
+public class PTCountryCodeModel:NSObject
 {
-    var countryCode:String = ""
-    var countryName:String = ""
+    public var countryCode:String = ""
+    public var countryName:String = ""
 }
 
 @objcMembers

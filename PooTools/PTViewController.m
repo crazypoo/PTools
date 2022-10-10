@@ -106,8 +106,7 @@
         [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
     }];
         
-    PTDevMaskView *mask = [[PTDevMaskView alloc] initWithMaskImage:@"icon_clear" maskString:@"asdadadafffffffff"];
-    mask.isMask = true;
+    PTDevMaskView *mask = [[PTDevMaskView alloc] initWithConfig:[PTDevMaskConfig new]];
     [self.view addSubview:mask];
     [mask mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);

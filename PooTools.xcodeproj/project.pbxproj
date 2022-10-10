@@ -173,21 +173,14 @@
 		CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
-		CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE820AC3F7C00949DF6 /* FMDB.framework */; };
-		CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEA20AC3F7C00949DF6 /* HTAutocompleteTextField.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
-		CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF020AC3F7C00949DF6 /* LTNavigationBar.framework */; };
-		CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF220AC3F7C00949DF6 /* Mantle.framework */; };
 		CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF420AC3F7C00949DF6 /* Masonry.framework */; };
 		CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF620AC3F7C00949DF6 /* MJRefresh.framework */; };
-		CC658CF920AC3F7C00949DF6 /* MYBlurIntroductionView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CF820AC3F7C00949DF6 /* MYBlurIntroductionView.framework */; };
 		CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFA20AC3F7C00949DF6 /* PooTools.framework */; };
 		CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFC20AC3F7C00949DF6 /* pop.framework */; };
 		CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CFE20AC3F7C00949DF6 /* SDWebImage.framework */; };
-		CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0420AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework */; };
 		CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0620AC3F7C00949DF6 /* UITextField_Shake.framework */; };
 		CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0820AC3F7C00949DF6 /* UIViewController_Swizzled.framework */; };
-		CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658D0A20AC3F7C00949DF6 /* YCXMenu.framework */; };
 		CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CC8217EC3530021BC19 /* libz.tbd */; };
 		CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */; };
 		CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CCDD3CCC217EC3640021BC19 /* TextFieldEffects.framework */; };
@@ -465,21 +458,14 @@
 				CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */,
 				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
 				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
-				CC658CE920AC3F7C00949DF6 /* FMDB.framework in Frameworks */,
-				CC658CEB20AC3F7C00949DF6 /* HTAutocompleteTextField.framework in Frameworks */,
 				CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */,
-				CC658CF120AC3F7C00949DF6 /* LTNavigationBar.framework in Frameworks */,
-				CC658CF320AC3F7C00949DF6 /* Mantle.framework in Frameworks */,
 				CC658CF520AC3F7C00949DF6 /* Masonry.framework in Frameworks */,
 				CC658CF720AC3F7C00949DF6 /* MJRefresh.framework in Frameworks */,
-				CC658CF920AC3F7C00949DF6 /* MYBlurIntroductionView.framework in Frameworks */,
 				CC658CFB20AC3F7C00949DF6 /* PooTools.framework in Frameworks */,
 				CC658CFD20AC3F7C00949DF6 /* pop.framework in Frameworks */,
 				CC658CFF20AC3F7C00949DF6 /* SDWebImage.framework in Frameworks */,
-				CC658D0520AC3F7C00949DF6 /* UITableView_FDTemplateLayoutCell.framework in Frameworks */,
 				CC658D0720AC3F7C00949DF6 /* UITextField_Shake.framework in Frameworks */,
 				CC658D0920AC3F7C00949DF6 /* UIViewController_Swizzled.framework in Frameworks */,
-				CC658D0B20AC3F7C00949DF6 /* YCXMenu.framework in Frameworks */,
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
@@ -509,18 +495,24 @@
 				55D59C5228F2971E00B4FF76 /* Animation */,
 				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
 				55D59C4C28F17DEA00B4FF76 /* AppStore */,
+				55D59C6828F3E98200B4FF76 /* Attributed */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
+				55D59C6128F3E87600B4FF76 /* BioID */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
 				55D59C5128F296F600B4FF76 /* Blur */,
 				55D59C5028F279C200B4FF76 /* Button */,
 				55D59C5528F2984B00B4FF76 /* Calendar */,
 				55D59C4728F14A3100B4FF76 /* CallMessageMail */,
+				55D59C6628F3E94B00B4FF76 /* Carrie */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				5528375A28EA8FD600D12202 /* CheckUpdate */,
+				55D59C5E28F3E81000B4FF76 /* CodeView */,
+				55D59C5B28F3E6FB00B4FF76 /* Core */,
 				231D15F9272CDEE9003D6F62 /* Country */,
+				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55D59C5628F298CC00B4FF76 /* Guide */,
 				231D1537272CDEE9003D6F62 /* Input */,
@@ -528,24 +520,28 @@
 				55D59C5428F2980000B4FF76 /* Keyboard */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
 				231D1579272CDEE9003D6F62 /* Label */,
+				55D59C6228F3E8A000B4FF76 /* Language */,
+				55D59C6528F3E91800B4FF76 /* Layout */,
+				55D59C6728F3E96D00B4FF76 /* Line */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				555E8FE628D01CF600AF5E63 /* LocalConsole */,
 				9AE4468D2858680A007DC2B5 /* Log */,
+				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
+				55D59C5D28F3E7C400B4FF76 /* Motion */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
-				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
-				231D15F1272CDEE9003D6F62 /* Rotamation */,
+				231D15F1272CDEE9003D6F62 /* Rotation */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
+				55D59C6028F3E84900B4FF76 /* SearchBar */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
-				231D15B2272CDEE9003D6F62 /* Swift */,
+				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				231D154A272CDEE9003D6F62 /* Thermometer */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
-				231D15E2272CDEE9003D6F62 /* UniTool */,
 			);
 			path = PooToolsSource;
 			sourceTree = SOURCE_ROOT;
@@ -589,6 +585,8 @@
 				231D1522272CDEE9003D6F62 /* NSURLResponse+Help.h */,
 				231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
+				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
+				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
@@ -625,7 +623,6 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
-				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -658,10 +655,10 @@
 		231D154A272CDEE9003D6F62 /* Thermometer */ = {
 			isa = PBXGroup;
 			children = (
-				231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */,
+				231D154E272CDEE9003D6F62 /* MAThermometer.h */,
 				231D154C272CDEE9003D6F62 /* MAThermometer.m */,
 				231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */,
-				231D154E272CDEE9003D6F62 /* MAThermometer.h */,
+				231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */,
 			);
 			path = Thermometer;
 			sourceTree = "<group>";
@@ -669,6 +666,7 @@
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
+				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
@@ -699,6 +697,7 @@
 			children = (
 				231D157C272CDEE9003D6F62 /* PLabel.h */,
 				231D1582272CDEE9003D6F62 /* PLabel.m */,
+				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 				231D157E272CDEE9003D6F62 /* UICountingLabel.h */,
 				231D1583272CDEE9003D6F62 /* UICountingLabel.m */,
 			);
@@ -730,8 +729,6 @@
 			isa = PBXGroup;
 			children = (
 				55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */,
-				55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */,
-				55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */,
 				55E80DB128ED63F9004CF2C1 /* PTSignView.swift */,
 			);
 			path = SignView;
@@ -746,34 +743,6 @@
 			path = Json;
 			sourceTree = "<group>";
 		};
-		231D15B2272CDEE9003D6F62 /* Swift */ = {
-			isa = PBXGroup;
-			children = (
-				231D15BA272CDEE9003D6F62 /* PTBiologyID.swift */,
-				231D15C8272CDEE9003D6F62 /* PTCarrie.swift */,
-				231D15C0272CDEE9003D6F62 /* PTCodeView.swift */,
-				231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */,
-				9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */,
-				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
-				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
-				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
-				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
-				231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */,
-				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
-				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
-				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
-				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
-				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
-				231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */,
-				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
-				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
-				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
-				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
-			);
-			path = Swift;
-			sourceTree = "<group>";
-		};
 		231D15DF272CDEE9003D6F62 /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
@@ -781,18 +750,6 @@
 				231D15E1272CDEE9003D6F62 /* GPKeyChain.h */,
 			);
 			path = KeyChain;
-			sourceTree = "<group>";
-		};
-		231D15E2272CDEE9003D6F62 /* UniTool */ = {
-			isa = PBXGroup;
-			children = (
-				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
-				231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */,
-				231D15E5272CDEE9003D6F62 /* PMacros.h */,
-				231D15E3272CDEE9003D6F62 /* Utils.h */,
-				231D15E6272CDEE9003D6F62 /* Utils.m */,
-			);
-			path = UniTool;
 			sourceTree = "<group>";
 		};
 		231D15EB272CDEE9003D6F62 /* CheckDirtyWord */ = {
@@ -812,13 +769,13 @@
 			path = BankCard;
 			sourceTree = "<group>";
 		};
-		231D15F1272CDEE9003D6F62 /* Rotamation */ = {
+		231D15F1272CDEE9003D6F62 /* Rotation */ = {
 			isa = PBXGroup;
 			children = (
 				231D15F2272CDEE9003D6F62 /* MXRotationManager.m */,
 				231D15F3272CDEE9003D6F62 /* MXRotationManager.h */,
 			);
-			path = Rotamation;
+			path = Rotation;
 			sourceTree = "<group>";
 		};
 		231D15F4272CDEE9003D6F62 /* AESAndDES */ = {
@@ -852,8 +809,10 @@
 		5503F9DA28F016CC00030F41 /* ApplicationFunction */ = {
 			isa = PBXGroup;
 			children = (
-				231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */,
 				231D15C3272CDEE9003D6F62 /* PCleanCache.swift */,
+				231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */,
+				231D15D5272CDEE9003D6F62 /* PTLaunchAdMonitor.swift */,
+				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 			);
 			path = ApplicationFunction;
 			sourceTree = "<group>";
@@ -980,6 +939,121 @@
 				231D15C1272CDEE9003D6F62 /* PTGuidePageHUD.swift */,
 			);
 			path = Guide;
+			sourceTree = "<group>";
+		};
+		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
+				231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */,
+				231D15E5272CDEE9003D6F62 /* PMacros.h */,
+				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
+				55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */,
+				55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */,
+				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
+				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
+				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
+				231D15E3272CDEE9003D6F62 /* Utils.h */,
+				231D15E6272CDEE9003D6F62 /* Utils.m */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		55D59C5C28F3E7A200B4FF76 /* StatusBar */ = {
+			isa = PBXGroup;
+			children = (
+				9AE446832858618C007DC2B5 /* StatusBarManager.swift */,
+			);
+			path = StatusBar;
+			sourceTree = "<group>";
+		};
+		55D59C5D28F3E7C400B4FF76 /* Motion */ = {
+			isa = PBXGroup;
+			children = (
+				555AE28F28BF2A1A002D4FFD /* PTMotion.swift */,
+			);
+			path = Motion;
+			sourceTree = "<group>";
+		};
+		55D59C5E28F3E81000B4FF76 /* CodeView */ = {
+			isa = PBXGroup;
+			children = (
+				231D15C0272CDEE9003D6F62 /* PTCodeView.swift */,
+			);
+			path = CodeView;
+			sourceTree = "<group>";
+		};
+		55D59C5F28F3E82E00B4FF76 /* DarkMode */ = {
+			isa = PBXGroup;
+			children = (
+				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
+				9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */,
+			);
+			path = DarkMode;
+			sourceTree = "<group>";
+		};
+		55D59C6028F3E84900B4FF76 /* SearchBar */ = {
+			isa = PBXGroup;
+			children = (
+				231D15C2272CDEE9003D6F62 /* PTSearchBar.swift */,
+			);
+			path = SearchBar;
+			sourceTree = "<group>";
+		};
+		55D59C6128F3E87600B4FF76 /* BioID */ = {
+			isa = PBXGroup;
+			children = (
+				231D15BA272CDEE9003D6F62 /* PTBiologyID.swift */,
+			);
+			path = BioID;
+			sourceTree = "<group>";
+		};
+		55D59C6228F3E8A000B4FF76 /* Language */ = {
+			isa = PBXGroup;
+			children = (
+				9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */,
+			);
+			path = Language;
+			sourceTree = "<group>";
+		};
+		55D59C6428F3E8FE00B4FF76 /* MediaViewer */ = {
+			isa = PBXGroup;
+			children = (
+				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
+			);
+			path = MediaViewer;
+			sourceTree = "<group>";
+		};
+		55D59C6528F3E91800B4FF76 /* Layout */ = {
+			isa = PBXGroup;
+			children = (
+				231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */,
+			);
+			path = Layout;
+			sourceTree = "<group>";
+		};
+		55D59C6628F3E94B00B4FF76 /* Carrie */ = {
+			isa = PBXGroup;
+			children = (
+				231D15C8272CDEE9003D6F62 /* PTCarrie.swift */,
+			);
+			path = Carrie;
+			sourceTree = "<group>";
+		};
+		55D59C6728F3E96D00B4FF76 /* Line */ = {
+			isa = PBXGroup;
+			children = (
+				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
+			);
+			path = Line;
+			sourceTree = "<group>";
+		};
+		55D59C6828F3E98200B4FF76 /* Attributed */ = {
+			isa = PBXGroup;
+			children = (
+				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
+			);
+			path = Attributed;
 			sourceTree = "<group>";
 		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
@@ -1218,24 +1292,24 @@
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
+				"${BUILT_PRODUCTS_DIR}/ChromaColorPicker/ChromaColorPicker.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
+				"${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework",
 				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
+				"${BUILT_PRODUCTS_DIR}/EmptyDataSet-Swift/EmptyDataSet_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
-				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/FluentDarkModeKit/FluentDarkModeKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
-				"${BUILT_PRODUCTS_DIR}/HTAutocompleteTextField/HTAutocompleteTextField.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
 				"${BUILT_PRODUCTS_DIR}/KakaJSON/KakaJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/LTNavigationBar/LTNavigationBar.framework",
+				"${BUILT_PRODUCTS_DIR}/LXFProtocolTool/LXFProtocolTool.framework",
 				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
 				"${BUILT_PRODUCTS_DIR}/MBProgressHUD/MBProgressHUD.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 				"${BUILT_PRODUCTS_DIR}/MJRefresh/MJRefresh.framework",
-				"${BUILT_PRODUCTS_DIR}/MYBlurIntroductionView/MYBlurIntroductionView.framework",
-				"${BUILT_PRODUCTS_DIR}/Mantle/Mantle.framework",
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
@@ -1250,11 +1324,9 @@
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UIColor_Hex_Swift/UIColor_Hex_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageColors/UIImageColors.framework",
-				"${BUILT_PRODUCTS_DIR}/UITableView+FDTemplateLayoutCell/UITableView_FDTemplateLayoutCell.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
 				"${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework",
-				"${BUILT_PRODUCTS_DIR}/YCXMenu/YCXMenu.framework",
 				"${BUILT_PRODUCTS_DIR}/YYCategories/YYCategories.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
@@ -1263,24 +1335,24 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChromaColorPicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CollectionViewPagingLayout.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmptyDataSet_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FluentDarkModeKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HTAutocompleteTextField.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KakaJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LTNavigationBar.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LXFProtocolTool.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MBProgressHUD.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJRefresh.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MYBlurIntroductionView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Mantle.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
@@ -1295,11 +1367,9 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIColor_Hex_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageColors.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITableView_FDTemplateLayoutCell.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WZLBadge.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YCXMenu.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYCategories.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
@@ -1635,7 +1705,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
@@ -1649,7 +1719,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "PooToolsSource/PooTools_Example-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PooToolsSource/Core/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -1676,7 +1746,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
@@ -1690,7 +1760,7 @@
 				SDKROOT = iphoneos;
 				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
 				SUPPORTS_MACCATALYST = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = "PooToolsSource/PooTools_Example-Bridging-Header.h";
+				SWIFT_OBJC_BRIDGING_HEADER = "PooToolsSource/Core/PooTools_Example-Bridging-Header.h";
 				SWIFT_OBJC_INTERFACE_HEADER_NAME = "PooTools/PooTools-Swift.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

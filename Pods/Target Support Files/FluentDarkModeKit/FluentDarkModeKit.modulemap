@@ -1,0 +1,6 @@
+framework module FluentDarkModeKit {
+  umbrella header "FluentDarkModeKit-umbrella.h"
+
+  export *
+  module * { export * }
+}
