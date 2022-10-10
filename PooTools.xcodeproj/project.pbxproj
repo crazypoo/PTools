@@ -10,10 +10,6 @@
 		231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D0272CDD19003D6F62 /* PooTools.podspec */; };
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
-		231D160F272CDEE9003D6F62 /* WMHubWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E2272CDEE9003D6F62 /* WMHubWindow.m */; };
-		231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14E3272CDEE9003D6F62 /* WMHubViewController.m */; };
-		231D1612272CDEE9003D6F62 /* WMHub.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EA272CDEE9003D6F62 /* WMHub.m */; };
-		231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EB272CDEE9003D6F62 /* WMHubView.m */; };
 		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
 		231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */; };
@@ -116,6 +112,8 @@
 		55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */; };
 		55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */; };
 		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
+		55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */; };
+		55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */; };
@@ -203,15 +201,7 @@
 		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		231D14E2272CDEE9003D6F62 /* WMHubWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubWindow.m; sourceTree = "<group>"; };
-		231D14E3272CDEE9003D6F62 /* WMHubViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubViewController.m; sourceTree = "<group>"; };
-		231D14E4272CDEE9003D6F62 /* WMHub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHub.h; sourceTree = "<group>"; };
 		231D14E5272CDEE9003D6F62 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
-		231D14E6272CDEE9003D6F62 /* WMHubView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubView.h; sourceTree = "<group>"; };
-		231D14E8272CDEE9003D6F62 /* WMHubViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubViewController.h; sourceTree = "<group>"; };
-		231D14E9272CDEE9003D6F62 /* WMHubWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WMHubWindow.h; sourceTree = "<group>"; };
-		231D14EA272CDEE9003D6F62 /* WMHub.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHub.m; sourceTree = "<group>"; };
-		231D14EB272CDEE9003D6F62 /* WMHubView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WMHubView.m; sourceTree = "<group>"; };
 		231D14EC272CDEE9003D6F62 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
 		231D14F5272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIButton+ImageTitleSpacing.h"; sourceTree = "<group>"; };
 		231D14F6272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
@@ -357,6 +347,8 @@
 		55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallMessageMailFunction.swift; sourceTree = "<group>"; };
 		55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
+		55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHudView.swift; sourceTree = "<group>"; };
+		55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorRBGModel.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTImageBlackToTransparent.h; sourceTree = "<group>"; };
@@ -567,14 +559,7 @@
 				231D14E5272CDEE9003D6F62 /* PGifHud.h */,
 				231D14EC272CDEE9003D6F62 /* PGifHud.m */,
 				55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */,
-				231D14E4272CDEE9003D6F62 /* WMHub.h */,
-				231D14EA272CDEE9003D6F62 /* WMHub.m */,
-				231D14E6272CDEE9003D6F62 /* WMHubView.h */,
-				231D14EB272CDEE9003D6F62 /* WMHubView.m */,
-				231D14E8272CDEE9003D6F62 /* WMHubViewController.h */,
-				231D14E3272CDEE9003D6F62 /* WMHubViewController.m */,
-				231D14E9272CDEE9003D6F62 /* WMHubWindow.h */,
-				231D14E2272CDEE9003D6F62 /* WMHubWindow.m */,
+				55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */,
 			);
 			path = Loading;
 			sourceTree = "<group>";
@@ -643,6 +628,7 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
+				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1390,7 +1376,6 @@
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
-				231D1610272CDEE9003D6F62 /* WMHubViewController.m in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
@@ -1434,6 +1419,7 @@
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				555A8B4528C2E7DA00692501 /* PTMaskView.m in Sources */,
+				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
@@ -1446,7 +1432,6 @@
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
 				231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */,
-				231D1613272CDEE9003D6F62 /* WMHubView.m in Sources */,
 				231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
@@ -1454,7 +1439,6 @@
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
-				231D160F272CDEE9003D6F62 /* WMHubWindow.m in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
@@ -1477,7 +1461,6 @@
 				231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */,
 				231D1622272CDEE9003D6F62 /* UIImage+BlurGlass.m in Sources */,
 				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
-				231D1612272CDEE9003D6F62 /* WMHub.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
@@ -1498,6 +1481,7 @@
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
+				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,

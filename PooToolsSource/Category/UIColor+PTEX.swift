@@ -113,4 +113,34 @@ public extension UIColor {
         let componentColors = self.cgColor.components
         return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
     }
+    
+    internal func rgbaValueModel()->PTColorRBGModel
+    {
+        var redF:CGFloat = 0
+        var greenF:CGFloat = 0
+        var blueF:CGFloat = 0
+        var alphaF:CGFloat = 0
+        guard self.getRed(&redF, green: &greenF, blue: &blueF, alpha: &alphaF) else {
+            return PTColorRBGModel()
+        }
+        
+        let colorModel = PTColorRBGModel()
+        colorModel.redFloat = redF
+        colorModel.greenFloat = greenF
+        colorModel.blueFloat = blueF
+        colorModel.alphaFloat = alphaF
+        return colorModel
+    }
+
+    internal func mixColor(otherColor:UIColor)->UIColor
+    {
+        let rgbaModel = self.rgbaValueModel()
+        let otherRgbaModel = otherColor.rgbaValueModel()
+
+        let newAlpha = 1 - (1 - (rgbaModel.alphaFloat)) * (1 - otherRgbaModel.alphaFloat)
+        let newRed = (rgbaModel.redFloat) * (rgbaModel.alphaFloat) / newAlpha + (otherRgbaModel.redFloat) * (otherRgbaModel.alphaFloat) * (1 - (rgbaModel.alphaFloat)) / newAlpha
+        let newGreen = (rgbaModel.greenFloat) * (rgbaModel.alphaFloat) / newAlpha + (otherRgbaModel.greenFloat) * (otherRgbaModel.alphaFloat) * (1 - (rgbaModel.alphaFloat)) / newAlpha
+        let newBlue = (rgbaModel.blueFloat) * (rgbaModel.alphaFloat) / newAlpha + (otherRgbaModel.blueFloat) * (otherRgbaModel.alphaFloat) * (1 - (rgbaModel.alphaFloat)) / newAlpha
+        return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
+    }
 }

@@ -34,7 +34,6 @@ CGFloat const tagItemSpace = 5;
 #import "PLabel.h"
 #import "UICountingLabel.h"
 
-#import "WMHub.h"
 #import "PGifHud.h"
 
 #import "UIImage+BlurGlass.h"
@@ -598,9 +597,12 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            [WMHub show];
+            PTHudView *hud = [PTHudView new];
+            [hud hudShow];
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond), dispatch_get_main_queue(), ^{
-                [WMHub hide];
+                [hud hideWithCompletion:^{
+                    
+                }];
             });
         }
             break;
