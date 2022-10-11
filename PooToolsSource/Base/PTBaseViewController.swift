@@ -179,11 +179,6 @@ extension PTBaseViewController:LXFEmptyDataSetable
 
 extension PTBaseViewController
 {
-    public func devFunction()
-    {
-        
-    }
-    
     public override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if UIApplication.applicationEnvironment() != .appStore
         {
@@ -191,7 +186,14 @@ extension PTBaseViewController
             UserDefaults.standard.set(!uidebug, forKey: LocalConsole.ConsoleDebug)
             if uidebug
             {
-                self.devFunction()
+                if PTDevFunction.share.mn_PFloatingButton != nil
+                {
+                    PTDevFunction.share.lab_btn_release()
+                }
+                else
+                {
+                    PTDevFunction.GobalDevFunction_close()
+                }
             }
             else
             {
