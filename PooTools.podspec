@@ -429,11 +429,11 @@ Pod::Spec.new do |s|
         }
     end
     
-    s.subspec 'Overlay' do |subspec|
+    s.subspec 'Instructions' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'OverlayController'
+        subspec.dependency 'Instructions'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PICKER POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INSTRUCTIONS POOTOOLS_COCOAPODS"
         }
     end
 
@@ -483,7 +483,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Picker'
-        subspec.dependency 'PooTools/Overlay'
+        subspec.dependency 'PooTools/Instructions'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
