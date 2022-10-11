@@ -15,155 +15,107 @@
     "file": "LICENSE"
   },
   "platforms": {
-    "ios": "11.0"
+    "ios": "13.0"
   },
   "requires_arc": true,
-  "swift_versions": "5.0",
+  "swift_versions": "4.2",
   "resources": "PooToolsSource/PooTools.bundle",
   "default_subspecs": "Core",
-  "dependencies": {
-    "SwiftDate": [
-
-    ],
-    "NotificationBannerSwift": [
-
-    ],
-    "WZLBadge": [
-
-    ],
-    "SnapKit": [
-
-    ],
-    "SwifterSwift": [
-
-    ],
-    "CocoaLumberjack/Swift": [
-
-    ],
-    "DeviceKit": [
-
-    ],
-    "UIColor_Hex_Swift": [
-
-    ],
-    "SJAttributesStringMaker": [
-
-    ],
-    "UIViewController+Swizzled": [
-
-    ],
-    "IQKeyboardManager": [
-
-    ],
-    "FDFullscreenPopGesture": [
-
-    ],
-    "YYCategories": [
-
-    ],
-    "pop": [
-
-    ],
-    "FluentDarkModeKit": [
-
-    ],
-    "SDWebImage": [
-
-    ],
-    "MJRefresh": [
-
-    ],
-    "TextFieldEffects": [
-
-    ],
-    "UITextField+Shake": [
-
-    ],
-    "Masonry": [
-
-    ],
-    "AFNetworking": [
-
-    ],
-    "KakaJSON": [
-
-    ],
-    "Alamofire": [
-
-    ],
-    "SwiftyJSON": [
-
-    ],
-    "HandyJSON": [
-
-    ],
-    "EmptyDataSet-Swift": [
-
-    ],
-    "LXFProtocolTool/LXFEmptyDataSetable": [
-
-    ],
-    "MJExtension": [
-
-    ],
-    "MBProgressHUD": [
-
-    ],
-    "CollectionViewPagingLayout": [
-
-    ],
-    "CYLTabBarController": [
-
-    ],
-    "DHSmartScreenshot": [
-
-    ],
-    "SSZipArchive": [
-
-    ],
-    "GCDWebServer": [
-
-    ],
-    "GCDWebServer/WebUploader": [
-
-    ],
-    "ChromaColorPicker": [
-
-    ],
-    "UIImageColors": [
-
-    ]
-  },
-  "frameworks": [
-    "UIKit",
-    "Foundation",
-    "AVKit",
-    "CoreFoundation",
-    "CoreText",
-    "AVFoundation",
-    "LocalAuthentication",
-    "Security",
-    "EventKit",
-    "CoreTelephony",
-    "WebKit",
-    "MessageUI",
-    "CoreMotion",
-    "SceneKit",
-    "Photos"
-  ],
-  "source_files": [
-    "PooToolsSource",
-    "PooToolsSource/**/*.{h,m,swift}"
-  ],
   "subspecs": [
     {
       "name": "Core",
+      "dependencies": {
+        "SwiftDate": [
+
+        ],
+        "NotificationBannerSwift": [
+
+        ],
+        "WZLBadge": [
+
+        ],
+        "SnapKit": [
+
+        ],
+        "SwifterSwift": [
+
+        ],
+        "CocoaLumberjack/Swift": [
+
+        ],
+        "DeviceKit": [
+
+        ],
+        "UIColor_Hex_Swift": [
+
+        ],
+        "SJAttributesStringMaker": [
+
+        ],
+        "UIViewController+Swizzled": [
+
+        ],
+        "IQKeyboardManager": [
+
+        ],
+        "FDFullscreenPopGesture": [
+
+        ],
+        "YYCategories": [
+
+        ],
+        "pop": [
+
+        ],
+        "FluentDarkModeKit": [
+
+        ],
+        "SDWebImage": [
+
+        ],
+        "MJRefresh": [
+
+        ],
+        "ZXNavigationBar": [
+
+        ],
+        "SwipeCellKit": [
+
+        ],
+        "FloatingPanel": [
+
+        ],
+        "FLEX": [
+
+        ],
+        "InAppViewDebugger": [
+
+        ]
+      },
+      "configuration_pod_whitelist": {
+        "FLEX": [
+          "debug"
+        ],
+        "InAppViewDebugger": [
+          "debug"
+        ]
+      },
+      "frameworks": [
+        "UIKit",
+        "Foundation",
+        "AVKit",
+        "CoreFoundation",
+        "CoreText",
+        "AVFoundation"
+      ],
       "source_files": [
         "PooToolsSource/Core/*.{h,m,swift}",
         "PooToolsSource/Blur/*.{h,m,swift}",
         "PooToolsSource/Blur/*.{h,m,swift}",
         "PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}",
+        "PooToolsSource/Base/*.{h,m,swift}",
         "PooToolsSource/AppStore/*.{h,m,swift}",
+        "PooToolsSource/ApplicationFunction/*.{h,m,swift}",
         "PooToolsSource/BlackMagic/*.{h,m,swift}",
         "PooToolsSource/Button/*.{h,m,swift}",
         "PooToolsSource/Category/*.{h,m,swift}",
@@ -179,250 +131,850 @@
     },
     {
       "name": "DataEncrypt",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/AESAndDES/*.{h,m,swift}",
+        "PooToolsSource/Base64/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Animation",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/Animation/*.{h,m,swift}",
+        "PooToolsSource/Animation/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "YB_Attributed",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/Attributed/*.{h,m,swift}",
+        "PooToolsSource/Attributed/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_YBATTRIBUTED POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "BankCard",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/BankCard/*.{h,m,swift}",
+        "PooToolsSource/BankCard/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BANKCARD POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "BilogyID",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": [
+        "LocalAuthentication",
+        "Security"
+      ],
+      "source_files": [
+        "PooToolsSource/BioID/*.{h,m,swift}",
+        "PooToolsSource/BioID/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Calendar",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": "EventKit",
+      "source_files": "PooToolsSource/Calendar/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CALENDAR POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Telephony",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": [
+        "CoreTelephony",
+        "WebKit",
+        "MessageUI"
+      ],
+      "source_files": [
+        "PooToolsSource/CallMessageMail/*.{h,m,swift}",
+        "PooToolsSource/Carrie/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CheckBox",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/CheckBox/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKBOX POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CheckDirtyWord",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/CheckDirtyWord/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKDIRTYWORD POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CodeView",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/CodeView/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CODEVIEW POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Country",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Country/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COUNTRY POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "DarkModeSetting",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/DarkMode/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DARKMODESETTING POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Guide",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Guide/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_GUIDE POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Input",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "TextFieldEffects": [
+
+        ],
+        "UITextField+Shake": [
+
+        ],
+        "CRBoxInputView": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Input/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUT POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CustomerNumberKeyboard",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Keyboard/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERNUMBERKEYWORD POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "KeyChain",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/KeyChain/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_KEYCHAIN POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CustomerLabel",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "YYText": [
+
+        ]
+      },
+      "frameworks": "QuartzCore",
+      "source_files": "PooToolsSource/Label/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CUSTOMERLABEL POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "LanguageSetting",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Language/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LANGUAGESETTING POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Line",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Line/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LINE POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Loading",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Loading/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOADING POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "MediaViewer",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": [
+        "CoreMotion",
+        "SceneKit",
+        "Photos"
+      ],
+      "source_files": "PooToolsSource/MediaViewer/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MEDIAVIEWER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Motion",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": "CoreMotion",
+      "source_files": "PooToolsSource/Motion/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MOTION POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "PhoneInfo",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": "Security",
+      "source_files": "PooToolsSource/PhoneInfo/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PHONEINFO POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "RateView",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/RateView/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_RATE POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Rotation",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Rotation/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ROTATION POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "ScrollBanner",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/ScrollBanner/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCROLLBANNER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "SearchBar",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/SearchBar/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEARCHBAR POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Segmented",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Segmented/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SEGMENT POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "HandSign",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/SignView/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HANDSIGN POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Slider",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Masonry": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Slider/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Thermometer",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Thermometer/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_THERMOMETER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "NetWork",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "AFNetworking": [
+
+        ],
+        "KakaJSON": [
+
+        ],
+        "Alamofire": [
+
+        ],
+        "SwiftyJSON": [
+
+        ],
+        "HandyJSON": [
+
+        ],
+        "EmptyDataSet-Swift": [
+
+        ],
+        "LXFProtocolTool/LXFEmptyDataSetable": [
+
+        ],
+        "MJExtension": [
+
+        ],
+        "MBProgressHUD": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/NetWork/*.{h,m,swift}",
+        "PooToolsSource/Json/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "CheckUpdate",
+      "dependencies": {
+        "PooTools/NetWork": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/CheckUpdate/*.{h,m,swift}",
+        "PooToolsSource/NetWork/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "Layout",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "CollectionViewPagingLayout": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Layout/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LAYOUT POOTOOLS_COCOAPODS"
       }
     },
     {
-      "name": "TABBAR",
+      "name": "Tabbar",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "CYLTabBarController": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TABBAR POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "SmartScreenshot",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "SnapshotKit": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "ZipArchive",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "SSZipArchive": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ZIPARCHINE POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "GCDWebServer",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "GCDWebServer": [
+
+        ],
+        "GCDWebServer/WebUploader": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CGDWEBSERVER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "ColorPicker",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "ChromaColorPicker": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COLORPICKER POOTOOLS_COCOAPODS"
       }
     },
     {
       "name": "ImageColors",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "UIImageColors": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGECOLORS POOTOOLS_COCOAPODS"
       }
     },
     {
+      "name": "FocusFaceImageView",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "FaceAware": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FOCUSFACE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PagingControl",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "JXPagingView/Paging": [
+
+        ],
+        "JXSegmentedView": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "FloatingPanel",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "FloatingPanel": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FLOATINGPANEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ImagePicker",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "TZImagePickerController": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Picker",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "BRPickerView": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PICKER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Instructions",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Instructions": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INSTRUCTIONS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Appz",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Appz": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "LaunchTimeProfiler",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "AMKLaunchTimeProfiler": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PooTools/DataEncrypt": [
+
+        ],
+        "PooTools/Animation": [
+
+        ],
+        "PooTools/YB_Attributed": [
+
+        ],
+        "PooTools/BankCard": [
+
+        ],
+        "PooTools/BilogyID": [
+
+        ],
+        "PooTools/Calendar": [
+
+        ],
+        "PooTools/Telephony": [
+
+        ],
+        "PooTools/CheckBox": [
+
+        ],
+        "PooTools/CheckDirtyWord": [
+
+        ],
+        "PooTools/CodeView": [
+
+        ],
+        "PooTools/Country": [
+
+        ],
+        "PooTools/DarkModeSetting": [
+
+        ],
+        "PooTools/Guide": [
+
+        ],
+        "PooTools/Input": [
+
+        ],
+        "PooTools/CustomerNumberKeyboard": [
+
+        ],
+        "PooTools/KeyChain": [
+
+        ],
+        "PooTools/CustomerLabel": [
+
+        ],
+        "PooTools/LanguageSetting": [
+
+        ],
+        "PooTools/Line": [
+
+        ],
+        "PooTools/Loading": [
+
+        ],
+        "PooTools/MediaViewer": [
+
+        ],
+        "PooTools/Motion": [
+
+        ],
+        "PooTools/PhoneInfo": [
+
+        ],
+        "PooTools/RateView": [
+
+        ],
+        "PooTools/Rotation": [
+
+        ],
+        "PooTools/ScrollBanner": [
+
+        ],
+        "PooTools/SearchBar": [
+
+        ],
+        "PooTools/Segmented": [
+
+        ],
+        "PooTools/Slider": [
+
+        ],
+        "PooTools/Thermometer": [
+
+        ],
+        "PooTools/NetWork": [
+
+        ],
+        "PooTools/CheckUpdate": [
+
+        ],
+        "PooTools/Layout": [
+
+        ],
+        "PooTools/Tabbar": [
+
+        ],
+        "PooTools/SmartScreenshot": [
+
+        ],
+        "PooTools/ZipArchive": [
+
+        ],
+        "PooTools/GCDWebServer": [
+
+        ],
+        "PooTools/ColorPicker": [
+
+        ],
+        "PooTools/ImageColors": [
+
+        ],
+        "PooTools/FocusFaceImageView": [
+
+        ],
+        "PooTools/PagingControl": [
+
+        ],
+        "PooTools/ImagePicker": [
+
+        ],
+        "PooTools/Picker": [
+
+        ],
+        "PooTools/Instructions": [
+
+        ],
+        "PooTools/Appz": [
+
+        ],
+        "PooTools/LaunchTimeProfiler": [
+
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
       }
     }
   ],
-  "swift_version": "5.0"
+  "swift_version": "4.2"
 }

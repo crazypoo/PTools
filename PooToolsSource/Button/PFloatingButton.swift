@@ -97,11 +97,11 @@ open class PFloatingButton: UIButton {
         }
         else if view is UIWindow
         {
-            UIApplication.shared.keyWindow!.addSubview(self)
+            AppWindows!.addSubview(self)
         }
         else
         {
-            UIApplication.shared.keyWindow!.addSubview(self)
+            AppWindows!.addSubview(self)
         }
         
         self.defultSetting()
@@ -417,7 +417,7 @@ open class PFloatingButton: UIButton {
         var newView : Any?
         if view == nil
         {
-            newView = UIApplication.shared.keyWindow
+            newView = AppWindows!
         }
         else
         {

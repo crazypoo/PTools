@@ -1,4 +1,4 @@
-platform :ios, '11.0'
+platform :ios, '13.0'
 use_frameworks!
 
 post_install do |installer|
@@ -10,7 +10,7 @@ post_install do |installer|
 end
 
 target 'PooTools_Example' do
-  pod 'PooTools', :path => 'PooTools.podspec'
+  pod 'PooTools/InputAll', :path => 'PooTools.podspec'
   pod 'WZLBadge'
   pod 'SnapKit'
   pod 'YYCategories'
@@ -31,4 +31,5 @@ target 'PooTools_Example' do
   pod 'SJAttributesStringMaker'
   pod 'SDWebImage'
   pod 'MJRefresh'
+  pod 'ZXNavigationBar'#导航栏
 end

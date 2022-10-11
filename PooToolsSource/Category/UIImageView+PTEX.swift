@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 public extension UIImageView {
     func getImagePointColor(point:CGPoint)->UIColor
@@ -17,5 +18,10 @@ public extension UIImageView {
         let pInImage = CGPointMake(point.x * thumbSize.width / self.bounds.size.width,
                                    point.y * thumbSize.height / self.bounds.size.height)
         return self.image!.getImgePointColor(point: pInImage)
+    }
+    
+    func pt_SDWebImage(imageString:String)
+    {
+        self.sd_setImage(with: URL.init(string: imageString), placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage, options: PTAppBaseConfig.share.gobalWebImageLoadOption(), context: nil)
     }
 }

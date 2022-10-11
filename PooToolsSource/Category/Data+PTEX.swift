@@ -10,21 +10,8 @@ import UIKit
 
 public extension Data
 {
-    @objc enum ImageType : Int{
-        case unknown
-        case jpeg
-        case jpeg2000
-        case tiff
-        case bmp
-        case ico
-        case icns
-        case gif
-        case png
-        case webp
-    }
-    
-    func detectImageType() -> Data.ImageType {
-        if self.count < 16 { return .unknown }
+    func detectImageType() -> PTAboutImageType {
+        if self.count < 16 { return .UNKNOW }
         
         var value = [UInt8](repeating:0, count:1)
         
@@ -32,24 +19,24 @@ public extension Data
         
         switch value[0] {
         case 0x4D, 0x49:
-            return .tiff
+            return .TIFF
         case 0x00:
-            return .ico
+            return .ICO
         case 0x69:
-            return .icns
+            return .ICNS
         case 0x47:
-            return .gif
+            return .GIF
         case 0x89:
-            return .png
+            return .PNG
         case 0xFF:
-            return .jpeg
+            return .JPEG
         case 0x42:
-            return .bmp
+            return .BMP
         case 0x52:
             let subData = self.subdata(in: Range(NSMakeRange(0, 12))!)
             if let infoString = String(data: subData, encoding: .ascii) {
                 if infoString.hasPrefix("RIFF") && infoString.hasSuffix("WEBP") {
-                    return .webp
+                    return .WEBP
                 }
             }
             break
@@ -57,31 +44,31 @@ public extension Data
             break
         }
         
-        return .unknown
+        return .UNKNOW
     }
     
-    static func detectImageType(with data: Data) -> Data.ImageType {
+    static func detectImageType(with data: Data) -> PTAboutImageType {
         return data.detectImageType()
     }
     
-    static func detectImageType(with url: URL) -> Data.ImageType {
+    static func detectImageType(with url: URL) -> PTAboutImageType {
         if let data = try? Data(contentsOf: url) {
             return data.detectImageType()
         } else {
-            return .unknown
+            return .UNKNOW
         }
     }
     
-    static func detectImageType(with filePath: String) -> Data.ImageType {
+    static func detectImageType(with filePath: String) -> PTAboutImageType {
         let pathUrl = URL(fileURLWithPath: filePath)
         if let data = try? Data(contentsOf: pathUrl) {
             return data.detectImageType()
         } else {
-            return .unknown
+            return .UNKNOW
         }
     }
     
-    static func detectImageType(with imageName: String, bundle: Bundle = Bundle.main) -> Data.ImageType? {
+    static func detectImageType(with imageName: String, bundle: Bundle = Bundle.main) -> PTAboutImageType? {
         
         guard let path = bundle.path(forResource: imageName, ofType: "") else { return nil }
         let pathUrl = URL(fileURLWithPath: path)

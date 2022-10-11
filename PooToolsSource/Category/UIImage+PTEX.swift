@@ -316,5 +316,5 @@ public extension UIImage
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
-    }
+    }    
 }

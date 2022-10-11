@@ -1,0 +1,6 @@
+framework module AMKLaunchTimeProfiler {
+  umbrella header "AMKLaunchTimeProfiler-umbrella.h"
+
+  export *
+  module * { export * }
+}

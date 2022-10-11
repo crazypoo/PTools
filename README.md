@@ -76,13 +76,64 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 
 ## Installation
 
-PooTools is available through [CocoaPods](https://cocoapods.org). To install
-it, simply add the following line to your Podfile:
+默认
 
 ```ruby
-pod 'PooTools', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 
+其他根据自己个人喜好加载
+
+```ruby
+pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/DataEncrypt', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Animation', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/YB_Attributed', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/BankCard', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/BilogyID', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Calendar', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Telephony', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CheckBox', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CheckDirtyWord', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CodeView', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Country', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/DarkModeSetting', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Guide', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Input', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CustomerNumberKeyboard', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/KeyChain', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CustomerLabel', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/LanguageSetting', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Line', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Loading', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/MediaViewer', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Motion', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/PhoneInfo', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/RateView', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Rotation', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ScrollBanner', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/SearchBar', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Segmented', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Slider', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Thermometer', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CheckUpdate', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Layout', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Tabbar', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/SmartScreenshot', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ZipArchive', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/GCDWebServer', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ColorPicker', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ImageColors', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/FocusFaceImageView', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/SwipeCell', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/PagingControl', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ImagePicker', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Picker', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Instructions', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/Appz', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/LaunchTimeProfiler', :git => 'https://github.com/crazypoo/PTools.git'
+```
 ## Author
 
 crazypoo, 273277355@qq.com

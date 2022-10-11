@@ -9,7 +9,6 @@
 import UIKit
 import KakaJSON
 import SwifterSwift
-import PooTools
 
 class IpadScreenshotUrls :PTBaseModel {
 

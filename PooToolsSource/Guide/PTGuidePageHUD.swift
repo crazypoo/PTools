@@ -87,7 +87,7 @@ public class PTGuidePageHUD: UIView {
             imageView.contentMode = .scaleAspectFit
             let contentImage = UIImage.init(named: viewModel.imageArrays[index])
             let data = contentImage!.pngData()
-            if data?.detectImageType() == .gif
+            if data?.detectImageType() == .GIF
             {
                 let source = CGImageSourceCreateWithData(data! as CFData, nil)
                 let frameCount = CGImageSourceGetCount(source!)

@@ -16,9 +16,6 @@ class PTSwiftViewController: UIViewController {
 
         _ = PTCountryCodes.share.codesModels()
         
-        PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "",force: true)
-        
-        
         let view = UIView()
 //        view.backgroundColor = UIImage(named: "DemoImage")?.imageMostColor()
         view.backgroundGradient(type: .LeftToRight, colors: [UIColor.blue,UIColor.red])

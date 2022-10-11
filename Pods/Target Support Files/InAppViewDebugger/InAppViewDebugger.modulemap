@@ -1,0 +1,6 @@
+framework module InAppViewDebugger {
+  umbrella header "InAppViewDebugger-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -27,8 +27,8 @@ public class PTPurchaseCarAnimationTool: NSObject {
         layer?.cornerRadius = newRect.size.width/2
         layer?.masksToBounds = true
         
-        let keyWindow = UIApplication.shared.keyWindow
-        keyWindow?.layer.addSublayer(layer!)
+        let keyWindow = AppWindows!
+        keyWindow.layer.addSublayer(layer!)
         layer?.position = CGPoint.init(x: newRect.origin.x + view.frame.size.width / 2, y: newRect.midY)
         self.createAnimation(rect: newRect, finishPoint: finishPoint)
         block = handle

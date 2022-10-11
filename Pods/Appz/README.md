@@ -1,0 +1,500 @@
+
+<h1 align="center">
+  Appz :iphone:
+  <h6 align="center">
+    Deeplinking to external applications made easy
+  </h6>
+</h1>
+
+<p align="center">
+  <img alt="Version" src="https://img.shields.io/badge/version-3.2.0-blue.svg"/>
+  <a alt="Travis CI" href="https://travis-ci.org/SwiftKitz/Appz">
+    <img alt="Version" src="https://travis-ci.org/SwiftKitz/Appz.svg?branch=master"/>
+  </a>
+  <img alt="Swift" src="https://img.shields.io/badge/swift-4.2-orange.svg"/>
+  <img alt="Platforms" src="https://img.shields.io/badge/platform-ios%20%7C%20watchos%20%7C%20tvos-lightgrey.svg"/>
+  <a alt="Carthage Compatible" href="https://github.com/SwiftKitz/Appz#carthage">
+    <img alt="Carthage" src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"/>
+  </a>
+  <img alt="Supported Apps" src="https://img.shields.io/badge/Apps-172-9600cd.svg"/>
+</p>
+
+<p align="center">
+  <img src="resources/Demo.gif">
+</p>
+
+## Highlights
+
++ __Web Fallback Support:__<br />
+In case the app can't open the external application, it will fall-back to a web URL that is guaranteed to succeed by opening the browser.
+
++ __Isolated App Specs:__<br />
+It was crucial to make sure the library can scale as the number of supported apps increase. Therefor, each supported app is implemented in isolation in a separate file.
+
++ __Full Autocomplete Support__:
+The API has been carefully designed to make the most out of auto complete features, so you don't even have to peak into any docs or code!
+
++ __Full Testing:__<br />
+To make the specs as transparent as possible, the library has tests to make sure every external application action has tests with the expected results.
+
+## Features
+
+You can try them in the playground shipped with the framework!
+
+__Concise syntax to trigger deep linking:__
+
+```swift
+
+let app = UIApplication.shared
+app.canOpen(Applications.Instagram())
+app.open(Applications.AppStore(), action: .account(id: "395107918"))
+app.open(Applications.AppSettings(), action: .open)
+```
+
+__Transparent web fallback:__
+
+```swift
+// In case the user doesn't have twitter installed, it will fallback to
+// https://twitter.com/testUser/statuses/2
+app.open(Applications.Twitter(), action: .status(id: "2",  screenName: "testUser"))
+```
+
+__Add your applications:__
+
+```swift
+// Applications are recommended to be part of the
+// "Applications" namespace
+extension Applications {
+    // Define your application as a type that
+    // conforms to "ExternalApplication"
+    struct MyApp: ExternalApplication {
+
+        typealias ActionType = Applications.MyApp.Action
+
+        let scheme = "myapp:"
+        let fallbackURL = ""
+        let appStoreId = ""
+    }
+}
+// Then, you define the actions your app supports
+extension Applications.MyApp {
+
+    enum Action: ExternalApplicationAction {
+
+        case open
+
+        // Each action should provide an app path and web path to be
+        // added to the associated URL
+        var paths: ActionPaths {
+
+            switch self {
+            case .open:
+                return ActionPaths()
+            }
+        }
+    }
+}
+
+app.open(Applications.MyApp(), action: .open)
+```
+
+__Supported Apps (for now!):__
+
+App | Actions
+----|--------
+[AirLaunch][AirLaunch-link] | Open
+[AliExpress][AliExpress-link] | Open
+[AllCast][AllCast-link] | Open
+[AppleMaps][AppleMaps-link] | Open
+[AppSettings][AppSettings-link] | Open
+[AppStore][AppStore-link] | Developer, App, Rate App
+[AppleWatch][AppleWatch-link] | Open
+[Audible][Audible-link] | Open
+[Ayah][Ayah-link] | Open
+[Behance][Behance-link] | Open, UserProfile
+[BNR][BNR-link] | Open
+[Box][Box-link] | Open
+[Buzzfeed][Buzzfeed-link] | Open
+[Calendars5][Calendars5-link] | Open
+[Camera360][Camera360-link] | Open
+[Careem][Careem-link] | Open
+[Chromecast][Chromecast-link] | Open
+[CirclePay][CirclePay-link] | Open, Request, Send
+[Clips][Clips-link] | Open
+[Cnet][Cnet-link] | Open
+[CNN][CNN-link] | Open
+[Currency][Currency-link] | Open
+[DailyMotion][DailyMotion-link] | Open
+[DamaKing][DamaKing-link] | Open
+[DayCost][DayCost-link] | Open
+[DayOne][DayOne-link] | Open
+[Diigo][Diigo-link] | Open
+[Documents][Documents-link] | Open
+[Dropbox][Dropbox-link] | Open
+[Duolingo][Duolingo-link] | Open
+[eBay][eBay-link] | Open
+[Echofon][Echofon-link] | Open
+[Epson][Epson-link] | Open
+[Everypost][Everypost-link] | Open
+[EyeEm][EyeEm-link] | Open
+[Facebook][Facebook-link] | Open, Profile, Notification, Feed, Page, Action
+[FaceTime][FaceTime-link] | Video Call
+[FaceTime audio][FaceTime audio-link] | Audio Call
+[Feedly][Feedly-link] | Open
+[FileApp][FileApp-link] | Open
+[FindFriends][FindFriends-link] | Open
+[FindiPhone][FindiPhone-link] | Open
+[Fitbit][Fitbit-link] | Open
+[Flickr][Flickr-link] | Open
+[Flipboard][Flipboard-link] | Open
+[FlippsTV][FlippsTV-link] | Open
+[Forest][Forest-link] | Open
+[Foursquare][Foursquare-link] | Open
+[FriendlySocial][FriendlySocial-link] | Open
+[Gallery][Gallery-link] | Open
+[Glympse][Glympse-link] | Open
+[GoogleCalendar][GoogleCalendar-link] | Open, CreateEvent
+[GoogleChrome][GoogleChrome-link] | Open
+[GoogleDocs][GoogleDocs-link] | Open
+[GoogleDrive][GoogleDrive-link] | Open
+[GoogleEarth][GoogleEarth-link] | Open
+[GoogleMail][GoogleMail-link] | Open
+[GoogleMaps][GoogleMaps-link] | Open, Display Directions, Display Location, Search
+[GooglePhotos][GooglePhotos-link] | Open
+[GooglePlus][GooglePlus-link] | Open
+[GoogleSheets][GoogleSheets-link] | Open
+[GoogleSlides][GoogleSlides-link] | Open
+[GoogleTranslate][GoogleTranslate-link] | Open
+[GroupeMe][GroupeMe-link] | Open
+[Heapo][Heapo-link] | Open
+[HootSuite][HootSuite-link] | Open
+[iBooks][iBooks-link] | Open
+[IMDb][IMDb-link] | Open, Search, Title, Boxoffice, Showtimes, Feature Coming Soon, Feature Best Picture, Feature Born Today, Top rated movies, Most popular movies.
+[iMovie][iMovie-link] | Open
+[INRIXTraffic][INRIXTraffic-link] | Open
+[Instagram][Instagram-link] | Open, Camera, Library, Media, Username, Location, Tag
+[Instapaper][Instapaper-link] | Open
+[iShows][iShows-link] | Open
+[iTranslate][iTranslate-link] | Open, Translate
+[iTunesU][iTunesU-link] | Open
+[KakaoTalk][KakaoTalk-link] | Open
+[Kayak][Kayak-link] | Open
+[Keeper][Keeper-link] | Open
+[Kik][Kik-link] | Open
+[LastPass][LastPass-link] | Open
+[Line][Line-link] | Open
+[Linkedin][Linkedin-link] | Open
+[Mail][Mail-link] | Compose
+[Marktplaats][Marktplaats-link] | Open
+[Marvis][Marvis-link] | Open
+[Meerkat][Meerkat-link] | Open
+[Messages][Messages-link] | SMS
+[MobileMouse][MobileMouse-link] | Open
+[Mopico][Mopico-link] | Open
+[Moves][Moves-link] | Open
+[Music][Music-link] | Open
+[MyFitnessPal][MyFitnessPal-link] | Open
+[NameShark][NameShark-link] | Open
+[Netflix][Netflix-link] | Open
+[Notes][Notes-link] | Open
+[NPORadio][NPORadio-link] | Open
+[Nunl][Nunl-link] | Open
+[NYTimes][NYTimes-link] | Open
+[OneMorething][OneMorething-link] | Open
+[OneDrive][OneDrive-link] | Open
+[OnePassword][OnePassword-link] | Open
+[Outlook][Outlook-link] | Open, Compose
+[Paypal][Paypal-link] | Open
+[Periscope][Periscope-link] | Open
+[Phone][Phone-link] | Open
+[Photos][Photos-link] | Open
+[PicCollage][PicCollage-link] | Open
+[Pinterest][Pinterest-link] | Open, UserProfile, Search
+[Pocket][Pocket-link] | Open
+[Podcasts][Podcasts-link] | Open
+[Quora][Quora-link] | Open
+[Radium][Radium-link] | Open
+[RemindersApp][RemindersApp-link] | Open
+[Remote][Remote-link] | Open
+[Rijnmond][Rijnmond-link] | Open
+[RoboForm][RoboForm-link] | Open
+[RunKeeper][RunKeeper-link] | Open
+[ScannerPro][ScannerPro-link] | Open
+[Simplenote][Simplenote-link] | Open
+[Skitch][Skitch-link] | Open
+[Skype][Skype-link] | Open
+[Slack][Slack-link] | Open, Channel, Direct Message, Open File, Search
+[Snapchat][Snapchat-link] | Open, Add
+[Snapseed][Snapseed-link] | Open
+[Songpop2][Songpop2-link] | Open
+[Sonos][Sonos-link] | Open
+[Soundflake][Soundflake-link] | Open
+[Spark][Spark-link] | Compose
+[StitcherRadio][StitcherRadio-link] | Open
+[Strava][Strava-link] | Open
+[SubwayKorea][SubwayKorea-link] | Open
+[SunriseCalendar][SunriseCalendar-link] | Open
+[Swarm][Swarm-link] | Open
+[Super-Stickman-Golf-2][Super-Stickman-Golf-2-link] | Open
+[Talabat][Talabat-link] | Open
+[Tango][Tango-link] | Open
+[Ted][Ted-link] | Open
+[Telegram][Telegram-link] | Open, SMS, openFromID
+[TestFlight][TestFlight-link] | Open
+[Tinder][Tinder-link] | Open
+[Trello][Trello-link] | Open
+[Tubex][Tubex-link] | Open
+[Tumblr][Tumblr-link] | Open, Dashboard, Explore, Activity, Blog, Tag
+[Tweetbot][Tweetbot-link] | Timeline, Post, Mentions, Lists, Retweets, Favorites, Messages, Status, Search, Profile, Follow, Unfollow, Favorite, Unfavorite, Retweet, List
+[Twitter][Twitter-link] | Status, UserHandle, UserId, List, Post, Search, Timeline, Mentions, Messages
+[Twitterrific][Twitterrific-link] | Open, MentionsView, MessagesView, FavoritesView, Search, TweetID, MessageID, Post, UserProfile
+[Uber][Uber-link] | Open
+[Unread][Unread-link] | Open
+[Ustream][Ustream-link] | Open
+[Viber][Viber-link] | Open Calls Tab, Open Chats Tab
+[Videos][Videos-link] | Open
+[Views][Views-link] | Open
+[Vimeo][Vimeo-link] | Open
+[Vine][Vine-link] | Open, Popular Timelines
+[VIPAccess][VIPAccess-link] | Open
+[Vox][Vox-link] | Open
+[Voxer][Voxer-link] | Open
+[VSCO][VSCO-link] | Open
+[Wallet][Wallet-link] | Open
+[Waze][Waze-link] | Open, NavigateToDirection
+[WeChat][WeChat-link] | Open
+[Weibo][Weibo-link] | Open
+[WhatsApp][WhatsApp-link] | Open
+[Whyd][Whyd-link] | Open
+[Wikipanion][Wikipanion-link] | Open
+[WordPress][WordPress-link] | Open
+[Workflow][Workflow-link] | Open
+[Yammer][Yammer-link] | Open
+[Yelp][Yelp-link] | Open, Search, Search Location, Search Category, Search Category Location, Business
+[Youtube][Youtube-link] | Open, Open Video
+[FRIL][FRIL-link] | Open
+
+## Getting Started
+
+### Configure Info.plist
+
+You must add the schemes you want to use to your app's info.plist file under `LSApplicationQueriesSchemes`. [See here for more](http://stackoverflow.com/a/30988328/456434).
+
+### Carthage
+
+[Carthage][carthage-link] is fully supported. Simply add the following line to your [Cartfile][cartfile-docs]:
+
+```ruby
+github "SwiftKitz/Appz"
+```
+
+### Cocoapods
+
+[Cocoapods][cocoapods-link] is fully supported. Simply add the following line to your [Podfile][podfile-docs]:
+
+```ruby
+pod 'Appz'
+```
+
+### Submodule
+
+For manual installation, you can grab the source directly or through git submodules, then simply:
+
++ Drop the `Appz.xcodeproj` file as a subproject (make sure `Copy resources` is __not__ enabled)
++ Navigate to your root project settings. Under "Embedded Binaries", click the "+" button and select the `Appz.framework`
+
+## Motivation
+
+I've gone through way too much pain than I am willing to admit integrating deeplinking in my app. It is very easy to forget calling `canOpenURL` or missing a colon somewhere. Another pain point was savaging the web for all the different specs for different applications.
+
+With this library, you can keep the external application deep linking spec separately and rest assured as it is open source and maintained by the wonderful github community!
+
+## Author
+
+Mazyod ([@Mazyod](http://twitter.com/mazyod))
+
+## Contributors
+
+This library could not have made it so far without the generous contributions of various developers!
+
+## License
+
+Appz is released under the MIT license. See LICENSE for details.
+
+[carthage-link]: https://github.com/Carthage/Carthage
+[cartfile-docs]: https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile
+[cocoapods-link]: https://cocoapods.org/
+[podfile-docs]: https://guides.cocoapods.org/syntax/podfile.html
+[AirLaunch-link]: http://www.iosappdownload.org/download.php?boaID=846864
+[AliExpress-link]: http://www.aliexpress.com
+[AllCast-link]: http://www.allcast.io
+[AppleMaps-link]: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html#//apple_ref/doc/uid/TP40007899-CH5-SW1
+[AppSettings-link]: https://developer.apple.com/library/ios/documentation/UIKit/Reference/UIApplication_Class/index.html#//apple_ref/c/data/UIApplicationOpenSettingsURLString
+[AppStore-link]: https://developer.apple.com/library/ios/qa/qa1633/_index.html
+[AppleWatch-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[Audible-link]: http://www.audible.com
+[Ayah-link]: http://ayahapp.com
+[Behance-link]: https://www.behance.net/
+[BNR-link]: http://www.bnr.nl
+[Box-link]: https://www.box.com/business/secure-enterprise-mobility/
+[Buzzfeed-link]: http://www.buzzfeed.com
+[Calendars5-link]: https://readdle.com/products/calendars5
+[Camera360-link]: https://www.camera360.com/production/?production=camera360&platform=ios
+[Careem-link]: https://www.careem.com/dubai/node
+[Chromecast-link]: https://www.google.com/intl/en_us/chromecast/
+[CirclePay-link]: https://itunes.apple.com/app/id920164002
+[Clips-link]: http://www.cleanshavenapps.com/clips/#download
+[Cnet-link]: http://www.cnet.com
+[CNN-link]: http://edition.cnn.com/specials/mobile-apps
+[Currency-link]: http://www.xe.com/apps/iphone/
+[DailyMotion-link]: http://www.dailymotion.com/
+[DamaKing-link]: http://level3.io
+[DayCost-link]: https://www.facebook.com/iDaycost/
+[DayOne-link]: http://dayoneapp.com
+[Diigo-link]: https://www.diigo.com
+[Documents-link]: https://readdle.com/products/documents
+[Dropbox-link]: https://dropbox.com
+[Duolingo-link]: https://www.duolingo.com
+[eBay-link]: http://www.ebay.com
+[Echofon-link]: http://www.echofon.com
+[Epson-link]: https://www.epson.com/cgi-bin/Store/jsp/epson-connect/mobile-printing/iprint-app.do
+[Everypost-link]: http://everypost.me
+[EyeEm-link]: http://pic-collage.com
+[Facebook-link]: https://facebook.com
+[FaceTime-link]:https://developer.apple.com/library/content/featuredarticles/iPhoneURLScheme_Reference/FacetimeLinks/FacetimeLinks.html#//apple_ref/doc/uid/TP40007899-CH2-SW1
+[FaceTime audio-link]: https://developer.apple.com/library/content/featuredarticles/iPhoneURLScheme_Reference/FacetimeLinks/FacetimeLinks.html#//apple_ref/doc/uid/TP40007899-CH2-SW1
+[Feedly-link]: http://feedly.com/i/welcome
+[FileApp-link]: http://fileapp.com
+[FindFriends-link]: http://handleopenurl.com/scheme/find-my-friends
+[FindiPhone-link]: https://itunes.apple.com/us/app/find-my-iphone/id376101648?mt=8
+[Fitbit-link]: https://www.fitbit.com/app
+[Flickr-link]: https://www.flickr.com
+[Flipboard-link]: https://flipboard.com
+[FlippsTV-link]: http://www.flipps.com
+[Forest-link]: https://www.forestapp.cc/en/
+[Foursquare-link]: https://foursquare.com/download
+[FriendlySocial-link]: http://friendly.io/#ios
+[Gallery-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[Glympse-link]: https://glympse.com/get-glympse
+[GoogleCalendar-link]: https://www.google.com/calendar/about/
+[GoogleChrome-link]: https://www.google.com/chrome/
+[GoogleDocs-link]: http://www.google.com/docs/about/
+[GoogleDrive-link]: https://www.google.com/drive/
+[GoogleEarth-link]: https://www.google.com/earth
+[GoogleMail-link]: https://mail.google.com
+[GoogleMaps-link]: https://maps.google.com
+[GooglePhotos-link]: https://www.google.com/photos/about/
+[GooglePlus-link]: https://plus.google.com
+[GoogleSheets-link]: http://www.google.com/sheets/about/
+[GoogleSlides-link]: http://www.google.com/slides/about/
+[GoogleTranslate-link]: https://translate.google.com/about/intl/en_ALL/index.html
+[GroupeMe-link]: https://groupme.com
+[Heapo-link]: http://heapo.marblzz.com
+[HootSuite-link]: https://hootsuite.com/products/mobile-apps/hootsuite-mobile-app
+[iBooks-link]: https://itunes.apple.com/us/app/ibooks/id364709193?mt=8
+[IMDb-link]: http://www.imdb.com
+[iMovie-link]: https://itunes.apple.com/us/app/imovie/id377298193?mt=8
+[INRIXTraffic-link]: http://inrix.com/inrix-traffic-app
+[Instagram-link]: https://instagram.com
+[Instapaper-link]: https://www.instapaper.com/iphone
+[iShows-link]: http://ishowsapp.com
+[iTranslate-link]: http://itranslateapp.com
+[iTunesU-link]: https://launchcenterpro.com/dzvk6r
+[KakaoTalk-link]: http://www.kakao.com/talk
+[Kayak-link]: https://www.kayak.ae/
+[Keeper-link]: https://keepersecurity.com/
+[Kik-link]: http://www.kik.com
+[LastPass-link]: https://lastpass.com
+[Line-link]: http://line.me/
+[Linkedin-link]: http://www.linkedin.com/
+[Mail-link]: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/MailLinks/MailLinks.html#//apple_ref/doc/uid/TP40007899-CH4-SW1
+[Marktplaats-link]: http://www.marktplaats.nl
+[Marvis-link]: https://appaddy.wix.com/marvis
+[Meerkat-link]: http://meerkatapp.co
+[Messages-link]: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/SMSLinks/SMSLinks.html#//apple_ref/doc/uid/TP40007899-CH7-SW1
+[MobileMouse-link]: http://www.mobilemouse.com
+[Mopico-link]: http://mo-pi-co.com
+[Moves-link]: https://www.moves-app.com
+[Music-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[MyFitnessPal-link]: https://www.myfitnesspal.com
+[NameShark-link]: http://www.namesharkapp.com
+[Netflix-link]: https://www.netflix.com
+[Notes-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[NPORadio-link]: http://forums.macrumors.com/threads/ios-8-widget-customisations-using-launcher.1782093/
+[Nunl-link]: http://www.nu.nl
+[NYTimes-link]: http://www.nytimes.com/services/mobile/index.html
+[OneMorething-link]: http://www.onemorething.nl
+[OneDrive-link]: https://onedrive.live.com/
+[OnePassword-link]: https://agilebits.com/onepassword
+[Outlook-link]: http://www.outlook.com/
+[Paypal-link]: https://paypal.com
+[Periscope-link]: https://www.periscope.tv
+[Phone-link]: https://developer.apple.com/library/ios/featuredarticles/iPhoneURLScheme_Reference/PhoneLinks/PhoneLinks.html
+[Photos-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[PicCollage-link]: http://pic-collage.com
+[Pinterest-link]: https://www.pinterest.com
+[Pocket-link]: https://getpocket.com/ios/?ep=1
+[Podcasts-link]: https://itunes.apple.com/us/app/podcasts/id525463029?mt=8
+[Quora-link]: https://www.quora.com
+[Radium-link]: http://catpigstudios.com
+[RemindersApp-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[Remote-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[Rijnmond-link]: http://www.rijnmond.nl
+[RoboForm-link]: http://www.roboform.com/for-iphone-ipad-ios
+[RunKeeper-link]: https://runkeeper.com/index
+[ScannerPro-link]: https://readdle.com/products/scannerpro/
+[Simplenote-link]: http://simplenote.com
+[Skitch-link]: https://evernote.com/skitch/
+[Skype-link]: http://www.skype.com/
+[Slack-link]: https://api.slack.com/docs/deep-linking#open_slack
+[Snapchat-link]: https://www.snapchat.com
+[Snapseed-link]: https://support.google.com/snapseed/#topic=6155507
+[Songpop2-link]: https://www.songpop2.com
+[Sonos-link]: http://www.sonos.com/
+[Soundflake-link]: http://soundflakeapp.com
+[Spark-link]: https://readdle.com/products/spark
+[StitcherRadio-link]: http://www.stitcher.com
+[Strava-link]: http://www.strava.com/mobile
+[SubwayKorea-link]: http://blog.malangstudio.com
+[SunriseCalendar-link]: https://calendar.sunrise.am
+[Swarm-link]: https://www.swarmapp.com
+[Super-Stickman-Golf-2-link]: http://www.noodlecake.com/games/super-stickman-golf-2/
+[Talabat-link]: https://www.talabat.com
+[Tango-link]: http://www.tango.me
+[Ted-link]: https://www.ted.com
+[Telegram-link]: https://web.telegram.org
+[TestFlight-link]: http://stackoverflow.com/questions/26667467/opening-testflight-app-from-another-app-and-deep-link-to-specific-app
+[Tinder-link]: https://www.gotinder.com
+[Trello-link]: https://trello.com/
+[Tubex-link]: https://www.facebook.com/Tubex-744986562245828/
+[Tumblr-link]: https://www.tumblr.com
+[Tweetbot-link]: http://tapbots.com/tweetbot
+[Twitter-link]: https://twitter.com
+[Twitterrific-link]: http://twitterrific.com/ios/poweruser
+[Uber-link]: https://www.uber.com
+[Unread-link]: http://supertop.co/unread/
+[Ustream-link]: https://www.ustream.tv/platform/watch-everywhere
+[Viber-link]: http://www.viber.com
+[Videos-link]: https://www.reddit.com/r/workflow/comments/3mux7h/ios_url_schemes/
+[Views-link]: http://www.saikambampati.com/views
+[Vimeo-link]: https://vimeo.com/everywhere
+[Vine-link]: https://vine.co
+[VIPAccess-link]: https://m.vip.symantec.com
+[Vox-link]: http://coppertino.com/vox/iphone
+[Voxer-link]: http://www.voxer.com
+[VSCO-link]: http://vsco.co/store/app
+[Wallet-link]: https://support.apple.com/en-us/HT204003
+[Waze-link]: https://www.waze.com
+[WeChat-link]: http://forums.macrumors.com/threads/ios-8-widget-customisations-using-launcher.1782093/
+[Weibo-link]: http://weibo.com/login.php
+[WhatsApp-link]: https://www.whatsapp.com
+[Whyd-link]: http://whyd.com
+[Wikipanion-link]: http://www.wikipanion.com/download.html?iphone
+[WordPress-link]: https://apps.wordpress.org
+[Workflow-link]: https://workflow.is
+[YahooWeather-link]: https://mobile.yahoo.com/weather/
+[Yammer-link]: https://products.office.com/en-us/yammer/yammer-mobile-app
+[Yelp-link]: https://m.yelp.com
+[Youtube-link]: https://youtube.com
+[FRIL-link]: https://fril.jp
+[v2.1.1-link]: https://github.com/SwiftKitz/Appz/releases/tag/v2.1.1

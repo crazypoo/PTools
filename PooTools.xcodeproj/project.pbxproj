@@ -113,6 +113,16 @@
 		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
 		55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */; };
 		55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */; };
+		55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */; };
+		55D59C6E28F54D9500B4FF76 /* PTFunctionCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */; };
+		55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */; };
+		55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */; };
+		55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */; };
+		55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */; };
+		55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */; };
+		55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */; };
+		55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */; };
+		55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */; };
@@ -170,7 +180,6 @@
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */; };
 		CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */; };
-		CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
@@ -339,6 +348,16 @@
 		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
 		55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHudView.swift; sourceTree = "<group>"; };
 		55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorRBGModel.swift; sourceTree = "<group>"; };
+		55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseViewController.swift; sourceTree = "<group>"; };
+		55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFunctionCellModel.swift; sourceTree = "<group>"; };
+		55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseCellOption.swift; sourceTree = "<group>"; };
+		55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFusionCell.swift; sourceTree = "<group>"; };
+		55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppBaseConfig.swift; sourceTree = "<group>"; };
+		55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugViewController.swift; sourceTree = "<group>"; };
+		55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PTList+EX.swift"; sourceTree = "<group>"; };
+		55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevFunction.swift; sourceTree = "<group>"; };
+		55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPanelFuction.swift; sourceTree = "<group>"; };
+		55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatPanelLayout.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTImageBlackToTransparent.h; sourceTree = "<group>"; };
@@ -455,7 +474,6 @@
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
 				CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */,
 				CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */,
-				CC658CE320AC3F7C00949DF6 /* DHSmartScreenshot.framework in Frameworks */,
 				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
 				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
 				CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */,
@@ -497,6 +515,7 @@
 				55D59C4C28F17DEA00B4FF76 /* AppStore */,
 				55D59C6828F3E98200B4FF76 /* Attributed */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
+				55D59C6928F537BA00B4FF76 /* Base */,
 				231D1572272CDEE9003D6F62 /* Base64 */,
 				55D59C6128F3E87600B4FF76 /* BioID */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
@@ -560,6 +579,7 @@
 		231D14F3272CDEE9003D6F62 /* Category */ = {
 			isa = PBXGroup;
 			children = (
+				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
 				55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */,
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
@@ -666,10 +686,10 @@
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
 			isa = PBXGroup;
 			children = (
-				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
-				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
+				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
+				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -1056,6 +1076,22 @@
 			path = Attributed;
 			sourceTree = "<group>";
 		};
+		55D59C6928F537BA00B4FF76 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
+				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
+				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
+				55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */,
+				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
+				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
+				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
+				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
+				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
+			);
+			path = Base;
+			sourceTree = "<group>";
+		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
 			isa = PBXGroup;
 			children = (
@@ -1290,20 +1326,31 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/AMKLaunchTimeProfiler/AMKLaunchTimeProfiler.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Appz/Appz.framework",
+				"${BUILT_PRODUCTS_DIR}/Aspects/Aspects.framework",
+				"${BUILT_PRODUCTS_DIR}/BRPickerView/BRPickerView.framework",
+				"${BUILT_PRODUCTS_DIR}/CRBoxInputView/CRBoxInputView.framework",
 				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
 				"${BUILT_PRODUCTS_DIR}/ChromaColorPicker/ChromaColorPicker.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework",
-				"${BUILT_PRODUCTS_DIR}/DHSmartScreenshot/DHSmartScreenshot.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/EmptyDataSet-Swift/EmptyDataSet_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
+				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
+				"${BUILT_PRODUCTS_DIR}/FaceAware/FaceAware.framework",
+				"${BUILT_PRODUCTS_DIR}/FloatingPanel/FloatingPanel.framework",
 				"${BUILT_PRODUCTS_DIR}/FluentDarkModeKit/FluentDarkModeKit.framework",
 				"${BUILT_PRODUCTS_DIR}/GCDWebServer/GCDWebServer.framework",
 				"${BUILT_PRODUCTS_DIR}/HandyJSON/HandyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/IQKeyboardManager/IQKeyboardManager.framework",
+				"${BUILT_PRODUCTS_DIR}/InAppViewDebugger/InAppViewDebugger.framework",
+				"${BUILT_PRODUCTS_DIR}/Instructions/Instructions.framework",
+				"${BUILT_PRODUCTS_DIR}/JXPagingView/JXPagingView.framework",
+				"${BUILT_PRODUCTS_DIR}/JXSegmentedView/JXSegmentedView.framework",
 				"${BUILT_PRODUCTS_DIR}/KakaJSON/KakaJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/LXFProtocolTool/LXFProtocolTool.framework",
 				"${BUILT_PRODUCTS_DIR}/LookinServer/LookinServer.framework",
@@ -1318,35 +1365,53 @@
 				"${BUILT_PRODUCTS_DIR}/SJAttributesStringMaker/SJAttributesStringMaker.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
 				"${BUILT_PRODUCTS_DIR}/SnapKit/SnapKit.framework",
+				"${BUILT_PRODUCTS_DIR}/SnapshotKit/SnapshotKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
+				"${BUILT_PRODUCTS_DIR}/TZImagePickerController/TZImagePickerController.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
 				"${BUILT_PRODUCTS_DIR}/UIColor_Hex_Swift/UIColor_Hex_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/UIImageColors/UIImageColors.framework",
 				"${BUILT_PRODUCTS_DIR}/UITextField+Shake/UITextField_Shake.framework",
 				"${BUILT_PRODUCTS_DIR}/UIViewController+Swizzled/UIViewController_Swizzled.framework",
 				"${BUILT_PRODUCTS_DIR}/WZLBadge/WZLBadge.framework",
+				"${BUILT_PRODUCTS_DIR}/YYCache/YYCache.framework",
 				"${BUILT_PRODUCTS_DIR}/YYCategories/YYCategories.framework",
+				"${BUILT_PRODUCTS_DIR}/YYModel/YYModel.framework",
+				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
+				"${BUILT_PRODUCTS_DIR}/ZXNavigationBar/ZXNavigationBar.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AMKLaunchTimeProfiler.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Appz.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Aspects.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BRPickerView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CRBoxInputView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChromaColorPicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CollectionViewPagingLayout.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DHSmartScreenshot.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmptyDataSet_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLEX.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FaceAware.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FloatingPanel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FluentDarkModeKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GCDWebServer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/HandyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IQKeyboardManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/InAppViewDebugger.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Instructions.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JXPagingView.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/JXSegmentedView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/KakaJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LXFProtocolTool.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/LookinServer.framework",
@@ -1361,16 +1426,23 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SJAttributesStringMaker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SnapshotKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TZImagePickerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIColor_Hex_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIImageColors.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UITextField_Shake.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/UIViewController_Swizzled.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WZLBadge.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYCache.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYCategories.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYModel.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXNavigationBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1404,11 +1476,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
+				55D59C6E28F54D9500B4FF76 /* PTFunctionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
+				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
@@ -1434,6 +1508,7 @@
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
 				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
+				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */,
@@ -1519,6 +1594,7 @@
 				231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
+				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
@@ -1537,15 +1613,21 @@
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
+				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */,
+				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
 				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
+				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
+				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
+				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
+				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
@@ -1632,7 +1714,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -1680,7 +1762,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1705,7 +1787,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
@@ -1746,7 +1828,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;

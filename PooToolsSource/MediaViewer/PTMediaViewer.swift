@@ -1133,8 +1133,8 @@ public class PTMediaViewer: UIView {
     
     public func showImageViewer()
     {
-        let windows = UIApplication.shared.keyWindow
-        windows?.addSubview(self.backgroundView)
+        let windows = AppWindows!
+        windows.addSubview(self.backgroundView)
         self.backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -1476,14 +1476,14 @@ public class PTMediaViewer: UIView {
     func hideAnimation()
     {
         self.isUserInteractionEnabled = false
-        let window = UIApplication.shared.keyWindow!
+        let window = AppWindows!
         var targetTemp:CGRect? = CGRect.init(x: window.center.x, y: window.center.y, width: 0, height: 0)
         let currentView = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
         switch currentView.dataModel.imageShowType {
         case .Normal,.GIF:
             targetTemp = currentView.convert(self.getSourceView().frame, to: self)
         default:
-            targetTemp = CGRect.init(x: UIApplication.shared.keyWindow!.center.x, y: UIApplication.shared.keyWindow!.center.y, width: 0, height: 0)
+            targetTemp = CGRect.init(x: UIApplication.shared.keyWindow!.center.x, y: AppWindows!.center.y, width: 0, height: 0)
         }
         
         window.windowLevel = .normal

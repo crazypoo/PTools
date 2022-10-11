@@ -31,6 +31,19 @@ public typealias NetWorkErrorBlock = () -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 
+public var PTBaseURLMode:NetWorkEnvironment
+{
+    guard let sliderValue = UserDefaults.standard.value(forKey: "AppServiceIdentifier") as? String else { return .Distribution }
+    if sliderValue == "1" {
+        return .Distribution
+    }else if sliderValue == "2" {
+        return .Test
+    }else if sliderValue == "3" {
+        return .Development
+    }
+    return .Distribution
+}
+
 // MARK: - 网络运行状态监听
 public class XMNetWorkStatus {
     
@@ -85,6 +98,7 @@ public class Network: NSObject {
     
     public var netRequsetTime:TimeInterval = 20
     public var serverAddress:String = ""
+    public var serverAddress_dev:String = ""
     public var userToken:String = ""
 
     /// manager
@@ -101,9 +115,39 @@ public class Network: NSObject {
         hud.show(animated: true)
         return hud
     }()
+    
+    //MARK: 服务器URL
+    class func gobalUrl() -> String
+    {
+        if UIApplication.applicationEnvironment() != .appStore
+        {
+            PTLocalConsoleFunction.share.pNSLog("PTBaseURLMode:\(PTBaseURLMode)")
+            switch PTBaseURLMode {
+            case .Development:
+                let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
+                let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
+                if url_debug.isEmpty
+                {
+                    return Network.share.serverAddress_dev
+                }
+                else
+                {
+                    return url_debug
+                }
+            case .Test:
+                return Network.share.serverAddress_dev
+            case .Distribution:
+                return Network.share.serverAddress
+            }
+        }
+        else
+        {
+            return Network.share.serverAddress
+        }
+    }
+    
     //JSONEncoding  JSON参数
     //URLEncoding    URL参数
-    
     /// 项目总接口
     /// - Parameters:
     ///   - urlStr: url地址
@@ -125,7 +169,7 @@ public class Network: NSObject {
                           resultBlock: @escaping ReslutClosure){
         
         
-        let urlStr = Network.share.serverAddress + urlStr
+        let urlStr = Network.gobalUrl() + urlStr
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
@@ -205,7 +249,7 @@ public class Network: NSObject {
                            progressBlock:UploadProgress? = nil,
                            resultBlock: @escaping ReslutClosure) {
         
-        let pathUrl = Network.share.serverAddress + path!
+        let pathUrl = Network.gobalUrl() + path!
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {

@@ -19,7 +19,7 @@ public class PSecurityStrategy: NSObject {
             let imageView = UIImageView.init(frame: UIScreen.main.bounds)
             imageView.tag = effectTag
             imageView.image = PSecurityStrategy.screenShot()
-            UIApplication.shared.keyWindow?.addSubview(imageView)
+            AppWindows!.addSubview(imageView)
             
             let blueView = UIView.init(frame: imageView.frame)
             imageView.addSubview(blueView)
@@ -32,7 +32,7 @@ public class PSecurityStrategy: NSObject {
     
     class public func removeBlurEffect()
     {
-        let subViews = UIApplication.shared.keyWindow?.subviews
+        let subViews = AppWindows!.subviews
         subViews!.enumerated().forEach { (index,value) in
             if value is UIImageView
             {
@@ -56,7 +56,7 @@ public class PSecurityStrategy: NSObject {
     class public func screenShot()->UIImage
     {
         UIGraphicsBeginImageContextWithOptions(CGSize.init(width: kSCREEN_WIDTH * UIScreen.main.scale, height: kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
-        UIApplication.shared.keyWindow?.layer.render(in: UIGraphicsGetCurrentContext()!)
+        AppWindows!.layer.render(in: UIGraphicsGetCurrentContext()!)
         let viewImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         let imageRef = viewImage?.cgImage

@@ -6,10 +6,10 @@ Pod::Spec.new do |s|
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
-    s.platform = :ios, '11.0'
+    s.platform = :ios, '13.0'
     s.requires_arc = true
-    s.ios.deployment_target = '11.0'
-    s.swift_versions = '5.0'
+    s.ios.deployment_target = '13.0'
+    s.swift_versions = '4.2'
     s.resource     = 'PooToolsSource/PooTools.bundle'
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
@@ -30,8 +30,13 @@ Pod::Spec.new do |s|
         subspec.dependency 'FluentDarkModeKit'
         subspec.dependency 'SDWebImage'
         subspec.dependency 'MJRefresh'
+        subspec.dependency 'ZXNavigationBar'
+        subspec.dependency 'SwipeCellKit'
+        subspec.dependency 'FloatingPanel'
+        subspec.dependency 'FLEX', :configurations => ['Debug']
+        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -387,15 +392,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FOCUSFACE POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'SwipeCell' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'SwipeCellKit'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'PagingControl' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'JXPagingView/Paging'
@@ -495,7 +492,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ColorPicker'
         subspec.dependency 'PooTools/ImageColors'
         subspec.dependency 'PooTools/FocusFaceImageView'
-        subspec.dependency 'PooTools/SwipeCell'
         subspec.dependency 'PooTools/PagingControl'
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Picker'

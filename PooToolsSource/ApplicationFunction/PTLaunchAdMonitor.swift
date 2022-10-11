@@ -22,7 +22,7 @@ public class PTLaunchAdMonitor: NSObject {
     private var imgLoaded:Bool? = false
     private var videoUrl:URL?
     private var imgData:NSMutableData?
-    private var imageType:Data.ImageType?
+    private var imageType:PTAboutImageType?
     private var callBack:PTLaunchAdMonitorCallBack?
     private var player:AVPlayerViewController?
     private var detailParam:NSMutableDictionary?
@@ -172,7 +172,7 @@ public class PTLaunchAdMonitor: NSObject {
         else
         {
             switch monitor.imageType {
-            case .gif:
+            case .GIF:
                 let source = CGImageSourceCreateWithData(monitor.imgData!, nil)
                 let frameCount = CGImageSourceGetCount(source!)
                 var frames = [UIImage]()
@@ -281,7 +281,7 @@ public class PTLaunchAdMonitor: NSObject {
     {
         var sup:UIView?
         switch monitor.imageType {
-        case .gif:
+        case .GIF:
             sup = (sender as! UIImageView).superview
         default:
             sup = (sender as! UIButton).superview

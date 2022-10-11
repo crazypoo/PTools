@@ -64,14 +64,6 @@
     self.window.rootViewController = mainNav;
     [self.window makeKeyAndVisible];
         
-    self.localConsoles = [LocalConsole shared];
-    self.localConsoles.consoleActionBlock = ^(LocalConsoleActionType type, BOOL finish, NSURL * url) {
-        PNSLog(@"%ld>>>>>%d>>>>>%@",(long)type,finish,url);
-        [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"%ld>>>>>%d>>>>>%@",(long)type,finish,url]];
-    };
-    [self.localConsoles createSystemLogView];
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"当前时间>>>>>>>>>%@",[PTUtils oc_currentTimeFunctionWithDateFormatter:@"yyyy-MM-dd HH:mm:ss"]]];
-
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
 
@@ -89,46 +81,7 @@
         make.top.equalTo(self.window).offset(100);
     }];
     
-    self.floatBtn = [[PFloatingButton alloc] initWithView:self.window frame:CGRectMake(0, 100, 50, 50)];
-    self.floatBtn.backgroundColor = kRandomColor;
-    self.floatBtn.adjustsImageWhenHighlighted = NO;
-    UILabel *titleLabel = [UILabel new];
-    titleLabel.textColor = [UIColor whiteColor];
-    titleLabel.numberOfLines = 0;
-    titleLabel.lineBreakMode = NSLineBreakByCharWrapping;
-    titleLabel.text = @"Dev\nTools";
-    [self.floatBtn addSubview:titleLabel];
-    [titleLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.floatBtn);
-    }];
-    
-    self.floatBtn.longPressBlock = ^(PFloatingButton * sender) {
-        
-    };
-    
-    self.floatBtn.tapBlock = ^(PFloatingButton * sender) {
-        
-    };
-    
-    self.floatBtn.doubleTapBlock = ^(PFloatingButton * sender) {
-        if ([[PCheckAppStatus shared] closed])
-        {
-            [[PCheckAppStatus shared] open];
-        }
-        else{
-            [[PCheckAppStatus shared] close];
-        }
-    };
-    
-    self.floatBtn.draggingBlock = ^(PFloatingButton * sender) {
-        
-    };
-    
-    self.floatBtn.autoDockingBlock = ^(PFloatingButton * sender) {
-        
-    };
-
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"ip>>>>>>>>%@",[PGetIpAddresses getIPAddress:YES]]];
+    [[PTDevFunction share] createLabBtn];
     
 //    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
     
@@ -175,9 +128,6 @@
 //       CheckNowTimeAndPastTimeRelationshipsReadyExpire,
 //       CheckNowTimeAndPastTimeRelationshipsNormal,
 //       CheckNowTimeAndPastTimeRelationshipsError
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%ld",(long)[Utils checkContractDateExpireContractDate:@"2019-08-28" expTimeStamp:2592000]]];
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否url>>>%d",[@"http://p3.music.126.net" isUrlString]]];
-    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@"是否信用代码%d",[@"91440705MA54R5NK0X" isCOLTDCode]]];
     
 //    NSMutableDictionary *dicaaaaaa = [NSMutableDictionary dictionaryWithDictionary:@{
 //        @"clientStatus":@0,

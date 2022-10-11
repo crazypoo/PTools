@@ -151,9 +151,9 @@ public class PTBiologyID: NSObject {
                         type = .Failed
                     case LAError.passcodeNotSet.rawValue:
                         type = .KeyboardIDNotFound
-                    case LAError.touchIDNotAvailable.rawValue:
+                    case LAError.biometryNotAvailable.rawValue:
                         type = .TouchIDNotOpen
-                    case LAError.touchIDNotEnrolled.rawValue:
+                    case LAError.biometryNotEnrolled.rawValue:
                         type = .TouchIDNotFound
                     case LAError.userFallback.rawValue:
                         type = .KeyboardTouchID

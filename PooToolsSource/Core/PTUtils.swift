@@ -20,10 +20,14 @@ import SwiftDate
 
 @objc public enum PTAboutImageType:Int {
     case JPEG
+    case JPEG2000
     case PNG
     case GIF
     case TIFF
     case WEBP
+    case BMP
+    case ICO
+    case ICNS
     case UNKNOW
 }
 
