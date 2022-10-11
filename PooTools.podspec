@@ -437,9 +437,9 @@ Pod::Spec.new do |s|
         }
     end
     
-    s.subspec 'APPZ' do |subspec|
+    s.subspec 'Appz' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'APPZ'
+        subspec.dependency 'Appz'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
         }
@@ -500,7 +500,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'
-        subspec.dependency 'PooTools/APPZ'
+        subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
