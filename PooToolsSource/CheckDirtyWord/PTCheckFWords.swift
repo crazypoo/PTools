@@ -14,7 +14,7 @@ let EXIST = "isExists"
 
 @objcMembers
 public class PTCheckFWords: NSObject {
-    static let share = PTCheckFWords()
+    public static let share = PTCheckFWords()
     
     fileprivate var root:NSMutableDictionary = NSMutableDictionary()
     public var isFilterClose:Bool = false

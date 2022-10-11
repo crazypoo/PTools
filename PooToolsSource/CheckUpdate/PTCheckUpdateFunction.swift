@@ -79,7 +79,7 @@ class PTCheckUpdateModel:PTBaseModel {
 
 @objcMembers
 public class PTCheckUpdateFunction: NSObject {
-    static let share = PTCheckUpdateFunction()
+    public static let share = PTCheckUpdateFunction()
     
     func compareVesionWithServerVersion(version:String)->Bool
     {

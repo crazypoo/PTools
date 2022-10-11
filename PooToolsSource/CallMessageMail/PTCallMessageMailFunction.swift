@@ -15,7 +15,7 @@ public typealias MailResultBlock = (_ sendResult: MFMailComposeResult)->Void
 
 @objcMembers
 public class PTCallMessageMailFunction: NSObject {
-    static let share = PTCallMessageMailFunction()
+    public static let share = PTCallMessageMailFunction()
     
     var messageResultBlock:MessageResultBlock?
     var mailResultBlock:MailResultBlock?

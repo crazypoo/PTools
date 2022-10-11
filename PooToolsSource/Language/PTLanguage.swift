@@ -40,7 +40,7 @@ let LanguageDidChangedKey = PTLanguage.didChangedKey
 
 // MARK: - BKLanguage 语言切换管理类
 public class PTLanguage: NSObject {
-    static let share = PTLanguage()
+    public static let share = PTLanguage()
     
     fileprivate static let didChangedKey = NSNotification.Name("LanguageDidChanged")
     
