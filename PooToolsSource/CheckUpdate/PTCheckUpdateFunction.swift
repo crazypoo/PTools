@@ -114,7 +114,7 @@ public class PTCheckUpdateFunction: NSObject {
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,versionInfo:String?,version:String?,note:String?,force:Bool)
+    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,version:String?,note:String?,force:Bool)
     {
         if test
         {
