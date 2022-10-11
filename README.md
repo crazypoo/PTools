@@ -16,8 +16,6 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 
 ## About iOS Kit
 本工具运用到以下系统工具框架:</br>
-'AssetsLibrary'</br>
-'AudioToolbox'</br>
 'AVFoundation'</br>
 'CoreImage'</br>
 'CoreMotion'</br>
@@ -44,22 +42,16 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 'DHSmartScreenshot':https://github.com/davidman/DHSmartScreenshot</br>
 'DZNEmptyDataSet':https://github.com/dzenbot/DZNEmptyDataSet</br>
 'FDFullscreenPopGesture':https://github.com/forkingdog/FDFullscreenPopGesture</br>
-'FMDB':https://github.com/ccgus/fmdb</br>
 'GCDWebServer':https://github.com/swisspol/GCDWebServer</br>
-'HTAutocompleteTextField':https://github.com/hoteltonight/HTAutocompleteTextField</br>
 'IQKeyboardManager':https://github.com/hackiftekhar/IQKeyboardManager</br>
 'JMHoledView':https://github.com/leverdeterre/JMHoledView</br>
-'LTNavigationBar':https://github.com/ltebean/LTNavigationBar</br>
-'Mantle':https://github.com/Mantle/Mantle</br>
 'Masonry':https://github.com/SnapKit/Masonry</br>
 'MJExtension':https://github.com/CoderMJLee/MJExtension</br>
 'MJRefresh':https://github.com/CoderMJLee/MJRefresh</br>
-'MYBlurIntroductionView':https://github.com/MatthewYork/MYBlurIntroductionView</br>
 'pop':https://github.com/facebook/pop</br>
 'SDWebImage':https://github.com/rs/SDWebImage</br>
 'TextFieldEffects':https://github.com/raulriera/TextFieldEffects</br>
 'UITextField+Shake':https://github.com/andreamazz/UITextField-Shake</br>
-'UITableView+FDTemplateLayoutCell':https://github.com/forkingdog/UITableView-FDTemplateLayoutCell</br>
 'UIViewController+Swizzled':https://github.com/RuiAAPeres/UIViewController-Swizzled</br>
 'YCXMenu':https://github.com/Aster0id/YCXMenuDemo_ObjC</br>
 'ZipArchive':https://github.com/ZipArchive/ZipArchive</br>
@@ -81,8 +73,6 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 'YCSymbolTracker':https://github.com/ryan7cruise/YCSymbolTracker</br>
 'UIColor_Hex_Swift':https://github.com/yeahdongcn/UIColor-Hex-Swift</br>
 ## Requirements
-
-使用工具时，一定要在Build Settings->other links flags加入-ObjC和-all_load,以防避免一些奇奇怪怪的问题发生.
 
 ## Attention
 
