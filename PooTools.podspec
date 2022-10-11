@@ -445,6 +445,14 @@ Pod::Spec.new do |s|
         }
     end
 
+    s.subspec 'LaunchTimeProfiler' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'AMKLaunchTimeProfiler'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -493,6 +501,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/APPZ'
+        subspec.dependency 'PooTools/LaunchTimeProfiler'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

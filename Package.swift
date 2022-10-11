@@ -54,7 +54,8 @@ let package = Package(
         .library(name: "ImagePicker", targets: ["ImagePicker"]),
         .library(name: "Picker", targets: ["Picker"]),
         .library(name: "Instructions", targets: ["Instructions"]),
-        .library(name: "APPZ", targets: ["APPZ"])
+        .library(name: "APPZ", targets: ["APPZ"]),
+        .library(name: "LaunchTimeProfiler", targets: ["LaunchTimeProfiler"])
     ],
     dependencies: [],
     targets: [
@@ -104,7 +105,8 @@ let package = Package(
         .target(name: "ImagePicker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_IMAGEPICKER"),.define("PTOOLS_SPM")]),
         .target(name: "Picker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_PICKER"),.define("PTOOLS_SPM")]),
         .target(name: "Instructions",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_INSTRUCTIONS"),.define("PTOOLS_SPM")]),
-        .target(name: "APPZ",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_APPZ"),.define("PTOOLS_SPM")])
+        .target(name: "APPZ",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_APPZ"),.define("PTOOLS_SPM")]),
+        .target(name: "LaunchTimeProfiler",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_LAUNCHTIMEPROFILER"),.define("PTOOLS_SPM")])
     ],
     swiftLanguageVersions: [.v5]
 )
