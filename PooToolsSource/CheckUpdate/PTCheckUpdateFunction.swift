@@ -113,70 +113,99 @@ public class PTCheckUpdateFunction: NSObject {
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,force:Bool)
+    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL,versionInfo:String,version:String,note:String,force:Bool)
     {
-        if !appid.stringIsEmpty()
+        if test
         {
-            Network.requestApi(urlStr: "http://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self) { result, error in
-                guard let responseModel = result!.originalString.kj.model(PTCheckUpdateModel.self) else { return }
-                if responseModel.results.count > 0
-                {
-                    let versionModel = responseModel.results.first!
-                    let versionStr = versionModel.version
-                    var appStoreVersion = versionStr.replacingOccurrences(of: ".", with: "")
-                    if appStoreVersion.nsString.length == 2
+            var okBtns = [String]()
+            if force
+            {
+                okBtns = ["更新"]
+            }
+            else
+            {
+                okBtns = ["稍后再说","更新"]
+            }
+            PTUtils.base_alertVC(title:"发现新版本\(version)\n\(note)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
+                switch index {
+                case 0:
+                    if force
                     {
-                        appStoreVersion = appStoreVersion.appending("0")
+                        self.jumpToDownloadLink(link: url)
                     }
-                    else if appStoreVersion.nsString.length == 1
-                    {
-                        appStoreVersion = appStoreVersion.appending("00")
-                    }
-                    
-                    var currentVersion = kAppVersion?.replacingOccurrences(of: ".", with: "")
-                    if currentVersion?.nsString.length == 2
-                    {
-                        currentVersion = currentVersion?.appending("0")
-                    }
-                    else if currentVersion?.nsString.length == 1
-                    {
-                        currentVersion = currentVersion?.appending("00")
-                    }
+                case 1:
+                    self.jumpToDownloadLink(link: url)
+                default:
+                    break
+                }
+            }
 
-                    if self.compareVesionWithServerVersion(version: versionStr)
+        }
+        else
+        {
+            if !appid.stringIsEmpty()
+            {
+                Network.requestApi(urlStr: "http://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self) { result, error in
+                    guard let responseModel = result!.originalString.kj.model(PTCheckUpdateModel.self) else { return }
+                    if responseModel.results.count > 0
                     {
-                        if appStoreVersion.float()! > currentVersion!.float()!
+                        let versionModel = responseModel.results.first!
+                        let versionStr = versionModel.version
+                        var appStoreVersion = versionStr.replacingOccurrences(of: ".", with: "")
+                        if appStoreVersion.nsString.length == 2
                         {
-                            var okBtns = [String]()
-                            if force
+                            appStoreVersion = appStoreVersion.appending("0")
+                        }
+                        else if appStoreVersion.nsString.length == 1
+                        {
+                            appStoreVersion = appStoreVersion.appending("00")
+                        }
+                        
+                        var currentVersion = kAppVersion?.replacingOccurrences(of: ".", with: "")
+                        if currentVersion?.nsString.length == 2
+                        {
+                            currentVersion = currentVersion?.appending("0")
+                        }
+                        else if currentVersion?.nsString.length == 1
+                        {
+                            currentVersion = currentVersion?.appending("00")
+                        }
+
+                        if self.compareVesionWithServerVersion(version: versionStr)
+                        {
+                            if appStoreVersion.float()! > currentVersion!.float()!
                             {
-                                okBtns = ["更新"]
-                            }
-                            else
-                            {
-                                okBtns = ["稍后再说","更新"]
-                            }
-                            PTUtils.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
-                                switch index {
-                                case 0:
-                                    if force
-                                    {
+                                var okBtns = [String]()
+                                if force
+                                {
+                                    okBtns = ["更新"]
+                                }
+                                else
+                                {
+                                    okBtns = ["稍后再说","更新"]
+                                }
+                                PTUtils.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
+                                    switch index {
+                                    case 0:
+                                        if force
+                                        {
+                                            self.jumpToAppStore(appid: appid)
+                                        }
+                                    case 1:
                                         self.jumpToAppStore(appid: appid)
+                                    default:
+                                        break
                                     }
-                                case 1:
-                                    self.jumpToAppStore(appid: appid)
-                                default:
-                                    break
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-        else
-        {
-            PTLocalConsoleFunction.share.pNSLog("没有检测到APPID")
+            else
+            {
+                PTLocalConsoleFunction.share.pNSLog("没有检测到APPID")
+            }
         }
     }
     
@@ -184,5 +213,10 @@ public class PTCheckUpdateFunction: NSObject {
     {
         let uriString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
         UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
+    }
+    
+    private func jumpToDownloadLink(link:URL)
+    {
+        UIApplication.shared.open(link, options: [:], completionHandler: nil)
     }
 }
