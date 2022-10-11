@@ -9,6 +9,7 @@
 import UIKit
 import KakaJSON
 import SwifterSwift
+import PooTools
 
 class IpadScreenshotUrls :PTBaseModel {
 
@@ -113,7 +114,7 @@ public class PTCheckUpdateFunction: NSObject {
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL,versionInfo:String,version:String,note:String,force:Bool)
+    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,versionInfo:String?,version:String?,note:String?,force:Bool)
     {
         if test
         {
@@ -126,15 +127,29 @@ public class PTCheckUpdateFunction: NSObject {
             {
                 okBtns = ["稍后再说","更新"]
             }
-            PTUtils.base_alertVC(title:"发现新版本\(version)\n\(note)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
+            PTUtils.base_alertVC(title:"发现新版本\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
                 switch index {
                 case 0:
                     if force
                     {
-                        self.jumpToDownloadLink(link: url)
+                        if url != nil
+                        {
+                            self.jumpToDownloadLink(link: url!)
+                        }
+                        else
+                        {
+                            PTLocalConsoleFunction.share.pNSLog("非法url")
+                        }
                     }
                 case 1:
-                    self.jumpToDownloadLink(link: url)
+                    if url != nil
+                    {
+                        self.jumpToDownloadLink(link: url!)
+                    }
+                    else
+                    {
+                        PTLocalConsoleFunction.share.pNSLog("非法url")
+                    }
                 default:
                     break
                 }
