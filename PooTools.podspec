@@ -148,6 +148,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'TextFieldEffects'
         subspec.dependency 'UITextField+Shake'
+        subspec.dependency 'CRBoxInputView'
         subspec.source_files = 'PooToolsSource/Input/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUT POOTOOLS_COCOAPODS"
@@ -172,6 +173,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'CustomerLabel' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'YYText'
         subspec.frameworks = 'QuartzCore'
         subspec.source_files = 'PooToolsSource/Label/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -339,7 +341,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'SmartScreenshot' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'DHSmartScreenshot'
+        subspec.dependency 'SnapshotKit'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
         }
@@ -378,6 +380,63 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'FocusFaceImageView' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'FaceAware'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FOCUSFACE POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'SwipeCell' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'SwipeCellKit'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'PagingControl' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'JXPagingView/Paging'
+        subspec.dependency 'JXSegmentedView'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'FloatingPanel' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'FloatingPanel'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLOATINGPANEL POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'ImagePicker' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'TZImagePickerController'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'Picker' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'BRPickerView'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PICKER POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'Overlay' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'OverlayController'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PICKER POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -419,6 +478,12 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/GCDWebServer'
         subspec.dependency 'PooTools/ColorPicker'
         subspec.dependency 'PooTools/ImageColors'
+        subspec.dependency 'PooTools/FocusFaceImageView'
+        subspec.dependency 'PooTools/SwipeCell'
+        subspec.dependency 'PooTools/PagingControl'
+        subspec.dependency 'PooTools/ImagePicker'
+        subspec.dependency 'PooTools/Picker'
+        subspec.dependency 'PooTools/Overlay'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

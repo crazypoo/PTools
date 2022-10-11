@@ -39,12 +39,9 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 推荐以下辅助第三方工具:</br>
 'AFNetworking':https://github.com/AFNetworking/AFNetworking</br>
 'CYLTabBarController':https://github.com/ChenYilong/CYLTabBarController</br>
-'DHSmartScreenshot':https://github.com/davidman/DHSmartScreenshot</br>
-'DZNEmptyDataSet':https://github.com/dzenbot/DZNEmptyDataSet</br>
 'FDFullscreenPopGesture':https://github.com/forkingdog/FDFullscreenPopGesture</br>
 'GCDWebServer':https://github.com/swisspol/GCDWebServer</br>
 'IQKeyboardManager':https://github.com/hackiftekhar/IQKeyboardManager</br>
-'JMHoledView':https://github.com/leverdeterre/JMHoledView</br>
 'Masonry':https://github.com/SnapKit/Masonry</br>
 'MJExtension':https://github.com/CoderMJLee/MJExtension</br>
 'MJRefresh':https://github.com/CoderMJLee/MJRefresh</br>
@@ -53,7 +50,6 @@ PooTools是一款积累了好多比较适合本人开发的工具类,工具大�
 'TextFieldEffects':https://github.com/raulriera/TextFieldEffects</br>
 'UITextField+Shake':https://github.com/andreamazz/UITextField-Shake</br>
 'UIViewController+Swizzled':https://github.com/RuiAAPeres/UIViewController-Swizzled</br>
-'YCXMenu':https://github.com/Aster0id/YCXMenuDemo_ObjC</br>
 'ZipArchive':https://github.com/ZipArchive/ZipArchive</br>
 'CocoaLumberjack/Swift':https://github.com/CocoaLumberjack/CocoaLumberjack</br>
 'SPPermissions':https://github.com/ivanvorobei/SPPermissions</br>

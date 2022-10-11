@@ -47,7 +47,13 @@ let package = Package(
         .library(name: "ZipArchive", targets: ["ZipArchive"]),
         .library(name: "GCDWebServer", targets: ["GCDWebServer"]),
         .library(name: "ColorPicker", targets: ["ColorPicker"]),
-        .library(name: "ImageColors", targets: ["ImageColors"])
+        .library(name: "ImageColors", targets: ["ImageColors"]),
+        .library(name: "FocusFaceImageView", targets: ["FocusFaceImageView"]),
+        .library(name: "SwipeCell", targets: ["SwipeCell"]),
+        .library(name: "PagingControl", targets: ["PagingControl"]),
+        .library(name: "ImagePicker", targets: ["ImagePicker"]),
+        .library(name: "Picker", targets: ["Picker"]),
+        .library(name: "Overlay", targets: ["Overlay"])
     ],
     dependencies: [],
     targets: [
@@ -90,7 +96,13 @@ let package = Package(
         .target(name: "ZipArchive",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_ZIPARCHIVE"),.define("PTOOLS_SPM")]),
         .target(name: "GCDWebServer",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_GCDWEBSERVER"),.define("PTOOLS_SPM")]),
         .target(name: "ColorPicker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_COLORPICKER"),.define("PTOOLS_SPM")]),
-        .target(name: "ImageColors",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_IMAGECOLOR"),.define("PTOOLS_SPM")])
+        .target(name: "ImageColors",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_IMAGECOLOR"),.define("PTOOLS_SPM")]),
+        .target(name: "FocusFaceImageView",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_FOCUSFACE"),.define("PTOOLS_SPM")]),
+        .target(name: "SwipeCell",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_SWIPECELL"),.define("PTOOLS_SPM")]),
+        .target(name: "PagingControl",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_PAGINGCONTROL"),.define("PTOOLS_SPM")]),
+        .target(name: "ImagePicker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_IMAGEPICKER"),.define("PTOOLS_SPM")]),
+        .target(name: "Picker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_PICKER"),.define("PTOOLS_SPM")]),
+        .target(name: "Overlay",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_OVERLAY"),.define("PTOOLS_SPM")])
     ],
     swiftLanguageVersions: [.v5]
 )
