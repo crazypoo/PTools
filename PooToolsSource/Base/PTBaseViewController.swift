@@ -80,7 +80,7 @@ open class PTBaseViewController: ZXNavigationBarController {
     
     /// 拦截返回上一页
     /// - Parameter popBlock: 是否允许放回上一页
-    func openPopIntercept(popBlock:@escaping ((_ viewController:ZXNavigationBarController,_ popBlockFrom:ZXNavPopBlockFrom)->(Bool))) {
+    open func openPopIntercept(popBlock:@escaping ((_ viewController:ZXNavigationBarController,_ popBlockFrom:ZXNavPopBlockFrom)->(Bool))) {
         //因FDFullscreenPopGesture默认会在控制器即将展示时显示系统导航栏，与ZXNavigationBar共同使用时会造成系统导航栏出现一下又马上消失，因此需要以下设置
         self.fd_prefersNavigationBarHidden = true
         //当您通过zx_handlePopBlock拦截侧滑返回手势时，请设置fd_interactivePopDisabled为YES以关闭FDFullscreenPopGesture在当前控制器的全屏返回手势，否则无法拦截。

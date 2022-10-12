@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SDWebImage
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
@@ -46,5 +47,10 @@ public extension UIButton
                 self.isUserInteractionEnabled = false
             }
         }
+    }
+    
+    func pt_SDWebImage(imageString:String)
+    {
+        self.sd_setImage(with: URL.init(string: imageString), for: .normal, placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
 }

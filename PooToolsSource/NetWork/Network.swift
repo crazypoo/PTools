@@ -117,7 +117,7 @@ public class Network: NSObject {
     }()
     
     //MARK: 服务器URL
-    class func gobalUrl() -> String
+    public class func gobalUrl() -> String
     {
         if UIApplication.applicationEnvironment() != .appStore
         {
