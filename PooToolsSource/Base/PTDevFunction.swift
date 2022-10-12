@@ -25,7 +25,7 @@ public class PTDevFunction: NSObject {
     public var mn_PFloatingButton : PFloatingButton?
     public var goToAppDevVC:GoToAppDev?
     
-    func createLabBtn()
+    public func createLabBtn()
     {
         if UIApplication.applicationEnvironment() != .appStore
         {
@@ -143,7 +143,7 @@ public class PTDevFunction: NSObject {
         }
     }
 
-    func lab_btn_release()
+    public func lab_btn_release()
     {
         UserDefaults.standard.set(false,forKey: LocalConsole.ConsoleDebug)
         self.mn_PFloatingButton?.removeFromSuperview()

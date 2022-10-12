@@ -27,11 +27,8 @@ public class PTDevMaskView: UIView {
         super.init(frame: .zero)
         self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
         
-        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
-        let filePath = bundlePath?.path(forResource: "icon_clear", ofType: "png")
+        let image = UIImage(named: "icon_clear")
 
-        let image = UIImage(contentsOfFile: filePath!)
-        
         let imageContent = UIImageView()
         addSubview(imageContent)
         imageContent.snp.makeConstraints { make in
