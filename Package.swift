@@ -54,7 +54,9 @@ let package = Package(
         .library(name: "Picker", targets: ["Picker"]),
         .library(name: "Instructions", targets: ["Instructions"]),
         .library(name: "Appz", targets: ["Appz"]),
-        .library(name: "LaunchTimeProfiler", targets: ["LaunchTimeProfiler"])
+        .library(name: "LaunchTimeProfiler", targets: ["LaunchTimeProfiler"]),
+        .library(name: "StepCount", targets: ["StepCount"]),
+        .library(name: "Speech", targets: ["Speech"])
     ],
     dependencies: [],
     targets: [
@@ -104,7 +106,9 @@ let package = Package(
         .target(name: "Picker",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_PICKER"),.define("PTOOLS_SPM")]),
         .target(name: "Instructions",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_INSTRUCTIONS"),.define("PTOOLS_SPM")]),
         .target(name: "Appz",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_APPZ"),.define("PTOOLS_SPM")]),
-        .target(name: "LaunchTimeProfiler",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_LAUNCHTIMEPROFILER"),.define("PTOOLS_SPM")])
+        .target(name: "LaunchTimeProfiler",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_LAUNCHTIMEPROFILER"),.define("PTOOLS_SPM")]),
+        .target(name: "StepCount",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_STEPCOUNT"),.define("PTOOLS_SPM")]),
+        .target(name: "Speech",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_SPEECH"),.define("PTOOLS_SPM")])
     ],
     swiftLanguageVersions: [.v5]
 )

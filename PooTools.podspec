@@ -519,8 +519,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
-        subspec.dependency 'PooTools/StepCount'
-        subspec.dependency 'PooTools/Speech'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
