@@ -33,7 +33,7 @@ public class PSecurityStrategy: NSObject {
     class public func removeBlurEffect()
     {
         let subViews = AppWindows!.subviews
-        subViews!.enumerated().forEach { (index,value) in
+        subViews.enumerated().forEach { (index,value) in
             if value is UIImageView
             {
                 if (value as! UIImageView).tag == effectTag

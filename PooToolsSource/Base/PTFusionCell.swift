@@ -355,8 +355,8 @@ public class PTFusionCellContent:UIView
         return view
     }()
     
-    lazy var topLineView = self.drawLine()
-    lazy var lineView = self.drawLine()
+    public lazy var topLineView = self.drawLine()
+    public lazy var lineView = self.drawLine()
     
     fileprivate lazy var cellContentIcon:UIImageView = {
         let view = UIImageView()
@@ -407,12 +407,12 @@ public class PTFusionCellContent:UIView
 }
 
 @objcMembers
-public class PTFusionCell: PTBaseNormalCell {
-    public  static let ID = "PTFusionCell"
+open class PTFusionCell: PTBaseNormalCell {
+    public static let ID = "PTFusionCell"
                 
-    public var switchValueChangeBLock:PTCellSwitchBlock?
+    open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    public var cellModel:PTFunctionCellModel?
+    open var cellModel:PTFunctionCellModel?
     {
         didSet
         {
@@ -420,7 +420,7 @@ public class PTFusionCell: PTBaseNormalCell {
         }
     }
         
-    lazy var dataContent:PTFusionCellContent = {
+    open lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBLock = self.switchValueChangeBLock
         return view
@@ -436,18 +436,18 @@ public class PTFusionCell: PTBaseNormalCell {
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 @objcMembers
-public class PTFusionSwipeCell: PTBaseSwipeCell {
-    public  static let ID = "PTFusionSwipeCell"
+open class PTFusionSwipeCell: PTBaseSwipeCell {
+    public static let ID = "PTFusionSwipeCell"
                 
-    public var switchValueChangeBLock:PTCellSwitchBlock?
+    open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    public var cellModel:PTFunctionCellModel?
+    open var cellModel:PTFunctionCellModel?
     {
         didSet
         {
@@ -455,7 +455,7 @@ public class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
         
-    public lazy var dataContent:PTFusionCellContent = {
+    open lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBLock = self.switchValueChangeBLock
         return view
@@ -471,7 +471,7 @@ public class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

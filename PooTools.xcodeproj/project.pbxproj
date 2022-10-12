@@ -579,7 +579,6 @@
 		231D14F3272CDEE9003D6F62 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
 				55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */,
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
@@ -606,6 +605,7 @@
 				231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
 				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
+				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
 				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
@@ -1082,12 +1082,12 @@
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
-				55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */,
-				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
 				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
+				55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */,
+				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";

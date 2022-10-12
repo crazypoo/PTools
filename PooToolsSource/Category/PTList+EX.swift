@@ -8,43 +8,79 @@
 
 import UIKit
 
-struct PTSection {
-    var headerTitle: String?
-    var headerPlaceholder:String?
-    var headerCls: AnyClass?
-    var headerID: String?
-    var footerCls: AnyClass?
-    var footerID: String?
-    var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
-    var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
-    var rows: [PTRows]
-    var haveDisclosureIndicator:Bool? = false
-    var disclosureIndicatorTitle:String?
-    var disclosureIndicatorImage:String? = ""
-    var disclosureIndicatorSelectImage:String? = ""
-    var isSelectIndicator:Bool? = false
+open class PTSection: NSObject {
+    
+    public var headerTitle: String?
+    public var headerPlaceholder:String?
+    public var headerCls: AnyClass?
+    public var headerID: String?
+    public var footerCls: AnyClass?
+    public var footerID: String?
+    public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
+    public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
+    public var rows: [PTRows]!
+    public var haveDisclosureIndicator:Bool? = false
+    public var disclosureIndicatorTitle:String?
+    public var disclosureIndicatorImage:String? = ""
+    public var disclosureIndicatorSelectImage:String? = ""
+    public var isSelectIndicator:Bool? = false
+
+    public init(headerTitle: String? = "",
+                headerPlaceholder: String? = "",
+                headerCls: AnyClass? = nil,
+                headerID: String? = "",
+                footerCls:AnyClass? = nil,
+                footerID:String? = "",
+                footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
+                headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
+                rows:[PTRows]!,
+                haveDisclosureIndicator:Bool? = false,
+                disclosureIndicatorTitle:String? = "",
+                disclosureIndicatorImage:String? = "",
+                disclosureIndicatorSelectImage:String? = "",
+                isSelectIndicator:Bool? = false
+         )
+    {
+        super.init()
+        
+        self.headerTitle = headerTitle
+        self.headerPlaceholder = headerPlaceholder
+        self.headerCls = headerCls
+        self.headerID = headerID
+        self.footerCls = footerCls
+        self.footerID = footerID
+        self.footerHeight = footerHeight
+        self.headerHeight = headerHeight
+        self.rows = rows
+        self.haveDisclosureIndicator = haveDisclosureIndicator
+        self.disclosureIndicatorTitle = disclosureIndicatorTitle
+        self.disclosureIndicatorImage = disclosureIndicatorImage
+        self.disclosureIndicatorSelectImage = disclosureIndicatorSelectImage
+        self.isSelectIndicator = isSelectIndicator
+    }
 }
 
-class PTRows: NSObject {
-    
-    var title = ""
-    var placeholder = ""
-    var cls: AnyClass?
-    var ID: String = ""
-    var dataModel: AnyObject?
-    var titleColor = UIColor.randomColor
-    var haveDisclosureIndicator = false
-    var haveSwitchView = false
-    var textEdit = false
-    var keyboard:UIKeyboardType = .default
-    var infoColor = UIColor.randomColor
-    var iconName = ""
-    var nibName = ""
-    var content = ""
-    var contentColor = UIColor.randomColor
-    var badge:Int = 0
 
-    init(title: String = "",
+open class PTRows: NSObject {
+    
+    open var title = ""
+    open var placeholder = ""
+    open var cls: AnyClass?
+    open var ID: String = ""
+    open var dataModel: AnyObject?
+    open var titleColor = UIColor.randomColor
+    open var haveDisclosureIndicator = false
+    open var haveSwitchView = false
+    open var textEdit = false
+    open var keyboard:UIKeyboardType = .default
+    open var infoColor = UIColor.randomColor
+    open var iconName = ""
+    open var nibName = ""
+    open var content = ""
+    open var contentColor = UIColor.randomColor
+    open var badge:Int = 0
+
+    public init(title: String = "",
          placeholder: String = "",
          content:String = "",
          cls: AnyClass? = nil,
@@ -78,12 +114,11 @@ class PTRows: NSObject {
         self.contentColor = contentColor!
         self.badge = badge!
     }
-    
 }
 
 extension UITableView {
     /// - Parameter bkSections:
-    func pt_register(by ptSections: [PTSection]) {
+    public func pt_register(by ptSections: [PTSection]) {
         
         ptSections.forEach { [weak self] (tmpSection) in
             // 注册 hederView
@@ -102,7 +137,7 @@ extension UITableView {
 
 extension UICollectionView {
     /// - Parameter bkSections:
-    func pt_register(by ptSections: [PTSection]) {
+    public func pt_register(by ptSections: [PTSection]) {
         
         ptSections.forEach { [weak self] (tmpSection) in
             // 注册 hederView

@@ -9,13 +9,13 @@
 import UIKit
 import SwipeCellKit
 
-public class PTBaseNormalCell: UICollectionViewCell {
-    override init(frame:CGRect)
+open class PTBaseNormalCell: UICollectionViewCell {
+    override public init(frame:CGRect)
     {
         super.init(frame: frame)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -40,13 +40,13 @@ public class PTBaseNormalCell: UICollectionViewCell {
     }
 }
 
-public class PTBaseSwipeCell: SwipeCollectionViewCell {
-    override init(frame:CGRect)
+open class PTBaseSwipeCell: SwipeCollectionViewCell {
+    override public init(frame:CGRect)
     {
         super.init(frame: frame)
     }
     
-    required init?(coder aDecoder: NSCoder) {
+    required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

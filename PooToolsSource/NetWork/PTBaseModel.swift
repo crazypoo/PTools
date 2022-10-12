@@ -10,10 +10,10 @@ import UIKit
 import HandyJSON
 import KakaJSON
 
-public class PTBaseModel: HandyJSON,Convertible {
+open class PTBaseModel: HandyJSON,Convertible {
     required public init() {}
     
-    public func mapping(mapper: HelpingMapper) {   //自定义解析规则，日期数字颜色，如果要指定解析格式，子类实现重写此方法即可
+    open func mapping(mapper: HelpingMapper) {   //自定义解析规则，日期数字颜色，如果要指定解析格式，子类实现重写此方法即可
         //        mapper <<<
         //            date <-- CustomDateFormatTransform(formatString: "yyyy-MM-dd")
         //
@@ -32,7 +32,7 @@ public class PTBaseModel: HandyJSON,Convertible {
     
     // 实现kj_modelKey方法
     // 会传入模型的属性`property`作为参数，返回值就是属性对应的key
-    public func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
+    open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
         return property.name
     }
 }
