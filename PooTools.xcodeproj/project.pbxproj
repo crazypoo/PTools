@@ -94,6 +94,8 @@
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
 		5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */; };
+		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
+		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
@@ -333,6 +335,8 @@
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
 		5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentControlBaseModel.swift; sourceTree = "<group>"; };
+		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
+		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
@@ -542,6 +546,7 @@
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				555A8B4228C2E7A700692501 /* DevMask */,
 				55D59C5628F298CC00B4FF76 /* Guide */,
+				5507026828F6A8DF00C48239 /* HealthKit */,
 				231D1537272CDEE9003D6F62 /* Input */,
 				231D15A1272CDEE9003D6F62 /* Json */,
 				55D59C5428F2980000B4FF76 /* Keyboard */,
@@ -567,6 +572,7 @@
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
+				5507026B28F6B33E00C48239 /* Speech */,
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				231D154A272CDEE9003D6F62 /* Thermometer */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
@@ -855,6 +861,22 @@
 				5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */,
 			);
 			path = SegmentControl;
+			sourceTree = "<group>";
+		};
+		5507026828F6A8DF00C48239 /* HealthKit */ = {
+			isa = PBXGroup;
+			children = (
+				5507026928F6A8F800C48239 /* PTHealthKit.swift */,
+			);
+			path = HealthKit;
+			sourceTree = "<group>";
+		};
+		5507026B28F6B33E00C48239 /* Speech */ = {
+			isa = PBXGroup;
+			children = (
+				5507026C28F6B35E00C48239 /* PTSpeech.swift */,
+			);
+			path = Speech;
 			sourceTree = "<group>";
 		};
 		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
@@ -1556,6 +1578,7 @@
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
+				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
@@ -1645,6 +1668,7 @@
 				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
+				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,

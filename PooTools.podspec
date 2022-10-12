@@ -449,7 +449,25 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'AMKLaunchTimeProfiler'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LAUNCHTIMEPROFILER POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'StepCount' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.frameworks = 'HealthKit'
+        subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'Speech' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.frameworks = 'Speech','AVFoundation'
+        subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
         }
     end
     
@@ -501,6 +519,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
+        subspec.dependency 'PooTools/StepCount'
+        subspec.dependency 'PooTools/Speech'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
