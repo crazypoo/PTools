@@ -6,10 +6,8 @@
 //  Copyright © 2021 Amir Khorsandi. All rights reserved.
 //
 
-#if canImport(SwiftUI) && canImport(Combine)
 import SwiftUI
 
-@available(iOS 13.0, *)
 public class PagingCollectionViewControllerBuilder<ValueType: Identifiable, PageContent: View> {
 
     public typealias ViewController = PagingCollectionViewController<ValueType, PageContent>
@@ -73,9 +71,8 @@ public class PagingCollectionViewControllerBuilder<ValueType: Identifiable, Page
 
     private func setupOnCurrentPageChanged(_ viewController: ViewController) {
         viewController.onCurrentPageChanged = { [data, selection] in
-            guard $0 < data.count else { return }
+            guard $0 >= 0 && $0 < data.count else { return }
             selection?.wrappedValue = data[$0].id
         }
     }
 }
-#endif

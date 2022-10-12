@@ -52,6 +52,9 @@
         "SJAttributesStringMaker": [
 
         ],
+        "YYText": [
+
+        ],
         "UIViewController+Swizzled": [
 
         ],
@@ -90,6 +93,9 @@
         ],
         "InAppViewDebugger": [
 
+        ],
+        "LookinServer": [
+
         ]
       },
       "configuration_pod_whitelist": {
@@ -97,6 +103,9 @@
           "debug"
         ],
         "InAppViewDebugger": [
+          "debug"
+        ],
+        "LookinServer": [
           "debug"
         ]
       },
@@ -738,6 +747,7 @@
 
         ]
       },
+      "source_files": "PooToolsSource/SegmentControl/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PAGINGCONTROL POOTOOLS_COCOAPODS"
       }

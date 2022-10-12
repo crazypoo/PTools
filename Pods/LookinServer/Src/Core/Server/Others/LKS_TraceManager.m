@@ -1,3 +1,5 @@
+#ifdef SHOULD_COMPILE_LOOKIN_SERVER 
+
 //
 //  LKS_TraceManager.m
 //  LookinServer
@@ -137,7 +139,7 @@
 - (void)_markIVarsInAllClassLevelsOfObject:(NSObject *)object {
     [self _markIVarsOfObject:object class:object.class];
 #if defined(LOOKIN_SERVER_SWIFT_ENABLED) || defined(LOOKIN_SERVER_TESTFLIGHT_SWIFT_ENABLED)
-    [self _swiftMarkIVarsOfObject:object];
+    [LKS_SwiftTraceManager swiftMarkIVarsOfObject:object];
 #endif
 }
 
@@ -252,3 +254,5 @@ static NSSet<LookinIvarTrace *> *LKS_InvalidIvarTraces() {
 }
 
 @end
+
+#endif /* SHOULD_COMPILE_LOOKIN_SERVER */

@@ -90,6 +90,10 @@
 		231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F6272CDEE9003D6F62 /* SecurityUtil.m */; };
 		231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F7272CDEE9003D6F62 /* NSData+AES.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
+		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
+		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
+		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
+		5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
@@ -325,6 +329,10 @@
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentCell.swift; sourceTree = "<group>"; };
+		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
+		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
+		5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSegmentControlBaseModel.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
@@ -555,6 +563,7 @@
 				231D15F1272CDEE9003D6F62 /* Rotation */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
+				5507025F28F6A09100C48239 /* SegmentControl */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
@@ -835,6 +844,17 @@
 				557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */,
 			);
 			path = ApplicationFunction;
+			sourceTree = "<group>";
+		};
+		5507025F28F6A09100C48239 /* SegmentControl */ = {
+			isa = PBXGroup;
+			children = (
+				5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */,
+				5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */,
+				5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */,
+				5507026628F6A2BB00C48239 /* PTSegmentControlBaseModel.swift */,
+			);
+			path = SegmentControl;
 			sourceTree = "<group>";
 		};
 		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
@@ -1560,6 +1580,7 @@
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
+				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
@@ -1583,7 +1604,9 @@
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
+				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
+				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
@@ -1613,6 +1636,7 @@
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
+				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
