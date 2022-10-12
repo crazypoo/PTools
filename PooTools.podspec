@@ -34,9 +34,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'FloatingPanel'
-        subspec.dependency 'FLEX', :configurations => ['Debug']
-        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
-        subspec.dependency 'LookinServer', :configurations => ['Debug']
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation'
         subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -468,6 +465,16 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'DEBUG' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'FLEX', :configurations => ['Debug']
+        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
+        subspec.dependency 'LookinServer', :configurations => ['Debug']
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
         }
     end
     

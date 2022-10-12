@@ -379,14 +379,14 @@ public class PTFusionCellContent:UIView
         self.addSubviews([self.lineView,self.accessV,self.nameTitle,self.valueSwitch,self.contentLabel,self.cellContentIcon,self.cellIcon,self.topLineView])
 
         self.lineView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+            make.right.equalToSuperview().inset(self.cellModel?.rightSpace ?? 10)
             make.bottom.equalToSuperview()
             make.height.equalTo(1)
             make.left.equalTo(self.nameTitle)
         }
         
         self.topLineView.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+            make.right.equalToSuperview().inset(self.cellModel?.rightSpace ?? 10)
             make.top.equalToSuperview()
             make.height.equalTo(1)
             make.left.equalTo(self.nameTitle)
