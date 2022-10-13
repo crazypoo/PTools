@@ -77,6 +77,12 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
+  - PhoneNumberKit (3.3.4):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.3.4)
+    - PhoneNumberKit/UIKit (= 3.3.4)
+  - PhoneNumberKit/PhoneNumberKitCore (3.3.4)
+  - PhoneNumberKit/UIKit (3.3.4):
+    - PhoneNumberKit/PhoneNumberKitCore
   - PooTools/Animation (3.0.0):
     - PooTools/Core
   - PooTools/Appz (3.0.0):
@@ -103,12 +109,9 @@ PODS:
     - CocoaLumberjack/Swift
     - DeviceKit
     - FDFullscreenPopGesture
-    - FLEX
     - FloatingPanel
     - FluentDarkModeKit
-    - InAppViewDebugger
     - IQKeyboardManager
-    - LookinServer
     - MJRefresh
     - NotificationBannerSwift
     - pop
@@ -152,6 +155,7 @@ PODS:
     - TZImagePickerController
   - PooTools/Input (3.0.0):
     - CRBoxInputView
+    - PhoneNumberKit
     - PooTools/Core
     - TextFieldEffects
     - "UITextField+Shake"
@@ -333,8 +337,10 @@ DEPENDENCIES:
   - Alamofire
   - CocoaLumberjack/Swift
   - DeviceKit (~> 4.0)
+  - FLEX
   - GCDWebServer/WebUploader (~> 3.0)
   - HandyJSON
+  - InAppViewDebugger
   - KakaJSON
   - LookinServer
   - MJRefresh
@@ -387,6 +393,7 @@ SPEC REPOS:
     - MJExtension
     - MJRefresh
     - NotificationBannerSwift
+    - PhoneNumberKit
     - pop
     - SDWebImage
     - SJAttributesStringMaker
@@ -450,7 +457,8 @@ SPEC CHECKSUMS:
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
-  PooTools: 5c1ad480968b397367ed977b2f5e1594914c1909
+  PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
+  PooTools: fe3308dbd9d31ebc3233e88823b698bf2094ecf2
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816
@@ -474,6 +482,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 19fb6476f4754bef1bf0b581957ee270996f6765
+PODFILE CHECKSUM: d38f782cff24f69bfd210dd23160ad11cfa3958f
 
 COCOAPODS: 1.11.3

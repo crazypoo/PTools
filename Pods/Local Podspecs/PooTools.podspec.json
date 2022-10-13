@@ -87,26 +87,6 @@
         ],
         "FloatingPanel": [
 
-        ],
-        "FLEX": [
-
-        ],
-        "InAppViewDebugger": [
-
-        ],
-        "LookinServer": [
-
-        ]
-      },
-      "configuration_pod_whitelist": {
-        "FLEX": [
-          "debug"
-        ],
-        "InAppViewDebugger": [
-          "debug"
-        ],
-        "LookinServer": [
-          "debug"
         ]
       },
       "frameworks": [
@@ -335,6 +315,9 @@
 
         ],
         "CRBoxInputView": [
+
+        ],
+        "PhoneNumberKit": [
 
         ]
       },
@@ -833,7 +816,36 @@
         ]
       },
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_APPZ POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LAUNCHTIMEPROFILER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "StepCount",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": "HealthKit",
+      "source_files": "PooToolsSource/HealthKit/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Speech",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "frameworks": [
+        "Speech",
+        "AVFoundation"
+      ],
+      "source_files": "PooToolsSource/Speech/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
       }
     },
     {

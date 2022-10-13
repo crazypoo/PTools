@@ -47,17 +47,17 @@ class PTSwiftViewController: UIViewController {
             make.width.equalTo(CGFloat.ScaleW(w: 85))
         }
         
-        let sign = PTSignView(viewConfig: PTSignatureConfig())
-        sign.showView()
-        sign.doneBlock = { images in
-            let imagesssss = UIImageView(image: images)
-            self.view.addSubview(imagesssss)
-            imagesssss.snp.makeConstraints { make in
-                make.width.height.equalTo(100)
-                make.top.equalToSuperview()
-                make.right.equalToSuperview()
-            }
-        }
+//        let sign = PTSignView(viewConfig: PTSignatureConfig())
+//        sign.showView()
+//        sign.doneBlock = { images in
+//            let imagesssss = UIImageView(image: images)
+//            self.view.addSubview(imagesssss)
+//            imagesssss.snp.makeConstraints { make in
+//                make.width.height.equalTo(100)
+//                make.top.equalToSuperview()
+//                make.right.equalToSuperview()
+//            }
+//        }
         
         
 //        PTUtils.gcdAfter(time: 5) {
@@ -68,6 +68,12 @@ class PTSwiftViewController: UIViewController {
         
 //        PTLocalConsoleFunction.share.pNSLog("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
         
-        
+        let vvvvv = PTGrowingTextView()
+        self.view.addSubview(vvvvv)
+        vvvvv.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(100)
+        }
     }
 }
