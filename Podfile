@@ -21,7 +21,6 @@ target 'PooTools_Example' do
   pod 'SwifterSwift'#Swift扩展类
   pod 'NotificationBannerSwift'#类似推送的弹出框
   pod 'CocoaLumberjack/Swift'#Log工具
-  pod 'LookinServer', :configurations => ['Debug']
   pod 'SwiftDate'
   pod 'KakaJSON'
   pod 'Alamofire'
@@ -32,4 +31,9 @@ target 'PooTools_Example' do
   pod 'SDWebImage'
   pod 'MJRefresh'
   pod 'ZXNavigationBar'#导航栏
+  
+  pod 'FLEX', :configurations => ['Debug']
+  pod 'InAppViewDebugger', :configurations => ['Debug']
+  pod 'LookinServer', :configurations => ['Debug']
+
 end

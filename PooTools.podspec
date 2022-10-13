@@ -12,6 +12,7 @@ Pod::Spec.new do |s|
     s.swift_versions = '4.2'
     s.resource     = 'PooToolsSource/PooTools.bundle'
     s.default_subspec = "Core"
+    s.dependency 'PooTools/DEBUG' , :configurations => ['Debug']
     s.subspec "Core" do |subspec|
         subspec.dependency 'SwiftDate'
         subspec.dependency 'NotificationBannerSwift'
@@ -469,9 +470,9 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'DEBUG' do |subspec|
-        subspec.dependency 'FLEX'
-        subspec.dependency 'InAppViewDebugger'
-        subspec.dependency 'LookinServer'
+        subspec.dependency 'FLEX', :configurations => ['Debug']
+        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
+        subspec.dependency 'LookinServer', :configurations => ['Debug']
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
         }
