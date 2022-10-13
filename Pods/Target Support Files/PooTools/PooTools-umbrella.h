@@ -39,8 +39,6 @@
 #import "LGTMBase64.h"
 #import "LGTMDefines.h"
 #import "CustomTextField.h"
-#import "HPGrowingTextView.h"
-#import "HPTextViewInternal.h"
 #import "PooTextView.h"
 #import "PTextField.h"
 #import "GPKeyChain.h"
