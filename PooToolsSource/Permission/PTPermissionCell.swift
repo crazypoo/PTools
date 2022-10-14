@@ -14,6 +14,36 @@ import SJAttributesStringMaker
 #if canImport(HealthKit)
 import HealthKit
 #endif
+#if canImport(HealthPermission)
+import HealthPermission
+#endif
+#if canImport(SpeechPermission)
+import SpeechPermission
+#endif
+#if canImport(FaceIDPermission)
+import FaceIDPermission
+#endif
+#if canImport(LocationWhenInUsePermission)
+import LocationWhenInUsePermission
+#endif
+#if canImport(NotificationPermission)
+import NotificationPermission
+#endif
+#if canImport(RemindersPermission)
+import RemindersPermission
+#endif
+#if canImport(CalendarPermission)
+import CalendarPermission
+#endif
+#if canImport(PhotoLibraryPermission)
+import PhotoLibraryPermission
+#endif
+#if canImport(CameraPermission)
+import CameraPermission
+#endif
+#if canImport(TrackingPermission)
+import TrackingPermission
+#endif
 
 class PTPermissionCell: PTBaseNormalCell {
     
@@ -30,25 +60,61 @@ class PTPermissionCell: PTBaseNormalCell {
             switch cellModel!.type
             {
             case .tracking:
+#if canImport(TrackingPermission)
                 if #available(iOS 14.5, *) {
                     self.cellStatus = Permission.tracking.status
                 }
+#else
+                self.cellStatus = .notSupported
+#endif
             case .camera:
+#if canImport(CameraPermission)
                 self.cellStatus = Permission.camera.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .photoLibrary:
+#if canImport(PhotoLibraryPermission)
                 self.cellStatus = Permission.photoLibrary.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .calendar:
+#if canImport(CalendarPermission)
                 self.cellStatus = Permission.calendar.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .reminders:
+#if canImport(RemindersPermission)
                 self.cellStatus = Permission.reminders.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .notification:
+#if canImport(NotificationPermission)
                 self.cellStatus = Permission.notification.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .locationWhenInUse:
+#if canImport(LocationWhenInUsePermission)
                 self.cellStatus = Permission.locationWhenInUse.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .faceID:
+#if canImport(FaceIDPermission)
                 self.cellStatus = Permission.faceID.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .speech:
+#if canImport(SpeechPermission)
                 self.cellStatus = Permission.speech.status
+#else
+                self.cellStatus = .notSupported
+#endif
             case .health:
 #if canImport(HealthKit)
                 self.cellStatus = HealthPermission.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)

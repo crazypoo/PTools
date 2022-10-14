@@ -10,6 +10,36 @@ import UIKit
 import PermissionsKit
 import ZXNavigationBar
 import SnapKit
+#if canImport(HealthPermission)
+import HealthPermission
+#endif
+#if canImport(SpeechPermission)
+import SpeechPermission
+#endif
+#if canImport(FaceIDPermission)
+import FaceIDPermission
+#endif
+#if canImport(LocationWhenInUsePermission)
+import LocationWhenInUsePermission
+#endif
+#if canImport(NotificationPermission)
+import NotificationPermission
+#endif
+#if canImport(RemindersPermission)
+import RemindersPermission
+#endif
+#if canImport(CalendarPermission)
+import CalendarPermission
+#endif
+#if canImport(PhotoLibraryPermission)
+import PhotoLibraryPermission
+#endif
+#if canImport(CameraPermission)
+import CameraPermission
+#endif
+#if canImport(TrackingPermission)
+import TrackingPermission
+#endif
 
 public typealias PTPermissionViewBlock = () ->Void
 
@@ -157,9 +187,11 @@ public class PTPermissionViewController: PTBaseViewController {
         if haveTracking!
         {
             if #available(iOS 14.5, *) {
+#if canImport(TrackingPermission)
                 Permission.tracking.request {
                     self.trackingRequest = true
                 }
+#endif
             }
             else
             {
@@ -177,29 +209,59 @@ public class PTPermissionViewController: PTBaseViewController {
         self.permissions?.enumerated().forEach({ index,value in
             switch value.type {
             case .camera:
+#if canImport(CameraPermission)
                 Permission.camera.request {
                     self.showDetail()
                 }
+#endif
             case .photoLibrary:
+#if canImport(PhotoLibraryPermission)
                 Permission.photoLibrary.request {
                     self.showDetail()
                 }
+#endif
             case .calendar:
+#if canImport(CalendarPermission)
                 Permission.calendar.request {
                     self.showDetail()
                 }
+#endif
             case .reminders:
+#if canImport(RemindersPermission)
                 Permission.reminders.request {
                     self.showDetail()
                 }
+#endif
             case .notification:
+#if canImport(NotificationPermission)
                 Permission.notification.request {
                     self.showDetail()
                 }
+#endif
             case .locationWhenInUse:
+#if canImport(LocationWhenInUsePermission)
                 Permission.locationWhenInUse.request {
                     self.showDetail()
                 }
+#endif
+            case .health:
+#if canImport(HealthPermission)
+                Permission.health.request {
+                    self.showDetail()
+                }
+#endif
+            case .speech:
+#if canImport(SpeechPermission)
+                Permission.speech.request {
+                    self.showDetail()
+                }
+#endif
+            case .faceID:
+#if canImport(FaceIDPermission)
+                Permission.faceID.request {
+                    self.showDetail()
+                }
+#endif
             default:
                 break
             }
@@ -260,35 +322,67 @@ extension PTPermissionViewController : UICollectionViewDelegate,UICollectionView
         cell.cellButtonTapBlock = { type in
             switch type {
             case .tracking:
+#if canImport(TrackingPermission)
                 if #available(iOS 14.5, *) {
                     Permission.tracking.request {
                         self.showDetail()
                     }
                 }
+#endif
             case .camera:
+#if canImport(CameraPermission)
                 Permission.camera.request {
                     self.showDetail()
                 }
+#endif
             case .photoLibrary:
+#if canImport(PhotoLibraryPermission)
                 Permission.photoLibrary.request {
                     self.showDetail()
                 }
+#endif
             case .calendar:
+#if canImport(CalendarPermission)
                 Permission.calendar.request {
                     self.showDetail()
                 }
+#endif
             case .reminders:
+#if canImport(RemindersPermission)
                 Permission.reminders.request {
                     self.showDetail()
                 }
+#endif
             case .notification:
+#if canImport(NotificationPermission)
                 Permission.notification.request {
                     self.showDetail()
                 }
+#endif
             case .locationWhenInUse:
+#if canImport(LocationWhenInUsePermission)
                 Permission.locationWhenInUse.request {
                     self.showDetail()
                 }
+#endif
+            case .health:
+#if canImport(HealthPermission)
+                Permission.health.request {
+                    self.showDetail()
+                }
+#endif
+            case .speech:
+#if canImport(SpeechPermission)
+                Permission.speech.request {
+                    self.showDetail()
+                }
+#endif
+            case .faceID:
+#if canImport(FaceIDPermission)
+                Permission.faceID.request {
+                    self.showDetail()
+                }
+#endif
             default:
                 break
             }
