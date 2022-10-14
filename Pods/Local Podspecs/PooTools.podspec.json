@@ -880,6 +880,171 @@
       }
     },
     {
+      "name": "NotificationPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/NotificationPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_NOTIFICATION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CameraPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/CameraPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CAMERA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "LocationWhenInUsePermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/LocationWhenInUsePermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION_W POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "LocationAlwaysPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/LocationAlwaysPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION_A POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "CalendarPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/CalendarPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CALENDAR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "MotionPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/MotionPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_MOTION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PhotoLibraryPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/PhotoLibraryPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_PHOTO POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "TrackingPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/TrackingPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_TRACKING POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "RemindersPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/RemindersPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_REMINDERS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SpeechRecognizerPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/SpeechRecognizerPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_SPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "HealthPermission",
+      "dependencies": {
+        "PooTools/PermissionFunction": [
+
+        ],
+        "PermissionFunction/HealthPermission": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_HEALTH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
