@@ -55,34 +55,34 @@ class PTPermissionCell: PTBaseNormalCell {
         {
         case .tracking:
             permissionName = "用户数据追踪"
-            self.cellIcon.image = UIImage(named: "icon_permission_tracking")
+            self.cellIcon.image = UIImage(named: "icon_permission_tracking.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .camera:
             permissionName = "照相机"
-            self.cellIcon.image = UIImage(named: "icon_permission_camera")
+            self.cellIcon.image = UIImage(named: "icon_permission_camera.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .photoLibrary:
             permissionName = "相册"
-            self.cellIcon.image = UIImage(named: "icon_permission_photoLibrary")
+            self.cellIcon.image = UIImage(named: "icon_permission_photoLibrary.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .calendar:
             permissionName = "日历"
-            self.cellIcon.image = UIImage(named: "icon_permission_calendar")
+            self.cellIcon.image = UIImage(named: "icon_permission_calendar.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .reminders:
             permissionName = "提醒"
-            self.cellIcon.image = UIImage(named: "icon_permission_reminders")
+            self.cellIcon.image = UIImage(named: "icon_permission_reminders.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .notification:
             permissionName = "通知推送"
-            self.cellIcon.image = UIImage(named: "icon_permission_notification")
+            self.cellIcon.image = UIImage(named: "icon_permission_notification.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .locationWhenInUse:
             permissionName = "定位"
-            self.cellIcon.image = UIImage(named: "icon_permission_location")
+            self.cellIcon.image = UIImage(named: "icon_permission_location.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .speech:
             permissionName = "语音识别"
-            self.cellIcon.image = UIImage(named: "icon_permission_speech")
+            self.cellIcon.image = UIImage(named: "icon_permission_speech.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .health:
             permissionName = "健康"
-            self.cellIcon.image = UIImage(named: "icon_permission_health")
+            self.cellIcon.image = UIImage(named: "icon_permission_health.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         case .faceID:
             permissionName = "FaceID"
-            self.cellIcon.image = UIImage(named: "icon_permission_faceid")
+            self.cellIcon.image = UIImage(named: "icon_permission_faceid.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
         default:break
         }
         

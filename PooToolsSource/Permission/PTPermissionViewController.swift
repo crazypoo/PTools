@@ -13,7 +13,7 @@ import SnapKit
 
 public typealias PTPermissionViewBlock = () ->Void
 
-let uPermission = "uPermission"
+public let uPermission = "uPermission"
 
 @objcMembers
 public class PTPermissionViewController: PTBaseViewController {
