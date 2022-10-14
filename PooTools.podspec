@@ -465,7 +465,15 @@ Pod::Spec.new do |s|
         subspec.frameworks = 'Speech','AVFoundation'
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SPEECH POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'PermissionFunction' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
         }
     end
     #    s.subspec 'DEBUG' do |subspec|
@@ -525,6 +533,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
+        subspec.dependency 'PooTools/PermissionFunction'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
