@@ -19,11 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if PERMISSIONSKIT_SPM
-import PermissionsKit
-#endif
-
-#if PERMISSIONSKIT_NOTIFICATION
 import UserNotifications
 
 public extension Permission {
@@ -71,4 +66,3 @@ public class NotificationPermission: Permission {
         }
     }
 }
-#endif

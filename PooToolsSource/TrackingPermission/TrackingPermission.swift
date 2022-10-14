@@ -19,11 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if PERMISSIONSKIT_SPM
-import PermissionsKit
-#endif
-
-#if PERMISSIONSKIT_TRACKING
 import AppTrackingTransparency
 
 @available(iOS 14.5, tvOS 14.5, *)
@@ -58,4 +53,3 @@ public class TrackingPermission: Permission {
         }
     }
 }
-#endif

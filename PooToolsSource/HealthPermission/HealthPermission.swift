@@ -19,11 +19,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if PERMISSIONSKIT_SPM
-import PermissionsKit
-#endif
-
-#if os(iOS) && PERMISSIONSKIT_HEALTH
+#if os(iOS)
 import Foundation
 import HealthKit
 

@@ -507,7 +507,7 @@ Pod::Spec.new do |s|
     s.subspec 'LocationWhenInUsePermission' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/PermissionFunction'
-        subspec.source_files = 'PooToolsSource/LocationWhenInUsePermission/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/LocationWhenInUsePermission/*.{h,m,swift}','PooToolsSource/LocationExtension/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_LOCATION_W POOTOOLS_COCOAPODS"
         }
@@ -515,7 +515,7 @@ Pod::Spec.new do |s|
     s.subspec 'LocationAlwaysPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/PermissionFunction'
-        subspec.source_files = 'PooToolsSource/LocationAlwaysPermission/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/LocationAlwaysPermission/*.{h,m,swift}','PooToolsSource/LocationExtension/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_LOCATION_A POOTOOLS_COCOAPODS"
         }

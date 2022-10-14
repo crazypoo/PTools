@@ -19,12 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if PERMISSIONSKIT_SPM
-import PermissionsKit
-import LocationExtension
-#endif
-
-#if PERMISSIONSKIT_LOCATION_WHENINUSE
 import Foundation
 import MapKit
 
@@ -86,4 +80,3 @@ public class LocationWhenInUsePermission: Permission {
         }
     }
 }
-#endif

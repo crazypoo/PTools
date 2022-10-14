@@ -19,11 +19,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#if PERMISSIONSKIT_SPM
-import PermissionsKit
-#endif
-
-#if PERMISSIONSKIT_BLUETOOTH
 import Foundation
 import CoreBluetooth
 import CloudKit
@@ -73,5 +68,4 @@ public class BluetoothPermission: Permission {
         BluetoothHandler.shared.reqeustUpdate()
     }
 }
-#endif
 
