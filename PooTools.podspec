@@ -453,7 +453,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'StepCount' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/HealthPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
         subspec.frameworks = 'HealthKit'
         subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -463,95 +462,12 @@ Pod::Spec.new do |s|
     
     s.subspec 'Speech' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/SpeechRecognizerPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
         subspec.frameworks = 'Speech','AVFoundation'
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'NotificationPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/NotificationPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-    
-    s.subspec 'CameraPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/CameraPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-    
-    s.subspec 'LocationWhenInUsePermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/LocationWhenInUsePermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-    
-    s.subspec 'LocationAlwaysPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/LocationAlwaysPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-
-    s.subspec 'CalendarPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/CalendarPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-
-    s.subspec 'MotionPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/MotionPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-    
-    s.subspec 'PhotoLibraryPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/PhotoLibraryPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-
-    s.subspec 'TrackingPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/TrackingPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-
-    s.subspec 'RemindersPermission' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit/RemindersPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
-        }
-    end
-
     #    s.subspec 'DEBUG' do |subspec|
 #        subspec.dependency 'FLEX', :configurations => ['Debug']
 #        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
