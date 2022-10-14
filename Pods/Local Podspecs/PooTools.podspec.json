@@ -919,7 +919,10 @@
 
         ]
       },
-      "source_files": "PooToolsSource/LocationWhenInUsePermission/*.{h,m,swift}",
+      "source_files": [
+        "PooToolsSource/LocationWhenInUsePermission/*.{h,m,swift}",
+        "PooToolsSource/LocationExtension/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION_W POOTOOLS_COCOAPODS"
       }
@@ -934,7 +937,10 @@
 
         ]
       },
-      "source_files": "PooToolsSource/LocationAlwaysPermission/*.{h,m,swift}",
+      "source_files": [
+        "PooToolsSource/LocationAlwaysPermission/*.{h,m,swift}",
+        "PooToolsSource/LocationExtension/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_LOCATION_A POOTOOLS_COCOAPODS"
       }
