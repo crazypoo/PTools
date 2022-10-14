@@ -75,9 +75,9 @@ Pod::Spec.new do |s|
     
     s.subspec 'BilogyID' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/FaceIDPermission'
+#        subspec.dependency 'PooTools/FaceIDPermission'
         subspec.frameworks = 'LocalAuthentication','Security'
-        subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}','PooToolsSource/BioID/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
         }
