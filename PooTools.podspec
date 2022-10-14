@@ -471,6 +471,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'PermissionFunction' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PermissionsKit'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
