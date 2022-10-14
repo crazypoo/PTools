@@ -75,6 +75,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'BilogyID' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PermissionsKit'
         subspec.frameworks = 'LocalAuthentication','Security'
         subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}','PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -453,6 +454,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'StepCount' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PermissionsKit'
         subspec.frameworks = 'HealthKit'
         subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -462,6 +464,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Speech' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PermissionsKit'
         subspec.frameworks = 'Speech','AVFoundation'
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {

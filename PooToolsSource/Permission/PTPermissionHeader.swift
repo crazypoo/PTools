@@ -11,7 +11,7 @@ import SnapKit
 
 class PTPermissionHeader: PTBaseCollectionReusableView {
     static let ID = "GPPermissionHeader"
-    static let headerTitle = "\(kAppDisplayName!)所需权限清单"
+    static let headerTitle = "\(kAppName!)所需权限清单"
     static let headerInfo = "以下是App完全正常工作所需的授权清单"
 
     open class func cellHeight()->CGFloat

@@ -74,6 +74,15 @@ class PTPermissionCell: PTBaseNormalCell {
         case .locationWhenInUse:
             permissionName = "定位"
             self.cellIcon.image = UIImage(named: "icon_permission_location")
+        case .speech:
+            permissionName = "语音识别"
+            self.cellIcon.image = UIImage(named: "icon_permission_speech")
+        case .health:
+            permissionName = "健康"
+            self.cellIcon.image = UIImage(named: "icon_permission_health")
+        case .faceID:
+            permissionName = "FaceID"
+            self.cellIcon.image = UIImage(named: "icon_permission_faceid")
         default:break
         }
         
