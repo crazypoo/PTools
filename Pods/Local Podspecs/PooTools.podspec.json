@@ -19,16 +19,11 @@
   },
   "requires_arc": true,
   "swift_versions": "4.2",
-  "resources": "PooToolsSource/PooTools.bundle",
-  "resource_bundles": {
-    "PooToolsSource": [
-      "PooToolsSource/*.*"
-    ]
-  },
   "default_subspecs": "Core",
   "subspecs": [
     {
       "name": "Core",
+      "resources": "PooToolsSource/PooTools.bundle",
       "dependencies": {
         "SwiftDate": [
 

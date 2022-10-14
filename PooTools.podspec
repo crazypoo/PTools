@@ -10,10 +10,9 @@ Pod::Spec.new do |s|
     s.requires_arc = true
     s.ios.deployment_target = '13.0'
     s.swift_versions = '4.2'
-    s.resource     = 'PooToolsSource/PooTools.bundle'
-    s.resource_bundles = {'PooToolsSource' =>['PooToolsSource/*.*']}
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
+        subspec.resource     = 'PooToolsSource/PooTools.bundle'
         subspec.dependency 'SwiftDate'
         subspec.dependency 'NotificationBannerSwift'
         subspec.dependency 'WZLBadge'

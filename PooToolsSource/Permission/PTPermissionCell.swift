@@ -116,7 +116,7 @@ class PTPermissionCell: PTBaseNormalCell {
                 self.cellStatus = .notSupported
 #endif
             case .health:
-#if canImport(HealthKit)
+#if canImport(HealthKit) && canImport(HealthPermission)
                 self.cellStatus = HealthPermission.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
 #else
                 self.cellStatus = .notSupported
