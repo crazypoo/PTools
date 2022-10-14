@@ -77,11 +77,17 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
+  - PermissionsKit (9.0.1):
+    - PermissionsKit/Core (= 9.0.1)
   - PermissionsKit/CalendarPermission (9.0.1):
     - PermissionsKit/Core
   - PermissionsKit/CameraPermission (9.0.1):
     - PermissionsKit/Core
   - PermissionsKit/Core (9.0.1)
+  - PermissionsKit/FaceIDPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/HealthPermission (9.0.1):
+    - PermissionsKit/Core
   - PermissionsKit/LocationAlwaysPermission (9.0.1):
     - PermissionsKit/Core
     - PermissionsKit/LocationExtension
@@ -96,6 +102,8 @@ PODS:
   - PermissionsKit/PhotoLibraryPermission (9.0.1):
     - PermissionsKit/Core
   - PermissionsKit/RemindersPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/SpeechRecognizerPermission (9.0.1):
     - PermissionsKit/Core
   - PermissionsKit/TrackingPermission (9.0.1):
     - PermissionsKit/Core
@@ -113,6 +121,7 @@ PODS:
   - PooTools/BankCard (3.0.0):
     - PooTools/Core
   - PooTools/BilogyID (3.0.0):
+    - PermissionsKit
     - PooTools/Core
   - PooTools/Calendar (3.0.0):
     - PooTools/Core
@@ -215,6 +224,7 @@ PODS:
     - PooTools/Motion
     - PooTools/NetWork
     - PooTools/PagingControl
+    - PooTools/PermissionFunction
     - PooTools/PhoneInfo
     - PooTools/Picker
     - PooTools/RateView
@@ -264,6 +274,9 @@ PODS:
   - PooTools/PagingControl (3.0.0):
     - JXPagingView/Paging
     - JXSegmentedView
+    - PooTools/Core
+  - PooTools/PermissionFunction (3.0.0):
+    - PermissionsKit
     - PooTools/Core
   - PooTools/PhoneInfo (3.0.0):
     - PooTools/Core
@@ -369,12 +382,15 @@ DEPENDENCIES:
   - NotificationBannerSwift
   - PermissionsKit/CalendarPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/CameraPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/FaceIDPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/HealthPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/LocationAlwaysPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/LocationWhenInUsePermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/MotionPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/NotificationPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/PhotoLibraryPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/RemindersPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/SpeechRecognizerPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/TrackingPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PooTools/InputAll (from `PooTools.podspec`)
   - SDWebImage
@@ -497,7 +513,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
   PermissionsKit: 522c5c0fb00888871a3d8a6eed12a7db56725a39
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
-  PooTools: e3c69e89e5cc671ba69b001663dc53bbba239e9c
+  PooTools: 04bf188100a1c97cb129f18a684dcbd9a975b9d5
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816
@@ -521,6 +537,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: d068915d3b50374dc0929c3041b2a00f160f425a
+PODFILE CHECKSUM: fe15b8da81ffd492720879e63c2b87b1b64cabb9
 
 COCOAPODS: 1.11.3

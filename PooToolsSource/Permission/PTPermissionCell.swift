@@ -11,6 +11,9 @@ import PermissionsKit
 import SwifterSwift
 import SnapKit
 import SJAttributesStringMaker
+#if canImport(HealthKit)
+import HealthKit
+#endif
 
 class PTPermissionCell: PTBaseNormalCell {
     
@@ -42,6 +45,16 @@ class PTPermissionCell: PTBaseNormalCell {
                 self.cellStatus = Permission.notification.status
             case .locationWhenInUse:
                 self.cellStatus = Permission.locationWhenInUse.status
+            case .faceID:
+                self.cellStatus = Permission.faceID.status
+            case .speech:
+                self.cellStatus = Permission.speech.status
+            case .health:
+#if canImport(HealthKit)
+                self.cellStatus = HealthPermission.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
+#else
+                self.cellStatus = .notSupported
+#endif
             default:break
             }
             self.setButtonStatus()
@@ -55,34 +68,34 @@ class PTPermissionCell: PTBaseNormalCell {
         {
         case .tracking:
             permissionName = "用户数据追踪"
-            self.cellIcon.image = UIImage(named: "icon_permission_tracking.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_tracking")
         case .camera:
             permissionName = "照相机"
-            self.cellIcon.image = UIImage(named: "icon_permission_camera.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_camera")
         case .photoLibrary:
             permissionName = "相册"
-            self.cellIcon.image = UIImage(named: "icon_permission_photoLibrary.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_photoLibrary")
         case .calendar:
             permissionName = "日历"
-            self.cellIcon.image = UIImage(named: "icon_permission_calendar.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
         case .reminders:
             permissionName = "提醒"
-            self.cellIcon.image = UIImage(named: "icon_permission_reminders.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_reminders")
         case .notification:
             permissionName = "通知推送"
-            self.cellIcon.image = UIImage(named: "icon_permission_notification.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_notification")
         case .locationWhenInUse:
             permissionName = "定位"
-            self.cellIcon.image = UIImage(named: "icon_permission_location.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
         case .speech:
             permissionName = "语音识别"
-            self.cellIcon.image = UIImage(named: "icon_permission_speech.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_speech")
         case .health:
             permissionName = "健康"
-            self.cellIcon.image = UIImage(named: "icon_permission_health.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_health")
         case .faceID:
             permissionName = "FaceID"
-            self.cellIcon.image = UIImage(named: "icon_permission_faceid.png", in: Bundle(for: PTPermissionCell.self), compatibleWith: nil)!
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
         default:break
         }
         

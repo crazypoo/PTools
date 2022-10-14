@@ -20,6 +20,11 @@
   "requires_arc": true,
   "swift_versions": "4.2",
   "resources": "PooToolsSource/PooTools.bundle",
+  "resource_bundles": {
+    "PooToolsSource": [
+      "PooToolsSource/*.*"
+    ]
+  },
   "default_subspecs": "Core",
   "subspecs": [
     {
@@ -183,6 +188,9 @@
       "name": "BilogyID",
       "dependencies": {
         "PooTools/Core": [
+
+        ],
+        "PermissionsKit": [
 
         ]
       },
@@ -825,10 +833,16 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "PermissionsKit": [
+
         ]
       },
       "frameworks": "HealthKit",
-      "source_files": "PooToolsSource/HealthKit/*.{h,m,swift}",
+      "source_files": [
+        "PooToolsSource/HealthKit/*.{h,m,swift}",
+        "PooToolsSource/Permission/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
       }
@@ -838,15 +852,36 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "PermissionsKit": [
+
         ]
       },
       "frameworks": [
         "Speech",
         "AVFoundation"
       ],
-      "source_files": "PooToolsSource/Speech/*.{h,m,swift}",
+      "source_files": [
+        "PooToolsSource/Speech/*.{h,m,swift}",
+        "PooToolsSource/Permission/*.{h,m,swift}"
+      ],
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PermissionFunction",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PermissionsKit": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Permission/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -991,6 +1026,9 @@
 
         ],
         "PooTools/LaunchTimeProfiler": [
+
+        ],
+        "PooTools/PermissionFunction": [
 
         ]
       },
