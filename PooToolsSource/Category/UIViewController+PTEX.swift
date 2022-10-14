@@ -8,6 +8,9 @@
 
 import UIKit
 import SnapKit
+import AVKit
+import Photos
+import Dispatch
 
 // MARK: - 状态栏扩展
 public extension UIViewController {
@@ -149,6 +152,97 @@ public extension UIViewController {
             }
         }
     }
+    
+    /* .restricted     ---> 受限制，系统原因，无法访问
+     * .notDetermined  ---> 系统还未知是否访问，第一次开启时
+     * .authorized     ---> 允许、已授权
+     * .denied         ---> 受限制，系统原因，无法访问
+     */
+    
+    /// 定位权限
+    func locationAuthorize() {
+        DispatchQueue.main.async {
+            PTUtils.base_alertVC(title:"打开定位开关",msg: "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务",okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    if UIApplication.shared.canOpenURL(url) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }
+                }
+            }
+        }
+    }
+    
+    /// 相机、麦克风权限
+    func avCaptureDeviceAuthorize(avMediaType: AVMediaType) -> Bool {
+        let status = AVCaptureDevice.authorizationStatus(for: avMediaType)
+        switch status {
+        case .authorized:
+            return true
+        case .notDetermined:
+            // 请求授权
+            AVCaptureDevice.requestAccess(for: avMediaType) { (granted) in
+                if granted {
+                    DispatchQueue.main.async {
+                        _ = self.avCaptureDeviceAuthorize(avMediaType: avMediaType)
+                    }
+                }
+            }
+            return false
+        default:
+            var title: String?
+            var msg: String?
+            switch avMediaType {
+            case .video:
+                title = "相机访问受限"
+                msg = "请在iPhone的\"设置-隐私-相机\"中允许访问相机"
+            case .audio:
+                title = "麦克风访问受限"
+                msg = "点击\"设置\"，允许访问您的麦克风"
+            default:
+                break
+            }
+            DispatchQueue.main.async {
+                PTUtils.base_alertVC(title:title,msg: msg,okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        }
+                    }
+                }
+            }
+            return false
+        }
+    }
+    
+    /// 相册权限
+    func photoAuthorize() -> Bool {
+        let status = PHPhotoLibrary.authorizationStatus()
+        switch status {
+        case .authorized:
+            return true
+        case .notDetermined:
+            // 请求授权
+            PHPhotoLibrary.requestAuthorization({ (status) in
+                DispatchQueue.main.async {
+                    _ = self.photoAuthorize()
+                }
+            })
+            return false
+        default:
+            DispatchQueue.main.async {
+                PTUtils.base_alertVC(title:"相册访问受限",msg: "请在iPhone的\"设置-隐私-相册\"中允许访问相册",okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                        }
+                    }
+                }
+
+            }
+            return false
+        }
+    }
+
 }
 
 extension UIViewController:UIPopoverPresentationControllerDelegate

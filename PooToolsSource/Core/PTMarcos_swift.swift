@@ -66,8 +66,10 @@ public let kTabbarHeight_Total : CGFloat = kTabbarSaveAreaHeight + kTabbarHeight
 
 // MARK: - app版本&设备系统版本
 public let infoDictionary            = Bundle.main.infoDictionary
+/* App显示名称 */
+public let kAppDisplayName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
 /* App名称 */
-public let kAppName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
+public let kAppName: String?         = infoDictionary!["CFBundleName"] as? String
 /* App版本号 */
 public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
 /* Appbuild版本号 */

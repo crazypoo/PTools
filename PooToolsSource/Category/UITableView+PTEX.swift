@@ -13,7 +13,7 @@ public extension UITableView
     @objc func cellInWindow(cellFrame:CGRect)->CGRect
     {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)
-        let cellRectInWindow = self.convert(cellInCollectionViewRect, to: UIApplication.shared.keyWindow!)
+        let cellRectInWindow = self.convert(cellInCollectionViewRect, to: AppWindows!)
         return cellRectInWindow
     }
 }

@@ -105,6 +105,28 @@ open class PTBaseViewController: ZXNavigationBarController {
         }
     }
     
+    open func switchOrientation(isFullScreen:Bool)
+    {
+        AppDelegateEXFunction.share.isFullScreen = isFullScreen
+        
+        if #available(iOS 16.0, *)
+        {
+            setNeedsUpdateOfPrefersPointerLocked()
+            guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+            let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
+            let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
+            scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
+                PTLocalConsoleFunction.share.pNSLog("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
+            }
+        }
+        else
+        {
+            let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait
+            UIDevice.current.setValue(oriention.rawValue, forKey: "orientation")
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
+    }
+    
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13.0, *)

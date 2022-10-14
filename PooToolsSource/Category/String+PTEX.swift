@@ -418,7 +418,7 @@ public extension String
         let formatter = NumberFormatter()
         formatter.locale = Locale.current
         formatter.numberStyle = numberStyle
-        let money = formatter.string(from: NSNumber(value: str.double()!))
+        let money = formatter.string(from: NSNumber(value: str.double() ?? 0.00))
         return money!
     }
     
@@ -445,7 +445,7 @@ public extension String
     
     func toMoney()->String
     {
-        return String(format: "%.2f", self.float()!)
+        return String(format: "%.2f", self.float() ?? 0.00)
     }
     
     func toSecurityPhone()->String

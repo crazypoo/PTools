@@ -8,6 +8,7 @@
 
 import UIKit
 import AVKit
+import DeviceKit
 
 public typealias PTLaunchAdMonitorCallBack = () -> Void
 

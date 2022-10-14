@@ -668,7 +668,7 @@ public class PTMediaMediaView:UIView
         }
         else
         {
-            print("该设备的deviceMotion不可用")
+            PTLocalConsoleFunction.share.pNSLog("该设备的deviceMotion不可用")
         }
         
         self.motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in
@@ -1483,7 +1483,7 @@ public class PTMediaViewer: UIView {
         case .Normal,.GIF:
             targetTemp = currentView.convert(self.getSourceView().frame, to: self)
         default:
-            targetTemp = CGRect.init(x: UIApplication.shared.keyWindow!.center.x, y: AppWindows!.center.y, width: 0, height: 0)
+            targetTemp = CGRect.init(x: AppWindows!.center.x, y: AppWindows!.center.y, width: 0, height: 0)
         }
         
         window.windowLevel = .normal
