@@ -490,7 +490,7 @@ Pod::Spec.new do |s|
 #    end
     
     s.subspec 'NotificationPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/NotificationPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -498,7 +498,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'CameraPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/CameraPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -506,7 +506,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'LocationWhenInUsePermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/LocationWhenInUsePermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -514,7 +514,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'LocationAlwaysPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/LocationAlwaysPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -522,7 +522,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'CalendarPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/CalendarPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -530,7 +530,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'MotionPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/MotionPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -538,7 +538,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'PhotoLibraryPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/PhotoLibraryPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -546,7 +546,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'TrackingPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/TrackingPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -554,7 +554,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'RemindersPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/RemindersPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -562,7 +562,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'SpeechRecognizerPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/SpeechRecognizerPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -570,7 +570,7 @@ Pod::Spec.new do |s|
         }
     end
     s.subspec 'HealthPermission' do |subspec|
-        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PermissionFunction/HealthPermission'
         subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
