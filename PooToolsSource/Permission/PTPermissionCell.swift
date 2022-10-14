@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PermissionsKit
 import SwifterSwift
 import SnapKit
 import SJAttributesStringMaker
@@ -187,21 +186,35 @@ class PTPermissionCell: PTBaseNormalCell {
                 switch self.cellModel!.type
                 {
                 case .tracking:
+#if canImport(TrackingPermission)
                     if #available(iOS 14.5, *) {
                         Permission.tracking.openSettingPage()
                     }
+#endif
                 case .camera:
+#if canImport(CameraPermission)
                     Permission.camera.openSettingPage()
+#endif
                 case .photoLibrary:
+#if canImport(PhotoLibraryPermission)
                     Permission.photoLibrary.openSettingPage()
+#endif
                 case .calendar:
+#if canImport(CalendarPermission)
                     Permission.calendar.openSettingPage()
+#endif
                 case .reminders:
+#if canImport(RemindersPermission)
                     Permission.reminders.openSettingPage()
+#endif
                 case .notification:
+#if canImport(NotificationPermission)
                     Permission.notification.openSettingPage()
+#endif
                 case .locationWhenInUse:
+#if canImport(LocationWhenInUsePermission)
                     Permission.locationWhenInUse.openSettingPage()
+#endif
                 default:break
                 }
             })

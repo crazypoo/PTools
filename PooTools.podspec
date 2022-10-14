@@ -75,7 +75,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'BilogyID' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit'
+        subspec.dependency 'PooTools/FaceIDPermission'
         subspec.frameworks = 'LocalAuthentication','Security'
         subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}','PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -454,7 +454,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'StepCount' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit'
+        subspec.dependency 'PooTools/HealthPermission'
         subspec.frameworks = 'HealthKit'
         subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -464,7 +464,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Speech' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit'
+        subspec.dependency 'PooTools/SpeechRecognizerPermission'
         subspec.frameworks = 'Speech','AVFoundation'
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -474,8 +474,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'PermissionFunction' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionsKit'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}','PooToolsSource/PermissionsKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
         }
@@ -491,93 +490,101 @@ Pod::Spec.new do |s|
     
     s.subspec 'NotificationPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/NotificationPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/NotificationPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_NOTIFICATION POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'CameraPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/CameraPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/CameraPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_CAMERA POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'LocationWhenInUsePermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/LocationWhenInUsePermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/LocationWhenInUsePermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_LOCATION_W POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'LocationAlwaysPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/LocationAlwaysPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/LocationAlwaysPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_LOCATION_A POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'CalendarPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/CalendarPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/CalendarPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_CALENDAR POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'MotionPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/MotionPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/MotionPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_MOTION POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'PhotoLibraryPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/PhotoLibraryPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_PHOTO POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'TrackingPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/TrackingPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/TrackingPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_TRACKING POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'RemindersPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/RemindersPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/RemindersPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_REMINDERS POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'SpeechRecognizerPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/SpeechRecognizerPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/SpeechRecognizerPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_SPEECH POOTOOLS_COCOAPODS"
         }
     end
     s.subspec 'HealthPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PermissionFunction/HealthPermission'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/HealthPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_HEALTH POOTOOLS_COCOAPODS"
         }
     end
-    
+    s.subspec 'FaceIDPermission' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PermissionFunction'
+        subspec.source_files = 'PooToolsSource/FaceIDPermission/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_FACEIDPERMISSION POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'

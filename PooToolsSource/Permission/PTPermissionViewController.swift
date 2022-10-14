@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PermissionsKit
 import ZXNavigationBar
 import SnapKit
 #if canImport(HealthPermission)

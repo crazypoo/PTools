@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PermissionsKit
 
 public class PTPermissionModel: NSObject {
     public var name:String!

@@ -114,6 +114,29 @@
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
+		5599AE8628F967EE0035A364 /* RemindersPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6F28F967EC0035A364 /* RemindersPermission.swift */; };
+		5599AE8728F967EE0035A364 /* LocationAlwaysHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE5B28F967EB0035A364 /* LocationAlwaysHandler.swift */; };
+		5599AE8828F967EE0035A364 /* BluetoothHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6928F967EC0035A364 /* BluetoothHandler.swift */; };
+		5599AE8928F967EE0035A364 /* LocationWhenInUsePermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6028F967EB0035A364 /* LocationWhenInUsePermission.swift */; };
+		5599AE8A28F967EE0035A364 /* PhotoLibraryPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6228F967EB0035A364 /* PhotoLibraryPermission.swift */; };
+		5599AE8B28F967EE0035A364 /* LocationAlwaysPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE5A28F967EB0035A364 /* LocationAlwaysPermission.swift */; };
+		5599AE8C28F967EE0035A364 /* LocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE5F28F967EB0035A364 /* LocationWhenInUseHandler.swift */; };
+		5599AE8D28F967EE0035A364 /* HealthPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6428F967EB0035A364 /* HealthPermission.swift */; };
+		5599AE8E28F967EE0035A364 /* MicrophonePermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7328F967ED0035A364 /* MicrophonePermission.swift */; };
+		5599AE8F28F967EE0035A364 /* FaceIDPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7528F967ED0035A364 /* FaceIDPermission.swift */; };
+		5599AE9028F967EE0035A364 /* ContactsPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7128F967ED0035A364 /* ContactsPermission.swift */; };
+		5599AE9128F967EE0035A364 /* LocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6628F967EC0035A364 /* LocationAccuracy.swift */; };
+		5599AE9228F967EE0035A364 /* Text.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE8428F967EE0035A364 /* Text.swift */; };
+		5599AE9328F967EE0035A364 /* NotificationPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7B28F967ED0035A364 /* NotificationPermission.swift */; };
+		5599AE9428F967EE0035A364 /* MediaLibraryPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7F28F967EE0035A364 /* MediaLibraryPermission.swift */; };
+		5599AE9528F967EE0035A364 /* MotionPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6B28F967EC0035A364 /* MotionPermission.swift */; };
+		5599AE9628F967EE0035A364 /* TrackingPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7728F967ED0035A364 /* TrackingPermission.swift */; };
+		5599AE9728F967EE0035A364 /* SiriPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE5D28F967EB0035A364 /* SiriPermission.swift */; };
+		5599AE9828F967EE0035A364 /* CameraPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7928F967ED0035A364 /* CameraPermission.swift */; };
+		5599AE9928F967EE0035A364 /* SpeechPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE7D28F967EE0035A364 /* SpeechPermission.swift */; };
+		5599AE9A28F967EE0035A364 /* BluetoothPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6828F967EC0035A364 /* BluetoothPermission.swift */; };
+		5599AE9B28F967EE0035A364 /* CalendarPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE8128F967EE0035A364 /* CalendarPermission.swift */; };
+		5599AE9C28F967EE0035A364 /* Permission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE6D28F967EC0035A364 /* Permission.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
@@ -358,6 +381,29 @@
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
+		5599AE5A28F967EB0035A364 /* LocationAlwaysPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAlwaysPermission.swift; sourceTree = "<group>"; };
+		5599AE5B28F967EB0035A364 /* LocationAlwaysHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAlwaysHandler.swift; sourceTree = "<group>"; };
+		5599AE5D28F967EB0035A364 /* SiriPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SiriPermission.swift; sourceTree = "<group>"; };
+		5599AE5F28F967EB0035A364 /* LocationWhenInUseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationWhenInUseHandler.swift; sourceTree = "<group>"; };
+		5599AE6028F967EB0035A364 /* LocationWhenInUsePermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationWhenInUsePermission.swift; sourceTree = "<group>"; };
+		5599AE6228F967EB0035A364 /* PhotoLibraryPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibraryPermission.swift; sourceTree = "<group>"; };
+		5599AE6428F967EB0035A364 /* HealthPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthPermission.swift; sourceTree = "<group>"; };
+		5599AE6628F967EC0035A364 /* LocationAccuracy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAccuracy.swift; sourceTree = "<group>"; };
+		5599AE6828F967EC0035A364 /* BluetoothPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothPermission.swift; sourceTree = "<group>"; };
+		5599AE6928F967EC0035A364 /* BluetoothHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothHandler.swift; sourceTree = "<group>"; };
+		5599AE6B28F967EC0035A364 /* MotionPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionPermission.swift; sourceTree = "<group>"; };
+		5599AE6D28F967EC0035A364 /* Permission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Permission.swift; sourceTree = "<group>"; };
+		5599AE6F28F967EC0035A364 /* RemindersPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersPermission.swift; sourceTree = "<group>"; };
+		5599AE7128F967ED0035A364 /* ContactsPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsPermission.swift; sourceTree = "<group>"; };
+		5599AE7328F967ED0035A364 /* MicrophonePermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophonePermission.swift; sourceTree = "<group>"; };
+		5599AE7528F967ED0035A364 /* FaceIDPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceIDPermission.swift; sourceTree = "<group>"; };
+		5599AE7728F967ED0035A364 /* TrackingPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackingPermission.swift; sourceTree = "<group>"; };
+		5599AE7928F967ED0035A364 /* CameraPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPermission.swift; sourceTree = "<group>"; };
+		5599AE7B28F967ED0035A364 /* NotificationPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermission.swift; sourceTree = "<group>"; };
+		5599AE7D28F967EE0035A364 /* SpeechPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechPermission.swift; sourceTree = "<group>"; };
+		5599AE7F28F967EE0035A364 /* MediaLibraryPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaLibraryPermission.swift; sourceTree = "<group>"; };
+		5599AE8128F967EE0035A364 /* CalendarPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarPermission.swift; sourceTree = "<group>"; };
+		5599AE8428F967EE0035A364 /* Text.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Text.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
@@ -529,6 +575,25 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				5599AE6728F967EC0035A364 /* BluetoothPermission */,
+				5599AE8028F967EE0035A364 /* CalendarPermission */,
+				5599AE7828F967ED0035A364 /* CameraPermission */,
+				5599AE7028F967EC0035A364 /* ContactsPermission */,
+				5599AE7428F967ED0035A364 /* FaceIDPermission */,
+				5599AE6328F967EB0035A364 /* HealthPermission */,
+				5599AE5928F967EA0035A364 /* LocationAlwaysPermission */,
+				5599AE6528F967EB0035A364 /* LocationExtension */,
+				5599AE5E28F967EB0035A364 /* LocationWhenInUsePermission */,
+				5599AE7E28F967EE0035A364 /* MediaLibraryPermission */,
+				5599AE7228F967ED0035A364 /* MicrophonePermission */,
+				5599AE6A28F967EC0035A364 /* MotionPermission */,
+				5599AE7A28F967ED0035A364 /* NotificationPermission */,
+				5599AE6C28F967EC0035A364 /* PermissionsKit */,
+				5599AE6128F967EB0035A364 /* PhotoLibraryPermission */,
+				5599AE6E28F967EC0035A364 /* RemindersPermission */,
+				5599AE5C28F967EB0035A364 /* SiriPermission */,
+				5599AE7C28F967ED0035A364 /* SpeechRecognizerPermission */,
+				5599AE7628F967ED0035A364 /* TrackingPermission */,
 				554929E828F9089100C82ABF /* Permission */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
@@ -933,6 +998,170 @@
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		5599AE5928F967EA0035A364 /* LocationAlwaysPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE5A28F967EB0035A364 /* LocationAlwaysPermission.swift */,
+				5599AE5B28F967EB0035A364 /* LocationAlwaysHandler.swift */,
+			);
+			path = LocationAlwaysPermission;
+			sourceTree = "<group>";
+		};
+		5599AE5C28F967EB0035A364 /* SiriPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE5D28F967EB0035A364 /* SiriPermission.swift */,
+			);
+			path = SiriPermission;
+			sourceTree = "<group>";
+		};
+		5599AE5E28F967EB0035A364 /* LocationWhenInUsePermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE5F28F967EB0035A364 /* LocationWhenInUseHandler.swift */,
+				5599AE6028F967EB0035A364 /* LocationWhenInUsePermission.swift */,
+			);
+			path = LocationWhenInUsePermission;
+			sourceTree = "<group>";
+		};
+		5599AE6128F967EB0035A364 /* PhotoLibraryPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6228F967EB0035A364 /* PhotoLibraryPermission.swift */,
+			);
+			path = PhotoLibraryPermission;
+			sourceTree = "<group>";
+		};
+		5599AE6328F967EB0035A364 /* HealthPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6428F967EB0035A364 /* HealthPermission.swift */,
+			);
+			path = HealthPermission;
+			sourceTree = "<group>";
+		};
+		5599AE6528F967EB0035A364 /* LocationExtension */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6628F967EC0035A364 /* LocationAccuracy.swift */,
+			);
+			path = LocationExtension;
+			sourceTree = "<group>";
+		};
+		5599AE6728F967EC0035A364 /* BluetoothPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6928F967EC0035A364 /* BluetoothHandler.swift */,
+				5599AE6828F967EC0035A364 /* BluetoothPermission.swift */,
+			);
+			path = BluetoothPermission;
+			sourceTree = "<group>";
+		};
+		5599AE6A28F967EC0035A364 /* MotionPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6B28F967EC0035A364 /* MotionPermission.swift */,
+			);
+			path = MotionPermission;
+			sourceTree = "<group>";
+		};
+		5599AE6C28F967EC0035A364 /* PermissionsKit */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE8528F967EE0035A364 /* Localization */,
+				5599AE8428F967EE0035A364 /* Text.swift */,
+				5599AE6D28F967EC0035A364 /* Permission.swift */,
+			);
+			path = PermissionsKit;
+			sourceTree = "<group>";
+		};
+		5599AE6E28F967EC0035A364 /* RemindersPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE6F28F967EC0035A364 /* RemindersPermission.swift */,
+			);
+			path = RemindersPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7028F967EC0035A364 /* ContactsPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7128F967ED0035A364 /* ContactsPermission.swift */,
+			);
+			path = ContactsPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7228F967ED0035A364 /* MicrophonePermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7328F967ED0035A364 /* MicrophonePermission.swift */,
+			);
+			path = MicrophonePermission;
+			sourceTree = "<group>";
+		};
+		5599AE7428F967ED0035A364 /* FaceIDPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7528F967ED0035A364 /* FaceIDPermission.swift */,
+			);
+			path = FaceIDPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7628F967ED0035A364 /* TrackingPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7728F967ED0035A364 /* TrackingPermission.swift */,
+			);
+			path = TrackingPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7828F967ED0035A364 /* CameraPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7928F967ED0035A364 /* CameraPermission.swift */,
+			);
+			path = CameraPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7A28F967ED0035A364 /* NotificationPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7B28F967ED0035A364 /* NotificationPermission.swift */,
+			);
+			path = NotificationPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7C28F967ED0035A364 /* SpeechRecognizerPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7D28F967EE0035A364 /* SpeechPermission.swift */,
+			);
+			path = SpeechRecognizerPermission;
+			sourceTree = "<group>";
+		};
+		5599AE7E28F967EE0035A364 /* MediaLibraryPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE7F28F967EE0035A364 /* MediaLibraryPermission.swift */,
+			);
+			path = MediaLibraryPermission;
+			sourceTree = "<group>";
+		};
+		5599AE8028F967EE0035A364 /* CalendarPermission */ = {
+			isa = PBXGroup;
+			children = (
+				5599AE8128F967EE0035A364 /* CalendarPermission.swift */,
+			);
+			path = CalendarPermission;
+			sourceTree = "<group>";
+		};
+		5599AE8528F967EE0035A364 /* Localization */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Localization;
 			sourceTree = "<group>";
 		};
 		55D59C4728F14A3100B4FF76 /* CallMessageMail */ = {
@@ -1350,6 +1579,20 @@
 			knownRegions = (
 				en,
 				Base,
+				de,
+				zh_Hans,
+				"zh-Hans",
+				ar,
+				fa,
+				uk,
+				es,
+				it,
+				"zh-Hant",
+				pl,
+				ru,
+				fr,
+				nl,
+				pt,
 			);
 			mainGroup = 6003F581195388D10070C39A;
 			productRefGroup = 6003F58B195388D20070C39A /* Products */;
@@ -1422,7 +1665,6 @@
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/PermissionsKit/PermissionsKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PhoneNumberKit/PhoneNumberKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
@@ -1485,7 +1727,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionsKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PhoneNumberKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
@@ -1553,6 +1794,7 @@
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
+				5599AE9228F967EE0035A364 /* Text.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
@@ -1565,12 +1807,14 @@
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
+				5599AE9628F967EE0035A364 /* TrackingPermission.swift in Sources */,
 				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1686272CDEEA003D6F62 /* PTFileDownLoadManager.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
+				5599AE9328F967EE0035A364 /* NotificationPermission.swift in Sources */,
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
 				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
@@ -1583,7 +1827,9 @@
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
+				5599AE8628F967EE0035A364 /* RemindersPermission.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
+				5599AE8A28F967EE0035A364 /* PhotoLibraryPermission.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
@@ -1594,13 +1840,17 @@
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
+				5599AE8F28F967EE0035A364 /* FaceIDPermission.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
+				5599AE9528F967EE0035A364 /* MotionPermission.swift in Sources */,
+				5599AE9028F967EE0035A364 /* ContactsPermission.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
+				5599AE8E28F967EE0035A364 /* MicrophonePermission.swift in Sources */,
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
@@ -1615,11 +1865,13 @@
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
 				231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */,
+				5599AE8828F967EE0035A364 /* BluetoothHandler.swift in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
+				5599AE8928F967EE0035A364 /* LocationWhenInUsePermission.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
@@ -1630,12 +1882,14 @@
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
+				5599AE8D28F967EE0035A364 /* HealthPermission.swift in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
+				5599AE9928F967EE0035A364 /* SpeechPermission.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
@@ -1650,6 +1904,7 @@
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
+				5599AE9128F967EE0035A364 /* LocationAccuracy.swift in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
@@ -1669,10 +1924,13 @@
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
+				5599AE9428F967EE0035A364 /* MediaLibraryPermission.swift in Sources */,
 				231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */,
+				5599AE9A28F967EE0035A364 /* BluetoothPermission.swift in Sources */,
 				231D1622272CDEE9003D6F62 /* UIImage+BlurGlass.m in Sources */,
 				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
+				5599AE9828F967EE0035A364 /* CameraPermission.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
@@ -1694,23 +1952,29 @@
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
+				5599AE8C28F967EE0035A364 /* LocationWhenInUseHandler.swift in Sources */,
+				5599AE9728F967EE0035A364 /* SiriPermission.swift in Sources */,
 				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
+				5599AE9C28F967EE0035A364 /* Permission.swift in Sources */,
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
+				5599AE8B28F967EE0035A364 /* LocationAlwaysPermission.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
+				5599AE8728F967EE0035A364 /* LocationAlwaysHandler.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
+				5599AE9B28F967EE0035A364 /* CalendarPermission.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
