@@ -76,6 +76,8 @@ open class PTBaseViewController: ZXNavigationBarController {
         // Do any additional setup after loading the view.
         self.edgesForExtendedLayout = []
         self.definesPresentationContext = true
+        
+        self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
     }
     
     /// 拦截返回上一页

@@ -77,6 +77,28 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
+  - PermissionsKit/CalendarPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/CameraPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/Core (9.0.1)
+  - PermissionsKit/LocationAlwaysPermission (9.0.1):
+    - PermissionsKit/Core
+    - PermissionsKit/LocationExtension
+  - PermissionsKit/LocationExtension (9.0.1)
+  - PermissionsKit/LocationWhenInUsePermission (9.0.1):
+    - PermissionsKit/Core
+    - PermissionsKit/LocationExtension
+  - PermissionsKit/MotionPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/NotificationPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/PhotoLibraryPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/RemindersPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/TrackingPermission (9.0.1):
+    - PermissionsKit/Core
   - PhoneNumberKit (3.3.4):
     - PhoneNumberKit/PhoneNumberKitCore (= 3.3.4)
     - PhoneNumberKit/UIKit (= 3.3.4)
@@ -345,6 +367,15 @@ DEPENDENCIES:
   - LookinServer
   - MJRefresh
   - NotificationBannerSwift
+  - PermissionsKit/CalendarPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/CameraPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/LocationAlwaysPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/LocationWhenInUsePermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/MotionPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/NotificationPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/PhotoLibraryPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/RemindersPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/TrackingPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PooTools/InputAll (from `PooTools.podspec`)
   - SDWebImage
   - SJAttributesStringMaker
@@ -418,8 +449,15 @@ SPEC REPOS:
     - ZXNavigationBar
 
 EXTERNAL SOURCES:
+  PermissionsKit:
+    :git: https://github.com/sparrowcode/PermissionsKit
   PooTools:
     :path: PooTools.podspec
+
+CHECKOUT OPTIONS:
+  PermissionsKit:
+    :commit: 976d46ddf8e6a30118ad278abc9c4f936c919ce4
+    :git: https://github.com/sparrowcode/PermissionsKit
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -457,8 +495,9 @@ SPEC CHECKSUMS:
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
+  PermissionsKit: 522c5c0fb00888871a3d8a6eed12a7db56725a39
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
-  PooTools: fe3308dbd9d31ebc3233e88823b698bf2094ecf2
+  PooTools: e3c69e89e5cc671ba69b001663dc53bbba239e9c
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816
@@ -482,6 +521,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: d38f782cff24f69bfd210dd23160ad11cfa3958f
+PODFILE CHECKSUM: d068915d3b50374dc0929c3041b2a00f160f425a
 
 COCOAPODS: 1.11.3

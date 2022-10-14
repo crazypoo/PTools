@@ -1,0 +1,33 @@
+"permission camera name" = "Câmara";
+
+"permission photoLibrary name" = "Biblioteca de fotos";
+
+"permission microphone name" = "Microfone";
+
+"permission calendar name" = "Calendário";
+
+"permission contacts name" = "Contactos";
+
+"permission reminders name" = "Lembretes";
+
+"permission speech name" = "Discurso";
+
+"permission motion name" = "Moção";
+
+"permission media library name" = "Mediateca";
+
+"permission bluetooth name" = "Bluetooth";
+
+"permission notification name" = "Notificação";
+
+"permission location when in use name" = "Localização Quando Usar";
+
+"permission location always name" = "Localização Sempre";
+
+"permission tracking name" = "Rastreamento";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "Siri";
+
+"permission health name" = "Saúde";

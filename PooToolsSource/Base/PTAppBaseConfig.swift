@@ -14,6 +14,27 @@ public class PTAppBaseConfig: NSObject {
     public static let share = PTAppBaseConfig()
     
     public var defaultPlaceholderImage:UIImage = UIImage()
+    public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
+    
+    //MARK:
+    public var viewControllerBaseBackgroundColor:UIColor = .lightGray
+    
+    //MARK: 权限请求配置
+    public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
+    public var permissionTitleColor:UIColor = .black
+    public var permissionSubtitleFont:UIFont = .appfont(size: 14)
+    public var permissionSubtitleColor:UIColor = .black
+    public var permissionDeniedColor:UIColor = .red
+    public var permissionAuthorizedButtonFont:UIFont = .appfont(size: 14)
+    public var permissionCellTitleFont:UIFont = .appfont(size: 14)
+    public var permissionCellTitleTextColor:UIColor = .black
+    public var permissionCellSubtitleFont:UIFont = .appfont(size: 12)
+    public var permissionCellSubtitleTextColor:UIColor = .black
+
+    //MARK: Collection
+    public var decorationBackgroundColor:UIColor = UIColor.white
+    public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
+    public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
     
     //MARK:SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)

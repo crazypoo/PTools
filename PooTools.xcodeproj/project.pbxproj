@@ -98,6 +98,12 @@
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
+		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
+		554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */; };
+		554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */; };
+		554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EC28F9089D00C82ABF /* PTPermissionCell.swift */; };
+		554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */; };
+		554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */; };
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
@@ -335,6 +341,12 @@
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+EXFuction.swift"; sourceTree = "<group>"; };
+		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
+		554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionViewController.swift; sourceTree = "<group>"; };
+		554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionHeader.swift; sourceTree = "<group>"; };
+		554929EC28F9089D00C82ABF /* PTPermissionCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionCell.swift; sourceTree = "<group>"; };
+		554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseDecorationFunction.swift; sourceTree = "<group>"; };
+		554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseCollectionReusableView.swift; sourceTree = "<group>"; };
 		554CCBE028BC943700028597 /* PTRateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRateView.swift; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
@@ -515,6 +527,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				554929E828F9089100C82ABF /* Permission */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -876,6 +889,17 @@
 			path = CheckUpdate;
 			sourceTree = "<group>";
 		};
+		554929E828F9089100C82ABF /* Permission */ = {
+			isa = PBXGroup;
+			children = (
+				554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */,
+				554929EC28F9089D00C82ABF /* PTPermissionCell.swift */,
+				554929E928F9089D00C82ABF /* PTPermissionModel.swift */,
+				554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */,
+			);
+			path = Permission;
+			sourceTree = "<group>";
+		};
 		555A8B4228C2E7A700692501 /* DevMask */ = {
 			isa = PBXGroup;
 			children = (
@@ -1111,6 +1135,7 @@
 		55D59C6928F537BA00B4FF76 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
@@ -1120,7 +1145,8 @@
 				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
 				55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
-				554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */,
+				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
+				554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1393,6 +1419,7 @@
 				"${BUILT_PRODUCTS_DIR}/MarqueeLabel/MarqueeLabel.framework",
 				"${BUILT_PRODUCTS_DIR}/Masonry/Masonry.framework",
 				"${BUILT_PRODUCTS_DIR}/NotificationBannerSwift/NotificationBannerSwift.framework",
+				"${BUILT_PRODUCTS_DIR}/PermissionsKit/PermissionsKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PhoneNumberKit/PhoneNumberKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
@@ -1455,6 +1482,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MarqueeLabel.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Masonry.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/NotificationBannerSwift.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionsKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PhoneNumberKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
@@ -1516,6 +1544,7 @@
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
+				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
 				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
@@ -1548,6 +1577,8 @@
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */,
+				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
+				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
@@ -1650,8 +1681,10 @@
 				554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */,
 				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
+				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
+				554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */,
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				231D165A272CDEEA003D6F62 /* PGetIpAddresses.m in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
@@ -1672,6 +1705,7 @@
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
+				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
 				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);

@@ -1,0 +1,33 @@
+"permission camera name" = "相機";
+
+"permission photoLibrary name" = "相簿";
+
+"permission microphone name" = "麥克風";
+
+"permission calendar name" = "日曆";
+
+"permission contacts name" = "通訊錄";
+
+"permission reminders name" = "提醒事項";
+
+"permission speech name" = "語音辨識";
+
+"permission motion name" = "運動";
+
+"permission media library name" = "媒體櫃";
+
+"permission bluetooth name" = "藍芽";
+
+"permission notification name" = "推播通知";
+
+"permission location when in use name" = "在使用 App 期間取用位置";
+
+"permission location always name" = "總是取用位置";
+
+"permission tracking name" = "追蹤";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "Siri";
+
+"permission health name" = "健康";

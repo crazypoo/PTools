@@ -202,6 +202,20 @@ public extension UIView
         keyFrame.values = [(x - 30),(x - 30),(x + 20),(x - 20),(x + 10),(x - 10),(x + 5),(x - 5)]
         self.layer.add(keyFrame, forKey: "shake")
     }
+    
+    @objc func pt_createLabel(text: String = "", font: UIFont = .systemFont(ofSize: 15), bgColor: UIColor = .clear, textColor: UIColor = .black, textAlignment: NSTextAlignment = .left) -> UILabel {
+        
+        let label = UILabel()
+        label.backgroundColor = bgColor
+        label.textColor = textColor
+        label.text = text
+        label.numberOfLines = 0
+        label.adjustsFontSizeToFitWidth = true
+        label.sizeToFit()
+        label.font = font
+        label.textAlignment = textAlignment
+        return label
+    }
 }
 
 public extension UILabel

@@ -75,5 +75,20 @@ class PTSwiftViewController: UIViewController {
             make.bottom.equalToSuperview()
             make.height.equalTo(100)
         }
+        
+        let data = PTPermissionModel()
+        data.type = .tracking
+        data.name = "123123"
+        data.desc = "12312344444"
+        let vc = PTPermissionViewController.init(datas: [data])
+        if vc.appfirst == "0"
+        {
+        }
+        let nav = UINavigationController(rootViewController: vc)
+        nav.modalPresentationStyle = .fullScreen
+        self.navigationController?.present(nav, animated: true)
+        vc.viewDismissBlock = {
+        }
+
     }
 }

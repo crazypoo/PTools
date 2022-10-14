@@ -1,0 +1,33 @@
+"permission camera name" = "دوربین";
+
+"permission photoLibrary name" = "گالری";
+
+"permission microphone name" = "میکروفون";
+
+"permission calendar name" = "تقویم";
+
+"permission contacts name" = "مخاطبین";
+
+"permission reminders name" = "یادآوری ها";
+
+"permission speech name" = "گفتار";
+
+"permission motion name" = "حرکت";
+
+"permission media library name" = "مدیا";
+
+"permission bluetooth name" = "بلوتوث";
+
+"permission notification name" = "اعلانات";
+
+"permission location when in use name" = "موقعیت مکانی هنگام استفاده";
+
+"permission location always name" = "موقعیت مکانی همیشه";
+
+"permission tracking name" = "ردیابی";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "سیری";
+
+"permission health name" = "سلامت";

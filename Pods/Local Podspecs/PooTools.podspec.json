@@ -95,7 +95,8 @@
         "AVKit",
         "CoreFoundation",
         "CoreText",
-        "AVFoundation"
+        "AVFoundation",
+        "Photos"
       ],
       "source_files": [
         "PooToolsSource/Core/*.{h,m,swift}",
