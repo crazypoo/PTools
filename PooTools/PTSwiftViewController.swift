@@ -68,27 +68,35 @@ class PTSwiftViewController: UIViewController {
         
 //        PTLocalConsoleFunction.share.pNSLog("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
         
-        let vvvvv = PTGrowingTextView()
-        self.view.addSubview(vvvvv)
-        vvvvv.snp.makeConstraints { make in
+//        let vvvvv = PTGrowingTextView()
+//        self.view.addSubview(vvvvv)
+//        vvvvv.snp.makeConstraints { make in
+//            make.left.right.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.height.equalTo(100)
+//        }
+//
+//        let data = PTPermissionModel()
+//        data.type = .tracking
+//        data.name = "123123"
+//        data.desc = "12312344444"
+//        let vc = PTPermissionViewController.init(datas: [data])
+//        if vc.appfirst == "0"
+//        {
+//        }
+//        let nav = UINavigationController(rootViewController: vc)
+//        nav.modalPresentationStyle = .fullScreen
+//        self.navigationController?.present(nav, animated: true)
+//        vc.viewDismissBlock = {
+//        }
+        let counting = PTCountingLabel()
+        counting.positiveFormat = "##0.00"
+        self.view.addSubview(counting)
+        counting.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(100)
         }
-        
-        let data = PTPermissionModel()
-        data.type = .tracking
-        data.name = "123123"
-        data.desc = "12312344444"
-        let vc = PTPermissionViewController.init(datas: [data])
-        if vc.appfirst == "0"
-        {
-        }
-        let nav = UINavigationController(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        self.navigationController?.present(nav, animated: true)
-        vc.viewDismissBlock = {
-        }
-
+        counting.countFrom(starValue: 0, toValue: 100, duration: 3)
     }
 }
