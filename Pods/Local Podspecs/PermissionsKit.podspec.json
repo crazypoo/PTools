@@ -1,0 +1,262 @@
+{
+  "name": "PermissionsKit",
+  "version": "9.0.1",
+  "summary": "Ask permissions with ready-use interface. You can check status permission and if it has been requested before. Support SwiftUI.",
+  "homepage": "https://github.com/sparrowcode/PermissionsKit",
+  "source": {
+    "git": "https://github.com/sparrowcode/PermissionsKit.git",
+    "tag": "9.0.1"
+  },
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Sparrow Code": "hello@sparrowcode.io"
+  },
+  "requires_arc": true,
+  "ios": {
+    "frameworks": "UIKit"
+  },
+  "tvos": {
+    "frameworks": "UIKit"
+  },
+  "swift_versions": [
+    "4.2",
+    "5.0"
+  ],
+  "platforms": {
+    "ios": "11.0",
+    "tvos": "11.0"
+  },
+  "default_subspecs": "Core",
+  "subspecs": [
+    {
+      "name": "Core",
+      "source_files": "Sources/PermissionsKit/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_COCOAPODS"
+      },
+      "resource_bundles": {
+        "PermissionsKit": [
+          "Sources/PermissionsKit/Resources/Localization/*.lproj/*.strings"
+        ]
+      }
+    },
+    {
+      "name": "CameraPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/CameraPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_CAMERA PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "PhotoLibraryPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/PhotoLibraryPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_PHOTOLIBRARY PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "NotificationPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/NotificationPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_NOTIFICATION PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "MicrophonePermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/MicrophonePermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_MICROPHONE PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "CalendarPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/CalendarPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_CALENDAR PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "ContactsPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/ContactsPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_CONTACTS PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "RemindersPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/RemindersPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_REMINDERS PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "SpeechRecognizerPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/SpeechRecognizerPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_SPEECH PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "LocationExtension",
+      "source_files": "Sources/LocationExtension/**/*.swift"
+    },
+    {
+      "name": "LocationWhenInUsePermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ],
+        "PermissionsKit/LocationExtension": [
+
+        ]
+      },
+      "source_files": "Sources/LocationWhenInUsePermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_LOCATION_WHENINUSE PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "LocationAlwaysPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ],
+        "PermissionsKit/LocationExtension": [
+
+        ]
+      },
+      "source_files": "Sources/LocationAlwaysPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_LOCATION_ALWAYS PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "MotionPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/MotionPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_MOTION PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "MediaLibraryPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/MediaLibraryPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_MEDIA_LIBRARY PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "BluetoothPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/BluetoothPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_BLUETOOTH PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "TrackingPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/TrackingPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_TRACKING PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "FaceIDPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/FaceIDPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_FACEID PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "SiriPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/SiriPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_SIRI PERMISSIONSKIT_COCOAPODS"
+      }
+    },
+    {
+      "name": "HealthPermission",
+      "dependencies": {
+        "PermissionsKit/Core": [
+
+        ]
+      },
+      "source_files": "Sources/HealthPermission/**/*.swift",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "PERMISSIONSKIT_HEALTH PERMISSIONSKIT_COCOAPODS"
+      }
+    }
+  ],
+  "swift_version": "5.0"
+}

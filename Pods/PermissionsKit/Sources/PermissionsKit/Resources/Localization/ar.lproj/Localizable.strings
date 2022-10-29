@@ -1,0 +1,33 @@
+"permission camera name" = "الكاميرا";
+
+"permission photoLibrary name" = "الاستوديو";
+
+"permission microphone name" = "المايكروفون";
+
+"permission calendar name" = "التقويم";
+
+"permission contacts name" = "جهات الاتصال";
+
+"permission reminders name" = "التذكيرات";
+
+"permission speech name" = "التحدث";=
+
+"permission motion name" = "الحركة";
+
+"permission media library name" = "الموسيقى";
+
+"permission bluetooth name" = "البلوتوث";
+
+"permission notification name" = "الإشعارات";
+
+"permission location when in use name" = "الموقع عند الاستخدام";
+
+"permission location always name" = "الموقع دائما";
+
+"permission tracking name" = "تتبع";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "سيري";
+
+"permission health name" = "الصحة";

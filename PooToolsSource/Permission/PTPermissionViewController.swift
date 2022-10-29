@@ -9,6 +9,9 @@
 import UIKit
 import ZXNavigationBar
 import SnapKit
+#if canImport(Permission)
+import Permission
+#endif
 #if canImport(HealthPermission)
 import HealthPermission
 #endif
@@ -176,11 +179,13 @@ public class PTPermissionViewController: PTBaseViewController {
         var haveTracking:Bool? = false
         for ( _ ,value) in self.permissions!.enumerated()
         {
+#if canImport(Permission)
             if value.type == .tracking
             {
                 haveTracking = true
                 break
             }
+#endif
         }
         
         if haveTracking!
@@ -206,6 +211,7 @@ public class PTPermissionViewController: PTBaseViewController {
     func showRequestFunction()
     {
         self.permissions?.enumerated().forEach({ index,value in
+#if canImport(Permission)
             switch value.type {
             case .camera:
 #if canImport(CameraPermission)
@@ -264,6 +270,7 @@ public class PTPermissionViewController: PTBaseViewController {
             default:
                 break
             }
+#endif
         })
 
     }
@@ -318,6 +325,7 @@ extension PTPermissionViewController : UICollectionViewDelegate,UICollectionView
         let itemRow = itemSec.rows[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTPermissionCell
         cell.cellModel  = (itemRow.dataModel as! PTPermissionModel)
+#if canImport(Permission)
         cell.cellButtonTapBlock = { type in
             switch type {
             case .tracking:
@@ -386,6 +394,7 @@ extension PTPermissionViewController : UICollectionViewDelegate,UICollectionView
                 break
             }
         }
+#endif
         return cell
     }
     

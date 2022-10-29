@@ -77,6 +77,34 @@ PODS:
   - NotificationBannerSwift (3.1.0):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
+  - PermissionsKit/CalendarPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/CameraPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/Core (9.0.1)
+  - PermissionsKit/FaceIDPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/HealthPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/LocationAlwaysPermission (9.0.1):
+    - PermissionsKit/Core
+    - PermissionsKit/LocationExtension
+  - PermissionsKit/LocationExtension (9.0.1)
+  - PermissionsKit/LocationWhenInUsePermission (9.0.1):
+    - PermissionsKit/Core
+    - PermissionsKit/LocationExtension
+  - PermissionsKit/MotionPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/NotificationPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/PhotoLibraryPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/RemindersPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/SpeechRecognizerPermission (9.0.1):
+    - PermissionsKit/Core
+  - PermissionsKit/TrackingPermission (9.0.1):
+    - PermissionsKit/Core
   - PhoneNumberKit (3.3.4):
     - PhoneNumberKit/PhoneNumberKitCore (= 3.3.4)
     - PhoneNumberKit/UIKit (= 3.3.4)
@@ -94,12 +122,6 @@ PODS:
     - PooTools/Core
   - PooTools/Calendar (3.0.0):
     - PooTools/Core
-  - PooTools/CalendarPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
-  - PooTools/CameraPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/CheckBox (3.0.0):
     - PooTools/Core
   - PooTools/CheckDirtyWord (3.0.0):
@@ -144,9 +166,6 @@ PODS:
     - PooTools/Core
   - PooTools/DataEncrypt (3.0.0):
     - PooTools/Core
-  - PooTools/FaceIDPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/FocusFaceImageView (3.0.0):
     - FaceAware
     - PooTools/Core
@@ -156,9 +175,6 @@ PODS:
     - PooTools/Core
   - PooTools/Guide (3.0.0):
     - PooTools/Core
-  - PooTools/HealthPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/ImageColors (3.0.0):
     - PooTools/Core
     - UIImageColors
@@ -236,19 +252,10 @@ PODS:
     - PooTools/Core
   - PooTools/Loading (3.0.0):
     - PooTools/Core
-  - PooTools/LocationAlwaysPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
-  - PooTools/LocationWhenInUsePermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/MediaViewer (3.0.0):
     - PooTools/Core
   - PooTools/Motion (3.0.0):
     - PooTools/Core
-  - PooTools/MotionPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/NetWork (3.0.0):
     - AFNetworking
     - Alamofire
@@ -260,28 +267,17 @@ PODS:
     - MJExtension
     - PooTools/Core
     - SwiftyJSON
-  - PooTools/NotificationPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/PagingControl (3.0.0):
     - JXPagingView/Paging
     - JXSegmentedView
     - PooTools/Core
-  - PooTools/PermissionFunction (3.0.0):
-    - PooTools/Core
   - PooTools/PhoneInfo (3.0.0):
     - PooTools/Core
-  - PooTools/PhotoLibraryPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/Picker (3.0.0):
     - BRPickerView
     - PooTools/Core
   - PooTools/RateView (3.0.0):
     - PooTools/Core
-  - PooTools/RemindersPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/Rotation (3.0.0):
     - PooTools/Core
   - PooTools/ScrollBanner (3.0.0):
@@ -296,9 +292,6 @@ PODS:
   - PooTools/SmartScreenshot (3.0.0):
     - PooTools/Core
     - SnapshotKit
-  - PooTools/SpeechRecognizerPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/Tabbar (3.0.0):
     - CYLTabBarController
     - PooTools/Core
@@ -306,18 +299,15 @@ PODS:
     - PooTools/Core
   - PooTools/Thermometer (3.0.0):
     - PooTools/Core
-  - PooTools/TrackingPermission (3.0.0):
-    - PooTools/Core
-    - PooTools/PermissionFunction
   - PooTools/YB_Attributed (3.0.0):
     - PooTools/Core
   - PooTools/ZipArchive (3.0.0):
     - PooTools/Core
     - SSZipArchive
   - pop (1.0.12)
-  - SDWebImage (5.13.4):
-    - SDWebImage/Core (= 5.13.4)
-  - SDWebImage/Core (5.13.4)
+  - SDWebImage (5.13.5):
+    - SDWebImage/Core (= 5.13.5)
+  - SDWebImage/Core (5.13.5)
   - SJAttributesStringMaker (2.1.1):
     - SJAttributesStringMaker/Deprecated (= 2.1.1)
   - SJAttributesStringMaker/Deprecated (2.1.1)
@@ -383,19 +373,19 @@ DEPENDENCIES:
   - LookinServer
   - MJRefresh
   - NotificationBannerSwift
-  - PooTools/CalendarPermission (from `PooTools.podspec`)
-  - PooTools/CameraPermission (from `PooTools.podspec`)
-  - PooTools/FaceIDPermission (from `PooTools.podspec`)
-  - PooTools/HealthPermission (from `PooTools.podspec`)
+  - PermissionsKit/CalendarPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/CameraPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/FaceIDPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/HealthPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/LocationAlwaysPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/LocationWhenInUsePermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/MotionPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/NotificationPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/PhotoLibraryPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/RemindersPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/SpeechRecognizerPermission (from `https://github.com/sparrowcode/PermissionsKit`)
+  - PermissionsKit/TrackingPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PooTools/InputAll (from `PooTools.podspec`)
-  - PooTools/LocationAlwaysPermission (from `PooTools.podspec`)
-  - PooTools/LocationWhenInUsePermission (from `PooTools.podspec`)
-  - PooTools/MotionPermission (from `PooTools.podspec`)
-  - PooTools/NotificationPermission (from `PooTools.podspec`)
-  - PooTools/PhotoLibraryPermission (from `PooTools.podspec`)
-  - PooTools/RemindersPermission (from `PooTools.podspec`)
-  - PooTools/SpeechRecognizerPermission (from `PooTools.podspec`)
-  - PooTools/TrackingPermission (from `PooTools.podspec`)
   - SDWebImage
   - SJAttributesStringMaker
   - SnapKit
@@ -468,8 +458,15 @@ SPEC REPOS:
     - ZXNavigationBar
 
 EXTERNAL SOURCES:
+  PermissionsKit:
+    :git: https://github.com/sparrowcode/PermissionsKit
   PooTools:
     :path: PooTools.podspec
+
+CHECKOUT OPTIONS:
+  PermissionsKit:
+    :commit: 10df0b43ccb59987eb788977d17f3a5270c35871
+    :git: https://github.com/sparrowcode/PermissionsKit
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
@@ -507,10 +504,11 @@ SPEC CHECKSUMS:
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
+  PermissionsKit: 522c5c0fb00888871a3d8a6eed12a7db56725a39
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
   PooTools: a2adfea9e330fc892eb71f7b015c10feef6ec7be
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
-  SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
+  SDWebImage: 23d714cd599354ee7906dbae26dff89b421c4370
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
   SnapshotKit: 4e6c25203719cd6be29d3d53a8160c4933102369
@@ -532,6 +530,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 2c949ead4bdf0d131ab000f85d9f9dea24f696bc
+PODFILE CHECKSUM: a1d66a360b4f5c58973eb696292213cb1a62d638
 
 COCOAPODS: 1.11.3

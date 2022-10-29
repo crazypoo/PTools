@@ -10,6 +10,9 @@ import UIKit
 import SwifterSwift
 import SnapKit
 import SJAttributesStringMaker
+#if canImport(Permission)
+import Permission
+#endif
 #if canImport(HealthKit)
 import HealthKit
 #endif
@@ -48,14 +51,16 @@ class PTPermissionCell: PTBaseNormalCell {
     
     static let ID = "PTPermissionCell"
     
+#if canImport(Permission)
     var cellStatus:Permission.Status? = .notDetermined
-    
     var cellButtonTapBlock:((_ type:Permission.Kind)->Void)?
+#endif
     
     var cellModel:PTPermissionModel?
     {
         didSet{
-                        
+                    
+#if canImport(Permission)
             switch cellModel!.type
             {
             case .tracking:
@@ -64,64 +69,85 @@ class PTPermissionCell: PTBaseNormalCell {
                     self.cellStatus = Permission.tracking.status
                 }
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .camera:
 #if canImport(CameraPermission)
                 self.cellStatus = Permission.camera.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .photoLibrary:
 #if canImport(PhotoLibraryPermission)
                 self.cellStatus = Permission.photoLibrary.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .calendar:
 #if canImport(CalendarPermission)
                 self.cellStatus = Permission.calendar.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .reminders:
 #if canImport(RemindersPermission)
                 self.cellStatus = Permission.reminders.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .notification:
 #if canImport(NotificationPermission)
                 self.cellStatus = Permission.notification.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .locationWhenInUse:
 #if canImport(LocationWhenInUsePermission)
                 self.cellStatus = Permission.locationWhenInUse.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .faceID:
 #if canImport(FaceIDPermission)
                 self.cellStatus = Permission.faceID.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .speech:
 #if canImport(SpeechPermission)
                 self.cellStatus = Permission.speech.status
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             case .health:
 #if canImport(HealthKit) && canImport(HealthPermission)
                 self.cellStatus = HealthPermission.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
 #else
+#if canImport(Permission)
                 self.cellStatus = .notSupported
+#endif
 #endif
             default:break
             }
+#endif
             self.setButtonStatus()
         }
     }
@@ -129,6 +155,7 @@ class PTPermissionCell: PTBaseNormalCell {
     func setButtonStatus()
     {
         var permissionName = ""
+        #if canImport(Permission)
         switch self.cellModel!.type
         {
         case .tracking:
@@ -163,6 +190,7 @@ class PTPermissionCell: PTBaseNormalCell {
             self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
         default:break
         }
+        #endif
         
         self.cellTitle.attributedText = NSMutableAttributedString.sj.makeText({ make in
             make.append(permissionName).font(PTAppBaseConfig.share.permissionCellTitleFont).alignment(.left).textColor(PTAppBaseConfig.share.permissionCellTitleTextColor).lineSpacing(CGFloat.ScaleW(w: 3))
@@ -172,6 +200,7 @@ class PTPermissionCell: PTBaseNormalCell {
             }
         })
         
+#if canImport(Permission)
         switch self.cellStatus {
         case .authorized:
             self.authorizedButton.isSelected = true
@@ -236,6 +265,7 @@ class PTPermissionCell: PTBaseNormalCell {
         default:
             break
         }
+#endif
     }
     
     fileprivate lazy var authorizedButton:UIButton = {

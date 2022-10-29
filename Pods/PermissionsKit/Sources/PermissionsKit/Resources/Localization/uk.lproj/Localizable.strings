@@ -1,0 +1,33 @@
+"permission camera name" = "Камера";
+
+"permission photoLibrary name" = "Фототека";
+
+"permission microphone name" = "Мікрофон";
+
+"permission calendar name" = "Календар";
+
+"permission contacts name" = "Контакти";
+
+"permission reminders name" = "Нагадування";
+
+"permission speech name" = "Мовлення";
+
+"permission motion name" = "Рух";
+
+"permission media library name" = "Медіатека";
+
+"permission bluetooth name" = "Bluetooth";
+
+"permission notification name" = "Повідомлення";
+
+"permission location when in use name" = "Розташування під час використання";
+
+"permission location always name" = "Розташування Завжди";
+
+"permission tracking name" = "Відстеження";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "Siri";
+
+"permission health name" = "Здоров'я";

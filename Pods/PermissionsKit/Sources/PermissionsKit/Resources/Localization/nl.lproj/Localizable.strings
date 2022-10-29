@@ -1,0 +1,33 @@
+"permission camera name" = "Camera";
+
+"permission photoLibrary name" = "Foto Bibliotheek";
+
+"permission microphone name" = "Microfoon";
+
+"permission calendar name" = "Kalender";
+
+"permission contacts name" = "Contacten";
+
+"permission reminders name" = "Herinneringen";
+
+"permission speech name" = "Spraak";
+
+"permission motion name" = "Beweging";
+
+"permission media library name" = "Media Bibliotheek";
+
+"permission bluetooth name" = "Bluetooth";
+
+"permission notification name" = "Notificatie";
+
+"permission location when in use name" = "Locatie tijdens gebruik";
+
+"permission location always name" = "Locatie Altijd";
+
+"permission tracking name" = "Volgen";
+
+"permission faceid name" = "FaceID";
+
+"permission siri name" = "Siri";
+
+"permission health name" = "Gezondheid";
