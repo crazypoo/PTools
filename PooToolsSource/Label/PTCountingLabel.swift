@@ -59,7 +59,7 @@ public class PTCountingLabel: UILabel {
     public var attributedFormatBlock:PTCountingLabelAttributedFormatBlock?
     public var formatBlock:PTCountingLabelFormatBlock?
     public var showCompletionBlock:PTCountingLabelShowCompletionBlock?
-    public var foramt:String = "%f"
+    public var format:String = "%f"
     {
         didSet
         {
@@ -199,15 +199,15 @@ public class PTCountingLabel: UILabel {
         }
         else
         {
-            if self.foramt.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || self.foramt.nsString.range(of: "%(.*)i").location != NSNotFound
+            if self.format.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || self.format.nsString.range(of: "%(.*)i").location != NSNotFound
             {
-                self.text = String(format: self.foramt, value)
+                self.text = String(format: self.format, value)
             }
             else
             {
                 if self.positiveFormat.nsString.length > 0
                 {
-                    let str = String(format: self.foramt, value)
+                    let str = String(format: self.format, value)
                     let formatter = NumberFormatter()
                     formatter.numberStyle = .decimal
                     formatter.positiveFormat = self.positiveFormat
@@ -215,7 +215,7 @@ public class PTCountingLabel: UILabel {
                 }
                 else
                 {
-                    self.text = String(format: self.foramt, value)
+                    self.text = String(format: self.format, value)
                 }
             }
         }

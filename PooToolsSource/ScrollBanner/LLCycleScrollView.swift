@@ -739,7 +739,7 @@ extension LLCycleScrollView {
     
     /// 滚动上一个/下一个
     ///
-    /// - Parameter gesture: 手势
+    /// - Parameter gestureRecognizer: 手势
     @objc open func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
         if let index = gestureRecognizer.view?.tag {
             if autoScroll {

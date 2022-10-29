@@ -44,13 +44,13 @@ PODS:
   - CYLTabBarController (1.29.2):
     - CYLTabBarController/Core (= 1.29.2)
   - CYLTabBarController/Core (1.29.2)
-  - DeviceKit (4.7.0)
+  - DeviceKit (4.8.0)
   - DZNEmptyDataSet (1.8.1)
   - EmptyDataSet-Swift (5.0.0)
   - FaceAware (2.1.0)
   - FDFullscreenPopGesture (1.1)
-  - FLEX (4.7.0)
-  - FloatingPanel (2.5.4)
+  - FLEX (5.22.10)
+  - FloatingPanel (2.5.5)
   - FluentDarkModeKit (1.0.4)
   - GCDWebServer (3.5.4):
     - GCDWebServer/Core (= 3.5.4)
@@ -64,9 +64,9 @@ PODS:
   - JXPagingView/Paging (2.1.2)
   - JXSegmentedView (1.3.0)
   - KakaJSON (1.1.2)
-  - LookinServer (1.0.9):
-    - LookinServer/Core (= 1.0.9)
-  - LookinServer/Core (1.0.9)
+  - LookinServer (1.1.0):
+    - LookinServer/Core (= 1.1.0)
+  - LookinServer/Core (1.1.0)
   - LXFProtocolTool/LXFEmptyDataSetable (0.2.0):
     - DZNEmptyDataSet (~> 1.8.1)
   - MarqueeLabel (4.0.5)
@@ -92,7 +92,6 @@ PODS:
     - PooTools/Core
   - PooTools/BilogyID (3.0.0):
     - PooTools/Core
-    - PooTools/FaceIDPermission
   - PooTools/Calendar (3.0.0):
     - PooTools/Core
   - PooTools/CalendarPermission (3.0.0):
@@ -206,7 +205,6 @@ PODS:
     - PooTools/Motion
     - PooTools/NetWork
     - PooTools/PagingControl
-    - PooTools/PermissionFunction
     - PooTools/PhoneInfo
     - PooTools/Picker
     - PooTools/RateView
@@ -485,13 +483,13 @@ SPEC CHECKSUMS:
   CollectionViewPagingLayout: 2f8d50683bae57ca88f47fa4ab0195c9079582cf
   CRBoxInputView: 2380c292aabbf786fe923776f111ba3053438fba
   CYLTabBarController: db44b5901a28693a8a4279e4721b3aafdd36c178
-  DeviceKit: c870c34f7c0e0ac4caa6f052e6efe7ef1472c5a1
+  DeviceKit: e787680f500d6ce642b24204aa7a5f9bc9ea1209
   DZNEmptyDataSet: 9525833b9e68ac21c30253e1d3d7076cc828eaa7
   EmptyDataSet-Swift: eb382c0c87a2d9c678077385a595cec52da38171
   FaceAware: f1266b8719a1a90da3d763b8cb428554edf0fa61
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
-  FLEX: bdc9ac7d4a239e3d04c298c01221203257d63a80
-  FloatingPanel: 387377aa46a9b088e5f8f5f2a8d2c00c61e67298
+  FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
+  FloatingPanel: a27e7827e0f710fa6236fe2596dd1b5484cb4fc1
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
@@ -501,7 +499,7 @@ SPEC CHECKSUMS:
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
-  LookinServer: 5d46766710ddac83ea072fa5a0351d1e74c0fd10
+  LookinServer: ba3d1d39c40e5b036862e47137606618d210227e
   LXFProtocolTool: 8d1e53c010f6941c273b9908be24bfc20d1ce2f2
   MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
@@ -510,7 +508,7 @@ SPEC CHECKSUMS:
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
-  PooTools: 8a0dc84127a955b8f671d6a836e8d12675a1a5da
+  PooTools: a2adfea9e330fc892eb71f7b015c10feef6ec7be
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   SDWebImage: e5cc87bf736e60f49592f307bdf9e157189298a3
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816
@@ -534,6 +532,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 55eb80b6ef56f60ec294bb672f96d7d9d8fe5edf
+PODFILE CHECKSUM: 2c949ead4bdf0d131ab000f85d9f9dea24f696bc
 
 COCOAPODS: 1.11.3

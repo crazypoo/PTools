@@ -32,7 +32,6 @@ CGFloat const tagItemSpace = 5;
 #import "PooTextView.h"
 
 #import "PLabel.h"
-#import "UICountingLabel.h"
 
 #import "PGifHud.h"
 
@@ -417,7 +416,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionLabelCountingLabel:
         {
-            UICountingLabel *balanceLabel = [UICountingLabel new];
+            PTCountingLabel *balanceLabel = [PTCountingLabel new];
             balanceLabel.textAlignment = NSTextAlignmentCenter;
             balanceLabel.font = kDEFAULT_FONT(FontName, 30);
             balanceLabel.textColor = [UIColor blackColor];
@@ -426,7 +425,7 @@ CGFloat const tagItemSpace = 5;
             balanceLabel.format = @"%.2f";
             //设置分隔符样式
             //self.balanceLabel.positiveFormat = @"###,##0.00";
-            [balanceLabel countFrom:99999.99 to:0.00 withDuration:1.0f];
+            [balanceLabel countFromStarValue:99999.99 toValue:0.00 duration:1];
             [balanceLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.right.equalTo(self.view);
                 make.height.offset(44);

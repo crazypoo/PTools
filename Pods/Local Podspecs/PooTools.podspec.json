@@ -184,19 +184,13 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/FaceIDPermission": [
-
         ]
       },
       "frameworks": [
         "LocalAuthentication",
         "Security"
       ],
-      "source_files": [
-        "PooToolsSource/BioID/*.{h,m,swift}",
-        "PooToolsSource/BioID/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/BioID/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_BILOGYID POOTOOLS_COCOAPODS"
       }
@@ -1207,9 +1201,6 @@
 
         ],
         "PooTools/LaunchTimeProfiler": [
-
-        ],
-        "PooTools/PermissionFunction": [
 
         ]
       },
