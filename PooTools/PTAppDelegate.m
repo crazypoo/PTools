@@ -10,7 +10,6 @@
 #import "PTViewController.h"
 
 #import "PMacros.h"
-#import "PGetIpAddresses.h"
 
 #import <IQKeyboardManager/IQKeyboardManager.h>
 

@@ -14,6 +14,8 @@ class PTSwiftViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print("\(PTPhoneNetWorkInfo.ipv4String())")
+
         _ = PTCountryCodes.share.codesModels()
         
         let view = UIView()

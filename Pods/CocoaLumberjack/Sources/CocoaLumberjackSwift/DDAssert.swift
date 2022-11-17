@@ -1,6 +1,6 @@
 // Software License Agreement (BSD License)
 //
-// Copyright (c) 2010-2021, Deusty, LLC
+// Copyright (c) 2010-2022, Deusty, LLC
 // All rights reserved.
 //
 // Redistribution and use of this software in source and binary forms,
@@ -29,9 +29,26 @@ import CocoaLumberjackSwiftSupport
  *     The default is an empty string.
  */
 @inlinable
-public func DDAssert(_ condition: @autoclosure () -> Bool, _ message: @autoclosure () -> String = "", level: DDLogLevel = DDDefaultLogLevel, context: Int = 0, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, tag: Any? = nil, asynchronous async: Bool = false, ddlog: DDLog = DDLog.sharedInstance) {
+public func DDAssert(_ condition: @autoclosure () -> Bool,
+                     _ message: @autoclosure () -> String = "",
+                     level: DDLogLevel = DDDefaultLogLevel,
+                     context: Int = 0,
+                     file: StaticString = #file,
+                     function: StaticString = #function,
+                     line: UInt = #line,
+                     tag: Any? = nil,
+                     asynchronous async: Bool = false,
+                     ddlog: DDLog = DDLog.sharedInstance) {
     if !condition() {
-        DDLogError(message(), level: level, context: context, file: file, function: function, line: line, tag: tag, asynchronous: async, ddlog: ddlog)
+        DDLogError(message(),
+                   level: level,
+                   context: context,
+                   file: file,
+                   function: function,
+                   line: line,
+                   tag: tag,
+                   asynchronous: async,
+                   ddlog: ddlog)
         Swift.assertionFailure(message(), file: file, line: line)
     }
 }
@@ -44,7 +61,23 @@ public func DDAssert(_ condition: @autoclosure () -> Bool, _ message: @autoclosu
  *   - message: A string to log (using `DDLogError`). The default is an empty string.
  */
 @inlinable
-public func DDAssertionFailure(_ message: @autoclosure () -> String = "", level: DDLogLevel = DDDefaultLogLevel, context: Int = 0, file: StaticString = #file, function: StaticString = #function, line: UInt = #line, tag: Any? = nil, asynchronous async: Bool = false, ddlog: DDLog = DDLog.sharedInstance) {
-    DDLogError(message(), level: level, context: context, file: file, function: function, line: line, tag: tag, asynchronous: async, ddlog: ddlog)
+public func DDAssertionFailure(_ message: @autoclosure () -> String = "",
+                               level: DDLogLevel = DDDefaultLogLevel,
+                               context: Int = 0,
+                               file: StaticString = #file,
+                               function: StaticString = #function,
+                               line: UInt = #line,
+                               tag: Any? = nil,
+                               asynchronous async: Bool = false,
+                               ddlog: DDLog = DDLog.sharedInstance) {
+    DDLogError(message(),
+               level: level,
+               context: context,
+               file: file,
+               function: function,
+               line: line,
+               tag: tag,
+               asynchronous: async,
+               ddlog: ddlog)
     Swift.assertionFailure(message(), file: file, line: line)
 }

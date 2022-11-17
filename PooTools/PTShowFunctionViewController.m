@@ -27,7 +27,6 @@ CGFloat const tagItemSpace = 5;
 #import "PTAppDelegate.h"
 
 #import <GCDWebServer/GCDWebUploader.h>
-#import "PGetIpAddresses.h"
 
 #import "PooTextView.h"
 
@@ -115,7 +114,7 @@ CGFloat const tagItemSpace = 5;
             NSString *urlString;
             if ([_webServer start])
             {
-                NSString *ipString = [PGetIpAddresses getIPAddress:YES];
+                NSString *ipString = [PTPhoneNetWorkInfo ipv4String];
                 NSLog(@"ip地址为：%@", ipString);
                 NSUInteger port = self.webServer.port;
                 NSLog(@"开启监听的端口为：%zd", port);

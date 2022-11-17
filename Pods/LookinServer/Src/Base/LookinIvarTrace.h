@@ -8,8 +8,6 @@
 //  https://lookin.work
 //
 
-
-
 #import <Foundation/Foundation.h>
 
 extern NSString *const LookinIvarTraceRelationValue_Self;
@@ -30,6 +28,12 @@ extern NSString *const LookinIvarTraceRelationValue_Self;
 #if TARGET_OS_IPHONE
 @property(nonatomic, weak) id hostObject;
 #endif
+
+@end
+
+@interface NSObject (LookinServer)
+
+@property(nonatomic, copy) NSArray<LookinIvarTrace *> *lks_ivarTraces;
 
 @end
 
