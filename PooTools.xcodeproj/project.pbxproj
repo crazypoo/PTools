@@ -29,7 +29,6 @@
 		231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1540272CDEE9003D6F62 /* CustomTextField.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
-		231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1575272CDEE9003D6F62 /* LGTMBase64.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
 		231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1587272CDEE9003D6F62 /* DoubleSliderView.m */; };
 		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
@@ -251,9 +250,6 @@
 		231D154C272CDEE9003D6F62 /* MAThermometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometer.m; sourceTree = "<group>"; };
 		231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
 		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
-		231D1573272CDEE9003D6F62 /* LGTMDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMDefines.h; sourceTree = "<group>"; };
-		231D1574272CDEE9003D6F62 /* LGTMBase64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LGTMBase64.h; sourceTree = "<group>"; };
-		231D1575272CDEE9003D6F62 /* LGTMBase64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LGTMBase64.m; sourceTree = "<group>"; };
 		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
 		231D1582272CDEE9003D6F62 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
 		231D1587272CDEE9003D6F62 /* DoubleSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleSliderView.m; sourceTree = "<group>"; };
@@ -532,7 +528,6 @@
 				55D59C6828F3E98200B4FF76 /* Attributed */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				55D59C6928F537BA00B4FF76 /* Base */,
-				231D1572272CDEE9003D6F62 /* Base64 */,
 				55D59C6128F3E87600B4FF76 /* BioID */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
 				55D59C5128F296F600B4FF76 /* Blur */,
@@ -707,16 +702,6 @@
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 			);
 			path = NetWork;
-			sourceTree = "<group>";
-		};
-		231D1572272CDEE9003D6F62 /* Base64 */ = {
-			isa = PBXGroup;
-			children = (
-				231D1573272CDEE9003D6F62 /* LGTMDefines.h */,
-				231D1574272CDEE9003D6F62 /* LGTMBase64.h */,
-				231D1575272CDEE9003D6F62 /* LGTMBase64.m */,
-			);
-			path = Base64;
 			sourceTree = "<group>";
 		};
 		231D1576272CDEE9003D6F62 /* CheckBox */ = {
@@ -1689,7 +1674,6 @@
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
 				554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */,
-				231D164F272CDEEA003D6F62 /* LGTMBase64.m in Sources */,
 				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,

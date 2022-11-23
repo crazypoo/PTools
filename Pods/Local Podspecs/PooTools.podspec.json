@@ -129,10 +129,7 @@
 
         ]
       },
-      "source_files": [
-        "PooToolsSource/AESAndDES/*.{h,m,swift}",
-        "PooToolsSource/Base64/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/AESAndDES/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
       }
