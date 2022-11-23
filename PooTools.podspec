@@ -43,6 +43,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'DataEncrypt' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'CryptoSwift'
         subspec.source_files = 'PooToolsSource/AESAndDES/*.{h,m,swift}','PooToolsSource/Base64/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"

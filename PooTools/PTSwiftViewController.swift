@@ -8,13 +8,29 @@
 
 import UIKit
 import SnapKit
+import CryptoSwift
+import CommonCrypto
 
 class PTSwiftViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        print("\(PTPhoneNetWorkInfo.ipv4String())")
+        let aesKey = "keykeykeykeykeyk"
+        let aesIv = "drowssapdrowssap"
+        
+        PTDataEncryption.aes_encryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in            
+            PTDataEncryption.ase_decrypt(data: Data(base64Encoded: encryptionString,options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
+                PTNSLog("aes:\(decryptData)\n")
+            }
+        }
+
+        PTDataEncryption.des_crypt(operation: CCOperation(kCCEncrypt), key: "321", dataString: "123456789") { outputString in
+            print("\(String(describing: outputString))\n")
+            PTDataEncryption.des_crypt(operation: CCOperation(kCCDecrypt), key: "321", dataString: outputString) { outputString1 in
+                print("\(String(describing: outputString1))\n")
+            }
+        }
 
         _ = PTCountryCodes.share.codesModels()
         

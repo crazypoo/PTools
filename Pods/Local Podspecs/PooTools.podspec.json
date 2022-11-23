@@ -124,6 +124,9 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "CryptoSwift": [
+
         ]
       },
       "source_files": [

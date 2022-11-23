@@ -82,8 +82,6 @@
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
 		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
 		231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F2272CDEE9003D6F62 /* MXRotationManager.m */; };
-		231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F6272CDEE9003D6F62 /* SecurityUtil.m */; };
-		231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F7272CDEE9003D6F62 /* NSData+AES.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
@@ -136,6 +134,7 @@
 		55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */; };
 		55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
+		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
@@ -317,10 +316,6 @@
 		231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		231D15F2272CDEE9003D6F62 /* MXRotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRotationManager.m; sourceTree = "<group>"; };
 		231D15F3272CDEE9003D6F62 /* MXRotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXRotationManager.h; sourceTree = "<group>"; };
-		231D15F5272CDEE9003D6F62 /* NSData+AES.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+AES.h"; sourceTree = "<group>"; };
-		231D15F6272CDEE9003D6F62 /* SecurityUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SecurityUtil.m; sourceTree = "<group>"; };
-		231D15F7272CDEE9003D6F62 /* NSData+AES.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+AES.m"; sourceTree = "<group>"; };
-		231D15F8272CDEE9003D6F62 /* SecurityUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SecurityUtil.h; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
 		231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -378,6 +373,8 @@
 		55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPanelFuction.swift; sourceTree = "<group>"; };
 		55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatPanelLayout.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
+		55E51757292C9DB200BFF122 /* PTDataEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDataEncryption.swift; sourceTree = "<group>"; };
+		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTImageBlackToTransparent.h; sourceTree = "<group>"; };
 		55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTImageBlackToTransparent.m; sourceTree = "<group>"; };
@@ -817,10 +814,7 @@
 		231D15F4272CDEE9003D6F62 /* AESAndDES */ = {
 			isa = PBXGroup;
 			children = (
-				231D15F5272CDEE9003D6F62 /* NSData+AES.h */,
-				231D15F7272CDEE9003D6F62 /* NSData+AES.m */,
-				231D15F8272CDEE9003D6F62 /* SecurityUtil.h */,
-				231D15F6272CDEE9003D6F62 /* SecurityUtil.m */,
+				55E51757292C9DB200BFF122 /* PTDataEncryption.swift */,
 			);
 			path = AESAndDES;
 			sourceTree = "<group>";
@@ -1188,6 +1182,7 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				55E51759292CB87500BFF122 /* CryptoSwift.framework */,
 				23898D872543FAEB004DDE1A /* Photos.framework */,
 				23898D852543FAD7004DDE1A /* AssetsLibrary.framework */,
 				CCDD3CCA217EC3640021BC19 /* SSZipArchive.framework */,
@@ -1408,6 +1403,7 @@
 				"${BUILT_PRODUCTS_DIR}/ChromaColorPicker/ChromaColorPicker.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework",
+				"${BUILT_PRODUCTS_DIR}/CryptoSwift/CryptoSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/EmptyDataSet-Swift/EmptyDataSet_Swift.framework",
@@ -1471,6 +1467,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChromaColorPicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CollectionViewPagingLayout.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CryptoSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmptyDataSet_Swift.framework",
@@ -1558,7 +1555,6 @@
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
-				231D169C272CDEEA003D6F62 /* NSData+AES.m in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
@@ -1609,6 +1605,7 @@
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
+				55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
@@ -1681,7 +1678,6 @@
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
 				231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */,
 				231D1622272CDEE9003D6F62 /* UIImage+BlurGlass.m in Sources */,
-				231D169B272CDEEA003D6F62 /* SecurityUtil.m in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,

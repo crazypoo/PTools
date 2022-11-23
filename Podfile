@@ -35,6 +35,7 @@ target 'PooTools_Example' do
   pod 'SDWebImage'
   pod 'MJRefresh'
   pod 'ZXNavigationBar'#导航栏
+  pod 'CryptoSwift'
   
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']
