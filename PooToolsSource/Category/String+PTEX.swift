@@ -55,6 +55,24 @@ public extension String
     static let ISNUMBER = "^[0-9]*$"
     static let AMOUT1 = "^[0][0-9]+$"
     static let AMOUT2 = "^(([1-9]{1}[0-9]*|[0])" + "\\." + "?[0-9]{0,2})$"
+    /*
+     第一位是字母，后面都是数字
+     P:P开头的是因公普通护照
+     D:外交护照是D开头
+     E: 有电子芯片的普通护照为“E”字开头，
+     S: 后接8位阿拉伯数字公务护照
+     G:因私护照G开头
+     14：
+     15：
+     H:香港特区护照和香港公民所持回乡卡H开头,后接10位数字
+     M:澳门特区护照和澳门公民所持回乡卡M开头,后接10位数字
+     */
+    static let PASSPORT = "^1[45][0-9]{7}|([P|p|S|s]\\d{7})|([S|s|G|g]\\d{8})|([Gg|Tt|Ss|Ll|Qq|Dd|Aa|Ff]\\d{8})|([H|h|M|m]\\d{8，10})$"
+    
+    func isPassportNumber()->Bool
+    {
+        return self.checkWithString(expression: String.PASSPORT)
+    }
     
     func checkURL()->Bool
     {

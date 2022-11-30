@@ -157,19 +157,20 @@ public class Network: NSObject {
     ///   - encoder: 编码方式，默认url编码
     ///   - showHud: 是否需要loading，默认true
     ///   - resultBlock: 方法回调
-    class public func requestApi(urlStr:String,
-                          method: HTTPMethod = .post,
-                          parameters: Parameters? = nil,
-                          modelType: Convertible.Type? = nil,
-                          encoder:ParameterEncoding = URLEncoding.default,
-                          showHud:Bool? = true,
-                          jsonRequest:Bool? = false,
-                          netWorkErrorBlock:NetWorkErrorBlock? = nil,
-                          netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
-                          resultBlock: @escaping ReslutClosure){
+    class public func requestApi(needGobal:Bool? = true,
+                                 urlStr:String,
+                                 method: HTTPMethod = .post,
+                                 parameters: Parameters? = nil,
+                                 modelType: Convertible.Type? = nil,
+                                 encoder:ParameterEncoding = URLEncoding.default,
+                                 showHud:Bool? = true,
+                                 jsonRequest:Bool? = false,
+                                 netWorkErrorBlock:NetWorkErrorBlock? = nil,
+                                 netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
+                                 resultBlock: @escaping ReslutClosure){
         
         
-        let urlStr = Network.gobalUrl() + urlStr
+        let urlStr = (needGobal! ? Network.gobalUrl() : "") + urlStr
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {

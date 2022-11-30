@@ -657,6 +657,18 @@ public class PTUtils: NSObject {
         let newImage = UIImage(cgImage: scaledImage!)
         return newImage
     }
+    
+    //MARK: 这个方法可以用于UITextField中,检测金额输入
+    func textInputAmoutRegex(text:NSString,range:NSRange,replacementString:NSString)->Bool
+    {
+        let len = (range.length > 0) ? (text.length - range.length) : (text.length + replacementString.length)
+        if len > 20
+        {
+            return false
+        }
+        let str = NSString(format: "%@%@", text,replacementString)
+        return str.isMoneyString()
+    }
 }
 
 //MARK: OC-FUNCTION

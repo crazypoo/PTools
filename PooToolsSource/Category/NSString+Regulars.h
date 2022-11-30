@@ -13,10 +13,6 @@
  */
 -(BOOL)isA2Z;
 
-/*! @brief 正则表达式(是否数字)
- */
--(BOOL)isNumber;
-
 /*! @brief 正则表达式(是否数字和字母)
  */
 -(BOOL)isNumberAndWord;
@@ -29,30 +25,10 @@
  */
 -(BOOL)isMobilePhoneNum;
 
-/*! @brief 正则表达式(是否电话,这个貌似才能用)
- */
--(BOOL)isPooPhoneNum;
-
-/*! @brief 正则表达式(是否家庭电话)
- */
--(BOOL)isHomePhone;
-
-/*! @brief 正则表达式(是否身份证)
- */
--(BOOL)isValidateIdentity;
-
-/*! @brief 正则表达式(是否IP地址)
- */
--(BOOL)isIPAddress;
-
 /*! @brief 正则表达式(是否URL)
  */
--(BOOL)isUrlString;
 -(BOOL)checkUrlWithString;
 
-/*! @brief 正则表达式(是否中文名)
- */
--(BOOL)isVaildRealName;
 
 /*! @brief 正则表达式(是否金钱)
  */
@@ -73,9 +49,6 @@
 /*! @brief 判断字符串是否社会统一信用代码
  */
 -(BOOL)isCOLTDCode;
-/*! @brief 判断字符串是否护照
- */
--(BOOL)isPassportNumber;
 /*! @brief 判断字符串是否中国车牌号码
  */
 -(BOOL)isCNCarNumber;

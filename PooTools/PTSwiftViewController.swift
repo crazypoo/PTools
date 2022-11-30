@@ -16,6 +16,19 @@ class PTSwiftViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        let card1 = "621226200000000000"
+        let card2 = "123456789098765"
+        let idcard = "111111111111111111"
+        
+        print((idcard as NSString).getIdentityCardAge())
+        
+        PTBankSimpleInfoNetwork.getBankSimpleInfo(cardNum: card1 as NSString) { model in
+            print(model.logoUrl)
+        }
+                
+        print("\((card1 as NSString).bankCardLuhmCheck())\n\((card2 as NSString).bankCardLuhmCheck())")
+        print("身份证:\((idcard as NSString).isValidateIdentity())")
+
         let aesKey = "keykeykeykeykeyk"
         let aesIv = "drowssapdrowssap"
         
