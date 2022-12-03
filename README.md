@@ -12,11 +12,11 @@
 
 ## About
 
-PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码,或者有些代码年份可能跨度有点大作者忘记了(估计也是12年到现在的代码).如有侵犯,请issue.希望大家喜欢
+PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码.希望大家喜欢
 
 ## Attention
 
-本工具使用了HealthKit之类的框架,审核时可能要集成,如果没需要,可以移除这些框架,使用压缩解压第三方库时,要添加libz.tbd
+如果全部导入本工具须要注意APP隐私权限配置,使用压缩解压第三方库时,要添加libz.tbd
 
 ## Installation
 
@@ -29,7 +29,7 @@ pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
 其他根据自己个人喜好加载
 
 ```ruby
-## 数据加密
+### 数据加密
 pod 'PooTools/DataEncrypt', :git => 'https://github.com/crazypoo/PTools.git'
 ### 动画
 pod 'PooTools/Animation', :git => 'https://github.com/crazypoo/PTools.git'
