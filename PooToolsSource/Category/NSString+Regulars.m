@@ -12,79 +12,18 @@
 @implementation NSString (Regulars)
 
 static NSString *A2Z = @"^[a-z]?$";
-static NSString *NumberAndWord = @"^[0-9_a-zA-Z]*$";
-
-static NSString *Mail = @"^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}?$";
-
 static NSString *MOBILE = @"^(86){0,1}1(3[0-9]|5[0-35-9]|8[025-9])\\d{8}$";
 static NSString *CM     = @"^(86){0,1}1(34[0-8]|(3[5-9]|5[017-9]|8[278])\\d)\\d{7}$";
 static NSString *CU     = @"^(86){0,1}1(3[0-2]|5[256]|8[56])\\d{8}$";
 static NSString *CT     = @"^(86){0,1}1((33|53|8[09])[0-9]|349)\\d{7}$";
 // NSString * PHS = @"^0(10|2[0-5789]|\\d{3})\\d{7,8}$";
-static NSString *URL_Full = @"(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}";
-static NSString *MoneyString = @"(\\+|\\-)?(([0]|(0[.]\\d{0,2}))|([1-9]\\d{0,4}(([.]\\d{0,2})?)))?";
-
-static NSString *Chinese = @"(^[\u4e00-\u9fa5]+$)";
-
-static NSString *COLTDCode = @"^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$";
-
-static NSString *CNCARNUMBER = @"^[\u4e00-\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\u4e00-\u9fa5]$";
-
-static NSString *AlphabetLowercased = @"^[a-z]+$";
-static NSString *AlphabetUpperCased = @"^[A-Za-z0-9]+$";
-
-static NSString *LetterFirstAlphabet = @"^[A-Za-z]+$";
-
--(BOOL)isLetterFirstAlphabet
-{
-    return [self checkWithRegular:LetterFirstAlphabet];
-}
-
--(BOOL)isAlphabet:(BOOL)Lowercased
-{
-    if (Lowercased)
-    {
-        return [self checkWithRegular:AlphabetLowercased];
-    }
-    else
-    {
-        return [self checkWithRegular:AlphabetUpperCased];
-    }
-}
-
--(BOOL)isCNCarNumber
-{
-    return [self checkWithRegular:CNCARNUMBER];
-}
-
--(BOOL)isCOLTDCode
-{
-    return [self checkWithRegular:COLTDCode];
-}
-
-- (BOOL)isChinese
-{
-    return [self checkWithRegular:Chinese];
-}
 
 -(BOOL)isA2Z{
     return [self checkWithRegular:A2Z];
 }
--(BOOL)isNumberAndWord{
-    return [self checkWithRegular:NumberAndWord];
-}
-
--(BOOL)isMail{
-    return [self checkWithRegular:Mail];
-}
 
 -(BOOL)isMobilePhoneNum{
     return [self checkWithRegulars:@[MOBILE,CM,CU,CT]];
-}
-
--(BOOL)isMoneyString
-{
-    return [self checkWithRegular:MoneyString];
 }
 
 -(BOOL)checkWithRegular:(NSString*)expression{
@@ -251,21 +190,5 @@ static NSString *LetterFirstAlphabet = @"^[A-Za-z]+$";
     {
         return @"该字符串不是银行卡号";
     }
-}
-
-- (BOOL)checkUrlWithString
-{
-    if(self.length < 1)
-        return NO;
-    
-    NSString *url = @"";
-    
-    if (self.length>4 && [[self substringToIndex:4] isEqualToString:@"www."]) {
-        url = [NSString stringWithFormat:@"http://%@",self];
-    } else {
-        url = self;
-    }
-
-    return  [url checkWithRegular:URL_Full];
 }
 @end

@@ -21,7 +21,6 @@
 #import "NSMutableString+TagReplace.h"
 #import "NSString+Regulars.h"
 #import "NSString+WPAttributedMarkup.h"
-#import "NSURLResponse+Help.h"
 #import "UIButton+ImageTitleSpacing.h"
 #import "UIColor+Colours.h"
 #import "UIImage+BlurGlass.h"

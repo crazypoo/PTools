@@ -12,7 +12,6 @@
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
 		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
-		231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */; };
 		231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */; };
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
 		231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1509272CDEE9003D6F62 /* NSString+Regulars.m */; };
@@ -112,6 +111,7 @@
 		5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
+		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -221,7 +221,6 @@
 		231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WWFoldableTableView.m"; sourceTree = "<group>"; };
 		231D14F8272CDEE9003D6F62 /* UIView+ModifyFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ModifyFrame.h"; sourceTree = "<group>"; };
 		231D14FD272CDEE9003D6F62 /* UITextField+Limit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Limit.h"; sourceTree = "<group>"; };
-		231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURLResponse+Help.m"; sourceTree = "<group>"; };
 		231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
 		231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+WPAttributedMarkup.m"; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
@@ -237,7 +236,6 @@
 		231D1519272CDEE9003D6F62 /* UITextField+Limit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
 		231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
 		231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
-		231D1522272CDEE9003D6F62 /* NSURLResponse+Help.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURLResponse+Help.h"; sourceTree = "<group>"; };
 		231D1525272CDEE9003D6F62 /* UIImage+BlurGlass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurGlass.h"; sourceTree = "<group>"; };
 		231D1526272CDEE9003D6F62 /* UIColor+Colours.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
 		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
@@ -350,6 +348,7 @@
 		5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankSimpleInfoNetwork.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
+		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -621,8 +620,7 @@
 				231D1509272CDEE9003D6F62 /* NSString+Regulars.m */,
 				231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */,
 				231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */,
-				231D1522272CDEE9003D6F62 /* NSURLResponse+Help.h */,
-				231D1500272CDEE9003D6F62 /* NSURLResponse+Help.m */,
+				559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
 				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
 				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
@@ -1299,6 +1297,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */,
+				559C1C91293AE247002874BA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1376,6 +1375,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		559C1C91293AE247002874BA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "#\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
+		};
 		E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1613,7 +1629,6 @@
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				231D1627272CDEE9003D6F62 /* UIButton+ImageTitleSpacing.m in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
-				231D161A272CDEE9003D6F62 /* NSURLResponse+Help.m in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
@@ -1702,6 +1717,7 @@
 				231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
+				559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,

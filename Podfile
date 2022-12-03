@@ -68,4 +68,5 @@ target 'PooTools_Example' do
 #  pod 'PooTools/HealthPermission', :path => 'PooTools.podspec'
 #  pod 'PooTools/SpeechRecognizerPermission', :path => 'PooTools.podspec'
 
+  pod 'SwiftLint'
 end

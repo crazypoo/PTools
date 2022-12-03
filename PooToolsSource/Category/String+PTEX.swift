@@ -55,6 +55,7 @@ public extension String
     static let ISNUMBER = "^[0-9]*$"
     static let AMOUT1 = "^[0][0-9]+$"
     static let AMOUT2 = "^(([1-9]{1}[0-9]*|[0])" + "\\." + "?[0-9]{0,2})$"
+    static let CHINESE = "(^[\\u4e00-\\u9fa5]+$)"
     /*
      第一位是字母，后面都是数字
      P:P开头的是因公普通护照
@@ -68,6 +69,49 @@ public extension String
      M:澳门特区护照和澳门公民所持回乡卡M开头,后接10位数字
      */
     static let PASSPORT = "^1[45][0-9]{7}|([P|p|S|s]\\d{7})|([S|s|G|g]\\d{8})|([Gg|Tt|Ss|Ll|Qq|Dd|Aa|Ff]\\d{8})|([H|h|M|m]\\d{8，10})$"
+    static let MAIL = "^[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}?$"
+    static let LETTERFIRSTALPHABET = "^[A-Za-z]+$"
+    static let ALPHABETLOWERCASED = "^[a-z]+$"
+    static let ALPHABETUPPERCASED = "^[A-Za-z0-9]+$"
+    static let CNCARLICENSE = "^[\\u4e00-\\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\\u4e00-\\u9fa5]$"
+    static let NUMBERANDWORD = "^[0-9_a-zA-Z]*$"
+    
+    func isNumberAndWord()->Bool
+    {
+        return self.checkWithString(expression: String.NUMBERANDWORD)
+    }
+
+    func isCnCarLicense()->Bool
+    {
+        return self.checkWithString(expression: String.CNCARLICENSE)
+    }
+    
+    func isAlphabet(isLower:Bool)->Bool
+    {
+        if isLower
+        {
+            return self.checkWithString(expression: String.ALPHABETLOWERCASED)
+        }
+        else
+        {
+            return self.checkWithString(expression: String.ALPHABETUPPERCASED)
+        }
+    }
+    
+    func isLetterFirstAlphabet()->Bool
+    {
+        return self.checkWithString(expression: String.LETTERFIRSTALPHABET)
+    }
+    
+    func isMail()->Bool
+    {
+        return self.checkWithString(expression: String.MAIL)
+    }
+    
+    func isChinese()->Bool
+    {
+        return self.checkWithString(expression: String.CHINESE)
+    }
     
     func isPassportNumber()->Bool
     {
