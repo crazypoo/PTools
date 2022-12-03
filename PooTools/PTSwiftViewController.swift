@@ -11,10 +11,34 @@ import CryptoSwift
 import SnapKit
 import UIKit
 
+#if canImport(LifetimeTracker)
+import LifetimeTracker
+#endif
+
 class PTSwiftViewController: UIViewController {
+    
+    class var lifetimeConfiguration: LifetimeConfiguration {
+            return LifetimeConfiguration(maxCount: 1, groupName: "VC")
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+#if canImport(LifetimeTracker)
+        trackLifetime()
+#endif
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
+#if canImport(LifetimeTracker)
+    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .alwaysVisible, style: .bar).refreshUI)
+#endif
+        
         let card1 = "621226200000000000"
         let card2 = "123456789098765"
         let idcard = "111111111111111111"

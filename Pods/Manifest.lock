@@ -65,6 +65,7 @@ PODS:
   - JXPagingView/Paging (2.1.2)
   - JXSegmentedView (1.3.0)
   - KakaJSON (1.1.2)
+  - LifetimeTracker (1.8.1)
   - LookinServer (1.1.2):
     - LookinServer/Core (= 1.1.2)
   - LookinServer/Core (1.1.2)
@@ -375,6 +376,7 @@ DEPENDENCIES:
   - HandyJSON
   - InAppViewDebugger
   - KakaJSON
+  - LifetimeTracker
   - LookinServer
   - MJRefresh
   - NotificationBannerSwift
@@ -432,6 +434,7 @@ SPEC REPOS:
     - JXPagingView
     - JXSegmentedView
     - KakaJSON
+    - LifetimeTracker
     - LookinServer
     - LXFProtocolTool
     - MarqueeLabel
@@ -506,6 +509,7 @@ SPEC CHECKSUMS:
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
+  LifetimeTracker: be33b0d89357dd2f381eb8aca636d184b538d5e9
   LookinServer: bb667a77f1ee594a8e91226e729dbe49f3401f5c
   LXFProtocolTool: 8d1e53c010f6941c273b9908be24bfc20d1ce2f2
   MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
@@ -542,6 +546,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 03fba20855f451f095cc7dca98841a822712344b
+PODFILE CHECKSUM: be7138bf004004692a01938c0f0bfcb96584ff3a
 
 COCOAPODS: 1.11.3

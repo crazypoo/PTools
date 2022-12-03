@@ -40,6 +40,7 @@ target 'PooTools_Example' do
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']
   pod 'LookinServer', :configurations => ['Debug']
+  pod 'LifetimeTracker', :configurations => ['Debug']
 
   #权限询问
   pod 'PermissionsKit/NotificationPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
