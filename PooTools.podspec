@@ -289,7 +289,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Slider' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'Masonry'
+        subspec.dependency 'RangeSeekSlider'
         subspec.source_files = 'PooToolsSource/Slider/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"

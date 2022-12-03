@@ -29,7 +29,6 @@
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
-		231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1587272CDEE9003D6F62 /* DoubleSliderView.m */; };
 		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
@@ -252,8 +251,6 @@
 		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
 		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
 		231D1582272CDEE9003D6F62 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
-		231D1587272CDEE9003D6F62 /* DoubleSliderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DoubleSliderView.m; sourceTree = "<group>"; };
-		231D1589272CDEE9003D6F62 /* DoubleSliderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DoubleSliderView.h; sourceTree = "<group>"; };
 		231D158C272CDEE9003D6F62 /* PooUDIDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
 		231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
 		231D15A2272CDEE9003D6F62 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
@@ -730,8 +727,6 @@
 		231D1586272CDEE9003D6F62 /* Slider */ = {
 			isa = PBXGroup;
 			children = (
-				231D1589272CDEE9003D6F62 /* DoubleSliderView.h */,
-				231D1587272CDEE9003D6F62 /* DoubleSliderView.m */,
 				55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */,
 			);
 			path = Slider;
@@ -1438,6 +1433,7 @@
 				"${BUILT_PRODUCTS_DIR}/PermissionsKit/PermissionsKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PhoneNumberKit/PhoneNumberKit.framework",
 				"${BUILT_PRODUCTS_DIR}/PooTools/PooTools.framework",
+				"${BUILT_PRODUCTS_DIR}/RangeSeekSlider/RangeSeekSlider.framework",
 				"${BUILT_PRODUCTS_DIR}/SDWebImage/SDWebImage.framework",
 				"${BUILT_PRODUCTS_DIR}/SJAttributesStringMaker/SJAttributesStringMaker.framework",
 				"${BUILT_PRODUCTS_DIR}/SSZipArchive/SSZipArchive.framework",
@@ -1502,6 +1498,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PermissionsKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PhoneNumberKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/PooTools.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RangeSeekSlider.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SDWebImage.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SJAttributesStringMaker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SSZipArchive.framework",
@@ -1645,7 +1642,6 @@
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
-				231D1657272CDEEA003D6F62 /* DoubleSliderView.m in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,

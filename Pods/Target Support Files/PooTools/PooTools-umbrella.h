@@ -39,7 +39,6 @@
 #import "PObject2Json.h"
 #import "PooUDIDInfo.h"
 #import "MXRotationManager.h"
-#import "DoubleSliderView.h"
 #import "MAThermometer.h"
 #import "MAThermometerBorder.h"
 
