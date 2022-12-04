@@ -667,7 +667,7 @@ public class PTUtils: NSObject {
             return false
         }
         let str = NSString(format: "%@%@", text,replacementString)
-        return str.isMoneyString()
+        return (str as String).isMoneyString()
     }
 }
 

@@ -34,8 +34,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "PGifHud.h"
 
-#import "UIImage+BlurGlass.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -404,7 +402,7 @@ CGFloat const tagItemSpace = 5;
         {
             UIImage *placeholderImage = kImageNamed(@"DemoImage");
             UIImageView *blurGlassImage = [UIImageView new];
-            blurGlassImage.image = [[placeholderImage transformImageWithSize:CGSizeMake(30, 30)] imgWithBlur];
+            blurGlassImage.image = [[placeholderImage transformImageWithSize:CGSizeMake(30, 30)] blurImage];
             [self.view addSubview:blurGlassImage];
             [blurGlassImage mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.left.equalTo(self.view);
