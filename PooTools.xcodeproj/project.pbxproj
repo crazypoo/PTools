@@ -76,7 +76,6 @@
 		231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */; };
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
 		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
-		231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15F2272CDEE9003D6F62 /* MXRotationManager.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
@@ -109,6 +108,7 @@
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
 		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
+		559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C94293CB789002874BA /* PTRotationManager.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -301,8 +301,6 @@
 		231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOGobalFileManager.h; sourceTree = "<group>"; };
 		231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
 		231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
-		231D15F2272CDEE9003D6F62 /* MXRotationManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MXRotationManager.m; sourceTree = "<group>"; };
-		231D15F3272CDEE9003D6F62 /* MXRotationManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MXRotationManager.h; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
 		231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -340,6 +338,7 @@
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
 		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
+		559C1C94293CB789002874BA /* PTRotationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRotationManager.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -779,8 +778,7 @@
 		231D15F1272CDEE9003D6F62 /* Rotation */ = {
 			isa = PBXGroup;
 			children = (
-				231D15F2272CDEE9003D6F62 /* MXRotationManager.m */,
-				231D15F3272CDEE9003D6F62 /* MXRotationManager.h */,
+				559C1C94293CB789002874BA /* PTRotationManager.swift */,
 			);
 			path = Rotation;
 			sourceTree = "<group>";
@@ -1558,7 +1556,6 @@
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
-				231D169A272CDEEA003D6F62 /* MXRotationManager.m in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
@@ -1596,6 +1593,7 @@
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
+				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,

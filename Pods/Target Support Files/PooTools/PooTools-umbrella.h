@@ -36,7 +36,6 @@
 #import "PGifHud.h"
 #import "PObject2Json.h"
 #import "PooUDIDInfo.h"
-#import "MXRotationManager.h"
 #import "MAThermometer.h"
 #import "MAThermometerBorder.h"
 

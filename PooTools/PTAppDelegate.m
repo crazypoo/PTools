@@ -13,8 +13,6 @@
 
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
-#import "MXRotationManager.h"
-
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
@@ -34,7 +32,7 @@
 @implementation PTAppDelegate
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
-    return [MXRotationManager defaultManager].interfaceOrientationMask;
+    return  [PTRotationManager share].interfaceOrientationMask;
 }
 
 + (PTAppDelegate *)appDelegate

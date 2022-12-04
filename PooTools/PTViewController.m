@@ -18,8 +18,6 @@
 #import <IQKeyboardManager/IQKeyboardManager.h>
 #import <WebKit/WebKit.h>
 
-#import "MXRotationManager.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -504,11 +502,8 @@ static NSString *cellIdentifier = @"CELL";
             break;
         case 9:
         {
-//            [MXRotationManager defaultManager].orientation = UIDeviceOrientationLandscapeRight;
 //            PopSignatureView *socialSingnatureView = [[PopSignatureView alloc] initWithNavColor:kRandomColor maskString:nil withViewFontName:FontName withNavFontName:FontNameBold withLinePathWidth:10 withBtnTitleColor:kRandomColor handleDone:^(PopSignatureView *signView, UIImage *signImage) {
-//                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
 //            } handleCancle:^(PopSignatureView *signView) {
-//                [MXRotationManager defaultManager].orientation = UIDeviceOrientationPortrait;
 //            }];
 //            [socialSingnatureView show];
             
@@ -526,7 +521,7 @@ static NSString *cellIdentifier = @"CELL";
         case 10:
         {
             NSUInteger r = arc4random_uniform(6);
-            [MXRotationManager defaultManager].orientation = r;
+            [PTRotationManager share].orientation = r;
         }
             break;
         case 11:
