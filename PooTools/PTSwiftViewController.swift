@@ -42,8 +42,15 @@ class PTSwiftViewController: UIViewController {
         let card1 = "621226200000000000"
         let card2 = "123456789098765"
         let idcard = "111111111111111111"
-
+        
+        let rangeFullStr = "你好啊"
+        let rangeSubStr = "啊"
+        let rangeArr = PTUtils.rangeOfSubString(fullStr: rangeFullStr as NSString, subStr: rangeSubStr as NSString)
+        print(">>>>>>>>>>>>>>>>>>>>\(rangeArr)")
+        
         print((idcard as NSString).getIdentityCardAge())
+
+        print(("1234" as NSString).getuperDigit())
 
         PTBankSimpleInfoNetwork.getBankSimpleInfo(cardNum: card1 as NSString) { model in
             print(model.logoUrl)

@@ -211,7 +211,7 @@ public class PTCountingLabel: UILabel {
                     let formatter = NumberFormatter()
                     formatter.numberStyle = .decimal
                     formatter.positiveFormat = self.positiveFormat
-                    self.text = String(format: "%@", formatter.string(from: NSNumber(floatLiteral: str.double()!))!)
+                    self.text = String(format: "%@", formatter.string(from: NSNumber(floatLiteral: str.double() ?? 0))!)
                 }
                 else
                 {

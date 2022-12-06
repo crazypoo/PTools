@@ -14,12 +14,6 @@
 #import <CoreImage/CoreImage.h>
 #import <ImageIO/ImageIO.h>
 
-typedef NS_ENUM(NSInteger, GradeType) {
-    GradeTypeGe = 0,
-    GradeTypeWan,
-    GradeTypeYi
-};
-
 typedef NS_ENUM(NSInteger,ToolsAboutImageType){
     ToolsAboutImageTypeJPEG = 0,
     ToolsAboutImageTypePNG,
@@ -170,20 +164,6 @@ static inline BOOL isIPhoneXSeries() {
 +(NSArray * _Nonnull)arraySortINV:(NSArray * _Nonnull)arr;
 
 #pragma mark ------> 字符串
-/*! @brief 数字小写转大写
- */
-+(NSString * _Nonnull)getUperDigit:(NSString * _Nonnull)inputStr;
-+(NSString * _Nonnull)getIntPartUper:(int)digit;
-+(NSString * _Nonnull)getPartAfterDot:(NSString * _Nonnull)digitStr;
-+(NSString * _Nonnull)dealWithDigit:(int)digit
-                     grade:(GradeType)grade;
-+(NSString * _Nonnull)digitUppercase:(NSString * _Nonnull)numstr;
-
-/*! @brief 查找某字符在字符串的位置
- */
-+ (NSArray * _Nonnull)rangeOfSubString:(NSString * _Nonnull)subStr
-                     inString:(NSString * _Nonnull)string;
-
 /*! @brief 英文星期几转中文星期几
  */
 +(NSString * _Nonnull)engDayCoverToZHCN:(NSString * _Nonnull)str;
