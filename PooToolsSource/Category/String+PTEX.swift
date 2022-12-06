@@ -907,14 +907,14 @@ public extension String
             //默认封面图
             return UIColor.randomColor.createImageWithColor()
         }
-        let aset = AVURLAsset(url: URL(fileURLWithPath: self), options: nil)
-        let assetImg = AVAssetImageGenerator(asset: aset)
-        assetImg.appliesPreferredTrackTransform = true
-        assetImg.apertureMode = AVAssetImageGenerator.ApertureMode.encodedPixels
-        do{
-            let cgimgref = try assetImg.copyCGImage(at: CMTime(seconds: 10, preferredTimescale: 50), actualTime: nil)
-            return UIImage(cgImage: cgimgref)
-        }catch{
+        
+        let image = FileManager.pt.getLocalVideoImage(videoPath: self)
+        if image != nil
+        {
+            return image!
+        }
+        else
+        {
             return UIColor.randomColor.createImageWithColor()
         }
     }

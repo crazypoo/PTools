@@ -21,4 +21,44 @@ public extension PTProtocol where Base: UIApplication
         let country = usLocale.displayName(forKey: NSLocale.Key.countryCode, value: countryCode!)
         return country!
     }
+    
+    /*! @brief iOS更换App图标
+     * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
+     */
+    static func changeAppIcon()
+    {
+        if UIApplication.shared.supportsAlternateIcons
+        {
+            PTNSLog("you can change this app's icon")
+        }
+        else
+        {
+            PTNSLog("you can not change this app's icon")
+            return
+        }
+        
+        let iconName = UIApplication.shared.alternateIconName
+        if !(iconName ?? "").stringIsEmpty()
+        {
+            UIApplication.shared.setAlternateIconName(nil) { error in
+                if error != nil
+                {
+                    PTUtils.gobal_drop(title: error.debugDescription)
+
+                }
+                PTNSLog("The alternate icon's name is \(String(describing: iconName))")
+            }
+        }
+        else
+        {
+            UIApplication.shared.setAlternateIconName(iconName) { error in
+                if error != nil
+                {
+                    PTUtils.gobal_drop(title: error.debugDescription)
+
+                }
+                PTNSLog("The alternate icon's name is \(String(describing: iconName))")
+            }
+        }
+    }
 }

@@ -190,6 +190,27 @@ public extension UIView {
             self.setNeedsDisplay()
         }
     }
+    
+    func isRolling()->Bool
+    {
+        if self is UIScrollView
+        {
+            let scrollView = self as! UIScrollView
+            if scrollView.isDragging || scrollView.isDecelerating
+            {
+                return true
+            }
+        }
+        
+        for subView in self.subviews
+        {
+            if subView.isRolling()
+            {
+                return true
+            }
+        }
+        return false
+    }
 }
 
 public extension UIView

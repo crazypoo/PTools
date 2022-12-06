@@ -38,7 +38,6 @@ class PTSwiftViewController: UIViewController {
 #if canImport(LifetimeTracker)
     LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .alwaysVisible, style: .bar).refreshUI)
 #endif
-        
         let card1 = "621226200000000000"
         let card2 = "123456789098765"
         let idcard = "111111111111111111"
@@ -50,7 +49,7 @@ class PTSwiftViewController: UIViewController {
         
         print((idcard as NSString).getIdentityCardAge())
 
-        print(("1234" as NSString).getuperDigit())
+        print(("123456789" as NSString).getuperDigit())
 
         PTBankSimpleInfoNetwork.getBankSimpleInfo(cardNum: card1 as NSString) { model in
             print(model.logoUrl)

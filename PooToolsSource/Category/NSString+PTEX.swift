@@ -228,5 +228,24 @@ public extension NSString
             }
         }
     }
+    
+    @objc func contentTypeForUrl()->PTUrlStringVideoType
+    {
+        let pathEX = self.pathExtension.lowercased()
+        
+        if pathEX.contains("mp4")
+        {
+            return .MP4
+        }
+        else if pathEX.contains("mov")
+        {
+            return .MOV
+        }
+        else if pathEX.contains("3gp")
+        {
+            return .ThreeGP
+        }
+        return .UNKNOW
+    }
 }
 

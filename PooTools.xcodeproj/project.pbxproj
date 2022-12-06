@@ -109,6 +109,7 @@
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
 		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
 		559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C94293CB789002874BA /* PTRotationManager.swift */; };
+		559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C96293F7ED8002874BA /* NSData+PTEX.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -339,6 +340,7 @@
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
 		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
 		559C1C94293CB789002874BA /* PTRotationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRotationManager.swift; sourceTree = "<group>"; };
+		559C1C96293F7ED8002874BA /* NSData+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+PTEX.swift"; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -601,6 +603,7 @@
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
+				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
 				231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */,
@@ -1584,6 +1587,7 @@
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
+				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,

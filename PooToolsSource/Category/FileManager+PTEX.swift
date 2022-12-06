@@ -597,7 +597,7 @@ public extension PTProtocol where Base: FileManager {
 
 // MARK: - 三、有关视频缩略图获取的扩展
 // 视频URL的类型
-enum JKVideoUrlType {
+enum PTVideoUrlType {
     // 本地
     case local
     // 服务器
@@ -681,7 +681,7 @@ public extension PTProtocol where Base: FileManager {
     ///   - maximumSize: 设置图片的最大size(分辨率)
     ///   - preferredTrackTransform: 设定缩略图的方向，如果不设定，可能会在视频旋转90/180/270°时，获取到的缩略图是被旋转过的，而不是正向的
     /// - Returns: 返回获取的图片
-    private static func getVideoImage(videoUrlSouceType: JKVideoUrlType = .local, path: String, seconds: Double = 1, preferredTimescale: CMTimeScale = 10, maximumSize: CGSize?, preferredTrackTransform: Bool = true) -> UIImage? {
+    private static func getVideoImage(videoUrlSouceType: PTVideoUrlType = .local, path: String, seconds: Double = 1, preferredTimescale: CMTimeScale = 10, maximumSize: CGSize?, preferredTrackTransform: Bool = true) -> UIImage? {
         var videoURL: URL?
         
         if videoUrlSouceType == .local {

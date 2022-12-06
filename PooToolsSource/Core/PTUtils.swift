@@ -11,6 +11,14 @@ import AVFoundation
 import NotificationBannerSwift
 import SwiftDate
 
+@objc public enum CheckContractTimeRelationships:Int
+{
+    case Expire
+    case ReadyExpire
+    case Normal
+    case Error
+}
+
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
     case MOV
@@ -316,26 +324,7 @@ public class PTUtils: NSObject {
             }
         }
     }
-    
-    public class func contentTypeForUrl(url:String)->PTUrlStringVideoType
-    {
-        let pathEX = url.pathExtension.lowercased()
-        
-        if pathEX.contains("mp4")
-        {
-            return .MP4
-        }
-        else if pathEX.contains("mov")
-        {
-            return .MOV
-        }
-        else if pathEX.contains("3gp")
-        {
-            return .ThreeGP
-        }
-        return .UNKNOW
-    }
-        
+            
     public class func sizeFor(string:String,
                               font:UIFont,
                               lineSpacing:CGFloat? = nil,
@@ -916,6 +905,37 @@ public class PTUtils: NSObject {
             }
         }
         return prefix.appending(suffix as String) as NSString
+    }
+    
+    //MARK: 合同时间状态检测
+    open class func checkContractTimeType(begainTime:String,endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
+    {
+        let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
+        let endTimeDate = endTime.toDate("yyyy-MM-dd")!
+        let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
+        let thirty = NSNumber(integerLiteral: readyExpTime).floatValue
+        let result = timeDifference.float - thirty
+        if result > (-thirty) && result < thirty
+        {
+            return .ReadyExpire
+        }
+        else if result < (-thirty)
+        {
+            return .Expire
+        }
+        else if result > 0
+        {
+            return .Normal
+        }
+        else
+        {
+            return .Error
+        }
+    }
+    
+    open class func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
+    {        
+        return PTUtils.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }
 

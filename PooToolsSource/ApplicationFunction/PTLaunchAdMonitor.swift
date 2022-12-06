@@ -308,7 +308,7 @@ public class PTLaunchAdMonitor: NSObject {
     func loadImageAtPath(path:NSArray)
     {
         let imageStr = path.firstObject
-        if PTUtils.contentTypeForUrl(url: imageStr as! String) == PTUrlStringVideoType.MP4
+        if (imageStr as! NSString).contentTypeForUrl() == PTUrlStringVideoType.MP4
         {
             playMovie = true
             imgLoaded = true
