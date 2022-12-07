@@ -118,6 +118,15 @@ public extension PTProtocol where Base: FileManager {
         let tmpDir = NSHomeDirectory() + "/tmp"
         return tmpDir
     }
+    
+    // MARK: 获取Log的完整路径名
+    /// 获取Log的完整路径名，用于存放临时文件，保存应用程序再次启动过程中不需要的信息，重启后清空
+    /// - Returns: Log的完整路径名
+    static func LogDirectory() -> String {
+        //方法
+        let tmpDir = NSHomeDirectory() + "/Log"
+        return tmpDir
+    }
 }
 
 // MARK: - 二、文件以及文件夹的操作 扩展
@@ -157,6 +166,36 @@ public extension PTProtocol where Base: FileManager {
             return (true, "")
         } catch _ {
             return (false, "创建失败")
+        }
+    }
+        
+    // MARK: 检测文件在文件夹中是否存在
+    /// 检测文件在文件夹中是否存在
+    /// - Parameter filePath: 文件夹的路径
+    /// - Parameter fileName: 文件的名字
+    @discardableResult
+    static func isFileExist(filePath:String,fileName:String)->Bool
+    {
+        let filePaths = (filePath + "/").appendingPathComponent(fileName)
+        let result = fileManager.fileExists(atPath: filePaths)
+        return result
+    }
+    
+    @discardableResult
+    static func renameFile(oldPath:String,newName:String)->(isSuccess:Bool,filePath:String)
+    {
+        let lastPathComponent = oldPath.lastPathComponent
+        let fileExtension = oldPath.pathExtension
+        let pathNew = oldPath.replacingOccurrences(of: lastPathComponent, with: "")
+        let newPath = pathNew + newName + "." + fileExtension
+        do
+        {
+            try fileManager.moveItem(at: URL.init(fileURLWithPath: oldPath), to: URL(fileURLWithPath: pathNew))
+            return (true,newPath)
+        }
+        catch
+        {
+            return (false,"")
         }
     }
     

@@ -12,7 +12,7 @@
 
 ## About
 
-PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码.希望大家喜欢
+PooTools是一款积累了好多比较适合本人开发的工具类,工具大部分工具都是高度自定义,也有可能适合到一些有需要的人.有些工具是修改于一些老前辈不再维护的代码
 
 ## Attention
 
@@ -127,6 +127,8 @@ pod 'PooTools/LaunchTimeProfiler', :git => 'https://github.com/crazypoo/PTools.g
 pod 'PooTools/Speech', :git => 'https://github.com/crazypoo/PTools.git'
 ### HealthKit
 pod 'PooTools/HealthKit', :git => 'https://github.com/crazypoo/PTools.git'
+### 颜色控件
+pod 'PooTools/ColorFunction', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

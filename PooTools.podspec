@@ -585,7 +585,24 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_FACEIDPERMISSION POOTOOLS_COCOAPODS"
         }
     end
-
+    
+    s.subspec 'Harbeth' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'Harbeth'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HARBETH POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'ColorFunction' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'DynamicColor'
+        subspec.dependency 'UIImageColors'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COLORFUNCTION POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -635,6 +652,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
 #        subspec.dependency 'PooTools/PermissionFunction'
+#        subspec.dependency 'PooTools/Harbeth'
+        subspec.dependency 'PooTools/ColorFunction'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

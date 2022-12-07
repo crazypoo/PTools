@@ -181,7 +181,7 @@ static NSString *cellIdentifier = @"CELL";
                     infoLabel.hidden = YES;
                     
                     NSString *isiPhoneX;
-                    if (isIPhoneXSeries()) {
+                    if ([Utils isIPhoneXSeries]) {
                         isiPhoneX = @"是";
                     }
                     else
@@ -453,7 +453,9 @@ static NSString *cellIdentifier = @"CELL";
                 case 2:
                 {
                     if ([PCleanCache clearCaches]) {
-                        [Utils alertVCOnlyShowWithTitle:nil andMessage:@"清理成功"];
+                        
+                        [PTUtils oc_alert_only_showWithTitle:@"" message:@"清理成功"];
+                        
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
                         GCDAfter(0.1, ^{
                             [self.tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
@@ -461,7 +463,7 @@ static NSString *cellIdentifier = @"CELL";
                     }
                     else
                     {
-                        [Utils alertVCOnlyShowWithTitle:nil andMessage:@"没有缓存"];
+                        [PTUtils oc_alert_only_showWithTitle:@"" message:@"没有缓存"];
                     }
                 }
                     break;

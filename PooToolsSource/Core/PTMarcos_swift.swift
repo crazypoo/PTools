@@ -15,8 +15,9 @@ public let Gobal_device_isSimulator = Device.current.isSimulator
 public let Gobal_device_info = Device.current
 public let Gobal_group_of_all_iPad:[Device] = Device.allPads
 public let Gobal_group_of_all_plus_device:[Device] = Device.allPlusSizedDevices
+public let Gobal_group_of_all_pro_device:[Device] = Device.allProDevices
 public let Gobal_group_of_all_X_device:[Device] = Device.allDevicesWithSensorHousing
-public let Gobal_group_of_all_small_device:[Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini)]
+public let Gobal_group_of_all_small_device:[Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.iPhone14,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini),.simulator(.iPhone14)]
 
 public var isXModel: Bool {
     if #available(iOS 11, *) {

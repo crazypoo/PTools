@@ -56,7 +56,8 @@ let package = Package(
         .library(name: "Appz", targets: ["Appz"]),
         .library(name: "LaunchTimeProfiler", targets: ["LaunchTimeProfiler"]),
         .library(name: "StepCount", targets: ["StepCount"]),
-        .library(name: "Speech", targets: ["Speech"])
+        .library(name: "Speech", targets: ["Speech"]),
+        .library(name: "Harbeth", targets: ["Harbeth"])
     ],
     dependencies: [],
     targets: [
@@ -108,7 +109,8 @@ let package = Package(
         .target(name: "Appz",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_APPZ"),.define("PTOOLS_SPM")]),
         .target(name: "LaunchTimeProfiler",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_LAUNCHTIMEPROFILER"),.define("PTOOLS_SPM")]),
         .target(name: "StepCount",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_STEPCOUNT"),.define("PTOOLS_SPM")]),
-        .target(name: "Speech",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_SPEECH"),.define("PTOOLS_SPM")])
+        .target(name: "Speech",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_SPEECH"),.define("PTOOLS_SPM")]),
+        .target(name: "Harbeth",dependencies: [.target(name: "PTools")],swiftSettings: [.define("POOTOOLS_HARBETH"),.define("PTOOLS_SPM")])
     ],
     swiftLanguageVersions: [.v5]
 )

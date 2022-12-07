@@ -1060,6 +1060,37 @@
       }
     },
     {
+      "name": "Harbeth",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Harbeth": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HARBETH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ColorFunction",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "DynamicColor": [
+
+        ],
+        "UIImageColors": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COLORFUNCTION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1201,6 +1232,9 @@
 
         ],
         "PooTools/LaunchTimeProfiler": [
+
+        ],
+        "PooTools/ColorFunction": [
 
         ]
       },

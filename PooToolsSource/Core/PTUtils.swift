@@ -11,6 +11,22 @@ import AVFoundation
 import NotificationBannerSwift
 import SwiftDate
 
+@inline(__always) private func isIPhoneXSeries() -> Bool {
+    var iPhoneXSeries = false
+    if UIDevice.current.userInterfaceIdiom != .phone {
+        return iPhoneXSeries
+    }
+
+    if #available(iOS 11.0, *) {
+        let mainWindow:UIView = UIApplication.shared.delegate!.window!!
+        if (mainWindow.safeAreaInsets.bottom) > 0.0 {
+            iPhoneXSeries = true
+        }
+    }
+
+    return iPhoneXSeries
+}
+
 @objc public enum CheckContractTimeRelationships:Int
 {
     case Expire
@@ -942,6 +958,21 @@ public class PTUtils: NSObject {
 //MARK: OC-FUNCTION
 extension PTUtils
 {
+    public class func oc_isiPhoneSeries()->Bool
+    {
+        return isIPhoneXSeries()
+
+    }
+    
+    public class func oc_alert_only_show(title:String?,message:String?)
+    {
+        PTUtils.oc_alert_base(title: title ?? "", msg: message ?? "", okBtns: [], cancelBtn: "确定", showIn: AppWindows!.rootViewController!) {
+            
+        } moreBtn: { index, title in
+            
+        }
+    }
+    
     public class func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
     {
         PTUtils.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)

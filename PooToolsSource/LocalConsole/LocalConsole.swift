@@ -186,27 +186,23 @@ public class LocalConsole: NSObject {
         }
         else if dataName == LocalConsole.ShareKey
         {
-            DOGobalFileManager.createLogFilePath()
-
+            FileManager.pt.createFolder(folderPath: FileManager.pt.LogDirectory())
             let fileName = "log.txt"
-
-            let manager = FileManager.default
-            let file = DOGobalFileManager.gobalLogFileURL().appendingPathComponent(fileName)
+            let file = (FileManager.pt.LogDirectory() + "/").appendingPathComponent(fileName)
             let data = currentText.data(using: .utf8)
-                                    
-            if !DOGobalFileManager.isFileExist(fileName, withFilePath: DOGobalFileManager.gobalLogFileURL())
+                      
+            if !FileManager.pt.isFileExist(filePath: FileManager.pt.LogDirectory(), fileName: fileName)
             {
-                manager.createFile(atPath: file, contents: data, attributes: nil)
+                FileManager.pt.fileManager.createFile(atPath: file, contents: data)
             }
             else
             {
-                _ = manager.subpaths(atPath: DOGobalFileManager.gobalLogFileURL())
-                try? manager.removeItem(at: URL.init(string: "file:///" + DOGobalFileManager.gobalLogFileURL())!)
-                manager.createFile(atPath: file, contents: data, attributes: nil)
+                FileManager.pt.removefolder(folderPath: FileManager.pt.LogDirectory())
+                FileManager.pt.fileManager.createFile(atPath: file, contents: data)
             }
             
             PTUtils.gcdAfter(time: 0.35) {
-                let shareURL = URL.init(fileURLWithPath: "file:///" + DOGobalFileManager.gobalLogFileURL() + fileName)
+                let shareURL = URL.init(fileURLWithPath: "file:///" + FileManager.pt.LogDirectory() + "/" + fileName)
                 if self.consoleActionBlock != nil
                 {
                     self.consoleActionBlock!(.ShareLog,false,shareURL)
