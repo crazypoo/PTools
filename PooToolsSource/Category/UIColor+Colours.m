@@ -22,6 +22,7 @@
 
 #import "UIColor+Colours.h"
 #import <objc/runtime.h>
+#import <PooTools/PooTools-Swift.h>
 
 #pragma mark - Static Block
 static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
@@ -41,34 +42,6 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 #define ColorClass NSColor
 
 #endif
-
-
-#pragma mark - Color from Hex
-+ (instancetype)colorFromHexString:(NSString *)hexString
-{
-    unsigned rgbValue = 0;
-    hexString = [hexString stringByReplacingOccurrencesOfString:@"#" withString:@""];
-    NSScanner *scanner = [NSScanner scannerWithString:hexString];
-    [scanner scanHexInt:&rgbValue];
-    
-    return [[self class] colorWithR:((rgbValue & 0xFF0000) >> 16) G:((rgbValue & 0xFF00) >> 8) B:(rgbValue & 0xFF) A:1.0];
-}
-
-
-#pragma mark - Hex from Color
-- (NSString *)hexString
-{
-    NSArray *colorArray	= [self rgbaArray];
-    int r = [colorArray[0] floatValue] * 255;
-    int g = [colorArray[1] floatValue] * 255;
-    int b = [colorArray[2] floatValue] * 255;
-    NSString *red = [NSString stringWithFormat:@"%02x", r];
-    NSString *green = [NSString stringWithFormat:@"%02x", g];
-    NSString *blue = [NSString stringWithFormat:@"%02x", b];
-    
-    return [NSString stringWithFormat:@"#%@%@%@", red, green, blue];
-}
-
 
 #pragma mark - Color from RGBA
 + (instancetype)colorFromRGBAArray:(NSArray *)rgbaArray
@@ -97,27 +70,6 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 
 
 #pragma mark - RGBA from Color
-- (NSArray *)rgbaArray
-{
-    CGFloat r=0,g=0,b=0,a=0;
-    
-    if ([self respondsToSelector:@selector(getRed:green:blue:alpha:)]) {
-        [self getRed:&r green:&g blue:&b alpha:&a];
-    }
-    else {
-        const CGFloat *components = CGColorGetComponents(self.CGColor);
-        r = components[0];
-        g = components[1];
-        b = components[2];
-        a = components[3];
-    }
-    
-    return @[@(r),
-             @(g),
-             @(b),
-             @(a)];
-}
-
 - (NSDictionary *)rgbaDictionary
 {
     CGFloat r=0,g=0,b=0,a=0;
@@ -199,10 +151,9 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 #pragma mark - LAB from Color
 - (NSArray *)CIE_LabArray {
     // Convert Color to XYZ format first
-    NSArray *rgba = [self rgbaArray];
-    CGFloat R = [rgba[0] floatValue];
-    CGFloat G = [rgba[1] floatValue];
-    CGFloat B = [rgba[2] floatValue];
+    CGFloat R = self.colorRValue;
+    CGFloat G = self.colorGValue;
+    CGFloat B = self.colorBValue;
     
     // Create deltaR block
     void (^deltaRGB)(CGFloat *R);
@@ -236,7 +187,7 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
     return @[L,
              a,
              b,
-             rgba[3]];
+             @(self.colorAValue)];
 }
 
 - (NSDictionary *)CIE_LabDictionary {
@@ -312,10 +263,9 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 - (NSArray *)cmykArray
 {
     // Convert RGB to CMY
-    NSArray *rgb = [self rgbaArray];
-    CGFloat C = 1 - [rgb[0] floatValue];
-    CGFloat M = 1 - [rgb[1] floatValue];
-    CGFloat Y = 1 - [rgb[2] floatValue];
+    CGFloat C = 1 - self.colorRValue;
+    CGFloat M = 1 - self.colorGValue;
+    CGFloat Y = 1 - self.colorBValue;
     
     // Find K
     CGFloat K = MIN(1, MIN(C, MIN(Y, M)));
@@ -407,21 +357,6 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
     return components;
 }
 
-- (CGFloat)red
-{
-    return [[self rgbaArray][0] floatValue];
-}
-
-- (CGFloat)green
-{
-    return [[self rgbaArray][1] floatValue];
-}
-
-- (CGFloat)blue
-{
-    return [[self rgbaArray][2] floatValue];
-}
-
 - (CGFloat)hue
 {
     return [[self hsbaArray][0] floatValue];
@@ -435,11 +370,6 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 - (CGFloat)brightness
 {
     return [[self hsbaArray][2] floatValue];
-}
-
-- (CGFloat)alpha
-{
-    return [[self rgbaArray][3] floatValue];
 }
 
 - (CGFloat)CIE_Lightness
@@ -551,8 +481,7 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 #pragma mark - Contrasting Color
 - (instancetype)blackOrWhiteContrastingColor
 {
-    NSArray *rgbaArray = [self rgbaArray];
-    double a = 1 - ((0.299 * [rgbaArray[0] doubleValue]) + (0.587 * [rgbaArray[1] doubleValue]) + (0.114 * [rgbaArray[2] doubleValue]));
+    double a = 1 - ((0.299 * self.colorRValue) + (0.587 * self.colorGValue) + (0.114 * self.colorBValue));
     return a < 0.5 ? [[self class] blackColor] : [[self class] whiteColor];
 }
 
@@ -703,32 +632,25 @@ static CGFloat (^RAD)(CGFloat) = ^CGFloat (CGFloat degree){
 #pragma mark - System Colors
 + (instancetype)infoBlueColor
 {
-	return [[self class] colorWithR:47 G:112 B:225 A:1.0];
+	return [[self class] colorBaseWithR:47 G:112 B:225 A:1.0];
 }
 
 + (instancetype)successColor
 {
-	return [[self class] colorWithR:83 G:215 B:106 A:1.0];
+	return [[self class] colorBaseWithR:83 G:215 B:106 A:1.0];
 }
 
 + (instancetype)warningColor
 {
-	return [[self class] colorWithR:221 G:170 B:59 A:1.0];
+	return [[self class] colorBaseWithR:221 G:170 B:59 A:1.0];
 }
 
 + (instancetype)dangerColor
 {
-	return [[self class] colorWithR:229 G:0 B:15 A:1.0];
+	return [[self class] colorBaseWithR:229 G:0 B:15 A:1.0];
 }
 
 #pragma mark - Private
-
-#pragma mark - RGBA Helper method
-+ (instancetype)colorWithR:(CGFloat)red G:(CGFloat)green B:(CGFloat)blue A:(CGFloat)alpha
-{
-    return [[self class] colorWithRed:red/255.0f green:green/255.0f blue:blue/255.0f alpha:alpha];
-}
-
 
 #pragma mark - Degrees Helper method for Color Schemes
 + (float)addDegrees:(float)addDeg toDegree:(float)staticDeg

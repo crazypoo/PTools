@@ -8,26 +8,12 @@
 
 import UIKit
 
-/// 颜色扩展
 public extension UIColor {
-    
-    var toHexString: String {
-        var r: CGFloat = 0
-        var g: CGFloat = 0
-        var b: CGFloat = 0
-        var a: CGFloat = 0
         
-        getRed(&r, green: &g, blue: &b, alpha: &a)
-        
-        return String(
-            format: "%02X%02X%02X",
-            Int(r * 0xff),
-            Int(g * 0xff),
-            Int(b * 0xff)
-        )
-    }
-    
-    /// hex 色值
+    //MARK: hex 色值
+    /// - Parameters hex:string that looks like @"#FF0000" or @"FF0000"
+    /// - Parameters alpha:0~1
+    /// - Returns UIColor
     class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         if #available(iOS 13, *)
@@ -44,14 +30,14 @@ public extension UIColor {
         }
     }
 
-    /// UIColor -> Hex String
-    var hex: String? {
+    //MARK: 颜色转Hex字符串
+    @objc var hex: String? {
         var red: CGFloat = 0
         var green: CGFloat = 0
         var blue: CGFloat = 0
         var alpha: CGFloat = 0
         
-        let multiplier = CGFloat(255.999999)
+        let multiplier = CGFloat(255)
         
         guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
             return nil
@@ -76,7 +62,23 @@ public extension UIColor {
         }
     }
     
-    /// 从Hex装换int
+    @objc var toHexString: String {
+        var r: CGFloat = 0
+        var g: CGFloat = 0
+        var b: CGFloat = 0
+        var a: CGFloat = 0
+        
+        getRed(&r, green: &g, blue: &b, alpha: &a)
+        
+        return String(
+            format: "%02X%02X%02X",
+            Int(r * 0xff),
+            Int(g * 0xff),
+            Int(b * 0xff)
+        )
+    }
+
+    //MARK: 从Hex装换int
     @available(iOS, introduced: 2.0, deprecated: 13.0)
     private class func intFromHexString(_ hexString:String)->UInt32{
         let scanner = Scanner(string: hexString)
@@ -94,7 +96,7 @@ public extension UIColor {
         return result
     }
 
-    /// 返回随机颜色
+    //MARK: 返回随机颜色
     @objc class var randomColor:UIColor{
         get
         {
@@ -107,6 +109,7 @@ public extension UIColor {
         return UIColor.colorBase(R: CGFloat(arc4random()%256), G: CGFloat(arc4random()%256), B: CGFloat(arc4random()%256), A: alpha)
     }
     
+    //MARK: 颜色基础方法
     @objc class func colorBase(R:CGFloat,G:CGFloat,B:CGFloat,A:CGFloat)->UIColor
     {
         let red = R/255.0
@@ -164,6 +167,23 @@ public extension UIColor {
         let newGreen = (rgbaModel.greenFloat) * (rgbaModel.alphaFloat) / newAlpha + (otherRgbaModel.greenFloat) * (otherRgbaModel.alphaFloat) * (1 - (rgbaModel.alphaFloat)) / newAlpha
         let newBlue = (rgbaModel.blueFloat) * (rgbaModel.alphaFloat) / newAlpha + (otherRgbaModel.blueFloat) * (otherRgbaModel.alphaFloat) * (1 - (rgbaModel.alphaFloat)) / newAlpha
         return UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
+    }
+    
+    //MARK: 分别获取颜色的RGBA值
+    @objc var colorRValue:CGFloat {
+        return self.rgbaValueModel().redFloat
+    }
+    
+    @objc var colorGValue:CGFloat {
+        return self.rgbaValueModel().greenFloat
+    }
+    
+    @objc var colorBValue:CGFloat {
+        return self.rgbaValueModel().blueFloat
+    }
+    
+    @objc var colorAValue:CGFloat {
+        return self.rgbaValueModel().alphaFloat
     }
     
     //MARK: 常规颜色配置

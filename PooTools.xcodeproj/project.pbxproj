@@ -746,8 +746,8 @@
 		231D15A1272CDEE9003D6F62 /* Json */ = {
 			isa = PBXGroup;
 			children = (
-				231D15A2272CDEE9003D6F62 /* PObject2Json.m */,
 				231D15A3272CDEE9003D6F62 /* PObject2Json.h */,
+				231D15A2272CDEE9003D6F62 /* PObject2Json.m */,
 			);
 			path = Json;
 			sourceTree = "<group>";
@@ -755,8 +755,8 @@
 		231D15DF272CDEE9003D6F62 /* KeyChain */ = {
 			isa = PBXGroup;
 			children = (
-				231D15E0272CDEE9003D6F62 /* GPKeyChain.m */,
 				231D15E1272CDEE9003D6F62 /* GPKeyChain.h */,
+				231D15E0272CDEE9003D6F62 /* GPKeyChain.m */,
 			);
 			path = KeyChain;
 			sourceTree = "<group>";

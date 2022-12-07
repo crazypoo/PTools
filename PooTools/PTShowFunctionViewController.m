@@ -43,7 +43,7 @@ CGFloat const tagItemSpace = 5;
 
 #define DelaySecond 1
 
-@interface PTShowFunctionViewController ()<GCDWebUploaderDelegate,UIPickerViewDelegate,UIPickerViewDataSource,UITextViewDelegate>
+@interface PTShowFunctionViewController ()<GCDWebUploaderDelegate,UITextViewDelegate>
 @property (nonatomic,assign)ShowFunction showType;
 
 @property (nonatomic, strong) GCDWebUploader *webServer;

@@ -25,12 +25,12 @@
 {
     NSMutableDictionary *keychainQuery = [self getKeyChainQuery:userNameService];
     SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
-    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:userName] forKey:(__bridge id)kSecValueData];
+    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:userName requiringSecureCoding:NO error:nil]/*[NSKeyedArchiver archivedDataWithRootObject:userName]*/ forKey:(__bridge id)kSecValueData];
     SecItemAdd((__bridge CFDictionaryRef)keychainQuery, NULL);
     
     keychainQuery = [self getKeyChainQuery:pwdService];
     SecItemDelete((__bridge CFDictionaryRef)keychainQuery);
-    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:pwd] forKey:(__bridge id)kSecValueData];
+    [keychainQuery setObject:[NSKeyedArchiver archivedDataWithRootObject:pwd requiringSecureCoding:NO error:nil]/*[NSKeyedArchiver archivedDataWithRootObject:pwd]*/ forKey:(__bridge id)kSecValueData];
     SecItemAdd((__bridge CFDictionaryRef)keychainQuery, NULL);
 }
 
@@ -55,7 +55,7 @@
     {
         @try
         {
-            ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+            ret = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSString class] fromData:(__bridge NSData *)(keyData) error:nil];//[NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }
         @catch (NSException *e)
         {
@@ -81,7 +81,7 @@
     {
         @try
         {
-            ret = [NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
+            ret = [NSKeyedUnarchiver unarchivedObjectOfClass:[NSString class] fromData:(__bridge NSData *)(keyData) error:nil];//[NSKeyedUnarchiver unarchiveObjectWithData:(__bridge NSData *)keyData];
         }
         @catch (NSException *e)
         {

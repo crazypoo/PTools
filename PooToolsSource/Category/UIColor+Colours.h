@@ -94,13 +94,6 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
 
 #pragma mark - Color from Hex/RGBA/HSBA/CIE_LAB/CMYK
 /**
- Creates a Color from a Hex representation string
- @param hexString   Hex string that looks like @"#FF0000" or @"FF0000"
- @return    Color
- */
-+ (instancetype)colorFromHexString:(NSString *)hexString;
-
-/**
  Creates a Color from an array of 4 NSNumbers (r,g,b,a)
  @param rgbaArray   4 NSNumbers for rgba between 0 - 1
  @return    Color
@@ -164,18 +157,6 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
 
 #pragma mark - Hex/RGBA/HSBA/CIE_LAB/CMYK from Color
 /**
- Creates a Hex representation from a Color
- @return    NSString
- */
-- (NSString *)hexString;
-
-/**
- Creates an array of 4 NSNumbers representing the float values of r, g, b, a in that order.
- @return    NSArray
- */
-- (NSArray *)rgbaArray;
-
-/**
  Creates an array of 4 NSNumbers representing the float values of h, s, b, a in that order.
  @return    NSArray
  */
@@ -231,27 +212,6 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
 - (NSDictionary *)colorComponents;
 
 /**
- *  Returns the red value from an RGBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)red;
-
-/**
- *  Returns the green value from an RGBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)green;
-
-/**
- *  Returns the blue value from an RGBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)blue;
-
-/**
  *  Returns the hue value from an HSBA formulation of the UIColor.
  *
  *  @return CGFloat
@@ -271,14 +231,6 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
  *  @return CGFloat
  */
 - (CGFloat)brightness;
-
-/**
- *  Returns the alpha value from an RGBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)alpha;
-
 /**
  *  Returns the lightness value from a CIELAB formulation of the UIColor.
  *
