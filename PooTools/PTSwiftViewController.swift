@@ -42,6 +42,8 @@ class PTSwiftViewController: UIViewController {
         let card2 = "123456789098765"
         let idcard = "111111111111111111"
         
+        let color = UIColor.hex("#FFFFFF")
+        
         let rangeFullStr = "你好啊"
         let rangeSubStr = "啊"
         let rangeArr = PTUtils.rangeOfSubString(fullStr: rangeFullStr as NSString, subStr: rangeSubStr as NSString)
@@ -94,7 +96,7 @@ class PTSwiftViewController: UIViewController {
 //            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
 //        }
 //        view.layoutSubviews()
-        self.view.backgroundColor = .random
+        self.view.backgroundColor = color
         // Do any additional setup after loading the view.
 
         let status = UIImageView()
