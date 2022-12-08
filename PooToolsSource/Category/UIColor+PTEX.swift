@@ -8,6 +8,13 @@
 
 import UIKit
 
+@objc public enum ColorDistanceType:Int
+{
+    case CIE76
+    case CIE94
+    case CIE2000
+}
+
 public extension UIColor {
         
     //MARK: hex 色值
@@ -29,7 +36,211 @@ public extension UIColor {
             return color
         }
     }
+    
+    func cielabColorArray()->[NSNumber]
+    {
+        var R = self.colorRValue
+        var G = self.colorGValue
+        var B = self.colorBValue
+        
+        let deltaRGB: (CGFloat) -> CGFloat = {
+            return ($0 > 0.04045) ? pow(($0 + 0.055) / 1.055, 2.4) : ($0 / 12.92)
+        }
+        R = deltaRGB(R)
+        G = deltaRGB(G)
+        B = deltaRGB(B)
 
+        var X = R * 41.24 + G * 35.76 + B * 18.05
+        var Y = R * 21.26 + G * 71.52 + B * 7.22
+        var Z = R * 1.93 + G * 11.92 + B * 95.05
+        
+        X = X / 95.047
+        Y = Y / 100
+        Z = Z / 108.883
+        
+        
+        let sideA:CGFloat = (1.0 / 3.0)
+        let sideB:CGFloat = (4.0 / 29.0)
+        let deltaF: (CGFloat) -> CGFloat = {
+            return ($0 > pow((6.0 / 29.0), 3.0)) ? pow($0, 1.0 / 3.0) : (sideA * pow((29.0 / 6.0), 2.0) * $0 + sideB)
+        }
+        X = deltaF(X)
+        Y = deltaF(Y)
+        Z = deltaF(Z)
+        
+        let L:NSNumber = NSNumber(floatLiteral: (116 * Y - 16))
+        let A:NSNumber = NSNumber(floatLiteral: (500 * (X - Y)))
+        let b:NSNumber = NSNumber(floatLiteral: (200 * (Y - Z)))
+        return [L,A,b,NSNumber(floatLiteral: self.colorAValue)]
+    }
+    
+    //MARK: Color from LAB Array
+    class func cielabColor(cielabData:[CGFloat])->UIColor
+    {
+        if cielabData.count < 4
+        {
+            return .clear
+        }
+        
+        let L:CGFloat = cielabData[0]
+        let A:CGFloat = cielabData[1]
+        let B:CGFloat = cielabData[2]
+        var Y:CGFloat = (L + 16) / 116
+        var X:CGFloat = A / 500 + Y
+        var Z:CGFloat = Y - B / 200
+        
+        let deltaXYZ: (CGFloat) -> CGFloat = {
+            return ($0 > 0.008856) ? pow($0, 3.0) : ($0 - 4/29.0)/7.787
+        }
+        
+        X = deltaXYZ(X) * 0.95047
+        Y = deltaXYZ(Y) * 1.00000
+        Z = deltaXYZ(Z) * 1.08883
+        
+        var R:CGFloat = X * 3.2406 + Y * (-1.5372) + Z * (-0.4986)
+        var G:CGFloat = X * (-0.9689) + Y * 1.8758 + Z * 0.0415
+        var _B:CGFloat = X * 0.0557 + Y * (-0.2040) + Z * 1.0570
+        
+        let deltaRGB: (CGFloat) -> CGFloat = {
+            return ($0 > 0.0031308) ? 1.055 * (pow($0, (1/2.4))) - 0.055 : $0 * 12.92
+        }
+        
+        R = deltaRGB(R)
+        G = deltaRGB(G)
+        _B = deltaRGB(_B)
+        return self.colorBase(R: R, G: G, B: B, A: cielabData[3])
+    }
+    
+    /**
+     *
+     *  Detecting a difference in two colors is not as trivial as it sounds.
+     *  One's first instinct is to go for a difference in RGB values, leaving
+     *  you with a sum of the differences of each point. It looks great! Until
+     *  you actually start comparing colors. Why do these two reds have a different
+     *  distance than these two blues *in real life* vs computationally?
+     *  Human visual perception is next in the line of things between a color
+     *  and your brain. Some colors are just perceived to have larger variants inside
+     *  of their respective areas than others, so we need a way to model this
+     *  human variable to colors. Enter CIELAB. This color formulation is supposed to be
+     *  this model. So now we need to standardize a unit of distance between any two
+     *  colors that works independent of how humans visually perceive that distance.
+     *  Enter CIE76,94,2000. These are methods that use user-tested data and other
+     *  mathematically and statistically significant correlations to output this info.
+     *  You can read the wiki articles below to get a better understanding historically
+     *  of how we moved to newer and better color distance formulas, and what
+     *  their respective pros/cons are.
+     *
+     *  References:
+     *
+     *  http://en.wikipedia.org/wiki/Color_difference
+     *  http://en.wikipedia.org/wiki/Just_noticeable_difference
+     *  http://en.wikipedia.org/wiki/CIELAB
+     *
+     */
+    
+    func RAD(degree:CGFloat)->CGFloat
+    {
+        return degree * .pi / 180
+    }
+    
+    func colorDistance(color:UIColor,type:ColorDistanceType)->CGFloat
+    {
+        let lab1 = self.cielabColorArray()
+        let lab2 = color.cielabColorArray()
+        
+        let L1:CGFloat = CGFloat(lab1[0].floatValue)
+        let A1:CGFloat = CGFloat(lab1[1].floatValue)
+        let B1:CGFloat = CGFloat(lab1[2].floatValue)
+
+        let L2:CGFloat = CGFloat(lab2[0].floatValue)
+        let A2:CGFloat = CGFloat(lab2[1].floatValue)
+        let B2:CGFloat = CGFloat(lab2[2].floatValue)
+
+        if type == .CIE76
+        {
+            let distance:CGFloat = CGFloat(sqrtf(Float(pow((L1 - L2), 2.0) + pow((A1 - A2), 2.0) + pow((B1 - B2), 2.0))))
+            return distance
+        }
+        
+        let kL:CGFloat = 1
+        let kC:CGFloat = 1
+        let kH:CGFloat = 1
+        let k1:CGFloat = 0.045
+        let k2:CGFloat = 0.015
+        let deltaL = L1 - L2
+        let C1 = sqrt((A1 * A1) + (B1 * B1))
+        let C2 = sqrt((A2 * A2) + (B2 * B2))
+        let deltaC = C1 - C2
+        let deltaH = sqrt(pow((A1 - A2), 2) + pow((B1 - B2), 2.0) - pow(deltaC, 2.0))
+        var sL:CGFloat = 1
+        var sC:CGFloat = 1 + k1 * (sqrt((A1 * A1) + (B1 * B1)))
+        var sH:CGFloat = 1 + k2 * (sqrt((A1 * A1) + (B1 * B1)))
+        
+        if type == .CIE94
+        {
+            let distance:CGFloat = sqrt(pow((deltaL / (kL * sL)), 2.0) + pow((deltaC / (kC * sC)), 2.0) + pow((deltaH / (kH * sH)), 2.0))
+            return distance
+        }
+        
+        let deltaLPrime:CGFloat = L2 - L1
+        let meanL:CGFloat = (L1 + L2) / 2
+        let meanC:CGFloat = (C1 + C2) / 2
+        let aPrime1:CGFloat = A1 + A1 / 2 * (1 - sqrt(pow(meanC, 7.0) / pow(meanC, 7.0) + pow(25.0, 7.0)))
+        let aPrime2:CGFloat = A2 + A2 / 2 * (1 - sqrt(pow(meanC, 7.0) / pow(meanC, 7.0) + pow(25.0, 7.0)))
+        let cPrime1:CGFloat = sqrt((aPrime1 * aPrime1) + (B1 * B1))
+        let cPrime2:CGFloat = sqrt((aPrime2 * aPrime2) + (B2 * B2))
+        let cMeanPrime:CGFloat = (cPrime1 + cPrime2) / 2
+        let deltaCPrime:CGFloat = (cPrime1 - cPrime2)
+        var hPrime1:CGFloat = atan2(B1, aPrime1)
+        var hPrime2:CGFloat = atan2(B2, aPrime2)
+        hPrime1 = CGFloat(fmodf(Float(hPrime1), Float(self.RAD(degree: 360))))
+        hPrime2 = CGFloat(fmodf(Float(hPrime2), Float(self.RAD(degree: 360))))
+        var deltahPrime:CGFloat = 0
+        if abs(hPrime1 - hPrime2) <= self.RAD(degree: 180)
+        {
+            deltahPrime = hPrime2 - hPrime1
+        }
+        else
+        {
+            deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + self.RAD(degree: 360)) : (hPrime2 - hPrime1 - self.RAD(degree: 360))
+        }
+        let deltaHPrime:CGFloat = 2 * sqrt(cPrime1 * cPrime2) * sin(deltahPrime / 2)
+        let meanHPrime = (abs(hPrime1 - hPrime2) <= self.RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : (hPrime1 + hPrime2 + self.RAD(degree: 360) / 2)
+        let T:CGFloat = 1 - 0.17 * cos(meanHPrime - self.RAD(degree: 30)) + 0.24 * cos(2 * meanHPrime) + 0.32 * cos(3 * meanHPrime + self.RAD(degree: 6)) - 0.2 * cos(4 * meanHPrime - self.RAD(degree: 63))
+        sL = 1 + 0.015 * pow(meanL - 50, 2) / sqrt(20 + pow(meanL - 50, 2))
+        sC = 1 + 0.045 * cMeanPrime
+        sH = 1 + 0.015 * cMeanPrime * T
+        let Rt = -2 * sqrt(pow(cMeanPrime, 7) / (pow(cMeanPrime, 7) + pow(25.0, 7))) * sin(self.RAD(degree:60.0) * exp(-1 * pow((meanHPrime - self.RAD(degree:275.0)) / self.RAD(degree:25.0), 2)))
+        return sqrt(pow((deltaLPrime / (kL * sL)), 2) + pow((deltaCPrime / (kC * sC)), 2) + pow((deltaHPrime / (kH * sH)), 2) + Rt * (deltaC / (kC * sC)) * (deltaHPrime / (kH * sH)))
+    }
+    
+    
+    //MARK: Color from CMYK Array
+    class func cmykColor(cmykData:[CGFloat])->UIColor
+    {
+        if cmykData.count < 4
+        {
+            return .clear
+        }
+        
+        var C:CGFloat = cmykData[0]
+        var M:CGFloat = cmykData[1]
+        var Y:CGFloat = cmykData[2]
+        let K:CGFloat = cmykData[3]
+
+        let cmyTransform = { (x: inout CGFloat) -> Void in
+                x = x * (1 - K) + K
+        }
+        cmyTransform(&C)
+        cmyTransform(&M)
+        cmyTransform(&Y)
+        
+        let R = 1 - C
+        let G = 1 - M
+        let B = 1 - Y
+        return self.colorBase(R: R, G: G, B: B, A: 1)
+    }
+        
     //MARK: 颜色转Hex字符串
     @objc var hex: String? {
         var red: CGFloat = 0
@@ -139,6 +350,24 @@ public extension UIColor {
         return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
     }
     
+    internal func hsbaValueModel()->PTColorHSBAModel
+    {
+        var hueF:CGFloat = 0
+        var saturationF:CGFloat = 0
+        var brightnessF:CGFloat = 0
+        var alphaF:CGFloat = 0
+        guard self.getHue(&hueF, saturation: &saturationF, lightness: &brightnessF, alpha: &alphaF) else {
+            return PTColorHSBAModel()
+        }
+        
+        let colorModel = PTColorHSBAModel()
+        colorModel.hueFloat = hueF
+        colorModel.saturationFloat = saturationF
+        colorModel.brightnessFloat = brightnessF
+        colorModel.alphaFloat = alphaF
+        return colorModel
+    }
+    
     internal func rgbaValueModel()->PTColorRBGModel
     {
         var redF:CGFloat = 0
@@ -184,6 +413,23 @@ public extension UIColor {
     
     @objc var colorAValue:CGFloat {
         return self.rgbaValueModel().alphaFloat
+    }
+    
+    //MARK: 分别获取颜色的HSBA值
+    @objc var hsbaColorHValue:CGFloat {
+        return self.hsbaValueModel().hueFloat
+    }
+    
+    @objc var hsbaColorSValue:CGFloat {
+        return self.hsbaValueModel().saturationFloat
+    }
+    
+    @objc var hsbaColorBValue:CGFloat {
+        return self.hsbaValueModel().brightnessFloat
+    }
+    
+    @objc var hsbaColorAValue:CGFloat {
+        return self.hsbaValueModel().alphaFloat
     }
     
     //MARK: 常规颜色配置

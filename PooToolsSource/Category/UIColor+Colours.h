@@ -66,21 +66,6 @@ typedef NS_ENUM(NSInteger, ColorScheme) {
     ColorSchemeComplementary
 };
 
-// ColorFormulation Type
-typedef NS_ENUM(NSInteger, ColorFormulation) {
-    ColorFormulationRGBA,
-    ColorFormulationHSBA,
-    ColorFormulationLAB,
-    ColorFormulationCMYK
-};
-
-// ColorDistance
-typedef NS_ENUM(NSInteger, ColorDistance) {
-    ColorDistanceCIE76,
-    ColorDistanceCIE94,
-    ColorDistanceCIE2000,
-};
-
 typedef NS_ENUM(NSInteger, ColorComparison) {
     ColorComparisonDarkness,
     ColorComparisonLightness,
@@ -91,214 +76,32 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
     ColorComparisonBlue
 };
 
-
-#pragma mark - Color from Hex/RGBA/HSBA/CIE_LAB/CMYK
-/**
- Creates a Color from an array of 4 NSNumbers (r,g,b,a)
- @param rgbaArray   4 NSNumbers for rgba between 0 - 1
- @return    Color
- */
-+ (instancetype)colorFromRGBAArray:(NSArray *)rgbaArray;
-
-/**
- Creates a Color from a dictionary of 4 NSNumbers
- Keys: kColoursRGBA_R, kColoursRGBA_G, kColoursRGBA_B, kColoursRGBA_A
- @param rgbaDictionary   4 NSNumbers for rgba between 0 - 1
- @return    Color
- */
-+ (instancetype)colorFromRGBADictionary:(NSDictionary *)rgbaDict;
-
-/**
- Creates a Color from an array of 4 NSNumbers (h,s,b,a)
- @param hsbaArray   4 NSNumbers for rgba between 0 - 1
- @return    Color
- */
-+ (instancetype)colorFromHSBAArray:(NSArray *)hsbaArray;
-
-/**
- Creates a Color from a dictionary of 4 NSNumbers
- Keys: kColoursHSBA_H, kColoursHSBA_S, kColoursHSBA_B, kColoursHSBA_A
- @param hsbaDictionary   4 NSNumbers for rgba between 0 - 1
- @return    Color
- */
-+ (instancetype)colorFromHSBADictionary:(NSDictionary *)hsbaDict;
-
-/**
- Creates a Color from an array of 4 NSNumbers (L,a,b,alpha)
- @param colors   4 NSNumbers for CIE_LAB between 0 - 1
- @return Color
- */
-+ (instancetype)colorFromCIE_LabArray:(NSArray *)colors;
-
-/**
- Creates a Color from a dictionary of 4 NSNumbers
- Keys: kColoursCIE_L, kColoursCIE_A, kColoursCIE_B, kColoursCIE_alpha
- @param colors   4 NSNumbers for CIE_LAB between 0 - 1
- @return Color
- */
-+ (instancetype)colorFromCIE_LabDictionary:(NSDictionary *)colors;
-
-/**
- Creates a Color from an array of 4 NSNumbers (C,M,Y,K)
- @param colors   4 NSNumbers for CMYK between 0 - 1
- @return Color
- */
-+ (instancetype)colorFromCMYKArray:(NSArray *)cmyk;
-
-/**
- Creates a Color from a dictionary of 4 NSNumbers
- Keys: kColoursCMYK_C, kColoursCMYK_M, kColoursCMYK_Y, kColoursCMYK_K
- @param colors   4 NSNumbers for CMYK between 0 - 1
- @return Color
- */
-+ (instancetype)colorFromCMYKDictionary:(NSDictionary *)cmyk;
-
-
-
-#pragma mark - Hex/RGBA/HSBA/CIE_LAB/CMYK from Color
-/**
- Creates an array of 4 NSNumbers representing the float values of h, s, b, a in that order.
- @return    NSArray
- */
-- (NSArray *)hsbaArray;
-
-/**
- Creates a dictionary of 4 NSNumbers representing float values with keys: kColoursRGBA_R, kColoursRGBA_G, kColoursRGBA_B, kColoursRGBA_A
- @return    NSDictionary
- */
-- (NSDictionary *)rgbaDictionary;
-
-/**
- Creates a dictionary of 4 NSNumbers representing float values with keys: kColoursHSBA_H, kColoursHSBA_S, kColoursHSBA_B, kColoursHSBA_A
- @return    NSDictionary
- */
-- (NSDictionary *)hsbaDictionary;
-
-/**
- *  Creates an array of 4 NSNumbers representing the float values of L*, a, b, alpha in that order.
- *
- *  @return NSArray
- */
-- (NSArray *)CIE_LabArray;
-
-/**
- *  Creates a dictionary of 4 NSNumbers representing the float values with keys: kColoursCIE_L, kColoursCIE_A, kColoursCIE_B, kColoursCIE_alpha
- *
- *  @return NSDictionary
- */
-- (NSDictionary *)CIE_LabDictionary;
-
-/**
- *  Creates an array of 4 NSNumbers representing the float values of C, M, Y, K in that order.
- *
- *  @return NSArray
- */
-- (NSArray *)cmykArray;
-
-/**
- *  Creates a dictionary of 4 NSNumbers representing the float values with keys: kColoursCMYK_C, kColoursCMYK_M, kColoursCMYK_Y, kColoursCMYK_K
- *
- *  @return NSDictionary
- */
-- (NSDictionary *)cmykDictionary;
-
-
 #pragma mark - Color Components
-/**
- *  Creates an NSDictionary with RGBA and HSBA color components inside.
- *
- *  @return NSDictionary
- */
-- (NSDictionary *)colorComponents;
-
-/**
- *  Returns the hue value from an HSBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)hue;
-
-/**
- *  Returns the saturation value from an HSBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)saturation;
-
-/**
- *  Returns the brightness value from an HSBA formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)brightness;
-/**
- *  Returns the lightness value from a CIELAB formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)CIE_Lightness;
-
-/**
- *  Returns the a value from a CIELAB formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)CIE_a;
-
-/**
- *  Returns the b value from a CIELAB formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)CIE_b;
-
-/**
- *  Returns the cyan value from a CMYK formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)cyan;
-
-/**
- *  Returns the magenta value from a CMYK formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)magenta;
-
-/**
- *  Returns the yellow value from a CMYK formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)yellow;
-
-/**
- *  Returns the black (K) value from a CMYK formulation of the UIColor.
- *
- *  @return CGFloat
- */
-- (CGFloat)keyBlack;
-
+///**
+// *  Creates an NSDictionary with RGBA and HSBA color components inside.
+// *
+// *  @return NSDictionary
+// */
+//- (NSDictionary *)colorComponents;
 
 #pragma mark - Darken/Lighten
-/**
- *  Darkens a color by changing the brightness by a percentage you pass in. If you want a 25% darker color, you pass in 0.25;
- *
- *  @param percentage CGFloat
- *
- *  @return Color
- */
-- (instancetype)darken:(CGFloat)percentage;
-
-/**
- *  Lightens a color by changing the brightness by a percentage you pass in. If you want a 25% lighter color, you pass in 0.25;
- *
- *  @param percentage CGFloat
- *
- *  @return Color
- */
-- (instancetype)lighten:(CGFloat)percentage;
+///**
+// *  Darkens a color by changing the brightness by a percentage you pass in. If you want a 25% darker color, you pass in 0.25;
+// *
+// *  @param percentage CGFloat
+// *
+// *  @return Color
+// */
+//- (instancetype)darken:(CGFloat)percentage;
+//
+///**
+// *  Lightens a color by changing the brightness by a percentage you pass in. If you want a 25% lighter color, you pass in 0.25;
+// *
+// *  @param percentage CGFloat
+// *
+// *  @return Color
+// */
+//- (instancetype)lighten:(CGFloat)percentage;
 
 
 #pragma mark - 4 Color Scheme from Color
@@ -319,39 +122,16 @@ typedef NS_ENUM(NSInteger, ColorComparison) {
 
 
 #pragma mark - Complementary Color
-/**
- Creates a complementary color - a color directly opposite it on the color wheel.
- @return    Color
- */
-- (instancetype)complementaryColor;
-
-
-#pragma mark - Distance between Colors
-/**
- *  Returns a float of the distance between 2 colors. Defaults to the
- *  CIE94 specification found here: http://en.wikipedia.org/wiki/Color_difference
- *
- *  @param color Color to check self with.
- *
- *  @return CGFloat
- */
-- (CGFloat)distanceFromColor:(id)color;
-
-/**
- *  Returns a float of the distance between 2 colors, using one of
- *
- *
- *  @param color        Color to check against
- *  @param distanceType Formula to calculate with
- *
- *  @return CGFloat
- */
-- (CGFloat)distanceFromColor:(id)color type:(ColorDistance)distanceType;
+///**
+// Creates a complementary color - a color directly opposite it on the color wheel.
+// @return    Color
+// */
+//- (instancetype)complementaryColor;
 
 
 #pragma mark - Compare Colors
-+ (NSArray *)sortColors:(NSArray *)colors withComparison:(ColorComparison)comparison;
-+ (NSComparisonResult)compareColor:(id)colorA andColor:(id)colorB withComparison:(ColorComparison)comparison;
+//+ (NSArray *)sortColors:(NSArray *)colors withComparison:(ColorComparison)comparison;
+//+ (NSComparisonResult)compareColor:(id)colorA andColor:(id)colorB withComparison:(ColorComparison)comparison;
 
 
 #pragma mark - Colors
