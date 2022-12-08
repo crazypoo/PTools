@@ -26,7 +26,6 @@
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
 		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
-		231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
@@ -71,7 +70,6 @@
 		231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */; };
 		231D1693272CDEEA003D6F62 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 231D15DE272CDEE9003D6F62 /* PooTools.bundle */; };
 		231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E0272CDEE9003D6F62 /* GPKeyChain.m */; };
-		231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */; };
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
 		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
@@ -240,8 +238,6 @@
 		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
 		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
 		231D1582272CDEE9003D6F62 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
-		231D158C272CDEE9003D6F62 /* PooUDIDInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooUDIDInfo.h; sourceTree = "<group>"; };
-		231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooUDIDInfo.m; sourceTree = "<group>"; };
 		231D15A2272CDEE9003D6F62 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
 		231D15A3272CDEE9003D6F62 /* PObject2Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PObject2Json.h; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
@@ -289,10 +285,8 @@
 		231D15E0272CDEE9003D6F62 /* GPKeyChain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GPKeyChain.m; sourceTree = "<group>"; };
 		231D15E1272CDEE9003D6F62 /* GPKeyChain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GPKeyChain.h; sourceTree = "<group>"; };
 		231D15E3272CDEE9003D6F62 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
-		231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DOGobalFileManager.m; sourceTree = "<group>"; };
 		231D15E5272CDEE9003D6F62 /* PMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
 		231D15E6272CDEE9003D6F62 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DOGobalFileManager.h; sourceTree = "<group>"; };
 		231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
 		231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
@@ -715,8 +709,6 @@
 		231D158B272CDEE9003D6F62 /* PhoneInfo */ = {
 			isa = PBXGroup;
 			children = (
-				231D158C272CDEE9003D6F62 /* PooUDIDInfo.h */,
-				231D158F272CDEE9003D6F62 /* PooUDIDInfo.m */,
 				55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */,
 			);
 			path = PhoneInfo;
@@ -976,8 +968,6 @@
 			isa = PBXGroup;
 			children = (
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
-				231D15E7272CDEE9003D6F62 /* DOGobalFileManager.h */,
-				231D15E4272CDEE9003D6F62 /* DOGobalFileManager.m */,
 				231D15E5272CDEE9003D6F62 /* PMacros.h */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */,
@@ -1289,7 +1279,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = PT;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1420;
 				ORGANIZATIONNAME = crazypoo;
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
@@ -1557,7 +1547,6 @@
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
-				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
@@ -1700,7 +1689,6 @@
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
-				231D1695272CDEEA003D6F62 /* DOGobalFileManager.m in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1758,6 +1746,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1813,6 +1802,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -1832,6 +1822,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 10;
 				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

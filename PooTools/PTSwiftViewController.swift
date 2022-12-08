@@ -36,7 +36,7 @@ class PTSwiftViewController: UIViewController {
         super.viewDidLoad()
 
 #if canImport(LifetimeTracker)
-    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .alwaysVisible, style: .bar).refreshUI)
+    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
 #endif
         let card1 = "621226200000000000"
         let card2 = "123456789098765"

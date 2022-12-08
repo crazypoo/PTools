@@ -26,7 +26,7 @@ public extension NSData
             if (self.count) < 12 {
                 return .UNKNOW
             }
-            var testString = NSString(data: self.subdata(with: NSMakeRange(0, 12)), encoding: NSASCIIStringEncoding)
+            let testString = NSString(data: self.subdata(with: NSMakeRange(0, 12)), encoding: NSASCIIStringEncoding)
     
             if testString?.hasPrefix("RIFF") ?? false && testString?.hasSuffix("WEBP") ?? false {
                 return .WEBP
