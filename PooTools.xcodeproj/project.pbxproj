@@ -20,7 +20,6 @@
 		231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */; };
 		231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1519272CDEE9003D6F62 /* UITextField+Limit.m */; };
 		231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */; };
-		231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1526272CDEE9003D6F62 /* UIColor+Colours.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153C272CDEE9003D6F62 /* PooTextView.m */; };
 		231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1540272CDEE9003D6F62 /* CustomTextField.m */; };
@@ -224,14 +223,12 @@
 		231D1509272CDEE9003D6F62 /* NSString+Regulars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Regulars.m"; sourceTree = "<group>"; };
 		231D150A272CDEE9003D6F62 /* UILabel+FlickerNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FlickerNumber.m"; sourceTree = "<group>"; };
 		231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
-		231D150C272CDEE9003D6F62 /* UIColor+Colours.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colours.h"; sourceTree = "<group>"; };
 		231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
 		231D1513272CDEE9003D6F62 /* UITableView+WWFoldableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WWFoldableTableView.h"; sourceTree = "<group>"; };
 		231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
 		231D1519272CDEE9003D6F62 /* UITextField+Limit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
 		231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
 		231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
-		231D1526272CDEE9003D6F62 /* UIColor+Colours.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colours.m"; sourceTree = "<group>"; };
 		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
 		231D1528272CDEE9003D6F62 /* NSString+Regulars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
 		231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
@@ -623,8 +620,6 @@
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
 				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
-				231D150C272CDEE9003D6F62 /* UIColor+Colours.h */,
-				231D1526272CDEE9003D6F62 /* UIColor+Colours.m */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
@@ -1392,7 +1387,6 @@
 				"${BUILT_PRODUCTS_DIR}/Aspects/Aspects.framework",
 				"${BUILT_PRODUCTS_DIR}/BRPickerView/BRPickerView.framework",
 				"${BUILT_PRODUCTS_DIR}/CRBoxInputView/CRBoxInputView.framework",
-				"${BUILT_PRODUCTS_DIR}/CYLTabBarController/CYLTabBarController.framework",
 				"${BUILT_PRODUCTS_DIR}/ChromaColorPicker/ChromaColorPicker.framework",
 				"${BUILT_PRODUCTS_DIR}/CocoaLumberjack/CocoaLumberjack.framework",
 				"${BUILT_PRODUCTS_DIR}/CollectionViewPagingLayout/CollectionViewPagingLayout.framework",
@@ -1400,6 +1394,7 @@
 				"${BUILT_PRODUCTS_DIR}/DZNEmptyDataSet/DZNEmptyDataSet.framework",
 				"${BUILT_PRODUCTS_DIR}/DeviceKit/DeviceKit.framework",
 				"${BUILT_PRODUCTS_DIR}/DynamicColor/DynamicColor.framework",
+				"${BUILT_PRODUCTS_DIR}/ESTabBarController-swift/ESTabBarController_swift.framework",
 				"${BUILT_PRODUCTS_DIR}/EmptyDataSet-Swift/EmptyDataSet_Swift.framework",
 				"${BUILT_PRODUCTS_DIR}/FDFullscreenPopGesture/FDFullscreenPopGesture.framework",
 				"${BUILT_PRODUCTS_DIR}/FLEX/FLEX.framework",
@@ -1435,6 +1430,7 @@
 				"${BUILT_PRODUCTS_DIR}/SwiftDate/SwiftDate.framework",
 				"${BUILT_PRODUCTS_DIR}/SwifterSwift/SwifterSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
+				"${BUILT_PRODUCTS_DIR}/Swinject/Swinject.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeCellKit/SwipeCellKit.framework",
 				"${BUILT_PRODUCTS_DIR}/TZImagePickerController/TZImagePickerController.framework",
 				"${BUILT_PRODUCTS_DIR}/TextFieldEffects/TextFieldEffects.framework",
@@ -1459,7 +1455,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Aspects.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/BRPickerView.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CRBoxInputView.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CYLTabBarController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ChromaColorPicker.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaLumberjack.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CollectionViewPagingLayout.framework",
@@ -1467,6 +1462,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DZNEmptyDataSet.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DeviceKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/DynamicColor.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ESTabBarController_swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EmptyDataSet_Swift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FDFullscreenPopGesture.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FLEX.framework",
@@ -1502,6 +1498,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftDate.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwifterSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Swinject.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeCellKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TZImagePickerController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/TextFieldEffects.framework",
@@ -1686,7 +1683,6 @@
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
 				554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */,
-				231D1630272CDEE9003D6F62 /* UIColor+Colours.m in Sources */,
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,

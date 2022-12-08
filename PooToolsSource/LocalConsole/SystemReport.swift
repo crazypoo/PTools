@@ -32,7 +32,6 @@ class SystemReport {
             // Fallback on earlier versions
             return "Unknown"
         }
-        
     }
     
     // Retrieve device mobile gestalt cache.
@@ -107,7 +106,6 @@ class SystemReport {
                 }
             }
         }
-        
         return "Unknown"
     }
 }

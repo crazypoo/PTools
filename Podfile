@@ -70,4 +70,5 @@ target 'PooTools_Example' do
 #  pod 'PooTools/SpeechRecognizerPermission', :path => 'PooTools.podspec'
 
   pod 'SwiftLint'
+  pod 'Swinject'
 end

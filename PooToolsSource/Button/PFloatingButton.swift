@@ -69,15 +69,22 @@ open class PFloatingButton: UIButton {
     }()
     
     lazy var loadTraceButton : PFloatingButton = {
-        let view : PFloatingButton = NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as! PFloatingButton
-        view.alpha = 0.8
-        view.isSelected = false
-        view.isHighlighted = false
-        if layerConfigBlock != nil
+        do
         {
-            layerConfigBlock!(view)
+            let view : PFloatingButton = try NSKeyedUnarchiver.unarchivedObject(ofClass: PFloatingButton.self, from: NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false))!//NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as! PFloatingButton
+            view.alpha = 0.8
+            view.isSelected = false
+            view.isHighlighted = false
+            if layerConfigBlock != nil
+            {
+                layerConfigBlock!(view)
+            }
+            return view
         }
-        return view
+        catch
+        {
+            return PFloatingButton()
+        }
     }()
         
     var autoAddTraceButtonTimer:Timer?

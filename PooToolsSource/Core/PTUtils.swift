@@ -266,7 +266,14 @@ public class PTUtils: NSObject {
     public class func showNetworkActivityIndicator(_ show:Bool)
     {
         PTUtils.gcdMain {
-            UIApplication.shared.isNetworkActivityIndicatorVisible = show
+            if #available(iOS 13.0, *)
+            {
+                
+            }
+            else
+            {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = show
+            }
         }
     }
     

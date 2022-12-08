@@ -13,7 +13,7 @@ public extension CGPoint {
     /// + returns: The distance from this point to the given point.
     func distance(to point: CGPoint) -> CGFloat {
         // Pythagoras
-        sqrt(pow(point.x - x, 2) + pow(point.y - y, 2))
+        return sqrt(pow(point.x - self.x, 2) + pow(point.y - self.y, 2))
     }
 }
 

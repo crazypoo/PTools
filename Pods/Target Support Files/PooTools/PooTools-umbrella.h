@@ -21,7 +21,6 @@
 #import "NSMutableString+TagReplace.h"
 #import "NSString+Regulars.h"
 #import "NSString+WPAttributedMarkup.h"
-#import "UIColor+Colours.h"
 #import "UILabel+FlickerNumber.h"
 #import "UITableView+WWFoldableTableView.h"
 #import "UITextField+Limit.h"
