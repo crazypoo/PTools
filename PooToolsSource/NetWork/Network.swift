@@ -315,7 +315,7 @@ public class Network: NSObject {
 @objcMembers
 public class PTFileDownloadApi: NSObject {
     
-    public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progrss:Double)->()
+    public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
     public typealias FileDownloadSuccess = (_ reponse:Any)->()
     public typealias FileDownloadFail = (_ error:Error?)->()
     

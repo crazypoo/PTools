@@ -13,7 +13,6 @@ import SceneKit
 import CoreMotion
 import AVFoundation
 import AVKit
-import AFNetworking
 
 public let PTViewerBaseTag = 9999
 public let PTSubViewBasicsIndex = 888
@@ -1296,22 +1295,18 @@ public class PTMediaViewer: UIView {
             make.centerX.centerY.equalToSuperview()
         }
         
+        
         let documentDirectory = FileManager.pt.DocumnetsDirectory()
-        let managers = AFHTTPSessionManager()
         let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-        let fileUrl = URL.init(string: url)!
-        let request = URLRequest.init(url: fileUrl)
-        let task = managers.downloadTask(with: request) { progress in
+        _ = PTFileDownloadApi(fileUrl: url, saveFilePath: fullPath) { bytesRead, totalBytesRead, progress in
             PTUtils.gcdMain {
-                loadingView.progress = progress.fractionCompleted
+                loadingView.progress = progress
             }
-        } destination: { targetPath, response in
-            return NSURL.fileURL(withPath: fullPath)
-        } completionHandler: { response, filePath, error in
+        } success: { reponse in
             loadingView.removeFromSuperview()
             self.saveVideo(videoPath: fullPath)
+        } fail: { error in
         }
-        task.resume()
     }
     
     func saveVideo(videoPath:String)

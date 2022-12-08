@@ -57,7 +57,6 @@
 		231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */; };
 		231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */; };
 		231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */; };
-		231D1686272CDEEA003D6F62 /* PTFileDownLoadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */; };
 		231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */; };
 		231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */; };
 		231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15D4272CDEE9003D6F62 /* PTUtils.swift */; };
@@ -187,8 +186,6 @@
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
-		CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */; };
-		CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
@@ -276,7 +273,6 @@
 		231D15CE272CDEE9003D6F62 /* PSecurityStrategy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PSecurityStrategy.swift; sourceTree = "<group>"; };
 		231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+PTEX.swift"; sourceTree = "<group>"; };
 		231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PooSegmentView.swift; sourceTree = "<group>"; };
-		231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFileDownLoadManager.swift; sourceTree = "<group>"; };
 		231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+PTEX.swift"; sourceTree = "<group>"; };
 		231D15D3272CDEE9003D6F62 /* PTNumberKeyBoard.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTNumberKeyBoard.swift; sourceTree = "<group>"; };
 		231D15D4272CDEE9003D6F62 /* PTUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUtils.swift; sourceTree = "<group>"; };
@@ -476,8 +472,6 @@
 				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
 				C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
-				CC658CDF20AC3F7C00949DF6 /* AFNetworking.framework in Frameworks */,
-				CC658CE120AC3F7C00949DF6 /* CYLTabBarController.framework in Frameworks */,
 				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
 				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
 				CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */,
@@ -685,7 +679,6 @@
 			children = (
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
-				231D15D1272CDEE9003D6F62 /* PTFileDownLoadManager.swift */,
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
 				5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */,
 			);
@@ -1380,7 +1373,6 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/AMKLaunchTimeProfiler/AMKLaunchTimeProfiler.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Appz/Appz.framework",
@@ -1448,7 +1440,6 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AMKLaunchTimeProfiler.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Appz.framework",
@@ -1569,7 +1560,6 @@
 				231D165B272CDEEA003D6F62 /* PooUDIDInfo.m in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
-				231D1686272CDEEA003D6F62 /* PTFileDownLoadManager.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,

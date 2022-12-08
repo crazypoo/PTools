@@ -306,7 +306,6 @@ Pod::Spec.new do |s|
     
     s.subspec 'NetWork' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'AFNetworking'
         subspec.dependency 'KakaJSON'
         subspec.dependency 'Alamofire'
         subspec.dependency 'SwiftyJSON'
