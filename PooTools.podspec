@@ -35,8 +35,15 @@ Pod::Spec.new do |s|
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'FloatingPanel'
         subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
+        subspec.dependency 'KakaJSON'
+        subspec.dependency 'Alamofire'
+        subspec.dependency 'SwiftyJSON'
+        subspec.dependency 'HandyJSON'
+        subspec.dependency 'EmptyDataSet-Swift'#空数据
+        subspec.dependency 'MJExtension'
+        subspec.dependency 'MBProgressHUD'
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -305,23 +312,23 @@ Pod::Spec.new do |s|
         }
     end
     
-    s.subspec 'NetWork' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'KakaJSON'
-        subspec.dependency 'Alamofire'
-        subspec.dependency 'SwiftyJSON'
-        subspec.dependency 'HandyJSON'
-        subspec.dependency 'EmptyDataSet-Swift'#空数据
-        subspec.dependency 'MJExtension'
-        subspec.dependency 'MBProgressHUD'
-        subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
-        }
-    end
+#    s.subspec 'NetWork' do |subspec|
+#        subspec.dependency 'PooTools/Core'
+#        subspec.dependency 'KakaJSON'
+#        subspec.dependency 'Alamofire'
+#        subspec.dependency 'SwiftyJSON'
+#        subspec.dependency 'HandyJSON'
+#        subspec.dependency 'EmptyDataSet-Swift'#空数据
+#        subspec.dependency 'MJExtension'
+#        subspec.dependency 'MBProgressHUD'
+#        subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
+#        subspec.pod_target_xcconfig = {
+#            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
+#        }
+#    end
     
     s.subspec 'CheckUpdate' do |subspec|
-        subspec.dependency 'PooTools/NetWork'
+        subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/CheckUpdate/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
@@ -643,7 +650,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Segmented'
         subspec.dependency 'PooTools/Slider'
         subspec.dependency 'PooTools/Thermometer'
-        subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/CheckUpdate'
         subspec.dependency 'PooTools/Layout'
         subspec.dependency 'PooTools/Tabbar'
