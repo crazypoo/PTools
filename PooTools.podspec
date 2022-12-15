@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'FloatingPanel'
+        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos'
         subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -311,7 +312,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'SwiftyJSON'
         subspec.dependency 'HandyJSON'
         subspec.dependency 'EmptyDataSet-Swift'#空数据
-        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
         subspec.dependency 'MJExtension'
         subspec.dependency 'MBProgressHUD'
         subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
@@ -602,6 +602,15 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'PopoverKit' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'Popovers'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -653,6 +662,7 @@ Pod::Spec.new do |s|
 #        subspec.dependency 'PooTools/PermissionFunction'
 #        subspec.dependency 'PooTools/Harbeth'
         subspec.dependency 'PooTools/ColorFunction'
+        subspec.dependency 'PooTools/PopoverKit'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
