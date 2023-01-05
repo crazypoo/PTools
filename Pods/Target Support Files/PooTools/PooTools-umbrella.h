@@ -11,7 +11,6 @@
 #endif
 
 #import "JYBDBankCardSearch.h"
-#import "DOGobalFileManager.h"
 #import "PMacros.h"
 #import "PooTools_Example-Bridging-Header.h"
 #import "PTImageBlackToTransparent.h"
@@ -28,13 +27,12 @@
 #import "UIView+LayoutSubviewsCallback.h"
 #import "UIView+ModifyFrame.h"
 #import "PrintBeautifulLog.h"
+#import "PObject2Json.h"
 #import "PLabel.h"
 #import "CustomTextField.h"
 #import "PooTextView.h"
 #import "GPKeyChain.h"
 #import "PGifHud.h"
-#import "PObject2Json.h"
-#import "PooUDIDInfo.h"
 #import "MAThermometer.h"
 #import "MAThermometerBorder.h"
 

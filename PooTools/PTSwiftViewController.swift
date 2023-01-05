@@ -35,6 +35,29 @@ class PTSwiftViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        
+        PTUtils.gcdAfter(time: 2) {
+            if #available(iOS 14.0, *)
+            {
+                Task{
+                    do{
+                        let object:PTAlbumObject = try await PTImagePicker.openAlbum()
+                        await MainActor.run{
+                            if let imageData = object.imageData,let image = UIImage(data: imageData){
+                                print(image)
+                            }else if let videoUrl = object.videoURL{
+                                print(videoUrl)
+                            }else{
+                                print("aaaaaaa")
+                            }
+                        }
+                    }catch let pickerError as PTImagePicker.PickerError{
+                        pickerError.outPutLog()
+                    }
+                }
+            }
+        }
+        
 #if canImport(LifetimeTracker)
     LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
 #endif

@@ -87,6 +87,30 @@
         ],
         "FloatingPanel": [
 
+        ],
+        "LXFProtocolTool/LXFEmptyDataSetable": [
+
+        ],
+        "KakaJSON": [
+
+        ],
+        "Alamofire": [
+
+        ],
+        "SwiftyJSON": [
+
+        ],
+        "HandyJSON": [
+
+        ],
+        "EmptyDataSet-Swift": [
+
+        ],
+        "MJExtension": [
+
+        ],
+        "MBProgressHUD": [
+
         ]
       },
       "frameworks": [
@@ -113,7 +137,9 @@
         "PooToolsSource/LocalConsole/*.{h,m,swift}",
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/StatusBar/*.{h,m,swift}",
-        "PooToolsSource/TouchInspector/*.{h,m,swift}"
+        "PooToolsSource/TouchInspector/*.{h,m,swift}",
+        "PooToolsSource/NetWork/*.{h,m,swift}",
+        "PooToolsSource/Json/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -543,48 +569,9 @@
       }
     },
     {
-      "name": "NetWork",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ],
-        "KakaJSON": [
-
-        ],
-        "Alamofire": [
-
-        ],
-        "SwiftyJSON": [
-
-        ],
-        "HandyJSON": [
-
-        ],
-        "EmptyDataSet-Swift": [
-
-        ],
-        "LXFProtocolTool/LXFEmptyDataSetable": [
-
-        ],
-        "MJExtension": [
-
-        ],
-        "MBProgressHUD": [
-
-        ]
-      },
-      "source_files": [
-        "PooToolsSource/NetWork/*.{h,m,swift}",
-        "PooToolsSource/Json/*.{h,m,swift}"
-      ],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "CheckUpdate",
       "dependencies": {
-        "PooTools/NetWork": [
+        "PooTools/Core": [
 
         ]
       },
@@ -754,6 +741,7 @@
 
         ]
       },
+      "source_files": "PooToolsSource/ImagePicker/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
       }
@@ -1088,6 +1076,20 @@
       }
     },
     {
+      "name": "PopoverKit",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Popovers": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_POPOVERKIT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1183,9 +1185,6 @@
         "PooTools/Thermometer": [
 
         ],
-        "PooTools/NetWork": [
-
-        ],
         "PooTools/CheckUpdate": [
 
         ],
@@ -1232,6 +1231,9 @@
 
         ],
         "PooTools/ColorFunction": [
+
+        ],
+        "PooTools/PopoverKit": [
 
         ]
       },
