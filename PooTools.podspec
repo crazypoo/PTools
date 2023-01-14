@@ -9,7 +9,7 @@ Pod::Spec.new do |s|
     s.platform = :ios, '13.0'
     s.requires_arc = true
     s.ios.deployment_target = '13.0'
-    s.swift_versions = '4.2'
+    s.swift_versions = '5.0'
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
         subspec.resource     = 'PooToolsSource/PooTools.bundle'

@@ -18,7 +18,7 @@
     "ios": "13.0"
   },
   "requires_arc": true,
-  "swift_versions": "4.2",
+  "swift_versions": "5.0",
   "default_subspecs": "Core",
   "subspecs": [
     {
@@ -1242,5 +1242,5 @@
       }
     }
   ],
-  "swift_version": "4.2"
+  "swift_version": "5.0"
 }

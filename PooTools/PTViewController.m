@@ -196,7 +196,17 @@ static NSString *cellIdentifier = @"CELL";
                     infoLabel.textAlignment = NSTextAlignmentCenter;
                     infoLabel.numberOfLines = 0;
                     infoLabel.lineBreakMode = NSLineBreakByCharWrapping;
-                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,[PTCarrie currentRadioAccessTechnology],isJailBroken,@"???"];
+                        
+                    NSString *carrieName = @"";
+                    if (@available(iOS 12.0,*))
+                    {
+                        carrieName = @"不支持";
+                    }
+                    else
+                    {
+                        carrieName = [PTCarrie currentRadioAccessTechnologys].firstObject;
+                    }
+                    infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,carrieName,isJailBroken,@"???"];
                     [cell.contentView addSubview:infoLabel];
                     [infoLabel mas_makeConstraints:^(MASConstraintMaker *make) {
                         make.top.equalTo(functionName.mas_bottom);

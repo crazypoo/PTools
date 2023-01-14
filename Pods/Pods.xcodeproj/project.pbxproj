@@ -21515,6 +21515,38 @@
 			};
 			name = Release;
 		};
+		B72F308FFF096C54C6BAAF0541E5C559 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2BDD9F6416F911AC4E858A16D00E0DE0 /* PooTools.release.xcconfig */;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_WEAK = NO;
+				CODE_SIGNING_ALLOWED = NO;
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
+				PRODUCT_MODULE_NAME = PooTools;
+				PRODUCT_NAME = PooTools;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		B82554EA08E0471970CA208660C2066C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 05CF2A0798500F450CA85223EEBDAD6E /* Aspects.debug.xcconfig */;
@@ -22363,9 +22395,9 @@
 			};
 			name = Debug;
 		};
-		DFBAB45D97D8E9B130C54C212C987E3D /* Release */ = {
+		E005869CD1E97203D66FE4AC7EB49B5B /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2BDD9F6416F911AC4E858A16D00E0DE0 /* PooTools.release.xcconfig */;
+			baseConfigurationReference = 9D34BBCBFE8B2829CD752D5069F808D3 /* PooTools.debug.xcconfig */;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_WEAK = NO;
@@ -22387,13 +22419,12 @@
 				PRODUCT_NAME = PooTools;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
+				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
 		E6ABE06C02B2F76A7C0A3B486293A657 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -22715,37 +22746,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		F624F52714D45EE14596ED3BA20C08C1 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9D34BBCBFE8B2829CD752D5069F808D3 /* PooTools.debug.xcconfig */;
-			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
-				CLANG_ENABLE_OBJC_WEAK = NO;
-				CODE_SIGNING_ALLOWED = NO;
-				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
-				CURRENT_PROJECT_VERSION = 1;
-				DEFINES_MODULE = YES;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
-				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				GCC_PREFIX_HEADER = "Target Support Files/PooTools/PooTools-prefix.pch";
-				INFOPLIST_FILE = "Target Support Files/PooTools/PooTools-Info.plist";
-				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MODULEMAP_FILE = "Target Support Files/PooTools/PooTools.modulemap";
-				PRODUCT_MODULE_NAME = PooTools;
-				PRODUCT_NAME = PooTools;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				SWIFT_VERSION = 4.2;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				VERSIONING_SYSTEM = "apple-generic";
-				VERSION_INFO_PREFIX = "";
-			};
-			name = Debug;
 		};
 		F808F178F2F5E6EAF9B6EDEFB3050E7B /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -23085,8 +23085,8 @@
 		244DEC3E5231D7D96D2EB1C6C0529B37 /* Build configuration list for PBXNativeTarget "PooTools" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				F624F52714D45EE14596ED3BA20C08C1 /* Debug */,
-				DFBAB45D97D8E9B130C54C212C987E3D /* Release */,
+				E005869CD1E97203D66FE4AC7EB49B5B /* Debug */,
+				B72F308FFF096C54C6BAAF0541E5C559 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

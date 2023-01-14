@@ -15,7 +15,7 @@ import Foundation
 class PTCarrie: NSObject {
     /*! @brief 获取手机当前运营商
      */
-    @available(iOS, introduced: 7.0, deprecated: 12.0)
+    @available(iOS, introduced: 7.0, deprecated: 12.0,message: "12後不再支持了")
     public class func currentRadioAccessTechnology()->String
     {
         let current = CTTelephonyNetworkInfo()
