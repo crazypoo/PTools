@@ -42,7 +42,10 @@ public class PTNumberKeyBoard: UIView {
         }
         set
         {
-            self.kKeyW = newValue
+            if self.kKeyW != newValue
+            {
+                self.kKeyW = newValue
+            }
         }
     }
                 

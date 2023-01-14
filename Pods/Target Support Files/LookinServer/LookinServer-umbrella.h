@@ -33,6 +33,7 @@
 #import "LKS_LocalInspectPanelLabelView.h"
 #import "LKS_LocalInspectViewController.h"
 #import "LookinServer.h"
+#import "LKSConfigManager.h"
 #import "LKS_AttrGroupsMaker.h"
 #import "LKS_EventHandlerMaker.h"
 #import "LKS_ExportManager.h"

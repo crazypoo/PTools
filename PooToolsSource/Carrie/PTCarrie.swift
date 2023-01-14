@@ -15,6 +15,7 @@ import Foundation
 class PTCarrie: NSObject {
     /*! @brief 获取手机当前运营商
      */
+    @available(iOS, introduced: 7.0, deprecated: 12.0)
     public class func currentRadioAccessTechnology()->String
     {
         let current = CTTelephonyNetworkInfo()
@@ -23,23 +24,37 @@ class PTCarrie: NSObject {
     
     /*! @brief 获取手机当前运营商其他信息
      */
+    @available(iOS, introduced: 4.0, deprecated: 16.0,message: "可能在16之後就無法使用該API了")
     public class func getSiminfo()->NSMutableDictionary
     {
         let dic = NSMutableDictionary()
         
-        let info = CTTelephonyNetworkInfo()
-        let carrier = info.subscriberCellularProvider
-        let mcc = carrier?.mobileCountryCode
-        let mnc = carrier?.mobileNetworkCode
-        let ccode = carrier?.isoCountryCode
-        let name = carrier?.carrierName
-        let allowVOIP = carrier!.allowsVOIP ? 1 : 0
+        if #available(iOS 13, *)
+        {
+            let carrier = CTCarrier()
+            let carrierName = carrier.carrierName
+            let mobileCountryCode = carrier.mobileCountryCode
+            let mobileNetworkCode = carrier.mobileNetworkCode
+            dic.setValue(mobileCountryCode, forKey: "mobileCountryCode")
+            dic.setValue(mobileNetworkCode, forKey: "mobileNetworkCode")
+            dic.setValue(carrierName, forKey: "carrierName")
+        }
+        else
+        {
+            let info = CTTelephonyNetworkInfo()
+            let carrier = info.subscriberCellularProvider
+            let mcc = carrier?.mobileCountryCode
+            let mnc = carrier?.mobileNetworkCode
+            let ccode = carrier?.isoCountryCode
+            let name = carrier?.carrierName
+            let allowVOIP = carrier!.allowsVOIP ? 1 : 0
 
-        dic.setValue(mcc, forKey: "mobileCountryCode")
-        dic.setValue(mnc, forKey: "mobileNetworkCode")
-        dic.setValue(ccode, forKey: "isoCountryCode")
-        dic.setValue(name, forKey: "carrierName")
-        dic.setValue(allowVOIP, forKey: "allowsVOIP")
+            dic.setValue(mcc, forKey: "mobileCountryCode")
+            dic.setValue(mnc, forKey: "mobileNetworkCode")
+            dic.setValue(ccode, forKey: "isoCountryCode")
+            dic.setValue(name, forKey: "carrierName")
+            dic.setValue(allowVOIP, forKey: "allowsVOIP")
+        }
 
         return dic
     }

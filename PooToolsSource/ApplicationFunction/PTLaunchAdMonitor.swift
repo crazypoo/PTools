@@ -104,7 +104,16 @@ public class PTLaunchAdMonitor: NSObject {
         
         if Gobal_device_info.isPad
         {
-            let orientation = UIApplication.shared.statusBarOrientation
+            var orientation:UIInterfaceOrientation = .unknown
+            if #available(iOS 13, *)
+            {
+                orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
+            }
+            else
+            {
+                orientation = UIApplication.shared.statusBarOrientation
+            }
+            
             switch orientation {
             case .landscapeLeft:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)

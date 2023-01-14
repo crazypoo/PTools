@@ -247,13 +247,43 @@ public extension String
         
         return String(data: data, encoding: .utf8)
     }
-        
-    var md5555:String
-    {
-        let utf8 = cString(using: .utf8)
-        var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-        CC_MD5(utf8, CC_LONG(utf8!.count - 1), &digest)
-        return digest.reduce("") { $0 + String(format:"%02X", $1) }
+            
+    @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這是因為MD5算法已被證明是不安全的，不應在安全上下文中使用,所以在iOS13之後用sha256算法比較合適")
+    var md5:String {
+        let data = Data(self.utf8)
+        let hash = data.withUnsafeBytes { (bytes:UnsafeRawBufferPointer) -> [UInt8] in
+            var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+            CC_MD5(bytes.baseAddress,CC_LONG(data.count),&hash)
+            return hash
+        }
+        return hash.map { String(format: "%02x", $0)}.joined()
+    }
+    
+    @available(iOS 13.0,*)
+    private func hexStringFormatData(input:NSData) -> String {
+        var bytes = [UInt8](repeating: 0, count: input.length)
+        input.getBytes(&bytes, length: input.length)
+        var hexString = ""
+        for byte in bytes {
+            hexString += String(format:"%02x",UInt8(byte))
+        }
+        return hexString
+    }
+    
+    @available(iOS 13.0,*)
+    private func digest(input:NSData) -> NSData {
+        let digestLength = Int(CC_SHA224_DIGEST_LENGTH)
+        var hash = [UInt8](repeating: 0, count: digestLength)
+        CC_SHA256(input.bytes, UInt32(input.length), &hash)
+        return NSData(bytes: hash, length: digestLength)
+    }
+    
+    @available(iOS 13.0,*)
+    var sha256:String {
+        if let stringData = self.data(using: String.Encoding.utf8) {
+            return hexStringFormatData(input: digest(input: stringData as NSData))
+        }
+        return ""
     }
     
     /// 是否包含emoji

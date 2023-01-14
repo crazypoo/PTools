@@ -671,7 +671,17 @@ public class PTMediaMediaView:UIView
         }
         
         self.motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in
-            let orientation = UIApplication.shared.statusBarOrientation
+            
+            var orientation:UIInterfaceOrientation = .unknown
+            if #available(iOS 13, *)
+            {
+                orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
+            }
+            else
+            {
+                orientation = UIApplication.shared.statusBarOrientation
+            }
+            
             if orientation == .portrait && !self.gestureDuring!
             {
                 var modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0)
