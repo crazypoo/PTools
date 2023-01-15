@@ -42,4 +42,48 @@ public extension Double
         let measurement = Measurement(value: self, unit: unit)
         return formatter.string(from: measurement)
     }
+    
+    //MARK: 數字金額轉換成人民幣大寫金額
+    /// - Parameter return: 人民幣大寫金額
+    func cnySpellOut()->String{
+        let numString = String(format: "%.2f", self)
+        let parts = numString.split(separator: ".")
+        let integerPart = parts[0]
+        let fractionalPart = parts[1]
+        let chineseNumerals = ["零", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖"]
+        let chineseUnits = ["", "拾", "佰", "仟", "萬", "拾萬", "佰萬", "仟萬", "億", "拾億", "佰億", "仟億"]
+        let chineseFractionalUnits = ["角", "分"]
+        var integerString = ""
+        var count = 0
+        for i in (0..<integerPart.count).reversed() {
+            let index = integerPart.index(integerPart.startIndex, offsetBy: i)
+            let ch = chineseNumerals[Int(String(integerPart[index]))!]
+            let unit = chineseUnits[count % chineseUnits.count]
+            if ch != "零" {
+                integerString = ch + unit + integerString
+            } else if !integerString.isEmpty {
+                integerString = ch + integerString
+            }
+            count += 1
+        }
+        var fractionalString = ""
+        count = 0
+        for i in 0..<2 {
+            let index = fractionalPart.index(fractionalPart.startIndex, offsetBy: i)
+            let ch = chineseNumerals[Int(String(fractionalPart[index]))!]
+            let unit = chineseFractionalUnits[count]
+            if ch != "零" {
+                fractionalString += ch + unit
+            }
+            count += 1
+        }
+        if integerString.isEmpty {
+            integerString = "零"
+        }
+        if fractionalString.isEmpty {
+            return integerString + "元整"
+        } else {
+            return integerString + "元" + fractionalString
+        }
+    }
 }

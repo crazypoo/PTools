@@ -36,27 +36,27 @@ class PTSwiftViewController: UIViewController {
         super.viewDidLoad()
 
         
-        PTUtils.gcdAfter(time: 2) {
-            if #available(iOS 14.0, *)
-            {
-                Task{
-                    do{
-                        let object:PTAlbumObject = try await PTImagePicker.openAlbum()
-                        await MainActor.run{
-                            if let imageData = object.imageData,let image = UIImage(data: imageData){
-                                print(image)
-                            }else if let videoUrl = object.videoURL{
-                                print(videoUrl)
-                            }else{
-                                print("aaaaaaa")
-                            }
-                        }
-                    }catch let pickerError as PTImagePicker.PickerError{
-                        pickerError.outPutLog()
-                    }
-                }
-            }
-        }
+//        PTUtils.gcdAfter(time: 2) {
+//            if #available(iOS 14.0, *)
+//            {
+//                Task{
+//                    do{
+//                        let object:PTAlbumObject = try await PTImagePicker.openAlbum()
+//                        await MainActor.run{
+//                            if let imageData = object.imageData,let image = UIImage(data: imageData){
+//                                print(image)
+//                            }else if let videoUrl = object.videoURL{
+//                                print(videoUrl)
+//                            }else{
+//                                print("aaaaaaa")
+//                            }
+//                        }
+//                    }catch let pickerError as PTImagePicker.PickerError{
+//                        pickerError.outPutLog()
+//                    }
+//                }
+//            }
+//        }
         
 #if canImport(LifetimeTracker)
     LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
@@ -73,8 +73,6 @@ class PTSwiftViewController: UIViewController {
         print(">>>>>>>>>>>>>>>>>>>>\(rangeArr)")
         
         print((idcard as NSString).getIdentityCardAge())
-
-        print(("123456789" as NSString).getuperDigit())
 
         PTBankSimpleInfoNetwork.getBankSimpleInfo(cardNum: card1 as NSString) { model in
             print(model.logoUrl)
@@ -113,7 +111,7 @@ class PTSwiftViewController: UIViewController {
         view.layoutSubviewsCallback = { view in
             PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
         }
-
+        
 //        UIView.swizzleLayoutSubviewsCallback_UNTRACKABLE_TOGGLE()
 //        view.layoutSubviewsCallback = { view in
 //            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
@@ -173,6 +171,7 @@ class PTSwiftViewController: UIViewController {
 //        self.navigationController?.present(nav, animated: true)
 //        vc.viewDismissBlock = {
 //        }
+        
         let counting = PTCountingLabel()
         counting.positiveFormat = "##0.00"
         self.view.addSubview(counting)
@@ -182,5 +181,29 @@ class PTSwiftViewController: UIViewController {
             make.height.equalTo(100)
         }
         counting.countFrom(starValue: 0, toValue: 100, duration: 3)
+        status.layoutSubviewsCallback = { someview in
+            print("asdadadadad:\(someview!)")
+        }
+        
+        let linessssss = PTImaginaryLineView()
+        linessssss.lineColor = .randomColor
+        linessssss.lineType = .Ver
+        self.view.addSubview(linessssss)
+        linessssss.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(100)
+            make.top.bottom.equalToSuperview()
+            make.width.equalTo(20)
+        }
+        
+        let customTextF = UITextView()
+        self.view.addSubview(customTextF)
+        customTextF.bk_placeholder = "123123123123123123123"
+        customTextF.bk_wordCountLabel?.textColor = .randomColor
+        customTextF.pt_maxWordCount = 10
+        customTextF.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.bottom.equalToSuperview().inset(100)
+        }
+
     }
 }

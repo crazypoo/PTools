@@ -30,4 +30,5 @@ public extension Int
     static func randomIntNumber(range: Range<Int>) -> Int {
         randomIntNumber(lower: range.lowerBound, upper: range.upperBound)
     }
+    
 }

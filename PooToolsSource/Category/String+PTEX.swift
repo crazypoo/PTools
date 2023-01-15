@@ -75,7 +75,7 @@ public extension String
     static let ALPHABETUPPERCASED = "^[A-Za-z0-9]+$"
     static let CNCARLICENSE = "^[\\u4e00-\\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\\u4e00-\\u9fa5]$"
     static let NUMBERANDWORD = "^[0-9_a-zA-Z]*$"
-    
+        
     func isNumberAndWord()->Bool
     {
         return self.checkWithString(expression: String.NUMBERANDWORD)

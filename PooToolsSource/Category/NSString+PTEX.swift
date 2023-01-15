@@ -198,37 +198,7 @@ public extension NSString
             return "99999"
         }
     }
-    
-    func getuperDigit()->NSString
-    {
-        let range:NSRange = self.range(of: ".")
-        if range.length != 0
-        {
-            let tmpArray:[String] = self.components(separatedBy: ".")
-            let integerNumber = (tmpArray[0] as NSString).integerValue
-            let dotNumber = tmpArray.last
-            let integerNumberStr = PTUtils.getIntPartUper(digit: integerNumber)
-            if integerNumberStr.isEqual(to: "元")
-            {
-                return NSString(format: "%@", PTUtils.getPartAfterDot(digitStr: dotNumber! as NSString))
-            }
-            return NSString(format: "%@%@", PTUtils.getIntPartUper(digit: integerNumber),PTUtils.getPartAfterDot(digitStr: dotNumber! as NSString))
-        }
-        else
-        {
-            let integerNumber = self.integerValue
-            let tmpStr = PTUtils.getIntPartUper(digit: integerNumber)
-            if tmpStr.isEqual(to: "元")
-            {
-                return "零元整"
-            }
-            else
-            {
-                return NSString(format: "%@整", PTUtils.getIntPartUper(digit: integerNumber))
-            }
-        }
-    }
-    
+        
     @objc func contentTypeForUrl()->PTUrlStringVideoType
     {
         let pathEX = self.pathExtension.lowercased()

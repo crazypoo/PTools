@@ -23,7 +23,28 @@ import UIKit
 @objcMembers
 public class PTLabel: UILabel {
         
-    public var verticalAlignment : PTVerticalAlignment? = .Middle
+    //MARK: 設置文字的位置
+    ///設置文字的位置
+    public func setVerticalAlignment(value:PTVerticalAlignment)
+    {
+        self.verticalAlignment = value
+    }
+    
+    private var verticalAlignment : PTVerticalAlignment? = .Middle
+    {
+        didSet{
+            self.setNeedsDisplay()
+        }
+    }
+
+    //MARK: 設置橫線的位置
+    ///設置橫線的位置
+    public func setStrikeThroughAlignment(value:PTStrikeThroughAlignment)
+    {
+        self.strikeThroughAlignment = value
+    }
+
+    private var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
     {
         didSet
         {
@@ -31,15 +52,14 @@ public class PTLabel: UILabel {
         }
     }
     
-    public var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
+    //MARK: 設置是否帶橫線
+    ///設置是否帶橫線
+    public func setStrikeThroughEnabled(value:Bool)
     {
-        didSet
-        {
-            self.setNeedsDisplay()
-        }
+        self.strikeThroughEnabled = value
     }
     
-    public var strikeThroughEnabled : Bool? = false
+    private var strikeThroughEnabled : Bool? = false
     {
         didSet
         {
@@ -47,6 +67,8 @@ public class PTLabel: UILabel {
         }
     }
 
+    //MARK: 設置橫線顏色
+    ///設置橫線顏色
     public var strikeThroughColor : UIColor = UIColor.systemRed
     
     override init(frame: CGRect)

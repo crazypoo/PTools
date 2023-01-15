@@ -21,11 +21,8 @@
 		231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1519272CDEE9003D6F62 /* UITextField+Limit.m */; };
 		231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
-		231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D153C272CDEE9003D6F62 /* PooTextView.m */; };
-		231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1540272CDEE9003D6F62 /* CustomTextField.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
-		231D1654272CDEEA003D6F62 /* PLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1582272CDEE9003D6F62 /* PLabel.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
@@ -115,6 +112,7 @@
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
+		55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */; };
 		55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */; };
 		55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */; };
 		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
@@ -230,16 +228,10 @@
 		231D1528272CDEE9003D6F62 /* NSString+Regulars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
 		231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
-		231D153B272CDEE9003D6F62 /* CustomTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CustomTextField.h; sourceTree = "<group>"; };
-		231D153C272CDEE9003D6F62 /* PooTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PooTextView.m; sourceTree = "<group>"; };
-		231D1540272CDEE9003D6F62 /* CustomTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CustomTextField.m; sourceTree = "<group>"; };
-		231D1541272CDEE9003D6F62 /* PooTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PooTextView.h; sourceTree = "<group>"; };
 		231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometerBorder.m; sourceTree = "<group>"; };
 		231D154C272CDEE9003D6F62 /* MAThermometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometer.m; sourceTree = "<group>"; };
 		231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
 		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
-		231D157C272CDEE9003D6F62 /* PLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PLabel.h; sourceTree = "<group>"; };
-		231D1582272CDEE9003D6F62 /* PLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PLabel.m; sourceTree = "<group>"; };
 		231D15A2272CDEE9003D6F62 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
 		231D15A3272CDEE9003D6F62 /* PObject2Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PObject2Json.h; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
@@ -339,6 +331,7 @@
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
+		55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallMessageMailFunction.swift; sourceTree = "<group>"; };
 		55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
@@ -629,6 +622,7 @@
 				231D1519272CDEE9003D6F62 /* UITextField+Limit.m */,
 				231D14F6272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.h */,
 				231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */,
+				55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
 				231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */,
 				231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */,
@@ -645,10 +639,6 @@
 		231D1537272CDEE9003D6F62 /* Input */ = {
 			isa = PBXGroup;
 			children = (
-				231D153B272CDEE9003D6F62 /* CustomTextField.h */,
-				231D1540272CDEE9003D6F62 /* CustomTextField.m */,
-				231D1541272CDEE9003D6F62 /* PooTextView.h */,
-				231D153C272CDEE9003D6F62 /* PooTextView.m */,
 				5507026E28F7A02300C48239 /* PTGrowingText.swift */,
 			);
 			path = Input;
@@ -695,8 +685,6 @@
 		231D1579272CDEE9003D6F62 /* Label */ = {
 			isa = PBXGroup;
 			children = (
-				231D157C272CDEE9003D6F62 /* PLabel.h */,
-				231D1582272CDEE9003D6F62 /* PLabel.m */,
 				5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */,
 				231D15B5272CDEE9003D6F62 /* PTLabel.swift */,
 			);
@@ -1556,7 +1544,6 @@
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
-				231D1654272CDEEA003D6F62 /* PLabel.m in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
@@ -1570,7 +1557,6 @@
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
-				231D1639272CDEE9003D6F62 /* PooTextView.m in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
@@ -1675,6 +1661,7 @@
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
 				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
+				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* Extensions.swift in Sources */,
@@ -1690,7 +1677,6 @@
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
-				231D163B272CDEE9003D6F62 /* CustomTextField.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,

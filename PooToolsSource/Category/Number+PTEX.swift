@@ -27,3 +27,4 @@ public extension BinaryFloatingPoint {
         return formatter.string(from: NSDecimalNumber(string: "\(self)")) ?? ""
     }
 }
+

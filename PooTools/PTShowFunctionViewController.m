@@ -28,9 +28,6 @@ CGFloat const tagItemSpace = 5;
 
 #import <GCDWebServer/GCDWebUploader.h>
 
-#import "PooTextView.h"
-
-#import "PLabel.h"
 
 #import "PGifHud.h"
 
@@ -238,15 +235,15 @@ CGFloat const tagItemSpace = 5;
                 make.height.offset(44);
             }];
             
-            PooTextView *textView = [PooTextView new];
+            UITextView *textView = [UITextView new];
+            [self.view addSubview:textView];
             textView.backgroundColor = kRandomColor;
             textView.delegate = self;
             textView.returnKeyType = UIReturnKeyDone;
             textView.font = APPFONT(20);
             textView.textColor = kRandomColor;
-            textView.placeholder = @"我是TextView";
-//            textView.bk_maxWordCount = @"20";
-            [self.view addSubview:textView];
+            textView.bk_placeholder = @"我是TextView";
+            textView.pt_maxWordCount = @30;
             [textView mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(searchBar.mas_bottom).offset(10);
                 make.left.right.equalTo(self.view);
@@ -289,31 +286,29 @@ CGFloat const tagItemSpace = 5;
             break;
         case ShowFunctionLabelThroughLine:
         {
-//            PTLabel *aaaaaaaaaaaaaa = [PTLabel new];
-//            aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
-//            aaaaaaaaaaaaaa.verticalAlignment = PTVerticalAlignmentMiddle;
-//            aaaaaaaaaaaaaa.strikeThroughAlignment = PTStrikeThroughAlignmentMiddle;
-//            aaaaaaaaaaaaaa.strikeThroughEnabled = YES;
-
-            PLabel *aaaaaaaaaaaaaa = [PLabel new];
-            aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
-            [aaaaaaaaaaaaaa setVerticalAlignment:VerticalAlignmentMiddle strikeThroughAlignment:StrikeThroughAlignmentBottom setStrikeThroughEnabled:YES];
+            PTLabel *aaaaaaaaaaaaaa = [PTLabel new];
             aaaaaaaaaaaaaa.text = @"111111111111111";
+            aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
+            [aaaaaaaaaaaaaa setVerticalAlignmentWithValue:PTVerticalAlignmentMiddle];
+            [aaaaaaaaaaaaaa setStrikeThroughAlignmentWithValue:PTStrikeThroughAlignmentMiddle];
+            aaaaaaaaaaaaaa.strikeThroughColor = UIColor.randomColor;
+            [PTUtils gcdAfterTime:0.2 block:^{
+                [aaaaaaaaaaaaaa setStrikeThroughEnabledWithValue:YES];
+            }];
             [self.view addSubview:aaaaaaaaaaaaaa];
             [aaaaaaaaaaaaaa mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.top.equalTo(self.view).offset(HEIGHT_NAVBAR);
                 make.left.right.equalTo(self.view);
                 make.height.offset(44);
             }];
-            
+
             UIButton *randomLineBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             [randomLineBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
             [randomLineBtn setTitle:@"随机画线" forState:UIControlStateNormal];
             [randomLineBtn addActionHandlersWithHandler:^(UIButton * sender) {
-                //                aaaaaaaaaaaaaa.verticalAlignment = random()%4;
-                //                aaaaaaaaaaaaaa.strikeThroughAlignment = random()%4;
-                //                aaaaaaaaaaaaaa.strikeThroughEnabled = random()%2;
-                [aaaaaaaaaaaaaa setVerticalAlignment:random()%4 strikeThroughAlignment:random()%4 setStrikeThroughEnabled:random()%2];
+                [aaaaaaaaaaaaaa setVerticalAlignmentWithValue:random()%4];
+                [aaaaaaaaaaaaaa setStrikeThroughAlignmentWithValue:random()%4];
+                [aaaaaaaaaaaaaa setStrikeThroughEnabledWithValue:random()%2];
             }];
             [self.view addSubview:randomLineBtn];
             [randomLineBtn mas_makeConstraints:^(MASConstraintMaker *make) {

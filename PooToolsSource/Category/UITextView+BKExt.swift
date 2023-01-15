@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 // MARK: - 扩展 UITextView，添加 placeholder 和 字数限制功能。
 /*
@@ -19,6 +20,7 @@ fileprivate var bk_placeholderKey = "bk_placeholderKey"
 fileprivate var bk_attributedTextKey = "bk_attributedTextKey"
 fileprivate var bk_wordCountLabelKey = "bk_wordCountLabelKey"
 fileprivate var bk_maxWordCountKey = "bk_maxWordCountKey"
+fileprivate var pt_textCountPositionKey = "pt_textCountPositionKey"
 
 public extension UITextView {
     
@@ -28,8 +30,9 @@ public extension UITextView {
         NotificationCenter.default.removeObserver(self, name: UITextView.textDidChangeNotification, object: nil)
         removeObserver(self, forKeyPath: "text")
     }
-    
-    /// bk_placeholder Label
+        
+    //MARK: 設置TextView的Placeholder Label
+    ///設置TextView的Placeholder Label
     var bk_placeholderLabel: UILabel? {
         set{
             objc_setAssociatedObject(self, &bk_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -64,8 +67,9 @@ public extension UITextView {
         }
     }
     
-    /// bk_placeholder
-    var bk_placeholder: String? {
+    //MARK: 設置TextView的Placeholder
+    ///設置TextView的Placeholder
+    @objc var bk_placeholder: String? {
         set {
             objc_setAssociatedObject(self, bk_placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let placeholder = newValue else { return }
@@ -76,8 +80,9 @@ public extension UITextView {
         }
     }
     
-    /// bk_placeholderAttributedText
-    var bk_placeholderAttributedText: NSAttributedString? {
+    //MARK: 設置TextView的Placeholder的富文本
+    ///設置TextView的Placeholder的富文本
+    @objc var bk_placeholderAttributedText: NSAttributedString? {
         set {
             objc_setAssociatedObject(self, &bk_attributedTextKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let attr = newValue else { return }
@@ -88,7 +93,8 @@ public extension UITextView {
         }
     }
     
-    /// 字数的Label
+    //MARK: 設置TextView的字數限制Label
+    ///設置TextView的字數限制Label
     var bk_wordCountLabel: UILabel? {
         set{
             // 调用 setter 的时候会执行此处代码，将自定义的label通过runtime保存起来
@@ -107,10 +113,8 @@ public extension UITextView {
                 if let grandfatherView = superview {
                     // 这里添加到 self.superview。如果添加到self，发现自动布局效果不理想。
                     grandfatherView.addSubview(label)
-                    
                     label.translatesAutoresizingMaskIntoConstraints = false
-                    
-                    grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -7)) 
+                    grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -7))
                     grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -7))
                 } else {
                     print("请先将您的UITextView添加到视图中")
@@ -127,28 +131,27 @@ public extension UITextView {
         }
     }
     
-    /// 限制的字数
-    var bk_maxWordCount: Int? {
+    //MARK: 設置TextView的字數限制
+    ///設置TextView的字數限制
+    @objc var pt_maxWordCount: NSNumber? {
         set {
-            let num = NSNumber(integerLiteral: newValue!)
-            objc_setAssociatedObject(self, &bk_maxWordCountKey, num, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &bk_maxWordCountKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let count = newValue else { return }
             guard let label = bk_wordCountLabel else { return }
             label.text = "\(text.count)/\(count)"
-            
         }
         get {
             let num = objc_getAssociatedObject(self, &bk_maxWordCountKey) as? NSNumber
-            return num?.intValue
+            return num
         }
     }
-    
+        
     @objc private func bk_maxWordCountAction() -> () {
         
-        guard let maxCount = bk_maxWordCount else { return }
-        if text.count >= maxCount {
+        guard let maxCount = pt_maxWordCount else { return }
+        if text.count >= maxCount.intValue {
             /// 输入的文字超过最大值
-            text = (self.text as NSString).substring(to: maxCount)
+            text = (self.text as NSString).substring(to: maxCount.intValue)
             print("已经超过限制的字数了！");
         }
     }
@@ -161,12 +164,11 @@ public extension UITextView {
         }
         
         if let wordCountLabel = bk_wordCountLabel {
-            guard let count = bk_maxWordCount else { return }
+            guard let count = pt_maxWordCount else { return }
             wordCountLabel.text = "\(text.count)/\(count)"
         }
         
     }
-    
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         

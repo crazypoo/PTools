@@ -8,10 +8,20 @@
 
 import UIKit
 
+@objc public enum PTImaginaryLineType:Int{
+    case Ver
+    case Hor
+}
+
 @objcMembers
 public class PTImaginaryLineView: UIView {
     
+    //MARK: 虛線顏色
+    ///虛線顏色
     public var lineColor:UIColor? = .lightGray
+    //MARK: 虛線方向
+    ///虛線方向
+    public var lineType:PTImaginaryLineType? = .Hor
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -28,8 +38,14 @@ public class PTImaginaryLineView: UIView {
         context?.setLineDash(phase: 4, lengths: [4])
         context?.fill(self.bounds)
         context?.setStrokeColor(self.lineColor!.cgColor)
-        context?.move(to: CGPoint.init(x: 0, y: 0))
-        context?.addLine(to: CGPoint.init(x: self.frame.size.width, y: 0))
+        switch self.lineType {
+        case .Hor:
+            context?.move(to: CGPoint.init(x: 0, y: self.frame.size.height / 2))
+            context?.addLine(to: CGPoint.init(x: self.frame.size.width, y: 0))
+        default:
+            context?.move(to: CGPoint.init(x: self.frame.size.width / 2, y: 0))
+            context?.addLine(to: CGPoint.init(x: self.frame.size.width / 2, y: self.frame.size.height))
+        }
         context?.strokePath()
     }
 }
