@@ -10,7 +10,6 @@
 #import "Utils.h"
 #import "PMacros.h"
 #import "PTAppDelegate.h"
-#import "UITextField+ModifyPlaceholder.h"
 
 #import "PTShowFunctionViewController.h"
 

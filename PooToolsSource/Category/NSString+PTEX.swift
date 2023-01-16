@@ -217,5 +217,127 @@ public extension NSString
         }
         return .UNKNOW
     }
+    
+    @objc func checkWithString(expression:NSString)->Bool
+    {
+        return String(format: "%@", self).checkWithString(expression: String(format: "%@", expression))
+    }
+    
+    @objc func checkWithArray(expression:NSArray)->Bool
+    {
+        return String(format: "%@", self).checkWithArray(expression: expression)
+    }
 }
 
+let kWPAttributedMarkupLinkName = "PTAttributedMarkupLinkName"
+public extension NSString
+{
+    func setText(color:UIColor,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        onAttributedString.removeAttribute(NSAttributedString.Key.foregroundColor, range: range)
+        onAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
+    }
+    
+    func setTextStyle(styleName:NSString,value:Any,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        onAttributedString.removeAttribute(styleName as NSAttributedString.Key, range: range)
+        onAttributedString.addAttribute(styleName as NSAttributedString.Key, value: value, range: range)
+    }
+    
+    func setLink(url:NSURL,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        onAttributedString.removeAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), range: range)
+        onAttributedString.addAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), value: url.absoluteString!, range: range)
+    }
+    
+    func setFont(fontName:NSString,size:CGFloat,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        let aFont = CTFontCreateWithName(fontName, size, nil)
+        onAttributedString.removeAttribute(kCTFontAttributeName as NSAttributedString.Key, range: range)
+        onAttributedString.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: aFont, range: range)
+    }
+    
+    func setFont(font:UIFont,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        self.setFont(fontName: font.fontName.nsString, size: font.pointSize, range: range, onAttributedString: onAttributedString)
+    }
+    
+    func setStyle(style:NSDictionary,range:NSRange,onAttributedString:NSMutableAttributedString)
+    {
+        for key in style.allKeys
+        {
+            let newKey = NSString(format: "%@", key as! CVarArg)
+            let value = style.value(forKey: newKey as String)
+            self.setTextStyle(styleName:newKey, value: value!, range: range, onAttributedString: onAttributedString)
+        }
+    }
+    
+    func style(attributedString:NSMutableAttributedString,range:NSRange,style:Any,styleBook:NSDictionary)
+    {
+        if style is NSArray
+        {
+            for subStyle in (style as! NSArray)
+            {
+                self.style(attributedString: attributedString, range: range, style: subStyle, styleBook: styleBook)
+            }
+        }
+        else if style is NSDictionary
+        {
+            self.setStyle(style: style as! NSDictionary, range: range, onAttributedString: attributedString)
+        }
+        else if style is UIFont
+        {
+            self.setFont(font: style as! UIFont, range: range, onAttributedString: attributedString)
+        }
+        else if style is UIColor
+        {
+            self.setText(color: style as! UIColor, range: range, onAttributedString: attributedString)
+        }
+        else if style is NSURL
+        {
+            self.setLink(url: style as! NSURL, range: range, onAttributedString: attributedString)
+        }
+        else if style is NSString
+        {
+            self.style(attributedString: attributedString, range: range, style: style, styleBook: styleBook)
+        }
+        else if style is UIImage
+        {
+            let attachment = NSTextAttachment()
+            attachment.image = (style as! UIImage)
+            attributedString.replaceCharacters(in: range, with: NSAttributedString(attachment: attachment))
+        }
+    }
+    
+    func attributedString(fontBook:NSDictionary)->NSAttributedString
+    {
+        let tags = [NSDictionary]()
+        let ms:NSMutableString = self.mutableCopy() as! NSMutableString
+        ms.replaceOccurrences(of: "<br>", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
+        ms.replaceOccurrences(of: "<br />", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
+        ms.replaceAllTags(intoArray:tags as! NSMutableArray)
+        
+        let attributedString = NSMutableAttributedString(string: ms as String)
+        attributedString.setAttributes([.underlineStyle:[NSNumber(integerLiteral: 0)]], range: NSMakeRange(0, attributedString.length))
+        
+        let bodyStyle = fontBook["body"]
+        if bodyStyle != nil
+        {
+            self.style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle!, styleBook: fontBook)
+        }
+        
+        for tag in tags
+        {
+            let t:NSString = tag["tag"] as! NSString
+            let loc:NSNumber? = tag["loc"] as? NSNumber
+            let endloc:NSNumber? = tag["endloc"] as? NSNumber
+            if loc != nil && endloc != nil
+            {
+                let range = NSMakeRange(loc!.intValue, endloc!.intValue - loc!.intValue)
+                let style = fontBook[t]
+                self.style(attributedString: attributedString, range: range, style: style!, styleBook: fontBook)
+            }
+        }
+        return attributedString
+    }
+}

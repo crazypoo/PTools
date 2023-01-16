@@ -16,8 +16,6 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-#import "NSString+Regulars.h"
-
 /*
  pod trunk register 273277355@qq.com 'HelloKitty' --description='Mac mini'
  //重装后先登录

@@ -12,14 +12,9 @@
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
 		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
 		231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */; };
-		231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */; };
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
-		231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1509272CDEE9003D6F62 /* NSString+Regulars.m */; };
 		231D1621272CDEE9003D6F62 /* UILabel+FlickerNumber.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D150A272CDEE9003D6F62 /* UILabel+FlickerNumber.m */; };
 		231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */; };
-		231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */; };
-		231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1519272CDEE9003D6F62 /* UITextField+Limit.m */; };
-		231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
 		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
@@ -113,6 +108,7 @@
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
 		55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */; };
+		55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */; };
 		55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */; };
 		55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */; };
 		55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */; };
@@ -208,24 +204,14 @@
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		231D14E5272CDEE9003D6F62 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
 		231D14EC272CDEE9003D6F62 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
-		231D14F6272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+ModifyPlaceholder.h"; sourceTree = "<group>"; };
 		231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITableView+WWFoldableTableView.m"; sourceTree = "<group>"; };
 		231D14F8272CDEE9003D6F62 /* UIView+ModifyFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ModifyFrame.h"; sourceTree = "<group>"; };
-		231D14FD272CDEE9003D6F62 /* UITextField+Limit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITextField+Limit.h"; sourceTree = "<group>"; };
-		231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableString+TagReplace.h"; sourceTree = "<group>"; };
-		231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+WPAttributedMarkup.m"; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
-		231D1509272CDEE9003D6F62 /* NSString+Regulars.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+Regulars.m"; sourceTree = "<group>"; };
 		231D150A272CDEE9003D6F62 /* UILabel+FlickerNumber.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UILabel+FlickerNumber.m"; sourceTree = "<group>"; };
 		231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
 		231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
 		231D1513272CDEE9003D6F62 /* UITableView+WWFoldableTableView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UITableView+WWFoldableTableView.h"; sourceTree = "<group>"; };
-		231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ModifyPlaceholder.m"; sourceTree = "<group>"; };
-		231D1519272CDEE9003D6F62 /* UITextField+Limit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UITextField+Limit.m"; sourceTree = "<group>"; };
-		231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+WPAttributedMarkup.h"; sourceTree = "<group>"; };
-		231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableString+TagReplace.m"; sourceTree = "<group>"; };
 		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
-		231D1528272CDEE9003D6F62 /* NSString+Regulars.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+Regulars.h"; sourceTree = "<group>"; };
 		231D1529272CDEE9003D6F62 /* UILabel+FlickerNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UILabel+FlickerNumber.h"; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
 		231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometerBorder.m; sourceTree = "<group>"; };
@@ -332,6 +318,7 @@
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
 		55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+PTEX.swift"; sourceTree = "<group>"; };
+		55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableString+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4828F14A9300B4FF76 /* PTCallMessageMailFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCallMessageMailFunction.swift; sourceTree = "<group>"; };
 		55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+PTEX.swift"; sourceTree = "<group>"; };
 		55D59C4D28F17DFD00B4FF76 /* PTAppStoreFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppStoreFunction.swift; sourceTree = "<group>"; };
@@ -589,13 +576,8 @@
 				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
-				231D1501272CDEE9003D6F62 /* NSMutableString+TagReplace.h */,
-				231D1521272CDEE9003D6F62 /* NSMutableString+TagReplace.m */,
+				55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */,
 				5593F5F2293703F70086C2EC /* NSString+PTEX.swift */,
-				231D1528272CDEE9003D6F62 /* NSString+Regulars.h */,
-				231D1509272CDEE9003D6F62 /* NSString+Regulars.m */,
-				231D151C272CDEE9003D6F62 /* NSString+WPAttributedMarkup.h */,
-				231D1506272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m */,
 				559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
 				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
@@ -618,10 +600,6 @@
 				55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */,
 				231D1513272CDEE9003D6F62 /* UITableView+WWFoldableTableView.h */,
 				231D14F7272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m */,
-				231D14FD272CDEE9003D6F62 /* UITextField+Limit.h */,
-				231D1519272CDEE9003D6F62 /* UITextField+Limit.m */,
-				231D14F6272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.h */,
-				231D1514272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m */,
 				55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
 				231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */,
@@ -1561,7 +1539,6 @@
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
-				231D162E272CDEE9003D6F62 /* NSMutableString+TagReplace.m in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */,
@@ -1572,7 +1549,6 @@
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
-				231D1626272CDEE9003D6F62 /* UITextField+ModifyPlaceholder.m in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
@@ -1587,6 +1563,7 @@
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */,
+				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				231D1694272CDEEA003D6F62 /* GPKeyChain.m in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
@@ -1626,7 +1603,6 @@
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
 				231D1617272CDEE9003D6F62 /* UITableView+WWFoldableTableView.m in Sources */,
-				231D1620272CDEE9003D6F62 /* NSString+Regulars.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
@@ -1641,7 +1617,6 @@
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
-				231D162B272CDEE9003D6F62 /* UITextField+Limit.m in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
@@ -1678,7 +1653,6 @@
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
-				231D161E272CDEE9003D6F62 /* NSString+WPAttributedMarkup.m in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
