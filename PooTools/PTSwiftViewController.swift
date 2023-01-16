@@ -188,6 +188,7 @@ class PTSwiftViewController: UIViewController {
         
         let counting = PTCountingLabel()
         counting.positiveFormat = "##0.00"
+        counting.textColor = .randomColor
         self.view.addSubview(counting)
         counting.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
