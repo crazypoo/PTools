@@ -23,7 +23,6 @@
 #import "UIView+ModifyFrame.h"
 #import "PrintBeautifulLog.h"
 #import "PObject2Json.h"
-#import "GPKeyChain.h"
 #import "PGifHud.h"
 #import "MAThermometer.h"
 #import "MAThermometerBorder.h"
