@@ -66,6 +66,8 @@ public class PTCountingLabel: UILabel {
             self.textValue(value: self.currentValue())
         }
     }
+    
+    //MARK: 如果浮点数需要千分位分隔符,须使用@"###,##0.00"进行控制样式
     ///如果浮点数需要千分位分隔符,须使用@"###,##0.00"进行控制样式
     public var positiveFormat:String = ""
     var progress:TimeInterval = 0

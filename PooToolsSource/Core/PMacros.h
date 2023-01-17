@@ -17,64 +17,6 @@
 #define kDevMaskBackgroundColor kRGBAColorDecimals(0, 0, 0, kDevAlpha)
 #define kDevButtonHighlightedColor kRGBAColor(242, 242, 242, 1)
 
-#pragma mark ---------------> 判断当前的iPhone设备/系统版本
-/*! @brief 当前系统版本与系统v是否匹配
- */
-#define SYSTEM_VERSION_EQUAL_TO(v)                  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedSame)
-/*! @brief 当前系统版本是否大于v系统
- */
-#define SYSTEM_VERSION_GREATER_THAN(v)              ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedDescending)
-/*! @brief 当前系统版本是否大于等于v系统
- */
-#define SYSTEM_VERSION_GREATER_THAN_OR_EQUAL_TO(v)  ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedAscending)
-/*! @brief 当前系统版本是否小于v系统
- */
-#define SYSTEM_VERSION_LESS_THAN(v)                 ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] == NSOrderedAscending)
-/*! @brief 当前系统版本是否小于等于v系统
- */
-#define SYSTEM_VERSION_LESS_THAN_OR_EQUAL_TO(v)     ([[[UIDevice currentDevice] systemVersion] compare:v options:NSNumericSearch] != NSOrderedDescending)
-/*! @brief 判断是否iOS8之前的系统版本
- */
-#define IOS8before [[[UIDevice currentDevice] systemVersion] floatValue] < 8
-/*! @brief 判断是否为iPhone
- */
-#define IS_IPHONE (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone)
-/*! @brief 判断是否为iPad
- */
-#define IS_IPAD (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-/*! @brief 判断是否为ipod
- */
-#define IS_IPOD ([[[UIDevice currentDevice] model] isEqualToString:@"iPod touch"])
-/*! @brief 判断 iOS 8 或更高的系统版本
- */
-#define IOS_VERSION_8_OR_LATER (([[[UIDevice currentDevice] systemVersion] floatValue] >=8.0)? (YES):(NO))
-
-#pragma mark ---------------> 屏幕
-/*! @brief 屏幕为类似iPhone4的机型
- */
-#define iPhone4 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 960), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhone5的机型
- */
-#define iPhone5 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640, 1136), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhone6的机型
- */
-#define iPhone6 ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(750, 1334), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhone6P的机型
- */
-#define iPhone6P ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2208), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPadAir的机型
- */
-#define iPad_Air ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(768, 1024), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhoneX的机型
- */
-#define kDevice_Is_iPhoneX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1125, 2436), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhoneXR的机型
- */
-#define kDevice_Is_iPhoneXR ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(828, 1792), [[UIScreen mainScreen] currentMode].size) : NO)
-/*! @brief 屏幕为类似iPhoneXS MAX的机型
- */
-#define kDevice_Is_iPhoneXS_MAX ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(1242, 2688), [[UIScreen mainScreen] currentMode].size) : NO)
-
 /*! @brief 当前屏幕宽度
  */
 #define kSCREEN_WIDTH [UIScreen mainScreen].bounds.size.width
@@ -90,16 +32,6 @@
 /*! @brief 获取KeyWindow
  */
 #define kKEYWINDOW [UIApplication sharedApplication].keyWindow
-
-/*! @brief 电池栏菊花转动
- */
-#define kShowNetworkActivityIndicator() [UIApplication sharedApplication].networkActivityIndicatorVisible = YES
-/*! @brief 电池栏菊花停止转动
- */
-#define kHideNetworkActivityIndicator() [UIApplication sharedApplication].networkActivityIndicatorVisible = NO
-/*! @brief 电池栏菊花设置是否转动
- */
-#define NetworkActivityIndicatorVisible(x) [UIApplication sharedApplication].networkActivityIndicatorVisible = x
 
 /*! @brief 获取view的宽度
  */
@@ -197,10 +129,6 @@
  */
 #define kVIEWWITHTAG(_OBJECT, _TAG) [_OBJECT viewWithTag : _TAG]
 
-/*! @brief R屏
- */
-#define isRetina ([UIScreen instancesRespondToSelector:@selector(currentMode)] ? CGSizeEqualToSize(CGSizeMake(640.f, 960.f), [[UIScreen mainScreen] currentMode].size) : NO)
-
 /*! @brief SaveArea适配
  */
 #define adjustsScrollViewInsets(scrollView)\
@@ -229,53 +157,6 @@ _Pragma("clang diagnostic pop")\
  */
 #define kNotificationCenter [NSNotificationCenter defaultCenter]
 
-#pragma mark ---------------> 颜色
-/*! @brief 随机颜色
- */
-#define kRandomColor [UIColor colorWithRed:arc4random_uniform(256)/255.0 green:arc4random_uniform(256)/255.0 blue:arc4random_uniform(256)/255.0 alpha:1.0]
-/*! @brief 随机颜色 (带Alpha值)
- */
-#define kRandomColorWithAlpha(s) [UIColor colorWithRed:arc4random_uniform(256)/255.0 green:arc4random_uniform(256)/255.0 blue:arc4random_uniform(256)/255.0 alpha:s]
-
-/*! @brief 设置RGB颜色
- */
-#define kRGBColor(r, g, b) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:1.0]
-/*! @brief 设置RGB颜色 (带Alpha值)
- */
-#define kRGBAColor(r, g, b, a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:a]
-
-/*! @brief 设置RGB颜色小数形式
- */
-#define kRGBColorDecimals(r, g, b) [UIColor colorWithRed:(r) green:(g) blue:(b) alpha:1.0]
-/*! @brief 设置RGB颜色小数形式(带Alpha值)
- */
-#define kRGBAColorDecimals(r, g, b, a) [UIColor colorWithRed:(r) green:(g) blue:(b) alpha:a]
-
-/*! @brief clear背景颜色
- */
-#define kClearColor [UIColor clearColor]
-
-/*! @brief 16进制RGB的颜色转换
- */
-#define kColorFromHex(rgbValue) [UIColor \
-colorWithRed:((float)((rgbValue & 0xFF0000) >> 16))/255.0 \
-green:((float)((rgbValue & 0xFF00) >> 8))/255.0 \
-blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
-
-#pragma mark ---------------> judge the simulator or hardware device        判断是真机还是模拟器
-
-/*! @brief 如果是真机
- */
-#if TARGET_OS_IPHONE
-//iPhone Device
-#endif
-
-/*! @brief 如果是模拟器
- */
-#if TARGET_IPHONE_SIMULATOR
-//iPhone Simulator
-#endif
-
 #pragma mark ---------------> 弱引用/强引用
 /*! @brief 弱引用
  */
@@ -283,16 +164,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 /*! @brief 强引用
  */
 #define kStrongSelf(type)  __strong typeof(type) type = weak##type;
-
-#pragma mark ---------------> 设置 view 圆角和边框
-/*! @brief 设置 view 圆角和边框
- */
-#define kViewBorderRadius(View, Radius, Width, Color)\
-\
-[View.layer setCornerRadius:(Radius)];\
-[View.layer setMasksToBounds:YES];\
-[View.layer setBorderWidth:(Width)];\
-[View.layer setBorderColor:[Color CGColor]]
 
 #pragma mark ---------------> 使用 ARC 和 MRC
 /*! @brief 判断ARC或者MRC
@@ -314,11 +185,6 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
  */
 #define kPathCache [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject]
 
-#pragma mark ---------------> NAV返回方法
-/*! @brief nav返回上一层
- */
-#define kReturnsToTheUpperLayer [self.navigationController popViewControllerAnimated:YES];
-
 #pragma mark ---------------> 获取当前语言
 /*! @brief 获取当前语言
  */
@@ -331,39 +197,12 @@ blue:((float)(rgbValue & 0xFF))/255.0 alpha:1.0]
 /*! @brief 定义UIImage对象 (ContentsOfFile形式读取,不带格式)
  */
 #define kIMAGE(A) [UIImage imageWithContentsOfFile:[[NSBundle mainBundle] pathForResource:A ofType:nil]]
-/*! @brief 定义UIImage对象 (Name形式读取)
- * @attention 优先使用前两种宏定义(kLOADIMAGE(file,ext),kIMAGE(A)),性能高于后面.
- */
-#define kImageNamed(_pointer) [UIImage imageNamed:_pointer]
 
 #pragma mark ---------------> 打印
 /*! @brief 强化NSLog
  */
 #define PNSLog(format, ...) do {fprintf(stderr, "%s:%d\t%s\n", [[[NSString stringWithUTF8String: __FILE__] lastPathComponent] UTF8String], __LINE__, [[NSString stringWithFormat: format, ## __VA_ARGS__] UTF8String]);fprintf(stderr, "我这里是打印,不要慌,我路过的😂😂😂😂😂😂😂😂😂😂😂😂\n");}while (0)
 
-#pragma mark ---------------> NSUserDefaults 实例化
-/*! @brief NSUserDefaults 实例化
- */
-#define USER_DEFAULT [NSUserDefaults standardUserDefaults]
-
-#pragma mark ---------------> 存储对象
-/*! @brief 储存数据NSUserDefaults
- */
-#define kUserDefaultSetObjectForKey(__VALUE__,__KEY__) \
-{\
-[USER_DEFAULT setObject:__VALUE__ forKey:__KEY__];\
-[USER_DEFAULT synchronize];\
-}
-/*! @brief 获得存储的对象NSUserDefaults
- */
-#define kUserDefaultObjectForKey(__KEY__)  [USER_DEFAULT objectForKey:__KEY__]
-/*! @brief 删除对象NSUserDefaults
- */
-#define kUserDefaultRemoveObjectForKey(__KEY__) \
-{\
-[USER_DEFAULT removeObjectForKey:__KEY__];\
-[USER_DEFAULT synchronize];\
-}
 /*! @brief 修改data.plist文件
  */
 #define PLIST_TICKET_INFO_EDIT [NSHomeDirectory() stringByAppendingString:@"/Documents/data.plist"]
@@ -405,32 +244,7 @@ else \
         [(UIView *)[__CELLNAME__.contentView.subviews lastObject] removeFromSuperview]; \
     } \
 }
-
-#pragma mark ---------------> Show Alert, brackets is the parameters.       宏定义一个弹窗方法,括号里面是方法的参数
-/*! @brief 定义一个简单的取消弹出框
- */
-#define ShowAlert(s) [[[UIAlertView alloc] initWithTitle:@"OPPS!" message:s delegate:self cancelButtonTitle:@"cancel" otherButtonTitles: @"OK"]show];
 #endif
-
-#pragma mark ---------------> GCD
-/*! @brief GCDGlobal
- */
-#define GCDWithGlobal(block) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{block})
-/*! @brief GCDMain
- */
-#define GCDWithMain(block) dispatch_async(dispatch_get_main_queue(),block)
-/* @brief GCD延时执行
- */
-#define GCDAfter(time,block) dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(time * NSEC_PER_SEC)), dispatch_get_main_queue(), block);
-/*! @brief GCD (一次性执行)
- */
-#define kDISPATCH_ONCE_BLOCK(onceBlock) static dispatch_once_t onceToken; dispatch_once(&onceToken, onceBlock);
-/*! @brief GCD (在Main线程上运行)
- */
-#define kDISPATCH_MAIN_THREAD(mainQueueBlock) dispatch_async(dispatch_get_main_queue(), ^{mainQueueBlock});
-/*! @brief GCD (开启异步线程)
- */
-#define kDISPATCH_GLOBAL_QUEUE_DEFAULT(globalQueueBlock) dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{globalQueueBlock});
 
 #pragma mark ---------------> 单例化 一个类
 /*! @brief 创建单例
@@ -505,11 +319,6 @@ return self; \
  */
 #define kAdaptedOtherFontSize(n,R) kDEFAULT_FONT(n,kAdaptedWidth(R))
 
-#pragma mark ---------------> 创建返回按钮
-/*! @brief 创建返回按钮 (可以自定义图片)
- */
-#define kCreatReturnButton(imageName,acttion)  UIButton *leftNavBtn = [UIButton buttonWithType:UIButtonTypeCustom];leftNavBtn.frame = CGRectMake(0, 0, 44, 44);[leftNavBtn setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];[leftNavBtn addTarget:self action:@selector(acttion) forControlEvents:UIControlEventTouchUpInside];[self.navigationItem setLeftBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:leftNavBtn]];
-
 #pragma mark ---------------> 由角度转换弧度 由弧度转换角度
 /*! @brief 角度转弧度
  */
@@ -517,20 +326,3 @@ return self; \
 /*! @brief 弧度转角度
  */
 #define PRadianToDegrees(radian) (radian*180.0)/(M_PI)
-
-#pragma mark ---------------> 判断是否为空
-/*! @brief 字符串是否为空
- */
-#define kStringIsEmpty(str) ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 ? YES : NO )
-/*! @brief 数组是否为空
- */
-#define kArrayIsEmpty(array) (array == nil || [array isKindOfClass:[NSNull class]] || array.count == 0)
-/*! @brief 字典是否为空
- */
-#define kDictIsEmpty(dic) (dic == nil || [dic isKindOfClass:[NSNull class]] || dic.allKeys == 0)
-/*! @brief 是否是空对象
- */
-#define kObjectIsEmpty(_object) (_object == nil \
-|| [_object isKindOfClass:[NSNull class]] \
-|| ([_object respondsToSelector:@selector(length)] && [(NSData *)_object length] == 0) \
-|| ([_object respondsToSelector:@selector(count)] && [(NSArray *)_object count] == 0))

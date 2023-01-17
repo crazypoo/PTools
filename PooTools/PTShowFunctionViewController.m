@@ -173,7 +173,7 @@ CGFloat const tagItemSpace = 5;
             PooSegmentConfig *config = [[PooSegmentConfig alloc] init];
 
             PooSegmentView *sgView = [[PooSegmentView alloc] initWithConfig:config];
-            sgView.backgroundColor = kRandomColor;
+            sgView.backgroundColor = UIColor.randomColor;
             sgView.viewDatas = @[segModel,segModels];
             [sgView reloadViewDataWithBlock:^(NSInteger index) {
 
@@ -225,7 +225,7 @@ CGFloat const tagItemSpace = 5;
             searchBar.searchTextColor = [UIColor brownColor];
             //    searchBar.searchBarImage = kImageNamed(@"Search");
             searchBar.searchTextFieldBackgroundColor = [UIColor yellowColor];
-            searchBar.searchBarOutViewColor = kRandomColor;
+            searchBar.searchBarOutViewColor = UIColor.randomColor;
             searchBar.searchBarTextFieldCornerRadius = [[NSDecimalNumber alloc] initWithString:@"15.0"];
             searchBar.cursorColor = [UIColor redColor];
             [self.view addSubview:searchBar];
@@ -237,11 +237,11 @@ CGFloat const tagItemSpace = 5;
             
             UITextView *textView = [UITextView new];
             [self.view addSubview:textView];
-            textView.backgroundColor = kRandomColor;
+            textView.backgroundColor = UIColor.randomColor;
             textView.delegate = self;
             textView.returnKeyType = UIReturnKeyDone;
             textView.font = APPFONT(20);
-            textView.textColor = kRandomColor;
+            textView.textColor = UIColor.randomColor;
             textView.bk_placeholder = @"我是TextView";
             textView.pt_maxWordCount = @30;
             [textView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -256,7 +256,7 @@ CGFloat const tagItemSpace = 5;
         {
             self.cornerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
             self.cornerBtn.frame = CGRectMake((kSCREEN_WIDTH-100)/2, HEIGHT_NAVBAR+HEIGHT_NAVBAR, 100, 100);
-            self.cornerBtn.backgroundColor = kRandomColor;
+            self.cornerBtn.backgroundColor = UIColor.randomColor;
             [self.view addSubview:self.cornerBtn];
             
             //    NSMutableArray *_RectCornerArr = [NSMutableArray array];
@@ -279,7 +279,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:kRandomColor];
+                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
             
         }
@@ -288,7 +288,7 @@ CGFloat const tagItemSpace = 5;
         {
             PTLabel *aaaaaaaaaaaaaa = [PTLabel new];
             aaaaaaaaaaaaaa.text = @"111111111111111";
-            aaaaaaaaaaaaaa.backgroundColor = kRandomColor;
+            aaaaaaaaaaaaaa.backgroundColor = UIColor.randomColor;
             [aaaaaaaaaaaaaa setVerticalAlignmentWithValue:PTVerticalAlignmentMiddle];
             [aaaaaaaaaaaaaa setStrikeThroughAlignmentWithValue:PTStrikeThroughAlignmentMiddle];
             aaaaaaaaaaaaaa.strikeThroughColor = UIColor.randomColor;
@@ -303,7 +303,7 @@ CGFloat const tagItemSpace = 5;
             }];
 
             UIButton *randomLineBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-            [randomLineBtn setTitleColor:kRandomColor forState:UIControlStateNormal];
+            [randomLineBtn setTitleColor:UIColor.randomColor forState:UIControlStateNormal];
             [randomLineBtn setTitle:@"随机画线" forState:UIControlStateNormal];
             [randomLineBtn addActionHandlersWithHandler:^(UIButton * sender) {
                 [aaaaaaaaaaaaaa setVerticalAlignmentWithValue:random()%4];
@@ -335,7 +335,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
+                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
@@ -356,8 +356,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
-
+                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
@@ -389,13 +388,13 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                kViewBorderRadius(pBtn, 5, 1, kRandomColor);
+                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
         case ShowFunctionAboutImage:
         {
-            UIImage *placeholderImage = kImageNamed(@"DemoImage");
+            UIImage *placeholderImage = [UIImage imageNamed:@"DemoImage"];
             UIImageView *blurGlassImage = [UIImageView new];
             blurGlassImage.image = [[placeholderImage transformImageWithSize:CGSizeMake(30, 30)] blurImage];
             [self.view addSubview:blurGlassImage];
@@ -486,7 +485,7 @@ CGFloat const tagItemSpace = 5;
             
             NSArray <PTCustomBottomButtonModel *>* titles = @[models];
             
-            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:kDEFAULT_FONT(FontName, 25) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:titles];
+            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:kDEFAULT_FONT(FontName, 25) titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles];
             [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:kDEFAULT_FONT(FontName, 25) buttonArray:titles]);
                 make.width.offset(kSCREEN_WIDTH-20);
@@ -534,7 +533,7 @@ CGFloat const tagItemSpace = 5;
         case 3:
         {
             UIView *views = [UIView new];
-            views.backgroundColor = kRandomColor;
+            views.backgroundColor = UIColor.randomColor;
             views.bounds = CGRectMake(0, 0, 100, 300);
             [self popoverWithPopoverVC:[[UIViewController alloc] init] contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
         }

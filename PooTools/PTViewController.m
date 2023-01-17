@@ -71,7 +71,7 @@
     views.bounds = CGRectMake(0, 0, 100, 300);
     
     UIButton *views2 = [UIButton buttonWithType:UIButtonTypeCustom];
-    views2.backgroundColor = kRandomColor;
+    views2.backgroundColor = UIColor.randomColor;
     [views addSubview:views2];
     [views2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.offset(50);
@@ -93,7 +93,7 @@
     
 
     UIButton *bbbbbbbbb = [UIButton buttonWithType:UIButtonTypeCustom];
-    [bbbbbbbbb setTitleColor:kRandomColor forState:UIControlStateNormal];
+    [bbbbbbbbb setTitleColor:UIColor.randomColor forState:UIControlStateNormal];
     [bbbbbbbbb setTitle:@"222222222" forState:UIControlStateNormal];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
     [bbbbbbbbb addActionHandlersWithHandler:^(UIButton *sender) {
@@ -466,9 +466,9 @@ static NSString *cellIdentifier = @"CELL";
                         [PTUtils oc_alert_only_showWithTitle:@"" message:@"清理成功"];
                         
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
-                        GCDAfter(0.1, ^{
+                        [PTUtils gcdAfterTime:0.1 block:^{
                             [self.tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
-                        });
+                        }];
                     }
                     else
                     {
@@ -587,7 +587,7 @@ static NSString *cellIdentifier = @"CELL";
         [arr addObject:models];
     }
             
-    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:kDEFAULT_FONT(FontName, 15) titleColor:kRandomColor alertVerLineColor:kRandomColor alertBackgroundColor:kRandomColor heightlightedColor:kRandomColor moreButtons:arr];
+    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:kDEFAULT_FONT(FontName, 15) titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr];
     [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:kDEFAULT_FONT(FontName, 15) buttonArray:arr]);
         make.width.offset(kSCREEN_WIDTH-20);

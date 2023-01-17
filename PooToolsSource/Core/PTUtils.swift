@@ -277,19 +277,28 @@ public class PTUtils: NSObject {
         }
     }
     
+    //MARK: GCD延時執行
+    ///GCD延時執行
     public class func gcdAfter(time:TimeInterval,
                              block:@escaping (()->Void))
     {
         DispatchQueue.main.asyncAfter(deadline: .now() + time, execute: block)
     }
     
+    //MARK: gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
+    ///gcdMain是用於在背景執行非同步任務的，它可以在多個不同的系統線程上執行任務。
     public class func gcdMain(block:@escaping (()->Void))
     {
-        DispatchQueue.global(qos: .userInitiated).async {
-            DispatchQueue.main.sync(execute: block)
-        }
+        DispatchQueue.main.async(execute: block)
     }
     
+    //MARK: gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
+    ///gcdGobal是用於在主執行緒上執行非同步任務的，通常用於更新UI或進行其他與用戶交互有關的操作。
+    public class func gcdGobal(block:@escaping (()->Void))
+    {
+        DispatchQueue.global(qos: .userInitiated).async(execute: block)
+    }
+        
     public class func getTimeStamp()->String
     {
         let date = Date()
@@ -734,6 +743,14 @@ public class PTUtils: NSObject {
     open class func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
     {        
         return PTUtils.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
+    }
+    
+    //MARK: 檢測當前系統是否小於某個版本系統
+    ///檢測當前系統是否小於某個版本系統
+    /// - Returns: Bool
+    class func lessThanSysVersion(version:NSString,equal:Bool) -> Bool
+    {
+        return UIDevice.current.systemVersion.compare("\(version)",options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
 }
 

@@ -17,7 +17,6 @@
 #import "PTInputAll.h"
 #import "Utils.h"
 #import "MethodSwizzle.h"
-#import "UITableView+WWFoldableTableView.h"
 #import "UIView+LayoutSubviewsCallback.h"
 #import "UIView+ModifyFrame.h"
 #import "PrintBeautifulLog.h"

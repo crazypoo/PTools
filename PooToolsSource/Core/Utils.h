@@ -16,4 +16,13 @@
 
 @interface Utils : NSObject
 +(BOOL)isIPhoneXSeries;
+/*! @brief 是否是空对象
+ */
++(BOOL)checkObject:(NSObject *)obj;
+/*! @brief 字典是否为空
+ */
++(BOOL)checkDic:(NSDictionary *)dic;
+/*! @brief 字符串是否为空
+ */
++(BOOL)checkStringFunc:(NSString *)str;
 @end
