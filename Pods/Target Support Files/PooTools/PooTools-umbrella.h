@@ -22,8 +22,6 @@
 #import "PrintBeautifulLog.h"
 #import "PObject2Json.h"
 #import "PGifHud.h"
-#import "MAThermometer.h"
-#import "MAThermometerBorder.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];

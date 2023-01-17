@@ -557,18 +557,6 @@
       }
     },
     {
-      "name": "Thermometer",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/Thermometer/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_THERMOMETER POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "CheckUpdate",
       "dependencies": {
         "PooTools/Core": [
@@ -1180,9 +1168,6 @@
 
         ],
         "PooTools/Slider": [
-
-        ],
-        "PooTools/Thermometer": [
 
         ],
         "PooTools/CheckUpdate": [

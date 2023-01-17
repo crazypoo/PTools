@@ -87,8 +87,6 @@ pod 'PooTools/SearchBar', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Segmented', :git => 'https://github.com/crazypoo/PTools.git'
 ### Slider
 pod 'PooTools/Slider', :git => 'https://github.com/crazypoo/PTools.git'
-### 温度计
-pod 'PooTools/Thermometer', :git => 'https://github.com/crazypoo/PTools.git'
 ### 网络层
 pod 'PooTools/NetWork', :git => 'https://github.com/crazypoo/PTools.git'
 ### 检测更新

@@ -232,7 +232,6 @@ PODS:
     - PooTools/SmartScreenshot
     - PooTools/Tabbar
     - PooTools/Telephony
-    - PooTools/Thermometer
     - PooTools/YB_Attributed
     - PooTools/ZipArchive
   - PooTools/Instructions (3.0.2):
@@ -288,8 +287,6 @@ PODS:
     - ESTabBarController-swift
     - PooTools/Core
   - PooTools/Telephony (3.0.2):
-    - PooTools/Core
-  - PooTools/Thermometer (3.0.2):
     - PooTools/Core
   - PooTools/YB_Attributed (3.0.2):
     - PooTools/Core
@@ -514,7 +511,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 49912a48b37e2f55d1cef4e8a38f15394f66a70a
   PermissionsKit: 522c5c0fb00888871a3d8a6eed12a7db56725a39
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
-  PooTools: 0e950674e985383ee2218fbd427dbab47f78e681
+  PooTools: abae813c82753e13f655b97016af9dcd9d927d0e
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5

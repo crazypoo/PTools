@@ -303,15 +303,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'Thermometer' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Thermometer/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_THERMOMETER POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
 #    s.subspec 'NetWork' do |subspec|
 #        subspec.dependency 'PooTools/Core'
 #        subspec.dependency 'KakaJSON'
@@ -650,7 +642,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/Segmented'
         subspec.dependency 'PooTools/Slider'
-        subspec.dependency 'PooTools/Thermometer'
         subspec.dependency 'PooTools/CheckUpdate'
         subspec.dependency 'PooTools/Layout'
         subspec.dependency 'PooTools/Tabbar'

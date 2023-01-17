@@ -14,8 +14,6 @@
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
 		231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
-		231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */; };
-		231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D154C272CDEE9003D6F62 /* MAThermometer.m */; };
 		231D1661272CDEEA003D6F62 /* PObject2Json.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15A2272CDEE9003D6F62 /* PObject2Json.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
@@ -209,10 +207,6 @@
 		231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+ModifyFrame.m"; sourceTree = "<group>"; };
 		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
-		231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometerBorder.m; sourceTree = "<group>"; };
-		231D154C272CDEE9003D6F62 /* MAThermometer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MAThermometer.m; sourceTree = "<group>"; };
-		231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometerBorder.h; sourceTree = "<group>"; };
-		231D154E272CDEE9003D6F62 /* MAThermometer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MAThermometer.h; sourceTree = "<group>"; };
 		231D15A2272CDEE9003D6F62 /* PObject2Json.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PObject2Json.m; sourceTree = "<group>"; };
 		231D15A3272CDEE9003D6F62 /* PObject2Json.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PObject2Json.h; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
@@ -533,7 +527,6 @@
 				231D1586272CDEE9003D6F62 /* Slider */,
 				5507026B28F6B33E00C48239 /* Speech */,
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
-				231D154A272CDEE9003D6F62 /* Thermometer */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 			);
 			path = PooToolsSource;
@@ -620,17 +613,6 @@
 				231D15D0272CDEE9003D6F62 /* PooSegmentView.swift */,
 			);
 			path = Segmented;
-			sourceTree = "<group>";
-		};
-		231D154A272CDEE9003D6F62 /* Thermometer */ = {
-			isa = PBXGroup;
-			children = (
-				231D154E272CDEE9003D6F62 /* MAThermometer.h */,
-				231D154C272CDEE9003D6F62 /* MAThermometer.m */,
-				231D154D272CDEE9003D6F62 /* MAThermometerBorder.h */,
-				231D154B272CDEE9003D6F62 /* MAThermometerBorder.m */,
-			);
-			path = Thermometer;
 			sourceTree = "<group>";
 		};
 		231D1550272CDEE9003D6F62 /* NetWork */ = {
@@ -1625,7 +1607,6 @@
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
-				231D163F272CDEE9003D6F62 /* MAThermometerBorder.m in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
@@ -1642,7 +1623,6 @@
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
-				231D1640272CDEE9003D6F62 /* MAThermometer.m in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
