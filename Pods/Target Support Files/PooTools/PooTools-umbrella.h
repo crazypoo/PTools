@@ -20,7 +20,6 @@
 #import "UIView+LayoutSubviewsCallback.h"
 #import "UIView+ModifyFrame.h"
 #import "PrintBeautifulLog.h"
-#import "PGifHud.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];

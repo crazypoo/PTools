@@ -10,7 +10,6 @@
 		231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D0272CDD19003D6F62 /* PooTools.podspec */; };
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
-		231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D14EC272CDEE9003D6F62 /* PGifHud.m */; };
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
 		231D1625272CDEE9003D6F62 /* UIView+ModifyFrame.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1512272CDEE9003D6F62 /* UIView+ModifyFrame.m */; };
 		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
@@ -199,8 +198,6 @@
 		231D14D0272CDD19003D6F62 /* PooTools.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = PooTools.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
-		231D14E5272CDEE9003D6F62 /* PGifHud.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PGifHud.h; sourceTree = "<group>"; };
-		231D14EC272CDEE9003D6F62 /* PGifHud.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PGifHud.m; sourceTree = "<group>"; };
 		231D14F8272CDEE9003D6F62 /* UIView+ModifyFrame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+ModifyFrame.h"; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
 		231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
@@ -534,8 +531,6 @@
 		231D14E0272CDEE9003D6F62 /* Loading */ = {
 			isa = PBXGroup;
 			children = (
-				231D14E5272CDEE9003D6F62 /* PGifHud.h */,
-				231D14EC272CDEE9003D6F62 /* PGifHud.m */,
 				55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */,
 				55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */,
 			);
@@ -1573,7 +1568,6 @@
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
-				231D1614272CDEE9003D6F62 /* PGifHud.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,

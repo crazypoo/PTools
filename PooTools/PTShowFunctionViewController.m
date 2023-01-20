@@ -28,9 +28,6 @@ CGFloat const tagItemSpace = 5;
 
 #import <GCDWebServer/GCDWebUploader.h>
 
-
-#import "PGifHud.h"
-
 #import <PooTools/PooTools-Swift.h>
 
 #define FontName @"HelveticaNeue-Light"
@@ -598,13 +595,8 @@ CGFloat const tagItemSpace = 5;
             break;
         case 1:
         {
-            [PGifHud gifHUDShowIn:kAppDelegateWindow];
-            [PGifHud setGifWithURL:[NSURL URLWithString:@"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"]];
-            [PGifHud setInfoLabelText:@"我是谁!!!!!!!!"];
-            [PGifHud showWithOverlay];
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_SEC*DelaySecond*3), dispatch_get_main_queue(), ^{
-                [PGifHud dismiss];
-            });
+//        https://github.com/kirualex/SwiftyGif
+//        http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif
         }
             break;
         case 2:

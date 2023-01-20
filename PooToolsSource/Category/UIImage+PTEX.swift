@@ -11,6 +11,8 @@ import Accelerate
 
 public extension UIImage
 {
+    //MARK: 更改圖片大小
+    ///更改圖片大小
     @objc func transformImage(size:CGSize)->UIImage
     {
         if #available(iOS 15.0, *) {
@@ -37,6 +39,8 @@ public extension UIImage
         return resultImage
     }
     
+    //MARK: 圖片高斯模糊
+    ///圖片高斯模糊
     @objc func blurImage()->UIImage
     {
         return self.img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
@@ -169,6 +173,7 @@ public extension UIImage
     }
         
     //MARK: 加水印
+    ///加水印
     @objc func watermark(title:String,font:UIFont = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
     {
         let originalImage = self
@@ -251,6 +256,8 @@ public extension UIImage
         return newImage!
     }
     
+    //MARK: 獲取圖片中大部分占有的顏色
+    ///獲取圖片中大部分占有的顏色
     @objc func imageMostColor()->UIColor
     {
         let context = self.getImageContext()
@@ -291,6 +298,8 @@ public extension UIImage
         return UIColor(red: maxColor![0] as! CGFloat / 255, green: maxColor![1] as! CGFloat / 255, blue: maxColor![2] as! CGFloat / 255, alpha: maxColor![3] as! CGFloat / 255)
     }
     
+    //MARK: 獲取圖片中某個像素點的顏色
+    ///獲取圖片中某個像素點的顏色
     func getImgePointColor(point:CGPoint)->UIColor
     {
         let context = self.getImageContext()
@@ -323,5 +332,5 @@ public extension UIImage
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
-    }    
+    }
 }
