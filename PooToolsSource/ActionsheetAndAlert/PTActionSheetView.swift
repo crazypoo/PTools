@@ -265,7 +265,7 @@ public class PTActionSheetView: UIView {
     func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat
     {
         let realH = actionSheetRealHeight()
-        let canshowViewH:CGFloat = kSCREEN_HEIGHT - kTabbarSaveAreaHeight - kStatusBarHeight - 10
+        let canshowViewH:CGFloat = kSCREEN_HEIGHT - kTabbarSaveAreaHeight - CGFloat.statusBarHeight() - 10
         if actionSheetRealHeight() >= canshowViewH
         {
             return canshowViewH

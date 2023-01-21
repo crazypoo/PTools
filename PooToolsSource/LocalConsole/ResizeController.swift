@@ -179,7 +179,7 @@ class ResizeController {
                 terminalView.layer.shadowOpacity = 0.5
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                    self.terminalView.center = CGPoint.init(x: Double(self.terminalView.bounds.width)/2, y: Double(self.terminalView.bounds.height)/2 + Double(kStatusBarHeight))
+                    self.terminalView.center = CGPoint.init(x: Double(self.terminalView.bounds.width)/2, y: Double(self.terminalView.bounds.height)/2 + Double(CGFloat.statusBarHeight()))
 //
 //                    // Update grabbers (layout constraints)
                     AppWindows!.backgroundColor = .clear

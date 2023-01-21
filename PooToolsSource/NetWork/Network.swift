@@ -171,6 +171,12 @@ public class Network: NSObject {
         
         
         let urlStr = (needGobal! ? Network.gobalUrl() : "") + urlStr
+        if !urlStr.isURL()
+        {
+            resultBlock(nil,nil)
+            PTLocalConsoleFunction().pNSLog("不是合法的URL")
+            return
+        }
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
@@ -197,13 +203,13 @@ public class Network: NSObject {
             Network.hud.show(animated: true)
         }
         PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n😂😂😂😂😂😂😂😂😂😂😂😂")
-        PTUtils.showNetworkActivityIndicator(true)
+//        PTUtils.showNetworkActivityIndicator(true)
         
         Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: header).responseData { data in
             if showHud! {
                 Network.hud.hide(animated: true)
             }
-            PTUtils.showNetworkActivityIndicator(false)
+//            PTUtils.showNetworkActivityIndicator(false)
             switch data.result {
             case .success(_):
                 let json = JSON(data.value ?? "")

@@ -53,7 +53,7 @@ public class PTLabel: UILabel {
     }
     
     //MARK: 設置是否帶橫線
-    ///設置是否帶橫線
+    ///設置是否帶橫線,加載此方法須要在GCD上延時一點時間
     public func setStrikeThroughEnabled(value:Bool)
     {
         self.strikeThroughEnabled = value

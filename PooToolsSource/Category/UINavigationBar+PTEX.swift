@@ -14,7 +14,7 @@ public extension UINavigationBar {
     /// Applies a background gradient with the given colors
     func apply(gradient colors : [UIColor]) {
         var frameAndStatusBar: CGRect = bounds
-        frameAndStatusBar.size.height += kStatusBarHeight // add 20 to account for the status bar
+        frameAndStatusBar.size.height += CGFloat.statusBarHeight() // add 20 to account for the status bar
         setBackgroundImage(UINavigationBar.gradient(size: frameAndStatusBar.size, colors: colors), for: .default)
     }
     

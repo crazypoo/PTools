@@ -174,7 +174,7 @@ public class PTLaunchAdMonitor: NSObject {
             let h = skipFont!.pointSize * CGFloat((exit.titleLabel!.text! as NSString).length) + 10 * 2
             exit.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(10)
-                make.top.equalToSuperview().inset(kStatusBarHeight)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                 make.width.equalTo(w)
                 make.height.equalTo(h)
             }
@@ -242,7 +242,7 @@ public class PTLaunchAdMonitor: NSObject {
             v.addSubview(exit)
             exit.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(10)
-                make.top.equalToSuperview().inset(kStatusBarHeight)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                 make.width.height.equalTo(55)
             }
             exit.viewCorner(radius: 55/2)

@@ -995,7 +995,7 @@ public class PTMediaViewer: UIView {
             self.indexLabel.text = "1/\(self.viewConfig.mediaData.count)"
             self.indexLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalToSuperview().inset(kStatusBarHeight + (kNavBarHeight - PTViewerTitleHeight) / 2)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
                 make.height.equalTo(PTViewerTitleHeight)
             }
         }
@@ -1003,14 +1003,14 @@ public class PTMediaViewer: UIView {
         self.fakeNav.addSubview(self.fullViewLabel)
         self.fullViewLabel.snp.makeConstraints { make in
             make.height.equalTo(PTViewerTitleHeight)
-            make.top.equalToSuperview().inset(kStatusBarHeight + (kNavBarHeight - PTViewerTitleHeight) / 2)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
             make.right.equalToSuperview().inset(20)
         }
         
         self.fakeNav.addSubview(self.backButton)
         self.backButton.snp.makeConstraints { make in
             make.width.height.equalTo(PTViewerTitleHeight)
-            make.top.equalToSuperview().inset(kStatusBarHeight + (kNavBarHeight - PTViewerTitleHeight) / 2)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
             make.left.equalToSuperview().inset(20)
         }
 

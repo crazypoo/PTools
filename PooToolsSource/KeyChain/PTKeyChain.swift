@@ -18,6 +18,13 @@ public typealias PTKeyChainBlock = (_ success:Bool) -> Void
 @objcMembers
 public class PTKeyChain: NSObject {
     
+    //MARK: 保存帳號密碼到Keychain中
+    ///保存帳號密碼到Keychain中
+    /// - Parameters:
+    ///   - service: 保存到哪個域
+    ///   - account: 帳號
+    ///   - password: 密碼
+    ///   - handle: 回調是否成功
     class func saveAccountInfo(service:NSString,account:NSString,password:NSString,handle:PTKeyChainBlock?)
     {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
@@ -46,6 +53,12 @@ public class PTKeyChain: NSObject {
         }
     }
     
+    //MARK: 根據帳號查詢密碼
+    ///根據帳號查詢密碼
+    /// - Parameters:
+    ///   - service: 保存到哪個域
+    ///   - account: 帳號
+    /// - Returns: 字符串
     class func getPassword(service:NSString,account:NSString)->NSString
     {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
@@ -62,6 +75,11 @@ public class PTKeyChain: NSObject {
         return retrievedPassword
     }
     
+    //MARK: 獲取儲存域的多個帳號密碼
+    ///獲取儲存域的多個帳號密碼
+    /// - Parameters:
+    ///   - service: 保存到哪個域
+    /// - Returns: 數組類型的帳號密碼字典
     class func getAccountInfo(service:NSString)->[NSMutableDictionary]
     {
         let queryDic:[String:Any] = [
@@ -92,6 +110,12 @@ public class PTKeyChain: NSObject {
         return [NSMutableDictionary]()
     }
     
+    //MARK: 刪除域的帳號密碼
+    ///刪除域的帳號密碼
+    /// - Parameters:
+    ///   - service: 保存到哪個域
+    ///   - account: 帳號
+    ///   - handle: 回調是否成功
     class func deleteAccountInfo(service:NSString,account:NSString?,handle:PTKeyChainBlock?)
     {
         let newAccount = String(format: "%@", account ?? "")

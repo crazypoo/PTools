@@ -157,7 +157,7 @@ public class PTPermissionViewController: PTBaseViewController {
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.height.equalTo(34)
-            make.top.equalToSuperview().inset(kStatusBarHeight + 5)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
         }
         closeButton.addActionHandlers(handler: { sender in
             self.navigationController?.dismiss(animated: true){

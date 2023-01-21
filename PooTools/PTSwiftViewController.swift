@@ -38,7 +38,10 @@ class PTSwiftViewController: UIViewController {
             
         }
         PTUtils.gcdAfter(time: 2) {
-            
+                        
+            print(">>>>>>\(CGFloat.statusBarHeight())")
+
+
             print(PTUtils.lessThanSysVersion(version: "15", equal: true))
             
             print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
@@ -143,7 +146,7 @@ class PTSwiftViewController: UIViewController {
         AppWindows!.addSubview(status)
         status.snp.makeConstraints { make in
             make.left.top.equalToSuperview()
-            make.height.equalTo(kStatusBarHeight)
+            make.height.equalTo(CGFloat.statusBarHeight())
             make.width.equalTo(CGFloat.ScaleW(w: 85))
         }
 

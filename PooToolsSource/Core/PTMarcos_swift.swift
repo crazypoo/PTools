@@ -31,55 +31,65 @@ public var isXModel: Bool {
     return false
 }
 
-/*! @brief 当前屏幕宽度
- */
-public let kSCREEN_WIDTH = UIScreen.main.bounds.size.width
-/*! @brief 当前屏幕高度
- */
-public let kSCREEN_HEIGHT = UIScreen.main.bounds.size.height
-/*! @brief 当前屏幕Bounds
- */
+//MARK: 当前屏幕Bounds
+///当前屏幕Bounds
 public let kSCREEN_BOUNDS = UIScreen.main.bounds
-/*! @brief 当前屏幕Size
- */
+//MARK: 当前屏幕Size
+///当前屏幕Size
 public let kSCREEN_SIZE = kSCREEN_BOUNDS.size
-/*! @brief 当前屏幕比例
- */
+//MARK: 当前屏幕宽度
+///当前屏幕宽度
+public let kSCREEN_WIDTH = kSCREEN_SIZE.width
+//MARK: 当前屏幕高度
+///当前屏幕高度
+public let kSCREEN_HEIGHT = kSCREEN_SIZE.height
+//MARK: 当前屏幕比例
+///当前屏幕比例
 public let kSCREEN_SCALE = UIScreen.main.scale
-
+//MARK: NavBar高度
+///NavBar高度
 public let kNavBarHeight : CGFloat = 44
-/// 状态栏默认高度
+//MARK: 状态栏默认高度
+///状态栏默认高度
 public var kStatusBarHeight: CGFloat {
-    if #available(iOS 14.0, *)
-    {
-        return isXModel ? 48 : 20
-    }
     return isXModel ? 44 : 20
 }
-
-public let kNavBarHeight_Total : CGFloat = kNavBarHeight + kStatusBarHeight
-
+//MARK: 導航欄總高度
+///導航欄總高度
+public let kNavBarHeight_Total : CGFloat = kNavBarHeight + CGFloat.statusBarHeight()
+//MARK: Tabbar安全高度
+///Tabbar安全高度
 public let kTabbarSaveAreaHeight : CGFloat = isXModel ? 34 : 0
-
+//MARK: Tabbar高度
+///Tabbar高度
 public let kTabbarHeight : CGFloat = 49
-
+//MARK: Tabbar總高度
+///Tabbar總高度
 public let kTabbarHeight_Total : CGFloat = kTabbarSaveAreaHeight + kTabbarHeight
 
-// MARK: - app版本&设备系统版本
+// MARK: App版本&设备系统版本
 public let infoDictionary            = Bundle.main.infoDictionary
-/* App显示名称 */
+//MARK: App显示名称
+///App显示名称
 public let kAppDisplayName: String?         = infoDictionary!["CFBundleDisplayName"] as? String
-/* App名称 */
+//MARK: App名称
+///App名称
 public let kAppName: String?         = infoDictionary!["CFBundleName"] as? String
-/* App版本号 */
+//MARK: App版本号
+///App版本号
 public let kAppVersion: String?      = infoDictionary!["CFBundleShortVersionString"] as? String
-/* Appbuild版本号 */
+//MARK: App Build版本号
+///AppBuild版本号
 public let kAppBuildVersion: String? = infoDictionary!["CFBundleVersion"] as? String
-/* app bundleId */
+//MARK: App Bundle Id
+///App BundleId
 public let kAppBundleId: String?     = infoDictionary!["CFBundleIdentifier"] as? String
-/* 平台名称（iphonesimulator 、 iphone）*/
+//MARK: 平台名称（iPhone Simulator 、 iPhone）
+///平台名称（iPhone Simulator 、 iPhone）
 public let kPlatformName: String?    = infoDictionary!["DTPlatformName"] as? String
-/* iOS系统版本 */
+//MARK: iOS系统版本
+///iOS系统版本
 public let kiOSVersion: String       = UIDevice.current.systemVersion
-/* 系统名称+版本，e.g. @"iOS 12.1" */
+//MARK: 系统名称+版本，e.g. @"iOS 12.1"
+///系统名称+版本，e.g. @"iOS 12.1"
 public let kOSType: String           = UIDevice.current.systemName + UIDevice.current.systemVersion

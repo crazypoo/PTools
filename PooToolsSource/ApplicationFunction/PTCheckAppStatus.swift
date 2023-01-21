@@ -51,7 +51,7 @@ public class PCheckAppStatus: NSObject {
                 make.left.equalToSuperview()
                 make.width.equalTo(50)
                 make.height.equalTo(30)
-                make.top.equalToSuperview().inset(kStatusBarHeight)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             }
 
             displayLink = CADisplayLink.init(target: self, selector: #selector(self.displayLinkTick(link:)))

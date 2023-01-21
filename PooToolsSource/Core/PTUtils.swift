@@ -263,17 +263,11 @@ public class PTUtils: NSObject {
         showIn.present(alert, animated: true, completion: nil)
     }
 
+    @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這個方法在iOS13之後不能使用了")
     public class func showNetworkActivityIndicator(_ show:Bool)
     {
         PTUtils.gcdMain {
-            if #available(iOS 13.0, *)
-            {
-                
-            }
-            else
-            {
-                UIApplication.shared.isNetworkActivityIndicatorVisible = show
-            }
+            UIApplication.shared.isNetworkActivityIndicatorVisible = show
         }
     }
     
@@ -811,5 +805,5 @@ extension PTUtils
     class open func oc_dateFormat(date:Date,formatString:String)->String
     {
         return date.toFormat(formatString)
-    }
+    }    
 }

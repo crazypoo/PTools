@@ -77,7 +77,7 @@ public class PTGuidePageHUD: UIView {
             make.width.equalTo(50)
             make.height.equalTo(25)
             make.right.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(kStatusBarHeight + 10)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 10)
         }
         skipButton.isHidden = viewModel.skipShow ? false : true
         skipButton.isUserInteractionEnabled = viewModel.skipShow
