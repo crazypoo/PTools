@@ -268,7 +268,7 @@ class ResizeController {
     var initialWidth = CGFloat.zero
     
     static let kMinConsoleWidth: CGFloat = systemLog_base_width
-    static let kMaxConsoleWidth: CGFloat = kSCREEN_WIDTH - 56
+    static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
     
     @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
         

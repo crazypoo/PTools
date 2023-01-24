@@ -39,7 +39,7 @@ public class PNProductSpecPanelLayout: FloatingPanelLayout {
 
     open var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring]  {
         [
-            .full: FloatingPanelLayoutAnchor(absoluteInset: kSCREEN_HEIGHT - viewHeight, edge: .top, referenceGuide: .superview)
+            .full: FloatingPanelLayoutAnchor(absoluteInset: CGFloat.kSCREEN_HEIGHT - viewHeight, edge: .top, referenceGuide: .superview)
         ]
     }
 

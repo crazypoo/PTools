@@ -155,7 +155,7 @@ public class LocalConsole: NSObject {
     {
         if terminal == nil
         {
-            terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
+            terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
             terminal?.tag = SystemLogViewTag
             terminal!.menuButton.addActionHandlers { sender in
                 let actionSheet = PTActionSheetView.init(title: "调试功能", destructiveButton: "关闭",otherButtonTitles: self.popoverTitles,dismissWithTapBG: false)

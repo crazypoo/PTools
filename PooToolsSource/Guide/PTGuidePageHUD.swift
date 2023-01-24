@@ -53,7 +53,7 @@ public class PTGuidePageHUD: UIView {
         
         let guidePageView = UIScrollView()
         guidePageView.backgroundColor = .lightGray
-        guidePageView.contentSize = CGSize.init(width: kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: kSCREEN_HEIGHT)
+        guidePageView.contentSize = CGSize.init(width: CGFloat.kSCREEN_WIDTH * CGFloat(viewModel.imageArrays.count), height: CGFloat.kSCREEN_HEIGHT)
         guidePageView.bounces = false
         guidePageView.isPagingEnabled = true
         guidePageView.showsHorizontalScrollIndicator = false
@@ -108,9 +108,9 @@ public class PTGuidePageHUD: UIView {
             }
             guidePageView.addSubview(imageView)
             imageView.snp.makeConstraints { make in
-                make.width.equalTo(kSCREEN_WIDTH)
-                make.height.equalTo(kSCREEN_HEIGHT)
-                make.left.equalToSuperview().inset(kSCREEN_WIDTH * CGFloat(index))
+                make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+                make.height.equalTo(CGFloat.kSCREEN_HEIGHT)
+                make.left.equalToSuperview().inset(CGFloat.kSCREEN_WIDTH * CGFloat(index))
             }
             
             if index == (viewModel.imageArrays.count - 1) && !viewModel.tapHidden
@@ -130,7 +130,7 @@ public class PTGuidePageHUD: UIView {
                     make.width.equalTo(100)
                     make.height.equalTo(50)
                     make.centerX.equalTo(imageView)
-                    make.bottom.equalTo(imageView).inset(kTabbarSaveAreaHeight + 20)
+                    make.bottom.equalTo(imageView).inset(CGFloat.kTabbarSaveAreaHeight + 20)
                 }
             }
         }
@@ -143,7 +143,7 @@ public class PTGuidePageHUD: UIView {
         imagePageControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(30)
-            make.bottom.equalToSuperview().inset(kTabbarSaveAreaHeight)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
         }
         
         imagePageControl.isHidden = viewModel.pageControl ? false : true
@@ -152,7 +152,7 @@ public class PTGuidePageHUD: UIView {
         self.addSubview(forwardButton)
         forwardButton.snp.makeConstraints { make in
             make.width.height.equalTo(64)
-            make.bottom.equalToSuperview().offset(-(kTabbarSaveAreaHeight + 10))
+            make.bottom.equalToSuperview().offset(-(CGFloat.kTabbarSaveAreaHeight + 10))
             make.left.equalToSuperview().inset(10)
         }
         forwardButton.isHidden = true
@@ -233,7 +233,7 @@ public class PTGuidePageHUD: UIView {
             make.width.equalTo(100)
             make.height.equalTo(50)
             make.centerX.equalTo(self.player.view)
-            make.bottom.equalTo(self.player.view).inset(kTabbarSaveAreaHeight + 20)
+            make.bottom.equalTo(self.player.view).inset(CGFloat.kTabbarSaveAreaHeight + 20)
         }
     }
     

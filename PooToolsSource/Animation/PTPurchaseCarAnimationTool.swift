@@ -48,7 +48,7 @@ public class PTPurchaseCarAnimationTool: NSObject {
     {
         let path = UIBezierPath()
         path.move(to: layer!.position)
-        path.addQuadCurve(to: finishPoint, controlPoint: CGPoint.init(x: kSCREEN_WIDTH/2, y: rect.origin.y - 80))
+        path.addQuadCurve(to: finishPoint, controlPoint: CGPoint.init(x: CGFloat.kSCREEN_WIDTH/2, y: rect.origin.y - 80))
         let pathAnimation = CAKeyframeAnimation.init(keyPath: "position")
         pathAnimation.path = path.cgPath
         

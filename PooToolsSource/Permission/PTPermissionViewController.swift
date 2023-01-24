@@ -90,7 +90,7 @@ public class PTPermissionViewController: PTBaseViewController {
         var bannerGroupSize : NSCollectionLayoutSize
         
         bannerItem.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(PTAppBaseConfig.share.baseCellHeight * CGFloat(sectionModel.rows.count)))
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(PTAppBaseConfig.share.baseCellHeight * CGFloat(sectionModel.rows.count)))
         group = NSCollectionLayoutGroup.vertical(layoutSize: bannerGroupSize, subitem: bannerItem, count: sectionModel.rows.count)
 
 
@@ -105,7 +105,7 @@ public class PTPermissionViewController: PTBaseViewController {
         laySection.contentInsets = sectionInsets
         laySection.supplementariesFollowContentInsets = false
         
-        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
+        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
         laySection.boundarySupplementaryItems = [headerItem]
         let backItem = NSCollectionLayoutDecorationItem.background(elementKind: "background")

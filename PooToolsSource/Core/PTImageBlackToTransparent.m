@@ -19,9 +19,8 @@
     uint32_t* rgbImageBuf = (uint32_t*)malloc(bytesPerRow * imageHeight);
     
     // 创建context
-    CGColorSpaceRef colorSpace =CGColorSpaceCreateDeviceRGB();
-    CGContextRef context = CGBitmapContextCreate(rgbImageBuf, imageWidth, imageHeight, 8, bytesPerRow, colorSpace,
-                                                 kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipLast);
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(rgbImageBuf, imageWidth, imageHeight, 8, bytesPerRow, colorSpace, kCGBitmapByteOrder32Little | kCGImageAlphaNoneSkipLast);
     
     CGContextDrawImage(context, CGRectMake(0, 0, imageWidth, imageHeight), image.CGImage);
     
@@ -48,8 +47,7 @@
     
     // 将内存转成image
     CGDataProviderRef dataProvider = CGDataProviderCreateWithData(NULL, rgbImageBuf, bytesPerRow * imageHeight,/*ProviderReleaseData**/NULL);
-    CGImageRef imageRef = CGImageCreate(imageWidth, imageHeight, 8,32, bytesPerRow, colorSpace,
-                                        kCGImageAlphaLast | kCGBitmapByteOrder32Little, dataProvider,
+    CGImageRef imageRef = CGImageCreate(imageWidth, imageHeight, 8,32, bytesPerRow, colorSpace,  kCGImageAlphaLast | kCGBitmapByteOrder32Little, dataProvider,
                                         NULL, true,kCGRenderingIntentDefault);
     CGDataProviderRelease(dataProvider);
     

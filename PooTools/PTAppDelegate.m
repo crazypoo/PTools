@@ -25,8 +25,6 @@
  pod trunk push /Users/crazypoo/ST/PTools/PooTools.podspec --verbose --allow-warnings//通过第一次验证后提交
  */
 
-#define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
-
 @implementation PTAppDelegate
 
 - (UIInterfaceOrientationMask)application:(UIApplication *)application supportedInterfaceOrientationsForWindow:(UIWindow *)window {
@@ -62,7 +60,7 @@
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
 
-    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:30 param:@{} year:@"2000" skipFont:APPFONT(16) comName:@"11111" comNameFont:APPFONT(12) callBack:^{
+    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:30 param:@{} year:@"2000" skipFont:[UIFont appCustomFontWithSize:16 customFont:FontName] comName:@"11111" comNameFont:[UIFont appCustomFontWithSize:12 customFont:FontName] callBack:^{
         
     }];
                 

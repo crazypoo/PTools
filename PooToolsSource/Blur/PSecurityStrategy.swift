@@ -55,12 +55,12 @@ public class PSecurityStrategy: NSObject {
     
     class public func screenShot()->UIImage
     {
-        UIGraphicsBeginImageContextWithOptions(CGSize.init(width: kSCREEN_WIDTH * UIScreen.main.scale, height: kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
+        UIGraphicsBeginImageContextWithOptions(CGSize.init(width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale), true, 0)
         AppWindows!.layer.render(in: UIGraphicsGetCurrentContext()!)
         let viewImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         let imageRef = viewImage?.cgImage
-        let rect = CGRect.init(x: 0, y: 0, width: kSCREEN_WIDTH * UIScreen.main.scale, height: kSCREEN_HEIGHT * UIScreen.main.scale)
+        let rect = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH * UIScreen.main.scale, height: CGFloat.kSCREEN_HEIGHT * UIScreen.main.scale)
         let imageRefRect = imageRef!.cropping(to: rect)
         let sendImage = UIImage.init(cgImage: imageRefRect!)
         return sendImage

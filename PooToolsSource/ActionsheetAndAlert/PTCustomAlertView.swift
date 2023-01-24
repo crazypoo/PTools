@@ -43,7 +43,7 @@ public class PTCustomAlertView: UIView {
     class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat
     {
         let height = PTUtils.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
-        let viewHeight = kSCREEN_HEIGHT / 3
+        let viewHeight = CGFloat.kSCREEN_HEIGHT / 3
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
@@ -208,16 +208,16 @@ public class PTCustomAlertView: UIView {
         switch animationType {
         case .Top:
             propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, -(kSCREEN_HEIGHT / 2), 0)
+            transform = CATransform3DMakeTranslation(0, -(CGFloat.kSCREEN_HEIGHT / 2), 0)
         case .Bottom:
             propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, (kSCREEN_HEIGHT / 2), 0)
+            transform = CATransform3DMakeTranslation(0, (CGFloat.kSCREEN_HEIGHT / 2), 0)
         case .Left:
             propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(-(kSCREEN_HEIGHT / 2), 0, 0)
+            transform = CATransform3DMakeTranslation(-(CGFloat.kSCREEN_HEIGHT / 2), 0, 0)
         case .Right:
             propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation((kSCREEN_HEIGHT / 2), 0, 0)
+            transform = CATransform3DMakeTranslation((CGFloat.kSCREEN_HEIGHT / 2), 0, 0)
         default:
             propertyNamed = kPOPLayerTranslationX
             transform = CATransform3DMakeTranslation(0, 0, 0)
@@ -246,7 +246,7 @@ public class PTCustomAlertView: UIView {
         super.layoutSubviews()
         
         let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width - 20, title: self.titleString)
-        if textH >= (kSCREEN_HEIGHT / 3)
+        if textH >= (CGFloat.kSCREEN_HEIGHT / 3)
         {
             titleLabel.text = titleString
             addSubview(titleScroller)
@@ -292,7 +292,7 @@ public class PTCustomAlertView: UIView {
         let bottomButtonHeight = PTCustomAlertView.getBottomButtonHiehgt(font: viewFont, alertWidth: frame.size.width, moreButtonTitles: bottombuttonArray)
         let bottomHeight = isEX! ? (bottomButtonHeight * CGFloat(bottombuttonArray.count) + AlertLine * CGFloat(bottombuttonArray.count)) : (bottomButtonHeight + AlertLine)
         customView.snp.makeConstraints { make in
-            if textH >= (kSCREEN_HEIGHT / 3)
+            if textH >= (CGFloat.kSCREEN_HEIGHT / 3)
             {
                 make.top.equalTo(self.titleScroller.snp.bottom)
             }

@@ -33,8 +33,6 @@ CGFloat const tagItemSpace = 5;
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-#define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
-
 #define DelaySecond 1
 
 @interface PTShowFunctionViewController ()<GCDWebUploaderDelegate,UITextViewDelegate>
@@ -210,7 +208,6 @@ CGFloat const tagItemSpace = 5;
                 make.left.right.equalTo(self.view);
                 make.height.offset(44);
             }];
-            
             PTSearchBar *searchBar = [PTSearchBar new];
             searchBar.barStyle     = UIBarStyleDefault;
             searchBar.translucent  = YES;
@@ -237,7 +234,7 @@ CGFloat const tagItemSpace = 5;
             textView.backgroundColor = UIColor.randomColor;
             textView.delegate = self;
             textView.returnKeyType = UIReturnKeyDone;
-            textView.font = APPFONT(20);
+            textView.font = [UIFont appCustomFontWithSize:20 customFont:FontName];
             textView.textColor = UIColor.randomColor;
             textView.bk_placeholder = @"我是TextView";
             textView.pt_maxWordCount = @30;
@@ -406,7 +403,7 @@ CGFloat const tagItemSpace = 5;
         {
             PTCountingLabel *balanceLabel = [PTCountingLabel new];
             balanceLabel.textAlignment = NSTextAlignmentCenter;
-            balanceLabel.font = kDEFAULT_FONT(FontName, 30);
+            balanceLabel.font = [UIFont appCustomFontWithSize:30 customFont:FontName];
             balanceLabel.textColor = [UIColor blackColor];
             [self.view addSubview:balanceLabel];
             //设置格式
@@ -482,9 +479,9 @@ CGFloat const tagItemSpace = 5;
             
             NSArray <PTCustomBottomButtonModel *>* titles = @[models];
             
-            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:kDEFAULT_FONT(FontName, 25) titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles];
+            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:[UIFont appCustomFontWithSize:25 customFont:FontName] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles];
             [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:kDEFAULT_FONT(FontName, 25) buttonArray:titles]);
+                make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:[UIFont appCustomFontWithSize:25 customFont:FontName] buttonArray:titles]);
                 make.width.offset(kSCREEN_WIDTH-20);
                 make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];

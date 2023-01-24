@@ -52,7 +52,7 @@ public class PTNumberKeyBoard: UIView {
     init(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) {
         super.init(frame: .zero)
         
-        self.bounds = CGRect.init(x: 0, y: 0, width: kSCREEN_WIDTH, height: PTNumberKeyBoard.kKeyBoardH + (Gobal_device_info.isOneOf(Gobal_group_of_all_X_device) ? kTabbarSaveAreaHeight : 0))
+        self.bounds = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH, height: PTNumberKeyBoard.kKeyBoardH + (CGFloat.kTabbarSaveAreaHeight))
         
         let colorNormal = UIColor(red: 252/255, green: 252/255, blue: 252/255, alpha: 1)
         let colorHightlighted = UIColor(red: 186/255, green: 189/255, blue: 194/255, alpha: 1)

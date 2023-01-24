@@ -75,7 +75,7 @@ public class PTDebugViewController: PTBaseViewController {
         var bannerGroupSize : NSCollectionLayoutSize
         
         bannerItem.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(44 * CGFloat(sectionModel.rows.count)))
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(44 * CGFloat(sectionModel.rows.count)))
         group = NSCollectionLayoutGroup.vertical(layoutSize: bannerGroupSize, subitem: bannerItem, count: sectionModel.rows.count)
 
         let sectionInsets = NSDirectionalEdgeInsets.init(top: 10, leading: 0, bottom: 0, trailing: 0)
@@ -100,7 +100,7 @@ public class PTDebugViewController: PTBaseViewController {
         self.view.addSubviews([self.viewCollection])
         self.viewCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(kNavBarHeight_Total)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
         self.showDetail()
     }

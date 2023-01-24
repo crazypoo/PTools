@@ -22,9 +22,6 @@
 #define FontName @"HelveticaNeue-Light"
 #define FontNameBold @"HelveticaNeue-Medium"
 
-
-#define APPFONT(R) kDEFAULT_FONT(FontName,kAdaptedWidth(R))
-
 @interface PTViewController ()<UITableViewDelegate,UITableViewDataSource,UIPopoverPresentationControllerDelegate>
 {
 }
@@ -65,7 +62,6 @@
     
     self.popover = [[UIViewController alloc] init];
     
-    kAdaptedOtherFontSize(@"", 16);
     UIView *views = [UIView new];
     views.backgroundColor = [UIColor redColor];
     views.bounds = CGRectMake(0, 0, 100, 300);
@@ -587,9 +583,9 @@ static NSString *cellIdentifier = @"CELL";
         [arr addObject:models];
     }
             
-    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:kDEFAULT_FONT(FontName, 15) titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr];
+    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr];
     [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:kDEFAULT_FONT(FontName, 15) buttonArray:arr]);
+        make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName] buttonArray:arr]);
         make.width.offset(kSCREEN_WIDTH-20);
         make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
     }];

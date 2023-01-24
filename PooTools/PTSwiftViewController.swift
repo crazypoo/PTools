@@ -125,7 +125,7 @@ class PTSwiftViewController: UIViewController {
         view.viewCornerRectCorner(cornerRadii: 30, borderWidth: 3, borderColor: .random, corner: [.topLeft, .topRight])
         self.view.addSubview(view)
         view.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(kNavBarHeight_Total)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.left.right.bottom.equalToSuperview().inset(40)
         }
         view.layoutSubviewsCallback = { view in

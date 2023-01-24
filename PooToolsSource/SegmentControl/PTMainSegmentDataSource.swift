@@ -15,7 +15,7 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
     public var change:PTSegmentControlModelType? = .ImageTitle(type: .Normal)
     public var titleNormalColor:UIColor = .black
     public var titleSelectedColor:UIColor = .black
-    public var itemWidths: CGFloat = kSCREEN_WIDTH / 4
+    public var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
     private var cell_width_array = [CGFloat]()
     private var cell_width_array_sub = [CGFloat]()
     

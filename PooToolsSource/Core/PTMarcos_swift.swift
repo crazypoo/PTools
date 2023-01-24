@@ -11,12 +11,26 @@ import DeviceKit
 
 public let AppWindows = UIApplication.shared.delegate?.window!
 
-public let Gobal_device_isSimulator = Device.current.isSimulator
+//MARK: 設備信息
+///設備信息
 public let Gobal_device_info = Device.current
+//MARK: 是否模擬器模擬器
+///是否模擬器模擬器
+public let Gobal_device_isSimulator = Gobal_device_info.isSimulator
+//MARK: 獲取所有屬於iPad的設備
+///獲取所有屬於iPad的設備
 public let Gobal_group_of_all_iPad:[Device] = Device.allPads
+//MARK: 獲取所有屬於Plus的設備
+///獲取所有屬於Plus的設備
 public let Gobal_group_of_all_plus_device:[Device] = Device.allPlusSizedDevices
+//MARK: 獲取所有屬於Pro的設備
+///獲取所有屬於Pro的設備
 public let Gobal_group_of_all_pro_device:[Device] = Device.allProDevices
+//MARK: 獲取所有屬於X的設備
+///獲取所有屬於X的設備
 public let Gobal_group_of_all_X_device:[Device] = Device.allDevicesWithSensorHousing
+//MARK: 獲取所有屬於小屏幕的設備
+///獲取所有屬於小屏幕的設備
 public let Gobal_group_of_all_small_device:[Device] = [.iPhone5,.iPhone5c,.iPhone5s,.iPodTouch5,.iPodTouch6,.iPodTouch7,.iPhone6,.iPhone7,.iPhone8,.iPhoneSE,.iPhoneSE2,.iPhone12Mini,.iPhone13Mini,.iPhone14,.simulator(.iPhone5),.simulator(.iPhone5c),.simulator(.iPhone5s),.simulator(.iPodTouch5),.simulator(.iPodTouch6),.simulator(.iPodTouch7),.simulator(.iPhone6),.simulator(.iPhone7),.simulator(.iPhone8),.simulator(.iPhoneSE),.simulator(.iPhoneSE2),.simulator(.iPhone12Mini),.simulator(.iPhone13Mini),.simulator(.iPhone14)]
 
 public var isXModel: Bool {
@@ -37,35 +51,9 @@ public let kSCREEN_BOUNDS = UIScreen.main.bounds
 //MARK: 当前屏幕Size
 ///当前屏幕Size
 public let kSCREEN_SIZE = kSCREEN_BOUNDS.size
-//MARK: 当前屏幕宽度
-///当前屏幕宽度
-public let kSCREEN_WIDTH = kSCREEN_SIZE.width
-//MARK: 当前屏幕高度
-///当前屏幕高度
-public let kSCREEN_HEIGHT = kSCREEN_SIZE.height
 //MARK: 当前屏幕比例
 ///当前屏幕比例
 public let kSCREEN_SCALE = UIScreen.main.scale
-//MARK: NavBar高度
-///NavBar高度
-public let kNavBarHeight : CGFloat = 44
-//MARK: 状态栏默认高度
-///状态栏默认高度
-public var kStatusBarHeight: CGFloat {
-    return isXModel ? 44 : 20
-}
-//MARK: 導航欄總高度
-///導航欄總高度
-public let kNavBarHeight_Total : CGFloat = kNavBarHeight + CGFloat.statusBarHeight()
-//MARK: Tabbar安全高度
-///Tabbar安全高度
-public let kTabbarSaveAreaHeight : CGFloat = isXModel ? 34 : 0
-//MARK: Tabbar高度
-///Tabbar高度
-public let kTabbarHeight : CGFloat = 49
-//MARK: Tabbar總高度
-///Tabbar總高度
-public let kTabbarHeight_Total : CGFloat = kTabbarSaveAreaHeight + kTabbarHeight
 
 // MARK: App版本&设备系统版本
 public let infoDictionary            = Bundle.main.infoDictionary

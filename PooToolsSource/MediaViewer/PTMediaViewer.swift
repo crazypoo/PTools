@@ -427,9 +427,9 @@ public class PTMediaMediaView:UIView
                     PTUtils.gcdAfter(time: 0.1) {
                         self.player.view.snp.makeConstraints { make in
                             make.width.equalTo(self.frame.size.width)
-                            make.top.equalTo(kNavBarHeight)
+                            make.top.equalTo(CGFloat.kNavBarHeight)
                             make.left.equalTo(0)
-                            make.height.equalTo(self.frame.size.height - kNavBarHeight - 80)
+                            make.height.equalTo(self.frame.size.height - CGFloat.kNavBarHeight - 80)
                         }
                     }
                     
@@ -567,8 +567,8 @@ public class PTMediaMediaView:UIView
         self.contentScrolView.addSubview(self.sceneView!)
         self.sceneView?.snp.makeConstraints({ make in
             make.left.right.equalToSuperview()
-            make.height.equalTo(self.frame.size.height - kNavBarHeight - 80)
-            make.top.equalToSuperview().inset(kNavBarHeight)
+            make.height.equalTo(self.frame.size.height - CGFloat.kNavBarHeight - 80)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight)
         })
         self.sceneView?.allowsCameraControl = true
         
@@ -980,7 +980,7 @@ public class PTMediaViewer: UIView {
         self.addSubview(self.fakeNav)
         self.fakeNav.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
-            make.height.equalTo(kNavBarHeight_Total)
+            make.height.equalTo(CGFloat.kNavBarHeight_Total)
         }
         
         self.addSubview(self.bottomView)
@@ -995,7 +995,7 @@ public class PTMediaViewer: UIView {
             self.indexLabel.text = "1/\(self.viewConfig.mediaData.count)"
             self.indexLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
+                make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
                 make.height.equalTo(PTViewerTitleHeight)
             }
         }
@@ -1003,14 +1003,14 @@ public class PTMediaViewer: UIView {
         self.fakeNav.addSubview(self.fullViewLabel)
         self.fullViewLabel.snp.makeConstraints { make in
             make.height.equalTo(PTViewerTitleHeight)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
             make.right.equalToSuperview().inset(20)
         }
         
         self.fakeNav.addSubview(self.backButton)
         self.backButton.snp.makeConstraints { make in
             make.width.height.equalTo(PTViewerTitleHeight)
-            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (kNavBarHeight - PTViewerTitleHeight) / 2)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
             make.left.equalToSuperview().inset(20)
         }
 
@@ -1604,21 +1604,21 @@ extension PTMediaViewer:UIScrollViewDelegate
             self.bottomView.snp.updateConstraints { make in
                 if (bottonH * 2) > infoH && infoH > bottonH
                 {
-                    make.height.equalTo(infoH + kTabbarSaveAreaHeight)
+                    make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight)
                 }
                 else if infoH < bottonH
                 {
-                    make.height.equalTo(bottonH + kTabbarSaveAreaHeight)
+                    make.height.equalTo(bottonH + CGFloat.kTabbarSaveAreaHeight)
                 }
                 else if infoH > (bottonH * 2)
                 {
-                    make.height.equalTo(bottonH * 2 + kTabbarSaveAreaHeight)
+                    make.height.equalTo(bottonH * 2 + CGFloat.kTabbarSaveAreaHeight)
                 }
             }
 
             self.labelScroller.snp.makeConstraints { make in
                 make.left.top.right.equalToSuperview().inset(10)
-                make.bottom.equalToSuperview().inset(kTabbarSaveAreaHeight + 10)
+                make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             }
             
             if (bottonH * 2) > infoH && infoH > bottonH
@@ -1647,22 +1647,22 @@ extension PTMediaViewer:UIScrollViewDelegate
             self.bottomView.snp.updateConstraints { make in
                 if (bottonH * 2) > infoH && infoH > bottonH
                 {
-                    make.height.equalTo(infoH + kTabbarSaveAreaHeight)
+                    make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight)
                 }
                 else if infoH < bottonH
                 {
-                    make.height.equalTo(bottonH + kTabbarSaveAreaHeight)
+                    make.height.equalTo(bottonH + CGFloat.kTabbarSaveAreaHeight)
                 }
                 else if infoH > (bottonH * 2)
                 {
-                    make.height.equalTo(bottonH * 2 + kTabbarSaveAreaHeight)
+                    make.height.equalTo(bottonH * 2 + CGFloat.kTabbarSaveAreaHeight)
                 }
             }
             self.bottomView.addSubview(self.moreActionButton)
             self.moreActionButton.snp.makeConstraints { make in
                 make.width.height.equalTo(bottonH)
                 make.right.equalToSuperview().inset(20)
-                make.bottom.equalToSuperview().inset(kTabbarSaveAreaHeight + 10)
+                make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             }
             
             self.labelScroller.snp.makeConstraints { make in

@@ -248,7 +248,7 @@ public class PTActionSheetView: UIView {
             titleStr = ""
         }
         
-        return PTUtils.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: kSCREEN_WIDTH).height + spacing * 2
+        return PTUtils.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + spacing * 2
     }
     
     func scrollContentHeight()->CGFloat
@@ -265,7 +265,7 @@ public class PTActionSheetView: UIView {
     func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat
     {
         let realH = actionSheetRealHeight()
-        let canshowViewH:CGFloat = kSCREEN_HEIGHT - kTabbarSaveAreaHeight - CGFloat.statusBarHeight() - 10
+        let canshowViewH:CGFloat = CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarSaveAreaHeight - CGFloat.statusBarHeight() - 10
         if actionSheetRealHeight() >= canshowViewH
         {
             return canshowViewH
@@ -279,7 +279,7 @@ public class PTActionSheetView: UIView {
     func scrollHieght(orientation:UIDeviceOrientation)->CGFloat
     {
         let a:CGFloat = self.actionSheetHeight(orientation: orientation)
-        let b:CGFloat = kSCREEN_HEIGHT
+        let b:CGFloat = CGFloat.kSCREEN_HEIGHT
         if (a - b) <= 0
         {
             return a - (self.titleHeight() + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - (self.destRowH() + self.destlineH() + kRowLineHeight * 2)
@@ -303,7 +303,7 @@ public class PTActionSheetView: UIView {
         actionSheetView.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.left.right.equalToSuperview().inset(LeftAndRightviewSpace)
-            make.bottom.equalToSuperview().inset(kTabbarSaveAreaHeight + 10)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             make.height.equalTo(self.actionSheetHeight(orientation: device.orientation))
         }
                 
@@ -336,10 +336,10 @@ public class PTActionSheetView: UIView {
             }
         }
         
-        let contentW : CGFloat = kSCREEN_WIDTH - LeftAndRightviewSpace * 2
+        let contentW : CGFloat = CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2
         actionSheetScroll.contentSize = CGSize.init(width: contentW, height: self.scrollContentHeight())
         actionSheetScroll.showsVerticalScrollIndicator = false
-        actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= kSCREEN_HEIGHT) ? true : false
+        actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= CGFloat.kSCREEN_HEIGHT) ? true : false
         
         let highlightedImage = heightlightColor.createImageWithColor()
 
@@ -351,7 +351,7 @@ public class PTActionSheetView: UIView {
                 self.actionSheetScroll.addSubview(lineView)
                 lineView.snp.makeConstraints { make in
                     make.height.equalTo(kRowLineHeight)
-                    make.width.equalTo(kSCREEN_WIDTH - LeftAndRightviewSpace * 2)
+                    make.width.equalTo(CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2)
                     make.centerX.equalToSuperview()
                     make.top.equalTo(kRowHeight * CGFloat(index) + kRowLineHeight * CGFloat(index))
                 }

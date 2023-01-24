@@ -114,13 +114,6 @@
  */
 #define HEIGHT_BUTTON 44.f
 
-/*! @brief 当前屏幕的宽与320的比例
- */
-#define SCREEN_POINT (float)SCREEN_WIDTH/320.f
-/*! @brief 当前屏幕的高度与480的比例
- */
-#define SCREEN_H_POINT (float)SCREEN_HEIGHT/480.f
-
 /*! @brief PS字号转换成iOS字号
  */
 #define kPSFontToiOSFont(pixel) (pixel*3/4)
@@ -294,30 +287,6 @@ return self; \
  * @see 用法TICK(do your work here)TOCK
  */
 #define TOCK NSLog(@"Time:%f", -[startTime timeIntervalSinceNow]);
-
-#pragma mark ---------------> 设置默认字体&字体大小
-/*! @brief 设置默认字体&字体大小
- */
-#define kDEFAULT_FONT(n,s)     [UIFont fontWithName:n size:s]
-
-/*! @brief 屏幕宽比例 (6SP为对比)
- */
-#define kScreenWidthRatio  (UIScreen.mainScreen.bounds.size.width / 375.0)
-/*! @brief 屏幕高比例 (6SP为对比)
- */
-#define kScreenHeightRatio (UIScreen.mainScreen.bounds.size.height / 667.0)
-/*! @brief 实际x宽 (6SP为对比)
- */
-#define kAdaptedWidth(x)  ceilf((x) * kScreenWidthRatio)
-/*! @brief 实际x高 (6SP为对比)
- */
-#define kAdaptedHeight(x) ceilf((x) * kScreenHeightRatio)
-/*! @brief 实际系统字体字号R的大小 (6SP为对比)
- */
-#define kAdaptedFontSize(R) [UIFont systemFontOfSize:kAdaptedWidth(R)]
-/*! @brief 实际自定义字体字号R的大小 (6SP为对比)
- */
-#define kAdaptedOtherFontSize(n,R) kDEFAULT_FONT(n,kAdaptedWidth(R))
 
 #pragma mark ---------------> 由角度转换弧度 由弧度转换角度
 /*! @brief 角度转弧度

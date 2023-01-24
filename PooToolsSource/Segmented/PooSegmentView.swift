@@ -418,7 +418,7 @@ public class PooSegmentView: UIView {
                 
                 self.addSubview(self.scrolView)
                 self.scrolView.snp.makeConstraints { (make) in
-                    if scrolContentW >= kSCREEN_WIDTH
+                    if scrolContentW >= CGFloat.kSCREEN_WIDTH
                     {
                         make.edges.equalToSuperview()
                     }
@@ -432,7 +432,7 @@ public class PooSegmentView: UIView {
                 self.scrolView.contentSize = CGSize.init(width: scrolContentW, height: self.frame.size.height)
                 self.selectedIndex = self.viewConfig.normalSelecdIndex
                 
-                if scrolContentW >= kSCREEN_WIDTH
+                if scrolContentW >= CGFloat.kSCREEN_WIDTH
                 {
                     self.scrolView.isScrollEnabled = true
                 }

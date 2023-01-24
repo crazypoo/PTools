@@ -23,7 +23,12 @@ public extension UIFont
         }
     }
     
-    class func appCustomFont(size:CGFloat,customFont:String? = nil)-> UIFont
+    @objc class func oc_appFont(size:CGFloat,bold:Bool)->UIFont
+    {
+        return self.appfont(size: size,bold: bold)
+    }
+    
+    @objc class func appCustomFont(size:CGFloat,customFont:String? = nil)-> UIFont
     {
         return UIFont.init(name: customFont!, size: CGFloat.ScaleW(w: size))!
     }

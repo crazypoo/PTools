@@ -474,10 +474,10 @@ public class PTUtils: NSObject {
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
         banner.duration = 1.5
         banner.backgroundColor = bannerBackgroundColor!
-        banner.subtitleLabel?.textAlignment = PTUtils.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
+        banner.subtitleLabel?.textAlignment = PTUtils.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.subtitleLabel?.font = subTitleFont
         banner.subtitleLabel?.textColor = subTitleColor!
-        banner.titleLabel?.textAlignment = PTUtils.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (kSCREEN_WIDTH - 36) ? .left : .center
+        banner.titleLabel?.textAlignment = PTUtils.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.titleLabel?.font = titleFont
         banner.titleLabel?.textColor = titleColor!
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
@@ -492,9 +492,9 @@ public class PTUtils: NSObject {
     //MARK: 生成CollectionView的Group
     @available(iOS 13.0, *)
     class open func gobal_collection_gird_layout(data:[AnyObject],
-                                                 size:CGSize? = CGSize.init(width: (kSCREEN_WIDTH - 10 * 2)/3, height: (kSCREEN_WIDTH - 10 * 2)/3),
+                                                 size:CGSize? = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
                                                  originalX:CGFloat? = 10,
-                                                 mainWidth:CGFloat? = kSCREEN_WIDTH,
+                                                 mainWidth:CGFloat? = CGFloat.kSCREEN_WIDTH,
                                                  cellRowCount:NSInteger? = 3,
                                                  sectionContentInsets:NSDirectionalEdgeInsets? = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0),
                                                  contentTopAndBottom:CGFloat? = 0,
@@ -550,7 +550,7 @@ public class PTUtils: NSObject {
     
     //MARK: 计算CollectionView的Group高度
     class open func gobal_collection_gird_layout_content_height(data:[AnyObject],
-                                                                size:CGSize? = CGSize.init(width: (kSCREEN_WIDTH - 10 * 2)/3, height: (kSCREEN_WIDTH - 10 * 2)/3),
+                                                                size:CGSize? = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
                                                                 cellRowCount:NSInteger? = 3,
                                                                 originalX:CGFloat? = 10,
                                                                 contentTopAndBottom:CGFloat? = 0,
@@ -780,11 +780,6 @@ extension PTUtils
         return PTUtils.sizeFor(string: string, font: font,lineSpacing: lineSpacing, height: height, width: width)
     }
     
-    class open func oc_font(fontSize:CGFloat)->UIFont
-    {
-        return UIFont.appfont(size: fontSize)
-    }
-
     //MARK: 时间
     class open func oc_currentTimeFunction(dateFormatter:NSString)->String
     {
