@@ -30,22 +30,15 @@ public class PTActionCell:UIView
                 
         blur = SSBlurView.init(to: self)
         blur!.alpha = 0.9
-        if #available(iOS 13.0, *) {
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-        } else {
-            blur!.style = .extraLight
-            // Fallback on earlier versions
-        }
+        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         blur!.enable()
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13.0, *) {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                // 适配代码
-                blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-            }
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // 适配代码
+            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         }
     }
 }
@@ -127,6 +120,24 @@ public class PTActionSheetView: UIView {
         return view
     }()
         
+    //MARK: 初始化創建Actionsheet
+    ///初始化創建Actionsheet
+    /// - Parameters:
+    ///   - title: 標題
+    ///   - subTitle: 副標題
+    ///   - cancelButton: 取消按鈕
+    ///   - destructiveButton: 額外按鈕
+    ///   - otherButtonTitles: 其他按鈕
+    ///   - buttonFont: 按鈕字體
+    ///   - comfirFont: 確認按鈕字體
+    ///   - titleCellFont: 每一行按鈕的字體
+    ///   - normalCellTitleColor: 每一行的字體顏色
+    ///   - destructiveCellTitleColor: 額外按鈕字體顏色
+    ///   - cancelCellTitleColor: 取消按鈕字體顏色
+    ///   - titleCellTitleColor: 標題字體顏色
+    ///   - selectedColor: 選中的動畫顏色
+    ///   - corner: 邊框角弧度
+    ///   - dismissWithTapBG: 是否支持點擊背景消失Alert
     public init(title:String? = "",
          subTitle:String? = "",
          cancelButton:String? = "取消",

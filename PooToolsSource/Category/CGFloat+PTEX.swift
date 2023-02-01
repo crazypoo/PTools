@@ -36,16 +36,9 @@ public extension CGFloat
     /// - Returns: CGFloat
     static func statusBarHeight()->CGFloat
     {
-        if #available(iOS 13.0, *)
-        {
-            let window = UIApplication.shared.windows.first
-            let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame
-            return statusBarFrame?.height ?? 0
-        }
-        else
-        {
-            return isXModel ? 44 : 20
-        }
+        let window = UIApplication.shared.windows.first
+        let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame
+        return statusBarFrame?.height ?? 0
     }
     
     //MARK: 獲取導航欄總高度

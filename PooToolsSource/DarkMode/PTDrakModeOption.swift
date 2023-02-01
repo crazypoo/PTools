@@ -57,13 +57,10 @@ public class PTDrakModeOption {
     
     /// 是否跟随系统
     public static var isFollowSystem: Bool {
-        if #available(iOS 13, *) {
-            if let value = UserDefaults.pt.userDefaultsGetValue(key: PTDarkToSystemKey) as? Bool {
-                return value
-            }
-            return true
+        if let value = UserDefaults.pt.userDefaultsGetValue(key: PTDarkToSystemKey) as? Bool {
+            return value
         }
-        return false
+        return true
     }
 }
 
@@ -72,73 +69,51 @@ public extension PTDrakModeOption {
     // MARK: 初始化的调用
     /// 默认设置
     static func defaultDark() {
-        if #available(iOS 13.0, *) {
-            // 默认跟随系统暗黑模式开启监听
-            if (PTDrakModeOption.isFollowSystem) {
-                PTDrakModeOption.setDarkModeFollowSystem(isFollowSystem: true)
-            } else {
-                UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDrakModeOption.isLight ? .light : .dark
-            }
+        // 默认跟随系统暗黑模式开启监听
+        if (PTDrakModeOption.isFollowSystem) {
+            PTDrakModeOption.setDarkModeFollowSystem(isFollowSystem: true)
+        } else {
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDrakModeOption.isLight ? .light : .dark
         }
     }
     
     // MARK: 设置系统是否跟随
     static func setDarkModeFollowSystem(isFollowSystem: Bool) {
-        if #available(iOS 13.0, *) {
-            // 1.1、设置是否跟随系统
-            UserDefaults.pt.userDefaultsSetValue(value: isFollowSystem, key: PTDarkToSystemKey)
-            let result = UITraitCollection.current.userInterfaceStyle == .light ? true : false
-            UserDefaults.pt.userDefaultsSetValue(value: result, key: PTLightDarkKey)
-            UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
-            // 1.2、设置模式的保存
-            if isFollowSystem {
-                UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = .unspecified
-            } else {
-                UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
-            }
+        // 1.1、设置是否跟随系统
+        UserDefaults.pt.userDefaultsSetValue(value: isFollowSystem, key: PTDarkToSystemKey)
+        let result = UITraitCollection.current.userInterfaceStyle == .light ? true : false
+        UserDefaults.pt.userDefaultsSetValue(value: result, key: PTLightDarkKey)
+        UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
+        // 1.2、设置模式的保存
+        if isFollowSystem {
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = .unspecified
+        } else {
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = UITraitCollection.current.userInterfaceStyle
         }
     }
     
     // MARK: 设置：浅色 / 深色
     static func setDarkModeCustom(isLight: Bool) {
-        if #available(iOS 13.0, *) {
-            // 1.1、只要设置了模式：就是黑或者白
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
-            // 1.2、设置跟随系统和智能换肤：否
-            UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
-            UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
-            // 1.3、黑白模式的设置
-            UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
-        } else {
-            UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
-            // 模式存储
-            UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
-            // 通知模式更新
-            LegacyThemeProvider.shared.updateTheme()
-        }
+        // 1.1、只要设置了模式：就是黑或者白
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        // 1.2、设置跟随系统和智能换肤：否
+        UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
+        UserDefaults.pt.userDefaultsSetValue(value: false, key: PTSmartPeelingKey)
+        // 1.3、黑白模式的设置
+        UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
     }
     
     // MARK: 设置：智能换肤
     /// 智能换肤
     /// - Parameter isSmartPeeling: 是否智能换肤
     static func setSmartPeelingDarkMode(isSmartPeeling: Bool) {
-        if #available(iOS 13.0, *) {
-            // 1.1、设置智能换肤
-            UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
-            // 1.2、智能换肤根据时间段来设置：黑或者白
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
-            // 1.3、设置跟随系统：否
-            UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
-            UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
-        } else {
-            // 模式存储
-            // 1.1、设置智能换肤
-            UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
-            // 1.2、设置跟随系统：否
-            UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
-            // 1.3、通知模式更新
-            LegacyThemeProvider.shared.updateTheme()
-        }
+        // 1.1、设置智能换肤
+        UserDefaults.pt.userDefaultsSetValue(value: isSmartPeeling, key: PTSmartPeelingKey)
+        // 1.2、智能换肤根据时间段来设置：黑或者白
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = isLight ? .light : .dark
+        // 1.3、设置跟随系统：否
+        UserDefaults.pt.userDefaultsSetValue(value: false, key: PTDarkToSystemKey)
+        UserDefaults.pt.userDefaultsSetValue(value: isLight, key: PTLightDarkKey)
     }
     
     // MARK: 智能换肤时间选择后
@@ -159,43 +134,28 @@ public extension PTDrakModeOption {
         }
         PTDrakModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
         
-        if #available(iOS 13.0, *) {
-            // 1.1、只要设置了模式：就是黑或者白
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = light ? .light : .dark
-            // 1.2、黑白模式的设置
-            UserDefaults.pt.userDefaultsSetValue(value: light, key: PTLightDarkKey)
-        } else {
-            // 模式存储
-            UserDefaults.pt.userDefaultsSetValue(value: light, key: PTLightDarkKey)
-            // 通知模式更新
-            LegacyThemeProvider.shared.updateTheme()
-        }
+        // 1.1、只要设置了模式：就是黑或者白
+        UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = light ? .light : .dark
+        // 1.2、黑白模式的设置
+        UserDefaults.pt.userDefaultsSetValue(value: light, key: PTLightDarkKey)
     }
 }
 
 // MARK: - 动态颜色的使用
 public extension PTDrakModeOption {
     static func colorLightDark(lightColor: UIColor, darkColor: UIColor) -> UIColor {
-        if #available(iOS 13.0, *) {
-            return UIColor { (traitCollection) -> UIColor in
-                if PTDrakModeOption.isFollowSystem {
-                    if traitCollection.userInterfaceStyle == .light {
-                        return lightColor
-                    } else {
-                        return darkColor
-                    }
-                } else if PTDrakModeOption.isSmartPeeling {
-                    return isSmartPeelingTime() ? darkColor : lightColor
+        return UIColor { (traitCollection) -> UIColor in
+            if PTDrakModeOption.isFollowSystem {
+                if traitCollection.userInterfaceStyle == .light {
+                    return lightColor
                 } else {
-                    return PTDrakModeOption.isLight ? lightColor : darkColor
+                    return darkColor
                 }
+            } else if PTDrakModeOption.isSmartPeeling {
+                return isSmartPeelingTime() ? darkColor : lightColor
+            } else {
+                return PTDrakModeOption.isLight ? lightColor : darkColor
             }
-        } else {
-            // iOS 13 以下主题色的使用
-            if PTDrakModeOption.isLight {
-                return lightColor
-            }
-            return darkColor
         }
     }
     
@@ -234,17 +194,9 @@ public extension PTDrakModeOption {
     ///   - dark: 深色图片
     /// - Returns: 最终图片
     static func image(light: UIImage?, dark: UIImage?) -> UIImage? {
-        if #available(iOS 13.0, *) {
-            guard let weakLight = light, let weakDark = dark, let config = weakLight.configuration else { return light }
-            let lightImage = weakLight.withConfiguration(config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.light)))
-            lightImage.imageAsset?.register(weakDark, with: config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.dark)))
-            return lightImage.imageAsset?.image(with: UITraitCollection.current) ?? light
-        } else {
-            // iOS 13 以下主题色的使用
-            if PTDrakModeOption.isLight {
-                return light
-            }
-            return dark
-        }
+        guard let weakLight = light, let weakDark = dark, let config = weakLight.configuration else { return light }
+        let lightImage = weakLight.withConfiguration(config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.light)))
+        lightImage.imageAsset?.register(weakDark, with: config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.dark)))
+        return lightImage.imageAsset?.image(with: UITraitCollection.current) ?? light
     }
 }

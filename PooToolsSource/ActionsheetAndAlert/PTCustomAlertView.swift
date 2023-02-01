@@ -121,6 +121,17 @@ public class PTCustomAlertView: UIView {
         return view
     }()
     
+    //MARK: 初始化創建Alert
+    ///初始化創建Alert
+    /// - Parameters:
+    ///   - superView: 加載在?上
+    ///   - alertTitle: 標題
+    ///   - font: 字體
+    ///   - titleColor: 標題的字體顏色
+    ///   - alertVerLineColor: 按鈕線的顏色
+    ///   - alertBackgroundColor: Alert的背景顏色
+    ///   - heightlightedColor: 按鈕點以後的顏色
+    ///   - moreButtons: 按鈕設置
     @objc public init(superView:UIView,
                       alertTitle:String? = "",
                       font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
@@ -134,6 +145,20 @@ public class PTCustomAlertView: UIView {
         self.createAlertView(superView: superView, alertTitle: alertTitle!, font: font!, titleColor: titleColor!, alertVerLineColor: alertVerLineColor!, alertBackgroundColor: alertBackgroundColor!, heightlightedColor: heightlightedColor!, moreButtons: moreButtons!, alertAnimationType: .Top)
     }
     
+    //MARK: 初始化創建Alert
+    ///初始化創建Alert
+    /// - Parameters:
+    ///   - superView: 加載在?上
+    ///   - alertTitle: 標題
+    ///   - font: 字體
+    ///   - titleColor: 標題的字體顏色
+    ///   - alertVerLineColor: 按鈕線的顏色
+    ///   - alertBackgroundColor: Alert的背景顏色
+    ///   - heightlightedColor: 按鈕點以後的顏色
+    ///   - moreButtons: 按鈕設置
+    ///   - alertAnimationType: 動畫形式
+    ///   - touchBackground: 是否支持點擊背景消失Alert
+    ///   - cornerSize: Alert邊框角弧度
     public init(superView:UIView,
          alertTitle:String? = "",
          font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
@@ -186,12 +211,7 @@ public class PTCustomAlertView: UIView {
         }
         
         blur = SSBlurView.init(to: self)
-        if #available(iOS 13.0, *) {
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-        } else {
-            blur!.style = .extraLight
-            // Fallback on earlier versions
-        }
+        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         blur!.alpha = 0.9
         blur!.enable()
 
@@ -440,11 +460,9 @@ public class PTCustomAlertView: UIView {
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13.0, *) {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                // 适配代码
-                blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-            }
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            // 适配代码
+            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         }
     }
 }

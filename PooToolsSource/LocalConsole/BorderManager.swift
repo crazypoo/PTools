@@ -28,12 +28,7 @@ class BorderManager {
         } else if "\(view.classForCoder)".contains("UILabel") {
             outlineColor = UIColor.systemBlue.withAlphaComponent(0.85).cgColor
         } else if "\(view.classForCoder)".contains("UIVisualEffectView") {
-            if #available(iOS 13.0, *) {
-                outlineColor = UIColor.systemIndigo.withAlphaComponent(0.85).cgColor
-            } else {
-                // Fallback on earlier versions
-                outlineColor = UIColor.randomColor.cgColor
-            }
+            outlineColor = UIColor.systemIndigo.withAlphaComponent(0.85).cgColor
         } else {
             outlineColor = UIColor.systemYellow.withAlphaComponent(0.85).cgColor
         }

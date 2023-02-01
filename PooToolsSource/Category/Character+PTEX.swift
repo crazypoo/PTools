@@ -14,14 +14,9 @@ public extension Character {
         guard let firstProperties = unicodeScalars.first?.properties else {
             return false
         }
-        if #available(iOS 10.2, *) {
-            return unicodeScalars.count == 1 &&
-            (firstProperties.isEmojiPresentation ||
-             firstProperties.generalCategory == .otherSymbol)
-        } else {
-            // Fallback on earlier versions
-            return false
-        }
+        return unicodeScalars.count == 1 &&
+        (firstProperties.isEmojiPresentation ||
+         firstProperties.generalCategory == .otherSymbol)
     }
 
     /// 检查标量是否将合并到emoji中

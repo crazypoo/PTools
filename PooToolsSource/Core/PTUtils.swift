@@ -17,11 +17,9 @@ import SwiftDate
         return iPhoneXSeries
     }
 
-    if #available(iOS 11.0, *) {
-        let mainWindow:UIView = UIApplication.shared.delegate!.window!!
-        if (mainWindow.safeAreaInsets.bottom) > 0.0 {
-            iPhoneXSeries = true
-        }
+    let mainWindow:UIView = UIApplication.shared.delegate!.window!!
+    if (mainWindow.safeAreaInsets.bottom) > 0.0 {
+        iPhoneXSeries = true
     }
 
     return iPhoneXSeries

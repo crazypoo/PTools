@@ -29,32 +29,13 @@ class PTCarrie: NSObject {
     {
         let dic = NSMutableDictionary()
         
-        if #available(iOS 13, *)
-        {
-            let carrier = CTCarrier()
-            let carrierName = carrier.carrierName
-            let mobileCountryCode = carrier.mobileCountryCode
-            let mobileNetworkCode = carrier.mobileNetworkCode
-            dic.setValue(mobileCountryCode, forKey: "mobileCountryCode")
-            dic.setValue(mobileNetworkCode, forKey: "mobileNetworkCode")
-            dic.setValue(carrierName, forKey: "carrierName")
-        }
-        else
-        {
-            let info = CTTelephonyNetworkInfo()
-            let carrier = info.subscriberCellularProvider
-            let mcc = carrier?.mobileCountryCode
-            let mnc = carrier?.mobileNetworkCode
-            let ccode = carrier?.isoCountryCode
-            let name = carrier?.carrierName
-            let allowVOIP = carrier!.allowsVOIP ? 1 : 0
-
-            dic.setValue(mcc, forKey: "mobileCountryCode")
-            dic.setValue(mnc, forKey: "mobileNetworkCode")
-            dic.setValue(ccode, forKey: "isoCountryCode")
-            dic.setValue(name, forKey: "carrierName")
-            dic.setValue(allowVOIP, forKey: "allowsVOIP")
-        }
+        let carrier = CTCarrier()
+        let carrierName = carrier.carrierName
+        let mobileCountryCode = carrier.mobileCountryCode
+        let mobileNetworkCode = carrier.mobileNetworkCode
+        dic.setValue(mobileCountryCode, forKey: "mobileCountryCode")
+        dic.setValue(mobileNetworkCode, forKey: "mobileNetworkCode")
+        dic.setValue(carrierName, forKey: "carrierName")
 
         return dic
     }
@@ -67,17 +48,10 @@ class PTCarrie: NSObject {
         }
         // 获取并输出运营商信息
         let info = CTTelephonyNetworkInfo()
-        if #available(iOS 12.0, *) {
-            guard let providers = info.serviceSubscriberCellularProviders else {
-                return []
-            }
-            return providers.filter { $0.value.carrierName != nil }.values.shuffled()
-        } else {
-            guard let carrier = info.subscriberCellularProvider, carrier.carrierName != nil else {
-                return []
-            }
-            return [carrier]
+        guard let providers = info.serviceSubscriberCellularProviders else {
+            return []
         }
+        return providers.filter { $0.value.carrierName != nil }.values.shuffled()
     }
 
     //MARK: 根据数据业务信息获取对应的网络类型
@@ -184,17 +158,10 @@ class PTCarrie: NSObject {
         }
         // 获取并输出运营商信息
         let info = CTTelephonyNetworkInfo()
-        if #available(iOS 12.0, *) {
-            guard let currentRadioTechs = info.serviceCurrentRadioAccessTechnology else {
-                return nil
-            }
-            return currentRadioTechs.values.shuffled()
-        } else {
-            guard let currentRadioTech = info.currentRadioAccessTechnology else {
-                return nil
-            }
-            return [currentRadioTech]
+        guard let currentRadioTechs = info.serviceCurrentRadioAccessTechnology else {
+            return nil
         }
+        return currentRadioTechs.values.shuffled()
     }
 
     // MARK: 设备网络制式

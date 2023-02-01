@@ -575,13 +575,8 @@ public class PTMediaMediaView:UIView
         self.cameraNode?.camera = camera
         self.cameraNode?.camera?.automaticallyAdjustsZRange = true
         self.cameraNode?.position = SCNVector3.init(x: 0, y: 0, z: 0)
-        if #available(iOS 11.0, *) {
-            self.cameraNode?.camera?.fieldOfView = 60
-            self.cameraNode?.camera?.focalLength = 60
-        } else {
-            self.cameraNode?.camera?.xFov = 60
-            self.cameraNode?.camera?.yFov = 60
-        }
+        self.cameraNode?.camera?.fieldOfView = 60
+        self.cameraNode?.camera?.focalLength = 60
         self.sceneView?.scene?.rootNode.addChildNode(self.cameraNode!)
         
         self.panoramaNode = SCNNode()
@@ -645,13 +640,8 @@ public class PTMediaMediaView:UIView
                     let xFov = 60 * scaleRatio
                     let yFov = 60 * scaleRatio
                     
-                    if #available(iOS 11.0, *) {
-                        self.cameraNode?.camera?.fieldOfView = xFov
-                        self.cameraNode?.camera?.focalLength = yFov
-                    } else {
-                        self.cameraNode?.camera?.xFov = xFov
-                        self.cameraNode?.camera?.yFov = yFov
-                    }
+                    self.cameraNode?.camera?.fieldOfView = xFov
+                    self.cameraNode?.camera?.focalLength = yFov
                 }
             }
             else if ges.state == .ended
@@ -673,15 +663,8 @@ public class PTMediaMediaView:UIView
         self.motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in
             
             var orientation:UIInterfaceOrientation = .unknown
-            if #available(iOS 13, *)
-            {
-                orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
-            }
-            else
-            {
-                orientation = UIApplication.shared.statusBarOrientation
-            }
-            
+            orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
+
             if orientation == .portrait && !self.gestureDuring!
             {
                 var modelMatrix = SCNMatrix4MakeRotation(0, 0, 0, 0)

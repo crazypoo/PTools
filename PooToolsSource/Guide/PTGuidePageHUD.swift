@@ -207,9 +207,7 @@ public class PTGuidePageHUD: UIView {
         super.init(frame: mainView.frame)
         player.player = AVPlayer.init(url: videlURL)
         player.showsPlaybackControls = false
-        if #available(iOS 11.0, *) {
-            player.entersFullScreenWhenPlaybackBegins = true
-        }
+        player.entersFullScreenWhenPlaybackBegins = true
         self.addSubview(player.view)
         player.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()

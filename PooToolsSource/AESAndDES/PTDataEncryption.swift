@@ -29,6 +29,13 @@ public class PTDataEncryption {
     //        /* Generate random IV value. IV is public value. Either need to generate, or get it from elsewhere */
     //        let iv = AES.randomIV(AES.blockSize)
 
+    //MARK: AES加密
+    ///AES加密
+    /// - Parameters:
+    ///   - data: 加密內容
+    ///   - key: key
+    ///   - iv: iv
+    ///   - handle: 輸出
     public static func aes_encryption(data:Data,key:String,iv:String,handle:(_ encryptionString:String)->Void)
     {
         /* Encrypt Data */
@@ -42,6 +49,13 @@ public class PTDataEncryption {
         }
     }
     
+    //MARK: AES解密
+    ///AES解密
+    /// - Parameters:
+    ///   - data: 加密內容
+    ///   - key: key
+    ///   - iv: iv
+    ///   - handle: 輸出
     public static func ase_decrypt(data:Data,key:String,iv:String,handle:(_ decryptData:Data)->Void)
     {
         /* Decrypt Data */
@@ -55,6 +69,13 @@ public class PTDataEncryption {
         }
     }
     
+    //MARK: Des加密
+    ///Des加密
+    /// - Parameters:
+    ///   - operation: 加密/解密
+    ///   - key: key
+    ///   - dataString: 被加密內容
+    ///   - handle: 輸出
     public static func des_crypt(operation:CCOperation, key: String,dataString:String!,handle:(_ outputString:String)->Void)
     {
         

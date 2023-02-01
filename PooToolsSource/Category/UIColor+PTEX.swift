@@ -23,18 +23,9 @@ public extension UIColor {
     /// - Returns UIColor
     class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
-        if #available(iOS 13, *)
-        {
-            let hexint = intFromHexString_64(tempStr)
-            let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
-            return color
-        }
-        else
-        {
-            let hexint = intFromHexString(tempStr)
-            let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
-            return color
-        }
+        let hexint = intFromHexString_64(tempStr)
+        let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
+        return color
     }
     
     func cielabColorArray()->[NSNumber]

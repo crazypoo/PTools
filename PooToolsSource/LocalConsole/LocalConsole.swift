@@ -261,25 +261,13 @@ public class LocalConsole: NSObject {
             var volumeAvailableCapacityForImportantUsageString = ""
             var volumeAvailableCapacityForOpportunisticUsageString = ""
             var volumesString = ""
-            if #available(iOS 11.0, *)
-            {
-                volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
-                volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
-                volumesString = String.init(format: "%d", Device.volumes!)
-            }
-            else
-            {
-                volumeAvailableCapacityForImportantUsageString = "Not Support"
-                volumeAvailableCapacityForOpportunisticUsageString = "Not Support"
-                volumesString = "Not Support"
-            }
-            
+            volumeAvailableCapacityForImportantUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+            volumeAvailableCapacityForOpportunisticUsageString = String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+            volumesString = String.init(format: "%d", Device.volumes!)
+
             var hzString = ""
-            if #available(iOS 10.3, *)
-            {
-                hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
-            }
-            
+            hzString = "MaxFrameRate: \(UIScreen.main.maximumFramesPerSecond) Hz"
+
             var supportApplePencilString = ""
             switch UIDevice.pt.supportApplePencil {
             case .Both:
@@ -418,17 +406,13 @@ public class PTTerminal:PFloatingButton
         self.shadowOffset = CGSize.init(width: 0, height: 2)
         self.layer.cornerRadius = 22
         self.tag = SystemLogViewTag
-        if #available(iOS 13.0, *) {
-            self.layer.cornerCurve = .continuous
-        }
-        
+        self.layer.cornerCurve = .continuous
+
         let borderView = UIView()
         borderView.layer.borderWidth = borderLine
         borderView.layer.borderColor = UIColor.randomColor.cgColor
         borderView.layer.cornerRadius = (self.layer.cornerRadius) + 1
-        if #available(iOS 13.0, *) {
-            borderView.layer.cornerCurve = .continuous
-        }
+        borderView.layer.cornerCurve = .continuous
         borderView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(borderView)
         borderView.snp.makeConstraints { (make) in
@@ -440,26 +424,18 @@ public class PTTerminal:PFloatingButton
         systemText?.textContainerInset = UIEdgeInsets(top: 10, left: 8, bottom: 10, right: 8)
         systemText?.isSelectable = false
         systemText?.showsVerticalScrollIndicator = false
-        if #available(iOS 11.0, *) {
-            systemText?.contentInsetAdjustmentBehavior = .never
-        }
+        systemText?.contentInsetAdjustmentBehavior = .never
         systemText?.backgroundColor = .clear
         self.addSubview(systemText!)
         systemText?.snp.makeConstraints { (make) in
             make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
         }
         systemText?.layer.cornerRadius = (self.layer.cornerRadius) - 2
-        if #available(iOS 13.0, *) {
-            systemText?.layer.cornerCurve = .continuous
-        }
+        systemText?.layer.cornerCurve = .continuous
 
         menuButton = UIButton.init(type: .custom)
         menuButton.backgroundColor = UIColor(white: 0.2, alpha: 0.95)
-        if #available(iOS 13.0, *) {
-            menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
-        } else {
-            menuButton.setImage(UIImage.init(named: "icon_category"), for: .normal)
-        }
+        menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
         menuButton.imageView?.contentMode = .scaleAspectFit
         menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         self.addSubview(menuButton)
@@ -503,17 +479,12 @@ public class PTTerminal:PFloatingButton
         paragraphStyle.headIndent = 7
         
         var attributes: [NSAttributedString.Key: Any]
-        if #available(iOS 13.0, *) {
-            attributes = [
-                .paragraphStyle: paragraphStyle,
-                .foregroundColor: UIColor.white,
-                .font: UIFont.systemFont(ofSize: fontSize!, weight: .semibold, design: .monospaced)
-            ]
-        } else {
-            // Fallback on earlier versions
-            attributes = [NSAttributedString.Key.foregroundColor: UIColor.white, NSAttributedString.Key.font: UIFont.systemFont(ofSize: fontSize!)]
-        }
-        
+        attributes = [
+            .paragraphStyle: paragraphStyle,
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: fontSize!, weight: .semibold, design: .monospaced)
+        ]
+
         systemText?.attributedText = NSAttributedString(string: string, attributes: attributes)
     }
 

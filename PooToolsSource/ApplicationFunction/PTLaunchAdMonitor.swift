@@ -105,15 +105,8 @@ public class PTLaunchAdMonitor: NSObject {
         if Gobal_device_info.isPad
         {
             var orientation:UIInterfaceOrientation = .unknown
-            if #available(iOS 13, *)
-            {
-                orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
-            }
-            else
-            {
-                orientation = UIApplication.shared.statusBarOrientation
-            }
-            
+            orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
+
             switch orientation {
             case .landscapeLeft:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
@@ -140,9 +133,7 @@ public class PTLaunchAdMonitor: NSObject {
             monitor.player = AVPlayerViewController()
             monitor.player?.player = AVPlayer.init(url: monitor.videoUrl!)
             monitor.player?.showsPlaybackControls = false
-            if #available(iOS 11.0, *) {
-                monitor.player?.entersFullScreenWhenPlaybackBegins = true
-            }
+            monitor.player?.entersFullScreenWhenPlaybackBegins = true
             v.addSubview((monitor.player?.view)!)
             monitor.player?.view.snp.makeConstraints({ make in
                 make.left.top.right.equalToSuperview()

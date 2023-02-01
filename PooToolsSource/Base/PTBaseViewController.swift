@@ -131,13 +131,10 @@ open class PTBaseViewController: ZXNavigationBarController {
     
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13.0, *)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)
         {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)
-            {
-                StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                setNeedsStatusBarAppearanceUpdate()
-            }
+            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            setNeedsStatusBarAppearanceUpdate()
         }
     }
 }
@@ -189,11 +186,8 @@ extension PTBaseViewController
             }
             else
             {
-                if #available(iOS 13.0, *)
-                {
-                    let vc = PTDebugViewController.init(hideBaseNavBar: false)
-                    PTUtils.getCurrentVC().navigationController?.pushViewController(vc, animated: true)
-                }
+                let vc = PTDebugViewController.init(hideBaseNavBar: false)
+                PTUtils.getCurrentVC().navigationController?.pushViewController(vc, animated: true)
             }
         }
     }

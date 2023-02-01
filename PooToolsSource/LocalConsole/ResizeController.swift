@@ -28,9 +28,7 @@ class ResizeController {
         view.layer.borderWidth = 2
         view.layer.borderColor = UIColor.randomColor.cgColor
         view.layer.cornerRadius = consoleViewReference.layer.cornerRadius + 6
-        if #available(iOS 13.0, *) {
-            view.layer.cornerCurve = .continuous
-        }
+        view.layer.cornerCurve = .continuous
         view.alpha = 0
         
         consoleViewReference.addSubview(view)
@@ -64,9 +62,7 @@ class ResizeController {
         bottomGrabberPillView.backgroundColor = .randomColor
         bottomGrabberPillView.alpha = 0.3
         bottomGrabberPillView.layer.cornerRadius = 2.5
-        if #available(iOS 13.0, *) {
-            bottomGrabberPillView.layer.cornerCurve = .continuous
-        }
+        bottomGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(bottomGrabberPillView)
         
         let verticalPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(verticalPanner(recognizer:)))
@@ -96,9 +92,7 @@ class ResizeController {
         rightGrabberPillView.backgroundColor = .randomColor
         rightGrabberPillView.alpha = 0.3
         rightGrabberPillView.layer.cornerRadius = 2.5
-        if #available(iOS 13.0, *) {
-            rightGrabberPillView.layer.cornerCurve = .continuous
-        }
+        rightGrabberPillView.layer.cornerCurve = .continuous
         view.addSubview(rightGrabberPillView)
         
         let horizontalPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(horizontalPanner(recognizer:)))
@@ -141,12 +135,9 @@ class ResizeController {
                 }.startAnimation()
                 
                 
-                if #available(iOS 12.0, *) {
-                    if terminalView.traitCollection.userInterfaceStyle == .light {
-                        terminalView.layer.shadowOpacity = 0.25
-                    }
+                if terminalView.traitCollection.userInterfaceStyle == .light {
+                    terminalView.layer.shadowOpacity = 0.25
                 }
-                
                 // Ensure background color animates in right the first time.
                 AppWindows!.backgroundColor = .clear
                 
@@ -357,21 +348,17 @@ class PlatterView: UIView,UITextFieldDelegate {
         layer.borderColor = UIColor.randomColor.cgColor
         layer.borderWidth = 1 / UIScreen.main.scale
         layer.cornerRadius = 30
-        if #available(iOS 13.0, *) {
-            layer.cornerCurve = .continuous
-        }
+        layer.cornerCurve = .continuous
+
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
+        blurView.layer.cornerRadius = 30
+        blurView.layer.cornerCurve = .continuous
+        blurView.clipsToBounds = true
         
-        if #available(iOS 13.0, *) {
-            let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
-            blurView.layer.cornerRadius = 30
-            blurView.layer.cornerCurve = .continuous
-            blurView.clipsToBounds = true
-            
-            blurView.frame = bounds
-            
-            addSubview(blurView)
-        }
+        blurView.frame = bounds
         
+        addSubview(blurView)
+
         backgroundColor = .randomColor
         AppWindows!.addSubview(self)
         
@@ -388,9 +375,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         grabber.backgroundColor = .randomColor
         grabber.alpha = 0.1
         grabber.layer.cornerRadius = 2.5
-        if #available(iOS 13.0, *) {
-            grabber.layer.cornerCurve = .continuous
-        }
+        grabber.layer.cornerCurve = .continuous
         addSubview(grabber)
         
         let titleLabel = UILabel()
@@ -452,23 +437,15 @@ class PlatterView: UIView,UITextFieldDelegate {
     
     lazy var doneButton: UIButton = {
         let button = UIButton(type: .custom)
-        if #available(iOS 13.0, *) {
-            button.backgroundColor = UIColor.systemBlue.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
-        }
-        else
-        {
-            button.backgroundColor = .randomColor
-        }
-        
+        button.backgroundColor = UIColor.systemBlue.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
+
         button.setTitle("Done", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
-        if #available(iOS 13.0, *) {
-            button.layer.cornerCurve = .continuous
-        }
-        
+        button.layer.cornerCurve = .continuous
+
         button.addActionHandlers { sender in
             ResizeController.shared.isActive = false
             self.dismiss()
@@ -479,29 +456,21 @@ class PlatterView: UIView,UITextFieldDelegate {
     
     lazy var resetButton: UIButton = {
         let button = UIButton(type: .custom)
-        if #available(iOS 13.0, *) {
-            button.backgroundColor = UIColor(dynamicProvider: { traitCollection in
-                if traitCollection.userInterfaceStyle == .dark {
-                    return UIColor(white: 1, alpha: 0.125)
-                } else {
-                    return UIColor(white: 0, alpha: 0.1)
-                }
-            })
-        }
-        else
-        {
-            button.backgroundColor = .randomColor
-        }
-        
+        button.backgroundColor = UIColor(dynamicProvider: { traitCollection in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(white: 1, alpha: 0.125)
+            } else {
+                return UIColor(white: 0, alpha: 0.1)
+            }
+        })
+
         button.setTitle("Reset", for: .normal)
         button.setTitleColor(.randomColor, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
-        if #available(iOS 13.0, *) {
-            button.layer.cornerCurve = .continuous
-        }
-        
+        button.layer.cornerCurve = .continuous
+
         button.addActionHandlers { sender in
             // Resolves a text view frame animation bug that occurs when *decreasing* text view width.
             if self.terminalView.bounds.size.width > systemLog_base_width {
@@ -558,9 +527,7 @@ class PlatterView: UIView,UITextFieldDelegate {
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        if #available(iOS 13.0, *) {
-            layer.borderColor = UIColor.randomColor.cgColor
-        }
+        layer.borderColor = UIColor.randomColor.cgColor
     }
     
     required init?(coder: NSCoder) {

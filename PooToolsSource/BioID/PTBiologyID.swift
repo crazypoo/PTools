@@ -51,68 +51,48 @@ public class PTBiologyID: NSObject {
     
     private func verifyBiologyIDAction()
     {
-        if #available(iOS 8.0,*)
+        var error : NSError? = nil
+        let isCanEvaluatePolicy : Bool = self.security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        if error != nil
         {
-            var error : NSError? = nil
-            let isCanEvaluatePolicy : Bool = self.security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-            if error != nil
+            if biologyStatusBlock != nil
             {
-                if biologyStatusBlock != nil
-                {
-                    biologyStatusBlock!(.None)
-                }
+                biologyStatusBlock!(.None)
             }
-            else
+        }
+        else
+        {
+            if isCanEvaluatePolicy
             {
-                if isCanEvaluatePolicy
-                {
-                    if #available(iOS 11.0, *)
+                switch security.biometryType {
+                case .none:
+                    if biologyStatusBlock != nil
                     {
-                        switch security.biometryType {
-                        case .none:
-                            if biologyStatusBlock != nil
-                            {
-                                biologyStatusBlock!(.None)
-                            }
-                        case .faceID:
-                            if biologyStatusBlock != nil
-                            {
-                                biologyStatusBlock!(.FaceID)
-                            }
-                        case .touchID:
-                            if biologyStatusBlock != nil
-                            {
-                                biologyStatusBlock!(.TouchID)
-                            }
-                        default:
-                            if biologyStatusBlock != nil
-                            {
-                                biologyStatusBlock!(.None)
-                            }
-                        }
+                        biologyStatusBlock!(.None)
                     }
-                    else
+                case .faceID:
+                    if biologyStatusBlock != nil
                     {
-                        if biologyStatusBlock != nil
-                        {
-                            biologyStatusBlock!(.TouchID)
-                        }
+                        biologyStatusBlock!(.FaceID)
                     }
-                }
-                else
-                {
+                case .touchID:
+                    if biologyStatusBlock != nil
+                    {
+                        biologyStatusBlock!(.TouchID)
+                    }
+                default:
                     if biologyStatusBlock != nil
                     {
                         biologyStatusBlock!(.None)
                     }
                 }
             }
-        }
-        else
-        {
-            if biologyStatusBlock != nil
+            else
             {
-                biologyStatusBlock!(.None)
+                if biologyStatusBlock != nil
+                {
+                    biologyStatusBlock!(.None)
+                }
             }
         }
     }
@@ -120,15 +100,8 @@ public class PTBiologyID: NSObject {
     public func biologyStart(alertTitle:String? = "生物技术验证")
     {        
         var evaluatePolicyType : LAPolicy?
-        if #available(iOS 9.0, *)
-        {
-            evaluatePolicyType = .deviceOwnerAuthentication
-        }
-        else
-        {
-            evaluatePolicyType = .deviceOwnerAuthenticationWithBiometrics
-        }
-        
+        evaluatePolicyType = .deviceOwnerAuthentication
+
         security.evaluatePolicy(evaluatePolicyType!, localizedReason: alertTitle!) { success, error in
             if success
             {

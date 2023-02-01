@@ -19,18 +19,13 @@ class SystemReport {
     
     // Current device thermal state.
     var thermalState: String {
-        if #available(iOS 11.0, *) {
-            let state = ProcessInfo.processInfo.thermalState
-            switch state {
-            case .nominal: return "Nominal"
-            case .fair : return "Fair"
-            case .serious : return "Serious"
-            case .critical : return "Critical"
-            default: return "Unknown"
-            }
-        } else {
-            // Fallback on earlier versions
-            return "Unknown"
+        let state = ProcessInfo.processInfo.thermalState
+        switch state {
+        case .nominal: return "Nominal"
+        case .fair : return "Fair"
+        case .serious : return "Serious"
+        case .critical : return "Critical"
+        default: return "Unknown"
         }
     }
     
