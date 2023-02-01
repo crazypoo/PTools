@@ -92,6 +92,7 @@
 		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
 		559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C94293CB789002874BA /* PTRotationManager.swift */; };
 		559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C96293F7ED8002874BA /* NSData+PTEX.swift */; };
+		55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -289,6 +290,7 @@
 		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
 		559C1C94293CB789002874BA /* PTRotationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRotationManager.swift; sourceTree = "<group>"; };
 		559C1C96293F7ED8002874BA /* NSData+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+PTEX.swift"; sourceTree = "<group>"; };
+		55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftMethodSwizzle.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -719,6 +721,7 @@
 			children = (
 				231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */,
 				231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */,
+				55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */,
 			);
 			path = BlackMagic;
 			sourceTree = "<group>";
@@ -1621,6 +1624,7 @@
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
+				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
 				557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
