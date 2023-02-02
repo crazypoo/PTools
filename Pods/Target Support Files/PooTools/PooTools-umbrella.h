@@ -10,7 +10,6 @@
 #endif
 #endif
 
-#import "JYBDBankCardSearch.h"
 #import "PMacros.h"
 #import "PooTools_Example-Bridging-Header.h"
 #import "PTImageBlackToTransparent.h"

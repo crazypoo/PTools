@@ -28,7 +28,27 @@ public class PTLaunchAdMonitor: NSObject {
     private var player:AVPlayerViewController?
     private var detailParam:NSMutableDictionary?
 
-    public class func showAt(path:NSArray,onView:Any,timeInterval:TimeInterval,param:NSDictionary?,year:String?,skipFont:UIFont?,comName:String?,comNameFont:UIFont,callBack:PTLaunchAdMonitorCallBack?)
+    //MARK: 初始化廣告界面
+    ///初始化廣告界面
+    /// - Parameters:
+    ///   - path: 多媒體數據路徑URL
+    ///   - onView: 展示在哪裏
+    ///   - timeInterval: 展示時間
+    ///   - param: 點擊標識
+    ///   - year: 公司年份
+    ///   - skipFont: 跳過字體
+    ///   - comName: 公司名字
+    ///   - comNameFont: 公司字體
+    ///   - callBack: 回調
+    public class func showAt(path:NSArray,
+                             onView:Any,
+                             timeInterval:TimeInterval,
+                             param:NSDictionary?,
+                             year:String?,
+                             skipFont:UIFont?,
+                             comName:String?,
+                             comNameFont:UIFont,
+                             callBack:PTLaunchAdMonitorCallBack?)
     {
         PTLaunchAdMonitor.shared.loadImageAtPath(path: path)
         while !monitor.imgLoaded! {

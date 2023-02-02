@@ -55,7 +55,6 @@
 		231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */; };
 		231D1693272CDEEA003D6F62 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 231D15DE272CDEE9003D6F62 /* PooTools.bundle */; };
 		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
-		231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
@@ -128,6 +127,7 @@
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
+		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
 		55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -247,8 +247,6 @@
 		231D15E3272CDEE9003D6F62 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		231D15E5272CDEE9003D6F62 /* PMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
 		231D15E6272CDEE9003D6F62 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
-		231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBDBankCardSearch.m; sourceTree = "<group>"; };
-		231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBDBankCardSearch.h; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
 		231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -328,6 +326,7 @@
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
+		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
 		55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Application+PTEX.swift"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -686,8 +685,7 @@
 		231D15EE272CDEE9003D6F62 /* BankCard */ = {
 			isa = PBXGroup;
 			children = (
-				231D15EF272CDEE9003D6F62 /* JYBDBankCardSearch.m */,
-				231D15F0272CDEE9003D6F62 /* JYBDBankCardSearch.h */,
+				55F6C632298B77360052A58C /* PTBankCardSearch.swift */,
 			);
 			path = BankCard;
 			sourceTree = "<group>";
@@ -1509,7 +1507,6 @@
 				55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
-				231D1699272CDEEA003D6F62 /* JYBDBankCardSearch.m in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
@@ -1522,6 +1519,7 @@
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
+				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,

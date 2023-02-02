@@ -60,6 +60,10 @@ public class PTOpenSystemFunction: NSObject {
 
     }
     
+    //MARK: 根據所需跳轉某Setting內的方法
+    ///根據所需跳轉某Setting內的方法
+    /// - Parameters:
+    ///   - config: 選項
     public class func openSystemFunction(config:PTOpenSystemConfig)
     {
         var uriString : String? = ""

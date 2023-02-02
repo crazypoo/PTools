@@ -14,6 +14,9 @@ public class PCleanCache: NSObject {
     static let fileManager = FileManager.default
     static let cachePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last
     
+    //MARK: 獲取緩存容量
+    ///獲取緩存容量
+    /// - Returns: 容量字符串
     class public func getCacheSize()->String
     {
         #if DEBUG
@@ -68,6 +71,9 @@ public class PCleanCache: NSObject {
         return totalSizeString
     }
     
+    //MARK: 清理緩存
+    ///清理緩存
+    /// - Returns: 是否清理完成
     class public func clearCaches()->Bool
     {
         var filePath = ""
