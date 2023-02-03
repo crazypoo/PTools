@@ -49,7 +49,7 @@ public class PTDevFunction: NSObject {
                 
                 mn_PFloatingButton?.longPressBlock = { (sender) in
                     
-                    PTUtils.base_alertVC(msg:"调试框架",okBtns: ["取消","全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面"],showIn: PTUtils.getCurrentVC()) { index, title in
+                    UIAlertController.base_alertVC(msg:"调试框架",okBtns: ["取消","全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面"]) { index, title in
                         if index == 0
                         {
 

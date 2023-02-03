@@ -35,10 +35,11 @@ class PTSwiftViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
-            
         }
         PTUtils.gcdAfter(time: 2) {
                         
+            UIApplication.pt.likeTapHome()
+            
             print(">>>>>>\(CGFloat.statusBarHeight())")
 
 

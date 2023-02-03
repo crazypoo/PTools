@@ -68,6 +68,17 @@ public extension Date {
         let timeInterval = timeDate!.timeIntervalSince1970
         return timeInterval
     }
+    
+    func getTimeStamp(timeZone:String? = "Asia/Shanghai")->String
+    {
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .short
+        _ = NSTimeZone.init(name: timeZone!)
+        return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
+    }
+
 }
 
 public extension PTProtocol where Base == Date {

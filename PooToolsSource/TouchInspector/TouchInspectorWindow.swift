@@ -12,7 +12,6 @@
 import Foundation
 import UIKit
 
-@available(iOS 13.0, *)
 public var App_TouchInspect_Debug_Bool:Bool
 {
     let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorDebug)
@@ -20,7 +19,6 @@ public var App_TouchInspect_Debug_Bool:Bool
     return ui_debug
 }
 
-@available(iOS 13.0, *)
 public class TouchInspectorWindow: UIWindow {
     
     public static let TouchInspectorDebug = "TS_debug"
@@ -45,7 +43,6 @@ public class TouchInspectorWindow: UIWindow {
     
     private var touchOverlays: [UITouch : TouchOverlayView] = [:]
     
-    @available(iOS 13.0, *)
     public override init(windowScene: UIWindowScene) {
         super.init(windowScene: windowScene)
     }

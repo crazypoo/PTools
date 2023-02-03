@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-@available(iOS 13.0,*)
 public class PTDebugViewController: PTBaseViewController {
     
     lazy var settingCellModels:[PTFunctionCellModel] = {
@@ -122,7 +121,6 @@ public class PTDebugViewController: PTBaseViewController {
     }
 }
 
-@available(iOS 13.0,*)
 extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource
 {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -222,7 +220,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                     current = url_debug
                 }
                 
-                PTUtils.base_textfiele_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                UIAlertController.base_textfiele_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                     let newURL = result.values.first
                     UserDefaults.standard.set(newURL, forKey: "UI_test_url")
                     
@@ -237,7 +235,6 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
     }
 }
 
-@available(iOS 13.0,*)
 extension PTDebugViewController:UITextFieldDelegate
 {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {

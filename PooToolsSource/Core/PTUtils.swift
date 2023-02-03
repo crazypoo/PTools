@@ -71,196 +71,7 @@ public class PTUtils: NSObject {
         
     public static let share = PTUtils()
     public var timer:DispatchSourceTimer?
-
-    //MARK: 类似iPhone点击了Home键
-    public class func likeTapHome()
-    {
-        PTUtils.gcdMain {
-            UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
-        }
-    }
     
-    ///ALERT真正基类
-    public class func base_alertVC(title:String? = "",
-                                   titleColor:UIColor? = UIColor.black,
-                                   titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                   msg:String? = "",
-                                   msgColor:UIColor? = UIColor.black,
-                                   msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                   okBtns:[String]? = [String](),
-                                   cancelBtn:String? = "",
-                                   showIn:UIViewController,
-                                   cancelBtnColor:UIColor? = .systemBlue,
-                                   doneBtnColors:[UIColor]? = [UIColor](),
-                                   alertBGColor:UIColor? = .white,
-                                   alertCornerRadius:CGFloat? = 15,
-                                   cancel:(()->Void)? = nil,
-                                   moreBtn:((_ index:Int,_ title:String)->Void)?)
-    {
-        let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
-        
-        if !(cancelBtn!).stringIsEmpty()
-        {
-            let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-                if cancel != nil
-                {
-                    cancel!()
-                }
-            }
-            alert.addAction(cancelAction)
-            cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
-        }
-        
-        if (okBtns?.count ?? 0) > 0
-        {
-            var dontArrColor = [UIColor]()
-            if doneBtnColors!.count == 0 || okBtns?.count != doneBtnColors?.count || okBtns!.count > (doneBtnColors?.count ?? 0)
-            {
-                if doneBtnColors!.count == 0
-                {
-                    okBtns?.enumerated().forEach({ (index,value) in
-                        dontArrColor.append(.systemBlue)
-                    })
-                }
-                else if okBtns!.count > (doneBtnColors?.count ?? 0)
-                {
-                    let count = okBtns!.count - (doneBtnColors?.count ?? 0)
-                    dontArrColor = doneBtnColors!
-                    for _ in 0..<(count)
-                    {
-                        dontArrColor.append(.systemBlue)
-                    }
-                }
-                else if okBtns!.count < (doneBtnColors?.count ?? 0)
-                {
-                    let count = (doneBtnColors?.count ?? 0) - okBtns!.count
-                    dontArrColor = doneBtnColors!
-                    for _ in 0..<(count)
-                    {
-                        dontArrColor.removeLast()
-                    }
-                }
-            }
-            else
-            {
-                dontArrColor = doneBtnColors!
-            }
-            okBtns?.enumerated().forEach({ (index,value) in
-                let callAction = UIAlertAction(title: value, style: .default) { (action) in
-                    if moreBtn != nil
-                    {
-                        moreBtn!(index,value)
-                    }
-                }
-                alert.addAction(callAction)
-                callAction.setValue(dontArrColor[index], forKey: "titleTextColor")
-            })
-        }
-        
-        // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty()
-        {
-            let alertStr = NSMutableAttributedString(string: title!)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
-            alert.setValue(alertStr, forKey: "attributedTitle")
-        }
-        
-        if !(msg ?? "").stringIsEmpty()
-        {
-            let alertMsgStr = NSMutableAttributedString(string: msg!)
-            let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor!, NSAttributedString.Key.font: msgFont!]
-            alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
-            alert.setValue(alertMsgStr, forKey: "attributedMessage")
-        }
-
-        let subview = alert.view.subviews.first! as UIView
-        let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white
-        {
-            alertContentView.backgroundColor = alertBGColor
-        }
-        alertContentView.layer.cornerRadius = alertCornerRadius!
-        
-        showIn.present(alert, animated: true, completion: nil)
-    }
-
-    public class func base_textfiele_alertVC(title:String? = "",
-                                             titleColor:UIColor? = UIColor.black,
-                                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                             okBtn:String,
-                                             cancelBtn:String,
-                                             showIn:UIViewController,
-                                             cancelBtnColor:UIColor? = .black,
-                                             doneBtnColor:UIColor? = .systemBlue,
-                                             placeHolders:[String],
-                                             textFieldTexts:[String],
-                                             keyboardType:[UIKeyboardType]?,
-                                             textFieldDelegate:Any? = nil,
-                                             alertBGColor:UIColor? = .white,
-                                             alertCornerRadius:CGFloat? = 15,
-                                             cancel:(()->Void)? = nil,
-                                             doneBtn:((_ result:[String:String])->Void)?)
-    {
-        let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
-        
-        let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-            if cancel != nil
-            {
-                cancel!()
-            }
-        }
-        alert.addAction(cancelAction)
-        cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
-
-        if placeHolders.count == textFieldTexts.count
-        {
-            placeHolders.enumerated().forEach({ (index,value) in
-                alert.addTextField { (textField : UITextField) -> Void in
-                    textField.placeholder = value
-                    textField.delegate = (textFieldDelegate as! UITextFieldDelegate)
-                    textField.tag = index
-                    textField.text = textFieldTexts[index]
-                    if keyboardType?.count == placeHolders.count
-                    {
-                        textField.keyboardType = keyboardType![index]
-                    }
-                }
-            })
-        }
-        
-        let doneAction = UIAlertAction(title: okBtn, style: .default) { (action) in
-            var resultDic = [String:String]()
-            alert.textFields?.enumerated().forEach({ (index,value) in
-                resultDic[value.placeholder!] = value.text
-            })
-            if doneBtn != nil
-            {
-                doneBtn!(resultDic)
-            }
-        }
-        alert.addAction(doneAction)
-        doneAction.setValue(doneBtnColor, forKey: "titleTextColor")
-
-        // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty()
-        {
-            let alertStr = NSMutableAttributedString(string: title!)
-            let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
-            alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
-            alert.setValue(alertStr, forKey: "attributedTitle")
-        }
-
-        let subview = alert.view.subviews.first! as UIView
-        let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white
-        {
-            alertContentView.backgroundColor = alertBGColor
-        }
-        alertContentView.layer.cornerRadius = alertCornerRadius!
-        showIn.present(alert, animated: true, completion: nil)
-    }
-
     @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這個方法在iOS13之後不能使用了")
     public class func showNetworkActivityIndicator(_ show:Bool)
     {
@@ -290,17 +101,7 @@ public class PTUtils: NSObject {
     {
         DispatchQueue.global(qos: .userInitiated).async(execute: block)
     }
-        
-    public class func getTimeStamp()->String
-    {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        _ = NSTimeZone.init(name: "Asia/Shanghai")
-        return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
-    }
-    
+            
     public class func timeRunWithTime_base(customQueName:String,timeInterval:TimeInterval,finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
     {
         let customQueue = DispatchQueue(label: customQueName)
@@ -410,7 +211,6 @@ public class PTUtils: NSObject {
         return bundle
     }
     
-    @available(iOS 11.0, *)
     public class func color(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIColor
     {
         return UIColor(named: name, in: bundle!, compatibleWith: traitCollection) ?? .randomColor
@@ -426,7 +226,7 @@ public class PTUtils: NSObject {
         return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,bundle: bundle!)
     }
         
-    //MARK:SDWebImage的加载失误图片方式(全局控制)
+    //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public class func gobalWebImageLoadOption()->SDWebImageOptions
     {
@@ -447,7 +247,14 @@ public class PTUtils: NSObject {
     }
     
     //MARK: 弹出框
-    class open func gobal_drop(title:String?,titleFont:UIFont? = UIFont.appfont(size: 16),titleColor:UIColor? = .black,subTitle:String? = nil,subTitleFont:UIFont? = UIFont.appfont(size: 16),subTitleColor:UIColor? = .black,bannerBackgroundColor:UIColor? = .white,notifiTap:(()->Void)? = nil)
+    class open func gobal_drop(title:String?,
+                               titleFont:UIFont? = UIFont.appfont(size: 16),
+                               titleColor:UIColor? = .black,
+                               subTitle:String? = nil,
+                               subTitleFont:UIFont? = UIFont.appfont(size: 16),
+                               subTitleColor:UIColor? = .black,
+                               bannerBackgroundColor:UIColor? = .white,
+                               notifiTap:(()->Void)? = nil)
     {
         var titleStr = ""
         if title == nil || (title ?? "").stringIsEmpty()
@@ -488,7 +295,6 @@ public class PTUtils: NSObject {
     }
 
     //MARK: 生成CollectionView的Group
-    @available(iOS 13.0, *)
     class open func gobal_collection_gird_layout(data:[AnyObject],
                                                  size:CGSize? = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
                                                  originalX:CGFloat? = 10,
@@ -609,24 +415,9 @@ public class PTUtils: NSObject {
             return 0
         }
     }
-    
-    //MARK: 判断是否白天
-    /// 判断是否白天
-    class open func isNowDayTime()->Bool
-    {
-        let date = NSDate()
-        let cal :NSCalendar = NSCalendar.current as NSCalendar
-        let components : NSDateComponents = cal.components(.hour, from: date as Date) as NSDateComponents
-        if components.hour >= 19 || components.hour < 6
-        {
-            return false
-        }
-        else
-        {
-            return true
-        }
-    }
-        
+            
+    //MARK: 找出某view的superview
+    ///找出某view的superview
     class open func findSuperViews(view:UIView)->[UIView]
     {
         var temp = view.superview
@@ -638,6 +429,8 @@ public class PTUtils: NSObject {
         return result as! [UIView]
     }
     
+    //MARK: 找出某views的superview
+    ///找出某views的superview
     class open func findCommonSuperView(firstView:UIView,other:UIView)->[UIView]
     {
         let result = NSMutableArray()
@@ -657,27 +450,7 @@ public class PTUtils: NSObject {
         }
         return result as! [UIView]
     }
-    
-    class open func createNoneInterpolatedUIImage(image:CIImage,imageSize:CGFloat)->UIImage
-    {
-        let extent = CGRectIntegral(image.extent)
-        let scale = min(imageSize / extent.width, imageSize / extent.height)
         
-        let width = extent.width * scale
-        let height = extent.height * scale
-        let cs = CGColorSpaceCreateDeviceGray()
-        let bitmapRef:CGContext = CGContext(data: nil , width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: cs, bitmapInfo: CGImageAlphaInfo.none.rawValue)!
-        let context = CIContext.init()
-        let bitmapImage = context.createCGImage(image, from: extent)
-        bitmapRef.interpolationQuality = .none
-        bitmapRef.scaleBy(x: scale, y: scale)
-        bitmapRef.draw(bitmapImage!, in: extent)
-        
-        let scaledImage = bitmapRef.makeImage()
-        let newImage = UIImage(cgImage: scaledImage!)
-        return newImage
-    }
-    
     //MARK: 这个方法可以用于UITextField中,检测金额输入
     class open func textInputAmoutRegex(text:NSString,range:NSRange,replacementString:NSString)->Bool
     {
@@ -707,7 +480,9 @@ public class PTUtils: NSObject {
     }
             
     //MARK: 合同时间状态检测
-    open class func checkContractTimeType(begainTime:String,endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
+    open class func checkContractTimeType(begainTime:String,
+                                          endTime:String,
+                                          readyExpTime:Int)->CheckContractTimeRelationships
     {
         let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
         let endTimeDate = endTime.toDate("yyyy-MM-dd")!
@@ -766,7 +541,7 @@ extension PTUtils
     
     public class func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
     {
-        PTUtils.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
+        UIAlertController.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
     }
 
     public class func oc_size(string:String,

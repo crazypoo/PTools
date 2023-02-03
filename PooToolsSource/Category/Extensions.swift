@@ -35,7 +35,6 @@ public extension UIApplication {
 }
 
 public extension UIFont {
-    @available(iOS 13.0, *)
     class func systemFont(ofSize size: CGFloat, weight: UIFont.Weight, design: UIFontDescriptor.SystemDesign) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
@@ -44,7 +43,6 @@ public extension UIFont {
 }
 
 public extension UIControl {
-    @available(iOS 13.0, *)
     func addActions(highlightAction: UIAction, unhighlightAction: UIAction) {
         if #available(iOS 14.0, *) {
             addAction(highlightAction, for: .touchDown)

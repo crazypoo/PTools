@@ -23,17 +23,22 @@ import FloatingPanel
 @objcMembers
 open class PTBaseViewController: ZXNavigationBarController {
 
-
+    //MARK: 是否隱藏StatusBar
+    ///是否隱藏StatusBar
     open override var prefersStatusBarHidden:Bool
     {
         return StatusBarManager.shared.isHidden
     }
     
+    //MARK: 設置StatusBar樣式
+    ///設置StatusBar樣式
     open override var preferredStatusBarStyle: UIStatusBarStyle
     {
         return StatusBarManager.shared.style
     }
     
+    //MARK: 設置StatusBar動畫
+    ///設置StatusBar動畫
     open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation
     {
         return StatusBarManager.shared.animation
@@ -64,6 +69,8 @@ open class PTBaseViewController: ZXNavigationBarController {
         super.viewDidDisappear(animated)
     }
     
+    //MARK: 是否隱藏NavBar
+    ///是否隱藏NavBar
     public convenience init(hideBaseNavBar: Bool) {
         self.init()
         self.zx_hideBaseNavBar = hideBaseNavBar
@@ -80,7 +87,8 @@ open class PTBaseViewController: ZXNavigationBarController {
         self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
     }
     
-    /// 拦截返回上一页
+    //MARK: 拦截返回上一页
+    ///拦截返回上一页
     /// - Parameter popBlock: 是否允许放回上一页
     open func openPopIntercept(popBlock:@escaping ((_ viewController:ZXNavigationBarController,_ popBlockFrom:ZXNavPopBlockFrom)->(Bool))) {
         //因FDFullscreenPopGesture默认会在控制器即将展示时显示系统导航栏，与ZXNavigationBar共同使用时会造成系统导航栏出现一下又马上消失，因此需要以下设置
@@ -91,7 +99,8 @@ open class PTBaseViewController: ZXNavigationBarController {
         self.zx_handlePopBlock = popBlock
     }
 
-    @available(iOS 13.0, *)
+    //MARK: 動態更換StatusBar
+    ///動態更換StatusBar
     open func changeStatusBar(type:VCStatusBarChangeStatusType)
     {
         switch type {
@@ -146,10 +155,11 @@ extension PTBaseViewController:UIGestureRecognizerDelegate
     }
 }
 
+//MARK: 添加emptydataset
 extension PTBaseViewController:LXFEmptyDataSetable
 {
-    //添加emptydataset
-    /// 设置无数据空页面
+    //MARK: 添加emptydataset
+    ///添加emptydataset,设置无数据空页面
     open func showEmptyDataSet(currentScroller:UIScrollView) {
         self.lxf_EmptyDataSet(currentScroller) { () -> ([LXFEmptyDataSetAttributeKeyType : Any]) in
             return [
@@ -166,6 +176,7 @@ extension PTBaseViewController:LXFEmptyDataSetable
     }
 }
 
+//MARK: 用來調用測試模式
 extension PTBaseViewController
 {
     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
@@ -193,6 +204,7 @@ extension PTBaseViewController
     }
 }
 
+//MARK: 用來調用懸浮框
 extension PTBaseViewController:FloatingPanelControllerDelegate
 {
     open func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {

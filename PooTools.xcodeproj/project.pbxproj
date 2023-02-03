@@ -128,6 +128,8 @@
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
+		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
+		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
 		55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -327,6 +329,8 @@
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
+		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
+		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
 		55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Application+PTEX.swift"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -554,6 +558,7 @@
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
 				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
+				55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
 				55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */,
@@ -565,6 +570,7 @@
 				9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
+				55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */,
 				231D15D9272CDEE9003D6F62 /* UIApplication+PTEX.swift */,
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
 				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
@@ -1522,6 +1528,7 @@
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
+				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
@@ -1530,6 +1537,7 @@
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
+				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,

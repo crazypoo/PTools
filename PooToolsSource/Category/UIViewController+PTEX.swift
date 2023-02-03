@@ -162,7 +162,7 @@ public extension UIViewController {
     /// 定位权限
     func locationAuthorize() {
         DispatchQueue.main.async {
-            PTUtils.base_alertVC(title:"打开定位开关",msg: "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务",okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+            UIAlertController.base_alertVC(title:"打开定位开关",msg: "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务",okBtns: ["设置"],cancelBtn: "取消") { index, title in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     if UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -202,7 +202,7 @@ public extension UIViewController {
                 break
             }
             DispatchQueue.main.async {
-                PTUtils.base_alertVC(title:title,msg: msg,okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+                UIAlertController.base_alertVC(title:title,msg: msg,okBtns: ["设置"],cancelBtn: "取消") { index, title in
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         if UIApplication.shared.canOpenURL(url) {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -230,7 +230,7 @@ public extension UIViewController {
             return false
         default:
             DispatchQueue.main.async {
-                PTUtils.base_alertVC(title:"相册访问受限",msg: "请在iPhone的\"设置-隐私-相册\"中允许访问相册",okBtns: ["设置"],cancelBtn: "取消",showIn: PTUtils.getCurrentVC()) { index, title in
+                UIAlertController.base_alertVC(title:"相册访问受限",msg: "请在iPhone的\"设置-隐私-相册\"中允许访问相册",okBtns: ["设置"],cancelBtn: "取消") { index, title in
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         if UIApplication.shared.canOpenURL(url) {
                             UIApplication.shared.open(url, options: [:], completionHandler: nil)

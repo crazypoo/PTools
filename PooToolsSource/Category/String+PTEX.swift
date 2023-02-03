@@ -259,7 +259,6 @@ public extension String
         return hash.map { String(format: "%02x", $0)}.joined()
     }
     
-    @available(iOS 13.0,*)
     private func hexStringFormatData(input:NSData) -> String {
         var bytes = [UInt8](repeating: 0, count: input.length)
         input.getBytes(&bytes, length: input.length)
@@ -270,7 +269,6 @@ public extension String
         return hexString
     }
     
-    @available(iOS 13.0,*)
     private func digest(input:NSData) -> NSData {
         let digestLength = Int(CC_SHA224_DIGEST_LENGTH)
         var hash = [UInt8](repeating: 0, count: digestLength)
@@ -278,7 +276,6 @@ public extension String
         return NSData(bytes: hash, length: digestLength)
     }
     
-    @available(iOS 13.0,*)
     var sha256:String {
         if let stringData = self.data(using: String.Encoding.utf8) {
             return hexStringFormatData(input: digest(input: stringData as NSData))
@@ -446,6 +443,31 @@ public extension String
         return PTUtils.createNoneInterpolatedUIImage(image: image!, imageSize: size)
     }
 }
+
+fileprivate extension PTUtils
+{
+    //MARK: 創建一個圖片
+    class func createNoneInterpolatedUIImage(image:CIImage,imageSize:CGFloat)->UIImage
+    {
+        let extent = CGRectIntegral(image.extent)
+        let scale = min(imageSize / extent.width, imageSize / extent.height)
+        
+        let width = extent.width * scale
+        let height = extent.height * scale
+        let cs = CGColorSpaceCreateDeviceGray()
+        let bitmapRef:CGContext = CGContext(data: nil , width: Int(width), height: Int(height), bitsPerComponent: 8, bytesPerRow: 0, space: cs, bitmapInfo: CGImageAlphaInfo.none.rawValue)!
+        let context = CIContext.init()
+        let bitmapImage = context.createCGImage(image, from: extent)
+        bitmapRef.interpolationQuality = .none
+        bitmapRef.scaleBy(x: scale, y: scale)
+        bitmapRef.draw(bitmapImage!, in: extent)
+        
+        let scaledImage = bitmapRef.makeImage()
+        let newImage = UIImage(cgImage: scaledImage!)
+        return newImage
+    }
+}
+
 
 // MARK: - Initializers
 public extension String {

@@ -52,7 +52,7 @@ public class PTOpenSystemConfig:NSObject
 public class PTOpenSystemFunction: NSObject {
     private class func functionAlert(msg:String)
     {
-        PTUtils.base_alertVC(title: "提示", msg: msg, cancelBtn: "好的", showIn: PTUtils.getCurrentVC()) {
+        UIAlertController.base_alertVC(title: "提示", msg: msg, cancelBtn: "好的") {
             
         } moreBtn: { index, title in
             

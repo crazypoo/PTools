@@ -27,7 +27,7 @@ public class PTMotion: NSObject {
         if !CMPedometer.isStepCountingAvailable() || !CMMotionActivityManager.isActivityAvailable()
         {
             let msg = "哎喲，不能運行哦,僅支持M7以上處理器, 所以暫時只能在iPhone5s以上玩哦."
-            PTUtils.base_alertVC(msg:msg,showIn: PTUtils.getCurrentVC(), moreBtn: nil)
+            UIAlertController.base_alertVC(msg:msg,showIn: PTUtils.getCurrentVC(), moreBtn: nil)
             return
         }
         

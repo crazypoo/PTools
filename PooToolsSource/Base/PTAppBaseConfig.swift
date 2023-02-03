@@ -13,10 +13,15 @@ import SDWebImage
 public class PTAppBaseConfig: NSObject {
     public static let share = PTAppBaseConfig()
     
+    //MARK: App的全局加載圖片的底圖
+    ///App的全局加載圖片的底圖
     public var defaultPlaceholderImage:UIImage = UIImage()
+    //MARK: App的全局邊距
+    ///App的全局邊距
     public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
     
-    //MARK:
+    //MARK: App的全局背景顏色
+    ///App的全局背景顏色
     public var viewControllerBaseBackgroundColor:UIColor = .lightGray
     
     //MARK: 权限请求配置
@@ -36,7 +41,7 @@ public class PTAppBaseConfig: NSObject {
     public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
     public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
     
-    //MARK:SDWebImage的加载失误图片方式(全局控制)
+    //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public func gobalWebImageLoadOption()->SDWebImageOptions
     {
@@ -56,6 +61,8 @@ public class PTAppBaseConfig: NSObject {
         #endif
     }
 
+    //MARK: App測試模式的檢測
+    ///App測試模式的檢測
     class open func registerDefaultsFromSettingsBundle()
     {
         if let settingsBundle = Bundle.main.path(forResource: "Settings", ofType: "bundle")

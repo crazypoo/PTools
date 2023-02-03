@@ -126,7 +126,7 @@ public class PTCheckUpdateFunction: NSObject {
             {
                 okBtns = ["稍后再说","更新"]
             }
-            PTUtils.base_alertVC(title:"发现新版本\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
+            UIAlertController.base_alertVC(title:"发现新版本\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns) { index, title in
                 switch index {
                 case 0:
                     if force
@@ -198,7 +198,7 @@ public class PTCheckUpdateFunction: NSObject {
                                 {
                                     okBtns = ["稍后再说","更新"]
                                 }
-                                PTUtils.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,showIn: PTUtils.getCurrentVC()) { index, title in
+                                UIAlertController.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns) { index, title in
                                     switch index {
                                     case 0:
                                         if force
