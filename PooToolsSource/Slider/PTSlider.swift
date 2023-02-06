@@ -37,7 +37,7 @@ public class PTSlider: UISlider {
         view.textAlignment = .center
         view.font = self.titleFont
         view.textColor = self.titleColor
-        view.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
+        view.text = String(format: "%.0f%", self.value/self.maximumValue * 100)
         return view
     }()
     
@@ -142,7 +142,7 @@ public class PTSlider: UISlider {
     
     func sliderAction(slider:UISlider)
     {
-        self.sliderValueLabel.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
+        self.sliderValueLabel.text = String(format: "%.0f%", self.value/self.maximumValue * 100)
     }
     
     public override func layoutSubviews() {
