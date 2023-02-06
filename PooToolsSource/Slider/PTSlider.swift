@@ -27,9 +27,18 @@ public class PTSlider: UISlider {
             self.layoutSubviews()
         }
     }
+    
+    fileprivate var isTitleValue:Bool?
+    {
+        didSet
+        {
+            self.layoutSubviews()
+        }
+    }
     public var titleStyle:PTSliderTitleShowType = .Top
     public var titleColor:UIColor = .systemBlue
     public var titleFont:UIFont = .appfont(size: 14)
+    public var titleValueUnit:String = ""
     
     fileprivate var lastBounds:CGRect? = .zero
     fileprivate lazy var sliderValueLabel:UILabel = {
@@ -37,13 +46,22 @@ public class PTSlider: UISlider {
         view.textAlignment = .center
         view.font = self.titleFont
         view.textColor = self.titleColor
-        view.text = String(format: "%.0f", self.value/self.maximumValue * 100)
+        
+        if !self.isTitleValue!
+        {
+            view.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
+        }
+        else
+        {
+            view.text = String(format: "%.0f%@", self.value,self.titleValueUnit)
+        }
         return view
     }()
     
-    init(showTitle:Bool) {
+    public init(showTitle:Bool,titleIsValue:Bool) {
         super.init(frame: .zero)
         self.isShowTitle = showTitle
+        self.isTitleValue = titleIsValue
     }
     
     public override init(frame: CGRect) {
@@ -142,7 +160,14 @@ public class PTSlider: UISlider {
     
     func sliderAction(slider:UISlider)
     {
-        self.sliderValueLabel.text = String(format: "%.0f", self.value/self.maximumValue * 100)
+        if !self.isTitleValue!
+        {
+            self.sliderValueLabel.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
+        }
+        else
+        {
+            self.sliderValueLabel.text = String(format: "%.0f%@", self.value,self.titleValueUnit)
+        }
     }
     
     public override func layoutSubviews() {
