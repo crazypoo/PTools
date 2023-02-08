@@ -10,6 +10,8 @@ import UIKit
 
 public extension Data
 {
+    //MARK: 根據Data來獲取圖片的格式(底層方法)
+    ///根據Data來獲取圖片的格式(底層方法)
     func detectImageType() -> PTAboutImageType {
         if self.count < 16 { return .UNKNOW }
         
@@ -47,10 +49,14 @@ public extension Data
         return .UNKNOW
     }
     
+    //MARK: 根據Data來獲取圖片的格式
+    ///根據Data來獲取圖片的格式
     static func detectImageType(with data: Data) -> PTAboutImageType {
         return data.detectImageType()
     }
     
+    //MARK: 根據圖片URL轉換成Data來獲取圖片的格式
+    ///根據圖片URL轉換成Data來獲取圖片的格式
     static func detectImageType(with url: URL) -> PTAboutImageType {
         if let data = try? Data(contentsOf: url) {
             return data.detectImageType()
@@ -59,6 +65,8 @@ public extension Data
         }
     }
     
+    //MARK: 根據圖片FileUrl轉換成Data來獲取圖片的格式
+    ///根據圖片FileUrl轉換成Data來獲取圖片的格式
     static func detectImageType(with filePath: String) -> PTAboutImageType {
         let pathUrl = URL(fileURLWithPath: filePath)
         if let data = try? Data(contentsOf: pathUrl) {
@@ -68,6 +76,8 @@ public extension Data
         }
     }
     
+    //MARK: 根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
+    ///根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
     static func detectImageType(with imageName: String, bundle: Bundle = Bundle.main) -> PTAboutImageType? {
         
         guard let path = bundle.path(forResource: imageName, ofType: "") else { return nil }
@@ -82,33 +92,42 @@ public extension Data
 
 // MARK: - Methods
 public extension Data {
-    /// 转 string
+    //MARK: Data轉String
+    ///Data轉String
     func toString(encoding: String.Encoding) -> String? {
         return String(data: self, encoding: encoding)
     }
     
+    //MARK: Data轉Bytes
+    ///Data轉Bytes
     func toBytes()->[UInt8]{
         return [UInt8](self)
     }
     
+    //MARK: Data轉字典
+    ///Data轉字典
     func toDict()->Dictionary<String, Any>? {
         do{
             return try JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String: Any]
         }catch{
-            print(error.localizedDescription)
+            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
             return nil
         }
     }
-    /// 从给定的JSON数据返回一个基础对象。
+    
+    //MARK: 从给定的JSON数据返回一个基础对象。
+    ///从给定的JSON数据返回一个基础对象。
     func toObject(options: JSONSerialization.ReadingOptions = []) throws -> Any {
         return try JSONSerialization.jsonObject(with: self, options: options)
     }
+    
+    //MARK: 指定Model类型
     /// 指定Model类型
     func toModel<T>(_ type:T.Type) -> T? where T:Decodable {
         do {
             return try JSONDecoder().decode(type, from: self)
         } catch  {
-            print("data to model error")
+            PTLocalConsoleFunction.share.pNSLog("data to model error")
             return nil
         }
     }

@@ -10,6 +10,7 @@ import UIKit
 import SwifterSwift
 
 extension Date: PTProtocolCompatible {}
+//MARK: 时间戳的类型
 /// 时间戳的类型
 public enum PTTimestampType: Int {
     /// 秒
@@ -19,10 +20,11 @@ public enum PTTimestampType: Int {
 }
 
 public extension Date {
+    //MARK: 获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
+    ///获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
     func getWeedayFromeDate() -> String {
         let calendar = Calendar.current
         let dateComponets = calendar.dateComponents([Calendar.Component.year,Calendar.Component.month,Calendar.Component.weekday,Calendar.Component.day], from: self)
-        //获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
         let weekDay = dateComponets.weekday
         var weekDayStr = ""
         switch weekDay {
@@ -54,12 +56,16 @@ public extension Date {
         return weekDayStr
     }
     
+    //MARK: 根據時間格式來獲取時間
+    ///根據時間格式來獲取時間
     func getTimeStr(dateFormat:String = "yyyy-MM-dd") -> String {
         let dformatter = DateFormatter()
         dformatter.dateFormat = dateFormat
         return dformatter.string(from: self)
     }
     
+    //MARK: 根據時間格式來獲取當前時間戳
+    ///根據時間格式來獲取當前時間戳
     func getCurrentDate(dateFormatterString:String)->TimeInterval
     {
         let dformatter = DateFormatter()
@@ -69,6 +75,8 @@ public extension Date {
         return timeInterval
     }
     
+    //MARK: 獲取時區的當前時間戳
+    ///獲取時區的當前時間戳
     func getTimeStamp(timeZone:String? = "Asia/Shanghai")->String
     {
         let date = Date()

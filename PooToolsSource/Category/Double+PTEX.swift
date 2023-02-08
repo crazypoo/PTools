@@ -33,6 +33,8 @@ public extension Double
      单位温度 NSUnitTemperature开尔文（K）
      单位体积 NSUnitVolume升（L）
      */
+    //MARK: 物理單位獲取
+    ///物理單位獲取
     func valueAddUnitToString(unit:Unit)->String
     {
         let formatter = MeasurementFormatter()

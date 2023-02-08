@@ -10,6 +10,8 @@ import UIKit
 
 public extension NSMutableArray
 {
+    //MARK: 打亂原始內部數據的內容排序
+    ///打亂原始內部數據的內容排序
     func shuffle()
     {
         for i in (0...(self.count - 1)).reversed()

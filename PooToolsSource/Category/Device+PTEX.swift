@@ -40,11 +40,14 @@ public extension PTProtocol where Base: UIDevice
         return Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
     }
     
+    ///Pad
     static func oneOfPadDevice()->Bool
     {
         return Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
     }
 
+    //MARK: 獲取當前設備的名稱
+    ///獲取當前設備的名稱
     static var currentDeviceName:String
     {
         get
@@ -110,7 +113,6 @@ public extension PTProtocol where Base: UIDevice
         return -1
     }
     
-    @available(iOS 11.0,*)
     static var volumes: String {
         return String.init(format: "%d", Device.volumes!)
     }
@@ -140,12 +142,14 @@ public extension PTProtocol where Base: UIDevice
         return used
     }
     
-    @available(iOS 11.0,*)
+    //MARK: 獲取可用的儲存用量(字節為單位)
+    ///獲取可用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForImportantUsage: String {
         return String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
     }
     
-    @available(iOS 11.0,*)
+    //MARK: 獲取不能用的儲存用量(字節為單位)
+    ///獲取不能用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForOpportunisticUsage: String {
         return String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
     }
@@ -212,12 +216,14 @@ public extension PTProtocol where Base: UIDevice
     }
     
     //MARK: 获取手机的第一个语言
+    ///获取手机的第一个语言
     static var currentDeviceLanguageInIos:String
     {
         return Bundle.main.preferredLocalizations.first!
     }
     
     //MARK: 获取手机的第一个语言字典
+    ///获取手机的第一个语言字典
     static var currentDeviceLanguageInIosWithDic:[String:String]
     {
         var dic:[String:String] = [String:String]()

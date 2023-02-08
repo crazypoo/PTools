@@ -11,9 +11,6 @@ import SwifterSwift
 
 public extension NSString
 {
-    //MARK: 銀行卡Luhm算法
-    ///銀行卡Luhm算法
-    /// - Returns: Bool
     /*  银行卡号有效性问题Luhm算法
      *  现行 16 位银联卡现行卡号开头 6 位是 622126～622925 之间的，7 到 15 位是银行自定义的，
      *  可能是发卡分行，发卡网点，发卡序号，第 16 位是校验码。
@@ -22,6 +19,9 @@ public extension NSString
      *  2，将奇位乘积的个十位全部相加，再加上所有偶数位上的数字
      *  3，将加法和加上校验位能被 10 整除。
      */
+    //MARK: 銀行卡Luhm算法
+    ///銀行卡Luhm算法
+    /// - Returns: Bool
     func bankCardLuhmCheck()->Bool
     {
         if String(format: "%@", self).stringIsEmpty()
@@ -109,13 +109,13 @@ public extension NSString
         }
     }
     
-    //MARK: 檢測中國公民新份證
-    ///檢測中國公民新份證
-    /// - Returns: Bool
     /*
      身份证号:加权因子
      中国大陆个人身份证号验证 Chinese Mainland Personal ID Card Validation
      */
+    //MARK: 檢測中國公民新份證
+    ///檢測中國公民新份證
+    /// - Returns: Bool
     func isValidateIdentity()->Bool
     {
         if self.length != 18
@@ -159,9 +159,8 @@ public extension NSString
         return true
     }
     
-    /*
-        从身份证上获取生日
-     */
+    //MARK: 从身份证上获取生日
+    ///从身份证上获取生日
     func birthdayFromIdentityCard()->NSString
     {
         let result = NSMutableString(capacity: 0)
@@ -187,9 +186,8 @@ public extension NSString
         }
     }
     
-    /*
-        从身份证上获取年龄
-     */
+    //MARK: 从身份证上获取年龄
+    ///从身份证上获取年龄
     func getIdentityCardAge()->NSString
     {
         if self.isValidateIdentity()

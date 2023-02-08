@@ -13,6 +13,7 @@ extension UIApplication: PTProtocolCompatible { }
 public extension PTProtocol where Base: UIApplication
 {
     //MARK: 获取应用的location
+    ///获取应用的location
     static var currentApplicationLocal:String
     {
         let locale:NSLocale = NSLocale.current as NSLocale
@@ -25,6 +26,8 @@ public extension PTProtocol where Base: UIApplication
     /*! @brief iOS更换App图标
      * @attention 此方法必须在info.plist中添加Icon files (iOS 5)字段，k&vCFBundleAlternateIcons ={IconName={CFBundleIconFiles =(IconName);UIPrerenderedIcon = 0;};};CFBundlePrimaryIcon={CFBundleIconFiles=(AppIcon20x20,AppIcon29x29,AppIcon40x40,AppIcon60x60);};
      */
+    //MARK: iOS更换App图标
+    ///iOS更换App图标
     static func changeAppIcon()
     {
         if UIApplication.shared.supportsAlternateIcons
@@ -63,6 +66,7 @@ public extension PTProtocol where Base: UIApplication
     }
     
     //MARK: 类似iPhone点击了Home键
+    ///类似iPhone点击了Home键
     static func likeTapHome()
     {
         PTUtils.gcdMain {

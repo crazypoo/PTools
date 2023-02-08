@@ -8,7 +8,6 @@
 
 import UIKit
 
-//MARK: 数据根据字段归组
 /*
  var appCityModels = [MTCityModelsReset]()
  models.group(by: { $0?.firstLetter}).sorted(by: {($0.key)! < ($1.key)! }).enumerated().forEach { (index,value) in
@@ -18,6 +17,8 @@ import UIKit
      appCityModels.append(cityNewModel)
  }
  */
+//MARK: 数据根据字段归组
+///数据根据字段归组
 public extension Sequence {
     func group<U: Hashable>(by key: (Iterator.Element) -> U) -> [U:[Iterator.Element]] {
         var categories: [U: [Iterator.Element]] = [:]
@@ -33,7 +34,8 @@ public extension Sequence {
 
 public extension Array
 {
-    // 去重
+    //MARK: 數組去重
+    ///數組去重
     func filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
         var result = [Element]()
         for value in self {
@@ -45,6 +47,8 @@ public extension Array
         return result
     }
     
+    //MARK: 數組冒泡排序
+    ///數組冒泡排序
     func bubbleSort(_ filterCall: (Element) -> Int) -> [Element] {
         var temp: [Element] = self
         for i in 0...self.count - 1 {

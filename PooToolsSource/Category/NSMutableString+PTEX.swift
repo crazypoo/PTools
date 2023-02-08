@@ -10,6 +10,8 @@ import UIKit
 import SwifterSwift
 
 public extension NSMutableString {
+    //MARK: 更改字符串的內部標籤
+    ///更改字符串的內部標籤
     func replaceFirstTagItoArray(_ array:NSMutableArray) ->Bool
     {
         let openTagRange = self.range(of: "<")

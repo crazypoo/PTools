@@ -10,9 +10,8 @@ import UIKit
 
 public extension Float
 {
-    /**
-     单精度的随机数
-     */
+    //MARK: 单精度的随机数
+    ///单精度的随机数
     static func randomFloatNumber(lower: Float = 0, upper: Float = 100) -> Float {
         return (Float(arc4random()) / Float(UInt32.max)) * (upper - lower) + lower
     }

@@ -12,21 +12,36 @@ public extension UIAlertController
 {
     //MARK: ALERT真正基类
     ///ALERT真正基类
+    /// - Parameters:
+    ///   - title: 標題
+    ///   - titleColor: 標題顏色
+    ///   - titleFont: 標題字體
+    ///   - msg: 內容
+    ///   - msgColor: 內容顏色
+    ///   - okBtns: 更多按鈕(數組)
+    ///   - cancelBtn: 取消按鈕
+    ///   - showIn: 在哪裏顯示
+    ///   - cancelBtnColor: 取消按鈕顏色
+    ///   - doneBtnColors: 更多按鈕顏色(數組)
+    ///   - alertBGColor: 背景顏色
+    ///   - alertCornerRadius: 圓角
+    ///   - cancel: 取消回調
+    ///   - moreBtn: 更多按鈕點擊回調
     class func base_alertVC(title:String? = "",
-                                   titleColor:UIColor? = UIColor.black,
-                                   titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                   msg:String? = "",
-                                   msgColor:UIColor? = UIColor.black,
-                                   msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                   okBtns:[String]? = [String](),
-                                   cancelBtn:String? = "",
-                                   showIn:UIViewController? = PTUtils.getCurrentVC(),
-                                   cancelBtnColor:UIColor? = .systemBlue,
-                                   doneBtnColors:[UIColor]? = [UIColor](),
-                                   alertBGColor:UIColor? = .white,
-                                   alertCornerRadius:CGFloat? = 15,
-                                   cancel:(()->Void)? = nil,
-                                   moreBtn:((_ index:Int,_ title:String)->Void)?)
+                            titleColor:UIColor? = UIColor.black,
+                            titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                            msg:String? = "",
+                            msgColor:UIColor? = UIColor.black,
+                            msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                            okBtns:[String]? = [String](),
+                            cancelBtn:String? = "",
+                            showIn:UIViewController? = PTUtils.getCurrentVC(),
+                            cancelBtnColor:UIColor? = .systemBlue,
+                            doneBtnColors:[UIColor]? = [UIColor](),
+                            alertBGColor:UIColor? = .white,
+                            alertCornerRadius:CGFloat? = 15,
+                            cancel:(()->Void)? = nil,
+                            moreBtn:((_ index:Int,_ title:String)->Void)?)
     {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
@@ -116,22 +131,41 @@ public extension UIAlertController
         showIn!.present(alert, animated: true, completion: nil)
     }
     
+    //MARK: ALERT輸入框基類
+    ///ALERT輸入框基類
+    /// - Parameters:
+    ///   - title: 標題
+    ///   - titleColor: 標題顏色
+    ///   - titleFont: 標題字體
+    ///   - okBtn: 更多按鈕(數組)
+    ///   - cancelBtn: 取消按鈕
+    ///   - showIn: 在哪裏顯示
+    ///   - cancelBtnColor: 取消按鈕顏色
+    ///   - doneBtnColor: 更多按鈕顏色(數組)
+    ///   - placeHolders: 輸入框底字(數組)
+    ///   - textFieldTexts:輸入框文字(數組)
+    ///   - keyboardType: 輸入框鍵盤類型(數組)
+    ///   - textFieldDelegate:輸入框代理
+    ///   - alertBGColor: 背景顏色
+    ///   - alertCornerRadius: 圓角
+    ///   - cancel: 取消回調
+    ///   - doneBtn: 更多按鈕點擊回調
     class func base_textfiele_alertVC(title:String? = "",
-                                             titleColor:UIColor? = UIColor.black,
-                                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
-                                             okBtn:String,
-                                             cancelBtn:String,
-                                             showIn:UIViewController? = PTUtils.getCurrentVC(),
-                                             cancelBtnColor:UIColor? = .black,
-                                             doneBtnColor:UIColor? = .systemBlue,
-                                             placeHolders:[String],
-                                             textFieldTexts:[String],
-                                             keyboardType:[UIKeyboardType]?,
-                                             textFieldDelegate:Any? = nil,
-                                             alertBGColor:UIColor? = .white,
-                                             alertCornerRadius:CGFloat? = 15,
-                                             cancel:(()->Void)? = nil,
-                                             doneBtn:((_ result:[String:String])->Void)?)
+                                      titleColor:UIColor? = UIColor.black,
+                                      titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
+                                      okBtn:String,
+                                      cancelBtn:String,
+                                      showIn:UIViewController? = PTUtils.getCurrentVC(),
+                                      cancelBtnColor:UIColor? = .black,
+                                      doneBtnColor:UIColor? = .systemBlue,
+                                      placeHolders:[String],
+                                      textFieldTexts:[String],
+                                      keyboardType:[UIKeyboardType]?,
+                                      textFieldDelegate:Any? = nil,
+                                      alertBGColor:UIColor? = .white,
+                                      alertCornerRadius:CGFloat? = 15,
+                                      cancel:(()->Void)? = nil,
+                                      doneBtn:((_ result:[String:String])->Void)?)
     {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         

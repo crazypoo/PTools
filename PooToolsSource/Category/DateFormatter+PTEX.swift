@@ -13,7 +13,7 @@ import UIKit
  */
 public let jx_formatter = DateFormatter()
 
-// MARK: - 一、基本扩展
+// MARK: 基本扩展
 public extension DateFormatter {
 
     // MARK: 格式化快捷方式

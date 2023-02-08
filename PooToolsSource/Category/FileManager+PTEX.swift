@@ -748,7 +748,7 @@ public extension PTProtocol where Base: FileManager {
             let img = UIImage(cgImage: cgImg)
             return img
         } else {
-            PTNSLog("获取缩略图失败")
+            PTLocalConsoleFunction.share.pNSLog("获取缩略图失败")
             return nil
         }
     }

@@ -535,7 +535,7 @@ static NSString *cellIdentifier = @"CELL";
         {
             [self createAlertViewWithTitle:@"Slider" withAlertBtns:@[@"222"] customeViewHeight:200 initCustomView:^(UIView *customView) {
                 
-                PTSlider *slider = [[PTSlider alloc] initWithShowTitle:YES];
+                PTSlider *slider = [[PTSlider alloc] initWithShowTitle:YES titleIsValue:NO];
                 [customView addSubview:slider];
                 [slider mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.width.offset(100);
