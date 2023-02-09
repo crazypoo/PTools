@@ -18,9 +18,10 @@ import UIKit
 public extension UIColor {
         
     //MARK: hex 色值
-    /// - Parameters hex:string that looks like @"#FF0000" or @"FF0000"
-    /// - Parameters alpha:0~1
-    /// - Returns UIColor
+    /// - Parameters:
+    ///   - hex:string that looks like @"#FF0000" or @"FF0000"
+    ///   - alpha:0~1
+    /// - Returns: UIColor
     class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         let hexint = intFromHexString_64(tempStr)
@@ -66,6 +67,7 @@ public extension UIColor {
     }
     
     //MARK: Color from LAB Array
+    ///Color from LAB Array
     class func cielabColor(cielabData:[CGFloat])->UIColor
     {
         if cielabData.count < 4
@@ -207,6 +209,7 @@ public extension UIColor {
     
     
     //MARK: Color from CMYK Array
+    ///Color from CMYK Array
     class func cmykColor(cmykData:[CGFloat])->UIColor
     {
         if cmykData.count < 4
@@ -233,6 +236,7 @@ public extension UIColor {
     }
         
     //MARK: 颜色转Hex字符串
+    ///颜色转Hex字符串
     @objc var hex: String? {
         var red: CGFloat = 0
         var green: CGFloat = 0
@@ -281,6 +285,7 @@ public extension UIColor {
     }
 
     //MARK: 从Hex装换int
+    ///从Hex装换int
     @available(iOS, introduced: 2.0, deprecated: 13.0)
     private class func intFromHexString(_ hexString:String)->UInt32{
         let scanner = Scanner(string: hexString)
@@ -299,6 +304,7 @@ public extension UIColor {
     }
 
     //MARK: 返回随机颜色
+    ///返回随机颜色
     @objc class var randomColor:UIColor{
         get
         {
@@ -312,6 +318,7 @@ public extension UIColor {
     }
     
     //MARK: 颜色基础方法
+    ///颜色基础方法
     @objc class func colorBase(R:CGFloat,G:CGFloat,B:CGFloat,A:CGFloat)->UIColor
     {
         let red = R/255.0
@@ -324,6 +331,8 @@ public extension UIColor {
         return UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
     }
     
+    //MARK: 顏色轉圖片
+    ///顏色轉圖片
     @objc func createImageWithColor()->UIImage
     {
         let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
@@ -336,6 +345,8 @@ public extension UIColor {
         return image!
     }
     
+    //MARK: 顏色的反色
+    ///顏色的反色
     @objc func inverseColor()->UIColor {
         let componentColors = self.cgColor.components
         return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
@@ -377,6 +388,8 @@ public extension UIColor {
         return colorModel
     }
 
+    //MARK: 混色
+    ///混色
     internal func mixColor(otherColor:UIColor)->UIColor
     {
         let rgbaModel = self.rgbaValueModel()
@@ -390,6 +403,7 @@ public extension UIColor {
     }
     
     //MARK: 分别获取颜色的RGBA值
+    ///分别获取颜色的RGBA值
     @objc var colorRValue:CGFloat {
         return self.rgbaValueModel().redFloat
     }
@@ -407,6 +421,7 @@ public extension UIColor {
     }
     
     //MARK: 分别获取颜色的HSBA值
+    ///分别获取颜色的HSBA值
     @objc var hsbaColorHValue:CGFloat {
         return self.hsbaValueModel().hueFloat
     }

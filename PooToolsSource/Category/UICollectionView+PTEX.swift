@@ -10,6 +10,8 @@ import UIKit
 
 public extension UICollectionView
 {
+    //MARK: 撇除動畫重加載
+    ///撇除動畫重加載
     @objc func reloadDataWithOutAnimation(completion:(()->Void)?)
     {
         UIView.performWithoutAnimation {
@@ -22,6 +24,8 @@ public extension UICollectionView
         }
     }
     
+    //MARK: 獲取Cell在Window的位置
+    ///獲取Cell在Window的位置
     @objc func cellInWindow(cellFrame:CGRect)->CGRect
     {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)

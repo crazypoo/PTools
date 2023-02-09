@@ -9,6 +9,7 @@
 import UIKit
 
 //MARK: 阿拉伯数字转中文
+///阿拉伯数字转中文
 public extension BinaryInteger {
     var chinese: String {
         let formatter = NumberFormatter()
@@ -19,6 +20,7 @@ public extension BinaryInteger {
 }
 
 //MARK: 阿拉伯数字转中文
+///阿拉伯数字转中文
 public extension BinaryFloatingPoint {
     var chinese: String {
         let formatter = NumberFormatter()

@@ -15,10 +15,12 @@ public extension UIApplication
         do {
             try FileManager.default.removeItem(atPath: NSHomeDirectory()+"/Library/SplashBoard")
         } catch {
-            print("Failed to delete launch screen cache: \(error)")
+            PTLocalConsoleFunction.share.pNSLog("Failed to delete launch screen cache: \(error)")
         }
     }
     
+    //MARK: 獲取軟件的開髮狀態
+    ///獲取軟件的開髮狀態
     class func applicationEnvironment()->Environment
     {
         return UIApplication.shared.inferredEnvironment

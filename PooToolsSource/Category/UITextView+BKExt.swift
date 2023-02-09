@@ -117,7 +117,7 @@ public extension UITextView {
                     grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1.0, constant: -7))
                     grandfatherView.addConstraint(NSLayoutConstraint(item: label, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1.0, constant: -7))
                 } else {
-                    print("请先将您的UITextView添加到视图中")
+                    PTLocalConsoleFunction.share.pNSLog("请先将您的UITextView添加到视图中")
                 }
                 
                 // 调用setter
@@ -152,7 +152,7 @@ public extension UITextView {
         if text.count >= maxCount.intValue {
             /// 输入的文字超过最大值
             text = (self.text as NSString).substring(to: maxCount.intValue)
-            print("已经超过限制的字数了！");
+            PTLocalConsoleFunction.share.pNSLog("已经超过限制的字数了！")
         }
     }
     

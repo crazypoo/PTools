@@ -117,7 +117,8 @@ open class PTRows: NSObject {
 }
 
 extension UITableView {
-    /// - Parameter bkSections:
+    //MARK: 註冊TableView的Cell
+    ///註冊TableView的Cell
     public func pt_register(by ptSections: [PTSection]) {
         
         ptSections.forEach { [weak self] (tmpSection) in
@@ -136,7 +137,8 @@ extension UITableView {
 }
 
 extension UICollectionView {
-    /// - Parameter bkSections:
+    //MARK: 註冊CollectionView的Cell
+    ///註冊CollectionView的Cell
     public func pt_register(by ptSections: [PTSection]) {
         
         ptSections.forEach { [weak self] (tmpSection) in

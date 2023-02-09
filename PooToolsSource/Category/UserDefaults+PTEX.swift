@@ -17,7 +17,6 @@ public extension PTProtocol where Base: UserDefaults {
     /// - Parameters:
     ///   - value: 值
     ///   - key: 键
-    
     @discardableResult
     static func userDefaultsSetValue(value: Any?, key: String?) -> Bool {
         guard value != nil, key != nil else {
@@ -88,7 +87,7 @@ public extension PTProtocol where Base: UserDefaults {
         }
         let decoder = JSONDecoder()
         guard let object = try? decoder.decode(type, from: data) else {
-            PTNSLog("Couldnt find key")
+            PTLocalConsoleFunction.share.pNSLog("Couldnt find key")
             return nil
         }
         return object

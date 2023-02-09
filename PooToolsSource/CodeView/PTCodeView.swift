@@ -103,7 +103,7 @@ public class PTCodeView: UIView {
     {
         let tempString = NSMutableString()
         for i in 0..<numberOfCode {
-            print(">>>>>\(i)")
+            PTLocalConsoleFunction.share.pNSLog("\(i)")
             let index = arc4random() % UInt32(dataSource.count - 1)
             tempString.append(dataSource[Int(index)])
         }
@@ -136,7 +136,7 @@ public class PTCodeView: UIView {
         let context = UIGraphicsGetCurrentContext()
         context?.setLineWidth(1)
         for count in 0..<numberOfLine {
-            print("count>>>>>>>>>>>>>>>>>>>\(count)")
+            PTLocalConsoleFunction.share.pNSLog("count:\(count)")
             context?.setStrokeColor(UIColor.randomColor.cgColor)
             pX = CGFloat(arc4random() % UInt32(rect.size.width))
             pY = CGFloat(arc4random() % UInt32(rect.size.height))

@@ -11,9 +11,9 @@ import UIKit
 //MARK: 全局统一字体
 public extension UIFont
 {
-    class func appfont(size:CGFloat,bold:Bool? = false)-> UIFont
+    @objc class func appfont(size:CGFloat,bold:Bool = false)-> UIFont
     {
-        if !bold!
+        if !bold
         {
             return UIFont.systemFont(ofSize: CGFloat.ScaleW(w: size))
         }
@@ -22,14 +22,16 @@ public extension UIFont
             return UIFont.boldSystemFont(ofSize: CGFloat.ScaleW(w: size))
         }
     }
-    
-    @objc class func oc_appFont(size:CGFloat,bold:Bool)->UIFont
-    {
-        return self.appfont(size: size,bold: bold)
-    }
-    
+        
     @objc class func appCustomFont(size:CGFloat,customFont:String? = nil)-> UIFont
     {
         return UIFont.init(name: customFont!, size: CGFloat.ScaleW(w: size))!
     }
+    
+    @objc class func systemFont(ofSize size: CGFloat, weight: UIFont.Weight, design: UIFontDescriptor.SystemDesign) -> UIFont {
+        let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
+        
+        return UIFont(descriptor: descriptor!, size: size)
+    }
+
 }

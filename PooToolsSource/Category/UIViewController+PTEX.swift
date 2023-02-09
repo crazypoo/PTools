@@ -15,16 +15,19 @@ import Dispatch
 // MARK: - 状态栏扩展
 public extension UIViewController {
     
+    //MARK: 控制器的状态栏唯一键
     /// 控制器的状态栏唯一键
     var statusBarKey: String {
         "\(self)"
     }
     
+    //MARK: 设置该控制器的状态栏状态
     /// 设置该控制器的状态栏状态
     func setStatusBar(isHidden: Bool? = nil, style: UIStatusBarStyle? = nil, animation: UIStatusBarAnimation? = nil) {
         StatusBarManager.shared.setState(for: statusBarKey, isHidden: isHidden, style: style, animation: animation)
     }
     
+    //MARK: 添加一个子状态
     /// 添加一个子状态
     func addSubStatusBar(for viewController: UIViewController) {
         let superKey = statusBarKey
@@ -32,6 +35,7 @@ public extension UIViewController {
         StatusBarManager.shared.addSubState(with: subKey, root: superKey)
     }
     
+    //MARK: 批量添加子状态,树横向生长
     /// 批量添加子状态,树横向生长
     func addSubStatusBars(for viewControllers: [UIViewController]) {
         viewControllers.forEach { (vc) in
@@ -39,12 +43,14 @@ public extension UIViewController {
         }
     }
     
+    //MARK: 从整个状态树上删除当前状态
     /// 从整个状态树上删除当前状态
     func removeFromSuperStatusBar() {
         let key = statusBarKey
         StatusBarManager.shared.removeState(with: key)
     }
     
+    //MARK: 设置当前状态下的所有子状态
     /// 设置当前状态下的所有子状态
     func setSubStatusBars(for viewControllers: [UIViewController]?) {
         clearSubStatusBars()
@@ -53,6 +59,7 @@ public extension UIViewController {
         }
     }
     
+    //MARK: 通过类似压栈的形式,压入一组状态,树纵向生长
     /// 通过类似压栈的形式,压入一组状态,树纵向生长
     func pushStatusBars(for viewControllers: [UIViewController]) {
         var lastVC: UIViewController? = self
@@ -64,6 +71,7 @@ public extension UIViewController {
         }
     }
     
+    //MARK: 切换多个子状态的某个子状态
     /// 切换多个子状态的某个子状态
     func showStatusBar(for viewController: UIViewController?) {
         guard let vc = viewController else { return }
@@ -72,11 +80,14 @@ public extension UIViewController {
         StatusBarManager.shared.showState(for: subKey, root: superKey)
     }
     
+    //MARK: 清楚所有子状态
     /// 清楚所有子状态
     func clearSubStatusBars(isUpdate: Bool = true) {
         StatusBarManager.shared.clearSubStates(with: statusBarKey, isUpdate: isUpdate)
     }
     
+    //MARK: 檢查當前的ViewController是Push還是Pop
+    ///檢查當前的ViewController是Push還是Pop
     func checkVCIsPresenting() ->Bool
     {
         let vcs = self.navigationController?.viewControllers
@@ -94,6 +105,8 @@ public extension UIViewController {
         return false
     }
     
+    //MARK: ViewController退出
+    ///ViewController退出
     func viewDismiss(dismissBolck:(()->Void)? = nil)
     {
         if self.presentingViewController != nil
@@ -116,6 +129,8 @@ public extension UIViewController {
         }
     }
     
+    //MARK: Pop to ViewController
+    ///Pop to ViewController
     func popToViewController(vcType:AnyClass) -> Bool {
         guard let childrens = self.navigationController?.children else { return false }
         for thisVC in childrens {
@@ -126,16 +141,17 @@ public extension UIViewController {
         }
         return false
     }
-
-    @objc func popover(popoverVC:UIViewController,contentView:UIView,sender:UIButton,arrowDirections:UIPopoverArrowDirection)
+    
+    //MARK: Popover
+    ///Popover
+    @objc func popover(popoverVC:UIViewController,
+                       popoverSize:CGSize,
+                       sender:UIButton,
+                       arrowDirections:UIPopoverArrowDirection)
     {
         PTUtils.gcdAfter(time: 0.1) {
-            popoverVC.preferredContentSize = contentView.bounds.size
+            popoverVC.preferredContentSize = popoverSize
             popoverVC.modalPresentationStyle = .popover
-            popoverVC.view.addSubview(contentView)
-            contentView.snp.makeConstraints { make in
-                make.edges.equalTo(popoverVC.view)
-            }
             
             let presentationCtr = popoverVC.popoverPresentationController
             presentationCtr?.sourceView = sender
@@ -159,6 +175,7 @@ public extension UIViewController {
      * .denied         ---> 受限制，系统原因，无法访问
      */
     
+    //MARK: 定位权限
     /// 定位权限
     func locationAuthorize() {
         DispatchQueue.main.async {
@@ -172,6 +189,7 @@ public extension UIViewController {
         }
     }
     
+    //MARK: 相机、麦克风权限
     /// 相机、麦克风权限
     func avCaptureDeviceAuthorize(avMediaType: AVMediaType) -> Bool {
         let status = AVCaptureDevice.authorizationStatus(for: avMediaType)
@@ -214,6 +232,7 @@ public extension UIViewController {
         }
     }
     
+    //MARK: 相册权限
     /// 相册权限
     func photoAuthorize() -> Bool {
         let status = PHPhotoLibrary.authorizationStatus()

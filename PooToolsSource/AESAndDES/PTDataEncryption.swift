@@ -45,7 +45,7 @@ public class PTDataEncryption {
             handle(encryptedData.base64EncodedString())
         }
         catch{
-            print(error.localizedDescription)
+            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
         }
     }
     
@@ -65,7 +65,7 @@ public class PTDataEncryption {
             handle(decryptData)
         }
         catch{
-            print(error.localizedDescription)
+            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
         }
     }
     

@@ -74,3 +74,14 @@ public extension PTProtocol where Base: UIApplication
         }
     }
 }
+
+@available(iOSApplicationExtension, unavailable)
+public extension UIApplication {
+    var statusBarHeight: CGFloat {
+        if let window = UIApplication.shared.windows.first {
+            return window.safeAreaInsets.top
+        } else {
+            return 0
+        }
+    }
+}

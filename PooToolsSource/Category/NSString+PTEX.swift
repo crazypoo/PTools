@@ -205,7 +205,9 @@ public extension NSString
             return "99999"
         }
     }
-        
+    
+    //MARK: 獲取字符串中文件名的格式(媒體)
+    ///獲取字符串中文件名的格式(媒體)
     @objc func contentTypeForUrl()->PTUrlStringVideoType
     {
         let pathEX = self.pathExtension.lowercased()
@@ -242,8 +244,16 @@ public extension NSString
     {
         return Utils.checkStringFunc(self as String)
     }
+    
+    @objc class func currentDate(dateFormatter:NSString)->NSString
+    {
+        return String.currentDate(dateFormatterString: dateFormatter as String).nsString
+    }
 }
 
+/*
+ 富文本文字處理
+ */
 let kWPAttributedMarkupLinkName = "PTAttributedMarkupLinkName"
 public extension NSString
 {

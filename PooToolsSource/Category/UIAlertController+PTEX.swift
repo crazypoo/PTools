@@ -10,6 +10,11 @@ import UIKit
 
 public extension UIAlertController
 {
+    @objc class func alertVC(title:String? = "",msg:String? = "")
+    {
+        UIAlertController.base_alertVC(title: title,msg: msg)
+    }
+    
     //MARK: ALERT真正基类
     ///ALERT真正基类
     /// - Parameters:
@@ -27,7 +32,7 @@ public extension UIAlertController
     ///   - alertCornerRadius: 圓角
     ///   - cancel: 取消回調
     ///   - moreBtn: 更多按鈕點擊回調
-    class func base_alertVC(title:String? = "",
+    @objc class func base_alertVC(title:String? = "",
                             titleColor:UIColor? = UIColor.black,
                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                             msg:String? = "",
@@ -39,9 +44,9 @@ public extension UIAlertController
                             cancelBtnColor:UIColor? = .systemBlue,
                             doneBtnColors:[UIColor]? = [UIColor](),
                             alertBGColor:UIColor? = .white,
-                            alertCornerRadius:CGFloat? = 15,
+                            alertCornerRadius:NSNumber? = 15,
                             cancel:(()->Void)? = nil,
-                            moreBtn:((_ index:Int,_ title:String)->Void)?)
+                            moreBtn: ((_ index:Int,_ title:String)->Void)? = nil)
     {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
@@ -126,7 +131,7 @@ public extension UIAlertController
         {
             alertContentView.backgroundColor = alertBGColor
         }
-        alertContentView.layer.cornerRadius = alertCornerRadius!
+        alertContentView.layer.cornerRadius = CGFloat(alertCornerRadius!.floatValue)
         
         showIn!.present(alert, animated: true, completion: nil)
     }

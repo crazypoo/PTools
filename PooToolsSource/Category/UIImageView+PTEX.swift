@@ -10,6 +10,8 @@ import UIKit
 import SDWebImage
 
 public extension UIImageView {
+    //MARK: 獲取圖片的某像素點的顏色
+    ///獲取圖片的某像素點的顏色
     func getImagePointColor(point:CGPoint)->UIColor
     {
         let thumbSize = CGSize(width: self.image!.size.width, height: self.image!.size.height)

@@ -59,19 +59,15 @@
     [self.tbView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.top.bottom.equalTo(self.view);
     }];
-    
+        
     self.popover = [[UIViewController alloc] init];
-    
-    UIView *views = [UIView new];
-    views.backgroundColor = [UIColor redColor];
-    views.bounds = CGRectMake(0, 0, 100, 300);
     
     UIButton *views2 = [UIButton buttonWithType:UIButtonTypeCustom];
     views2.backgroundColor = UIColor.randomColor;
-    [views addSubview:views2];
+    [((UIViewController *)self.popover).view addSubview:views2];
     [views2 mas_makeConstraints:^(MASConstraintMaker *make) {
         make.width.height.offset(50);
-        make.centerY.centerX.equalTo(views);
+        make.centerY.centerX.equalTo(((UIViewController *)self.popover).view);
     }];
     [views2 addActionHandlersWithHandler:^(UIButton *sender) {
         if ([self.popover isKindOfClass:[PTCustomAlertView class]])
@@ -94,8 +90,8 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:bbbbbbbbb];
     [bbbbbbbbb addActionHandlersWithHandler:^(UIButton *sender) {
         PNSLog(@"222222222");
-        
-        [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
+        [self popoverWithPopoverVC:self.popover popoverSize:CGSizeMake(100, 300) sender:sender arrowDirections:UIPopoverArrowDirectionAny];
+//        [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
     }];
         
     PTDevMaskView *mask = [[PTDevMaskView alloc] initWithConfig:[PTDevMaskConfig new]];
@@ -459,7 +455,7 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     if ([PCleanCache clearCaches]) {
                         
-                        [PTUtils oc_alert_only_showWithTitle:@"" message:@"清理成功"];
+                        [UIAlertController alertVCWithTitle:nil msg:@"清理成功"];
                         
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
                         [PTUtils gcdAfterTime:0.1 block:^{
@@ -468,7 +464,7 @@ static NSString *cellIdentifier = @"CELL";
                     }
                     else
                     {
-                        [PTUtils oc_alert_only_showWithTitle:@"" message:@"没有缓存"];
+                        [UIAlertController alertVCWithTitle:nil msg:@"没有缓存"];
                     }
                 }
                     break;

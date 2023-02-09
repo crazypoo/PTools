@@ -152,7 +152,7 @@ public class PTUtils: NSObject {
             
     public class func sizeFor(string:String,
                               font:UIFont,
-                              lineSpacing:CGFloat? = nil,
+                              lineSpacing:NSNumber? = nil,
                               height:CGFloat,
                               width:CGFloat)->CGSize
     {
@@ -160,7 +160,7 @@ public class PTUtils: NSObject {
         if lineSpacing != nil
         {
             let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = lineSpacing!
+            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
         let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
@@ -527,38 +527,9 @@ extension PTUtils
     public class func oc_isiPhoneSeries()->Bool
     {
         return isIPhoneXSeries()
-
-    }
-    
-    public class func oc_alert_only_show(title:String?,message:String?)
-    {
-        PTUtils.oc_alert_base(title: title ?? "", msg: message ?? "", okBtns: [], cancelBtn: "确定", showIn: AppWindows!.rootViewController!) {
-            
-        } moreBtn: { index, title in
-            
-        }
-    }
-    
-    public class func oc_alert_base(title:String,msg:String,okBtns:[String],cancelBtn:String,showIn:UIViewController,cancel:@escaping (()->Void),moreBtn:@escaping ((_ index:Int,_ title:String)->Void))
-    {
-        UIAlertController.base_alertVC(title: title, msg: msg, okBtns: okBtns, cancelBtn: cancelBtn, showIn: showIn, cancel: cancel, moreBtn: moreBtn)
-    }
-
-    public class func oc_size(string:String,
-                              font:UIFont,
-                              lineSpacing:CGFloat = CGFloat.ScaleW(w: 3),
-                              height:CGFloat,
-                              width:CGFloat)->CGSize
-    {
-        return PTUtils.sizeFor(string: string, font: font,lineSpacing: lineSpacing, height: height, width: width)
     }
     
     //MARK: 时间
-    class open func oc_currentTimeFunction(dateFormatter:NSString)->String
-    {
-        return String.currentDate(dateFormatterString: dateFormatter as String)
-    }
-    
     class open func oc_currentTimeToTimeInterval(dateFormatter:NSString)->TimeInterval
     {
         return String.currentDate(dateFormatterString: dateFormatter as String).dateStrToTimeInterval(dateFormat: dateFormatter as String)

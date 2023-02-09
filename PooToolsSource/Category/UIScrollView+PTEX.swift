@@ -11,6 +11,7 @@ import MJRefresh
 
 public extension UIScrollView {
     
+    //MARK: 自动判断上拉或下拉结束正在刷新状态
     /// 自动判断上拉或下拉结束正在刷新状态
    @objc func bk_endMJRefresh() {
         

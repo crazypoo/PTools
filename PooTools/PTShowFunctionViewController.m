@@ -255,8 +255,7 @@ CGFloat const tagItemSpace = 5;
             
             //    NSMutableArray *_RectCornerArr = [NSMutableArray array];
             //    [_RectCornerArr addObject:@(UIRectCornerAllCorners)];
-            
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomRight];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerBottomRight];
             
             NSArray *arr = @[@"左上",@"右上",@"左下",@"右下",@"全部"];
             
@@ -273,7 +272,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
+                [pBtn viewCornerWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
             
         }
@@ -329,7 +328,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
+                [pBtn viewCornerWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
@@ -350,7 +349,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
+                [pBtn viewCornerWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
@@ -382,7 +381,7 @@ CGFloat const tagItemSpace = 5;
                     make.width.offset(kSCREEN_WIDTH/arr.count);
                     make.height.offset(kSCREEN_WIDTH/arr.count);
                 }];
-                [pBtn viewCorner_ocWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
+                [pBtn viewCornerWithRadius:5 borderWidth:1 borderColor:UIColor.randomColor];
             }
         }
             break;
@@ -430,27 +429,27 @@ CGFloat const tagItemSpace = 5;
     switch (sender.tag) {
         case 0:
         {
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerTopLeft];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerTopLeft];
         }
             break;
         case 1:
         {
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerTopRight];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerTopRight];
         }
             break;
         case 2:
         {
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomLeft];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerBottomLeft];
         }
             break;
         case 3:
         {
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerBottomRight];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerBottomRight];
         }
             break;
         default:
         {
-            [self.cornerBtn viewCornerRectCorner_ocWithCornerRadii:20 corner:UIRectCornerAllCorners];
+            [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerAllCorners];
         }
             break;
     }
@@ -517,11 +516,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-            [PTUtils oc_alert_baseWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" msg:@"11111111111111111111111111111111111234234234234234234234243" okBtns:@[] cancelBtn:@"qqqqq" showIn:self cancel:^{
-                
-            } moreBtn:^(NSInteger index, NSString * value) {
-                
-            }];
+            [UIAlertController base_alertVCWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" titleColor:nil titleFont:nil msg:@"11111111111111111111111111111111111234234234234234234234243" msgColor:nil msgFont:nil okBtns:nil cancelBtn:@"qqqqq" showIn:nil cancelBtnColor:nil doneBtnColors:nil alertBGColor:nil alertCornerRadius:nil cancel:nil moreBtn:nil];
         }
             break;
         case 3:
@@ -529,7 +524,7 @@ CGFloat const tagItemSpace = 5;
             UIView *views = [UIView new];
             views.backgroundColor = UIColor.randomColor;
             views.bounds = CGRectMake(0, 0, 100, 300);
-            [self popoverWithPopoverVC:[[UIViewController alloc] init] contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
+            [self popoverWithPopoverVC:[[UIViewController alloc] init] popoverSize:CGSizeMake(100, 100) sender:sender arrowDirections:UIPopoverArrowDirectionAny];
         }
             break;
         default:

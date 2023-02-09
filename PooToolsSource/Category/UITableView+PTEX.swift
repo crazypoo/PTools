@@ -9,7 +9,9 @@
 import UIKit
 
 public extension UITableView
-{    
+{
+    //MARK: 獲取Cell在Window的位置
+    ///獲取Cell在Window的位置
     @objc func cellInWindow(cellFrame:CGRect)->CGRect
     {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)

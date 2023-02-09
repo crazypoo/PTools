@@ -10,10 +10,14 @@ import UIKit
 
 public extension TimeInterval
 {
+    //MARK: 時間戳轉換成Date
+    ///時間戳轉換成Date
     func timeToDate() -> Date {
         return Date.init(timeIntervalSince1970: self)
     }
     
+    //MARK: 時間戳轉換成Date
+    ///時間戳轉換成Date
     func msTimeToDate() -> Date {
         let timeSta:TimeInterval = TimeInterval(self / 1000)
         return Date.init(timeIntervalSince1970: timeSta)
@@ -24,6 +28,8 @@ public extension TimeInterval
         return self.msTimeToDate().getTimeStr(dateFormat: dateFormat)
     }
     
+    //MARK: 獲取播放時長(分:秒)
+    ///獲取播放時長(分:秒)
     func getFormatPlayTime()->String
     {
         if self.isNaN{
@@ -40,6 +46,8 @@ public extension TimeInterval
         return String(format: "00:%02d:%02d", Min, Sec)
     }
     
+    //MARK: 獲取播放時長(時:分:秒)
+    ///獲取播放時長(時:分:秒)
     func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String)->Void)?)
     {
         if self.isNaN{

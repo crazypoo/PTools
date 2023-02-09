@@ -105,36 +105,26 @@ public extension PTProtocol where Base:UIView
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension UIView {
-    
-    @objc func viewCorner_oc(radius:CGFloat,borderWidth:CGFloat,borderColor:UIColor)
-    {
-        self.viewCorner(radius: radius,borderWidth: borderWidth,borderColor:borderColor)
-    }
-    
-    func viewCorner(radius:CGFloat,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
+        
+    @objc func viewCorner(radius:CGFloat = 0,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear)
     {
         self.layer.cornerRadius = radius
         self.layer.masksToBounds = true
-        self.layer.borderWidth = borderWidth!
-        self.layer.borderColor = borderColor!.cgColor
+        self.layer.borderWidth = borderWidth
+        self.layer.borderColor = borderColor.cgColor
     }
-    
-    @objc func viewCornerRectCorner_oc(cornerRadii:CGFloat,corner:UIRectCorner)
-    {
-        self.viewCornerRectCorner(cornerRadii: cornerRadii, corner: corner)
-    }
-    
-    func viewCornerRectCorner(cornerRadii:CGFloat? = 5,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear,corner:UIRectCorner? = .allCorners)
+        
+    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners)
     {
         PTUtils.gcdMain {
-            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner!, cornerRadii: CGSize.init(width: cornerRadii!, height: cornerRadii!))
+            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = self.bounds
             maskLayer.path = maskPath.cgPath
             self.layer.mask = maskLayer
             self.layer.masksToBounds = true
-            self.layer.borderWidth = borderWidth!
-            self.layer.borderColor = borderColor!.cgColor
+            self.layer.borderWidth = borderWidth
+            self.layer.borderColor = borderColor.cgColor
         }
     }
     
@@ -154,6 +144,7 @@ public extension UIView {
     }
     
     //MARK: View的背景渐变
+    ///View的背景渐变
     func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
     {
         PTUtils.gcdMain {
@@ -210,6 +201,11 @@ public extension UIView {
             }
         }
         return false
+    }
+    
+    func roundOriginToPixel() {
+        frame.origin.x = (round(frame.origin.x * UIScreen.main.scale)) / UIScreen.main.scale
+        frame.origin.y = (round(frame.origin.y * UIScreen.main.scale)) / UIScreen.main.scale
     }
 }
 

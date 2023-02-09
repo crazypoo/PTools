@@ -49,7 +49,7 @@ public class PCleanCache: NSObject {
                 totalSize += fileSize as! Float
 
             } catch {
-                print("\(error)")
+                PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
             }
         }
         totalSize += Float(SDImageCache.shared.totalDiskSize())
@@ -98,7 +98,7 @@ public class PCleanCache: NSObject {
                     }
                     catch
                     {
-                        print("\(error)")
+                        PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
                     }
                 }
             }
@@ -107,12 +107,12 @@ public class PCleanCache: NSObject {
                 flag = true
             }
         }   catch {
-            print("\(error)")
+            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
         }
         
         if !flag
         {
-            print("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除")
+            PTLocalConsoleFunction.share.pNSLog("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除")
         }
         return flag
     }
@@ -125,7 +125,7 @@ public class PCleanCache: NSObject {
                 let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: path)
                 return fileAttributes[FileAttributeKey.size] as! Float
             } catch {
-                print("\(error)")
+                PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
                 return 0
             }
         }
@@ -160,7 +160,7 @@ public class PCleanCache: NSObject {
             do {
                 try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(value as! String))
             } catch {
-                print("\(error)")
+                PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
             }
         })
         
