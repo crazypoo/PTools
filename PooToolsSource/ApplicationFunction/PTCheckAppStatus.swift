@@ -87,7 +87,7 @@ public class PCheckAppStatus: NSObject {
         let text = String.init(format: "FPS:%02.0f", round(fps))
         fpsLabel.text = text
         avatar?.snp.updateConstraints { make in
-            make.width.equalTo(PTUtils.sizeFor(string: text, font: fpsLabel.font, height: 30, width: CGFloat(MAXFLOAT)).width + 20)
+            make.width.equalTo(UIView.sizeFor(string: text, font: fpsLabel.font, height: 30, width: CGFloat(MAXFLOAT)).width + 20)
         }
         
         if fpsHandle != nil

@@ -131,7 +131,7 @@ public class PTFusionCellContent:UIView
                 self.nameTitle.snp.remakeConstraints { make in
                     make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
                     make.centerY.equalTo(self.cellIcon)
-                    make.width.equalTo(PTUtils.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
+                    make.width.equalTo(UIView.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
                 }
 
                 if self.cellModel!.contentAttr != nil
@@ -174,7 +174,7 @@ public class PTFusionCellContent:UIView
                 self.nameTitle.snp.remakeConstraints { make in
                     make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
                     make.top.bottom.equalToSuperview()
-                    make.width.equalTo(PTUtils.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
+                    make.width.equalTo(UIView.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
                 }
 
                 if self.cellModel!.contentAttr != nil

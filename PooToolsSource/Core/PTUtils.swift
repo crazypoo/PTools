@@ -25,14 +25,6 @@ import SwiftDate
     return iPhoneXSeries
 }
 
-@objc public enum CheckContractTimeRelationships:Int
-{
-    case Expire
-    case ReadyExpire
-    case Normal
-    case Error
-}
-
 @objc public enum PTUrlStringVideoType:Int {
     case MP4
     case MOV
@@ -51,12 +43,6 @@ import SwiftDate
     case ICO
     case ICNS
     case UNKNOW
-}
-
-@objc public enum TemperatureUnit:Int
-{
-    case Fahrenheit
-    case CentigradeDegree
 }
 
 @objc public enum GradeType:Int
@@ -150,23 +136,6 @@ public class PTUtils: NSObject {
         }
     }
             
-    public class func sizeFor(string:String,
-                              font:UIFont,
-                              lineSpacing:NSNumber? = nil,
-                              height:CGFloat,
-                              width:CGFloat)->CGSize
-    {
-        var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil
-        {
-            let paraStyle = NSMutableParagraphStyle()
-            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
-            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
-        }
-        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
-        return size
-    }
-
     public class func getCurrentVCFrom(rootVC:UIViewController)->UIViewController
     {
         var currentVC : UIViewController?
@@ -225,173 +194,7 @@ public class PTUtils: NSObject {
     {
         return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,bundle: bundle!)
     }
-        
-    //MARK: SDWebImage的加载失误图片方式(全局控制)
-    ///SDWebImage的加载失误图片方式(全局控制)
-    public class func gobalWebImageLoadOption()->SDWebImageOptions
-    {
-        #if DEBUG
-        let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
-        let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
-        if devServer
-        {
-            return .retryFailed
-        }
-        else
-        {
-            return .lowPriority
-        }
-        #else
-        return .retryFailed
-        #endif
-    }
-    
-    //MARK: 弹出框
-    class open func gobal_drop(title:String?,
-                               titleFont:UIFont? = UIFont.appfont(size: 16),
-                               titleColor:UIColor? = .black,
-                               subTitle:String? = nil,
-                               subTitleFont:UIFont? = UIFont.appfont(size: 16),
-                               subTitleColor:UIColor? = .black,
-                               bannerBackgroundColor:UIColor? = .white,
-                               notifiTap:(()->Void)? = nil)
-    {
-        var titleStr = ""
-        if title == nil || (title ?? "").stringIsEmpty()
-        {
-            titleStr = ""
-        }
-        else
-        {
-            titleStr = title!
-        }
-        
-        var subTitleStr = ""
-        if subTitle == nil || (subTitle ?? "").stringIsEmpty()
-        {
-            subTitleStr = ""
-        }
-        else
-        {
-            subTitleStr = subTitle!
-        }
-                
-        let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
-        banner.duration = 1.5
-        banner.backgroundColor = bannerBackgroundColor!
-        banner.subtitleLabel?.textAlignment = PTUtils.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
-        banner.subtitleLabel?.font = subTitleFont
-        banner.subtitleLabel?.textColor = subTitleColor!
-        banner.titleLabel?.textAlignment = PTUtils.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
-        banner.titleLabel?.font = titleFont
-        banner.titleLabel?.textColor = titleColor!
-        banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
-        banner.onTap = {
-            if notifiTap != nil
-            {
-                notifiTap!()
-            }
-        }
-    }
-
-    //MARK: 生成CollectionView的Group
-    class open func gobal_collection_gird_layout(data:[AnyObject],
-                                                 size:CGSize? = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
-                                                 originalX:CGFloat? = 10,
-                                                 mainWidth:CGFloat? = CGFloat.kSCREEN_WIDTH,
-                                                 cellRowCount:NSInteger? = 3,
-                                                 sectionContentInsets:NSDirectionalEdgeInsets? = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0),
-                                                 contentTopAndBottom:CGFloat? = 0,
-                                                 cellLeadingSpace:CGFloat? = 0,
-                                                 cellTrailingSpace:CGFloat? = 0)->NSCollectionLayoutGroup
-    {
-        let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))
-        let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
-        var bannerGroupSize : NSCollectionLayoutSize
-
-        var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupH:CGFloat = 0
-
-        let itemH = size!.height
-        let itemW = size!.width
-
-        var x:CGFloat = originalX!,y:CGFloat = 0 + contentTopAndBottom!
-        data.enumerated().forEach { (index,value) in
-            if index < cellRowCount!
-            {
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
-                x += itemW + cellLeadingSpace!
-                if index == (data.count - 1)
-                {
-                    groupH = y + itemH + contentTopAndBottom!
-                }
-            }
-            else
-            {
-                x += itemW + cellLeadingSpace!
-                if index > 0 && (index % cellRowCount! == 0)
-                {
-                    x = originalX!
-                    y += itemH + cellTrailingSpace!
-                }
-
-                if index == (data.count - 1)
-                {
-                    groupH = y + itemH + contentTopAndBottom!
-                }
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
-                customers.append(customItem)
-            }
-        }
-
-        bannerItem.contentInsets = sectionContentInsets!
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(mainWidth!-originalX!*2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-            customers
-        })
-    }
-    
-    //MARK: 计算CollectionView的Group高度
-    class open func gobal_collection_gird_layout_content_height(data:[AnyObject],
-                                                                size:CGSize? = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
-                                                                cellRowCount:NSInteger? = 3,
-                                                                originalX:CGFloat? = 10,
-                                                                contentTopAndBottom:CGFloat? = 0,
-                                                                cellLeadingSpace:CGFloat? = 0,
-                                                                cellTrailingSpace:CGFloat? = 0)->CGFloat
-    {
-        var groupH:CGFloat = 0
-        let itemH = size!.height
-        let itemW = size!.width
-        var x:CGFloat = originalX!,y:CGFloat = 0 + contentTopAndBottom!
-        data.enumerated().forEach { (index,value) in
-            if index < cellRowCount!
-            {
-                x += itemW + cellLeadingSpace!
-                if index == (data.count - 1)
-                {
-                    groupH = y + itemH + contentTopAndBottom!
-                }
-            }
-            else
-            {
-                x += itemW + cellLeadingSpace!
-                if index > 0 && (index % cellRowCount! == 0)
-                {
-                    x = originalX!
-                    y += itemH + cellTrailingSpace!
-                }
-
-                if index == (data.count - 1)
-                {
-                    groupH = y + itemH + contentTopAndBottom!
-                }
-            }
-        }
-        return groupH
-    }
-
+            
     //MARK: 获取一个输入内最大的一个值
     ///获取一个输入内最大的一个值
     class open func maxOne<T:Comparable>( _ seq:[T]) -> T{
@@ -401,21 +204,7 @@ public class PTUtils: NSObject {
             max($0, $1)
         }
     }
-    
-    //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
-    ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
-    class open func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat
-    {
-        switch changeToType {
-        case .Fahrenheit:
-            return 32 + 1.8 * value
-        case .CentigradeDegree:
-            return (value - 32) / 1.8
-        default:
-            return 0
-        }
-    }
-            
+                
     //MARK: 找出某view的superview
     ///找出某view的superview
     class open func findSuperViews(view:UIView)->[UIView]
@@ -477,40 +266,7 @@ public class PTUtils: NSObject {
             }
         }
         return rangeArray
-    }
-            
-    //MARK: 合同时间状态检测
-    open class func checkContractTimeType(begainTime:String,
-                                          endTime:String,
-                                          readyExpTime:Int)->CheckContractTimeRelationships
-    {
-        let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
-        let endTimeDate = endTime.toDate("yyyy-MM-dd")!
-        let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
-        let thirty = NSNumber(integerLiteral: readyExpTime).floatValue
-        let result = timeDifference.float - thirty
-        if result > (-thirty) && result < thirty
-        {
-            return .ReadyExpire
-        }
-        else if result < (-thirty)
-        {
-            return .Expire
-        }
-        else if result > 0
-        {
-            return .Normal
-        }
-        else
-        {
-            return .Error
-        }
-    }
-    
-    open class func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
-    {        
-        return PTUtils.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
-    }
+    }            
 }
 
 //MARK: OC-FUNCTION

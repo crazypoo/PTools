@@ -20,6 +20,20 @@ public enum PTTimestampType: Int {
     case millisecond
 }
 
+//MARK: 時間對比狀態
+///時間對比狀態
+@objc public enum CheckContractTimeRelationships:Int
+{
+    ///過期
+    case Expire
+    ///準備過期
+    case ReadyExpire
+    ///正常
+    case Normal
+    ///未知錯誤
+    case Error
+}
+
 public extension Date {
     //MARK: 获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
     ///获取到今天是周几 1(星期天) 2(星期一) 3(星期二) 4(星期三) 5(星期四) 6(星期五) 7(星期六)
@@ -93,6 +107,51 @@ public extension Date {
     func dateFormat(formatString:String = "yyyy-MM-dd")->String
     {
         return self.toFormat(formatString)
+    }
+    
+    //MARK: 合同时间状态检测
+    ///合同时间状态检测
+    /// - Parameters:
+    ///   - begainTime: 開始時間
+    ///   - endTime: 結束時間
+    ///   - readyExpTime: 多久過期
+    /// - Returns : 狀態
+    static func checkContractTimeType(begainTime:String,
+                                      endTime:String,
+                                      readyExpTime:Int)->CheckContractTimeRelationships
+    {
+        let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
+        let endTimeDate = endTime.toDate("yyyy-MM-dd")!
+        let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
+        let thirty = NSNumber(integerLiteral: readyExpTime).floatValue
+        let result = timeDifference.float - thirty
+        if result > (-thirty) && result < thirty
+        {
+            return .ReadyExpire
+        }
+        else if result < (-thirty)
+        {
+            return .Expire
+        }
+        else if result > 0
+        {
+            return .Normal
+        }
+        else
+        {
+            return .Error
+        }
+    }
+    
+    //MARK: 合同时间状态检测
+    ///合同时间状态检测
+    /// - Parameters:
+    ///   - endTime: 結束時間
+    ///   - readyExpTime: 多久過期
+    /// - Returns : 狀態
+    static func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
+    {
+        return Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }
 

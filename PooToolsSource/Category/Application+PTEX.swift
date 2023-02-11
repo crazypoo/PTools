@@ -46,7 +46,7 @@ public extension PTProtocol where Base: UIApplication
             UIApplication.shared.setAlternateIconName(nil) { error in
                 if error != nil
                 {
-                    PTUtils.gobal_drop(title: error.debugDescription)
+                    UIViewController.gobal_drop(title: error.debugDescription)
 
                 }
                 PTLocalConsoleFunction.share.pNSLog("The alternate icon's name is \(String(describing: iconName))")
@@ -57,7 +57,7 @@ public extension PTProtocol where Base: UIApplication
             UIApplication.shared.setAlternateIconName(iconName) { error in
                 if error != nil
                 {
-                    PTUtils.gobal_drop(title: error.debugDescription)
+                    UIViewController.gobal_drop(title: error.debugDescription)
 
                 }
                 PTLocalConsoleFunction.share.pNSLog("The alternate icon's name is \(String(describing: iconName))")

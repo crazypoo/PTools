@@ -101,4 +101,25 @@ public extension UIButton
         self.titleEdgeInsets = labelEdgeInsets
         self.imageEdgeInsets = imageEdgeInsets
     }
+    
+    //MARK: 計算文字的Size
+    ///計算文字的Size
+    /// - Parameters:
+    ///   - lineSpacing: 行距
+    ///   - size: size
+    /// - Returns: Size
+    @objc func sizeFor(lineSpacing:NSNumber? = nil,
+                       size:CGSize)->CGSize
+    {
+        var dic = [NSAttributedString.Key.font:self.titleLabel!.font] as! [NSAttributedString.Key:Any]
+        if lineSpacing != nil
+        {
+            let paraStyle = NSMutableParagraphStyle()
+            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
+            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        }
+        let size = self.titleLabel!.text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        return size
+    }
+
 }

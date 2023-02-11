@@ -1581,7 +1581,7 @@ extension PTMediaViewer:UIScrollViewDelegate
         switch self.viewConfig.actionType
         {
         case .Empty:
-            let infoH = PTUtils.sizeFor(string: models.imageInfo, font: self.titleLabel.font, height: CGFloat(MAXFLOAT), width: self.frame.size.width - 20).height
+            let infoH = UIView.sizeFor(string: models.imageInfo, font: self.titleLabel.font, height: CGFloat(MAXFLOAT), width: self.frame.size.width - 20).height
             
             self.labelScroller.contentSize = CGSize.init(width: self.frame.size.width - 20, height: infoH)
             self.bottomView.snp.updateConstraints { make in
@@ -1624,7 +1624,7 @@ extension PTMediaViewer:UIScrollViewDelegate
         default:
             let labelW = self.frame.size.width - 40 - bottonH
             
-            let infoH = PTUtils.sizeFor(string: models.imageInfo, font: self.titleLabel.font,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+            let infoH = UIView.sizeFor(string: models.imageInfo, font: self.titleLabel.font,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
             self.labelScroller.contentSize = CGSize.init(width: labelW, height: infoH)
 
             self.bottomView.snp.updateConstraints { make in

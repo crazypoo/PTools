@@ -49,7 +49,7 @@ public class PTDevFunction: NSObject {
                 
                 mn_PFloatingButton?.longPressBlock = { (sender) in
                     
-                    UIAlertController.base_alertVC(msg:"调试框架",okBtns: ["取消","全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面"]) { index, title in
+                    UIAlertController.base_alertVC(msg:"调试框架",okBtns: ["取消","全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面"],moreBtn: { index, title in
                         if index == 0
                         {
 
@@ -113,7 +113,7 @@ public class PTDevFunction: NSObject {
 #endif
                             }
                         }
-                    }
+                    })
                 }
             }
         }
@@ -150,4 +150,23 @@ public class PTDevFunction: NSObject {
         self.mn_PFloatingButton = nil
     }
 
+    //MARK: SDWebImage的加载失误图片方式(全局控制)
+    ///SDWebImage的加载失误图片方式(全局控制)
+    public class func gobalWebImageLoadOption()->SDWebImageOptions
+    {
+        #if DEBUG
+        let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
+        let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
+        if devServer
+        {
+            return .retryFailed
+        }
+        else
+        {
+            return .lowPriority
+        }
+        #else
+        return .retryFailed
+        #endif
+    }
 }

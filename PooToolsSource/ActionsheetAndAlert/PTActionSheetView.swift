@@ -259,7 +259,7 @@ public class PTActionSheetView: UIView {
             titleStr = ""
         }
         
-        return PTUtils.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + spacing * 2
+        return UIView.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + spacing * 2
     }
     
     func scrollContentHeight()->CGFloat

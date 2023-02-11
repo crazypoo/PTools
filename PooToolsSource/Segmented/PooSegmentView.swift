@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import YYCategories
 import SwifterSwift
+import SDWebImage
 
 @objc public enum PooSegmentSelectedType : Int {
     case UnderLine
@@ -123,7 +124,7 @@ public class PooSegmentSubView:UIView
             if subViewModels.imageURL.isValidUrl
             {
                 
-                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -132,7 +133,7 @@ public class PooSegmentSubView:UIView
 
             if subViewModels.selectedImageURL.isValidUrl
             {
-                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -149,7 +150,7 @@ public class PooSegmentSubView:UIView
             imageBtn.setTitle(subViewModels.titles, for: .normal)
             if subViewModels.imageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -158,7 +159,7 @@ public class PooSegmentSubView:UIView
 
             if subViewModels.selectedImageURL.isURL()
             {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTUtils.gobalWebImageLoadOption(), context: nil)
+                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
             }
             else
             {
@@ -337,8 +338,8 @@ public class PooSegmentView: UIView {
             if datas.count > 0
             {
                 datas.enumerated().forEach { (index,value) in                    
-                    let normalW = PTUtils.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
-                    let selectedW = PTUtils.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+                    let normalW = UIView.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+                    let selectedW = UIView.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
                     var subContentW:CGFloat?
                     if selectedW >= normalW
                     {

@@ -918,11 +918,11 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D15E5272CDEE9003D6F62 /* PMacros.h */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */,
 				55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */,
+				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,

@@ -193,6 +193,11 @@ class PTSwiftViewController: UIViewController {
 //        vc.viewDismissBlock = {
 //        }
         
+        let ccccccc = UILabel()
+        ccccccc.text = "123123123123123112039810923890128309128390128903812903809128390128309182390812903819023819023"
+        PTLocalConsoleFunction.share.pNSLog("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
+
+        
         let counting = UILabel()
 //        let counting = PTCountingLabel()
 //        counting.positiveFormat = "##0.00"

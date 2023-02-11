@@ -229,7 +229,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                     cell.cellModel = self.settingCellModels[1]
                 }
             default:
-                PTUtils.gobal_drop(title: "仅在自定义模式中输入")
+                UIViewController.gobal_drop(title: "仅在自定义模式中输入")
             }
         }
     }

@@ -8,6 +8,15 @@
 
 import UIKit
 
+//MARK: 溫度單位
+@objc public enum TemperatureUnit:Int
+{
+    ///華氏
+    case Fahrenheit
+    ///攝氏
+    case CentigradeDegree
+}
+
 public extension CGFloat
 {
     //MARK: 獲取屏幕寬度
@@ -54,5 +63,20 @@ public extension CGFloat
     //MARK: Tabbar總高度
     ///Tabbar總高度
     static let kTabbarHeight_Total = CGFloat.kTabbarSaveAreaHeight + CGFloat.kTabbarHeight
-
+    
+    //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
+    ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
+    static func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat
+    {
+        switch changeToType {
+        case .Fahrenheit:
+            let values = 32 + 1.8 * value
+            return values
+        case .CentigradeDegree:
+            let values = (value - 32) / 1.8
+            return values
+        default:
+            return 0
+        }
+    }
 }

@@ -207,6 +207,23 @@ public extension UIView {
         frame.origin.x = (round(frame.origin.x * UIScreen.main.scale)) / UIScreen.main.scale
         frame.origin.y = (round(frame.origin.y * UIScreen.main.scale)) / UIScreen.main.scale
     }
+    
+    @objc class func sizeFor(string:String,
+                              font:UIFont,
+                              lineSpacing:NSNumber? = nil,
+                              height:CGFloat,
+                              width:CGFloat)->CGSize
+    {
+        var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
+        if lineSpacing != nil
+        {
+            let paraStyle = NSMutableParagraphStyle()
+            paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
+            dic[NSAttributedString.Key.paragraphStyle] = paraStyle
+        }
+        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        return size
+    }
 }
 
 public extension UIView
@@ -239,7 +256,7 @@ public extension UILabel
 {
     @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
     {
-        return PTUtils.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
+        return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat
@@ -257,7 +274,7 @@ public extension UIButton
 {
     @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize
     {
-        return PTUtils.sizeFor(string: self.titleLabel!.text!, font: self.titleLabel!.font!, height: height, width: width)
+        return UIView.sizeFor(string: self.titleLabel!.text!, font: self.titleLabel!.font!, height: height, width: width)
     }
     
     @objc func getButtonWidth(height:CGFloat)->CGFloat
@@ -275,7 +292,7 @@ public extension UITextView
 {
     @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize
     {
-        return PTUtils.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
+        return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat

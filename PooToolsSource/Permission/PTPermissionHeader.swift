@@ -16,8 +16,8 @@ class PTPermissionHeader: PTBaseCollectionReusableView {
 
     open class func cellHeight()->CGFloat
     {
-        let titleHeight = PTUtils.sizeFor(string: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
-        let infoHeight = PTUtils.sizeFor(string: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
+        let titleHeight = UIView.sizeFor(string: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
+        let infoHeight = UIView.sizeFor(string: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace).height + CGFloat.ScaleW(w: 5)
         return titleHeight + infoHeight + CGFloat.ScaleW(w: 5) * 3
     }
     

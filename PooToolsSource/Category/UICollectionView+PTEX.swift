@@ -45,11 +45,11 @@ public extension UICollectionView
     ///   - cellTrailingSpace: 每一行相隔高度
     ///   - handle: 返回Group高度和[GroupCustomItem]
     @objc class func girdCollectionContentHeight(data:[AnyObject],
-                                           size:CGSize = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
-                                           cellRowCount:NSInteger = 3,
-                                           originalX:CGFloat = 10,
-                                           contentTopAndBottom:CGFloat = 0,
-                                           cellLeadingSpace:CGFloat = 0,
+                                                 size:CGSize = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
+                                                 cellRowCount:NSInteger = 3,
+                                                 originalX:CGFloat = 10,
+                                                 contentTopAndBottom:CGFloat = 0,
+                                                 cellLeadingSpace:CGFloat = 0,
                                                  cellTrailingSpace:CGFloat = 0,
                                                  handle:((_ groupHeight:CGFloat,_ groupItem:[NSCollectionLayoutGroupCustomItem])->Void))
     {
@@ -89,6 +89,19 @@ public extension UICollectionView
         handle(groupH,customers)
     }
     
+    //MARK: 設置CollectionView的GirdLayout
+    ///設置CollectionView的GirdLayout
+    /// - Parameters:
+    ///   - data: 數據(數組)
+    ///   - groupWidth: gropu的實際展示寬度
+    ///   - size: 佈局大小
+    ///   - cellRowCount: 每一行多少個數量
+    ///   - originalX: 每行第一個起始位置
+    ///   - contentTopAndBottom: 起始行的起始高度
+    ///   - cellLeadingSpace: 每個item相隔距離
+    ///   - cellTrailingSpace: 每一行相隔高度
+    ///   - sectionContentInsets: 佈局偏移
+    /// - Returns: Gird佈局
     @objc class func girdCollectionLayout(data:[AnyObject],
                                           groupWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
                                           size:CGSize = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),

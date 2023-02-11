@@ -42,14 +42,14 @@ public class PTCustomAlertView: UIView {
 
     class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat
     {
-        let height = PTUtils.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
+        let height = UIView.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         let viewHeight = CGFloat.kSCREEN_HEIGHT / 3
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
     class public func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat
     {
-        let buttonH = PTUtils.sizeFor(string: "HOLA", font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
+        let buttonH = UIView.sizeFor(string: "HOLA", font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         return (moreButtonTitles.count == 0 || moreButtonTitles.isEmpty) ? 0 : ((buttonH > BottomButtonHeight) ? buttonH : BottomButtonHeight)
     }
     
@@ -270,7 +270,7 @@ public class PTCustomAlertView: UIView {
         {
             titleLabel.text = titleString
             addSubview(titleScroller)
-            titleScroller.contentSize = CGSize.init(width: frame.size.width - 20, height: PTUtils.sizeFor(string: titleString, font: viewFont, height: CGFloat(MAXFLOAT), width: (frame.size.width - 20)).height)
+            titleScroller.contentSize = CGSize.init(width: frame.size.width - 20, height: UIView.sizeFor(string: titleString, font: viewFont, height: CGFloat(MAXFLOAT), width: (frame.size.width - 20)).height)
             titleScroller.snp.makeConstraints { make in
                 make.height.equalTo(textH)
                 make.top.equalToSuperview().inset(titleString.stringIsEmpty() ? 0 : 10)

@@ -45,20 +45,7 @@ public class PTAppBaseConfig: NSObject {
     ///SDWebImage的加载失误图片方式(全局控制)
     public func gobalWebImageLoadOption()->SDWebImageOptions
     {
-        #if DEBUG
-        let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
-        let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
-        if devServer
-        {
-            return .retryFailed
-        }
-        else
-        {
-            return .lowPriority
-        }
-        #else
-        return .retryFailed
-        #endif
+        return PTDevFunction.gobalWebImageLoadOption()
     }
 
     //MARK: App測試模式的檢測
