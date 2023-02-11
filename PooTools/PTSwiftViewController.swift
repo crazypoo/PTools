@@ -43,7 +43,7 @@ class PTSwiftViewController: UIViewController {
             print(">>>>>>\(CGFloat.statusBarHeight())")
 
 
-            print(PTUtils.lessThanSysVersion(version: "15", equal: true))
+            print(UIDevice.lessThanSysVersion(version: "15", equal: true))
             
             print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
             PTUtils.gcdAfter(time: 1){
@@ -107,7 +107,7 @@ class PTSwiftViewController: UIViewController {
 
         PTDataEncryption.aes_encryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
             PTDataEncryption.ase_decrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
-                PTNSLog("aes:\(decryptData)\n")
+                PTLocalConsoleFunction.share.pNSLog("aes:\(decryptData)\n")
             }
         }
 

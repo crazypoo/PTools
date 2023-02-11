@@ -511,14 +511,6 @@ public class PTUtils: NSObject {
     {        
         return PTUtils.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
-    
-    //MARK: 檢測當前系統是否小於某個版本系統
-    ///檢測當前系統是否小於某個版本系統
-    /// - Returns: Bool
-    class func lessThanSysVersion(version:NSString,equal:Bool) -> Bool
-    {
-        return UIDevice.current.systemVersion.compare("\(version)",options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
-    }
 }
 
 //MARK: OC-FUNCTION
@@ -528,21 +520,4 @@ extension PTUtils
     {
         return isIPhoneXSeries()
     }
-    
-    //MARK: 时间
-    class open func oc_currentTimeToTimeInterval(dateFormatter:NSString)->TimeInterval
-    {
-        return String.currentDate(dateFormatterString: dateFormatter as String).dateStrToTimeInterval(dateFormat: dateFormatter as String)
-    }
-
-    class open func oc_dateStringFormat(dateString:String,formatString:String)->NSString
-    {
-        let regions = Region(calendar: Calendars.republicOfChina,zone: Zones.asiaHongKong,locale: Locales.chineseChina)
-        return dateString.toDate(formatString,region: regions)!.toString() as NSString
-    }
-    
-    class open func oc_dateFormat(date:Date,formatString:String)->String
-    {
-        return date.toFormat(formatString)
-    }    
 }

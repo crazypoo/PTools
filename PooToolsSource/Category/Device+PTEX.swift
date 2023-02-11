@@ -89,13 +89,15 @@ public extension PTProtocol where Base: UIDevice
             fclose(bash)
             return true
         }
-        let path = String(format: "/private/%@", UIDevice.pt.stringWithUUID() ?? "")
+        
+        let uuid = self.stringWithUUID() ?? ""//UIDevice.pt.stringWithUUID() ?? ""
+        let path = String(format: "/private/%@", uuid)
         do {
             try "test".write(toFile: path, atomically: true, encoding: .utf8)
             try FileManager.default.removeItem(atPath: path)
             return true
         } catch {
-            PTNSLog(error.localizedDescription)
+            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
         }
         return false
     }
@@ -234,5 +236,16 @@ public extension PTProtocol where Base: UIDevice
         dic["LANGUAGECHINESE"] = NSLocale(localeIdentifier: language).displayName(forKey: NSLocale.Key.identifier, value: language)
 
         return dic
+    }
+}
+
+public extension UIDevice
+{
+    //MARK: 檢測當前系統是否小於某個版本系統
+    ///檢測當前系統是否小於某個版本系統
+    /// - Returns: Bool
+    class func lessThanSysVersion(version:NSString,equal:Bool) -> Bool
+    {
+        return UIDevice.current.systemVersion.compare("\(version)",options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
 }

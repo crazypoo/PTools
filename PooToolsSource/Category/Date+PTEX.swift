@@ -8,6 +8,7 @@
 
 import UIKit
 import SwifterSwift
+import SwiftDate
 
 extension Date: PTProtocolCompatible {}
 //MARK: 时间戳的类型
@@ -87,6 +88,12 @@ public extension Date {
         return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
     }
 
+    //MARK: Date格式化
+    ///Date格式化
+    func dateFormat(formatString:String = "yyyy-MM-dd")->String
+    {
+        return self.toFormat(formatString)
+    }
 }
 
 public extension PTProtocol where Base == Date {

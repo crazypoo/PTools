@@ -978,11 +978,26 @@ public extension String
     //MARK: 时间字符串转化为时间戳
     /// - Returns: 时间戳
     func dateStrToTimeInterval(dateFormat:String = "yyyy-MM-dd") -> TimeInterval  {
-            let dateformatter = DateFormatter()
-            dateformatter.dateFormat = dateFormat
-            let date = dateformatter.date(from: self)
-            let dateTimeInterval:TimeInterval = date!.timeIntervalSince1970
-            return dateTimeInterval
+        let dateformatter = DateFormatter()
+        dateformatter.dateFormat = dateFormat
+        let date = dateformatter.date(from: self)
+        let dateTimeInterval:TimeInterval = date!.timeIntervalSince1970
+        return dateTimeInterval
+    }
+    
+    //MARK: 當前時間的時間戳字符串
+    ///當前時間的時間戳字符串
+    func currentTimeInterval(dateFormatter:String = "yyyy-MM-dd")->TimeInterval
+    {
+        return String.currentDate(dateFormatterString: dateFormatter).dateStrToTimeInterval(dateFormat: dateFormatter)
+    }
+    
+    //MARK: 格式化時間字符串
+    ///格式化時間字符串
+    func dateStringFormat(calendar:Calendars = Calendars.republicOfChina,zone:Zones = Zones.asiaShanghai,local:Locales = Locales.chineseChina,formatString:String = "yyyy-MM-dd") -> String
+    {
+        let regions = Region(calendar: calendar, zone: zone, locale: local)
+        return self.toDate(formatString,region: regions)?.toString() ?? ""
     }
     
     //MARK: JavaUnicode转苹果可以用的String

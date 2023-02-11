@@ -79,7 +79,7 @@ public class XMNetWorkStatus {
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
         detectNetWork { (status, environment,statusType)  in
-            PTNSLog("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
+            PTLocalConsoleFunction.share.pNSLog("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
             if handle != nil
             {
                 handle!(statusType)
