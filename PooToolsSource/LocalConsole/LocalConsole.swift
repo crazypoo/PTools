@@ -201,7 +201,7 @@ public class LocalConsole: NSObject {
                 FileManager.pt.fileManager.createFile(atPath: file, contents: data)
             }
             
-            PTUtils.gcdAfter(time: 0.35) {
+            PTGCDManager.gcdAfter(time: 0.35) {
                 let shareURL = URL.init(fileURLWithPath: "file:///" + FileManager.pt.LogDirectory() + "/" + fileName)
                 if self.consoleActionBlock != nil
                 {

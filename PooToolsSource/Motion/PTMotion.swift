@@ -46,7 +46,7 @@ public class PTMotion: NSObject {
         if CMMotionActivityManager.isActivityAvailable()
         {
             self.activityManager.startActivityUpdates(to: self.operationQueue) { activity in
-                PTUtils.gcdMain {
+                PTGCDManager.gcdMain {
                     if self.motionBlock != nil
                     {
                         self.motionBlock!(self.stepCount,self.activityConfidenceString(confidence: activity!.confidence),self.statusForActivity(activity: activity!))

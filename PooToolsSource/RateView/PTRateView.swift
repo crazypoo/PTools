@@ -66,7 +66,7 @@ public class PTRateView: UIView {
     {
         didSet
         {
-            PTUtils.gcdAfter(time: 0.1) {
+            PTGCDManager.gcdAfter(time: 0.1) {
                 self.layoutSubviews()
             }
             

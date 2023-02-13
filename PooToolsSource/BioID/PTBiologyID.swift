@@ -44,7 +44,7 @@ public class PTBiologyID: NSObject {
     private override init()
     {
         super.init()
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             self.verifyBiologyIDAction()
         }
     }

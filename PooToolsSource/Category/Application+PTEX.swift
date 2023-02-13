@@ -69,7 +69,7 @@ public extension PTProtocol where Base: UIApplication
     ///类似iPhone点击了Home键
     static func likeTapHome()
     {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             UIApplication.shared.perform(#selector(NSXPCConnection.suspend))
         }
     }

@@ -333,7 +333,7 @@ public class PooSegmentView: UIView {
     
     private func setUI(datas:[PooSegmentModel])
     {
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             var scrolContentW:CGFloat = 0
             if datas.count > 0
             {
@@ -500,7 +500,7 @@ public class PooSegmentView: UIView {
     
     public func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1)
     {
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
                 if index == indexView
                 {

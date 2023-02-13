@@ -604,7 +604,7 @@ extension LLCycleScrollView {
             make.edges.equalToSuperview()
         }
         
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             
             // Cell Height
             self.cellHeight = self.collectionView.frame.height

@@ -116,7 +116,7 @@ public extension UIView {
         
     @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners)
     {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
             let maskLayer = CAShapeLayer()
             maskLayer.frame = self.bounds
@@ -147,7 +147,7 @@ public extension UIView {
     ///View的背景渐变
     func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
     {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             self.backgroundColor = .clear
             let maskLayer = CAGradientLayer()
             

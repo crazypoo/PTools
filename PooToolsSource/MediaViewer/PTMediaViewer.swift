@@ -371,7 +371,7 @@ public class PTMediaMediaView:UIView
             make.centerX.centerY.equalToSuperview()
         }
         
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             switch dataModel.imageShowType {
             case .ThreeD,.FullView:
                 if dataModel.imageURL is String
@@ -380,7 +380,7 @@ public class PTMediaMediaView:UIView
                     if urlString.isValidUrl
                     {
                         SDWebImageManager.shared.loadImage(with: URL(string: urlString)) { receivedSize, expectedSendSize, targetURL in
-                            PTUtils.gcdMain {
+                            PTGCDManager.gcdMain {
                                 loading.progress = CGFloat(receivedSize / expectedSendSize)
                             }
                         } completed: { image, data, error, type, finish, url in
@@ -424,7 +424,7 @@ public class PTMediaMediaView:UIView
                     self.player.player = AVPlayer.init(playerItem: playerItem)
                     self.player.showsPlaybackControls = false
                     self.contentScrolView.addSubview(self.player.view)
-                    PTUtils.gcdAfter(time: 0.1) {
+                    PTGCDManager.gcdAfter(time: 0.1) {
                         self.player.view.snp.makeConstraints { make in
                             make.width.equalTo(self.frame.size.width)
                             make.top.equalTo(CGFloat.kNavBarHeight)
@@ -494,7 +494,7 @@ public class PTMediaMediaView:UIView
                 else if dataModel.imageURL is String
                 {
                     SDWebImageManager.shared.loadImage(with: URL.init(string: dataModel.imageURL as! String)) { receivedSize, expectedSendSize, targetURL in
-                        PTUtils.gcdMain {
+                        PTGCDManager.gcdMain {
                             loading.progress = CGFloat(receivedSize / expectedSendSize)
                         }
                     } completed: { image, data, error, type, finish, url in
@@ -1147,7 +1147,7 @@ public class PTMediaViewer: UIView {
             make.edges.equalToSuperview()
         }
         
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             self.contentScrolView.contentSize = CGSize.init(width: self.frame.size.width * CGFloat(self.viewConfig.mediaData.count), height: self.frame.size.height)
             let w = self.frame.size.width
             self.viewConfig.mediaData.enumerated().forEach { index,value in
@@ -1292,7 +1292,7 @@ public class PTMediaViewer: UIView {
         let documentDirectory = FileManager.pt.DocumnetsDirectory()
         let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
         _ = PTFileDownloadApi(fileUrl: url, saveFilePath: fullPath) { bytesRead, totalBytesRead, progress in
-            PTUtils.gcdMain {
+            PTGCDManager.gcdMain {
                 loadingView.progress = progress
             }
         } success: { reponse in

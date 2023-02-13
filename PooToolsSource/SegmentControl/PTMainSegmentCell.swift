@@ -89,7 +89,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
                 lineView.isHidden = false
             }
             
-            PTUtils.gcdAfter(time: 0.1) {
+            PTGCDManager.gcdAfter(time: 0.1) {
                 self.titleLabel.snp.remakeConstraints { make in
                     make.left.right.equalToSuperview()
                     make.bottom.equalTo(self.contentView.snp.centerY)

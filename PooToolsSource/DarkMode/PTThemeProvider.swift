@@ -52,7 +52,7 @@ public class LegacyThemeProvider: PTThemeProvider {
     // MARK: 通知监听对象更新theme
     /// 通知监听对象更新theme
     private func notifyObservers() {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             self.observers.allObjects
                 .compactMap({ $0 as? PTThemeable })
                 .forEach({ $0.apply() })

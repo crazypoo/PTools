@@ -243,7 +243,7 @@ public class PTGuidePageHUD: UIView {
     {
         UIView.animate(withDuration: animationTime) {
             self.alpha = 0
-            PTUtils.gcdAfter(time: self.animationTime) {
+            PTGCDManager.gcdAfter(time: self.animationTime) {
                 self.removeGuidePageHUD()
             }
         }

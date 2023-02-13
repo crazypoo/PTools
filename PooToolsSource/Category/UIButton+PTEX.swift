@@ -39,28 +39,6 @@ public extension UIButton
         block(sender)
     }
     
-    func timeRunWithTime(timeInterval:TimeInterval,originalTitle:String,canTap:Bool,timeFinish:(()->Void)?)
-    {
-        PTUtils.timeRunWithTime_base(customQueName:"ButtonFunction",timeInterval: timeInterval) { finish, time in
-            if finish
-            {
-                self.setTitle(originalTitle, for: self.state)
-                self.isUserInteractionEnabled = canTap
-                if timeFinish != nil
-                {
-                    timeFinish!()
-                }
-            }
-            else
-            {
-                let strTime = String.init(format: "%.2d", time)
-                let buttonTime = String.init(format: "%@", strTime)
-                self.setTitle(buttonTime, for: self.state)
-                self.isUserInteractionEnabled = false
-            }
-        }
-    }
-    
     func pt_SDWebImage(imageString:String)
     {
         self.sd_setImage(with: URL.init(string: imageString), for: .normal, placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
@@ -122,4 +100,46 @@ public extension UIButton
         return size
     }
 
+    //MARK: 按鈕倒計時基礎方法
+    ///按鈕倒計時基礎方法
+    /// - Parameters:
+    ///   - timeInterval: 時間
+    ///   - finishBlock:回調
+    func buttonTimeRun_Base(timeInterval:TimeInterval,
+                            finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
+    {
+        PTGCDManager.timeRunWithTime_base(timeInterval: timeInterval, finishBlock: finishBlock)
+    }
+    
+    //MARK: 按鈕倒計時方法
+    ///按鈕倒計時方法
+    /// - Parameters:
+    ///   - timeInterval: 時間
+    ///   - originalTitle: 原始標題
+    ///   - canTap: 倒計時後是否可以點擊
+    ///   - finishBlock: 回調
+    func buttonTimeRun(timeInterval:TimeInterval,
+                       originalTitle:String,
+                       canTap:Bool,
+                       timeFinish:(()->Void)?)
+    {
+        self.buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
+            if finish
+            {
+                self.setTitle(originalTitle, for: self.state)
+                self.isUserInteractionEnabled = canTap
+                if timeFinish != nil
+                {
+                    timeFinish!()
+                }
+            }
+            else
+            {
+                let strTime = String.init(format: "%.2d", time)
+                let buttonTime = String.init(format: "%@", strTime)
+                self.setTitle(buttonTime, for: self.state)
+                self.isUserInteractionEnabled = false
+            }
+        }
+    }
 }

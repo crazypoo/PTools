@@ -48,7 +48,7 @@ public class PTHealthKit: NSObject {
                     return
                 }
                 
-                PTUtils.gcdMain {
+                PTGCDManager.gcdMain {
                     PTLocalConsoleFunction.share.pNSLog("The user allow the app to read information about SetpCount.")
                 }
             }
@@ -88,7 +88,7 @@ public class PTHealthKit: NSObject {
                     self.stepCounts += value!
                 }
                 self.isLoad = true
-                PTUtils.gcdMain {
+                PTGCDManager.gcdMain {
                     if self.loadBlock != nil
                     {
                         self.loadBlock!(self.isLoad,self.stepCounts)

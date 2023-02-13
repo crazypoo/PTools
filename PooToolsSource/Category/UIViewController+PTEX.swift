@@ -150,7 +150,7 @@ public extension UIViewController {
                        sender:UIButton,
                        arrowDirections:UIPopoverArrowDirection)
     {
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             popoverVC.preferredContentSize = popoverSize
             popoverVC.modalPresentationStyle = .popover
             

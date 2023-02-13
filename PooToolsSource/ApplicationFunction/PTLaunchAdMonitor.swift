@@ -257,7 +257,7 @@ public class PTLaunchAdMonitor: NSObject {
                 make.width.height.equalTo(55)
             }
             exit.viewCorner(radius: 55/2)
-            PTUtils.timeRunWithTime(timeInterval: timeInterval, sender: exit, originalTitle: "", canTap: true) {
+            exit.buttonTimeRun(timeInterval: timeInterval, originalTitle: "", canTap: true) {
                 PTLaunchAdMonitor.hideView(sender: exit)
             }
             

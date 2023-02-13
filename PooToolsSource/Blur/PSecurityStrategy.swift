@@ -15,7 +15,7 @@ public class PSecurityStrategy: NSObject {
     
     class public func addBlurEffect()
     {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             let imageView = UIImageView.init(frame: UIScreen.main.bounds)
             imageView.tag = effectTag
             imageView.image = PSecurityStrategy.screenShot()

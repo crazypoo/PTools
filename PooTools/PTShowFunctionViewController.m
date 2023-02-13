@@ -285,7 +285,7 @@ CGFloat const tagItemSpace = 5;
             [aaaaaaaaaaaaaa setVerticalAlignmentWithValue:PTVerticalAlignmentMiddle];
             [aaaaaaaaaaaaaa setStrikeThroughAlignmentWithValue:PTStrikeThroughAlignmentMiddle];
             aaaaaaaaaaaaaa.strikeThroughColor = UIColor.randomColor;
-            [PTUtils gcdAfterTime:0.2 block:^{
+            [PTGCDManager gcdAfterTime:0.2 block:^{
                 [aaaaaaaaaaaaaa setStrikeThroughEnabledWithValue:YES];
             }];
             [self.view addSubview:aaaaaaaaaaaaaa];

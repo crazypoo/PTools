@@ -123,7 +123,7 @@ public class PTSlider: UISlider {
             
             self.addSubview(self.sliderValueLabel)
 
-            PTUtils.gcdAfter(time: 0.1) {
+            PTGCDManager.gcdAfter(time: 0.1) {
                 
                 if self.frame.size.height < (31 + self.sliderValueLabel.font.pointSize + 5)
                 {

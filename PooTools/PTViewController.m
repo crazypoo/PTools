@@ -458,7 +458,7 @@ static NSString *cellIdentifier = @"CELL";
                         [UIAlertController alertVCWithTitle:nil msg:@"清理成功"];
                         
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
-                        [PTUtils gcdAfterTime:0.1 block:^{
+                        [PTGCDManager gcdAfterTime:0.1 block:^{
                             [self.tbView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:2 inSection:1]] withRowAnimation:UITableViewRowAnimationNone];
                         }];
                     }

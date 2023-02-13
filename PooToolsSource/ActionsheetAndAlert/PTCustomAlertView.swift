@@ -216,7 +216,7 @@ public class PTCustomAlertView: UIView {
         blur!.enable()
 
         mainView.addSubview(self)
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             self.viewCornerRectCorner(cornerRadii: cornerSize!, corner: .allCorners)
         }
                 
@@ -249,7 +249,7 @@ public class PTCustomAlertView: UIView {
         animation?.springBounciness = 1
         layer.pop_add(animation, forKey: "AlertAnimation")
         
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             if self.customerBlock != nil
             {
                 self.customerBlock!(self.customView)

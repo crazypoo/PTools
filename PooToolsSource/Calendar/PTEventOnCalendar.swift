@@ -45,14 +45,14 @@ public class PTEventOnCalendar: NSObject {
 
                     do{
                         try eventStore.save(event, span: .thisEvent)
-                        PTUtils.gcdAfter(time: 0.2) {
+                        PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil
                             {
                                 handle!(true)
                             }
                         }
                     }catch{
-                        PTUtils.gcdAfter(time: 0.2) {
+                        PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil
                             {
                                 handle!(false)
@@ -71,14 +71,14 @@ public class PTEventOnCalendar: NSObject {
                     event.calendar = eventStore.defaultCalendarForNewReminders()
                     do{
                         try eventStore.save(event, commit: true)
-                        PTUtils.gcdAfter(time: 0.2) {
+                        PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil
                             {
                                 handle!(true)
                             }
                         }
                     }catch{
-                        PTUtils.gcdAfter(time: 0.2) {
+                        PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil
                             {
                                 handle!(false)

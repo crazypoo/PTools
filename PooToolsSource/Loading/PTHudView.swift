@@ -183,7 +183,7 @@ class PTLoadingHud:UIView
     
     @objc func refreshCricle()
     {
-        PTUtils.gcdMain {
+        PTGCDManager.gcdMain {
             switch self.status {
             case .Decrease:
                 self.length -= lengthIteration
@@ -235,7 +235,7 @@ class PTLoadingHud:UIView
                 }
             }
             self.rotateAngle %= 360
-            PTUtils.gcdMain {
+            PTGCDManager.gcdMain {
                 self.transform = CGAffineTransformMakeRotation(self.degressToRadian(angle: CGFloat(self.rotateAngle)))
                 self.setNeedsDisplay()
             }

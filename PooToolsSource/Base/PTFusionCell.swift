@@ -311,13 +311,13 @@ public class PTFusionCellContent:UIView
 
             if self.cellModel!.conrner != []
             {
-                PTUtils.gcdMain {
+                PTGCDManager.gcdMain {
                     self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
                 }
             }
             else
             {
-                PTUtils.gcdMain {
+                PTGCDManager.gcdMain {
                     self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
                 }
             }

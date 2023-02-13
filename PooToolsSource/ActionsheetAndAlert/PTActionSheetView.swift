@@ -333,7 +333,7 @@ public class PTActionSheetView: UIView {
                 make.bottom.equalToSuperview().inset(actionSheetScrollBottom)
             }
             
-            PTUtils.gcdAfter(time: 0.1) {
+            PTGCDManager.gcdAfter(time: 0.1) {
                 self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
             }
         }
@@ -394,7 +394,7 @@ public class PTActionSheetView: UIView {
                     if index == 0
                     {
                         lineView.isHidden = true
-                        PTUtils.gcdAfter(time: 0.1) {
+                        PTGCDManager.gcdAfter(time: 0.1) {
                             btn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
                         }
                     }
@@ -403,7 +403,7 @@ public class PTActionSheetView: UIView {
                 
                 if index == (self.otherTitles.count - 1)
                 {
-                    PTUtils.gcdAfter(time: 0.1) {
+                    PTGCDManager.gcdAfter(time: 0.1) {
                         btn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.bottomLeft,.bottomRight])
                     }
                 }
@@ -418,7 +418,7 @@ public class PTActionSheetView: UIView {
                 make.height.equalTo(kRowHeight)
             }
             
-            PTUtils.gcdAfter(time: 0.1) {
+            PTGCDManager.gcdAfter(time: 0.1) {
                 self.destructiveButton.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: .allCorners)
             }
         }
@@ -428,7 +428,7 @@ public class PTActionSheetView: UIView {
             make.height.equalTo(kRowHeight)
         }
         
-        PTUtils.gcdAfter(time: 0.1) {
+        PTGCDManager.gcdAfter(time: 0.1) {
             self.cancelBtn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: .allCorners)
         }
     }

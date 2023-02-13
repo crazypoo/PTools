@@ -34,9 +34,10 @@ class PTSwiftViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
         }
-        PTUtils.gcdAfter(time: 2) {
+        PTGCDManager.gcdAfter(time: 2) {
                         
             UIApplication.pt.likeTapHome()
             
@@ -46,11 +47,11 @@ class PTSwiftViewController: UIViewController {
             print(UIDevice.lessThanSysVersion(version: "15", equal: true))
             
             print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
-            PTUtils.gcdAfter(time: 1){
+            PTGCDManager.gcdAfter(time: 1){
                 PTKeyChain.deleteAccountInfo(service: "com.qq.com", account: "",handle: { success in
                     
                 })
-                PTUtils.gcdAfter(time: 1){
+                PTGCDManager.gcdAfter(time: 1){
                     print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
                 }
             }
