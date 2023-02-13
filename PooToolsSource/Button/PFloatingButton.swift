@@ -16,6 +16,8 @@ open class PFloatingButton: UIButton {
     public static let RC_TRACE_DISMISS_TIME_INTERVAL = 0.5
     public static let RC_DEFAULT_ANIMATE_DURATION = 0.2
     
+    //MARK: 長按回調
+    ///長按回調
     public var longPressBlock:((_ button:PFloatingButton)->Void)?
     {
         didSet
@@ -34,33 +36,65 @@ open class PFloatingButton: UIButton {
             self.addGestureRecognizer(longPressGestureRecognizer)
         }
     }
+    //MARK: 長按結束後回調
+    ///長按結束後回調
     public var longPressEndedBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 點擊回調
+    ///點擊回調
     public var tapBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 雙擊回調
+    ///雙擊回調
     public var doubleTapBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 浮動Content回調
+    ///浮動Content回調
     public var layerConfigBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 拖動回調
+    ///拖動回調
     public var draggingBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 拖動結束回調
+    ///拖動結束回調
     public var dragEndedBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 自動歸邊結束回調
+    ///自動歸邊結束回調
     public var autoDockEndedBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 取消拖動回調
+    ///取消拖動回調
     public var dragCancelledBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 自動歸邊回調
+    ///自動歸邊回調
     public var autoDockingBlock:((_ button:PFloatingButton)->Void)?
+    //MARK: 將要移除回調
+    ///將要移除回調
     public var willBeRemovedBlock:((_ button:PFloatingButton)->Void)?
     
-    public var draggable : Bool? = true
-    public var autoDocking : Bool? = false
-    public var dragOutOfBoundsEnabled : Bool? = false
-    public var dockPoint : CGPoint? = PFloatingButton.RC_POINT_NULL
-    public var limitedDistance : CGFloat? = -1.0
-    public var isTraceEnabled : Bool? = false
+    //MARK: 是否支持拖動
+    ///是否支持拖動
+    public var draggable : Bool = true
+    //MARK: 是否支持自動歸邊
+    ///是否支持自動歸邊
+    public var autoDocking : Bool = false
+    //MARK: 是否支持超邊拖動
+    ///是否支持超邊拖動
+    public var dragOutOfBoundsEnabled : Bool = false
+    //MARK: 邊界
+    ///邊界
+    public var dockPoint : CGPoint = PFloatingButton.RC_POINT_NULL
+    //MARK: 最小距離
+    ///最小距離
+    public var limitedDistance : CGFloat = -1.0
+    //MARK: 是否跟蹤按鈕
+    ///是否跟蹤按鈕
+    public var isTraceEnabled : Bool = false
     
-    private var singleTapCanceled : Bool? = false
-    private var skipTapEventOnce : Bool? = false
-    private var isDragging : Bool? = false
+    private var singleTapCanceled : Bool = false
+    private var skipTapEventOnce : Bool = false
+    private var isDragging : Bool = false
     private var touchBeginPoint:CGPoint?
     private var moveBeginPoint:CGPoint?
     private var traceDismissTimer:Timer?
-    private var willBeRemoved : Bool? = false
-    private var draggableAfterLongPress : Bool? = false
-    private var isRecordingDraggingPathEnabled : Bool? = false
+    private var willBeRemoved : Bool = false
+    private var draggableAfterLongPress : Bool = false
+    private var isRecordingDraggingPathEnabled : Bool = false
     private var traceButtons = NSMutableArray.init(capacity: PFloatingButton.RC_TRACES_NUMBER)
 
     private lazy var draggingPath:UIBezierPath = {
@@ -117,7 +151,7 @@ open class PFloatingButton: UIButton {
     func defultSetting()
     {
         self.addActionHandlers { sender in
-            if !self.singleTapCanceled! && self.tapBlock != nil && !self.isDragging! && !self.skipTapEventOnce!
+            if !self.singleTapCanceled && self.tapBlock != nil && !self.isDragging && !self.skipTapEventOnce
             {
                 self.tapBlock!(self)
             }
@@ -143,7 +177,7 @@ open class PFloatingButton: UIButton {
             
             skipTapEventOnce = true
             
-            if draggableAfterLongPress!
+            if draggableAfterLongPress
             {
                 draggable = true
             }
@@ -177,7 +211,7 @@ open class PFloatingButton: UIButton {
     }
     
     public override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if draggable!
+        if draggable
         {
             isDragging = true
             let touch = touches.first
@@ -187,12 +221,12 @@ open class PFloatingButton: UIButton {
 
             self.resetCenter(center: CGPoint.init(x: center.x + offsetX, y: center.y + offsetY))
             
-            if isTraceEnabled!
+            if isTraceEnabled
             {
                 self.addTraceButton()
             }
             
-            if isRecordingDraggingPathEnabled!
+            if isRecordingDraggingPathEnabled
             {
                 draggingPath.addLine(to: self.center)
             }
@@ -208,12 +242,12 @@ open class PFloatingButton: UIButton {
     
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
-        if (isDragging! && dragEndedBlock != nil) {
+        if (isDragging && dragEndedBlock != nil) {
             dragEndedBlock!(self);
             singleTapCanceled = true;
         }
         
-        if isDragging! && autoDocking!
+        if isDragging && autoDocking
         {
             if !self.isDockPointAvailable()
             {
@@ -225,7 +259,7 @@ open class PFloatingButton: UIButton {
             }
         }
         
-        if draggableAfterLongPress!
+        if draggableAfterLongPress
         {
             draggable = false
         }
@@ -237,7 +271,7 @@ open class PFloatingButton: UIButton {
         super.touchesCancelled(touches, with: event)
         isDragging = false
         singleTapCanceled = true
-        if draggableAfterLongPress!
+        if draggableAfterLongPress
         {
             draggable = false
         }
@@ -257,7 +291,7 @@ open class PFloatingButton: UIButton {
             let bool = self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
             PTLocalConsoleFunction.share.pNSLog(bool)
         }
-        else if !dragOutOfBoundsEnabled!
+        else if !dragOutOfBoundsEnabled
         {
             let bool = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
             PTLocalConsoleFunction.share.pNSLog(bool)
@@ -266,17 +300,17 @@ open class PFloatingButton: UIButton {
     
     func isLimitedDistanceAvailable()->Bool
     {
-        return (limitedDistance! > 0)
+        return (limitedDistance > 0)
     }
     
     func checkIfExceedingLimitedDistanceThenFixIt(fixIt:Bool)->Bool
     {
-        let tmpPoint = CGPoint.init(x: self.center.x - dockPoint!.x, y: self.center.y - dockPoint!.y)
-        let distance = self.distanceFromPoint(point: dockPoint!)
-        let willExceedingLimitedDistance = distance > limitedDistance!
+        let tmpPoint = CGPoint.init(x: self.center.x - dockPoint.x, y: self.center.y - dockPoint.y)
+        let distance = self.distanceFromPoint(point: dockPoint)
+        let willExceedingLimitedDistance = distance > limitedDistance
         if willExceedingLimitedDistance && fixIt
         {
-            self.center = CGPoint.init(x: tmpPoint.x * limitedDistance! / distance + dockPoint!.y, y: tmpPoint.y * limitedDistance! / distance + dockPoint!.y)
+            self.center = CGPoint.init(x: tmpPoint.x * limitedDistance / distance + dockPoint.y, y: tmpPoint.y * limitedDistance / distance + dockPoint.y)
         }
         return willExceedingLimitedDistance
     }
@@ -328,7 +362,7 @@ open class PFloatingButton: UIButton {
     
     func isDockPointAvailable()->Bool
     {
-        return !__CGPointEqualToPoint(self.dockPoint!, PFloatingButton.RC_POINT_NULL)
+        return !__CGPointEqualToPoint(self.dockPoint, PFloatingButton.RC_POINT_NULL)
     }
     
     func dockingToBorder()
@@ -351,7 +385,7 @@ open class PFloatingButton: UIButton {
                 self.autoDockingBlock!(self)
             }
         } completion: { finish in
-            if self.isRecordingDraggingPathEnabled!
+            if self.isRecordingDraggingPathEnabled
             {
                 self.draggingPath.addLine(to: self.center)
             }
@@ -366,12 +400,12 @@ open class PFloatingButton: UIButton {
     func dockingToPoint()
     {
         UIView.animate(withDuration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION) {
-            self.center = self.dockPoint!
+            self.center = self.dockPoint
             if self.autoDockingBlock != nil {
                 self.autoDockingBlock!(self)
             }
         } completion: { (finish) in
-            if self.isRecordingDraggingPathEnabled!
+            if self.isRecordingDraggingPathEnabled
             {
                 self.draggingPath.addLine(to: self.center)
             }
@@ -595,11 +629,11 @@ open class PFloatingButton: UIButton {
     
     func moveToPoint(point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?)
     {
-        if !willBeRemoved!
+        if !willBeRemoved
         {
             moveBeginPoint = self.center
             
-            if isTraceEnabled!
+            if isTraceEnabled
             {
                 self.addTraceButtonsDuringMoveToPoint(point: point, duration: duration!, delay: delay!, options: options!)
             }
@@ -613,7 +647,7 @@ open class PFloatingButton: UIButton {
                     self.autoAddTraceButtonTimer = nil
                 }
                 
-                if self.isRecordingDraggingPathEnabled!
+                if self.isRecordingDraggingPathEnabled
                 {
                     self.draggingPath.addLine(to: self.center)
                 }
