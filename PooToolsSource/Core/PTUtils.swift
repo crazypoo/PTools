@@ -109,22 +109,7 @@ public class PTUtils: NSObject {
         let bundle = Bundle.init(for: self)
         return bundle
     }
-    
-    public class func color(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIColor
-    {
-        return UIColor(named: name, in: bundle!, compatibleWith: traitCollection) ?? .randomColor
-    }
-    
-    public class func image(name:String,traitCollection:UITraitCollection,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
-    {
-        return UIImage(named: name, in: bundle!, compatibleWith: traitCollection) ?? UIColor.randomColor.createImageWithColor()
-    }
-    
-    public class func darkModeImage(name:String,bundle:Bundle? = PTUtils.cgBaseBundle())->UIImage
-    {
-        return PTUtils.image(name: name, traitCollection: (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,bundle: bundle!)
-    }
-            
+                
     //MARK: 获取一个输入内最大的一个值
     ///获取一个输入内最大的一个值
     class open func maxOne<T:Comparable>( _ seq:[T]) -> T{

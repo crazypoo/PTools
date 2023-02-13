@@ -1100,4 +1100,38 @@ public extension String
         }
         return seconds
     }
+    
+    //MARK: 根據文件名字拿到Bundle上的顏色
+    ///根據文件名字拿到Bundle上的顏色
+    /// - Parameters:
+    ///   - traitCollection: 當前系統的顯示模式
+    ///   - bundle: 顏色所在Bundle
+    /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
+    func color(traitCollection:UITraitCollection = (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,
+               bundle:Bundle = PTUtils.cgBaseBundle())->UIColor
+    {
+        return UIColor(named: self, in: bundle, compatibleWith: traitCollection) ?? .randomColor
+    }
+    
+    //MARK: 根據文件名字拿到Bundle上的圖片
+    ///根據文件名字拿到Bundle上的圖片
+    /// - Parameters:
+    ///   - traitCollection: 當前系統的顯示模式
+    ///   - bundle: 圖片所在Bundle
+    /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
+    func image(traitCollection:UITraitCollection = (UIApplication.shared.delegate?.window?!.rootViewController!.traitCollection)!,
+               bundle:Bundle = PTUtils.cgBaseBundle())->UIImage
+    {
+        return UIImage(named: self, in: bundle, compatibleWith: traitCollection) ?? UIColor.randomColor.createImageWithColor()
+    }
+    
+    //MARK: 根據文件名字拿到Bundle上的圖片
+    ///根據文件名字拿到Bundle上的圖片
+    /// - Parameters:
+    ///   - bundle: 圖片所在Bundle
+    /// - Returns: 返回顏色,如果獲取不到會返回隨機顏色
+    func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle())->UIImage
+    {
+        return self.image(bundle: bundle)
+    }
 }

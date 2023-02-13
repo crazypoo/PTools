@@ -256,7 +256,7 @@ CGFloat const tagItemSpace = 5;
             //    NSMutableArray *_RectCornerArr = [NSMutableArray array];
             //    [_RectCornerArr addObject:@(UIRectCornerAllCorners)];
             [self.cornerBtn viewCornerRectCornerWithCornerRadii:20 borderWidth:0 borderColor:UIColor.clearColor corner:UIRectCornerBottomRight];
-            
+                        
             NSArray *arr = @[@"左上",@"右上",@"左下",@"右下",@"全部"];
             
             for (int i = 0; i < arr.count; i++) {
