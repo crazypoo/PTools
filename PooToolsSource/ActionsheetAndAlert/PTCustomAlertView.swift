@@ -10,6 +10,7 @@ import UIKit
 import pop
 import SwifterSwift
 import YYCategories
+import SnapKit
 
 public let BottomButtonHeight : CGFloat = 44
 public let AlertLine : CGFloat = 0.5
@@ -121,6 +122,86 @@ public class PTCustomAlertView: UIView {
         return view
     }()
         
+    //MARK: 初始化創建Alert
+    ///初始化創建Alert
+    /// - Parameters:
+    ///   - superView: 加載在?上
+    ///   - titleString: 標題
+    ///   - titleFont: 字體
+    ///   - titleColor: 標題的字體顏色
+    ///   - alertVerLineColor: 按鈕線的顏色
+    ///   - alertBackgroundColor: Alert的背景顏色
+    ///   - alertHeightlightedColor: 按鈕點以後的顏色
+    ///   - alertAnimationType: 動畫形式
+    ///   - buttons: 按鈕設置
+    ///   - buttonColor: 按鈕顏色
+    ///   - touchBackground: 是否支持點擊背景消失Alert
+    ///   - cornerSize: Alert邊框角弧度
+    ///   - customAlertHeight: 自定義View高度
+    ///   - alertLeftAndRightSpace: Alert的左右邊距
+    ///   - customerBlock: 自定義View回調
+    ///   - tapBlock: 點擊回調
+    ///   - alertDismissBlock: 界面離開後的回調
+    @objc public class func alertFunction(superView:UIView = AppWindows!,
+                                          titleString:String = "",
+                                          titleFont:UIFont = .appfont(size: 15),
+                                          titleColor:UIColor = .systemBlue,
+                                          alertVerLineColor:UIColor = .lightGray,
+                                          alertBackgroundColor:UIColor = .white,
+                                          alertHeightlightedColor:UIColor = .systemBlue,
+                                          alertAnimationType:PTAlertAnimationType = .Bottom,
+                                          buttons:[String],
+                                          buttonColor:[UIColor],
+                                          touchBackground:Bool = true,
+                                          cornerSize:CGFloat = 15,
+                                          customAlertHeight:CGFloat = 100,
+                                          alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
+                                          customerBlock:@escaping ((_ customerView:UIView)->Void),
+                                          tapBlock:@escaping ((_ index:NSInteger)->Void),
+                                          alertDismissBlock:@escaping (()->Void))
+    {
+        var buttonModels = [PTCustomBottomButtonModel]()
+        buttons.enumerated().forEach { index,value in
+            let model = PTCustomBottomButtonModel()
+            if buttonColor.count < buttons.count
+            {
+                if index > (buttonColor.count - 1)
+                {
+                    model.titleColor = .systemBlue
+                }
+                else
+                {
+                    model.titleColor = buttonColor[index]
+                }
+            }
+            else
+            {
+                model.titleColor = buttonColor[index]
+            }
+            model.titleName = value
+            buttonModels.append(model)
+        }
+        
+        let alertWidth = CGFloat.kSCREEN_WIDTH - alertLeftAndRightSpace * 2
+        
+        let alerts = PTCustomAlertView(superView: superView,alertTitle: titleString,font: titleFont,titleColor: titleColor,alertVerLineColor: alertVerLineColor,alertBackgroundColor: alertBackgroundColor,heightlightedColor: alertHeightlightedColor,moreButtons: buttonModels, alertAnimationType: alertAnimationType,touchBackground: touchBackground,cornerSize: cornerSize)
+        alerts.snp.makeConstraints { make in
+            make.height.equalTo(customAlertHeight + PTCustomAlertView.titleAndBottomViewNormalHeight(width: alertWidth, title: titleString, font: titleFont, buttonArray: buttonModels))
+            make.width.equalTo(alertWidth)
+            make.centerX.centerY.equalTo(superView)
+        }
+        alerts.customerBlock = { customView in
+            customerBlock(customView)
+        }
+        alerts.buttonClick = { alertView,index in
+            tapBlock(index)
+            alertView.dismiss()
+        }
+        alerts.didDismissBlock = { alertView in
+            alertDismissBlock()
+        }
+    }
+
     //MARK: 初始化創建Alert
     ///初始化創建Alert
     /// - Parameters:

@@ -44,14 +44,18 @@ open class PTFunctionCellModel: NSObject {
     open var cellIndexPath:IndexPath?
     ///Cell的AccessViewImage
     open var disclosureIndicatorImageName :String = ""
-    
+    ///Cell的圓角處理
     open var conrner:UIRectCorner = []
-    
+    ///Cell的是否顯示Icon
     open var showContentIcon:Bool = false
+    ///Cell的是否顯示Icon
     open var contentIcon:String = ""
-    
+    ///Cell的右間隔
     open var rightSpace:CGFloat = 10
+    ///Cell的左間隔
     open var leftSpace:CGFloat = 10
+    ///Cell的圓角度數
     open var cellCorner:CGFloat = 10
+    ///Cell的Switch的顏色
     open var switchTinColor:UIColor = .systemGreen
 }

@@ -478,8 +478,9 @@ static NSString *cellIdentifier = @"CELL";
             switch (indexPath.row) {
                 case 1:
                 {
-                    PTCodeView *codeView = [[PTCodeView alloc] initWithFrame:CGRectZero numberOfCodes:4 numberOfLines:3 changeTimes:3];
-                    [self createAlertViewWithTitle:@"验证码图片" withAlertBtns:@[@"222"] customeViewHeight:100 initCustomView:^(UIView *customView) {
+                    PTCodeView *codeView = [[PTCodeView alloc] initWithNumberOfCodes:4 numberOfLines:3 changeTimes:3];
+                    
+                    [PTCustomAlertView alertFunctionWithSuperView:[PTAppDelegate appDelegate].window titleString:@"验证码图片" titleFont:[UIFont appfontWithSize:15 bold:YES] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor alertHeightlightedColor:UIColor.randomColor alertAnimationType:PTAlertAnimationTypeTop buttons:@[@"222",@"123123",@"123123"] buttonColor:@[] touchBackground:YES cornerSize:15 customAlertHeight:100 alertLeftAndRightSpace:20 customerBlock:^(UIView * _Nonnull customView) {
                         [customView addSubview:codeView];
                         [codeView mas_makeConstraints:^(MASConstraintMaker *make) {
                             make.centerX.centerY.equalTo(customView);
@@ -488,9 +489,10 @@ static NSString *cellIdentifier = @"CELL";
                         codeView.codeBlock = ^(PTCodeView * codeView, NSString * codeString) {
                             PNSLog(@">>>>>>>>%@",codeString);
                         };
-                    } alertBtnTapBlock:^(NSInteger btnIndex) {
+                    } tapBlock:^(NSInteger btnIndex) {
                         
                     } alertDismissBlock:^{
+                        
                     }];
                 }
                     break;
@@ -538,6 +540,9 @@ static NSString *cellIdentifier = @"CELL";
                     make.height.offset(80);
                     make.centerX.equalTo(customView);
                     make.top.equalTo(customView).offset(5);
+                }];
+                [slider addSliderActionWithHandler:^(UISlider * _Nonnull slider) {
+                    
                 }];
 
 //                DoubleSliderView *dSlider = [DoubleSliderView new];

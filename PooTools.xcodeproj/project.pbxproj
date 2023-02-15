@@ -94,6 +94,7 @@
 		55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
+		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -295,6 +296,7 @@
 		55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftMethodSwizzle.swift; sourceTree = "<group>"; };
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
+		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -557,7 +559,6 @@
 				9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */,
 				9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */,
 				55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */,
-				231D15CD272CDEE9003D6F62 /* UIControl+PTEX.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
@@ -579,6 +580,7 @@
 				231D15D2272CDEE9003D6F62 /* UIButton+PTEX.swift */,
 				9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */,
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
+				231D15CD272CDEE9003D6F62 /* UIControl+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
@@ -586,6 +588,7 @@
 				9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */,
 				55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */,
 				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
+				55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */,
 				9AE446A62859ACBB007DC2B5 /* UISwitch+PTEX.swift */,
 				55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */,
 				55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */,
@@ -1638,6 +1641,7 @@
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
+				55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */,
 				557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
