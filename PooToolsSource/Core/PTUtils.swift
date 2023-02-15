@@ -85,9 +85,9 @@ public class PTUtils: NSObject {
         return currentVC!
     }
     
-    public class func getCurrentVC(anyClass:UIViewController? = UIViewController())->UIViewController
+    public class func getCurrentVC(anyClass:UIViewController = UIViewController())->UIViewController
     {
-        let currentVC = PTUtils.getCurrentVCFrom(rootVC: (AppWindows?.rootViewController ?? anyClass!))
+        let currentVC = PTUtils.getCurrentVCFrom(rootVC: (AppWindows?.rootViewController ?? anyClass))
         return currentVC
     }
     

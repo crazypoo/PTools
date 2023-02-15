@@ -18,7 +18,7 @@ public typealias PTCustomerAlertClickBlock = (_ alert:PTCustomAlertView,_ index:
 public typealias PTCustomerDidDismissBlock = (_ alert:PTCustomAlertView) -> Void
 public typealias PTCustomerCustomerBlock = (_ alertCustomerView:UIView) -> Void
 
-public enum PTAlertAnimationType {
+@objc public enum PTAlertAnimationType:Int {
     case Top
     case Bottom
     case Left
@@ -120,31 +120,7 @@ public class PTCustomAlertView: UIView {
         let view = UIView()
         return view
     }()
-    
-    //MARK: 初始化創建Alert
-    ///初始化創建Alert
-    /// - Parameters:
-    ///   - superView: 加載在?上
-    ///   - alertTitle: 標題
-    ///   - font: 字體
-    ///   - titleColor: 標題的字體顏色
-    ///   - alertVerLineColor: 按鈕線的顏色
-    ///   - alertBackgroundColor: Alert的背景顏色
-    ///   - heightlightedColor: 按鈕點以後的顏色
-    ///   - moreButtons: 按鈕設置
-    @objc public init(superView:UIView,
-                      alertTitle:String? = "",
-                      font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
-                      titleColor:UIColor? = UIColor.black,
-                      alertVerLineColor:UIColor? = UIColor.lightGray,
-                      alertBackgroundColor:UIColor? = UIColor.white,
-                      heightlightedColor:UIColor? = UIColor.lightGray,
-                      moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel]())
-    {
-        super.init(frame: .zero)
-        self.createAlertView(superView: superView, alertTitle: alertTitle!, font: font!, titleColor: titleColor!, alertVerLineColor: alertVerLineColor!, alertBackgroundColor: alertBackgroundColor!, heightlightedColor: heightlightedColor!, moreButtons: moreButtons!, alertAnimationType: .Top)
-    }
-    
+        
     //MARK: 初始化創建Alert
     ///初始化創建Alert
     /// - Parameters:
@@ -159,19 +135,19 @@ public class PTCustomAlertView: UIView {
     ///   - alertAnimationType: 動畫形式
     ///   - touchBackground: 是否支持點擊背景消失Alert
     ///   - cornerSize: Alert邊框角弧度
-    public init(superView:UIView,
-         alertTitle:String? = "",
-         font:UIFont? = UIFont.boldSystemFont(ofSize: 20),
-         titleColor:UIColor? = UIColor.black,
-         alertVerLineColor:UIColor? = UIColor.lightGray,
-         alertBackgroundColor:UIColor? = UIColor.white,
-         heightlightedColor:UIColor? = UIColor.lightGray,
-         moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel](),
+    @objc public init(superView:UIView,
+         alertTitle:String = "",
+         font:UIFont = UIFont.boldSystemFont(ofSize: 20),
+         titleColor:UIColor = UIColor.black,
+         alertVerLineColor:UIColor = UIColor.lightGray,
+         alertBackgroundColor:UIColor = UIColor.white,
+         heightlightedColor:UIColor = UIColor.lightGray,
+         moreButtons:[PTCustomBottomButtonModel] = [PTCustomBottomButtonModel](),
          alertAnimationType:PTAlertAnimationType,
-         touchBackground:Bool? = true,
-         cornerSize:CGFloat? = 15) {
+         touchBackground:Bool = true,
+         cornerSize:CGFloat = 15) {
         super.init(frame: .zero)
-        self.createAlertView(superView: superView, alertTitle: alertTitle!, font: font!, titleColor: titleColor!, alertVerLineColor: alertVerLineColor!, alertBackgroundColor: alertBackgroundColor!, heightlightedColor: heightlightedColor!, moreButtons: moreButtons!, alertAnimationType: alertAnimationType, touchBackground: touchBackground!, cornerSize: cornerSize!)
+        self.createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
     }
     
     func createAlertView(superView:UIView,

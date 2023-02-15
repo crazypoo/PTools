@@ -138,7 +138,7 @@ public class PTActionSheetView: UIView {
     ///   - selectedColor: 選中的動畫顏色
     ///   - corner: 邊框角弧度
     ///   - dismissWithTapBG: 是否支持點擊背景消失Alert
-    public init(title:String? = "",
+    @objc public init(title:String? = "",
          subTitle:String? = "",
          cancelButton:String? = "取消",
          destructiveButton:String? = "",
@@ -151,19 +151,13 @@ public class PTActionSheetView: UIView {
          cancelCellTitleColor:UIColor? = UIColor.systemBlue,
          titleCellTitleColor:UIColor? = UIColor.systemGray,
          selectedColor:UIColor? = UIColor.lightGray,
-         corner:CGFloat? = 15,
-         dismissWithTapBG:Bool? = true) {
+         corner:CGFloat = 15,
+         dismissWithTapBG:Bool = true) {
         super.init(frame: .zero)
-        self.createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner! > (kRowHeight / 2)) ? (kRowHeight / 2) : corner!, dismissWithTapBG: dismissWithTapBG!)
+        self.createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)
         self.createView()
     }
-    
-    @objc public init(title:String? = "",subTitle:String? = "",cancelButton:String? = "",destructiveButton:String? = "",otherButtonTitles:[String]? = [String]()) {
-        super.init(frame: .zero)
-        self.createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!)
-        self.createView()
-    }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

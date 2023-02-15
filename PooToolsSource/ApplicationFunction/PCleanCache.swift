@@ -117,6 +117,11 @@ public class PCleanCache: NSObject {
         return flag
     }
     
+    //MARK: 獲取某個文件的大小
+    ///獲取某個文件的大小
+    /// - Parameters:
+    ///   - path: 文件路徑
+    /// - Returns: 文件Size大小
     class public func fileSizeAtPath(path:String)->Float
     {
         if PCleanCache.fileManager.fileExists(atPath: path)
@@ -132,6 +137,11 @@ public class PCleanCache: NSObject {
         return 0
     }
     
+    //MARK: 獲取某個文件夾的大小
+    ///獲取某個文件夾的大小
+    /// - Parameters:
+    ///   - path: 文件夾路徑
+    /// - Returns: 文件夾Size大小
     class public func folderSizeAtPath(path:String)->Float
     {
         if !PCleanCache.fileManager.fileExists(atPath: path)
@@ -153,6 +163,11 @@ public class PCleanCache: NSObject {
         return Float(folderSize/(1024*1024))
     }
     
+    //MARK: 清理某個文件夾
+    ///清理某個文件夾
+    /// - Parameters:
+    ///   - path: 文件夾路徑
+    /// - Returns: 是否完成
     class public func cleanDocumentAtPath(path:String)->Bool
     {
         let enumerator = PCleanCache.fileManager.enumerator(atPath: path)

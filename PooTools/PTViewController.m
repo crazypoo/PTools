@@ -579,7 +579,7 @@ static NSString *cellIdentifier = @"CELL";
         [arr addObject:models];
     }
             
-    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr];
+    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
     [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName] buttonArray:arr]);
         make.width.offset(kSCREEN_WIDTH-20);

@@ -73,7 +73,14 @@
         make.top.equalTo(self.window).offset(100);
     }];
     
-    [[PTDevFunction share] createLabBtn];
+    PTDevFunction *devFunction = [PTDevFunction share];
+    [devFunction createLabBtn];
+    devFunction.goToAppDevVC = ^{
+        PTDebugViewController *vc = [[PTDebugViewController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vc];
+        [[PTUtils getCurrentVCWithAnyClass:[UIViewController new]] presentViewController:nav animated:YES completion:^{
+        }];
+    };
     
 //    [PTAppDelegate.appDelegate.localConsoles print:[NSString stringWithFormat:@">>>>>>>>>>>>>>>>>>>>>>>>>>>>>%@>>>>>>>>>>>%lu",[Utils fewMonthLater:3 fromNow:[NSDate date] timeType:FewMonthLaterTypeContract],(unsigned long)[@"520dengjieHAO" passwordLevel]]];
     
