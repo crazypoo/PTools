@@ -46,7 +46,7 @@ public extension NSMutableString {
                                 "loc": loc,
                                 "tag": strippedTag,
                                 "endloc": NSNumber(value: range.location)
-                            ])
+                            ] as [String : Any])
                         }
                     }
                     break

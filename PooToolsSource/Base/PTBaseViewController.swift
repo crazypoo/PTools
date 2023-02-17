@@ -146,6 +146,19 @@ open class PTBaseViewController: ZXNavigationBarController {
             setNeedsStatusBarAppearanceUpdate()
         }
     }
+    
+    @objc public func returnFrontVC()
+    {
+        if self.presentingViewController != nil
+        {
+            self.dismiss(animated: true, completion: nil)
+        }
+        else
+        {
+            self.navigationController?.popViewController(animated: true, nil)
+        }
+    }
+
 }
 
 extension PTBaseViewController:UIGestureRecognizerDelegate

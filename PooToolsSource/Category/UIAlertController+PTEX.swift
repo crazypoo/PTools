@@ -10,9 +10,9 @@ import UIKit
 
 public extension UIAlertController
 {
-    @objc class func alertVC(title:String? = "",msg:String? = "")
+    @objc class func alertVC(title:String? = "",msg:String? = "",cancel:String? = "取消",cancelBlock:(()->Void)?)
     {
-        UIAlertController.base_alertVC(title: title,msg: msg)
+        UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
     }
     
     //MARK: ALERT真正基类
@@ -58,8 +58,8 @@ public extension UIAlertController
                     cancel!()
                 }
             }
-            alert.addAction(cancelAction)
             cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
+            alert.addAction(cancelAction)
         }
         
         if (okBtns?.count ?? 0) > 0
@@ -103,8 +103,8 @@ public extension UIAlertController
                         moreBtn!(index,value)
                     }
                 }
-                alert.addAction(callAction)
                 callAction.setValue(dontArrColor[index], forKey: "titleTextColor")
+                alert.addAction(callAction)
             })
         }
         
@@ -180,8 +180,8 @@ public extension UIAlertController
                 cancel!()
             }
         }
-        alert.addAction(cancelAction)
         cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
+        alert.addAction(cancelAction)
 
         if placeHolders.count == textFieldTexts.count
         {
@@ -209,8 +209,8 @@ public extension UIAlertController
                 doneBtn!(resultDic)
             }
         }
-        alert.addAction(doneAction)
         doneAction.setValue(doneBtnColor, forKey: "titleTextColor")
+        alert.addAction(doneAction)
 
         // KVC修改系统弹框文字颜色字号
         if !(title ?? "").stringIsEmpty()

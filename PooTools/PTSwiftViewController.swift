@@ -15,7 +15,7 @@ import UIKit
 import LifetimeTracker
 #endif
 
-class PTSwiftViewController: UIViewController {
+class PTSwiftViewController: PTBaseViewController {
     
     class var lifetimeConfiguration: LifetimeConfiguration {
             return LifetimeConfiguration(maxCount: 1, groupName: "VC")
@@ -39,7 +39,9 @@ class PTSwiftViewController: UIViewController {
         }
         PTGCDManager.gcdAfter(time: 2) {
                         
-            UIApplication.pt.likeTapHome()
+//            UIApplication.pt.likeTapHome()
+//            
+//            self.returnFrontVC()
             
             print(">>>>>>\(CGFloat.statusBarHeight())")
 

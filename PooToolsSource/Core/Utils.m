@@ -35,4 +35,5 @@
 {
     return ([str isKindOfClass:[NSNull class]] || str == nil || [str length] < 1 ? YES : NO );
 }
+
 @end

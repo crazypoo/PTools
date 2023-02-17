@@ -190,5 +190,5 @@ extension PTUtils
     public class func oc_isiPhoneSeries()->Bool
     {
         return isIPhoneXSeries()
-    }
+    }    
 }

@@ -455,7 +455,9 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     if ([PCleanCache clearCaches]) {
                         
-                        [UIAlertController alertVCWithTitle:nil msg:@"清理成功"];
+                        [UIAlertController alertVCWithTitle:nil msg:@"清理成功" cancel:@"好的" cancelBlock:^{
+                            
+                        }];
                         
                         self.tableArr = [[NSMutableArray alloc] initWithArray:self.tableNameArr];
                         [PTGCDManager gcdAfterTime:0.1 block:^{
@@ -464,7 +466,9 @@ static NSString *cellIdentifier = @"CELL";
                     }
                     else
                     {
-                        [UIAlertController alertVCWithTitle:nil msg:@"没有缓存"];
+                        [UIAlertController alertVCWithTitle:nil msg:@"没有缓存" cancel:@"好的" cancelBlock:^{
+                            
+                        }];
                     }
                 }
                     break;
