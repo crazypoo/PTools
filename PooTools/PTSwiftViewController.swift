@@ -108,15 +108,15 @@ class PTSwiftViewController: PTBaseViewController {
         let aesKey = "keykeykeykeykeyk"
         let aesIv = "drowssapdrowssap"
 
-        PTDataEncryption.aes_encryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
-            PTDataEncryption.ase_decrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
-                PTLocalConsoleFunction.share.pNSLog("aes:\(decryptData)\n")
+        PTDataEncryption.aesEncryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
+            PTDataEncryption.aseDecrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
+                PTLocalConsoleFunction.share.pNSLog("aes:\(String(describing: String(data: decryptData, encoding: .utf8)))\n")
             }
         }
 
-        PTDataEncryption.des_crypt(operation: CCOperation(kCCEncrypt), key: "321", dataString: "123456789") { outputString in
+        PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: "321", dataString: "123456789") { outputString in
             print("\(String(describing: outputString))\n")
-            PTDataEncryption.des_crypt(operation: CCOperation(kCCDecrypt), key: "321", dataString: outputString) { outputString1 in
+            PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: "321", dataString: outputString) { outputString1 in
                 print("\(String(describing: outputString1))\n")
             }
         }

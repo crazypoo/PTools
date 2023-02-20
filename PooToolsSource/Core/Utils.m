@@ -11,10 +11,6 @@
 
 #import <PooTools/PooTools-Swift.h>
 
-#define HORIZONTAL_SPACE 30//水平间距
-#define VERTICAL_SPACE 50//竖直间距
-#define CG_TRANSFORM_ROTATION (M_PI_2 / 3)//旋转角度(正旋45度 || 反旋45度)
-
 @implementation Utils
 +(BOOL)isIPhoneXSeries
 {

@@ -106,7 +106,9 @@ public class PCleanCache: NSObject {
             SDImageCache.shared.clearDisk {
                 flag = true
             }
-        }   catch {
+        }
+        catch
+        {
             PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
         }
         
