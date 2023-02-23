@@ -966,6 +966,56 @@ public extension String
         return self.isNumberString()
     }
     
+    //MARK: 根據日期字符串獲取星座名稱
+    ///根據日期字符串獲取星座名稱
+    func getConstellation(format:String = "yyyy-MM-dd HH:mm:ss")->String
+    {
+        let getDate = self.toDate(format)!.date
+        let month = getDate.month
+        let day = getDate.day
+        
+        switch (month, day) {
+        case (1, 20...31), (2, 1...18):
+            ///水瓶
+            return "Aquarius"
+        case (2, 19...29), (3, 1...20):
+            ///双鱼
+            return "Pisces"
+        case (3, 21...31), (4, 1...19):
+            ///白羊
+            return "Aries"
+        case (4, 20...30), (5, 1...20):
+            ///金牛
+            return "Taurus"
+        case (5, 21...31), (6, 1...20):
+            ///双子
+            return "Gemini"
+        case (6, 21...30), (7, 1...22):
+            ///巨蟹
+            return "Cancer"
+        case (7, 23...31), (8, 1...22):
+            ///狮子
+            return "Leo"
+        case (8, 23...31), (9, 1...22):
+            ///处女
+            return "Virgo"
+        case (9, 23...30), (10, 1...22):
+            ///天秤
+            return "Libra"
+        case (10, 23...31), (11, 1...21):
+            ///天蝎
+            return "Scorpio"
+        case (11, 22...30), (12, 1...21):
+            ///射手
+            return "Sagittarius"
+        case (12, 22...31), (1, 1...19):
+            ///摩羯
+            return "Capricorn"
+        default:
+            return ""
+        }
+    }
+    
     //MARK: 获取当前时间
     ///获取当前时间
     static func currentDate(dateFormatterString:String? = "yyyy-MM-dd")->String

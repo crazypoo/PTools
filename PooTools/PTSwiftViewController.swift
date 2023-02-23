@@ -35,14 +35,15 @@ class PTSwiftViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        PTLocalConsoleFunction.share.pNSLog("1989-06-02 00:00:00".getConstellation())
+
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
         }
         PTGCDManager.gcdAfter(time: 2) {
-            
-            let qrConfig = PTScanQRConfig()
-            qrConfig.canScanQR = false
-            let qr = PTScanQRController(viewConfig: qrConfig)
-            self.navigationController!.pushViewController(qr)
+//            let qrConfig = PTScanQRConfig()
+//            qrConfig.canScanQR = false
+//            let qr = PTScanQRController(viewConfig: qrConfig)
+//            self.navigationController!.pushViewController(qr)
             
 //            UIApplication.pt.likeTapHome()
 //            
