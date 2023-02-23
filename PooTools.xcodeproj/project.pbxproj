@@ -85,6 +85,7 @@
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
+		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
@@ -288,6 +289,7 @@
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
+		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankSimpleInfoNetwork.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				554929E828F9089100C82ABF /* Permission */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
+				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
@@ -837,6 +840,14 @@
 				557FC36D2966A45000991C36 /* PTImagePickerObject.swift */,
 			);
 			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		5589FF4829A73E4400519383 /* QRCodeScan */ = {
+			isa = PBXGroup;
+			children = (
+				5589FF4929A73ED600519383 /* PTScanQRController.swift */,
+			);
+			path = QRCodeScan;
 			sourceTree = "<group>";
 		};
 		55D59C4728F14A3100B4FF76 /* CallMessageMail */ = {
@@ -1509,6 +1520,7 @@
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
+				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,

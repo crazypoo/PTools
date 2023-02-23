@@ -38,7 +38,12 @@ class PTSwiftViewController: PTBaseViewController {
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
         }
         PTGCDManager.gcdAfter(time: 2) {
-                        
+            
+            let qrConfig = PTScanQRConfig()
+            qrConfig.canScanQR = false
+            let qr = PTScanQRController(viewConfig: qrConfig)
+            self.navigationController!.pushViewController(qr)
+            
 //            UIApplication.pt.likeTapHome()
 //            
 //            self.returnFrontVC()
@@ -59,31 +64,9 @@ class PTSwiftViewController: PTBaseViewController {
             }
             
         }
-        
-//        PTUtils.gcdAfter(time: 2) {
-//            if #available(iOS 14.0, *)
-//            {
-//                Task{
-//                    do{
-//                        let object:PTAlbumObject = try await PTImagePicker.openAlbum()
-//                        await MainActor.run{
-//                            if let imageData = object.imageData,let image = UIImage(data: imageData){
-//                                print(image)
-//                            }else if let videoUrl = object.videoURL{
-//                                print(videoUrl)
-//                            }else{
-//                                print("aaaaaaa")
-//                            }
-//                        }
-//                    }catch let pickerError as PTImagePicker.PickerError{
-//                        pickerError.outPutLog()
-//                    }
-//                }
-//            }
-//        }
-        
+                
 #if canImport(LifetimeTracker)
-    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
+//    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
 #endif
         let card1 = "621226200000000000"
         let card2 = "123456789098765"

@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.0.3'
+    s.version     = '3.0.4'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -420,6 +420,15 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'ScanQRCode' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/ImagePicker'
+        subspec.source_files = 'PooToolsSource/QRCodeScan/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCANQRCODE POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'Picker' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'BRPickerView'
@@ -661,6 +670,7 @@ Pod::Spec.new do |s|
 #        subspec.dependency 'PooTools/Harbeth'
         subspec.dependency 'PooTools/ColorFunction'
         subspec.dependency 'PooTools/PopoverKit'
+        subspec.dependency 'PooTools/ScanQRCode'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

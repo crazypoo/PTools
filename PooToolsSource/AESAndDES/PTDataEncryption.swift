@@ -132,6 +132,6 @@ public class PTDataEncryption {
         {
             data = data!.base64EncodedData()
         }
-        handle(String(data: data!, encoding: .utf8)!)
+        handle(String(data: data!, encoding: .utf8) ?? "")
     }
 }
