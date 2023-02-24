@@ -57,7 +57,6 @@ public class PTOpenSystemFunction: NSObject {
         } moreBtn: { index, title in
             
         }
-
     }
     
     //MARK: 根據所需跳轉某Setting內的方法

@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSUserTrackingUsageDescription</key>
-	<string>跟踪数据</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -33,12 +31,16 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>相机使用</string>
+	<key>NSContactsUsageDescription</key>
+	<string>獲取通訊錄</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Mic使用</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>相册添加</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>相册使用</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>跟踪数据</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>

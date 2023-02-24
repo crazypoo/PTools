@@ -419,10 +419,10 @@ public extension String
     ///中文轉換成拼音字母
     func chineseTransToMandarinAlphabet()->String
     {
-        let pinyin:NSMutableString = self.nsString.mutableCopy() as! NSMutableString
-        CFStringTransform((pinyin as CFMutableString), nil, kCFStringTransformMandarinLatin, false)
-        CFStringTransform((pinyin as CFMutableString), nil, kCFStringTransformStripCombiningMarks, false)
-        var newString:NSString = pinyin as NSString
+        let chinese:NSMutableString = self.nsString.mutableCopy() as! NSMutableString
+        CFStringTransform((chinese as CFMutableString), nil, kCFStringTransformMandarinLatin, false)
+        CFStringTransform((chinese as CFMutableString), nil, kCFStringTransformStripCombiningMarks, false)
+        var newString:NSString = chinese as NSString
         newString = newString.replacingOccurrences(of: " ", with: "") as NSString
         return newString.uppercased
     }

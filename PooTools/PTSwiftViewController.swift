@@ -230,5 +230,9 @@ class PTSwiftViewController: PTBaseViewController {
             make.width.equalTo(150)
             make.height.equalTo(44)
         }
+        
+        PTContract.share.getContractData { models in
+            print(models!.indexStrings)
+        }
     }
 }

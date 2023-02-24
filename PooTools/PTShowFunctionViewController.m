@@ -89,7 +89,7 @@ CGFloat const tagItemSpace = 5;
     // Do any additional setup after loading the view.
     
     self.view.backgroundColor = [UIColor whiteColor];
-    
+        
     switch (self.showType) {
         case ShowFunctionFile:
         {
