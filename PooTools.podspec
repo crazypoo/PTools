@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.0.4'
+    s.version     = '3.0.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -55,6 +55,14 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/AESAndDES/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'Stepper' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Stepper/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPPER POOTOOLS_COCOAPODS"
         }
     end
     
@@ -671,6 +679,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ColorFunction'
         subspec.dependency 'PooTools/PopoverKit'
         subspec.dependency 'PooTools/ScanQRCode'
+        subspec.dependency 'PooTools/Stepper'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

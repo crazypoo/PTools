@@ -221,5 +221,14 @@ class PTSwiftViewController: PTBaseViewController {
             make.top.bottom.equalToSuperview().inset(100)
         }
 
+        let stepper = PTStepper()
+        stepper.baseNum = "999"
+        self.view.addSubview(stepper)
+        stepper.snp.makeConstraints { make in
+            make.right.equalToSuperview()
+            make.top.equalTo(customTextF.snp.bottom)
+            make.width.equalTo(150)
+            make.height.equalTo(44)
+        }
     }
 }

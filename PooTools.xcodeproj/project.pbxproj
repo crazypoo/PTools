@@ -86,6 +86,7 @@
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
+		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
@@ -290,6 +291,7 @@
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
+		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankSimpleInfoNetwork.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
@@ -481,6 +483,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				5589FF4B29A8527D00519383 /* Stepper */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -848,6 +851,14 @@
 				5589FF4929A73ED600519383 /* PTScanQRController.swift */,
 			);
 			path = QRCodeScan;
+			sourceTree = "<group>";
+		};
+		5589FF4B29A8527D00519383 /* Stepper */ = {
+			isa = PBXGroup;
+			children = (
+				5589FF4C29A8529E00519383 /* PTStepper.swift */,
+			);
+			path = Stepper;
 			sourceTree = "<group>";
 		};
 		55D59C4728F14A3100B4FF76 /* CallMessageMail */ = {
@@ -1646,6 +1657,7 @@
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
+				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,

@@ -57,7 +57,8 @@ let package = Package(
         .library(name: "StepCount", targets: ["StepCount"]),
         .library(name: "Speech", targets: ["Speech"]),
         .library(name: "Harbeth", targets: ["Harbeth"]),
-        .library(name: "ScanQRCode", targets: ["ScanQRCode"])
+        .library(name: "ScanQRCode", targets: ["ScanQRCode"]),
+        .library(name: "Stepper", targets: ["Stepper"])
     ],
     dependencies: [],
     targets: [
@@ -110,7 +111,8 @@ let package = Package(
         .target(name: "StepCount",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_STEPCOUNT"),.define("PTOOLS_SPM")]),
         .target(name: "Speech",dependencies: [.target(name: "PTools")],swiftSettings: [.define("PTOOLS_SPEECH"),.define("PTOOLS_SPM")]),
         .target(name: "Harbeth",dependencies: [.target(name: "PTools")],swiftSettings: [.define("POOTOOLS_HARBETH"),.define("PTOOLS_SPM")]),
-        .target(name: "ScanQRCode",dependencies: [.target(name: "PTools")],swiftSettings: [.define("POOTOOLS_SCANQRCODE"),.define("PTOOLS_SPM")])
+        .target(name: "ScanQRCode",dependencies: [.target(name: "PTools")],swiftSettings: [.define("POOTOOLS_SCANQRCODE"),.define("PTOOLS_SPM")]),
+        .target(name: "Stepper",dependencies: [.target(name: "PTools")],swiftSettings: [.define("POOTOOLS_STEPPER"),.define("PTOOLS_SPM")])
 
     ],
     swiftLanguageVersions: [.v5]
