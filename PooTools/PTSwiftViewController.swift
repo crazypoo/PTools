@@ -234,5 +234,23 @@ class PTSwiftViewController: PTBaseViewController {
         PTContract.share.getContractData { models in
             print(models!.indexStrings)
         }
+        
+        let wave = PTWaterWaveView(startColor: .randomColor, endColor: .randomColor)
+        self.view.addSubview(wave)
+        wave.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        let coin = PTCoinAnimation()
+        self.view.addSubview(coin)
+        coin.showLabel.text = "1111111"
+        coin.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        PTGCDManager.gcdAfter(time: 2) {
+            coin.beginAnimationFunction()
+            coin.animationBlock = { finish in
+            }
+        }
     }
 }

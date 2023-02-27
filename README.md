@@ -127,6 +127,12 @@ pod 'PooTools/Speech', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/HealthKit', :git => 'https://github.com/crazypoo/PTools.git'
 ### 颜色控件
 pod 'PooTools/ColorFunction', :git => 'https://github.com/crazypoo/PTools.git'
+### 弹出框控件
+pod 'PooTools/PopoverKit', :git => 'https://github.com/crazypoo/PTools.git'
+### 扫描二维码/条形码控件
+pod 'PooTools/ScanQRCode', :git => 'https://github.com/crazypoo/PTools.git'
+### Stepper控件
+pod 'PooTools/Stepper', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

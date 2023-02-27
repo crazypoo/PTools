@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.0.4",
+  "version": "3.0.5",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.0.4"
+    "tag": "3.0.5"
   },
   "license": {
     "type": "MIT",
@@ -158,6 +158,18 @@
       "source_files": "PooToolsSource/AESAndDES/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DATAENCRYPT POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "Stepper",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Stepper/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPPER POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -832,6 +844,9 @@
         ],
         "PooTools/SpeechRecognizerPermission": [
 
+        ],
+        "OSSSpeechKit": [
+
         ]
       },
       "frameworks": [
@@ -1237,6 +1252,9 @@
 
         ],
         "PooTools/ScanQRCode": [
+
+        ],
+        "PooTools/Stepper": [
 
         ]
       },

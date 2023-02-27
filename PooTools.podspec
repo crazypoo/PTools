@@ -482,6 +482,7 @@ Pod::Spec.new do |s|
     s.subspec 'Speech' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/SpeechRecognizerPermission'
+        subspec.dependency 'OSSSpeechKit'
         subspec.frameworks = 'Speech','AVFoundation'
         subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
