@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.0.5'
+    s.version     = '3.0.6'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -344,6 +344,14 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'Location' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Location/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LOCATION POOTOOLS_COCOAPODS"
+        }
+    end
+        
     s.subspec 'Tabbar' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'ESTabBarController-swift'
@@ -681,6 +689,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PopoverKit'
         subspec.dependency 'PooTools/ScanQRCode'
         subspec.dependency 'PooTools/Stepper'
+        subspec.dependency 'PooTools/Location'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
