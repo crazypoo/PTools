@@ -35,6 +35,9 @@ class PTSwiftViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        let gps = PTGetGPSData.share
+        gps.locationManager.startUpdatingLocation()
+        
         PTLocalConsoleFunction.share.pNSLog("1989-06-02 00:00:00".getConstellation())
 
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in

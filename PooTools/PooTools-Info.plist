@@ -33,6 +33,12 @@
 	<string>相机使用</string>
 	<key>NSContactsUsageDescription</key>
 	<string>獲取通訊錄</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>定位</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>定位</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>定位</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Mic使用</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>

@@ -84,6 +84,8 @@
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
+		5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */; };
+		5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
@@ -292,6 +294,8 @@
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
+		5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocationFunction.swift; sourceTree = "<group>"; };
+		5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGetGPSData.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
@@ -527,6 +531,7 @@
 				55D59C6728F3E96D00B4FF76 /* Line */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				555E8FE628D01CF600AF5E63 /* LocalConsole */,
+				5578EE5829ADC45C00F3E0AC /* Location */,
 				9AE4468D2858680A007DC2B5 /* Log */,
 				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
 				55D59C5D28F3E7C400B4FF76 /* Motion */,
@@ -841,6 +846,15 @@
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		5578EE5829ADC45C00F3E0AC /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */,
+				5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */,
+			);
+			path = Location;
 			sourceTree = "<group>";
 		};
 		557FC36A2966A2BC00991C36 /* ImagePicker */ = {
@@ -1571,6 +1585,7 @@
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */,
+				5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
@@ -1682,6 +1697,7 @@
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
+				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
 				559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,

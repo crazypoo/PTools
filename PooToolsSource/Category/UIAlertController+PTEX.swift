@@ -10,9 +10,50 @@ import UIKit
 
 public extension UIAlertController
 {
+    //MARK: 單按鈕Alert
+    ///單按鈕Alert
+    /// - Parameters:
+    ///   - title: 標題
+    ///   - msg: 內容
+    ///   - cancel: 取消按鈕
+    ///   - cancelBlock: 取消回調
     @objc class func alertVC(title:String? = "",msg:String? = "",cancel:String? = "取消",cancelBlock:(()->Void)?)
     {
         UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
+    }
+    
+    //MARK: ActionSheet基類
+    ///ActionSheet基類
+    /// - Parameters:
+    ///   - title: 標題
+    ///   - subTitle: 子標題
+    ///   - cancelButtonName: 取消按鈕
+    ///   - destructiveButtonName: 擴展按鈕
+    ///   - titles: 其他標題
+    ///   - destructiveBlock: 擴展回調
+    ///   - cancelBlock: 取消回調
+    ///   - otherBlock: 其他回調
+    @objc class func baseActionSheet(title:String,
+                                     subTitle:String? = "",
+                                     cancelButtonName:String? = "取消",
+                                     destructiveButtonName:String? = "",
+                                     titles:[String],
+                                     destructiveBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
+                                     cancelBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
+                                     otherBlock:@escaping ((_ sheet:PTActionSheetView,_ index:Int)->Void))
+    {
+        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles)
+        actionSheet.actionSheetSelectBlock = { (sheet,index) in
+            switch index {
+            case PTActionSheetView.DestructiveButtonTag:
+                destructiveBlock(sheet)
+            case PTActionSheetView.CancelButtonTag:
+                cancelBlock(sheet)
+            default:
+                otherBlock(sheet,index)
+            }
+        }
+        actionSheet.show()
     }
     
     //MARK: ALERT真正基类
