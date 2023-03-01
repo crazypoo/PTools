@@ -38,6 +38,9 @@ class PTSwiftViewController: PTBaseViewController {
         let gps = PTGetGPSData.share
         gps.locationManager.startUpdatingLocation()
         
+        PTLocalConsoleFunction.share.pNSLog("............>>>>>>>>>>>>>>>>>>>\(Bundle.appScheme())")
+        PTLocalConsoleFunction.share.pNSLog("............>>>>>>>>>>>>>>>>>>>\("".stringIsEmpty())>>>>>>>>\("12312312312313".stringIsEmpty())")
+
         PTLocalConsoleFunction.share.pNSLog("1989-06-02 00:00:00".getConstellation())
 
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
@@ -201,7 +204,7 @@ class PTSwiftViewController: PTBaseViewController {
 //        counting.countFrom(starValue: 0, toValue: 100, duration: 3)
         counting.count(fromValue: 0, to: 100, duration: 3,formatter: "%.0f")
         status.layoutSubviewsCallback = { someview in
-            print("asdadadadad:\(someview!)")
+            print("asdadadadad:\(someview)")
         }
         
         let linessssss = PTImaginaryLineView()
@@ -242,6 +245,8 @@ class PTSwiftViewController: PTBaseViewController {
         self.view.addSubview(wave)
         wave.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        wave.layoutSubviewsCallback = { view in
         }
         
         let coin = PTCoinAnimation()

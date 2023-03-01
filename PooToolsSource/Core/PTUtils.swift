@@ -185,9 +185,9 @@ public class PTUtils: NSObject {
 }
 
 //MARK: OC-FUNCTION
-extension PTUtils
+public extension PTUtils
 {
-    public class func oc_isiPhoneSeries()->Bool
+    @objc class func oc_isiPhoneSeries()->Bool
     {
         return isIPhoneXSeries()
     }    

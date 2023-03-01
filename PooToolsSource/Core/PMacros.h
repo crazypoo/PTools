@@ -6,7 +6,6 @@
 //  Copyright (c) 2014年 crazypoo. All rights reserved.
 //
 
-#import "Utils.h"
 #ifndef PTools_PMacros_h
 #define PTools_PMacros_h
 
@@ -81,13 +80,13 @@
 #define HEIGHT_NAV_LandSpaceLeftOrRight 32.f
 /*! @brief status高度 (iPhoneX除外)
  */
-#define HEIGHT_STATUS ([Utils isIPhoneXSeries] ? 44.f : 20.f)
+#define HEIGHT_STATUS ([PTUtils oc_isiPhoneSeries] ? 44.f : 20.f)
 /*! @brief 普通导航栏高度 (nav高度+status高度)
  */
 #define HEIGHT_NAVBAR HEIGHT_NAV + HEIGHT_STATUS
 /*! @brief tabbara安全区域高度
  */
-#define HEIGHT_TABBAR_SAFEAREA ([Utils isIPhoneXSeries] ? 34.f : 0.f)
+#define HEIGHT_TABBAR_SAFEAREA ([PTUtils oc_isiPhoneSeries] ? 34.f : 0.f)
 /*! @brief tabbar高度
  */
 #define HEIGHT_TABBAR 49.0f

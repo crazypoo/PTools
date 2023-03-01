@@ -7,7 +7,6 @@
 //
 
 #import "PTViewController.h"
-#import "Utils.h"
 #import "PMacros.h"
 #import "PTAppDelegate.h"
 
@@ -172,7 +171,7 @@ static NSString *cellIdentifier = @"CELL";
                     infoLabel.hidden = YES;
                     
                     NSString *isiPhoneX;
-                    if ([Utils isIPhoneXSeries]) {
+                    if ([PTUtils oc_isiPhoneSeries]) {
                         isiPhoneX = @"是";
                     }
                     else
@@ -521,6 +520,14 @@ static NSString *cellIdentifier = @"CELL";
             [socialSingnatureView showView];
             socialSingnatureView.doneBlock = ^(UIImage * iamge) {
                 
+                UIImageView *newImage = [UIImageView new];
+                newImage.frame = CGRectMake(0, 0, 199, 199);
+                newImage.image = iamge;
+                [self.view addSubview:newImage];
+                
+                [PTGCDManager gcdAfterTime:10 block:^{
+                    [newImage removeFromSuperview];
+                }];
             };
             socialSingnatureView.dismissBlock = ^{
                 

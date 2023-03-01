@@ -240,9 +240,12 @@ public extension NSString
     //MARK: 檢測字符串是否為空
     ///檢測字符串是否為空
     /// - Returns: Bool
-    func stringIsEmpty()->Bool
+    @objc func stringIsEmpty()->Bool
     {
-        return Utils.checkStringFunc(self as String)
+        if let string = self as String?, !string.isEmpty {
+            return false
+        }
+        return true
     }
     
     @objc class func currentDate(dateFormatter:NSString)->NSString

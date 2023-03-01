@@ -228,6 +228,46 @@ public extension UIView {
 
 public extension UIView
 {
+    private struct AssociatedKeys {
+        static var layoutSubviewsCallback = "layoutSubviewsCallback"
+    }
+
+    @objc func jx_layoutSubviews() {
+        self.jx_layoutSubviews()
+        self.layoutSubviewsCallback?(self)
+    }
+
+    var layoutSubviewsCallback: ((UIView) -> Void)? {
+        get {
+            return objc_getAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback) as? ((UIView) -> Void)
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
+    }
+
+    static func swizzle() {
+        let originalSelector = #selector(layoutSubviews)
+        let swizzledSelector = #selector(jx_layoutSubviews)
+
+        guard let originalMethod = class_getInstanceMethod(self, originalSelector),
+              let swizzledMethod = class_getInstanceMethod(self, swizzledSelector)
+        else {
+            return
+        }
+
+        let didAddMethod = class_addMethod(self, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod))
+
+        if didAddMethod {
+            class_replaceMethod(self, swizzledSelector, method_getImplementation(originalMethod), method_getTypeEncoding(originalMethod))
+        } else {
+            method_exchangeImplementations(originalMethod, swizzledMethod)
+        }
+    }
+}
+
+public extension UIView
+{
     @objc func viewUI_shake()
     {
         let keyFrame = CAKeyframeAnimation(keyPath: "position.x")

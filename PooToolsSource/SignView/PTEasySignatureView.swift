@@ -279,7 +279,7 @@ class PTEasySignatureView: UIView {
         self.layer.render(in: UIGraphicsGetCurrentContext()!)
         var images:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        images = PTImageBlackToTransparent.imageBlack(toTransparent: images)
+        images = PTImageBlackToTransparent.imageBlackToTransparent(image: images) ?? UIImage()
         
         if self.showMessage.stringIsEmpty()
         {

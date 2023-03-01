@@ -26,4 +26,19 @@ public extension NSObject
         }
         free(ivars)
     }
+    
+    //MARK: 檢測Obj是否為空
+    ///檢測Obj是否為空
+    class func checkObject(_ obj: NSObject?) -> Bool {
+        if obj == nil || obj is NSNull {
+            return true
+        }
+        if let data = obj as? Data, data.count == 0 {
+            return true
+        }
+        if let array = obj as? NSArray, array.count == 0 {
+            return true
+        }
+        return false
+    }
 }

@@ -53,4 +53,20 @@ public extension NSDictionary
             return ""
         }
     }
+    
+    //MARK: 檢測Dic是否為空
+    ///檢測Dic是否為空
+    class func checkDic(_ dic:NSDictionary?) -> Bool
+    {
+        if dic == nil {
+            return true
+        }
+        if let dict = dic as? [AnyHashable:Any],dict.isEmpty {
+            return true
+        }
+        if (dic?.allKeys ?? []).isEmpty {
+            return true
+        }
+        return false
+    }
 }

@@ -47,6 +47,10 @@
  pod 'PermissionsKit/RemindersPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
  pod 'PermissionsKit/SpeechRecognizerPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
  pod 'PermissionsKit/HealthPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
+ pod 'Brightroom/Engine'
+ pod 'Brightroom/UI-Classic'
+ pod 'Brightroom/UI-Crop'
+ pod 'CalendarKit'
  */
 #ifndef PTools_PTInputAll_h
 #define PTools_PTInputAll_h

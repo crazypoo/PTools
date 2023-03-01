@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.0.6'
+    s.version     = '3.0.7'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'https://github.com/crazypoo/PTools'
     s.summary     = '多年来积累的轮子'
@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     s.swift_versions = '5.0'
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
-        subspec.resource     = 'PooToolsSource/PooTools.bundle'
+        subspec.resource = 'PooToolsSource/PooTools.bundle'
         subspec.dependency 'SwiftDate'
         subspec.dependency 'NotificationBannerSwift'
         subspec.dependency 'WZLBadge'

@@ -11,7 +11,6 @@
 		231D14D4272CDD2C003D6F62 /* LICENSE in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D2272CDD2B003D6F62 /* LICENSE */; };
 		231D14D5272CDD2C003D6F62 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 231D14D3272CDD2C003D6F62 /* README.md */; };
 		231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */; };
-		231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */; };
 		231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B3272CDEE9003D6F62 /* ResizeController.swift */; };
 		231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */; };
 		231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15B5272CDEE9003D6F62 /* PTLabel.swift */; };
@@ -54,7 +53,6 @@
 		231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DC272CDEE9003D6F62 /* LocalConsole.swift */; };
 		231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */; };
 		231D1693272CDEEA003D6F62 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 231D15DE272CDEE9003D6F62 /* PooTools.bundle */; };
-		231D1696272CDEEA003D6F62 /* Utils.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15E6272CDEE9003D6F62 /* Utils.m */; };
 		231D169E272CDEEA003D6F62 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
@@ -63,6 +61,7 @@
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
+		5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
@@ -133,7 +132,6 @@
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
-		55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
@@ -212,8 +210,6 @@
 		231D14D2272CDD2B003D6F62 /* LICENSE */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		231D14D3272CDD2C003D6F62 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Swizzled.swift"; sourceTree = "<group>"; };
-		231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+LayoutSubviewsCallback.h"; sourceTree = "<group>"; };
-		231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+LayoutSubviewsCallback.m"; sourceTree = "<group>"; };
 		231D1533272CDEE9003D6F62 /* PTInputAll.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PTInputAll.h; sourceTree = "<group>"; };
 		231D15B3272CDEE9003D6F62 /* ResizeController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResizeController.swift; sourceTree = "<group>"; };
 		231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTUrlChange.swift; sourceTree = "<group>"; };
@@ -257,9 +253,7 @@
 		231D15DC272CDEE9003D6F62 /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
 		231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+PTEX.swift"; sourceTree = "<group>"; };
 		231D15DE272CDEE9003D6F62 /* PooTools.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = PooTools.bundle; sourceTree = "<group>"; };
-		231D15E3272CDEE9003D6F62 /* Utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Utils.h; sourceTree = "<group>"; };
 		231D15E5272CDEE9003D6F62 /* PMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMacros.h; sourceTree = "<group>"; };
-		231D15E6272CDEE9003D6F62 /* Utils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Utils.m; sourceTree = "<group>"; };
 		231D15FD272CDEE9003D6F62 /* MethodSwizzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		231D15FE272CDEE9003D6F62 /* MethodSwizzle.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
 		231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -273,6 +267,7 @@
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
+		5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImageBlackToTransparent.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
@@ -344,8 +339,6 @@
 		55E51757292C9DB200BFF122 /* PTDataEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDataEncryption.swift; sourceTree = "<group>"; };
 		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
-		55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTImageBlackToTransparent.h; sourceTree = "<group>"; };
-		55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTImageBlackToTransparent.m; sourceTree = "<group>"; };
 		55E80DB128ED63F9004CF2C1 /* PTSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSignView.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
@@ -614,8 +607,6 @@
 				55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */,
 				55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */,
 				231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */,
-				231D150B272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.h */,
-				231D1527272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m */,
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
@@ -688,6 +679,7 @@
 			isa = PBXGroup;
 			children = (
 				55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */,
+				5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */,
 				55E80DB128ED63F9004CF2C1 /* PTSignView.swift */,
 			);
 			path = SignView;
@@ -982,14 +974,10 @@
 				231D15E5272CDEE9003D6F62 /* PMacros.h */,
 				231D16A7272CE727003D6F62 /* PooTools_Example-Bridging-Header.h */,
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,
-				55E80DAB28ED5D7D004CF2C1 /* PTImageBlackToTransparent.h */,
-				55E80DAC28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m */,
 				231D1533272CDEE9003D6F62 /* PTInputAll.h */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				231D15E3272CDEE9003D6F62 /* Utils.h */,
-				231D15E6272CDEE9003D6F62 /* Utils.m */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1576,7 +1564,6 @@
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
-				55E80DAD28ED5D7D004CF2C1 /* PTImageBlackToTransparent.m in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
@@ -1587,7 +1574,6 @@
 				5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */,
 				5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
-				231D1696272CDEEA003D6F62 /* Utils.m in Sources */,
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
@@ -1647,6 +1633,7 @@
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
+				5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
@@ -1659,7 +1646,6 @@
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
-				231D1631272CDEE9003D6F62 /* UIView+LayoutSubviewsCallback.m in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,

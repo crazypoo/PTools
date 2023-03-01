@@ -12,9 +12,7 @@
 
 #import "PMacros.h"
 #import "PooTools_Example-Bridging-Header.h"
-#import "PTImageBlackToTransparent.h"
 #import "PTInputAll.h"
-#import "Utils.h"
 #import "MethodSwizzle.h"
 #import "UIView+LayoutSubviewsCallback.h"
 #import "PrintBeautifulLog.h"
