@@ -11,23 +11,23 @@ import UIKit
 extension DispatchQueue: PTProtocolCompatible {}
 
 public extension PTProtocol where Base == DispatchQueue {
-    private static var _onceTracker = [String]()
+    private static var unaTracker = [String]()
     
-    // MARK: 函数只被执行一次
-    /// 函数只被执行一次
+    //MARK: 函数只被执行一次
+    ///函数只被执行一次
     /// - Parameters:
     ///   - token: 函数标识
     ///   - block: 执行的闭包
     /// - Returns: 一次性函数
-    static func once(token: String, block: () -> ()) {
-        if _onceTracker.contains(token) {
+    static func una(token: String, block: () -> ()) {
+        if unaTracker.contains(token) {
             return
         }
         objc_sync_enter(self)
         defer {
             objc_sync_exit(self)
         }
-        _onceTracker.append(token)
+        unaTracker.append(token)
         block()
     }
 }

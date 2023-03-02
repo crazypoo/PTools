@@ -12,7 +12,7 @@ import MJRefresh
 public extension UIScrollView {
     
     //MARK: 自动判断上拉或下拉结束正在刷新状态
-    /// 自动判断上拉或下拉结束正在刷新状态
+    ///自动判断上拉或下拉结束正在刷新状态
    @objc func bk_endMJRefresh() {
         
         if mj_header != nil {
@@ -38,7 +38,8 @@ public extension UIScrollView {
 
 public extension PTProtocol where Base : UIScrollView
 {
-    /// 根据偏移量和页数绘制
+    //MARK: 根据偏移量和页数绘制
+    ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw
     private func snapShotContentScrollPage(index: Int, maxIndex: Int, callback: @escaping () -> Void) {
         self.base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * self.base.frame.size.height), animated: false)
@@ -53,9 +54,10 @@ public extension PTProtocol where Base : UIScrollView
         }
     }
     
-    // MARK: 获取 ScrollView 的 contentScroll 长图像
-    /// 获取 ScrollView 的 contentScroll 长图像
-    /// - Parameter completionHandler: 获取闭包
+    //MARK: 获取ScrollView的contentScroll长图像
+    /// 获取ScrollView的contentScroll长图像
+    /// - Parameters:
+    ///  - completionHandler: 获取闭包
     func snapShotContentScroll(_ completionHandler: @escaping (_ screenShotImage: UIImage?) -> Void) {
         /// 放一个假的封面
         let snapShotView = self.base.snapshotView(afterScreenUpdates: true)

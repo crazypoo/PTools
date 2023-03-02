@@ -9,11 +9,10 @@
 import UIKit
 
 extension UserDefaults: PTProtocolCompatible {}
-// MARK: 基本的扩展
 public extension PTProtocol where Base: UserDefaults {
   
-    // MARK: 存值
-    /// 存值
+    //MARK: 存值
+    ///存值
     /// - Parameters:
     ///   - value: 值
     ///   - key: 键
@@ -27,9 +26,10 @@ public extension PTProtocol where Base: UserDefaults {
         return true
     }
     
-    // MARK: 取值
-    /// 取值
-    /// - Parameter key: 键
+    //MARK: 取值
+    ///取值
+    /// - Parameters:
+    ///  - key: 键
     /// - Returns: 返回值
     static func userDefaultsGetValue(key: String?) -> Any? {
         guard key != nil, let result = Base.standard.value(forKey: key!) else {
@@ -38,8 +38,8 @@ public extension PTProtocol where Base: UserDefaults {
         return result
     }
     
-    // MARK: 移除单个值
-    /// 移除单个值
+    //MARK: 移除单个值
+    ///移除单个值
     /// - Parameter key: 键名
     static func remove(_ key: String) {
         guard let _ = Base.standard.value(forKey: key) else {
@@ -48,8 +48,8 @@ public extension PTProtocol where Base: UserDefaults {
         Base.standard.removeObject(forKey: key)
     }
     
-    // MARK: 移除所有值
-    /// 移除所有值
+    //MARK: 移除所有值
+    ///移除所有值
     static func removeAllKeyValue() {
         if let bundleID = Bundle.main.bundleIdentifier {
             Base.standard.removePersistentDomain(forName: bundleID)
@@ -60,8 +60,8 @@ public extension PTProtocol where Base: UserDefaults {
 // MARK: 模型持久化
 public extension PTProtocol where Base: UserDefaults {
     
-    // MARK: 存储模型
-    /// 存储模型
+    //MARK: 存储模型
+    ///存储模型
     /// - Parameters:
     ///   - object: 模型
     ///   - key: 对应的key
@@ -74,8 +74,8 @@ public extension PTProtocol where Base: UserDefaults {
         Base.standard.synchronize()
     }
     
-    // MARK: 取出模型
-    /// 取出模型
+    //MARK: 取出模型
+    ///取出模型
     /// - Parameters:
     ///   - type: 当时存储的类型
     ///   - key: 对应的key
@@ -94,7 +94,7 @@ public extension PTProtocol where Base: UserDefaults {
     }
     
     //MARK: 保存模型数组
-    /// 保存模型数组
+    ///保存模型数组
     /// - Returns: 返回保存的结果
     @discardableResult
     static func setModelArray<T: Decodable & Encodable>(modelArrry object: [T], key: String) -> Bool {
@@ -110,7 +110,7 @@ public extension PTProtocol where Base: UserDefaults {
     }
     
     //MARK: 读取模型数组
-    ///  读取模型数组
+    ///读取模型数组
     /// - Returns: 返回读取的模型数组
     static func getModelArray<T: Decodable & Encodable>(forKey key : String) -> [T] {
         guard let data = Base.standard.data(forKey: key) else { return [] }

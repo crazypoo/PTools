@@ -48,8 +48,8 @@ public enum BasePath {
 }
 
 public extension PTProtocol where Base: FileManager {
-    // MARK: 获取Home的完整路径名
-    /// 获取Home的完整路径名
+    //MARK: 获取Home的完整路径名
+    ///获取Home的完整路径名
     /// - Returns: Home的完整路径名
     static func homeDirectory() -> String {
         //获取程序的Home目录
@@ -57,8 +57,8 @@ public extension PTProtocol where Base: FileManager {
         return homeDirectory
     }
     
-    // MARK: 获取Documnets的完整路径名
-    /// 获取Documnets的完整路径名
+    //MARK: 获取Documnets的完整路径名
+    ///获取Documnets的完整路径名
     /// - Returns: Documnets的完整路径名
     static func DocumnetsDirectory() -> String {
         //获取程序的documentPaths目录
@@ -71,13 +71,13 @@ public extension PTProtocol where Base: FileManager {
         return ducumentPath
     }
     
-    // MARK: 获取Library的完整路径名
+    //MARK: 获取Library的完整路径名
     /**
      这个目录下有两个子目录：Caches 和 Preferences
      Library/Preferences目录，包含应用程序的偏好设置文件。不应该直接创建偏好设置文件，而是应该使用NSUserDefaults类来取得和设置应用程序的偏好。
      Library/Caches目录，主要存放缓存文件，iTunes不会备份此目录，此目录下文件不会再应用退出时删除
      */
-    /// 获取Library的完整路径名
+    ///获取Library的完整路径名
     /// - Returns: Library的完整路径名
     static func LibraryDirectory() -> String {
         //获取程序的documentPaths目录
@@ -90,8 +90,8 @@ public extension PTProtocol where Base: FileManager {
         return libraryPath
     }
     
-    // MARK: 获取/Library/Caches的完整路径名
-    /// 获取/Library/Caches的完整路径名
+    //MARK: 获取/Library/Caches的完整路径名
+    ///获取/Library/Caches的完整路径名
     /// - Returns: /Library/Caches的完整路径名
     static func CachesDirectory() -> String {
         //获取程序的/Library/Caches目录
@@ -99,8 +99,8 @@ public extension PTProtocol where Base: FileManager {
         return cachesPath
     }
     
-    // MARK: 1.5、获取Library/Preferences的完整路径名
-    /// 获取Library/Preferences的完整路径名
+    //MARK: 获取Library/Preferences的完整路径名
+    ///获取Library/Preferences的完整路径名
     /// - Returns: Library/Preferences的完整路径名
     static func PreferencesDirectory() -> String {
         //Library/Preferences目录－方法2
@@ -108,8 +108,8 @@ public extension PTProtocol where Base: FileManager {
         return preferencesPath
     }
     
-    // MARK: 获取Tmp的完整路径名
-    /// 获取Tmp的完整路径名，用于存放临时文件，保存应用程序再次启动过程中不需要的信息，重启后清空
+    //MARK: 获取Tmp的完整路径名
+    ///获取Tmp的完整路径名，用于存放临时文件，保存应用程序再次启动过程中不需要的信息，重启后清空
     /// - Returns: Tmp的完整路径名
     static func TmpDirectory() -> String {
         //方法1
@@ -119,8 +119,8 @@ public extension PTProtocol where Base: FileManager {
         return tmpDir
     }
     
-    // MARK: 获取Log的完整路径名
-    /// 获取Log的完整路径名，用于存放临时文件，保存应用程序再次启动过程中不需要的信息，重启后清空
+    //MARK: 获取Log的完整路径名
+    ///获取Log的完整路径名，用于存放临时文件，保存应用程序再次启动过程中不需要的信息，重启后清空
     /// - Returns: Log的完整路径名
     static func LogDirectory() -> String {
         //方法
@@ -129,18 +129,18 @@ public extension PTProtocol where Base: FileManager {
     }
 }
 
-// MARK: 文件以及文件夹的操作 扩展
+//MARK: 文件以及文件夹的操作 扩展
 public extension PTProtocol where Base: FileManager {
-    // MARK: 文件写入的类型
-    /// 文件写入的类型
+    //MARK: 文件写入的类型
+    ///文件写入的类型
     enum FileWriteType {
         case TextType
         case ImageType
         case ArrayType
         case DictionaryType
     }
-    // MARK: 移动或者拷贝的类型
-    /// 移动或者拷贝的类型
+    //MARK: 移动或者拷贝的类型
+    ///移动或者拷贝的类型
     enum MoveOrCopyType {
         case file
         case directory
@@ -150,8 +150,8 @@ public extension PTProtocol where Base: FileManager {
         return FileManager.default
     }
 
-    // MARK: 创建文件夹(蓝色的，文件夹和文件是不一样的)
-    /// 创建文件夹(蓝色的，文件夹和文件是不一样的)
+    //MARK: 创建文件夹(蓝色的，文件夹和文件是不一样的)
+    ///创建文件夹(蓝色的，文件夹和文件是不一样的)
     /// - Parameter folderName: 文件夹的名字
     /// - Returns: 返回创建的 创建文件夹路径
     @discardableResult
@@ -169,10 +169,11 @@ public extension PTProtocol where Base: FileManager {
         }
     }
         
-    // MARK: 检测文件在文件夹中是否存在
-    /// 检测文件在文件夹中是否存在
-    /// - Parameter filePath: 文件夹的路径
-    /// - Parameter fileName: 文件的名字
+    //MARK: 检测文件在文件夹中是否存在
+    //检测文件在文件夹中是否存在
+    /// - Parameters:
+    ///    - filePath: 文件夹的路径
+    ///    - fileName: 文件的名字
     @discardableResult
     static func isFileExist(filePath:String,fileName:String)->Bool
     {
@@ -199,9 +200,10 @@ public extension PTProtocol where Base: FileManager {
         }
     }
     
-    // MARK: 删除文件夹
+    //MARK: 删除文件夹
     /// 删除文件夹
-    /// - Parameter folderPath: 文件的路径
+    /// - Parameters:
+    ///  - folderPath: 文件的路径
     @discardableResult
     static func removefolder(folderPath: String) -> (isSuccess: Bool, error: String) {
         let filePath = "\(folderPath)"
@@ -218,9 +220,10 @@ public extension PTProtocol where Base: FileManager {
         }
     }
 
-    // MARK: 创建文件
-    /// 创建文件
-    /// - Parameter filePath: 文件路径
+    //MARK: 创建文件
+    ///创建文件
+    /// - Parameters:
+    ///  - filePath: 文件路径
     /// - Returns: 返回创建的结果 和 路径
     @discardableResult
     static func createFile(filePath: String) -> (isSuccess: Bool, error: String) {
@@ -233,9 +236,10 @@ public extension PTProtocol where Base: FileManager {
         return (true, "")
     }
     
-    // MARK: 删除文件
-    /// 删除文件
-    /// - Parameter filePath: 文件路径
+    //MARK: 删除文件
+    ///删除文件
+    /// - Parameters:
+    ///  - filePath: 文件路径
     @discardableResult
     static func removefile(filePath: String) -> (isSuccess: Bool, error: String) {
         guard judgeFileOrFolderExists(filePath: filePath) else {
@@ -251,9 +255,10 @@ public extension PTProtocol where Base: FileManager {
         }
     }
     
-    // MARK: 读取文件内容
-    /// 读取文件内容
-    /// - Parameter filePath: 文件路径
+    //MARK: 读取文件内容
+    ///读取文件内容
+    /// - Parameters:
+    ///  - filePath: 文件路径
     /// - Returns: 文件内容
     @discardableResult
     static func readfile(filePath: String) -> String? {
@@ -265,8 +270,8 @@ public extension PTProtocol where Base: FileManager {
         return String(data: data!, encoding: String.Encoding.utf8)
     }
     
-    // MARK: 把文字，图片，数组，字典写入文件
-    /// 把文字，图片，数组，字典写入文件
+    //MARK: 把文字，图片，数组，字典写入文件
+    ///把文字，图片，数组，字典写入文件
     /// - Parameters:
     ///   - writeType: 写入类型
     ///   - content: 写入内容
@@ -318,8 +323,8 @@ public extension PTProtocol where Base: FileManager {
         }
     }
     
-    // MARK: 从文件 读取 文字，图片，数组，字典
-    /// 从文件 读取 文字，图片，数组，字典
+    //MARK: 从文件 读取 文字，图片，数组，字典
+    ///从文件 读取 文字，图片，数组，字典
     /// - Parameters:
     ///   - readType: 读取的类型
     ///   - readPath: 读取文件路径
@@ -352,13 +357,13 @@ public extension PTProtocol where Base: FileManager {
         }
     }
     
-    // MARK: 拷贝(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 拷贝
+    //MARK: 拷贝(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 拷贝
     /**
      几个小注意点：
      1、目标路径，要带上文件夹名称，而不能只写父路径
      2、如果是覆盖拷贝，就是说目标路径已存在此文件夹，我们必须先删除，否则提示make directory error（当然这里最好做一个容错处理，比如拷贝前先转移到其他路径，如果失败，再拿回来）
      */
-    /// 拷贝(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 拷贝
+    ///拷贝(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 拷贝
     /// - Parameters:
     ///   - fromeFile: 拷贝的(文件夹/文件)路径
     ///   - toFile: 拷贝后的(文件夹/文件)路径
@@ -392,8 +397,8 @@ public extension PTProtocol where Base: FileManager {
         return (true, "success")
     }
     
-    // MARK: 移动(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 移动
-    /// 移动(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 移动
+    //MARK: 移动(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 移动
+    ///移动(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 移动
     /// - Parameters:
     ///   - fromeFile: 被移动的文件路径
     ///   - toFile: 移动后的文件路径
@@ -425,8 +430,8 @@ public extension PTProtocol where Base: FileManager {
         return (true, "success")
     }
     
-    // MARK: 判断 (文件夹/文件) 是否存在
-    /// 判断文件或文件夹是否存在
+    //MARK: 判断 (文件夹/文件) 是否存在
+    ///判断文件或文件夹是否存在
     static func judgeFileOrFolderExists(filePath: String) -> Bool {
         let exist = fileManager.fileExists(atPath: filePath)
         // 查看文件夹是否存在，如果存在就直接读取，不存在就直接反空
@@ -436,44 +441,46 @@ public extension PTProtocol where Base: FileManager {
         return true
     }
     
-    // MARK: 获取 (文件夹/文件) 的前一个路径
-    /// 获取 (文件夹/文件) 的前一个路径
-    /// - Parameter path: (文件夹/文件) 的路径
+    //MARK: 获取 (文件夹/文件) 的前一个路径
+    ///获取 (文件夹/文件) 的前一个路径
+    /// - Parameters:
+    ///   - path: (文件夹/文件) 的路径
     /// - Returns: (文件夹/文件) 的前一个路径
     static func directoryAtPath(path: String) -> String {
         return (path as NSString).deletingLastPathComponent
     }
     
-    // MARK: 判断目录是否可读
+    //MARK: 判断目录是否可读
     static func judegeIsReadableFile(path: String) -> Bool {
         return fileManager.isReadableFile(atPath: path)
     }
     
-    // MARK: 判断目录是否可写
+    //MARK: 判断目录是否可写
     static func judegeIsWritableFile(path: String) -> Bool {
         return fileManager.isReadableFile(atPath: path)
     }
     
-    // MARK: 判断目录是否可执行
+    //MARK: 判断目录是否可执行
     static func judegeIsExecutableFile(path: String) -> Bool {
         return fileManager.isExecutableFile(atPath: path)
     }
     
-    // MARK: 判断目录是否可删除
+    //MARK: 判断目录是否可删除
     static func judegeIsDeletableFile(path: String) -> Bool {
         return fileManager.isDeletableFile(atPath: path)
     }
     
-    // MARK: 根据文件路径获取文件扩展类型
-    /// 根据文件路径获取文件扩展类型
-    /// - Parameter path: 文件路径
+    //MARK: 根据文件路径获取文件扩展类型
+    ///根据文件路径获取文件扩展类型
+    /// - Parameters:
+    ///  - path: 文件路径
     /// - Returns: 文件扩展类型
     static func fileSuffixAtPath(path: String) -> String {
         return (path as NSString).pathExtension
     }
     
-    // MARK: 根据文件路径获取文件名称，是否需要后缀
-    /// 根据文件路径获取文件名称，是否需要后缀
+    //MARK: 根据文件路径获取文件名称，是否需要后缀
+    ///根据文件路径获取文件名称，是否需要后缀
     /// - Parameters:
     ///   - path: 文件路径
     ///   - suffix: 是否需要后缀，默认需要
@@ -487,8 +494,8 @@ public extension PTProtocol where Base: FileManager {
         return fileName
     }
     
-    // MARK: 对指定路径执行浅搜索，返回指定目录路径下的文件、子目录及符号链接的列表(只寻找一层)
-    /// 对指定路径执行浅搜索，返回指定目录路径下的文件、子目录及符号链接的列表(只寻找一层)
+    //MARK: 对指定路径执行浅搜索，返回指定目录路径下的文件、子目录及符号链接的列表(只寻找一层)
+    ///对指定路径执行浅搜索，返回指定目录路径下的文件、子目录及符号链接的列表(只寻找一层)
     /// - Parameter folderPath: 建搜索的lujing
     /// - Returns: 指定目录路径下的文件、子目录及符号链接的列表
     static func shallowSearchAllFiles(folderPath: String) -> Array<String>? {
@@ -498,8 +505,8 @@ public extension PTProtocol where Base: FileManager {
         return contentsOfDirectoryArray
     }
     
-    // MARK: 深度遍历，会递归遍历子文件夹（包括符号链接，所以要求性能的话用enumeratorAtPath）
-    /**深度遍历，会递归遍历子文件夹（包括符号链接，所以要求性能的话用enumeratorAtPath）*/
+    //MARK: 深度遍历，会递归遍历子文件夹（包括符号链接，所以要求性能的话用enumeratorAtPath）
+    ///深度遍历，会递归遍历子文件夹（包括符号链接，所以要求性能的话用enumeratorAtPath）
     static func getAllFileNames(folderPath: String) -> Array<String>? {
         // 查看文件夹是否存在，如果存在就直接读取，不存在就直接反空
         guard judgeFileOrFolderExists(filePath: folderPath), let subPaths = fileManager.subpaths(atPath: folderPath) else {
@@ -509,7 +516,7 @@ public extension PTProtocol where Base: FileManager {
     }
     
     // MARK: 深度遍历，会递归遍历子文件夹（但不会递归符号链接）
-    /** 对指定路径深度遍历，会递归遍历子文件夹（但不会递归符号链接））*/
+    ///深度遍历，会递归遍历子文件夹（但不会递归符号链接）
     static func deepSearchAllFiles(folderPath: String) -> Array<Any>? {
         // 查看文件夹是否存在，如果存在就直接读取，不存在就直接反空
         guard judgeFileOrFolderExists(filePath: folderPath), let contentsOfPathArray = fileManager.enumerator(atPath: folderPath) else {
@@ -518,9 +525,10 @@ public extension PTProtocol where Base: FileManager {
         return contentsOfPathArray.allObjects
     }
     
-    // MARK: 计算单个 (文件夹/文件) 的大小，单位为字节(bytes) （没有进行转换的）
-    /// 计算单个 (文件夹/文件) 的大小，单位为字节 （没有进行转换的）
-    /// - Parameter filePath: (文件夹/文件) 路径
+    //MARK: 计算单个 (文件夹/文件) 的大小，单位为字节(bytes) （没有进行转换的）
+    ///计算单个 (文件夹/文件) 的大小，单位为字节 （没有进行转换的）
+    /// - Parameters:
+    ///  - filePath: (文件夹/文件) 路径
     /// - Returns: 单个文件或文件夹的大小
     static func fileOrDirectorySingleSize(filePath: String) -> UInt64 {
         // 1、先判断文件路径是否存在
@@ -535,8 +543,9 @@ public extension PTProtocol where Base: FileManager {
     }
     
     //MARK: 计算 (文件夹/文件) 的大小（转换过的）
-    /// 计算 (文件夹/文件) 的大小
-    /// - Parameter path: (文件夹/文件) 的路径
+    ///计算 (文件夹/文件) 的大小
+    /// - Parameters:
+    ///   - path: (文件夹/文件) 的路径
     /// - Returns: (文件夹/文件) 的大小
     static func fileOrDirectorySize(path: String) -> String {
         if path.count == 0, !fileManager.fileExists(atPath: path) {
@@ -557,9 +566,10 @@ public extension PTProtocol where Base: FileManager {
         return covertUInt64ToString(with: fileSize)
     }
 
-    // MARK: 获取(文件夹/文件)属性集合
-    ///  获取(文件夹/文件)属性集合
-    /// - Parameter path: (文件夹/文件)路径
+    //MARK: 获取(文件夹/文件)属性集合
+    ///获取(文件夹/文件)属性集合
+    /// - Parameters:
+    ///   - path: (文件夹/文件)路径
     /// - Returns: (文件夹/文件)属性集合
     @discardableResult
     static func fileAttributes(path: String) -> ([FileAttributeKey : Any]?) {
@@ -604,7 +614,8 @@ public extension PTProtocol where Base: FileManager {
         */
     }
     
-    // MARK: 文件/文件夹比较 是否一样
+    //MARK: 文件/文件夹比较 是否一样
+    ///文件/文件夹比较 是否一样
     static func isEqual(filePath1: String, filePath2: String) -> Bool {
         // 先判断是否存在路径
         guard judgeFileOrFolderExists(filePath: filePath1), judgeFileOrFolderExists(filePath: filePath2) else {
@@ -618,8 +629,8 @@ public extension PTProtocol where Base: FileManager {
 // MARK: fileprivate
 public extension PTProtocol where Base: FileManager {
     
-    // MARK: 计算文件大小：UInt64 -> String
-    /// 计算文件大小：UInt64 -> String
+    //MARK: 计算文件大小：UInt64 -> String
+    ///计算文件大小：UInt64 -> String
     /// - Parameter size: 文件的大小
     /// - Returns: 转换后的文件大小
     static func covertUInt64ToString(with size: UInt64) -> String {
@@ -634,8 +645,8 @@ public extension PTProtocol where Base: FileManager {
     }
 }
 
-// MARK: 有关视频缩略图获取的扩展
-// 视频URL的类型
+//MARK: 有关视频缩略图获取的扩展
+//视频URL的类型
 enum PTVideoUrlType {
     // 本地
     case local
@@ -644,8 +655,8 @@ enum PTVideoUrlType {
 }
 public extension PTProtocol where Base: FileManager {
     
-    // MARK: 通过本地(沙盒)视频文件路径获取截图
-    /// 通过本地(沙盒)视频文件路径获取截图
+    //MARK: 通过本地(沙盒)视频文件路径获取截图
+    ///通过本地(沙盒)视频文件路径获取截图
     /// - Parameters:
     ///   - videoPath: 视频在沙盒的路径
     ///   - preferredTrackTransform: 缩略图的方向
@@ -656,8 +667,8 @@ public extension PTProtocol where Base: FileManager {
         return videoImage
     }
     
-    // MARK: 通过本地(沙盒)视频文件路径数组获取截图数组
-    /// 通过本地(沙盒)视频文件路径数组获取截图数组
+    //MARK: 通过本地(沙盒)视频文件路径数组获取截图数组
+    ///通过本地(沙盒)视频文件路径数组获取截图数组
     /// - Parameters:
     ///   - videoPaths: 视频在沙盒的路径数组
     ///   - preferredTrackTransform: 缩略图的方向
@@ -672,8 +683,8 @@ public extension PTProtocol where Base: FileManager {
         return allImageArray
     }
     
-    // MARK: 通过网络视频文件路径获取截图
-    /// 通过网络视频文件路径获取截图
+    //MARK: 通过网络视频文件路径获取截图
+    ///通过网络视频文件路径获取截图
     /// - Parameters:
     ///   - videoPath: 视频在沙盒的路径
     ///   - preferredTrackTransform: 缩略图的方向
@@ -689,8 +700,8 @@ public extension PTProtocol where Base: FileManager {
         }
     }
     
-    // MARK: 通过网络视频文件路径数组获取截图数组
-    /// 通过网络视频文件路径数组获取截图数组
+    //MARK: 通过网络视频文件路径数组获取截图数组
+    ///通过网络视频文件路径数组获取截图数组
     /// - Parameters:
     ///   - videoPaths: 视频在沙盒的路径数组
     ///   - preferredTrackTransform: 缩略图的方向
@@ -710,8 +721,8 @@ public extension PTProtocol where Base: FileManager {
         }
     }
    
-    // MARK: 获取视频缩略图的共有方法
-    /// 获取视频缩略图的共有方法
+    //MARK: 获取视频缩略图的共有方法
+    ///获取视频缩略图的共有方法
     /// - Parameters:
     ///   - videoUrlSouceType: 视频来源类型
     ///   - path: 本地路径或者网络视频连接

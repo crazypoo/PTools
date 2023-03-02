@@ -509,8 +509,8 @@ public extension String
         return PTUtils.createNoneInterpolatedUIImage(image: image!, imageSize: size)
     }
     
-    // MARK: 字符串根据某个字符进行分隔成数组
-    /// 字符串根据某个字符进行分隔成数组
+    //MARK: 字符串根据某个字符进行分隔成数组
+    ///字符串根据某个字符进行分隔成数组
     /// - Parameter char: 分隔符
     /// - Returns: 分隔后的数组
     func separatedByString(with char: String) -> Array<String> {
@@ -519,8 +519,8 @@ public extension String
         return arrayStrings
     }
     
-    // MARK: 获取指定位置和长度的字符串
-    /// 获取指定位置和大小的字符串
+    //MARK: 获取指定位置和长度的字符串
+    ///获取指定位置和大小的字符串
     /// - Parameters:
     ///   - start: 开始位置
     ///   - length: 长度
@@ -536,8 +536,8 @@ public extension String
         return String(self[range])
     }
     
-    // MARK: 隐藏手机号中间的几位(保留前几位和后几位)
-    /// 隐藏手机号中间的几位(保留前几位和后几位)
+    //MARK: 隐藏手机号中间的几位(保留前几位和后几位)
+    ///隐藏手机号中间的几位(保留前几位和后几位)
     /// - Parameters:
     ///   - combine: 中间加密的符号
     ///   - digitsBefore: 前面保留的位数
@@ -559,8 +559,8 @@ public extension String
         }
     }
     
-    // MARK:  隐藏邮箱中间的几位(保留前几位和后几位)
-    /// 隐藏邮箱中间的几位(保留前几位和后几位)
+    //MARK:  隐藏邮箱中间的几位(保留前几位和后几位)
+    ///隐藏邮箱中间的几位(保留前几位和后几位)
     /// - Parameters:
     ///   - combine: 加密的符号
     ///   - digitsBefore: 前面保留几位
@@ -1257,31 +1257,33 @@ public extension String
 }
 
 public extension PTProtocol where Base: ExpressibleByStringLiteral {
-    // MARK: 字符串的长度
-    /// 字符串的长度
+    //MARK: 字符串的长度
+    ///字符串的长度
     var length: Int {
         let string = base as! String
         return string.count
     }
     
-    // MARK: 判断是否包含某个子串
-    /// 判断是否包含某个子串
-    /// - Parameter find: 子串
+    //MARK: 判断是否包含某个子串
+    ///判断是否包含某个子串
+    /// - Parameters:
+    ///  - find: 子串
     /// - Returns: Bool
     func contains(find: String) -> Bool {
         return (base as! String).range(of: find) != nil
     }
     
-    // MARK: 判断是否包含某个子串 -- 忽略大小写
-    ///  判断是否包含某个子串 -- 忽略大小写
-    /// - Parameter find: 子串
+    //MARK: 判断是否包含某个子串(忽略大小写)
+    ///判断是否包含某个子串 (忽略大小写)
+    /// - Parameters:
+    ///  - find: 子串
     /// - Returns: Bool
     func containsIgnoringCase(find: String) -> Bool {
         return (base as! String).range(of: find, options: .caseInsensitive) != nil
     }
     
-    // MARK: 字符串转 base64
-    /// 字符串 Base64 编码
+    //MARK: 字符串转Base64
+    ///字符串转Base64编码
     var base64Encode: String? {
         guard let codingData = (base as! String).data(using: .utf8) else {
             return nil
@@ -1289,8 +1291,8 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return codingData.base64EncodedString()
     }
     
-    // MARK: base64转字符串转
-    /// 字符串 Base64 编码
+    //MARK: Base64转字符串转
+    ///字符串转Base64编码
     var base64Decode: String? {
         guard let decryptionData = Data(base64Encoded: base as! String, options: .ignoreUnknownCharacters) else {
             return nil
@@ -1298,16 +1300,16 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return String(data: decryptionData, encoding: .utf8)
     }
 
-    // MARK: 字符串转数组
-    /// 字符串转数组
+    //MARK: 字符串转数组
+    ///字符串转数组
     /// - Returns: 转化后的数组
     func toArray() -> Array<Any> {
         let a = Array(base as! String)
         return a
     }
     
-    // MARK: JSON字符串转Dictionary
-    /// JSON字符串转Dictionary
+    //MARK: JSON字符串转Dictionary
+    ///JSON字符串转Dictionary
     /// - Returns: Dictionary
     func jsonStringToDictionary() -> Dictionary<String, Any>? {
         let jsonString = self.base as! String
@@ -1319,8 +1321,8 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return nil
     }
     
-    // MARK: JSON字符串转Array
-    /// JSON字符串转Array
+    //MARK: JSON字符串转Array
+    ///JSON字符串转Array
     /// - Returns: Array
     func jsonStringToArray() -> Array<Any>? {
         let jsonString = self.base as! String
@@ -1332,9 +1334,10 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return nil
     }
     
-    // MARK: 转成拼音
-    /// 转成拼音
-    /// - Parameter isTone: true：带声调，false：不带声调，默认 false
+    //MARK: 转成拼音
+    ///转成拼音
+    /// - Parameters:
+    ///  - isTone: true：带声调，false：不带声调，默认 false
     /// - Returns: 拼音
     func toLetter(_ isTone: Bool = false) -> String {
         let mutableString = NSMutableString(string: self.base as! String)
@@ -1346,9 +1349,10 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return mutableString as String
     }
     
-    // MARK: 中文提取首字母
-    /// 中文提取首字母
-    /// - Parameter isUpper:  true：大写首字母，false: 小写首字母，默认 true
+    //MARK: 中文提取首字母
+    ///中文提取首字母
+    /// - Parameters:
+    ///  - isUpper:  true：大写首字母，false: 小写首字母，默认 true
     /// - Returns: 字符串的首字母
     func letterInitials(_ isUpper: Bool = true) -> String {
         let pinyin = toLetter(false).components(separatedBy: " ")
@@ -1356,8 +1360,8 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return isUpper ? initials.joined().uppercased() : initials.joined()
     }
 
-    // MARK: 提取出字符串中所有的URL链接
-    /// 提取出字符串中所有的URL链接
+    //MARK: 提取出字符串中所有的URL链接
+    ///提取出字符串中所有的URL链接
     /// - Returns: URL链接数组
     func getUrls() -> [String]? {
         var urls = [String]()
@@ -1374,8 +1378,8 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return urls
     }
 
-    // MARK: 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
-    /// 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    //MARK: 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    ///计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
     /// - Returns: 返回字符的个数
     func countOfChars() -> Int {
         var count = 0
@@ -1391,8 +1395,8 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
         return count
     }
 
-    // MARK: 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
-    /// 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
+    //MARK: 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
+    ///将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
     /// - Returns: 千分位的字符串
     func toThousands() -> String? {
         let formatter = NumberFormatter()
@@ -1418,7 +1422,7 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
 /**
  iOS中填充规则PKCS7,加解密模式ECB(无补码,CCCrypt函数中对应的nil),字符集UTF8,输出base64(可以自己改hex)
  */
-// MARK: 加密模式
+//MARK: 加密模式
 public enum DDYSCAType {
     case AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish
     var infoTuple: (algorithm: CCAlgorithm, digLength: Int, keyLength: Int) {
@@ -1444,8 +1448,8 @@ public enum DDYSCAType {
 
 public extension PTProtocol where Base: ExpressibleByStringLiteral {
     
-    // MARK: 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
-    /// 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
+    //MARK: 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
+    ///字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
     /// - Parameters:
     ///   - cryptType: 加密类型
     ///   - key: 加密的key
@@ -1504,13 +1508,13 @@ public extension PTProtocol where Base: ExpressibleByStringLiteral {
     }
 }
 
-// MARK: SHA1, SHA224, SHA256, SHA384, SHA512
+//MARK: SHA1, SHA224, SHA256, SHA384, SHA512
 /**
  - 安全哈希算法（Secure Hash Algorithm）主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。对于长度小于2^64位的消息，SHA1会产生一个160位的消息摘要。当接收到消息的时候，这个消息摘要可以用来验证数据的完整性。在传输的过程中，数据很可能会发生变化，那么这时候就会产生不同的消息摘要。当让除了SHA1还有SHA256以及SHA512等。
  - SHA1有如下特性：不可以从消息摘要中复原信息；两个不同的消息不会产生同样的消息摘要
  - SHA1 SHA256 SHA512 这4种本质都是摘要函数，不通在于长度 SHA1是160位，SHA256是256位，SHA512是512位
  */
-// MARK: 加密类型
+//MARK: 加密类型
 public enum DDYSHAType {
     case SHA1, SHA224, SHA256, SHA384, SHA512
     var infoTuple: (algorithm: CCHmacAlgorithm, length: Int) {
@@ -1531,8 +1535,8 @@ public enum DDYSHAType {
 
 public extension PTProtocol where Base: ExpressibleByStringLiteral {
     
-    // MARK: SHA1, SHA224, SHA256, SHA384, SHA512 加密
-    /// SHA1, SHA224, SHA256, SHA384, SHA512 加密
+    //MARK: SHA1, SHA224, SHA256, SHA384, SHA512 加密
+    ///SHA1, SHA224, SHA256, SHA384, SHA512 加密
     /// - Parameters:
     ///   - cryptType: 加密类型，默认是 SHA1 加密
     ///   - key: 加密的key

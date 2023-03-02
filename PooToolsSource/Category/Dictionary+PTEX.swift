@@ -11,23 +11,25 @@ import UIKit
 extension Dictionary: PTProtocolCompatible { }
 
 public extension Dictionary {
-    // MARK: 检查字典里面是否有某个 key
-    /// 检查字典里面是否有某个 key
+    //MARK: 检查字典里面是否有某个 key
+    ///检查字典里面是否有某个 key
     func has(_ key: Key) -> Bool {
         return index(forKey: key) != nil
     }
     
-    // MARK: 字典的key或者value组成的数组
-    /// 字典的key或者value组成的数组
-    /// - Parameter map: map
+    //MARK: 字典的key或者value组成的数组
+    ///字典的key或者value组成的数组
+    /// - Parameters:
+    ///  - map: map
     /// - Returns: 数组
     func toArray<V>(_ map: (Key, Value) -> V) -> [V] {
         return self.map(map)
     }
     
-    // MARK: JSON字符串 -> 字典
-    /// JsonString转为字典
-    /// - Parameter json: JSON字符串
+    //MARK: JSON字符串转字典
+    ///JsonString转为字典
+    /// - Parameters:
+    ///  - json: JSON字符串
     /// - Returns: 字典
     static func jsonToDictionary(json: String) -> Dictionary<String, Any>? {
         if let data = (try? JSONSerialization.jsonObject(
@@ -39,8 +41,8 @@ public extension Dictionary {
         }
     }
     
-    // MARK: 字典 -> JSON字符串
-    /// 字典转换为JSONString
+    //MARK: 字典转JSON字符串
+    ///字典转JSONString
     func toJSON() -> String? {
         if let jsonData = try? JSONSerialization.data(withJSONObject: self, options: JSONSerialization.WritingOptions()) {
             let jsonStr = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
@@ -49,8 +51,8 @@ public extension Dictionary {
         return nil
     }
     
-    // MARK: 字典里面所有的 key
-    /// 字典里面所有的key
+    //MARK: 字典里面所有的key
+    ///字典里面所有的key
     /// - Returns: key 数组
     func allKeys() -> [Key] {
         /*
@@ -59,14 +61,14 @@ public extension Dictionary {
         return self.keys.shuffled()
     }
     
-    // MARK: 字典里面所有的 value
-    /// 字典里面所有的value
+    //MARK: 字典里面所有的value
+    ///字典里面所有的value
     /// - Returns: value 数组
     func allValues() -> [Value] {
         return self.values.shuffled()
     }
     
-    // MARK: 设置value
+    //MARK: 设置value
     subscript<Result>(key: Key, as type: Result.Type) -> Result? {
         get {
             return self[key] as? Result
@@ -85,8 +87,8 @@ public extension Dictionary {
         }
     }
     
-    // MARK: 设置value
-    /// 设置value
+    //MARK: 设置value
+    ///设置value
     /// - Parameters:
     ///   - keys: key链
     ///   - newValue: 新的value
@@ -107,7 +109,8 @@ public extension Dictionary {
         return result
     }
     
-    /// 字典深层次设置value
+    //MARK: 字典深层次设置value
+    ///字典深层次设置value
     /// - Parameters:
     ///   - keys: key链
     ///   - oldValue: 字典
@@ -129,8 +132,8 @@ public extension Dictionary {
 // MARK: 其他基本扩展
 public extension PTProtocol where Base == Dictionary<String, Any> {
     
-    // MARK: 字典转JSON
-    /// 字典转JSON
+    //MARK: 字典转JSON
+    ///字典转JSON
     @discardableResult
     func dictionaryToJson() -> String? {
         if (!JSONSerialization.isValidJSONObject(self.base)) {

@@ -341,8 +341,8 @@ public extension UIImage
 
 public extension PTProtocol where Base: UIImage
 {
-    // MARK: 设置图片的圆角
-    /// 设置图片的圆角
+    //MARK: 设置图片的圆角
+    ///设置图片的圆角
     /// - Parameters:
     ///   - radius: 圆角大小 (默认:3.0,图片大小)
     ///   - corners: 切圆角的方式
@@ -377,8 +377,8 @@ public extension PTProtocol where Base: UIImage
         return output
     }
 
-    // MARK: 获取视频的第一帧
-    /// 获取视频的第一帧
+    //MARK: 获取视频的第一帧
+    ///获取视频的第一帧
     /// - Parameters:
     ///   - videoUrl: 视频 url
     ///   - maximumSize: 图片的最大尺寸
@@ -417,9 +417,10 @@ public extension PTProtocol where Base: UIImage
         }
     }
 
-    // MARK: 设置图片透明度
-    /// 设置图片透明度
-    /// alpha: 透明度
+    //MARK: 设置图片透明度
+    ///设置图片透明度
+    /// - Parameters:
+    ///  - alpha: 透明度
     /// - Returns: newImage
     func imageByApplayingAlpha(_ alpha: CGFloat) -> UIImage {
         UIGraphicsBeginImageContext(base.size)
@@ -435,8 +436,8 @@ public extension PTProtocol where Base: UIImage
         return newImage ?? self.base
     }
     
-    // MARK: 更改图片颜色
-    /// 更改图片颜色
+    //MARK: 更改图片颜色
+    ///更改图片颜色
     /// - Parameters:
     ///   - color: 图片颜色
     ///   - blendMode: 模式
@@ -459,8 +460,8 @@ public extension PTProtocol where Base: UIImage
         return tintedImage
     }
 
-    // MARK: 保存图片到相册(建议使用这个)
-    /// 保存图片到相册
+    //MARK: 保存图片到相册
+    ///保存图片到相册
     func savePhotosImageToAlbum(completion: @escaping ((Bool, Error?) -> Void)) {
         PHPhotoLibrary.shared().performChanges {
             PHAssetChangeRequest.creationRequestForAsset(from: self.base)
@@ -470,7 +471,7 @@ public extension PTProtocol where Base: UIImage
     }
 }
 
-// MARK: 压缩模式
+//MARK: 压缩模式
 public enum CompressionMode {
     /// 分辨率规则
     private static let resolutionRule: (min: CGFloat, max: CGFloat, low: CGFloat, default: CGFloat, high: CGFloat) = (10, 4096, 512, 1024, 2048)
@@ -543,24 +544,27 @@ public enum CompressionMode {
     }
 }
 
-// MARK: UIImage 压缩相关
+//MARK: UIImage 压缩相关
 public extension PTProtocol where Base: UIImage {
     
-    // MARK: 压缩图片
-    /// 压缩图片
-    /// - Parameter mode: 压缩模式
+    //MARK: 压缩图片
+    ///压缩图片
+    /// - Parameters:
+    ///  - mode: 压缩模式
     /// - Returns: 压缩后Data
     func compress(mode: CompressionMode = .medium) -> Data? {
         return resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
     }
     
-    // MARK: 异步图片压缩
-    /// 异步图片压缩
+    //MARK: 异步图片压缩
+    ///异步图片压缩
     /// - Parameters:
     ///   - mode: 压缩模式
     ///   - queue: 压缩队列
     ///   - complete: 完成回调(压缩后Data, 调整后分辨率)
-    func asyncCompress(mode: CompressionMode = .medium, queue: DispatchQueue = DispatchQueue.global(), complete:@escaping (Data?, CGSize) -> Void) {
+    func asyncCompress(mode: CompressionMode = .medium,
+                       queue: DispatchQueue = DispatchQueue.global(),
+                       complete:@escaping (Data?, CGSize) -> Void) {
         queue.async {
             let data = resizeIO(resizeSize: mode.resize(self.base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
             DispatchQueue.main.async {
@@ -569,9 +573,10 @@ public extension PTProtocol where Base: UIImage {
         }
     }
     
-    // MARK: 压缩图片质量
-    /// 压缩图片质量
-    /// - Parameter maxSize: 最大数据大小
+    //MARK: 压缩图片质量
+    ///压缩图片质量
+    /// - Parameters:
+    ///  - maxSize: 最大数据大小
     /// - Returns: 压缩后数据
     func compressDataSize(maxSize: Int = 1024 * 1024 * 2) -> Data? {
         var compression: CGFloat = 1
@@ -600,7 +605,8 @@ public extension PTProtocol where Base: UIImage {
         return cycleCompressDataSize(maxSize: maxSize)
     }
     
-    /// 循环压缩
+    //MARK: 循环压缩
+    ///循环压缩
     /// - Parameter maxSize: 最大数据大小
     /// - Returns: 压缩后数据
     private func cycleCompressDataSize(maxSize: Int) -> Data? {
@@ -617,9 +623,10 @@ public extension PTProtocol where Base: UIImage {
         return data
     }
     
-    // MARK: ImageIO 方式调整图片大小 性能很好
-    /// ImageIO 方式调整图片大小 性能很好
-    /// - Parameter resizeSize: 图片调整Size
+    //MARK: ImageIO 方式调整图片大小 性能很好
+    ///ImageIO 方式调整图片大小 性能很好
+    /// - Parameters:
+    ///  - resizeSize: 图片调整Size
     /// - Returns: 调整后图片
     func resizeIO(resizeSize: CGSize) -> UIImage? {
         if base.size == resizeSize {
@@ -639,9 +646,10 @@ public extension PTProtocol where Base: UIImage {
         return resizedImage
     }
     
-    // MARK: CoreGraphics 方式调整图片大小 性能很好
-    /// CoreGraphics 方式调整图片大小 性能很好
-    /// - Parameter resizeSize: 图片调整Size
+    //MARK: CoreGraphics 方式调整图片大小 性能很好
+    ///CoreGraphics 方式调整图片大小 性能很好
+    /// - Parameters:
+    ///  - resizeSize: 图片调整Size
     /// - Returns: 调整后图片
     func resizeCG(resizeSize: CGSize) -> UIImage? {
         if base.size == resizeSize {

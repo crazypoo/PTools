@@ -121,10 +121,10 @@ public extension Array
     }
 }
 
-// MARK: 遵守NSObjectProtocol协议对应数组的扩展方法
+//MARK: 遵守NSObjectProtocol协议对应数组的扩展方法
 public extension Array where Element : NSObjectProtocol {
-    // MARK: 删除数组中遵守NSObjectProtocol协议的元素，是否删除重复的元素
-    /// 删除数组中遵守NSObjectProtocol协议的元素
+    //MARK: 删除数组中遵守NSObjectProtocol协议的元素，是否删除重复的元素
+    ///删除数组中遵守NSObjectProtocol协议的元素
     /// - Parameters:
     ///   - object: 元素
     ///   - isRepeat: 是否删除重复的元素
@@ -145,8 +145,8 @@ public extension Array where Element : NSObjectProtocol {
         return self
     }
     
-    // MARK: 删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
-    /// 删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
+    //MARK: 删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
+    ///删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
     /// - Parameters:
     ///   - objects: 遵守NSObjectProtocol的数组
     ///   - isRepeat: 是否删除重复的元素
@@ -161,12 +161,13 @@ public extension Array where Element : NSObjectProtocol {
     }
 }
 
-// MARK: 针对数组元素是 String 的扩展
+//MARK: 针对数组元素是 String 的扩展
 public extension Array where Self.Element == String {
     
-    // MARK: 数组字符串转字符转
-    /// 数组字符串转字符转
-    /// - Parameter separator: 分隔符(默认没有)
+    //MARK: 数组字符串转字符转
+    ///数组字符串转字符转
+    /// - Parameters:
+    ///    - separator: 分隔符(默认没有)
     /// - Returns: 转化后的字符串
     func toStrinig(separator: String = "") -> String {
         return self.joined(separator: separator)

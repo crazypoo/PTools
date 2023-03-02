@@ -37,15 +37,15 @@ public extension Character {
     }
 }
 
-// MARK: Character 与其他类型的转换
+//MARK: Character 与其他类型的转换
 public extension PTProtocol where Base == Character {
 
-    // MARK: Character 转 String
-    /// Character 转 String
+    //MARK: Character转String
+    ///Character转String
     var charToString: String { return String(self.base) }
 
-    // MARK: Character 转 Int
-    /// Character 转 Int
+    //MARK: Character转Int
+    ///Character转Int
     var charToInt: Int? {
         return Int(String(self.base))
         

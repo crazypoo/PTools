@@ -11,10 +11,9 @@ import CoreLocation
 
 extension CLLocation: PTProtocolCompatible {}
 
-// MARK: 基本的扩展
 public extension PTProtocol where Base == CLLocation {
-    // MARK: 地理信息反编码
-    /// 地理信息反编码
+    //MARK: 地理信息反编码
+    ///地理信息反编码
     /// - Parameters:
     ///   - latitude: 精度
     ///   - longitude: 纬度
@@ -25,23 +24,25 @@ public extension PTProtocol where Base == CLLocation {
         geocoder.reverseGeocodeLocation(currentLocation, completionHandler: completionHandler)
     }
     
-    // MARK: 地理信息编码
-    /// 地理信息编码
+    //MARK: 地理信息编码
+    ///地理信息编码
     /// - Parameters:
     ///   - address: 地址信息
     ///   - completionHandler: 回调函数
-    static func locationEncode(address: String, completionHandler: @escaping CLGeocodeCompletionHandler) {
+    static func locationEncode(address: String,
+                               completionHandler: @escaping CLGeocodeCompletionHandler) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address, completionHandler: completionHandler)
     }
     
     //MARK: 点与点之间的距离
-    /// 点与点之间的距离
+    ///点与点之间的距离
     /// - Parameters:
     ///   - currentLocationCoordinate2D: 起点
     ///   - targetLocationCoordinate2D: 终点
     /// - Returns: 之间的距离
-    static func distanePointToPoint(startLocationCoordinate2D: CLLocationCoordinate2D, endLocationCoordinate2D: CLLocationCoordinate2D) -> Double {
+    static func distanePointToPoint(startLocationCoordinate2D: CLLocationCoordinate2D,
+                                    endLocationCoordinate2D: CLLocationCoordinate2D) -> Double {
         // 地球半径
         let earthRadius: Double = 6378137.0
         

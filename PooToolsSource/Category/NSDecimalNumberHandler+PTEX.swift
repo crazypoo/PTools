@@ -7,8 +7,8 @@
 //
 
 import UIKit
-// MARK: - 苹果针对浮点类型计算精度问题提供出来的计算类
-/// NSDecimalNumberHandler 苹果针对浮点类型计算精度问题提供出来的计算类
+//MARK: 苹果针对浮点类型计算精度问题提供出来的计算类
+///苹果针对浮点类型计算精度问题提供出来的计算类
 /**
  初始化方法
  roundingMode 舍入方式
@@ -30,21 +30,21 @@ extension NSDecimalNumberHandler: PTProtocolCompatible {}
 
 /// 计算的类型
 public enum DecimalNumberHandlerType: String {
-    // 加
+    /// 加
     case add
-    // 减
+    /// 减
     case subtracting
-    // 乘
+    /// 乘
     case multiplying
-    // 除
+    /// 除
     case dividing
 }
 
-// MARK: - 一、基本的扩展
+// MARK: 基本的扩展
 public extension PTProtocol where Base: NSDecimalNumberHandler {
     
-    // MARK: 向下取整取倍数
-    /// 向下取整取倍数
+    //MARK: 向下取整取倍数
+    ///向下取整取倍数
     /// - Parameters:
     ///   - value1: 除数
     ///   - value2: 被除数
@@ -53,7 +53,8 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
         return decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).intValue
     }
     
-    // MARK: 一个数字能否整除另外一个数字
+    //MARK: 一个数字能否整除另外一个数字
+    ///一个数字能否整除另外一个数字
     static func isDivisible(value1: Any, value2: Any) -> Bool {
         let value = decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 3, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).stringValue
         
@@ -70,8 +71,8 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
         return true
     }
     
-    // MARK: 两个数字之间的计算
-    /// 两个数字之间的计算
+    //MARK: 两个数字之间的计算
+    ///两个数字之间的计算
     /// - Parameters:
     ///   - type: 计算的类型
     ///   - value1: 值
@@ -81,8 +82,8 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
         return decimalNumberHandlerValue(type: type, value1: value1, value2: value2, roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
-    // MARK: 一个数字四舍五入返回
-    /// 一个数字四舍五入返回
+    //MARK: 一个数字四舍五入返回
+    ///一个数字四舍五入返回
     /// - Parameters:
     ///   - value: 值
     /// - Returns:四舍五入返回结果
@@ -90,8 +91,8 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
         return decimalNumberHandlerValue(type: .multiplying, value1: value, value2: "1", roundingMode: .plain, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
-    // MARK: 数字取舍以及位数的处理
-    /// 数字取舍以及位数的处理
+    //MARK: 数字取舍以及位数的处理
+    ///数字取舍以及位数的处理
     /// - Parameters:
     ///   - value1: 值
     ///   - roundingMode: 舍入方式
@@ -103,7 +104,8 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
 }
 
 public extension PTProtocol where Base: NSDecimalNumberHandler {
-    /// 两个数的：加 减 乘 除
+    //MARK: 两个数的：加 减 乘 除
+    ///两个数的：加 减 乘 除
     /// - Parameters:
     ///   - type: 计算的类型
     ///   - value1: 第一个值

@@ -59,7 +59,7 @@ public extension PTProtocol where Base: UIDevice
         }
     }
     
-    // MARK: 设备的UUID
+    //MARK: 设备的UUID
     /// UUID
     static func stringWithUUID() -> String? {
         let uuid = CFUUIDCreate(kCFAllocatorDefault)
@@ -105,8 +105,8 @@ public extension PTProtocol where Base: UIDevice
         return false
     }
     
-    // MARK: 当前硬盘的空间
-    /// 当前硬盘的空间
+    //MARK: 当前硬盘的空间
+    ///当前硬盘的空间
     static var hardDiskSpace: Int64 {
         if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()) {
             if let space: NSNumber = attrs[FileAttributeKey.systemSize] as? NSNumber {
@@ -122,8 +122,8 @@ public extension PTProtocol where Base: UIDevice
         return String.init(format: "%d", Device.volumes!)
     }
     
-    // MARK: 当前硬盘可用空间
-    /// 当前硬盘可用空间
+    //MARK: 当前硬盘可用空间
+    ///当前硬盘可用空间
     static var hardDiskSpaceFree: Int64 {
         if let attrs = try? FileManager.default.attributesOfFileSystem(forPath: NSHomeDirectory()) {
             if let space: NSNumber = attrs[FileAttributeKey.systemFreeSize] as? NSNumber {
@@ -135,8 +135,8 @@ public extension PTProtocol where Base: UIDevice
         return -1
     }
     
-    // MARK: 当前硬盘已经使用的空间
-    /// 当前硬盘已经使用的空间
+    //MARK: 当前硬盘已经使用的空间
+    ///当前硬盘已经使用的空间
     static var hardDiskSpaceUsed: Int64 {
         let total = self.hardDiskSpace
         let free = self.hardDiskSpaceFree
@@ -159,39 +159,39 @@ public extension PTProtocol where Base: UIDevice
         return String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
     }
 
-    // MARK: 获取总内存大小
-    /// 获取总内存大小GB
+    //MARK: 获取总内存大小
+    ///获取总内存大小GB
     static var memoryTotal: Double {
         return round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100
     }
     
-    // MARK: 获取屏幕亮度
-    /// 获取屏幕亮度比例
+    //MARK: 获取屏幕亮度
+    ///获取屏幕亮度比例
     static var brightness: CGFloat {
         return UIScreen.main.brightness
     }
     
-    // MARK: 获取设备是否省电模式
-    /// 获取设备是否省电模式
+    //MARK: 获取设备是否省电模式
+    ///获取设备是否省电模式
     static var lowPowerMode: Bool {
         return ProcessInfo.processInfo.isLowPowerModeEnabled
     }
     
-    // MARK: 获取设备CPU数量
-    /// 获取设备CPU数量
+    //MARK: 获取设备CPU数量
+    ///获取设备CPU数量
     static var processorCount: Int {
         return ProcessInfo.processInfo.processorCount
     }
     
-    // MARK: 当前系统更新时间
-    /// 当前系统更新时间
+    //MARK: 当前系统更新时间
+    ///当前系统更新时间
     static var systemUptime: String {
         let time = ProcessInfo.processInfo.systemUptime.formattedString!
         return time
     }
     
-    // MARK: 是否支持ApplePencil
-    /// 是否支持ApplePencil
+    //MARK: 是否支持ApplePencil
+    ///是否支持ApplePencil
     static var supportApplePencil: UIDeviceApplePencilSupportType {
         
         if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue)
@@ -212,8 +212,8 @@ public extension PTProtocol where Base: UIDevice
         }
     }
     
-    // MARK: 获取最高刷新率
-    /// 获取最高刷新率
+    //MARK: 获取最高刷新率
+    ///获取最高刷新率
     @available(iOS 10.3,*)
     static var maximumFramesPerSecond:Int
     {
@@ -241,8 +241,8 @@ public extension PTProtocol where Base: UIDevice
         return dic
     }
     
-    // MARK: 當前設備能否打電話
-    /// 當前設備能否打電話
+    //MARK: 當前設備能否打電話
+    ///當前設備能否打電話
     /// - Returns: 結果
     static func isCanCallTel() -> Bool {
         if let url = URL(string: "tel://") {
@@ -265,8 +265,8 @@ public extension PTProtocol where Base: UIDevice
 
 public extension PTProtocol where Base: UIDevice
 {
-    /*! @brief 获取手机当前运营商
-     */
+    //MARK: 获取手机当前运营商
+    ///获取手机当前运营商
     @available(iOS, introduced: 7.0, deprecated: 12.0,message: "12後不再支持了")
     static func currentRadioAccessTechnology()->String
     {
@@ -274,8 +274,8 @@ public extension PTProtocol where Base: UIDevice
         return current.currentRadioAccessTechnology ?? ""
     }
     
-    /*! @brief 获取手机当前运营商其他信息
-     */
+    //MARK: 获取手机当前运营商其他信息
+    ///获取手机当前运营商其他信息
     @available(iOS, introduced: 4.0, deprecated: 16.0,message: "可能在16之後就無法使用該API了")
     static func getSiminfo()->NSMutableDictionary
     {
@@ -345,8 +345,8 @@ public extension PTProtocol where Base: UIDevice
         return networkType
     }
     
-    // MARK: 是否允许VoIP
-    /// 是否允许VoIP
+    //MARK: 是否允许VoIP
+    ///是否允许VoIP
     /// - Returns: 是否允许VoIP
     static func isAllowsVOIPs() -> [Bool]? {
         // 获取并输出运营商信息
@@ -356,8 +356,8 @@ public extension PTProtocol where Base: UIDevice
         return carriers.map{ $0.allowsVOIP}
     }
     
-    // MARK: ISO国家代码
-    /// ISO国家代码
+    //MARK: ISO国家代码
+    ///ISO国家代码
     /// - Returns: ISO国家代码
     static func isoCountryCodes() -> [String]? {
         // 获取并输出运营商信息
@@ -367,8 +367,8 @@ public extension PTProtocol where Base: UIDevice
         return carriers.map{ $0.isoCountryCode!}
     }
     
-    // MARK: 移动网络码(MNC)
-    /// 移动网络码(MNC)
+    //MARK: 移动网络码(MNC)
+    ///移动网络码(MNC)
     /// - Returns: 移动网络码(MNC)
     static func mobileNetworkCodes() -> [String]? {
         // 获取并输出运营商信息
@@ -378,8 +378,8 @@ public extension PTProtocol where Base: UIDevice
         return carriers.map{ $0.mobileNetworkCode!}
     }
     
-    // MARK: 移动国家码(MCC)
-    /// 移动国家码(MCC)
+    //MARK: 移动国家码(MCC)
+    ///移动国家码(MCC)
     /// - Returns: 移动国家码(MCC)
     static func mobileCountryCodes() -> [String]? {
         // 获取并输出运营商信息
@@ -389,8 +389,8 @@ public extension PTProtocol where Base: UIDevice
         return carriers.map{ $0.mobileCountryCode!}
     }
     
-    // MARK: 运营商名字
-    /// 运营商名字
+    //MARK: 运营商名字
+    ///运营商名字
     /// - Returns: 运营商名字
     static func carrierNames() -> [String]? {
         // 获取并输出运营商信息
@@ -401,8 +401,8 @@ public extension PTProtocol where Base: UIDevice
     }
     
     
-    // MARK: 数据业务对应的通信技术
-    /// 数据业务对应的通信技术
+    //MARK: 数据业务对应的通信技术
+    ///数据业务对应的通信技术
     /// - Returns: 通信技术
     static func currentRadioAccessTechnologys() -> [String]? {
         guard !Device.current.isSimulator else {
@@ -416,8 +416,8 @@ public extension PTProtocol where Base: UIDevice
         return currentRadioTechs.values.shuffled()
     }
 
-    // MARK: 设备网络制式
-    /// 设备网络制式
+    //MARK: 设备网络制式
+    ///设备网络制式
     /// - Returns: 网络
     static func networkTypes() -> [String]? {
         // 获取并输出运营商信息
@@ -427,25 +427,26 @@ public extension PTProtocol where Base: UIDevice
         return currentRadioTechs.compactMap { getNetworkType(currentRadioTech: $0) }
     }
     
-    // MARK: sim卡信息
+    //MARK: sim卡信息
+    ///sim卡信息
     static func simCardInfos() -> [CTCarrier]? {
         return getCarriers()
     }
 }
 
-// MARK: 设备的震动
+//MARK: 设备的震动
 public enum SystemSoundIDShockType: Int64 {
-    /// 短振动，普通短震，3D Touch 中 Peek 震动反馈
+    ///短振动，普通短震，3D Touch 中 Peek 震动反馈
     case short3DTouchPeekVibration = 1519
-    /// 普通短震，3D Touch 中 Pop 震动反馈,home 键的振动
+    ///普通短震，3D Touch 中 Pop 震动反馈,home 键的振动
     case short3DPopHomeVibration = 1520
-    /// 连续三次短震
+    ///连续三次短震
     case thereshortVibration = 1521
 }
 
 public extension PTProtocol where Base: UIDevice {
     //MARK: 使用 SystemSoundID 产生的震动
-    /// 使用 SystemSoundID 产生的震动
+    ///使用 SystemSoundID 产生的震动
     /// - Parameter type: 震动的类型
     static func systemSoundIDShock(type: SystemSoundIDShockType) {
         let soundShort = SystemSoundID(type.rawValue)
@@ -453,7 +454,7 @@ public extension PTProtocol where Base: UIDevice {
     }
     
     //MARK: UINotificationFeedbackGenerator 来设置的手机振动
-    /// UINotificationFeedbackGenerator 来设置的手机振动
+    ///UINotificationFeedbackGenerator 来设置的手机振动
     @available(iOS 10.0, *)
     static func notificationFeedbackGeneratorSuccess(_ notificationType: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
@@ -461,7 +462,7 @@ public extension PTProtocol where Base: UIDevice {
     }
     
     //MARK: UIImpactFeedbackGenerator 来设置的手机振动
-    /// UIImpactFeedbackGenerator 来设置的手机振动
+    ///UIImpactFeedbackGenerator 来设置的手机振动
     @available(iOS 10.0, *)
     static func impactFeedbackGenerator(style: UIImpactFeedbackGenerator.FeedbackStyle) {
         let generator = UIImpactFeedbackGenerator(style: style)
@@ -469,8 +470,8 @@ public extension PTProtocol where Base: UIDevice {
     }
     
     //MARK: 模拟选择滚轮一类控件时的震动
-    /// 模拟选择滚轮一类控件时的震动
-    /// UISelectionFeedbackGenerator中只有一个类型，是用来模拟选择滚轮一类控件时的震动，比如计时器中的picker滚动时就有这个效果。
+    ///模拟选择滚轮一类控件时的震动
+    ///UISelectionFeedbackGenerator中只有一个类型，是用来模拟选择滚轮一类控件时的震动，比如计时器中的picker滚动时就有这个效果。
     @available(iOS 10.0, *)
     static func selectionFeedbackGeneratorChanged() {
         UISelectionFeedbackGenerator().selectionChanged()

@@ -18,6 +18,7 @@ public extension Int
     }
     
     //MARK: 这是一个内置函数
+    ///这是一个内置函数
     /// - Parameters:
     ///   - lower: 内置为 0，可根据自己要获取的随机数进行修改。
     ///   - upper: 内置为 UInt32.max 的最大值，这里防止转化越界，造成的崩溃。
@@ -33,7 +34,7 @@ public extension Int
     }
     
     //MARK: 是否是偶数
-    /// 是否是偶数
+    ///是否是偶数
     /// - Returns: 结果
     func isEven() -> Bool {
         return self % 2 == 0

@@ -95,11 +95,11 @@ public extension UILabel {
     }
 }
 
-// MARK: 其他的基本扩展
+//MARK: 其他的基本扩展
 public extension PTProtocol where Base: UILabel {
     
-    // MARK: 获取已知 frame 的 label 的文本行数 & 每一行内容
-    /// 获取已知 frame 的 label 的文本行数 & 每一行内容
+    //MARK: 获取已知 frame 的 label 的文本行数 & 每一行内容
+    ///获取已知 frame 的 label 的文本行数 & 每一行内容
     /// - Parameters:
     ///   - lineSpace: 行间距
     ///   - textSpace: 字间距，默认为0.0
@@ -109,8 +109,8 @@ public extension PTProtocol where Base: UILabel {
         return accordWidthLinesCountAndLinesContent(accordWidth: base.frame.size.width, lineSpace: lineSpace, textSpace: textSpace, paraSpace: paraSpace)
     }
     
-    // MARK: 获取已知 width 的 label 的文本行数 & 每一行内容
-    /// 获取已知 width 的 label 的文本行数 & 每一行内容
+    //MARK: 获取已知 width 的 label 的文本行数 & 每一行内容
+    ///获取已知 width 的 label 的文本行数 & 每一行内容
     /// - Parameters:
     ///   - accordWidth: label 的 width
     ///   - lineSpace: 行间距
@@ -147,15 +147,16 @@ public extension PTProtocol where Base: UILabel {
         return (lineArr.count, lineArr)
     }
     
-    // MARK: 获取第一行内容
-    /// 获取第一行内容
+    //MARK: 获取第一行内容
+    ///获取第一行内容
     var firstLineString: String? {
         return self.linesCountAndLinesContent(lineSpace: 0.0).1?.first
     }
     
-    // MARK: 改变行间距
-    /// 改变行间距
-    /// - Parameter space: 行间距大小
+    //MARK: 改变行间距
+    ///改变行间距
+    /// - Parameters:
+    ///  - space: 行间距大小
     func changeLineSpace(space: CGFloat) {
         if self.base.text == nil || self.base.text == "" {
             return
@@ -169,9 +170,10 @@ public extension PTProtocol where Base: UILabel {
         self.base.sizeToFit()
     }
     
-    // MARK: 改变字间距
-    /// 改变字间距
-    /// - Parameter space: 字间距大小
+    //MARK: 改变字间距
+    ///改变字间距
+    /// - Parameters:
+    ///  -  space: 字间距大小
     func changeWordSpace(space: CGFloat) {
         if self.base.text == nil || self.base.text == "" {
             return
@@ -184,8 +186,8 @@ public extension PTProtocol where Base: UILabel {
         self.base.sizeToFit()
     }
     
-    // MARK: 改变字间距和行间距
-    /// 改变字间距和行间距
+    //MARK: 改变字间距和行间距
+    ///改变字间距和行间距
     /// - Parameters:
     ///   - lineSpace: 行间距
     ///   - wordSpace: 字间距
@@ -202,8 +204,8 @@ public extension PTProtocol where Base: UILabel {
         self.base.sizeToFit()
     }
     
-    // MARK: label添加中划线
-    /// label添加中划线
+    //MARK: label添加中划线
+    ///label添加中划线
     /// - Parameters:
     ///   - lineValue: value 越大,划线越粗
     ///   - underlineColor: 中划线的颜色
@@ -216,8 +218,8 @@ public extension PTProtocol where Base: UILabel {
         base.attributedText = arrText
     }
     
-    // MARK: 设置文本样式
-    /// 设置文本样式
+    //MARK: 设置文本样式
+    ///设置文本样式
     /// - Parameters:
     ///   - text: 文字内容
     ///   - linebreakmode: 结尾部分的内容以……方式省略 ( "...wxyz" ,"abcd..." ,"ab...yz")
@@ -278,8 +280,8 @@ public extension PTProtocol where Base: UILabel {
         return dict
     }
     
-    // MARK: 获取已知label 的文本行数 & 每一行内容
-    /// 获取已知label 的文本行数 & 每一行内容
+    //MARK: 获取已知label的文本行数和每一行内容
+    ///获取已知label的文本行数和每一行内容
     /// - Returns: 每行的内容
     func linesCountAndLinesContent() -> (Int?, [String]?) {
         guard let t = base.text else {return (0, nil)}
@@ -314,8 +316,8 @@ public extension PTProtocol where Base: UILabel {
         return (lineArr.count, lineArr)
     }
     
-    // MARK: 获取字体的大小
-    /// 获取字体的大小
+    //MARK: 获取字体的大小
+    ///获取字体的大小
     /// - Returns: 字体大小
     func getFontSizeForLabel() -> CGFloat {
         let text: NSMutableAttributedString = NSMutableAttributedString(attributedString: base.attributedText!)
