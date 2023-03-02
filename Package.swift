@@ -65,7 +65,7 @@ let package = Package(
     dependencies: [],
     targets: [
         .target(name: "PTools",resources: [.process("Resources")],swiftSettings: [.define("PTOOLS_SPM")]),
-        .target(name: "DataEncrypt",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("PTOOLS_DATAENCRYPT"),.define("PTOOLS_SPM")]),
+        .target(name: "DataEncrypt",dependencies: [.target(name: "PTools")],path: "PooToolsSource/Category",swiftSettings: [.define("PTOOLS_DATAENCRYPT"),.define("PTOOLS_SPM")]),
         .target(name: "Animation",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("PTOOLS_ANIMATION"),.define("PTOOLS_SPM")]),
         .target(name: "YB_Attributed",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("PTOOLS_YB_ATTRIBUTED"),.define("PTOOLS_SPM")]),
         .target(name: "BankCard",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("PTOOLS_BANKCARD"),.define("PTOOLS_SPM")]),

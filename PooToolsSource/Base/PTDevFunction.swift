@@ -15,6 +15,7 @@ import FLEX
 import InAppViewDebugger
 #endif
 #endif
+import SDWebImage
 
 public typealias GoToAppDev = () -> Void
 

@@ -10,11 +10,6 @@
 #endif
 #endif
 
-#import "PMacros.h"
-#import "PooTools_Example-Bridging-Header.h"
-#import "PTInputAll.h"
-#import "MethodSwizzle.h"
-#import "PrintBeautifulLog.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];

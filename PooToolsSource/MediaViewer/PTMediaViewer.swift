@@ -13,6 +13,7 @@ import SceneKit
 import CoreMotion
 import AVFoundation
 import AVKit
+import SDWebImage
 
 public let PTViewerBaseTag = 9999
 public let PTSubViewBasicsIndex = 888

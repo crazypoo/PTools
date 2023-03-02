@@ -11,6 +11,7 @@ import SnapKit
 import YYCategories
 import SwifterSwift
 import SDWebImage
+import WZLBadge
 
 @objc public enum PooSegmentSelectedType : Int {
     case UnderLine

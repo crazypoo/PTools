@@ -1,9 +1,9 @@
 //
 //  MethodSwizzle.h
-//  XMNiao_Shop
+//  PooTools_Example
 //
-//  Created by Notednog on 2016/10/14.
-//  Copyright © 2016年 xnmiao.com. All rights reserved.
+//  Created by 邓杰豪 on 3/3/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
 //
 
 #ifndef MethodSwizzle_h
