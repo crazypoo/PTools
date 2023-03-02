@@ -135,6 +135,8 @@ pod 'PooTools/ScanQRCode', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Stepper', :git => 'https://github.com/crazypoo/PTools.git'
 ### Location相關
 pod 'PooTools/Location', :git => 'https://github.com/crazypoo/PTools.git'
+### UpdateTips
+pod 'PooTools/UpdateTips', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

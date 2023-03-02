@@ -46,6 +46,9 @@ class PTSwiftViewController: PTBaseViewController {
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
         }
         PTGCDManager.gcdAfter(time: 2) {
+            
+            PTUpdateTipsFunction.share.showUpdateTips(oldVersion:"1.0", newVersion:"1.1", description: "123123kljkljkljkljlkjkljkljlkjlkjkljkljkljkljlkjkljkljkljlkjlkjlkjkljkljkljlkjlkjlkjlkjlkjkljlkjlkjkljlkjkljlkjkljlkjlkjkljkljkljkljkljkljlkjkljlkjlkjlkjlkjlkjlkjlkjkljlkjkljkljlkj", downloadUrl: URL(string: "qq.com")!, isTest: false, showError: false)
+            
 //            let qrConfig = PTScanQRConfig()
 //            qrConfig.canScanQR = false
 //            let qr = PTScanQRController(viewConfig: qrConfig)
