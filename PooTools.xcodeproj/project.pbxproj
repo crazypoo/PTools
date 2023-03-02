@@ -32,7 +32,6 @@
 		231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */; };
 		231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */; };
 		231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */; };
-		231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15C8272CDEE9003D6F62 /* PTCarrie.swift */; };
 		231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */; };
 		231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */; };
 		231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */; };
@@ -100,6 +99,12 @@
 		559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C94293CB789002874BA /* PTRotationManager.swift */; };
 		559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C96293F7ED8002874BA /* NSData+PTEX.swift */; };
 		55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */; };
+		55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */; };
+		55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */; };
+		55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D6FF29B09A1E00DCA096 /* Dictionary+PTEX.swift */; };
+		55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70129B09AD300DCA096 /* DispatchQueue+PTEX.swift */; };
+		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
+		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
@@ -233,7 +238,6 @@
 		231D15C5272CDEE9003D6F62 /* BKCutsomButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BKCutsomButton.swift; sourceTree = "<group>"; };
 		231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDevMaskView.swift; sourceTree = "<group>"; };
 		231D15C7272CDEE9003D6F62 /* UITextView+BKExt.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UITextView+BKExt.swift"; sourceTree = "<group>"; };
-		231D15C8272CDEE9003D6F62 /* PTCarrie.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCarrie.swift; sourceTree = "<group>"; };
 		231D15CA272CDEE9003D6F62 /* PTCheckAppStatus.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCheckAppStatus.swift; sourceTree = "<group>"; };
 		231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTInvertedTextView.swift; sourceTree = "<group>"; };
 		231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCollectionLayout.swift; sourceTree = "<group>"; };
@@ -307,6 +311,12 @@
 		559C1C94293CB789002874BA /* PTRotationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRotationManager.swift; sourceTree = "<group>"; };
 		559C1C96293F7ED8002874BA /* NSData+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSData+PTEX.swift"; sourceTree = "<group>"; };
 		55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftMethodSwizzle.swift; sourceTree = "<group>"; };
+		55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bool+PTEX.swift"; sourceTree = "<group>"; };
+		55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CoreLocation+PTEX.swift"; sourceTree = "<group>"; };
+		55A5D6FF29B09A1E00DCA096 /* Dictionary+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dictionary+PTEX.swift"; sourceTree = "<group>"; };
+		55A5D70129B09AD300DCA096 /* DispatchQueue+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DispatchQueue+PTEX.swift"; sourceTree = "<group>"; };
+		55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSDecimalNumberHandler+PTEX.swift"; sourceTree = "<group>"; };
+		55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "WKWebView+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
@@ -502,7 +512,6 @@
 				55D59C5028F279C200B4FF76 /* Button */,
 				55D59C5528F2984B00B4FF76 /* Calendar */,
 				55D59C4728F14A3100B4FF76 /* CallMessageMail */,
-				55D59C6628F3E94B00B4FF76 /* Carrie */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
@@ -568,19 +577,24 @@
 				55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */,
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
+				55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */,
 				5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */,
 				9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
+				55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
 				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
 				9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */,
 				9AE446A0285980CF007DC2B5 /* Device+PTEX.swift */,
+				55A5D6FF29B09A1E00DCA096 /* Dictionary+PTEX.swift */,
+				55A5D70129B09AD300DCA096 /* DispatchQueue+PTEX.swift */,
 				55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
 				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
 				55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */,
+				55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
 				55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */,
@@ -614,6 +628,7 @@
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
+				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1064,14 +1079,6 @@
 				231D15CC272CDEE9003D6F62 /* PTCollectionLayout.swift */,
 			);
 			path = Layout;
-			sourceTree = "<group>";
-		};
-		55D59C6628F3E94B00B4FF76 /* Carrie */ = {
-			isa = PBXGroup;
-			children = (
-				231D15C8272CDEE9003D6F62 /* PTCarrie.swift */,
-			);
-			path = Carrie;
 			sourceTree = "<group>";
 		};
 		55D59C6728F3E96D00B4FF76 /* Line */ = {
@@ -1541,6 +1548,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFunctionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
@@ -1548,6 +1556,7 @@
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
+				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
@@ -1565,16 +1574,17 @@
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
+				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
-				231D167D272CDEEA003D6F62 /* PTCarrie.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
+				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
@@ -1599,6 +1609,7 @@
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
 				55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */,
+				55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */,
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
@@ -1673,6 +1684,7 @@
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
+				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,

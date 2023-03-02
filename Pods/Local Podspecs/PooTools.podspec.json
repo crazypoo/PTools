@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.0.7",
+  "version": "3.0.8",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.0.7"
+    "tag": "3.0.8"
   },
   "license": {
     "type": "MIT",
@@ -120,7 +120,8 @@
         "CoreFoundation",
         "CoreText",
         "AVFoundation",
-        "Photos"
+        "Photos",
+        "AudioToolbox"
       ],
       "source_files": [
         "PooToolsSource/Core/*.{h,m,swift}",
@@ -258,10 +259,7 @@
         "WebKit",
         "MessageUI"
       ],
-      "source_files": [
-        "PooToolsSource/CallMessageMail/*.{h,m,swift}",
-        "PooToolsSource/Carrie/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/CallMessageMail/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
       }
@@ -1120,6 +1118,18 @@
       }
     },
     {
+      "name": "UpdateTips",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/UpdateTips/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_UPDATETIPS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1270,6 +1280,9 @@
 
         ],
         "PooTools/Location": [
+
+        ],
+        "PooTools/UpdateTips": [
 
         ]
       },

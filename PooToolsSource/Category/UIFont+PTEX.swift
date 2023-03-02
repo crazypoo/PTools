@@ -33,5 +33,93 @@ public extension UIFont
         
         return UIFont(descriptor: descriptor!, size: size)
     }
+    
+    fileprivate class func text(_ ofSize: CGFloat, W Weight: UIFont.Weight) -> UIFont {
+        return UIFont.systemFont(ofSize: ofSize, weight: Weight)
+    }
+    
+    // MARK: 常规字体
+    /// 常规字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textRegular(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .regular)
+    }
+    
+    // MARK: 中等的字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textMedium(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .medium)
+    }
+    
+    // MARK: 加粗的字体
+    /// 加粗的字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textBold(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .bold)
+    }
+    
+    // MARK: 半粗体的字体
+    /// 半粗体的字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textSemibold(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .semibold)
+    }
+    
+    // MARK: 超细的字体
+    /// 超细的字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textUltraLight(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .ultraLight)
+    }
+    
+    // MARK: 纤细的字体
+    /// 纤细的字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textThin(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .thin)
+    }
+    
+    // MARK: 亮字体
+    /// 亮字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textLight(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .light)
+    }
+    
+    // MARK: 介于Bold和Black之间
+    /// 介于Bold和Black之间
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textHeavy(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .heavy)
+    }
+    
+    // MARK: 最粗字体
+    /// 最粗字体
+    /// - Parameter ofSize: 字体大小
+    /// - Returns: 字体
+    static func textBlack(_ ofSize: CGFloat) -> UIFont {
+        return text(ofSize, W: .black)
+    }
 
+    // MARK: 查看所有字体的名字
+    static func showAllFont()
+    {
+        var i = 0
+        for family in UIFont.familyNames
+        {
+            debugPrint("\(i)---项目字体---\(family)")
+            for names in UIFont.fontNames(forFamilyName: family) {
+                debugPrint("== \(names)")
+            }
+            i += 1
+        }
+    }
 }

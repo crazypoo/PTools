@@ -8,6 +8,10 @@
 
 import UIKit
 import Accelerate
+import AVFoundation
+import Photos
+
+extension UIImage : PTProtocolCompatible {}
 
 public extension UIImage
 {
@@ -332,5 +336,331 @@ public extension UIImage
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
+    }
+}
+
+public extension PTProtocol where Base: UIImage
+{
+    // MARK: 设置图片的圆角
+    /// 设置图片的圆角
+    /// - Parameters:
+    ///   - radius: 圆角大小 (默认:3.0,图片大小)
+    ///   - corners: 切圆角的方式
+    ///   - imageSize: 图片的大小
+    /// - Returns: 剪切后的图片
+    func isRoundCorner(radius: CGFloat = 3, byRoundingCorners corners: UIRectCorner = .allCorners, imageSize: CGSize?) -> UIImage? {
+        let weakSize = imageSize ?? base.size
+        let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: weakSize)
+        // 开始图形上下文
+        UIGraphicsBeginImageContextWithOptions(weakSize, false, UIScreen.main.scale)
+        guard let contentRef: CGContext = UIGraphicsGetCurrentContext() else {
+            // 关闭上下文
+            UIGraphicsEndImageContext()
+            return nil
+        }
+        // 绘制路线
+        contentRef.addPath(UIBezierPath(roundedRect: rect,
+                                        byRoundingCorners: UIRectCorner.allCorners,
+                                        cornerRadii: CGSize(width: radius, height: radius)).cgPath)
+        // 裁剪
+        contentRef.clip()
+        // 将原图片画到图形上下文
+        base.draw(in: rect)
+        contentRef.drawPath(using: .fillStroke)
+        guard let output = UIGraphicsGetImageFromCurrentImageContext() else {
+            // 关闭上下文
+            UIGraphicsEndImageContext()
+            return nil
+        }
+        // 关闭上下文
+        UIGraphicsEndImageContext()
+        return output
+    }
+
+    // MARK: 获取视频的第一帧
+    /// 获取视频的第一帧
+    /// - Parameters:
+    ///   - videoUrl: 视频 url
+    ///   - maximumSize: 图片的最大尺寸
+    /// - Returns: 视频的第一帧
+    static func getVideoFirstImage(videoUrl: String, maximumSize: CGSize = CGSize(width: 1000, height: 1000), closure: @escaping (UIImage?) -> Void) {
+        guard let url = URL(string: videoUrl) else {
+            closure(nil)
+            return
+        }
+        DispatchQueue.global().async {
+            let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
+            let avAsset = AVURLAsset(url: url, options: opts)
+            let generator = AVAssetImageGenerator(asset: avAsset)
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = maximumSize
+            var cgImage: CGImage? = nil
+            let time = CMTimeMake(value: 0, timescale: 600)
+            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
+            do {
+                try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
+            } catch {
+                DispatchQueue.main.async {
+                    closure(nil)
+                }
+                return
+            }
+            guard let image = cgImage else {
+                DispatchQueue.main.async {
+                    closure(nil)
+                }
+                return
+            }
+            DispatchQueue.main.async {
+                closure(UIImage(cgImage: image))
+            }
+        }
+    }
+
+    // MARK: 设置图片透明度
+    /// 设置图片透明度
+    /// alpha: 透明度
+    /// - Returns: newImage
+    func imageByApplayingAlpha(_ alpha: CGFloat) -> UIImage {
+        UIGraphicsBeginImageContext(base.size)
+        let context = UIGraphicsGetCurrentContext()
+        let area = CGRect(x: 0, y: 0, width: base.size.width, height: base.size.height)
+        context?.scaleBy(x: 1, y: -1)
+        context?.translateBy(x: 0, y: -area.height)
+        context?.setBlendMode(.multiply)
+        context?.setAlpha(alpha)
+        context?.draw(self.base.cgImage!, in: area)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage ?? self.base
+    }
+    
+    // MARK: 更改图片颜色
+    /// 更改图片颜色
+    /// - Parameters:
+    ///   - color: 图片颜色
+    ///   - blendMode: 模式
+    /// - Returns: 返回更改后的图片颜色
+    func tint(color: UIColor, blendMode: CGBlendMode = .destinationIn) -> UIImage? {
+        /**
+         有时我们的App需要能切换不同的主题和场景，希望图片能动态的改变颜色以配合对应场景的色调。虽然我们可以根据不同主题事先创建不同颜色的图片供调用，但既然用的图片素材都一样，还一个个转换显得太麻烦，而且不便于维护。使用blendMode变可以满足这个需求。
+         */
+        defer {
+            UIGraphicsEndImageContext()
+        }
+        let drawRect = CGRect(x: 0, y: 0, width: self.base.size.width, height: self.base.size.height)
+        UIGraphicsBeginImageContextWithOptions(self.base.size, false, self.base.scale)
+        color.setFill()
+        UIRectFill(drawRect)
+        self.base.draw(in: drawRect, blendMode: CGBlendMode.destinationIn, alpha: 1.0)
+        guard let tintedImage = UIGraphicsGetImageFromCurrentImageContext() else {
+            return nil
+        }
+        return tintedImage
+    }
+
+    // MARK: 保存图片到相册(建议使用这个)
+    /// 保存图片到相册
+    func savePhotosImageToAlbum(completion: @escaping ((Bool, Error?) -> Void)) {
+        PHPhotoLibrary.shared().performChanges {
+            PHAssetChangeRequest.creationRequestForAsset(from: self.base)
+        } completionHandler: { (isSuccess: Bool, error: Error?) in
+            completion(isSuccess, error)
+        }
+    }
+}
+
+// MARK: 压缩模式
+public enum CompressionMode {
+    /// 分辨率规则
+    private static let resolutionRule: (min: CGFloat, max: CGFloat, low: CGFloat, default: CGFloat, high: CGFloat) = (10, 4096, 512, 1024, 2048)
+    /// 数据大小规则
+    private static let  dataSizeRule: (min: Int, max: Int, low: Int, default: Int, high: Int) = (1024 * 10, 1024 * 1024 * 20, 1024 * 512, 1024 * 1024 * 2, 1024 * 1024 * 10)
+    // 低质量
+    case low
+    // 中等质量 默认
+    case medium
+    // 高质量
+    case high
+    // 自定义(最大分辨率, 最大输出数据大小)
+    case other(CGFloat, Int)
+    
+    fileprivate var maxDataSize: Int {
+        switch self {
+        case .low:
+            return CompressionMode.dataSizeRule.low
+        case .medium:
+            return CompressionMode.dataSizeRule.default
+        case .high:
+            return CompressionMode.dataSizeRule.high
+        case .other(_, let dataSize):
+            if dataSize < CompressionMode.dataSizeRule.min {
+                return CompressionMode.dataSizeRule.default
+            }
+            if dataSize > CompressionMode.dataSizeRule.max {
+                return CompressionMode.dataSizeRule.max
+            }
+            return dataSize
+        }
+    }
+    
+    fileprivate func resize(_ size: CGSize) -> CGSize {
+        if size.width < CompressionMode.resolutionRule.min || size.height < CompressionMode.resolutionRule.min {
+            return size
+        }
+        let maxResolution = maxSize
+        let aspectRatio = max(size.width, size.height) / maxResolution
+        if aspectRatio <= 1.0 {
+            return size
+        } else {
+            let resizeWidth = size.width / aspectRatio
+            let resizeHeighth = size.height / aspectRatio
+            if resizeHeighth < CompressionMode.resolutionRule.min || resizeWidth < CompressionMode.resolutionRule.min {
+                return size
+            } else {
+                return CGSize(width: resizeWidth, height: resizeHeighth)
+            }
+        }
+    }
+    
+    fileprivate var maxSize: CGFloat {
+        switch self {
+        case .low:
+            return CompressionMode.resolutionRule.low
+        case .medium:
+            return CompressionMode.resolutionRule.default
+        case .high:
+            return CompressionMode.resolutionRule.high
+        case .other(let size, _):
+            if size < CompressionMode.resolutionRule.min {
+                return CompressionMode.resolutionRule.default
+            }
+            if size > CompressionMode.resolutionRule.max {
+                return CompressionMode.resolutionRule.max
+            }
+            return size
+        }
+    }
+}
+
+// MARK: UIImage 压缩相关
+public extension PTProtocol where Base: UIImage {
+    
+    // MARK: 压缩图片
+    /// 压缩图片
+    /// - Parameter mode: 压缩模式
+    /// - Returns: 压缩后Data
+    func compress(mode: CompressionMode = .medium) -> Data? {
+        return resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
+    }
+    
+    // MARK: 异步图片压缩
+    /// 异步图片压缩
+    /// - Parameters:
+    ///   - mode: 压缩模式
+    ///   - queue: 压缩队列
+    ///   - complete: 完成回调(压缩后Data, 调整后分辨率)
+    func asyncCompress(mode: CompressionMode = .medium, queue: DispatchQueue = DispatchQueue.global(), complete:@escaping (Data?, CGSize) -> Void) {
+        queue.async {
+            let data = resizeIO(resizeSize: mode.resize(self.base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
+            DispatchQueue.main.async {
+                complete(data, mode.resize(self.base.size))
+            }
+        }
+    }
+    
+    // MARK: 压缩图片质量
+    /// 压缩图片质量
+    /// - Parameter maxSize: 最大数据大小
+    /// - Returns: 压缩后数据
+    func compressDataSize(maxSize: Int = 1024 * 1024 * 2) -> Data? {
+        var compression: CGFloat = 1
+        guard var data = self.base.jpegData(compressionQuality: 1) else { return nil }
+        if data.count < maxSize {
+            return data
+        }
+        var max: CGFloat = 1
+        var min: CGFloat = 0
+        var count = 0
+        for _ in 0..<6 {
+            count = count + 1
+            compression = (max + min) / 2
+            data = self.base.jpegData(compressionQuality: compression)!
+            if CGFloat(data.count) < CGFloat(maxSize) * 0.9 {
+                min = compression
+            } else if data.count > maxSize {
+                max = compression
+            } else {
+                break
+            }
+        }
+        if data.count < maxSize {
+            return data
+        }
+        return cycleCompressDataSize(maxSize: maxSize)
+    }
+    
+    /// 循环压缩
+    /// - Parameter maxSize: 最大数据大小
+    /// - Returns: 压缩后数据
+    private func cycleCompressDataSize(maxSize: Int) -> Data? {
+        guard let oldData = self.base.jpegData(compressionQuality: 1) else { return nil }
+        if oldData.count < maxSize {
+            return oldData
+        }
+        var compress: CGFloat = 0.9
+        guard var data = self.base.jpegData(compressionQuality: compress) else { return nil }
+        while data.count > maxSize && compress > 0.01 {
+            compress -= 0.02
+            data = self.base.jpegData(compressionQuality: compress)!
+        }
+        return data
+    }
+    
+    // MARK: ImageIO 方式调整图片大小 性能很好
+    /// ImageIO 方式调整图片大小 性能很好
+    /// - Parameter resizeSize: 图片调整Size
+    /// - Returns: 调整后图片
+    func resizeIO(resizeSize: CGSize) -> UIImage? {
+        if base.size == resizeSize {
+            return self.base
+        }
+        guard let imageData = base.pngData() else { return nil }
+        guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else { return nil }
+        
+        let maxPixelSize = max(base.size.width, base.size.height)
+        let options = [kCGImageSourceCreateThumbnailWithTransform: true,
+                   kCGImageSourceCreateThumbnailFromImageIfAbsent: true,
+                              kCGImageSourceThumbnailMaxPixelSize: maxPixelSize] as [CFString : Any]
+        
+        let resizedImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, options as CFDictionary).flatMap{
+            UIImage(cgImage: $0)
+        }
+        return resizedImage
+    }
+    
+    // MARK: CoreGraphics 方式调整图片大小 性能很好
+    /// CoreGraphics 方式调整图片大小 性能很好
+    /// - Parameter resizeSize: 图片调整Size
+    /// - Returns: 调整后图片
+    func resizeCG(resizeSize: CGSize) -> UIImage? {
+        if base.size == resizeSize {
+            return self.base
+        }
+        guard  let cgImage = self.base.cgImage else { return nil }
+        guard  let colorSpace = cgImage.colorSpace else { return nil }
+        guard let context = CGContext(data: nil,
+                                      width: Int(resizeSize.width),
+                                      height: Int(resizeSize.height),
+                                      bitsPerComponent: cgImage.bitsPerComponent,
+                                      bytesPerRow: cgImage.bytesPerRow,
+                                      space: colorSpace,
+                                      bitmapInfo: cgImage.bitmapInfo.rawValue) else { return nil }
+        context.interpolationQuality = .high
+        context.draw(cgImage, in: CGRect(origin: .zero, size: resizeSize))
+        let resizedImage = context.makeImage().flatMap {
+            UIImage(cgImage: $0)
+        }
+        return resizedImage
     }
 }

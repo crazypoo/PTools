@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 /*
  var appCityModels = [MTCityModelsReset]()
@@ -105,5 +106,69 @@ public extension Array
         }
         return temp
     }
+    
+    //MARK: 數組轉字典
+    ///數組轉字典
+    func toJSON()->String?
+    {
+        guard JSONSerialization.isValidJSONObject(self) else {
+            PTLocalConsoleFunction.share.pNSLog("无法解析出JSONString")
+            return ""
+        }
+        let data : NSData = try! JSONSerialization.data(withJSONObject: self, options: []) as NSData
+        let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
+        return JSONString! as String
+    }
 }
 
+// MARK: 遵守NSObjectProtocol协议对应数组的扩展方法
+public extension Array where Element : NSObjectProtocol {
+    // MARK: 删除数组中遵守NSObjectProtocol协议的元素，是否删除重复的元素
+    /// 删除数组中遵守NSObjectProtocol协议的元素
+    /// - Parameters:
+    ///   - object: 元素
+    ///   - isRepeat: 是否删除重复的元素
+    @discardableResult
+    mutating func remove(object: NSObjectProtocol, isRepeat: Bool = true) -> Array {
+        var removeIndexs: [Int] = []
+        for i in 0..<count {
+            if self[i].isEqual(object) {
+                removeIndexs.append(i)
+                if !isRepeat {
+                    break
+                }
+            }
+        }
+        for index in removeIndexs.reversed() {
+            self.remove(at: index)
+        }
+        return self
+    }
+    
+    // MARK: 删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
+    /// 删除一个遵守NSObjectProtocol的数组中的元素，支持重复删除
+    /// - Parameters:
+    ///   - objects: 遵守NSObjectProtocol的数组
+    ///   - isRepeat: 是否删除重复的元素
+    @discardableResult
+    mutating func removeArray(objects: [NSObjectProtocol], isRepeat: Bool = true) -> Array {
+        for object in objects {
+            if self.contains(where: {$0.isEqual(object)} ){
+                self.remove(object: object, isRepeat: isRepeat)
+            }
+        }
+        return self
+    }
+}
+
+// MARK: 针对数组元素是 String 的扩展
+public extension Array where Self.Element == String {
+    
+    // MARK: 数组字符串转字符转
+    /// 数组字符串转字符转
+    /// - Parameter separator: 分隔符(默认没有)
+    /// - Returns: 转化后的字符串
+    func toStrinig(separator: String = "") -> String {
+        return self.joined(separator: separator)
+    }
+}

@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
     s.name        = 'PooTools'
     s.version     = '3.0.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
-    s.homepage    = 'https://github.com/crazypoo/PTools'
+    s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
@@ -42,7 +42,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'EmptyDataSet-Swift'#空数据
         subspec.dependency 'MJExtension'
         subspec.dependency 'MBProgressHUD'
-        subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos'
+        subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
         subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
@@ -112,7 +112,7 @@ Pod::Spec.new do |s|
     s.subspec 'Telephony' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.frameworks = 'CoreTelephony','WebKit','MessageUI'
-        subspec.source_files = 'PooToolsSource/CallMessageMail/*.{h,m,swift}','PooToolsSource/Carrie/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/CallMessageMail/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_TELEPHONY POOTOOLS_COCOAPODS"
         }

@@ -194,7 +194,7 @@ static NSString *cellIdentifier = @"CELL";
                     }
                     else
                     {
-                        carrieName = [PTCarrie currentRadioAccessTechnologys].firstObject;
+                        carrieName = @"";
                     }
                     infoLabel.text = [NSString stringWithFormat:@"是否iPhoneX?%@.运营商:%@.是否越狱了?%@.机型:%@",isiPhoneX,carrieName,isJailBroken,@"???"];
                     [cell.contentView addSubview:infoLabel];

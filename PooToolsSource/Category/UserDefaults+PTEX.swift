@@ -9,7 +9,7 @@
 import UIKit
 
 extension UserDefaults: PTProtocolCompatible {}
-// MARK: - 一、基本的扩展
+// MARK: 基本的扩展
 public extension PTProtocol where Base: UserDefaults {
   
     // MARK: 存值
@@ -57,7 +57,7 @@ public extension PTProtocol where Base: UserDefaults {
     }
 }
 
-// MARK: - 二、模型持久化
+// MARK: 模型持久化
 public extension PTProtocol where Base: UserDefaults {
     
     // MARK: 存储模型
@@ -91,5 +91,34 @@ public extension PTProtocol where Base: UserDefaults {
             return nil
         }
         return object
+    }
+    
+    //MARK: 保存模型数组
+    /// 保存模型数组
+    /// - Returns: 返回保存的结果
+    @discardableResult
+    static func setModelArray<T: Decodable & Encodable>(modelArrry object: [T], key: String) -> Bool {
+        do {
+            let data = try JSONEncoder().encode(object)
+            Base.standard.set(data, forKey: key)
+            Base.standard.synchronize()
+            return true
+        } catch {
+            PTLocalConsoleFunction.share.pNSLog(error)
+        }
+        return false
+    }
+    
+    //MARK: 读取模型数组
+    ///  读取模型数组
+    /// - Returns: 返回读取的模型数组
+    static func getModelArray<T: Decodable & Encodable>(forKey key : String) -> [T] {
+        guard let data = Base.standard.data(forKey: key) else { return [] }
+        do {
+            return try JSONDecoder().decode([T].self, from: data)
+        } catch {
+            PTLocalConsoleFunction.share.pNSLog(error)
+        }
+        return []
     }
 }

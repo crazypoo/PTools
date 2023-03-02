@@ -20,6 +20,8 @@ import AVFoundation
 import Foundation
 import SwiftDate
 
+extension String:PTProtocolCompatible {}
+
 /** 数字类型*/
 let NUM = 1
 /** 小写字母*/
@@ -506,6 +508,74 @@ public extension String
         let image = filter?.outputImage
         return PTUtils.createNoneInterpolatedUIImage(image: image!, imageSize: size)
     }
+    
+    // MARK: 字符串根据某个字符进行分隔成数组
+    /// 字符串根据某个字符进行分隔成数组
+    /// - Parameter char: 分隔符
+    /// - Returns: 分隔后的数组
+    func separatedByString(with char: String) -> Array<String> {
+        let arraySubstrings = self.components(separatedBy: char)
+        let arrayStrings: [String] = arraySubstrings.compactMap { "\($0)" }
+        return arrayStrings
+    }
+    
+    // MARK: 获取指定位置和长度的字符串
+    /// 获取指定位置和大小的字符串
+    /// - Parameters:
+    ///   - start: 开始位置
+    ///   - length: 长度
+    /// - Returns: 截取后的字符串
+    func sub(start: Int, length: Int = -1) -> String {
+        var len = length
+        if len == -1 {
+            len = self.count - start
+        }
+        let st = self.index(self.startIndex, offsetBy: start)
+        let en = self.index(st, offsetBy: len)
+        let range = st ..< en
+        return String(self[range])
+    }
+    
+    // MARK: 隐藏手机号中间的几位(保留前几位和后几位)
+    /// 隐藏手机号中间的几位(保留前几位和后几位)
+    /// - Parameters:
+    ///   - combine: 中间加密的符号
+    ///   - digitsBefore: 前面保留的位数
+    ///   - digitsAfter: 后面保留的位数
+    /// - Returns: 返回隐藏的手机号
+    func hidePhone(combine: String = "*", digitsBefore: Int = 2, digitsAfter: Int = 2) -> String {
+        let phoneLength: Int = self.count
+        if phoneLength > digitsBefore + digitsAfter {
+            let combineCount: Int = phoneLength - digitsBefore - digitsAfter
+            var combineContent: String = ""
+            for _ in 0..<combineCount {
+                combineContent = combineContent + combine
+            }
+            let pre = self.sub(start: 0, length: digitsBefore)
+            let post = self.sub(start: phoneLength - digitsAfter, length: digitsAfter)
+            return pre + "\(combineContent)" + post
+        } else {
+            return self
+        }
+    }
+    
+    // MARK:  隐藏邮箱中间的几位(保留前几位和后几位)
+    /// 隐藏邮箱中间的几位(保留前几位和后几位)
+    /// - Parameters:
+    ///   - combine: 加密的符号
+    ///   - digitsBefore: 前面保留几位
+    ///   - digitsAfter: 后面保留几位
+    /// - Returns: 返回加密后的字符串
+    func hideEmail(combine: String = "*", digitsBefore: Int = 1, digitsAfter: Int = 1) -> String {
+        let emailArray = self.separatedByString(with: "@")
+        if emailArray.count == 2 {
+            let fistContent = emailArray[0]
+            let encryptionContent = fistContent.hidePhone(combine: "*", digitsBefore: 1, digitsAfter: 1)
+            return encryptionContent + "@" +  emailArray[1]
+        }
+        return self
+    }
+
 }
 
 fileprivate extension PTUtils
@@ -1183,5 +1253,320 @@ public extension String
     func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle())->UIImage
     {
         return self.image(bundle: bundle)
+    }
+}
+
+public extension PTProtocol where Base: ExpressibleByStringLiteral {
+    // MARK: 字符串的长度
+    /// 字符串的长度
+    var length: Int {
+        let string = base as! String
+        return string.count
+    }
+    
+    // MARK: 判断是否包含某个子串
+    /// 判断是否包含某个子串
+    /// - Parameter find: 子串
+    /// - Returns: Bool
+    func contains(find: String) -> Bool {
+        return (base as! String).range(of: find) != nil
+    }
+    
+    // MARK: 判断是否包含某个子串 -- 忽略大小写
+    ///  判断是否包含某个子串 -- 忽略大小写
+    /// - Parameter find: 子串
+    /// - Returns: Bool
+    func containsIgnoringCase(find: String) -> Bool {
+        return (base as! String).range(of: find, options: .caseInsensitive) != nil
+    }
+    
+    // MARK: 字符串转 base64
+    /// 字符串 Base64 编码
+    var base64Encode: String? {
+        guard let codingData = (base as! String).data(using: .utf8) else {
+            return nil
+        }
+        return codingData.base64EncodedString()
+    }
+    
+    // MARK: base64转字符串转
+    /// 字符串 Base64 编码
+    var base64Decode: String? {
+        guard let decryptionData = Data(base64Encoded: base as! String, options: .ignoreUnknownCharacters) else {
+            return nil
+        }
+        return String(data: decryptionData, encoding: .utf8)
+    }
+
+    // MARK: 字符串转数组
+    /// 字符串转数组
+    /// - Returns: 转化后的数组
+    func toArray() -> Array<Any> {
+        let a = Array(base as! String)
+        return a
+    }
+    
+    // MARK: JSON字符串转Dictionary
+    /// JSON字符串转Dictionary
+    /// - Returns: Dictionary
+    func jsonStringToDictionary() -> Dictionary<String, Any>? {
+        let jsonString = self.base as! String
+        let jsonData: Data = jsonString.data(using: .utf8)!
+        let dict = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        if dict != nil {
+            return (dict as! Dictionary<String, Any>)
+        }
+        return nil
+    }
+    
+    // MARK: JSON字符串转Array
+    /// JSON字符串转Array
+    /// - Returns: Array
+    func jsonStringToArray() -> Array<Any>? {
+        let jsonString = self.base as! String
+        let jsonData:Data = jsonString.data(using: .utf8)!
+        let array = try? JSONSerialization.jsonObject(with: jsonData, options: .mutableContainers)
+        if array != nil {
+            return (array as! Array<Any>)
+        }
+        return nil
+    }
+    
+    // MARK: 转成拼音
+    /// 转成拼音
+    /// - Parameter isTone: true：带声调，false：不带声调，默认 false
+    /// - Returns: 拼音
+    func toLetter(_ isTone: Bool = false) -> String {
+        let mutableString = NSMutableString(string: self.base as! String)
+        CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)
+        if !isTone {
+            // 不带声调
+            CFStringTransform(mutableString, nil, kCFStringTransformStripDiacritics, false)
+        }
+        return mutableString as String
+    }
+    
+    // MARK: 中文提取首字母
+    /// 中文提取首字母
+    /// - Parameter isUpper:  true：大写首字母，false: 小写首字母，默认 true
+    /// - Returns: 字符串的首字母
+    func letterInitials(_ isUpper: Bool = true) -> String {
+        let pinyin = toLetter(false).components(separatedBy: " ")
+        let initials = pinyin.compactMap { String(format: "%c", $0.cString(using:.utf8)![0]) }
+        return isUpper ? initials.joined().uppercased() : initials.joined()
+    }
+
+    // MARK: 提取出字符串中所有的URL链接
+    /// 提取出字符串中所有的URL链接
+    /// - Returns: URL链接数组
+    func getUrls() -> [String]? {
+        var urls = [String]()
+        // 创建一个正则表达式对象
+        guard let dataDetector = try? NSDataDetector(types:  NSTextCheckingTypes(NSTextCheckingResult.CheckingType.link.rawValue)) else {
+            return nil
+        }
+        // 匹配字符串，返回结果集
+        let res = dataDetector.matches(in: self.base as! String, options: NSRegularExpression.MatchingOptions(rawValue: 0), range: NSMakeRange(0, (self.base as! String).count))
+        // 取出结果
+        for checkingRes in res {
+            urls.append((self.base as! NSString).substring(with: checkingRes.range))
+        }
+        return urls
+    }
+
+    // MARK: 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    /// 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    /// - Returns: 返回字符的个数
+    func countOfChars() -> Int {
+        var count = 0
+        guard (self.base as! String).count > 0 else { return 0 }
+        for i in 0...(self.base as! String).count - 1 {
+            let c: unichar = ((self.base as! String) as NSString).character(at: i)
+            if (c >= 0x4E00) {
+                count += 2
+            } else {
+                count += 1
+            }
+        }
+        return count
+    }
+
+    // MARK: 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
+    /// 将金额字符串转化为带逗号的金额 按照千分位划分，如  "1234567" => 1,234,567   1234567.56 => 1,234,567.56
+    /// - Returns: 千分位的字符串
+    func toThousands() -> String? {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.roundingMode = .floor
+        formatter.maximumFractionDigits = 0
+        formatter.minimumFractionDigits = 0
+        if (base as! String).contains(".") {
+            formatter.maximumFractionDigits = 2
+            formatter.minimumFractionDigits = 2
+            formatter.minimumIntegerDigits = 1
+        }
+        var num = NSDecimalNumber(string: (base as! String))
+        if num!.doubleValue.isNaN {
+            num = NSDecimalNumber(string: "0")
+        }
+        let result = formatter.string(from: num!)
+        return result
+    }
+}
+
+// MARK: AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
+/**
+ iOS中填充规则PKCS7,加解密模式ECB(无补码,CCCrypt函数中对应的nil),字符集UTF8,输出base64(可以自己改hex)
+ */
+// MARK: 加密模式
+public enum DDYSCAType {
+    case AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish
+    var infoTuple: (algorithm: CCAlgorithm, digLength: Int, keyLength: Int) {
+        switch self {
+        case .AES:
+            return (CCAlgorithm(kCCAlgorithmAES), Int(kCCKeySizeAES128), Int(kCCKeySizeAES128))
+        case .AES128:
+            return (CCAlgorithm(kCCAlgorithmAES128), Int(kCCBlockSizeAES128), Int(kCCKeySizeAES256))
+        case .DES:
+            return (CCAlgorithm(kCCAlgorithmDES), Int(kCCBlockSizeDES), Int(kCCKeySizeDES))
+        case .DES3:
+            return (CCAlgorithm(kCCAlgorithm3DES), Int(kCCBlockSize3DES), Int(kCCKeySize3DES))
+        case .CAST:
+            return (CCAlgorithm(kCCAlgorithmCAST), Int(kCCBlockSizeCAST), Int(kCCKeySizeMaxCAST))
+        case .RC2:
+            return (CCAlgorithm(kCCAlgorithmRC2), Int(kCCBlockSizeRC2), Int(kCCKeySizeMaxRC2))
+        case .RC4:
+            return (CCAlgorithm(kCCAlgorithmRC4), Int(kCCBlockSizeRC2), Int(kCCKeySizeMaxRC4))
+        case .Blowfish:return (CCAlgorithm(kCCAlgorithmBlowfish), Int(kCCBlockSizeBlowfish), Int(kCCKeySizeMaxBlowfish))
+        }
+    }
+}
+
+public extension PTProtocol where Base: ExpressibleByStringLiteral {
+    
+    // MARK: 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
+    /// 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
+    /// - Parameters:
+    ///   - cryptType: 加密类型
+    ///   - key: 加密的key
+    ///   - encode: 编码还是解码
+    ///   - encryptIV: 偏移量
+    /// - Returns: 编码或者解码后的字符串
+    func scaCrypt(cryptType: DDYSCAType, key: String?, encode: Bool, encryptIV: String = "1") -> String? {
+        
+        let strData = encode ? (self.base as! String).data(using: .utf8) : Data(base64Encoded: (self.base as! String))
+        // 创建数据编码后的指针
+        let dataPointer = UnsafeRawPointer((strData! as NSData).bytes)
+        // 获取转码后数据的长度
+        let dataLength = size_t(strData!.count)
+        
+        // 2、后台对应的加密key
+        // 将加密或解密的密钥转化为Data数据
+        guard let keyData = key?.data(using: .utf8) else {
+            return nil
+        }
+        // 创建密钥的指针
+        let keyPointer = UnsafeRawPointer((keyData as NSData).bytes)
+        // 设置密钥的长度
+        let keyLength = cryptType.infoTuple.keyLength
+        /// 3、后台对应的加密 IV，这个是跟后台商量的iv偏移量
+        let encryptIV = "1"
+        let encryptIVData = encryptIV.data(using: .utf8)!
+        let encryptIVDataBytes = UnsafeRawPointer((encryptIVData as NSData).bytes)
+        // 创建加密或解密后的数据对象
+        let cryptData = NSMutableData(length: Int(dataLength) + cryptType.infoTuple.digLength)
+        // 获取返回数据(cryptData)的指针
+        let cryptPointer = UnsafeMutableRawPointer(mutating: cryptData!.mutableBytes)
+        // 获取接收数据的长度
+        let cryptDataLength = size_t(cryptData!.length)
+        // 加密或则解密后的数据长度
+        var cryptBytesLength:size_t = 0
+        // 是解密或者加密操作(CCOperation 是32位的)
+        let operation = encode ? CCOperation(kCCEncrypt) : CCOperation(kCCDecrypt)
+        // 算法类型
+        let algoritm: CCAlgorithm = CCAlgorithm(cryptType.infoTuple.algorithm)
+        // 设置密码的填充规则（ PKCS7 & ECB 两种填充规则）
+        let options: CCOptions = UInt32(kCCOptionPKCS7Padding) | UInt32(kCCOptionECBMode)
+        // 执行算法处理
+        let cryptStatus = CCCrypt(operation, algoritm, options, keyPointer, keyLength, encryptIVDataBytes, dataPointer, dataLength, cryptPointer, cryptDataLength, &cryptBytesLength)
+        // 结果字符串初始化
+        var resultString: String?
+        // 通过返回状态判断加密或者解密是否成功
+        if CCStatus(cryptStatus) == CCStatus(kCCSuccess) {
+            cryptData!.length = cryptBytesLength
+            if encode {
+                resultString = cryptData!.base64EncodedString(options: .lineLength64Characters)
+            } else {
+                resultString = NSString(data:cryptData! as Data ,encoding:String.Encoding.utf8.rawValue) as String?
+            }
+        }
+        return resultString
+    }
+}
+
+// MARK: SHA1, SHA224, SHA256, SHA384, SHA512
+/**
+ - 安全哈希算法（Secure Hash Algorithm）主要适用于数字签名标准（Digital Signature Standard DSS）里面定义的数字签名算法（Digital Signature Algorithm DSA）。对于长度小于2^64位的消息，SHA1会产生一个160位的消息摘要。当接收到消息的时候，这个消息摘要可以用来验证数据的完整性。在传输的过程中，数据很可能会发生变化，那么这时候就会产生不同的消息摘要。当让除了SHA1还有SHA256以及SHA512等。
+ - SHA1有如下特性：不可以从消息摘要中复原信息；两个不同的消息不会产生同样的消息摘要
+ - SHA1 SHA256 SHA512 这4种本质都是摘要函数，不通在于长度 SHA1是160位，SHA256是256位，SHA512是512位
+ */
+// MARK: 加密类型
+public enum DDYSHAType {
+    case SHA1, SHA224, SHA256, SHA384, SHA512
+    var infoTuple: (algorithm: CCHmacAlgorithm, length: Int) {
+        switch self {
+        case .SHA1:
+            return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA1), length: Int(CC_SHA1_DIGEST_LENGTH))
+        case .SHA224:
+            return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA224), length: Int(CC_SHA224_DIGEST_LENGTH))
+        case .SHA256:
+            return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA256), length: Int(CC_SHA256_DIGEST_LENGTH))
+        case .SHA384:
+            return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA384), length: Int(CC_SHA384_DIGEST_LENGTH))
+        case .SHA512:
+            return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA512), length: Int(CC_SHA512_DIGEST_LENGTH))
+        }
+    }
+}
+
+public extension PTProtocol where Base: ExpressibleByStringLiteral {
+    
+    // MARK: SHA1, SHA224, SHA256, SHA384, SHA512 加密
+    /// SHA1, SHA224, SHA256, SHA384, SHA512 加密
+    /// - Parameters:
+    ///   - cryptType: 加密类型，默认是 SHA1 加密
+    ///   - key: 加密的key
+    ///   - lower: 大写还是小写，默认小写
+    /// - Returns: 加密以后的字符串
+    func shaCrypt(cryptType: DDYSHAType = .SHA1, key: String?, lower: Bool = true) -> String? {
+        guard let cStr = (self.base as! String).cString(using: String.Encoding.utf8) else {
+            return nil
+        }
+        let strLen  = strlen(cStr)
+        let digLen = cryptType.infoTuple.length
+        let buffer = UnsafeMutablePointer<CUnsignedChar>.allocate(capacity: digLen)
+        let hash = NSMutableString()
+        
+        if let cKey = key?.cString(using: String.Encoding.utf8), key != "" {
+            let keyLen = Int(key!.lengthOfBytes(using: String.Encoding.utf8))
+            CCHmac(cryptType.infoTuple.algorithm, cKey, keyLen, cStr, strLen, buffer)
+        } else {
+            switch cryptType {
+            case .SHA1:     CC_SHA1(cStr,   (CC_LONG)(strlen(cStr)), buffer)
+            case .SHA224:   CC_SHA224(cStr, (CC_LONG)(strlen(cStr)), buffer)
+            case .SHA256:   CC_SHA256(cStr, (CC_LONG)(strlen(cStr)), buffer)
+            case .SHA384:   CC_SHA384(cStr, (CC_LONG)(strlen(cStr)), buffer)
+            case .SHA512:   CC_SHA512(cStr, (CC_LONG)(strlen(cStr)), buffer)
+            }
+        }
+        for i in 0..<digLen {
+            if lower {
+                hash.appendFormat("%02x", buffer[i])
+            } else {
+                hash.appendFormat("%02X", buffer[i])
+            }
+        }
+        free(buffer)
+        return hash as String
     }
 }

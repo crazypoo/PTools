@@ -9,6 +9,8 @@
 import UIKit
 import SwifterSwift
 
+extension NSString:PTProtocolCompatible {}
+
 public extension NSString
 {
     /*  银行卡号有效性问题Luhm算法

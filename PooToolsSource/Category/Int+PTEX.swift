@@ -32,4 +32,10 @@ public extension Int
         randomIntNumber(lower: range.lowerBound, upper: range.upperBound)
     }
     
+    //MARK: 是否是偶数
+    /// 是否是偶数
+    /// - Returns: 结果
+    func isEven() -> Bool {
+        return self % 2 == 0
+    }
 }

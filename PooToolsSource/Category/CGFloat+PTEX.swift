@@ -7,7 +7,9 @@
 //
 
 import UIKit
+import SwifterSwift
 
+extension CGFloat: PTProtocolCompatible {}
 //MARK: 溫度單位
 @objc public enum TemperatureUnit:Int
 {
@@ -78,5 +80,19 @@ public extension CGFloat
         default:
             return 0
         }
+    }
+}
+
+//MARK: 基本的扩展
+public extension PTProtocol where Base == CGFloat {
+    // MARK: 一个数字四舍五入返回
+    /// 一个数字四舍五入返回
+    /// - Parameters:
+    ///   - value: 值
+    ///   - scale: 保留小数的位数
+    /// - Returns: 四舍五入返回结果
+    func rounding(scale: Int16 = 1) -> CGFloat {
+        let value = NSDecimalNumberHandler.pt.rounding(value: self.base,scale: scale)
+        return "\(value.floatValue)".cgFloat() ?? 0
     }
 }

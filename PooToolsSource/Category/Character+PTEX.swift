@@ -8,6 +8,8 @@
 
 import UIKit
 
+extension Character: PTProtocolCompatible {}
+
 public extension Character {
     //MARK: 简单的emoji是一个标量，以emoji的形式呈现给用户
     ///简单的emoji是一个标量，以emoji的形式呈现给用户
@@ -32,6 +34,21 @@ public extension Character {
     /// - Note: http://stackoverflow.com/questions/30757193/find-out-if-character-in-string-is-emoji
     var isEmoji: Bool {
         return isSimpleEmoji || isCombinedIntoEmoji
+    }
+}
+
+// MARK: Character 与其他类型的转换
+public extension PTProtocol where Base == Character {
+
+    // MARK: Character 转 String
+    /// Character 转 String
+    var charToString: String { return String(self.base) }
+
+    // MARK: Character 转 Int
+    /// Character 转 Int
+    var charToInt: Int? {
+        return Int(String(self.base))
+        
     }
 }
 
