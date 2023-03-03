@@ -214,7 +214,6 @@ public extension PTProtocol where Base: UIDevice
     
     //MARK: 获取最高刷新率
     ///获取最高刷新率
-    @available(iOS 10.3,*)
     static var maximumFramesPerSecond:Int
     {
         return UIScreen.main.maximumFramesPerSecond
@@ -307,7 +306,8 @@ public extension PTProtocol where Base: UIDevice
     }
 
     //MARK: 根据数据业务信息获取对应的网络类型
-    /// - Parameter currentRadioTech: 当前的无线电接入技术信息
+    /// - Parameters:
+    ///  -  currentRadioTech: 当前的无线电接入技术信息
     /// - Returns: 网络类型
     private static func getNetworkType(currentRadioTech: String) -> String {
         /**
@@ -455,7 +455,6 @@ public extension PTProtocol where Base: UIDevice {
     
     //MARK: UINotificationFeedbackGenerator 来设置的手机振动
     ///UINotificationFeedbackGenerator 来设置的手机振动
-    @available(iOS 10.0, *)
     static func notificationFeedbackGeneratorSuccess(_ notificationType: UINotificationFeedbackGenerator.FeedbackType) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(notificationType)
@@ -463,7 +462,6 @@ public extension PTProtocol where Base: UIDevice {
     
     //MARK: UIImpactFeedbackGenerator 来设置的手机振动
     ///UIImpactFeedbackGenerator 来设置的手机振动
-    @available(iOS 10.0, *)
     static func impactFeedbackGenerator(style: UIImpactFeedbackGenerator.FeedbackStyle) {
         let generator = UIImpactFeedbackGenerator(style: style)
         generator.impactOccurred()
@@ -472,7 +470,6 @@ public extension PTProtocol where Base: UIDevice {
     //MARK: 模拟选择滚轮一类控件时的震动
     ///模拟选择滚轮一类控件时的震动
     ///UISelectionFeedbackGenerator中只有一个类型，是用来模拟选择滚轮一类控件时的震动，比如计时器中的picker滚动时就有这个效果。
-    @available(iOS 10.0, *)
     static func selectionFeedbackGeneratorChanged() {
         UISelectionFeedbackGenerator().selectionChanged()
     }
