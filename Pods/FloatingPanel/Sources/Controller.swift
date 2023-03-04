@@ -441,6 +441,12 @@ open class FloatingPanelController: UIViewController {
                 // Use `self.view.safeAreaInsets` because `change.newValue` can be nil in particular case when
                 // is reported in https://github.com/SCENEE/FloatingPanel/issues/330
                 guard let self = self, change.oldValue != self.view.safeAreaInsets else { return }
+
+                // Sometimes the bounding rectangle of the controlled view becomes invalid when the screen is rotated.
+                // This results in its safeAreaInsets change. In that case, `self.update(safeAreaInsets:)` leads
+                // an unsatisfied constraints error. So this method should not be called with those bounds.
+                guard self.view.bounds.height > 0 && self.view.bounds.width > 0 else { return }
+
                 self.update(safeAreaInsets: self.view.safeAreaInsets)
             }
         } else {
@@ -587,6 +593,16 @@ open class FloatingPanelController: UIViewController {
         default:
             break
         }
+    }
+    
+    /// [Experimental] Allows the panel to move as its tracking scroll view bounces.
+    ///
+    /// This method must be called in the delegate method, `UIScrollViewDelegate.scrollViewDidScroll(_:)`,
+    /// of its tracking scroll view. This method only supports a bottom positioned panel for now.
+    ///
+    /// - TODO: Support top, left and right positioned panels.
+    public func followScrollViewBouncing() {
+        floatingPanel.followScrollViewBouncing()
     }
 
     /// Cancel tracking the specify scroll view.

@@ -118,7 +118,7 @@ public class PTDebugViewController: PTBaseViewController {
         
         self.viewCollection.pt_register(by: self.mSections)
         self.viewCollection.reloadData()
-    }
+    }    
 }
 
 extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource
@@ -151,7 +151,11 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                         {
                             //开了
                             PTDevFunction.share.createLabBtn()
-                            PTDevFunction.GobalDevFunction_open()
+                            PTDevFunction.GobalDevFunction_open { showFlex in
+#if DEBUG
+                                self.showFlexFunction(show: showFlex)
+#endif
+                            }
                         }
                     }
                     else
@@ -159,7 +163,11 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                         //关了
                         PTDevFunction.share.mn_PFloatingButton?.removeFromSuperview()
                         PTDevFunction.share.mn_PFloatingButton = nil
-                        PTDevFunction.GobalDevFunction_close()
+                        PTDevFunction.GobalDevFunction_close { showFlex in
+#if DEBUG
+                                self.showFlexFunction(show: showFlex)
+#endif
+                        }
                     }
                 }
             }

@@ -18723,6 +18723,22 @@
 			};
 			name = Debug;
 		};
+		0F98BADEC77403C4E6C766EB990796BA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 148FCFD40D2D140478049FE3C59BC5DD /* PermissionsKit.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/PermissionsKit";
+				IBSC_MODULE = PermissionsKit;
+				INFOPLIST_FILE = "Target Support Files/PermissionsKit/ResourceBundle-PermissionsKit-PermissionsKit-Info.plist";
+				PRODUCT_NAME = PermissionsKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
 		0FA76CFB66D0A6591309D195738CB8F4 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C21D59F30BBD5F8CCA0E72D9471A2F2B /* YYCache.debug.xcconfig */;
@@ -19476,22 +19492,6 @@
 			};
 			name = Debug;
 		};
-		325B43C6119D652374A3A2A41ADA2034 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 874530B1E72E126C1FC6F4C9004CB833 /* LXFProtocolTool.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LXFProtocolTool";
-				IBSC_MODULE = LXFProtocolTool;
-				INFOPLIST_FILE = "Target Support Files/LXFProtocolTool/ResourceBundle-LXFProtocolTool-LXFProtocolTool-Info.plist";
-				PRODUCT_NAME = LXFProtocolTool;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		33E24E1198B25565628395444E80EFDA /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = D8592B2DE9F1C7031B73254A2BD9B283 /* Masonry.release.xcconfig */;
@@ -19552,6 +19552,22 @@
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		37AEBDB59CECEE977C1D236079104435 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 538148D318F2F75D52BD4599B056770A /* LifetimeTracker.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LifetimeTracker";
+				IBSC_MODULE = LifetimeTracker;
+				INFOPLIST_FILE = "Target Support Files/LifetimeTracker/ResourceBundle-LifetimeTracker-LifetimeTracker-Info.plist";
+				PRODUCT_NAME = LifetimeTracker;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Debug;
 		};
@@ -19662,6 +19678,22 @@
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3C34D0575F8FA6ECA1486851C627F42A /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = BF61FA81D2B9716D4905CA30F560A270 /* LifetimeTracker.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LifetimeTracker";
+				IBSC_MODULE = LifetimeTracker;
+				INFOPLIST_FILE = "Target Support Files/LifetimeTracker/ResourceBundle-LifetimeTracker-LifetimeTracker-Info.plist";
+				PRODUCT_NAME = LifetimeTracker;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -20291,22 +20323,6 @@
 			};
 			name = Release;
 		};
-		63952190DD35AB598E5C85CCB11E456F /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 538148D318F2F75D52BD4599B056770A /* LifetimeTracker.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LifetimeTracker";
-				IBSC_MODULE = LifetimeTracker;
-				INFOPLIST_FILE = "Target Support Files/LifetimeTracker/ResourceBundle-LifetimeTracker-LifetimeTracker-Info.plist";
-				PRODUCT_NAME = LifetimeTracker;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
 		653D52ED33A62F730176D3610182E29D /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3E16783D36E8031D3BB9FF8D30537579 /* pop.release.xcconfig */;
@@ -20468,22 +20484,6 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
-		};
-		6F5000FAC88A29B6FC8E3EDF024DF958 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 148FCFD40D2D140478049FE3C59BC5DD /* PermissionsKit.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/PermissionsKit";
-				IBSC_MODULE = PermissionsKit;
-				INFOPLIST_FILE = "Target Support Files/PermissionsKit/ResourceBundle-PermissionsKit-PermissionsKit-Info.plist";
-				PRODUCT_NAME = PermissionsKit;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
 		};
 		6F59832190DB794D61453CDAF6C1CFA1 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -21073,6 +21073,22 @@
 			};
 			name = Release;
 		};
+		90B5C9E24051C13444AE9A9144D46B3C /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3AD17021AE7006189023C5C12750D4D2 /* LXFProtocolTool.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LXFProtocolTool";
+				IBSC_MODULE = LXFProtocolTool;
+				INFOPLIST_FILE = "Target Support Files/LXFProtocolTool/ResourceBundle-LXFProtocolTool-LXFProtocolTool-Info.plist";
+				PRODUCT_NAME = LXFProtocolTool;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Debug;
+		};
 		96AA20B660F7C8AEAB59312698D784CF /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 2BE897D80E44A582B1D8411299030648 /* ChromaColorPicker.release.xcconfig */;
@@ -21103,22 +21119,6 @@
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
-			};
-			name = Release;
-		};
-		9719EC44FCF5987E9C618167942F570D /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = BF61FA81D2B9716D4905CA30F560A270 /* LifetimeTracker.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LifetimeTracker";
-				IBSC_MODULE = LifetimeTracker;
-				INFOPLIST_FILE = "Target Support Files/LifetimeTracker/ResourceBundle-LifetimeTracker-LifetimeTracker-Info.plist";
-				PRODUCT_NAME = LifetimeTracker;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
 			};
 			name = Release;
 		};
@@ -21727,22 +21727,6 @@
 			};
 			name = Release;
 		};
-		BE54710FB623A921D4A96DD65670DB89 /* Release */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = C0C3BD7A027629A1AF131353367E4943 /* PermissionsKit.release.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/PermissionsKit";
-				IBSC_MODULE = PermissionsKit;
-				INFOPLIST_FILE = "Target Support Files/PermissionsKit/ResourceBundle-PermissionsKit-PermissionsKit-Info.plist";
-				PRODUCT_NAME = PermissionsKit;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Release;
-		};
 		BFBB9DFF0500F761AF20EB3EA15C979E /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = DEF5844A228584D818F6E2075DCE8F2B /* YYModel.debug.xcconfig */;
@@ -22152,22 +22136,6 @@
 			};
 			name = Release;
 		};
-		CF17DCEE83E579A483AE598AB414B2D5 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3AD17021AE7006189023C5C12750D4D2 /* LXFProtocolTool.debug.xcconfig */;
-			buildSettings = {
-				CODE_SIGNING_ALLOWED = NO;
-				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LXFProtocolTool";
-				IBSC_MODULE = LXFProtocolTool;
-				INFOPLIST_FILE = "Target Support Files/LXFProtocolTool/ResourceBundle-LXFProtocolTool-LXFProtocolTool-Info.plist";
-				PRODUCT_NAME = LXFProtocolTool;
-				SDKROOT = iphoneos;
-				SKIP_INSTALL = YES;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				WRAPPER_EXTENSION = bundle;
-			};
-			name = Debug;
-		};
 		D13374A05D1FD0B631019DD5E2064FE1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 81BC154DABF60D396FCC559CC078FF19 /* JXSegmentedView.debug.xcconfig */;
@@ -22229,6 +22197,22 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
+		};
+		D3462EF787554AC2551B06243B8E057F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0C3BD7A027629A1AF131353367E4943 /* PermissionsKit.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/PermissionsKit";
+				IBSC_MODULE = PermissionsKit;
+				INFOPLIST_FILE = "Target Support Files/PermissionsKit/ResourceBundle-PermissionsKit-PermissionsKit-Info.plist";
+				PRODUCT_NAME = PermissionsKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
 		};
 		DA42476FB9FEB4F8A5D236BE7E0B20B9 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -22610,6 +22594,22 @@
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
+		};
+		F2F8FCBA2132E6B57AC94D26017B8C2F /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 874530B1E72E126C1FC6F4C9004CB833 /* LXFProtocolTool.release.xcconfig */;
+			buildSettings = {
+				CODE_SIGNING_ALLOWED = NO;
+				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)/LXFProtocolTool";
+				IBSC_MODULE = LXFProtocolTool;
+				INFOPLIST_FILE = "Target Support Files/LXFProtocolTool/ResourceBundle-LXFProtocolTool-LXFProtocolTool-Info.plist";
+				PRODUCT_NAME = LXFProtocolTool;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				WRAPPER_EXTENSION = bundle;
+			};
+			name = Release;
 		};
 		F47A9822B62D70AC847BBC978608FB88 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -23065,8 +23065,8 @@
 		2DC442A1BE75C432AD18338E183AED2D /* Build configuration list for PBXNativeTarget "PermissionsKit-PermissionsKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6F5000FAC88A29B6FC8E3EDF024DF958 /* Debug */,
-				BE54710FB623A921D4A96DD65670DB89 /* Release */,
+				0F98BADEC77403C4E6C766EB990796BA /* Debug */,
+				D3462EF787554AC2551B06243B8E057F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -23101,8 +23101,8 @@
 		3E45FA5E5D054AF5423D6C2D072F6962 /* Build configuration list for PBXNativeTarget "LXFProtocolTool-LXFProtocolTool" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				CF17DCEE83E579A483AE598AB414B2D5 /* Debug */,
-				325B43C6119D652374A3A2A41ADA2034 /* Release */,
+				90B5C9E24051C13444AE9A9144D46B3C /* Debug */,
+				F2F8FCBA2132E6B57AC94D26017B8C2F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -23191,8 +23191,8 @@
 		60ED925BFF1A3989B27DFEF4C861BA47 /* Build configuration list for PBXNativeTarget "LifetimeTracker-LifetimeTracker" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				63952190DD35AB598E5C85CCB11E456F /* Debug */,
-				9719EC44FCF5987E9C618167942F570D /* Release */,
+				37AEBDB59CECEE977C1D236079104435 /* Debug */,
+				3C34D0575F8FA6ECA1486851C627F42A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

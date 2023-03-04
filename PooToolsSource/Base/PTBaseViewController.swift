@@ -159,6 +159,12 @@ open class PTBaseViewController: ZXNavigationBarController {
         }
     }
 
+    //MARK: 這裏提供給Flex使用
+    ///這裏提供給Flex使用
+    public func showFlexFunction(show:Bool)
+    {
+        
+    }
 }
 
 extension PTBaseViewController:UIGestureRecognizerDelegate
@@ -205,7 +211,11 @@ extension PTBaseViewController
                 }
                 else
                 {
-                    PTDevFunction.GobalDevFunction_close()
+                    PTDevFunction.GobalDevFunction_close { show in
+#if DEBUG
+                                self.showFlexFunction(show: showFlex)
+#endif
+                    }
                 }
             }
             else
