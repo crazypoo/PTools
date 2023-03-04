@@ -7,25 +7,39 @@
 //
 
 import UIKit
-#if DEBUG
-#if canImport(FLEX)
-import FLEX
-#endif
-#if canImport(InAppViewDebugger)
-import InAppViewDebugger
-#endif
-#endif
 import SDWebImage
 
-public typealias GoToAppDev = () -> Void
+public typealias DevTask = () -> Void
 
 @objcMembers
 public class PTDevFunction: NSObject {
     public static let share = PTDevFunction()
     
     public var mn_PFloatingButton : PFloatingButton?
-    public var goToAppDevVC:GoToAppDev?
-    
+    //去開發人員設置界面
+    public var goToAppDevVC:DevTask?
+    //開啟/關閉Flex
+    /*
+     #if DEBUG
+     if FLEXManager.shared.isHidden
+     {
+         FLEXManager.shared.showExplorer()
+     }
+     else
+     {
+         FLEXManager.shared.hideExplorer()
+     }
+     #endif
+     */
+    public var flex:DevTask?
+    //開啟/關閉inAppViewDebugger
+    /*
+     #if DEBUG
+        InAppViewDebugger.present()
+     #endif
+     */
+    public var inApp:DevTask?
+
     public func createLabBtn()
     {
         if UIApplication.applicationEnvironment() != .appStore
@@ -67,16 +81,10 @@ public class PTDevFunction: NSObject {
                             }
                             else if title == "FLEX"
                             {
-                                #if DEBUG
-                                if FLEXManager.shared.isHidden
+                                if self.flex != nil
                                 {
-                                    FLEXManager.shared.showExplorer()
+                                    self.flex!()
                                 }
-                                else
-                                {
-                                    FLEXManager.shared.hideExplorer()
-                                }
-                                #endif
                             }
                             else if title == "Log"
                             {
@@ -109,9 +117,10 @@ public class PTDevFunction: NSObject {
                             }
                             else if title == "检测界面"
                             {
-#if DEBUG
-                                InAppViewDebugger.present()
-#endif
+                                if self.inApp != nil
+                                {
+                                    self.inApp!()
+                                }
                             }
                         }
                     })
