@@ -10,6 +10,7 @@ import UIKit
 import SDWebImage
 
 public typealias DevTask = () -> Void
+public typealias FlexDevTask = (Bool) -> Void
 
 @objcMembers
 public class PTDevFunction: NSObject {
@@ -32,6 +33,7 @@ public class PTDevFunction: NSObject {
      #endif
      */
     public var flex:DevTask?
+    public var flexBool:FlexDevTask?
     //開啟/關閉inAppViewDebugger
     /*
      #if DEBUG
@@ -73,11 +75,21 @@ public class PTDevFunction: NSObject {
                         {
                             if title == "全部开启"
                             {
-                                PTDevFunction.GobalDevFunction_open()
+                                PTDevFunction.GobalDevFunction_open { show in
+                                    if self.flexBool != nil
+                                    {
+                                        self.flexBool!(show)
+                                    }
+                                }
                             }
                             else if title == "全部关闭"
                             {
-                                PTDevFunction.GobalDevFunction_close()
+                                PTDevFunction.GobalDevFunction_close { show in
+                                    if self.flexBool != nil
+                                    {
+                                        self.flexBool!(show)
+                                    }
+                                }
                             }
                             else if title == "FLEX"
                             {
@@ -129,25 +141,21 @@ public class PTDevFunction: NSObject {
         }
     }
     
-    public class func GobalDevFunction_open()
+    public class func GobalDevFunction_open(flexTask:(Bool)->Void)
     {
         if UIApplication.applicationEnvironment() != .appStore
         {
-            #if DEBUG
-            FLEXManager.shared.showExplorer()
-            #endif
+            flexTask(true)
             PTLocalConsoleFunction.share.localconsole.createSystemLogView()
             PCheckAppStatus.shared.open()
         }
     }
 
-    public class func GobalDevFunction_close()
+    public class func GobalDevFunction_close(flexTask:(Bool)->Void)
     {
         if UIApplication.shared.inferredEnvironment != .appStore
         {
-            #if DEBUG
-            FLEXManager.shared.hideExplorer()
-            #endif
+            flexTask(false)
             PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
             PCheckAppStatus.shared.close()
         }
