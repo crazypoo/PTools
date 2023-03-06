@@ -47,7 +47,7 @@ public var PTBaseURLMode:NetWorkEnvironment
 // MARK: - 网络运行状态监听
 public class XMNetWorkStatus {
     
-    static let shared = XMNetWorkStatus()
+    public static let shared = XMNetWorkStatus()
     /// 当前网络环境状态
     private var currentNetWorkStatus: NetWorkStatus = .wifi
     /// 当前运行环境状态
