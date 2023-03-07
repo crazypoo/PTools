@@ -43,7 +43,7 @@ open class PTFunctionCellModel: NSObject {
     ///当前选择的Indexpath
     open var cellIndexPath:IndexPath?
     ///Cell的AccessViewImage
-    open var disclosureIndicatorImageName :String = ""
+    open var disclosureIndicatorImageName :UIImage = UIImage()
     ///Cell的圓角處理
     open var conrner:UIRectCorner = []
     ///Cell的是否顯示Icon

@@ -43,7 +43,7 @@ public class PTFusionCellContent:UIView
             {
                 self.valueSwitch.isHidden = true
                 self.accessV.isHidden = false
-                self.accessV.image = UIImage.init(named: cellModel!.disclosureIndicatorImageName)
+                self.accessV.image = cellModel!.disclosureIndicatorImageName
                 self.accessV.snp.makeConstraints { make in
                     make.width.height.equalTo(14)
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
