@@ -9,10 +9,12 @@
 import UIKit
 import AVKit
 import DeviceKit
+import SnapKit
 
 public typealias PTLaunchAdMonitorCallBack = () -> Void
 
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
+public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
 @objcMembers
 public class PTLaunchAdMonitor: NSObject {
@@ -27,7 +29,7 @@ public class PTLaunchAdMonitor: NSObject {
     private var callBack:PTLaunchAdMonitorCallBack?
     private var player:AVPlayerViewController?
     private var detailParam:NSMutableDictionary?
-
+    private var isTap:Bool = false
     //MARK: 初始化廣告界面
     ///初始化廣告界面
     /// - Parameters:
@@ -244,21 +246,31 @@ public class PTLaunchAdMonitor: NSObject {
             exit.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.2)
             exit.setTitleColor(.white, for: .normal)
             exit.addActionHandlers { sender in
+                monitor.isTap = true
                 PTLaunchAdMonitor.hideView(sender: sender)
             }
             exit.titleLabel!.textAlignment = .center
             exit.titleLabel!.numberOfLines = 0
             exit.titleLabel!.lineBreakMode = .byCharWrapping
             exit.titleLabel!.font = newFont
+            exit.isUserInteractionEnabled = true
             v.addSubview(exit)
+            v.bringSubviewToFront(exit)
             exit.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(10)
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
                 make.width.height.equalTo(55)
             }
             exit.viewCorner(radius: 55/2)
-            exit.buttonTimeRun(timeInterval: timeInterval, originalTitle: "", canTap: true) {
-                PTLaunchAdMonitor.hideView(sender: exit)
+            exit.buttonTimeRun(timeInterval: timeInterval, originalTitle: "") {
+                if !monitor.isTap
+                {
+                    PTLaunchAdMonitor.hideView(sender: exit)
+                }
+                else
+                {
+                    monitor.isTap = false
+                }
             }
             
             if !comlabel
@@ -295,11 +307,13 @@ public class PTLaunchAdMonitor: NSObject {
         } completion: { finish in
             monitor.player?.player?.pause()
             sup?.removeFromSuperview()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: PLaunchAdSkipNotification), object:nil)
         }
     }
     
     @objc class public func showDetail(sender:Any)
     {
+        monitor.isTap = true
         var sup:UIView?
         switch monitor.imageType {
         case .GIF:
@@ -309,12 +323,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
         
         sup?.isUserInteractionEnabled = false
-        
-        if monitor.callBack != nil
-        {
-            monitor.callBack!()
-        }
-        
+                
         UIView.animate(withDuration: 0.25) {
             sup?.alpha = 0
         } completion: { finish in

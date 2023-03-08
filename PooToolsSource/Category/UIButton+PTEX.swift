@@ -120,14 +120,15 @@ public extension UIButton
     ///   - finishBlock: 回調
     func buttonTimeRun(timeInterval:TimeInterval,
                        originalTitle:String,
-                       canTap:Bool,
+                       countdowningCanTap:Bool = true,
+                       countdownFinishCanTap:Bool = true,
                        timeFinish:(()->Void)?)
     {
         self.buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             if finish
             {
                 self.setTitle(originalTitle, for: self.state)
-                self.isUserInteractionEnabled = canTap
+                self.isUserInteractionEnabled = countdownFinishCanTap
                 if timeFinish != nil
                 {
                     timeFinish!()
@@ -138,7 +139,7 @@ public extension UIButton
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)
                 self.setTitle(buttonTime, for: self.state)
-                self.isUserInteractionEnabled = false
+                self.isUserInteractionEnabled = countdowningCanTap
             }
         }
     }

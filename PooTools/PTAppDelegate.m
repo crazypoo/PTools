@@ -59,8 +59,8 @@
         
 //    http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4
 //    http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg
-    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:10 param:@{} year:@"2000" skipFont:[UIFont appCustomFontWithSize:10 customFont:FontName] comName:@"11111" comNameFont:[UIFont appCustomFontWithSize:10 customFont:FontName] callBack:^{
-        
+    [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:10 param:@{@"123":@"https://www.qq.com"} year:@"2000" skipFont:[UIFont appCustomFontWithSize:10 customFont:FontName] comName:@"11111" comNameFont:[UIFont appCustomFontWithSize:10 customFont:FontName] callBack:^{
+        PNSLog(@"1231231231231231231231");
     }];
                 
     [[PCheckAppStatus shared] open];
