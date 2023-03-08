@@ -16,7 +16,7 @@ import UIKit
  4、在对应的语言文件里添加
     "Home_follow" = "关注";
     ...
- 5、使用BKLanguage类，管理语言的切换。
+ 5、使用PTLanguage类，管理语言的切换。
  */
 
 
@@ -31,12 +31,12 @@ import UIKit
  2）、本文件扩展了 UIViewController，开发者也可以使用 pt_observerLangauge 来监听，使用 pt_removeObserverLangauge 来移除监听。
 */
 
-func LocalizedString(_ key: String) -> String {
+public func LocalizedString(_ key: String) -> String {
     PTLanguage.share.text(forKey: key)
 }
 
 // Noti Key: 语言已切换
-let LanguageDidChangedKey = PTLanguage.didChangedKey
+public let LanguageDidChangedKey = PTLanguage.didChangedKey
 
 // MARK: - BKLanguage 语言切换管理类
 public class PTLanguage: NSObject {
