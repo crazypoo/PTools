@@ -207,7 +207,7 @@ public extension UIAlertController
                                       placeHolders:[String],
                                       textFieldTexts:[String],
                                       keyboardType:[UIKeyboardType]?,
-                                      textFieldDelegate:Any? = nil,
+                                      textFieldDelegate:UITextFieldDelegate,
                                       alertBGColor:UIColor? = .white,
                                       alertCornerRadius:CGFloat? = 15,
                                       cancel:(()->Void)? = nil,
@@ -229,7 +229,7 @@ public extension UIAlertController
             placeHolders.enumerated().forEach({ (index,value) in
                 alert.addTextField { (textField : UITextField) -> Void in
                     textField.placeholder = value
-                    textField.delegate = (textFieldDelegate as! UITextFieldDelegate)
+                    textField.delegate = textFieldDelegate
                     textField.tag = index
                     textField.text = textFieldTexts[index]
                     if keyboardType?.count == placeHolders.count
