@@ -21,7 +21,7 @@ public enum PTImagePicker {
         ///選擇全部
         case All
         
-        var types:[String]{
+        public var types:[String]{
             switch self{
             case .Photo:
                 return [UTType.image.identifier,UTType.livePhoto.identifier]
@@ -46,7 +46,7 @@ public enum PTImagePicker {
         ///取消
         case UserCancel
         
-        func outPutLog(){
+        public func outPutLog(){
             switch self {
             case .NullParentViewController:
                 PTLocalConsoleFunction.share.pNSLog("沒有Controller")

@@ -64,9 +64,9 @@ extension UIImage:PTImagePickerObject
 //MARK: 圖庫對象
 public struct PTAlbumObject {
     ///圖片數據
-    let imageData:Data?
+    public let imageData:Data?
     ///視頻URL
-    let videoURL:URL?
+    public let videoURL:URL?
 }
 
 @available(iOS 14.0, *)
