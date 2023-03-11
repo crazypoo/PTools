@@ -9,7 +9,7 @@
 import UIKit
 import UniformTypeIdentifiers
 
-protocol PTImagePickerObject {
+public protocol PTImagePickerObject {
     static func fetchFromPicker(_ info:[UIImagePickerController.InfoKey:Any]) throws -> Self
 }
 
@@ -17,7 +17,7 @@ protocol PTImagePickerObject {
 @available(iOS 14.0, *)
 extension URL:PTImagePickerObject
 {
-    static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
+    public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         guard let url = info[.mediaURL] as? Self else{
             throw PTImagePicker.PickerError.ObjFetchFaild
         }
@@ -29,7 +29,7 @@ extension URL:PTImagePickerObject
 @available(iOS 14.0, *)
 extension Data:PTImagePickerObject
 {
-    static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
+    public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         guard let url = info[.imageURL] as? URL else{
             throw PTImagePicker.PickerError.ObjFetchFaild
         }
@@ -45,7 +45,7 @@ extension Data:PTImagePickerObject
 @available(iOS 14.0, *)
 extension UIImage:PTImagePickerObject
 {
-    static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
+    public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         do{
             let data = try Data.fetchFromPicker(info)
             guard let image = Self.init(data: data) else{
@@ -62,7 +62,7 @@ extension UIImage:PTImagePickerObject
 }
 
 //MARK: 圖庫對象
-struct PTAlbumObject {
+public struct PTAlbumObject {
     ///圖片數據
     let imageData:Data?
     ///視頻URL
@@ -71,7 +71,7 @@ struct PTAlbumObject {
 
 @available(iOS 14.0, *)
 extension PTAlbumObject:PTImagePickerObject{
-    static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
+    public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         var imageData:Data?
         var videoURL:URL?
         if let mediaType = info[.mediaType] as? String,mediaType == UTType.image.identifier{

@@ -10,9 +10,9 @@ import UIKit
 import UniformTypeIdentifiers
 
 @available(iOS 14.0, *)
-enum PTImagePicker {
+public enum PTImagePicker {
     
-    enum PickerType
+    public enum PickerType
     {
         ///圖片
         case Photo
@@ -34,7 +34,7 @@ enum PTImagePicker {
     }
     
     //MARK: Error
-    enum PickerError:Error{
+    public enum PickerError:Error{
         ///沒有Controller
         case NullParentViewController
         ///找不到對象
@@ -64,13 +64,13 @@ enum PTImagePicker {
     }
     
     //MARK: PickerCompletion
-    typealias Completion<T: PTImagePickerObject> = (_ result: Result<T, PTImagePicker.PickerError>) -> Void
+    public typealias Completion<T: PTImagePickerObject> = (_ result: Result<T, PTImagePicker.PickerError>) -> Void
 }
 
 //MARK: 控制器
 @available(iOS 14.0, *)
 extension PTImagePicker{
-    class Controller<T:PTImagePickerObject>:UIImagePickerController,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+    public class Controller<T:PTImagePickerObject>:UIImagePickerController,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
         //MARK: Block
         private var completion:PTImagePicker.Completion<T>? = nil
         
@@ -78,7 +78,7 @@ extension PTImagePicker{
             PTLocalConsoleFunction.share.pNSLog("PTImagePicker.controller deinit")
         }
         
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
             let result:Result<T,PTImagePicker.PickerError>
             do{
                 result = .success(try T.fetchFromPicker(info))
@@ -92,7 +92,7 @@ extension PTImagePicker{
             dismiss(animated: true)
         }
         
-        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
             completion?(.failure(.UserCancel))
             dismiss(animated: true)
         }
@@ -147,12 +147,12 @@ private extension PTImagePicker.Controller {
 //MARK: 打開相冊
 @available(iOS 14.0, *)
 extension PTImagePicker.Controller{
-    static func openAlbum<T:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> T{
+    public static func openAlbum<T:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> T{
         let picker:PTImagePicker.Controller<T> = try showAlbumPicker(mediaType: mediaType)
         return try await picker.pickObject()
     }
     
-    static func openAlbum<T: PTImagePickerObject>(_ mediaType: PTImagePicker.PickerType, completion: @escaping PTImagePicker.Completion<T>) {
+    public static func openAlbum<T: PTImagePickerObject>(_ mediaType: PTImagePicker.PickerType, completion: @escaping PTImagePicker.Completion<T>) {
         do {
             let picker: PTImagePicker.Controller<T> = try showAlbumPicker(mediaType: mediaType)
             picker.pickObject(completion: completion)
@@ -167,12 +167,12 @@ extension PTImagePicker.Controller{
 // MARK: 圖片
 @available(iOS 14.0, *)
 extension PTImagePicker.Controller {
-    static func photograph() async throws -> UIImage {
+    public static func photograph() async throws -> UIImage {
         let picker = try showPhotographPicker()
         return try await picker.pickObject()
     }
     
-    static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
+    public static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
         do {
             let picker = try showPhotographPicker()
             picker.pickObject(completion: completion)
@@ -188,27 +188,27 @@ extension PTImagePicker.Controller {
 @available(iOS 14.0, *)
 extension PTImagePicker{
     /// Open album -> 圖片
-    static func openAlbum() async throws -> UIImage {
+    public static func openAlbum() async throws -> UIImage {
         try await PTImagePicker.Controller<UIImage>.openAlbum(.Photo)
     }
     
     /// Open album -> 圖片/GIF數據
-    static func openAlbum() async throws -> Data {
+    public static func openAlbum() async throws -> Data {
         try await PTImagePicker.Controller<Data>.openAlbum(.Photo)
     }
     
     /// Open album -> 視頻路徑
-    static func openAlbum() async throws -> URL {
+    public static func openAlbum() async throws -> URL {
         try await PTImagePicker.Controller<URL>.openAlbum(.Video)
     }
     
     /// Open album -> 圖片/GIF數據 or 視頻路徑
-    static func openAlbum() async throws -> PTAlbumObject {
+    public static func openAlbum() async throws -> PTAlbumObject {
         try await PTImagePicker.Controller<PTAlbumObject>.openAlbum(.All)
     }
     
     /// Photograph -> 圖片
-    static func photograph() async throws -> UIImage {
+    public static func photograph() async throws -> UIImage {
         try await PTImagePicker.Controller<UIImage>.photograph()
     }
 }
@@ -217,27 +217,27 @@ extension PTImagePicker{
 @available(iOS 14.0, *)
 extension PTImagePicker {
     /// Open album -> 圖片
-    static func openAlbumForImage(completion: @escaping PTImagePicker.Completion<UIImage>) {
+    public static func openAlbumForImage(completion: @escaping PTImagePicker.Completion<UIImage>) {
         PTImagePicker.Controller<UIImage>.openAlbum(.Photo, completion: completion)
     }
     
     /// Open album -> 圖片/GIF數據
-    static func openAlbumForImageData(completion: @escaping PTImagePicker.Completion<Data>) {
+    public static func openAlbumForImageData(completion: @escaping PTImagePicker.Completion<Data>) {
         PTImagePicker.Controller<Data>.openAlbum(.Photo, completion: completion)
     }
     
     /// Open album -> 視頻路徑
-    static func openAlbumForVideoURL(completion: @escaping PTImagePicker.Completion<URL>) {
+    public static func openAlbumForVideoURL(completion: @escaping PTImagePicker.Completion<URL>) {
         PTImagePicker.Controller<URL>.openAlbum(.Video, completion: completion)
     }
     
     /// Open album -> 圖片/GIF數據 or 視頻路徑
-    static func openAlbumForObject(completion: @escaping PTImagePicker.Completion<PTAlbumObject>) {
+    public static func openAlbumForObject(completion: @escaping PTImagePicker.Completion<PTAlbumObject>) {
         PTImagePicker.Controller<PTAlbumObject>.openAlbum(.All, completion: completion)
     }
     
     /// Photograph -> 圖片
-    static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
+    public static func photograph(completion: @escaping PTImagePicker.Completion<UIImage>) {
         PTImagePicker.Controller<UIImage>.photograph(completion: completion)
     }
 }
