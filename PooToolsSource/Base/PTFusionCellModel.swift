@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class PTFunctionCellModel: NSObject {
+open class PTFusionCellModel: NSObject {
     ///图片名
     open var leftImage:Any?
     ///图片上下间隔默认CGFloat.ScaleW(w: 5)
@@ -43,7 +43,7 @@ open class PTFunctionCellModel: NSObject {
     ///当前选择的Indexpath
     open var cellIndexPath:IndexPath?
     ///Cell的AccessViewImage
-    open var disclosureIndicatorImage :UIImage = UIImage()
+    open var disclosureIndicatorImage :Any?
     ///Cell的圓角處理
     open var conrner:UIRectCorner = []
     ///Cell的是否顯示Icon

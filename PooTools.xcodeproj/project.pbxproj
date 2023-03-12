@@ -126,7 +126,7 @@
 		55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */; };
 		55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */; };
 		55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */; };
-		55D59C6E28F54D9500B4FF76 /* PTFunctionCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */; };
+		55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */; };
 		55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */; };
 		55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */; };
 		55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */; };
@@ -337,7 +337,7 @@
 		55D59C5728F2C8ED00B4FF76 /* PTHudView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHudView.swift; sourceTree = "<group>"; };
 		55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorRBGModel.swift; sourceTree = "<group>"; };
 		55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseViewController.swift; sourceTree = "<group>"; };
-		55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFunctionCellModel.swift; sourceTree = "<group>"; };
+		55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFusionCellModel.swift; sourceTree = "<group>"; };
 		55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseCellOption.swift; sourceTree = "<group>"; };
 		55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFusionCell.swift; sourceTree = "<group>"; };
 		55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppBaseConfig.swift; sourceTree = "<group>"; };
@@ -1102,7 +1102,7 @@
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
 				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
-				55D59C6D28F54D9500B4FF76 /* PTFunctionCellModel.swift */,
+				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
 				554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */,
@@ -1548,7 +1548,7 @@
 			files = (
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
-				55D59C6E28F54D9500B4FF76 /* PTFunctionCellModel.swift in Sources */,
+				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,

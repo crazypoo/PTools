@@ -12,7 +12,7 @@ import SwifterSwift
 
 public class PTDebugViewController: PTBaseViewController {
     
-    lazy var settingCellModels:[PTFunctionCellModel] = {
+    lazy var settingCellModels:[PTFusionCellModel] = {
         
         var modeName = ""
         switch PTBaseURLMode {
@@ -24,12 +24,12 @@ public class PTDebugViewController: PTBaseViewController {
             modeName = "生产环境"
         }
         
-        let cell_mode = PTFunctionCellModel()
+        let cell_mode = PTFusionCellModel()
         cell_mode.name = .ipMode
         cell_mode.content = modeName
         cell_mode.haveDisclosureIndicator = true
         
-        let cell_input = PTFunctionCellModel()
+        let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
         let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
         let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
@@ -43,7 +43,7 @@ public class PTDebugViewController: PTBaseViewController {
         }
         cell_input.haveDisclosureIndicator = true
 
-        let cell_debug = PTFunctionCellModel()
+        let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
         cell_debug.haveSwitch = true
 
@@ -138,7 +138,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
         if itemRow.ID == PTFusionCell.ID
         {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = (itemRow.dataModel as! PTFunctionCellModel)
+            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
             if itemRow.title == .DebugMode
             {
                 cell.dataContent.valueSwitch.isOn = App_UI_Debug_Bool

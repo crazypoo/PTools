@@ -35,7 +35,7 @@ public class PTFusionCellContent:UIView
         case None
     }
 
-    public var cellModel:PTFunctionCellModel?
+    public var cellModel:PTFusionCellModel?
     {
         didSet
         {
@@ -44,7 +44,35 @@ public class PTFusionCellContent:UIView
             {
                 self.valueSwitch.isHidden = true
                 self.accessV.isHidden = false
-                self.accessV.image = cellModel!.disclosureIndicatorImage
+                
+                if !NSObject.checkObject(self.cellModel!.disclosureIndicatorImage as? NSObject)
+                {
+                    if self.cellModel!.disclosureIndicatorImage is String
+                    {
+                        let link = self.cellModel!.disclosureIndicatorImage as! String
+                        if link.isURL()
+                        {
+                            self.accessV.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.accessV.image = UIImage.init(named: link)
+                        }
+                    }
+                    else if self.cellModel!.disclosureIndicatorImage is UIImage
+                    {
+                        self.accessV.image = (self.cellModel!.disclosureIndicatorImage as! UIImage)
+                    }
+                    else if self.cellModel!.disclosureIndicatorImage is Data
+                    {
+                        self.accessV.image = UIImage(data: (self.cellModel!.disclosureIndicatorImage as! Data))
+                    }
+                }
+                else
+                {
+                    self.accessV.image = UIColor.random.createImageWithColor()
+                }
+
                 self.accessV.snp.makeConstraints { make in
                     make.width.height.equalTo(14)
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
@@ -461,7 +489,7 @@ open class PTFusionCell: PTBaseNormalCell {
                 
     open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    open var cellModel:PTFunctionCellModel?
+    open var cellModel:PTFusionCellModel?
     {
         didSet
         {
@@ -496,7 +524,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
                 
     open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    open var cellModel:PTFunctionCellModel?
+    open var cellModel:PTFusionCellModel?
     {
         didSet
         {
