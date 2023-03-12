@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UISwitch)->Void
 
@@ -43,7 +44,7 @@ public class PTFusionCellContent:UIView
             {
                 self.valueSwitch.isHidden = true
                 self.accessV.isHidden = false
-                self.accessV.image = cellModel!.disclosureIndicatorImageName
+                self.accessV.image = cellModel!.disclosureIndicatorImage
                 self.accessV.snp.makeConstraints { make in
                     make.width.height.equalTo(14)
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
@@ -71,15 +72,27 @@ public class PTFusionCellContent:UIView
                 cellType = .None
             }
             
-            if !self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
+            if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
             {
-                if self.cellModel!.imageName.isURL()
+                if self.cellModel!.leftImage is String
                 {
-                    self.cellIcon.pt_SDWebImage(imageString: self.cellModel!.imageName)
+                    let link = self.cellModel!.leftImage as! String
+                    if link.isURL()
+                    {
+                        self.cellIcon.pt_SDWebImage(imageString: link)
+                    }
+                    else
+                    {
+                        self.cellIcon.image = UIImage.init(named: link)
+                    }
                 }
-                else
+                else if self.cellModel!.leftImage is UIImage
                 {
-                    self.cellIcon.image = UIImage.init(named: self.cellModel!.imageName)
+                    self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
+                }
+                else if self.cellModel!.leftImage is Data
+                {
+                    self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                 }
                 self.cellIcon.snp.makeConstraints { make in
                     make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
@@ -108,15 +121,27 @@ public class PTFusionCellContent:UIView
                 self.nameTitle.isHidden = false
                 self.cellContentIcon.isHidden = true
             }
-            else if !self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
+            else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
             {
-                if self.cellModel!.imageName.isURL()
+                if self.cellModel!.leftImage is String
                 {
-                    self.cellIcon.pt_SDWebImage(imageString: self.cellModel!.imageName)
+                    let link = self.cellModel!.leftImage as! String
+                    if link.isURL()
+                    {
+                        self.cellIcon.pt_SDWebImage(imageString: link)
+                    }
+                    else
+                    {
+                        self.cellIcon.image = UIImage.init(named: link)
+                    }
                 }
-                else
+                else if self.cellModel!.leftImage is UIImage
                 {
-                    self.cellIcon.image = UIImage.init(named: self.cellModel!.imageName)
+                    self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
+                }
+                else if self.cellModel!.leftImage is Data
+                {
+                    self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                 }
 
                 self.cellIcon.snp.makeConstraints { make in
@@ -161,7 +186,7 @@ public class PTFusionCellContent:UIView
                 self.nameTitle.isHidden = false
                 self.cellContentIcon.isHidden = true
             }
-            else if self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
+            else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
             {
                 self.contentLabel.isHidden = false
                 self.cellIcon.isHidden = true
@@ -199,7 +224,7 @@ public class PTFusionCellContent:UIView
                     }
                 }
             }
-            else if self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
+            else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
             {
                 self.contentLabel.isHidden = true
                 self.cellIcon.isHidden = true
@@ -241,7 +266,7 @@ public class PTFusionCellContent:UIView
                 }
                 self.cellContentIcon.viewCorner(radius: (PTFusionCellContent.ContentIconHeight - CGFloat.ScaleW(w: 5) * 2) / 2)
                 
-                if self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty()
+                if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty()
                 {
                     self.cellIcon.isHidden = true
                     self.nameTitle.isHidden = false
@@ -254,18 +279,30 @@ public class PTFusionCellContent:UIView
                         make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
                     }
                 }
-                else if !self.cellModel!.imageName.stringIsEmpty() && self.cellModel!.name.stringIsEmpty()
+                else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && self.cellModel!.name.stringIsEmpty()
                 {
                     self.nameTitle.isHidden = true
                     self.cellIcon.isHidden = false
                     
-                    if self.cellModel!.imageName.isURL()
+                    if self.cellModel!.leftImage is String
                     {
-                        self.cellIcon.pt_SDWebImage(imageString: self.cellModel!.imageName)
+                        let link = self.cellModel!.leftImage as! String
+                        if link.isURL()
+                        {
+                            self.cellIcon.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.cellIcon.image = UIImage.init(named: link)
+                        }
                     }
-                    else
+                    else if self.cellModel!.leftImage is UIImage
                     {
-                        self.cellIcon.image = UIImage.init(named: self.cellModel!.imageName)
+                        self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
+                    }
+                    else if self.cellModel!.leftImage is Data
+                    {
+                        self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                     }
 
                     self.cellIcon.snp.makeConstraints { make in
@@ -275,18 +312,30 @@ public class PTFusionCellContent:UIView
                         make.width.equalTo(self.cellIcon.snp.height)
                     }
                 }
-                else if !self.cellModel!.imageName.stringIsEmpty() && !self.cellModel!.name.stringIsEmpty()
+                else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty()
                 {
                     self.nameTitle.isHidden = false
                     self.cellIcon.isHidden = false
                     
-                    if self.cellModel!.imageName.isURL()
+                    if self.cellModel!.leftImage is String
                     {
-                        self.cellIcon.pt_SDWebImage(imageString: self.cellModel!.imageName)
+                        let link = self.cellModel!.leftImage as! String
+                        if link.isURL()
+                        {
+                            self.cellIcon.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.cellIcon.image = UIImage.init(named: link)
+                        }
                     }
-                    else
+                    else if self.cellModel!.leftImage is UIImage
                     {
-                        self.cellIcon.image = UIImage.init(named: self.cellModel!.imageName)
+                        self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
+                    }
+                    else if self.cellModel!.leftImage is Data
+                    {
+                        self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                     }
 
                     self.cellIcon.snp.makeConstraints { make in

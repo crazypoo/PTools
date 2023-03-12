@@ -10,7 +10,7 @@ import UIKit
 
 open class PTFunctionCellModel: NSObject {
     ///图片名
-    open var imageName:String = ""
+    open var leftImage:Any?
     ///图片上下间隔默认CGFloat.ScaleW(w: 5)
     open var imageTopOffset:CGFloat = CGFloat.ScaleW(w: 5)
     open var imageBottomOffset:CGFloat = CGFloat.ScaleW(w: 5)
@@ -43,7 +43,7 @@ open class PTFunctionCellModel: NSObject {
     ///当前选择的Indexpath
     open var cellIndexPath:IndexPath?
     ///Cell的AccessViewImage
-    open var disclosureIndicatorImageName :UIImage = UIImage()
+    open var disclosureIndicatorImage :UIImage = UIImage()
     ///Cell的圓角處理
     open var conrner:UIRectCorner = []
     ///Cell的是否顯示Icon
