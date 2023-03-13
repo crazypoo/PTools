@@ -105,13 +105,13 @@ public class PTContract: NSObject {
                     }
                     catch
                     {
-                        PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+                        PTNSLogConsole(error.localizedDescription)
                         handle(nil)
                     }
                 }
                 else
                 {
-                    PTLocalConsoleFunction.share.pNSLog(error?.localizedDescription ?? "User denied access to contacts")
+                    PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts")
                     handle(nil)
                 }
             }

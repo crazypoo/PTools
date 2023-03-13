@@ -49,15 +49,15 @@ public enum PTImagePicker {
         public func outPutLog(){
             switch self {
             case .NullParentViewController:
-                PTLocalConsoleFunction.share.pNSLog("沒有Controller")
+                PTNSLogConsole("沒有Controller")
             case .ObjFetchFaild:
-                PTLocalConsoleFunction.share.pNSLog("找不到對象")
+                PTNSLogConsole("找不到對象")
             case let .ObjConvertFaild(error):
-                PTLocalConsoleFunction.share.pNSLog("對象轉換失敗:\(String(describing: error))")
+                PTNSLogConsole("對象轉換失敗:\(String(describing: error))")
             case let .Other(error):
-                PTLocalConsoleFunction.share.pNSLog("其他錯誤:\(String(describing: error))")
+                PTNSLogConsole("其他錯誤:\(String(describing: error))")
             case .UserCancel:
-                PTLocalConsoleFunction.share.pNSLog("用戶取消了")
+                PTNSLogConsole("用戶取消了")
             }
         }
         
@@ -75,7 +75,7 @@ extension PTImagePicker{
         private var completion:PTImagePicker.Completion<T>? = nil
         
         deinit {
-            PTLocalConsoleFunction.share.pNSLog("PTImagePicker.controller deinit")
+            PTNSLogConsole("PTImagePicker.controller deinit")
         }
         
         public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {

@@ -69,7 +69,7 @@ public class PTAppBaseConfig: NSObject {
         else
         {
             UserDefaults.standard.setValue(nil, forKey: "AppServiceIdentifier")
-            PTLocalConsoleFunction.share.pNSLog("没有发现Settings.bundle")
+            PTNSLogConsole("没有发现Settings.bundle")
         }
     }
 }

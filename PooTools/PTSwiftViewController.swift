@@ -38,10 +38,10 @@ class PTSwiftViewController: PTBaseViewController {
         let gps = PTGetGPSData.share
         gps.locationManager.startUpdatingLocation()
         
-        PTLocalConsoleFunction.share.pNSLog("............>>>>>>>>>>>>>>>>>>>\(Bundle.appScheme())")
-        PTLocalConsoleFunction.share.pNSLog("............>>>>>>>>>>>>>>>>>>>\("".stringIsEmpty())>>>>>>>>\("12312312312313".stringIsEmpty())")
+        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\(Bundle.appScheme())")
+        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\("".stringIsEmpty())>>>>>>>>\("12312312312313".stringIsEmpty())")
 
-        PTLocalConsoleFunction.share.pNSLog("1989-06-02 00:00:00".getConstellation())
+        PTNSLogConsole("1989-06-02 00:00:00".getConstellation())
 
         PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
         }
@@ -102,7 +102,7 @@ class PTSwiftViewController: PTBaseViewController {
 
         PTDataEncryption.aesEncryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
             PTDataEncryption.aseDecrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
-                PTLocalConsoleFunction.share.pNSLog("aes:\(String(describing: String(data: decryptData, encoding: .utf8)))\n")
+                PTNSLogConsole("aes:\(String(describing: String(data: decryptData, encoding: .utf8)))\n")
             }
         }
 
@@ -125,12 +125,12 @@ class PTSwiftViewController: PTBaseViewController {
             make.left.right.bottom.equalToSuperview().inset(40)
         }
         view.layoutSubviewsCallback = { view in
-            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
+            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
         }
         
 //        UIView.swizzleLayoutSubviewsCallback_UNTRACKABLE_TOGGLE()
 //        view.layoutSubviewsCallback = { view in
-//            PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
+//            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
 //        }
 //        view.layoutSubviews()
         self.view.backgroundColor = color
@@ -160,11 +160,11 @@ class PTSwiftViewController: PTBaseViewController {
 
 //        PTUtils.gcdAfter(time: 5) {
 //            PTCallMessageMailFunction.sendMessage(content: "12312312312", users: ["15336934140"]) { sendResult in
-//                PTLocalConsoleFunction.share.pNSLog(">>>>>>>>>>>>>>>\(sendResult)")
+//                PTNSLogConsole(">>>>>>>>>>>>>>>\(sendResult)")
 //            }
 //        }
 
-//        PTLocalConsoleFunction.share.pNSLog("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
+//        PTNSLogConsole("asdasdadasdasd>>\(Double(600).valueAddUnitToString(unit: unitma))")
 
 //        let vvvvv = PTGrowingTextView()
 //        self.view.addSubview(vvvvv)
@@ -190,7 +190,7 @@ class PTSwiftViewController: PTBaseViewController {
         
         let ccccccc = UILabel()
         ccccccc.text = "123123123123123112039810923890128309128390128903812903809128390128309182390812903819023819023"
-        PTLocalConsoleFunction.share.pNSLog("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
+        PTNSLogConsole("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
 
         
         let counting = UILabel()

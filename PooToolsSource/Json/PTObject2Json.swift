@@ -71,7 +71,7 @@ public class PTObject2Json: NSObject {
         }
         catch
         {
-            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription)
         }
         return NSData()
     }

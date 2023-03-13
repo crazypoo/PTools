@@ -71,7 +71,7 @@ public class PTHudView: UIView {
     {
         if self.hudConfig.hudColors.count < 2
         {
-            PTLocalConsoleFunction.share.pNSLog("不可以小于两个颜色")
+            PTNSLogConsole("不可以小于两个颜色")
             return
         }
         self.backgroundColor = self.hudConfig.backgroundColor

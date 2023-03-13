@@ -45,13 +45,13 @@ open class PTBaseViewController: ZXNavigationBarController {
     }
     
     deinit {
-        PTLocalConsoleFunction.share.pNSLog("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
         self.removeFromSuperStatusBar()
     }
     
     @objc open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PTLocalConsoleFunction.share.pNSLog("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
         if self.presentationController != nil
         {
             self.zx_leftClickedBlock { itenBtn in
@@ -62,7 +62,7 @@ open class PTBaseViewController: ZXNavigationBarController {
     
     @objc override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        PTLocalConsoleFunction.share.pNSLog("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
     }
     
     @objc override open func viewDidDisappear(_ animated: Bool) {
@@ -127,7 +127,7 @@ open class PTBaseViewController: ZXNavigationBarController {
             let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
             let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
             scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
-                PTLocalConsoleFunction.share.pNSLog("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
+                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
             }
         }
         else

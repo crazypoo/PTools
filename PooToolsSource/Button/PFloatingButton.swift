@@ -289,12 +289,12 @@ open class PFloatingButton: UIButton {
         if self.isDockPointAvailable() && self.isLimitedDistanceAvailable()
         {
             let bool = self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
-            PTLocalConsoleFunction.share.pNSLog(bool)
+            PTNSLogConsole(bool)
         }
         else if !dragOutOfBoundsEnabled
         {
             let bool = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
-            PTLocalConsoleFunction.share.pNSLog(bool)
+            PTNSLogConsole(bool)
         }
     }
     

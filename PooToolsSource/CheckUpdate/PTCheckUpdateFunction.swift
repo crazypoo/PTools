@@ -137,7 +137,7 @@ public class PTCheckUpdateFunction: NSObject {
                         }
                         else
                         {
-                            PTLocalConsoleFunction.share.pNSLog("非法url")
+                            PTNSLogConsole("非法url")
                         }
                     }
                 case 1:
@@ -147,7 +147,7 @@ public class PTCheckUpdateFunction: NSObject {
                     }
                     else
                     {
-                        PTLocalConsoleFunction.share.pNSLog("非法url")
+                        PTNSLogConsole("非法url")
                     }
                 default:
                     break
@@ -218,7 +218,7 @@ public class PTCheckUpdateFunction: NSObject {
             }
             else
             {
-                PTLocalConsoleFunction.share.pNSLog("没有检测到APPID")
+                PTNSLogConsole("没有检测到APPID")
             }
         }
     }

@@ -100,7 +100,7 @@ public extension PTProtocol where Base: UIDevice
             try FileManager.default.removeItem(atPath: path)
             return true
         } catch {
-            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription)
         }
         return false
     }

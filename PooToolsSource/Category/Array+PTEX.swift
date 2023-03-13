@@ -112,7 +112,7 @@ public extension Array
     func toJSON()->String?
     {
         guard JSONSerialization.isValidJSONObject(self) else {
-            PTLocalConsoleFunction.share.pNSLog("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString")
             return ""
         }
         let data : NSData = try! JSONSerialization.data(withJSONObject: self, options: []) as NSData

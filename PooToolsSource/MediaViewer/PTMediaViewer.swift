@@ -658,7 +658,7 @@ public class PTMediaMediaView:UIView
         }
         else
         {
-            PTLocalConsoleFunction.share.pNSLog("该设备的deviceMotion不可用")
+            PTNSLogConsole("该设备的deviceMotion不可用")
         }
         
         self.motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in

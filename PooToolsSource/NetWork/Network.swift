@@ -79,7 +79,7 @@ public class XMNetWorkStatus {
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
         detectNetWork { (status, environment,statusType)  in
-            PTLocalConsoleFunction.share.pNSLog("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
+            PTNSLogConsole("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
             if handle != nil
             {
                 handle!(statusType)
@@ -121,7 +121,7 @@ public class Network: NSObject {
     {
         if UIApplication.applicationEnvironment() != .appStore
         {
-            PTLocalConsoleFunction.share.pNSLog("PTBaseURLMode:\(PTBaseURLMode)")
+            PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)")
             switch PTBaseURLMode {
             case .Development:
                 let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
@@ -174,7 +174,7 @@ public class Network: NSObject {
         if !urlStr.isURL()
         {
             resultBlock(nil,nil)
-            PTLocalConsoleFunction().pNSLog("不是合法的URL")
+            PTNSLogConsole("不是合法的URL")
             return
         }
         
@@ -202,7 +202,7 @@ public class Network: NSObject {
         if showHud!{
             Network.hud.show(animated: true)
         }
-        PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n😂😂😂😂😂😂😂😂😂😂😂😂")
+        PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n😂😂😂😂😂😂😂😂😂😂😂😂")
 //        PTUtils.showNetworkActivityIndicator(true)
         
         Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: header).responseData { data in
@@ -215,7 +215,7 @@ public class Network: NSObject {
                 let json = JSON(data.value ?? "")
                 guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else { return }
                 
-                PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)\n😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)\n😂😂😂😂😂😂😂😂😂😂😂😂")
 
                 guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
                 responseModel.originalString = jsonStr
@@ -236,7 +236,7 @@ public class Network: NSObject {
                 resultBlock(responseModel,nil)
 
             case .failure(let error):
-                PTLocalConsoleFunction.share.pNSLog("------------------------------------>\n接口:\(urlStr)\n----------------------出现错误----------------------\n\(String(describing: error.errorDescription))",error: true)
+                PTNSLogConsole("------------------------------------>\n接口:\(urlStr)\n----------------------出现错误----------------------\n\(String(describing: error.errorDescription))",error: true)
                 resultBlock(nil,error)
             }
         }
@@ -307,10 +307,10 @@ public class Network: NSObject {
             switch response.result {
             case .success(let result):
                 guard let responseModel = result?.toDict()?.kj.model(ResponseModel.self) else { return }
-                PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\(result!.toDict()!)\n😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\(result!.toDict()!)\n😂😂😂😂😂😂😂😂😂😂😂😂")
                 resultBlock(responseModel,nil)
             case .failure(let error):
-                PTLocalConsoleFunction.share.pNSLog("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)",error: true)
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)",error: true)
                 resultBlock(nil,error)
 
             }

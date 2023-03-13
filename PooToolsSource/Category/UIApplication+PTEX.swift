@@ -15,7 +15,7 @@ public extension UIApplication
         do {
             try FileManager.default.removeItem(atPath: NSHomeDirectory()+"/Library/SplashBoard")
         } catch {
-            PTLocalConsoleFunction.share.pNSLog("Failed to delete launch screen cache: \(error)")
+            PTNSLogConsole("Failed to delete launch screen cache: \(error)")
         }
     }
     

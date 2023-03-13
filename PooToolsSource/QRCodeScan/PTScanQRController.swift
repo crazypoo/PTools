@@ -124,7 +124,7 @@ public class PTScanQRController: PTBaseViewController {
         }
         catch
         {
-            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription)
         }
         return avDevice!
     }()
@@ -178,7 +178,7 @@ public class PTScanQRController: PTBaseViewController {
                 }
                 catch
                 {
-                    PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+                    PTNSLogConsole(error.localizedDescription)
                 }
             }
         }
@@ -288,7 +288,7 @@ public class PTScanQRController: PTBaseViewController {
                             }
                             else
                             {
-                                PTLocalConsoleFunction.share.pNSLog("獲取圖片出現錯誤")
+                                PTNSLogConsole("獲取圖片出現錯誤")
                             }
                         }
                     }
@@ -423,7 +423,7 @@ public class PTScanQRController: PTBaseViewController {
         }
         catch
         {
-            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription)
         }
     }
     
@@ -505,7 +505,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 獲取二維碼數據後處理回調
     func processResult(result:String)
     {
-        PTLocalConsoleFunction.share.pNSLog(result)
+        PTNSLogConsole(result)
         if self.resultBlock != nil
         {
             self.resultBlock!(result)

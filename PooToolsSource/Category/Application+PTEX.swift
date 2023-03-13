@@ -32,11 +32,11 @@ public extension PTProtocol where Base: UIApplication
     {
         if UIApplication.shared.supportsAlternateIcons
         {
-            PTLocalConsoleFunction.share.pNSLog("you can change this app's icon")
+            PTNSLogConsole("you can change this app's icon")
         }
         else
         {
-            PTLocalConsoleFunction.share.pNSLog("you can not change this app's icon")
+            PTNSLogConsole("you can not change this app's icon")
             return
         }
         
@@ -49,7 +49,7 @@ public extension PTProtocol where Base: UIApplication
                     UIViewController.gobal_drop(title: error.debugDescription)
 
                 }
-                PTLocalConsoleFunction.share.pNSLog("The alternate icon's name is \(String(describing: iconName))")
+                PTNSLogConsole("The alternate icon's name is \(String(describing: iconName))")
             }
         }
         else
@@ -60,7 +60,7 @@ public extension PTProtocol where Base: UIApplication
                     UIViewController.gobal_drop(title: error.debugDescription)
 
                 }
-                PTLocalConsoleFunction.share.pNSLog("The alternate icon's name is \(String(describing: iconName))")
+                PTNSLogConsole("The alternate icon's name is \(String(describing: iconName))")
             }
         }
     }

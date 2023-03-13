@@ -22,7 +22,7 @@ public extension NSObject
             let ivar = ivars![Int(i)]
             let cName = ivar_getName(ivar)!
             let keysName = String(utf8String: cName)
-            PTLocalConsoleFunction.share.pNSLog(keysName!)
+            PTNSLogConsole(keysName!)
         }
         free(ivars)
     }

@@ -137,14 +137,14 @@ public extension PTProtocol where Base == Dictionary<String, Any> {
     @discardableResult
     func dictionaryToJson() -> String? {
         if (!JSONSerialization.isValidJSONObject(self.base)) {
-            PTLocalConsoleFunction.share.pNSLog("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString")
             return nil
         }
         if let data = try? JSONSerialization.data(withJSONObject: self.base) {
             let JSONString = NSString(data:data,encoding: String.Encoding.utf8.rawValue)
             return JSONString! as String
         } else {
-            PTLocalConsoleFunction.share.pNSLog("无法解析出JSONString")
+            PTNSLogConsole("无法解析出JSONString")
             return nil
         }
     }

@@ -76,7 +76,7 @@ public extension PTProtocol where Base: WKWebView {
               let urlStr = urlString.removingPercentEncoding as String?,
               let url = URL(string: urlStr) as URL?
         else {
-            PTLocalConsoleFunction.share.pNSLog("链接错误")
+            PTNSLogConsole("链接错误")
             return
         }
         let cookieSource: String = "document.cookie = 'user=\("userValue")';"

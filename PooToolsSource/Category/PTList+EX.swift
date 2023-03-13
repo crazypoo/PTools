@@ -148,7 +148,7 @@ extension UICollectionView {
             }
             else
             {
-                PTLocalConsoleFunction.share.pNSLog("NoHeader")
+                PTNSLogConsole("NoHeader")
             }
             
             if let cls = tmpSection.footerCls, let id = tmpSection.footerID {
@@ -156,7 +156,7 @@ extension UICollectionView {
             }
             else
             {
-                PTLocalConsoleFunction.share.pNSLog("NoFooter")
+                PTNSLogConsole("NoFooter")
             }
 
             // 注册 cell

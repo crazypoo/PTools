@@ -110,7 +110,7 @@ public extension Data {
         do{
             return try JSONSerialization.jsonObject(with: self, options: .allowFragments) as? [String: Any]
         }catch{
-            PTLocalConsoleFunction.share.pNSLog(error.localizedDescription)
+            PTNSLogConsole(error.localizedDescription)
             return nil
         }
     }
@@ -127,7 +127,7 @@ public extension Data {
         do {
             return try JSONDecoder().decode(type, from: self)
         } catch  {
-            PTLocalConsoleFunction.share.pNSLog("data to model error")
+            PTNSLogConsole("data to model error")
             return nil
         }
     }
