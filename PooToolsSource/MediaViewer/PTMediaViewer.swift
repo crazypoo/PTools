@@ -138,9 +138,9 @@ public class PTViewerConfig: NSObject {
     ///操作方式
     public var actionType:PTViewerActionType = .All
     ///关闭页面按钮图片连接/名字
-    public var closeViewerImageName:String = ""
+    public var closeViewerImage:UIImage = UIImage()
     ///更多操作按钮图片连接/名字
-    public var moreActionImageName:String = ""
+    public var moreActionImage:UIImage = UIImage()
     ///更多功能扩展,如果选择全部,则默认保存0删除1........
     public var moreActionEX:[String] = []
 }
@@ -410,7 +410,7 @@ public class PTMediaMediaView:UIView
 
                     var videoUrl:NSURL?
                     let urlString = dataModel.imageURL as! String
-                    if urlString.nsString.range(of: "/var").length > 0
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: urlString)
                     {
                         videoUrl = NSURL.init(fileURLWithPath: urlString)
                     }
@@ -495,9 +495,11 @@ public class PTMediaMediaView:UIView
                 else if dataModel.imageURL is String
                 {
                     let urlString = dataModel.imageURL as! String
-                    if urlString.nsString.range(of: "/var").length > 0
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: urlString)
                     {
                         self.imageView.image = UIImage(contentsOfFile: urlString)
+                        self.adjustFrame()
+                        self.hasLoadedImage = true
                     }
                     else
                     {
@@ -829,7 +831,7 @@ public class PTMediaViewer: UIView {
     
     fileprivate lazy var moreActionButton:UIButton = {
         let view = UIButton.init(type: .custom)
-        view.setImage(UIImage(named: self.viewConfig.moreActionImageName), for: .normal)
+        view.setImage(self.viewConfig.moreActionImage, for: .normal)
         view.addActionHandlers { sender in
             let moreAction = PTActionSheetView.init(title: "更多操作", subTitle: "", cancelButton: "取消", destructiveButton: "", otherButtonTitles: self.actionSheetTitle)
             moreAction.actionSheetSelectBlock = { sheet,index in
@@ -893,7 +895,7 @@ public class PTMediaViewer: UIView {
     
     fileprivate lazy var backButton:UIButton = {
         let view = UIButton.init(type: .custom)
-        view.setImage(UIImage(named: self.viewConfig.closeViewerImageName), for: .normal)
+        view.setImage(self.viewConfig.closeViewerImage, for: .normal)
         view.addActionHandlers { sender in
             self.viewDismissAction()
             if self.viewerDismissBlock != nil

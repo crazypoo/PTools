@@ -308,8 +308,8 @@ static NSString *cellIdentifier = @"CELL";
 
                     PTViewerConfig *config = [[PTViewerConfig alloc] init];
                     config.actionType = PTViewerActionTypeAll;
-                    config.closeViewerImageName = @"DemoImage";
-                    config.moreActionImageName = @"DemoImage";
+                    config.closeViewerImage = [UIImage imageNamed:@"DemoImage"];
+                    config.moreActionImage = [UIImage imageNamed:@"DemoImage"];
                     config.mediaData = @[imageModelV,imageModel1,imageModel1aaaa,imageModel1aaaag];
                     
                     PTMediaViewer *viewer = [[PTMediaViewer alloc] initWithViewConfig:config];
