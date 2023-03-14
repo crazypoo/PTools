@@ -409,7 +409,9 @@ public class PTScanQRController: PTBaseViewController {
             }
             
             self.view.layer.insertSublayer(self.videoPreviewLayer, at: 0)
-            self.session.startRunning()
+            PTGCDManager.gcdBackground {
+                self.session.startRunning()
+            }
             
             if !self.qrCode
             {
@@ -432,7 +434,9 @@ public class PTScanQRController: PTBaseViewController {
     {
         if !self.session.isRunning && self.hasEntered
         {
-            self.session.startRunning()
+            PTGCDManager.gcdBackground {
+                self.session.startRunning()
+            }
         }
         self.hasEntered = false
         

@@ -33,6 +33,13 @@ public class PTGCDManager :NSObject {
         DispatchQueue.global(qos: .userInitiated).async(execute: block)
     }
     
+    //MARK: gcdBackground
+    //gcdBackground
+    public class func gcdBackground(block:@escaping (()->Void))
+    {
+        DispatchQueue.global(qos: .background).async(execute: block)
+    }
+    
     //MARK: GCD倒計時基礎方法
     ///GCD倒計時基礎方法
     /// - Parameters:
