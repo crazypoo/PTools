@@ -497,6 +497,7 @@ public class PTMediaMediaView:UIView
                     let urlString = dataModel.imageURL as! String
                     if FileManager.pt.judgeFileOrFolderExists(filePath: urlString)
                     {
+                        self.gifImage = UIImage(contentsOfFile: urlString)
                         self.imageView.image = UIImage(contentsOfFile: urlString)
                         self.adjustFrame()
                         self.hasLoadedImage = true

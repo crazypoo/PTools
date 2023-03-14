@@ -49,7 +49,7 @@ open class PTFusionCellModel: NSObject {
     ///Cell的是否顯示Icon
     open var showContentIcon:Bool = false
     ///Cell的是否顯示Icon
-    open var contentIcon:String = ""
+    open var contentIcon:Any?
     ///Cell的右間隔
     open var rightSpace:CGFloat = 10
     ///Cell的左間隔

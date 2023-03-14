@@ -50,13 +50,20 @@ public class PTFusionCellContent:UIView
                     if self.cellModel!.disclosureIndicatorImage is String
                     {
                         let link = self.cellModel!.disclosureIndicatorImage as! String
-                        if link.isURL()
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
                         {
-                            self.accessV.pt_SDWebImage(imageString: link)
+                            self.accessV.image = UIImage(contentsOfFile: link)
                         }
                         else
                         {
-                            self.accessV.image = UIImage.init(named: link)
+                            if link.isURL()
+                            {
+                                self.accessV.pt_SDWebImage(imageString: link)
+                            }
+                            else
+                            {
+                                self.accessV.image = UIImage(named: link)
+                            }
                         }
                     }
                     else if self.cellModel!.disclosureIndicatorImage is UIImage
@@ -105,13 +112,20 @@ public class PTFusionCellContent:UIView
                 if self.cellModel!.leftImage is String
                 {
                     let link = self.cellModel!.leftImage as! String
-                    if link.isURL()
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
                     {
-                        self.cellIcon.pt_SDWebImage(imageString: link)
+                        self.cellIcon.image = UIImage(contentsOfFile: link)
                     }
                     else
                     {
-                        self.cellIcon.image = UIImage.init(named: link)
+                        if link.isURL()
+                        {
+                            self.cellIcon.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.cellIcon.image = UIImage(named: link)
+                        }
                     }
                 }
                 else if self.cellModel!.leftImage is UIImage
@@ -154,13 +168,20 @@ public class PTFusionCellContent:UIView
                 if self.cellModel!.leftImage is String
                 {
                     let link = self.cellModel!.leftImage as! String
-                    if link.isURL()
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
                     {
-                        self.cellIcon.pt_SDWebImage(imageString: link)
+                        self.cellIcon.image = UIImage(contentsOfFile: link)
                     }
                     else
                     {
-                        self.cellIcon.image = UIImage.init(named: link)
+                        if link.isURL()
+                        {
+                            self.cellIcon.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.cellIcon.image = UIImage(named: link)
+                        }
                     }
                 }
                 else if self.cellModel!.leftImage is UIImage
@@ -279,7 +300,34 @@ public class PTFusionCellContent:UIView
                 self.contentLabel.isHidden = true
                 self.cellContentIcon.isHidden = false
                 
-                self.cellContentIcon.pt_SDWebImage(imageString: self.cellModel!.contentIcon)
+                if self.cellModel!.contentIcon is String
+                {
+                    let link = self.cellModel!.contentIcon as! String
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
+                    {
+                        self.cellContentIcon.image = UIImage(contentsOfFile: link)
+                    }
+                    else
+                    {
+                        if link.isURL()
+                        {
+                            self.cellContentIcon.pt_SDWebImage(imageString: link)
+                        }
+                        else
+                        {
+                            self.cellContentIcon.image = UIImage(named: link)
+                        }
+                    }
+                }
+                else if self.cellModel!.contentIcon is UIImage
+                {
+                    self.cellContentIcon.image = (self.cellModel!.contentIcon as! UIImage)
+                }
+                else if self.cellModel!.contentIcon is Data
+                {
+                    self.cellContentIcon.image = UIImage(data: (self.cellModel!.contentIcon as! Data))
+                }
+                
                 self.cellContentIcon.snp.makeConstraints { make in
                     make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
                     switch cellType {
@@ -315,13 +363,20 @@ public class PTFusionCellContent:UIView
                     if self.cellModel!.leftImage is String
                     {
                         let link = self.cellModel!.leftImage as! String
-                        if link.isURL()
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
                         {
-                            self.cellIcon.pt_SDWebImage(imageString: link)
+                            self.cellIcon.image = UIImage(contentsOfFile: link)
                         }
                         else
                         {
-                            self.cellIcon.image = UIImage.init(named: link)
+                            if link.isURL()
+                            {
+                                self.cellIcon.pt_SDWebImage(imageString: link)
+                            }
+                            else
+                            {
+                                self.cellIcon.image = UIImage(named: link)
+                            }
                         }
                     }
                     else if self.cellModel!.leftImage is UIImage
@@ -348,13 +403,20 @@ public class PTFusionCellContent:UIView
                     if self.cellModel!.leftImage is String
                     {
                         let link = self.cellModel!.leftImage as! String
-                        if link.isURL()
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
                         {
-                            self.cellIcon.pt_SDWebImage(imageString: link)
+                            self.cellIcon.image = UIImage(contentsOfFile: link)
                         }
                         else
                         {
-                            self.cellIcon.image = UIImage.init(named: link)
+                            if link.isURL()
+                            {
+                                self.cellIcon.pt_SDWebImage(imageString: link)
+                            }
+                            else
+                            {
+                                self.cellIcon.image = UIImage(named: link)
+                            }
                         }
                     }
                     else if self.cellModel!.leftImage is UIImage
