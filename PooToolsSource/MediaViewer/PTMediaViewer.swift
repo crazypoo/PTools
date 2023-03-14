@@ -494,60 +494,68 @@ public class PTMediaMediaView:UIView
                 }
                 else if dataModel.imageURL is String
                 {
-                    SDWebImageManager.shared.loadImage(with: URL.init(string: dataModel.imageURL as! String)) { receivedSize, expectedSendSize, targetURL in
-                        PTGCDManager.gcdMain {
-                            loading.progress = CGFloat(receivedSize / expectedSendSize)
-                        }
-                    } completed: { image, data, error, type, finish, url in
-                        loading.removeFromSuperview()
-                        if error != nil
-                        {
-                            self.createReloadButton()
-                            return
-                        }
-                        
-                        if finish
-                        {
-                            if image != nil
-                            {
-                                self.gifImage = image
-
-                                switch self.dataModel.imageShowType {
-                                case .Normal:
-                                    self.imageView.image = image
-                                    self.adjustFrame()
-                                    self.hasLoadedImage = true
-                                case .GIF:
-                                    if data != nil
-                                    {
-                                        let source = CGImageSourceCreateWithData(data! as CFData, nil)
-                                        let frameCount = CGImageSourceGetCount(source!)
-                                        var frames = [UIImage]()
-                                        for i in 0...frameCount
-                                        {
-                                            let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                            let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                            frames.append(imageName)
-                                        }
-                                        self.imageView.animationImages = frames
-                                        self.imageView.animationDuration = 2
-                                        self.imageView.startAnimating()
-                                        self.adjustFrame()
-                                        self.hasLoadedImage = true
-                                    }
-                                    else
-                                    {
-                                        self.createReloadButton()
-                                        self.adjustFrame()
-                                    }
-                                default:
-                                    break
-                                }
+                    let urlString = dataModel.imageURL as! String
+                    if urlString.nsString.range(of: "/var").length > 0
+                    {
+                        self.imageView.image = UIImage(contentsOfFile: urlString)
+                    }
+                    else
+                    {
+                        SDWebImageManager.shared.loadImage(with: URL.init(string: dataModel.imageURL as! String)) { receivedSize, expectedSendSize, targetURL in
+                            PTGCDManager.gcdMain {
+                                loading.progress = CGFloat(receivedSize / expectedSendSize)
                             }
-                            else
+                        } completed: { image, data, error, type, finish, url in
+                            loading.removeFromSuperview()
+                            if error != nil
                             {
                                 self.createReloadButton()
-                                self.adjustFrame()
+                                return
+                            }
+                            
+                            if finish
+                            {
+                                if image != nil
+                                {
+                                    self.gifImage = image
+
+                                    switch self.dataModel.imageShowType {
+                                    case .Normal:
+                                        self.imageView.image = image
+                                        self.adjustFrame()
+                                        self.hasLoadedImage = true
+                                    case .GIF:
+                                        if data != nil
+                                        {
+                                            let source = CGImageSourceCreateWithData(data! as CFData, nil)
+                                            let frameCount = CGImageSourceGetCount(source!)
+                                            var frames = [UIImage]()
+                                            for i in 0...frameCount
+                                            {
+                                                let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                                let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                                frames.append(imageName)
+                                            }
+                                            self.imageView.animationImages = frames
+                                            self.imageView.animationDuration = 2
+                                            self.imageView.startAnimating()
+                                            self.adjustFrame()
+                                            self.hasLoadedImage = true
+                                        }
+                                        else
+                                        {
+                                            self.createReloadButton()
+                                            self.adjustFrame()
+                                        }
+                                    default:
+                                        break
+                                    }
+                                }
+                                else
+                                {
+                                    self.createReloadButton()
+                                    self.adjustFrame()
+                                }
                             }
                         }
                     }
