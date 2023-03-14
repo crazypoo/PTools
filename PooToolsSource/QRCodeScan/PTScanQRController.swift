@@ -21,24 +21,24 @@ public class PTScanBarInfo:PTBaseModel
 public class PTScanQRConfig:NSObject
 {
     ///返回按鈕圖片
-    var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///獲取相冊圖片
-    var photoImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var photoImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///電筒圖片
-    var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///掃描線圖片
-    var scanLineImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var scanLineImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///點擊二維碼圖片
-    var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    public var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///條形碼提示
-    var barCodeTips:String = "掃描條形碼"
+    public var barCodeTips:String = "掃描條形碼"
     ///取消按鈕名字
-    var cancelButtonName:String = "取消"
+    public var cancelButtonName:String = "取消"
     ///掃描二維碼後提示
-    var scanedTips:String = "轻触小蓝点，选中识别二维码"
+    public var scanedTips:String = "轻触小蓝点，选中识别二维码"
     ///是否可以掃二維碼
-    var canScanQR:Bool = true
+    public var canScanQR:Bool = true
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String) -> Void
