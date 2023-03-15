@@ -8,17 +8,17 @@
 import Foundation
 import MachO
 
-class SystemReport {
-    static let shared = SystemReport()
+public class SystemReport {
+    public static let shared = SystemReport()
     
-    var versionString: String {
+    public var versionString: String {
         ProcessInfo.processInfo.operatingSystemVersionString
             .replacingOccurrences(of: "Build ", with: "")
             .replacingOccurrences(of: "Version ", with: "")
     }
     
     // Current device thermal state.
-    var thermalState: String {
+    public var thermalState: String {
         let state = ProcessInfo.processInfo.thermalState
         switch state {
         case .nominal: return "Nominal"
@@ -30,7 +30,7 @@ class SystemReport {
     }
     
     // Retrieve device mobile gestalt cache.
-    lazy var gestaltCacheExtra: NSDictionary? = {
+    public lazy var gestaltCacheExtra: NSDictionary? = {
         let url = URL(fileURLWithPath: "/pri" + "vate/va" + "r/containe" + "rs/Shared/Sys" + "temGroup/sys" + "temgroup.com.apple.mobilegestal" + "tcache/Libr" + "ary/Ca" + "ches/com.app" + "le.MobileGes" + "talt.plist")
         
         let dictionary = NSDictionary(contentsOf: url)
@@ -38,31 +38,31 @@ class SystemReport {
     }()
     
     // Device marketing name.
-    lazy var gestaltMarketingName: Any = gestaltCacheExtra?.value(forKey: "Z/dqyWS6OZ" + "TRy10UcmUAhw") ?? "Unknown"
+    public lazy var gestaltMarketingName: Any = gestaltCacheExtra?.value(forKey: "Z/dqyWS6OZ" + "TRy10UcmUAhw") ?? "Unknown"
     
     // iBoot (second-stage loader) version.
-    lazy var gestaltFirmwareVersion: Any = gestaltCacheExtra?.value(forKey: "LeSRsiLoJC" + "Mhjn6nd6GWbQ") ?? "Unknown"
+    public lazy var gestaltFirmwareVersion: Any = gestaltCacheExtra?.value(forKey: "LeSRsiLoJC" + "Mhjn6nd6GWbQ") ?? "Unknown"
     
     // CPU architecture.
-    lazy var gestaltArchitecture: Any = gestaltCacheExtra?.value(forKey: "k7QIBwZJJO" + "Vw+Sej/8h8VA") ?? deviceArchitecture
+    public lazy var gestaltArchitecture: Any = gestaltCacheExtra?.value(forKey: "k7QIBwZJJO" + "Vw+Sej/8h8VA") ?? deviceArchitecture
     
     // Fallback in case gestaltArchitecture doesn't return a value.
-    var deviceArchitecture: String {
+    public var deviceArchitecture: String {
         let info = NXGetLocalArchInfo()
         return String(utf8String: (info?.pointee.description)!) ?? "Unknown"
     }
     
-    lazy var gestaltModelIdentifier: Any = gestaltCacheExtra?.value(forKey: "h9jDsbgj7xI" + "VeIQ8S3/X3Q") ?? modelIdentifier
+    public lazy var gestaltModelIdentifier: Any = gestaltCacheExtra?.value(forKey: "h9jDsbgj7xI" + "VeIQ8S3/X3Q") ?? modelIdentifier
     
     // Fallback in case gestaltModelIdentifier doesn't return a value.
-    var modelIdentifier: String {
+    public var modelIdentifier: String {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MO" + "DEL_IDENTIFIER"] { return simulatorModelIdentifier }
         var sysinfo = utsname()
         uname(&sysinfo) // ignore return value
         return String(bytes: Data(bytes: &sysinfo.machine, count: Int(_SYS_NAMELEN)), encoding: .ascii)?.trimmingCharacters(in: .controlCharacters) ?? "Unknown"
     }
     
-    var kernel: String {
+    public var kernel: String {
         var size = 0
         sysctlbyname("ker" + "n.os" + "type", nil, &size, nil, 0)
         
@@ -71,7 +71,7 @@ class SystemReport {
         return String(cString: string)
     }
     
-    var kernelVersion: String {
+    public var kernelVersion: String {
         var size = 0
         sysctlbyname("ker" + "n.os" + "release", nil, &size, nil, 0)
         
@@ -80,7 +80,7 @@ class SystemReport {
         return String(cString: string)
     }
     
-    var compileDate: String {
+    public var compileDate: String {
         var size = 0
         sysctlbyname("ker" + "n.ve" + "rsion", nil, &size, nil, 0)
         
