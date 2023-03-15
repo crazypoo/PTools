@@ -90,10 +90,7 @@ class PTSwiftViewController: PTBaseViewController {
         
         print((idcard as NSString).getIdentityCardAge())
 
-        PTBankSimpleInfoNetwork.getBankSimpleInfo(cardNum: card1 as NSString) { model in
-            print(model.logoUrl)
-        }
-
+    
         print("\((card1 as NSString).bankCardLuhmCheck())\n\((card2 as NSString).bankCardLuhmCheck())")
         print("身份证:\((idcard as NSString).isValidateIdentity())")
 

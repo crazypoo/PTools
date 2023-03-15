@@ -91,7 +91,6 @@
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
 		5589FF5029A87BA700519383 /* PTContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContract.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
-		5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
 		559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */; };
@@ -300,7 +299,6 @@
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
 		5589FF4F29A87BA700519383 /* PTContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContract.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
-		5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankSimpleInfoNetwork.swift; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
 		559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSURLResponse+PTEX.swift"; sourceTree = "<group>"; };
@@ -654,7 +652,6 @@
 				55C9CBA228E851DA00DB6200 /* Network.swift */,
 				55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */,
 				55C9CBA428E8521500DB6200 /* ResponseModel.swift */,
-				5593F5F429372C420086C2EC /* PTBankSimpleInfoNetwork.swift */,
 			);
 			path = NetWork;
 			sourceTree = "<group>";
@@ -1703,7 +1700,6 @@
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
-				5593F5F529372C420086C2EC /* PTBankSimpleInfoNetwork.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,

@@ -96,20 +96,6 @@ public extension NSString
         let luhmTotal = Int(lastNumber) + sumEvenNumTotal + sumOddNum2Total + sumOddNumTotal
         return (luhmTotal % 10 == 0) ? true : false
     }
-        
-    //MARK: 獲取銀行名稱
-    ///獲取銀行名稱
-    /// - Returns: Bool
-    func getBankName()->NSString{
-        if self.bankCardLuhmCheck()
-        {
-            return NSString(format: "https://ccdcapi.alipay.com/validateAndCacheCardInfo.json?_input_charset=utf-8&cardNo=%@&cardBinCheck=true", self)
-        }
-        else
-        {
-            return self
-        }
-    }
     
     /*
      身份证号:加权因子
