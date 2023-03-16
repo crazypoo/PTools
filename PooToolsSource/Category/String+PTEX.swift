@@ -576,6 +576,19 @@ public extension String
         return self
     }
 
+    //MARK: 判断一个Class是否存在
+    ///判断一个Class是否存在
+    func checkClass() -> Bool
+    {
+        if let someClass = NSClassFromString(self)
+        {
+            return true
+        }
+        else
+        {
+            return false
+        }
+    }
 }
 
 fileprivate extension PTUtils
