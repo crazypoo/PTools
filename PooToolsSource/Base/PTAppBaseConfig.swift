@@ -22,7 +22,7 @@ public class PTAppBaseConfig: NSObject {
     
     //MARK: App的全局背景顏色
     ///App的全局背景顏色
-    public var viewControllerBaseBackgroundColor:UIColor = UIColor(hexString:"#eeeff4")
+    public var viewControllerBaseBackgroundColor:UIColor = UIColor(hexString:"#eeeff4")!
     
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
