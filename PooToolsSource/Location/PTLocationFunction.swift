@@ -82,6 +82,8 @@ public class PTLocationFunction: NSObject {
                 urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", lat!,lon!,locations.latitude,locations.longitude,qqMapKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
             }
             UIApplication.shared.open(URL.init(string: urlString as String)!, options: [:], completionHandler: nil)
+        } tapBackgroundBlock: { sheet in
+            
         }
     }
 }

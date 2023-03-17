@@ -40,7 +40,8 @@ public extension UIAlertController
                                      titles:[String],
                                      destructiveBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
                                      cancelBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
-                                     otherBlock:@escaping ((_ sheet:PTActionSheetView,_ index:Int)->Void))
+                                     otherBlock:@escaping ((_ sheet:PTActionSheetView,_ index:Int)->Void),
+                                     tapBackgroundBlock:@escaping ((_ sheet:PTActionSheetView)->Void))
     {
         let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles)
         actionSheet.actionSheetSelectBlock = { (sheet,index) in
@@ -54,6 +55,9 @@ public extension UIAlertController
             }
         }
         actionSheet.show()
+        actionSheet.actionSheetTapDismissBlock = { sheet in
+            tapBackgroundBlock(sheet)
+        }
     }
     
     //MARK: ALERT真正基类

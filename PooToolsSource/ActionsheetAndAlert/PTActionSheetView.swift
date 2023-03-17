@@ -49,6 +49,7 @@ public class PTActionSheetView: UIView {
     public static let DestructiveButtonTag = 99998
     
     public var actionSheetSelectBlock:((_ sheet:PTActionSheetView,_ selectIndex:Int)->Void)?
+    public var actionSheetTapDismissBlock:((_ sheet:PTActionSheetView)->Void)?
     
     private let kRowLineHeight:CGFloat = 0.5
     private let kRowHeight:CGFloat = 54
@@ -435,7 +436,10 @@ public class PTActionSheetView: UIView {
             if dismissWithTapBackground
             {
                 dismiss {
-                    
+                    if self.actionSheetTapDismissBlock != nil
+                    {
+                        self.actionSheetTapDismissBlock!(self)
+                    }
                 }
             }
         }
