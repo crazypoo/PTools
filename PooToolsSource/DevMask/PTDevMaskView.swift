@@ -18,7 +18,7 @@ public class PTDevMaskConfig:NSObject
 }
 
 @objcMembers
-public class PTDevMaskView: UIView {
+public class PTDevMaskView: PTBaseMaskView {
 
     var viewConfig : PTDevMaskConfig = PTDevMaskConfig()
     
@@ -26,6 +26,7 @@ public class PTDevMaskView: UIView {
     {
         super.init(frame: .zero)
         self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
+        self.isMask = self.viewConfig.isMask
         
         let image = UIImage(named: "icon_clear")
 
@@ -40,24 +41,5 @@ public class PTDevMaskView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
-    {
-        if self.viewConfig.isMask
-        {
-            return super.hitTest(point, with: event)
-        }
-        else
-        {
-            for view in self.subviews
-            {
-                if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event)
-                {
-                    return responder
-                }
-            }
-            return nil
-        }
     }
 }

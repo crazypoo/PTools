@@ -107,6 +107,9 @@
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
+		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
+		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
+		55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTShareItem.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
@@ -317,6 +320,9 @@
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
+		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
+		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
+		55BD5B8229C620C80023458A /* PTShareItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTShareItem.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
@@ -547,6 +553,7 @@
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
 				5507025F28F6A09100C48239 /* SegmentControl */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
+				55BD5B8129C620C10023458A /* Share */,
 				231D159C272CDEE9003D6F62 /* SignView */,
 				231D1586272CDEE9003D6F62 /* Slider */,
 				5507026B28F6B33E00C48239 /* Speech */,
@@ -626,6 +633,7 @@
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -902,6 +910,14 @@
 			path = Contract;
 			sourceTree = "<group>";
 		};
+		55BD5B8129C620C10023458A /* Share */ = {
+			isa = PBXGroup;
+			children = (
+				55BD5B8229C620C80023458A /* PTShareItem.swift */,
+			);
+			path = Share;
+			sourceTree = "<group>";
+		};
 		55D59C4728F14A3100B4FF76 /* CallMessageMail */ = {
 			isa = PBXGroup;
 			children = (
@@ -1091,6 +1107,7 @@
 		55D59C6928F537BA00B4FF76 /* Base */ = {
 			isa = PBXGroup;
 			children = (
+				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
 				554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
@@ -1544,6 +1561,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
+				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
@@ -1560,6 +1578,7 @@
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
+				55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
@@ -1593,6 +1612,7 @@
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
+				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
