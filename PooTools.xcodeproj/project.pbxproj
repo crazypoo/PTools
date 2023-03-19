@@ -1107,19 +1107,19 @@
 		55D59C6928F537BA00B4FF76 /* Base */ = {
 			isa = PBXGroup;
 			children = (
-				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
 				554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */,
 				55D59C7328F5565B00B4FF76 /* PTAppBaseConfig.swift */,
 				55D59C6F28F54EFA00B4FF76 /* PTBaseCellOption.swift */,
+				554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */,
+				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
+				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
 				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
-				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
-				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
-				554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */,
+				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
