@@ -56,12 +56,12 @@ public class PTFusionCellContent:UIView
                         }
                         else
                         {
-                            if link.isURL()
-                            {
+                            if link.isURL() {
                                 self.accessV.pt_SDWebImage(imageString: link)
                             }
-                            else
-                            {
+                            else if link.isSingleEmoji {
+                                self.accessV.image = UIImage(systemName: link)
+                            } else {
                                 self.accessV.image = UIImage(named: link)
                             }
                         }
@@ -118,12 +118,11 @@ public class PTFusionCellContent:UIView
                     }
                     else
                     {
-                        if link.isURL()
-                        {
+                        if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
-                        }
-                        else
-                        {
+                        } else if link.isSingleEmoji {
+                            self.cellIcon.image = UIImage(systemName: link)
+                        } else {
                             self.cellIcon.image = UIImage(named: link)
                         }
                     }
@@ -174,12 +173,11 @@ public class PTFusionCellContent:UIView
                     }
                     else
                     {
-                        if link.isURL()
-                        {
+                        if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
-                        }
-                        else
-                        {
+                        } else if link.isSingleEmoji {
+                            self.cellIcon.image = UIImage(systemName: link)
+                        } else {
                             self.cellIcon.image = UIImage(named: link)
                         }
                     }
@@ -309,13 +307,12 @@ public class PTFusionCellContent:UIView
                     }
                     else
                     {
-                        if link.isURL()
-                        {
-                            self.cellContentIcon.pt_SDWebImage(imageString: link)
-                        }
-                        else
-                        {
-                            self.cellContentIcon.image = UIImage(named: link)
+                        if link.isURL() {
+                            self.cellIcon.pt_SDWebImage(imageString: link)
+                        } else if link.isSingleEmoji {
+                            self.cellIcon.image = UIImage(systemName: link)
+                        } else {
+                            self.cellIcon.image = UIImage(named: link)
                         }
                     }
                 }
@@ -369,12 +366,11 @@ public class PTFusionCellContent:UIView
                         }
                         else
                         {
-                            if link.isURL()
-                            {
+                            if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
-                            }
-                            else
-                            {
+                            } else if link.isSingleEmoji {
+                                self.cellIcon.image = UIImage(systemName: link)
+                            } else {
                                 self.cellIcon.image = UIImage(named: link)
                             }
                         }
@@ -409,12 +405,11 @@ public class PTFusionCellContent:UIView
                         }
                         else
                         {
-                            if link.isURL()
-                            {
+                            if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
-                            }
-                            else
-                            {
+                            } else if link.isSingleEmoji {
+                                self.cellIcon.image = UIImage(systemName: link)
+                            } else {
                                 self.cellIcon.image = UIImage(named: link)
                             }
                         }
