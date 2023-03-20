@@ -60,7 +60,7 @@ public class PTFusionCellContent:UIView
                                 self.accessV.pt_SDWebImage(imageString: link)
                             }
                             else if link.isSingleEmoji {
-                                self.accessV.image = UIImage(systemName: link)
+                                self.accessV.image = link.emojiToImage()
                             } else {
                                 self.accessV.image = UIImage(named: link)
                             }
@@ -121,7 +121,7 @@ public class PTFusionCellContent:UIView
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
-                            self.cellIcon.image = UIImage(systemName: link)
+                            self.cellIcon.image = link.emojiToImage()
                         } else {
                             self.cellIcon.image = UIImage(named: link)
                         }
@@ -176,7 +176,7 @@ public class PTFusionCellContent:UIView
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
-                            self.cellIcon.image = UIImage(systemName: link)
+                            self.cellIcon.image = link.emojiToImage()
                         } else {
                             self.cellIcon.image = UIImage(named: link)
                         }
@@ -310,7 +310,7 @@ public class PTFusionCellContent:UIView
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
-                            self.cellIcon.image = UIImage(systemName: link)
+                            self.cellIcon.image = link.emojiToImage()
                         } else {
                             self.cellIcon.image = UIImage(named: link)
                         }
@@ -369,7 +369,7 @@ public class PTFusionCellContent:UIView
                             if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
                             } else if link.isSingleEmoji {
-                                self.cellIcon.image = UIImage(systemName: link)
+                                self.cellIcon.image = link.emojiToImage()
                             } else {
                                 self.cellIcon.image = UIImage(named: link)
                             }
@@ -408,7 +408,7 @@ public class PTFusionCellContent:UIView
                             if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
                             } else if link.isSingleEmoji {
-                                self.cellIcon.image = UIImage(systemName: link)
+                                self.cellIcon.image = link.emojiToImage()
                             } else {
                                 self.cellIcon.image = UIImage(named: link)
                             }

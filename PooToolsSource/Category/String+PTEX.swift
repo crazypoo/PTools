@@ -1180,9 +1180,29 @@ public extension String
     
     //MARK: Emoji转图片
     ///Emoji转图片
-    func emojiToImage() -> UIImage {
+    /*
+     如果使用 UIImage(systemName:) 方法转换Emoji表情为图片返回的 UIImage 对象为空，则可能是由于表情不受支持或无效。这是因为 UIImage(systemName:) 方法是根据系统中内置的 SF Symbol 字体来渲染图像的，SF Symbol 字体包含有限的表情符号，因此并不是所有的 Emoji 表情都能被成功转换。
+     所以如何系统 UIImage(systemName:) 的方法返回为空则调用 Core Text来绘制图片
+    */
+    func emojiToImage(emojiFont:UIFont? = .appfont(size: 24)) -> UIImage {
         if self.isSingleEmoji {
-            return UIImage(systemName: self)!
+            if let image = UIImage(systemName: self) {
+                return image
+            } else {
+                let nsText = self.nsString
+                let fontAttributes = [NSAttributedString.Key.font: emojiFont]
+                let imageSize = nsText.size(withAttributes: fontAttributes as [NSAttributedString.Key : Any])
+                
+                UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
+                defer { UIGraphicsEndImageContext() }
+                
+                let context = UIGraphicsGetCurrentContext()
+                
+                nsText.draw(at: CGPoint.zero, withAttributes: fontAttributes as [NSAttributedString.Key : Any])
+                
+                guard let image = UIGraphicsGetImageFromCurrentImageContext() else { return UIImage() }
+                return image
+            }
         } else {
             return UIImage()
         }
