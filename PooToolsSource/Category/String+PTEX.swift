@@ -580,12 +580,9 @@ public extension String
     ///判断一个Class是否存在
     func checkClass() -> Bool
     {
-        if let someClass = NSClassFromString(self)
-        {
+        if NSClassFromString(self) != nil {
             return true
-        }
-        else
-        {
+        } else {
             return false
         }
     }
@@ -1179,6 +1176,14 @@ public extension String
     /// 提取单元编码标量
     var emojiScalars: [UnicodeScalar] {
         return filter{$0.isEmoji}.flatMap{$0.unicodeScalars}
+    }
+    
+    func emojiToImage() -> UIImage {
+        if self.isSingleEmoji {
+            return UIImage(systemName: self)
+        } else {
+            return UIImage()
+        }
     }
     
     //MARK: 获取视频的一个图片
