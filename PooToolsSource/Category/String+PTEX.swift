@@ -1178,9 +1178,11 @@ public extension String
         return filter{$0.isEmoji}.flatMap{$0.unicodeScalars}
     }
     
+    //MARK: Emoji转图片
+    ///Emoji转图片
     func emojiToImage() -> UIImage {
         if self.isSingleEmoji {
-            return UIImage(systemName: self)
+            return UIImage(systemName: self)!
         } else {
             return UIImage()
         }
