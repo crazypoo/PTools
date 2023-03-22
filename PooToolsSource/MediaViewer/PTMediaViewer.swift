@@ -954,6 +954,11 @@ public class PTMediaViewer: UIView {
                 make.bottom.equalToSuperview().inset(20)
                 make.height.equalTo(20)
             }
+            if self.viewConfig.mediaData.count > 1 {
+                self.pageView.isHidden = false
+            } else {
+                self.pageView.isHidden = true
+            }
         }
         
         self.isUserInteractionEnabled = true
