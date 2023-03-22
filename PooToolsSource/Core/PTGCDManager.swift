@@ -39,7 +39,7 @@ public class PTGCDManager :NSObject {
         let dispatchQueue = DispatchQueue(label: label)
         let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount!)
         dispatchQueue.async {
-            for i in 0...threadCount {
+            for i in 0..<threadCount {
                 dispatchGroup.enter()
                 doSomeThing(dispatchSemaphore,dispatchGroup,i)
                 dispatchSemaphore.wait()
