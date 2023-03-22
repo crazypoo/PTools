@@ -33,15 +33,15 @@ public class PTGCDManager :NSObject {
     public class func gcdGroup(label:String,
                                semaphoreCount:Int? = 0,
                                threadCount:Int,
-                               doSomeThing:@escaping ((_ dispatchSemaphore:DispatchSemaphore,_ dispatchGroup:DispatchGroup)->Void),
+                               doSomeThing:@escaping ((_ dispatchSemaphore:DispatchSemaphore,_ dispatchGroup:DispatchGroup,_ currentIndex:Int)->Void),
                                jobDoneBlock:@escaping (()->Void)) {
         let dispatchGroup = DispatchGroup()
         let dispatchQueue = DispatchQueue(label: label)
         let dispatchSemaphore = DispatchSemaphore(value: semaphoreCount!)
         dispatchQueue.async {
-            for _ in 0...threadCount {
+            for i in 0...threadCount {
                 dispatchGroup.enter()
-                doSomeThing(dispatchSemaphore,dispatchGroup)
+                doSomeThing(dispatchSemaphore,dispatchGroup,i)
                 dispatchSemaphore.wait()
             }
         }
