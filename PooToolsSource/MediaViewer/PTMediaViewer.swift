@@ -769,9 +769,23 @@ public class PTMediaViewer: UIView {
             } otherBlock: { sheet, index in
                 switch self.viewConfig.actionType {
                 case .Save:
-                    self.saveImage()
+                    switch index {
+                    case 0:
+                        self.saveImage()
+                    default:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index - 1)
+                        }
+                    }
                 case .Delete:
-                    self.deleteImage()
+                    switch index {
+                    case 0:
+                        self.deleteImage()
+                    default:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index - 1)
+                        }
+                    }
                 case .All:
                     switch index {
                     case 0:
@@ -884,8 +898,14 @@ public class PTMediaViewer: UIView {
             }
         case .Save:
             self.actionSheetTitle = ["保存媒体"]
+            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+                self.actionSheetTitle.append(value)
+            }
         case .Delete:
             self.actionSheetTitle = ["删除图片"]
+            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+                self.actionSheetTitle.append(value)
+            }
         case .DIY:
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
                 self.actionSheetTitle.append(value)
