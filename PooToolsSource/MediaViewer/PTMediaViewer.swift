@@ -776,6 +776,7 @@ public class PTMediaViewer: UIView {
                         if self.viewMoreActionBlock != nil {
                             self.viewMoreActionBlock!(index - 1)
                         }
+                        self.viewDismissAction()
                     }
                 case .Delete:
                     switch index {
@@ -785,6 +786,7 @@ public class PTMediaViewer: UIView {
                         if self.viewMoreActionBlock != nil {
                             self.viewMoreActionBlock!(index - 1)
                         }
+                        self.viewDismissAction()
                     }
                 case .All:
                     switch index {
@@ -796,11 +798,13 @@ public class PTMediaViewer: UIView {
                         if self.viewMoreActionBlock != nil {
                             self.viewMoreActionBlock!(index - 2)
                         }
+                        self.viewDismissAction()
                     }
                 case .DIY:
                     if self.viewMoreActionBlock != nil {
                         self.viewMoreActionBlock!(index)
                     }
+                    self.viewDismissAction()
                 default:
                     break
                 }
