@@ -15,10 +15,9 @@ public protocol PTImagePickerObject {
 
 //MARK:媒體的URL
 @available(iOS 14.0, *)
-extension URL:PTImagePickerObject
-{
+extension URL:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
-        guard let url = info[.mediaURL] as? Self else{
+        guard let url = info[.mediaURL] as? Self else {
             throw PTImagePicker.PickerError.ObjFetchFaild
         }
         return url
@@ -27,15 +26,14 @@ extension URL:PTImagePickerObject
 
 //MARK:媒體的Data
 @available(iOS 14.0, *)
-extension Data:PTImagePickerObject
-{
+extension Data:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
-        guard let url = info[.imageURL] as? URL else{
+        guard let url = info[.imageURL] as? URL else {
             throw PTImagePicker.PickerError.ObjFetchFaild
         }
-        do{
+        do {
             return try Self.init(contentsOf: url)
-        }catch{
+        } catch {
             throw PTImagePicker.PickerError.ObjConvertFaild(error)
         }
     }
@@ -48,12 +46,12 @@ extension UIImage:PTImagePickerObject
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         do{
             let data = try Data.fetchFromPicker(info)
-            guard let image = Self.init(data: data) else{
+            guard let image = Self.init(data: data) else {
                 throw PTImagePicker.PickerError.ObjConvertFaild(nil)
             }
             return image
-        }catch PTImagePicker.PickerError.ObjFetchFaild{
-            guard let image = info[.originalImage] as? Self else{
+        } catch PTImagePicker.PickerError.ObjFetchFaild{
+            guard let image = info[.originalImage] as? Self else {
                 throw PTImagePicker.PickerError.ObjFetchFaild
             }
             return image
@@ -69,8 +67,15 @@ public struct PTAlbumObject {
     public let videoURL:URL?
 }
 
+public struct PTPhotoObject {
+    ///圖片
+    public let image:UIImage?
+    ///圖片URL
+    public let url:URL?
+}
+
 @available(iOS 14.0, *)
-extension PTAlbumObject:PTImagePickerObject{
+extension PTAlbumObject:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
         var imageData:Data?
         var videoURL:URL?
@@ -84,4 +89,12 @@ extension PTAlbumObject:PTImagePickerObject{
     }
 }
 
+@available(iOS 14.0, *)
+extension PTPhotoObject:PTImagePickerObject {
+    public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
+        let data = try Data.fetchFromPicker(info)
+        let imageUrl:URL = info[.imageURL] as! URL
+        return Self.init(image: UIImage(data: data), url: imageUrl)
+    }
+}
 

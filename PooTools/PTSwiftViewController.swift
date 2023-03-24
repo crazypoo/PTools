@@ -35,6 +35,29 @@ class PTSwiftViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
+        PTGCDManager.gcdAfter(time: 0.5) {
+            if #available(iOS 14, *) {
+                PTImagePicker.openAlbumForImageObject { result in
+                    PTNSLogConsole(result)
+                }
+//                Task{
+//                    do{
+//                        let object:UIImage = try await PTImagePicker.openAlbum()
+//                        await MainActor.run{
+//                            PTNSLogConsole(object)
+//    //                        var message = PTMessageModel(image: object, user: PTChatData.share.user, messageId: UUID().uuidString, date: Date(), sendSuccess: false)//PTMessageModel(text: str, user: user, messageId: UUID().uuidString, date: date,correctionText:saveModel.correctionText)
+//    //                        message.sending = true
+//    //                        self.insertMessage(message)
+//                        }
+//                    }
+//                    catch let pickerError as PTImagePicker.PickerError
+//                    {
+//                        pickerError.outPutLog()
+//                    }
+//                }
+            }
+        }
+        
         let gps = PTGetGPSData.share
         gps.locationManager.startUpdatingLocation()
         
