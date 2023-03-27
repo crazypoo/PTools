@@ -337,7 +337,9 @@ public class PTFusionCellContent:UIView
                     }
                     make.width.equalTo(self.cellContentIcon.snp.height)
                 }
-                self.cellContentIcon.viewCorner(radius: (PTFusionCellContent.ContentIconHeight - CGFloat.ScaleW(w: 5) * 2) / 2)
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    self.cellContentIcon.viewCorner(radius: self.cellContentIcon.height / 2)
+                }
                 
                 if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty()
                 {
