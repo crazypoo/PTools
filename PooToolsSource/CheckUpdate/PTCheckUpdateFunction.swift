@@ -81,128 +81,86 @@ class PTCheckUpdateModel:PTBaseModel {
 public class PTCheckUpdateFunction: NSObject {
     public static let share = PTCheckUpdateFunction()
     
-    func compareVesionWithServerVersion(version:String)->Bool
-    {
+    func compareVesionWithServerVersion(version:String)->Bool {
         let currentVersion = kAppVersion
         let versionArray = version.components(separatedBy: ".")
         let currentVesionArray = currentVersion!.components(separatedBy: ".")
         let a = (versionArray.count > currentVesionArray.count ) ? currentVesionArray.count : versionArray.count
         
-        for i in 0...a
-        {
+        for i in 0..<a {
             let forA = versionArray[i].int!
-            var forB:Int = 0
-            if i > (currentVesionArray.count - 1)
-            {
-                forB = 0
-            }
-            else
-            {
-                forB = currentVesionArray[i].int!
-            }
+            let forB:Int = currentVesionArray[i].int!
             
-            if forA > forB
-            {
+            if forA > forB {
                 return true
-            }
-            else if forA < forB
-            {
+            } else if forA < forB {
                 return false
             }
         }
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,version:String?,note:String?,force:Bool)
-    {
-        if test
-        {
+    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,version:String?,note:String?,force:Bool,showHub:Bool? = false) {
+        if test {
             var okBtns = [String]()
-            if force
-            {
+            if force {
                 okBtns = ["更新"]
-            }
-            else
-            {
+            } else {
                 okBtns = ["稍后再说","更新"]
             }
             UIAlertController.base_alertVC(title:"发现新版本\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
                 switch index {
                 case 0:
-                    if force
-                    {
-                        if url != nil
-                        {
+                    if force {
+                        if url != nil {
                             self.jumpToDownloadLink(link: url!)
-                        }
-                        else
-                        {
+                        } else {
                             PTNSLogConsole("非法url")
                         }
                     }
                 case 1:
-                    if url != nil
-                    {
+                    if url != nil {
                         self.jumpToDownloadLink(link: url!)
-                    }
-                    else
-                    {
+                    } else {
                         PTNSLogConsole("非法url")
                     }
                 default:
                     break
                 }
             })
-
-        }
-        else
-        {
-            if !appid.stringIsEmpty()
-            {
-                Network.requestApi(urlStr: "http://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self) { result, error in
+        } else {
+            if !appid.stringIsEmpty() {
+                Network.requestApi(urlStr: "http://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self,showHud: showHub) { result, error in
                     guard let responseModel = result!.originalString.kj.model(PTCheckUpdateModel.self) else { return }
-                    if responseModel.results.count > 0
-                    {
+                    if responseModel.results.count > 0 {
                         let versionModel = responseModel.results.first!
                         let versionStr = versionModel.version
                         var appStoreVersion = versionStr.replacingOccurrences(of: ".", with: "")
-                        if appStoreVersion.nsString.length == 2
-                        {
+                        if appStoreVersion.nsString.length == 2 {
                             appStoreVersion = appStoreVersion.appending("0")
-                        }
-                        else if appStoreVersion.nsString.length == 1
-                        {
+                        } else if appStoreVersion.nsString.length == 1 {
                             appStoreVersion = appStoreVersion.appending("00")
                         }
                         
                         var currentVersion = kAppVersion?.replacingOccurrences(of: ".", with: "")
-                        if currentVersion?.nsString.length == 2
-                        {
+                        if currentVersion?.nsString.length == 2 {
                             currentVersion = currentVersion?.appending("0")
-                        }
-                        else if currentVersion?.nsString.length == 1
-                        {
+                        } else if currentVersion?.nsString.length == 1 {
                             currentVersion = currentVersion?.appending("00")
                         }
 
-                        if self.compareVesionWithServerVersion(version: versionStr)
-                        {
-                            if appStoreVersion.float()! > currentVersion!.float()!
-                            {
+                        if self.compareVesionWithServerVersion(version: versionStr) {
+                            if appStoreVersion.float()! > currentVersion!.float()! {
                                 var okBtns = [String]()
-                                if force
-                                {
+                                if force {
                                     okBtns = ["更新"]
-                                }
-                                else
-                                {
+                                } else {
                                     okBtns = ["稍后再说","更新"]
                                 }
                                 UIAlertController.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
                                     switch index {
                                     case 0:
-                                        if force
-                                        {
+                                        if force {
                                             self.jumpToAppStore(appid: appid)
                                         }
                                     case 1:
@@ -215,22 +173,18 @@ public class PTCheckUpdateFunction: NSObject {
                         }
                     }
                 }
-            }
-            else
-            {
+            } else {
                 PTNSLogConsole("没有检测到APPID")
             }
         }
     }
     
-    private func jumpToAppStore(appid:String)
-    {
+    private func jumpToAppStore(appid:String) {
         let uriString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
         UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
     }
     
-    private func jumpToDownloadLink(link:URL)
-    {
+    private func jumpToDownloadLink(link:URL) {
         UIApplication.shared.open(link, options: [:], completionHandler: nil)
     }
 }

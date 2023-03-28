@@ -42,8 +42,6 @@ target 'PooTools_Example' do
   pod 'LookinServer', :configurations => ['Debug']
   pod 'LifetimeTracker', :configurations => ['Debug']
   
-#  pod 'appstoreconnect-swift-sdk'
-
   #权限询问
   pod 'PermissionsKit/NotificationPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
   pod 'PermissionsKit/CameraPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
