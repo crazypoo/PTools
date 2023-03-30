@@ -35,11 +35,30 @@ class PTSwiftViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
-        PTGCDManager.gcdAfter(time: 0.5) {
-            if #available(iOS 14, *) {
-                PTImagePicker.openAlbumForImageObject { result in
-                    PTNSLogConsole(result)
-                }
+//        let config = PTTextCustomRightViewConfig()
+//        config.image = "DemoImage"
+//        config.size = CGSize(width: 24, height: 34)
+//        
+//        let textf = PTTextField()
+//        textf.leftSpace = 30
+//        textf.placeholder = "123123123123"
+//        textf.rightTapBlock = {
+//            PTNSLogConsole("12312312312314123123")
+//        }
+//        self.view.addSubview(textf)
+//        textf.snp.makeConstraints { make in
+//            make.left.right.equalToSuperview().inset(20)
+//            make.height.equalTo(44)
+//            make.centerY.equalToSuperview()
+//        }
+//        textf.viewCorner(radius: 5, borderWidth: 1, borderColor: .random)
+//        textf.rightConfig = config
+
+//        PTGCDManager.gcdAfter(time: 0.5) {
+//            if #available(iOS 14, *) {
+//                PTImagePicker.openAlbumForImageObject { result in
+//                    PTNSLogConsole(result)
+//                }
 //                Task{
 //                    do{
 //                        let object:UIImage = try await PTImagePicker.openAlbum()
@@ -55,99 +74,99 @@ class PTSwiftViewController: PTBaseViewController {
 //                        pickerError.outPutLog()
 //                    }
 //                }
-            }
-        }
+//            }
+//        }
         
-        let gps = PTGetGPSData.share
-        gps.locationManager.startUpdatingLocation()
-        
-        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\(Bundle.appScheme())")
-        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\("".stringIsEmpty())>>>>>>>>\("12312312312313".stringIsEmpty())")
-
-        PTNSLogConsole("1989-06-02 00:00:00".getConstellation())
-
-        PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
-        }
-        PTGCDManager.gcdAfter(time: 2) {
-                        
-            PTUpdateTipsFunction.share.showUpdateTips(oldVersion:"1.0", newVersion:"1.1", description: "123123kljkljkljkljlkjkljkljlkjlkjkljkljkljkljlkjkljkljkljlkjlkjlkjkljkljkljlkjlkjlkjlkjlkjkljlkjlkjkljlkjkljlkjkljlkjlkjkljkljkljkljkljkljlkjkljlkjlkjlkjlkjlkjlkjlkjkljlkjkljkljlkj", downloadUrl: URL(string: "qq.com")!, isTest: false, showError: false)
-            
-//            let qrConfig = PTScanQRConfig()
-//            qrConfig.canScanQR = false
-//            let qr = PTScanQRController(viewConfig: qrConfig)
-//            self.navigationController!.pushViewController(qr)
-            
-//            UIApplication.pt.likeTapHome()
-//            
-//            self.returnFrontVC()
-            
-            print(">>>>>>\(CGFloat.statusBarHeight())")
-
-            print(UIDevice.pt.lessThanSysVersion(version: "15", equal: true))
-            
-            print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
-            PTGCDManager.gcdAfter(time: 1){
-                PTKeyChain.deleteAccountInfo(service: "com.qq.com", account: "",handle: { success in
-                    
-                })
-                PTGCDManager.gcdAfter(time: 1){
-                    print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
-                }
-            }
-            
-        }
+//        let gps = PTGetGPSData.share
+//        gps.locationManager.startUpdatingLocation()
+//
+//        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\(Bundle.appScheme())")
+//        PTNSLogConsole("............>>>>>>>>>>>>>>>>>>>\("".stringIsEmpty())>>>>>>>>\("12312312312313".stringIsEmpty())")
+//
+//        PTNSLogConsole("1989-06-02 00:00:00".getConstellation())
+//
+//        PTKeyChain.saveAccountInfo(service: "com.qq.com", account: "123", password: "312") { success in
+//        }
+//        PTGCDManager.gcdAfter(time: 2) {
+//
+//            PTUpdateTipsFunction.share.showUpdateTips(oldVersion:"1.0", newVersion:"1.1", description: "123123kljkljkljkljlkjkljkljlkjlkjkljkljkljkljlkjkljkljkljlkjlkjlkjkljkljkljlkjlkjlkjlkjlkjkljlkjlkjkljlkjkljlkjkljlkjlkjkljkljkljkljkljkljlkjkljlkjlkjlkjlkjlkjlkjlkjkljlkjkljkljlkj", downloadUrl: URL(string: "qq.com")!, isTest: false, showError: false)
+//
+////            let qrConfig = PTScanQRConfig()
+////            qrConfig.canScanQR = false
+////            let qr = PTScanQRController(viewConfig: qrConfig)
+////            self.navigationController!.pushViewController(qr)
+//
+////            UIApplication.pt.likeTapHome()
+////
+////            self.returnFrontVC()
+//
+//            print(">>>>>>\(CGFloat.statusBarHeight())")
+//
+//            print(UIDevice.pt.lessThanSysVersion(version: "15", equal: true))
+//
+//            print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
+//            PTGCDManager.gcdAfter(time: 1){
+//                PTKeyChain.deleteAccountInfo(service: "com.qq.com", account: "",handle: { success in
+//
+//                })
+//                PTGCDManager.gcdAfter(time: 1){
+//                    print(PTKeyChain.getAccountInfo(service: "com.qq.com"))
+//                }
+//            }
+//
+//        }
                 
 #if canImport(LifetimeTracker)
 //    LifetimeTracker.setup(onUpdate: LifetimeTrackerDashboardIntegration(visibility: .visibleWithIssuesDetected, style: .bar).refreshUI)
 #endif
-        let card1 = "621226200000000000"
-        let card2 = "123456789098765"
-        let idcard = "111111111111111111"
-        
+//        let card1 = "621226200000000000"
+//        let card2 = "123456789098765"
+//        let idcard = "111111111111111111"
+//
         let color = UIColor.hex("#FFFFFF")
-        
-        let rangeFullStr = "你好啊"
-        let rangeSubStr = "啊"
-        let rangeArr = PTUtils.rangeOfSubString(fullStr: rangeFullStr as NSString, subStr: rangeSubStr as NSString)
-        print(">>>>>>>>>>>>>>>>>>>>\(rangeArr)")
-        
-        print((idcard as NSString).getIdentityCardAge())
-
-    
-        print("\((card1 as NSString).bankCardLuhmCheck())\n\((card2 as NSString).bankCardLuhmCheck())")
-        print("身份证:\((idcard as NSString).isValidateIdentity())")
-
-        let aesKey = "keykeykeykeykeyk"
-        let aesIv = "drowssapdrowssap"
-
-        PTDataEncryption.aesEncryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
-            PTDataEncryption.aseDecrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
-                PTNSLogConsole("aes:\(String(describing: String(data: decryptData, encoding: .utf8)))\n")
-            }
-        }
-
-        PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: "321", dataString: "123456789") { outputString in
-            print("\(String(describing: outputString))\n")
-            PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: "321", dataString: outputString) { outputString1 in
-                print("\(String(describing: outputString1))\n")
-            }
-        }
-
-        _ = PTCountryCodes.share.codesModels()
-
-        let view = UIView()
-//        view.backgroundColor = UIImage(named: "DemoImage")?.imageMostColor()
-        view.backgroundGradient(type: .LeftToRight, colors: [UIColor.blue, UIColor.red])
-        view.viewCornerRectCorner(cornerRadii: 30, borderWidth: 3, borderColor: .random, corner: [.topLeft, .topRight])
-        self.view.addSubview(view)
-        view.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-            make.left.right.bottom.equalToSuperview().inset(40)
-        }
-        view.layoutSubviewsCallback = { view in
-            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
-        }
-        
+//
+//        let rangeFullStr = "你好啊"
+//        let rangeSubStr = "啊"
+//        let rangeArr = PTUtils.rangeOfSubString(fullStr: rangeFullStr as NSString, subStr: rangeSubStr as NSString)
+//        print(">>>>>>>>>>>>>>>>>>>>\(rangeArr)")
+//
+//        print((idcard as NSString).getIdentityCardAge())
+//
+//
+//        print("\((card1 as NSString).bankCardLuhmCheck())\n\((card2 as NSString).bankCardLuhmCheck())")
+//        print("身份证:\((idcard as NSString).isValidateIdentity())")
+//
+//        let aesKey = "keykeykeykeykeyk"
+//        let aesIv = "drowssapdrowssap"
+//
+//        PTDataEncryption.aesEncryption(data: "adada".data(using: String.Encoding.utf8)!, key: aesKey, iv: aesIv) { encryptionString in
+//            PTDataEncryption.aseDecrypt(data: Data(base64Encoded: encryptionString, options: Data.Base64DecodingOptions(rawValue: 0))!, key: aesKey, iv: aesIv) { decryptData in
+//                PTNSLogConsole("aes:\(String(describing: String(data: decryptData, encoding: .utf8)))\n")
+//            }
+//        }
+//
+//        PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: "321", dataString: "123456789") { outputString in
+//            print("\(String(describing: outputString))\n")
+//            PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: "321", dataString: outputString) { outputString1 in
+//                print("\(String(describing: outputString1))\n")
+//            }
+//        }
+//
+//        _ = PTCountryCodes.share.codesModels()
+//
+//        let view = UIView()
+////        view.backgroundColor = UIImage(named: "DemoImage")?.imageMostColor()
+//        view.backgroundGradient(type: .LeftToRight, colors: [UIColor.blue, UIColor.red])
+//        view.viewCornerRectCorner(cornerRadii: 30, borderWidth: 3, borderColor: .random, corner: [.topLeft, .topRight])
+//        self.view.addSubview(view)
+//        view.snp.makeConstraints { make in
+//            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+//            make.left.right.bottom.equalToSuperview().inset(40)
+//        }
+//        view.layoutSubviewsCallback = { view in
+//            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>.\(String(describing: view))")
+//        }
+//
 //        UIView.swizzleLayoutSubviewsCallback_UNTRACKABLE_TOGGLE()
 //        view.layoutSubviewsCallback = { view in
 //            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
@@ -155,17 +174,17 @@ class PTSwiftViewController: PTBaseViewController {
 //        view.layoutSubviews()
         self.view.backgroundColor = color
         // Do any additional setup after loading the view.
-
-        let status = UIImageView()
-        status.image = "123123123123123".createQRImage(size: 100)
-        status.backgroundColor = .random
-        AppWindows!.addSubview(status)
-        status.snp.makeConstraints { make in
-            make.left.top.equalToSuperview()
-            make.height.equalTo(CGFloat.statusBarHeight())
-            make.width.equalTo(CGFloat.ScaleW(w: 85))
-        }
-
+//
+//        let status = UIImageView()
+//        status.image = "123123123123123".createQRImage(size: 100)
+//        status.backgroundColor = .random
+//        AppWindows!.addSubview(status)
+//        status.snp.makeConstraints { make in
+//            make.left.top.equalToSuperview()
+//            make.height.equalTo(CGFloat.statusBarHeight())
+//            make.width.equalTo(CGFloat.ScaleW(w: 85))
+//        }
+//
 //        let sign = PTSignView(viewConfig: PTSignatureConfig())
 //        sign.showView()
 //        sign.doneBlock = { images in
@@ -207,80 +226,80 @@ class PTSwiftViewController: PTBaseViewController {
 //        self.navigationController?.present(nav, animated: true)
 //        vc.viewDismissBlock = {
 //        }
-        
-        let ccccccc = UILabel()
-        ccccccc.text = "123123123123123112039810923890128309128390128903812903809128390128309182390812903819023819023"
-        PTNSLogConsole("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
-
-        
-        let counting = UILabel()
-//        let counting = PTCountingLabel()
-//        counting.positiveFormat = "##0.00"
-        counting.textColor = .randomColor
-        self.view.addSubview(counting)
-        counting.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.bottom.equalToSuperview()
-            make.height.equalTo(100)
-        }
-//        counting.countFrom(starValue: 0, toValue: 100, duration: 3)
-        counting.count(fromValue: 0, to: 100, duration: 3,formatter: "%.0f")
-        status.layoutSubviewsCallback = { someview in
-            print("asdadadadad:\(someview)")
-        }
-        
-        let linessssss = PTImaginaryLineView()
-        linessssss.lineColor = .randomColor
-        linessssss.lineType = .Ver
-        self.view.addSubview(linessssss)
-        linessssss.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(100)
-            make.top.bottom.equalToSuperview()
-            make.width.equalTo(20)
-        }
-        
-        let customTextF = UITextView()
-        self.view.addSubview(customTextF)
-        customTextF.bk_placeholder = "123123123123123123123"
-        customTextF.bk_wordCountLabel?.textColor = .randomColor
-        customTextF.pt_maxWordCount = 10
-        customTextF.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
-            make.top.bottom.equalToSuperview().inset(100)
-        }
-
-        let stepper = PTStepper()
-        stepper.baseNum = "999"
-        self.view.addSubview(stepper)
-        stepper.snp.makeConstraints { make in
-            make.right.equalToSuperview()
-            make.top.equalTo(customTextF.snp.bottom)
-            make.width.equalTo(150)
-            make.height.equalTo(44)
-        }
-        
-        PTContract.share.getContractData { models in
-            print(models!.indexStrings)
-        }
-        
-        let wave = PTWaterWaveView(startColor: .randomColor, endColor: .randomColor)
-        self.view.addSubview(wave)
-        wave.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        wave.layoutSubviewsCallback = { view in
-        }
-        
-        let coin = PTCoinAnimation()
-        self.view.addSubview(coin)
-        coin.showLabel.text = "1111111"
-        coin.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        PTGCDManager.gcdAfter(time: 2) {
-            coin.beginAnimationFunction()
-            coin.animationBlock = { finish in
-            }
-        }
+//
+//        let ccccccc = UILabel()
+//        ccccccc.text = "123123123123123112039810923890128309128390128903812903809128390128309182390812903819023819023"
+//        PTNSLogConsole("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
+//
+//
+//        let counting = UILabel()
+////        let counting = PTCountingLabel()
+////        counting.positiveFormat = "##0.00"
+//        counting.textColor = .randomColor
+//        self.view.addSubview(counting)
+//        counting.snp.makeConstraints { make in
+//            make.left.right.equalToSuperview()
+//            make.bottom.equalToSuperview()
+//            make.height.equalTo(100)
+//        }
+////        counting.countFrom(starValue: 0, toValue: 100, duration: 3)
+//        counting.count(fromValue: 0, to: 100, duration: 3,formatter: "%.0f")
+//        status.layoutSubviewsCallback = { someview in
+//            print("asdadadadad:\(someview)")
+//        }
+//
+//        let linessssss = PTImaginaryLineView()
+//        linessssss.lineColor = .randomColor
+//        linessssss.lineType = .Ver
+//        self.view.addSubview(linessssss)
+//        linessssss.snp.makeConstraints { make in
+//            make.left.equalToSuperview().inset(100)
+//            make.top.bottom.equalToSuperview()
+//            make.width.equalTo(20)
+//        }
+//
+//        let customTextF = UITextView()
+//        self.view.addSubview(customTextF)
+//        customTextF.bk_placeholder = "123123123123123123123"
+//        customTextF.bk_wordCountLabel?.textColor = .randomColor
+//        customTextF.pt_maxWordCount = 10
+//        customTextF.snp.makeConstraints { make in
+//            make.left.right.equalToSuperview()
+//            make.top.bottom.equalToSuperview().inset(100)
+//        }
+//
+//        let stepper = PTStepper()
+//        stepper.baseNum = "999"
+//        self.view.addSubview(stepper)
+//        stepper.snp.makeConstraints { make in
+//            make.right.equalToSuperview()
+//            make.top.equalTo(customTextF.snp.bottom)
+//            make.width.equalTo(150)
+//            make.height.equalTo(44)
+//        }
+//
+//        PTContract.share.getContractData { models in
+//            print(models!.indexStrings)
+//        }
+//
+//        let wave = PTWaterWaveView(startColor: .randomColor, endColor: .randomColor)
+//        self.view.addSubview(wave)
+//        wave.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//        wave.layoutSubviewsCallback = { view in
+//        }
+//
+//        let coin = PTCoinAnimation()
+//        self.view.addSubview(coin)
+//        coin.showLabel.text = "1111111"
+//        coin.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
+//        PTGCDManager.gcdAfter(time: 2) {
+//            coin.beginAnimationFunction()
+//            coin.animationBlock = { finish in
+//            }
+//        }
     }
 }

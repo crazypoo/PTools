@@ -149,6 +149,7 @@
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
 		55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */; };
 		55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */; };
+		55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73A29D5C80900CF6272 /* PTTextField.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -364,6 +365,7 @@
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
 		55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Application+PTEX.swift"; sourceTree = "<group>"; };
 		55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTRefreshEX.swift"; sourceTree = "<group>"; };
+		55F7A73A29D5C80900CF6272 /* PTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTextField.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -645,6 +647,7 @@
 			isa = PBXGroup;
 			children = (
 				5507026E28F7A02300C48239 /* PTGrowingText.swift */,
+				55F7A73A29D5C80900CF6272 /* PTTextField.swift */,
 			);
 			path = Input;
 			sourceTree = "<group>";
@@ -1576,6 +1579,7 @@
 				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
+				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
