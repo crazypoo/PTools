@@ -30,7 +30,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'pop'
         subspec.dependency 'FluentDarkModeKit'
         subspec.dependency 'SDWebImage'
-        subspec.dependency 'MJRefresh'
         subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'FloatingPanel'
@@ -46,6 +45,15 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'ScrollRefresh' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'MJRefresh'
+        subspec.source_files = 'PooToolsSource/ScrollRefresh/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCROLLREFRESH POOTOOLS_COCOAPODS"
         }
     end
     
@@ -698,6 +706,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Stepper'
         subspec.dependency 'PooTools/Location'
         subspec.dependency 'PooTools/UpdateTips'
+        subspec.dependency 'PooTools/ScrollRefresh'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

@@ -9,11 +9,11 @@
 import UIKit
 
 // MARK: - 方法的调用
-extension PTDrakModeOption: PTThemeable {
+extension PTDarkModeOption: PTThemeable {
     public func apply() {}
 }
 
-public class PTDrakModeOption {
+public class PTDarkModeOption {
     /// 智能换肤的时间区间的key
     private static let PTSmartPeelingTimeIntervalKey = "PTSmartPeelingTimeIntervalKey"
     /// 跟随系统的key
@@ -64,16 +64,16 @@ public class PTDrakModeOption {
     }
 }
 
-public extension PTDrakModeOption {
+public extension PTDarkModeOption {
     
     // MARK: 初始化的调用
     /// 默认设置
     static func defaultDark() {
         // 默认跟随系统暗黑模式开启监听
-        if (PTDrakModeOption.isFollowSystem) {
-            PTDrakModeOption.setDarkModeFollowSystem(isFollowSystem: true)
+        if (PTDarkModeOption.isFollowSystem) {
+            PTDarkModeOption.setDarkModeFollowSystem(isFollowSystem: true)
         } else {
-            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDrakModeOption.isLight ? .light : .dark
+            UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = PTDarkModeOption.isLight ? .light : .dark
         }
     }
     
@@ -122,17 +122,17 @@ public extension PTDrakModeOption {
         
         /// 是否是浅色
         var light: Bool = false
-        if PTDrakModeOption.isSmartPeelingTime(startTime: startTime, endTime: endTime), PTDrakModeOption.isLight {
+        if PTDarkModeOption.isSmartPeelingTime(startTime: startTime, endTime: endTime), PTDarkModeOption.isLight {
             light = false
         } else {
-            if !PTDrakModeOption.isLight {
+            if !PTDarkModeOption.isLight {
                 light = true
             } else {
-                PTDrakModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
+                PTDarkModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
                 return
             }
         }
-        PTDrakModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
+        PTDarkModeOption.smartPeelingTimeIntervalValue = startTime + "~" + endTime
         
         // 1.1、只要设置了模式：就是黑或者白
         UIApplication.shared.windows.filter({$0.isKeyWindow}).first?.overrideUserInterfaceStyle = light ? .light : .dark
@@ -142,19 +142,19 @@ public extension PTDrakModeOption {
 }
 
 // MARK: - 动态颜色的使用
-public extension PTDrakModeOption {
+public extension PTDarkModeOption {
     static func colorLightDark(lightColor: UIColor, darkColor: UIColor) -> UIColor {
         return UIColor { (traitCollection) -> UIColor in
-            if PTDrakModeOption.isFollowSystem {
+            if PTDarkModeOption.isFollowSystem {
                 if traitCollection.userInterfaceStyle == .light {
                     return lightColor
                 } else {
                     return darkColor
                 }
-            } else if PTDrakModeOption.isSmartPeeling {
+            } else if PTDarkModeOption.isSmartPeeling {
                 return isSmartPeelingTime() ? darkColor : lightColor
             } else {
-                return PTDrakModeOption.isLight ? lightColor : darkColor
+                return PTDarkModeOption.isLight ? lightColor : darkColor
             }
         }
     }
@@ -168,7 +168,7 @@ public extension PTDrakModeOption {
         if startTime != nil && endTime != nil {
             timeIntervalValue = [startTime!, endTime!]
         } else {
-            timeIntervalValue = PTDrakModeOption.smartPeelingTimeIntervalValue.components(separatedBy: "~") 
+            timeIntervalValue = PTDarkModeOption.smartPeelingTimeIntervalValue.components(separatedBy: "~")
         }
         // 1、时间区间分隔为：开始时间 和 结束时间
         // 2、当前的时间转时间戳
@@ -185,7 +185,7 @@ public extension PTDrakModeOption {
 }
 
 // MARK: - 动态图片的使用
-public extension PTDrakModeOption {
+public extension PTDarkModeOption {
 
     // MARK: 深色图片和浅色图片切换 （深色模式适配）
     /// 深色图片和浅色图片切换 （深色模式适配）

@@ -148,6 +148,7 @@
 		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
 		55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */; };
+		55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -362,6 +363,7 @@
 		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
 		55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Application+PTEX.swift"; sourceTree = "<group>"; };
+		55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTRefreshEX.swift"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -550,6 +552,7 @@
 				55D59C4F28F2799C00B4FF76 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
+				55F7A73729D5949900CF6272 /* ScrollRefresh */,
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
 				5507025F28F6A09100C48239 /* SegmentControl */,
 				231D1547272CDEE9003D6F62 /* Segmented */,
@@ -1138,6 +1141,14 @@
 			path = ScrollBanner;
 			sourceTree = "<group>";
 		};
+		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
+			isa = PBXGroup;
+			children = (
+				55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */,
+			);
+			path = ScrollRefresh;
+			sourceTree = "<group>";
+		};
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
@@ -1599,6 +1610,7 @@
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
+				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
