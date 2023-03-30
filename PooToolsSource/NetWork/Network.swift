@@ -31,14 +31,13 @@ public typealias NetWorkErrorBlock = () -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 
-public var PTBaseURLMode:NetWorkEnvironment
-{
+public var PTBaseURLMode:NetWorkEnvironment {
     guard let sliderValue = UserDefaults.standard.value(forKey: "AppServiceIdentifier") as? String else { return .Distribution }
     if sliderValue == "1" {
         return .Distribution
-    }else if sliderValue == "2" {
+    } else if sliderValue == "2" {
         return .Test
-    }else if sliderValue == "3" {
+    } else if sliderValue == "3" {
         return .Development
     }
     return .Distribution
@@ -80,8 +79,7 @@ public class XMNetWorkStatus {
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
         detectNetWork { (status, environment,statusType)  in
             PTNSLogConsole("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
-            if handle != nil
-            {
+            if handle != nil {
                 handle!(statusType)
             }
         }
@@ -93,9 +91,7 @@ public class XMNetWorkStatus {
 public class Network: NSObject {
     
     static public let share = Network()
-        
-    static var header:HTTPHeaders?
-    
+            
     public var netRequsetTime:TimeInterval = 20
     public var serverAddress:String = ""
     public var serverAddress_dev:String = ""
@@ -117,21 +113,16 @@ public class Network: NSObject {
     }()
     
     //MARK: 服务器URL
-    public class func gobalUrl() -> String
-    {
-        if UIApplication.applicationEnvironment() != .appStore
-        {
+    public class func gobalUrl() -> String {
+        if UIApplication.applicationEnvironment() != .appStore {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)")
             switch PTBaseURLMode {
             case .Development:
                 let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
                 let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
-                if url_debug.isEmpty
-                {
+                if url_debug.isEmpty {
                     return Network.share.serverAddress_dev
-                }
-                else
-                {
+                } else {
                     return url_debug
                 }
             case .Test:
@@ -139,9 +130,7 @@ public class Network: NSObject {
             case .Distribution:
                 return Network.share.serverAddress
             }
-        }
-        else
-        {
+        } else {
             return Network.share.serverAddress
         }
     }
@@ -160,6 +149,7 @@ public class Network: NSObject {
     class public func requestApi(needGobal:Bool? = true,
                                  urlStr:String,
                                  method: HTTPMethod = .post,
+                                 header:HTTPHeaders? = nil,
                                  parameters: Parameters? = nil,
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
@@ -167,12 +157,11 @@ public class Network: NSObject {
                                  jsonRequest:Bool? = false,
                                  netWorkErrorBlock:NetWorkErrorBlock? = nil,
                                  netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
-                                 resultBlock: @escaping ReslutClosure){
+                                 resultBlock: @escaping ReslutClosure) {
         
         
         let urlStr = (needGobal! ? Network.gobalUrl() : "") + urlStr
-        if !urlStr.isURL()
-        {
+        if !urlStr.isURL() {
             resultBlock(nil,nil)
             PTNSLogConsole("不是合法的URL")
             return
@@ -181,47 +170,49 @@ public class Network: NSObject {
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                if netWorkErrorBlock != nil
-                {
+                if netWorkErrorBlock != nil {
                     netWorkErrorBlock!()
                 }
                 return
             }
         }
         
+        var apiHeader = HTTPHeaders()
         let token = Network.share.userToken
-        if !token.stringIsEmpty() {
-            header = HTTPHeaders.init(["token":token,"device":"iOS"])
-            if jsonRequest!
-            {
-                header!["Content-Type"] = "application/json;charset=UTF-8"
-                header!["Accept"] = "application/json"
+        if !token.stringIsEmpty() && header == nil {
+            apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
+            }
+        } else if token.stringIsEmpty() && header != nil {
+            apiHeader = header!
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
             }
         }
         
-        if showHud!{
+        if showHud! {
             Network.hud.show(animated: true)
         }
-        PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n😂😂😂😂😂😂😂😂😂😂😂😂")
-//        PTUtils.showNetworkActivityIndicator(true)
+        PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.参数 = \(parameters?.jsonString() ?? "没有参数")💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")😂😂😂😂😂😂😂😂😂😂😂😂")
         
-        Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: header).responseData { data in
+        Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
             if showHud! {
                 Network.hud.hide(animated: true)
             }
-//            PTUtils.showNetworkActivityIndicator(false)
             switch data.result {
             case .success(_):
                 let json = JSON(data.value ?? "")
                 guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else { return }
                 
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)\n😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.result:\(jsonStr)😂😂😂😂😂😂😂😂😂😂😂😂")
 
                 guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
                 responseModel.originalString = jsonStr
                 
-                if netWorkServerStatusBlock != nil
-                {
+                if netWorkServerStatusBlock != nil {
                     netWorkServerStatusBlock!(responseModel)
                 }
                 
@@ -236,7 +227,7 @@ public class Network: NSObject {
                 resultBlock(responseModel,nil)
 
             case .failure(let error):
-                PTNSLogConsole("------------------------------------>\n接口:\(urlStr)\n----------------------出现错误----------------------\n\(String(describing: error.errorDescription))",error: true)
+                PTNSLogConsole("------------------------------------>接口:\(urlStr)🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))",error: true)
                 resultBlock(nil,error)
             }
         }
@@ -248,38 +239,45 @@ public class Network: NSObject {
     ///   - progressBlock: 进度回调
     ///   - success: 成功回调
     ///   - failure: 失败回调
-    class public func imageUpload(images:[UIImage]?,
-                           path:String? = "/api/project/ossImg",
-                           fileKey:String? = "images",
-                           parmas:[String:String]? = nil,
-                           netWorkErrorBlock:NetWorkErrorBlock? = nil,
-                           progressBlock:UploadProgress? = nil,
-                           resultBlock: @escaping ReslutClosure) {
+    class public func imageUpload(needGobal:Bool? = true,
+                                  images:[UIImage]?,
+                                  path:String? = "/api/project/ossImg",
+                                  fileKey:String? = "images",
+                                  parmas:[String:String]? = nil,
+                                  header:HTTPHeaders? = nil,
+                                  showHud:Bool? = true,
+                                  netWorkErrorBlock:NetWorkErrorBlock? = nil,
+                                  progressBlock:UploadProgress? = nil,
+                                  resultBlock: @escaping ReslutClosure) {
         
-        let pathUrl = Network.gobalUrl() + path!
-        
+        let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
+        if !pathUrl.isURL() {
+            resultBlock(nil,nil)
+            PTNSLogConsole("不是合法的URL")
+            return
+        }
+
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                if netWorkErrorBlock != nil
-                {
+                if netWorkErrorBlock != nil {
                     netWorkErrorBlock!()
                 }
                 return
             }
         }
         
-        let hud:MBProgressHUD = MBProgressHUD.showAdded(to: AppWindows!, animated: true)
-        hud.show(animated: true)
-        
-        var headerDic = [String:String]()
-        headerDic["device"] = "iOS"
+        var apiHeader = HTTPHeaders()
         let token = Network.share.userToken
-        if !token.stringIsEmpty()
-        {
-            headerDic["token"] = token
+        if !token.stringIsEmpty() && header == nil {
+            apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
+        } else if token.stringIsEmpty() && header != nil {
+            apiHeader = header!
         }
-        let requestHeaders = HTTPHeaders.init(headerDic)
+        
+        if showHud! {
+            Network.hud.show(animated: true)
+        }
         
         Network.manager.upload(multipartFormData: { (multipartFormData) in
             images?.enumerated().forEach { index,image in
@@ -287,32 +285,31 @@ public class Network: NSObject {
                     multipartFormData.append(imgData, withName: fileKey!,fileName: "image_\(index).png", mimeType: "image/png")
                 }
             }
-            if parmas != nil
-            {
+            if parmas != nil {
                 parmas?.keys.enumerated().forEach({ index,value in
                     multipartFormData.append(Data(parmas![value]!.utf8), withName: value)
                 })
             }
-        }, to: pathUrl,method: .post, headers: requestHeaders) { (result) in
+        }, to: pathUrl,method: .post, headers: apiHeader) { (result) in
         }
         .uploadProgress(closure: { (progress) in
-            if progressBlock != nil
-            {
+            if progressBlock != nil {
                 progressBlock!(progress)
             }
         })
         .response { response in
-            hud.hide(animated: true)
-            
+            if showHud! {
+                Network.hud.hide(animated: true)
+            }
+
             switch response.result {
             case .success(let result):
                 guard let responseModel = result?.toDict()?.kj.model(ResponseModel.self) else { return }
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\(result!.toDict()!)\n😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(pathUrl)💛2.result:\(result!.toDict()!)😂😂😂😂😂😂😂😂😂😂😂😂")
                 resultBlock(responseModel,nil)
             case .failure(let error):
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂\n❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)",error: true)
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 =\(pathUrl)💛2.error:\(error)",error: true)
                 resultBlock(nil,error)
-
             }
         }
     }
@@ -383,9 +380,9 @@ public class PTFileDownloadApi: NSObject {
             }
             self.downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
             
-        }else if self.downloadRequest != nil {
+        } else if self.downloadRequest != nil {
             self.downloadRequest?.task?.resume()
-        }else {
+        } else {
             self.downloadRequest = AF.download(fileUrl, to: self.destination)
             self.downloadRequest?.downloadProgress { [weak self] (pro) in
                 guard let `self` = self else {return}
@@ -399,7 +396,7 @@ public class PTFileDownloadApi: NSObject {
     }
     
     //根据下载状态处理
-    private func downloadResponse(response:AFDownloadResponse<Data>){
+    private func downloadResponse(response:AFDownloadResponse<Data>) {
         switch response.result {
         case .success:
             if let data = response.value, data.count > 1000 {
@@ -408,14 +405,14 @@ public class PTFileDownloadApi: NSObject {
                         self.success?(response)
                     }
                 }
-            }else {
+            } else {
                 DispatchQueue.main.async {
                     self.fail?(NSError(domain: "文件下载失败", code: 12345, userInfo: nil) as Error)
                 }
             }
         case .failure:
             self.cancelledData = response.resumeData//意外停止的话,把已下载的数据存储起来
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.fail?(response.error)
             }
         }
