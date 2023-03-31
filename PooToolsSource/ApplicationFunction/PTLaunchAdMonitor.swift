@@ -50,8 +50,7 @@ public class PTLaunchAdMonitor: NSObject {
                              skipFont:UIFont?,
                              comName:String?,
                              comNameFont:UIFont,
-                             callBack:PTLaunchAdMonitorCallBack?)
-    {
+                             callBack:PTLaunchAdMonitorCallBack?) {
         PTLaunchAdMonitor.shared.loadImageAtPath(path: path)
         while !monitor.imgLoaded! {
             RunLoop.current.run(mode: .default, before: Date.distantFuture)
@@ -65,34 +64,27 @@ public class PTLaunchAdMonitor: NSObject {
         monitor.callBack = callBack
         
         let comLabel:Bool?
-        if (year ?? "").stringIsEmpty() || (comName ?? "").stringIsEmpty()
-        {
+        if (year ?? "").stringIsEmpty() || (comName ?? "").stringIsEmpty() {
             comLabel = true
-        }
-        else
-        {
+        } else {
             comLabel = false
         }
         
         PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel!, comNameFont: comNameFont, skipFont: skipFont)
     }
     
-    class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?)
-    {
+    class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?) {
         var f = UIScreen.main.bounds
         let v = UIView()
         v.backgroundColor = .lightGray
         
-        if onView is UIView
-        {
+        if onView is UIView {
             (onView as! UIView).addSubview(v)
             (onView as! UIView).bringSubviewToFront(v)
             v.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-        }
-        else if onView is UIWindow
-        {
+        } else if onView is UIWindow {
             (onView as! UIWindow).addSubview(v)
             (onView as! UIWindow).bringSubviewToFront(v)
             v.snp.makeConstraints { make in
@@ -106,12 +98,9 @@ public class PTLaunchAdMonitor: NSObject {
         
         var bottomViewHeight:CGFloat? = 0
         
-        if comlabel
-        {
+        if comlabel {
             bottomViewHeight = 0
-        }
-        else
-        {
+        } else {
             switch device.orientation {
             case .landscapeLeft:
                 bottomViewHeight = 50
@@ -124,8 +113,7 @@ public class PTLaunchAdMonitor: NSObject {
         
         var newFont :UIFont?
         
-        if Gobal_device_info.isPad
-        {
+        if Gobal_device_info.isPad {
             var orientation:UIInterfaceOrientation = .unknown
             orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
 
@@ -137,9 +125,7 @@ public class PTLaunchAdMonitor: NSObject {
             default:
                 newFont = skipFont != nil ? skipFont! : UIFont.systemFont(ofSize: 16)
             }
-        }
-        else
-        {
+        } else {
             switch device.orientation {
             case .landscapeLeft:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
@@ -150,8 +136,7 @@ public class PTLaunchAdMonitor: NSObject {
             }
         }
         
-        if monitor.playMovie!
-        {
+        if monitor.playMovie! {
             monitor.player = AVPlayerViewController()
             monitor.player?.player = AVPlayer.init(url: monitor.videoUrl!)
             monitor.player?.showsPlaybackControls = false
@@ -191,16 +176,13 @@ public class PTLaunchAdMonitor: NSObject {
                 make.width.equalTo(w)
                 make.height.equalTo(h)
             }
-        }
-        else
-        {
+        } else {
             switch monitor.imageType {
             case .GIF:
                 let source = CGImageSourceCreateWithData(monitor.imgData!, nil)
                 let frameCount = CGImageSourceGetCount(source!)
                 var frames = [UIImage]()
-                for i in 0...frameCount
-                {
+                for i in 0...frameCount {
                     let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
                     let imageName = UIImage.init(cgImage: imageref!)
                     frames.append(imageName)
@@ -220,12 +202,9 @@ public class PTLaunchAdMonitor: NSObject {
                 imageView.addGestureRecognizer(tapGesture)
             default:
                 let imageBtn = UIButton.init(type: .custom)
-                if monitor.imgData != nil
-                {
+                if monitor.imgData != nil {
                     imageBtn.setImage(UIImage(data: monitor.imgData! as Data), for: .normal)
-                }
-                else
-                {
+                } else {
                     imageBtn.setImage(UIColor.randomColor.createImageWithColor(), for: .normal)
                 }
                 imageBtn.addActionHandlers { sender in
@@ -263,18 +242,14 @@ public class PTLaunchAdMonitor: NSObject {
             }
             exit.viewCorner(radius: 55/2)
             exit.buttonTimeRun(timeInterval: timeInterval, originalTitle: "") {
-                if !monitor.isTap
-                {
+                if !monitor.isTap {
                     PTLaunchAdMonitor.hideView(sender: exit)
-                }
-                else
-                {
+                } else {
                     monitor.isTap = false
                 }
             }
             
-            if !comlabel
-            {
+            if !comlabel {
                 let label = UILabel()
                 label.backgroundColor = .white
                 label.numberOfLines = 0
@@ -293,12 +268,10 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    public class func hideView(sender:Any)
-    {
+    public class func hideView(sender:Any) {
         let sup = (sender as! UIButton).superview
         sup?.isUserInteractionEnabled = false
-        if monitor.callBack != nil
-        {
+        if monitor.callBack != nil {
             monitor.callBack!()
         }
         
@@ -311,8 +284,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    @objc class public func showDetail(sender:Any)
-    {
+    @objc class public func showDetail(sender:Any) {
         monitor.isTap = true
         var sup:UIView?
         switch monitor.imageType {
@@ -334,28 +306,19 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    func loadImageAtPath(path:NSArray)
-    {
+    func loadImageAtPath(path:NSArray) {
         let imageStr = path.firstObject
-        if (imageStr as! NSString).contentTypeForUrl() == PTUrlStringVideoType.MP4
-        {
+        if (imageStr as! NSString).contentTypeForUrl() == PTUrlStringVideoType.MP4 {
             playMovie = true
             imgLoaded = true
             videoUrl = ((imageStr as! NSString).range(of: "/var").length > 0 ) ? URL.init(fileURLWithPath: imageStr as! String) : URL.init(string: (imageStr as! NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed))
-        }
-        else
-        {
+        } else {
             playMovie = false
-            if imageStr is String
-            {
+            if imageStr is String {
                 loadImage(path: imageStr as! String)
-            }
-            else if imageStr is URL
-            {
+            } else if imageStr is URL {
                 loadImage(path:(imageStr as! URL).description)
-            }
-            else if imageStr is UIImage
-            {
+            } else if imageStr is UIImage {
                 imgData = NSMutableData()
                 imgData?.append((imageStr as! UIImage).pngData()!)
                 imgLoaded = true
@@ -363,16 +326,14 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    func loadImage(path:String)
-    {
+    func loadImage(path:String) {
         let url = URL.init(string: path)
         let request = URLRequest.init(url: url!)
         let session = URLSession.shared
         let dataTask = session.dataTask(with: request) { data, response, error in
             
             let resp = response as? HTTPURLResponse
-            if resp?.statusCode != 200
-            {
+            if resp?.statusCode != 200 {
                 self.imgLoaded = true
                 return
             }
