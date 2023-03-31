@@ -9,23 +9,29 @@
 import UIKit
 
 //MARK: 全局统一字体
-public extension UIFont
-{
-    @objc class func appfont(size:CGFloat,bold:Bool = false)-> UIFont
-    {
-        if !bold
-        {
-            return UIFont.systemFont(ofSize: CGFloat.ScaleW(w: size))
+public extension UIFont {
+    @objc class func appfont(size:CGFloat,bold:Bool = false,scale:Bool = false)-> UIFont {
+        var fontSzie:CGFloat = 0
+        if scale {
+            fontSzie = CGFloat.ScaleW(w: size)
+        } else {
+            fontSzie = size
         }
-        else
-        {
-            return UIFont.boldSystemFont(ofSize: CGFloat.ScaleW(w: size))
+        if !bold {
+            return UIFont.systemFont(ofSize: fontSzie)
+        } else {
+            return UIFont.boldSystemFont(ofSize: fontSzie)
         }
     }
         
-    @objc class func appCustomFont(size:CGFloat,customFont:String? = nil)-> UIFont
-    {
-        return UIFont.init(name: customFont!, size: CGFloat.ScaleW(w: size))!
+    @objc class func appCustomFont(size:CGFloat,customFont:String? = nil,scale:Bool = false)-> UIFont {
+        var fontSzie:CGFloat = 0
+        if scale {
+            fontSzie = CGFloat.ScaleW(w: size)
+        } else {
+            fontSzie = size
+        }
+        return UIFont.init(name: customFont!, size: fontSzie)!
     }
     
     @objc class func systemFont(ofSize size: CGFloat, weight: UIFont.Weight, design: UIFontDescriptor.SystemDesign) -> UIFont {
@@ -121,11 +127,9 @@ public extension UIFont
 
     // MARK: 查看所有字体的名字
     ///查看所有字体的名字
-    static func showAllFont()
-    {
+    static func showAllFont() {
         var i = 0
-        for family in UIFont.familyNames
-        {
+        for family in UIFont.familyNames {
             debugPrint("\(i)---项目字体---\(family)")
             for names in UIFont.fontNames(forFamilyName: family) {
                 debugPrint("== \(names)")
