@@ -242,9 +242,10 @@ public class Network: NSObject {
     class public func imageUpload(needGobal:Bool? = true,
                                   images:[UIImage]?,
                                   path:String? = "/api/project/ossImg",
-                                  fileKey:String? = "images",
+                                  fileKey:[String]? = ["images"],
                                   parmas:[String:String]? = nil,
                                   header:HTTPHeaders? = nil,
+                                  pngData:Bool? = true,
                                   showHud:Bool? = true,
                                   netWorkErrorBlock:NetWorkErrorBlock? = nil,
                                   progressBlock:UploadProgress? = nil,
@@ -281,8 +282,14 @@ public class Network: NSObject {
         
         Network.manager.upload(multipartFormData: { (multipartFormData) in
             images?.enumerated().forEach { index,image in
-                if let imgData = image.jpegData(compressionQuality: 0.2) {
-                    multipartFormData.append(imgData, withName: fileKey!,fileName: "image_\(index).png", mimeType: "image/png")
+                if pngData! {
+                    if let imgData = image.pngData() {
+                        multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+                    }
+                } else {
+                    if let imgData = image.jpegData(compressionQuality: 0.2) {
+                        multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+                    }
                 }
             }
             if parmas != nil {
@@ -303,9 +310,13 @@ public class Network: NSObject {
             }
 
             switch response.result {
-            case .success(let result):
-                guard let responseModel = result?.toDict()?.kj.model(ResponseModel.self) else { return }
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(pathUrl)💛2.result:\(result!.toDict()!)😂😂😂😂😂😂😂😂😂😂😂😂")
+            case .success(_):
+                let json = JSON(response.value! ?? "")
+                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else { return }
+
+                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
+                responseModel.originalString = jsonStr
+                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(pathUrl)💛2.result:\(String(describing: jsonStr))😂😂😂😂😂😂😂😂😂😂😂😂")
                 resultBlock(responseModel,nil)
             case .failure(let error):
                 PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 =\(pathUrl)💛2.error:\(error)",error: true)
