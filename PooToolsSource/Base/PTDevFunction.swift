@@ -8,6 +8,7 @@
 
 import UIKit
 import SDWebImage
+import SwifterSwift
 
 public typealias DevTask = () -> Void
 public typealias FlexDevTask = (Bool) -> Void
@@ -22,18 +23,16 @@ public class PTDevFunction: NSObject {
     //開啟/關閉Flex
     /*
      #if DEBUG
-     if FLEXManager.shared.isHidden
-     {
+     if FLEXManager.shared.isHidden {
          FLEXManager.shared.showExplorer()
-     }
-     else
-     {
+     } else {
          FLEXManager.shared.hideExplorer()
      }
      #endif
      */
     public var flex:DevTask?
     public var flexBool:FlexDevTask?
+    public var HyperioniOS:DevTask?
     //開啟/關閉inAppViewDebugger
     /*
      #if DEBUG
@@ -42,13 +41,10 @@ public class PTDevFunction: NSObject {
      */
     public var inApp:DevTask?
 
-    public func createLabBtn()
-    {
-        if UIApplication.applicationEnvironment() != .appStore
-        {
+    public func createLabBtn() {
+        if UIApplication.applicationEnvironment() != .appStore {
             UserDefaults.standard.set(true,forKey: LocalConsole.ConsoleDebug)
-            if self.mn_PFloatingButton == nil
-            {
+            if self.mn_PFloatingButton == nil {
                 mn_PFloatingButton = PFloatingButton.init(view: AppWindows as Any, frame: CGRect.init(x: 0, y: 200, width: 50, height: 50))
                 mn_PFloatingButton?.backgroundColor = .randomColor
                 
@@ -65,104 +61,73 @@ public class PTDevFunction: NSObject {
                 }
                 
                 mn_PFloatingButton?.longPressBlock = { (sender) in
-                    
-                    UIAlertController.base_alertVC(msg:"调试框架",okBtns: ["取消","全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面"],moreBtn: { index, title in
-                        if index == 0
-                        {
-
-                        }
-                        else
-                        {
-                            if title == "全部开启"
-                            {
-                                PTDevFunction.GobalDevFunction_open { show in
-                                    if self.flexBool != nil
-                                    {
-                                        self.flexBool!(show)
-                                    }
+                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: ["全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面","HyperioniOS"],cancelBtn: "取消") {
+                        
+                    } moreBtn: { index, title in
+                        if title == "全部开启" {
+                            PTDevFunction.GobalDevFunction_open { show in
+                                if self.flexBool != nil {
+                                    self.flexBool!(show)
                                 }
                             }
-                            else if title == "全部关闭"
-                            {
-                                PTDevFunction.GobalDevFunction_close { show in
-                                    if self.flexBool != nil
-                                    {
-                                        self.flexBool!(show)
-                                    }
+                        } else if title == "全部关闭" {
+                            PTDevFunction.GobalDevFunction_close { show in
+                                if self.flexBool != nil {
+                                    self.flexBool!(show)
                                 }
                             }
-                            else if title == "FLEX"
-                            {
-                                if self.flex != nil
-                                {
-                                    self.flex!()
-                                }
+                        } else if title == "FLEX" {
+                            if self.flex != nil {
+                                self.flex!()
                             }
-                            else if title == "Log"
-                            {
-                                if PTLocalConsoleFunction.share.localconsole.terminal == nil
-                                {
-                                    PTLocalConsoleFunction.share.localconsole.createSystemLogView()
-                                }
-                                else
-                                {
-                                    PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
-                                }
+                        } else if title == "Log" {
+                            if PTLocalConsoleFunction.share.localconsole.terminal == nil {
+                                PTLocalConsoleFunction.share.localconsole.createSystemLogView()
+                            } else {
+                                PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
                             }
-                            else if title == "FPS"
-                            {
-                                if PCheckAppStatus.shared.closed
-                                {
-                                    PCheckAppStatus.shared.open()
-                                }
-                                else
-                                {
-                                    PCheckAppStatus.shared.close()
-                                }
+                        } else if title == "FPS" {
+                            if PCheckAppStatus.shared.closed {
+                                PCheckAppStatus.shared.open()
+                            } else {
+                                PCheckAppStatus.shared.close()
                             }
-                            else if title == "调试功能界面"
-                            {
-                                if self.goToAppDevVC != nil
-                                {
-                                    self.goToAppDevVC!()
-                                }
+                        } else if title == "调试功能界面" {
+                            if self.goToAppDevVC != nil {
+                                self.goToAppDevVC!()
                             }
-                            else if title == "检测界面"
-                            {
-                                if self.inApp != nil
-                                {
-                                    self.inApp!()
-                                }
+                        } else if title == "检测界面" {
+                            if self.inApp != nil {
+                                self.inApp!()
+                            }
+                        } else if title == "HyperioniOS" {
+                            if self.HyperioniOS != nil {
+                                self.HyperioniOS!()
                             }
                         }
-                    })
+                    }
                 }
             }
         }
     }
     
-    public class func GobalDevFunction_open(flexTask:(Bool)->Void)
-    {
-        if UIApplication.applicationEnvironment() != .appStore
-        {
+    public class func GobalDevFunction_open(flexTask:(Bool)->Void) {
+        if UIApplication.applicationEnvironment() != .appStore {
             flexTask(true)
             PTLocalConsoleFunction.share.localconsole.createSystemLogView()
             PCheckAppStatus.shared.open()
         }
     }
 
-    public class func GobalDevFunction_close(flexTask:(Bool)->Void)
-    {
-        if UIApplication.shared.inferredEnvironment != .appStore
-        {
+    public class func GobalDevFunction_close(flexTask:(Bool)->Void) {
+        if UIApplication.shared.inferredEnvironment != .appStore {
             flexTask(false)
             PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
             PCheckAppStatus.shared.close()
         }
     }
 
-    public func lab_btn_release()
-    {
+    public func lab_btn_release() {
         UserDefaults.standard.set(false,forKey: LocalConsole.ConsoleDebug)
         self.mn_PFloatingButton?.removeFromSuperview()
         self.mn_PFloatingButton = nil
@@ -170,17 +135,13 @@ public class PTDevFunction: NSObject {
 
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
-    public class func gobalWebImageLoadOption()->SDWebImageOptions
-    {
+    public class func gobalWebImageLoadOption()->SDWebImageOptions {
         #if DEBUG
         let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
         let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
-        if devServer
-        {
+        if devServer {
             return .retryFailed
-        }
-        else
-        {
+        } else {
             return .lowPriority
         }
         #else
