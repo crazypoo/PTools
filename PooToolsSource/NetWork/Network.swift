@@ -205,11 +205,17 @@ public class Network: NSObject {
             switch data.result {
             case .success(_):
                 let json = JSON(data.value ?? "")
-                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else { return }
+                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
+                    return
+                }
                 
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.result:\(jsonStr)😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("😂😂😂😂😂😂接口请求成功回调😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.result:\(jsonStr)😂😂😂😂😂😂😂😂😂😂😂😂")
 
-                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
+                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
+                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
+                    return
+                }
                 responseModel.originalString = jsonStr
                 
                 if netWorkServerStatusBlock != nil {
@@ -312,9 +318,16 @@ public class Network: NSObject {
             switch response.result {
             case .success(_):
                 let json = JSON(response.value! ?? "")
-                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else { return }
+                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
+                    return
+                }
 
-                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else { return }
+                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
+                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
+                    return
+                }
+                
                 responseModel.originalString = jsonStr
                 PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(pathUrl)💛2.result:\(String(describing: jsonStr))😂😂😂😂😂😂😂😂😂😂😂😂")
                 resultBlock(responseModel,nil)
