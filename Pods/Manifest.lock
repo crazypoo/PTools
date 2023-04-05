@@ -219,6 +219,7 @@ PODS:
     - PooTools/Location
     - PooTools/MediaViewer
     - PooTools/Motion
+    - PooTools/OtherLog
     - PooTools/PagingControl
     - PooTools/PhoneInfo
     - PooTools/Picker
@@ -261,6 +262,9 @@ PODS:
     - PooTools/Core
   - PooTools/Motion (3.0.9):
     - PooTools/Core
+  - PooTools/OtherLog (3.0.9):
+    - PooTools/Core
+    - PrintBeautifulLog
   - PooTools/PagingControl (3.0.9):
     - JXPagingView/Paging
     - JXSegmentedView
@@ -311,6 +315,7 @@ PODS:
     - SSZipArchive
   - pop (1.0.12)
   - Popovers (1.3.0)
+  - PrintBeautifulLog (1.0.0)
   - RangeSeekSlider (1.8.0)
   - SDWebImage (5.15.5):
     - SDWebImage/Core (= 5.15.5)
@@ -451,6 +456,7 @@ SPEC REPOS:
     - PhoneNumberKit
     - pop
     - Popovers
+    - PrintBeautifulLog
     - RangeSeekSlider
     - SDWebImage
     - SJAttributesStringMaker
@@ -527,9 +533,10 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: 437e135298d297fcb03f3eec4466f45cdb128d3d
   PermissionsKit: 522c5c0fb00888871a3d8a6eed12a7db56725a39
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
-  PooTools: e88ea3ecea7cd25dc6ee500d560a8b0399f9ce9c
+  PooTools: 3e461e6da3b334b03885a5fa60f0f8e24e96eb23
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
+  PrintBeautifulLog: ae1edcf7af92ffcb1de3726d1545d043e861d2e0
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
   SDWebImage: fd7e1a22f00303e058058278639bf6196ee431fe
   SJAttributesStringMaker: 8b5f54c487cc88fa26d2f540166cd43dfceca816

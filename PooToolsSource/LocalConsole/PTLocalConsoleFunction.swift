@@ -10,50 +10,37 @@ import UIKit
 import CocoaLumberjack
 import SwifterSwift
 
-public func PTNSLogConsole(_ any:Any...,error:Bool? = false)
-{
+public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
     var currentAppStatus = ""
-    #if DEBUG
-    currentAppStatus = "<<<DEBUG环境>>>"
-    #elseif Development
-    currentAppStatus = "<<<开发环境>>>"
-    #elseif Test
-    currentAppStatus = "<<<测试环境>>>"
-    #elseif Distribution
-    currentAppStatus = "<<<生产环境>>>"
-    #endif
+    
+    switch UIApplication.applicationEnvironment() {
+    case .appStore:
+        currentAppStatus = "<<<生产环境>>>"
+    case .testFlight:
+        currentAppStatus = "<<<测试环境>>>"
+    default:
+        currentAppStatus = "<<<DEBUG环境>>>"
+    }
 
     let loginfo = "\(currentAppStatus)\(any)"
     
-    if UIApplication.shared.inferredEnvironment != .appStore
-    {
-        if PTLocalConsoleFunction.share.localconsole.terminal?.systemIsVisible ?? false && PTLocalConsoleFunction.share.localconsole.terminal != nil
-        {
-            PTLocalConsoleFunction.share.localconsole.print(loginfo)
-        }
+    if UIApplication.shared.inferredEnvironment != .appStore {
         DDLog.add(DDOSLogger.sharedInstance)
-        if error!
-        {
+        if error {
             DDLogError(loginfo)
+        } else {
+            switch UIApplication.applicationEnvironment() {
+            case .debug:
+                PTNSLog(loginfo)
+            default:
+                DDLogVerbose(loginfo)
+            }
         }
-        else
-        {
-        #if DEBUG
-            DDLogDebug(loginfo)
-        #else
-            DDLogVerbose(loginfo)
-        #endif
-        }
-    }
-    else
-    {
+    } else {
         DDLog.add(DDOSLogger.sharedInstance)
-        if error!
-        {
+        if error {
             DDLogError(loginfo)
-        }
-        else
-        {
+        } else {
             DDLogVerbose(loginfo)
         }
     }

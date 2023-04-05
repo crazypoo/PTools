@@ -1142,6 +1142,20 @@
       }
     },
     {
+      "name": "OtherLog",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PrintBeautifulLog": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OTHERLOG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1298,6 +1312,9 @@
 
         ],
         "PooTools/ScrollRefresh": [
+
+        ],
+        "PooTools/OtherLog": [
 
         ]
       },

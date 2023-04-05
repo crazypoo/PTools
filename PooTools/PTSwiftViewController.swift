@@ -35,6 +35,7 @@ class PTSwiftViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
                 
+        PTNSLogConsole("11231231231289371289371923719827398123\n12387618273617826387126387162gdausgduasgd8712387126387126")
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"
 //        config.size = CGSize(width: 24, height: 34)

@@ -9,6 +9,7 @@
 import UIKit
 import DeviceKit
 import CoreFoundation
+import SJAttributesStringMaker
 
 public let LocalConsoleFontBaseSize:CGFloat = 7.5
 public let LocalConsoleFontMin:CGFloat = 4
@@ -477,15 +478,12 @@ public class PTTerminal:PFloatingButton
     public func setAttributedText(_ string: String) {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.headIndent = 7
-        
-        var attributes: [NSAttributedString.Key: Any]
-        attributes = [
-            .paragraphStyle: paragraphStyle,
-            .foregroundColor: UIColor.white,
-            .font: UIFont.systemFont(ofSize: fontSize!, weight: .semibold, design: .monospaced)
-        ]
 
-        systemText?.attributedText = NSAttributedString(string: string, attributes: attributes)
+        let att = NSMutableAttributedString.sj.makeText { make in
+            make.append(string).font(.systemFont(ofSize: fontSize!, weight: .semibold, design: .monospaced)).textColor(.white).paragraphStyle(paragraphStyle).lineSpacing(5)
+        }
+        
+        systemText?.attributedText = att
     }
 
     required init?(coder: NSCoder) {
