@@ -11,11 +11,12 @@ import Alamofire
 import MBProgressHUD
 import KakaJSON
 import SwiftyJSON
+import Network
 
 public enum NetWorkStatus: String {
     case unknown      = "未知网络"
     case notReachable = "网络无连接"
-    case wwan         = "2，3，4G网络"
+    case wwan         = "2,3,4G,5G网络"
     case wifi          = "wifi网络"
 }
 
@@ -52,6 +53,8 @@ public class XMNetWorkStatus {
     /// 当前运行环境状态
     private var currentEnvironment: NetWorkEnvironment = .Test
     
+    private let monitor = NWPathMonitor()
+
     let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.baidu.com")
     
     private func detectNetWork(netWork: @escaping NetWorkStatusBlock) {
@@ -83,6 +86,28 @@ public class XMNetWorkStatus {
                 handle!(statusType)
             }
         }
+    }
+    
+    public func netWork(handle:@escaping ((_ status:NetWorkStatus)->Void)) {
+        self.monitor.pathUpdateHandler = { path in
+            if path.usesInterfaceType(.wifi) {
+                handle(.wifi)
+            } else if path.usesInterfaceType(.cellular) {
+                handle(.wwan)
+            } else {
+                handle(.notReachable)
+            }
+        }
+        let queue = DispatchQueue(label: "Network")
+        self.monitor.start(queue: queue)
+    }
+    
+    public func checkNetworkStatusCancel() {
+        self.monitor.cancel()
+    }
+    
+    deinit {
+        self.checkNetworkStatusCancel()
     }
 }
 
