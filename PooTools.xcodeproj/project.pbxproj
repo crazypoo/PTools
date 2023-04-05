@@ -59,6 +59,7 @@
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
+		5509372B29DD173F007FA668 /* PTClampedProperyWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5509372A29DD173F007FA668 /* PTClampedProperyWrapper.swift */; };
 		5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */; };
 		5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
@@ -181,10 +182,8 @@
 		9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */; };
 		9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE44689285862B0007DC2B5 /* Date+PTEX.swift */; };
 		9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */; };
-		9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */; };
 		9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469128586987007DC2B5 /* Character+PTEX.swift */; };
 		9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */; };
-		9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */; };
 		9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */; };
 		9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */; };
 		9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */; };
@@ -272,6 +271,7 @@
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
+		5509372A29DD173F007FA668 /* PTClampedProperyWrapper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTClampedProperyWrapper.swift; sourceTree = "<group>"; };
 		5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImageBlackToTransparent.swift; sourceTree = "<group>"; };
 		5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsFunction.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
@@ -410,8 +410,6 @@
 		9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+PTEX.swift"; sourceTree = "<group>"; };
 		9AE44689285862B0007DC2B5 /* Date+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationBar+PTEX.swift"; sourceTree = "<group>"; };
-		9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PrintBeautifulLog.m; sourceTree = "<group>"; };
-		9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PrintBeautifulLog.h; sourceTree = "<group>"; };
 		9AE4469128586987007DC2B5 /* Character+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Character+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIFont+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4469A28597ABA007DC2B5 /* PTProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTProtocol.swift; sourceTree = "<group>"; };
@@ -1013,6 +1011,7 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				5509372A29DD173F007FA668 /* PTClampedProperyWrapper.swift */,
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
@@ -1231,8 +1230,6 @@
 				231D15E5272CDEE9003D6F62 /* PMacros.h */,
 				55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */,
 				231D14D6272CDEE9003D6F62 /* PooToolsSource */,
-				9AE4468F28586815007DC2B5 /* PrintBeautifulLog.h */,
-				9AE4468E28586815007DC2B5 /* PrintBeautifulLog.m */,
 				6003F59C195388D20070C39A /* PTAppDelegate.h */,
 				6003F59D195388D20070C39A /* PTAppDelegate.m */,
 				CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */,
@@ -1576,7 +1573,6 @@
 			files = (
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
-				9AE4469528587304007DC2B5 /* PrintBeautifulLog.h in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
@@ -1598,7 +1594,6 @@
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
-				9AE4469028586815007DC2B5 /* PrintBeautifulLog.m in Sources */,
 				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
@@ -1606,6 +1601,7 @@
 				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
+				5509372B29DD173F007FA668 /* PTClampedProperyWrapper.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,

@@ -652,6 +652,14 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'OtherLog' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PrintBeautifulLog'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_OTHERLOG POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -707,6 +715,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Location'
         subspec.dependency 'PooTools/UpdateTips'
         subspec.dependency 'PooTools/ScrollRefresh'
+        subspec.dependency 'PooTools/OtherLog'
+        
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

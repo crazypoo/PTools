@@ -76,9 +76,6 @@
         "SDWebImage": [
 
         ],
-        "MJRefresh": [
-
-        ],
         "ZXNavigationBar": [
 
         ],
@@ -144,6 +141,21 @@
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ScrollRefresh",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "MJRefresh": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/ScrollRefresh/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SCROLLREFRESH POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1283,6 +1295,9 @@
 
         ],
         "PooTools/UpdateTips": [
+
+        ],
+        "PooTools/ScrollRefresh": [
 
         ]
       },

@@ -233,7 +233,7 @@ CGFloat const tagItemSpace = 5;
             textView.backgroundColor = UIColor.randomColor;
             textView.delegate = self;
             textView.returnKeyType = UIReturnKeyDone;
-            textView.font = [UIFont appCustomFontWithSize:20 customFont:FontName];
+            textView.font = [UIFont appCustomFontWithSize:10 customFont:FontName scale:NO];
             textView.textColor = UIColor.randomColor;
             textView.bk_placeholder = @"我是TextView";
             textView.pt_maxWordCount = @30;
@@ -401,7 +401,7 @@ CGFloat const tagItemSpace = 5;
         {
             PTCountingLabel *balanceLabel = [PTCountingLabel new];
             balanceLabel.textAlignment = NSTextAlignmentCenter;
-            balanceLabel.font = [UIFont appCustomFontWithSize:30 customFont:FontName];
+            balanceLabel.font = [UIFont appCustomFontWithSize:30 customFont:FontName scale:NO];
             balanceLabel.textColor = [UIColor blackColor];
             [self.view addSubview:balanceLabel];
             //设置格式
@@ -460,7 +460,7 @@ CGFloat const tagItemSpace = 5;
         case 0:
         {
             NSArray<NSString *> * titles = @[@"按钮1",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2",@"按钮2"];
-            PTActionSheetView * aaaaa = [[PTActionSheetView alloc] initWithTitle:@"" subTitle:@"" cancelButton:@"取消" destructiveButton:@"" otherButtonTitles:titles buttonFont:[UIFont appfontWithSize:15 bold:YES] comfirFont:[UIFont appfontWithSize:15 bold:YES] titleCellFont:[UIFont appfontWithSize:15 bold:YES] normalCellTitleColor:UIColor.randomColor destructiveCellTitleColor:UIColor.randomColor cancelCellTitleColor:UIColor.randomColor titleCellTitleColor:UIColor.randomColor selectedColor:UIColor.randomColor corner:15 dismissWithTapBG:YES];
+            PTActionSheetView * aaaaa = [[PTActionSheetView alloc] initWithTitle:@"" subTitle:@"" cancelButton:@"取消" destructiveButton:@"" otherButtonTitles:titles buttonFont:[UIFont appfontWithSize:15 bold:true scale:NO] comfirFont:[UIFont appfontWithSize:15 bold:YES scale:NO] titleCellFont:[UIFont appfontWithSize:15 bold:YES scale:NO] normalCellTitleColor:UIColor.randomColor destructiveCellTitleColor:UIColor.randomColor cancelCellTitleColor:UIColor.randomColor titleCellTitleColor:UIColor.randomColor selectedColor:UIColor.randomColor corner:15 dismissWithTapBG:YES];
             aaaaa.actionSheetSelectBlock = ^(PTActionSheetView * sheet, NSInteger buttonIndex) {
                 PNSLog(@">>>>>>>>>>%ld",(long)buttonIndex);
             };
@@ -477,9 +477,9 @@ CGFloat const tagItemSpace = 5;
             
             NSArray <PTCustomBottomButtonModel *>* titles = @[models];
             
-            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:[UIFont appCustomFontWithSize:25 customFont:FontName] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
+            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:[UIFont appCustomFontWithSize:25 customFont:FontName scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
             [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:[UIFont appCustomFontWithSize:25 customFont:FontName] buttonArray:titles]);
+                make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:[UIFont appCustomFontWithSize:25 customFont:FontName scale:NO] buttonArray:titles]);
                 make.width.offset(kSCREEN_WIDTH-20);
                 make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
             }];
@@ -515,7 +515,7 @@ CGFloat const tagItemSpace = 5;
             break;
         case 2:
         {
-            [UIAlertController base_alertVCWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" titleColor:UIColor.randomColor titleFont:[UIFont appfontWithSize:15 bold:YES] msg:@"11111111111111111111111111111111111234234234234234234234243" msgColor:UIColor.randomColor msgFont:[UIFont appfontWithSize:15 bold:YES] okBtns:nil cancelBtn:@"qqqqq" showIn:[PTUtils getCurrentVCWithAnyClass:self] cancelBtnColor:UIColor.randomColor doneBtnColors:nil alertBGColor:UIColor.randomColor alertCornerRadius:@15 cancel:nil moreBtn:nil];
+            [UIAlertController base_alertVCWithTitle:@"111111111111111111111111111111111111111111111111111111111111111111" titleColor:UIColor.randomColor titleFont:[UIFont appfontWithSize:15 bold:YES scale:NO] msg:@"11111111111111111111111111111111111234234234234234234234243" msgColor:UIColor.randomColor msgFont:[UIFont appfontWithSize:15 bold:YES scale: NO] okBtns:nil cancelBtn:@"qqqqq" showIn:[PTUtils getCurrentVCWithAnyClass:self] cancelBtnColor:UIColor.randomColor doneBtnColors:nil alertBGColor:UIColor.randomColor alertCornerRadius:@15 cancel:nil moreBtn:nil];
         }
             break;
         case 3:
