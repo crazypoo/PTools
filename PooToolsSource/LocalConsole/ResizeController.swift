@@ -630,22 +630,15 @@ class PlatterView: UIView,UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
-        if FontSizeBlock != nil
-        {
-            if !(textField.text ?? "").stringIsEmpty()
-            {
-                if (textField.text?.cgFloat())! < LocalConsoleFontMin
-                {
+        if FontSizeBlock != nil {
+            if !(textField.text ?? "").stringIsEmpty() {
+                if (textField.text?.cgFloat())! < LocalConsoleFontMin {
                     textField.text = "4"
                     FontSizeBlock!(4)
-                }
-                else if (textField.text?.cgFloat())! > LocalConsoleFontMax
-                {
+                } else if (textField.text?.cgFloat())! > LocalConsoleFontMax {
                     textField.text = "20"
                     FontSizeBlock!(20)
-                }
-                else
-                {
+                } else {
                     FontSizeBlock!((textField.text?.cgFloat())!)
                 }
             }

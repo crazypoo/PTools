@@ -13,8 +13,7 @@ import LXFProtocolTool
 import SJAttributesStringMaker
 import FloatingPanel
 
-@objc public enum VCStatusBarChangeStatusType : Int
-{
+@objc public enum VCStatusBarChangeStatusType : Int {
     case Dark
     case Light
     case Auto
@@ -25,22 +24,19 @@ open class PTBaseViewController: ZXNavigationBarController {
 
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
-    open override var prefersStatusBarHidden:Bool
-    {
+    open override var prefersStatusBarHidden:Bool {
         return StatusBarManager.shared.isHidden
     }
     
     //MARK: 設置StatusBar樣式
     ///設置StatusBar樣式
-    open override var preferredStatusBarStyle: UIStatusBarStyle
-    {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         return StatusBarManager.shared.style
     }
     
     //MARK: 設置StatusBar動畫
     ///設置StatusBar動畫
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation
-    {
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         return StatusBarManager.shared.animation
     }
     
@@ -52,8 +48,7 @@ open class PTBaseViewController: ZXNavigationBarController {
     @objc open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
-        if self.presentationController != nil
-        {
+        if self.presentationController != nil {
             self.zx_leftClickedBlock { itenBtn in
                 self.viewDismiss()
             }
@@ -101,8 +96,7 @@ open class PTBaseViewController: ZXNavigationBarController {
 
     //MARK: 動態更換StatusBar
     ///動態更換StatusBar
-    open func changeStatusBar(type:VCStatusBarChangeStatusType)
-    {
+    open func changeStatusBar(type:VCStatusBarChangeStatusType) {
         switch type {
         case .Auto:
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
@@ -116,12 +110,10 @@ open class PTBaseViewController: ZXNavigationBarController {
         }
     }
     
-    open func switchOrientation(isFullScreen:Bool)
-    {
+    open func switchOrientation(isFullScreen:Bool) {
         AppDelegateEXFunction.share.isFullScreen = isFullScreen
         
-        if #available(iOS 16.0, *)
-        {
+        if #available(iOS 16.0, *) {
             setNeedsUpdateOfPrefersPointerLocked()
             guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
             let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
@@ -129,9 +121,7 @@ open class PTBaseViewController: ZXNavigationBarController {
             scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
                 PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
             }
-        }
-        else
-        {
+        } else {
             let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait
             UIDevice.current.setValue(oriention.rawValue, forKey: "orientation")
             UIViewController.attemptRotationToDeviceOrientation()
@@ -140,43 +130,35 @@ open class PTBaseViewController: ZXNavigationBarController {
     
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection)
-        {
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
             setNeedsStatusBarAppearanceUpdate()
         }
     }
     
-    @objc public func returnFrontVC()
-    {
-        if self.presentingViewController != nil
-        {
+    @objc public func returnFrontVC() {
+        if self.presentingViewController != nil {
             self.dismiss(animated: true, completion: nil)
-        }
-        else
-        {
+        } else {
             self.navigationController?.popViewController(animated: true, nil)
         }
     }
 
     //MARK: 這裏提供給Flex使用
     ///這裏提供給Flex使用
-    public func showFlexFunction(show:Bool)
-    {
+    public func showFlexFunction(show:Bool) {
         
     }
 }
 
-extension PTBaseViewController:UIGestureRecognizerDelegate
-{
+extension PTBaseViewController:UIGestureRecognizerDelegate {
     open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
         false
     }
 }
 
 //MARK: 添加emptydataset
-extension PTBaseViewController:LXFEmptyDataSetable
-{
+extension PTBaseViewController:LXFEmptyDataSetable {
     //MARK: 添加emptydataset
     ///添加emptydataset,设置无数据空页面
     open func showEmptyDataSet(currentScroller:UIScrollView) {
@@ -196,30 +178,22 @@ extension PTBaseViewController:LXFEmptyDataSetable
 }
 
 //MARK: 用來調用測試模式
-extension PTBaseViewController
-{
+extension PTBaseViewController {
     open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if UIApplication.applicationEnvironment() != .appStore
-        {
+        if UIApplication.applicationEnvironment() != .appStore {
             let uidebug:Bool = App_UI_Debug_Bool
             UserDefaults.standard.set(!uidebug, forKey: LocalConsole.ConsoleDebug)
-            if uidebug
-            {
-                if PTDevFunction.share.mn_PFloatingButton != nil
-                {
+            if uidebug {
+                if PTDevFunction.share.mn_PFloatingButton != nil {
                     PTDevFunction.share.lab_btn_release()
-                }
-                else
-                {
+                } else {
                     PTDevFunction.GobalDevFunction_close { show in
 #if DEBUG
                                 self.showFlexFunction(show: showFlex)
 #endif
                     }
                 }
-            }
-            else
-            {
+            } else {
                 let vc = PTDebugViewController.init(hideBaseNavBar: false)
                 PTUtils.getCurrentVC().navigationController?.pushViewController(vc, animated: true)
             }
@@ -228,8 +202,7 @@ extension PTBaseViewController
 }
 
 //MARK: 用來調用懸浮框
-extension PTBaseViewController:FloatingPanelControllerDelegate
-{
+extension PTBaseViewController:FloatingPanelControllerDelegate {
     open func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
         let layout = PTFloatPanelLayout()
         return layout

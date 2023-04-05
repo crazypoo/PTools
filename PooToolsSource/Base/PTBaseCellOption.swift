@@ -10,8 +10,7 @@ import UIKit
 import SwipeCellKit
 
 open class PTBaseNormalCell: UICollectionViewCell {
-    override public init(frame:CGRect)
-    {
+    override public init(frame:CGRect) {
         super.init(frame: frame)
     }
     
@@ -19,30 +18,25 @@ open class PTBaseNormalCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class func cellSize() -> CGSize
-    {
+    class func cellSize() -> CGSize {
         return CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String?
-    {
+    class func cellIdentifier() -> String? {
         return "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber?
-    {
+    class func cellSizeByClass() -> NSNumber? {
         return NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue?
-    {
+    class func cellSizeValue() -> NSValue? {
         return NSValue(cgSize: cellSize())
     }
 }
 
 open class PTBaseSwipeCell: SwipeCollectionViewCell {
-    override public init(frame:CGRect)
-    {
+    override public init(frame:CGRect) {
         super.init(frame: frame)
     }
     
@@ -50,23 +44,19 @@ open class PTBaseSwipeCell: SwipeCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class func cellSize() -> CGSize
-    {
+    class func cellSize() -> CGSize {
         return CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String?
-    {
+    class func cellIdentifier() -> String? {
         return "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber?
-    {
+    class func cellSizeByClass() -> NSNumber? {
         return NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue?
-    {
+    class func cellSizeValue() -> NSValue? {
         return NSValue(cgSize: cellSize())
     }
 }

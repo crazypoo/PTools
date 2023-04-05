@@ -29,12 +29,7 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
         if error {
             DDLogError(loginfo)
         } else {
-            switch UIApplication.applicationEnvironment() {
-            case .debug:
-                PTNSLog(loginfo)
-            default:
-                DDLogVerbose(loginfo)
-            }
+            PTNSLog(loginfo)
         }
     } else {
         DDLog.add(DDOSLogger.sharedInstance)

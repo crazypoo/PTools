@@ -8,22 +8,16 @@
 
 import UIKit
 
-public class AppDelegateEXFunction:NSObject
-{
+public class AppDelegateEXFunction:NSObject {
     public static let share = AppDelegateEXFunction()
     
     public var isFullScreen:Bool = false
     
-    public func faceOrientationMask(app:UIApplication,windos:UIWindow)->UIInterfaceOrientationMask
-    {
-        if self.isFullScreen
-        {
-            if #available(iOS 16.0, *)
-            {
+    public func faceOrientationMask(app:UIApplication,windos:UIWindow) -> UIInterfaceOrientationMask {
+        if self.isFullScreen {
+            if #available(iOS 16.0, *) {
                 return .landscape
-            }
-            else
-            {
+            } else {
                 return .landscapeRight
             }
         }

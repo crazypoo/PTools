@@ -32,24 +32,17 @@ public class PTUpdateTipsFunction: NSObject {
                                downloadUrl url: URL,
                                isTest test:Bool = false,
                                showError isShowError:Bool = true,
-                               forcedUpgrade isForcedUpgrade:Bool = false)
-    {
+                               forcedUpgrade isForcedUpgrade:Bool = false) {
         let cancelTitle:String = isForcedUpgrade ? "" : NSLocalizedString("取消升级", comment: "")
         self.gobalTips(tipsTitle: NSLocalizedString("发现新版本", comment: ""), cancelTitle: cancelTitle, cancelBlock: { maskVC in
-            if test
-            {
-                if isShowError
-                {
+            if test {
+                if isShowError {
                     maskVC.dismiss(animated: true, completion: nil)
-                }
-                else
-                {
+                } else {
                     UserDefaults.standard.set(1, forKey: uAppNoMoreShowUpdate)
                     maskVC.dismiss(animated: true, completion: nil)
                 }
-            }
-            else
-            {
+            } else {
                 maskVC.dismiss(animated: true, completion: nil)
             }
 
@@ -145,8 +138,7 @@ public class PTUpdateTipsFunction: NSObject {
                                cancelBlock: ((_ currentVC:PTBaseViewController)->Void)?,
                                doneTitle:String,
                                doneBlock: ((_ currentVC:PTBaseViewController)->Void)?,
-                               tipContentView:((_ contentView:UIView,_ currentVC:PTBaseViewController)->Void)?)
-    {
+                               tipContentView:((_ contentView:UIView,_ currentVC:PTBaseViewController)->Void)?) {
         let maskVC = PTBaseViewController()
         maskVC.modalPresentationStyle = .fullScreen
         maskVC.view.backgroundColor = .init(white: 0, alpha: 0.5)
@@ -186,8 +178,7 @@ public class PTUpdateTipsFunction: NSObject {
             closeBtn.setTitleColor(.black, for: .normal)
             closeBtn.viewCorner(radius: 5,borderWidth: 1,borderColor: .black)
             closeBtn.addActionHandlers { sender in
-                if cancelBlock != nil
-                {
+                if cancelBlock != nil {
                     cancelBlock!(maskVC)
                 }
             }
@@ -207,8 +198,7 @@ public class PTUpdateTipsFunction: NSObject {
         downLoadBtn.setTitleColor(.white, for: .normal)
         downLoadBtn.viewCorner(radius: 5)
         downLoadBtn.addActionHandlers { (sneder) in
-            if doneBlock != nil
-            {
+            if doneBlock != nil {
                 doneBlock!(maskVC)
             }
         }
@@ -219,7 +209,7 @@ public class PTUpdateTipsFunction: NSObject {
             if hasCancel {
                 make.left.equalTo(whiteView.snp.centerX).offset(10)
                 make.size.equalTo(CGSize(width: 100, height: 40))
-            }else {
+            } else {
                 make.centerX.equalToSuperview()
                 make.size.equalTo(CGSize(width: 210, height: 40))
             }
@@ -233,8 +223,7 @@ public class PTUpdateTipsFunction: NSObject {
             make.top.equalTo(titleLabel.snp.bottom).offset(15)
         }
 
-        if tipContentView != nil
-        {
+        if tipContentView != nil {
             tipContentView!(bgView,maskVC)
         }
         PTUtils.getCurrentVC().present(maskVC, animated: true, completion: nil)

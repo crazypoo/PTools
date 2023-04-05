@@ -11,8 +11,7 @@ import SnapKit
 
 public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UISwitch)->Void
 
-fileprivate extension UIView
-{
+fileprivate extension UIView {
     /// 绘制简单横线
     func drawLine() -> UIView {
         
@@ -23,39 +22,29 @@ fileprivate extension UIView
 }
 
 @objcMembers
-public class PTFusionCellContent:UIView
-{
+public class PTFusionCellContent:UIView {
     public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
     public var switchValueChangeBLock:PTCellSwitchBlock?
 
-    enum MNCellAccessoryView
-    {
+    enum MNCellAccessoryView {
         case Switch
         case DisclosureIndicator
         case None
     }
 
-    public var cellModel:PTFusionCellModel?
-    {
-        didSet
-        {
+    public var cellModel:PTFusionCellModel? {
+        didSet {
             var cellType:MNCellAccessoryView = .None
-            if self.cellModel!.haveDisclosureIndicator && !self.cellModel!.haveSwitch
-            {
+            if self.cellModel!.haveDisclosureIndicator && !self.cellModel!.haveSwitch {
                 self.valueSwitch.isHidden = true
                 self.accessV.isHidden = false
                 
-                if !NSObject.checkObject(self.cellModel!.disclosureIndicatorImage as? NSObject)
-                {
-                    if self.cellModel!.disclosureIndicatorImage is String
-                    {
+                if !NSObject.checkObject(self.cellModel!.disclosureIndicatorImage as? NSObject) {
+                    if self.cellModel!.disclosureIndicatorImage is String {
                         let link = self.cellModel!.disclosureIndicatorImage as! String
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                        {
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                             self.accessV.image = UIImage(contentsOfFile: link)
-                        }
-                        else
-                        {
+                        } else {
                             if link.isURL() {
                                 self.accessV.pt_SDWebImage(imageString: link)
                             }
@@ -65,18 +54,12 @@ public class PTFusionCellContent:UIView
                                 self.accessV.image = UIImage(named: link)
                             }
                         }
-                    }
-                    else if self.cellModel!.disclosureIndicatorImage is UIImage
-                    {
+                    } else if self.cellModel!.disclosureIndicatorImage is UIImage {
                         self.accessV.image = (self.cellModel!.disclosureIndicatorImage as! UIImage)
-                    }
-                    else if self.cellModel!.disclosureIndicatorImage is Data
-                    {
+                    } else if self.cellModel!.disclosureIndicatorImage is Data {
                         self.accessV.image = UIImage(data: (self.cellModel!.disclosureIndicatorImage as! Data))
                     }
-                }
-                else
-                {
+                } else {
                     self.accessV.image = UIColor.random.createImageWithColor()
                 }
 
@@ -86,9 +69,7 @@ public class PTFusionCellContent:UIView
                     make.centerY.equalToSuperview()
                 }
                 cellType = .DisclosureIndicator
-            }
-            else if !self.cellModel!.haveDisclosureIndicator && self.cellModel!.haveSwitch
-            {
+            } else if !self.cellModel!.haveDisclosureIndicator && self.cellModel!.haveSwitch {
                 self.accessV.isHidden = true
                 self.valueSwitch.isHidden = false
                 self.valueSwitch.onTintColor = self.cellModel!.switchTinColor
@@ -99,25 +80,18 @@ public class PTFusionCellContent:UIView
                 }
                 self.valueSwitch.addTarget(self, action: #selector(onSwitch(sender:)), for: .valueChanged)
                 cellType = .Switch
-            }
-            else
-            {
+            } else {
                 self.accessV.isHidden = true
                 self.valueSwitch.isHidden = true
                 cellType = .None
             }
             
-            if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
-            {
-                if self.cellModel!.leftImage is String
-                {
+            if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon {
+                if self.cellModel!.leftImage is String {
                     let link = self.cellModel!.leftImage as! String
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                    {
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                         self.cellIcon.image = UIImage(contentsOfFile: link)
-                    }
-                    else
-                    {
+                    } else {
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
@@ -126,13 +100,9 @@ public class PTFusionCellContent:UIView
                             self.cellIcon.image = UIImage(named: link)
                         }
                     }
-                }
-                else if self.cellModel!.leftImage is UIImage
-                {
+                } else if self.cellModel!.leftImage is UIImage {
                     self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
-                }
-                else if self.cellModel!.leftImage is Data
-                {
+                } else if self.cellModel!.leftImage is Data {
                     self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                 }
                 self.cellIcon.snp.makeConstraints { make in
@@ -161,18 +131,12 @@ public class PTFusionCellContent:UIView
                 self.cellIcon.isHidden = false
                 self.nameTitle.isHidden = false
                 self.cellContentIcon.isHidden = true
-            }
-            else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
-            {
-                if self.cellModel!.leftImage is String
-                {
+            } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon {
+                if self.cellModel!.leftImage is String {
                     let link = self.cellModel!.leftImage as! String
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                    {
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                         self.cellIcon.image = UIImage(contentsOfFile: link)
-                    }
-                    else
-                    {
+                    } else {
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
@@ -181,13 +145,9 @@ public class PTFusionCellContent:UIView
                             self.cellIcon.image = UIImage(named: link)
                         }
                     }
-                }
-                else if self.cellModel!.leftImage is UIImage
-                {
+                } else if self.cellModel!.leftImage is UIImage {
                     self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
-                }
-                else if self.cellModel!.leftImage is Data
-                {
+                } else if self.cellModel!.leftImage is Data {
                     self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                 }
 
@@ -206,12 +166,9 @@ public class PTFusionCellContent:UIView
                     make.width.equalTo(UIView.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
                 }
 
-                if self.cellModel!.contentAttr != nil
-                {
+                if self.cellModel!.contentAttr != nil {
                     self.contentLabel.attributedText = self.cellModel!.contentAttr
-                }
-                else
-                {
+                } else {
                     self.contentLabel.text = self.cellModel!.content
                     self.contentLabel.textColor = self.cellModel!.contentTextColor
                 }
@@ -232,9 +189,7 @@ public class PTFusionCellContent:UIView
                 self.cellIcon.isHidden = false
                 self.nameTitle.isHidden = false
                 self.cellContentIcon.isHidden = true
-            }
-            else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon
-            {
+            } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) && !self.cellModel!.showContentIcon {
                 self.contentLabel.isHidden = false
                 self.cellIcon.isHidden = true
                 self.nameTitle.isHidden = false
@@ -249,12 +204,9 @@ public class PTFusionCellContent:UIView
                     make.width.equalTo(UIView.sizeFor(string: self.nameTitle.text!, font: self.nameTitle.font, height: 44, width: CGFloat(MAXFLOAT)).width + 10)
                 }
 
-                if self.cellModel!.contentAttr != nil
-                {
+                if self.cellModel!.contentAttr != nil {
                     self.contentLabel.attributedText = self.cellModel!.contentAttr
-                }
-                else
-                {
+                } else {
                     self.contentLabel.text = self.cellModel!.content
                     self.contentLabel.textColor = self.cellModel!.contentTextColor
                 }
@@ -270,9 +222,7 @@ public class PTFusionCellContent:UIView
                         make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                     }
                 }
-            }
-            else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon
-            {
+            } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() && (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && !self.cellModel!.showContentIcon {
                 self.contentLabel.isHidden = true
                 self.cellIcon.isHidden = true
                 self.nameTitle.isHidden = false
@@ -292,21 +242,15 @@ public class PTFusionCellContent:UIView
                         make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                     }
                 }
-            }
-            else if (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && self.cellModel!.showContentIcon
-            {
+            } else if (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) && self.cellModel!.showContentIcon {
                 self.contentLabel.isHidden = true
                 self.cellContentIcon.isHidden = false
                 
-                if self.cellModel!.contentIcon is String
-                {
+                if self.cellModel!.contentIcon is String {
                     let link = self.cellModel!.contentIcon as! String
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                    {
+                    if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                         self.cellContentIcon.image = UIImage(contentsOfFile: link)
-                    }
-                    else
-                    {
+                    } else {
                         if link.isURL() {
                             self.cellIcon.pt_SDWebImage(imageString: link)
                         } else if link.isSingleEmoji {
@@ -315,13 +259,9 @@ public class PTFusionCellContent:UIView
                             self.cellIcon.image = UIImage(named: link)
                         }
                     }
-                }
-                else if self.cellModel!.contentIcon is UIImage
-                {
+                } else if self.cellModel!.contentIcon is UIImage {
                     self.cellContentIcon.image = (self.cellModel!.contentIcon as! UIImage)
-                }
-                else if self.cellModel!.contentIcon is Data
-                {
+                } else if self.cellModel!.contentIcon is Data {
                     self.cellContentIcon.image = UIImage(data: (self.cellModel!.contentIcon as! Data))
                 }
                 
@@ -341,8 +281,7 @@ public class PTFusionCellContent:UIView
                     self.cellContentIcon.viewCorner(radius: self.cellContentIcon.height / 2)
                 }
                 
-                if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty()
-                {
+                if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() {
                     self.cellIcon.isHidden = true
                     self.nameTitle.isHidden = false
                     
@@ -353,21 +292,15 @@ public class PTFusionCellContent:UIView
                         make.top.bottom.equalToSuperview()
                         make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
                     }
-                }
-                else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && self.cellModel!.name.stringIsEmpty()
-                {
+                } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && self.cellModel!.name.stringIsEmpty() {
                     self.nameTitle.isHidden = true
                     self.cellIcon.isHidden = false
                     
-                    if self.cellModel!.leftImage is String
-                    {
+                    if self.cellModel!.leftImage is String {
                         let link = self.cellModel!.leftImage as! String
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                        {
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                             self.cellIcon.image = UIImage(contentsOfFile: link)
-                        }
-                        else
-                        {
+                        } else {
                             if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
                             } else if link.isSingleEmoji {
@@ -376,13 +309,9 @@ public class PTFusionCellContent:UIView
                                 self.cellIcon.image = UIImage(named: link)
                             }
                         }
-                    }
-                    else if self.cellModel!.leftImage is UIImage
-                    {
+                    } else if self.cellModel!.leftImage is UIImage {
                         self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
-                    }
-                    else if self.cellModel!.leftImage is Data
-                    {
+                    } else if self.cellModel!.leftImage is Data {
                         self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                     }
 
@@ -392,21 +321,15 @@ public class PTFusionCellContent:UIView
                         make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
                         make.width.equalTo(self.cellIcon.snp.height)
                     }
-                }
-                else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty()
-                {
+                } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) && !self.cellModel!.name.stringIsEmpty() {
                     self.nameTitle.isHidden = false
                     self.cellIcon.isHidden = false
                     
-                    if self.cellModel!.leftImage is String
-                    {
+                    if self.cellModel!.leftImage is String {
                         let link = self.cellModel!.leftImage as! String
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: link)
-                        {
+                        if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
                             self.cellIcon.image = UIImage(contentsOfFile: link)
-                        }
-                        else
-                        {
+                        } else {
                             if link.isURL() {
                                 self.cellIcon.pt_SDWebImage(imageString: link)
                             } else if link.isSingleEmoji {
@@ -415,13 +338,9 @@ public class PTFusionCellContent:UIView
                                 self.cellIcon.image = UIImage(named: link)
                             }
                         }
-                    }
-                    else if self.cellModel!.leftImage is UIImage
-                    {
+                    } else if self.cellModel!.leftImage is UIImage {
                         self.cellIcon.image = (self.cellModel!.leftImage as! UIImage)
-                    }
-                    else if self.cellModel!.leftImage is Data
-                    {
+                    } else if self.cellModel!.leftImage is Data {
                         self.cellIcon.image = UIImage(data: (self.cellModel!.leftImage as! Data))
                     }
 
@@ -445,14 +364,11 @@ public class PTFusionCellContent:UIView
             self.lineView.isHidden = !self.cellModel!.haveLine
             self.nameTitle.font = self.cellModel!.cellFont
 
-            if self.cellModel!.conrner != []
-            {
+            if self.cellModel!.conrner != [] {
                 PTGCDManager.gcdMain {
                     self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
                 }
-            }
-            else
-            {
+            } else {
                 PTGCDManager.gcdMain {
                     self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
                 }
@@ -533,10 +449,8 @@ public class PTFusionCellContent:UIView
         fatalError("init(coder:) has not been implemented")
     }
     
-    @objc func onSwitch(sender:UISwitch)
-    {
-        if switchValueChangeBLock != nil
-        {
+    @objc func onSwitch(sender:UISwitch) {
+        if switchValueChangeBLock != nil {
             switchValueChangeBLock!(self.nameTitle.text!,sender)
         }
     }
@@ -548,10 +462,8 @@ open class PTFusionCell: PTBaseNormalCell {
                 
     open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    open var cellModel:PTFusionCellModel?
-    {
-        didSet
-        {
+    open var cellModel:PTFusionCellModel? {
+        didSet {
             self.dataContent.cellModel = self.cellModel
         }
     }
@@ -562,8 +474,7 @@ open class PTFusionCell: PTBaseNormalCell {
         return view
     }()
     
-    override init(frame:CGRect)
-    {
+    override init(frame:CGRect) {
         super.init(frame: frame)
         
         self.contentView.addSubview(self.dataContent)
@@ -583,10 +494,8 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
                 
     open var switchValueChangeBLock:PTCellSwitchBlock?
 
-    open var cellModel:PTFusionCellModel?
-    {
-        didSet
-        {
+    open var cellModel:PTFusionCellModel? {
+        didSet {
             self.dataContent.cellModel = self.cellModel
         }
     }
@@ -597,8 +506,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         return view
     }()
     
-    override init(frame:CGRect)
-    {
+    override init(frame:CGRect) {
         super.init(frame: frame)
         
         self.contentView.addSubview(self.dataContent)

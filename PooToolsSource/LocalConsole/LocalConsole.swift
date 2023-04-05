@@ -20,8 +20,7 @@ public let systemLog_base_height:CGFloat = 142
 public let borderLine:CGFloat = 5
 public let diameter:CGFloat = 28
 
-public var App_UI_Debug_Bool:Bool
-{
+public var App_UI_Debug_Bool:Bool {
     let userDefaults = UserDefaults.standard.value(forKey: LocalConsole.ConsoleDebug)
     let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
     return ui_debug
@@ -128,22 +127,18 @@ public class LocalConsole: NSObject {
         return baseArr
     }()
 
-    private override init()
-    {
+    private override init() {
         super.init()
     }
     
-    public func cleanSystemLogView()
-    {
+    public func cleanSystemLogView() {
         terminal?.removeFromSuperview()
         terminal = nil
         terminal?.systemIsVisible = false
     }
     
-    func setLog()
-    {
-        if terminal!.systemText!.contentOffset.y > terminal!.systemText!.contentSize.height - terminal!.systemText!.bounds.size.height - 20
-        {
+    func setLog() {
+        if terminal!.systemText!.contentOffset.y > (terminal!.systemText!.contentSize.height - terminal!.systemText!.bounds.size.height - 20) {
             terminal!.systemText?.pendingOffsetChange = true
         }
         
@@ -152,10 +147,8 @@ public class LocalConsole: NSObject {
         terminal!.systemText!.contentOffset.y = terminal!.systemText!.contentSize.height
     }
         
-    public func createSystemLogView()
-    {
-        if terminal == nil
-        {
+    public func createSystemLogView() {
+        if terminal == nil {
             terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
             terminal?.tag = SystemLogViewTag
             terminal!.menuButton.addActionHandlers { sender in
@@ -175,52 +168,38 @@ public class LocalConsole: NSObject {
         }
     }
     
-    func popoverDidselect(dataName:String)
-    {
-        if dataName == LocalConsole.CopyKey
-        {
+    func popoverDidselect(dataName:String) {
+        if dataName == LocalConsole.CopyKey {
             currentText.copyToPasteboard()
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.CopyLog,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.ShareKey
-        {
+        } else if dataName == LocalConsole.ShareKey {
             FileManager.pt.createFolder(folderPath: FileManager.pt.LogDirectory())
             let fileName = "log.txt"
             let file = (FileManager.pt.LogDirectory() + "/").appendingPathComponent(fileName)
             let data = currentText.data(using: .utf8)
                       
-            if !FileManager.pt.isFileExist(filePath: FileManager.pt.LogDirectory(), fileName: fileName)
-            {
+            if !FileManager.pt.isFileExist(filePath: FileManager.pt.LogDirectory(), fileName: fileName) {
                 FileManager.pt.fileManager.createFile(atPath: file, contents: data)
-            }
-            else
-            {
+            } else {
                 FileManager.pt.removefolder(folderPath: FileManager.pt.LogDirectory())
                 FileManager.pt.fileManager.createFile(atPath: file, contents: data)
             }
             
             PTGCDManager.gcdAfter(time: 0.35) {
                 let shareURL = URL.init(fileURLWithPath: "file:///" + FileManager.pt.LogDirectory() + "/" + fileName)
-                if self.consoleActionBlock != nil
-                {
+                if self.consoleActionBlock != nil {
                     self.consoleActionBlock!(.ShareLog,false,shareURL)
                 }
             }
-        }
-        else if dataName == LocalConsole.ResizeKey
-        {
+        } else if dataName == LocalConsole.ResizeKey {
             ResizeController.shared.isActive.toggle()
             ResizeController.shared.platterView.reveal()
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.RespringKey
-        {
+        } else if dataName == LocalConsole.RespringKey {
             guard let window = UIApplication.shared.windows.first else { return }
             
             window.layer.cornerRadius = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat
@@ -236,29 +215,20 @@ public class LocalConsole: NSObject {
                 }
             }
             animator.startAnimation()
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.CleanKey
-        {
+        } else if dataName == LocalConsole.CleanKey {
             currentText = ""
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.ViewFrameKey
-        {
+        } else if dataName == LocalConsole.ViewFrameKey {
             debugBordersEnabled.toggle()
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.SystemReportKey
-        {
+        } else if dataName == LocalConsole.SystemReportKey {
             var volumeAvailableCapacityForImportantUsageString = ""
             var volumeAvailableCapacityForOpportunisticUsageString = ""
             var volumesString = ""
@@ -325,50 +295,34 @@ public class LocalConsole: NSObject {
                     HasUltraWideCamera: \(Device.current.hasUltraWideCamera ? "Yes" : "No")
                     IsJailBroken: \(UIDevice.pt.isJailBroken ? "Yes" : "No")
                     """
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.NoActionCallBack,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.RestoreFirstKey
-        {
-            if consoleActionBlock != nil
-            {
+        } else if dataName == LocalConsole.RestoreFirstKey {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.RestoreUserDefult,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.AppUpdateKey
-        {
-            if consoleActionBlock != nil
-            {
+        } else if dataName == LocalConsole.AppUpdateKey {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.AppUpdate,false,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.DEBUGKey || dataName == LocalConsole.NORMALKey
-        {
+        } else if dataName == LocalConsole.DEBUGKey || dataName == LocalConsole.NORMALKey {
             let newBool:Bool = !App_UI_Debug_Bool
             UserDefaults.standard.set(newBool, forKey: LocalConsole.ConsoleDebug)
             
             popoverTitles.enumerated().forEach { (index,value) in
-                if value == LocalConsole.DEBUGKey
-                {
+                if value == LocalConsole.DEBUGKey {
                     popoverTitles[index] = LocalConsole.NORMALKey
-                }
-                else if value == LocalConsole.NORMALKey
-                {
+                } else if value == LocalConsole.NORMALKey {
                     popoverTitles[index] = LocalConsole.DEBUGKey
                 }
             }
             
-            if consoleActionBlock != nil
-            {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.Debug,newBool,URL(string: "nil")!)
             }
-        }
-        else if dataName == LocalConsole.DEBUGSETTINGKey
-        {
-            if consoleActionBlock != nil
-            {
+        } else if dataName == LocalConsole.DEBUGSETTINGKey {
+            if consoleActionBlock != nil {
                 consoleActionBlock!(.DebugSetting,false,URL(string: "nil")!)
             }
         }
@@ -391,14 +345,12 @@ public extension TimeInterval {
     }
 }
 
-public class PTTerminal:PFloatingButton
-{
+public class PTTerminal:PFloatingButton {
     public var systemText : PTInvertedTextView?
     public lazy var menuButton = UIButton()
     public var systemIsVisible : Bool? = false
 
-    override init(view:Any,frame:CGRect)
-    {
+    override init(view:Any,frame:CGRect) {
         super.init(view: view, frame: frame)
         self.backgroundColor = .black
         self.draggable = true
@@ -489,5 +441,4 @@ public class PTTerminal:PFloatingButton
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }

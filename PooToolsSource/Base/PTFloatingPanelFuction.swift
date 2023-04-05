@@ -12,8 +12,7 @@ import FloatingPanel
 public typealias FloatingBlock = () -> Void
 
 public class PTFloatingPanelFuction: NSObject {
-    class open func floatPanel_VC(vc:PTBaseViewController,panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController,floatingDismiss:FloatingBlock? = nil)
-    {
+    class open func floatPanel_VC(vc:PTBaseViewController,panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController,floatingDismiss:FloatingBlock? = nil) {
         let fpc = FloatingPanelController()
         fpc.set(contentViewController: vc)
         fpc.contentMode = .fitToBounds
@@ -25,8 +24,7 @@ public class PTFloatingPanelFuction: NSObject {
         
         let backDropDismiss = UITapGestureRecognizer.init { action in
             vc.dismiss(animated: true)
-            if floatingDismiss != nil
-            {
+            if floatingDismiss != nil {
                 floatingDismiss!()
             }
         }
@@ -52,8 +50,7 @@ public class PTFloatingPanelFuction: NSObject {
         fpc.surfaceView.appearance = appearance
         fpc.delegate = vc
         (PTUtils.getCurrentVC() as? PTBaseViewController)?.present(fpc, animated: true) {
-            if floatingDismiss != nil
-            {
+            if floatingDismiss != nil {
                 floatingDismiss!()
             }
         }

@@ -53,16 +53,14 @@ public class PTDebugViewController: PTBaseViewController {
     
     var mSections = [PTSection]()
     
-    func comboLayout()->UICollectionViewCompositionalLayout
-    {
+    func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
             self.generateSection(section: section)
         }
         return layout
     }
     
-    func generateSection(section:NSInteger)->NSCollectionLayoutSection
-    {
+    func generateSection(section:NSInteger)->NSCollectionLayoutSection {
         let sectionModel = mSections[section]
 
         var group : NSCollectionLayoutGroup
@@ -104,8 +102,7 @@ public class PTDebugViewController: PTBaseViewController {
         self.showDetail()
     }
     
-    func showDetail()
-    {
+    func showDetail() {
         self.mSections.removeAll()
         
         var rows = [PTRows]()
@@ -121,8 +118,7 @@ public class PTDebugViewController: PTBaseViewController {
     }    
 }
 
-extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource
-{
+extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         return self.mSections.count
     }
@@ -135,20 +131,16 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
         
         let itemSec = mSections[indexPath.section]
         let itemRow = itemSec.rows[indexPath.row]
-        if itemRow.ID == PTFusionCell.ID
-        {
+        if itemRow.ID == PTFusionCell.ID {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            if itemRow.title == .DebugMode
-            {
+            if itemRow.title == .DebugMode {
                 cell.dataContent.valueSwitch.isOn = App_UI_Debug_Bool
                 cell.switchValueChangeBLock = { title,sender in
                     let value = !App_UI_Debug_Bool
                     UserDefaults.standard.set(value, forKey: LocalConsole.ConsoleDebug)
-                    if value
-                    {
-                        if PTDevFunction.share.mn_PFloatingButton == nil
-                        {
+                    if value {
+                        if PTDevFunction.share.mn_PFloatingButton == nil {
                             //开了
                             PTDevFunction.share.createLabBtn()
                             PTDevFunction.GobalDevFunction_open { showFlex in
@@ -157,9 +149,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
 #endif
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         //关了
                         PTDevFunction.share.mn_PFloatingButton?.removeFromSuperview()
                         PTDevFunction.share.mn_PFloatingButton = nil
@@ -172,9 +162,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                 }
             }
             return cell
-        }
-        else
-        {
+        } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
             return cell
         }
@@ -183,8 +171,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
         let itemRow = itemSec.rows[indexPath.row]
-        if itemRow.title == .ipMode
-        {
+        if itemRow.title == .ipMode {
             let actionSheet = PTActionSheetView.init(title: "选择APP请求环境", subTitle: "", cancelButton: NSLocalizedString("取消", comment: ""),destructiveButton: "", otherButtonTitles: ["生产环境","测试","自定义"])
             actionSheet.actionSheetSelectBlock = { (sheet,index) in
                 switch index {
@@ -211,20 +198,15 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                 }
             }
             actionSheet.show()
-        }
-        else if itemRow.title == .addressInput
-        {
+        } else if itemRow.title == .addressInput {
             switch PTBaseURLMode {
             case .Development:
                 var current = ""
                 let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
                 let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
-                if url_debug.isEmpty
-                {
+                if url_debug.isEmpty {
                     current = Network.share.serverAddress_dev
-                }
-                else
-                {
+                } else {
                     current = url_debug
                 }
                 
@@ -243,15 +225,13 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
     }
 }
 
-extension PTDebugViewController:UITextFieldDelegate
-{
+extension PTDebugViewController:UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         return true
     }
 }
 
-fileprivate extension String
-{
+fileprivate extension String {
     static let ipMode = "选择服务器地址(默认是正式环境)"
     static let addressInput = "自定义地址"
     static let DebugMode = "DebugMode"
