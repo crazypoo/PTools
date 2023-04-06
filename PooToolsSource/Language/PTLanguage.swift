@@ -48,14 +48,13 @@ public class PTLanguage: NSObject {
     
     public var language: String {
         get {
-            if let lang = UserDefaults.standard.value(forKey: LanguageKey) as? String {
-                return lang
+            if let lang = UserDefaults.standard.value(forKey: LanguageKey) {
+                return lang as! String
             } else {
                 // 默认的语言，可以根据需求来进行默认。zh-Hans.lproj
                 return "zh-Hans"
             }
-        }
-        set {
+        } set {
             // 保存当前的语言
             UserDefaults.standard.set(newValue, forKey: LanguageKey)
             UserDefaults.standard.synchronize()
@@ -86,28 +85,28 @@ public class PTLanguage: NSObject {
  */
 public extension UIViewController {
     
-    private static let key = "BLOCKL_KEY"
-    private typealias ChangedBlock = () -> ()
+    private static var key = "BLOCKL_KEY"
+    typealias ChangedBlock = () -> ()
     // 动态添加block属性
     private var block: ChangedBlock? {
         get {
-            objc_getAssociatedObject(self, UIViewController.key) as? ChangedBlock
+            return (objc_getAssociatedObject(self, &UIViewController.key) as! ChangedBlock)
         }
         set {
-            objc_setAssociatedObject(self, UIViewController.key, newValue, .OBJC_ASSOCIATION_COPY)
+            return objc_setAssociatedObject(self, &UIViewController.key, newValue, .OBJC_ASSOCIATION_COPY)
         }
     }
     
     @objc private func notiLanguageChange(_ noti: Notification) {
-        block?()
+        if self.block != nil {
+            self.block!()
+        }
     }
     
     /// 监听切换语言
-    func pt_observerLanguage(didChanged block: @escaping () -> ()) {
-        
-        self.block = block
-        
+    func pt_observerLanguage(didChanged block: ChangedBlock?) {
         NotificationCenter.default.addObserver(self, selector: #selector(notiLanguageChange(_:)), name: LanguageDidChangedKey, object: nil)
+        self.block = block
     }
     
     /// 移除监听
