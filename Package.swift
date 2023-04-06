@@ -60,8 +60,7 @@ let package = Package(
         .library(name: "ScanQRCode", targets: ["ScanQRCode"]),
         .library(name: "Stepper", targets: ["Stepper"]),
         .library(name: "Location", targets: ["Location"]),
-        .library(name: "UpdateTips", targets: ["UpdateTips"]),
-        .library(name: "OtherLog", targets: ["OtherLog"])
+        .library(name: "UpdateTips", targets: ["UpdateTips"])
     ],
     dependencies: [],
     targets: [
@@ -117,8 +116,7 @@ let package = Package(
         .target(name: "ScanQRCode",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_SCANQRCODE"),.define("PTOOLS_SPM")]),
         .target(name: "Stepper",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_STEPPER"),.define("PTOOLS_SPM")]),
         .target(name: "Location",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_LOCATION"),.define("PTOOLS_SPM")]),
-        .target(name: "UpdateTips",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_UPDATETIPS"),.define("PTOOLS_SPM")]),
-        .target(name: "OtherLog",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_OTHERLOG"),.define("PTOOLS_SPM")])
+        .target(name: "UpdateTips",dependencies: [.target(name: "PTools")],path: "PooToolsSource",swiftSettings: [.define("POOTOOLS_UPDATETIPS"),.define("PTOOLS_SPM")])
     ],
     swiftLanguageVersions: [.v5]
 )
