@@ -8,6 +8,8 @@
 
 import UIKit
 import Foundation
+import CocoaLumberjack
+
 //MARK: - 自定义打印
 /// 自定义打印
 /// - Parameter msg: 打印的内容
@@ -21,27 +23,30 @@ public func PTNSLog(_ msg: Any...,
                      line: Int = #line,
                    column: Int = #column,
                        fn: String = #function) {
+    var msgStr = ""
+    for element in msg {
+        msgStr += "\(element)\n"
+    }
+    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:SS")
+    let prefix = "🔨Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)\n❌Conclusión❌"
+
     switch UIApplication.applicationEnvironment() {
-    case .debug:
-        var msgStr = ""
-        for element in msg {
-            msgStr += "\(element)\n"
-        }
-        let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:SS")
-        let prefix = "🔨Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)\n❌Conclusión❌"
+    case .appStore:
+        DDLogVerbose(prefix)
+    default:
         print(prefix)
         if PTLocalConsoleFunction.share.localconsole.terminal?.systemIsVisible ?? false && PTLocalConsoleFunction.share.localconsole.terminal != nil {
             PTLocalConsoleFunction.share.localconsole.print(prefix)
         }
-        guard isWriteLog else {
-            return
-        }
-        // 将内容同步写到文件中去（Caches文件夹下）
-        let cachePath = FileManager.pt.CachesDirectory()
-        let logURL = cachePath + "/log.txt"
-        appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: "\(currentDate)")
-    default:break
     }
+    
+    guard isWriteLog else {
+        return
+    }
+    // 将内容同步写到文件中去（Caches文件夹下）
+    let cachePath = FileManager.pt.CachesDirectory()
+    let logURL = cachePath + "/log.txt"
+    appendText(fileURL: URL(string: logURL)!, string: "\(prefix)", currentDate: "\(currentDate)")
 }
 
 // 在文件末尾追加新内容
@@ -62,7 +67,7 @@ private func appendText(fileURL: URL, string: String, currentDate: String) {
 
 public func PTPrintPointer<T>(ptr: UnsafePointer<T>) {
     switch UIApplication.applicationEnvironment() {
-    case .debug:
+    case .debug,.testFlight:
         print("内存地址：\(ptr)) --------------")
     default:break
     }
@@ -72,7 +77,7 @@ public func PTPrintPointer<T>(ptr: UnsafePointer<T>) {
 // MARK: mark 变量的：地址、内存、大小 的打印
 public func PTPrint<T>(val: inout T) {
     switch UIApplication.applicationEnvironment() {
-    case .debug:
+    case .debug,.testFlight:
         print("-------------- \(type(of: val)) --------------")
         print("变量的地址:", PTMems.ptr(ofVal: &val))
         print("变量的内存:", PTMems.memStr(ofVal: &val))
@@ -85,7 +90,7 @@ public func PTPrint<T>(val: inout T) {
 // MARK: 对象的：地址、内存、大小 的打印
 public func PTPrint<T>(ref: T) {
     switch UIApplication.applicationEnvironment() {
-    case .debug:
+    case .debug,.testFlight:
         print("-------------- \(type(of: ref)) --------------")
         print("对象的地址:", PTMems.ptr(ofRef: ref))
         print("对象的内存:", PTMems.memStr(ofRef: ref))
