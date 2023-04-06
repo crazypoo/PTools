@@ -8,16 +8,13 @@
 
 import UIKit
 
-public extension UICollectionView
-{
+public extension UICollectionView {
     //MARK: 撇除動畫重加載
     ///撇除動畫重加載
-    @objc func reloadDataWithOutAnimation(completion:(()->Void)?)
-    {
+    @objc func reloadDataWithOutAnimation(completion:(()->Void)?) {
         UIView.performWithoutAnimation {
             self.reloadData {
-                if completion != nil
-                {
+                if completion != nil {
                     completion!()
                 }
             }
@@ -26,8 +23,7 @@ public extension UICollectionView
     
     //MARK: 獲取Cell在Window的位置
     ///獲取Cell在Window的位置
-    @objc func cellInWindow(cellFrame:CGRect)->CGRect
-    {
+    @objc func cellInWindow(cellFrame:CGRect)->CGRect {
         let cellInCollectionViewRect = self.convert(cellFrame, to: self)
         let cellRectInWindow = self.convert(cellInCollectionViewRect, to: AppWindows!)
         return cellRectInWindow
@@ -51,35 +47,28 @@ public extension UICollectionView
                                                  contentTopAndBottom:CGFloat = 0,
                                                  cellLeadingSpace:CGFloat = 0,
                                                  cellTrailingSpace:CGFloat = 0,
-                                                 handle:((_ groupHeight:CGFloat,_ groupItem:[NSCollectionLayoutGroupCustomItem])->Void))
-    {
+                                                 handle:((_ groupHeight:CGFloat,_ groupItem:[NSCollectionLayoutGroupCustomItem])->Void)) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupH:CGFloat = 0
         let itemH = size.height
         let itemW = size.width
         var x:CGFloat = originalX,y:CGFloat = 0 + contentTopAndBottom
         data.enumerated().forEach { (index,value) in
-            if index < cellRowCount
-            {
+            if index < cellRowCount {
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
                 customers.append(customItem)
                 x += itemW + cellLeadingSpace
-                if index == (data.count - 1)
-                {
+                if index == (data.count - 1) {
                     groupH = y + itemH + contentTopAndBottom
                 }
-            }
-            else
-            {
+            } else {
                 x += itemW + cellLeadingSpace
-                if index > 0 && (index % cellRowCount == 0)
-                {
+                if index > 0 && (index % cellRowCount == 0) {
                     x = originalX
                     y += itemH + cellTrailingSpace
                 }
 
-                if index == (data.count - 1)
-                {
+                if index == (data.count - 1) {
                     groupH = y + itemH + contentTopAndBottom
                 }
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: itemW, height: itemH), zIndex: 1000+index)
@@ -110,8 +99,7 @@ public extension UICollectionView
                                           contentTopAndBottom:CGFloat = 0,
                                           cellLeadingSpace:CGFloat = 0,
                                           cellTrailingSpace:CGFloat = 0,
-                                          sectionContentInsets:NSDirectionalEdgeInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)) -> NSCollectionLayoutGroup
-    {
+                                          sectionContentInsets:NSDirectionalEdgeInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)) -> NSCollectionLayoutGroup {
         var customers = [NSCollectionLayoutGroupCustomItem]()
 
         let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))

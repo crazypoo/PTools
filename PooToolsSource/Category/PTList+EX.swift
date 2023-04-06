@@ -39,8 +39,7 @@ open class PTSection: NSObject {
                 disclosureIndicatorImage:String? = "",
                 disclosureIndicatorSelectImage:String? = "",
                 isSelectIndicator:Bool? = false
-         )
-    {
+         ) {
         super.init()
         
         self.headerTitle = headerTitle
@@ -146,27 +145,16 @@ extension UICollectionView {
             if let cls = tmpSection.headerCls, let id = tmpSection.headerID {
                 self?.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: id)
             }
-            else
-            {
-                PTNSLogConsole("NoHeader")
-            }
             
             if let cls = tmpSection.footerCls, let id = tmpSection.footerID {
                 self?.register(cls.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: id)
             }
-            else
-            {
-                PTNSLogConsole("NoFooter")
-            }
 
             // 注册 cell
             tmpSection.rows.forEach { (tmpRow) in
-                if tmpRow.nibName.stringIsEmpty()
-                {
+                if tmpRow.nibName.stringIsEmpty() {
                     self?.register(tmpRow.cls.self, forCellWithReuseIdentifier:  tmpRow.ID)
-                }
-                else
-                {
+                } else {
                     self?.register(UINib.init(nibName: tmpRow.nibName, bundle: nil), forCellWithReuseIdentifier: tmpRow.ID)
                 }
             }

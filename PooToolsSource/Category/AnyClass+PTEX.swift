@@ -8,12 +8,10 @@
 
 import UIKit
 
-public extension NSObject
-{
+public extension NSObject {
     //MARK: 獲取一個Class中的Keys
     ///獲取一個Class中的Keys
-    class func getClassName()
-    {
+    class func getClassName() {
         var count:UInt32 = 0
         let ivars = class_copyIvarList((self as AnyClass), &count)
         
@@ -40,5 +38,20 @@ public extension NSObject
             return true
         }
         return false
+    }
+    
+    func convertToJsonString() -> String {
+        if !JSONSerialization.isValidJSONObject(self) {
+            return ""
+        }
+        
+        let jsonOptions:JSONSerialization.WritingOptions = [.prettyPrinted,.sortedKeys]
+        do {
+            let jsonData = try JSONSerialization.data(withJSONObject: self,options: jsonOptions)
+            let jsonString = String(data: jsonData, encoding: String.Encoding.utf8)
+            return jsonString ?? ""
+        } catch {
+            return ""
+        }
     }
 }

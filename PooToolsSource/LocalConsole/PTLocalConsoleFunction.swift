@@ -11,32 +11,49 @@ import CocoaLumberjack
 import SwifterSwift
 
 public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
-    var currentAppStatus = ""
-    
-    switch UIApplication.applicationEnvironment() {
-    case .appStore:
-        currentAppStatus = "<<<生产环境>>>"
-    case .testFlight:
-        currentAppStatus = "<<<测试环境>>>"
-    default:
-        currentAppStatus = "<<<DEBUG环境>>>"
+        
+    var msgStr = ""
+    for element in any {
+        
+        let result = "\(element)"
+        var newString = result
+        if element is String {
+            if let jsonString = (element as! String).jsonStringToDic() {
+                let string = jsonString.convertToJsonString()
+                if !string.stringIsEmpty() {
+                    newString = string
+                }
+            }
+        } else if element is NSDictionary {
+            let dic = (element as! NSDictionary)
+            let string = dic.convertToJsonString()
+            if !string.stringIsEmpty() {
+                newString = string
+            }
+        } else if element is NSArray {
+            let arr = (element as! NSArray)
+            let string = arr.convertToJsonString()
+            if !string.stringIsEmpty() {
+                newString = string
+            }
+        }
+        
+        msgStr += "\(newString)\n"
     }
 
-    let loginfo = "\(currentAppStatus)\(any)"
-    
     if UIApplication.shared.inferredEnvironment != .appStore {
         DDLog.add(DDOSLogger.sharedInstance)
         if error {
-            DDLogError(loginfo)
+            DDLogError(msgStr)
         } else {
-            PTNSLog(loginfo)
+            PTNSLog(msgStr)
         }
     } else {
         DDLog.add(DDOSLogger.sharedInstance)
         if error {
-            DDLogError(loginfo)
+            DDLogError(msgStr)
         } else {
-            DDLogVerbose(loginfo)
+            DDLogVerbose(msgStr)
         }
     }
 }

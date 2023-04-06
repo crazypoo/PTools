@@ -27,8 +27,19 @@ public func PTNSLog(_ msg: Any...,
     for element in msg {
         msgStr += "\(element)\n"
     }
+    
+    var currentAppStatus = ""
+    switch UIApplication.applicationEnvironment() {
+    case .appStore:
+        currentAppStatus = "<<<生产环境>>>"
+    case .testFlight:
+        currentAppStatus = "<<<测试环境>>>"
+    default:
+        currentAppStatus = "<<<DEBUG环境>>>"
+    }
+
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:SS")
-    let prefix = "🔨Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)\n❌Conclusión❌"
+    let prefix = "🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌"
 
     switch UIApplication.applicationEnvironment() {
     case .appStore:
