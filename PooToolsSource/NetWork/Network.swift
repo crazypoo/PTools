@@ -221,7 +221,7 @@ public class Network: NSObject {
         if showHud! {
             Network.hud.show(animated: true)
         }
-        PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.参数 = \(parameters?.jsonString() ?? "没有参数")💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")😂😂😂😂😂😂😂😂😂😂😂😂")
+        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")🌐")
         
         Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
             if showHud! {
@@ -235,7 +235,7 @@ public class Network: NSObject {
                     return
                 }
                 
-                PTNSLogConsole("😂😂😂😂😂😂接口请求成功回调😂😂😂😂😂😂❤️1.请求地址 = \(urlStr)💛2.result:\(jsonStr)😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)🌐")
 
                 guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
                     resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
@@ -258,7 +258,7 @@ public class Network: NSObject {
                 resultBlock(responseModel,nil)
 
             case .failure(let error):
-                PTNSLogConsole("------------------------------------>接口:\(urlStr)🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))",error: true)
+                PTNSLogConsole("❌接口:\(urlStr)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
                 resultBlock(nil,error)
             }
         }
@@ -354,10 +354,10 @@ public class Network: NSObject {
                 }
                 
                 responseModel.originalString = jsonStr
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 = \(pathUrl)💛2.result:\(String(describing: jsonStr))😂😂😂😂😂😂😂😂😂😂😂😂")
+                PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐")
                 resultBlock(responseModel,nil)
             case .failure(let error):
-                PTNSLogConsole("😂😂😂😂😂😂😂😂😂😂😂😂❤️1.请求地址 =\(pathUrl)💛2.error:\(error)",error: true)
+                PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌",error: true)
                 resultBlock(nil,error)
             }
         }

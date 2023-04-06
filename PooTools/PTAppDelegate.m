@@ -44,8 +44,7 @@
     
 //    PNSLog(@">>>>>>>>>>>>>>>>>%@",[PTUtils jsonStringToArrayWithJsonStr:@"{\"json\":11111,\"b\"123344}"]);
 
-    PNSLog(@"有没有敏感词%d",[[PTCheckFWords share] haveFWordWithStr:@"公安局"]);
-    
+    PNSLog(@"有没有敏感词%d",[[PTCheckFWords share] haveFWordWithStr:@"公安局"]);    
     PNSLog(@">>>>>>>>>>>>%@",[[UIColor.redColor createImageWithColor] transformImageWithSize:CGSizeMake(100, 100)]);
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 50;
@@ -62,7 +61,7 @@
     [PTLaunchAdMonitor showAtPath:@[@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"] onView:kAppDelegateWindow timeInterval:10 param:@{@"123":@"https://www.qq.com"} year:@"2000" skipFont:[UIFont appCustomFontWithSize:10 customFont:FontName scale:NO] comName:@"11111" comNameFont:[UIFont appCustomFontWithSize:10 customFont:FontName scale:NO] callBack:^{
         PNSLog(@"1231231231231231231231");
     }];
-                
+                    
     [[PCheckAppStatus shared] open];
         
     PTImaginaryLineView *imageLine = [[PTImaginaryLineView alloc] init];

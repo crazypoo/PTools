@@ -43,11 +43,7 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
 
     if UIApplication.shared.inferredEnvironment != .appStore {
         DDLog.add(DDOSLogger.sharedInstance)
-        if error {
-            DDLogError(msgStr)
-        } else {
-            PTNSLog(msgStr)
-        }
+        PTNSLog(msgStr)
     } else {
         DDLog.add(DDOSLogger.sharedInstance)
         if error {
