@@ -453,9 +453,11 @@ public class PTMediaMediaView:UIView
                 self.contentScrolView.addSubview(self.imageView)
                 
                 if dataModel.imageURL is UIImage {
+                    self.gifImage = dataModel.imageURL as? UIImage
                     self.imageView.image = dataModel.imageURL as? UIImage
                     self.adjustFrame()
                     self.hasLoadedImage = true
+                    loading.removeFromSuperview()
                 } else if dataModel.imageURL is String {
                     let urlString = dataModel.imageURL as! String
                     if FileManager.pt.judgeFileOrFolderExists(filePath: urlString) {
