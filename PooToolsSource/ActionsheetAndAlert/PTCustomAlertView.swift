@@ -28,8 +28,7 @@ public typealias PTCustomerCustomerBlock = (_ alertCustomerView:UIView) -> Void
 }
 
 @objcMembers
-public class PTCustomBottomButtonModel:NSObject
-{
+public class PTCustomBottomButtonModel:NSObject {
     public var titleName:String? = ""
     public var titleColor:UIColor? = UIColor.systemBlue
 }
@@ -41,38 +40,30 @@ public class PTCustomAlertView: UIView {
     public var didDismissBlock:PTCustomerDidDismissBlock?
     public var customerBlock:PTCustomerCustomerBlock?
 
-    class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat
-    {
+    class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat {
         let height = UIView.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         let viewHeight = CGFloat.kSCREEN_HEIGHT / 3
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
-    class public func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat
-    {
+    class public func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat {
         let buttonH = UIView.sizeFor(string: "HOLA", font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         return (moreButtonTitles.count == 0 || moreButtonTitles.isEmpty) ? 0 : ((buttonH > BottomButtonHeight) ? buttonH : BottomButtonHeight)
     }
     
-    class public func titleAndBottomViewNormalHeight(width:CGFloat,title:String,font:UIFont,buttonArray:[PTCustomBottomButtonModel])->CGFloat
-    {
+    class public func titleAndBottomViewNormalHeight(width:CGFloat,title:String,font:UIFont,buttonArray:[PTCustomBottomButtonModel])->CGFloat {
         var titleH : CGFloat? = 0
         titleH = PTCustomAlertView.getAlertTitleHeight(font: font, alertWidth: width, title: title)
         let btnW : CGFloat = (width - CGFloat(buttonArray.count - 1) * AlertLine) / CGFloat(buttonArray.count)
         var isEX : Bool?  = false
-        if !(buttonArray.count == 0 || buttonArray.isEmpty)
-        {
-            for string in buttonArray
-            {
-                if (font.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
-                {
+        if !(buttonArray.count == 0 || buttonArray.isEmpty) {
+            for string in buttonArray {
+                if (font.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW {
                     isEX = true
                     break
                 }
             }
-        }
-        else
-        {
+        } else {
             isEX = true
         }
         
@@ -158,24 +149,17 @@ public class PTCustomAlertView: UIView {
                                           alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
                                           customerBlock:@escaping ((_ customerView:UIView)->Void),
                                           tapBlock:@escaping ((_ index:NSInteger)->Void),
-                                          alertDismissBlock:@escaping (()->Void))
-    {
+                                          alertDismissBlock:@escaping (()->Void)) {
         var buttonModels = [PTCustomBottomButtonModel]()
         buttons.enumerated().forEach { index,value in
             let model = PTCustomBottomButtonModel()
-            if buttonColor.count < buttons.count
-            {
-                if index > (buttonColor.count - 1)
-                {
+            if buttonColor.count < buttons.count {
+                if index > (buttonColor.count - 1) {
                     model.titleColor = .systemBlue
-                }
-                else
-                {
+                } else {
                     model.titleColor = buttonColor[index]
                 }
-            }
-            else
-            {
+            } else {
                 model.titleColor = buttonColor[index]
             }
             model.titleName = value
@@ -241,8 +225,7 @@ public class PTCustomAlertView: UIView {
                          moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel](),
                          alertAnimationType:PTAlertAnimationType,
                          touchBackground:Bool? = true,
-                         cornerSize:CGFloat? = 15)
-    {
+                         cornerSize:CGFloat? = 15) {
         bottombuttonArray = moreButtons!
         mainView = superView
         
@@ -259,8 +242,7 @@ public class PTCustomAlertView: UIView {
         heightlightedColorColor = heightlightedColor!
         animationType = alertAnimationType
         
-        if touchBackground!
-        {
+        if touchBackground! {
             let tapBackgroundView = UITapGestureRecognizer.init(target: self, action: #selector(self.dismiss))
             tapBackgroundView.numberOfTouchesRequired = 1
             tapBackgroundView.numberOfTapsRequired = 1
@@ -307,8 +289,7 @@ public class PTCustomAlertView: UIView {
         layer.pop_add(animation, forKey: "AlertAnimation")
         
         PTGCDManager.gcdAfter(time: 0.1) {
-            if self.customerBlock != nil
-            {
+            if self.customerBlock != nil {
                 self.customerBlock!(self.customView)
             }
         }
@@ -318,13 +299,11 @@ public class PTCustomAlertView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func layoutSubviews()
-    {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width - 20, title: self.titleString)
-        if textH >= (CGFloat.kSCREEN_HEIGHT / 3)
-        {
+        if textH >= (CGFloat.kSCREEN_HEIGHT / 3) {
             titleLabel.text = titleString
             addSubview(titleScroller)
             titleScroller.contentSize = CGSize.init(width: frame.size.width - 20, height: UIView.sizeFor(string: titleString, font: viewFont, height: CGFloat(MAXFLOAT), width: (frame.size.width - 20)).height)
@@ -340,9 +319,7 @@ public class PTCustomAlertView: UIView {
                 make.width.equalTo(frame.size.width - 20)
                 make.centerX.equalToSuperview()
             }
-        }
-        else
-        {
+        } else {
             titleLabel.text = titleString
             addSubview(titleLabel)
             titleLabel.snp.makeConstraints { make in
@@ -354,55 +331,41 @@ public class PTCustomAlertView: UIView {
         
         let btnW = (frame.size.width - (CGFloat(bottombuttonArray.count) - 1) * AlertLine) / CGFloat(bottombuttonArray.count)
         var isEX : Bool?  = false
-        for string in bottombuttonArray
-        {
-            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
-            {
+        for string in bottombuttonArray {
+            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW {
                 isEX = true
                 break
-            }
-            else
-            {
+            } else {
                 isEX = false
             }
         }
         let bottomButtonHeight = PTCustomAlertView.getBottomButtonHiehgt(font: viewFont, alertWidth: frame.size.width, moreButtonTitles: bottombuttonArray)
         let bottomHeight = isEX! ? (bottomButtonHeight * CGFloat(bottombuttonArray.count) + AlertLine * CGFloat(bottombuttonArray.count)) : (bottomButtonHeight + AlertLine)
         customView.snp.makeConstraints { make in
-            if textH >= (CGFloat.kSCREEN_HEIGHT / 3)
-            {
+            if textH >= (CGFloat.kSCREEN_HEIGHT / 3) {
                 make.top.equalTo(self.titleScroller.snp.bottom)
-            }
-            else
-            {
+            } else {
                 make.top.equalTo(self.titleLabel.snp.bottom)
             }
             make.bottom.equalToSuperview().inset(bottomHeight)
             make.left.right.equalToSuperview()
         }
-                
         setBottomView()
     }
     
-    func setBottomView()
-    {
+    func setBottomView() {
         let btnW = (frame.size.width - (CGFloat(bottombuttonArray.count) - 1) * AlertLine) / CGFloat(bottombuttonArray.count)
         var isEX : Bool?  = false
-        for string in bottombuttonArray
-        {
-            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW
-            {
+        for string in bottombuttonArray {
+            if (viewFont.pointSize * CGFloat((string.titleName! as NSString).length) + 10) > btnW {
                 isEX = true
                 break
-            }
-            else
-            {
+            } else {
                 isEX = false
             }
         }
         
-        if !(bottombuttonArray.count == 0 || bottombuttonArray.isEmpty)
-        {
+        if !(bottombuttonArray.count == 0 || bottombuttonArray.isEmpty) {
             let btnView = UIView()
             addSubview(btnView)
             btnView.snp.makeConstraints { make in
@@ -427,21 +390,17 @@ public class PTCustomAlertView: UIView {
                 cancelBtn.titleLabel?.font = self.viewFont
                 cancelBtn.tag = 100 + index
                 cancelBtn.addActionHandlers { sender in
-                    if self.buttonClick != nil
-                    {
+                    if self.buttonClick != nil {
                         self.buttonClick!(self,(sender.tag - 100))
                     }
                 }
                 btnView.addSubview(cancelBtn)
                 cancelBtn.snp.makeConstraints { make in
-                    if isEX!
-                    {
+                    if isEX! {
                         make.left.right.equalToSuperview()
                         make.top.equalToSuperview().inset(bottomButtonHeight * CGFloat(index) + AlertLine * CGFloat(index) + AlertLine)
                         make.height.equalTo(bottomButtonHeight)
-                    }
-                    else
-                    {
+                    } else {
                         make.width.equalTo(btnW)
                         make.top.equalToSuperview().inset(AlertLine)
                         make.bottom.equalToSuperview()
@@ -453,14 +412,11 @@ public class PTCustomAlertView: UIView {
                 lineView.backgroundColor = .lightGray
                 btnView.addSubview(lineView)
                 lineView.snp.makeConstraints { make in
-                    if isEX!
-                    {
+                    if isEX! {
                         make.left.right.equalToSuperview()
                         make.top.equalTo(cancelBtn.snp.bottom)
                         make.height.equalTo(AlertLine)
-                    }
-                    else
-                    {
+                    } else {
                         make.width.equalTo(AlertLine)
                         make.top.equalToSuperview().inset(AlertLine)
                         make.bottom.equalToSuperview()
@@ -471,8 +427,7 @@ public class PTCustomAlertView: UIView {
         }
     }
     
-    @objc public func dismiss()
-    {
+    @objc public func dismiss() {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
 
@@ -506,8 +461,7 @@ public class PTCustomAlertView: UIView {
                 self.backgroundView.removeFromSuperview()
                 self.customView.removeAllSubviews()
                 self.removeFromSuperview()
-                if self.didDismissBlock != nil
-                {
+                if self.didDismissBlock != nil {
                     self.didDismissBlock!(self)
                 }
             }

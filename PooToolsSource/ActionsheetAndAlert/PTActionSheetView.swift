@@ -10,8 +10,7 @@ import UIKit
 import pop
 import SnapKit
 
-public class PTActionCell:UIView
-{
+public class PTActionCell:UIView {
     private var blur:SSBlurView?
     
     lazy var cellButton : UIButton = {
@@ -19,8 +18,7 @@ public class PTActionCell:UIView
         return view
     }()
 
-    public override func layoutSubviews()
-    {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         self.addSubview(cellButton)
@@ -177,8 +175,7 @@ public class PTActionSheetView: UIView {
                     titleCellTitleColor:UIColor? = UIColor.systemGray,
                     selectedColor:UIColor? = UIColor.lightGray,
                     corner:CGFloat? = 15,
-                    dismissWithTapBG:Bool? = true)
-    {
+                    dismissWithTapBG:Bool? = true) {
         actionSheetTitle = title!
         actionSheetMessage = subTitle!
         cancelButtonTitle = cancelButton!
@@ -196,8 +193,7 @@ public class PTActionSheetView: UIView {
         dismissWithTapBackground = dismissWithTapBG!
     }
     
-    func createView()
-    {
+    func createView() {
         UIApplication.shared.delegate!.window!!.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -207,8 +203,7 @@ public class PTActionSheetView: UIView {
         self.addSubview(actionSheetView)
         actionSheetView.addSubview(actionSheetScroll)
         
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty())
-        {
+        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
             let enterString = (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) ? "\n" : ""
             let titleStr = String(format: "%@%@%@", actionSheetTitle as CVarArg,enterString,actionSheetMessage as CVarArg)
             titleLbale.cellButton.setTitle(titleStr, for: .normal)
@@ -217,8 +212,7 @@ public class PTActionSheetView: UIView {
         
         let highlightedImage = heightlightColor.createImageWithColor()
         
-        if !destructiveButtonTitle.stringIsEmpty()
-        {
+        if !destructiveButtonTitle.stringIsEmpty() {
             destructiveButton.cellButton.setBackgroundImage(highlightedImage, for: .highlighted)
             actionSheetView.addSubview(destructiveButton)
         }
@@ -227,29 +221,23 @@ public class PTActionSheetView: UIView {
         actionSheetView.addSubview(cancelBtn)
     }
     
-    func destlineH()->CGFloat
-    {
+    func destlineH()->CGFloat {
         return destructiveButtonTitle.stringIsEmpty() ? 0 : kRowLineHeight
     }
     
-    func destRowH()->CGFloat
-    {
+    func destRowH()->CGFloat {
         return destructiveButtonTitle.stringIsEmpty() ? 0 : kRowHeight
     }
     
-    func titleHeight()->CGFloat
-    {
+    func titleHeight()->CGFloat {
         var spacing:CGFloat = 0
         
         var titleStr = ""
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty())
-        {
+        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
             spacing = 25
             let enterString = (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) ? "\n" : ""
             titleStr = String(format: "%@%@%@", actionSheetTitle as CVarArg,enterString,actionSheetMessage as CVarArg)
-        }
-        else
-        {
+        } else {
             spacing = 0
             titleStr = ""
         }
@@ -257,47 +245,36 @@ public class PTActionSheetView: UIView {
         return UIView.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + spacing * 2
     }
     
-    func scrollContentHeight()->CGFloat
-    {
+    func scrollContentHeight()->CGFloat {
         let realH = CGFloat(otherTitles.count) * kRowHeight + kRowLineHeight * CGFloat(otherTitles.count)
         return realH
     }
     
-    func actionSheetRealHeight()->CGFloat
-    {
+    func actionSheetRealHeight()->CGFloat {
         return scrollContentHeight() + (titleHeight() + kRowLineHeight) + (kSeparatorHeight + kRowHeight) + destRowH() + destlineH() + kRowLineHeight * 2
     }
     
-    func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat
-    {
+    func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat {
         let realH = actionSheetRealHeight()
         let canshowViewH:CGFloat = CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarSaveAreaHeight - CGFloat.statusBarHeight() - 10
-        if actionSheetRealHeight() >= canshowViewH
-        {
+        if actionSheetRealHeight() >= canshowViewH {
             return canshowViewH
-        }
-        else
-        {
+        } else {
             return realH
         }
     }
     
-    func scrollHieght(orientation:UIDeviceOrientation)->CGFloat
-    {
+    func scrollHieght(orientation:UIDeviceOrientation)->CGFloat {
         let a:CGFloat = self.actionSheetHeight(orientation: orientation)
         let b:CGFloat = CGFloat.kSCREEN_HEIGHT
-        if (a - b) <= 0
-        {
+        if (a - b) <= 0 {
             return a - (self.titleHeight() + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - (self.destRowH() + self.destlineH() + kRowLineHeight * 2)
-        }
-        else
-        {
+        } else {
             return self.scrollContentHeight()
         }
     }
     
-    public override func layoutSubviews()
-    {
+    public override func layoutSubviews() {
         super.layoutSubviews()
         
         backgroundView.snp.makeConstraints { make in
@@ -313,8 +290,7 @@ public class PTActionSheetView: UIView {
             make.height.equalTo(self.actionSheetHeight(orientation: device.orientation))
         }
                 
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty())
-        {
+        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
             titleLbale.snp.makeConstraints { make in
                 make.left.right.top.equalToSuperview()
                 make.height.equalTo(self.titleHeight())
@@ -331,9 +307,7 @@ public class PTActionSheetView: UIView {
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
             }
-        }
-        else
-        {
+        } else {
             let actionSheetScrollBottom = destructiveButtonTitle.stringIsEmpty() ? (kRowHeight + kSeparatorHeight + kRowLineHeight) : ((kRowHeight*2) + kSeparatorHeight * 1.5 + kRowLineHeight)
             actionSheetScroll.snp.makeConstraints { make in
                 make.left.right.top.equalToSuperview()
@@ -349,8 +323,7 @@ public class PTActionSheetView: UIView {
         
         let highlightedImage = heightlightColor.createImageWithColor()
 
-        if otherTitles.count > 0
-        {
+        if otherTitles.count > 0 {
             otherTitles.enumerated().forEach({ (index,value) in
                 let lineView = UIView()
                 lineView.backgroundColor = .lightGray
@@ -380,24 +353,18 @@ public class PTActionSheetView: UIView {
                     make.height.equalTo(kRowHeight)
                 }
                 
-                if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty())
-                {
+                if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
                     
-                }
-                else
-                {
-                    if index == 0
-                    {
+                } else {
+                    if index == 0 {
                         lineView.isHidden = true
                         PTGCDManager.gcdAfter(time: 0.1) {
                             btn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
                         }
                     }
-                    
                 }
                 
-                if index == (self.otherTitles.count - 1)
-                {
+                if index == (self.otherTitles.count - 1) {
                     PTGCDManager.gcdAfter(time: 0.1) {
                         btn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.bottomLeft,.bottomRight])
                     }
@@ -405,8 +372,7 @@ public class PTActionSheetView: UIView {
             })
         }
                 
-        if !destructiveButtonTitle.stringIsEmpty()
-        {
+        if !destructiveButtonTitle.stringIsEmpty() {
             destructiveButton.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview().inset(kRowHeight + kSeparatorHeight / 2)
@@ -431,13 +397,10 @@ public class PTActionSheetView: UIView {
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let view = touches.first
         let point = view!.location(in: backgroundView)
-        if !actionSheetView.frame.contains(point)
-        {
-            if dismissWithTapBackground
-            {
+        if !actionSheetView.frame.contains(point) {
+            if dismissWithTapBackground {
                 dismiss {
-                    if self.actionSheetTapDismissBlock != nil
-                    {
+                    if self.actionSheetTapDismissBlock != nil {
                         self.actionSheetTapDismissBlock!(self)
                     }
                 }
@@ -445,19 +408,17 @@ public class PTActionSheetView: UIView {
         }
     }
     
-    public func dismiss(block:(()->Void)?)
-    {
+    public func dismiss(block:(()->Void)?) {
         let offscreenAnimation = POPBasicAnimation.easeOut()
         offscreenAnimation?.property = (POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty)
-        offscreenAnimation?.toValue = actionSheetRealHeight() + 10
+        offscreenAnimation?.toValue = actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight
         offscreenAnimation!.duration = 0.35
         offscreenAnimation?.completionBlock = { (anim,finish) in
             UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
                 self.backgroundView.alpha = 0
             } completion: { animationFinish in
                 self.removeFromSuperview()
-                if block != nil
-                {
+                if block != nil {
                     block!()
                 }
             }
@@ -465,8 +426,7 @@ public class PTActionSheetView: UIView {
         actionSheetView.layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
     }
     
-    public func show()
-    {
+    public func show() {
         let animation = POPSpringAnimation.init(propertyNamed: kPOPLayerTranslationY)
         actionSheetView.layer.transform = CATransform3DMakeTranslation(0, self.actionSheetRealHeight(), 0)
         animation?.toValue = 0
@@ -474,21 +434,14 @@ public class PTActionSheetView: UIView {
         actionSheetView.layer.pop_add(animation, forKey: "ActionSheetAnimation")
     }
     
-    func didSelection(sender:UIButton)
-    {
-        if actionSheetSelectBlock != nil
-        {
+    func didSelection(sender:UIButton) {
+        if actionSheetSelectBlock != nil {
             var index = 0
-            if sender == cancelBtn.cellButton
-            {
+            if sender == cancelBtn.cellButton {
                 index = PTActionSheetView.CancelButtonTag
-            }
-            else if sender == destructiveButton.cellButton
-            {
+            } else if sender == destructiveButton.cellButton {
                 index = PTActionSheetView.DestructiveButtonTag
-            }
-            else
-            {
+            } else {
                 index = sender.tag - 100
             }
             dismiss {
