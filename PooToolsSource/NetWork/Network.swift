@@ -423,7 +423,7 @@ public class PTFileDownloadApi: NSObject {
             self.downloadRequest = AF.download(resumingWith: self.cancelledData!, to: self.destination)
             self.downloadRequest?.downloadProgress { [weak self] (pro) in
                 guard let `self` = self else {return}
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
                 }
             }
@@ -435,7 +435,7 @@ public class PTFileDownloadApi: NSObject {
             self.downloadRequest = AF.download(fileUrl, to: self.destination)
             self.downloadRequest?.downloadProgress { [weak self] (pro) in
                 guard let `self` = self else {return}
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
                 }
             }
@@ -450,12 +450,12 @@ public class PTFileDownloadApi: NSObject {
         case .success:
             if let data = response.value, data.count > 1000 {
                 if self.success != nil{
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         self.success?(response)
                     }
                 }
             } else {
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.fail?(NSError(domain: "文件下载失败", code: 12345, userInfo: nil) as Error)
                 }
             }
