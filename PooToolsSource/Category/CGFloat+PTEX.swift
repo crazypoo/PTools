@@ -11,16 +11,14 @@ import SwifterSwift
 
 extension CGFloat: PTProtocolCompatible {}
 //MARK: 溫度單位
-@objc public enum TemperatureUnit:Int
-{
+@objc public enum TemperatureUnit:Int {
     ///華氏
     case Fahrenheit
     ///攝氏
     case CentigradeDegree
 }
 
-public extension CGFloat
-{
+public extension CGFloat {
     //MARK: 獲取屏幕寬度
     ///獲取屏幕寬度
     static let kSCREEN_WIDTH = kSCREEN_SIZE.width
@@ -32,8 +30,7 @@ public extension CGFloat
     //MARK: 等比例调整
     ///等比例调整
     /// - Returns: CGFloat
-    static func ScaleW(w:CGFloat)->CGFloat
-    {
+    static func ScaleW(w:CGFloat)->CGFloat {
         let width:CGFloat = w * self.kSCREEN_WIDTH/375
         return width
     }
@@ -45,8 +42,7 @@ public extension CGFloat
     //MARK: 獲取StatusBar的高度
     ///獲取StatusBar的高度
     /// - Returns: CGFloat
-    static func statusBarHeight()->CGFloat
-    {
+    static func statusBarHeight()->CGFloat {
         let window = UIApplication.shared.windows.first
         let statusBarFrame = window?.windowScene?.statusBarManager?.statusBarFrame
         return statusBarFrame?.height ?? 0
@@ -68,8 +64,7 @@ public extension CGFloat
     
     //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
     ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
-    static func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat
-    {
+    static func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat {
         switch changeToType {
         case .Fahrenheit:
             let values = 32 + 1.8 * value

@@ -8,33 +8,25 @@
 
 import UIKit
 
-public extension NSDictionary
-{
+public extension NSDictionary {
     //MARK: Json類型數據轉字符串
     ///Json類型數據轉字符串
-    @objc func jsonDataToString()->String
-    {
+    @objc func jsonDataToString()->String {
         var jsonData : Data? = nil
                 
         let dic = NSMutableDictionary()
         self.enumerateKeysAndObjects { keys, obj, stop in
             var keyString = ""
             var valueString = ""
-            if keys is NSString || keys is String
-            {
+            if keys is NSString || keys is String {
                 keyString = keys as! String
-            }
-            else
-            {
+            } else {
                 keyString = String(format: "%@", keys as! CVarArg)
             }
             
-            if obj is NSString || obj is String
-            {
+            if obj is NSString || obj is String {
                 valueString = obj as! String
-            }
-            else
-            {
+            } else {
                 valueString = String(format: "%@", obj as! CVarArg)
             }
             dic.setObject(valueString as NSCopying, forKey: keyString as NSCopying)
@@ -56,8 +48,7 @@ public extension NSDictionary
     
     //MARK: 檢測Dic是否為空
     ///檢測Dic是否為空
-    class func checkDic(_ dic:NSDictionary?) -> Bool
-    {
+    class func checkDic(_ dic:NSDictionary?) -> Bool {
         if dic == nil {
             return true
         }

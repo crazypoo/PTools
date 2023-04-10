@@ -653,6 +653,7 @@ enum PTVideoUrlType {
     // 服务器
     case server
 }
+
 public extension PTProtocol where Base: FileManager {
     
     //MARK: 通过本地(沙盒)视频文件路径获取截图

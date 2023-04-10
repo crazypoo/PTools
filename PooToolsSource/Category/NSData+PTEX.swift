@@ -8,8 +8,7 @@
 
 import UIKit
 
-public extension NSData
-{
+public extension NSData {
     //MARK: 根據NSData來獲取圖片的格式(底層方法)
     ///根據NSData來獲取圖片的格式(底層方法)
     @objc func getImageDataType() -> PTAboutImageType {

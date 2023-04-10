@@ -8,21 +8,17 @@
 
 import UIKit
 
-public extension NSMutableArray
-{
+public extension NSMutableArray {
     //MARK: 打亂原始內部數據的內容排序
     ///打亂原始內部數據的內容排序
-    func shuffle()
-    {
-        for i in (0...(self.count - 1)).reversed()
-        {
+    func shuffle() {
+        for i in (0...(self.count - 1)).reversed() {
             let j = arc4random() % UInt32(i)
             self.exchangeObject(at: Int(j), withObjectAt: i)
         }
     }
     
-    func randomizedArray()->NSMutableArray
-    {
+    func randomizedArray()->NSMutableArray {
         let results = NSMutableArray.init(array: self)
         var i = results.count
         i -= 1

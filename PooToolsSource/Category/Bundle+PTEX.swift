@@ -8,18 +8,15 @@
 
 import UIKit
 
-public extension Bundle
-{
-    class func imageWithName(imageName:String)->UIImage
-    {
+public extension Bundle {
+    class func imageWithName(imageName:String)->UIImage {
         let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
         let filePath = bundlePath?.path(forResource: imageName, ofType: "png")
         let image = UIImage(contentsOfFile: filePath!)
         return image!
     }
     
-    class func appScheme()->[String]
-    {
+    class func appScheme()->[String] {
         let bundleURL = Bundle.main.bundleURL
         let plistPath = bundleURL.appendingPathComponent("Info.plist")
         if let plistData = try? Data(contentsOf: plistPath),let plist = try? PropertyListSerialization.propertyList(from:plistData,options: [],format: nil) as? [String:Any] {

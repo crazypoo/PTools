@@ -11,8 +11,7 @@ import SwifterSwift
 
 extension NSString:PTProtocolCompatible {}
 
-public extension NSString
-{
+public extension NSString {
     /*  银行卡号有效性问题Luhm算法
      *  现行 16 位银联卡现行卡号开头 6 位是 622126～622925 之间的，7 到 15 位是银行自定义的，
      *  可能是发卡分行，发卡网点，发卡序号，第 16 位是校验码。
@@ -24,15 +23,12 @@ public extension NSString
     //MARK: 銀行卡Luhm算法
     ///銀行卡Luhm算法
     /// - Returns: Bool
-    func bankCardLuhmCheck()->Bool
-    {
-        if String(format: "%@", self).stringIsEmpty()
-        {
+    func bankCardLuhmCheck()->Bool {
+        if String(format: "%@", self).stringIsEmpty() {
             return false
         }
         
-        if self.length < 3
-        {
+        if self.length < 3 {
             return false
         }
         
@@ -40,8 +36,7 @@ public extension NSString
         let forwardNum:NSString = self.substring(to: (self.length - 1)) as NSString
         
         let forwardArr = NSMutableArray(capacity: 0)
-        for i in 0..<forwardNum.length
-        {
+        for i in 0..<forwardNum.length {
             let subStr:NSString = forwardNum.substring(with: NSMakeRange(i, 1)) as NSString
             forwardArr.add(subStr)
         }
@@ -104,25 +99,21 @@ public extension NSString
     //MARK: 檢測中國公民新份證
     ///檢測中國公民新份證
     /// - Returns: Bool
-    func isValidateIdentity()->Bool
-    {
-        if self.length != 18
-        {
+    func isValidateIdentity()->Bool {
+        if self.length != 18 {
             return false
         }
         
         let regex2 = "^(^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$)|(^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])((\\d{4})|\\d{3}[Xx])$)$"
         let identityStringPredicate = NSPredicate(format: "SELF MATCHES %@", regex2)
-        if !identityStringPredicate.evaluate(with: self)
-        {
+        if !identityStringPredicate.evaluate(with: self) {
             return false
         }
         
         let idCardWi = [ "7", "9", "10", "5", "8", "4", "2", "1", "6", "3", "7", "9", "10", "5", "8", "4", "2" ] //将前17位加权因子保存在数组里
         let idCardY = [ "1", "0", "10", "9", "8", "7", "6", "5", "4", "3", "2" ] //这是除以11后，可能产生的11位余数、验证码，也保存成数组
         var idCardWiSum = 0
-        for i in 0..<17
-        {
+        for i in 0..<17 {
             let subStringIndex = self.substring(with: NSMakeRange(i, 1)).int!
             let idCardWithIndex = idCardWi[i].int!
             idCardWiSum += (subStringIndex * idCardWithIndex)
@@ -130,17 +121,12 @@ public extension NSString
         
         let idCardMod = idCardWiSum % 11
         let idCardLast:NSString = self.substring(with: NSMakeRange(17, 1)) as NSString
-        if idCardMod == 2
-        {
-            if !idCardLast.isEqual(to: "X") || idCardLast.isEqual(to: "x")
-            {
+        if idCardMod == 2 {
+            if !idCardLast.isEqual(to: "X") || idCardLast.isEqual(to: "x") {
                 return false
             }
-        }
-        else
-        {
-            if !idCardLast.isEqual(to: idCardY[idCardMod])
-            {
+        } else {
+            if !idCardLast.isEqual(to: idCardY[idCardMod]) {
                 return false
             }
         }
@@ -149,14 +135,12 @@ public extension NSString
     
     //MARK: 从身份证上获取生日
     ///从身份证上获取生日
-    func birthdayFromIdentityCard()->NSString
-    {
+    func birthdayFromIdentityCard()->NSString {
         let result = NSMutableString(capacity: 0)
         var year:NSString = ""
         var month:NSString = ""
         var day:NSString = ""
-        if self.isValidateIdentity()
-        {
+        if self.isValidateIdentity() {
             year = self.substring(with: NSMakeRange(6, 4)) as NSString
             month = self.substring(with: NSMakeRange(10, 2)) as NSString
             day = self.substring(with: NSMakeRange(12, 2)) as NSString
@@ -167,19 +151,15 @@ public extension NSString
             result.append("-")
             result.append(day as String)
             return result
-        }
-        else
-        {
+        } else {
             return "1970-01-01"
         }
     }
     
     //MARK: 从身份证上获取年龄
     ///从身份证上获取年龄
-    func getIdentityCardAge()->NSString
-    {
-        if self.isValidateIdentity()
-        {
+    func getIdentityCardAge()->NSString {
+        if self.isValidateIdentity() {
             let formatterTow = DateFormatter()
             formatterTow.dateFormat = "yyyy-MM-dd"
             let birthday = self.birthdayFromIdentityCard()
@@ -187,57 +167,45 @@ public extension NSString
             let dateDiff = bsyDate!.timeIntervalSinceNow
             let age = trunc(dateDiff / (60 * 60 * 24)) / 365
             return "\(-age)" as NSString
-        }
-        else
-        {
+        } else {
             return "99999"
         }
     }
     
     //MARK: 獲取字符串中文件名的格式(媒體)
     ///獲取字符串中文件名的格式(媒體)
-    @objc func contentTypeForUrl()->PTUrlStringVideoType
-    {
+    @objc func contentTypeForUrl()->PTUrlStringVideoType {
         let pathEX = self.pathExtension.lowercased()
         
-        if pathEX.contains("mp4")
-        {
+        if pathEX.contains("mp4") {
             return .MP4
-        }
-        else if pathEX.contains("mov")
-        {
+        } else if pathEX.contains("mov") {
             return .MOV
-        }
-        else if pathEX.contains("3gp")
-        {
+        } else if pathEX.contains("3gp") {
             return .ThreeGP
         }
         return .UNKNOW
     }
     
-    @objc func checkWithString(expression:NSString)->Bool
-    {
+    @objc func checkWithString(expression:NSString)->Bool {
         return String(format: "%@", self).checkWithString(expression: String(format: "%@", expression))
     }
     
-    @objc func checkWithArray(expression:NSArray)->Bool
-    {
+    @objc func checkWithArray(expression:NSArray)->Bool {
         return String(format: "%@", self).checkWithArray(expression: expression)
     }
     
     //MARK: 檢測字符串是否為空
     ///檢測字符串是否為空
     /// - Returns: Bool
-    @objc func stringIsEmpty()->Bool
-    {
+    @objc func stringIsEmpty()->Bool {
         if let string = self as String?, !string.isEmpty {
             return false
         }
         return true
     }
     
-    @objc class func currentDate(dateFormatter:NSString)->NSString
-    {
+    @objc class func currentDate(dateFormatter:NSString)->NSString {
         return String.currentDate(dateFormatterString: dateFormatter as String).nsString
     }
 }
@@ -246,87 +214,63 @@ public extension NSString
  富文本文字處理
  */
 let kWPAttributedMarkupLinkName = "PTAttributedMarkupLinkName"
-public extension NSString
-{
-    func setText(color:UIColor,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
+public extension NSString {
+    func setText(color:UIColor,range:NSRange,onAttributedString:NSMutableAttributedString) {
         onAttributedString.removeAttribute(NSAttributedString.Key.foregroundColor, range: range)
         onAttributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: range)
     }
     
-    func setTextStyle(styleName:NSString,value:Any,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
+    func setTextStyle(styleName:NSString,value:Any,range:NSRange,onAttributedString:NSMutableAttributedString) {
         onAttributedString.removeAttribute(styleName as NSAttributedString.Key, range: range)
         onAttributedString.addAttribute(styleName as NSAttributedString.Key, value: value, range: range)
     }
     
-    func setLink(url:NSURL,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
+    func setLink(url:NSURL,range:NSRange,onAttributedString:NSMutableAttributedString) {
         onAttributedString.removeAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), range: range)
         onAttributedString.addAttribute(NSAttributedString.Key(rawValue: kWPAttributedMarkupLinkName), value: url.absoluteString!, range: range)
     }
     
-    func setFont(fontName:NSString,size:CGFloat,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
+    func setFont(fontName:NSString,size:CGFloat,range:NSRange,onAttributedString:NSMutableAttributedString) {
         let aFont = CTFontCreateWithName(fontName, size, nil)
         onAttributedString.removeAttribute(kCTFontAttributeName as NSAttributedString.Key, range: range)
         onAttributedString.addAttribute(kCTFontAttributeName as NSAttributedString.Key, value: aFont, range: range)
     }
     
-    func setFont(font:UIFont,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
+    func setFont(font:UIFont,range:NSRange,onAttributedString:NSMutableAttributedString) {
         self.setFont(fontName: font.fontName.nsString, size: font.pointSize, range: range, onAttributedString: onAttributedString)
     }
     
-    func setStyle(style:NSDictionary,range:NSRange,onAttributedString:NSMutableAttributedString)
-    {
-        for key in style.allKeys
-        {
+    func setStyle(style:NSDictionary,range:NSRange,onAttributedString:NSMutableAttributedString) {
+        for key in style.allKeys {
             let newKey = NSString(format: "%@", key as! CVarArg)
             let value = style.value(forKey: newKey as String)
             self.setTextStyle(styleName:newKey, value: value!, range: range, onAttributedString: onAttributedString)
         }
     }
     
-    func style(attributedString:NSMutableAttributedString,range:NSRange,style:Any,styleBook:NSDictionary)
-    {
-        if style is NSArray
-        {
-            for subStyle in (style as! NSArray)
-            {
+    func style(attributedString:NSMutableAttributedString,range:NSRange,style:Any,styleBook:NSDictionary) {
+        if style is NSArray {
+            for subStyle in (style as! NSArray) {
                 self.style(attributedString: attributedString, range: range, style: subStyle, styleBook: styleBook)
             }
-        }
-        else if style is NSDictionary
-        {
+        } else if style is NSDictionary {
             self.setStyle(style: style as! NSDictionary, range: range, onAttributedString: attributedString)
-        }
-        else if style is UIFont
-        {
+        } else if style is UIFont {
             self.setFont(font: style as! UIFont, range: range, onAttributedString: attributedString)
-        }
-        else if style is UIColor
-        {
+        } else if style is UIColor {
             self.setText(color: style as! UIColor, range: range, onAttributedString: attributedString)
-        }
-        else if style is NSURL
-        {
+        } else if style is NSURL {
             self.setLink(url: style as! NSURL, range: range, onAttributedString: attributedString)
-        }
-        else if style is NSString
-        {
+        } else if style is NSString {
             self.style(attributedString: attributedString, range: range, style: style, styleBook: styleBook)
-        }
-        else if style is UIImage
-        {
+        } else if style is UIImage {
             let attachment = NSTextAttachment()
             attachment.image = (style as! UIImage)
             attributedString.replaceCharacters(in: range, with: NSAttributedString(attachment: attachment))
         }
     }
     
-    func attributedString(fontBook:NSDictionary)->NSAttributedString
-    {
+    func attributedString(fontBook:NSDictionary)->NSAttributedString {
         let tags = [NSDictionary]()
         let ms:NSMutableString = self.mutableCopy() as! NSMutableString
         ms.replaceOccurrences(of: "<br>", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
@@ -337,18 +281,15 @@ public extension NSString
         attributedString.setAttributes([.underlineStyle:[NSNumber(integerLiteral: 0)]], range: NSMakeRange(0, attributedString.length))
         
         let bodyStyle = fontBook["body"]
-        if bodyStyle != nil
-        {
+        if bodyStyle != nil {
             self.style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle!, styleBook: fontBook)
         }
         
-        for tag in tags
-        {
+        for tag in tags {
             let t:NSString = tag["tag"] as! NSString
             let loc:NSNumber? = tag["loc"] as? NSNumber
             let endloc:NSNumber? = tag["endloc"] as? NSNumber
-            if loc != nil && endloc != nil
-            {
+            if loc != nil && endloc != nil {
                 let range = NSMakeRange(loc!.intValue, endloc!.intValue - loc!.intValue)
                 let style = fontBook[t]
                 self.style(attributedString: attributedString, range: range, style: style!, styleBook: fontBook)

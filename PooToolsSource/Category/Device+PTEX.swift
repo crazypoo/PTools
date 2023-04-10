@@ -14,47 +14,39 @@ import AudioToolbox
 
 extension UIDevice: PTProtocolCompatible { }
 
-public enum UIDeviceApplePencilSupportType
-{
+public enum UIDeviceApplePencilSupportType {
     case First
     case Second
     case Both
     case BothNot
 }
 
-public extension PTProtocol where Base: UIDevice
-{
+public extension PTProtocol where Base: UIDevice {
     //MARK: 判断机型
     ///小
-    static func oneOfSmallDevice()->Bool
-    {
+    static func oneOfSmallDevice()->Bool {
         return Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
     }
     
     ///大
-    static func oneOfPlusDevice()->Bool
-    {
+    static func oneOfPlusDevice()->Bool {
         return Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
     }
 
     ///X
-    static func oneOfXDevice()->Bool
-    {
+    static func oneOfXDevice()->Bool {
         return Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
     }
     
     ///Pad
-    static func oneOfPadDevice()->Bool
-    {
+    static func oneOfPadDevice()->Bool {
         return Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
     }
 
     //MARK: 獲取當前設備的名稱
     ///獲取當前設備的名稱
-    static var currentDeviceName:String
-    {
-        get
-        {
+    static var currentDeviceName:String {
+        get {
             return UIDevice.current.name
         }
     }
@@ -69,8 +61,7 @@ public extension PTProtocol where Base: UIDevice
     
     //MARK: 越狱检测
     ///越狱检测
-    static var isJailBroken:Bool
-    {
+    static var isJailBroken:Bool {
         let apps = ["/Applications/Cydia.app",
                   "/Applications/limera1n.app",
                   "/Applications/greenpois0n.app",
@@ -79,10 +70,8 @@ public extension PTProtocol where Base: UIDevice
                   "/Applications/redsn0w.app",
                   "/Applications/Absinthe.app",
                     "/private/var/lib/apt"]
-        for app in apps
-        {
-            if FileManager.default.fileExists(atPath: app)
-            {
+        for app in apps {
+            if FileManager.default.fileExists(atPath: app) {
                 return true
             }
         }
@@ -194,42 +183,32 @@ public extension PTProtocol where Base: UIDevice
     ///是否支持ApplePencil
     static var supportApplePencil: UIDeviceApplePencilSupportType {
         
-        if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue)
-        {
+        if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .Both
-        }
-        else if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue)
-        {
+        } else if Device.ApplePencilSupport.secondGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .Second
-        }
-        else if Device.ApplePencilSupport.secondGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue)
-        {
+        } else if Device.ApplePencilSupport.secondGeneration != Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.secondGeneration.rawValue) && Device.ApplePencilSupport.firstGeneration == Device.ApplePencilSupport.init(rawValue: Device.ApplePencilSupport.firstGeneration.rawValue) {
             return .First
-        }
-        else
-        {
+        } else {
             return .BothNot
         }
     }
     
     //MARK: 获取最高刷新率
     ///获取最高刷新率
-    static var maximumFramesPerSecond:Int
-    {
+    static var maximumFramesPerSecond:Int {
         return UIScreen.main.maximumFramesPerSecond
     }
     
     //MARK: 获取手机的第一个语言
     ///获取手机的第一个语言
-    static var currentDeviceLanguageInIos:String
-    {
+    static var currentDeviceLanguageInIos:String {
         return Bundle.main.preferredLocalizations.first!
     }
     
     //MARK: 获取手机的第一个语言字典
     ///获取手机的第一个语言字典
-    static var currentDeviceLanguageInIosWithDic:[String:String]
-    {
+    static var currentDeviceLanguageInIosWithDic:[String:String] {
         var dic:[String:String] = [String:String]()
         let arr = NSLocale.preferredLanguages
         let language = arr.first!
@@ -251,24 +230,20 @@ public extension PTProtocol where Base: UIDevice
     }
 }
 
-public extension PTProtocol where Base: UIDevice
-{
+public extension PTProtocol where Base: UIDevice {
     //MARK: 檢測當前系統是否小於某個版本系統
     ///檢測當前系統是否小於某個版本系統
     /// - Returns: Bool
-    static func lessThanSysVersion(version:NSString,equal:Bool) -> Bool
-    {
+    static func lessThanSysVersion(version:NSString,equal:Bool) -> Bool {
         return UIDevice.current.systemVersion.compare("\(version)",options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
 }
 
-public extension PTProtocol where Base: UIDevice
-{
+public extension PTProtocol where Base: UIDevice {
     //MARK: 获取手机当前运营商
     ///获取手机当前运营商
     @available(iOS, introduced: 7.0, deprecated: 12.0,message: "12後不再支持了")
-    static func currentRadioAccessTechnology()->String
-    {
+    static func currentRadioAccessTechnology()->String {
         let current = CTTelephonyNetworkInfo()
         return current.currentRadioAccessTechnology ?? ""
     }
@@ -276,8 +251,7 @@ public extension PTProtocol where Base: UIDevice
     //MARK: 获取手机当前运营商其他信息
     ///获取手机当前运营商其他信息
     @available(iOS, introduced: 4.0, deprecated: 16.0,message: "可能在16之後就無法使用該API了")
-    static func getSiminfo()->NSMutableDictionary
-    {
+    static func getSiminfo()->NSMutableDictionary {
         let dic = NSMutableDictionary()
         
         let carrier = CTCarrier()

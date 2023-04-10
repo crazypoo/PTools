@@ -9,12 +9,10 @@
 import UIKit
 
 extension Bool: PTProtocolCompatible {}
-public extension PTProtocol where Base == Bool
-{
+public extension PTProtocol where Base == Bool {
     //MARK: Swift的Bool轉Int
     ///Swift的Bool轉Int
-    var boolToInt:Int
-    {
+    var boolToInt:Int {
         return self.base ? 1 : 0
     }
 }

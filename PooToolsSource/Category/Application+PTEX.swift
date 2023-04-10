@@ -26,7 +26,7 @@ public extension PTProtocol where Base: UIApplication {
      */
     //MARK: iOS更换App图标
     ///iOS更换App图标
-    static func changeAppIcon() {
+    static func changeAppIcon(with name:String? = nil) {
         if UIApplication.shared.supportsAlternateIcons {
             PTNSLogConsole("you can change this app's icon")
         } else {
@@ -34,23 +34,12 @@ public extension PTProtocol where Base: UIApplication {
             return
         }
         
-        let iconName = UIApplication.shared.alternateIconName
-        if !(iconName ?? "").stringIsEmpty() {
-            UIApplication.shared.setAlternateIconName(nil) { error in
-                if error != nil {
-                    UIViewController.gobal_drop(title: error.debugDescription)
+        UIApplication.shared.setAlternateIconName(name) { error in
+            if error != nil {
+                UIViewController.gobal_drop(title: error.debugDescription)
 
-                }
-                PTNSLogConsole("The alternate icon's name is \(String(describing: iconName))")
             }
-        } else {
-            UIApplication.shared.setAlternateIconName(iconName) { error in
-                if error != nil {
-                    UIViewController.gobal_drop(title: error.debugDescription)
-
-                }
-                PTNSLogConsole("The alternate icon's name is \(String(describing: iconName))")
-            }
+            PTNSLogConsole("The alternate icon's name is \(String(describing: name))")
         }
     }
     

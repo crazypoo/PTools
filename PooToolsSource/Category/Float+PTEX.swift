@@ -10,8 +10,7 @@ import UIKit
 
 extension Float: PTProtocolCompatible {}
 
-public extension Float
-{
+public extension Float {
     //MARK: 单精度的随机数
     ///单精度的随机数
     static func randomFloatNumber(lower: Float = 0, upper: Float = 100) -> Float {

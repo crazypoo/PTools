@@ -8,8 +8,7 @@
 
 import UIKit
 
-public extension Double
-{
+public extension Double {
     /*
      加速度单位 NSUnitAccelerationm /s²
      几何角度单位 NSUnitAngle度（°）
@@ -35,8 +34,7 @@ public extension Double
      */
     //MARK: 物理單位獲取
     ///物理單位獲取
-    func valueAddUnitToString(unit:Unit)->String
-    {
+    func valueAddUnitToString(unit:Unit)->String {
         let formatter = MeasurementFormatter()
         formatter.locale = Locale.init(identifier: "zh")
         formatter.unitOptions = .providedUnit

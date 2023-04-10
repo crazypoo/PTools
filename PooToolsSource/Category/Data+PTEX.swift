@@ -8,8 +8,7 @@
 
 import UIKit
 
-public extension Data
-{
+public extension Data {
     //MARK: 根據Data來獲取圖片的格式(底層方法)
     ///根據Data來獲取圖片的格式(底層方法)
     func detectImageType() -> PTAboutImageType {

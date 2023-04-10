@@ -8,8 +8,7 @@
 
 import UIKit
 
-extension URLResponse
-{
+extension URLResponse {
     typealias MYURLResponseGetHTTPResponse = ((CFURL?) -> CFHTTPMessage?)?
 
     //MARK: 獲取Http的版本

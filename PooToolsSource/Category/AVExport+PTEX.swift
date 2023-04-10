@@ -10,8 +10,7 @@ import UIKit
 import AVFoundation
 extension AVAssetExportSession: PTProtocolCompatible { }
 
-public extension PTProtocol where Base: AVAssetExportSession
-{
+public extension PTProtocol where Base: AVAssetExportSession {
     // MARK: 本地视频压缩
     /// 本地视频压缩
     /// - Parameters:
@@ -25,64 +24,64 @@ public extension PTProtocol where Base: AVAssetExportSession
                                    outputPath: String,
                                    outputFileType: AVFileType = .mp4,
                                    completionHandler handler: @escaping (AVAssetExportSession, Float64, String, String) -> Void, shouldOptimizeForNetworkUse: Bool = true, exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality) {
-    // 1、先检查是否存在输入是视频路径
-    guard FileManager.pt.judgeFileOrFolderExists(filePath: inputPath) else {
-        return
-    }
-    // 2、先移除转换后的路径（否则无法导出视频）
-    FileManager.pt.removefile(filePath: outputPath)
-    // 3、获取视频资源
-    let avAsset: AVURLAsset = AVURLAsset(url: URL(fileURLWithPath: inputPath), options: nil)
-    // 资源的时间
-    let assetTime = avAsset.duration
-    // 视频时长
-    let duration = CMTimeGetSeconds(assetTime)
-    // 4、配置视频压缩参数
-    guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: exportPresetMediumQuality) else {
-        return
-    }
-    // 输出URL
-    exportSession.outputURL = URL(fileURLWithPath: outputPath)
-    // 转换后的格式
-    exportSession.outputFileType = outputFileType
-    // 优化网络
-    exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
-    // 异步导出
-    exportSession.exportAsynchronously {
-        DispatchQueue.main.async {
-            if exportSession.status == .completed {
-                handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
-            } else {
-                handler(exportSession, duration, "", "")
+        // 1、先检查是否存在输入是视频路径
+        guard FileManager.pt.judgeFileOrFolderExists(filePath: inputPath) else {
+            return
+        }
+        // 2、先移除转换后的路径（否则无法导出视频）
+        FileManager.pt.removefile(filePath: outputPath)
+        // 3、获取视频资源
+        let avAsset: AVURLAsset = AVURLAsset(url: URL(fileURLWithPath: inputPath), options: nil)
+        // 资源的时间
+        let assetTime = avAsset.duration
+        // 视频时长
+        let duration = CMTimeGetSeconds(assetTime)
+        // 4、配置视频压缩参数
+        guard let exportSession: AVAssetExportSession = AVAssetExportSession(asset: avAsset, presetName: exportPresetMediumQuality) else {
+            return
+        }
+        // 输出URL
+        exportSession.outputURL = URL(fileURLWithPath: outputPath)
+        // 转换后的格式
+        exportSession.outputFileType = outputFileType
+        // 优化网络
+        exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
+        // 异步导出
+        exportSession.exportAsynchronously {
+            DispatchQueue.main.async {
+                if exportSession.status == .completed {
+                    handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
+                } else {
+                    handler(exportSession, duration, "", "")
+                }
             }
         }
+        //
+        /*
+        exportSession.exportAsynchronously(completionHandler: {
+            switch exportSession.status{
+            case .waiting:
+                print("等待压缩")
+                break
+            case .exporting:
+                print("压缩中：")
+                break
+            case .completed:
+                print("转码成功")
+                //转码成功后获取视频视频地址
+                //上传
+                break
+            case .cancelled:
+                print("取消")
+                break
+            case .failed:
+                print("失败...\(String(describing: exportSession.error?.localizedDescription))")
+                break
+            default:
+                print("..")
+                break
+            }
+        })
+        */
     }
-    //
-    /*
-    exportSession.exportAsynchronously(completionHandler: {
-        switch exportSession.status{
-        case .waiting:
-            print("等待压缩")
-            break
-        case .exporting:
-            print("压缩中：")
-            break
-        case .completed:
-            print("转码成功")
-            //转码成功后获取视频视频地址
-            //上传
-            break
-        case .cancelled:
-            print("取消")
-            break
-        case .failed:
-            print("失败...\(String(describing: exportSession.error?.localizedDescription))")
-            break
-        default:
-            print("..")
-            break
-        }
-    })
-    */
-}
 }

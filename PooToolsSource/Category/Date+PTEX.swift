@@ -22,8 +22,7 @@ public enum PTTimestampType: Int {
 
 //MARK: 時間對比狀態
 ///時間對比狀態
-@objc public enum CheckContractTimeRelationships:Int
-{
+@objc public enum CheckContractTimeRelationships:Int {
     ///過期
     case Expire
     ///準備過期
@@ -81,8 +80,7 @@ public extension Date {
     
     //MARK: 根據時間格式來獲取當前時間戳
     ///根據時間格式來獲取當前時間戳
-    func getCurrentDate(dateFormatterString:String)->TimeInterval
-    {
+    func getCurrentDate(dateFormatterString:String)->TimeInterval {
         let dformatter = DateFormatter()
         dformatter.dateFormat = dateFormatterString
         let timeDate = dformatter.date(from: String.currentDate(dateFormatterString: dateFormatterString))
@@ -92,8 +90,7 @@ public extension Date {
     
     //MARK: 獲取時區的當前時間戳
     ///獲取時區的當前時間戳
-    func getTimeStamp(timeZone:String? = "Asia/Shanghai")->String
-    {
+    func getTimeStamp(timeZone:String? = "Asia/Shanghai")->String {
         let date = Date()
         let formatter = DateFormatter()
         formatter.dateStyle = .medium
@@ -104,8 +101,7 @@ public extension Date {
 
     //MARK: Date格式化
     ///Date格式化
-    func dateFormat(formatString:String = "yyyy-MM-dd")->String
-    {
+    func dateFormat(formatString:String = "yyyy-MM-dd")->String {
         return self.toFormat(formatString)
     }
     
@@ -118,27 +114,19 @@ public extension Date {
     /// - Returns : 狀態
     static func checkContractTimeType(begainTime:String,
                                       endTime:String,
-                                      readyExpTime:Int)->CheckContractTimeRelationships
-    {
+                                      readyExpTime:Int)->CheckContractTimeRelationships {
         let begainTimeDate = begainTime.toDate("yyyy-MM-dd")!
         let endTimeDate = endTime.toDate("yyyy-MM-dd")!
         let timeDifference = endTimeDate.timeIntervalSince(begainTimeDate)
         let thirty = NSNumber(integerLiteral: readyExpTime).floatValue
         let result = timeDifference.float - thirty
-        if result > (-thirty) && result < thirty
-        {
+        if result > (-thirty) && result < thirty {
             return .ReadyExpire
-        }
-        else if result < (-thirty)
-        {
+        } else if result < (-thirty) {
             return .Expire
-        }
-        else if result > 0
-        {
+        } else if result > 0 {
             return .Normal
-        }
-        else
-        {
+        } else {
             return .Error
         }
     }
@@ -149,8 +137,7 @@ public extension Date {
     ///   - endTime: 結束時間
     ///   - readyExpTime: 多久過期
     /// - Returns : 狀態
-    static func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships
-    {
+    static func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships {
         return Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }

@@ -33,8 +33,7 @@ public extension Sequence {
     }
 }
 
-public extension Array
-{
+public extension Array {
     //MARK: 數組去重
     ///數組去重
     func filterDuplicates<E: Equatable>(_ filter: (Element) -> E) -> [Element] {
@@ -109,8 +108,7 @@ public extension Array
     
     //MARK: 數組轉字典
     ///數組轉字典
-    func toJSON()->String?
-    {
+    func toJSON()->String? {
         guard JSONSerialization.isValidJSONObject(self) else {
             PTNSLogConsole("无法解析出JSONString")
             return ""
