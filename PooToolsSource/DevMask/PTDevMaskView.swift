@@ -10,8 +10,7 @@ import UIKit
 import SnapKit
 
 @objcMembers
-public class PTDevMaskConfig:NSObject
-{
+public class PTDevMaskConfig:NSObject {
     public var isMask:Bool = false
     public var maskString:String = "测试模式"
     public var maskFont:UIFont = .appfont(size: 100,bold: true)
@@ -22,13 +21,14 @@ public class PTDevMaskView: PTBaseMaskView {
 
     var viewConfig : PTDevMaskConfig = PTDevMaskConfig()
     
-    public init(config:PTDevMaskConfig?)
-    {
+    let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
+
+    public init(config:PTDevMaskConfig?) {
         super.init(frame: .zero)
         self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
         self.isMask = self.viewConfig.isMask
         
-        let image = UIImage(named: "icon_clear")
+        let image = UIImage.init(contentsOfFile: bundlePath!.path(forResource: "icon_clear", ofType: "png")!)
 
         let imageContent = UIImageView()
         addSubview(imageContent)
