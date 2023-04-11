@@ -12,8 +12,7 @@ import SDWebImage
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     ///獲取圖片的某像素點的顏色
-    func getImagePointColor(point:CGPoint)->UIColor
-    {
+    func getImagePointColor(point:CGPoint)->UIColor {
         let thumbSize = CGSize(width: self.image!.size.width, height: self.image!.size.height)
 
         // 当前点在图片中的相对位置
@@ -22,8 +21,7 @@ public extension UIImageView {
         return self.image!.getImgePointColor(point: pInImage)
     }
     
-    func pt_SDWebImage(imageString:String)
-    {
+    func pt_SDWebImage(imageString:String) {
         self.sd_setImage(with: URL.init(string: imageString), placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage, options: PTAppBaseConfig.share.gobalWebImageLoadOption(), context: nil)
     }
 }

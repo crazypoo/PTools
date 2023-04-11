@@ -59,6 +59,50 @@ open class PTDevMaskView: PTBaseMaskView {
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         self.springMotionView.move(to: point)
+        
+        let touchPointSize:CGFloat = 64
+        let animation = PTTouchAnimationView(touchPoint: point)
+        self.addSubview(animation)
+        animation.snp.makeConstraints { make in
+            make.width.height.equalTo(touchPointSize)
+            make.left.equalTo(point.x / 2)
+            make.top.equalTo(point.y / 2)
+        }
+        UIView.animate(withDuration: 0.5) {
+            animation.transform = CGAffineTransformScale(animation.transform, 4, 4)
+            animation.alpha = 0
+        } completion: { finish in
+            animation.removeFromSuperview()
+        }
+
         return super.hitTest(point, with: event)
+    }
+}
+
+fileprivate class PTTouchAnimationView :UIView {
+    
+    private var touchPoint:CGPoint!
+    
+    init(touchPoint:CGPoint) {
+        super.init(frame: .zero)
+        self.touchPoint = touchPoint
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func draw(_ rect: CGRect) {
+        let redbius:CGFloat = 40
+        let startAngle:CGFloat = 0
+        let point = CGPoint(x: self.touchPoint.x / 2, y: self.touchPoint.y / 2)
+        let endAngle = 2 * Double.pi
+        
+        let path = UIBezierPath(arcCenter: point, radius: redbius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        let layer = CAShapeLayer()
+        layer.path = path.cgPath
+        layer.strokeColor = UIColor.randomColor.cgColor
+        layer.fillColor = UIColor.randomColor.cgColor
+        self.layer.addSublayer(layer)
     }
 }

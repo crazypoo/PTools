@@ -13,12 +13,10 @@ import Photos
 
 extension UIImage : PTProtocolCompatible {}
 
-public extension UIImage
-{
+public extension UIImage {
     //MARK: 更改圖片大小
     ///更改圖片大小
-    @objc func transformImage(size:CGSize)->UIImage
-    {
+    @objc func transformImage(size:CGSize)->UIImage {
         if #available(iOS 15.0, *) {
             return self.preparingThumbnail(of: size)!
         } else {
@@ -26,8 +24,7 @@ public extension UIImage
         }
     }
     
-    private func transform(size:CGSize)->UIImage
-    {
+    private func transform(size:CGSize)->UIImage {
         let destW = size.width
         let destH = size.height
         let sourceW = size.width
@@ -45,8 +42,7 @@ public extension UIImage
     
     //MARK: 圖片高斯模糊
     ///圖片高斯模糊
-    @objc func blurImage()->UIImage
-    {
+    @objc func blurImage()->UIImage {
         return self.img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
     }
     
@@ -57,20 +53,17 @@ public extension UIImage
      色彩饱和度(浓度)因子:  0是黑白灰, 9是浓彩色, 1是原色  默认1.8
      “彩度”，英文是称Saturation，即饱和度。将无彩色的黑白灰定为0，最鲜艳定为9s，这样大致分成十阶段，让数值和人的感官直觉一致。
      */
-    func img(alpha:Float,radius:Float,colorSaturationFactor:Float)->UIImage
-    {
+    func img(alpha:Float,radius:Float,colorSaturationFactor:Float)->UIImage {
         let tintColor = UIColor.init(white: 1, alpha: CGFloat(alpha))
         return self.imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
-    func imgBluredWithRadius(blurRadius:Float,tintColor:UIColor?,saturationDeltaFactor:Float,maskImage:UIImage?)->UIImage
-    {
+    func imgBluredWithRadius(blurRadius:Float,tintColor:UIColor?,saturationDeltaFactor:Float,maskImage:UIImage?)->UIImage {
         let imageRect = CGRect.init(origin: .zero, size: self.size)
         var effectImage = self
         let hadBlur = blurRadius > Float.ulpOfOne
         let hasSaturationChange = abs(saturationDeltaFactor - 1) > Float.ulpOfOne
-        if hadBlur || hasSaturationChange
-        {
+        if hadBlur || hasSaturationChange {
             UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
             let effectContext = UIGraphicsGetCurrentContext()
             effectContext!.scaleBy(x: 1,y: -1)
@@ -92,13 +85,11 @@ public extension UIImage
             effectOutBuffer.rowBytes = effectOutContext!.bytesPerRow
             
 //            var redPointer = [0xFF,0x00,0x00]
-            if hadBlur
-            {
+            if hadBlur {
                 let inputRadius = blurRadius * Float(UIScreen.main.scale)
                 let sqartReslut = sqrt(2 * Double.pi)
                 var radius:NSInteger = NSInteger(floor(Double(inputRadius) * 3.0 * sqartReslut / 4.0 + 0.5))
-                if radius % 2 != 1
-                {
+                if radius % 2 != 1 {
                     radius += 1
                 }
                 vImageBoxConvolve_ARGB8888(&effectInBuffer, &effectOutBuffer, nil, 0, 0, UInt32(radius), UInt32(radius), nil, vImage_Flags(kvImageEdgeExtend))
@@ -107,8 +98,7 @@ public extension UIImage
             }
             
             var effectImageBuffersAreSwapped = false
-            if hasSaturationChange
-            {
+            if hasSaturationChange {
                 let s = saturationDeltaFactor
                 let floatingPointSaturationMatrix = [0.0722 + 0.9278 * s,  0.0722 - 0.0722 * s,  0.0722 - 0.0722 * s,  0,
                                                      0.7152 - 0.7152 * s,  0.7152 + 0.2848 * s,  0.7152 - 0.7152 * s,  0,
@@ -118,28 +108,21 @@ public extension UIImage
                 let matrixSize = MemoryLayout.size(ofValue: floatingPointSaturationMatrix) / MemoryLayout.size(ofValue: floatingPointSaturationMatrix[0])
                 var saturationMatrix = [Int16]()
                 
-                for i in 0...(matrixSize - 1)
-                {
+                for i in 0...(matrixSize - 1) {
                     saturationMatrix[i] = Int16(roundf(floatingPointSaturationMatrix[i] * Float(divesor)))
                 }
                 
-                if hadBlur
-                {
+                if hadBlur {
                     vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, &saturationMatrix, divesor, nil,nil, vImage_Flags(kvImageNoFlags))
                     effectImageBuffersAreSwapped = true
-                }
-                else
-                {
+                } else {
                     vImageMatrixMultiply_ARGB8888(&effectOutBuffer, &effectInBuffer, &saturationMatrix, divesor, nil,nil, vImage_Flags(kvImageNoFlags))
                 }
                 
-                if !effectImageBuffersAreSwapped
-                {
+                if !effectImageBuffersAreSwapped {
                     effectImage = UIGraphicsGetImageFromCurrentImageContext()!
                     UIGraphicsEndImageContext()
-                }
-                else
-                {
+                } else {
                     effectImage = UIGraphicsGetImageFromCurrentImageContext()!
                     UIGraphicsEndImageContext()
                 }
@@ -152,19 +135,16 @@ public extension UIImage
         outputContext?.translateBy(x: 0, y: -self.size.height)
         outputContext?.draw(self.cgImage!, in: imageRect)
         
-        if hadBlur
-        {
+        if hadBlur {
             outputContext?.saveGState()
-            if maskImage != nil
-            {
+            if maskImage != nil {
                 outputContext?.clip(to: imageRect, mask: (maskImage?.cgImage)!)
             }
             outputContext?.draw(self.cgImage!, in: imageRect)
             outputContext?.restoreGState()
         }
         
-        if tintColor != nil
-        {
+        if tintColor != nil {
             outputContext?.saveGState()
             outputContext?.setFillColor(tintColor!.cgColor)
             outputContext?.fill(imageRect)
@@ -178,8 +158,7 @@ public extension UIImage
         
     //MARK: 加水印
     ///加水印
-    @objc func watermark(title:String,font:UIFont = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage
-    {
+    @objc func watermark(title:String,font:UIFont = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage {
         let originalImage = self
         
         let HORIZONTAL_SPACE = 30
@@ -212,16 +191,12 @@ public extension UIImage
         var tempOrignY = orignY
 
         let totalCount : Int = Int(horCount * verCount)
-        for i in 0...totalCount
-        {
+        for i in 0...totalCount {
             mark.draw(in: CGRect.init(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
-            if i % horCount == 0 && i != 0
-            {
+            if i % horCount == 0 && i != 0 {
                 tempOrignX = orignX
                 tempOrignY += (strHeight + CGFloat(VERTICAL_SPACE))
-            }
-            else
-            {
+            } else {
                 tempOrignX += (strWidth + CGFloat(HORIZONTAL_SPACE))
             }
         }
@@ -232,16 +207,14 @@ public extension UIImage
         return finalImg
     }
 
-    func imageScale(scaleSize:CGFloat)->UIImage
-    {
+    func imageScale(scaleSize:CGFloat)->UIImage {
         UIGraphicsBeginImageContext(CGSize(width: self.size.width * scaleSize, height: self.size.height * scaleSize))
         self.draw(in: CGRect(x: 0, y: 0, width: self.size.width * scaleSize, height: self.size.height * scaleSize))
         UIGraphicsEndImageContext()
         return self
     }
     
-    func imageMask(text:NSString,point:CGPoint,attributed:NSDictionary)->UIImage
-    {
+    func imageMask(text:NSString,point:CGPoint,attributed:NSDictionary)->UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
         text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
@@ -250,8 +223,7 @@ public extension UIImage
         return newImage!
     }
     
-    func imageMask(maskImage:UIImage,maskRect:CGRect)->UIImage
-    {
+    func imageMask(maskImage:UIImage,maskRect:CGRect)->UIImage {
         UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
         maskImage.draw(in: maskRect)
@@ -262,30 +234,23 @@ public extension UIImage
     
     //MARK: 獲取圖片中大部分占有的顏色
     ///獲取圖片中大部分占有的顏色
-    @objc func imageMostColor()->UIColor
-    {
+    @objc func imageMostColor()->UIColor {
         let context = self.getImageContext()
                 
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
 
         let cls = NSCountedSet.init(capacity: Int(self.size.width * self.size.height))
-        for i in 0...Int(self.size.width)
-        {
-            for j in 0...Int(self.size.height)
-            {
+        for i in 0...Int(self.size.width) {
+            for j in 0...Int(self.size.height) {
                 let offSet = 4 * (i * j)
                 let red = (newImgData + offSet).pointee
                 let green = (newImgData + (offSet + 1)).pointee
                 let blue = (newImgData + (offSet + 2)).pointee
                 let alpha = (newImgData + (offSet + 3)).pointee
-                if alpha > 0
-                {
-                    if red == 255 && green == 255 && blue == 255
-                    {
+                if alpha > 0 {
+                    if red == 255 && green == 255 && blue == 255 {
                         
-                    }
-                    else
-                    {
+                    } else {
                         let clr = [red,green,blue,alpha]
                         cls.add(clr)
                     }
@@ -304,8 +269,7 @@ public extension UIImage
     
     //MARK: 獲取圖片中某個像素點的顏色
     ///獲取圖片中某個像素點的顏色
-    func getImgePointColor(point:CGPoint)->UIColor
-    {
+    func getImgePointColor(point:CGPoint)->UIColor {
         let context = self.getImageContext()
                 
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
@@ -323,8 +287,7 @@ public extension UIImage
         return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha)/255.0)
     }
         
-    func getImageContext()-> CGContext
-    {
+    func getImageContext()-> CGContext {
         let currentImage = self.cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
         
         let bitmapInfo = CGBitmapInfo.byteOrderDefault.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
@@ -339,8 +302,7 @@ public extension UIImage
     }
 }
 
-public extension PTProtocol where Base: UIImage
-{
+public extension PTProtocol where Base: UIImage {
     //MARK: 设置图片的圆角
     ///设置图片的圆角
     /// - Parameters:

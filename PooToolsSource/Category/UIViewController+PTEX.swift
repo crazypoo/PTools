@@ -89,18 +89,13 @@ public extension UIViewController {
     
     //MARK: 檢查當前的ViewController是Push還是Pop
     ///檢查當前的ViewController是Push還是Pop
-    func checkVCIsPresenting() ->Bool
-    {
+    func checkVCIsPresenting() ->Bool {
         let vcs = self.navigationController?.viewControllers
-        if (vcs?.count ?? 0) > 1
-        {
-            if vcs![vcs!.count - 1] == self
-            {
+        if (vcs?.count ?? 0) > 1 {
+            if vcs![vcs!.count - 1] == self {
                 return false
             }
-        }
-        else
-        {
+        } else {
             return true
         }
         return false
@@ -108,22 +103,16 @@ public extension UIViewController {
     
     //MARK: ViewController退出
     ///ViewController退出
-    func viewDismiss(dismissBolck:(()->Void)? = nil)
-    {
-        if self.presentingViewController != nil
-        {
+    func viewDismiss(dismissBolck:(()->Void)? = nil) {
+        if self.presentingViewController != nil {
             self.dismiss(animated: true) {
-                if dismissBolck != nil
-                {
+                if dismissBolck != nil {
                     dismissBolck!()
                 }
             }
-        }
-        else
-        {
+        } else {
             self.navigationController?.popViewController(animated: true) {
-                if dismissBolck != nil
-                {
+                if dismissBolck != nil {
                     dismissBolck!()
                 }
             }
@@ -148,8 +137,7 @@ public extension UIViewController {
     @objc func popover(popoverVC:UIViewController,
                        popoverSize:CGSize,
                        sender:UIButton,
-                       arrowDirections:UIPopoverArrowDirection)
-    {
+                       arrowDirections:UIPopoverArrowDirection) {
         PTGCDManager.gcdAfter(time: 0.1) {
             popoverVC.preferredContentSize = popoverSize
             popoverVC.modalPresentationStyle = .popover
@@ -159,12 +147,9 @@ public extension UIViewController {
             presentationCtr?.sourceRect = sender.bounds
             presentationCtr?.permittedArrowDirections = arrowDirections
             presentationCtr?.delegate = self
-            if (self.navigationController?.viewControllers.count ?? 0) > 0
-            {
+            if (self.navigationController?.viewControllers.count ?? 0) > 0 {
                 self.navigationController?.present(popoverVC, animated: true)
-            }
-            else
-            {
+            } else {
                 self.present(popoverVC, animated: true)
             }
         }
@@ -271,25 +256,18 @@ public extension UIViewController {
                                subTitleFont:UIFont? = UIFont.appfont(size: 16),
                                subTitleColor:UIColor? = .black,
                                bannerBackgroundColor:UIColor? = .white,
-                               notifiTap:(()->Void)? = nil)
-    {
+                               notifiTap:(()->Void)? = nil) {
         var titleStr = ""
-        if title == nil || (title ?? "").stringIsEmpty()
-        {
+        if title == nil || (title ?? "").stringIsEmpty() {
             titleStr = ""
-        }
-        else
-        {
+        } else {
             titleStr = title!
         }
 
         var subTitleStr = ""
-        if subTitle == nil || (subTitle ?? "").stringIsEmpty()
-        {
+        if subTitle == nil || (subTitle ?? "").stringIsEmpty() {
             subTitleStr = ""
-        }
-        else
-        {
+        } else {
             subTitleStr = subTitle!
         }
 
@@ -304,16 +282,14 @@ public extension UIViewController {
         banner.titleLabel?.textColor = titleColor!
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)
         banner.onTap = {
-            if notifiTap != nil
-            {
+            if notifiTap != nil {
                 notifiTap!()
             }
         }
     }
 }
 
-extension UIViewController:UIPopoverPresentationControllerDelegate
-{
+extension UIViewController:UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
     }

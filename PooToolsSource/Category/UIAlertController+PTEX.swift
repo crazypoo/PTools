@@ -8,8 +8,7 @@
 
 import UIKit
 
-public extension UIAlertController
-{
+public extension UIAlertController {
     //MARK: 單按鈕Alert
     ///單按鈕Alert
     /// - Parameters:
@@ -17,8 +16,7 @@ public extension UIAlertController
     ///   - msg: 內容
     ///   - cancel: 取消按鈕
     ///   - cancelBlock: 取消回調
-    @objc class func alertVC(title:String? = "",msg:String? = "",cancel:String? = "取消",cancelBlock:(()->Void)?)
-    {
+    @objc class func alertVC(title:String? = "",msg:String? = "",cancel:String? = "取消",cancelBlock:(()->Void)?) {
         UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
     }
     
@@ -41,8 +39,7 @@ public extension UIAlertController
                                      destructiveBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
                                      cancelBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
                                      otherBlock:@escaping ((_ sheet:PTActionSheetView,_ index:Int)->Void),
-                                     tapBackgroundBlock:@escaping ((_ sheet:PTActionSheetView)->Void))
-    {
+                                     tapBackgroundBlock:@escaping ((_ sheet:PTActionSheetView)->Void)) {
         let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles)
         actionSheet.actionSheetSelectBlock = { (sheet,index) in
             switch index {
@@ -91,15 +88,12 @@ public extension UIAlertController
                             alertBGColor:UIColor? = .white,
                             alertCornerRadius:NSNumber? = 15,
                             cancel:(()->Void)? = nil,
-                            moreBtn: ((_ index:Int,_ title:String)->Void)? = nil)
-    {
+                            moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
-        if !(cancelBtn!).stringIsEmpty()
-        {
+        if !(cancelBtn!).stringIsEmpty() {
             let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-                if cancel != nil
-                {
+                if cancel != nil {
                     cancel!()
                 }
             }
@@ -107,44 +101,32 @@ public extension UIAlertController
             alert.addAction(cancelAction)
         }
         
-        if (okBtns?.count ?? 0) > 0
-        {
+        if (okBtns?.count ?? 0) > 0 {
             var dontArrColor = [UIColor]()
-            if doneBtnColors!.count == 0 || okBtns?.count != doneBtnColors?.count || okBtns!.count > (doneBtnColors?.count ?? 0)
-            {
-                if doneBtnColors!.count == 0
-                {
+            if doneBtnColors!.count == 0 || okBtns?.count != doneBtnColors?.count || okBtns!.count > (doneBtnColors?.count ?? 0) {
+                if doneBtnColors!.count == 0 {
                     okBtns?.enumerated().forEach({ (index,value) in
                         dontArrColor.append(.systemBlue)
                     })
-                }
-                else if okBtns!.count > (doneBtnColors?.count ?? 0)
-                {
+                } else if okBtns!.count > (doneBtnColors?.count ?? 0) {
                     let count = okBtns!.count - (doneBtnColors?.count ?? 0)
                     dontArrColor = doneBtnColors!
-                    for _ in 0..<(count)
-                    {
+                    for _ in 0..<(count) {
                         dontArrColor.append(.systemBlue)
                     }
-                }
-                else if okBtns!.count < (doneBtnColors?.count ?? 0)
-                {
+                } else if okBtns!.count < (doneBtnColors?.count ?? 0) {
                     let count = (doneBtnColors?.count ?? 0) - okBtns!.count
                     dontArrColor = doneBtnColors!
-                    for _ in 0..<(count)
-                    {
+                    for _ in 0..<(count) {
                         dontArrColor.removeLast()
                     }
                 }
-            }
-            else
-            {
+            } else {
                 dontArrColor = doneBtnColors!
             }
             okBtns?.enumerated().forEach({ (index,value) in
                 let callAction = UIAlertAction(title: value, style: .default) { (action) in
-                    if moreBtn != nil
-                    {
+                    if moreBtn != nil {
                         moreBtn!(index,value)
                     }
                 }
@@ -154,16 +136,14 @@ public extension UIAlertController
         }
         
         // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty()
-        {
+        if !(title ?? "").stringIsEmpty() {
             let alertStr = NSMutableAttributedString(string: title!)
             let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
             alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
             alert.setValue(alertStr, forKey: "attributedTitle")
         }
         
-        if !(msg ?? "").stringIsEmpty()
-        {
+        if !(msg ?? "").stringIsEmpty() {
             let alertMsgStr = NSMutableAttributedString(string: msg!)
             let alertMsgStrAttr = [NSAttributedString.Key.foregroundColor: msgColor!, NSAttributedString.Key.font: msgFont!]
             alertMsgStr.addAttributes(alertMsgStrAttr, range: NSMakeRange(0, msg!.count))
@@ -172,8 +152,7 @@ public extension UIAlertController
 
         let subview = alert.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white
-        {
+        if alertBGColor != .white {
             alertContentView.backgroundColor = alertBGColor
         }
         alertContentView.layer.cornerRadius = CGFloat(alertCornerRadius!.floatValue)
@@ -215,29 +194,25 @@ public extension UIAlertController
                                       alertBGColor:UIColor? = .white,
                                       alertCornerRadius:CGFloat? = 15,
                                       cancel:(()->Void)? = nil,
-                                      doneBtn:((_ result:[String:String])->Void)?)
-    {
+                                      doneBtn:((_ result:[String:String])->Void)?) {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         
         let cancelAction = UIAlertAction(title: cancelBtn, style: .cancel) { (action) in
-            if cancel != nil
-            {
+            if cancel != nil {
                 cancel!()
             }
         }
         cancelAction.setValue(cancelBtnColor, forKey: "titleTextColor")
         alert.addAction(cancelAction)
 
-        if placeHolders.count == textFieldTexts.count
-        {
+        if placeHolders.count == textFieldTexts.count {
             placeHolders.enumerated().forEach({ (index,value) in
                 alert.addTextField { (textField : UITextField) -> Void in
                     textField.placeholder = value
                     textField.delegate = textFieldDelegate
                     textField.tag = index
                     textField.text = textFieldTexts[index]
-                    if keyboardType?.count == placeHolders.count
-                    {
+                    if keyboardType?.count == placeHolders.count {
                         textField.keyboardType = keyboardType![index]
                     }
                 }
@@ -249,8 +224,7 @@ public extension UIAlertController
             alert.textFields?.enumerated().forEach({ (index,value) in
                 resultDic[value.placeholder!] = value.text
             })
-            if doneBtn != nil
-            {
+            if doneBtn != nil {
                 doneBtn!(resultDic)
             }
         }
@@ -258,8 +232,7 @@ public extension UIAlertController
         alert.addAction(doneAction)
 
         // KVC修改系统弹框文字颜色字号
-        if !(title ?? "").stringIsEmpty()
-        {
+        if !(title ?? "").stringIsEmpty() {
             let alertStr = NSMutableAttributedString(string: title!)
             let alertStrAttr = [NSAttributedString.Key.foregroundColor: titleColor!, NSAttributedString.Key.font: titleFont!]
             alertStr.addAttributes(alertStrAttr, range: NSMakeRange(0, title!.count))
@@ -268,8 +241,7 @@ public extension UIAlertController
 
         let subview = alert.view.subviews.first! as UIView
         let alertContentView = subview.subviews.first! as UIView
-        if alertBGColor != .white
-        {
+        if alertBGColor != .white {
             alertContentView.backgroundColor = alertBGColor
         }
         alertContentView.layer.cornerRadius = alertCornerRadius!

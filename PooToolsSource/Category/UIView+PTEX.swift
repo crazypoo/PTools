@@ -8,8 +8,7 @@
 
 import UIKit
 
-@objc public enum Imagegradien:Int
-{
+@objc public enum Imagegradien:Int {
     case LeftToRight
     case TopToBottom
     case RightToLeft
@@ -20,62 +19,55 @@ var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 
 extension UIView: PTProtocolCompatible {}
 
-public extension PTProtocol where Base:UIView
-{
+public extension PTProtocol where Base:UIView {
     var jx_x: CGFloat{
-        get{
+        get {
             base.frame.origin.x
-        }
-        set{
+        } set {
             base.frame.origin.x = newValue
         }
     }
     var jx_y: CGFloat{
-        get{
+        get {
             base.frame.origin.y
-        }
-        set{
+        } set {
             base.frame.origin.y = newValue
         }
     }
     var jx_width: CGFloat{
-        get{
+        get {
             base.frame.size.width
-        }
-        set{
+        } set {
             base.frame.size.width = newValue
         }
     }
     
     var jx_height: CGFloat{
-        get{
+        get {
             base.frame.size.height
-        }
-        set{
+        } set {
             base.frame.size.height = newValue
         }
     }
     
     var jx_viewCenter: CGPoint{
-        get{
+        get {
             CGPoint(x: jx_width * 0.5, y: jx_height * 0.5)
         }
     }
     
     var jx_centerX: CGFloat{
-        get{
+        get {
             jx_width * 0.5
-        }
-        set{
+        } set{
             base.center.x = newValue
         }
     }
     
     var jx_centerY: CGFloat{
-        get{
+        get {
             jx_height * 0.5
-        }
-        set{
+        } set{
             base.center.y = newValue
         }
     }
@@ -85,10 +77,9 @@ public extension PTProtocol where Base:UIView
     }
     
     var maxX: CGFloat{
-        get{
+        get {
             jx_x + jx_width
-        }
-        set{
+        } set{
             jx_x = newValue - jx_width
         }
     }
@@ -106,16 +97,14 @@ public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension UIView {
         
-    @objc func viewCorner(radius:CGFloat = 0,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear)
-    {
+    @objc func viewCorner(radius:CGFloat = 0,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear) {
         self.layer.cornerRadius = radius
         self.layer.masksToBounds = true
         self.layer.borderWidth = borderWidth
         self.layer.borderColor = borderColor.cgColor
     }
         
-    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners)
-    {
+    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
             let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
             let maskLayer = CAShapeLayer()
@@ -145,8 +134,7 @@ public extension UIView {
     
     //MARK: View的背景渐变
     ///View的背景渐变
-    func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear)
-    {
+    func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear) {
         PTGCDManager.gcdMain {
             self.backgroundColor = .clear
             let maskLayer = CAGradientLayer()
@@ -182,21 +170,16 @@ public extension UIView {
         }
     }
     
-    func isRolling()->Bool
-    {
-        if self is UIScrollView
-        {
+    func isRolling()->Bool {
+        if self is UIScrollView {
             let scrollView = self as! UIScrollView
-            if scrollView.isDragging || scrollView.isDecelerating
-            {
+            if scrollView.isDragging || scrollView.isDecelerating {
                 return true
             }
         }
         
-        for subView in self.subviews
-        {
-            if subView.isRolling()
-            {
+        for subView in self.subviews {
+            if subView.isRolling() {
                 return true
             }
         }
@@ -212,11 +195,9 @@ public extension UIView {
                               font:UIFont,
                               lineSpacing:NSNumber? = nil,
                               height:CGFloat,
-                              width:CGFloat)->CGSize
-    {
+                              width:CGFloat)->CGSize {
         var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil
-        {
+        if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
@@ -226,8 +207,7 @@ public extension UIView {
     }
 }
 
-public extension UIView
-{
+public extension UIView {
     private struct AssociatedKeys {
         static var layoutSubviewsCallback = "layoutSubviewsCallback"
     }
@@ -240,8 +220,7 @@ public extension UIView
     var layoutSubviewsCallback: ((UIView) -> Void)? {
         get {
             return objc_getAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback) as? ((UIView) -> Void)
-        }
-        set {
+        } set {
             objc_setAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
@@ -266,10 +245,8 @@ public extension UIView
     }
 }
 
-public extension UIView
-{
-    @objc func viewUI_shake()
-    {
+public extension UIView {
+    @objc func viewUI_shake() {
         let keyFrame = CAKeyframeAnimation(keyPath: "position.x")
         keyFrame.duration = 0.3
         let x = self.layer.position.x
@@ -292,56 +269,44 @@ public extension UIView
     }
 }
 
-public extension UILabel
-{
-    @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize
-    {
+public extension UILabel {
+    @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize {
         return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
-    @objc func getLabelWidth(height:CGFloat)->CGFloat
-    {
+    @objc func getLabelWidth(height:CGFloat)->CGFloat {
         return self.getLabelSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    @objc func getLabelHeight(width:CGFloat)->CGFloat
-    {
+    @objc func getLabelHeight(width:CGFloat)->CGFloat {
         return self.getLabelSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
 
-public extension UIButton
-{
-    @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize
-    {
+public extension UIButton {
+    @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize {
         return UIView.sizeFor(string: self.titleLabel!.text!, font: self.titleLabel!.font!, height: height, width: width)
     }
     
-    @objc func getButtonWidth(height:CGFloat)->CGFloat
-    {
+    @objc func getButtonWidth(height:CGFloat)->CGFloat {
         return self.getButtonSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    @objc func getButtonHeight(width:CGFloat)->CGFloat
-    {
+    @objc func getButtonHeight(width:CGFloat)->CGFloat {
         return self.getButtonSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
 
-public extension UITextView
-{
-    @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize
-    {
+public extension UITextView {
+    @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize {
         return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
     }
     
-    @objc func getLabelWidth(height:CGFloat)->CGFloat
-    {
+    @objc func getLabelWidth(height:CGFloat)->CGFloat {
         return self.getTextViewSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
-    @objc func getLabelHeight(width:CGFloat)->CGFloat
-    {
+    @objc func getLabelHeight(width:CGFloat)->CGFloat {
         return self.getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }

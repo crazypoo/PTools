@@ -17,8 +17,7 @@ extension UITextField {
         get {
             guard let length = getAssociatedObject(forKey: &maxLengthKey) as? Int else { return Int.max }
             return length
-        }
-        set {
+        } set {
             set(associatedObject: newValue, forKey: &maxLengthKey)
             addTarget(self, action: #selector(checkMaxLength), for: .editingChanged)
         }
@@ -34,8 +33,7 @@ extension UITextField {
         selectedTextRange = selection
     }
     
-    func setCursorAboveText()
-    {
+    func setCursorAboveText() {
         let padding = self.textRect(forBounds: self.bounds)
         let cursorFrame = CGRect(x: padding.origin.x, y: padding.origin.y, width: 2, height: padding.size.height)
         self.tintColor = .clear

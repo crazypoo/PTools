@@ -9,8 +9,7 @@
 import UIKit
 import SwifterSwift
 
-public extension UIApplication
-{
+public extension UIApplication {
     @objc func clearLaunchScreenCache() {
         do {
             try FileManager.default.removeItem(atPath: NSHomeDirectory()+"/Library/SplashBoard")
@@ -21,8 +20,7 @@ public extension UIApplication
     
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
-    class func applicationEnvironment()->Environment
-    {
+    class func applicationEnvironment()->Environment {
         return UIApplication.shared.inferredEnvironment
     }
 }

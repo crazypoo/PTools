@@ -599,6 +599,7 @@
 				55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */,
 				5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */,
 				9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */,
+				55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
 				55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
@@ -648,7 +649,6 @@
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";

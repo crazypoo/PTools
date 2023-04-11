@@ -8,8 +8,7 @@
 
 import UIKit
 
-public extension TimeInterval
-{
+public extension TimeInterval {
     //MARK: 時間戳轉換成Date
     ///時間戳轉換成Date
     func timeToDate() -> Date {
@@ -23,15 +22,13 @@ public extension TimeInterval
         return Date.init(timeIntervalSince1970: timeSta)
     }
     
-    func toTimeString(dateFormat:String)->String
-    {
+    func toTimeString(dateFormat:String)->String {
         return self.msTimeToDate().getTimeStr(dateFormat: dateFormat)
     }
     
     //MARK: 獲取播放時長(分:秒)
     ///獲取播放時長(分:秒)
-    func getFormatPlayTime()->String
-    {
+    func getFormatPlayTime()->String {
         if self.isNaN{
             return "00:00"
         }
@@ -48,11 +45,9 @@ public extension TimeInterval
     
     //MARK: 獲取播放時長(時:分:秒)
     ///獲取播放時長(時:分:秒)
-    func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String)->Void)?)
-    {
+    func getFormatPlayTime(callBack:((_ h:String,_ m:String,_ s:String)->Void)?) {
         if self.isNaN{
-            if callBack != nil
-            {
+            if callBack != nil {
                 callBack!("00","00","00")
             }
         }
@@ -62,13 +57,11 @@ public extension TimeInterval
         if Min>=60 {
             Hour = Int(Min / 60)
             Min = Min - Hour*60
-            if callBack != nil
-            {
+            if callBack != nil {
                 callBack!(String(format: "%02d", Hour),String(format: "%02d", Min),String(format: "%02d", Sec))
             }
         }
-        if callBack != nil
-        {
+        if callBack != nil {
             callBack!("00",String(format: "%02d", Min),String(format: "%02d", Sec))
         }
     }

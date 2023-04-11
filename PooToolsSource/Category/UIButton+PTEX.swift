@@ -11,8 +11,7 @@ import SDWebImage
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
-public enum PTButtonEdgeInsetsStyle:Int
-{
+public enum PTButtonEdgeInsetsStyle:Int {
     /// image在上，label在下
     case Top
     /// image在左，label在右
@@ -23,29 +22,24 @@ public enum PTButtonEdgeInsetsStyle:Int
     case Right
 }
 
-public extension UIButton
-{
+public extension UIButton {
     static var UIButtonBlockKey = "UIButtonBlockKey"
     
-    @objc func addActionHandlers(handler:@escaping TouchedBlock)
-    {
+    @objc func addActionHandlers(handler:@escaping TouchedBlock) {
         objc_setAssociatedObject(self, &UIButton.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
     }
     
-    @objc func actionTouched(sender:UIButton)
-    {
+    @objc func actionTouched(sender:UIButton) {
         let block:TouchedBlock = objc_getAssociatedObject(self, &UIButton.UIButtonBlockKey) as! TouchedBlock
         block(sender)
     }
     
-    func pt_SDWebImage(imageString:String)
-    {
+    func pt_SDWebImage(imageString:String) {
         self.sd_setImage(with: URL.init(string: imageString), for: .normal, placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
-    func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,imageTitleSpace:CGFloat)
-    {
+    func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,imageTitleSpace:CGFloat) {
         /**
          * 知识点：titleEdgeInsets是title相对于其上下左右的inset，跟tableView的contentInset是类似的，
          * 如果只有title，那它上下左右都是相对于button的，image也是一样；
@@ -87,11 +81,9 @@ public extension UIButton
     ///   - size: size
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
-                       size:CGSize)->CGSize
-    {
+                       size:CGSize)->CGSize {
         var dic = [NSAttributedString.Key.font:self.titleLabel!.font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil
-        {
+        if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
@@ -106,8 +98,7 @@ public extension UIButton
     ///   - timeInterval: 時間
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
-                            finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void))
-    {
+                            finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void)) {
         PTGCDManager.timeRunWithTime_base(timeInterval: timeInterval, finishBlock: finishBlock)
     }
     
@@ -122,20 +113,15 @@ public extension UIButton
                        originalTitle:String,
                        countdowningCanTap:Bool = true,
                        countdownFinishCanTap:Bool = true,
-                       timeFinish:(()->Void)?)
-    {
+                       timeFinish:(()->Void)?) {
         self.buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
-            if finish
-            {
+            if finish {
                 self.setTitle(originalTitle, for: self.state)
                 self.isUserInteractionEnabled = countdownFinishCanTap
-                if timeFinish != nil
-                {
+                if timeFinish != nil {
                     timeFinish!()
                 }
-            }
-            else
-            {
+            } else {
                 let strTime = String.init(format: "%.2d", time)
                 let buttonTime = String.init(format: "%@", strTime)
                 self.setTitle(buttonTime, for: self.state)

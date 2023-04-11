@@ -98,13 +98,7 @@
         PNSLog(@"222222222");
         [self popoverWithPopoverVC:self.popover popoverSize:CGSizeMake(100, 300) sender:sender arrowDirections:UIPopoverArrowDirectionAny];
 //        [self popoverWithPopoverVC:self.popover contentView:views sender:sender arrowDirections:UIPopoverArrowDirectionAny];
-    }];
-        
-    PTDevMaskView *mask = [[PTDevMaskView alloc] initWithConfig:[PTDevMaskConfig new]];
-    [self.view addSubview:mask];
-    [mask mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.right.top.bottom.equalTo(self.view);
-    }];
+    }];        
 }
 
 -(void)aaaaa

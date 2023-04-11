@@ -33,11 +33,11 @@ Pod::Spec.new do |s|
         subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'FloatingPanel'
-        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
         subspec.dependency 'KakaJSON'
         subspec.dependency 'Alamofire'
         subspec.dependency 'SwiftyJSON'
         subspec.dependency 'HandyJSON'
+        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
         subspec.dependency 'EmptyDataSet-Swift'#空数据
         subspec.dependency 'MJExtension'
         subspec.dependency 'MBProgressHUD'

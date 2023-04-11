@@ -36,8 +36,7 @@ public extension UITextView {
     var bk_placeholderLabel: UILabel? {
         set{
             objc_setAssociatedObject(self, &bk_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get{
+        } get {
             let obj =  objc_getAssociatedObject(self, &bk_placeholderLabelKey)
             guard let placeholderLabel = obj as? UILabel else {
                 let label = UILabel()
@@ -74,8 +73,7 @@ public extension UITextView {
             objc_setAssociatedObject(self, bk_placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let placeholder = newValue else { return }
             bk_placeholderLabel?.text = placeholder
-        }
-        get {
+        } get {
             objc_getAssociatedObject(self, bk_placeholderKey) as? String
         }
     }
@@ -87,8 +85,7 @@ public extension UITextView {
             objc_setAssociatedObject(self, &bk_attributedTextKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let attr = newValue else { return }
             bk_placeholderLabel?.attributedText = attr
-        }
-        get {
+        } get {
             objc_getAssociatedObject(self, &bk_attributedTextKey) as? NSAttributedString
         }
     }
@@ -99,8 +96,7 @@ public extension UITextView {
         set{
             // 调用 setter 的时候会执行此处代码，将自定义的label通过runtime保存起来
             objc_setAssociatedObject(self, &bk_wordCountLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-        }
-        get{
+        } get{
             let obj =  objc_getAssociatedObject(self, &bk_wordCountLabelKey) as? UILabel
             guard let wordCountLabel = obj else {
                 let label = UILabel()
@@ -139,8 +135,7 @@ public extension UITextView {
             guard let count = newValue else { return }
             guard let label = bk_wordCountLabel else { return }
             label.text = "\(text.count)/\(count)"
-        }
-        get {
+        } get {
             let num = objc_getAssociatedObject(self, &bk_maxWordCountKey) as? NSNumber
             return num
         }

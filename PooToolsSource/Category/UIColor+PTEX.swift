@@ -8,8 +8,7 @@
 
 import UIKit
 
-@objc public enum ColorDistanceType:Int
-{
+@objc public enum ColorDistanceType:Int {
     case CIE76
     case CIE94
     case CIE2000
@@ -29,8 +28,7 @@ public extension UIColor {
         return color
     }
     
-    func cielabColorArray()->[NSNumber]
-    {
+    func cielabColorArray()->[NSNumber] {
         var R = self.colorRValue
         var G = self.colorGValue
         var B = self.colorBValue
@@ -68,10 +66,8 @@ public extension UIColor {
     
     //MARK: Color from LAB Array
     ///Color from LAB Array
-    class func cielabColor(cielabData:[CGFloat])->UIColor
-    {
-        if cielabData.count < 4
-        {
+    class func cielabColor(cielabData:[CGFloat])->UIColor {
+        if cielabData.count < 4 {
             return .clear
         }
         
@@ -131,13 +127,11 @@ public extension UIColor {
      *
      */
     
-    func RAD(degree:CGFloat)->CGFloat
-    {
+    func RAD(degree:CGFloat)->CGFloat {
         return degree * .pi / 180
     }
     
-    func colorDistance(color:UIColor,type:ColorDistanceType)->CGFloat
-    {
+    func colorDistance(color:UIColor,type:ColorDistanceType)->CGFloat {
         let lab1 = self.cielabColorArray()
         let lab2 = color.cielabColorArray()
         
@@ -149,8 +143,7 @@ public extension UIColor {
         let A2:CGFloat = CGFloat(lab2[1].floatValue)
         let B2:CGFloat = CGFloat(lab2[2].floatValue)
 
-        if type == .CIE76
-        {
+        if type == .CIE76 {
             let distance:CGFloat = CGFloat(sqrtf(Float(pow((L1 - L2), 2.0) + pow((A1 - A2), 2.0) + pow((B1 - B2), 2.0))))
             return distance
         }
@@ -169,8 +162,7 @@ public extension UIColor {
         var sC:CGFloat = 1 + k1 * (sqrt((A1 * A1) + (B1 * B1)))
         var sH:CGFloat = 1 + k2 * (sqrt((A1 * A1) + (B1 * B1)))
         
-        if type == .CIE94
-        {
+        if type == .CIE94 {
             let distance:CGFloat = sqrt(pow((deltaL / (kL * sL)), 2.0) + pow((deltaC / (kC * sC)), 2.0) + pow((deltaH / (kH * sH)), 2.0))
             return distance
         }
@@ -189,12 +181,9 @@ public extension UIColor {
         hPrime1 = CGFloat(fmodf(Float(hPrime1), Float(self.RAD(degree: 360))))
         hPrime2 = CGFloat(fmodf(Float(hPrime2), Float(self.RAD(degree: 360))))
         var deltahPrime:CGFloat = 0
-        if abs(hPrime1 - hPrime2) <= self.RAD(degree: 180)
-        {
+        if abs(hPrime1 - hPrime2) <= self.RAD(degree: 180) {
             deltahPrime = hPrime2 - hPrime1
-        }
-        else
-        {
+        } else {
             deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + self.RAD(degree: 360)) : (hPrime2 - hPrime1 - self.RAD(degree: 360))
         }
         let deltaHPrime:CGFloat = 2 * sqrt(cPrime1 * cPrime2) * sin(deltahPrime / 2)
@@ -210,10 +199,8 @@ public extension UIColor {
     
     //MARK: Color from CMYK Array
     ///Color from CMYK Array
-    class func cmykColor(cmykData:[CGFloat])->UIColor
-    {
-        if cmykData.count < 4
-        {
+    class func cmykColor(cmykData:[CGFloat])->UIColor {
+        if cmykData.count < 4 {
             return .clear
         }
         
@@ -256,8 +243,7 @@ public extension UIColor {
                 Int(green * multiplier),
                 Int(blue * multiplier)
             )
-        }
-        else {
+        } else {
             return String(
                 format: "#%02lX%02lX%02lX%02lX",
                 Int(red * multiplier),
@@ -306,21 +292,18 @@ public extension UIColor {
     //MARK: 返回随机颜色
     ///返回随机颜色
     @objc class var randomColor:UIColor{
-        get
-        {
+        get {
             return UIColor.randomColorWithAlpha(alpha: 1)
         }
     }
     
-    @objc class func randomColorWithAlpha(alpha:CGFloat)->UIColor
-    {
+    @objc class func randomColorWithAlpha(alpha:CGFloat)->UIColor {
         return UIColor.colorBase(R: CGFloat(arc4random()%256), G: CGFloat(arc4random()%256), B: CGFloat(arc4random()%256), A: alpha)
     }
     
     //MARK: 颜色基础方法
     ///颜色基础方法
-    @objc class func colorBase(R:CGFloat,G:CGFloat,B:CGFloat,A:CGFloat)->UIColor
-    {
+    @objc class func colorBase(R:CGFloat,G:CGFloat,B:CGFloat,A:CGFloat)->UIColor {
         let red = R/255.0
         let green = G/255.0
         let blue = B/255.0
@@ -333,8 +316,7 @@ public extension UIColor {
     
     //MARK: 顏色轉圖片
     ///顏色轉圖片
-    @objc func createImageWithColor()->UIImage
-    {
+    @objc func createImageWithColor()->UIImage {
         let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let ccontext = UIGraphicsGetCurrentContext()
@@ -352,8 +334,7 @@ public extension UIColor {
         return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
     }
     
-    internal func hsbaValueModel()->PTColorHSBAModel
-    {
+    internal func hsbaValueModel()->PTColorHSBAModel {
         var hueF:CGFloat = 0
         var saturationF:CGFloat = 0
         var brightnessF:CGFloat = 0
@@ -370,8 +351,7 @@ public extension UIColor {
         return colorModel
     }
     
-    internal func rgbaValueModel()->PTColorRBGModel
-    {
+    internal func rgbaValueModel()->PTColorRBGModel {
         var redF:CGFloat = 0
         var greenF:CGFloat = 0
         var blueF:CGFloat = 0
@@ -390,8 +370,7 @@ public extension UIColor {
 
     //MARK: 混色
     ///混色
-    internal func mixColor(otherColor:UIColor)->UIColor
-    {
+    internal func mixColor(otherColor:UIColor)->UIColor {
         let rgbaModel = self.rgbaValueModel()
         let otherRgbaModel = otherColor.rgbaValueModel()
 

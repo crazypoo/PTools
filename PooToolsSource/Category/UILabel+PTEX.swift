@@ -81,11 +81,9 @@ public extension UILabel {
     ///   - size: size
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
-                       size:CGSize)->CGSize
-    {
+                       size:CGSize)->CGSize {
         var dic = [NSAttributedString.Key.font:self.font] as! [NSAttributedString.Key:Any]
-        if lineSpacing != nil
-        {
+        if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
