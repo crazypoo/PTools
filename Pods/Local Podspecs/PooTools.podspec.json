@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.0.9",
+  "version": "3.0.10",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.0.9"
+    "tag": "3.0.10"
   },
   "license": {
     "type": "MIT",
@@ -137,7 +137,8 @@
         "PooToolsSource/StatusBar/*.{h,m,swift}",
         "PooToolsSource/TouchInspector/*.{h,m,swift}",
         "PooToolsSource/NetWork/*.{h,m,swift}",
-        "PooToolsSource/Json/*.{h,m,swift}"
+        "PooToolsSource/Json/*.{h,m,swift}",
+        "PooToolsSource/CocoaSprings/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -1142,20 +1143,6 @@
       }
     },
     {
-      "name": "OtherLog",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ],
-        "PrintBeautifulLog": [
-
-        ]
-      },
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OTHERLOG POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1312,9 +1299,6 @@
 
         ],
         "PooTools/ScrollRefresh": [
-
-        ],
-        "PooTools/OtherLog": [
 
         ]
       },

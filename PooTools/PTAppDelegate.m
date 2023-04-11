@@ -160,6 +160,10 @@
     };
     [self.window addSubview:aasdasd];
 
+    PTDevMaskConfig * config = [PTDevMaskConfig new];
+    PTDevMaskView *mask = [[PTDevMaskView alloc] initWithConfig:config];
+    mask.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT);
+    [self.window addSubview:mask];
     
 //    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
 //        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);

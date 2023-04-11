@@ -1196,7 +1196,7 @@ public extension String
                 UIGraphicsBeginImageContextWithOptions(imageSize, false, UIScreen.main.scale)
                 defer { UIGraphicsEndImageContext() }
                 
-                let context = UIGraphicsGetCurrentContext()
+                let _ = UIGraphicsGetCurrentContext()
                 
                 nsText.draw(at: CGPoint.zero, withAttributes: fontAttributes as [NSAttributedString.Key : Any])
                 

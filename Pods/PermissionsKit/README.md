@@ -24,11 +24,17 @@ Universal API for request permission and get its statuses. Available `.authorize
 ### Community
 
 <p float="left">
-    <a href="#apps-using">
-        <img src="https://cdn.sparrowcode.io/github/badges/download-on-the-appstore.png?version=2" height="52">
+    <a href="https://twitter.com/sparrowcode_en">
+        <img src="https://cdn.sparrowcode.io/github%2Fbadges%2Ftwitter.png?version=4" height="52">
     </a>
-    <a href="https://github.com/sponsors/sparrowcode">
-        <img src="https://cdn.sparrowcode.io/github/badges/github-sponsor.png?version=3" height="52">
+    <a href="https://t.me/sparrowcode_en">
+        <img src="https://cdn.sparrowcode.io/github/badges/telegram.png?version=1" height="52">
+    </a>
+    <a href="https://mastodon.social/@sparrowcode_en">
+        <img src="https://cdn.sparrowcode.io/github/badges/mastodon.png?version=2" height="52">
+    </a>
+    <a href="#apps-using">
+        <img src="https://cdn.sparrowcode.io/github/badges/download-on-the-appstore.png?version=4" height="52">
     </a>
 </p>
 
@@ -73,13 +79,14 @@ Ready to use on iOS 11+. Supports iOS, tvOS and `SwiftUI`.
 
 ### Swift Package Manager
 
-In Xcode go to `File` -> `Packages` -> `Update to Latest Package Versions` and insert url: 
+In Xcode go to Project -> Your Project Name -> `Package Dependencies` -> Tap *Plus*. Insert url:
 
 ```
 https://github.com/sparrowcode/PermissionsKit
 ```
 
-or adding it to the `dependencies` value of your `Package.swift`:
+Next, choose the permissions you need. But don't add all of them, because apple will reject app.
+Or adding it to the `dependencies` of your `Package.swift`:
 
 ```swift
 dependencies: [
@@ -87,7 +94,7 @@ dependencies: [
 ]
 ```
 
-Next, choose the permissions you need. But don't add all of them, because apple [will reject app](#apple-review).
+and choose valid targets.
 
 ### CocoaPods:
 
@@ -176,6 +183,7 @@ If you use xliff localization export, keys will be create automatically. If you 
     <a href="https://apps.apple.com/app/id1617055933"><img src="https://cdn.sparrowcode.io/github/apps-using/id1617055933.png?version=2" height="65"></a>
     <a href="https://apps.apple.com/app/id1596657751"><img src="https://cdn.sparrowcode.io/github/apps-using/id1596657751.png?version=2" height="65"></a>
     <a href="https://apps.apple.com/app/id1459483980"><img src="https://cdn.sparrowcode.io/github/apps-using/id1459483980.png?version=2" height="65"></a>
+    <a href="https://apps.apple.com/app/id1544749600"><img src="https://cdn.sparrowcode.io/github/apps-using/id1544749600.png" height="65"></a>
 </p>
 
 If you use a `PermissionsKit`, add your application via Pull Request.
