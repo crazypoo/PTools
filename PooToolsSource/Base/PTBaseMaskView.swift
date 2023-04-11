@@ -9,7 +9,7 @@
 import UIKit
 
 @objcMembers
-public class PTBaseMaskView: UIView {
+open class PTBaseMaskView: UIView {
 
     public var isMask : Bool = false
         

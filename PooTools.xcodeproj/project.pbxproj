@@ -137,6 +137,13 @@
 		55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */; };
 		55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */; };
 		55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */; };
+		55D7382F29E529BB0027BDC3 /* CGRect+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382829E529BB0027BDC3 /* CGRect+Extensions.swift */; };
+		55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */; };
+		55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */; };
+		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
+		55D7383329E529BB0027BDC3 /* CGPoint+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382C29E529BB0027BDC3 /* CGPoint+Extensions.swift */; };
+		55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */; };
+		55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
@@ -350,6 +357,13 @@
 		55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevFunction.swift; sourceTree = "<group>"; };
 		55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingPanelFuction.swift; sourceTree = "<group>"; };
 		55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatPanelLayout.swift; sourceTree = "<group>"; };
+		55D7382829E529BB0027BDC3 /* CGRect+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGRect+Extensions.swift"; sourceTree = "<group>"; };
+		55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SpringMotionView-iOS.swift"; sourceTree = "<group>"; };
+		55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionPhysics.swift; sourceTree = "<group>"; };
+		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
+		55D7382C29E529BB0027BDC3 /* CGPoint+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extensions.swift"; sourceTree = "<group>"; };
+		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
+		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E51757292C9DB200BFF122 /* PTDataEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDataEncryption.swift; sourceTree = "<group>"; };
 		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -841,6 +855,13 @@
 		555A8B4228C2E7A700692501 /* DevMask */ = {
 			isa = PBXGroup;
 			children = (
+				55D7382C29E529BB0027BDC3 /* CGPoint+Extensions.swift */,
+				55D7382829E529BB0027BDC3 /* CGRect+Extensions.swift */,
+				55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */,
+				55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */,
+				55D7382A29E529BB0027BDC3 /* SpringMotionPhysics.swift */,
+				55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */,
+				55D7382929E529BB0027BDC3 /* SpringMotionView-iOS.swift */,
 				231D15C6272CDEE9003D6F62 /* PTDevMaskView.swift */,
 			);
 			path = DevMask;
@@ -1587,6 +1608,7 @@
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */,
+				55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
@@ -1620,6 +1642,7 @@
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
+				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
@@ -1653,6 +1676,7 @@
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
+				55D7382F29E529BB0027BDC3 /* CGRect+Extensions.swift in Sources */,
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
@@ -1674,8 +1698,10 @@
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
+				55D7383329E529BB0027BDC3 /* CGPoint+Extensions.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
+				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
@@ -1701,6 +1727,7 @@
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
 				9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */,
+				55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */,
 				5589FF5029A87BA700519383 /* PTContract.swift in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
@@ -1721,6 +1748,7 @@
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
+				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
