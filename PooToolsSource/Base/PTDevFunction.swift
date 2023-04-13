@@ -7,8 +7,8 @@
 //
 
 import UIKit
-import SDWebImage
 import SwifterSwift
+import Kingfisher
 
 public typealias DevTask = () -> Void
 public typealias FlexDevTask = (Bool) -> Void
@@ -135,17 +135,17 @@ public class PTDevFunction: NSObject {
 
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
-    public class func gobalWebImageLoadOption()->SDWebImageOptions {
+    public class func gobalWebImageLoadOption()->KingfisherOptionsInfo {
         #if DEBUG
         let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
         let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
         if devServer {
-            return .retryFailed
+            return [KingfisherOptionsInfoItem.cacheOriginalImage]
         } else {
-            return .lowPriority
+            return [.lowDataModeSource,.memoryCacheExpiration(.seconds(60)).diskCacheExpiration(.seconds(20))]
         }
         #else
-        return .retryFailed
+        return [KingfisherOptionsInfoItem.cacheOriginalImage]
         #endif
     }
 }

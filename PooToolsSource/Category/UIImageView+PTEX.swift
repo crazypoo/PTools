@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import SDWebImage
+import Kingfisher
 
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
@@ -22,6 +22,6 @@ public extension UIImageView {
     }
     
     func pt_SDWebImage(imageString:String) {
-        self.sd_setImage(with: URL.init(string: imageString), placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage, options: PTAppBaseConfig.share.gobalWebImageLoadOption(), context: nil)
+        self.kf.setImage(with: URL.init(string: imageString),placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
 }

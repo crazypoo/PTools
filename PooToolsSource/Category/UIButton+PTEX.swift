@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import SDWebImage
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 
@@ -36,7 +35,7 @@ public extension UIButton {
     }
     
     func pt_SDWebImage(imageString:String) {
-        self.sd_setImage(with: URL.init(string: imageString), for: .normal, placeholderImage: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
+        self.kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
     func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,imageTitleSpace:CGFloat) {

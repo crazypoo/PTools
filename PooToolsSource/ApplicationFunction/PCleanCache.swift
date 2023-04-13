@@ -7,7 +7,10 @@
 //
 
 import UIKit
+#if canImport(SDWebImage)
 import SDWebImage
+#endif
+import Kingfisher
 
 @objcMembers
 public class PCleanCache: NSObject {
@@ -17,13 +20,11 @@ public class PCleanCache: NSObject {
     //MARK: 獲取緩存容量
     ///獲取緩存容量
     /// - Returns: 容量字符串
-    class public func getCacheSize()->String
-    {
+    class public func getCacheSize()->String {
         #if DEBUG
         var isDirectory:ObjCBool = false
         let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
-        if !isExist || !isDirectory.boolValue
-        {
+        if !isExist || !isDirectory.boolValue {
             let exception = NSException.init(name: NSExceptionName(rawValue: "文件错误"), reason: "请检查你的文件路径!", userInfo: nil)
             exception.raise()
         }
@@ -33,13 +34,11 @@ public class PCleanCache: NSObject {
         var filePath = ""
         var totalSize : Float = 0
         
-        for subpath in subpathArray!
-        {
+        for subpath in subpathArray! {
             filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
             var isDirectory:ObjCBool = false
             let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
-            if !isExist || isDirectory.boolValue || filePath.contains(".DS")
-            {
+            if !isExist || isDirectory.boolValue || filePath.contains(".DS") {
                 continue
             }
             
@@ -52,20 +51,35 @@ public class PCleanCache: NSObject {
                 PTNSLogConsole(error.localizedDescription)
             }
         }
+        #if canImport(SDWebImage)
         totalSize += Float(SDImageCache.shared.totalDiskSize())
+        
+        ImageCache.default.calculateDiskStorageSize(completion: { result in
+            switch result {
+            case .success(let success):
+                totalSize += Float(success)
+            case .failure(let failure):
+                PTNSLogConsole("Kingfisher:\(failure)")
+            }
+        })
+        #else
+        ImageCache.default.calculateDiskStorageSize(completion: { result in
+            switch result {
+            case .success(let success):
+                totalSize += Float(success)
+            case .failure(let failure):
+                PTNSLogConsole("Kingfisher:\(failure)")
+            }
+        })
+        #endif
         
         var totalSizeString = ""
         
-        if totalSize > (1000 * 1000)
-        {
+        if totalSize > (1000 * 1000) {
             totalSizeString = String.init(format: "%.1fM", totalSize/1000/1000)
-        }
-        else if totalSize > 1000
-        {
+        } else if totalSize > 1000 {
             totalSizeString = String.init(format: "%.1fKB", totalSize/1000)
-        }
-        else
-        {
+        } else {
             totalSizeString = String.init(format: "%.1fB", totalSize)
         }
         return totalSizeString
@@ -74,46 +88,50 @@ public class PCleanCache: NSObject {
     //MARK: 清理緩存
     ///清理緩存
     /// - Returns: 是否清理完成
-    class public func clearCaches()->Bool
-    {
+    class public func clearCaches()->Bool {
         var filePath = ""
         var flag = false
 
-        do
-        {
+        do {
             let subpathArray = try PCleanCache.fileManager.contentsOfDirectory(atPath: PCleanCache.cachePath!)
-            if subpathArray.count == 0
-            {
+            if subpathArray.count == 0 {
                 return false
             }
             
-            for subpath in subpathArray
-            {
+            for subpath in subpathArray {
                 filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
-                if PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!)
-                {
-                    do{
+                if PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!) {
+                    do {
                         try PCleanCache.fileManager.removeItem(atPath: filePath)
                         flag = true
-                    }
-                    catch
-                    {
+                    } catch {
                         PTNSLogConsole(error.localizedDescription)
                     }
                 }
             }
             
+#if canImport(SDWebImage)
             SDImageCache.shared.clearDisk {
                 flag = true
             }
-        }
-        catch
-        {
+            
+            PTGCDManager.gcdMain {
+                ImageCache.default.clearDiskCache {
+                    flag = true
+                }
+            }
+#else
+            PTGCDManager.gcdMain {
+                ImageCache.default.clearDiskCache {
+                    flag = true
+                }
+            }
+#endif
+        } catch {
             PTNSLogConsole(error.localizedDescription)
         }
         
-        if !flag
-        {
+        if !flag {
             PTNSLogConsole("提示:您已经清理了所有可以访问的文件,不可访问的文件无法删除")
         }
         return flag
@@ -124,10 +142,8 @@ public class PCleanCache: NSObject {
     /// - Parameters:
     ///   - path: 文件路徑
     /// - Returns: 文件Size大小
-    class public func fileSizeAtPath(path:String)->Float
-    {
-        if PCleanCache.fileManager.fileExists(atPath: path)
-        {
+    class public func fileSizeAtPath(path:String)->Float {
+        if PCleanCache.fileManager.fileExists(atPath: path) {
             do {
                 let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: path)
                 return fileAttributes[FileAttributeKey.size] as! Float
@@ -144,10 +160,8 @@ public class PCleanCache: NSObject {
     /// - Parameters:
     ///   - path: 文件夾路徑
     /// - Returns: 文件夾Size大小
-    class public func folderSizeAtPath(path:String)->Float
-    {
-        if !PCleanCache.fileManager.fileExists(atPath: path)
-        {
+    class public func folderSizeAtPath(path:String)->Float {
+        if !PCleanCache.fileManager.fileExists(atPath: path) {
            return 0
         }
         
@@ -156,8 +170,7 @@ public class PCleanCache: NSObject {
         var folderSize = 0
         childFilesEnumerator?.enumerated().forEach({ (index,value) in
             fileName = value
-            if !(fileName).stringIsEmpty()
-            {
+            if !(fileName).stringIsEmpty() {
                 let fileAbsolutePath = path.appendingPathComponent(fileName)
                 folderSize += Int(PCleanCache.fileSizeAtPath(path: fileAbsolutePath))
             }
@@ -170,8 +183,7 @@ public class PCleanCache: NSObject {
     /// - Parameters:
     ///   - path: 文件夾路徑
     /// - Returns: 是否完成
-    class public func cleanDocumentAtPath(path:String)->Bool
-    {
+    class public func cleanDocumentAtPath(path:String)->Bool {
         let enumerator = PCleanCache.fileManager.enumerator(atPath: path)
         enumerator?.enumerated().forEach({ index,value in
             do {
@@ -181,12 +193,9 @@ public class PCleanCache: NSObject {
             }
         })
         
-        if PCleanCache.folderSizeAtPath(path: path) > 0
-        {
+        if PCleanCache.folderSizeAtPath(path: path) > 0 {
             return false
-        }
-        else
-        {
+        } else {
             return true
         }
     }

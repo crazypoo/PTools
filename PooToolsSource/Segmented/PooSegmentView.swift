@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import YYCategories
 import SwifterSwift
-import SDWebImage
+import Kingfisher
 import WZLBadge
 
 @objc public enum PooSegmentSelectedType : Int {
@@ -122,22 +122,15 @@ public class PooSegmentSubView:UIView
             
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
 
-            if subViewModels.imageURL.isValidUrl
-            {
-                
-                label.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
-            }
-            else
-            {
+            if subViewModels.imageURL.isValidUrl {
+                label.kf.setImage(with: URL.init(string: subViewModels.imageURL), for: .normal,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
+            } else {
                 label.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
 
-            if subViewModels.selectedImageURL.isValidUrl
-            {
-                label.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
-            }
-            else
-            {
+            if subViewModels.selectedImageURL.isValidUrl {
+                label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
+            } else {
                 label.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
         }
@@ -149,21 +142,15 @@ public class PooSegmentSubView:UIView
             imageBtn.contentMode = .scaleAspectFit
             imageBtn.titleLabel?.font = config.normalFont
             imageBtn.setTitle(subViewModels.titles, for: .normal)
-            if subViewModels.imageURL.isURL()
-            {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.imageURL), for: .normal, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
-            }
-            else
-            {
+            if subViewModels.imageURL.isURL() {
+                label.kf.setImage(with: URL.init(string: subViewModels.imageURL), for: .normal,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
+            } else {
                 imageBtn.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
 
-            if subViewModels.selectedImageURL.isURL()
-            {
-                imageBtn.sd_setImage(with:  URL.init(string: subViewModels.selectedImageURL), for: .selected, placeholderImage: placeHolderImage, options: PTDevFunction.gobalWebImageLoadOption(), context: nil)
-            }
-            else
-            {
+            if subViewModels.selectedImageURL.isURL() {
+                label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
+            } else {
                 imageBtn.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
         }

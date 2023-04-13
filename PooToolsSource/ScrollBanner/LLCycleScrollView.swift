@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 /// Style
 public enum PageControlStyle {
@@ -791,7 +792,7 @@ extension LLCycleScrollView: UICollectionViewDelegate, UICollectionViewDataSourc
                 // 根据imagePath，来判断是网络图片还是本地图
                 if imagePath.hasPrefix("http") {
                     let escapedString = imagePath.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-                    cell.imageView.sd_setImage(with: URL(string: isAddingPercentEncodingForURLString ? escapedString ?? imagePath : imagePath), placeholderImage: placeHolderImage)
+                    cell.imageView.kf.setImage(with: URL(string: isAddingPercentEncodingForURLString ? escapedString ?? imagePath : imagePath),placeholder: placeHolderImage)
                 }else{
                     if let image = UIImage.init(named: imagePath) {
                         cell.imageView.image = image;

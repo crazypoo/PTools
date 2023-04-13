@@ -13,7 +13,7 @@ import SceneKit
 import CoreMotion
 import AVFoundation
 import AVKit
-import SDWebImage
+import Kingfisher
 
 public let PTViewerBaseTag = 9999
 public let PTSubViewBasicsIndex = 888
@@ -355,18 +355,20 @@ public class PTMediaMediaView:UIView
                 if dataModel.imageURL is String {
                     let urlString = dataModel.imageURL as! String
                     if urlString.isValidUrl {
-                        SDWebImageManager.shared.loadImage(with: URL(string: urlString)) { receivedSize, expectedSendSize, targetURL in
+                        ImageDownloader.default.downloadImage(with: URL(string: urlString)!,options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
                             PTGCDManager.gcdMain {
-                                loading.progress = CGFloat(receivedSize / expectedSendSize)
+                                loading.progress = CGFloat(receivedSize / totalSize)
                             }
-                        } completed: { image, data, error, type, finish, url in
-                            loading.removeFromSuperview()
-                            if error != nil {
+                        }) { result in
+                            switch result {
+                            case .success(let value):
+                                loading.removeFromSuperview()
+                                self.createThreeDView(image: value.image)
+                            case .failure(let error):
+                                loading.removeFromSuperview()
+                                PTNSLogConsole(error)
                                 self.createReloadButton()
-                                return
                             }
-                            
-                            self.createThreeDView(image: image!)
                         }
                     }
                 } else if dataModel.imageURL is UIImage {
@@ -404,7 +406,7 @@ public class PTMediaMediaView:UIView
                     
                     self.player.player!.addPeriodicTimeObserver(forInterval: CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_SEC)), queue: nil, using: { time in
                         
-                        let duration = Float(CMTimeGetSeconds(self.player.player!.currentItem!.duration))
+                        let duration = Float(CMTimeGetSeconds(self.player.player?.currentItem?.duration ?? .zero))
                         
                         self.videoSlider.maximumValue = duration
                         self.videoSlider.minimumValue = 0
@@ -466,52 +468,43 @@ public class PTMediaMediaView:UIView
                         self.adjustFrame()
                         self.hasLoadedImage = true
                     } else {
-                        SDWebImageManager.shared.loadImage(with: URL.init(string: dataModel.imageURL as! String)) { receivedSize, expectedSendSize, targetURL in
+                        ImageDownloader.default.downloadImage(with: URL(string: urlString)!,options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
                             PTGCDManager.gcdMain {
-                                loading.progress = CGFloat(receivedSize / expectedSendSize)
+                                loading.progress = CGFloat(receivedSize / totalSize)
                             }
-                        } completed: { image, data, error, type, finish, url in
-                            loading.removeFromSuperview()
-                            if error != nil {
-                                self.createReloadButton()
-                                return
-                            }
-                            
-                            if finish {
-                                if image != nil {
-                                    self.gifImage = image
+                        }) { result in
+                            switch result {
+                            case .success(let value):
+                                loading.removeFromSuperview()
+                                self.gifImage = value.image
 
-                                    switch self.dataModel.imageShowType {
-                                    case .Normal:
-                                        self.imageView.image = image
-                                        self.adjustFrame()
-                                        self.hasLoadedImage = true
-                                    case .GIF:
-                                        if data != nil {
-                                            let source = CGImageSourceCreateWithData(data! as CFData, nil)
-                                            let frameCount = CGImageSourceGetCount(source!)
-                                            var frames = [UIImage]()
-                                            for i in 0...frameCount {
-                                                let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                                let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                                frames.append(imageName)
-                                            }
-                                            self.imageView.animationImages = frames
-                                            self.imageView.animationDuration = 2
-                                            self.imageView.startAnimating()
-                                            self.adjustFrame()
-                                            self.hasLoadedImage = true
-                                        } else {
-                                            self.createReloadButton()
-                                            self.adjustFrame()
-                                        }
-                                    default:
-                                        break
-                                    }
-                                } else {
-                                    self.createReloadButton()
+                                switch self.dataModel.imageShowType {
+                                case .Normal:
+                                    self.imageView.image = value.image
                                     self.adjustFrame()
+                                    self.hasLoadedImage = true
+                                case .GIF:
+                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                    let frameCount = CGImageSourceGetCount(source!)
+                                    var frames = [UIImage]()
+                                    for i in 0...frameCount {
+                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                        frames.append(imageName)
+                                    }
+                                    self.imageView.animationImages = frames
+                                    self.imageView.animationDuration = 2
+                                    self.imageView.startAnimating()
+                                    self.adjustFrame()
+                                    self.hasLoadedImage = true
+                                default:
+                                    break
                                 }
+                            case .failure(let error):
+                                loading.removeFromSuperview()
+                                PTNSLogConsole(error)
+                                self.createReloadButton()
+                                self.adjustFrame()
                             }
                         }
                     }

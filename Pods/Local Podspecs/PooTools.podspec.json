@@ -73,7 +73,7 @@
         "FluentDarkModeKit": [
 
         ],
-        "SDWebImage": [
+        "Kingfisher": [
 
         ],
         "ZXNavigationBar": [
@@ -83,9 +83,6 @@
 
         ],
         "FloatingPanel": [
-
-        ],
-        "LXFProtocolTool/LXFEmptyDataSetable": [
 
         ],
         "KakaJSON": [
@@ -98,6 +95,9 @@
 
         ],
         "HandyJSON": [
+
+        ],
+        "LXFProtocolTool/LXFEmptyDataSetable": [
 
         ],
         "EmptyDataSet-Swift": [
@@ -1143,6 +1143,21 @@
       }
     },
     {
+      "name": "SVG",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PocketSVG": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/KingfisherSVG/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SVG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1299,6 +1314,9 @@
 
         ],
         "PooTools/ScrollRefresh": [
+
+        ],
+        "PooTools/SVG": [
 
         ]
       },

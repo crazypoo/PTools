@@ -32,10 +32,10 @@ target 'PooTools_Example' do
   pod 'SwiftyJSON'
   pod 'CocoaLumberjack/Swift'#Log工具
   pod 'SJAttributesStringMaker'
-  pod 'SDWebImage'
   pod 'MJRefresh'
   pod 'ZXNavigationBar'#导航栏
   pod 'CryptoSwift'
+  pod 'Kingfisher'
   
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']

@@ -11,14 +11,12 @@ import JXSegmentedView
 import SnapKit
 import SwifterSwift
 import SJAttributesStringMaker
-import SDWebImage
+import Kingfisher
 
 public class PTMainSegmentCell: JXSegmentedBaseCell {
     
-    open override var isSelected: Bool
-    {
-        didSet
-        {
+    open override var isSelected: Bool {
+        didSet {
         }
     }
     
@@ -138,17 +136,19 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         switch self.cellItemModel!.onlyShowTitle! {
         case .ImageTitle:
-            SDWebImageManager.shared.loadImage(with: URL.init(string: myItemModel.imageURL!), progress: nil) { images, data, error, cache, finish, url in
-                if finish
-                {
+            ImageDownloader.default.downloadImage(with: URL.init(string: myItemModel.imageURL!)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
+                switch result {
+                case .success(let value):
                     let att = NSMutableAttributedString.sj.makeText { make in
                         make.append { imageMake in
-                            imageMake.image = images
+                            imageMake.image = value.image
                             imageMake.bounds = CGRect.init(x: 0, y: -2.5, width: CGFloat.ScaleW(w: 20), height: CGFloat.ScaleW(w: 20))
                         }.alignment(.center)
                         make.append(myItemModel.title!).font(myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont).textColor(myItemModel.titleCurrentColor).alignment(.center)
                     }
                     self.titleLabel.attributedText = att
+                case .failure(let error):
+                    PTNSLogConsole(error)
                 }
             }
         case .OnlyTitle:
