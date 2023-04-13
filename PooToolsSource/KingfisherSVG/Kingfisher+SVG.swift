@@ -11,18 +11,18 @@ import Kingfisher
 import PocketSVG
 
 // Convert SVG images from Server to UIImage
-struct SVGProcessor: ImageProcessor {
+public struct SVGProcessor: ImageProcessor {
     
     // `identifier` should be the same for processors with the same properties/functionality
     // It will be used when storing and retrieving the image to/from cache.
-    let identifier = "svgprocessor"
+    public let identifier = "svgprocessor"
     var size: CGSize!
-    init(size: CGSize) {
+    public init(size: CGSize) {
         self.size = size
     }
     
     // Convert input data/image to target image and return it.
-    func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
+    public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
         switch item {
         case .image(let image):
             return image
@@ -52,7 +52,7 @@ struct SVGProcessor: ImageProcessor {
 }
 
 // For SVG rendering only
-extension UIImageView {
+public extension UIImageView {
     
     /// Use this function for downloading SVG image from URL
     /// - Parameters:
@@ -77,7 +77,7 @@ extension UIImageView {
     }
 }
 
-extension UIButton {
+public extension UIButton {
     
     /// Use this function for downloading SVG image from URL
     /// - Parameters:
