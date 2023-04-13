@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 public typealias TouchedBlock = (_ sender:UIButton) -> Void
 

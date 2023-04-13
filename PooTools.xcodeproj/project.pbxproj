@@ -60,6 +60,7 @@
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
+		5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */; };
 		5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */; };
 		5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
@@ -278,6 +279,7 @@
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
 		5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Kingfisher+SVG.swift"; sourceTree = "<group>"; };
+		5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+PTEX.swift"; sourceTree = "<group>"; };
 		5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImageBlackToTransparent.swift; sourceTree = "<group>"; };
 		5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsFunction.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
@@ -650,6 +652,7 @@
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1657,6 +1660,7 @@
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
+				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
