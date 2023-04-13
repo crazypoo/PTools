@@ -6,10 +6,8 @@
 //  Copyright © 2023 Football infomation. All rights reserved.
 //
 
-#if canImport(PocketSVG)
 import UIKit
 import Kingfisher
-import PooTools
 import PocketSVG
 
 // Convert SVG images from Server to UIImage
@@ -103,4 +101,3 @@ extension UIButton {
         }
     }
 }
-#endif
