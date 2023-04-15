@@ -7,12 +7,12 @@
 
 import UIKit
 
-public class PTShareItem: NSObject,UIActivityItemSource {
+open class PTShareItem: NSObject,UIActivityItemSource {
     let title: String
     let content: String
     let url: URL
     
-    init(title: String, content: String, url: URL) {
+    public init(title: String, content: String, url: URL) {
         self.title = title
         self.content = content
         self.url = url
@@ -36,8 +36,8 @@ public class PTShareItem: NSObject,UIActivityItemSource {
     }
 }
 
-public class PTShare {
-    static let share = PTShare()
+open class PTShare {
+    public static let share = PTShare()
     
     public func share(shareItems items:[Any]) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
