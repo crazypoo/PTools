@@ -26,12 +26,10 @@ public class PTEventOnCalendar: NSObject {
                                 notes:String,
                                 eventType:EKEntityType,
                                 remindTime:TimeInterval,
-                                handle:((_ finish:Bool)->Void)? = nil)
-    {
+                                handle:((_ finish:Bool)->Void)? = nil) {
         let eventStore = EKEventStore()
         eventStore.requestAccess(to: eventType) { granted, error in
-            if granted && error == nil
-            {
+            if granted && error == nil {
                 switch eventType {
                 case .event:
                     let event = EKEvent.init(eventStore: eventStore)
@@ -43,18 +41,16 @@ public class PTEventOnCalendar: NSObject {
                     event.addAlarm(EKAlarm.init(relativeOffset: remindTime))
                     event.calendar = eventStore.defaultCalendarForNewEvents
 
-                    do{
+                    do {
                         try eventStore.save(event, span: .thisEvent)
                         PTGCDManager.gcdAfter(time: 0.2) {
-                            if handle != nil
-                            {
+                            if handle != nil {
                                 handle!(true)
                             }
                         }
-                    }catch{
+                    } catch {
                         PTGCDManager.gcdAfter(time: 0.2) {
-                            if handle != nil
-                            {
+                            if handle != nil {
                                 handle!(false)
                             }
                         }
@@ -69,18 +65,16 @@ public class PTEventOnCalendar: NSObject {
                     event.priority = 1
                     event.addAlarm(EKAlarm.init(absoluteDate: (startDate - abs(remindTime).int.seconds).date))
                     event.calendar = eventStore.defaultCalendarForNewReminders()
-                    do{
+                    do {
                         try eventStore.save(event, commit: true)
                         PTGCDManager.gcdAfter(time: 0.2) {
-                            if handle != nil
-                            {
+                            if handle != nil {
                                 handle!(true)
                             }
                         }
-                    }catch{
+                    } catch {
                         PTGCDManager.gcdAfter(time: 0.2) {
-                            if handle != nil
-                            {
+                            if handle != nil {
                                 handle!(false)
                             }
                         }
