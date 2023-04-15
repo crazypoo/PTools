@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.1.1'
+    s.version     = '3.1.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -660,6 +660,14 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SVG POOTOOLS_COCOAPODS"
         }
     end
+    
+    s.subspec 'Share' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Share/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
+        }
+    end
         
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
@@ -717,7 +725,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/UpdateTips'
         subspec.dependency 'PooTools/ScrollRefresh'
         subspec.dependency 'PooTools/SVG'
-        
+        subspec.dependency 'PooTools/Share'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

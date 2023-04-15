@@ -58,16 +58,16 @@ public extension UIImageView {
     /// - Parameters:
     ///   - url: SVG image url
     ///   - processor: SVG Image Processor
-    func svgImage(from url: URL?, processor: SVGProcessor) {
+    func svgImage(from url: URL?, processor: SVGProcessor,placeholder:UIImage? = nil) {
         guard let url = url else {
-            self.image = nil
+            self.image = placeholder
             return
         }
-        
+        self.image = placeholder
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.image = value.image
                 }
             case .failure(let error):
@@ -83,16 +83,17 @@ public extension UIButton {
     /// - Parameters:
     ///   - url: SVG image url
     ///   - processor: SVG Image Processor
-    func svgImage(from url: URL?,state:UIControl.State, processor: SVGProcessor) {
+    func svgImage(from url: URL?,state:UIControl.State, processor: SVGProcessor,placeholder:UIImage? = nil) {
         guard let url = url else {
-            self.setImage(nil, for: state)
+            self.setImage(placeholder, for: state)
             return
         }
         
+        self.setImage(placeholder, for: state)
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     self.setImage(value.image, for: state)
                 }
             case .failure(let error):
