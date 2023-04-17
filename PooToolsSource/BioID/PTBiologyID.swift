@@ -41,79 +41,59 @@ public class PTBiologyID: NSObject {
     public var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
     public var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
 
-    private override init()
-    {
+    private override init() {
         super.init()
         PTGCDManager.gcdMain {
             self.verifyBiologyIDAction()
         }
     }
     
-    private func verifyBiologyIDAction()
-    {
+    private func verifyBiologyIDAction() {
         var error : NSError? = nil
         let isCanEvaluatePolicy : Bool = self.security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
-        if error != nil
-        {
-            if biologyStatusBlock != nil
-            {
+        if error != nil {
+            if biologyStatusBlock != nil {
                 biologyStatusBlock!(.None)
             }
-        }
-        else
-        {
-            if isCanEvaluatePolicy
-            {
+        } else {
+            if isCanEvaluatePolicy {
                 switch security.biometryType {
                 case .none:
-                    if biologyStatusBlock != nil
-                    {
+                    if biologyStatusBlock != nil {
                         biologyStatusBlock!(.None)
                     }
                 case .faceID:
-                    if biologyStatusBlock != nil
-                    {
+                    if biologyStatusBlock != nil {
                         biologyStatusBlock!(.FaceID)
                     }
                 case .touchID:
-                    if biologyStatusBlock != nil
-                    {
+                    if biologyStatusBlock != nil {
                         biologyStatusBlock!(.TouchID)
                     }
                 default:
-                    if biologyStatusBlock != nil
-                    {
+                    if biologyStatusBlock != nil {
                         biologyStatusBlock!(.None)
                     }
                 }
-            }
-            else
-            {
-                if biologyStatusBlock != nil
-                {
+            } else {
+                if biologyStatusBlock != nil {
                     biologyStatusBlock!(.None)
                 }
             }
         }
     }
     
-    public func biologyStart(alertTitle:String? = "生物技术验证")
-    {        
+    public func biologyStart(alertTitle:String? = "生物技术验证") {
         var evaluatePolicyType : LAPolicy?
         evaluatePolicyType = .deviceOwnerAuthentication
 
         security.evaluatePolicy(evaluatePolicyType!, localizedReason: alertTitle!) { success, error in
-            if success
-            {
-                if self.biologyVerifyStatusBlock != nil
-                {
+            if success {
+                if self.biologyVerifyStatusBlock != nil {
                     self.biologyVerifyStatusBlock!(.Success)
                 }
-            }
-            else
-            {
-                if let newError = error as NSError?
-                {
+            } else {
+                if let newError = error as NSError? {
                     var type : PTBiologyVerifyStatus = .UnKnow
                     switch newError.code {
                     case LAError.systemCancel.rawValue:
@@ -133,8 +113,7 @@ public class PTBiologyID: NSObject {
                     default:
                         type = .UnKnow
                     }
-                    if self.biologyVerifyStatusBlock != nil
-                    {
+                    if self.biologyVerifyStatusBlock != nil {
                         self.biologyVerifyStatusBlock!(type)
                     }
                 }
@@ -142,8 +121,7 @@ public class PTBiologyID: NSObject {
         }
     }
     
-    func deleteBiologyID()
-    {
+    func deleteBiologyID() {
         let query = [kSecClass:kSecClassGenericPassword,kSecAttrService:"PTouchIDService"] as [CFString : Any]
         let status : OSStatus = SecItemDelete(query as CFDictionary)
         var type : PTBiologyVerifyStatus = .UnKnow
@@ -158,8 +136,7 @@ public class PTBiologyID: NSObject {
             type = .AlertCancel
         default:break
         }
-        if self.biologyVerifyStatusBlock != nil
-        {
+        if self.biologyVerifyStatusBlock != nil {
             self.biologyVerifyStatusBlock!(type)
         }
     }

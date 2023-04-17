@@ -87,27 +87,22 @@ public class PTWaterWaveView: UIView {
         self.starWave()
     }
     
-    func configParam()
-    {
-        if self.waveWidth <= 0
-        {
+    func configParam() {
+        if self.waveWidth <= 0 {
             self.waveWidth = self.frame.size.width
         }
         
-        if self.waveCycle <= 0
-        {
+        if self.waveCycle <= 0 {
             self.waveCycle = 1.29 * .pi / self.waveWidth
         }
     }
     
-    func changeFirstWaveLayerPath()
-    {
+    func changeFirstWaveLayerPath() {
         let path = CGMutablePath()
         var y = self.wavePointY
         path.move(to: CGPoint(x: 0, y: y))
         
-        for x in stride(from: 0, to: self.waveWidth, by: 0.1)
-        {
+        for x in stride(from: 0, to: self.waveWidth, by: 0.1) {
             y = self.waveAmplitude * 1.6 * sin((250 / self.waveWidth) * (x * .pi / 180) - self.waveOffsetX * .pi / 270) + self.wavePointY
             path.addLine(to: CGPoint(x: x, y: y))
         }
@@ -118,14 +113,12 @@ public class PTWaterWaveView: UIView {
         self.shapeLayer1.path = path
     }
     
-    func changeSecondWaveLayerPath()
-    {
+    func changeSecondWaveLayerPath() {
         let path = CGMutablePath()
         var y = self.wavePointY
         path.move(to: CGPoint(x: 0, y: y))
         
-        for x in stride(from: 0, to: self.waveWidth, by: 0.1)
-        {
+        for x in stride(from: 0, to: self.waveWidth, by: 0.1) {
             y = self.waveAmplitude * 1.6 * sin((250 / self.waveWidth) * (x * .pi / 180) - self.waveOffsetX * .pi / 180) + self.wavePointY
             path.addLine(to: CGPoint(x: x, y: y))
         }
@@ -136,8 +129,7 @@ public class PTWaterWaveView: UIView {
         self.shapeLayer2.path = path
     }
     
-    func getCurrentWave()
-    {
+    func getCurrentWave() {
         self.waveOffsetX += self.waveSpeed
         self.changeFirstWaveLayerPath()
         self.changeSecondWaveLayerPath()
@@ -147,8 +139,7 @@ public class PTWaterWaveView: UIView {
         self.gradientLayer2.mask = self.shapeLayer2
     }
     
-    func starWave()
-    {
+    func starWave() {
         self.layer.addSublayer(self.shapeLayer1)
         self.layer.addSublayer(self.shapeLayer2)
         self.displayLink.add(to: .main, forMode: .common)

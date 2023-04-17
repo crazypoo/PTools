@@ -36,15 +36,13 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - iv: iv
     ///   - handle: 輸出
-    public static func aesEncryption(data:Data,key:String,iv:String,handle:(_ encryptionString:String)->Void)
-    {
+    public static func aesEncryption(data:Data,key:String,iv:String,handle:(_ encryptionString:String)->Void) {
         /* Encrypt Data */
-        do{
+        do {
             let aes = try AES(key: key,iv: iv).encrypt(data.bytes)
             let encryptedData = Data(aes)
             handle(encryptedData.base64EncodedString())
-        }
-        catch{
+        } catch{
             PTNSLogConsole(error.localizedDescription)
         }
     }
@@ -56,15 +54,13 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - iv: iv
     ///   - handle: 輸出
-    public static func aseDecrypt(data:Data,key:String,iv:String,handle:(_ decryptData:Data)->Void)
-    {
+    public static func aseDecrypt(data:Data,key:String,iv:String,handle:(_ decryptData:Data)->Void) {
         /* Decrypt Data */
-        do{
+        do {
             let aes = try AES(key: key,iv: iv).decrypt(data.bytes)
             let decryptData = Data(aes)
             handle(decryptData)
-        }
-        catch{
+        } catch {
             PTNSLogConsole(error.localizedDescription)
         }
     }
@@ -76,8 +72,7 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - dataString: 被加密內容
     ///   - handle: 輸出
-    public static func desCrypt(operation:CCOperation, key: String,dataString:String!,handle:(_ outputString:String)->Void)
-    {
+    public static func desCrypt(operation:CCOperation, key: String,dataString:String!,handle:(_ outputString:String)->Void) {
         
         guard let keyData = key.data(using: .utf8) else {
             handle("")
@@ -86,12 +81,9 @@ public class PTDataEncryption {
         
         var cryptData: Data?
         
-        if operation == kCCEncrypt
-        {
+        if operation == kCCEncrypt {
             cryptData = dataString.data(using: .utf8)
-        }
-        else
-        {
+        } else {
             cryptData = Data(base64Encoded: dataString, options: Data.Base64DecodingOptions(rawValue: 0))
         }
         
@@ -128,8 +120,7 @@ public class PTDataEncryption {
         dataOutMoved.deallocate()
         dataOut.deallocate()
                 
-        if operation == kCCEncrypt
-        {
+        if operation == kCCEncrypt {
             data = data!.base64EncodedData()
         }
         handle(String(data: data!, encoding: .utf8) ?? "")

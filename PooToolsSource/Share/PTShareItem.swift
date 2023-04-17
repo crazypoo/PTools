@@ -10,9 +10,9 @@ import UIKit
 open class PTShareItem: NSObject,UIActivityItemSource {
     let title: String
     let content: String
-    let url: URL
+    let url: URL?
     
-    public init(title: String, content: String, url: URL) {
+    public init(title: String, content: String, url: URL? = nil) {
         self.title = title
         self.content = content
         self.url = url
@@ -25,11 +25,23 @@ open class PTShareItem: NSObject,UIActivityItemSource {
     public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         switch activityType {
         case .postToFacebook?:
-            return "\(title)\n\(content)\n\(url)"
+            if url != nil {
+                return "\(title)\n\(content)\n\(url!)"
+            } else {
+                return "\(title)\n\(content)"
+            }
         case .postToTwitter?:
-            return "\(title) \(url)"
+            if url != nil {
+                return "\(title) \(url!)"
+            } else {
+                return "\(title)"
+            }
         case .message?:
-            return "\(title)\n\(content)\n\(url)"
+            if url != nil {
+                return "\(title)\n\(content)\n\(url!)"
+            } else {
+                return "\(title)\n\(content)"
+            }
         default:
             return url
         }

@@ -33,17 +33,14 @@ public class PCheckAppStatus: NSObject {
         displayLink?.invalidate()
     }
     
-    public override init()
-    {
+    public override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
-    func createUI()
-    {
-        if avatar == nil
-        {
+    func createUI() {
+        if avatar == nil {
             avatar = PFloatingButton.init(view: AppWindows as Any, frame: .zero)
             avatar?.adjustsImageWhenHighlighted = false
             avatar?.tag = 9999
@@ -66,18 +63,15 @@ public class PCheckAppStatus: NSObject {
         closed = false
     }
     
-    @objc func displayLinkTick(link:CADisplayLink)
-    {
-        if lastTime == 0
-        {
+    @objc func displayLinkTick(link:CADisplayLink) {
+        if lastTime == 0 {
             lastTime = link.timestamp
             return
         }
                 
         count! += 1
         let interval:Double = link.timestamp - lastTime!
-        if interval < 1
-        {
+        if interval < 1 {
             return
         }
         lastTime = link.timestamp
@@ -90,38 +84,31 @@ public class PCheckAppStatus: NSObject {
             make.width.equalTo(fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20)
         }
         
-        if fpsHandle != nil
-        {
+        if fpsHandle != nil {
             fpsHandle!(NSInteger(round(fps)))
         }
     }
     
-    public func open()
-    {
+    public func open() {
         createUI()
         displayLink?.isPaused = false
     }
     
-    public func close()
-    {
+    public func close() {
         displayLink?.isPaused = true
         closed = true
         avatar?.removeFromSuperview()
         avatar = nil
     }
     
-    @objc func applicationDidBecomeActiveNotification()
-    {
-        if avatar != nil
-        {
+    @objc func applicationDidBecomeActiveNotification() {
+        if avatar != nil {
             displayLink!.isPaused = false
         }
     }
 
-    @objc func applicationWillResignActiveNotification()
-    {
-        if avatar != nil
-        {
+    @objc func applicationWillResignActiveNotification() {
+        if avatar != nil {
             displayLink!.isPaused = true
         }
     }

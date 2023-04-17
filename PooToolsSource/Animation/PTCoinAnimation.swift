@@ -75,8 +75,7 @@ public class PTCoinAnimation: UIView {
         self.emitterLayer.emitterCells = [cell]
     }
     
-    public func beginAnimationFunction()
-    {
+    public func beginAnimationFunction() {
         self.showLabel.isHidden = false
         self.backgroundView.isHidden = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 5,options: .curveLinear) {
@@ -102,8 +101,7 @@ public class PTCoinAnimation: UIView {
         }
     }
     
-    func babyCoinFadeAway()
-    {
+    func babyCoinFadeAway() {
         let aniMove = CABasicAnimation(keyPath: "position")
         aniMove.fromValue = self.showLabel.layer.position
         aniMove.toValue = CGPoint(x: CGFloat.kSCREEN_WIDTH, y: CGFloat.kSCREEN_HEIGHT)
@@ -124,20 +122,16 @@ public class PTCoinAnimation: UIView {
     }
 }
 
-extension PTCoinAnimation:CAAnimationDelegate
-{
+extension PTCoinAnimation:CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if anim == self.showLabel.layer.animation(forKey: "babyCoin_scale")
-        {
+        if anim == self.showLabel.layer.animation(forKey: "babyCoin_scale") {
             self.babyCoinFadeAway()
-            if self.animationBlock != nil
-            {
+            if self.animationBlock != nil {
                 self.animationBlock!(true)
             }
         }
         
-        if anim == self.showLabel.layer.animation(forKey: "aniMove_aniScale_groupAnimation")
-        {
+        if anim == self.showLabel.layer.animation(forKey: "aniMove_aniScale_groupAnimation") {
             self.showLabel.isHidden = true
             self.backgroundView.alpha = 0.6
             self.backgroundView.isHidden = true

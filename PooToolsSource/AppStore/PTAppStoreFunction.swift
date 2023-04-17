@@ -15,8 +15,7 @@ public class PTAppStoreFunction: NSObject {
     ///評分App
     /// - Parameters:
     ///   - appid: App的App id
-    class open func rateApp(appid:String)
-    {
+    class open func rateApp(appid:String) {
         let openAppStore = "itms-apps://itunes.apple.com/app/id\(appid)?action=write-review"
         UIApplication.shared.open(URL(string: openAppStore)!)
     }
