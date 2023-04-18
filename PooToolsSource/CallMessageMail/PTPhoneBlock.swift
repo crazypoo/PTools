@@ -22,11 +22,9 @@ class PTPhoneBlock: NSObject {
     public var cancelBlock:CancelBlock?
     public var canCall:CanCall?
 
-    public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping CancelBlock,canCall:@escaping CanCall)
-    {
+    public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping CancelBlock,canCall:@escaping CanCall) {
         var canCallSomeOne:Bool? = false
-        if PTPhoneBlock.validPhone(phoneNumber: phoneNumber)
-        {
+        if PTPhoneBlock.validPhone(phoneNumber: phoneNumber) {
             let share = PTPhoneBlock.shared
             share.setNotifications()
             share.callBlock = call
@@ -40,37 +38,29 @@ class PTPhoneBlock: NSObject {
         canCall(canCallSomeOne!)
     }
     
-    public class func validPhone(phoneNumber:String)->Bool
-    {
+    public class func validPhone(phoneNumber:String)->Bool {
         let type = NSTextCheckingResult.phoneNumberCheckingResult(range: NSRange.init(location: 0, length: phoneNumber.charactersArray.count), phoneNumber: phoneNumber).resultType
         return type == NSTextCheckingResult.CheckingType.phoneNumber
     }
     
-    func setNotifications()
-    {
+    func setNotifications() {
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground(notification:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActive(notification:)), name: UIApplication.didBecomeActiveNotification, object: nil)
     }
     
-    func applicationDidEnterBackground(notification:NSNotification)
-    {
+    func applicationDidEnterBackground(notification:NSNotification) {
         callStartTime = Date()
     }
     
-    func applicationDidBecomeActive(notification:NSNotification)
-    {
+    func applicationDidBecomeActive(notification:NSNotification) {
         NotificationCenter.default.removeObserver(self)
         
-        if callStartTime != nil
-        {
-            if callBlock != nil
-            {
+        if callStartTime != nil {
+            if callBlock != nil {
                 callBlock!(-(callStartTime!.timeIntervalSinceNow) - 3)
             }
             callStartTime = nil
-        }
-        else if cancelBlock != nil
-        {
+        } else if cancelBlock != nil {
             cancelBlock!()
         }
     }

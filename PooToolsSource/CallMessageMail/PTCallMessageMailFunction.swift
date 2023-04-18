@@ -25,16 +25,14 @@ public class PTCallMessageMailFunction: NSObject {
         return webView
     }()
     
-    open class func telpromptByWebView(phone:String)
-    {
+    open class func telpromptByWebView(phone:String) {
         PTCallMessageMailFunction.share.webView.navigationDelegate = PTCallMessageMailFunction.share
         
         let urlPhoneString = "tel://\(phone)"
         PTCallMessageMailFunction.share.webView.load(URLRequest.init(url: URL(string: urlPhoneString)!))
     }
     
-    open class func sendMessage(content:String,users:[String],resultBlock:MessageResultBlock?)
-    {
+    open class func sendMessage(content:String,users:[String],resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
         vc.body = content
         vc.recipients = users
@@ -44,8 +42,7 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
-    open class func sendMail(title:String,content:String,recipients:[String]?,ccRecipients:[String]?,bccRecipients:[String]?,image:UIImage?,resultBlock:MailResultBlock?)
-    {
+    open class func sendMail(title:String,content:String,recipients:[String]?,ccRecipients:[String]?,bccRecipients:[String]?,image:UIImage?,resultBlock:MailResultBlock?) {
         let vc = MFMailComposeViewController()
         vc.setSubject(title)
         vc.setMessageBody(content, isHTML: false)
@@ -63,16 +60,13 @@ public class PTCallMessageMailFunction: NSObject {
     }
 }
 
-extension PTCallMessageMailFunction:WKNavigationDelegate
-{
+extension PTCallMessageMailFunction:WKNavigationDelegate {
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         let url = navigationAction.request.url
         let scheme = url!.scheme
         let app = UIApplication.shared
-        if scheme == "tel"
-        {
-            if app.canOpenURL(url!)
-            {
+        if scheme == "tel" {
+            if app.canOpenURL(url!) {
                 app.open(url!)
                 decisionHandler(.cancel)
                 return
@@ -82,23 +76,19 @@ extension PTCallMessageMailFunction:WKNavigationDelegate
     }
 }
 
-extension PTCallMessageMailFunction:MFMessageComposeViewControllerDelegate
-{
+extension PTCallMessageMailFunction:MFMessageComposeViewControllerDelegate {
     public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true)
-        if self.messageResultBlock != nil
-        {
+        if self.messageResultBlock != nil {
             self.messageResultBlock!(result)
         }
     }
 }
 
-extension PTCallMessageMailFunction:MFMailComposeViewControllerDelegate
-{
+extension PTCallMessageMailFunction:MFMailComposeViewControllerDelegate {
     public func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
         controller.dismiss(animated: true) {
-            if self.mailResultBlock != nil
-            {
+            if self.mailResultBlock != nil {
                 self.mailResultBlock!(result)
             }
         }

@@ -10,8 +10,7 @@ import UIKit
 
 public typealias PTCheckboxValueChangedBlock = (_ isChecked:Bool)->Void
 
-public enum PTCheckBoxStyle:Int
-{
+public enum PTCheckBoxStyle:Int {
     /// ■
     case Square
     /// ●
@@ -22,8 +21,7 @@ public enum PTCheckBoxStyle:Int
     case Tick
 }
 
-public enum PTCheckBoxBorderStyle:Int
-{
+public enum PTCheckBoxBorderStyle:Int {
     /// ▢
     case Square
     /// ◯
@@ -41,8 +39,7 @@ public class PTCheckBox: UIControl {
     public var checkmarkSize:CGFloat = 0.5
     public var checkboxBackgroundColor:UIColor = .clear
     public var increasedTouchRadius:CGFloat = 5
-    public var isChecked:Bool = true
-    {
+    public var isChecked:Bool = true {
         didSet{
             self.setNeedsDisplay()
         }
@@ -65,14 +62,12 @@ public class PTCheckBox: UIControl {
     
     public override func draw(_ rect: CGRect) {
         self.drawBorder(shappe: self.borderStyle, frame: rect)
-        if self.isChecked
-        {
+        if self.isChecked {
             self.drawCheckmark(style: self.checkmarkStyle, frame: rect)
         }
     }
     
-    func drawBorder(shappe:PTCheckBoxBorderStyle,frame:CGRect)
-    {
+    func drawBorder(shappe:PTCheckBoxBorderStyle,frame:CGRect) {
         switch shappe {
         case .Square:
             self.squareBorder(frame: frame)
@@ -81,40 +76,32 @@ public class PTCheckBox: UIControl {
         }
     }
     
-    func setupDefults()
-    {
+    func setupDefults() {
         self.backgroundColor = UIColor.init(white: 1, alpha: 0)
         let tap = UITapGestureRecognizer.init { sender in
             self.isChecked = !self.isChecked
-            if self.valueChanged != nil
-            {
+            if self.valueChanged != nil {
                 self.valueChanged!(self.isChecked)
             }
             self.sendActions(for: .valueChanged)
             
-            if self.useHapticFeedback
-            {
+            if self.useHapticFeedback {
                 self.feedbackGenerator.impactOccurred()
                 self.feedbackGenerator.prepare()
             }
         }
         self.addGestureRecognizer(tap)
         
-        if self.useHapticFeedback
-        {
+        if self.useHapticFeedback {
             self.feedbackGenerator.prepare()
         }
     }
     
-    func squareBorder(frame:CGRect)
-    {
+    func squareBorder(frame:CGRect) {
         let rectanglePath = UIBezierPath.init(rect: frame)
-        if self.isChecked
-        {
+        if self.isChecked {
             self.checkedBorderColor.setStroke()
-        }
-        else
-        {
+        } else {
             self.uncheckedBorderColor.setStroke()
         }
         
@@ -124,17 +111,13 @@ public class PTCheckBox: UIControl {
         rectanglePath.fill()
     }
     
-    func circleBorder(frame:CGRect)
-    {
+    func circleBorder(frame:CGRect) {
         let adjustedRect = CGRect.init(x: self.boxBorderWidth / 2, y: self.boxBorderWidth / 2, width: self.bounds.size.width - self.boxBorderWidth, height: self.bounds.size.height - self.boxBorderWidth)
         let ovalPath = UIBezierPath.init(rect: adjustedRect)
         
-        if self.isChecked
-        {
+        if self.isChecked {
             self.checkedBorderColor.setStroke()
-        }
-        else
-        {
+        } else {
             self.uncheckedBorderColor.setStroke()
         }
         
@@ -144,8 +127,7 @@ public class PTCheckBox: UIControl {
         ovalPath.fill()
     }
     
-    func drawCheckmark(style:PTCheckBoxStyle,frame:CGRect)
-    {
+    func drawCheckmark(style:PTCheckBoxStyle,frame:CGRect) {
         let adjustRect = self.checkmarkRect(rect: frame)
         switch style {
         case .Square:
@@ -159,22 +141,19 @@ public class PTCheckBox: UIControl {
         }
     }
     
-    func circleCheckmark(rect:CGRect)
-    {
+    func circleCheckmark(rect:CGRect) {
         let ovalPath = UIBezierPath.init(ovalIn: rect)
         self.checkmarkColor.setFill()
         ovalPath.fill()
     }
     
-    func squareCheckmark(rect:CGRect)
-    {
+    func squareCheckmark(rect:CGRect) {
         let ovalPath = UIBezierPath.init(rect: rect)
         self.checkmarkColor.setFill()
         ovalPath.fill()
     }
     
-    func crossCheckmark(rect:CGRect)
-    {
+    func crossCheckmark(rect:CGRect) {
         let bezier4Path = UIBezierPath()
         bezier4Path.move(to: CGPoint.init(x: rect.minX + 0.06250 * rect.size.width, y: rect.minY + 0.06250 * rect.size.height))
         bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.93750 * rect.size.width, y: rect.minY + 0.93548 * rect.size.height))
@@ -185,8 +164,7 @@ public class PTCheckBox: UIControl {
         bezier4Path.stroke()
     }
     
-    func tickCheckmark(rect:CGRect)
-    {
+    func tickCheckmark(rect:CGRect) {
         let bezier4Path = UIBezierPath()
         bezier4Path.move(to: CGPoint.init(x: rect.minX + 0.4688 * rect.size.width, y: rect.minY + 0.63548 * rect.size.height))
         bezier4Path.addLine(to: CGPoint.init(x: rect.minX + 0.34896 * rect.size.width, y: rect.minY + 0.95161 * rect.size.height))
@@ -196,8 +174,7 @@ public class PTCheckBox: UIControl {
         bezier4Path.stroke()
     }
     
-    func checkmarkRect(rect:CGRect)->CGRect
-    {
+    func checkmarkRect(rect:CGRect)->CGRect {
         let width = rect.maxX * self.checkmarkSize
         let height = rect.maxY * self.checkmarkSize
         let adjustedRect = CGRect.init(x: (rect.maxX - width) / 2, y: (rect.maxY - height) / 2, width: width, height: height)

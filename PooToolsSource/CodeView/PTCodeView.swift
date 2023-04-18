@@ -27,12 +27,10 @@ public class PTCodeView: UIView {
         self.removeFromSuperview()
     }
 
-    public init(numberOfCodes:Int,numberOfLines:Int,changeTimes:TimeInterval)
-    {
+    public init(numberOfCodes:Int,numberOfLines:Int,changeTimes:TimeInterval) {
         super.init(frame: CGRectZero)
         
-        for index in 0..<10
-        {
+        for index in 0..<10 {
             dataSource.append(String(format: "%d", index))
         }
         alphabetArr.enumerated().forEach { (index,value) in
@@ -46,8 +44,7 @@ public class PTCodeView: UIView {
         changeTime = changeTimes
         changeResultString()
         self.backgroundColor = UIColor.randomColor
-        if changeTimes != 0
-        {
+        if changeTimes != 0 {
             timeChange()
         }
     }
@@ -61,8 +58,7 @@ public class PTCodeView: UIView {
         self.dismiss = true
     }
 
-    private func timeChange()
-    {
+    private func timeChange() {
         var newCount = Int(changeTime) + 1
         let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
         timer.schedule(deadline: .now(), repeating: .seconds(1))
@@ -71,14 +67,11 @@ public class PTCodeView: UIView {
                 newCount -= 1
                 if newCount < 1 {
                     DispatchQueue.main.async {
-                        if !self.dismiss!
-                        {
+                        if !self.dismiss! {
                             timer.suspend()
                             self.timeChange()
                             self.changeResultString()
-                        }
-                        else
-                        {
+                        } else {
                             timer.suspend()
                         }
                     }
@@ -89,18 +82,15 @@ public class PTCodeView: UIView {
         timer.resume()
     }
         
-    public func changeCode()
-    {
+    public func changeCode() {
         changeResultString()
     }
     
-    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
-    {
+    public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         changeResultString()
     }
 
-    private func changeResultString()
-    {
+    private func changeResultString() {
         let tempString = NSMutableString()
         for i in 0..<numberOfCode {
             PTNSLogConsole("\(i)")
@@ -108,8 +98,7 @@ public class PTCodeView: UIView {
             tempString.append(dataSource[Int(index)])
         }
         changeString = String(format: "%@", tempString)
-        if codeBlock != nil
-        {
+        if codeBlock != nil {
             codeBlock!(self,changeString)
         }
         self.setNeedsDisplay()

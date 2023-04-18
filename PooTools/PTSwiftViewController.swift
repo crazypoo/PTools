@@ -17,6 +17,34 @@ import LifetimeTracker
 
 class PTSwiftViewController: PTBaseViewController {
     
+    lazy var cycleView: LLCycleScrollView = {
+        
+        let banner = LLCycleScrollView.llCycleScrollViewWithFrame(.zero)
+//        banner.delegate = self
+        // 滚动间隔时间(默认为2秒)
+        banner.autoScrollTimeInterval = 3.0
+        // 等待数据状态显示的占位图
+        banner.placeHolderImage = PTAppBaseConfig.share.defaultPlaceholderImage
+        // 如果没有数据的时候，使用的封面图
+        banner.coverImage = PTAppBaseConfig.share.defaultPlaceholderImage
+        // 设置图片显示方式=UIImageView的ContentMode
+        banner.imageViewContentMode = .scaleAspectFill
+        banner.viewCorner(radius: 10)
+        // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
+        banner.customPageControlStyle = .pill
+        // 非.system的状态下，设置PageControl的tintColor
+        banner.customPageControlInActiveTintColor = UIColor.lightGray
+        // 设置.system系统的UIPageControl当前显示的颜色
+        banner.pageControlCurrentPageColor = UIColor.white
+        // 非.system的状态下，设置PageControl的间距(默认为8.0)
+        banner.customPageControlIndicatorPadding = 5.0
+        // 设置PageControl的位置 (.left, .right 默认为.center)
+        banner.pageControlPosition = .center
+        // 圆角
+        banner.backgroundColor = .clear
+        return banner
+    }()
+
     class var lifetimeConfiguration: LifetimeConfiguration {
             return LifetimeConfiguration(maxCount: 1, groupName: "VC")
     }
@@ -34,7 +62,13 @@ class PTSwiftViewController: PTBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+        self.cycleView.imagePaths = [ "https://p4.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/eafdba113bc942eaa7d48b176db6be3a.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg"]
+        self.view.addSubview(self.cycleView)
+        self.cycleView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.top.bottom.equalToSuperview().inset(10)
+        }
+
         PTNSLogConsole(self)
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"
@@ -124,7 +158,7 @@ class PTSwiftViewController: PTBaseViewController {
 //        let card2 = "123456789098765"
 //        let idcard = "111111111111111111"
 //
-        let color = UIColor.hex("#FFFFFF")
+//        let color = UIColor.hex("#FFFFFF")
 //
 //        let rangeFullStr = "你好啊"
 //        let rangeSubStr = "啊"
@@ -173,7 +207,7 @@ class PTSwiftViewController: PTBaseViewController {
 //            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(view)")
 //        }
 //        view.layoutSubviews()
-        self.view.backgroundColor = color
+//        self.view.backgroundColor = color
         // Do any additional setup after loading the view.
 //
 //        let status = UIImageView()
