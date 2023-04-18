@@ -8,6 +8,12 @@
 
 import UIKit
 
+public enum PTFusionShowAccessoryType:Int {
+    case Switch
+    case DisclosureIndicator
+    case NoneAccessoryView
+}
+
 open class PTFusionCellModel: NSObject {
     ///图片名
     open var leftImage:Any?
@@ -28,14 +34,16 @@ open class PTFusionCellModel: NSObject {
     open var contentTextColor:UIColor = UIColor.black
     ///Content的富文本
     open var contentAttr:NSAttributedString?
-    ///是否带有switch
-    open var haveSwitch:Bool = false
-    ///是否带有可点击标识
-    open var haveDisclosureIndicator:Bool = false
+    ///content字体
+    open var contentFont:UIFont = .appfont(size: 16)
+    ///AccessoryView类型
+    open var accessoryType:PTFusionShowAccessoryType = .NoneAccessoryView
     ///是否有线
     open var haveLine:Bool = false
     ///字体
     open var cellFont:UIFont = .appfont(size: 16)
+    ///Desc字体
+    open var cellDescFont:UIFont = .appfont(size: 14)
     ///ID
     open var cellID:String? = ""
     ///是否已经选择了
@@ -46,8 +54,6 @@ open class PTFusionCellModel: NSObject {
     open var disclosureIndicatorImage :Any?
     ///Cell的圓角處理
     open var conrner:UIRectCorner = []
-    ///Cell的是否顯示Icon
-    open var showContentIcon:Bool = false
     ///Cell的是否顯示Icon
     open var contentIcon:Any?
     ///Cell的右間隔

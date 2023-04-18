@@ -44,6 +44,53 @@ class PTSwiftViewController: PTBaseViewController {
         banner.backgroundColor = .clear
         return banner
     }()
+    
+    var mSections = [PTSection]()
+    func comboLayout()->UICollectionViewCompositionalLayout {
+        let layout = UICollectionViewCompositionalLayout.init { section, environment in
+            self.generateSection(section: section)
+        }
+        layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: "background")
+        layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: "background_no")
+        return layout
+    }
+    
+    func generateSection(section:NSInteger)->NSCollectionLayoutSection {
+        let sectionModel = mSections[section]
+
+        var group : NSCollectionLayoutGroup
+        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
+        
+        var bannerGroupSize : NSCollectionLayoutSize
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+        var groupH:CGFloat = 0
+        let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
+        sectionModel.rows.enumerated().forEach { (index,model) in
+            let cellHeight:CGFloat = 54
+            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
+            customers.append(customItem)
+            groupH += cellHeight
+        }
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        group = NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+
+        let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let laySection = NSCollectionLayoutSection(group: group)
+        laySection.orthogonalScrollingBehavior = behavior
+        laySection.contentInsets = sectionInsets
+
+        return laySection
+    }
+
+    lazy var collectionView : UICollectionView = {
+        let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
+        view.backgroundColor = .clear
+        view.delegate = self
+        view.dataSource = self
+        return view
+    }()
 
     class var lifetimeConfiguration: LifetimeConfiguration {
             return LifetimeConfiguration(maxCount: 1, groupName: "VC")
@@ -60,16 +107,74 @@ class PTSwiftViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func cellModels() -> [PTFusionCellModel] {
+        
+        let disclosureIndicatorImageName = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
+        let nameFont:UIFont = .appfont(size: 16,bold: true)
+
+        let userIcon = PTFusionCellModel()
+        userIcon.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        userIcon.name = "修改用户头像"
+        userIcon.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        userIcon.accessoryType = .DisclosureIndicator
+        userIcon.nameColor = .black
+        userIcon.disclosureIndicatorImage = disclosureIndicatorImageName
+        userIcon.cellFont = nameFont
+        
+        let userNickName = PTFusionCellModel()
+        userNickName.name = "修改用户昵称"
+        userNickName.content = "AAAAAAA"
+        userNickName.accessoryType = .DisclosureIndicator
+        userNickName.nameColor = .black
+        userNickName.disclosureIndicatorImage = disclosureIndicatorImageName
+        userNickName.cellFont = nameFont
+
+        let userPhone = PTFusionCellModel()
+        userPhone.name = "修改用户手机号"
+        userPhone.content = "BBBBB"
+        userPhone.accessoryType = .Switch
+        userPhone.nameColor = .black
+        userPhone.disclosureIndicatorImage = disclosureIndicatorImageName
+        userPhone.cellFont = nameFont
+
+        let aaaaaa = PTFusionCellModel()
+        aaaaaa.name = "123123123123123123123"
+        aaaaaa.desc = "aaaaaadddddd"
+        aaaaaa.accessoryType = .NoneAccessoryView
+        aaaaaa.nameColor = .black
+        aaaaaa.cellFont = nameFont
+
+        return [/*userIcon,userNickName,userPhone,*/aaaaaa]
+    }
+
+    func showCollectionViewData() {
+                
+        self.mSections.removeAll()
+        
+        var rows = [PTRows]()
+        self.cellModels().enumerated().forEach { (index,value) in
+            let row_List = PTRows.init(title: value.name, placeholder: value.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: value)
+            rows.append(row_List)
+        }
+        let cellSection = PTSection.init(rows: rows)
+        mSections.append(cellSection)
+
+        self.collectionView.pt_register(by: self.mSections)
+        self.collectionView.reloadData()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.cycleView.imagePaths = [ "https://p4.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/eafdba113bc942eaa7d48b176db6be3a.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg","https://p8.itc.cn/a_auto,q_70,c_zoom,w_640/images03/20211219/327919e04dc847bdabffd407ef83d9ce.jpeg"]
-        self.view.addSubview(self.cycleView)
-        self.cycleView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.bottom.equalToSuperview().inset(10)
-        }
 
         PTNSLogConsole(self)
+        
+        self.view.addSubview(self.collectionView)
+        self.collectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+        }
+
+        self.showCollectionViewData()
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"
 //        config.size = CGSize(width: 24, height: 34)
@@ -336,5 +441,42 @@ class PTSwiftViewController: PTBaseViewController {
 //            coin.animationBlock = { finish in
 //            }
 //        }
+    }
+}
+
+extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSource {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return self.mSections.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return self.mSections[section].rows.count
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let itemSec = self.mSections[indexPath.section]
+        let itemRow = itemSec.rows[indexPath.row]
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+        cell.dataContent.backgroundColor = .white
+        cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+        cell.dataContent.lineView.isHidden = indexPath.row == (itemSec.rows.count - 1) ? true : false
+        cell.dataContent.topLineView.isHidden = true
+        
+        if itemSec.rows.count == 1 {
+            PTGCDManager.gcdMain {
+                cell.dataContent.viewCornerRectCorner(cornerRadii:5,corner:.allCorners)
+            }
+        } else {
+            if indexPath.row == 0 {
+                PTGCDManager.gcdMain {
+                    cell.dataContent.viewCornerRectCorner(cornerRadii: 5,corner:[.topLeft,.topRight])
+                }
+            } else if indexPath.row == (itemSec.rows.count - 1) {
+                PTGCDManager.gcdMain {
+                    cell.dataContent.viewCornerRectCorner(cornerRadii: 5,corner:[.bottomLeft,.bottomRight])
+                }
+            }
+        }
+        return cell
     }
 }

@@ -27,7 +27,7 @@ public class PTDebugViewController: PTBaseViewController {
         let cell_mode = PTFusionCellModel()
         cell_mode.name = .ipMode
         cell_mode.content = modeName
-        cell_mode.haveDisclosureIndicator = true
+        cell_mode.accessoryType = .DisclosureIndicator
         
         let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
@@ -41,11 +41,11 @@ public class PTDebugViewController: PTBaseViewController {
         {
             cell_input.content = url_debug
         }
-        cell_input.haveDisclosureIndicator = true
+        cell_input.accessoryType = .DisclosureIndicator
 
         let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
-        cell_debug.haveSwitch = true
+        cell_debug.accessoryType = .Switch
 
         return [cell_mode,cell_input,cell_debug]
     }()
