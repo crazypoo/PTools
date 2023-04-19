@@ -29,7 +29,6 @@ public class PTFusionCellContent:UIView {
     enum PTFusionContentCellType {
         case Name
         case NameContent
-        case NameDetail
         case Content
         case None
     }
@@ -207,70 +206,61 @@ public class PTFusionCellContent:UIView {
             }
                   
             switch cellType {
-            case .Switch(type: .LeftImageContent(type: .NameDetail)),
-                    .Switch(type: .LeftImageContent(type: .Name)),
+            case .Switch(type: .LeftImageContent(type: .Name)),
                     .Switch(type: .LeftImageContent(type: .NameContent)),
                     .Switch(type: .BothImage(type: .Name)),
-                    .Switch(type: .BothImage(type: .NameDetail)),
                     .Switch(type: .BothImage(type: .NameContent)),
                     .Switch(type: .None(type: .Name)),
-                    .Switch(type: .None(type: .NameDetail)),
                     .Switch(type: .None(type: .NameContent)),
                     .Switch(type: .RightImageContent(type: .Name)),
-                    .Switch(type: .RightImageContent(type: .NameDetail)),
                     .Switch(type: .RightImageContent(type: .NameContent)),
-                    .DisclosureIndicator(type: .LeftImageContent(type: .NameDetail)),
                     .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
                     .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
                     .DisclosureIndicator(type: .BothImage(type: .Name)),
-                    .DisclosureIndicator(type: .BothImage(type: .NameDetail)),
                     .DisclosureIndicator(type: .BothImage(type: .NameContent)),
                     .DisclosureIndicator(type: .None(type: .Name)),
-                    .DisclosureIndicator(type: .None(type: .NameDetail)),
                     .DisclosureIndicator(type: .None(type: .NameContent)),
                     .DisclosureIndicator(type: .RightImageContent(type: .Name)),
                     .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
-                    .DisclosureIndicator(type: .RightImageContent(type: .NameDetail)),
                     .NoneAccessoryView(type: .RightImageContent(type: .Name)),
                     .NoneAccessoryView(type: .RightImageContent(type: .NameContent)),
-                    .NoneAccessoryView(type: .RightImageContent(type: .NameDetail)),
-                    .NoneAccessoryView(type: .None(type: .NameDetail)),
                     .NoneAccessoryView(type: .None(type: .Name)),
                     .NoneAccessoryView(type: .None(type: .NameContent)),
-                    .NoneAccessoryView(type: .LeftImageContent(type: .NameDetail)),
                     .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
                     .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
                     .NoneAccessoryView(type: .BothImage(type: .Name)),
-                    .NoneAccessoryView(type: .BothImage(type: .NameDetail)),
                     .NoneAccessoryView(type: .BothImage(type: .NameContent)):
                 
-                let att = NSMutableAttributedString.sj.makeText { make in
-                    make.append(self.cellModel!.name).alignment(.left).font(self.cellModel!.cellFont).textColor(self.cellModel!.nameColor)
-                    if !self.cellModel!.desc.stringIsEmpty() {
-                        make.append("\n\(self.cellModel!.desc)").alignment(.left).font(self.cellModel!.cellDescFont).textColor(self.cellModel!.descColor)
+                if  self.cellModel!.nameAttr != nil {
+                    self.nameTitle.attributedText = self.cellModel!.nameAttr
+                } else {
+                    let att = NSMutableAttributedString.sj.makeText { make in
+                        if !self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() {
+                            make.append(self.cellModel!.name).alignment(.left).font(self.cellModel!.cellFont).textColor(self.cellModel!.nameColor)
+                        } else if self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
+                            make.append("\(self.cellModel!.desc)").alignment(.left).font(self.cellModel!.cellDescFont).textColor(self.cellModel!.descColor)
+                        } else if !self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
+                            make.append(self.cellModel!.name).alignment(.left).font(self.cellModel!.cellFont).textColor(self.cellModel!.nameColor)
+                            make.append("\n\(self.cellModel!.desc)").alignment(.left).font(self.cellModel!.cellDescFont).textColor(self.cellModel!.descColor)
+                        }
                     }
+                    self.nameTitle.attributedText = att
                 }
-                self.nameTitle.attributedText = att
+
                 self.addSubview(self.nameTitle)
                 self.nameTitle.snp.remakeConstraints { make in
                     switch cellType {
                     case .Switch(type: .None(type: .Name)),
-                            .Switch(type: .None(type: .NameDetail)),
                             .Switch(type: .None(type: .NameContent)),
                             .Switch(type: .RightImageContent(type: .NameContent)),
                             .Switch(type: .RightImageContent(type: .Name)),
-                            .Switch(type: .RightImageContent(type: .NameDetail)),
                             .DisclosureIndicator(type: .None(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .NameDetail)),
                             .DisclosureIndicator(type: .None(type: .NameContent)),
                             .DisclosureIndicator(type: .RightImageContent(type: .Name)),
-                            .DisclosureIndicator(type: .RightImageContent(type: .NameDetail)),
                             .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
                             .NoneAccessoryView(type: .None(type: .Name)),
-                            .NoneAccessoryView(type: .None(type: .NameDetail)),
                             .NoneAccessoryView(type: .None(type: .NameContent)),
                             .NoneAccessoryView(type: .RightImageContent(type: .Name)),
-                            .NoneAccessoryView(type: .RightImageContent(type: .NameDetail)),
                             .NoneAccessoryView(type: .RightImageContent(type: .NameContent)):
                         make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
                         make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
@@ -282,16 +272,11 @@ public class PTFusionCellContent:UIView {
                     
                     switch cellType {
                     case .Switch(type: .BothImage(type: .Name)),
-                            .Switch(type: .BothImage(type: .NameDetail)),
                             .DisclosureIndicator(type: .BothImage(type: .Name)),
-                            .DisclosureIndicator(type: .BothImage(type: .NameDetail)),
-                            .NoneAccessoryView(type: .BothImage(type: .Name)),
-                            .NoneAccessoryView(type: .BothImage(type: .NameDetail)):
+                            .NoneAccessoryView(type: .BothImage(type: .Name)):
                         make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
                     case .Switch(type: .None(type: .Name)),
-                            .Switch(type: .None(type: .NameDetail)),
-                            .DisclosureIndicator(type: .None(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .NameDetail)):
+                            .DisclosureIndicator(type: .None(type: .Name)):
                         make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                     case .Switch(type: .BothImage(type: .NameContent)),
                             .DisclosureIndicator(type: .BothImage(type: .NameContent)),
@@ -394,40 +379,28 @@ public class PTFusionCellContent:UIView {
                 switch cellType {
                 case .Switch(type: .BothImage(type: .Name)),
                         .Switch(type: .BothImage(type: .NameContent)),
-                        .Switch(type: .BothImage(type: .NameDetail)),
                         .Switch(type: .None(type: .Name)),
                         .Switch(type: .None(type: .NameContent)),
-                        .Switch(type: .None(type: .NameDetail)),
                         .Switch(type: .LeftImageContent(type: .Name)),
                         .Switch(type: .LeftImageContent(type: .NameContent)),
-                        .Switch(type: .LeftImageContent(type: .NameDetail)),
                         .Switch(type: .RightImageContent(type: .Name)),
-                        .Switch(type: .RightImageContent(type: .NameDetail)),
                         .Switch(type: .RightImageContent(type: .NameContent)),
                         .DisclosureIndicator(type: .BothImage(type: .Name)),
                         .DisclosureIndicator(type: .BothImage(type: .NameContent)),
-                        .DisclosureIndicator(type: .BothImage(type: .NameDetail)),
                         .DisclosureIndicator(type: .None(type: .Name)),
                         .DisclosureIndicator(type: .None(type: .NameContent)),
-                        .DisclosureIndicator(type: .None(type: .NameDetail)),
                         .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
                         .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
-                        .DisclosureIndicator(type: .LeftImageContent(type: .NameDetail)),
                         .DisclosureIndicator(type: .RightImageContent(type: .Name)),
                         .DisclosureIndicator(type: .RightImageContent(type: .NameContent)),
-                        .DisclosureIndicator(type: .RightImageContent(type: .NameDetail)),
                         .NoneAccessoryView(type: .BothImage(type: .Name)),
                         .NoneAccessoryView(type: .BothImage(type: .NameContent)),
-                        .NoneAccessoryView(type: .BothImage(type: .NameDetail)),
                         .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
                         .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
-                        .NoneAccessoryView(type: .LeftImageContent(type: .NameDetail)),
                         .NoneAccessoryView(type: .None(type: .Name)),
                         .NoneAccessoryView(type: .None(type: .NameContent)),
-                        .NoneAccessoryView(type: .None(type: .NameDetail)),
                         .NoneAccessoryView(type: .RightImageContent(type: .Name)),
-                        .NoneAccessoryView(type: .RightImageContent(type: .NameContent)),
-                        .NoneAccessoryView(type: .RightImageContent(type: .NameDetail)):
+                        .NoneAccessoryView(type: .RightImageContent(type: .NameContent)):
                     make.left.equalTo(self.nameTitle)
                 case .Switch(type: .OnlyLeftImage),.DisclosureIndicator(type: .OnlyLeftImage):
                     make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
@@ -495,7 +468,6 @@ public class PTFusionCellContent:UIView {
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.addSubviews([self.lineView,self.accessV,self.nameTitle,self.valueSwitch,self.contentLabel,self.cellContentIcon,self.cellIcon,self.topLineView])
     }
     
     required init?(coder: NSCoder) {
@@ -504,11 +476,10 @@ public class PTFusionCellContent:UIView {
     
     func accessoryViewType(type:PTFusionShowAccessoryType) -> PTFusionCellAccessoryView {
         var cellType:PTFusionCellAccessoryView
-        if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-            !self.cellModel!.name.stringIsEmpty() &&
+        if (!NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+            (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
             (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-            self.cellModel!.desc.stringIsEmpty() &&
-            NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+            NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .LeftImageContent(type: .Name))
@@ -517,24 +488,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .LeftImageContent(type: .Name))
             }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    !self.cellModel!.desc.stringIsEmpty() &&
-                    NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .LeftImageContent(type: .NameDetail))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .LeftImageContent(type: .NameDetail))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .LeftImageContent(type: .NameDetail))
-            }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (!NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
+                   NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .LeftImageContent(type: .NameContent))
@@ -543,11 +500,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .LeftImageContent(type: .NameContent))
             }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (!NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
+                   !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .BothImage(type: .Name))
@@ -557,22 +513,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .BothImage(type: .Name))
             }
         } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    !self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .BothImage(type: .NameDetail))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .BothImage(type: .NameDetail))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .BothImage(type: .NameDetail))
-            }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -582,11 +524,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .BothImage(type: .Content))
             }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (!NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
+                   !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .BothImage(type: .NameContent))
@@ -596,9 +537,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .BothImage(type: .NameContent))
             }
         } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -609,9 +549,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .LeftImageContent(type: .Content))
             }
         } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -622,9 +561,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .OnlyLeftImage)
             }
         } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -634,50 +572,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .OnlyRightImage)
             }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .BothImage(type: .Name))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .BothImage(type: .Name))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .BothImage(type: .Name))
-            }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .BothImage(type: .NameContent))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .BothImage(type: .NameContent))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .BothImage(type: .NameContent))
-            }
-        } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    !self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .BothImage(type: .Content))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .BothImage(type: .Content))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .BothImage(type: .Content))
-            }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
+                   !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)){
             switch type {
             case .Switch:
                 cellType = .Switch(type: .RightImageContent(type: .Name))
@@ -686,11 +584,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .RightImageContent(type: .Name))
             }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
+                   !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .RightImageContent(type: .NameContent))
@@ -700,22 +597,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .RightImageContent(type: .NameContent))
             }
         } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    !self.cellModel!.desc.stringIsEmpty() &&
-                    !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .RightImageContent(type: .NameDetail))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .RightImageContent(type: .NameDetail))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .RightImageContent(type: .NameDetail))
-            }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -725,11 +608,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .RightImageContent(type: .Content))
             }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
+                   NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .None(type: .NameContent))
@@ -738,23 +620,9 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .None(type: .NameContent))
             }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    !self.cellModel!.desc.stringIsEmpty() &&
-                    NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
-            switch type {
-            case .Switch:
-                cellType = .Switch(type: .None(type: .NameDetail))
-            case .DisclosureIndicator:
-                cellType = .DisclosureIndicator(type: .None(type: .NameDetail))
-            case .NoneAccessoryView:
-                cellType = .NoneAccessoryView(type: .None(type: .NameDetail))
-            }
         } else if !NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     !NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
@@ -764,11 +632,10 @@ public class PTFusionCellContent:UIView {
             case .NoneAccessoryView:
                 cellType = .NoneAccessoryView(type: .BothImage(type: .None))
             }
-        } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    !self.cellModel!.name.stringIsEmpty() &&
-                    (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
-                    NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
+        } else if (NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
+                   (!self.cellModel!.name.stringIsEmpty() || !self.cellModel!.desc.stringIsEmpty() || self.cellModel!.nameAttr != nil) &&
+                   (self.cellModel!.content.stringIsEmpty() && self.cellModel!.contentAttr == nil) &&
+                   NSObject.checkObject(self.cellModel!.contentIcon as? NSObject)) {
             switch type {
             case .Switch:
                 cellType = .Switch(type: .None(type: .Name))
@@ -778,9 +645,8 @@ public class PTFusionCellContent:UIView {
                 cellType = .NoneAccessoryView(type: .None(type: .Name))
             }
         } else if NSObject.checkObject(self.cellModel!.leftImage as? NSObject) &&
-                    self.cellModel!.name.stringIsEmpty() &&
+                    (self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() && self.cellModel!.nameAttr == nil) &&
                     (!self.cellModel!.content.stringIsEmpty() || self.cellModel!.contentAttr != nil) &&
-                    self.cellModel!.desc.stringIsEmpty() &&
                     NSObject.checkObject(self.cellModel!.contentIcon as? NSObject) {
             switch type {
             case .Switch:
