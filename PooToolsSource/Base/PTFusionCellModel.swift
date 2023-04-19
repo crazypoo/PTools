@@ -28,6 +28,8 @@ open class PTFusionCellModel: NSObject {
     open var desc:String = ""
     ///主标题下文字颜色
     open var descColor:UIColor = UIColor.lightGray
+    ///主标题的富文本
+    open var nameAttr:NSAttributedString?
     ///描述
     open var content:String = ""
     ///描述文字颜色

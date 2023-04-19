@@ -107,57 +107,189 @@ class PTSwiftViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellModels() -> [PTFusionCellModel] {
+    func cellModels() -> [[PTFusionCellModel]] {
         
         let disclosureIndicatorImageName = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
         let nameFont:UIFont = .appfont(size: 16,bold: true)
 
-        let userIcon = PTFusionCellModel()
-        userIcon.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        userIcon.name = "修改用户头像"
-        userIcon.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        userIcon.accessoryType = .DisclosureIndicator
-        userIcon.nameColor = .black
-        userIcon.disclosureIndicatorImage = disclosureIndicatorImageName
-        userIcon.cellFont = nameFont
+        let onlyLeft = PTFusionCellModel()
+        onlyLeft.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft.accessoryType = .NoneAccessoryView
+        onlyLeft.nameColor = .black
+        onlyLeft.cellFont = nameFont
         
-        let userNickName = PTFusionCellModel()
-        userNickName.name = "修改用户昵称"
-        userNickName.content = "AAAAAAA"
-        userNickName.accessoryType = .DisclosureIndicator
-        userNickName.nameColor = .black
-        userNickName.disclosureIndicatorImage = disclosureIndicatorImageName
-        userNickName.cellFont = nameFont
+        let onlyLeftRight = PTFusionCellModel()
+        onlyLeftRight.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight.accessoryType = .NoneAccessoryView
+        onlyLeftRight.nameColor = .black
+        onlyLeftRight.cellFont = nameFont
 
-        let userPhone = PTFusionCellModel()
-        userPhone.name = "修改用户手机号"
-        userPhone.content = "BBBBB"
-        userPhone.accessoryType = .Switch
-        userPhone.nameColor = .black
-        userPhone.disclosureIndicatorImage = disclosureIndicatorImageName
-        userPhone.cellFont = nameFont
+        let onlyLeft_a = PTFusionCellModel()
+        onlyLeft_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft_a.accessoryType = .DisclosureIndicator
+        onlyLeft_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeft_a.nameColor = .black
+        onlyLeft_a.cellFont = nameFont
 
-        let aaaaaa = PTFusionCellModel()
-        aaaaaa.name = "123123123123123123123"
-        aaaaaa.desc = "aaaaaadddddd"
-        aaaaaa.accessoryType = .NoneAccessoryView
-        aaaaaa.nameColor = .black
-        aaaaaa.cellFont = nameFont
+        let onlyRight_a = PTFusionCellModel()
+        onlyRight_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight_a.accessoryType = .DisclosureIndicator
+        onlyRight_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight_a.nameColor = .black
+        onlyRight_a.cellFont = nameFont
 
-        return [/*userIcon,userNickName,userPhone,*/aaaaaa]
+        let onlyRight = PTFusionCellModel()
+        onlyRight.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight.accessoryType = .NoneAccessoryView
+        onlyRight.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight.nameColor = .black
+        onlyRight.cellFont = nameFont
+
+        let onlyLeftRight_a = PTFusionCellModel()
+        onlyLeftRight_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_a.accessoryType = .DisclosureIndicator
+        onlyLeftRight_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeftRight_a.nameColor = .black
+        onlyLeftRight_a.cellFont = nameFont
+
+        let onlyLeftRight_n_a = PTFusionCellModel()
+        onlyLeftRight_n_a.name = "左标题"
+        onlyLeftRight_n_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_n_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_n_a.accessoryType = .DisclosureIndicator
+        onlyLeftRight_n_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeftRight_n_a.nameColor = .black
+        onlyLeftRight_n_a.cellFont = nameFont
+
+        let onlyLeftRight_nc_a = PTFusionCellModel()
+        onlyLeftRight_nc_a.name = "左标题"
+        onlyLeftRight_nc_a.content = "右标题"
+        onlyLeftRight_nc_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_nc_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_nc_a.accessoryType = .DisclosureIndicator
+        onlyLeftRight_nc_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeftRight_nc_a.nameColor = .black
+        onlyLeftRight_nc_a.cellFont = nameFont
+
+        let onlyLeftRight_nd_a = PTFusionCellModel()
+        onlyLeftRight_nd_a.name = "左标题"
+        onlyLeftRight_nd_a.desc = "底部标题"
+        onlyLeftRight_nd_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_nd_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_nd_a.accessoryType = .DisclosureIndicator
+        onlyLeftRight_nd_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeftRight_nd_a.nameColor = .black
+        onlyLeftRight_nd_a.cellFont = nameFont
+
+        let onlyLeftRight_c_a = PTFusionCellModel()
+        onlyLeftRight_c_a.content = "右边标题"
+        onlyLeftRight_c_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_c_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeftRight_c_a.accessoryType = .DisclosureIndicator
+        onlyLeftRight_c_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyLeftRight_c_a.nameColor = .black
+        onlyLeftRight_c_a.cellFont = nameFont
+
+        let onlyRight_n_a = PTFusionCellModel()
+        onlyRight_n_a.name = "左标题"
+        onlyRight_n_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight_n_a.accessoryType = .DisclosureIndicator
+        onlyRight_n_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight_n_a.nameColor = .black
+        onlyRight_n_a.cellFont = nameFont
+
+        let onlyRight_nc_a = PTFusionCellModel()
+        onlyRight_nc_a.name = "左标题"
+        onlyRight_nc_a.content = "右标题"
+        onlyRight_nc_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight_nc_a.accessoryType = .DisclosureIndicator
+        onlyRight_nc_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight_nc_a.nameColor = .black
+        onlyRight_nc_a.cellFont = nameFont
+
+        let onlyRight_nd_a = PTFusionCellModel()
+        onlyRight_nd_a.name = "左标题"
+        onlyRight_nd_a.desc = "底部标题"
+        onlyRight_nd_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight_nd_a.accessoryType = .DisclosureIndicator
+        onlyRight_nd_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight_nd_a.nameColor = .black
+        onlyRight_nd_a.cellFont = nameFont
+
+        let onlyRight_c_a = PTFusionCellModel()
+        onlyRight_c_a.content = "右边标题"
+        onlyRight_c_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyRight_c_a.accessoryType = .DisclosureIndicator
+        onlyRight_c_a.disclosureIndicatorImage = disclosureIndicatorImageName
+        onlyRight_c_a.nameColor = .black
+        onlyRight_c_a.cellFont = nameFont
+
+        let only_n_a = PTFusionCellModel()
+        only_n_a.name = "左标题"
+        only_n_a.nameColor = .black
+        only_n_a.cellFont = nameFont
+
+        let only_nc_a = PTFusionCellModel()
+        only_nc_a.name = "左标题"
+        only_nc_a.content = "右标题"
+        only_nc_a.nameColor = .black
+        only_nc_a.cellFont = nameFont
+
+        let only_nd_a = PTFusionCellModel()
+        only_nd_a.name = "左标题"
+        only_nd_a.desc = "底部标题"
+        only_nd_a.nameColor = .black
+        only_nd_a.cellFont = nameFont
+
+        let only_c_a = PTFusionCellModel()
+        only_c_a.content = "右边标题"
+        only_c_a.nameColor = .black
+        only_c_a.cellFont = nameFont
+
+        let onlyLeft_n_a = PTFusionCellModel()
+        onlyLeft_n_a.name = "左标题"
+        onlyLeft_n_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft_n_a.nameColor = .black
+        onlyLeft_n_a.cellFont = nameFont
+
+        let onlyLeft_nc_a = PTFusionCellModel()
+        onlyLeft_nc_a.name = "左标题"
+        onlyLeft_nc_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft_nc_a.content = "右标题"
+        onlyLeft_nc_a.nameColor = .black
+        onlyLeft_nc_a.cellFont = nameFont
+
+        let onlyLeft_nd_a = PTFusionCellModel()
+        onlyLeft_nd_a.name = "左标题"
+        onlyLeft_nd_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft_nd_a.desc = "底部标题"
+        onlyLeft_nd_a.nameColor = .black
+        onlyLeft_nd_a.cellFont = nameFont
+
+        let onlyLeft_c_a = PTFusionCellModel()
+        onlyLeft_c_a.content = "右边标题"
+        onlyLeft_c_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
+        onlyLeft_c_a.nameColor = .black
+        onlyLeft_c_a.cellFont = nameFont
+
+        return [[onlyLeft,onlyLeftRight,onlyLeft_a,onlyRight_a,onlyRight],[onlyLeftRight_n_a,onlyLeftRight_nc_a,onlyLeftRight_nd_a,onlyLeftRight_c_a,onlyRight_n_a,onlyRight_nc_a,onlyRight_nd_a,onlyRight_c_a],[only_n_a,only_nc_a,only_nd_a,only_c_a],[onlyLeft_n_a,onlyLeft_nc_a,onlyLeft_nd_a,onlyLeft_c_a]]
     }
 
     func showCollectionViewData() {
                 
         self.mSections.removeAll()
         
-        var rows = [PTRows]()
         self.cellModels().enumerated().forEach { (index,value) in
-            let row_List = PTRows.init(title: value.name, placeholder: value.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: value)
-            rows.append(row_List)
+            var rows = [PTRows]()
+            value.enumerated().forEach { subIndex,subValue in
+                let row_List = PTRows.init(title: subValue.name, placeholder: subValue.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: subValue)
+                rows.append(row_List)
+            }
+            let cellSection = PTSection.init(rows: rows)
+            mSections.append(cellSection)
         }
-        let cellSection = PTSection.init(rows: rows)
-        mSections.append(cellSection)
 
         self.collectionView.pt_register(by: self.mSections)
         self.collectionView.reloadData()
