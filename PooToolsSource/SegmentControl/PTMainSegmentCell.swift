@@ -65,12 +65,9 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         switch self.cellItemModel!.onlyShowTitle {
         case .OnlyTitle(type: .OnlyTitle):
-            if cellItemModel?.index == 0
-            {
+            if cellItemModel?.index == 0 {
                 lineView.isHidden = true
-            }
-            else
-            {
+            } else {
                 lineView.isHidden = false
             }
             self.titleLabel.snp.remakeConstraints { make in
@@ -78,12 +75,9 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             }
             self.subTitleLabel.isHidden = true
         case .OnlyTitle(type: .Normal):
-            if cellItemModel?.index == 0
-            {
+            if cellItemModel?.index == 0 {
                 lineView.isHidden = true
-            }
-            else
-            {
+            } else {
                 lineView.isHidden = false
             }
             
@@ -119,8 +113,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
         }
         cellItemModel = myItemModel        
                     
-        if !(cellItemModel!.subTitle!).stringIsEmpty()
-        {
+        if !(cellItemModel!.subTitle!).stringIsEmpty() {
             subTitleLabel.backgroundColor = myItemModel.subTitleCurrentBGColor
             
             let subAtt = NSMutableAttributedString.sj.makeText { make in
@@ -128,9 +121,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             }
             self.subTitleLabel.attributedText = subAtt
 
-        }
-        else
-        {
+        } else {
             subTitleLabel.backgroundColor = .clear
         }
 

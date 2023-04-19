@@ -9,8 +9,7 @@
 import UIKit
 import JXSegmentedView
 
-public enum PTSegmentControlModelType
-{
+public enum PTSegmentControlModelType {
     case OnlyTitle(type:PTSegmentControlModelSubType)
     case ImageTitle(type:PTSegmentControlModelSubType)
     case OnlyImage

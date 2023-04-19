@@ -18,33 +18,27 @@ import UIKit
 
 @objcMembers
 public class PTPhoneNetWorkInfo:NSObject {
-    public struct NetworkInterfaceInfo
-    {
+    public struct NetworkInterfaceInfo {
         let name: String
         let ip: String
         let netmask: String
     }
     
-    class open func ipv4String()->String
-    {
-        for info in PTPhoneNetWorkInfo.enumerate()
-        {
-            if info.name == "en0"
-            {
+    class open func ipv4String()->String {
+        for info in PTPhoneNetWorkInfo.enumerate() {
+            if info.name == "en0" {
                 return info.ip
             }
         }
         return "0.0.0.0"
     }
     
-    public static func enumerate() -> [NetworkInterfaceInfo]
-    {
+    public static func enumerate() -> [NetworkInterfaceInfo] {
         var interfaces = [NetworkInterfaceInfo]()
 
         //MARK: Get list of all interfaces on the local machine:
         var ifaddr : UnsafeMutablePointer<ifaddrs>? = nil
-        if getifaddrs(&ifaddr) == 0
-        {
+        if getifaddrs(&ifaddr) == 0 {
 
             //MARK: For each interface ...
             var ptr = ifaddr
@@ -69,8 +63,7 @@ public class PTPhoneNetWorkInfo:NSObject {
                             let name = ptr!.pointee.ifa_name!
                             let ifname = String(cString: name)
 
-                            if (getnameinfo(&mask, socklen_t(mask.sa_len), &netmask, socklen_t(netmask.count),nil, socklen_t(0), NI_NUMERICHOST) == 0)
-                            {
+                            if (getnameinfo(&mask, socklen_t(mask.sa_len), &netmask, socklen_t(netmask.count),nil, socklen_t(0), NI_NUMERICHOST) == 0) {
                                 let netmaskIP = String(cString: netmask)
 
                                 let info = NetworkInterfaceInfo(name: ifname,ip: address,netmask: netmaskIP)

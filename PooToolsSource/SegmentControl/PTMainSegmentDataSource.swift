@@ -69,12 +69,9 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
         var cell:JXSegmentedBaseCell?
         if dataSource[index] is PTMainSegmentModel {
             cell = segmentedView.dequeueReusableCell(withReuseIdentifier: "titleCell", at: index)
-            if index != 0
-            {
+            if index != 0 {
                 (cell as! PTMainSegmentCell).lineView.isHidden = false
-            }
-            else
-            {
+            } else {
                 (cell as! PTMainSegmentCell).lineView.isHidden = true
             }
         }

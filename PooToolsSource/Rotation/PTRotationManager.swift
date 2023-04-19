@@ -25,15 +25,12 @@ public class PTRotationManager: NSObject {
     @objc public var interfaceOrientationMask: UIInterfaceOrientationMask = .portrait
     @objc public var orientation: UIDeviceOrientation = .portrait
     
-    @objc public func setOrientation(orientation:UIDeviceOrientation)
-    {
-        if self.orientation == orientation
-        {
+    @objc public func setOrientation(orientation:UIDeviceOrientation) {
+        if self.orientation == orientation {
             return
         }
         
-        if UIDevice.current.orientation == orientation
-        {
+        if UIDevice.current.orientation == orientation {
             UIDevice.current.setValue(self.orientation, forKey: "orientation")
         }
         

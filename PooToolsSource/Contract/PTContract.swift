@@ -10,22 +10,19 @@ import UIKit
 import Contacts
 
 @objcMembers
-public class PTContractIndexModel:NSObject
-{
+public class PTContractIndexModel:NSObject {
     var indexStrings:[String] = [String]()
     var contractModel:[PTContractModel] = [PTContractModel]()
 }
 
 @objcMembers
-public class PTContractModel:NSObject
-{
+public class PTContractModel:NSObject {
     var key:String = ""
     var contractModel:[PTContractSubModel] = [PTContractSubModel]()
 }
 
 @objcMembers
-public class PTContractSubModel:NSObject
-{
+public class PTContractSubModel:NSObject {
     var givenName:String = ""
     var familyName:String = ""
     var phonenumbers:[String] = []
@@ -37,18 +34,15 @@ public class PTContract: NSObject {
 
     static let share = PTContract()
     
-    func getContractData(handle:@escaping ((_ model:PTContractIndexModel?)->Void))
-    {
+    func getContractData(handle:@escaping ((_ model:PTContractIndexModel?)->Void)) {
         DispatchQueue.global(qos: .background).async {
             let store = CNContactStore()
             store.requestAccess(for: .contacts) { granted, error in
-                if granted
-                {
+                if granted {
                     let keys = [CNContactGivenNameKey,CNContactFamilyNameKey,CNContactPhoneNumbersKey,CNContactThumbnailImageDataKey,CNContactImageDataAvailableKey]
                     var contacts = [CNContact]()
                     let request = CNContactFetchRequest(keysToFetch: keys as [CNKeyDescriptor])
-                    do
-                    {
+                    do {
                         try store.enumerateContacts(with: request, usingBlock: { contact, stop in
                             contacts.append(contact)
                         })
@@ -83,14 +77,12 @@ public class PTContract: NSObject {
                             if let contacts = contactDict[key] {
                                 let subModel = PTContractSubModel()
                                 for contact in contacts {
-                                    if let image = contact.1
-                                    {
+                                    if let image = contact.1 {
                                         // 处理联系人头像
                                         subModel.image = image
                                     }
 
-                                    for number in contact.0.phoneNumbers
-                                    {
+                                    for number in contact.0.phoneNumbers {
                                         subModel.phonenumbers.append(number.value.stringValue)
                                     }
                                     subModel.givenName = contact.0.givenName
@@ -102,15 +94,11 @@ public class PTContract: NSObject {
                         }
                         indexModel.contractModel = contractModels
                         handle(indexModel)
-                    }
-                    catch
-                    {
+                    } catch {
                         PTNSLogConsole(error.localizedDescription)
                         handle(nil)
                     }
-                }
-                else
-                {
+                } else {
                     PTNSLogConsole(error?.localizedDescription ?? "User denied access to contacts")
                     handle(nil)
                 }

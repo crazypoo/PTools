@@ -29,21 +29,17 @@ public class PTHealthKit: NSObject {
         self.kitSetting()
     }
     
-    func dataTypesToRead()->Set<HKObjectType>
-    {
+    func dataTypesToRead()->Set<HKObjectType> {
         
         return [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!]
     }
 
-    func kitSetting()
-    {
-        if HKHealthStore.isHealthDataAvailable()
-        {
+    func kitSetting() {
+        if HKHealthStore.isHealthDataAvailable() {
             let types = self.dataTypesToRead()
             
             self.healthStore.requestAuthorization(toShare: nil, read: types) { success, error in
-                if !success
-                {
+                if !success {
                     PTNSLogConsole("You didn't allow HealthKit to access these read data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: \(String(describing: error)). If you're using a simulator, try it on a device.")
                     return
                 }
@@ -52,17 +48,14 @@ public class PTHealthKit: NSObject {
                     PTNSLogConsole("The user allow the app to read information about SetpCount.")
                 }
             }
-        }
-        else
-        {
+        } else {
             PTNSLogConsole("HKHealthStore is not available")
         }
         
         self.stepAll()
     }
     
-    func stepAll()
-    {
+    func stepAll() {
         let calendar = NSCalendar.current
         var interval = DateComponents()
         interval.day = 1
@@ -72,8 +65,7 @@ public class PTHealthKit: NSObject {
         let quantityType = HKObjectType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)
         let query = HKStatisticsCollectionQuery(quantityType: quantityType!, quantitySamplePredicate: nil,options: .cumulativeSum, anchorDate: anchorDate!, intervalComponents: interval)
         query.initialResultsHandler = { querys, results, error in
-            if error != nil
-            {
+            if error != nil {
                 PTNSLogConsole("*** An error occurred while calculating the statistics: \(error!.localizedDescription) ***")
             }
                         
@@ -82,15 +74,13 @@ public class PTHealthKit: NSObject {
 
             results?.enumerateStatistics(from: todayDate, to: endDate, with: { result, stop in
                 let quantity = result.sumQuantity()
-                if quantity != nil
-                {
+                if quantity != nil {
                     let value = quantity?.doubleValue(for: .count())
                     self.stepCounts += value!
                 }
                 self.isLoad = true
                 PTGCDManager.gcdMain {
-                    if self.loadBlock != nil
-                    {
+                    if self.loadBlock != nil {
                         self.loadBlock!(self.isLoad,self.stepCounts)
                     }
                 }

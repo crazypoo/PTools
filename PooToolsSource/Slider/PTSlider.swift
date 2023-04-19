@@ -12,26 +12,21 @@ import SnapKit
 let thumbBound_y:CGFloat = 20
 let thumbBound_x:CGFloat = 10
 
-public enum PTSliderTitleShowType:Int
-{
+public enum PTSliderTitleShowType:Int {
     case Top
     case Bottom
 }
 
 @objcMembers
 public class PTSlider: UISlider {
-    fileprivate var isShowTitle:Bool?
-    {
-        didSet
-        {
+    fileprivate var isShowTitle:Bool? {
+        didSet {
             self.layoutSubviews()
         }
     }
     
-    fileprivate var isTitleValue:Bool?
-    {
-        didSet
-        {
+    fileprivate var isTitleValue:Bool? {
+        didSet {
             self.layoutSubviews()
         }
     }
@@ -47,12 +42,9 @@ public class PTSlider: UISlider {
         view.font = self.titleFont
         view.textColor = self.titleColor
         
-        if !self.isTitleValue!
-        {
+        if !self.isTitleValue! {
             view.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
-        }
-        else
-        {
+        } else {
             view.text = String(format: "%.0f%@", self.value,self.titleValueUnit)
         }
         return view
@@ -83,13 +75,11 @@ public class PTSlider: UISlider {
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let result = super.hitTest(point, with: event)
-        if point.x < 0 || point.x > self.bounds.size.width
-        {
+        if point.x < 0 || point.x > self.bounds.size.width {
             return result
         }
         
-        if point.y >= -thumbBound_y && point.y < (self.lastBounds!.size.height + thumbBound_y)
-        {
+        if point.y >= -thumbBound_y && point.y < (self.lastBounds!.size.height + thumbBound_y) {
             var value:CGFloat = 0.0
             value = point.x - self.bounds.origin.x
             value = value / self.bounds.size.width
@@ -104,20 +94,16 @@ public class PTSlider: UISlider {
     
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var result = super.point(inside: point, with: event)
-        if !result && point.y > -10
-        {
-            if point.x >= (self.lastBounds!.origin.x - thumbBound_x) && point.x <= (self.lastBounds!.origin.x + self.lastBounds!.size.width + thumbBound_x) && point.y < (self.lastBounds!.size.height + thumbBound_y)
-            {
+        if !result && point.y > -10 {
+            if point.x >= (self.lastBounds!.origin.x - thumbBound_x) && point.x <= (self.lastBounds!.origin.x + self.lastBounds!.size.width + thumbBound_x) && point.y < (self.lastBounds!.size.height + thumbBound_y) {
                 result = true
             }
         }
         return result
     }
     
-    func createLabel()
-    {
-        if self.isShowTitle!
-        {
+    func createLabel() {
+        if self.isShowTitle! {
             self.addTarget(self, action: #selector(self.sliderAction(slider:)), for: .valueChanged)
             self.isContinuous = true
             
@@ -125,21 +111,16 @@ public class PTSlider: UISlider {
 
             PTGCDManager.gcdAfter(time: 0.1) {
                 
-                if self.frame.size.height < (31 + self.sliderValueLabel.font.pointSize + 5)
-                {
+                if self.frame.size.height < (31 + self.sliderValueLabel.font.pointSize + 5) {
                     self.sliderValueLabel.isHidden = true
                     self.sliderValueLabel.removeFromSuperview()
-                }
-                else
-                {
+                } else {
                     self.sliderValueLabel.isHidden = false
                 }
                 
-                if !self.sliderValueLabel.isHidden
-                {
+                if !self.sliderValueLabel.isHidden {
                     self.sliderValueLabel.snp.makeConstraints { make in
-                        switch self.titleStyle
-                        {
+                        switch self.titleStyle {
                         case .Top:
                             make.bottom.equalTo(self.snp.centerY).offset(-15.5)
                             make.top.equalToSuperview()
@@ -151,21 +132,15 @@ public class PTSlider: UISlider {
                     }
                 }
             }
-        }
-        else
-        {
+        } else {
             self.sliderValueLabel.removeFromSuperview()
         }
     }
     
-    func sliderAction(slider:UISlider)
-    {
-        if !self.isTitleValue!
-        {
+    func sliderAction(slider:UISlider) {
+        if !self.isTitleValue! {
             self.sliderValueLabel.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
-        }
-        else
-        {
+        } else {
             self.sliderValueLabel.text = String(format: "%.0f%@", self.value,self.titleValueUnit)
         }
     }

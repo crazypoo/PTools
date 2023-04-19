@@ -41,10 +41,9 @@ extension Data:PTImagePickerObject {
 
 //MARK:媒體的Image
 @available(iOS 14.0, *)
-extension UIImage:PTImagePickerObject
-{
+extension UIImage:PTImagePickerObject {
     public static func fetchFromPicker(_ info: [UIImagePickerController.InfoKey : Any]) throws -> Self {
-        do{
+        do {
             let data = try Data.fetchFromPicker(info)
             guard let image = Self.init(data: data) else {
                 throw PTImagePicker.PickerError.ObjConvertFaild(nil)

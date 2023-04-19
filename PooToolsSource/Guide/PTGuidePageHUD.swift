@@ -10,8 +10,7 @@ import UIKit
 import AVKit
 
 @objcMembers
-public class PTGuidePageModel: NSObject
-{
+public class PTGuidePageModel: NSObject {
     public var tapHidden:Bool = false
     public var imageArrays:[String] = []
     public var mainView:UIView = UIView()
@@ -46,8 +45,7 @@ public class PTGuidePageHUD: UIView {
     
     public init(viewModel:PTGuidePageModel) {
         super.init(frame: viewModel.mainView.frame)
-        if viewModel.tapHidden
-        {
+        if viewModel.tapHidden {
             self.imageArray = viewModel.imageArrays
         }
         
@@ -87,13 +85,11 @@ public class PTGuidePageHUD: UIView {
             imageView.contentMode = .scaleAspectFit
             let contentImage = UIImage.init(named: viewModel.imageArrays[index])
             let data = contentImage!.pngData()
-            if data?.detectImageType() == .GIF
-            {
+            if data?.detectImageType() == .GIF {
                 let source = CGImageSourceCreateWithData(data! as CFData, nil)
                 let frameCount = CGImageSourceGetCount(source!)
                 var frames = [UIImage]()
-                for i in 0...frameCount
-                {
+                for i in 0...frameCount {
                     let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
                     let imageName = UIImage.init(cgImage: imageref!)
                     frames.append(imageName)
@@ -101,9 +97,7 @@ public class PTGuidePageHUD: UIView {
                 imageView.animationImages = frames
                 imageView.animationDuration = 1
                 imageView.startAnimating()
-            }
-            else
-            {
+            } else {
                 imageView.image = contentImage
             }
             guidePageView.addSubview(imageView)
@@ -113,8 +107,7 @@ public class PTGuidePageHUD: UIView {
                 make.left.equalToSuperview().inset(CGFloat.kSCREEN_WIDTH * CGFloat(index))
             }
             
-            if index == (viewModel.imageArrays.count - 1) && !viewModel.tapHidden
-            {
+            if index == (viewModel.imageArrays.count - 1) && !viewModel.tapHidden {
                 imageView.isUserInteractionEnabled = true
                 
                 let startButton = UIButton(type: .custom)
@@ -168,34 +161,25 @@ public class PTGuidePageHUD: UIView {
             make.right.equalToSuperview().inset(10)
         }
         nextButton.addActionHandlers { seder in
-            if viewModel.imageArrays.count == (self.imagePageControl.currentPage + 1)
-            {
+            if viewModel.imageArrays.count == (self.imagePageControl.currentPage + 1) {
                 self.buttonClick(sender: seder)
-            }
-            else
-            {
+            } else {
                 self.imagePageControl.currentPage = self.imagePageControl.currentPage + 1
                 guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
             }
         }
         
-        if !viewModel.forwardImage.isEmpty && !viewModel.backImage.isEmpty
-        {
-            if viewModel.imageArrays.count > 1
-            {
+        if !viewModel.forwardImage.isEmpty && !viewModel.backImage.isEmpty {
+            if viewModel.imageArrays.count > 1 {
                 nextButton.isHidden = false
                 nextButton.isUserInteractionEnabled = true
-            }
-            else
-            {
+            } else {
                 nextButton.isHidden = true
                 nextButton.isUserInteractionEnabled = false
             }
             nextButton.setImage(UIImage.init(named: viewModel.backImage), for: .normal)
             forwardButton.setImage(UIImage.init(named: viewModel.forwardImage), for: .normal)
-        }
-        else
-        {
+        } else {
             nextButton.isHidden = true
             nextButton.isUserInteractionEnabled = false
             forwardButton.isHidden = true
@@ -239,8 +223,7 @@ public class PTGuidePageHUD: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func buttonClick(sender:UIButton?)
-    {
+    func buttonClick(sender:UIButton?) {
         UIView.animate(withDuration: animationTime) {
             self.alpha = 0
             PTGCDManager.gcdAfter(time: self.animationTime) {
@@ -249,55 +232,43 @@ public class PTGuidePageHUD: UIView {
         }
     }
     
-    public func removeGuidePageHUD()
-    {
+    public func removeGuidePageHUD() {
         self.removeFromSuperview()
-        if adHadRemove != nil
-        {
+        if adHadRemove != nil {
             adHadRemove!()
         }
     }
 }
 
-extension PTGuidePageHUD : UIScrollViewDelegate
-{
+extension PTGuidePageHUD : UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto!
-        {
+        if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto! {
             self.buttonClick(sender: nil)
         }
         
-        if (imageArray?.count ?? 0 > 0) && page < (imageArray!.count - 1) && slideInto!
-        {
+        if (imageArray?.count ?? 0 > 0) && page < (imageArray!.count - 1) && slideInto! {
             slideIntoNumber = 1
         }
         
-        if (imageArray?.count ?? 0 > 0) && page == (imageArray!.count - 1) && slideInto!
-        {
+        if (imageArray?.count ?? 0 > 0) && page == (imageArray!.count - 1) && slideInto! {
             let swipeGestureRecognizer = UISwipeGestureRecognizer.init(target: nil, action: nil)
-            if swipeGestureRecognizer.direction == .right
-            {
+            if swipeGestureRecognizer.direction == .right {
                 slideIntoNumber += 1
-                if slideIntoNumber == 3
-                {
+                if slideIntoNumber == 3 {
                     buttonClick(sender: nil)
                 }
             }
         }
     }
     
-    public func scrollViewDidScroll(_ scrollView: UIScrollView)
-    {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let currentInt = "\((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)".int ?? 0
         imagePageControl.currentPage = currentInt
-        if currentInt >= 1
-        {
+        if currentInt >= 1 {
             self.forwardButton.isHidden = false
             self.forwardButton.isUserInteractionEnabled = true
-        }
-        else
-        {
+        } else {
             self.forwardButton.isHidden = true
             self.forwardButton.isUserInteractionEnabled = false
         }

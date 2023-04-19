@@ -26,8 +26,7 @@ enum PTHudStatus:Int {
 }
 
 @objcMembers
-public class PTHudConfig:NSObject
-{
+public class PTHudConfig:NSObject {
     public var lineWidth:CGFloat = 2
     public var length:CGFloat = maxLength
     public var hudColors:[UIColor] = [UIColor(hexString: "#F05783")!,UIColor(hexString: "#FCB644")!,UIColor(hexString: "#88BD33")!,UIColor(hexString: "#E5512D")!,UIColor(hexString: "#3ABCAB")!]
@@ -67,10 +66,8 @@ public class PTHudView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func hudShow()
-    {
-        if self.hudConfig.hudColors.count < 2
-        {
+    func hudShow() {
+        if self.hudConfig.hudColors.count < 2 {
             PTNSLogConsole("不可以小于两个颜色")
             return
         }
@@ -94,31 +91,23 @@ public class PTHudView: UIView {
         }
     }
     
-    func hide(completion:(()->Void)?)
-    {
+    func hide(completion:(()->Void)?) {
         UIView.animate(withDuration: 1) {
             self.centerView.alpha = 0
         } completion: { finish in
             self.removeFromSuperview()
-            if completion != nil
-            {
+            if completion != nil {
                 completion!()
             }
         }
     }
     
-    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView?
-    {
-        if self.hudConfig.masked
-        {
+    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if self.hudConfig.masked {
             return super.hitTest(point, with: event)
-        }
-        else
-        {
-            for view in self.subviews
-            {
-                if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event)
-                {
+        } else {
+            for view in self.subviews {
+                if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event) {
                     return responder
                 }
             }
@@ -127,8 +116,7 @@ public class PTHudView: UIView {
     }
 }
 
-class PTLoadingHud:UIView
-{
+public class PTLoadingHud:UIView {
     var hudConfig:PTHudConfig = PTHudConfig()
     var length:CGFloat = maxLength
     var gradualColor:UIColor = .randomColor
@@ -153,8 +141,7 @@ class PTLoadingHud:UIView
         fatalError("init(coder:) has not been implemented")
     }
     
-    func degressToRadian(angle:CGFloat)->CGFloat
-    {
+    func degressToRadian(angle:CGFloat)->CGFloat {
         return Double.pi * angle / 180
     }
     
@@ -164,12 +151,9 @@ class PTLoadingHud:UIView
         context?.setLineCap(.round)
         context?.setLineWidth(self.hudConfig.lineWidth)
         
-        if self.status == .Waiting && self.length == minLength
-        {
+        if self.status == .Waiting && self.length == minLength {
             context?.setStrokeColor(red: self.gradualColor.rgbaValueModel().redFloat, green: self.gradualColor.rgbaValueModel().greenFloat, blue: self.gradualColor.rgbaValueModel().blueFloat, alpha: self.gradualColor.rgbaValueModel().alphaFloat)
-        }
-        else
-        {
+        } else {
             context?.setStrokeColor(red: self.finalColor.rgbaValueModel().redFloat, green: self.finalColor.rgbaValueModel().greenFloat, blue: self.finalColor.rgbaValueModel().blueFloat, alpha: self.finalColor.rgbaValueModel().alphaFloat)
         }
         
@@ -181,16 +165,14 @@ class PTLoadingHud:UIView
         self.perform(#selector(self.refreshCricle), afterDelay: 1 / framePerSecond)
     }
     
-    @objc func refreshCricle()
-    {
+    @objc func refreshCricle() {
         PTGCDManager.gcdMain {
             switch self.status {
             case .Decrease:
                 self.length -= lengthIteration
                 self.rotateAngle += Int(rotateIteration)
                 
-                if self.length <= minLength
-                {
+                if self.length <= minLength {
                     self.length = minLength
                     self.status = .Waiting
                     self.colorIndex += 1
@@ -203,8 +185,7 @@ class PTLoadingHud:UIView
                 let deltaLength = sin(lengthIteration / 360 * (Double.pi / 2)) * 360
                 self.rotateAngle += Int((rotateIteration + deltaLength))
                 
-                if self.length >= maxLength
-                {
+                if self.length >= maxLength {
                     self.length = maxLength
                     self.status = .Waiting
                 }
@@ -212,8 +193,7 @@ class PTLoadingHud:UIView
                 self.waitingFrameCount += 1
                 self.rotateAngle += Int(rotateIteration)
                 
-                if self.length == minLength
-                {
+                if self.length == minLength {
                     let colorAPercent:CGFloat = CGFloat(self.waitingFrameCount) / maxWaitingFrame
                     let colorBPercent = 1 - colorAPercent
                     let transparentColorA = UIColor(red: self.finalColor.rgbaValueModel().redFloat, green: self.finalColor.rgbaValueModel().greenFloat, blue: self.finalColor.rgbaValueModel().blueFloat, alpha: colorAPercent)
@@ -221,15 +201,11 @@ class PTLoadingHud:UIView
                     self.gradualColor = transparentColorA.mixColor(otherColor: transparentColorB)
                 }
                 
-                if self.waitingFrameCount == Int(maxWaitingFrame)
-                {
+                if self.waitingFrameCount == Int(maxWaitingFrame) {
                     self.waitingFrameCount = 0
-                    if self.length == minLength
-                    {
+                    if self.length == minLength {
                         self.status = .Increase
-                    }
-                    else
-                    {
+                    } else {
                         self.status = .Decrease
                     }
                 }
@@ -242,21 +218,17 @@ class PTLoadingHud:UIView
         }
     }
     
-    override func layoutSubviews() {
+    public override func layoutSubviews() {
         super.layoutSubviews()
     }
 }
 
-extension PTLoadingHud
-{
-    override func willMove(toSuperview newSuperview: UIView?) {
-        if newSuperview != nil
-        {
+extension PTLoadingHud {
+    public override func willMove(toSuperview newSuperview: UIView?) {
+        if newSuperview != nil {
             self.colorIndex = Int(arc4random())%self.hudConfig.hudColors.count
             self.finalColor = self.hudConfig.hudColors[self.colorIndex]
-        }
-        else
-        {
+        } else {
             NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(self.refreshCricle), object: nil)
         }
     }

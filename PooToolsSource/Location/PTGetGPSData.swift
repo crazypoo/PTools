@@ -31,20 +31,17 @@ public class PTGetGPSData: NSObject {
         self.locationManager.distanceFilter = 1000
     }
     
-    public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String)->Void)?)
-    {
+    public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String)->Void)?) {
         let lon:String = UserDefaults.standard.value(forKey: "lon") as! String
         let lat:String = UserDefaults.standard.value(forKey: "lat") as! String
         let city:String = UserDefaults.standard.value(forKey: "locCity") as! String
 
-        if block != nil
-        {
+        if block != nil {
             block!(lat,lon,city)
         }
     }
     
-    func setObjectFunction(city:String)
-    {
+    func setObjectFunction(city:String) {
         let lon = "\(self.lon)"
         let lat = "\(self.lat)"
         UserDefaults.standard.set(lon, forKey: "lon")
@@ -53,8 +50,7 @@ public class PTGetGPSData: NSObject {
     }
 }
 
-extension PTGetGPSData:CLLocationManagerDelegate
-{
+extension PTGetGPSData:CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         UIAlertController.base_alertVC(title:"提示",msg: "您还未开启定位服务，是否需要开启？",okBtns: ["确定"],cancelBtn: "取消") {
             
@@ -63,8 +59,7 @@ extension PTGetGPSData:CLLocationManagerDelegate
             UIApplication.shared.open(settingUrl!)
         }
         
-        if self.errorBlock != nil
-        {
+        if self.errorBlock != nil {
             self.errorBlock!()
         }
     }
@@ -79,14 +74,12 @@ extension PTGetGPSData:CLLocationManagerDelegate
         geoCoder.reverseGeocodeLocation(currentLocation!) { placemarks, error in
             var distance:CLLocationDistance = 0
             var cityStr = "⟳定位失败"
-            if placemarks?.count ?? 0 > 0
-            {
+            if placemarks?.count ?? 0 > 0 {
                 let placeMark:CLPlacemark = placemarks![0]
                 let city = placeMark.locality
                 PTNSLogConsole("city:>>>>>>>>>>>>>>>>>>>>\(city ?? "")")
 
-                if !(city ?? "").stringIsEmpty()
-                {
+                if !(city ?? "").stringIsEmpty() {
                     let loc1 = CLLocation(latitude: self.lat, longitude: self.lon)
                     let loc2 = placeMark.location
                     self.lat = placeMark.location?.coordinate.latitude ?? 0
@@ -96,57 +89,42 @@ extension PTGetGPSData:CLLocationManagerDelegate
                     
                     let getUserLocCtiy:String? = UserDefaults.standard.value(forKey: "locCity") as? String
                     PTNSLogConsole("getUserLocCtiy:>>>>>>>>>>>>>>>>>>>>\(getUserLocCtiy ?? "")")
-                    if !(getUserLocCtiy ?? "").stringIsEmpty()
-                    {
-                        if self.showChangeAlert
-                        {
-                            if getUserLocCtiy != cityStr
-                            {
+                    if !(getUserLocCtiy ?? "").stringIsEmpty() {
+                        if self.showChangeAlert {
+                            if getUserLocCtiy != cityStr {
                                 self.isShow += 1
-                                if self.isShow < 2
-                                {
+                                if self.isShow < 2 {
                                     let cancelStr = "继续选择\(getUserLocCtiy!)"
                                     let doneStr = "切换到\(cityStr)"
                                     UIAlertController.base_alertVC(title: "提示",msg: "系统检测到你当前地区与您所选的地区不相符是否切换",okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
                                         
-                                        if self.selectCurrentBlock != nil
-                                        {
+                                        if self.selectCurrentBlock != nil {
                                             self.selectCurrentBlock!()
                                         }
                                         self.isShow = 0
                                     } moreBtn: { index, title in
                                         self.setObjectFunction(city: cityStr)
-                                        if self.selectNewBlock != nil
-                                        {
+                                        if self.selectNewBlock != nil {
                                             self.selectNewBlock!()
                                         }
                                         self.isShow = 0
                                     }
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 self.setObjectFunction(city: cityStr)
-                                if self.selectNewBlock != nil
-                                {
+                                if self.selectNewBlock != nil {
                                     self.selectNewBlock!()
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             self.setObjectFunction(city: cityStr)
-                            if self.selectNewBlock != nil
-                            {
+                            if self.selectNewBlock != nil {
                                 self.selectNewBlock!()
                             }
                         }
-                    }
-                    else
-                    {
+                    } else {
                         self.setObjectFunction(city: cityStr)
-                        if self.selectNewBlock != nil
-                        {
+                        if self.selectNewBlock != nil {
                             self.selectNewBlock!()
                         }
                     }
@@ -154,10 +132,8 @@ extension PTGetGPSData:CLLocationManagerDelegate
             }
             
             UserDefaults.standard.set(userDefaultLanguages, forKey: "AppleLanguages")
-            if distance > 1000
-            {
-                if self.selectNewBlock != nil
-                {
+            if distance > 1000 {
+                if self.selectNewBlock != nil {
                     self.selectNewBlock!()
                 }
             }
@@ -166,14 +142,13 @@ extension PTGetGPSData:CLLocationManagerDelegate
     
     public func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status == .authorizedAlways || status == .authorizedWhenInUse {
-            DispatchQueue.main.async { // 异步执行
+            PTGCDManager.gcdMain {
                 // 在主线程上更新UI或执行其他操作
                 self.locationManager.requestWhenInUseAuthorization()
                 self.locationManager.requestAlwaysAuthorization()
             }
         } else {
-            if self.errorBlock != nil
-            {
+            if self.errorBlock != nil {
                 self.errorBlock!()
             }
         }

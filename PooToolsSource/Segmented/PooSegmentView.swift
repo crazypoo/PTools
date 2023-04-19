@@ -50,8 +50,7 @@ public class PooSegmentConfig: NSObject {
 }
 
 @objcMembers
-public class PooSegmentModel:NSObject
-{
+public class PooSegmentModel:NSObject {
     ///标题
     public var titles:String = ""
     ///图片
@@ -69,8 +68,7 @@ public enum ButtonShowType:Int {
 }
 
 @objcMembers
-public class PooSegmentSubView:UIView
-{
+public class PooSegmentSubView:UIView {
     private var viewConfig = PooSegmentConfig()
 
 //    private let lineSqare:CGFloat = 5
@@ -108,14 +106,11 @@ public class PooSegmentSubView:UIView
         viewConfig = config
         super.init(frame: .zero)
 
-        if subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && subViewModels.selectedImageURL.stringIsEmpty()
-        {
+        if subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && subViewModels.selectedImageURL.stringIsEmpty() {
             buttonShowType = .OnlyTitle
             label.titleLabel?.font = config.normalFont
             label.setTitle(subViewModels.titles, for: .normal)
-        }
-        else if !subViewModels.imageURL.stringIsEmpty() && subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty()
-        {
+        } else if !subViewModels.imageURL.stringIsEmpty() && subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty() {
             //MARK:图片地址判断
             buttonShowType = .OnlyImage
             label.contentMode = .scaleAspectFit
@@ -133,9 +128,7 @@ public class PooSegmentSubView:UIView
             } else {
                 label.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
             }
-        }
-        else if !subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty()
-        {
+        } else if !subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty() {
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             //MARK:两个都有
             buttonShowType = .TitleImage
@@ -209,19 +202,15 @@ public class PooSegmentSubView:UIView
                     make.left.right.equalTo(self.label)
                 }
                 let lineHight:CGFloat?
-                if self.viewConfig.underHight >= self.viewConfig.bottomSquare
-                {
+                if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
                     lineHight = self.viewConfig.bottomSquare
                     make.height.equalTo(self.viewConfig.bottomSquare)
-                }
-                else
-                {
+                } else {
                     lineHight = self.viewConfig.underHight
                     make.height.equalTo(self.viewConfig.underHight)
                 }
                 make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight!)/2)
-                if self.viewConfig.underlineRadius
-                {
+                if self.viewConfig.underlineRadius {
                     underLine.viewCorner(radius: lineHight!/2)
                 }
             }
@@ -229,13 +218,10 @@ public class PooSegmentSubView:UIView
             addSubview(underLine)
             underLine.snp.makeConstraints { (make) in
                 let lineHight:CGFloat?
-                if self.viewConfig.underHight >= self.viewConfig.bottomSquare
-                {
+                if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
                     lineHight = self.viewConfig.bottomSquare
                     make.width.height.equalTo(self.viewConfig.bottomSquare)
-                }
-                else
-                {
+                } else {
                     lineHight = self.viewConfig.underHight
                     make.width.height.equalTo(self.viewConfig.underHight)
                 }
@@ -281,10 +267,8 @@ public class PooSegmentView: UIView {
         case BottomRight
     }
     
-    public var selectedIndex:Int?
-    {
-        didSet
-        {
+    public var selectedIndex:Int? {
+        didSet {
             setSelectItem(indexs: selectedIndex!)
         }
     }
@@ -304,8 +288,7 @@ public class PooSegmentView: UIView {
         viewConfig = config!
     }
     
-    public func reloadViewData(block:((_ index:Int)->Void)?)
-    {
+    public func reloadViewData(block:((_ index:Int)->Void)?) {
         subViewArr.forEach { (value) in
             let subV = value as! PooSegmentSubView
             subV.removeFromSuperview()
@@ -313,41 +296,30 @@ public class PooSegmentView: UIView {
         subViewArr.removeAll()
         scrolView.removeAllSubviews()
         setUI(datas: viewDatas)
-        if block != nil
-        {
+        if block != nil {
             block!(selectedIndex ?? 0)
         }
     }
     
-    private func setUI(datas:[PooSegmentModel])
-    {
+    private func setUI(datas:[PooSegmentModel]) {
         PTGCDManager.gcdAfter(time: 0.1) {
             var scrolContentW:CGFloat = 0
-            if datas.count > 0
-            {
+            if datas.count > 0 {
                 datas.enumerated().forEach { (index,value) in                    
                     let normalW = UIView.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
                     let selectedW = UIView.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
                     var subContentW:CGFloat?
-                    if selectedW >= normalW
-                    {
+                    if selectedW >= normalW {
                         subContentW = selectedW + self.viewConfig.subViewInContentSpace + 10
-                    }
-                    else
-                    {
+                    } else {
                         subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
                     }
                     
-                    if value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty()
-                    {
+                    if value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() {
                         
-                    }
-                    else if !value.imageURL.stringIsEmpty() && value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty()
-                    {
+                    } else if !value.imageURL.stringIsEmpty() && value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() {
                         subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace
-                    }
-                    else if !value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty()
-                    {
+                    } else if !value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() {
                         switch self.viewConfig.imagePosition {
                         case .leftImageRightTitle:
                             subContentW = subContentW! + self.viewConfig.imageTitleSpace + (self.frame.height-5)
@@ -360,20 +332,13 @@ public class PooSegmentView: UIView {
                     let subView = PooSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
                     
                     var subShowType:ButtonShowType!
-                    if value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty()
-                    {
+                    if value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty() {
                         subShowType = .OnlyImage
-                    }
-                    else if !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() && value.imageURL.stringIsEmpty()
-                    {
+                    } else if !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() && value.imageURL.stringIsEmpty() {
                         subShowType = .OnlyTitle
-                    }
-                    else if !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty()
-                    {
+                    } else if !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty() {
                         subShowType = .TitleImage
-                    }
-                    else
-                    {
+                    } else {
                         subShowType = .OnlyTitle
                     }
                     subView.buttonShowType = subShowType
@@ -386,8 +351,7 @@ public class PooSegmentView: UIView {
                         subView.imageBtn.tag = index
                         subView.imageBtn.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
-                            if self.segTapBlock != nil
-                            {
+                            if self.segTapBlock != nil {
                                 self.segTapBlock!(sender.tag)
                             }
                         }
@@ -395,8 +359,7 @@ public class PooSegmentView: UIView {
                         subView.label.tag = index
                         subView.label.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
-                            if self.segTapBlock != nil
-                            {
+                            if self.segTapBlock != nil {
                                 self.segTapBlock!(sender.tag)
                             }
                         }
@@ -407,12 +370,9 @@ public class PooSegmentView: UIView {
                 
                 self.addSubview(self.scrolView)
                 self.scrolView.snp.makeConstraints { (make) in
-                    if scrolContentW >= CGFloat.kSCREEN_WIDTH
-                    {
+                    if scrolContentW >= CGFloat.kSCREEN_WIDTH {
                         make.edges.equalToSuperview()
-                    }
-                    else
-                    {
+                    } else {
                         make.width.equalTo(scrolContentW)
                         make.height.equalToSuperview()
                         make.centerX.equalToSuperview()
@@ -421,12 +381,9 @@ public class PooSegmentView: UIView {
                 self.scrolView.contentSize = CGSize.init(width: scrolContentW, height: self.frame.size.height)
                 self.selectedIndex = self.viewConfig.normalSelecdIndex
                 
-                if scrolContentW >= CGFloat.kSCREEN_WIDTH
-                {
+                if scrolContentW >= CGFloat.kSCREEN_WIDTH {
                     self.scrolView.isScrollEnabled = true
-                }
-                else
-                {
+                } else {
                     self.scrolView.isScrollEnabled = false
                 }
             }
@@ -434,10 +391,8 @@ public class PooSegmentView: UIView {
         }
     }
     
-    public func setSelectItem(indexs:Int)
-    {
-        if indexs <= (subViewArr.count - 1)
-        {
+    public func setSelectItem(indexs:Int) {
+        if indexs <= (subViewArr.count - 1) {
             let subV = subViewArr[indexs] as! PooSegmentSubView
 
             switch indexs {
@@ -449,8 +404,7 @@ public class PooSegmentView: UIView {
 
             subViewArr.enumerated().forEach { (index,value) in
                 let viewInArr = value as! PooSegmentSubView
-                if index != indexs
-                {
+                if index != indexs {
                     switch viewConfig.showType {
                     case .UnderLine:
                         viewInArr.underLine.isSelected = false
@@ -465,9 +419,7 @@ public class PooSegmentView: UIView {
                     default:
                         viewInArr.label.titleLabel?.font = viewConfig.normalFont
                     }
-                }
-                else
-                {
+                } else {
                     switch viewConfig.showType {
                     case .UnderLine:
                         viewInArr.underLine.isSelected = true
@@ -486,12 +438,10 @@ public class PooSegmentView: UIView {
         }
     }
     
-    public func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1)
-    {
+    public func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
-                if index == indexView
-                {
+                if index == indexView {
                     let subViews = (value as! PooSegmentSubView)
                     var badgePoint = CGPoint.init(x: 0, y: 0)
                     switch badgePosition {
@@ -521,19 +471,16 @@ public class PooSegmentView: UIView {
         }
     }
     
-    public func removeBadgeAtIndex(indexView:Int)
-    {
+    public func removeBadgeAtIndex(indexView:Int) {
         subViewArr.enumerated().forEach { (index,value) in
-            if index == indexView
-            {
+            if index == indexView {
                 let subViews = (value as! PooSegmentSubView)
                 subViews.clearBadge()
             }
         }
     }
     
-    public func removeAllBadge()
-    {
+    public func removeAllBadge() {
         subViewArr.enumerated().forEach { (index,value) in
             let subViews = (value as! PooSegmentSubView)
             subViews.clearBadge()

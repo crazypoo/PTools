@@ -29,10 +29,8 @@ public class PTStepper: UIView {
     public var multipleNum:Int = 1
     //MARK: 初始顯示值,默認0
     ///初始顯示值,默認0
-    public var baseNum:String = "0"
-    {
-        didSet
-        {
+    public var baseNum:String = "0" {
+        didSet {
             self.numberText.text = self.baseNum
         }
     }
@@ -44,74 +42,58 @@ public class PTStepper: UIView {
     public var maxNum:Int = 99999
     //MARK: 數字框是否支持手動輸入(默認開)
     ///數字框是否支持手動輸入(默認開)
-    public var canText:Bool = true
-    {
-        didSet
-        {
+    public var canText:Bool = true {
+        didSet {
             self.numberText.isUserInteractionEnabled = self.canText
         }
     }
     //MARK: 是否顯示邊框(默認開)
     ///是否顯示邊框(默認開)
-    public var hideBorder:Bool = true
-    {
-        didSet
-        {
+    public var hideBorder:Bool = true {
+        didSet {
             self.setupViews()
         }
     }
     //MARK: 邊框顏色
     ///邊框顏色
-    public var stepperBorderColor:UIColor = .lightGray
-    {
-        didSet
-        {
+    public var stepperBorderColor:UIColor = .lightGray {
+        didSet {
             self.setupViews()
         }
     }
     //MARK: 按鈕顏色
     ///按鈕顏色
-    public var buttonBackgroundColor:UIColor = .clear
-    {
-        didSet
-        {
+    public var buttonBackgroundColor:UIColor = .clear {
+        didSet {
             self.addButton.backgroundColor = self.buttonBackgroundColor
             self.reduceButton.backgroundColor = self.buttonBackgroundColor
         }
     }
     //MARK: 輸入框字體顏色
     ///輸入框字體顏色
-    public var numberTextColor:UIColor = .black
-    {
-        didSet
-        {
+    public var numberTextColor:UIColor = .black {
+        didSet {
             self.numberText.textColor = self.numberTextColor
         }
     }
     //MARK: 輸入框字體
     ///輸入框字體
-    public var numberTextFont:UIFont = .appfont(size: 13)
-    {
-        didSet
-        {
+    public var numberTextFont:UIFont = .appfont(size: 13) {
+        didSet {
             self.numberText.font = self.numberTextFont
         }
     }
     //MARK: 加號圖片
     ///加號圖片
-    public var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    {
-        didSet
-        {
+    public var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
+        didSet {
             self.addButton.setImage(self.addImage, for: .normal)
         }
     }
     //MARK: 減號圖片
     ///減號圖片
-    public var reduceImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    {
-        didSet
-        {
+    public var reduceImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
+        didSet {
             self.reduceButton.setImage(self.reduceImage, for: .normal)
         }
     }
@@ -124,12 +106,9 @@ public class PTStepper: UIView {
         view.setImage(self.addImage, for: .normal)
         view.addActionHandlers(handler: { sender in
             self.numberText.resignFirstResponder()
-            if self.numberText.text!.int! < self.maxNum
-            {
+            if self.numberText.text!.int! < self.maxNum {
                 self.numberText.text = "\(self.numberText.text!.int! + self.multipleNum)"
-            }
-            else
-            {
+            } else {
                 self.shakeAnimation()
             }
             self.callBack(value: self.numberText.text!)
@@ -142,8 +121,7 @@ public class PTStepper: UIView {
         view.setImage(self.reduceImage, for: .normal)
         view.addActionHandlers(handler: { sender in
             self.numberText.resignFirstResponder()
-            if self.numberText.text!.int! <= self.minNum
-            {
+            if self.numberText.text!.int! <= self.minNum {
                 self.shakeAnimation()
                 return
             }
@@ -155,12 +133,9 @@ public class PTStepper: UIView {
     
     lazy var numberText : UITextField = {
         let view = UITextField()
-        if self.baseNum.stringIsEmpty()
-        {
+        if self.baseNum.stringIsEmpty() {
             view.text = "0"
-        }
-        else
-        {
+        } else {
             view.text = self.baseNum
         }
         view.delegate = self
@@ -203,16 +178,14 @@ public class PTStepper: UIView {
         }
     }
     
-    func setupViews()
-    {
+    func setupViews() {
         self.addButton.removeFromSuperview()
         self.reduceButton.removeFromSuperview()
         self.numberText.removeFromSuperview()
         
         self.addSubviews([self.addButton,self.reduceButton,self.numberText])
         
-        if !self.hideBorder
-        {
+        if !self.hideBorder {
             self.reduceButton.layer.borderWidth = 0.5
             self.numberText.layer.borderWidth = 0.5
             self.addButton.layer.borderWidth = 0.5
@@ -225,26 +198,21 @@ public class PTStepper: UIView {
         self.layoutSubviews()
     }
     
-    func textNumberChange(textField:UITextField)
-    {
-        if textField.text!.int! < self.minNum
-        {
+    func textNumberChange(textField:UITextField) {
+        if textField.text!.int! < self.minNum {
             self.alertAction(max: false)
             textField.text = ""
         }
         
-        if textField.text!.int! > self.maxNum
-        {
+        if textField.text!.int! > self.maxNum {
             self.alertAction(max: true)
             textField.text = ""
             return
         }
     }
     
-    func shakeAnimation()
-    {
-        if self.isShake
-        {
+    func shakeAnimation() {
+        if self.isShake {
             let animation = CAKeyframeAnimation(keyPath: "position.x")
             let positionX = self.layer.position.x
             animation.values = [(positionX - 4),positionX,(positionX + 4)]
@@ -255,57 +223,46 @@ public class PTStepper: UIView {
         }
     }
     
-    func callBack(value:String)
-    {
-        if self.valueBlock != nil
-        {
+    func callBack(value:String) {
+        if self.valueBlock != nil {
             self.valueBlock!(value)
         }
     }
     
-    func alertAction(max:Bool)
-    {
-        if self.alertBlock != nil
-        {
+    func alertAction(max:Bool) {
+        if self.alertBlock != nil {
             self.alertBlock!(max)
         }
     }
 }
 
-extension PTStepper:UITextFieldDelegate
-{
+extension PTStepper:UITextFieldDelegate {
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         self.recordNumber = textField.text ?? ""
         textField.text = ""
     }
     
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        if textField.text?.nsString.length == 0
-        {
+        if textField.text?.nsString.length == 0 {
             textField.text = self.recordNumber
         }
         
-        if (textField.text?.int ?? 0) / self.multipleNum == 0
-        {
+        if (textField.text?.int ?? 0) / self.multipleNum == 0 {
             textField.text = "\(self.multipleNum)"
-        }
-        else
-        {
+        } else {
             textField.text = "\(((textField.text?.int ?? 0) / self.multipleNum) * self.multipleNum)"
         }
         self.callBack(value: textField.text ?? "")
     }
     
-    func validateNumber(number:String) -> Bool
-    {
+    func validateNumber(number:String) -> Bool {
         var res = true
         let tmpSet = NSCharacterSet(charactersIn: "0123456789")
         var i = 0
         while i < number.nsString.length {
             let string = number.nsString.substring(with: NSRange(location: i, length: 1))
             let range = string.nsString.rangeOfCharacter(from: tmpSet as CharacterSet)
-            if range.length == 0
-            {
+            if range.length == 0 {
                 res = false
                 break
             }

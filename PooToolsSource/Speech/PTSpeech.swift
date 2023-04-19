@@ -13,8 +13,7 @@ import AVFoundation
 public typealias ErrorBlock = (_ error:NSError) -> Void
 public typealias FinishBlock = (_ text:String) -> Void
 
-public enum PTSpeechErrorType:Int
-{
+public enum PTSpeechErrorType:Int {
     case UnsupportedLocale
     case RecognitionDenied
     case IsBusy
@@ -50,13 +49,11 @@ public class PTSpeech: NSObject {
         self.setup()
     }
     
-    func errorFunction(code:Int,desc:String)->NSError
-    {
+    func errorFunction(code:Int,desc:String)->NSError {
         return NSError(domain: NSStringFromClass(type(of: self)), code: code,userInfo: [NSLocalizedDescriptionKey:desc])
     }
     
-    func createError(errorType:PTSpeechErrorType)->NSError
-    {
+    func createError(errorType:PTSpeechErrorType)->NSError {
         switch errorType {
         case .UnsupportedLocale:
             return self.errorFunction(code: -999, desc: "不支持当前语言环境")
@@ -67,15 +64,13 @@ public class PTSpeech: NSObject {
         }
     }
     
-    func requestAuthorization()
-    {
+    func requestAuthorization() {
         SFSpeechRecognizer.requestAuthorization { status in
             switch status {
             case .notDetermined:
                 self.requestAuthorization()
             case .denied:
-                if self.errorBlock != nil
-                {
+                if self.errorBlock != nil {
                     self.errorBlock!(self.createError(errorType: .RecognitionDenied))
                 }
             default:
@@ -84,10 +79,8 @@ public class PTSpeech: NSObject {
         }
     }
     
-    func setup()
-    {
-        if self.recognizer != nil
-        {
+    func setup() {
+        if self.recognizer != nil {
             self.recognizer?.defaultTaskHint = SFSpeechRecognitionTaskHint.dictation
             self.request.interactionIdentifier = "com.Jax.interactionIdentifier"
             let node = self.audioEndine.inputNode
@@ -95,23 +88,18 @@ public class PTSpeech: NSObject {
             node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, when in
                 self.request.append(buffer)
             }
-        }
-        else
-        {
-            if self.errorBlock != nil
-            {
+        } else {
+            if self.errorBlock != nil {
                 self.errorBlock!(self.createError(errorType: .UnsupportedLocale))
             }
         }
     }
     
-    func isTaskInProgress()->Bool
-    {
+    func isTaskInProgress()->Bool {
         return self.currentTask.state == .running
     }
     
-    func performRecognition()
-    {
+    func performRecognition() {
         self.audioEndine.prepare()
         
         do {
@@ -125,55 +113,41 @@ public class PTSpeech: NSObject {
         }
     }
     
-    public func startRecognize(handleBlock:((_ success:Bool)->Void)?)
-    {
+    public func startRecognize(handleBlock:((_ success:Bool)->Void)?) {
         let isRunning = self.isTaskInProgress()
-        if isRunning
-        {
-            if self.errorBlock != nil
-            {
+        if isRunning {
+            if self.errorBlock != nil {
                 self.errorBlock!(self.createError(errorType: .IsBusy))
             }
-        }
-        else
-        {
+        } else {
             self.performRecognition()
         }
         
-        if handleBlock != nil
-        {
+        if handleBlock != nil {
             handleBlock!(isRunning)
         }
     }
     
-    public func stopRecognize()
-    {
-        if self.isTaskInProgress()
-        {
+    public func stopRecognize() {
+        if self.isTaskInProgress() {
             self.currentTask.finish()
             self.audioEndine.stop()
         }
     }
 }
 
-extension PTSpeech:SFSpeechRecognitionTaskDelegate
-{
+extension PTSpeech:SFSpeechRecognitionTaskDelegate {
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {
         self.buffer = recognitionResult.bestTranscription.formattedString
     }
     
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) {
-        if !successfully
-        {
-            if self.errorBlock != nil
-            {
+        if !successfully {
+            if self.errorBlock != nil {
                 self.errorBlock!(task.error! as NSError)
             }
-        }
-        else
-        {
-            if self.finishBlock != nil
-            {
+        } else {
+            if self.finishBlock != nil {
                 self.finishBlock!(self.buffer)
             }
         }

@@ -9,22 +9,17 @@
 import UIKit
 
 public class PTObject2Json: NSObject {
-    class func getObjectData(obj:NSObject) ->NSDictionary
-    {
+    class func getObjectData(obj:NSObject) ->NSDictionary {
         let dic = NSMutableDictionary()
         var propsCount:UInt32 = 0
         let props = class_copyPropertyList((obj.self as! AnyClass), &propsCount)
-        for i in 0...propsCount
-        {
+        for i in 0...propsCount {
             let prop = props![Int(i)]
             let propName = NSString(utf8String: property_getName(prop))
             var value = obj.value(forKey: propName! as String)
-            if value == nil
-            {
+            if value == nil {
                 value = NSNull()
-            }
-            else
-            {
+            } else {
                 value = PTObject2Json.getObjectInternal(obj: value as! NSObject)
             }
             dic .setObject(value!, forKey: propName!)
@@ -32,30 +27,24 @@ public class PTObject2Json: NSObject {
         return dic
     }
     
-    class func getObjectInternal(obj:NSObject)->NSObject
-    {
-        if obj is NSString || obj is NSNumber || obj is NSNull
-        {
+    class func getObjectInternal(obj:NSObject)->NSObject {
+        if obj is NSString || obj is NSNumber || obj is NSNull {
             return obj
         }
         
-        if obj is NSArray
-        {
+        if obj is NSArray {
             let objArr = obj as! NSArray
             let arr = NSMutableArray(capacity: objArr.count)
-            for i in 0...objArr.count
-            {
+            for i in 0...objArr.count {
                 arr[i] = PTObject2Json.getObjectInternal(obj: objArr[i] as! NSObject)
             }
             return arr
         }
         
-        if obj is NSDictionary
-        {
+        if obj is NSDictionary {
             let objDic = obj as! NSDictionary
             let dic = NSMutableDictionary(capacity: objDic.count)
-            for key in objDic.allKeys
-            {
+            for key in objDic.allKeys {
                 dic[key] = PTObject2Json.getObjectInternal(obj: objDic[key] as! NSObject)
             }
             return dic
@@ -63,14 +52,10 @@ public class PTObject2Json: NSObject {
         return PTObject2Json.getObjectData(obj: obj)
     }
     
-    class func getJson(obj:NSObject,options:JSONSerialization.WritingOptions) ->NSData
-    {
-        do
-        {
+    class func getJson(obj:NSObject,options:JSONSerialization.WritingOptions) ->NSData {
+        do {
             return try JSONSerialization.data(withJSONObject: PTObject2Json.getObjectData(obj: obj) ,options: options) as NSData
-        }
-        catch
-        {
+        } catch {
             PTNSLogConsole(error.localizedDescription)
         }
         return NSData()

@@ -45,8 +45,7 @@ public class PTSignView: UIView {
         view.setTitle(self.viewConfig.saveName, for: .normal)
         view.addActionHandlers { sender in
             self.signView.saveSign()
-            if self.doneBlock != nil
-            {
+            if self.doneBlock != nil {
                 self.doneBlock!(self.signView.SignatureImg)
             }
             self.viewDismiss()
@@ -69,12 +68,10 @@ public class PTSignView: UIView {
         let view = UILabel()
         view.numberOfLines = 0
         view.attributedText = NSMutableAttributedString.sj.makeText({ make in
-            if !self.viewConfig.infoTitle.stringIsEmpty()
-            {
+            if !self.viewConfig.infoTitle.stringIsEmpty() {
                 make.append(self.viewConfig.infoTitle).font(self.viewConfig.signNavTitleFont).textColor(self.viewConfig.signNavTitleColor).alignment(.center)
             }
-            if !self.viewConfig.infoDesc.stringIsEmpty()
-            {
+            if !self.viewConfig.infoDesc.stringIsEmpty() {
                 make.append("\n\(self.viewConfig.infoDesc)").font(self.viewConfig.signNavDescFont).textColor(self.viewConfig.signNavDescColor).alignment(.center)
             }
         })
@@ -134,19 +131,16 @@ public class PTSignView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func showView()
-    {
+    public func showView() {
         AppWindows!.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
     
-    public func viewDismiss()
-    {
+    public func viewDismiss() {
         self.removeFromSuperview()
-        if self.dismissBlock != nil
-        {
+        if self.dismissBlock != nil {
             self.dismissBlock!()
         }
     }

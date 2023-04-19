@@ -15,9 +15,8 @@ public class PTCycleLoadingView: UIView {
     public var lineColor:UIColor! = .lightGray
     public var isAnimation:Bool! = false
 
-    fileprivate var anglePer:CGFloat? = 0
-    {
-        didSet{
+    fileprivate var anglePer:CGFloat? = 0 {
+        didSet {
             self.setNeedsDisplay()
         }
     }
@@ -33,10 +32,8 @@ public class PTCycleLoadingView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func startAnimation()
-    {
-        if self.isAnimation
-        {
+    public func startAnimation() {
+        if self.isAnimation {
             self.stopAnimation()
             self.layer.removeAllAnimations()
         }
@@ -47,13 +44,10 @@ public class PTCycleLoadingView: UIView {
         RunLoop.current.add(self.timer!, forMode: .common)
     }
     
-    public func stopAnimation()
-    {
+    public func stopAnimation() {
         self.isAnimation = false
-        if self.timer != nil
-        {
-            if self.timer!.isValid
-            {
+        if self.timer != nil {
+            if self.timer!.isValid {
                 self.timer!.invalidate()
                 self.timer = nil
             }
@@ -61,11 +55,9 @@ public class PTCycleLoadingView: UIView {
         self.stopRotateAnimation()
     }
     
-    func drawPathAnimation(timer:Timer)
-    {
+    func drawPathAnimation(timer:Timer) {
         self.anglePer! += 0.03
-        if self.anglePer! >= 1
-        {
+        if self.anglePer! >= 1 {
             self.anglePer = 1
             timer.invalidate()
             self.timer = nil
@@ -73,8 +65,7 @@ public class PTCycleLoadingView: UIView {
         }
     }
     
-    func startRotateAnimation()
-    {
+    func startRotateAnimation() {
         let animation = CABasicAnimation.init(keyPath: "transform.rotation.z")
         animation.fromValue = 0
         animation.toValue = (2 * Double.pi)
@@ -83,8 +74,7 @@ public class PTCycleLoadingView: UIView {
         self.layer.add(animation, forKey: "keyFrameAnimation")
     }
     
-    func stopRotateAnimation()
-    {
+    func stopRotateAnimation() {
         UIView.animate(withDuration: 0.3) {
             self.alpha = 0
         } completion: { finish in
@@ -95,8 +85,7 @@ public class PTCycleLoadingView: UIView {
     }
     
     public override func draw(_ rect: CGRect) {
-        if self.anglePer! <= 0
-        {
+        if self.anglePer! <= 0 {
             self.anglePer! = 0
         }
         
@@ -107,8 +96,7 @@ public class PTCycleLoadingView: UIView {
         context!.strokePath()
     }
     
-    func angle(float:CGFloat)->CGFloat
-    {
+    func angle(float:CGFloat)->CGFloat {
         return 2 * Double.pi / 360 * float
     }
 }

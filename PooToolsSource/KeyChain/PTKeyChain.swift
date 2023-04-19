@@ -25,8 +25,7 @@ public class PTKeyChain: NSObject {
     ///   - account: 帳號
     ///   - password: 密碼
     ///   - handle: 回調是否成功
-    class func saveAccountInfo(service:NSString,account:NSString,password:NSString,handle:PTKeyChainBlock?)
-    {
+    class func saveAccountInfo(service:NSString,account:NSString,password:NSString,handle:PTKeyChainBlock?) {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
         let passwordData = password.data(using: String.Encoding.utf8.rawValue)!
         
@@ -37,17 +36,12 @@ public class PTKeyChain: NSObject {
             kSecAttrService as String : service
         ]
         let status = SecItemAdd(queryDic as CFDictionary, nil)
-        if status == errSecSuccess
-        {
-            if handle != nil
-            {
+        if status == errSecSuccess {
+            if handle != nil {
                 handle!(true)
             }
-        }
-        else
-        {
-            if handle != nil
-            {
+        } else {
+            if handle != nil {
                 handle!(false)
             }
         }
@@ -59,8 +53,7 @@ public class PTKeyChain: NSObject {
     ///   - service: 保存到哪個域
     ///   - account: 帳號
     /// - Returns: 字符串
-    class func getPassword(service:NSString,account:NSString)->NSString
-    {
+    class func getPassword(service:NSString,account:NSString)->NSString {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
         let queryDic:[String:Any] = [
             kSecClass as String : kSecClassGenericPassword,
@@ -80,8 +73,7 @@ public class PTKeyChain: NSObject {
     /// - Parameters:
     ///   - service: 保存到哪個域
     /// - Returns: 數組類型的帳號密碼字典
-    class func getAccountInfo(service:NSString)->[NSMutableDictionary]
-    {
+    class func getAccountInfo(service:NSString)->[NSMutableDictionary] {
         let queryDic:[String:Any] = [
             kSecClass as String : kSecClassGenericPassword,
             kSecReturnAttributes as String : kCFBooleanTrue!,
@@ -91,13 +83,11 @@ public class PTKeyChain: NSObject {
         ]
         var result : AnyObject?
         let status = SecItemCopyMatching(queryDic as CFDictionary, &result)
-        if status == errSecSuccess
-        {
+        if status == errSecSuccess {
             var accountArr = [NSMutableDictionary]()
             let dic = NSMutableDictionary()
             let accounts = result as! [[String:Any]]
-            for account in accounts
-            {
+            for account in accounts {
                 let findAccount = String(data: account[kSecAttrAccount as String] as! Data, encoding: String.Encoding.utf8)!.nsString
                 let findPassword = String(data: account[kSecValueData as String] as! Data, encoding: String.Encoding.utf8)!.nsString
                 dic.setValue(findAccount, forKey: kAccount)
@@ -105,7 +95,6 @@ public class PTKeyChain: NSObject {
                 accountArr.append(dic)
             }
             return accountArr
-
         }
         return [NSMutableDictionary]()
     }
@@ -116,35 +105,26 @@ public class PTKeyChain: NSObject {
     ///   - service: 保存到哪個域
     ///   - account: 帳號
     ///   - handle: 回調是否成功
-    class func deleteAccountInfo(service:NSString,account:NSString?,handle:PTKeyChainBlock?)
-    {
+    class func deleteAccountInfo(service:NSString,account:NSString?,handle:PTKeyChainBlock?) {
         let newAccount = String(format: "%@", account ?? "")
         var query = [String:Any]()
-        if !newAccount.stringIsEmpty()
-        {
+        if !newAccount.stringIsEmpty() {
             query = [
                 kSecClass as String : kSecClassGenericPassword,
                 kSecAttrAccount as String : account!.data(using: String.Encoding.utf8.rawValue)!,
                 kSecAttrService as String : service
             ]
             let status = SecItemDelete(query as CFDictionary)
-            if status == errSecSuccess
-            {
-                if handle != nil
-                {
+            if status == errSecSuccess {
+                if handle != nil {
                     handle!(true)
                 }
-            }
-            else
-            {
-                if handle != nil
-                {
+            } else {
+                if handle != nil {
                     handle!(false)
                 }
             }
-        }
-        else
-        {
+        } else {
             query = [
                 kSecClass as String: kSecClassGenericPassword,
                 kSecAttrService as String: service,
@@ -164,17 +144,12 @@ public class PTKeyChain: NSObject {
 
                     let _ = SecItemDelete(query as CFDictionary)
                 }
-                if PTKeyChain.getAccountInfo(service: service).count == 0
-                {
-                    if handle != nil
-                    {
+                if PTKeyChain.getAccountInfo(service: service).count == 0 {
+                    if handle != nil {
                         handle!(true)
                     }
-                }
-                else
-                {
-                    if handle != nil
-                    {
+                } else {
+                    if handle != nil {
                         handle!(false)
                     }
                 }

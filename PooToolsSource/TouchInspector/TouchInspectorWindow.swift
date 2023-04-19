@@ -12,8 +12,7 @@
 import Foundation
 import UIKit
 
-public var App_TouchInspect_Debug_Bool:Bool
-{
+public var App_TouchInspect_Debug_Bool:Bool {
     let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorDebug)
     let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
     return ui_debug

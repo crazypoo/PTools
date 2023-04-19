@@ -18,10 +18,8 @@ import UIKit
 typealias PTNumberKeyBoardBackSpace = (_ keyboard:PTNumberKeyBoard)->Void
 typealias PTNumberKeyBoardReturnSTH = (_ keyboard:PTNumberKeyBoard,_ result:String)->Void
 
-extension PTNumberKeyBoard
-{
-    @objc static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self
-     {
+extension PTNumberKeyBoard {
+    @objc static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self {
          return PTNumberKeyBoard.init(type: type, backSpace: backSpace, returnSTH: returnSTH) as! Self
      }
 }
@@ -34,16 +32,11 @@ public class PTNumberKeyBoard: UIView {
     private static let kButtonSpaceLeft : CGFloat = 5
     private static let kKeyH : CGFloat = (PTNumberKeyBoard.kKeyBoardH - CGFloat(PTNumberKeyBoard.kLineWidth * 3) - CGFloat(PTNumberKeyBoard.kButtonSpaceTop * 5)) / 4
     
-    fileprivate var kKeyW : CGFloat
-    {
-        get
-        {
+    fileprivate var kKeyW : CGFloat {
+        get {
             (self.bounds.size.width - CGFloat(PTNumberKeyBoard.kLineWidth * 2) - CGFloat(PTNumberKeyBoard.kButtonSpaceLeft * 4))/3
-        }
-        set
-        {
-            if self.kKeyW != newValue
-            {
+        } set {
+            if self.kKeyW != newValue {
                 self.kKeyW = newValue
             }
         }
@@ -57,26 +50,18 @@ public class PTNumberKeyBoard: UIView {
         let colorNormal = UIColor(red: 252/255, green: 252/255, blue: 252/255, alpha: 1)
         let colorHightlighted = UIColor(red: 186/255, green: 189/255, blue: 194/255, alpha: 1)
         
-        for i in 0..<4
-        {
-            for j in 0..<3
-            {
+        for i in 0..<4 {
+            for j in 0..<3 {
                 let button = UIButton.init(type: .custom)
                 button.tag = j + 3 * i + 1
                 button.addActionHandlers { sender in
-                    if sender.tag == 12
-                    {
+                    if sender.tag == 12 {
                         backSpace(self)
-                    }
-                    else
-                    {
+                    } else {
                         var num = String(format: "%d", sender.tag)
-                        if sender.tag == 11
-                        {
+                        if sender.tag == 11 {
                             num = "0"
-                        }
-                        else if sender.tag == 10
-                        {
+                        } else if sender.tag == 10 {
                             switch type {
                             case .Normal:
                                 num = ""
@@ -102,29 +87,21 @@ public class PTNumberKeyBoard: UIView {
                 
                 var cN : UIColor?
                 var cH : UIColor?
-                if button.tag == 10 || button.tag == 12
-                {
+                if button.tag == 10 || button.tag == 12 {
                     cN = colorHightlighted
                     cH = colorNormal
-                }
-                else
-                {
+                } else {
                     cN = colorNormal
                     cH = colorHightlighted
                 }
                 
                 button.titleLabel?.font = .systemFont(ofSize: 25)
                 button.setTitleColor(.black, for: .normal)
-                if button.tag < 10
-                {
+                if button.tag < 10 {
                     button.setTitle(String(format: "%d", j + 3 * i + 1), for: .normal)
-                }
-                else if button.tag == 11
-                {
+                } else if button.tag == 11 {
                     button.setTitle("0", for: .normal)
-                }
-                else if button.tag == 10
-                {
+                } else if button.tag == 10 {
                     switch type {
                     case .Call:
                         button.setTitle("+", for: .normal)
@@ -135,9 +112,7 @@ public class PTNumberKeyBoard: UIView {
                     default:
                         button.setTitle("", for: .normal)
                     }
-                }
-                else
-                {
+                } else {
                     button.setTitle("删除", for: .normal)
                 }
                 button.setBackgroundImage(cN!.createImageWithColor(), for: .normal)
@@ -152,10 +127,8 @@ public class PTNumberKeyBoard: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        for i in 0..<4
-        {
-            for j in 0..<3
-            {
+        for i in 0..<4 {
+            for j in 0..<3 {
                 let button  = self.viewWithTag(j + 3 * i + 1)
                 button!.snp.makeConstraints { make in
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)

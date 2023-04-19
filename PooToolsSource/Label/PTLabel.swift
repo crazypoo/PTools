@@ -25,44 +25,36 @@ public class PTLabel: UILabel {
         
     //MARK: 設置文字的位置
     ///設置文字的位置
-    public func setVerticalAlignment(value:PTVerticalAlignment)
-    {
+    public func setVerticalAlignment(value:PTVerticalAlignment) {
         self.verticalAlignment = value
     }
     
-    private var verticalAlignment : PTVerticalAlignment? = .Middle
-    {
-        didSet{
+    private var verticalAlignment : PTVerticalAlignment? = .Middle {
+        didSet {
             self.setNeedsDisplay()
         }
     }
 
     //MARK: 設置橫線的位置
     ///設置橫線的位置
-    public func setStrikeThroughAlignment(value:PTStrikeThroughAlignment)
-    {
+    public func setStrikeThroughAlignment(value:PTStrikeThroughAlignment) {
         self.strikeThroughAlignment = value
     }
 
-    private var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle
-    {
-        didSet
-        {
+    private var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle {
+        didSet {
             self.setNeedsDisplay()
         }
     }
     
     //MARK: 設置是否帶橫線
     ///設置是否帶橫線,加載此方法須要在GCD上延時一點時間
-    public func setStrikeThroughEnabled(value:Bool)
-    {
+    public func setStrikeThroughEnabled(value:Bool) {
         self.strikeThroughEnabled = value
     }
     
-    private var strikeThroughEnabled : Bool? = false
-    {
-        didSet
-        {
+    private var strikeThroughEnabled : Bool? = false {
+        didSet {
             self.setNeedsDisplay()
         }
     }
@@ -71,8 +63,7 @@ public class PTLabel: UILabel {
     ///設置橫線顏色
     public var strikeThroughColor : UIColor = UIColor.systemRed
     
-    override init(frame: CGRect)
-    {
+    override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
@@ -93,8 +84,7 @@ public class PTLabel: UILabel {
             textRect.origin.y = bounds.origin.y + (bounds.size.height - textRect.size.height) / 2.0
         }
         
-        if strikeThroughEnabled!
-        {
+        if strikeThroughEnabled! {
             let strikeWidth = textRect.size.width
             var lineRect : CGRect? = .zero
             switch strikeThroughAlignment {
@@ -113,8 +103,7 @@ public class PTLabel: UILabel {
         return textRect
     }
     
-    public override func drawText(in rect: CGRect)
-    {
+    public override func drawText(in rect: CGRect) {
         let actualRect = self.textRect(forBounds: rect, limitedToNumberOfLines: self.numberOfLines)
         super.drawText(in: actualRect)
     }

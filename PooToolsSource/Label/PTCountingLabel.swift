@@ -21,32 +21,25 @@ public enum PTCountingLabelType {
     case Out
     case Linear
     
-    func lineUpdate(t:CGFloat)->CGFloat
-    {
+    func lineUpdate(t:CGFloat)->CGFloat {
         return t
     }
     
-    func inUpdate(t:CGFloat)->CGFloat
-    {
+    func inUpdate(t:CGFloat)->CGFloat {
         return CGFloat(powf(Float(t), Float(kPTLabelCounterRate)))
     }
     
-    func inOutUpdate(t:CGFloat)->CGFloat
-    {
+    func inOutUpdate(t:CGFloat)->CGFloat {
         var newT = t
         var sign = 1
         let r:Int = Int(kPTLabelCounterRate)
-        if r % 2 == 0
-        {
+        if r % 2 == 0 {
             sign -= 1
         }
         newT *= 2
-        if t < 1
-        {
+        if t < 1 {
             return  CGFloat(0.5 * powf(Float(newT), Float(kPTLabelCounterRate)))
-        }
-        else
-        {
+        } else {
             return  CGFloat(sign) * CGFloat(0.5 * powf(Float(newT - 2), Float(kPTLabelCounterRate) + Float(sign * 2)))
         }
     }
@@ -59,10 +52,8 @@ public class PTCountingLabel: UILabel {
     public var attributedFormatBlock:PTCountingLabelAttributedFormatBlock?
     public var formatBlock:PTCountingLabelFormatBlock?
     public var showCompletionBlock:PTCountingLabelShowCompletionBlock?
-    public var format:String = "%f"
-    {
-        didSet
-        {
+    public var format:String = "%f" {
+        didSet {
             self.textValue(value: self.currentValue())
         }
     }
@@ -76,10 +67,8 @@ public class PTCountingLabel: UILabel {
     var animationDuration:TimeInterval = 2
     var destinationValue:CGFloat = 0
     var startingValue:CGFloat = 0
-    public func currentValue()->CGFloat
-    {
-        if self.progress >= self.totalTime
-        {
+    public func currentValue()->CGFloat {
+        if self.progress >= self.totalTime {
             return self.destinationValue
         }
         
@@ -108,41 +97,34 @@ public class PTCountingLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public func countFrom(value:CGFloat,toValue:CGFloat)
-    {
+    public func countFrom(value:CGFloat,toValue:CGFloat) {
         self.countFrom(starValue: value, toValue: toValue, duration: self.animationDuration)
     }
     
-    public func countFromCurrentValue(toValue:CGFloat)
-    {
+    public func countFromCurrentValue(toValue:CGFloat) {
         self.countFrom(value: self.currentValue(), toValue: toValue)
     }
     
-    public func countFormCurrentValue(toValue:CGFloat,duration:TimeInterval)
-    {
+    public func countFormCurrentValue(toValue:CGFloat,duration:TimeInterval) {
         self.countFrom(starValue: self.currentValue(), toValue: toValue,duration: duration)
     }
     
-    public func countFromZero(toValue:CGFloat)
-    {
+    public func countFromZero(toValue:CGFloat) {
         self.countFrom(value: 0, toValue: toValue)
     }
     
-    public func countFromZero(toValue:CGFloat,duration:TimeInterval)
-    {
+    public func countFromZero(toValue:CGFloat,duration:TimeInterval) {
         self.countFrom(starValue: 0, toValue: toValue, duration: duration)
     }
     
-    public func countFrom(starValue:CGFloat,toValue:CGFloat,duration:TimeInterval)
-    {
+    public func countFrom(starValue:CGFloat,toValue:CGFloat,duration:TimeInterval) {
         self.startingValue = starValue
         self.destinationValue = toValue
         
         self.timer?.invalidate()
         self.timer = nil
         
-        if duration == 0
-        {
+        if duration == 0 {
             self.textValue(value: toValue)
             self.runCompletionBlock()
         }
@@ -159,14 +141,12 @@ public class PTCountingLabel: UILabel {
         self.timer?.add(to: RunLoop.main, forMode: .tracking)
     }
     
-    @objc func updateValue(timer:Timer)
-    {
+    @objc func updateValue(timer:Timer) {
         let now = Date.timeIntervalSinceReferenceDate
         self.progress += (now - self.lastUpdate)
         self.lastUpdate = now
         
-        if self.progress >= self.totalTime
-        {
+        if self.progress >= self.totalTime {
             self.timer?.invalidate()
             self.timer = nil
             self.progress = self.totalTime
@@ -174,49 +154,34 @@ public class PTCountingLabel: UILabel {
         
         self.textValue(value: self.currentValue())
         
-        if self.progress == self.totalTime
-        {
+        if self.progress == self.totalTime {
             self.runCompletionBlock()
         }
     }
     
-    func runCompletionBlock()
-    {
-        if self.showCompletionBlock != nil
-        {
+    func runCompletionBlock() {
+        if self.showCompletionBlock != nil {
             self.showCompletionBlock!()
             self.showCompletionBlock = nil
         }
     }
     
-    func textValue(value:CGFloat)
-    {
-        if self.attributedFormatBlock != nil
-        {
+    func textValue(value:CGFloat) {
+        if self.attributedFormatBlock != nil {
             self.attributedText = self.attributedFormatBlock!(value)
-        }
-        else if self.formatBlock != nil
-        {
+        } else if self.formatBlock != nil {
             self.text = self.formatBlock!(value)
-        }
-        else
-        {
-            if self.format.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || self.format.nsString.range(of: "%(.*)i").location != NSNotFound
-            {
+        } else {
+            if self.format.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || self.format.nsString.range(of: "%(.*)i").location != NSNotFound {
                 self.text = String(format: self.format, value)
-            }
-            else
-            {
-                if self.positiveFormat.nsString.length > 0
-                {
+            } else {
+                if self.positiveFormat.nsString.length > 0 {
                     let str = String(format: self.format, value)
                     let formatter = NumberFormatter()
                     formatter.numberStyle = .decimal
                     formatter.positiveFormat = self.positiveFormat
                     self.text = String(format: "%@", formatter.string(from: NSNumber(floatLiteral: str.double() ?? 0))!)
-                }
-                else
-                {
+                } else {
                     self.text = String(format: self.format, value)
                 }
             }
