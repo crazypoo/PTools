@@ -10,7 +10,6 @@ import UIKit
 import ZXNavigationBar
 import FDFullscreenPopGesture
 import LXFProtocolTool
-import SJAttributesStringMaker
 import FloatingPanel
 
 @objc public enum VCStatusBarChangeStatusType : Int {

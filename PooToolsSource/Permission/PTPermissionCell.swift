@@ -9,7 +9,7 @@
 import UIKit
 import SwifterSwift
 import SnapKit
-import SJAttributesStringMaker
+import AttributedString
 #if canImport(Permission)
 import Permission
 #endif
@@ -192,13 +192,15 @@ class PTPermissionCell: PTBaseNormalCell {
         }
         #endif
         
-        self.cellTitle.attributedText = NSMutableAttributedString.sj.makeText({ make in
-            make.append(permissionName).font(PTAppBaseConfig.share.permissionCellTitleFont).alignment(.left).textColor(PTAppBaseConfig.share.permissionCellTitleTextColor).lineSpacing(CGFloat.ScaleW(w: 3))
-            if !(self.cellModel?.desc ?? "").stringIsEmpty()
-            {
-                make.append("\n\(self.cellModel!.desc)").font(PTAppBaseConfig.share.permissionCellSubtitleFont).alignment(.left).textColor(PTAppBaseConfig.share.permissionCellSubtitleTextColor)
-            }
-        })
+        var totalAtt:ASAttributedString = ASAttributedString(string: "")
+        
+        let att:ASAttributedString =  ASAttributedString("\(permissionName)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellTitleFont),.foreground(PTAppBaseConfig.share.permissionCellTitleTextColor))
+        if !(self.cellModel?.desc ?? "").stringIsEmpty() {
+            let descAtt:ASAttributedString =  ASAttributedString("\n\(self.cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
+            totalAtt = att + descAtt
+        }
+
+        self.cellTitle.attributed.text = totalAtt
         
 #if canImport(Permission)
         switch self.cellStatus {

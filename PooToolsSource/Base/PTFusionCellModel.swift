@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AttributedString
 
 public enum PTFusionShowAccessoryType:Int {
     case Switch
@@ -29,13 +30,13 @@ open class PTFusionCellModel: NSObject {
     ///主标题下文字颜色
     open var descColor:UIColor = UIColor.lightGray
     ///主标题的富文本
-    open var nameAttr:NSAttributedString?
+    open var nameAttr:ASAttributedString?
     ///描述
     open var content:String = ""
     ///描述文字颜色
     open var contentTextColor:UIColor = UIColor.black
     ///Content的富文本
-    open var contentAttr:NSAttributedString?
+    open var contentAttr:ASAttributedString?
     ///content字体
     open var contentFont:UIFont = .appfont(size: 16)
     ///AccessoryView类型

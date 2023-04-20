@@ -21,7 +21,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'CocoaLumberjack/Swift'
         subspec.dependency 'DeviceKit'
         subspec.dependency 'UIColor_Hex_Swift'
-        subspec.dependency 'SJAttributesStringMaker'
+        subspec.dependency 'AttributedString'
         subspec.dependency 'YYText'
         subspec.dependency 'UIViewController+Swizzled'
         subspec.dependency 'IQKeyboardManager'

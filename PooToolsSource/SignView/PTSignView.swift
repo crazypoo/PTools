@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-import SJAttributesStringMaker
+import AttributedString
 
 public typealias SignImageBlock = (_ signImage:UIImage?) -> Void
 public typealias SignImageDismissBlock = () -> Void
@@ -67,15 +67,20 @@ public class PTSignView: UIView {
     lazy var infoLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.attributedText = NSMutableAttributedString.sj.makeText({ make in
-            if !self.viewConfig.infoTitle.stringIsEmpty() {
-                make.append(self.viewConfig.infoTitle).font(self.viewConfig.signNavTitleFont).textColor(self.viewConfig.signNavTitleColor).alignment(.center)
-            }
-            if !self.viewConfig.infoDesc.stringIsEmpty() {
-                make.append("\n\(self.viewConfig.infoDesc)").font(self.viewConfig.signNavDescFont).textColor(self.viewConfig.signNavDescColor).alignment(.center)
-            }
-        })
-        view.textAlignment = .center
+        var totalAtts:ASAttributedString = ASAttributedString("")
+        if !self.viewConfig.infoTitle.stringIsEmpty() && self.viewConfig.infoDesc.stringIsEmpty() {
+            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
+            totalAtts = textAtt
+        } else if self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
+            let descAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
+            totalAtts = descAtt
+        } else if !self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
+            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavTitleFont),.foreground(self.viewConfig.signNavTitleColor))
+            let descAtt:ASAttributedString = ASAttributedString("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signNavDescFont),.foreground(self.viewConfig.signNavDescColor))
+            totalAtts = textAtt + descAtt
+        }
+        view.attributed.text = totalAtts
+
         return view
     }()
     

@@ -36,6 +36,7 @@ target 'PooTools_Example' do
   pod 'ZXNavigationBar'#导航栏
   pod 'CryptoSwift'
   pod 'Kingfisher'
+  pod 'AttributedString'
   
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']

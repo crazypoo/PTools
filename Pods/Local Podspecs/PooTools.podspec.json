@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.0.10",
+  "version": "3.1.3",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.0.10"
+    "tag": "3.1.3"
   },
   "license": {
     "type": "MIT",
@@ -50,6 +50,9 @@
 
         ],
         "SJAttributesStringMaker": [
+
+        ],
+        "AttributedString": [
 
         ],
         "YYText": [
@@ -1158,6 +1161,18 @@
       }
     },
     {
+      "name": "Share",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Share/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1317,6 +1332,9 @@
 
         ],
         "PooTools/SVG": [
+
+        ],
+        "PooTools/Share": [
 
         ]
       },

@@ -9,7 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-import SJAttributesStringMaker
+import AttributedString
 
 public class PTSignatureConfig:NSObject {
     public var lineWidth:CGFloat = 1
@@ -63,15 +63,20 @@ class PTEasySignatureView: UIView {
     lazy var infoLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
-        view.attributedText = NSMutableAttributedString.sj.makeText({ make in
-            if !self.viewConfig.infoTitle.stringIsEmpty() {
-                make.append(self.viewConfig.infoTitle).font(self.viewConfig.signContentTitleFont).textColor(self.viewConfig.signContentTitleColor).lineSpacing(CGFloat.ScaleW(w: 4.5)).alignment(.center)
-            }
-            if !self.viewConfig.infoDesc.stringIsEmpty() {
-                make.append("\n\(self.viewConfig.infoDesc)").font(self.viewConfig.signContentDescFont).textColor(self.viewConfig.signContentDescColor).alignment(.center)
-            }
-        })
-        view.textAlignment = .center
+        
+        var totalAtts:ASAttributedString = ASAttributedString("")
+        if !self.viewConfig.infoTitle.stringIsEmpty() && self.viewConfig.infoDesc.stringIsEmpty() {
+            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
+            totalAtts = textAtt
+        } else if self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
+            let descAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
+            totalAtts = descAtt
+        } else if !self.viewConfig.infoTitle.stringIsEmpty() && !self.viewConfig.infoDesc.stringIsEmpty() {
+            let textAtt:ASAttributedString = ASAttributedString("\(self.viewConfig.infoTitle)",.paragraph(.alignment(.center),.lineSpacing(4.5)),.font(self.viewConfig.signContentTitleFont),.foreground(self.viewConfig.signContentTitleColor))
+            let descAtt:ASAttributedString = ASAttributedString("\n\(self.viewConfig.infoDesc)",.paragraph(.alignment(.center)),.font(self.viewConfig.signContentDescFont),.foreground(self.viewConfig.signContentDescColor))
+            totalAtts = textAtt + descAtt
+        }
+        view.attributed.text = totalAtts
         return view
     }()
     

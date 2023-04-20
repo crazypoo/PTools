@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import AttributedString
 
 public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UISwitch)->Void
 
@@ -16,7 +17,7 @@ fileprivate extension UIView {
     func drawLine() -> UIView {
         
         let lineView = UIView()
-        lineView.backgroundColor = UIColor.init(hexString: "#E8E8E8")
+        lineView.backgroundColor = UIColor(hexString: "#E8E8E8")
         return lineView
     }
 }
@@ -232,19 +233,21 @@ public class PTFusionCellContent:UIView {
                     .NoneAccessoryView(type: .BothImage(type: .NameContent)):
                 
                 if  self.cellModel!.nameAttr != nil {
-                    self.nameTitle.attributedText = self.cellModel!.nameAttr
+                    self.nameTitle.attributed.text = self.cellModel!.nameAttr
                 } else {
-                    let att = NSMutableAttributedString.sj.makeText { make in
-                        if !self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() {
-                            make.append(self.cellModel!.name).alignment(.left).font(self.cellModel!.cellFont).textColor(self.cellModel!.nameColor)
-                        } else if self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
-                            make.append("\(self.cellModel!.desc)").alignment(.left).font(self.cellModel!.cellDescFont).textColor(self.cellModel!.descColor)
-                        } else if !self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
-                            make.append(self.cellModel!.name).alignment(.left).font(self.cellModel!.cellFont).textColor(self.cellModel!.nameColor)
-                            make.append("\n\(self.cellModel!.desc)").alignment(.left).font(self.cellModel!.cellDescFont).textColor(self.cellModel!.descColor)
-                        }
+                    var atts:ASAttributedString = ASAttributedString(string: "")
+                    if !self.cellModel!.name.stringIsEmpty() && self.cellModel!.desc.stringIsEmpty() {
+                        let nameAtts:ASAttributedString =  ASAttributedString("\(self.cellModel!.name)",.paragraph(.alignment(.left)),.font(self.cellModel!.cellFont),.foreground(self.cellModel!.nameColor))
+                        atts = nameAtts
+                    } else if self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
+                        let descAtts:ASAttributedString =  ASAttributedString("\(self.cellModel!.desc)",.paragraph(.alignment(.left)),.font(self.cellModel!.cellDescFont),.foreground(self.cellModel!.descColor))
+                        atts = descAtts
+                    } else if !self.cellModel!.name.stringIsEmpty() && !self.cellModel!.desc.stringIsEmpty() {
+                        let nameAtts:ASAttributedString =  ASAttributedString("\(self.cellModel!.name)",.paragraph(.alignment(.left)),.font(self.cellModel!.cellFont),.foreground(self.cellModel!.nameColor))
+                        let descAtts:ASAttributedString =  ASAttributedString("\n\(self.cellModel!.desc)",.paragraph(.alignment(.left)),.font(self.cellModel!.cellDescFont),.foreground(self.cellModel!.descColor))
+                        atts = nameAtts + descAtts
                     }
-                    self.nameTitle.attributedText = att
+                    self.nameTitle.attributed.text = atts
                 }
 
                 self.addSubview(self.nameTitle)
@@ -317,12 +320,10 @@ public class PTFusionCellContent:UIView {
                     .NoneAccessoryView(type: .None(type: .Content)),
                     .NoneAccessoryView(type: .None(type: .NameContent)):
                 if self.cellModel!.contentAttr != nil && self.cellModel!.content.stringIsEmpty() {
-                    self.contentLabel.attributedText = self.cellModel!.contentAttr
+                    self.contentLabel.attributed.text = self.cellModel!.contentAttr
                 } else if self.cellModel!.contentAttr == nil && !self.cellModel!.content.stringIsEmpty() {
-                    let att = NSMutableAttributedString.sj.makeText { make in
-                        make.append(self.cellModel!.content).alignment(.right).textColor(self.cellModel!.contentTextColor).font(self.cellModel!.contentFont)
-                    }
-                    self.contentLabel.attributedText = att
+                    let contentAtts:ASAttributedString =  ASAttributedString("\(self.cellModel!.content)",.paragraph(.alignment(.right)),.font(self.cellModel!.contentFont),.foreground(self.cellModel!.contentTextColor))
+                    self.contentLabel.attributed.text = contentAtts
                 }
                 self.addSubview(self.contentLabel)
                 self.contentLabel.snp.remakeConstraints { make in

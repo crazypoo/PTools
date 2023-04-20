@@ -10,7 +10,7 @@ import UIKit
 import JXSegmentedView
 import SnapKit
 import SwifterSwift
-import SJAttributesStringMaker
+import AttributedString
 import Kingfisher
 
 public class PTMainSegmentCell: JXSegmentedBaseCell {
@@ -116,10 +116,8 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
         if !(cellItemModel!.subTitle!).stringIsEmpty() {
             subTitleLabel.backgroundColor = myItemModel.subTitleCurrentBGColor
             
-            let subAtt = NSMutableAttributedString.sj.makeText { make in
-                make.append(myItemModel.subTitle!).font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont).textColor(myItemModel.subTitleCurrentColor).alignment(.center)
-            }
-            self.subTitleLabel.attributedText = subAtt
+            let subAtt:ASAttributedString =  ASAttributedString("\(myItemModel.subTitle!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont),.foreground(myItemModel.subTitleCurrentColor))
+            self.subTitleLabel.attributed.text = subAtt
 
         } else {
             subTitleLabel.backgroundColor = .clear
@@ -130,14 +128,13 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             ImageDownloader.default.downloadImage(with: URL.init(string: myItemModel.imageURL!)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
                 switch result {
                 case .success(let value):
-                    let att = NSMutableAttributedString.sj.makeText { make in
-                        make.append { imageMake in
-                            imageMake.image = value.image
-                            imageMake.bounds = CGRect.init(x: 0, y: -2.5, width: CGFloat.ScaleW(w: 20), height: CGFloat.ScaleW(w: 20))
-                        }.alignment(.center)
-                        make.append(myItemModel.title!).font(myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont).textColor(myItemModel.titleCurrentColor).alignment(.center)
-                    }
-                    self.titleLabel.attributedText = att
+                    let imageAtt:ASAttributedString = """
+                    \(wrap:.embedding("""
+                    \(.image(value.image,.custom(size: CGSize(width: 20, height: 20))))
+                    """),.paragraph(.alignment(.center)),.baselineOffset(2.5))
+                    """
+                    let textAtt:ASAttributedString = ASAttributedString("\(myItemModel.title!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.titleSelectedFont : myItemModel.titleNormalFont),.foreground(myItemModel.titleCurrentColor))
+                    self.titleLabel.attributed.text = imageAtt + textAtt
                 case .failure(let error):
                     PTNSLogConsole(error)
                 }
