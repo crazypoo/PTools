@@ -33,12 +33,9 @@ public class PTDebugViewController: PTBaseViewController {
         cell_input.name = .addressInput
         let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
         let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
-        if url_debug.isEmpty
-        {
+        if url_debug.isEmpty {
             cell_input.content = Network.gobalUrl()
-        }
-        else
-        {
+        } else {
             cell_input.content = url_debug
         }
         cell_input.accessoryType = .DisclosureIndicator

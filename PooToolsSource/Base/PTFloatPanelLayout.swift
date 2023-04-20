@@ -9,7 +9,12 @@
 import UIKit
 import FloatingPanel
 
-public class PTFloatPanelLayout: FloatingPanelLayout {
+open class PTFloatPanelLayout: NSObject,FloatingPanelLayout {
+    
+    public override init() {
+        super.init()
+    }
+
     open var initialState: FloatingPanelState {
         .half
     }
@@ -29,7 +34,11 @@ public class PTFloatPanelLayout: FloatingPanelLayout {
     }
 }
 
-public class PNProductSpecPanelLayout: FloatingPanelLayout {
+public class PNProductSpecPanelLayout: NSObject, FloatingPanelLayout {
+    
+    public override init() {
+        super.init()
+    }
     
     public var viewHeight:CGFloat = 18
     
