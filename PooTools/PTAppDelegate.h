@@ -12,7 +12,6 @@
 #import <PooTools/PooTools-Swift.h>
 
 @interface PTAppDelegate : UIResponder <UIApplicationDelegate>
-@property(nonatomic,strong)PTDevMaskView *maskView;
 @property (strong, nonatomic) UIWindow *window;
 + (PTAppDelegate *)appDelegate;
 

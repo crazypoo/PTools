@@ -49,9 +49,6 @@
         "UIColor_Hex_Swift": [
 
         ],
-        "SJAttributesStringMaker": [
-
-        ],
         "AttributedString": [
 
         ],
@@ -141,7 +138,8 @@
         "PooToolsSource/TouchInspector/*.{h,m,swift}",
         "PooToolsSource/NetWork/*.{h,m,swift}",
         "PooToolsSource/Json/*.{h,m,swift}",
-        "PooToolsSource/CocoaSprings/*.{h,m,swift}"
+        "PooToolsSource/CocoaSprings/*.{h,m,swift}",
+        "PooToolsSource/WhereIsMyEye/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"

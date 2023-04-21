@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SwifterSwift
 
 @objcMembers
 open class PTDevMaskConfig:NSObject {
@@ -31,6 +32,53 @@ open class PTDevMaskView: PTBaseMaskView {
         return view
     }()
     
+    private var eyeTrackingFunction = PTFaceEye.share
+    
+    private lazy var eyeTracking:UISwitch = {
+        let view = UISwitch()
+        view.onTintColor = .randomColor
+        view.isOn = false
+        view.addSwitchAction { sender in
+            if sender.isOn {
+                self.eyeTrackingFunction.createEye()
+            } else {
+                self.eyeTrackingFunction.dismissEye()
+            }
+        }
+        return view
+    }()
+    
+    private lazy var eyeTrackingLabel:UILabel = {
+        let view = UILabel()
+        view.textColor = .randomColor
+        view.text = "眼球追踪开关"
+        return view
+    }()
+    
+    private var focusBool:Bool = false
+    
+    private lazy var eyeTrackingFocus:UISwitch = {
+        let view = UISwitch()
+        view.onTintColor = .randomColor
+        view.isOn = false
+        view.addSwitchAction { sender in
+            self.focusBool = sender.isOn
+            if sender.isOn {
+                self.eyeTrackingFunction.hideCursorView()
+            } else {
+                self.eyeTrackingFunction.showCursorView()
+            }
+        }
+        return view
+    }()
+    
+    private lazy var eyeTrackingLabelFocus:UILabel = {
+        let view = UILabel()
+        view.textColor = .randomColor
+        view.text = "眼球追踪是否同步点击事件"
+        return view
+    }()
+    
     public init(config:PTDevMaskConfig?) {
         super.init(frame: .zero)
         self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
@@ -50,6 +98,33 @@ open class PTDevMaskView: PTBaseMaskView {
         self.springMotionView.onPositionUpdate = { point in
             let size = self.springMotionView.frame.size
             self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
+        }
+        
+        self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
+        self.eyeTracking.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+        }
+        
+        self.eyeTrackingLabel.snp.makeConstraints { make in
+            make.left.equalTo(self.eyeTracking.snp.right).offset(10)
+            make.centerY.equalTo(self.eyeTracking)
+        }
+        
+        self.eyeTrackingFocus.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
+        }
+        
+        self.eyeTrackingLabelFocus.snp.makeConstraints { make in
+            make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
+            make.centerY.equalTo(self.eyeTrackingFocus)
+        }
+
+        self.eyeTrackingFunction.eyeLookAt = { point in
+            if self.focusBool {
+                self.springMotionView.move(to: point)
+            }
         }
     }
     

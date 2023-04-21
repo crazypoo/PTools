@@ -41,6 +41,8 @@ public class PTDevFunction: NSObject {
      */
     public var inApp:DevTask?
 
+    private var maskView:PTDevMaskView?
+    
     public func createLabBtn() {
         if UIApplication.applicationEnvironment() != .appStore {
             UserDefaults.standard.set(true,forKey: LocalConsole.ConsoleDebug)
@@ -61,7 +63,7 @@ public class PTDevFunction: NSObject {
                 }
                 
                 mn_PFloatingButton?.longPressBlock = { (sender) in
-                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: ["全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面","HyperioniOS"],cancelBtn: "取消") {
+                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: ["全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面","HyperioniOS","DEVMask"],cancelBtn: "取消") {
                         
                     } moreBtn: { index, title in
                         if title == "全部开启" {
@@ -104,6 +106,17 @@ public class PTDevFunction: NSObject {
                             if self.HyperioniOS != nil {
                                 self.HyperioniOS!()
                             }
+                        } else if title == "DEVMask" {
+                            if self.maskView != nil {
+                                self.maskView?.removeFromSuperview()
+                                self.maskView = nil
+                            } else {
+                                let maskConfig = PTDevMaskConfig()
+                                
+                                self.maskView = PTDevMaskView(config: maskConfig)
+                                self.maskView?.frame = AppWindows!.frame
+                                AppWindows?.addSubview(self.maskView!)
+                            }
                         }
                     }
                 }
@@ -116,6 +129,15 @@ public class PTDevFunction: NSObject {
             flexTask(true)
             PTLocalConsoleFunction.share.localconsole.createSystemLogView()
             PCheckAppStatus.shared.open()
+            
+            let devShare = PTDevFunction.share
+            if devShare.maskView == nil {
+                let maskConfig = PTDevMaskConfig()
+                
+                devShare.maskView = PTDevMaskView(config: maskConfig)
+                devShare.maskView?.frame = AppWindows!.frame
+                AppWindows?.addSubview(devShare.maskView!)
+            }
         }
     }
 
@@ -124,6 +146,12 @@ public class PTDevFunction: NSObject {
             flexTask(false)
             PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
             PCheckAppStatus.shared.close()
+            
+            let devShare = PTDevFunction.share
+            if devShare.maskView != nil {
+                devShare.maskView?.removeFromSuperview()
+                devShare.maskView = nil
+            }
         }
     }
 

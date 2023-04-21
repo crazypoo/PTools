@@ -159,13 +159,6 @@
         
     };
     [self.window addSubview:aasdasd];
-
-    if (self.maskView == nil) {
-        PTDevMaskConfig * config = [PTDevMaskConfig new];
-        self.maskView = [[PTDevMaskView alloc] initWithConfig:config];
-        self.maskView.frame = CGRectMake(0, 0, kSCREEN_WIDTH, kSCREEN_HEIGHT);
-        [self.window addSubview:self.maskView];
-    }
     
 //    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
 //        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);
@@ -174,6 +167,9 @@
 //    [PTUtils timeRunWithTime_baseWithCustomQueName:@"222222" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
 //        PNSLog(@"2222222%d>>>>>>%ld",finish,(long)time);
 //    }];
+//    PTFaceEye * share = [PTFaceEye share];
+//    [share createEye];
+    
     return YES;
 }
 

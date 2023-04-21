@@ -52,6 +52,12 @@
 		231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DC272CDEE9003D6F62 /* LocalConsole.swift */; };
 		231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */; };
 		231D1693272CDEEA003D6F62 /* PooTools.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 231D15DE272CDEE9003D6F62 /* PooTools.bundle */; };
+		55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DDC29F2831500244E44 /* PTFaceEye.swift */; };
+		55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */; };
+		55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE029F2855300244E44 /* PTEyeTrackingDataManager.swift */; };
+		55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE129F2855300244E44 /* PTEyeTrackingManager.swift */; };
+		55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE229F2855300244E44 /* PTEyeTrackingTestUtility.swift */; };
+		55024DE929F2999600244E44 /* PTEyeTrackingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE829F2999600244E44 /* PTEyeTrackingExtensions.swift */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
@@ -272,6 +278,12 @@
 		2352EA7B2543C022002AE25C /* PooTools_Example.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = PooTools_Example.entitlements; sourceTree = "<group>"; };
 		23898D852543FAD7004DDE1A /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		23898D872543FAEB004DDE1A /* Photos.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Photos.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/Photos.framework; sourceTree = DEVELOPER_DIR; };
+		55024DDC29F2831500244E44 /* PTFaceEye.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFaceEye.swift; sourceTree = "<group>"; };
+		55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingSessionManager.swift; sourceTree = "<group>"; };
+		55024DE029F2855300244E44 /* PTEyeTrackingDataManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingDataManager.swift; sourceTree = "<group>"; };
+		55024DE129F2855300244E44 /* PTEyeTrackingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingManager.swift; sourceTree = "<group>"; };
+		55024DE229F2855300244E44 /* PTEyeTrackingTestUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingTestUtility.swift; sourceTree = "<group>"; };
+		55024DE829F2999600244E44 /* PTEyeTrackingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingExtensions.swift; sourceTree = "<group>"; };
 		5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentCell.swift; sourceTree = "<group>"; };
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
@@ -519,6 +531,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55024DDB29F282F600244E44 /* WhereIsMyEye */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -791,6 +804,19 @@
 				55A3E98E298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift */,
 			);
 			path = BlackMagic;
+			sourceTree = "<group>";
+		};
+		55024DDB29F282F600244E44 /* WhereIsMyEye */ = {
+			isa = PBXGroup;
+			children = (
+				55024DE829F2999600244E44 /* PTEyeTrackingExtensions.swift */,
+				55024DE029F2855300244E44 /* PTEyeTrackingDataManager.swift */,
+				55024DE129F2855300244E44 /* PTEyeTrackingManager.swift */,
+				55024DDF29F2855300244E44 /* PTEyeTrackingSessionManager.swift */,
+				55024DE229F2855300244E44 /* PTEyeTrackingTestUtility.swift */,
+				55024DDC29F2831500244E44 /* PTFaceEye.swift */,
+			);
+			path = WhereIsMyEye;
 			sourceTree = "<group>";
 		};
 		5503F9DA28F016CC00030F41 /* ApplicationFunction */ = {
@@ -1641,6 +1667,7 @@
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
+				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
@@ -1663,6 +1690,7 @@
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
+				55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
@@ -1683,6 +1711,7 @@
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
+				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
@@ -1696,6 +1725,7 @@
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
+				55024DE929F2999600244E44 /* PTEyeTrackingExtensions.swift in Sources */,
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				55D7382F29E529BB0027BDC3 /* CGRect+Extensions.swift in Sources */,
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
@@ -1714,6 +1744,8 @@
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
+				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
+				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
