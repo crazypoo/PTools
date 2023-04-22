@@ -32,17 +32,14 @@ Pod::Spec.new do |s|
         subspec.dependency 'Kingfisher'
         subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
-        subspec.dependency 'FloatingPanel'
         subspec.dependency 'KakaJSON'
         subspec.dependency 'Alamofire'
         subspec.dependency 'SwiftyJSON'
         subspec.dependency 'HandyJSON'
-        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
-        subspec.dependency 'EmptyDataSet-Swift'#空数据
         subspec.dependency 'MJExtension'
         subspec.dependency 'MBProgressHUD'
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}','PooToolsSource/CocoaSprings/*.{h,m,swift}','PooToolsSource/WhereIsMyEye/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}','PooToolsSource/CocoaSprings/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -513,15 +510,18 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
         }
     end
-    #    s.subspec 'DEBUG' do |subspec|
-#        subspec.dependency 'FLEX', :configurations => ['Debug']
-#        subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
-#        subspec.dependency 'LookinServer', :configurations => ['Debug']
-#        subspec.pod_target_xcconfig = {
-#            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
-#        }
-#    end
     
+    s.subspec 'DEBUG' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/WhereIsMyEye/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}'
+#    subspec.dependency 'FLEX', :configurations => ['Debug']
+#    subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
+#    subspec.dependency 'LookinServer', :configurations => ['Debug']
+    subspec.pod_target_xcconfig = {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+    }
+    end
+
     s.subspec 'NotificationPermission' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/PermissionFunction'
@@ -668,7 +668,26 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SHARE POOTOOLS_COCOAPODS"
         }
     end
-        
+    
+    s.subspec 'FloatPanel' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'FloatingPanel'
+        subspec.source_files = 'PooToolsSource/FloatPanel/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLOATPANEL POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'ListEmptyData' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'LXFProtocolTool/LXFEmptyDataSetable'#Table/Collection空白时提示框架
+        subspec.dependency 'EmptyDataSet-Swift'#空数据
+        subspec.source_files = 'PooToolsSource/ListEmptyData/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LISTEMPTYDATA POOTOOLS_COCOAPODS"
+        }
+    end
+            
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -726,6 +745,10 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ScrollRefresh'
         subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
+        subspec.dependency 'PooTools/FloatPanel'
+        subspec.dependency 'PooTools/ListEmptyData'
+        subspec.dependency 'PooTools/DEBUG'
+
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

@@ -48,7 +48,7 @@ public extension PTProtocol where Base: AVAssetExportSession {
         exportSession.shouldOptimizeForNetworkUse = shouldOptimizeForNetworkUse
         // 异步导出
         exportSession.exportAsynchronously {
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 if exportSession.status == .completed {
                     handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
                 } else {

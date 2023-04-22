@@ -695,7 +695,7 @@ public extension PTProtocol where Base: FileManager {
         DispatchQueue.global().async {
             //  获取截图
             let image = getVideoImage(videoUrlSouceType: .server, path: videoPath, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 videoImage(image)
             }
         }
@@ -716,7 +716,7 @@ public extension PTProtocol where Base: FileManager {
                 let videoImage = getVideoImage(videoUrlSouceType: .server, path: path, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
                 allImageArray.append(videoImage)
             }
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 videoImages(allImageArray)
             }
         }

@@ -82,9 +82,6 @@
         "SwipeCellKit": [
 
         ],
-        "FloatingPanel": [
-
-        ],
         "KakaJSON": [
 
         ],
@@ -95,12 +92,6 @@
 
         ],
         "HandyJSON": [
-
-        ],
-        "LXFProtocolTool/LXFEmptyDataSetable": [
-
-        ],
-        "EmptyDataSet-Swift": [
 
         ],
         "MJExtension": [
@@ -131,15 +122,12 @@
         "PooToolsSource/BlackMagic/*.{h,m,swift}",
         "PooToolsSource/Button/*.{h,m,swift}",
         "PooToolsSource/Category/*.{h,m,swift}",
-        "PooToolsSource/DevMask/*.{h,m,swift}",
-        "PooToolsSource/LocalConsole/*.{h,m,swift}",
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/StatusBar/*.{h,m,swift}",
         "PooToolsSource/TouchInspector/*.{h,m,swift}",
         "PooToolsSource/NetWork/*.{h,m,swift}",
         "PooToolsSource/Json/*.{h,m,swift}",
-        "PooToolsSource/CocoaSprings/*.{h,m,swift}",
-        "PooToolsSource/WhereIsMyEye/*.{h,m,swift}"
+        "PooToolsSource/CocoaSprings/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -901,6 +889,23 @@
       }
     },
     {
+      "name": "DEBUG",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": [
+        "PooToolsSource/Debug/*.{h,m,swift}",
+        "PooToolsSource/LocalConsole/*.{h,m,swift}",
+        "PooToolsSource/WhereIsMyEye/*.{h,m,swift}",
+        "PooToolsSource/DevMask/*.{h,m,swift}"
+      ],
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "NotificationPermission",
       "dependencies": {
         "PooTools/Core": [
@@ -1171,6 +1176,39 @@
       }
     },
     {
+      "name": "FloatPanel",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "FloatingPanel": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/FloatPanel/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FLOATPANEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ListEmptyData",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "LXFProtocolTool/LXFEmptyDataSetable": [
+
+        ],
+        "EmptyDataSet-Swift": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/ListEmptyData/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LISTEMPTYDATA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1333,6 +1371,15 @@
 
         ],
         "PooTools/Share": [
+
+        ],
+        "PooTools/FloatPanel": [
+
+        ],
+        "PooTools/ListEmptyData": [
+
+        ],
+        "PooTools/DEBUG": [
 
         ]
       },

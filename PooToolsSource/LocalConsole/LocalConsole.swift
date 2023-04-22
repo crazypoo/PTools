@@ -60,7 +60,7 @@ public class LocalConsole: NSObject {
     public var terminal:PTTerminal?
     var currentText: String = "" {
         didSet {
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 self.setLog()
             }
         }

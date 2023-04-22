@@ -220,7 +220,7 @@ public class StatusBarManager {
     
     /// 开始更新状态栏的状态
     fileprivate func updateStatusBar() {
-        DispatchQueue.main.async { // 在主线程异步执行 避免同时索取同一属性
+        PTGCDManager.gcdMain { // 在主线程异步执行 避免同时索取同一属性
             // 如果状态栏需要动画（fade or slide），需要添加动画时间，才会有动画效果
             UIView.animate(withDuration: self.duration, animations: {
                 AppWindows?.rootViewController?.setNeedsStatusBarAppearanceUpdate()

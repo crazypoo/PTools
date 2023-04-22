@@ -362,18 +362,18 @@ public extension PTProtocol where Base: UIImage {
             do {
                 try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
             } catch {
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     closure(nil)
                 }
                 return
             }
             guard let image = cgImage else {
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     closure(nil)
                 }
                 return
             }
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 closure(UIImage(cgImage: image))
             }
         }
@@ -529,7 +529,7 @@ public extension PTProtocol where Base: UIImage {
                        complete:@escaping (Data?, CGSize) -> Void) {
         queue.async {
             let data = resizeIO(resizeSize: mode.resize(self.base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 complete(data, mode.resize(self.base.size))
             }
         }

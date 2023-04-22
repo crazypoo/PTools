@@ -63,10 +63,10 @@ public class PTCodeView: UIView {
         let timer = DispatchSource.makeTimerSource(flags: [], queue: DispatchQueue.main)
         timer.schedule(deadline: .now(), repeating: .seconds(1))
         timer.setEventHandler {
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 newCount -= 1
                 if newCount < 1 {
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         if !self.dismiss! {
                             timer.suspend()
                             self.timeChange()

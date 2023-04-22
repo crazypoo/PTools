@@ -164,14 +164,14 @@ public extension UIViewController {
     //MARK: 定位权限
     /// 定位权限
     func locationAuthorize() {
-        DispatchQueue.main.async {
+        PTGCDManager.gcdMain {
             UIAlertController.base_alertVC(title:"打开定位开关",msg: "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务",okBtns: ["设置"],cancelBtn: "取消",moreBtn: { index, title in
                 if let url = URL(string: UIApplication.openSettingsURLString) {
                     if UIApplication.shared.canOpenURL(url) {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
                 }
-            }) 
+            })
         }
     }
     
@@ -186,7 +186,7 @@ public extension UIViewController {
             // 请求授权
             AVCaptureDevice.requestAccess(for: avMediaType) { (granted) in
                 if granted {
-                    DispatchQueue.main.async {
+                    PTGCDManager.gcdMain {
                         _ = self.avCaptureDeviceAuthorize(avMediaType: avMediaType)
                     }
                 }
@@ -205,7 +205,7 @@ public extension UIViewController {
             default:
                 break
             }
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 UIAlertController.base_alertVC(title:title,msg: msg,okBtns: ["设置"],cancelBtn: "取消",moreBtn: { index, title in
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         if UIApplication.shared.canOpenURL(url) {
@@ -228,13 +228,13 @@ public extension UIViewController {
         case .notDetermined:
             // 请求授权
             PHPhotoLibrary.requestAuthorization({ (status) in
-                DispatchQueue.main.async {
+                PTGCDManager.gcdMain {
                     _ = self.photoAuthorize()
                 }
             })
             return false
         default:
-            DispatchQueue.main.async {
+            PTGCDManager.gcdMain {
                 UIAlertController.base_alertVC(title:"相册访问受限",msg: "请在iPhone的\"设置-隐私-相册\"中允许访问相册",okBtns: ["设置"],cancelBtn: "取消",moreBtn: { index,title in
                     if let url = URL(string: UIApplication.openSettingsURLString) {
                         if UIApplication.shared.canOpenURL(url) {

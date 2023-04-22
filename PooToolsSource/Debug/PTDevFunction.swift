@@ -42,6 +42,7 @@ public class PTDevFunction: NSObject {
     public var inApp:DevTask?
 
     private var maskView:PTDevMaskView?
+    private var isAllOpen:Bool = false
     
     public func createLabBtn() {
         if UIApplication.applicationEnvironment() != .appStore {
@@ -63,16 +64,26 @@ public class PTDevFunction: NSObject {
                 }
                 
                 mn_PFloatingButton?.longPressBlock = { (sender) in
-                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: ["全部开启","FLEX","Log","FPS","全部关闭","调试功能界面","检测界面","HyperioniOS","DEVMask"],cancelBtn: "取消") {
+                    var allOpenString = ""
+                    if self.isAllOpen {
+                        allOpenString = "全部关闭"
+                    } else {
+                        allOpenString = "全部开启"
+                    }
+                    let titles = ["FLEX","Log","FPS",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask"]
+
+                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
                     } moreBtn: { index, title in
                         if title == "全部开启" {
+                            self.isAllOpen = true
                             PTDevFunction.GobalDevFunction_open { show in
                                 if self.flexBool != nil {
                                     self.flexBool!(show)
                                 }
                             }
                         } else if title == "全部关闭" {
+                            self.isAllOpen = false
                             PTDevFunction.GobalDevFunction_close { show in
                                 if self.flexBool != nil {
                                     self.flexBool!(show)

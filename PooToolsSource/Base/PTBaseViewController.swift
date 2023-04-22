@@ -9,8 +9,6 @@
 import UIKit
 import ZXNavigationBar
 import FDFullscreenPopGesture
-import LXFProtocolTool
-import FloatingPanel
 
 @objc public enum VCStatusBarChangeStatusType : Int {
     case Dark
@@ -141,69 +139,5 @@ open class PTBaseViewController: ZXNavigationBarController {
         } else {
             self.navigationController?.popViewController(animated: true, nil)
         }
-    }
-
-    //MARK: 這裏提供給Flex使用
-    ///這裏提供給Flex使用
-    public func showFlexFunction(show:Bool) {
-        
-    }
-}
-
-extension PTBaseViewController:UIGestureRecognizerDelegate {
-    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        false
-    }
-}
-
-//MARK: 添加emptydataset
-extension PTBaseViewController:LXFEmptyDataSetable {
-    //MARK: 添加emptydataset
-    ///添加emptydataset,设置无数据空页面
-    open func showEmptyDataSet(currentScroller:UIScrollView) {
-        self.lxf_EmptyDataSet(currentScroller) { () -> ([LXFEmptyDataSetAttributeKeyType : Any]) in
-            return [
-                .tipStr : "",
-                .tipColor : UIColor.black,
-                .verticalOffset : 0,
-                .tipImage : UIImage()
-            ]
-        }
-    }
-    
-    open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        return NSAttributedString()
-    }
-}
-
-//MARK: 用來調用測試模式
-extension PTBaseViewController {
-    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
-        if UIApplication.applicationEnvironment() != .appStore {
-            let uidebug:Bool = App_UI_Debug_Bool
-            UserDefaults.standard.set(!uidebug, forKey: LocalConsole.ConsoleDebug)
-            if uidebug {
-                if PTDevFunction.share.mn_PFloatingButton != nil {
-                    PTDevFunction.share.lab_btn_release()
-                } else {
-                    PTDevFunction.GobalDevFunction_close { show in
-#if DEBUG
-                                self.showFlexFunction(show: showFlex)
-#endif
-                    }
-                }
-            } else {
-                let vc = PTDebugViewController.init(hideBaseNavBar: false)
-                PTUtils.getCurrentVC().navigationController?.pushViewController(vc, animated: true)
-            }
-        }
-    }
-}
-
-//MARK: 用來調用懸浮框
-extension PTBaseViewController:FloatingPanelControllerDelegate {
-    open func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTFloatPanelLayout()
-        return layout
     }
 }

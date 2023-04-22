@@ -117,6 +117,7 @@ public class Network: NSObject {
     
     static public let share = Network()
             
+    ///网络请求时间
     public var netRequsetTime:TimeInterval = 20
     public var serverAddress:String = ""
     public var serverAddress_dev:String = ""
@@ -216,12 +217,29 @@ public class Network: NSObject {
                 apiHeader["Content-Type"] = "application/json;charset=UTF-8"
                 apiHeader["Accept"] = "application/json"
             }
+        } else if !token.stringIsEmpty() && header != nil {
+            apiHeader = header!
+            apiHeader["token"] = token
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
+            }
         }
         
         if showHud! {
             Network.hud.show(animated: true)
         }
-        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")🌐")
+        
+        var postString = ""
+        switch method {
+        case .post:
+            postString = "POST请求"
+        case .get:
+            postString = "GET请求"
+        default:
+            postString = "其他"
+        }
+        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
         
         Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
             if showHud! {
@@ -276,6 +294,7 @@ public class Network: NSObject {
                                   fileKey:[String]? = ["images"],
                                   parmas:[String:String]? = nil,
                                   header:HTTPHeaders? = nil,
+                                  jsonRequest:Bool? = false,
                                   pngData:Bool? = true,
                                   showHud:Bool? = true,
                                   netWorkErrorBlock:NetWorkErrorBlock? = nil,
@@ -303,8 +322,23 @@ public class Network: NSObject {
         let token = Network.share.userToken
         if !token.stringIsEmpty() && header == nil {
             apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
+            }
         } else if token.stringIsEmpty() && header != nil {
             apiHeader = header!
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
+            }
+        } else if !token.stringIsEmpty() && header != nil {
+            apiHeader = header!
+            apiHeader["token"] = token
+            if jsonRequest! {
+                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                apiHeader["Accept"] = "application/json"
+            }
         }
         
         if showHud! {

@@ -58,6 +58,10 @@
 		55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE129F2855300244E44 /* PTEyeTrackingManager.swift */; };
 		55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE229F2855300244E44 /* PTEyeTrackingTestUtility.swift */; };
 		55024DE929F2999600244E44 /* PTEyeTrackingExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DE829F2999600244E44 /* PTEyeTrackingExtensions.swift */; };
+		55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */; };
+		55024DEF29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DEE29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift */; };
+		55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */; };
+		55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55024DF329F372A600244E44 /* PTDebugFunction.swift */; };
 		5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */; };
 		5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */; };
 		5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */; };
@@ -284,6 +288,10 @@
 		55024DE129F2855300244E44 /* PTEyeTrackingManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingManager.swift; sourceTree = "<group>"; };
 		55024DE229F2855300244E44 /* PTEyeTrackingTestUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingTestUtility.swift; sourceTree = "<group>"; };
 		55024DE829F2999600244E44 /* PTEyeTrackingExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEyeTrackingExtensions.swift; sourceTree = "<group>"; };
+		55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+FloatPanel.swift"; sourceTree = "<group>"; };
+		55024DEE29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+ListEmptyData.swift"; sourceTree = "<group>"; };
+		55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTBaseViewController+Debug.swift"; sourceTree = "<group>"; };
+		55024DF329F372A600244E44 /* PTDebugFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDebugFunction.swift; sourceTree = "<group>"; };
 		5507026028F6A0CB00C48239 /* PTMainSegmentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentCell.swift; sourceTree = "<group>"; };
 		5507026128F6A0CB00C48239 /* PTMainSegmentModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentModel.swift; sourceTree = "<group>"; };
 		5507026228F6A0CB00C48239 /* PTMainSegmentDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMainSegmentDataSource.swift; sourceTree = "<group>"; };
@@ -531,7 +539,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55024DDB29F282F600244E44 /* WhereIsMyEye */,
+				55024DF029F370DB00244E44 /* Debug */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -556,6 +564,7 @@
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				555A8B4228C2E7A700692501 /* DevMask */,
+				55024DEA29F36A0900244E44 /* FloatPanel */,
 				55D59C5628F298CC00B4FF76 /* Guide */,
 				5507026828F6A8DF00C48239 /* HealthKit */,
 				557FC36A2966A2BC00991C36 /* ImagePicker */,
@@ -568,6 +577,7 @@
 				55D59C6228F3E8A000B4FF76 /* Language */,
 				55D59C6528F3E91800B4FF76 /* Layout */,
 				55D59C6728F3E96D00B4FF76 /* Line */,
+				55024DED29F36C8500244E44 /* ListEmptyData */,
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				555E8FE628D01CF600AF5E63 /* LocalConsole */,
 				5578EE5829ADC45C00F3E0AC /* Location */,
@@ -594,6 +604,7 @@
 				5589FF4B29A8527D00519383 /* Stepper */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				5517EC0929B0482400C68FF4 /* UpdateTips */,
+				55024DDB29F282F600244E44 /* WhereIsMyEye */,
 			);
 			path = PooToolsSource;
 			sourceTree = SOURCE_ROOT;
@@ -817,6 +828,35 @@
 				55024DDC29F2831500244E44 /* PTFaceEye.swift */,
 			);
 			path = WhereIsMyEye;
+			sourceTree = "<group>";
+		};
+		55024DEA29F36A0900244E44 /* FloatPanel */ = {
+			isa = PBXGroup;
+			children = (
+				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
+				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
+				55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */,
+			);
+			path = FloatPanel;
+			sourceTree = "<group>";
+		};
+		55024DED29F36C8500244E44 /* ListEmptyData */ = {
+			isa = PBXGroup;
+			children = (
+				55024DEE29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift */,
+			);
+			path = ListEmptyData;
+			sourceTree = "<group>";
+		};
+		55024DF029F370DB00244E44 /* Debug */ = {
+			isa = PBXGroup;
+			children = (
+				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
+				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
+				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
+				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
+			);
+			path = Debug;
 			sourceTree = "<group>";
 		};
 		5503F9DA28F016CC00030F41 /* ApplicationFunction */ = {
@@ -1177,10 +1217,6 @@
 				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
 				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
-				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
-				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
-				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
-				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 			);
@@ -1669,6 +1705,7 @@
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
+				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
@@ -1712,6 +1749,7 @@
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
+				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
@@ -1745,6 +1783,7 @@
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
+				55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */,
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
@@ -1794,6 +1833,7 @@
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,
 				5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */,
+				55024DEF29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
 				55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */,

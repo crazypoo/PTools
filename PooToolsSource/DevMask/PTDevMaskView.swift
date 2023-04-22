@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+import DeviceKit
 
 @objcMembers
 open class PTDevMaskConfig:NSObject {
@@ -100,30 +101,32 @@ open class PTDevMaskView: PTBaseMaskView {
             self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
         }
         
-        self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
-        self.eyeTracking.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
-        }
-        
-        self.eyeTrackingLabel.snp.makeConstraints { make in
-            make.left.equalTo(self.eyeTracking.snp.right).offset(10)
-            make.centerY.equalTo(self.eyeTracking)
-        }
-        
-        self.eyeTrackingFocus.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
-        }
-        
-        self.eyeTrackingLabelFocus.snp.makeConstraints { make in
-            make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
-            make.centerY.equalTo(self.eyeTrackingFocus)
-        }
+        if Gobal_device_info.isFaceIDCapable {
+            self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
+            self.eyeTracking.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+            }
+            
+            self.eyeTrackingLabel.snp.makeConstraints { make in
+                make.left.equalTo(self.eyeTracking.snp.right).offset(10)
+                make.centerY.equalTo(self.eyeTracking)
+            }
+            
+            self.eyeTrackingFocus.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalTo(self.eyeTracking.snp.top).offset(-10)
+            }
+            
+            self.eyeTrackingLabelFocus.snp.makeConstraints { make in
+                make.left.equalTo(self.eyeTrackingFocus.snp.right).offset(10)
+                make.centerY.equalTo(self.eyeTrackingFocus)
+            }
 
-        self.eyeTrackingFunction.eyeLookAt = { point in
-            if self.focusBool {
-                self.springMotionView.move(to: point)
+            self.eyeTrackingFunction.eyeLookAt = { point in
+                if self.focusBool {
+                    self.springMotionView.move(to: point)
+                }
             }
         }
     }
