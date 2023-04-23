@@ -611,4 +611,22 @@ extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSou
         }
         return cell
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if #available(iOS 14.0, *) {
+
+            let imagev = UIImageView(image: UIImage(named: "TextImage")!)
+            self.view.addSubview(imagev)
+            imagev.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            
+            let share = PTVision.share
+            share.findText(withImageView: imagev,revision: 2) { resultText in
+                
+            }
+        } else {
+            // Fallback on earlier versions
+        }
+    }
 }

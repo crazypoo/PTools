@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.1.3'
+    s.version     = '3.1.4'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -687,6 +687,14 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LISTEMPTYDATA POOTOOLS_COCOAPODS"
         }
     end
+    
+    s.subspec 'Vision' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Vision/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_VISION POOTOOLS_COCOAPODS"
+        }
+    end
             
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
@@ -748,7 +756,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/FloatPanel'
         subspec.dependency 'PooTools/ListEmptyData'
         subspec.dependency 'PooTools/DEBUG'
-
+        subspec.dependency 'PooTools/Vision'
+        
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }
