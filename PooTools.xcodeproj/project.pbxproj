@@ -541,7 +541,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				5517CAC429F5530500E33ACE /* Vision */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -607,6 +606,7 @@
 				5589FF4B29A8527D00519383 /* Stepper */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				5517EC0929B0482400C68FF4 /* UpdateTips */,
+				5517CAC429F5530500E33ACE /* Vision */,
 				55024DDB29F282F600244E44 /* WhereIsMyEye */,
 			);
 			path = PooToolsSource;
@@ -854,10 +854,10 @@
 		55024DF029F370DB00244E44 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
-				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
-				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55024DF129F3711000244E44 /* PTBaseViewController+Debug.swift */,
 				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
+				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
+				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";

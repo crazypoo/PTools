@@ -278,9 +278,10 @@ public class PTFusionCellContent:UIView {
                             .DisclosureIndicator(type: .BothImage(type: .Name)),
                             .NoneAccessoryView(type: .BothImage(type: .Name)):
                         make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
-                    case .Switch(type: .None(type: .Name)),
-                            .DisclosureIndicator(type: .None(type: .Name)):
-                        make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+                    case .Switch(type: .None(type: .Name)):
+                        make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.rightSpace)
+                    case .DisclosureIndicator(type: .None(type: .Name)):
+                        make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.rightSpace)
                     case .Switch(type: .BothImage(type: .NameContent)),
                             .DisclosureIndicator(type: .BothImage(type: .NameContent)),
                             .Switch(type: .None(type: .Content)),
