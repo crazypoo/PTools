@@ -513,12 +513,21 @@ Pod::Spec.new do |s|
     
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/WhereIsMyEye/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}'
 #    subspec.dependency 'FLEX', :configurations => ['Debug']
 #    subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
 #    subspec.dependency 'LookinServer', :configurations => ['Debug']
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+    }
+    end
+    
+    s.subspec 'DEBUG_TrackingEyes' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/DEBUG'
+        subspec.source_files = 'PooToolsSource/WhereIsMyEye/*.{h,m,swift}'
+    subspec.pod_target_xcconfig = {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUGTRACKINGEYES POOTOOLS_COCOAPODS"
     }
     end
 

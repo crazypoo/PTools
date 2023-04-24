@@ -33,6 +33,7 @@ open class PTDevMaskView: PTBaseMaskView {
         return view
     }()
     
+#if POOTOOLS_DEBUGTRACKINGEYES
     private var eyeTrackingFunction = PTFaceEye.share
     
     private lazy var eyeTracking:UISwitch = {
@@ -79,6 +80,7 @@ open class PTDevMaskView: PTBaseMaskView {
         view.text = "眼球追踪是否同步点击事件"
         return view
     }()
+#endif
     
     public init(config:PTDevMaskConfig?) {
         super.init(frame: .zero)
@@ -101,6 +103,8 @@ open class PTDevMaskView: PTBaseMaskView {
             self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
         }
         
+#if POOTOOLS_DEBUGTRACKINGEYES
+
         if Gobal_device_info.isFaceIDCapable {
             self.addSubviews([self.eyeTracking,self.eyeTrackingLabel,self.eyeTrackingFocus,self.eyeTrackingLabelFocus])
             self.eyeTracking.snp.makeConstraints { make in
@@ -129,6 +133,7 @@ open class PTDevMaskView: PTBaseMaskView {
                 }
             }
         }
+#endif
     }
     
     required public init?(coder: NSCoder) {
