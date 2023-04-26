@@ -9,6 +9,51 @@
 import UIKit
 import Foundation
 import CocoaLumberjack
+import SwifterSwift
+
+public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
+        
+    var msgStr = ""
+    for element in any {
+        
+        let result = "\(element)"
+        var newString = result
+        if element is String {
+            if let jsonString = (element as! String).jsonStringToDic() {
+                let string = jsonString.convertToJsonString()
+                if !string.stringIsEmpty() {
+                    newString = string
+                }
+            }
+        } else if element is NSDictionary {
+            let dic = (element as! NSDictionary)
+            let string = dic.convertToJsonString()
+            if !string.stringIsEmpty() {
+                newString = string
+            }
+        } else if element is NSArray {
+            let arr = (element as! NSArray)
+            let string = arr.convertToJsonString()
+            if !string.stringIsEmpty() {
+                newString = string
+            }
+        }
+        
+        msgStr += "\(newString)\n"
+    }
+
+    if UIApplication.shared.inferredEnvironment != .appStore {
+        DDLog.add(DDOSLogger.sharedInstance)
+        PTNSLog(msgStr)
+    } else {
+        DDLog.add(DDOSLogger.sharedInstance)
+        if error {
+            DDLogError(msgStr)
+        } else {
+            DDLogVerbose(msgStr)
+        }
+    }
+}
 
 //MARK: - 自定义打印
 /// 自定义打印
@@ -46,9 +91,11 @@ public func PTNSLog(_ msg: Any...,
         DDLogVerbose(prefix)
     default:
         print(prefix)
+#if POOTOOLS_DEBUG
         if PTLocalConsoleFunction.share.localconsole.terminal?.systemIsVisible ?? false && PTLocalConsoleFunction.share.localconsole.terminal != nil {
             PTLocalConsoleFunction.share.localconsole.print(prefix)
         }
+#endif
     }
     
     guard isWriteLog else {

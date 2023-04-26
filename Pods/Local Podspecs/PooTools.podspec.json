@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.1.3",
+  "version": "3.1.4",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.1.3"
+    "tag": "3.1.4"
   },
   "license": {
     "type": "MIT",
@@ -898,11 +898,25 @@
       "source_files": [
         "PooToolsSource/Debug/*.{h,m,swift}",
         "PooToolsSource/LocalConsole/*.{h,m,swift}",
-        "PooToolsSource/WhereIsMyEye/*.{h,m,swift}",
         "PooToolsSource/DevMask/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "DEBUG_TrackingEyes",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PooTools/DEBUG": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/WhereIsMyEye/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DEBUGTRACKINGEYES POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1209,6 +1223,18 @@
       }
     },
     {
+      "name": "Vision",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Vision/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VISION POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1380,6 +1406,9 @@
 
         ],
         "PooTools/DEBUG": [
+
+        ],
+        "PooTools/Vision": [
 
         ]
       },

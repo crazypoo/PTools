@@ -49,6 +49,7 @@ public class PTRateView: UIView {
         didSet {
             self.scorePercent = self.viewConfig!.scorePercent
             self.removeSubviews()
+            self.loaded = false
             self.layoutSubviews()
         }
     }
@@ -66,6 +67,8 @@ public class PTRateView: UIView {
             }
         }
     }
+    
+    fileprivate var loaded:Bool = false
     
     public init(viewConfig:PTRateConfig) {
         super.init(frame: .zero)
@@ -85,9 +88,7 @@ public class PTRateView: UIView {
         }
     }
     
-    public override func layoutSubviews() {
-        super.layoutSubviews()
-        
+    func initView() {
         PTGCDManager.gcdAfter(time: 0.1) {
             self.addSubviews([self.backgroundStarView,self.foregroundStarView])
 
@@ -103,6 +104,16 @@ public class PTRateView: UIView {
             UIView.animate(withDuration: animationTimeInterval) {
                 self.foregroundStarView.frame = CGRect.init(x: 0, y: 0, width: self.frame.size.width * self.scorePercent!, height: self.frame.size.height)
             }
+            
+            self.loaded = true
+        }
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        if !self.loaded {
+            self.initView()
         }
     }
     
