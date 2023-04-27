@@ -14,6 +14,7 @@ public let PTNavDefalutItemMargin:CGFloat = 10
 public let PTNavDefalutItemFontSize:CGFloat = 15
 public let PTNavDefalutTitleSize:CGFloat = 17
 public let PTNavDefalutSubTitleSize:CGFloat = 10
+public let PTNavHistoryStackViewItemMaxLength:CGFloat = 6
 
 public let PTNavDefalutBackColor:UIColor = .white
 public let PTNavDefalutItemTextColor:UIColor = .black
