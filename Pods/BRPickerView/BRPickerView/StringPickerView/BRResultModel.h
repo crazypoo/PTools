@@ -13,21 +13,24 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface BRResultModel : NSObject
 
-/** 索引 */
-@property (nonatomic, assign) NSInteger index;
 /** key */
 @property (nullable, nonatomic, copy) NSString *key;
 /** value */
 @property (nullable, nonatomic, copy) NSString *value;
-
 /** 父级key（提示：联动时第一级数据，parentKey设置为：@"-1"） */
 @property (nullable, nonatomic, copy) NSString *parentKey;
 /** 父级value */
 @property (nullable, nonatomic, copy) NSString *parentValue;
+/** 级别 */
+@property (nullable, nonatomic, copy) NSString *level;
+/** 子级list */
+@property (nullable, nonatomic, copy) NSArray<BRResultModel *> *children;
+/** 记录选择的索引位置 */
+@property (nonatomic, assign) NSInteger index;
 
 /// 其它扩展字段
-@property (nullable, nonatomic, copy) NSString *remark;
 @property (nullable, nonatomic, strong) id extras;
+@property (nullable, nonatomic, copy) NSString *remark;
 
 @end
 

@@ -10,7 +10,7 @@ import UIKit
 
 extension DispatchQueue: PTProtocolCompatible {}
 
-public extension PTProtocol where Base == DispatchQueue {
+public extension PTPOP where Base == DispatchQueue {
     private static var unaTracker = [String]()
     
     //MARK: 函数只被执行一次

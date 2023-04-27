@@ -9,7 +9,7 @@
 import UIKit
 
 extension UserDefaults: PTProtocolCompatible {}
-public extension PTProtocol where Base: UserDefaults {
+public extension PTPOP where Base: UserDefaults {
   
     //MARK: 存值
     ///存值
@@ -58,7 +58,7 @@ public extension PTProtocol where Base: UserDefaults {
 }
 
 // MARK: 模型持久化
-public extension PTProtocol where Base: UserDefaults {
+public extension PTPOP where Base: UserDefaults {
     
     //MARK: 存储模型
     ///存储模型

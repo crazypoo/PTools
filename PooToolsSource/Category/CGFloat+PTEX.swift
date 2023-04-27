@@ -78,7 +78,7 @@ public extension CGFloat {
     }
 }
 
-public extension PTProtocol where Base == CGFloat {
+public extension PTPOP where Base == CGFloat {
     //MARK: 一个数字四舍五入返回
     ///一个数字四舍五入返回
     /// - Parameters:

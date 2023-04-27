@@ -94,7 +94,7 @@ public extension UILabel {
 }
 
 //MARK: 其他的基本扩展
-public extension PTProtocol where Base: UILabel {
+public extension PTPOP where Base: UILabel {
     
     //MARK: 获取已知 frame 的 label 的文本行数 & 每一行内容
     ///获取已知 frame 的 label 的文本行数 & 每一行内容

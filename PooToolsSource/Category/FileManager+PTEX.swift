@@ -47,7 +47,7 @@ public enum BasePath {
     case Tmp
 }
 
-public extension PTProtocol where Base: FileManager {
+public extension PTPOP where Base: FileManager {
     //MARK: 获取Home的完整路径名
     ///获取Home的完整路径名
     /// - Returns: Home的完整路径名
@@ -130,7 +130,7 @@ public extension PTProtocol where Base: FileManager {
 }
 
 //MARK: 文件以及文件夹的操作 扩展
-public extension PTProtocol where Base: FileManager {
+public extension PTPOP where Base: FileManager {
     //MARK: 文件写入的类型
     ///文件写入的类型
     enum FileWriteType {
@@ -627,7 +627,7 @@ public extension PTProtocol where Base: FileManager {
 }
 
 // MARK: fileprivate
-public extension PTProtocol where Base: FileManager {
+public extension PTPOP where Base: FileManager {
     
     //MARK: 计算文件大小：UInt64 -> String
     ///计算文件大小：UInt64 -> String
@@ -654,7 +654,7 @@ enum PTVideoUrlType {
     case server
 }
 
-public extension PTProtocol where Base: FileManager {
+public extension PTPOP where Base: FileManager {
     
     //MARK: 通过本地(沙盒)视频文件路径获取截图
     ///通过本地(沙盒)视频文件路径获取截图

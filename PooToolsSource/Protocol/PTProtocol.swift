@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-public struct PTProtocol<Base> {
+public struct PTPOP<Base> {
     let base: Base
     init(_ base: Base) {
         self.base = base
@@ -20,13 +20,13 @@ public protocol PTProtocolCompatible {}
 
 public extension PTProtocolCompatible {
     
-    static var pt: PTProtocol<Self>.Type {
-        get{ PTProtocol<Self>.self }
+    static var pt: PTPOP<Self>.Type {
+        get{ PTPOP<Self>.self }
         set {}
     }
     
-    var pt: PTProtocol<Self> {
-        get { PTProtocol(self) }
+    var pt: PTPOP<Self> {
+        get { PTPOP(self) }
         set {}
     }
 }

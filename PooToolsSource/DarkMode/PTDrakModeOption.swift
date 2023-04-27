@@ -28,6 +28,7 @@ public class PTDarkModeOption {
         if isSmartPeeling {
             return isSmartPeelingTime() ? false : true
         }
+        
         if let value = UserDefaults.pt.userDefaultsGetValue(key: PTLightDarkKey) as? Bool {
             return value
         }

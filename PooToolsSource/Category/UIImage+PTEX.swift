@@ -302,7 +302,7 @@ public extension UIImage {
     }
 }
 
-public extension PTProtocol where Base: UIImage {
+public extension PTPOP where Base: UIImage {
     //MARK: 设置图片的圆角
     ///设置图片的圆角
     /// - Parameters:
@@ -507,7 +507,7 @@ public enum CompressionMode {
 }
 
 //MARK: UIImage 压缩相关
-public extension PTProtocol where Base: UIImage {
+public extension PTPOP where Base: UIImage {
     
     //MARK: 压缩图片
     ///压缩图片

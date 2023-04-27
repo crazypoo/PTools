@@ -10,7 +10,7 @@ import UIKit
 
 extension UIApplication: PTProtocolCompatible { }
 
-public extension PTProtocol where Base: UIApplication {
+public extension PTPOP where Base: UIApplication {
     //MARK: 获取应用的location
     ///获取应用的location
     static var currentApplicationLocal:String {

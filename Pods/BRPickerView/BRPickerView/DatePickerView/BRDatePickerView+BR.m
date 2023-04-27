@@ -368,6 +368,69 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
     return [tempArr copy];
 }
 
+#pragma mark - 获取 monthWeekArr 数组
+- (NSArray *)getMonthWeekArr:(NSInteger)year month:(NSInteger)month {
+    NSInteger startWeek = 1;
+    NSInteger endWeek = [NSDate br_getWeeksOfMonthInYear:year month:month];
+    if (year == self.minDate.br_year && month == self.minDate.br_month) {
+        startWeek = self.minDate.br_monthWeek;
+    }
+    if (year == self.maxDate.br_year && month == self.maxDate.br_month) {
+        endWeek = self.maxDate.br_monthWeek;
+    }
+    NSMutableArray *tempArr = [[NSMutableArray alloc]init];
+    for (NSInteger i = startWeek; i <= endWeek; i++) {
+        [tempArr addObject:[self getMDHMSNumber:i]];
+    }
+    if (self.isDescending) {
+        return [[tempArr reverseObjectEnumerator] allObjects];
+    }
+    
+    return [tempArr copy];
+}
+
+#pragma mark - 获取 yearWeekArr 数组
+- (NSArray *)getYearWeekArr:(NSInteger)year {
+    NSInteger startWeek = 1;
+    NSInteger endWeek = [NSDate br_getWeeksOfYearInYear:year];
+    if (year == self.minDate.br_year) {
+        startWeek = self.minDate.br_yearWeek;
+    }
+    if (year == self.maxDate.br_year) {
+        endWeek = self.maxDate.br_yearWeek;
+    }
+    NSMutableArray *tempArr = [[NSMutableArray alloc]init];
+    for (NSInteger i = startWeek; i <= endWeek; i++) {
+        [tempArr addObject:[self getMDHMSNumber:i]];
+    }
+    if (self.isDescending) {
+        return [[tempArr reverseObjectEnumerator] allObjects];
+    }
+    
+    return [tempArr copy];
+}
+
+#pragma mark - 获取 quarterArr 数组
+- (NSArray *)getQuarterArr:(NSInteger)year {
+    NSInteger startQuarter = 1;
+    NSInteger endQuarter = [NSDate br_getQuartersInYear:year];
+    if (year == self.minDate.br_year) {
+        startQuarter = self.minDate.br_quarter;
+    }
+    if (year == self.maxDate.br_year) {
+        endQuarter = self.maxDate.br_quarter;
+    }
+    NSMutableArray *tempArr = [[NSMutableArray alloc]init];
+    for (NSInteger i = startQuarter; i <= endQuarter; i++) {
+        [tempArr addObject:[self getMDHMSNumber:i]];
+    }
+    if (self.isDescending) {
+        return [[tempArr reverseObjectEnumerator] allObjects];
+    }
+    
+    return [tempArr copy];
+}
+
 #pragma mark - 添加 pickerView
 - (void)setupPickerView:(UIView *)pickerView toView:(UIView *)view {
     if (view) {
@@ -381,6 +444,10 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
         pickerView.frame = CGRectMake(0, pickerHeaderViewHeight, view.bounds.size.width, view.bounds.size.height - pickerHeaderViewHeight - pickerFooterViewHeight);
         [self addSubview:pickerView];
     } else {
+        // iOS16：重新设置 pickerView 高度（解决懒加载设置frame不生效问题）
+        CGFloat pickerHeaderViewHeight = self.pickerHeaderView ? self.pickerHeaderView.bounds.size.height : 0;
+        pickerView.frame = CGRectMake(0, self.pickerStyle.titleBarHeight + pickerHeaderViewHeight, self.keyView.bounds.size.width, self.pickerStyle.pickerHeight);
+
         [self.alertView addSubview:pickerView];
     }
 }
@@ -487,7 +554,7 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
         NSInteger index = [monthString integerValue] - 1;
         monthString = (index >= 0 && index < self.monthNames.count) ? self.monthNames[index] : @"";
     } else {
-        if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYM)) {
+        if (![self.pickerStyle.language hasPrefix:@"zh"] && (self.pickerMode == BRDatePickerModeYMD || self.pickerMode == BRDatePickerModeYM || self.pickerMode == BRDatePickerModeYMW)) {
             // 非中文环境：月份使用系统的月份名称
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             dateFormatter.locale = [[NSLocale alloc]initWithLocaleIdentifier:self.pickerStyle.language];
@@ -556,6 +623,32 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
     NSString *secondString = [secondArr objectAtIndex:index];
     NSString *secondUnit = self.showUnitType == BRShowUnitTypeAll ? [self getSecondUnit] : @"";
     return [NSString stringWithFormat:@"%@%@", secondString, secondUnit];
+}
+
+- (NSString *)getWeekText:(NSArray *)weekArr row:(NSInteger)row {
+    NSInteger index = 0;
+    if (row >= 0) {
+        index = MIN(row, weekArr.count - 1);
+    }
+    NSString *weekString = [weekArr objectAtIndex:index];
+    if ((self.lastRowContent && [weekString isEqualToString:self.lastRowContent]) || (self.firstRowContent && [weekString isEqualToString:self.firstRowContent])) {
+        return weekString;
+    }
+    NSString *weekUnit = self.showUnitType == BRShowUnitTypeAll ? [self getWeekUnit] : @"";
+    return [NSString stringWithFormat:@"%@%@", weekString, weekUnit];
+}
+
+- (NSString *)getQuarterText:(NSArray *)quarterArr row:(NSInteger)row {
+    NSInteger index = 0;
+    if (row >= 0) {
+        index = MIN(row, quarterArr.count - 1);
+    }
+    NSString *quarterString = [quarterArr objectAtIndex:index];
+    if ((self.lastRowContent && [quarterString isEqualToString:self.lastRowContent]) || (self.firstRowContent && [quarterString isEqualToString:self.firstRowContent])) {
+        return quarterString;
+    }
+    NSString *quarterUnit = self.showUnitType == BRShowUnitTypeAll ? [self getQuarterUnit] : @"";
+    return [NSString stringWithFormat:@"%@%@", quarterString, quarterUnit];
 }
 
 - (NSString *)getAMText {
@@ -627,6 +720,26 @@ BRSYNTH_DUMMY_CLASS(BRDatePickerView_BR)
         return @"";
     }
     return [NSBundle br_localizedStringForKey:@"秒" language:self.pickerStyle.language];
+}
+
+- (NSString *)getWeekUnit {
+    if (self.customUnit) {
+        return self.customUnit[@"week"] ? : @"";
+    }
+    if (![self.pickerStyle.language hasPrefix:@"zh"]) {
+        return @"";
+    }
+    return [NSBundle br_localizedStringForKey:@"周" language:self.pickerStyle.language];
+}
+
+- (NSString *)getQuarterUnit {
+    if (self.customUnit) {
+        return self.customUnit[@"quarter"] ? : @"";
+    }
+    if (![self.pickerStyle.language hasPrefix:@"zh"]) {
+        return @"";
+    }
+    return [NSBundle br_localizedStringForKey:@"季度" language:self.pickerStyle.language];
 }
 
 - (NSInteger)getIndexWithArray:(NSArray *)array object:(NSString *)obj {

@@ -142,7 +142,7 @@ public extension Date {
     }
 }
 
-public extension PTProtocol where Base == Date {
+public extension PTPOP where Base == Date {
     // MARK: Date 转 时间戳
     /// Date 转 时间戳
     /// - Parameter timestampType: 返回的时间戳类型，默认是秒 10 为的时间戳字符串

@@ -41,7 +41,7 @@ public enum DecimalNumberHandlerType: String {
 }
 
 // MARK: 基本的扩展
-public extension PTProtocol where Base: NSDecimalNumberHandler {
+public extension PTPOP where Base: NSDecimalNumberHandler {
     
     //MARK: 向下取整取倍数
     ///向下取整取倍数
@@ -103,7 +103,7 @@ public extension PTProtocol where Base: NSDecimalNumberHandler {
     }
 }
 
-public extension PTProtocol where Base: NSDecimalNumberHandler {
+public extension PTPOP where Base: NSDecimalNumberHandler {
     //MARK: 两个数的：加 减 乘 除
     ///两个数的：加 减 乘 除
     /// - Parameters:

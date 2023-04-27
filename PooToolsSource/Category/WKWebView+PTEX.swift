@@ -15,7 +15,7 @@ extension WKWebView {
     }
 }
 
-public extension PTProtocol where Base: WKWebView {
+public extension PTPOP where Base: WKWebView {
     
     //MARK: WKWebViewConfiguration默认配置
     /// WKWebViewConfiguration默认配置
@@ -104,8 +104,8 @@ public extension PTProtocol where Base: WKWebView {
     ///  - callBack: 回调函数
     /// - Returns: WKWebView视图
     func snapShotContentScroll(callBack: @escaping (UIImage?) -> ()) {
-        base.scrollView.pt.snapShotContentScroll { (image) in
-            callBack(image)
+        base.scrollView.pt.snapShotContentScroll { screenShotImage in
+            callBack(screenShotImage)
         }
     }
 }

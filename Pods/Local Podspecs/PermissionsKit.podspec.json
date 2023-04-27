@@ -1,11 +1,11 @@
 {
   "name": "PermissionsKit",
-  "version": "9.0.1",
+  "version": "9.0.4",
   "summary": "Ask permissions with ready-use interface. You can check status permission and if it has been requested before. Support SwiftUI.",
   "homepage": "https://github.com/sparrowcode/PermissionsKit",
   "source": {
     "git": "https://github.com/sparrowcode/PermissionsKit.git",
-    "tag": "9.0.1"
+    "tag": "9.0.4"
   },
   "license": {
     "type": "MIT",

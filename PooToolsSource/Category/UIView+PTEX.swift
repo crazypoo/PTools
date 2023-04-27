@@ -19,7 +19,7 @@ var GLOBAL_BORDER_TRACKERS: [BorderManager] = []
 
 extension UIView: PTProtocolCompatible {}
 
-public extension PTProtocol where Base:UIView {
+public extension PTPOP where Base:UIView {
     var jx_x: CGFloat{
         get {
             base.frame.origin.x

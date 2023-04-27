@@ -1163,7 +1163,7 @@ public extension String {
     }
 }
 
-public extension PTProtocol where Base: ExpressibleByStringLiteral {
+public extension PTPOP where Base: ExpressibleByStringLiteral {
     //MARK: 字符串的长度
     ///字符串的长度
     var length: Int {
@@ -1353,7 +1353,7 @@ public enum DDYSCAType {
     }
 }
 
-public extension PTProtocol where Base: ExpressibleByStringLiteral {
+public extension PTPOP where Base: ExpressibleByStringLiteral {
     
     //MARK: 字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
     ///字符串 AES, AES128, DES, DES3, CAST, RC2, RC4, Blowfish 多种加密
@@ -1440,7 +1440,7 @@ public enum DDYSHAType {
     }
 }
 
-public extension PTProtocol where Base: ExpressibleByStringLiteral {
+public extension PTPOP where Base: ExpressibleByStringLiteral {
     
     //MARK: SHA1, SHA224, SHA256, SHA384, SHA512 加密
     ///SHA1, SHA224, SHA256, SHA384, SHA512 加密

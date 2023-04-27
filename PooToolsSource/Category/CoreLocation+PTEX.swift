@@ -11,7 +11,7 @@ import CoreLocation
 
 extension CLLocation: PTProtocolCompatible {}
 
-public extension PTProtocol where Base == CLLocation {
+public extension PTPOP where Base == CLLocation {
     //MARK: 地理信息反编码
     ///地理信息反编码
     /// - Parameters:

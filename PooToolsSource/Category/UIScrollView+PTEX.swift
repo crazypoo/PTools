@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension PTProtocol where Base : UIScrollView {
+public extension PTPOP where Base : UIScrollView {
     //MARK: 根据偏移量和页数绘制
     ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw

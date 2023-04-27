@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 extension AVAssetExportSession: PTProtocolCompatible { }
 
-public extension PTProtocol where Base: AVAssetExportSession {
+public extension PTPOP where Base: AVAssetExportSession {
     // MARK: 本地视频压缩
     /// 本地视频压缩
     /// - Parameters:

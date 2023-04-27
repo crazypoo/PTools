@@ -38,7 +38,7 @@ public extension Character {
 }
 
 //MARK: Character 与其他类型的转换
-public extension PTProtocol where Base == Character {
+public extension PTPOP where Base == Character {
 
     //MARK: Character转String
     ///Character转String

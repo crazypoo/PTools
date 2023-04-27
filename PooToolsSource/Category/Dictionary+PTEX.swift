@@ -130,7 +130,7 @@ public extension Dictionary {
 }
 
 // MARK: 其他基本扩展
-public extension PTProtocol where Base == Dictionary<String, Any> {
+public extension PTPOP where Base == Dictionary<String, Any> {
     
     //MARK: 字典转JSON
     ///字典转JSON

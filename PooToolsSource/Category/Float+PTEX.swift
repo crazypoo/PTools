@@ -18,7 +18,7 @@ public extension Float {
     }
 }
 
-public extension PTProtocol where Base == Float {
+public extension PTPOP where Base == Float {
 
     //MARK:  浮点数四舍五入
     ///浮点数四舍五入

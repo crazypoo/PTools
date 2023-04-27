@@ -21,7 +21,7 @@ public enum UIDeviceApplePencilSupportType {
     case BothNot
 }
 
-public extension PTProtocol where Base: UIDevice {
+public extension PTPOP where Base: UIDevice {
     //MARK: 判断机型
     ///小
     static func oneOfSmallDevice()->Bool {
@@ -230,7 +230,7 @@ public extension PTProtocol where Base: UIDevice {
     }
 }
 
-public extension PTProtocol where Base: UIDevice {
+public extension PTPOP where Base: UIDevice {
     //MARK: 檢測當前系統是否小於某個版本系統
     ///檢測當前系統是否小於某個版本系統
     /// - Returns: Bool
@@ -239,7 +239,7 @@ public extension PTProtocol where Base: UIDevice {
     }
 }
 
-public extension PTProtocol where Base: UIDevice {
+public extension PTPOP where Base: UIDevice {
     //MARK: 获取手机当前运营商
     ///获取手机当前运营商
     @available(iOS, introduced: 7.0, deprecated: 12.0,message: "12後不再支持了")
@@ -418,7 +418,7 @@ public enum SystemSoundIDShockType: Int64 {
     case thereshortVibration = 1521
 }
 
-public extension PTProtocol where Base: UIDevice {
+public extension PTPOP where Base: UIDevice {
     //MARK: 使用 SystemSoundID 产生的震动
     ///使用 SystemSoundID 产生的震动
     /// - Parameter type: 震动的类型
