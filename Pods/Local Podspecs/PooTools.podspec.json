@@ -76,9 +76,6 @@
         "Kingfisher": [
 
         ],
-        "ZXNavigationBar": [
-
-        ],
         "SwipeCellKit": [
 
         ],
@@ -132,6 +129,20 @@
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "NavBarController",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "ZXNavigationBar": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NAVBARCONTROLLER POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1410,6 +1421,9 @@
 
         ],
         "PooTools/Vision": [
+
+        ],
+        "PooTools/NavBarController": [
 
         ]
       },

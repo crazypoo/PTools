@@ -151,7 +151,6 @@ PODS:
     - WZLBadge
     - YYCategories
     - YYText
-    - ZXNavigationBar
   - PooTools/Country (3.1.5):
     - PooTools/Core
   - PooTools/CustomerLabel (3.1.5):
@@ -227,6 +226,7 @@ PODS:
     - PooTools/Location
     - PooTools/MediaViewer
     - PooTools/Motion
+    - PooTools/NavBarController
     - PooTools/PagingControl
     - PooTools/PhoneInfo
     - PooTools/Picker
@@ -276,6 +276,9 @@ PODS:
     - PooTools/Core
   - PooTools/Motion (3.1.5):
     - PooTools/Core
+  - PooTools/NavBarController (3.1.5):
+    - PooTools/Core
+    - ZXNavigationBar
   - PooTools/PagingControl (3.1.5):
     - JXPagingView/Paging
     - JXSegmentedView
@@ -552,7 +555,7 @@ SPEC CHECKSUMS:
   PermissionsKit: 2ee142d1fd69d1e8faa1801432d9241c84c132e1
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
   PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
-  PooTools: fec7d54a3abc3d448cc85fce7569bdfe3668eb7a
+  PooTools: 186c78b8e61dd11ce344de753a51519ac509286f
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
