@@ -7,8 +7,11 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import FDFullscreenPopGesture
+import SwifterSwift
 
 @objc public enum VCStatusBarChangeStatusType : Int {
     case Dark
@@ -16,6 +19,7 @@ import FDFullscreenPopGesture
     case Auto
 }
 
+#if POOTOOLS_NAVBARCONTROLLER
 @objcMembers
 open class PTBaseViewController: ZXNavigationBarController {
 
@@ -141,3 +145,113 @@ open class PTBaseViewController: ZXNavigationBarController {
         }
     }
 }
+#else
+@objcMembers
+open class PTBaseViewController: UIViewController {
+
+    //MARK: 是否隱藏StatusBar
+    ///是否隱藏StatusBar
+    open override var prefersStatusBarHidden:Bool {
+        return StatusBarManager.shared.isHidden
+    }
+    
+    //MARK: 設置StatusBar樣式
+    ///設置StatusBar樣式
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        return StatusBarManager.shared.style
+    }
+    
+    //MARK: 設置StatusBar動畫
+    ///設置StatusBar動畫
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        return StatusBarManager.shared.animation
+    }
+    
+    deinit {
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
+        self.removeFromSuperStatusBar()
+    }
+    
+    @objc open override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+    }
+    
+    @objc override open func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+    }
+    
+    @objc override open func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+    }
+    
+    //MARK: 是否隱藏NavBar
+    ///是否隱藏NavBar
+    public convenience init(hideBaseNavBar: Bool) {
+        self.init()
+        self.navigationController?.navigationBar.isHidden = hideBaseNavBar
+    }
+
+    open override func viewDidLoad() {
+        super.viewDidLoad()
+
+        UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
+        // Do any additional setup after loading the view.
+        self.edgesForExtendedLayout = []
+        self.definesPresentationContext = true
+        
+        self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+    }
+    
+    //MARK: 動態更換StatusBar
+    ///動態更換StatusBar
+    open func changeStatusBar(type:VCStatusBarChangeStatusType) {
+        switch type {
+        case .Auto:
+            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            setNeedsStatusBarAppearanceUpdate()
+        case .Dark:
+            StatusBarManager.shared.style = .lightContent
+            setNeedsStatusBarAppearanceUpdate()
+        case .Light:
+            StatusBarManager.shared.style = .darkContent
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    open func switchOrientation(isFullScreen:Bool) {
+        AppDelegateEXFunction.share.isFullScreen = isFullScreen
+        
+        if #available(iOS 16.0, *) {
+            setNeedsUpdateOfPrefersPointerLocked()
+            guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+            let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
+            let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
+            scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
+                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
+            }
+        } else {
+            let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait
+            UIDevice.current.setValue(oriention.rawValue, forKey: "orientation")
+            UIViewController.attemptRotationToDeviceOrientation()
+        }
+    }
+    
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    
+    @objc public func returnFrontVC() {
+        if self.presentingViewController != nil {
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            self.navigationController?.popViewController(animated: true, nil)
+        }
+    }
+}
+#endif

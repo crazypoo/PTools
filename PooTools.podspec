@@ -30,7 +30,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'pop'
         subspec.dependency 'FluentDarkModeKit'
         subspec.dependency 'Kingfisher'
-        subspec.dependency 'ZXNavigationBar'
         subspec.dependency 'SwipeCellKit'
         subspec.dependency 'KakaJSON'
         subspec.dependency 'Alamofire'
@@ -42,6 +41,14 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}','PooToolsSource/CocoaSprings/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'NavBarController' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'ZXNavigationBar'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NAVBARCONTROLLER POOTOOLS_COCOAPODS"
         }
     end
     
@@ -766,6 +773,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ListEmptyData'
         subspec.dependency 'PooTools/DEBUG'
         subspec.dependency 'PooTools/Vision'
+        subspec.dependency 'PooTools/NavBarController'
         
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
