@@ -34,7 +34,7 @@ open class PTFloatPanelLayout: NSObject,FloatingPanelLayout {
     }
 }
 
-public class PNProductSpecPanelLayout: NSObject, FloatingPanelLayout {
+open class PTCustomControlHeightPanelLayout: NSObject, FloatingPanelLayout {
     
     public override init() {
         super.init()
