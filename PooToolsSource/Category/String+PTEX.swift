@@ -1009,6 +1009,37 @@ public extension String {
         return constellationChinese
     }
     
+    func emojiConstellationSign() -> String {
+        switch self.lowercased() {
+            case "aries":
+                return "♈️"
+            case "taurus":
+                return "♉️"
+            case "gemini":
+                return "♊️"
+            case "cancer":
+                return "♋️"
+            case "leo":
+                return "♌️"
+            case "virgo":
+                return "♍️"
+            case "libra":
+                return "♎️"
+            case "scorpio":
+                return "♏️"
+            case "sagittarius":
+                return "♐️"
+            case "capricorn":
+                return "♑️"
+            case "aquarius":
+                return "♒️"
+            case "pisces":
+                return "♓️"
+            default:
+                return ""
+        }
+    }
+
     //MARK: 获取当前时间
     ///获取当前时间
     static func currentDate(dateFormatterString:String? = "yyyy-MM-dd")->String {
