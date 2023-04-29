@@ -975,6 +975,40 @@ public extension String {
         }
     }
     
+    func getConstellationChinese(format:String = "yyyy-MM-dd HH:mm:ss") ->String {
+        var constellationChinese = ""
+        let constellation = self.getConstellation(format: format)
+        switch constellation {
+        case "Aquarius":
+            constellationChinese = "水瓶座"
+        case "Pisces":
+            constellationChinese = "双鱼座"
+        case "Aries":
+            constellationChinese = "白羊座"
+        case "Taurus":
+            constellationChinese = "金牛座"
+        case "Gemini":
+            constellationChinese = "双子座"
+        case "Cancer":
+            constellationChinese = "巨蟹座"
+        case "Leo":
+            constellationChinese = "狮子座"
+        case "Virgo":
+            constellationChinese = "处女座"
+        case "Libra":
+            constellationChinese = "天秤座"
+        case "Scorpio":
+            constellationChinese = "天蝎座"
+        case "Sagittarius":
+            constellationChinese = "射手座"
+        case "Capricorn":
+            constellationChinese = "摩羯座"
+        default:
+            constellationChinese = ""
+        }
+        return constellationChinese
+    }
+    
     //MARK: 获取当前时间
     ///获取当前时间
     static func currentDate(dateFormatterString:String? = "yyyy-MM-dd")->String {
