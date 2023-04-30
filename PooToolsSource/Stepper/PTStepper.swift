@@ -11,7 +11,14 @@ import SwifterSwift
 import SnapKit
 
 public typealias PTStepperErrorAlert = (_ type:Bool) -> Void
-public typealias PTStepperValue = (_ string:String) -> Void
+public typealias PTStepperValue = (_ string:String,_ valueChangeType:PTStepperVahleChangeType) -> Void
+
+public enum PTStepperVahleChangeType:Int {
+    case Add
+    case Reduce
+    case Input
+}
+
 @objcMembers
 public class PTStepper: UIView {
 
@@ -111,7 +118,7 @@ public class PTStepper: UIView {
             } else {
                 self.shakeAnimation()
             }
-            self.callBack(value: self.numberText.text!)
+            self.callBack(value: self.numberText.text!,type: .Add)
         })
         return view
     }()
@@ -126,7 +133,7 @@ public class PTStepper: UIView {
                 return
             }
             self.numberText.text = "\(self.numberText.text!.int! - self.multipleNum)"
-            self.callBack(value: self.numberText.text!)
+            self.callBack(value: self.numberText.text!,type: .Reduce)
         })
         return view
     }()
@@ -223,9 +230,9 @@ public class PTStepper: UIView {
         }
     }
     
-    func callBack(value:String) {
+    func callBack(value:String,type:PTStepperVahleChangeType) {
         if self.valueBlock != nil {
-            self.valueBlock!(value)
+            self.valueBlock!(value,type)
         }
     }
     
@@ -252,7 +259,7 @@ extension PTStepper:UITextFieldDelegate {
         } else {
             textField.text = "\(((textField.text?.int ?? 0) / self.multipleNum) * self.multipleNum)"
         }
-        self.callBack(value: textField.text ?? "")
+        self.callBack(value: textField.text ?? "",type: .Input)
     }
     
     func validateNumber(number:String) -> Bool {

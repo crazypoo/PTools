@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Animation' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Animation/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
         }
