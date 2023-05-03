@@ -79,8 +79,7 @@ public class PTFusionCellContent:UIView {
                         } else {
                             if link.isURL() {
                                 self.accessV.pt_SDWebImage(imageString: link)
-                            }
-                            else if link.isSingleEmoji {
+                            } else if link.isSingleEmoji {
                                 self.accessV.image = link.emojiToImage()
                             } else {
                                 self.accessV.image = UIImage(named: link)

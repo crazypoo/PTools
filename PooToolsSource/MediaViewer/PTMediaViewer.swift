@@ -140,6 +140,8 @@ public class PTViewerConfig: NSObject {
     public var moreActionEX:[String] = []
     ///是否显示Nav右边媒体的名字
     public var showMediaTypeLabel:Bool = true
+    ///iCloudDocumentName
+    public var iCloudDocumentName:String = ""
 }
 
 public class PTMediaMediaView:UIView
@@ -467,46 +469,72 @@ public class PTMediaMediaView:UIView
                         self.imageView.image = UIImage(contentsOfFile: urlString)
                         self.adjustFrame()
                         self.hasLoadedImage = true
-                    } else {
-                        ImageDownloader.default.downloadImage(with: URL(string: urlString)!,options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
-                            PTGCDManager.gcdMain {
-                                loading.progress = CGFloat(receivedSize / totalSize)
-                            }
-                        }) { result in
-                            switch result {
-                            case .success(let value):
-                                loading.removeFromSuperview()
-                                self.gifImage = value.image
-
-                                switch self.dataModel.imageShowType {
-                                case .Normal:
-                                    self.imageView.image = value.image
+                        loading.removeFromSuperview()
+                    } else if urlString.isURL() {
+                        if urlString.contains("file://") {
+                            if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(self.viewConfig.iCloudDocumentName) {
+                                let imageURL = icloudURL.appendingPathComponent(urlString.lastPathComponent)
+                                if let imageData = try? Data(contentsOf: imageURL) {
+                                    self.gifImage = UIImage(data: imageData)
+                                    self.imageView.image = UIImage(data: imageData)
                                     self.adjustFrame()
                                     self.hasLoadedImage = true
-                                case .GIF:
-                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                    let frameCount = CGImageSourceGetCount(source!)
-                                    var frames = [UIImage]()
-                                    for i in 0...frameCount {
-                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                        frames.append(imageName)
-                                    }
-                                    self.imageView.animationImages = frames
-                                    self.imageView.animationDuration = 2
-                                    self.imageView.startAnimating()
-                                    self.adjustFrame()
-                                    self.hasLoadedImage = true
-                                default:
-                                    break
+                                    loading.removeFromSuperview()
                                 }
-                            case .failure(let error):
-                                loading.removeFromSuperview()
-                                PTNSLogConsole(error)
-                                self.createReloadButton()
+                            } else {
+                                self.gifImage = UIImage(contentsOfFile: urlString)
+                                self.imageView.image = UIImage(contentsOfFile: urlString)
                                 self.adjustFrame()
+                                self.hasLoadedImage = true
+                                loading.removeFromSuperview()
+                            }
+                        } else {
+                            ImageDownloader.default.downloadImage(with: URL(string: urlString)!,options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
+                                PTGCDManager.gcdMain {
+                                    loading.progress = CGFloat(receivedSize / totalSize)
+                                }
+                            }) { result in
+                                switch result {
+                                case .success(let value):
+                                    loading.removeFromSuperview()
+                                    self.gifImage = value.image
+
+                                    switch self.dataModel.imageShowType {
+                                    case .Normal:
+                                        self.imageView.image = value.image
+                                        self.adjustFrame()
+                                        self.hasLoadedImage = true
+                                    case .GIF:
+                                        let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                        let frameCount = CGImageSourceGetCount(source!)
+                                        var frames = [UIImage]()
+                                        for i in 0...frameCount {
+                                            let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                            let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                            frames.append(imageName)
+                                        }
+                                        self.imageView.animationImages = frames
+                                        self.imageView.animationDuration = 2
+                                        self.imageView.startAnimating()
+                                        self.adjustFrame()
+                                        self.hasLoadedImage = true
+                                    default:
+                                        break
+                                    }
+                                case .failure(let error):
+                                    loading.removeFromSuperview()
+                                    PTNSLogConsole(error)
+                                    self.createReloadButton()
+                                    self.adjustFrame()
+                                }
                             }
                         }
+                    } else {
+                        self.gifImage = UIImage(named: urlString)
+                        self.imageView.image = UIImage(named: urlString)
+                        self.adjustFrame()
+                        self.hasLoadedImage = true
+                        loading.removeFromSuperview()
                     }
                 }
             default:
@@ -953,7 +981,7 @@ public class PTMediaViewer: UIView {
         self.backButton.snp.makeConstraints { make in
             make.width.height.equalTo(PTViewerTitleHeight)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
-            make.left.equalToSuperview().inset(20)
+            make.left.equalToSuperview().inset(10)
         }
 
         if self.viewConfig.mediaData.count > 10 {
@@ -998,8 +1026,7 @@ public class PTMediaViewer: UIView {
         super.layoutSubviews()
     }
     
-    func touchAction()
-    {
+    func touchAction() {
         let doubleTap = UITapGestureRecognizer.init { sender in
             let currentView = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
             let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
@@ -1090,8 +1117,7 @@ public class PTMediaViewer: UIView {
         }
     }
     
-    func show(content:UIView,loadFinishBlock:@escaping PTViewerActionFinishBlock)
-    {
+    func show(content:UIView,loadFinishBlock:@escaping PTViewerActionFinishBlock) {
         content.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -1513,7 +1539,7 @@ extension PTMediaViewer:UIScrollViewDelegate {
             self.bottomView.addSubview(self.moreActionButton)
             self.moreActionButton.snp.makeConstraints { make in
                 make.width.height.equalTo(bottonH)
-                make.right.equalToSuperview().inset(20)
+                make.right.equalToSuperview().inset(10)
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             }
             
