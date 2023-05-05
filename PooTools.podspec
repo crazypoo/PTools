@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.2.0'
+    s.version     = '3.2.1'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -109,7 +109,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'YB_Attributed' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Attributed/*.{h,m,swift}','PooToolsSource/Attributed/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Attributed/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_YBATTRIBUTED POOTOOLS_COCOAPODS"
         }

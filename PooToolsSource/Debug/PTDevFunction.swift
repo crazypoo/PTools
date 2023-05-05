@@ -33,6 +33,8 @@ public class PTDevFunction: NSObject {
     public var flex:DevTask?
     public var flexBool:FlexDevTask?
     public var HyperioniOS:DevTask?
+    public var TestHitShow:FlexDevTask?
+    public var TestHitTouchesShow:FlexDevTask?
     //開啟/關閉inAppViewDebugger
     /*
      #if DEBUG
@@ -40,7 +42,15 @@ public class PTDevFunction: NSObject {
      #endif
      */
     public var inApp:DevTask?
+    
+    //MARK: 测试模式下检查界面的点击展示事件
+    ///测试模式下检查界面的点击展示事件
+    public private(set) var touchesType: Bool = false
 
+    //MARK: 测试模式下检查界面的点击展示事件开关
+    ///测试模式下检查界面的点击展示事件开关
+    public private(set) var touchesTestHit: Bool = false
+    
     private var maskView:PTDevMaskView?
     private var isAllOpen:Bool = false
     
@@ -70,7 +80,21 @@ public class PTDevFunction: NSObject {
                     } else {
                         allOpenString = "全部开启"
                     }
-                    let titles = ["FLEX","Log","FPS",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask"]
+                    
+                    var touchTypeInfo = ""
+                    if self.touchesType {
+                        touchTypeInfo = "关闭检测界面点击特效"
+                    } else {
+                        touchTypeInfo = "开启检测界面点击特效"
+                    }
+                    
+                    var showTouchHit = ""
+                    if self.touchesTestHit {
+                        showTouchHit = "关闭界面点击检测"
+                    } else {
+                        showTouchHit = "开启界面点击检测"
+                    }
+                    let titles = ["FLEX","Log","FPS",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
@@ -81,6 +105,22 @@ public class PTDevFunction: NSObject {
                                 if self.flexBool != nil {
                                     self.flexBool!(show)
                                 }
+                                
+                                if self.inApp != nil {
+                                    self.inApp!()
+                                }
+
+                                if self.HyperioniOS != nil {
+                                    self.HyperioniOS!()
+                                }
+
+                                if self.TestHitShow != nil {
+                                    self.TestHitShow!(show)
+                                }
+
+                                if self.TestHitTouchesShow != nil {
+                                    self.TestHitTouchesShow!(show)
+                                }
                             }
                         } else if title == "全部关闭" {
                             self.isAllOpen = false
@@ -88,6 +128,42 @@ public class PTDevFunction: NSObject {
                                 if self.flexBool != nil {
                                     self.flexBool!(show)
                                 }
+                                
+                                if self.inApp != nil {
+                                    self.inApp!()
+                                }
+
+                                if self.HyperioniOS != nil {
+                                    self.HyperioniOS!()
+                                }
+
+                                if self.TestHitShow != nil {
+                                    self.TestHitShow!(show)
+                                }
+
+                                if self.TestHitTouchesShow != nil {
+                                    self.TestHitTouchesShow!(show)
+                                }
+                            }
+                        } else if title == "关闭界面点击检测" {
+                            self.touchesTestHit = false
+                            if self.TestHitShow != nil {
+                                self.TestHitShow!(self.touchesTestHit)
+                            }
+                        } else if title == "开启界面点击检测" {
+                            self.touchesTestHit = true
+                            if self.TestHitShow != nil {
+                                self.TestHitShow!(self.touchesTestHit)
+                            }
+                        } else if title == "关闭检测界面点击特效" {
+                            self.touchesType = false
+                            if self.TestHitTouchesShow != nil {
+                                self.TestHitTouchesShow!(self.touchesType)
+                            }
+                        } else if title == "开启检测界面点击特效" {
+                            self.touchesType = true
+                            if self.TestHitTouchesShow != nil {
+                                self.TestHitTouchesShow!(self.touchesType)
                             }
                         } else if title == "FLEX" {
                             if self.flex != nil {
@@ -142,6 +218,8 @@ public class PTDevFunction: NSObject {
             PCheckAppStatus.shared.open()
             
             let devShare = PTDevFunction.share
+            devShare.touchesTestHit = true
+            devShare.touchesType = true
             if devShare.maskView == nil {
                 let maskConfig = PTDevMaskConfig()
                 
@@ -159,6 +237,8 @@ public class PTDevFunction: NSObject {
             PCheckAppStatus.shared.close()
             
             let devShare = PTDevFunction.share
+            devShare.touchesTestHit = false
+            devShare.touchesType = false
             if devShare.maskView != nil {
                 devShare.maskView?.removeFromSuperview()
                 devShare.maskView = nil

@@ -26,9 +26,28 @@ open class PFloatingButton: UIButton {
                 }
             })
             
-            let longPressGestureRecognizer = UILongPressGestureRecognizer.init()
+            let longPressGestureRecognizer = UILongPressGestureRecognizer { sender in
+                let gestureRecognizer = sender as! UILongPressGestureRecognizer
+                switch gestureRecognizer.state {
+                case .began:
+                    if self.longPressBlock != nil {
+                        self.longPressBlock!(self)
+                    }
+                    
+                    self.skipTapEventOnce = true
+                    
+                    if self.draggableAfterLongPress {
+                        self.draggable = true
+                    }
+                case .ended:break
+                case .cancelled:
+                    if self.longPressEndedBlock != nil {
+                        self.longPressEndedBlock!(self)
+                    }
+                default:break
+                }
+            }
             longPressGestureRecognizer.cancelsTouchesInView = false
-            longPressGestureRecognizer.addTarget(self, action: #selector(self.gestureRecognizerHandle(gestureRecognizer:)))
             longPressGestureRecognizer.allowableMovement = 0
             self.addGestureRecognizer(longPressGestureRecognizer)
         }
@@ -147,28 +166,7 @@ open class PFloatingButton: UIButton {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    @objc func gestureRecognizerHandle(gestureRecognizer:UILongPressGestureRecognizer) {
-        switch gestureRecognizer.state {
-        case .began:
-            if longPressBlock != nil {
-                longPressBlock!(self)
-            }
-            
-            skipTapEventOnce = true
-            
-            if draggableAfterLongPress {
-                draggable = true
-            }
-        case .ended:break
-        case .cancelled:
-            if longPressEndedBlock != nil {
-                longPressEndedBlock!(self)
-            }
-        default:break
-        }
-    }
-    
+        
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         isDragging = false
         super.touchesBegan(touches, with: event)
