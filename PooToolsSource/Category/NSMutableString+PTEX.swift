@@ -38,11 +38,11 @@ public extension NSMutableString {
                         array.remove(i)
                         let strippedTag = (openTag as NSString).substring(with: NSRange(location: 1, length: openTag.count - 2))
                         if let loc {
-                            array.append([
+                            array.add([
                                 "loc": loc,
                                 "tag": strippedTag,
                                 "endloc": NSNumber(value: range.location)
-                            ] as [String : Any])
+                            ])
                         }
                     }
                     break

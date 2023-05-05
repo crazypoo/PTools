@@ -250,7 +250,7 @@ public class PTFusionCellContent:UIView {
                 }
 
                 self.addSubview(self.nameTitle)
-                self.nameTitle.snp.remakeConstraints { make in
+                self.nameTitle.snp.makeConstraints { make in
                     switch cellType {
                     case .Switch(type: .None(type: .Name)),
                             .Switch(type: .None(type: .NameContent)),
@@ -267,9 +267,21 @@ public class PTFusionCellContent:UIView {
                         make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
                         make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
                         make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                    default:
+                    case .Switch(type: .LeftImageContent(type: .Name)),
+                            .Switch(type: .LeftImageContent(type: .NameContent)),
+                            .Switch(type: .BothImage(type: .Name)),
+                            .Switch(type: .BothImage(type: .NameContent)),
+                            .DisclosureIndicator(type: .LeftImageContent(type: .Name)),
+                            .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
+                            .DisclosureIndicator(type: .BothImage(type: .Name)),
+                            .DisclosureIndicator(type: .BothImage(type: .NameContent)),
+                            .NoneAccessoryView(type: .LeftImageContent(type: .Name)),
+                            .NoneAccessoryView(type: .LeftImageContent(type: .NameContent)),
+                            .NoneAccessoryView(type: .BothImage(type: .Name)),
+                            .NoneAccessoryView(type: .BothImage(type: .NameContent)):
                         make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
                         make.top.bottom.equalTo(self.cellIcon)
+                    default:break
                     }
                     
                     switch cellType {
@@ -326,7 +338,7 @@ public class PTFusionCellContent:UIView {
                     self.contentLabel.attributed.text = contentAtts
                 }
                 self.addSubview(self.contentLabel)
-                self.contentLabel.snp.remakeConstraints { make in
+                self.contentLabel.snp.makeConstraints { make in
                     make.top.bottom.equalToSuperview()
 
                     switch cellType {
@@ -672,7 +684,14 @@ open class PTFusionCell: PTBaseNormalCell {
 
     open var cellModel:PTFusionCellModel? {
         didSet {
-            self.dataContent.cellModel = self.cellModel
+            self.contentView.addSubview(self.dataContent)
+            self.dataContent.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.dataContent.cellModel = self.cellModel
+            }
         }
     }
         
@@ -684,11 +703,6 @@ open class PTFusionCell: PTBaseNormalCell {
     
     override init(frame:CGRect) {
         super.init(frame: frame)
-        
-        self.contentView.addSubview(self.dataContent)
-        self.dataContent.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -696,6 +710,7 @@ open class PTFusionCell: PTBaseNormalCell {
     }
 }
 
+#if POOTOOLS_SWIPECELL
 @objcMembers
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
@@ -704,7 +719,14 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
 
     open var cellModel:PTFusionCellModel? {
         didSet {
-            self.dataContent.cellModel = self.cellModel
+            self.contentView.addSubview(self.dataContent)
+            self.dataContent.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.dataContent.cellModel = self.cellModel
+            }
         }
     }
         
@@ -716,15 +738,10 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     
     override init(frame:CGRect) {
         super.init(frame: frame)
-        
-        self.contentView.addSubview(self.dataContent)
-        self.dataContent.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
     }
     
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
-
+#endif

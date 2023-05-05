@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 /// 高斯模糊
 @objcMembers

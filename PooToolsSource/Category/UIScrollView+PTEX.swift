@@ -51,4 +51,10 @@ public extension PTPOP where Base : UIScrollView {
             completionHandler(screenShotImage)
         })
     }
+    
+    func scrolToLeftAnimation(animation:Bool) {
+        var off = self.base.contentOffset
+        off.x = 0 - self.base.contentInset.left
+        self.base.setContentOffset(off, animated: true)
+    }
 }

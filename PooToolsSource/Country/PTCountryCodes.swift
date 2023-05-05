@@ -9,8 +9,7 @@
 import UIKit
 
 @objcMembers
-public class PTCountryCodeModel:NSObject
-{
+public class PTCountryCodeModel:NSObject {
     public var countryCode:String = ""
     public var countryName:String = ""
 }

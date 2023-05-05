@@ -97,8 +97,8 @@ public class PTUpdateTipsFunction: NSObject {
                 make.top.equalTo(contentVC.snp.top).offset(90)
                 make.size.equalTo(CGSize(width: 200, height: 65))
             }
-            
-            let tmpHight = descriptionString.nsString.size(for: .appfont(size: 14), size: CGSize(width: CGFloat(200), height: CGFloat(MAXFLOAT)), mode: .byCharWrapping).height
+                        
+            let tmpHight = UIView.sizeFor(string: descriptionString, font: .appfont(size: 14), height: CGFloat(MAXFLOAT), width: CGFloat(200)).height
             
             let valueLabel = UILabel()
             valueLabel.text = descriptionString

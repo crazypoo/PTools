@@ -75,6 +75,7 @@
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
+		550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
 		5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */; };
 		5517CAC629F5532600E33ACE /* PTVision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517CAC529F5532600E33ACE /* PTVision.swift */; };
@@ -313,6 +314,7 @@
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
+		550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+PTEX.swift"; sourceTree = "<group>"; };
 		5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Kingfisher+SVG.swift"; sourceTree = "<group>"; };
 		5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+PTEX.swift"; sourceTree = "<group>"; };
 		5517CAC529F5532600E33ACE /* PTVision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVision.swift; sourceTree = "<group>"; };
@@ -555,8 +557,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55025E4129FA56D00024A960 /* PTNavigationBar */,
-				55025E4029FA54B60024A960 /* Protocol */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -606,6 +606,8 @@
 				554929E828F9089100C82ABF /* Permission */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
+				55025E4029FA54B60024A960 /* Protocol */,
+				55025E4129FA56D00024A960 /* PTNavigationBar */,
 				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
@@ -697,6 +699,7 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
 				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
+				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1758,6 +1761,7 @@
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
+				550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */,
 				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,

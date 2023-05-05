@@ -48,7 +48,6 @@ public extension PTPOP where Base == Character {
     ///Character转Int
     var charToInt: Int? {
         return Int(String(self.base))
-        
     }
 }
 

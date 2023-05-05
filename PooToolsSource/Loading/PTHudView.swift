@@ -162,7 +162,7 @@ public class PTLoadingHud:UIView {
         context?.addArc(center: self.circleCenter, radius: self.circleRadius, startAngle: startAngle, endAngle: 0, clockwise: false)
         
         context?.strokePath()
-        self.perform(#selector(self.refreshCricle), afterDelay: 1 / framePerSecond)
+        self.perform(#selector(self.refreshCricle), with: nil, afterDelay: 1 / framePerSecond)
     }
     
     @objc func refreshCricle() {

@@ -226,5 +226,4 @@ public extension PTPOP where Base == Date {
         }
         return "\(Int((date.timeIntervalSince1970) * 1000))"
     }
-
 }

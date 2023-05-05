@@ -78,7 +78,8 @@ public class PTCheckBox: UIControl {
     
     func setupDefults() {
         self.backgroundColor = UIColor.init(white: 1, alpha: 0)
-        let tap = UITapGestureRecognizer.init { sender in
+        
+        let tap = UITapGestureRecognizer { sender in
             self.isChecked = !self.isChecked
             if self.valueChanged != nil {
                 self.valueChanged!(self.isChecked)

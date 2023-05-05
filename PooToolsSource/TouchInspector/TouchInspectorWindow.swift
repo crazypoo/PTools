@@ -18,6 +18,7 @@ public var App_TouchInspect_Debug_Bool:Bool {
     return ui_debug
 }
 
+@objcMembers
 public class TouchInspectorWindow: UIWindow {
     
     public static let TouchInspectorDebug = "TS_debug"
@@ -25,7 +26,7 @@ public class TouchInspectorWindow: UIWindow {
     /**
      Whether to show the circular touch indicator.
      */
-    public var showTouches: Bool = true {
+    @objc public var showTouches: Bool = true {
         didSet {
             hideOverlaysIfNeeded()
         }
@@ -34,7 +35,7 @@ public class TouchInspectorWindow: UIWindow {
     /**
      Whether to show the hit-test debugging overlay. If enabled, touch indicators will also be shown.
      */
-    public var showHitTesting: Bool = true {
+    @objc public var showHitTesting: Bool = true {
         didSet {
             hideOverlaysIfNeeded()
         }

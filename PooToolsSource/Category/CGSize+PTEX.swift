@@ -8,22 +8,19 @@
 
 import UIKit
 
-public extension CGSize
-{
+public extension CGSize {
     static func from(archivedData data: Data) throws -> CGSize {
         var sizeObj = CGSize.zero
         let unarchiver = try NSKeyedUnarchiver(forReadingFrom: data)
         unarchiver.requiresSecureCoding = false
-        if let size = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? NSValue
-        {
+        if let size = unarchiver.decodeObject(forKey: NSKeyedArchiveRootObjectKey) as? NSValue {
             sizeObj =  size.cgSizeValue
         }
         unarchiver.finishDecoding()
         return sizeObj
     }
     
-    static func archiveData() throws -> Data
-    {
+    static func archiveData() throws -> Data {
         let data = try? NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false)
         return data ?? Data()
     }

@@ -1382,10 +1382,10 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
             formatter.minimumIntegerDigits = 1
         }
         var num = NSDecimalNumber(string: (base as! String))
-        if num!.doubleValue.isNaN {
+        if num.doubleValue.isNaN {
             num = NSDecimalNumber(string: "0")
         }
-        let result = formatter.string(from: num!)
+        let result = formatter.string(from: num)
         return result
     }
 }

@@ -11,7 +11,9 @@ import SnapKit
 import AVKit
 import Photos
 import Dispatch
+#if POOTOOLS_NOTIFICATIONBANNER
 import NotificationBannerSwift
+#endif
 
 // MARK: - 状态栏扩展
 public extension UIViewController {
@@ -270,7 +272,7 @@ public extension UIViewController {
         } else {
             subTitleStr = subTitle!
         }
-
+#if POOTOOLS_NOTIFICATIONBANNER
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
         banner.duration = 1.5
         banner.backgroundColor = bannerBackgroundColor!
@@ -286,6 +288,9 @@ public extension UIViewController {
                 notifiTap!()
             }
         }
+#else
+        UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "好的")
+#endif
     }
 }
 

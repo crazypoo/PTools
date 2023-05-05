@@ -45,7 +45,7 @@ public extension NSString {
         var i = Int(forwardArr.count - 1)
         while i > -1 {
             //前15位或者前18位倒序存进数组
-            forwardDescArr.append(forwardArr[i])
+            forwardDescArr.add(forwardArr[i])
             i -= 1
         }
         
@@ -57,16 +57,16 @@ public extension NSString {
             let num = (forwardDescArr[i] as! NSString).intValue
             if i % 2 != 0 {
                 //偶数位
-                arrEvenNum.append(NSNumber(value: num))
+                arrEvenNum.add(NSNumber(value: num))
             } else {
                 //奇数位
                 if num * 2 < 9 {
-                    arrOddNum.append(NSNumber(value: num * 2))
+                    arrOddNum.add(NSNumber(value: num * 2))
                 } else {
                     let decadeNum = (num * 2) / 10
                     let unitNum = (num * 2) % 10
-                    arrOddNum2.append(NSNumber(value: unitNum))
-                    arrOddNum2.append(NSNumber(value: decadeNum))
+                    arrOddNum2.add(NSNumber(value: unitNum))
+                    arrOddNum2.add(NSNumber(value: decadeNum))
                 }
             }
         }

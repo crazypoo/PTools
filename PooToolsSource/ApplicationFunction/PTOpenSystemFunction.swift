@@ -41,8 +41,7 @@ import Foundation
 }
 
 @objcMembers
-public class PTOpenSystemConfig:NSObject
-{
+public class PTOpenSystemConfig:NSObject {
     public var types : SystemFunctionType = SystemFunctionType(rawValue: 27)!
     public var content : String = ""
     public var scheme : String = ""
@@ -50,8 +49,7 @@ public class PTOpenSystemConfig:NSObject
 
 @objcMembers
 public class PTOpenSystemFunction: NSObject {
-    private class func functionAlert(msg:String)
-    {
+    private class func functionAlert(msg:String) {
         UIAlertController.base_alertVC(title: "提示", msg: msg, cancelBtn: "好的") {
             
         } moreBtn: { index, title in
@@ -63,70 +61,51 @@ public class PTOpenSystemFunction: NSObject {
     ///根據所需跳轉某Setting內的方法
     /// - Parameters:
     ///   - config: 選項
-    public class func openSystemFunction(config:PTOpenSystemConfig)
-    {
+    public class func openSystemFunction(config:PTOpenSystemConfig) {
         var uriString : String? = ""
         switch config.types {
         case .Call:
-            if config.content.stringIsEmpty() || !config.content.isPooPhoneNum()
-            {
+            if config.content.stringIsEmpty() || !config.content.isPooPhoneNum() {
                 PTOpenSystemFunction.functionAlert(msg: "请填写电话号码")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "tel://%@",config.content)
             }
         case .SMS:
-            if config.content.stringIsEmpty() || config.content.isPooPhoneNum()
-            {
+            if config.content.stringIsEmpty() || config.content.isPooPhoneNum() {
                 PTOpenSystemFunction.functionAlert(msg: "请填写电话号码")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "sms://%@",config.content)
             }
         case .Mail:
-            if config.content.stringIsEmpty() || config.content.isValidEmail
-            {
+            if config.content.stringIsEmpty() || config.content.isValidEmail {
                 PTOpenSystemFunction.functionAlert(msg: "请填写邮箱")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "mailto://%@",config.content)
             }
         case .AppStore:
-            if config.content.stringIsEmpty()
-            {
+            if config.content.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请填写AppID")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "itms-apps://itunes.apple.com/app/id%@",config.content)
             }
         case .Safari:
-            if config.content.stringIsEmpty() || config.content.isURL()
-            {
+            if config.content.stringIsEmpty() || config.content.isURL() {
                 PTOpenSystemFunction.functionAlert(msg: "请填写网址")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@",config.content)
             }
         case .iBook:
             uriString = "itms-books://"
         case .FaceTime:
-            if config.content.stringIsEmpty() || config.content.isPooPhoneNum()
-            {
+            if config.content.stringIsEmpty() || config.content.isPooPhoneNum() {
                 PTOpenSystemFunction.functionAlert(msg: "请填写电话号码")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "facetime://%@",config.content)
             }
         case .Map:
@@ -134,196 +113,138 @@ public class PTOpenSystemFunction: NSObject {
         case .Music:
             uriString = "music://"
         case .Battery:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=BATTERY_USAGE",config.scheme)
             }
         case .Location:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Privacy&path=LOCATION",config.scheme)
             }
         case .Privace:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Privacy",config.scheme)
             }
         case .Siri:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Siri",config.scheme)
             }
         case .Sounds:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Sounds",config.scheme)
             }
         case .Wallpaper:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Wallpaper",config.scheme)
             }
         case .Display:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General&path=DISPLAY",config.scheme)
             }
         case .Keyboard:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General&path=Keyboard",config.scheme)
             }
         case .DateAndTime:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General&path=DATE_AND_TIME",config.scheme)
             }
         case .Accessibilly:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General&path=ACCESSIBILITY",config.scheme)
             }
         case .About:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General&path=About",config.scheme)
             }
         case .General:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=General",config.scheme)
             }
         case .Notification:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=NOTIFICATIONS_ID",config.scheme)
             }
         case .MobileData:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=MOBILE_DATA_SETTINGS_ID",config.scheme)
             }
         case .Bluetooth:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=Bluetooth",config.scheme)
             }
         case .WIFI:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=WIFI",config.scheme)
             }
         case .Castle:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@:root=CASTLE",config.scheme)
             }
         case .Setting:
-            if config.scheme.stringIsEmpty()
-            {
+            if config.scheme.stringIsEmpty() {
                 PTOpenSystemFunction.functionAlert(msg: "请在Xcode设置Scheme")
                 return
-            }
-            else
-            {
+            } else {
                 uriString = String(format: "%@",UIApplication.openSettingsURLString)
             }
         default:
             break
         }
-        if uriString!.stringIsEmpty()
-        {
+        if uriString!.stringIsEmpty() {
             
-        }
-        else
-        {
+        } else {
             UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
-
         }
     }
 }

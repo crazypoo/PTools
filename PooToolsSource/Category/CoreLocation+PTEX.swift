@@ -57,6 +57,5 @@ public extension PTPOP where Base == CLLocation {
         
         let distance: Double = 2 * asin(sqrt(pow(sin(a / 2), 2) + cos(radLat1) * cos(radLat2) * pow(sin(b / 2), 2)))
         return distance * earthRadius
-        
     }
 }

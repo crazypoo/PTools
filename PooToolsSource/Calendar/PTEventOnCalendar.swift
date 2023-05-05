@@ -19,6 +19,17 @@ public class PTEventOnCalendar: NSObject {
      * @param notes 备注
      * @param remindTime 大于0是开始后提醒,小于0就开始时间前提醒
      */
+    //MARK: 把数据插入到日历作提醒
+    ///把数据插入到日历作提醒
+    /// - Parameters:
+    ///   - startDate: 开始时间
+    ///   - endDate: 结束时间
+    ///   - eventTitle: 标题
+    ///   - location: 地址
+    ///   - notes: 备注
+    ///   - eventType: 提醒类型
+    ///   - remindTime: 大于0是开始后提醒,小于0就开始时间前提醒
+    ///   - handle: 成功回调
     open class func createEvent(startDate:DateInRegion,
                                 endDate:DateInRegion,
                                 eventTitle:String,
@@ -26,7 +37,7 @@ public class PTEventOnCalendar: NSObject {
                                 notes:String,
                                 eventType:EKEntityType,
                                 remindTime:TimeInterval,
-                                handle:((_ finish:Bool)->Void)? = nil) {
+                                handle:((_ finish:Bool,_ error:Error?)->Void)? = nil) {
         let eventStore = EKEventStore()
         eventStore.requestAccess(to: eventType) { granted, error in
             if granted && error == nil {
@@ -45,13 +56,13 @@ public class PTEventOnCalendar: NSObject {
                         try eventStore.save(event, span: .thisEvent)
                         PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil {
-                                handle!(true)
+                                handle!(true,nil)
                             }
                         }
                     } catch {
                         PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil {
-                                handle!(false)
+                                handle!(false,error)
                             }
                         }
                     }
@@ -69,13 +80,13 @@ public class PTEventOnCalendar: NSObject {
                         try eventStore.save(event, commit: true)
                         PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil {
-                                handle!(true)
+                                handle!(true,nil)
                             }
                         }
                     } catch {
                         PTGCDManager.gcdAfter(time: 0.2) {
                             if handle != nil {
-                                handle!(false)
+                                handle!(false,error)
                             }
                         }
                     }

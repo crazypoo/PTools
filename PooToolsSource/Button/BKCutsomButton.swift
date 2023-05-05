@@ -8,64 +8,6 @@
 
 import UIKit
 
-//MARK: 左文右图（间隔5，Label的文字居左。）
-public class BKRightImageButton: UIButton {
-
-    private let space: CGFloat = 5.0
-    private var margin: CGFloat = 5.0
-    
-    public init(frame: CGRect = .zero,
-         margin: CGFloat = 5) {
-        self.margin = margin
-        super.init(frame: frame)
-        titleLabel?.lineBreakMode = .byTruncatingTail
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        var titleRect = super.titleRect(forContentRect: contentRect)
-        let imgRect = super.imageRect(forContentRect: contentRect)
-        titleRect.size.width = contentRect.size.width - (space + 2*margin + imgRect.size.width)
-        return CGRect(origin: CGPoint(x: margin, y: titleRect.origin.y), size: titleRect.size)
-    }
-    
-    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        let imgRect = super.imageRect(forContentRect: contentRect)
-        let imgX = contentRect.size.width - imgRect.size.width - margin
-        return CGRect(origin: CGPoint(x: imgX, y: imgRect.origin.y), size: imgRect.size)
-    }
-    
-}
-
-//MARK: 上图下文（间隔7，文字和图片水平垂直都居中）
-public class BKTopImageButton: UIButton {
-    
-    private let space: CGFloat = 7.0
-    
-    public override func titleRect(forContentRect contentRect: CGRect) -> CGRect {
-        let titleRect = super.titleRect(forContentRect: contentRect)
-        let imgRect = super.imageRect(forContentRect: contentRect)
-        let titleX = (contentRect.size.width - titleRect.size.width) / 2.0
-        let customContentHeight = imgRect.size.height + space + titleRect.size.height
-        let imgY = (contentRect.size.height - customContentHeight) / 2.0
-        let titleY = imgY + imgRect.size.height + space
-        return CGRect(origin: CGPoint(x: titleX, y: titleY), size: titleRect.size)
-    }
-     
-    public override func imageRect(forContentRect contentRect: CGRect) -> CGRect {
-        let titleRect = super.titleRect(forContentRect: contentRect)
-        let imgRect = super.imageRect(forContentRect: contentRect)
-        let imgX = (contentRect.size.width - imgRect.size.width) / 2.0
-        let customContentHeight = imgRect.size.height + space + titleRect.size.height
-        let imgY = (contentRect.size.height - customContentHeight) / 2.0
-        return CGRect(origin: CGPoint(x: imgX, y: imgY), size: imgRect.size)
-    }
-    
-}
-
 @objc public enum BKLayoutButtonStyle : Int {
     case leftImageRightTitle // 系统默认
     case leftTitleRightImage
@@ -75,6 +17,7 @@ public class BKTopImageButton: UIButton {
 
 // MARK: - 上图下文 上文下图 左图右文(系统默认) 右图左文
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
+@objcMembers
 public class BKLayoutButton: UIButton {
     /// 布局方式
     public var layoutStyle: BKLayoutButtonStyle!
@@ -113,7 +56,6 @@ public class BKLayoutButton: UIButton {
         default:
             break
         }
-        
     }
 
     public func layoutHorizontal(withLeftView leftView: UIView?, rightView: UIView?) {
@@ -121,7 +63,6 @@ public class BKLayoutButton: UIButton {
         guard var leftViewFrame = leftView?.frame,
             var rightViewFrame = rightView?.frame else { return }
         
-
         let totalWidth: CGFloat = leftViewFrame.width + midSpacing + rightViewFrame.width
 
         leftViewFrame.origin.x = (frame.width - totalWidth) / 2.0
@@ -131,14 +72,12 @@ public class BKLayoutButton: UIButton {
         rightViewFrame.origin.x = leftViewFrame.maxX + midSpacing
         rightViewFrame.origin.y = (frame.height - rightViewFrame.height) / 2.0
         rightView?.frame = rightViewFrame
-        
     }
     
     public func layoutVertical(withUp upView: UIView?, downView: UIView?) {
         
         guard var upViewFrame = upView?.frame,
             var downViewFrame = downView?.frame else { return }
-        
 
         let totalHeight: CGFloat = upViewFrame.height + midSpacing + downViewFrame.height
 
@@ -149,7 +88,6 @@ public class BKLayoutButton: UIButton {
         downViewFrame.origin.y = upViewFrame.maxY + midSpacing
         downViewFrame.origin.x = (frame.width - downViewFrame.width) / 2.0
         downView?.frame = downViewFrame
-        
     }
 
     public override func setImage(_ image: UIImage?, for state: UIControl.State) {
@@ -171,5 +109,4 @@ public class BKLayoutButton: UIButton {
         self.imageSize = imageSize
         setNeedsLayout()
     }
-    
 }

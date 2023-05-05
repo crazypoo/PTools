@@ -303,10 +303,12 @@ class PTSwiftViewController: PTBaseViewController {
         self.view.addSubview(self.collectionView)
         self.collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+//            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+            make.top.equalToSuperview()
         }
 
         self.showCollectionViewData()
+        
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"
 //        config.size = CGSize(width: 24, height: 34)
@@ -613,20 +615,14 @@ extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if #available(iOS 14.0, *) {
-
-            let imagev = UIImageView(image: UIImage(named: "TextImage")!)
-            self.view.addSubview(imagev)
-            imagev.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
+        UIAlertController.baseActionSheet(title: "1",cancelButtonName: "213",destructiveButtonName: "4444444", titles: ["123"]) { sheet in
             
-            let share = PTVision.share
-            share.findText(withImageView: imagev,revision: 2) { resultText in
-                
-            }
-        } else {
-            // Fallback on earlier versions
+        } cancelBlock: { sheet in
+            
+        } otherBlock: { sheet, index in
+            
+        } tapBackgroundBlock: { sheet in
+            
         }
     }
 }

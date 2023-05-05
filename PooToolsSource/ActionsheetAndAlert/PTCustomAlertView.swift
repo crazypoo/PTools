@@ -9,7 +9,6 @@
 import UIKit
 import pop
 import SwifterSwift
-import YYCategories
 import SnapKit
 
 public let BottomButtonHeight : CGFloat = 44
@@ -459,7 +458,7 @@ public class PTCustomAlertView: UIView {
                 self.alpha = 0
             } completion: { ok in
                 self.backgroundView.removeFromSuperview()
-                self.customView.removeAllSubviews()
+                self.customView.removeSubviews()
                 self.removeFromSuperview()
                 if self.didDismissBlock != nil {
                     self.didDismissBlock!(self)

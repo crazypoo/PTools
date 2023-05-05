@@ -218,7 +218,7 @@ public class PTMediaMediaView:UIView
     
     fileprivate lazy var videoSlider:UISlider = {
         let view = UISlider()
-        view.addBlock(for: .valueChanged) { sender in
+        view.addSliderAction { sender in
             self.player.player!.pause()
             self.playInSomeTime(someTime: (sender as! UISlider).value)
         }

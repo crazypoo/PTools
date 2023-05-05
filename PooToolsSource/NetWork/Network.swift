@@ -111,7 +111,6 @@ public class XMNetWorkStatus {
     }
 }
 
-
 @objcMembers
 public class Network: NSObject {
     
@@ -184,7 +183,6 @@ public class Network: NSObject {
                                  netWorkErrorBlock:NetWorkErrorBlock? = nil,
                                  netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
                                  resultBlock: @escaping ReslutClosure) {
-        
         
         let urlStr = (needGobal! ? Network.gobalUrl() : "") + urlStr
         if !urlStr.isURL() {

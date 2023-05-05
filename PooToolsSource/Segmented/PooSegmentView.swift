@@ -8,7 +8,6 @@
 
 import UIKit
 import SnapKit
-import YYCategories
 import SwifterSwift
 import Kingfisher
 import WZLBadge
@@ -294,7 +293,7 @@ public class PooSegmentView: UIView {
             subV.removeFromSuperview()
         }
         subViewArr.removeAll()
-        scrolView.removeAllSubviews()
+        scrolView.removeSubviews()
         setUI(datas: viewDatas)
         if block != nil {
             block!(selectedIndex ?? 0)
@@ -397,7 +396,7 @@ public class PooSegmentView: UIView {
 
             switch indexs {
             case 0:
-                scrolView.scrollToLeft()
+                scrolView.pt.scrolToLeftAnimation(animation: true)
             default:
                 scrolView.scrollRectToVisible(CGRect.init(x: (subV.frame.origin.x) + (subV.frame.size.width) / 2, y: 0, width: (subV.frame.size.width), height: frame.size.height), animated: true)
             }

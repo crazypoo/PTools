@@ -411,7 +411,7 @@ public class PTActionSheetView: UIView {
     public func dismiss(block:(()->Void)?) {
         let offscreenAnimation = POPBasicAnimation.easeOut()
         offscreenAnimation?.property = (POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty)
-        offscreenAnimation?.toValue = actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight
+        offscreenAnimation?.toValue = actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight + 10
         offscreenAnimation!.duration = 0.35
         offscreenAnimation?.completionBlock = { (anim,finish) in
             UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {

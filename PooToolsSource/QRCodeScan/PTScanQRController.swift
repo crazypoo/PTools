@@ -11,7 +11,7 @@ import SnapKit
 import Photos
 import SwifterSwift
 
-public class PTScanBarInfo:PTBaseModel {
+public class PTScanBarInfo:NSObject {
     var codeView:UIView = UIView()
     var codeString:String = ""
 }
@@ -412,7 +412,7 @@ public class PTScanQRController: PTBaseViewController {
                 self.scanningLine.frame = frame
             }
         } else {
-            if self.scanningLine.origin.y >= self.scanningLineY {
+            if self.scanningLine.frame.origin.y >= self.scanningLineY {
                 let scanContentMaxY = self.view.frame.size.height - self.scanningLineY
                 if self.scanningLine.frame.origin.y >= scanContentMaxY - 10 {
                     frame.origin.y = self.scanningLineY

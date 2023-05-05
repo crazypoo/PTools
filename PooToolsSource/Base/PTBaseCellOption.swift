@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_SWIPECELL
 import SwipeCellKit
+#endif
 
 open class PTBaseNormalCell: UICollectionViewCell {
     override public init(frame:CGRect) {
@@ -35,6 +37,7 @@ open class PTBaseNormalCell: UICollectionViewCell {
     }
 }
 
+#if POOTOOLS_SWIPECELL
 open class PTBaseSwipeCell: SwipeCollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)
@@ -60,3 +63,4 @@ open class PTBaseSwipeCell: SwipeCollectionViewCell {
         return NSValue(cgSize: cellSize())
     }
 }
+#endif

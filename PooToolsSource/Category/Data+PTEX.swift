@@ -44,7 +44,6 @@ public extension Data {
         default:
             break
         }
-        
         return .UNKNOW
     }
     

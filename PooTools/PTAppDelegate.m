@@ -50,7 +50,11 @@
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 50;
     
     // Override point for customization after application launch.
+#if DEBUG
+    self.window = [[TouchInspectorWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+#else
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+#endif
     PTViewController *view = [[PTViewController alloc] init];
     UINavigationController *mainNav = [[UINavigationController alloc] initWithRootViewController:view];
     self.window.rootViewController = mainNav;

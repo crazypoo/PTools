@@ -28,9 +28,6 @@
         "SwiftDate": [
 
         ],
-        "NotificationBannerSwift": [
-
-        ],
         "WZLBadge": [
 
         ],
@@ -64,9 +61,6 @@
         "FDFullscreenPopGesture": [
 
         ],
-        "YYCategories": [
-
-        ],
         "pop": [
 
         ],
@@ -74,27 +68,6 @@
 
         ],
         "Kingfisher": [
-
-        ],
-        "SwipeCellKit": [
-
-        ],
-        "KakaJSON": [
-
-        ],
-        "Alamofire": [
-
-        ],
-        "SwiftyJSON": [
-
-        ],
-        "HandyJSON": [
-
-        ],
-        "MJExtension": [
-
-        ],
-        "MBProgressHUD": [
 
         ]
       },
@@ -122,13 +95,70 @@
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/StatusBar/*.{h,m,swift}",
         "PooToolsSource/TouchInspector/*.{h,m,swift}",
-        "PooToolsSource/NetWork/*.{h,m,swift}",
         "PooToolsSource/Json/*.{h,m,swift}",
         "PooToolsSource/CocoaSprings/*.{h,m,swift}",
         "PooToolsSource/Protocol/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "NetWork",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Alamofire": [
+
+        ],
+        "KakaJSON": [
+
+        ],
+        "HandyJSON": [
+
+        ],
+        "SwiftyJSON": [
+
+        ],
+        "MBProgressHUD": [
+
+        ],
+        "MJExtension": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/NetWork/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SwipeCell",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "SwipeCellKit": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "NotificationBanner",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "NotificationBannerSwift": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -194,10 +224,7 @@
 
         ]
       },
-      "source_files": [
-        "PooToolsSource/Animation/*.{h,m,swift}",
-        "PooToolsSource/Animation/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/Animation/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
       }
@@ -583,14 +610,11 @@
     {
       "name": "CheckUpdate",
       "dependencies": {
-        "PooTools/Core": [
+        "PooTools/NetWork": [
 
         ]
       },
-      "source_files": [
-        "PooToolsSource/CheckUpdate/*.{h,m,swift}",
-        "PooToolsSource/NetWork/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/CheckUpdate/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
       }
@@ -1424,6 +1448,15 @@
 
         ],
         "PooTools/NavBarController": [
+
+        ],
+        "PooTools/NotificationBanner": [
+
+        ],
+        "PooTools/SwipeCell": [
+
+        ],
+        "PooTools/NetWork": [
 
         ]
       },

@@ -339,7 +339,7 @@ public extension UIColor {
         var saturationF:CGFloat = 0
         var brightnessF:CGFloat = 0
         var alphaF:CGFloat = 0
-        guard self.getHue(&hueF, saturation: &saturationF, lightness: &brightnessF, alpha: &alphaF) else {
+        guard self.getHue(&hueF, saturation: &saturationF, brightness: &brightnessF, alpha: &alphaF) else {
             return PTColorHSBAModel()
         }
         

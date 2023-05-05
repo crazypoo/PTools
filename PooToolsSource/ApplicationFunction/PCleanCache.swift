@@ -114,19 +114,13 @@ public class PCleanCache: NSObject {
             SDImageCache.shared.clearDisk {
                 flag = true
             }
-            
-            PTGCDManager.gcdMain {
-                ImageCache.default.clearDiskCache {
-                    flag = true
-                }
-            }
-#else
-            PTGCDManager.gcdMain {
-                ImageCache.default.clearDiskCache {
-                    flag = true
-                }
-            }
 #endif
+            PTGCDManager.gcdMain {
+                ImageCache.default.clearDiskCache {
+                    flag = true
+                }
+            }
+
         } catch {
             PTNSLogConsole(error.localizedDescription)
         }

@@ -148,9 +148,10 @@ public class PTPermissionViewController: PTBaseViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        
+#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBarBackgroundColorAlpha = 0
         self.zx_hideBaseNavBar = true
+#endif
         
         let closeButton = UIButton.init(type: .close)
         self.view?.addSubview(closeButton)
@@ -171,7 +172,11 @@ public class PTPermissionViewController: PTBaseViewController {
         self.view.addSubview(self.viewCollection)
         self.viewCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
+#if POOTOOLS_NAVBARCONTROLLER
             make.top.equalTo(self.zx_navBar!.snp.bottom)
+#else
+            make.top.equalToSuperview()
+#endif
         }
         
         self.showDetail()

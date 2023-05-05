@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.1.5'
+    s.version     = '3.2.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
     s.subspec "Core" do |subspec|
         subspec.resource = 'PooToolsSource/PooTools.bundle'
         subspec.dependency 'SwiftDate'
-        subspec.dependency 'NotificationBannerSwift'
         subspec.dependency 'WZLBadge'
         subspec.dependency 'SnapKit'
         subspec.dependency 'SwifterSwift'
@@ -26,24 +25,46 @@ Pod::Spec.new do |s|
         subspec.dependency 'UIViewController+Swizzled'
         subspec.dependency 'IQKeyboardManager'
         subspec.dependency 'FDFullscreenPopGesture'
-        subspec.dependency 'YYCategories'
         subspec.dependency 'pop'
         subspec.dependency 'FluentDarkModeKit'
         subspec.dependency 'Kingfisher'
-        subspec.dependency 'SwipeCellKit'
-        subspec.dependency 'KakaJSON'
-        subspec.dependency 'Alamofire'
-        subspec.dependency 'SwiftyJSON'
-        subspec.dependency 'HandyJSON'
-        subspec.dependency 'MJExtension'
-        subspec.dependency 'MBProgressHUD'
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}','PooToolsSource/CocoaSprings/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
     end
     
+    s.subspec 'NetWork' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'Alamofire'
+        subspec.dependency 'KakaJSON'
+        subspec.dependency 'HandyJSON'
+        subspec.dependency 'SwiftyJSON'
+        subspec.dependency 'MBProgressHUD'
+        subspec.dependency 'MJExtension'
+        subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'SwipeCell' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'SwipeCellKit'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SWIPECELL POOTOOLS_COCOAPODS"
+        }
+    end
+
+    s.subspec 'NotificationBanner' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'NotificationBannerSwift'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NOTIFICATIONBANNER POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'NavBarController' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'ZXNavigationBar'
@@ -340,8 +361,8 @@ Pod::Spec.new do |s|
 #    end
     
     s.subspec 'CheckUpdate' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/CheckUpdate/*.{h,m,swift}','PooToolsSource/NetWork/*.{h,m,swift}'
+        subspec.dependency 'PooTools/NetWork'
+        subspec.source_files = 'PooToolsSource/CheckUpdate/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CHECKUPDATE POOTOOLS_COCOAPODS"
         }
@@ -520,7 +541,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
 #    subspec.dependency 'FLEX', :configurations => ['Debug']
 #    subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
 #    subspec.dependency 'LookinServer', :configurations => ['Debug']
@@ -774,6 +795,9 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/DEBUG'
         subspec.dependency 'PooTools/Vision'
         subspec.dependency 'PooTools/NavBarController'
+        subspec.dependency 'PooTools/NotificationBanner'
+        subspec.dependency 'PooTools/SwipeCell'
+        subspec.dependency 'PooTools/NetWork'
         
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
