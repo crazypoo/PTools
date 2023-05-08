@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.2.1'
+    s.version     = '3.2.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -262,7 +262,7 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'MediaViewer' do |subspec|
-        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/NetWork'
         subspec.frameworks = 'CoreMotion','SceneKit','Photos'
         subspec.source_files = 'PooToolsSource/MediaViewer/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -344,22 +344,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SLIDER POOTOOLS_COCOAPODS"
         }
     end
-        
-#    s.subspec 'NetWork' do |subspec|
-#        subspec.dependency 'PooTools/Core'
-#        subspec.dependency 'KakaJSON'
-#        subspec.dependency 'Alamofire'
-#        subspec.dependency 'SwiftyJSON'
-#        subspec.dependency 'HandyJSON'
-#        subspec.dependency 'EmptyDataSet-Swift'#空数据
-#        subspec.dependency 'MJExtension'
-#        subspec.dependency 'MBProgressHUD'
-#        subspec.source_files = 'PooToolsSource/NetWork/*.{h,m,swift}','PooToolsSource/Json/*.{h,m,swift}'
-#        subspec.pod_target_xcconfig = {
-#            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORK POOTOOLS_COCOAPODS"
-#        }
-#    end
-    
+            
     s.subspec 'CheckUpdate' do |subspec|
         subspec.dependency 'PooTools/NetWork'
         subspec.source_files = 'PooToolsSource/CheckUpdate/*.{h,m,swift}'
