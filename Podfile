@@ -15,34 +15,17 @@ end
 
 target 'PooTools_Example' do
   pod 'PooTools/InputAll', :path => 'PooTools.podspec'
-  pod 'WZLBadge'
-  pod 'SnapKit'
-  pod 'YYCategories'
-#  pod 'WoodPeckeriOS'
-  pod "GCDWebServer/WebUploader", "~> 3.0"
-  pod 'HandyJSON' #JSON处理
-  pod 'DeviceKit', '~> 4.0'
-  pod 'SwifterSwift'#Swift扩展类
-  pod 'NotificationBannerSwift'#类似推送的弹出框
-  pod 'CocoaLumberjack/Swift'#Log工具
-  pod 'SwiftDate'
-  pod 'KakaJSON'
-  pod 'Alamofire'
-  pod 'HandyJSON'
-  pod 'SwiftyJSON'
-  pod 'CocoaLumberjack/Swift'#Log工具
-  pod 'SJAttributesStringMaker'
-  pod 'MJRefresh'
-  pod 'ZXNavigationBar'#导航栏
-  pod 'CryptoSwift'
-  pod 'Kingfisher'
-  pod 'AttributedString'
   
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']
   pod 'LookinServer', :configurations => ['Debug']
   pod 'LifetimeTracker', :configurations => ['Debug']
-  
+  pod "HyperioniOS/Core", :configurations => ['Debug']
+  pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin
+  pod 'HyperioniOS/Measurements', :configurations => ['Debug'] # Optional plugin
+  pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
+  pod 'WoodPeckeriOS', :configurations => ['Debug']
+
   #权限询问
   pod 'PermissionsKit/NotificationPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'
   pod 'PermissionsKit/CameraPermission', :git => 'https://github.com/sparrowcode/PermissionsKit'

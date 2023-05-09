@@ -1,10 +1,8 @@
 ![Notification Banner](NotificationBanner/Assets/header.png)
 
-[![Version](https://img.shields.io/cocoapods/v/NotificationBannerSwift.svg?style=flat)](http://cocoapods.org/pods/NotificationBannerSwift)
-<a href="https://github.com/Carthage/Carthage/"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
-[![Platform](https://img.shields.io/cocoapods/p/NotificationBannerSwift.svg?style=flat)](http://cocoapods.org/pods/NotificationBannerSwift)
-<a href="https://developer.apple.com/swift"><img src="https://img.shields.io/badge/swift-5-4BC51D.svg?style=flat" alt="Language: Swift" /></a>
+[![GitHub contributors](https://img.shields.io/github/contributors/daltron/notificationbanner.svg?style=flat)]() 
 [![License](https://img.shields.io/cocoapods/l/NotificationBannerSwift.svg?style=flat)](http://cocoapods.org/pods/NotificationBannerSwift)
+[![PayPal](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/donate/?hosted_button_id=QEBVNMTVX6N88)  
 
 ## Written in Swift 5
 
@@ -33,6 +31,7 @@ NotificationBanner is an extremely customizable and lightweight library that mak
 - Built in banner queue ✅
 - Allow to display several banners simultaneously, configurable in banners queue ✅
 - Accessibility support ✅
+- Dynamic Island Support ✅
 
 ## Requirements
 

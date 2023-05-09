@@ -179,6 +179,9 @@ class PTPermissionCell: PTBaseNormalCell {
         case .locationWhenInUse:
             permissionName = "定位"
             self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
+        case .locationAlways:
+            permissionName = "保持使用定位"
+            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
         case .speech:
             permissionName = "语音识别"
             self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_speech")
