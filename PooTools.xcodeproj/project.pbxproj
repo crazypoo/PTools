@@ -642,7 +642,6 @@
 		231D14F3272CDEE9003D6F62 /* Category */ = {
 			isa = PBXGroup;
 			children = (
-				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
 				5589FF42299F314900519383 /* AnyClass+PTEX.swift */,
 				55F6D0BF28E6CC6200ABABAC /* Application+PTEX.swift */,
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
@@ -662,6 +661,7 @@
 				55D59C4A28F1790F00B4FF76 /* Double+PTEX.swift */,
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
+				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
 				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
 				55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */,
 				55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */,
@@ -682,10 +682,12 @@
 				231D15B8272CDEE9003D6F62 /* UIColor+PTEX.swift */,
 				231D15CD272CDEE9003D6F62 /* UIControl+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
+				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
 				55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */,
 				9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */,
+				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
 				55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */,
 				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
 				55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */,
@@ -698,8 +700,6 @@
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
-				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1619,7 +1619,6 @@
 				"${BUILT_PRODUCTS_DIR}/YYText/YYText.framework",
 				"${BUILT_PRODUCTS_DIR}/ZXNavigationBar/ZXNavigationBar.framework",
 				"${BUILT_PRODUCTS_DIR}/pop/pop.framework",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/WoodPeckeriOS/WoodPeckeriOS.framework/WoodPeckeriOS",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -1689,7 +1688,6 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YYText.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ZXNavigationBar.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/pop.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/WoodPeckeriOS.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

@@ -82,7 +82,7 @@ public extension UICollectionView {
     ///設置CollectionView的GirdLayout
     /// - Parameters:
     ///   - data: 數據(數組)
-    ///   - groupWidth: gropu的實際展示寬度
+    ///   - groupWidth: group的實際展示寬度
     ///   - size: 佈局大小
     ///   - cellRowCount: 每一行多少個數量
     ///   - originalX: 每行第一個起始位置
@@ -114,6 +114,75 @@ public extension UICollectionView {
         
         bannerItem.contentInsets = sectionContentInsets
         bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth - originalX * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
+    
+    //MARK: 設置CollectionView的WaterFallLayout
+    ///設置CollectionView的WaterFallLayout
+    /// - Parameters:
+    ///   - data: 數據(數組)
+    ///   - screenWidth: group的實際展示寬度
+    ///   - rowCount: 每一行多少個數量
+    ///   - itemOriginalX: item的初始x坐标
+    ///   - itemOriginalY: item的初始y坐标
+    ///   - itemSpace: item间隔距离
+    ///   - itemWidth: item的width
+    ///   - itemHeight: 根据回调的index和model来使外部传入对应每个item的height
+    /// - Returns: 瀑布流佈局
+    @objc class func waterFallLayout(data:[AnyObject],
+                                     screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                     rowCount:Int = 2,
+                                     itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                     itemOriginalY:CGFloat = 10,
+                                     itemSpace:CGFloat,
+                                     itemWidth:CGFloat,
+                                     itemHeight:(Int,AnyObject)->CGFloat) -> NSCollectionLayoutGroup {
+        var bannerGroupSize : NSCollectionLayoutSize
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+        var groupH:CGFloat = 0
+        let itemRightSapce:CGFloat = itemSpace
+        let screenW:CGFloat = screenWidth
+
+        let cellWidth = itemWidth
+        let originalX = itemOriginalX
+        let contentTopAndBottom:CGFloat = itemOriginalY
+        var x:CGFloat = originalX,y:CGFloat = 0 + contentTopAndBottom
+        data.enumerated().forEach { (index,model) in
+            let result = itemHeight(index,model)
+
+            let itemH:CGFloat = result
+            if index < rowCount {
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: cellWidth, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
+                x += cellWidth + itemRightSapce
+                if index == (data.count - 1) {
+                    groupH = y + itemH + contentTopAndBottom
+                }
+            } else {
+                x += cellWidth + itemRightSapce
+                if index > 0 && (index % rowCount == 0) {
+                    x = originalX
+                    y = (customers[index - rowCount].frame.height + 10 + customers[index - rowCount].frame.origin.y)
+                } else {
+                    y = (customers[index - rowCount].frame.height + 10 + customers[index - rowCount].frame.origin.y)
+                }
+
+                if index == (data.count - 1) {
+                    let lastHeight = (y + itemH + contentTopAndBottom)
+                    let lastLastHeight = (customers[index - 1].frame.height + contentTopAndBottom + customers[index - 1].frame.origin.y)
+                    if lastLastHeight > lastHeight {
+                        groupH = lastLastHeight
+                    } else {
+                        groupH = lastHeight
+                    }
+                }
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: x, y: y, width: cellWidth, height: itemH), zIndex: 1000+index)
+                customers.append(customItem)
+            }
+        }
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })

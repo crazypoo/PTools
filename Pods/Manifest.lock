@@ -395,7 +395,6 @@ PODS:
   - UIImageColors (2.1.0)
   - "UITextField+Shake (1.2.1)"
   - "UIViewController+Swizzled (1.4)"
-  - WoodPeckeriOS (1.3.3)
   - WZLBadge (1.2.6)
   - YYCache (1.0.4)
   - YYModel (1.0.4)
@@ -426,7 +425,6 @@ DEPENDENCIES:
   - PooTools/InputAll (from `PooTools.podspec`)
   - SwiftLint
   - Swinject
-  - WoodPeckeriOS
 
 SPEC REPOS:
   trunk:
@@ -490,7 +488,6 @@ SPEC REPOS:
     - UIImageColors
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
-    - WoodPeckeriOS
     - WZLBadge
     - YYCache
     - YYModel
@@ -571,13 +568,12 @@ SPEC CHECKSUMS:
   UIImageColors: d2ef3b0877d203cbb06489eeb78ea8b7788caabe
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb
-  WoodPeckeriOS: 6c067b9de7c2d4143ec1c66bac5aa2120327f759
   WZLBadge: 9ec779dcfd94c825518b395e8315fccaabff1bfa
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 72b0c87d9cb551fd15f42ed9745a6ef87f829d2d
+PODFILE CHECKSUM: 94f27a0f58f38ba9c1c30fe6cc3fc770c9f2c00e
 
 COCOAPODS: 1.12.1

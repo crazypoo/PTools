@@ -61,20 +61,25 @@ class PTSwiftViewController: PTBaseViewController {
         var group : NSCollectionLayoutGroup
         let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
         
-        var bannerGroupSize : NSCollectionLayoutSize
-        var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupH:CGFloat = 0
-        let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
-        sectionModel.rows.enumerated().forEach { (index,model) in
-            let cellHeight:CGFloat = 54
-            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
-            customers.append(customItem)
-            groupH += cellHeight
+//        var bannerGroupSize : NSCollectionLayoutSize
+//        var customers = [NSCollectionLayoutGroupCustomItem]()
+//        var groupH:CGFloat = 0
+//        let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
+//        sectionModel.rows.enumerated().forEach { (index,model) in
+//            let cellHeight:CGFloat = 54
+//            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace, y: groupH, width: screenW - PTAppBaseConfig.share.defaultViewSpace * 2, height: cellHeight), zIndex: 1000+index)
+//            customers.append(customItem)
+//            groupH += cellHeight
+//        }
+//        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+//        group = NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+//            customers
+//        })
+        
+        group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10, itemWidth: 100) { index in
+            return CGFloat(arc4random() % 1000)
         }
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenW), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-        group = NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-            customers
-        })
+        
 
         let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
         let laySection = NSCollectionLayoutSection(group: group)
