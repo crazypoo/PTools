@@ -51,8 +51,14 @@ open class PTShareItem: NSObject,UIActivityItemSource {
 open class PTShare {
     public static let share = PTShare()
     
-    public func share(shareItems items:[Any]) {
+    //MARK: 初始化分享控件
+    ///初始化分享控件
+    /// - Parameters:
+    ///   - shareItems: 可以是文本,图片data,其他文件....... Sample:["123",someImage.pngData()]
+    ///   - showCompletion: 弹出界面后的回调
+    public func share(shareItems items:[Any],
+                      showCompletion:(()->Void)? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        PTUtils.getCurrentVC().present(activityViewController, animated: true)
+        PTUtils.getCurrentVC().present(activityViewController, animated: true,completion: showCompletion)
     }
 }
