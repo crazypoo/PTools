@@ -34,7 +34,7 @@ public extension NSMutableAttributedString {
            paragraphStyle.paragraphSpacing = paragraphSpacing
            paragraphStyle.alignment = alignment
            paragraphStyle.lineBreakMode = lineBreakMode
-           self.addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
+           addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
        }
        return self
    }
@@ -42,7 +42,7 @@ public extension NSMutableAttributedString {
     @discardableResult func yb_lineSpacing(spacing: CGFloat) -> Self {
         getParagraphStyle(range: NSMakeRange(0, string.count)) { paragraphStyle,range in
             paragraphStyle.lineSpacing = spacing
-            self.addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
+            addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
         }
         return self
     }
@@ -53,7 +53,7 @@ public extension NSMutableAttributedString {
     @discardableResult func yb_alignment(alignment:NSTextAlignment) -> Self {
         getParagraphStyle(range: NSMakeRange(0, string.count)) { paragraphStyle,range in
             paragraphStyle.alignment = alignment
-            self.addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
+            addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
         }
         return self
     }

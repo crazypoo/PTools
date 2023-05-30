@@ -77,7 +77,7 @@ class PTSwiftViewController: PTBaseViewController {
 //        })
         
         group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10, itemWidth: 100) { index,item in
-            return CGFloat(arc4random() % 1000)
+            CGFloat(arc4random() % 1000)
         }
         
 
@@ -98,7 +98,7 @@ class PTSwiftViewController: PTBaseViewController {
     }()
 
     class var lifetimeConfiguration: LifetimeConfiguration {
-            return LifetimeConfiguration(maxCount: 1, groupName: "VC")
+        LifetimeConfiguration(maxCount: 1, groupName: "VC")
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -585,11 +585,11 @@ class PTSwiftViewController: PTBaseViewController {
 
 extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return mSections.count
+        mSections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return mSections[section].rows.count
+        mSections[section].rows.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

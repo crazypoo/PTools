@@ -575,7 +575,7 @@ public extension PTPOP where Base: FileManager {
     ///   - path: (文件夹/文件)路径
     /// - Returns: (文件夹/文件)属性集合
     @discardableResult
-    static func fileAttributes(path: String) -> ([FileAttributeKey : Any]?) {
+    static func fileAttributes(path: String) -> [FileAttributeKey : Any]? {
         do {
             let attributes = try fileManager.attributesOfItem(atPath: path)
             /*
