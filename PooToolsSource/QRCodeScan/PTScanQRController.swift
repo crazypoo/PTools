@@ -37,6 +37,8 @@ public class PTScanQRConfig:NSObject {
     public var scanedTips:String = "轻触小蓝点，选中识别二维码"
     ///是否可以掃二維碼
     public var canScanQR:Bool = true
+    ///是否自动返回
+    public var autoReturn:Bool = true
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String) -> Void
@@ -436,8 +438,11 @@ public class PTScanQRController: PTBaseViewController {
         if resultBlock != nil {
             resultBlock!(result)
         }
-        returnFrontVC()
-        navigationController?.setNavigationBarHidden(false, animated: false)
+        
+        if viewConfig.autoReturn {
+            returnFrontVC()
+            navigationController?.setNavigationBarHidden(false, animated: false)
+        }
     }
     
     //MARK: 根據UIImage來查找QR code
