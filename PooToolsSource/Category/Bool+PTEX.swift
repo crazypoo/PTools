@@ -13,6 +13,6 @@ public extension PTPOP where Base == Bool {
     //MARK: Swift的Bool轉Int
     ///Swift的Bool轉Int
     var boolToInt:Int {
-        return self.base ? 1 : 0
+        base ? 1 : 0
     }
 }

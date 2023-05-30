@@ -34,7 +34,7 @@ public class PTFaceEye: NSObject {
     ///开启
     public func createEye() {
         if Gobal_device_info.isFaceIDCapable {
-            self.manager.run()
+            manager.run()
         } else {
             PTNSLogConsole("设备不能运行")
         }
@@ -42,33 +42,33 @@ public class PTFaceEye: NSObject {
     
     ///关闭
     public func dismissEye() {
-        self.manager.hideCursorView()
-        self.manager.hideStatusView()
-        self.manager.pause()
+        manager.hideCursorView()
+        manager.hideStatusView()
+        manager.pause()
     }
     
     ///隐藏焦点
     public func hideCursorView() {
-        self.manager.hideCursorView()
+        manager.hideCursorView()
     }
     
     ///开启焦点
     public func showCursorView() {
-        self.manager.showCursorView(parent: AppWindows!)
+        manager.showCursorView(parent: AppWindows!)
     }
 }
 
 @available(iOS 12.0,*)
 extension PTFaceEye:PTEyeTrackingDelegate {
     public func didChange(eyeTrackingState: PTEyeTrackingState) {
-        if self.trackingEyeState != nil {
-            self.trackingEyeState!(eyeTrackingState)
+        if trackingEyeState != nil {
+            trackingEyeState!(eyeTrackingState)
         }
     }
     
     public func didChange(lookAtPoint: CGPoint) {
-        if self.eyeLookAt != nil {
-            self.eyeLookAt!(lookAtPoint)
+        if eyeLookAt != nil {
+            eyeLookAt!(lookAtPoint)
         }
     }
 }

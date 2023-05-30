@@ -15,12 +15,12 @@ public extension UIGestureRecognizer {
     
     @objc convenience init(actionBlock:@escaping TapedBlock) {
         self.init()
-        self.addGesActionHandlers(handler: actionBlock)
+        addGesActionHandlers(handler: actionBlock)
     }
     
     @objc func addGesActionHandlers(handler:@escaping TapedBlock) {
         objc_setAssociatedObject(self, &UIGestureRecognizer.UIGestureRecognizerBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        self.addTarget(self, action: #selector(self.actionTap(sender:)))
+        addTarget(self, action: #selector(actionTap(sender:)))
     }
     
     @objc func actionTap(sender:AnyObject) {

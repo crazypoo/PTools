@@ -21,6 +21,6 @@ public extension UIApplication {
     //MARK: 獲取軟件的開髮狀態
     ///獲取軟件的開髮狀態
     class func applicationEnvironment()->Environment {
-        return UIApplication.shared.inferredEnvironment
+        UIApplication.shared.inferredEnvironment
     }
 }

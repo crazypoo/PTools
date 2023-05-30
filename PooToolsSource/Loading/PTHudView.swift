@@ -53,13 +53,13 @@ public class PTHudView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubview(self.centerView)
-        self.centerView.snp.makeConstraints { make in
+        addSubview(centerView)
+        centerView.snp.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
             make.width.height.equalTo(conterViewSize)
         }
-        self.centerView.viewCorner(radius: conterViewSize * 0.1)
-        self.centerView.addSubview(self.hudView)
+        centerView.viewCorner(radius: conterViewSize * 0.1)
+        centerView.addSubview(hudView)
     }
     
     required init?(coder: NSCoder) {
@@ -67,17 +67,17 @@ public class PTHudView: UIView {
     }
     
     func hudShow() {
-        if self.hudConfig.hudColors.count < 2 {
+        if hudConfig.hudColors.count < 2 {
             PTNSLogConsole("不可以小于两个颜色")
             return
         }
-        self.backgroundColor = self.hudConfig.backgroundColor
+        backgroundColor = hudConfig.backgroundColor
         AppWindows?.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.centerView.transform = CGAffineTransformScale(.identity, 0.001, 0.001)
+        centerView.transform = CGAffineTransformScale(.identity, 0.001, 0.001)
         UIView.animate(withDuration: 0.3 / 1.5) {
             self.centerView.transform = CGAffineTransformScale(.identity, 1.1, 1.1)
         } completion: { finish in
@@ -103,10 +103,10 @@ public class PTHudView: UIView {
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if self.hudConfig.masked {
+        if hudConfig.masked {
             return super.hitTest(point, with: event)
         } else {
-            for view in self.subviews {
+            for view in subviews {
                 if let responder : UIView = view.hitTest(view.convert(point, from: self), with: event) {
                     return responder
                 }
@@ -132,9 +132,9 @@ public class PTLoadingHud:UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .clear
-        self.circleCenter = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
-        self.circleRadius = frame.size.width / 3
+        backgroundColor = .clear
+        circleCenter = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        circleRadius = frame.size.width / 3
     }
     
     required init?(coder: NSCoder) {
@@ -142,27 +142,27 @@ public class PTLoadingHud:UIView {
     }
     
     func degressToRadian(angle:CGFloat)->CGFloat {
-        return Double.pi * angle / 180
+        Double.pi * angle / 180
     }
     
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
         let context = UIGraphicsGetCurrentContext()
         context?.setLineCap(.round)
-        context?.setLineWidth(self.hudConfig.lineWidth)
+        context?.setLineWidth(hudConfig.lineWidth)
         
-        if self.status == .Waiting && self.length == minLength {
-            context?.setStrokeColor(red: self.gradualColor.rgbaValueModel().redFloat, green: self.gradualColor.rgbaValueModel().greenFloat, blue: self.gradualColor.rgbaValueModel().blueFloat, alpha: self.gradualColor.rgbaValueModel().alphaFloat)
+        if status == .Waiting && length == minLength {
+            context?.setStrokeColor(red: gradualColor.rgbaValueModel().redFloat, green: gradualColor.rgbaValueModel().greenFloat, blue: gradualColor.rgbaValueModel().blueFloat, alpha: gradualColor.rgbaValueModel().alphaFloat)
         } else {
-            context?.setStrokeColor(red: self.finalColor.rgbaValueModel().redFloat, green: self.finalColor.rgbaValueModel().greenFloat, blue: self.finalColor.rgbaValueModel().blueFloat, alpha: self.finalColor.rgbaValueModel().alphaFloat)
+            context?.setStrokeColor(red: finalColor.rgbaValueModel().redFloat, green: finalColor.rgbaValueModel().greenFloat, blue: finalColor.rgbaValueModel().blueFloat, alpha: finalColor.rgbaValueModel().alphaFloat)
         }
         
-        let deltaLength = sin(self.length / 360 * (Double.pi / 2)) * 360
-        let startAngle = self.degressToRadian(angle: -deltaLength)
-        context?.addArc(center: self.circleCenter, radius: self.circleRadius, startAngle: startAngle, endAngle: 0, clockwise: false)
+        let deltaLength = sin(length / 360 * (Double.pi / 2)) * 360
+        let startAngle = degressToRadian(angle: -deltaLength)
+        context?.addArc(center: circleCenter, radius: circleRadius, startAngle: startAngle, endAngle: 0, clockwise: false)
         
         context?.strokePath()
-        self.perform(#selector(self.refreshCricle), with: nil, afterDelay: 1 / framePerSecond)
+        self.perform(#selector(refreshCricle), with: nil, afterDelay: 1 / framePerSecond)
     }
     
     @objc func refreshCricle() {
@@ -226,10 +226,10 @@ public class PTLoadingHud:UIView {
 extension PTLoadingHud {
     public override func willMove(toSuperview newSuperview: UIView?) {
         if newSuperview != nil {
-            self.colorIndex = Int(arc4random())%self.hudConfig.hudColors.count
-            self.finalColor = self.hudConfig.hudColors[self.colorIndex]
+            colorIndex = Int(arc4random()) % hudConfig.hudColors.count
+            finalColor = hudConfig.hudColors[colorIndex]
         } else {
-            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(self.refreshCricle), object: nil)
+            NSObject.cancelPreviousPerformRequests(withTarget: self, selector: #selector(refreshCricle), object: nil)
         }
     }
 }

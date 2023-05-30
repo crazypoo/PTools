@@ -91,37 +91,37 @@ public class PTDebugViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.addSubviews([self.viewCollection])
-        self.viewCollection.snp.makeConstraints { make in
+        view.addSubviews([viewCollection])
+        viewCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
-        self.showDetail()
+        showDetail()
     }
     
     func showDetail() {
-        self.mSections.removeAll()
+        mSections.removeAll()
         
         var rows = [PTRows]()
-        self.settingCellModels.enumerated().forEach { index,value in
+        settingCellModels.enumerated().forEach { index,value in
             let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
             rows.append(row)
         }
         let section = PTSection.init(rows: rows)
-        self.mSections.append(section)
+        mSections.append(section)
         
-        self.viewCollection.pt_register(by: self.mSections)
-        self.viewCollection.reloadData()
+        viewCollection.pt_register(by: mSections)
+        viewCollection.reloadData()
     }    
 }
 
 extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.mSections.count
+        mSections.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.mSections[section].rows.count
+        mSections[section].rows.count
     }
 
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -224,7 +224,7 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
 
 extension PTDebugViewController:UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        return true
+        true
     }
 }
 

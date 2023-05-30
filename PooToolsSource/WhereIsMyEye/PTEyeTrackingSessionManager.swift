@@ -27,7 +27,7 @@ internal class PTEyeTrackingSessionManager: NSObject {
     internal var delegate: PTEyeTrackingSessionManagerDelegate?
     
     internal func run() {
-        self.session.delegate = self
+        session.delegate = self
         guard ARFaceTrackingConfiguration.isSupported else {
             print(Constants.ERR_MESSAGE_NOT_SUPPORTED)
             return
@@ -37,11 +37,11 @@ internal class PTEyeTrackingSessionManager: NSObject {
         configuration.isLightEstimationEnabled = false
         configuration.worldAlignment = .camera
         
-        self.session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
+        session.run(configuration, options: [.resetTracking, .removeExistingAnchors])
     }
     
     internal func pause() {
-        self.session.pause()
+        session.pause()
     }
 }
 
@@ -52,7 +52,7 @@ extension PTEyeTrackingSessionManager: ARSessionDelegate {
 
     internal func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
         guard let faceAnchor = anchors[0] as? ARFaceAnchor else { return }
-        self.delegate?.update(withFaceAnchor: faceAnchor)
+        delegate?.update(withFaceAnchor: faceAnchor)
     }
     
     internal func session(_ session: ARSession, didFailWithError error: Error) {

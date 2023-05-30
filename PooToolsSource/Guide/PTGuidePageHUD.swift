@@ -46,7 +46,7 @@ public class PTGuidePageHUD: UIView {
     public init(viewModel:PTGuidePageModel) {
         super.init(frame: viewModel.mainView.frame)
         if viewModel.tapHidden {
-            self.imageArray = viewModel.imageArrays
+            imageArray = viewModel.imageArrays
         }
         
         let guidePageView = UIScrollView()
@@ -56,7 +56,7 @@ public class PTGuidePageHUD: UIView {
         guidePageView.isPagingEnabled = true
         guidePageView.showsHorizontalScrollIndicator = false
         guidePageView.delegate = self
-        self.addSubview(guidePageView)
+        addSubview(guidePageView)
         guidePageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -70,7 +70,7 @@ public class PTGuidePageHUD: UIView {
         skipButton.addActionHandlers { sender in
             self.buttonClick(sender: sender)
         }
-        self.addSubview(skipButton)
+        addSubview(skipButton)
         skipButton.snp.makeConstraints { make in
             make.width.equalTo(50)
             make.height.equalTo(25)
@@ -132,7 +132,7 @@ public class PTGuidePageHUD: UIView {
         imagePageControl.numberOfPages = viewModel.imageArrays.count
         imagePageControl.pageIndicatorTintColor = .gray
         imagePageControl.currentPageIndicatorTintColor = .white
-        self.addSubview(imagePageControl)
+        addSubview(imagePageControl)
         imagePageControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(30)
@@ -142,7 +142,7 @@ public class PTGuidePageHUD: UIView {
         imagePageControl.isHidden = viewModel.pageControl ? false : true
         imagePageControl.isUserInteractionEnabled = viewModel.pageControl
         
-        self.addSubview(forwardButton)
+        addSubview(forwardButton)
         forwardButton.snp.makeConstraints { make in
             make.width.height.equalTo(64)
             make.bottom.equalToSuperview().offset(-(CGFloat.kTabbarSaveAreaHeight + 10))
@@ -155,7 +155,7 @@ public class PTGuidePageHUD: UIView {
             guidePageView.contentOffset.x = guidePageView.contentOffset.x - guidePageView.frame.size.width
         }
         
-        self.addSubview(nextButton)
+        addSubview(nextButton)
         nextButton.snp.makeConstraints { make in
             make.width.height.bottom.equalTo(forwardButton)
             make.right.equalToSuperview().inset(10)
@@ -192,7 +192,7 @@ public class PTGuidePageHUD: UIView {
         player.player = AVPlayer.init(url: videlURL)
         player.showsPlaybackControls = false
         player.entersFullScreenWhenPlaybackBegins = true
-        self.addSubview(player.view)
+        addSubview(player.view)
         player.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -233,7 +233,7 @@ public class PTGuidePageHUD: UIView {
     }
     
     public func removeGuidePageHUD() {
-        self.removeFromSuperview()
+        removeFromSuperview()
         if adHadRemove != nil {
             adHadRemove!()
         }
@@ -244,7 +244,7 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto! {
-            self.buttonClick(sender: nil)
+            buttonClick(sender: nil)
         }
         
         if (imageArray?.count ?? 0 > 0) && page < (imageArray!.count - 1) && slideInto! {
@@ -266,11 +266,11 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
         let currentInt = "\((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)".int ?? 0
         imagePageControl.currentPage = currentInt
         if currentInt >= 1 {
-            self.forwardButton.isHidden = false
-            self.forwardButton.isUserInteractionEnabled = true
+            forwardButton.isHidden = false
+            forwardButton.isUserInteractionEnabled = true
         } else {
-            self.forwardButton.isHidden = true
-            self.forwardButton.isUserInteractionEnabled = false
+            forwardButton.isHidden = true
+            forwardButton.isUserInteractionEnabled = false
         }
     }
 }

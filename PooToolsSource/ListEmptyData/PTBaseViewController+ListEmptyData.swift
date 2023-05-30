@@ -14,17 +14,17 @@ extension PTBaseViewController:LXFEmptyDataSetable {
     //MARK: 添加emptydataset
     ///添加emptydataset,设置无数据空页面
     open func showEmptyDataSet(currentScroller:UIScrollView) {
-        self.lxf_EmptyDataSet(currentScroller) { () -> ([LXFEmptyDataSetAttributeKeyType : Any]) in
-            return [
-                .tipStr : "",
-                .tipColor : UIColor.black,
-                .verticalOffset : 0,
-                .tipImage : UIImage()
+        self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
+            [
+                .tipStr: "",
+                .tipColor: UIColor.black,
+                .verticalOffset: 0,
+                .tipImage: UIImage()
             ]
         }
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        return NSAttributedString()
+        NSAttributedString()
     }
 }

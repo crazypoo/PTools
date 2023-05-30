@@ -29,8 +29,8 @@ open class LLImagePageControl: UIPageControl {
     
     func updateDots() {
         var i = 0
-        for view in self.subviews {
-            var imageView = self.imageView(forSubview: view)
+        for view in subviews {
+            var imageView = imageView(forSubview: view)
             if imageView == nil {
                 if i == 0 {
                     imageView = UIImageView(image: dotInActiveImage)
@@ -43,7 +43,7 @@ open class LLImagePageControl: UIPageControl {
                 view.clipsToBounds = false
             }
             
-            if i == self.currentPage {
+            if i == currentPage {
                 imageView!.image = dotInActiveImage
             } else {
                 imageView!.image = dotActiveImage

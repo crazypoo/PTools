@@ -31,15 +31,17 @@ public extension UIAlertController {
     ///   - destructiveBlock: 擴展回調
     ///   - cancelBlock: 取消回調
     ///   - otherBlock: 其他回調
+    ///   - tapBackgroundBlock:
+    ///   - tapBackgroundBlock:
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
                                      cancelButtonName:String? = "取消",
                                      destructiveButtonName:String? = "",
                                      titles:[String],
-                                     destructiveBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
-                                     cancelBlock:@escaping ((_ sheet:PTActionSheetView)->Void),
-                                     otherBlock:@escaping ((_ sheet:PTActionSheetView,_ index:Int)->Void),
-                                     tapBackgroundBlock:@escaping ((_ sheet:PTActionSheetView)->Void)) {
+                                     destructiveBlock: @escaping (_ sheet:PTActionSheetView)->Void,
+                                     cancelBlock: @escaping (_ sheet:PTActionSheetView)->Void,
+                                     otherBlock: @escaping (_ sheet:PTActionSheetView, _ index:Int)->Void,
+                                     tapBackgroundBlock: @escaping (_ sheet:PTActionSheetView)->Void) {
         let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles)
         actionSheet.actionSheetSelectBlock = { (sheet,index) in
             switch index {
@@ -65,6 +67,7 @@ public extension UIAlertController {
     ///   - titleFont: 標題字體
     ///   - msg: 內容
     ///   - msgColor: 內容顏色
+    ///   - msgFont:
     ///   - okBtns: 更多按鈕(數組)
     ///   - cancelBtn: 取消按鈕
     ///   - showIn: 在哪裏顯示
@@ -74,6 +77,7 @@ public extension UIAlertController {
     ///   - alertCornerRadius: 圓角
     ///   - cancel: 取消回調
     ///   - moreBtn: 更多按鈕點擊回調
+    ///   - msgFont:
     @objc class func base_alertVC(title:String? = "",
                             titleColor:UIColor? = UIColor.black,
                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),

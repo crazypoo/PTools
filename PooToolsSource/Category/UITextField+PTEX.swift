@@ -34,12 +34,12 @@ extension UITextField {
     }
     
     func setCursorAboveText() {
-        let padding = self.textRect(forBounds: self.bounds)
+        let padding = textRect(forBounds: self.bounds)
         let cursorFrame = CGRect(x: padding.origin.x, y: padding.origin.y, width: 2, height: padding.size.height)
-        self.tintColor = .clear
+        tintColor = .clear
         let cursor = UIView(frame: cursorFrame)
         cursor.backgroundColor = .randomColor
-        self.addSubview(cursor)
+        addSubview(cursor)
     }
 }
 
@@ -49,6 +49,6 @@ extension UITextField {
     }
 
     func getAssociatedObject(forKey key: UnsafeRawPointer) -> Any? {
-        return objc_getAssociatedObject(self, key)
+        objc_getAssociatedObject(self, key)
     }
 }

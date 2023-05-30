@@ -13,12 +13,12 @@ public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     ///獲取圖片的某像素點的顏色
     func getImagePointColor(point:CGPoint)->UIColor {
-        let thumbSize = CGSize(width: self.image!.size.width, height: self.image!.size.height)
+        let thumbSize = CGSize(width: image!.size.width, height: image!.size.height)
 
         // 当前点在图片中的相对位置
         let pInImage = CGPointMake(point.x * thumbSize.width / self.bounds.size.width,
                                    point.y * thumbSize.height / self.bounds.size.height)
-        return self.image!.getImgePointColor(point: pInImage)
+        return image!.getImgePointColor(point: pInImage)
     }
     
     func pt_SDWebImage(imageString:String) {

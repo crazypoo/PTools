@@ -200,7 +200,7 @@ public class PooSegmentSubView:UIView {
                 default:
                     make.left.right.equalTo(self.label)
                 }
-                let lineHight:CGFloat?
+                var lineHight: CGFloat
                 if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
                     lineHight = self.viewConfig.bottomSquare
                     make.height.equalTo(self.viewConfig.bottomSquare)
@@ -208,15 +208,15 @@ public class PooSegmentSubView:UIView {
                     lineHight = self.viewConfig.underHight
                     make.height.equalTo(self.viewConfig.underHight)
                 }
-                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight!)/2)
+                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight)/2)
                 if self.viewConfig.underlineRadius {
-                    underLine.viewCorner(radius: lineHight!/2)
+                    underLine.viewCorner(radius: lineHight/2)
                 }
             }
         case .Dog:
             addSubview(underLine)
             underLine.snp.makeConstraints { (make) in
-                let lineHight:CGFloat?
+                let lineHight: CGFloat
                 if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
                     lineHight = self.viewConfig.bottomSquare
                     make.width.height.equalTo(self.viewConfig.bottomSquare)
@@ -225,8 +225,8 @@ public class PooSegmentSubView:UIView {
                     make.width.height.equalTo(self.viewConfig.underHight)
                 }
                 make.centerX.equalToSuperview()
-                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight!)/2)
-                underLine.viewCorner(radius: lineHight!/2)
+                make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight)/2)
+                underLine.viewCorner(radius: lineHight/2)
             }
 
         case .Background:

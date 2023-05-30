@@ -58,8 +58,8 @@ public class PTLoadingView: UIView {
     public var progress:CGFloat = 0 {
         didSet{
             self.setNeedsDisplay()
-            if self.progress >= 1 {
-                self.removeFromSuperview()
+            if progress >= 1 {
+                removeFromSuperview()
             }
         }
     }
@@ -68,13 +68,13 @@ public class PTLoadingView: UIView {
     
     public init(type:PTLoadingViewMode) {
         super.init(frame: .zero)
-        self.progressMode = type
+        progressMode = type
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.backgroundColor = PTLoadingBackgroundColor
-        self.clipsToBounds = true
+        backgroundColor = PTLoadingBackgroundColor
+        clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -88,7 +88,7 @@ public class PTLoadingView: UIView {
         let yCenter = rect.size.height * 0.5
         UIColor.white.set()
         
-        switch self.progressMode {
+        switch progressMode {
         case .PieDiagram:
             let radius = min(xCenter, yCenter) - PTLoadingItemSpace
             let w = radius * 2 - PTLoadingItemSpace
@@ -102,7 +102,7 @@ public class PTLoadingView: UIView {
             ctx!.move(to: CGPoint.init(x: xCenter, y: yCenter))
             ctx?.addLine(to: CGPoint.init(x: xCenter, y: 0))
             let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + self.progress * .pi * 2 + 0.01)
+            let to = (piFloat * 0.5 + progress * .pi * 2 + 0.01)
             ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: yCenter / 2, startAngle: (piFloat * 0.5), endAngle: to, clockwise: true)
             ctx!.closePath()
             ctx!.fillPath()
@@ -110,7 +110,7 @@ public class PTLoadingView: UIView {
             ctx!.setLineWidth(4)
             ctx!.setLineCap(.round)
             let piFloat :CGFloat = -.pi
-            let to = (piFloat * 0.5 + self.progress * .pi * 2 + 0.05)
+            let to = (piFloat * 0.5 + progress * .pi * 2 + 0.05)
             let radius = min(rect.size.width, rect.self.size.height) * 0.5 - PTLoadingItemSpace
             ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
             ctx!.strokePath()
@@ -183,7 +183,7 @@ public class PTMediaMediaView:UIView
 
     //MARK: 图片相关
     fileprivate var scrollOffset:CGPoint? = CGPoint.zero
-    public lazy var zoomImageSize:CGSize? = CGSize.init(width: self.frame.size.width, height: self.frame.size.height)
+    public lazy var zoomImageSize:CGSize? = CGSize.init(width: frame.size.width, height: frame.size.height)
     var hasLoadedImage:Bool? = false
     fileprivate lazy var reloadButton:UIButton = {
         let view = UIButton.init(type: .custom)
@@ -284,8 +284,8 @@ public class PTMediaMediaView:UIView
         
         self.viewConfig = viewConfig
         
-        self.addSubview(self.contentScrolView)
-        self.contentScrolView.snp.makeConstraints { make in
+        addSubview(contentScrolView)
+        contentScrolView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }
@@ -299,17 +299,17 @@ public class PTMediaMediaView:UIView
     }
     
     func adjustFrame() {
-        switch self.dataModel.imageShowType {
+        switch dataModel.imageShowType {
         case .GIF,.Normal:
-            if self.gifImage != nil {
-                let imageSize = self.gifImage!.size
+            if gifImage != nil {
+                let imageSize = gifImage!.size
                 var imageFrame = CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
-                if self.isFullWidthForLandScape {
+                if isFullWidthForLandScape {
                     let ratio = frame.size.width / imageFrame.size.width
                     imageFrame.size.height = imageFrame.size.height * ratio
                     imageFrame.size.width = frame.size.width
                 } else {
-                    if self.frame.size.width <= self.frame.size.height {
+                    if frame.size.width <= frame.size.height {
                         let ratio = frame.size.width / imageFrame.size.width
                         imageFrame.size.height = imageFrame.size.height * ratio
                         imageFrame.size.width = frame.size.width
@@ -319,23 +319,23 @@ public class PTMediaMediaView:UIView
                         imageFrame.size.height = frame.size.height
                     }
                 }
-                self.imageView.frame = imageFrame
-                self.contentScrolView.contentSize = self.imageView.frame.size
-                self.imageView.center = PTMediaMediaView.centerOfScrollVIewContent(scrollView: self.contentScrolView)
+                imageView.frame = imageFrame
+                contentScrolView.contentSize = imageView.frame.size
+                imageView.center = PTMediaMediaView.centerOfScrollVIewContent(scrollView: contentScrolView)
                 
                 var maxScale = frame.size.height / imageFrame.size.height
                 maxScale = frame.size.width / imageFrame.self.width > maxScale ? frame.self.width / imageFrame.self.width : maxScale
                 maxScale = maxScale > maxZoomSale ? maxScale : maxZoomSale
-                self.contentScrolView.minimumZoomScale = minZoomSale
-                self.contentScrolView.maximumZoomScale = maxScale
-                self.contentScrolView.zoomScale = 1
+                contentScrolView.minimumZoomScale = minZoomSale
+                contentScrolView.maximumZoomScale = maxScale
+                contentScrolView.zoomScale = 1
             } else {
                 frame.origin = .zero
-                self.imageView.frame = frame
-                self.contentScrolView.contentSize = self.imageView.frame.size
+                imageView.frame = frame
+                contentScrolView.contentSize = imageView.frame.size
             }
-            self.contentScrolView.contentOffset = .zero
-            self.zoomImageSize = self.imageView.frame.size
+            contentScrolView.contentOffset = .zero
+            zoomImageSize = imageView.frame.size
         default:
             break
         }
@@ -345,7 +345,7 @@ public class PTMediaMediaView:UIView
         self.dataModel = dataModel
         
         let loading = PTLoadingView.init(type: .LoopDiagram)
-        self.addSubview(loading)
+        addSubview(loading)
         loading.snp.makeConstraints { make in
             make.width.height.equalTo(50)
             make.centerX.centerY.equalToSuperview()
@@ -545,33 +545,33 @@ public class PTMediaMediaView:UIView
     
     func createThreeDView(image:UIImage) {
         let camera = SCNCamera()
-        self.cameraNode = SCNNode()
+        cameraNode = SCNNode()
         
-        self.sceneView = SCNView()
-        self.sceneView?.scene = SCNScene()
-        self.contentScrolView.addSubview(self.sceneView!)
-        self.sceneView?.snp.makeConstraints({ make in
+        sceneView = SCNView()
+        sceneView?.scene = SCNScene()
+        contentScrolView.addSubview(sceneView!)
+        sceneView?.snp.makeConstraints({ make in
             make.left.right.equalToSuperview()
             make.height.equalTo(self.frame.size.height - CGFloat.kNavBarHeight - 80)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight)
         })
-        self.sceneView?.allowsCameraControl = true
+        sceneView?.allowsCameraControl = true
         
-        self.cameraNode?.camera = camera
-        self.cameraNode?.camera?.automaticallyAdjustsZRange = true
-        self.cameraNode?.position = SCNVector3.init(x: 0, y: 0, z: 0)
-        self.cameraNode?.camera?.fieldOfView = 60
-        self.cameraNode?.camera?.focalLength = 60
-        self.sceneView?.scene?.rootNode.addChildNode(self.cameraNode!)
+        cameraNode?.camera = camera
+        cameraNode?.camera?.automaticallyAdjustsZRange = true
+        cameraNode?.position = SCNVector3.init(x: 0, y: 0, z: 0)
+        cameraNode?.camera?.fieldOfView = 60
+        cameraNode?.camera?.focalLength = 60
+        sceneView?.scene?.rootNode.addChildNode(cameraNode!)
         
-        self.panoramaNode = SCNNode()
-        self.panoramaNode?.geometry = SCNSphere.init(radius: 150)
-        self.panoramaNode?.geometry?.firstMaterial?.cullMode = .front
-        self.panoramaNode?.geometry?.firstMaterial?.isDoubleSided = true
-        self.panoramaNode?.position = SCNVector3.init(x: 0, y: 0, z: 0)
-        self.sceneView?.scene?.rootNode.addChildNode(self.panoramaNode!)
+        panoramaNode = SCNNode()
+        panoramaNode?.geometry = SCNSphere.init(radius: 150)
+        panoramaNode?.geometry?.firstMaterial?.cullMode = .front
+        panoramaNode?.geometry?.firstMaterial?.isDoubleSided = true
+        panoramaNode?.position = SCNVector3.init(x: 0, y: 0, z: 0)
+        sceneView?.scene?.rootNode.addChildNode(panoramaNode!)
         
-        self.panoramaNode?.geometry?.firstMaterial?.diffuse.contents = image
+        panoramaNode?.geometry?.firstMaterial?.diffuse.contents = image
         
         let pan = UIPanGestureRecognizer.init { sender in
             let ges = sender as! UIPanGestureRecognizer
@@ -598,7 +598,7 @@ public class PTMediaMediaView:UIView
                 self.cameraNode?.pivot = modelMatrix
             }
         }
-        self.sceneView?.addGestureRecognizer(pan)
+        sceneView?.addGestureRecognizer(pan)
         
         let pinch = UIPinchGestureRecognizer.init { sender in
             //TODO: pinch
@@ -624,15 +624,15 @@ public class PTMediaMediaView:UIView
                 self.prevScale = self.currentScale
             }
         }
-        self.sceneView?.addGestureRecognizer(pinch)
+        sceneView?.addGestureRecognizer(pinch)
         
-        if self.motionManager.isDeviceMotionAvailable {
-            self.motionManager.startDeviceMotionUpdates()
+        if motionManager.isDeviceMotionAvailable {
+            motionManager.startDeviceMotionUpdates()
         } else {
             PTNSLogConsole("该设备的deviceMotion不可用")
         }
         
-        self.motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in
+        motionManager.startDeviceMotionUpdates(using: CMAttitudeReferenceFrame.xMagneticNorthZVertical, to: OperationQueue.current!) { motion, error in
             
             var orientation:UIInterfaceOrientation = .unknown
             orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
@@ -645,8 +645,8 @@ public class PTMediaMediaView:UIView
             }
         }
         
-        self.hasLoadedImage = true
-        self.contentScrolView.contentSize = CGSize.init(width: self.frame.size.width, height: self.frame.size.height)
+        hasLoadedImage = true
+        contentScrolView.contentSize = CGSize.init(width: frame.size.width, height: frame.size.height)
     }
     
     func validateScale(scale:CGFloat)->CGFloat {
@@ -660,18 +660,18 @@ public class PTMediaMediaView:UIView
     }
     
     func createReloadButton() {
-        self.hasLoadedImage = false
-        self.addSubview(self.reloadButton)
-        self.reloadButton.snp.makeConstraints { make in
+        hasLoadedImage = false
+        addSubview(reloadButton)
+        reloadButton.snp.makeConstraints { make in
             make.width.equalTo(200)
             make.height.equalTo(40)
             make.centerY.centerX.equalToSuperview()
         }
-        self.bringSubviewToFront(self.reloadButton)
+        bringSubviewToFront(reloadButton)
     }
     
     func playInSomeTime(someTime:Float) {
-        let fps = self.player.player!.currentItem!.asset.tracks(withMediaType: .video)[0].nominalFrameRate
+        let fps = player.player!.currentItem!.asset.tracks(withMediaType: .video)[0].nominalFrameRate
         let time = CMTimeMakeWithSeconds(Float64(someTime), preferredTimescale: Int32(fps))
         self.player.player?.seek(to: time, toleranceBefore: .zero, toleranceAfter: .zero, completionHandler: { finish in
             self.player.player!.play()
@@ -688,13 +688,13 @@ public class PTMediaMediaView:UIView
 
 extension PTMediaMediaView:UIScrollViewDelegate
 {
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return self.imageView
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView {
+        imageView
     }
     
     public func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        self.zoomImageSize = view?.frame.size
-        self.scrollOffset = scrollView.contentOffset
+        zoomImageSize = view?.frame.size
+        scrollOffset = scrollView.contentOffset
     }
     
     public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
@@ -706,11 +706,11 @@ extension PTMediaMediaView:UIScrollViewDelegate
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        self.imageView.center = PTMediaMediaView.centerOfScrollVIewContent(scrollView: scrollView)
+        imageView.center = PTMediaMediaView.centerOfScrollVIewContent(scrollView: scrollView)
     }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        self.scrollOffset = scrollView.contentOffset
+        scrollOffset = scrollView.contentOffset
     }
 }
 
@@ -919,99 +919,99 @@ public class PTMediaViewer: UIView {
         self.viewConfig = viewConfig
         switch self.viewConfig.actionType {
         case .All:
-            self.actionSheetTitle = ["保存媒体","删除图片"]
+            actionSheetTitle = ["保存媒体","删除图片"]
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
-                self.actionSheetTitle.append(value)
+                actionSheetTitle.append(value)
             }
         case .Save:
-            self.actionSheetTitle = ["保存媒体"]
+            actionSheetTitle = ["保存媒体"]
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
-                self.actionSheetTitle.append(value)
+                actionSheetTitle.append(value)
             }
         case .Delete:
-            self.actionSheetTitle = ["删除图片"]
+            actionSheetTitle = ["删除图片"]
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
-                self.actionSheetTitle.append(value)
+                actionSheetTitle.append(value)
             }
         case .DIY:
             self.viewConfig.moreActionEX.enumerated().forEach { index,value in
-                self.actionSheetTitle.append(value)
+                actionSheetTitle.append(value)
             }
         default:
             break
         }
         
         
-        self.addSubview(self.contentScrolView)
-        self.contentScrolView.snp.makeConstraints { make in
+        addSubview(contentScrolView)
+        contentScrolView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.addSubview(self.fakeNav)
-        self.fakeNav.snp.makeConstraints { make in
+        addSubview(fakeNav)
+        fakeNav.snp.makeConstraints { make in
             make.left.right.top.equalToSuperview()
             make.height.equalTo(CGFloat.kNavBarHeight_Total)
         }
         
-        self.addSubview(self.bottomView)
-        self.bottomView.snp.makeConstraints { make in
+        addSubview(bottomView)
+        bottomView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(44)
         }
 
         if self.viewConfig.mediaData.count > 1 {
-            self.fakeNav.addSubview(self.indexLabel)
-            self.indexLabel.text = "1/\(self.viewConfig.mediaData.count)"
-            self.indexLabel.snp.makeConstraints { make in
+            fakeNav.addSubview(indexLabel)
+            indexLabel.text = "1/\(self.viewConfig.mediaData.count)"
+            indexLabel.snp.makeConstraints { make in
                 make.centerX.equalToSuperview()
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
                 make.height.equalTo(PTViewerTitleHeight)
             }
         }
         
-        self.fakeNav.addSubview(self.fullViewLabel)
-        self.fullViewLabel.snp.makeConstraints { make in
+        fakeNav.addSubview(fullViewLabel)
+        fullViewLabel.snp.makeConstraints { make in
             make.height.equalTo(PTViewerTitleHeight)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
             make.right.equalToSuperview().inset(20)
         }
-        self.fullViewLabel.isHidden = self.viewConfig.showMediaTypeLabel
+        fullViewLabel.isHidden = self.viewConfig.showMediaTypeLabel
         
-        self.fakeNav.addSubview(self.backButton)
-        self.backButton.snp.makeConstraints { make in
+        fakeNav.addSubview(backButton)
+        backButton.snp.makeConstraints { make in
             make.width.height.equalTo(PTViewerTitleHeight)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + (CGFloat.kNavBarHeight - PTViewerTitleHeight) / 2)
             make.left.equalToSuperview().inset(10)
         }
 
         if self.viewConfig.mediaData.count > 10 {
-            self.showLabel = true
-            self.pageView_label.text = "1/\(self.viewConfig.mediaData.count)"
-            self.addSubview(self.pageView_label)
-            self.pageView_label.snp.makeConstraints { make in
+            showLabel = true
+            pageView_label.text = "1/\(self.viewConfig.mediaData.count)"
+            addSubview(pageView_label)
+            pageView_label.snp.makeConstraints { make in
                 make.height.equalTo(PTViewerTitleHeight)
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(20)
             }
         } else {
-            self.showLabel = false
-            self.addSubview(self.pageView)
-            self.pageView.snp.makeConstraints { make in
+            showLabel = false
+            addSubview(pageView)
+            pageView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalToSuperview().inset(20)
                 make.height.equalTo(20)
             }
             if self.viewConfig.mediaData.count > 1 {
-                self.pageView.isHidden = false
+                pageView.isHidden = false
             } else {
-                self.pageView.isHidden = true
+                pageView.isHidden = true
             }
         }
         
-        self.isUserInteractionEnabled = true
+        isUserInteractionEnabled = true
         
-        self.bottomView.addSubview(self.labelScroller)
-        self.labelScroller.addSubview(self.titleLabel)
+        bottomView.addSubview(labelScroller)
+        labelScroller.addSubview(titleLabel)
     }
     
     required init?(coder: NSCoder) {
@@ -1098,17 +1098,17 @@ public class PTMediaViewer: UIView {
         }
         
 //        let current = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
-        self.addGestureRecognizers([singleTap,doubleTap,pan])
+        addGestureRecognizers([singleTap,doubleTap,pan])
     }
     
     public func showImageViewer() {
         let windows = AppWindows!
-        windows.addSubview(self.backgroundView)
-        self.backgroundView.snp.makeConstraints { make in
+        windows.addSubview(backgroundView)
+        backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.show(content: self.backgroundView) {
+        show(content: backgroundView) {
             UIView.animate(withDuration: 0.5) {
                 self.alpha = 1
                 self.backgroundView.alpha = 1
@@ -1169,7 +1169,7 @@ public class PTMediaViewer: UIView {
     }
     
     func fullImageHidden()->String {
-        let models = self.viewConfig.mediaData[self.page]
+        let models = viewConfig.mediaData[page]
         switch models.imageShowType {
         case .FullView:
             return "全景"
@@ -1185,8 +1185,8 @@ public class PTMediaViewer: UIView {
     }
     
     func viewDismissAction() {
-        self.viewConfig.mediaData.enumerated().forEach { index,value in
-            let currentImages = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
+        viewConfig.mediaData.enumerated().forEach { index,value in
+            let currentImages = contentScrolView.subviews[page] as! PTMediaMediaView
             switch currentImages.dataModel.imageShowType {
             case .GIF:
                 currentImages.imageView.stopAnimating()
@@ -1217,28 +1217,28 @@ public class PTMediaViewer: UIView {
     }
     
     func saveImage() {
-        let model = self.viewConfig.mediaData[self.page]
+        let model = viewConfig.mediaData[page]
         
-        let currentView = self.imagesScrollViews[self.page] as! PTMediaMediaView
+        let currentView = imagesScrollViews[page] as! PTMediaMediaView
         switch model.imageShowType {
         case .FullView,.ThreeD:
             if currentView.hasLoadedImage! {
                 let fullImage = currentView.panoramaNode?.geometry?.firstMaterial?.diffuse.contents as! UIImage
-                self.saveImageToPhotos(saveImage: fullImage)
+                saveImageToPhotos(saveImage: fullImage)
             } else {
-                if self.viewSaveImageBlock != nil {
-                    self.viewSaveImageBlock!(false)
+                if viewSaveImageBlock != nil {
+                    viewSaveImageBlock!(false)
                 }
             }
         case .Video:
-            self.saveVideoAction(url: model.imageURL as! String)
+            saveVideoAction(url: model.imageURL as! String)
         default:
-            self.saveImageToPhotos(saveImage: currentView.gifImage!)
+            saveImageToPhotos(saveImage: currentView.gifImage!)
         }
     }
     
     func saveVideoAction(url:String) {
-        let currentMediaView = self.imagesScrollViews[self.page] as! PTMediaMediaView
+        let currentMediaView = imagesScrollViews[page] as! PTMediaMediaView
         let loadingView = PTLoadingView.init(type: .LoopDiagram)
         currentMediaView.player.view.addSubview(loadingView)
         loadingView.snp.makeConstraints { make in
@@ -1264,16 +1264,16 @@ public class PTMediaViewer: UIView {
         let url = NSURL.fileURL(withPath: videoPath)
         let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible {
-            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
+            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(save(image:didFinishSavingWithError:contextInfo:)), nil)
         } else {
-            if self.viewSaveImageBlock != nil {
-                self.viewSaveImageBlock!(compatible)
+            if viewSaveImageBlock != nil {
+                viewSaveImageBlock!(compatible)
             }
         }
     }
     
     func saveImageToPhotos(saveImage:UIImage) {
-        UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
+        UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(save(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     
     func save(image:UIImage, didFinishSavingWithError:NSError?,contextInfo:AnyObject) {
@@ -1285,20 +1285,20 @@ public class PTMediaViewer: UIView {
             saveImageBool = true
         }
         
-        if self.viewSaveImageBlock != nil {
-            self.viewSaveImageBlock!(saveImageBool!)
+        if viewSaveImageBlock != nil {
+            viewSaveImageBlock!(saveImageBool!)
         }
     }
     
     func deleteImage() {
-        if self.contentScrolView.subviews.count == 1 && self.imagesScrollViews.count == 1 {
-            self.viewDismissAction()
-            if self.viewDeleteImageBlock != nil {
-                self.viewDeleteImageBlock!(0)
+        if contentScrolView.subviews.count == 1 && imagesScrollViews.count == 1 {
+            viewDismissAction()
+            if viewDeleteImageBlock != nil {
+                viewDeleteImageBlock!(0)
             }
         } else {
-            let index = self.page
-            let currentImages = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
+            let index = page
+            let currentImages = contentScrolView.subviews[page] as! PTMediaMediaView
             switch currentImages.dataModel.imageShowType {
             case .GIF:
                 currentImages.imageView.stopAnimating()
@@ -1353,7 +1353,7 @@ public class PTMediaViewer: UIView {
     }
     
     func bounceToOriginal() {
-        self.isUserInteractionEnabled = false
+        isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.35) {
             self.tempView.transform = CGAffineTransform.identity
             self.backgroundView.alpha = 1
@@ -1371,32 +1371,32 @@ public class PTMediaViewer: UIView {
     }
     
     func prepareForHide() {
-        self.backgroundView.insertSubview(self.coverView, belowSubview: self)
-        self.coverView.snp.makeConstraints { make in
+        backgroundView.insertSubview(coverView, belowSubview: self)
+        coverView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        self.fakeNav.alpha = 0
-        self.bottomView.alpha = 0
-        self.backgroundView.addSubview(self.tempView)
-        self.backgroundColor = .clear
-        self.backgroundView.backgroundColor = .clear
-        let currentView = self.getSourceView()
+        fakeNav.alpha = 0
+        bottomView.alpha = 0
+        backgroundView.addSubview(tempView)
+        backgroundColor = .clear
+        backgroundView.backgroundColor = .clear
+        let currentView = getSourceView()
         currentView.alpha = 0
     }
     
     func getSourceView()->UIView {
-        let currentView = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
+        let currentView = contentScrolView.subviews[page] as! PTMediaMediaView
         return currentView
     }
     
     func hideAnimation() {
-        self.isUserInteractionEnabled = false
+        isUserInteractionEnabled = false
         let window = AppWindows!
         var targetTemp:CGRect? = CGRect.init(x: window.center.x, y: window.center.y, width: 0, height: 0)
-        let currentView = self.contentScrolView.subviews[self.page] as! PTMediaMediaView
+        let currentView = contentScrolView.subviews[page] as! PTMediaMediaView
         switch currentView.dataModel.imageShowType {
         case .Normal,.GIF:
-            targetTemp = currentView.convert(self.getSourceView().frame, to: self)
+            targetTemp = currentView.convert(getSourceView().frame, to: self)
         default:
             targetTemp = CGRect.init(x: AppWindows!.center.x, y: AppWindows!.center.y, width: 0, height: 0)
         }
@@ -1425,33 +1425,33 @@ public class PTMediaViewer: UIView {
 
 extension PTMediaViewer:UIScrollViewDelegate {
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if scrollView == self.contentScrolView {
+        if scrollView == contentScrolView {
             let pages:Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-            self.page = pages
-            if self.showLabel! {
-                self.pageView_label.text = "\(pages + 1)/\(self.viewConfig.mediaData.count)"
+            page = pages
+            if showLabel! {
+                pageView_label.text = "\(pages + 1)/\(viewConfig.mediaData.count)"
             } else {
-                self.pageView.currentPage = pages
+                pageView.currentPage = pages
             }
-            self.indexLabel.text = "\(pages + 1)/\(self.viewConfig.mediaData.count)"
-            if self.fullImageHidden() == "全景" {
-                self.fullViewLabel.isUserInteractionEnabled = true
+            indexLabel.text = "\(pages + 1)/\(viewConfig.mediaData.count)"
+            if fullImageHidden() == "全景" {
+                fullViewLabel.isUserInteractionEnabled = true
             } else {
-                self.fullViewLabel.isUserInteractionEnabled = false
+                fullViewLabel.isUserInteractionEnabled = false
             }
-            self.fullViewLabel.setTitle(self.fullImageHidden(), for: .normal)
+            fullViewLabel.setTitle(fullImageHidden(), for: .normal)
                         
-            let models = self.viewConfig.mediaData[pages]
-            self.titleLabel.text = models.imageInfo
-            self.titleLabel.isHidden = models.imageInfo.stringIsEmpty()
-            self.viewConfig.mediaData.enumerated().forEach { index,value in
-                let currentImages = self.contentScrolView.subviews[index] as! PTMediaMediaView
+            let models = viewConfig.mediaData[pages]
+            titleLabel.text = models.imageInfo
+            titleLabel.isHidden = models.imageInfo.stringIsEmpty()
+            viewConfig.mediaData.enumerated().forEach { index,value in
+                let currentImages = contentScrolView.subviews[index] as! PTMediaMediaView
                 if index == pages {
                     switch currentImages.dataModel.imageShowType {
                     case .GIF:
                         currentImages.imageView.startAnimating()
                     case .Video:
-                        self.contentScrolView.delaysContentTouches = false
+                        contentScrolView.delaysContentTouches = false
                         if !currentImages.playedVideo! {
                             currentImages.playBtn.isHidden = false
                             currentImages.stopBtn.isHidden = true
@@ -1475,26 +1475,26 @@ extension PTMediaViewer:UIScrollViewDelegate {
                 }
             }
             
-            let currentImages = self.contentScrolView.viewWithTag(PTSubViewBasicsIndex + pages) as! PTMediaMediaView
+            let currentImages = contentScrolView.viewWithTag(PTSubViewBasicsIndex + pages) as! PTMediaMediaView
             if !currentImages.hasLoadedImage! {
                 currentImages.setMediaData(dataModel: models)
             }
-            self.updateBottomSize(models: models)
+            updateBottomSize(models: models)
         }
     }
     
     func updateBottomSize(models:PTViewerModel) {
-        self.titleLabel.text = models.imageInfo
-        self.titleLabel.isHidden = models.imageInfo.stringIsEmpty()
+        titleLabel.text = models.imageInfo
+        titleLabel.isHidden = models.imageInfo.stringIsEmpty()
         
         let bottonH:CGFloat = 44
         
-        switch self.viewConfig.actionType {
+        switch viewConfig.actionType {
             case .Empty:
-                let infoH = UIView.sizeFor(string: models.imageInfo, font: self.titleLabel.font, height: CGFloat(MAXFLOAT), width: self.frame.size.width - 20).height
+                let infoH = UIView.sizeFor(string: models.imageInfo, font: titleLabel.font, height: CGFloat(MAXFLOAT), width: self.frame.size.width - 20).height
             
-                self.labelScroller.contentSize = CGSize.init(width: self.frame.size.width - 20, height: infoH)
-                self.bottomView.snp.updateConstraints { make in
+                labelScroller.contentSize = CGSize.init(width: self.frame.size.width - 20, height: infoH)
+                bottomView.snp.updateConstraints { make in
                     if (bottonH * 2) > infoH && infoH > bottonH {
                         make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight)
                     }  else if infoH < bottonH {
@@ -1504,30 +1504,30 @@ extension PTMediaViewer:UIScrollViewDelegate {
                     }
                 }
 
-                self.labelScroller.snp.makeConstraints { make in
+                labelScroller.snp.makeConstraints { make in
                     make.left.top.right.equalToSuperview().inset(10)
                     make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
                 }
                 
                 if (bottonH * 2) > infoH && infoH > bottonH {
-                    self.labelScroller.isScrollEnabled = false
+                    labelScroller.isScrollEnabled = false
                 } else if infoH < bottonH {
-                    self.labelScroller.isScrollEnabled = false
+                    labelScroller.isScrollEnabled = false
                 } else if infoH > (bottonH * 2) {
-                    self.labelScroller.isScrollEnabled = true
+                    labelScroller.isScrollEnabled = true
                 }
                 
-                self.titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.makeConstraints { make in
                     make.left.top.equalToSuperview()
                     make.width.equalTo(self.frame.size.width - 20)
                 }
         default:
             let labelW = self.frame.size.width - 40 - bottonH
             
-            let infoH = UIView.sizeFor(string: models.imageInfo, font: self.titleLabel.font,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
-            self.labelScroller.contentSize = CGSize.init(width: labelW, height: infoH)
+            let infoH = UIView.sizeFor(string: models.imageInfo, font: titleLabel.font,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+            labelScroller.contentSize = CGSize.init(width: labelW, height: infoH)
 
-            self.bottomView.snp.updateConstraints { make in
+            bottomView.snp.updateConstraints { make in
                 if (bottonH * 2) > infoH && infoH > bottonH {
                     make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight)
                 } else if infoH < bottonH {
@@ -1536,28 +1536,28 @@ extension PTMediaViewer:UIScrollViewDelegate {
                     make.height.equalTo(bottonH * 2 + CGFloat.kTabbarSaveAreaHeight)
                 }
             }
-            self.bottomView.addSubview(self.moreActionButton)
-            self.moreActionButton.snp.makeConstraints { make in
+            bottomView.addSubview(moreActionButton)
+            moreActionButton.snp.makeConstraints { make in
                 make.width.height.equalTo(bottonH)
                 make.right.equalToSuperview().inset(10)
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             }
             
-            self.labelScroller.snp.makeConstraints { make in
+            labelScroller.snp.makeConstraints { make in
                 make.left.top.equalToSuperview().inset(10)
                 make.bottom.equalTo(self.moreActionButton)
                 make.right.equalTo(self.moreActionButton.snp.left).offset(-10)
             }
             
             if (bottonH * 2) > infoH && infoH > bottonH {
-                self.labelScroller.isScrollEnabled = false
+                labelScroller.isScrollEnabled = false
             } else if infoH < bottonH {
-                self.labelScroller.isScrollEnabled = false
+                labelScroller.isScrollEnabled = false
             } else if infoH > (bottonH * 2) {
-                self.labelScroller.isScrollEnabled = true
+                labelScroller.isScrollEnabled = true
             }
 
-            self.titleLabel.snp.makeConstraints { make in
+            titleLabel.snp.makeConstraints { make in
                 make.width.equalTo(labelW)
                 make.centerX.equalToSuperview()
                 make.top.equalTo(0)

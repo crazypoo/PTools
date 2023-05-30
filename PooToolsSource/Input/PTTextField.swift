@@ -21,7 +21,7 @@ public class PTTextField: UITextField {
     
     public var leftSpace:CGFloat? {
         didSet {
-            self.layoutSubviews()
+            layoutSubviews()
         }
     }
     
@@ -71,7 +71,7 @@ public class PTTextField: UITextField {
                     self.rightViewMode = .always
                 }
             }
-            self.layoutSubviews()
+            layoutSubviews()
         }
     }
     
@@ -94,9 +94,9 @@ public class PTTextField: UITextField {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        if (self.leftSpace ?? 0) > 0 {
-            self.leftView = self.leftSpaceView
-            self.leftViewMode = .always
+        if (leftSpace ?? 0) > 0 {
+            leftView = leftSpaceView
+            leftViewMode = .always
         }
     }
 }

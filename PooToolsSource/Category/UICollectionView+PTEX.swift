@@ -47,7 +47,7 @@ public extension UICollectionView {
                                                  contentTopAndBottom:CGFloat = 0,
                                                  cellLeadingSpace:CGFloat = 0,
                                                  cellTrailingSpace:CGFloat = 0,
-                                                 handle:((_ groupHeight:CGFloat,_ groupItem:[NSCollectionLayoutGroupCustomItem])->Void)) {
+                                                 handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupH:CGFloat = 0
         let itemH = size.height

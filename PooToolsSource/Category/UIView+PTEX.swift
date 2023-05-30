@@ -98,10 +98,10 @@ public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 public extension UIView {
         
     @objc func viewCorner(radius:CGFloat = 0,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear) {
-        self.layer.cornerRadius = radius
-        self.layer.masksToBounds = true
-        self.layer.borderWidth = borderWidth
-        self.layer.borderColor = borderColor.cgColor
+        layer.cornerRadius = radius
+        layer.masksToBounds = true
+        layer.borderWidth = borderWidth
+        layer.borderColor = borderColor.cgColor
     }
         
     @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners) {
@@ -178,7 +178,7 @@ public extension UIView {
             }
         }
         
-        for subView in self.subviews {
+        for subView in subviews {
             if subView.isRolling() {
                 return true
             }
@@ -213,13 +213,13 @@ public extension UIView {
     }
 
     @objc func jx_layoutSubviews() {
-        self.jx_layoutSubviews()
-        self.layoutSubviewsCallback?(self)
+        jx_layoutSubviews()
+        layoutSubviewsCallback?(self)
     }
 
     var layoutSubviewsCallback: ((UIView) -> Void)? {
         get {
-            return objc_getAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback) as? ((UIView) -> Void)
+            objc_getAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback) as? (UIView) -> Void
         } set {
             objc_setAssociatedObject(self, &AssociatedKeys.layoutSubviewsCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
@@ -249,9 +249,9 @@ public extension UIView {
     @objc func viewUI_shake() {
         let keyFrame = CAKeyframeAnimation(keyPath: "position.x")
         keyFrame.duration = 0.3
-        let x = self.layer.position.x
+        let x = layer.position.x
         keyFrame.values = [(x - 30),(x - 30),(x + 20),(x - 20),(x + 10),(x - 10),(x + 5),(x - 5)]
-        self.layer.add(keyFrame, forKey: "shake")
+        layer.add(keyFrame, forKey: "shake")
     }
     
     @objc func pt_createLabel(text: String = "", font: UIFont = .systemFont(ofSize: 15), bgColor: UIColor = .clear, textColor: UIColor = .black, textAlignment: NSTextAlignment = .left) -> UILabel {
@@ -271,42 +271,42 @@ public extension UIView {
 
 public extension UILabel {
     @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize {
-        return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
+        UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat {
-        return self.getLabelSize(width: CGFloat(MAXFLOAT), height: height).width
+        getLabelSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
     @objc func getLabelHeight(width:CGFloat)->CGFloat {
-        return self.getLabelSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getLabelSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
 
 public extension UIButton {
     @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize {
-        return UIView.sizeFor(string: self.titleLabel!.text!, font: self.titleLabel!.font!, height: height, width: width)
+        UIView.sizeFor(string: titleLabel!.text!, font: titleLabel!.font!, height: height, width: width)
     }
     
     @objc func getButtonWidth(height:CGFloat)->CGFloat {
-        return self.getButtonSize(width: CGFloat(MAXFLOAT), height: height).width
+        getButtonSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
     @objc func getButtonHeight(width:CGFloat)->CGFloat {
-        return self.getButtonSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getButtonSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }
 
 public extension UITextView {
     @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize {
-        return UIView.sizeFor(string: self.text!, font: self.font!, height: height, width: width)
+        UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat {
-        return self.getTextViewSize(width: CGFloat(MAXFLOAT), height: height).width
+        getTextViewSize(width: CGFloat(MAXFLOAT), height: height).width
     }
     
     @objc func getLabelHeight(width:CGFloat)->CGFloat {
-        return self.getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
     }
 }

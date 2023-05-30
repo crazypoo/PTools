@@ -88,8 +88,8 @@ public class XMNetWorkStatus {
         }
     }
     
-    public func netWork(handle:@escaping ((_ status:NetWorkStatus)->Void)) {
-        self.monitor.pathUpdateHandler = { path in
+    public func netWork(handle: @escaping (_ status:NetWorkStatus)->Void) {
+        monitor.pathUpdateHandler = { path in
             if path.usesInterfaceType(.wifi) {
                 handle(.wifi)
             } else if path.usesInterfaceType(.cellular) {
@@ -99,15 +99,15 @@ public class XMNetWorkStatus {
             }
         }
         let queue = DispatchQueue(label: "Network")
-        self.monitor.start(queue: queue)
+        monitor.start(queue: queue)
     }
     
     public func checkNetworkStatusCancel() {
-        self.monitor.cancel()
+        monitor.cancel()
     }
     
     deinit {
-        self.checkNetworkStatusCancel()
+        checkNetworkStatusCancel()
     }
 }
 
@@ -164,13 +164,23 @@ public class Network: NSObject {
     //URLEncoding    URL参数
     /// 项目总接口
     /// - Parameters:
+    ///   - needGobal:
     ///   - urlStr: url地址
     ///   - method: 方法类型，默认post
+    ///   - header:
     ///   - parameters: 请求参数，默认nil
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - encoder: 编码方式，默认url编码
     ///   - showHud: 是否需要loading，默认true
+    ///   - jsonRequest:
+    ///   - netWorkErrorBlock:
+    ///   - netWorkServerStatusBlock:
     ///   - resultBlock: 方法回调
+    ///   - jsonRequest:
+    ///   - header:
+    ///   - header:
+    ///   - needGobal:
+    ///   - needGobal:
     class public func requestApi(needGobal:Bool? = true,
                                  urlStr:String,
                                  method: HTTPMethod = .post,
@@ -282,8 +292,28 @@ public class Network: NSObject {
     
     /// 图片上传接口
     /// - Parameters:
+    ///   - needGobal:
     ///   - images: 图片集合
+    ///   - path:
+    ///   - fileKey:
+    ///   - parmas:
+    ///   - header:
+    ///   - jsonRequest:
+    ///   - pngData:
+    ///   - showHud:
+    ///   - netWorkErrorBlock:
     ///   - progressBlock: 进度回调
+    ///   - resultBlock:
+    ///   - header:
+    ///   - header:
+    ///   - parmas:
+    ///   - parmas:
+    ///   - fileKey:
+    ///   - fileKey:
+    ///   - path:
+    ///   - path:
+    ///   - needGobal:
+    ///   - needGobal:
     ///   - success: 成功回调
     ///   - failure: 失败回调
     class public func imageUpload(needGobal:Bool? = true,
@@ -403,8 +433,8 @@ public class PTFileDownloadApi: NSObject {
     public typealias FileDownloadSuccess = (_ reponse:Any)->()
     public typealias FileDownloadFail = (_ error:Error?)->()
     
-    @objc public var fileUrl:String = ""
-    @objc public var saveFilePath:String = "" // 文件下载保存的路径
+    public var fileUrl:String = ""
+    public var saveFilePath:String = "" // 文件下载保存的路径
     public var cancelledData : Data?//用于停止下载时,保存已下载的部分
     public var downloadRequest:DownloadRequest? //下载请求对象
     public var destination:DownloadRequest.Destination!//下载文件的保存路径
@@ -430,49 +460,49 @@ public class PTFileDownloadApi: NSObject {
         }
         
         // 配置下载存储路径
-        self.destination = {_,response in
+        destination = {_,response in
             let saveUrl = URL(fileURLWithPath: saveFilePath)
             return (saveUrl,[.removePreviousFile, .createIntermediateDirectories] )
         }
         // 这里直接就开始下载了
-        self.startDownloadFile()
+        startDownloadFile()
     }
     
     // 暂停下载
     public func suspendDownload() {
-        self.downloadRequest?.task?.suspend()
+        downloadRequest?.task?.suspend()
     }
     // 取消下载
     public func cancelDownload() {
-        self.downloadRequest?.cancel()
-        self.downloadRequest = nil;
-        self.progress = nil
+        downloadRequest?.cancel()
+        downloadRequest = nil;
+        progress = nil
     }
     
     // 开始下载
     public func startDownloadFile() {
-        if self.cancelledData != nil {
-            self.downloadRequest = AF.download(resumingWith: self.cancelledData!, to: self.destination)
-            self.downloadRequest?.downloadProgress { [weak self] (pro) in
+        if cancelledData != nil {
+            downloadRequest = AF.download(resumingWith: cancelledData!, to: destination)
+            downloadRequest?.downloadProgress { [weak self] (pro) in
                 guard let `self` = self else {return}
                 PTGCDManager.gcdMain {
                     self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
                 }
             }
-            self.downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
+            downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
             
-        } else if self.downloadRequest != nil {
-            self.downloadRequest?.task?.resume()
+        } else if downloadRequest != nil {
+            downloadRequest?.task?.resume()
         } else {
-            self.downloadRequest = AF.download(fileUrl, to: self.destination)
-            self.downloadRequest?.downloadProgress { [weak self] (pro) in
+            downloadRequest = AF.download(fileUrl, to: destination)
+            downloadRequest?.downloadProgress { [weak self] (pro) in
                 guard let `self` = self else {return}
                 PTGCDManager.gcdMain {
                     self.progress?(pro.completedUnitCount,pro.totalUnitCount,pro.fractionCompleted)
                 }
             }
             
-            self.downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
+            downloadRequest?.responseData(queue: queue, completionHandler: downloadResponse)
         }
     }
     
@@ -481,7 +511,7 @@ public class PTFileDownloadApi: NSObject {
         switch response.result {
         case .success:
             if let data = response.value, data.count > 1000 {
-                if self.success != nil{
+                if success != nil{
                     PTGCDManager.gcdMain {
                         self.success?(response)
                     }
@@ -492,7 +522,7 @@ public class PTFileDownloadApi: NSObject {
                 }
             }
         case .failure:
-            self.cancelledData = response.resumeData//意外停止的话,把已下载的数据存储起来
+            cancelledData = response.resumeData//意外停止的话,把已下载的数据存储起来
             PTGCDManager.gcdMain {
                 self.fail?(response.error)
             }

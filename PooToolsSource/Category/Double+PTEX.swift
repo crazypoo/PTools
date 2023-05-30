@@ -91,14 +91,14 @@ public extension Double {
     ///角度转弧度
     /// - Returns: 弧度
     func degreesToRadians() -> Double {
-        return (.pi * self) / 180.0
+        (.pi * self) / 180.0
     }
     
     //MARK: 弧度转角度
     ///角弧度转角度
     /// - Returns: 角度
     func radiansToDegrees() -> Double {
-        return (self * 180.0) / .pi
+        (self * 180.0) / .pi
     }
     
     //MARK:  浮点数四舍五入

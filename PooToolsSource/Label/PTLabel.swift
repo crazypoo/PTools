@@ -26,7 +26,7 @@ public class PTLabel: UILabel {
     //MARK: 設置文字的位置
     ///設置文字的位置
     public func setVerticalAlignment(value:PTVerticalAlignment) {
-        self.verticalAlignment = value
+        verticalAlignment = value
     }
     
     private var verticalAlignment : PTVerticalAlignment? = .Middle {
@@ -38,7 +38,7 @@ public class PTLabel: UILabel {
     //MARK: 設置橫線的位置
     ///設置橫線的位置
     public func setStrikeThroughAlignment(value:PTStrikeThroughAlignment) {
-        self.strikeThroughAlignment = value
+        strikeThroughAlignment = value
     }
 
     private var strikeThroughAlignment : PTStrikeThroughAlignment? = .Middle {
@@ -50,7 +50,7 @@ public class PTLabel: UILabel {
     //MARK: 設置是否帶橫線
     ///設置是否帶橫線,加載此方法須要在GCD上延時一點時間
     public func setStrikeThroughEnabled(value:Bool) {
-        self.strikeThroughEnabled = value
+        strikeThroughEnabled = value
     }
     
     private var strikeThroughEnabled : Bool? = false {
@@ -97,14 +97,14 @@ public class PTLabel: UILabel {
             }
             
             let context : CGContext = UIGraphicsGetCurrentContext()!
-            context.setFillColor(self.strikeThroughColor.cgColor)
+            context.setFillColor(strikeThroughColor.cgColor)
             context.fill(lineRect!)
         }
         return textRect
     }
     
     public override func drawText(in rect: CGRect) {
-        let actualRect = self.textRect(forBounds: rect, limitedToNumberOfLines: self.numberOfLines)
+        let actualRect = textRect(forBounds: rect, limitedToNumberOfLines: numberOfLines)
         super.drawText(in: actualRect)
     }
 }

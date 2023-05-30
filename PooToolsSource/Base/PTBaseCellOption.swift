@@ -21,19 +21,19 @@ open class PTBaseNormalCell: UICollectionViewCell {
     }
     
     class func cellSize() -> CGSize {
-        return CGSize(width: 1, height: 1)
+        CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String? {
-        return "\(type(of: self))"
+    class func cellIdentifier() -> String {
+        "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber? {
-        return NSNumber(value: true)
+    class func cellSizeByClass() -> NSNumber {
+        NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue? {
-        return NSValue(cgSize: cellSize())
+    class func cellSizeValue() -> NSValue {
+        NSValue(cgSize: cellSize())
     }
 }
 
@@ -48,19 +48,19 @@ open class PTBaseSwipeCell: SwipeCollectionViewCell {
     }
     
     class func cellSize() -> CGSize {
-        return CGSize(width: 1, height: 1)
+        CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String? {
-        return "\(type(of: self))"
+    class func cellIdentifier() -> String {
+        "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber? {
-        return NSNumber(value: true)
+    class func cellSizeByClass() -> NSNumber {
+        NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue? {
-        return NSValue(cgSize: cellSize())
+    class func cellSizeValue() -> NSValue {
+        NSValue(cgSize: cellSize())
     }
 }
 #endif

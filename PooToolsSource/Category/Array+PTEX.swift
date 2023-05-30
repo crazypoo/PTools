@@ -108,7 +108,7 @@ public extension Array {
     
     //MARK: 數組轉字典
     ///數組轉字典
-    func toJSON()->String? {
+    func toJSON()-> String {
         guard JSONSerialization.isValidJSONObject(self) else {
             PTNSLogConsole("无法解析出JSONString")
             return ""
@@ -151,7 +151,7 @@ public extension Array where Element : NSObjectProtocol {
     @discardableResult
     mutating func removeArray(objects: [NSObjectProtocol], isRepeat: Bool = true) -> Array {
         for object in objects {
-            if self.contains(where: {$0.isEqual(object)} ){
+            if contains(where: {$0.isEqual(object)} ){
                 self.remove(object: object, isRepeat: isRepeat)
             }
         }
@@ -168,6 +168,6 @@ public extension Array where Self.Element == String {
     ///    - separator: 分隔符(默认没有)
     /// - Returns: 转化后的字符串
     func toStrinig(separator: String = "") -> String {
-        return self.joined(separator: separator)
+        joined(separator: separator)
     }
 }

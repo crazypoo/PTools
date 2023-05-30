@@ -18,28 +18,40 @@ public extension UILabel {
         static var formatter:String = "%.2f"
     }
     private var startTime: CFTimeInterval {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.startTime) as? CFTimeInterval ?? 0 }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.startTime) as? CFTimeInterval ?? 0
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.startTime, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     private var fromValue: Double {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.fromValue) as? Double ?? 0 }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.fromValue) as? Double ?? 0
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.fromValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var toValue: Double {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.toValue) as? Double ?? 0 }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.toValue) as? Double ?? 0
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.toValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var duration: Double {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.duration) as? Double ?? 0 }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.duration) as? Double ?? 0
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.duration, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var displayLink: CADisplayLink? {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.displayLink) as? CADisplayLink }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.displayLink) as? CADisplayLink
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.displayLink, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var formatter: NSString? {
-        get { return objc_getAssociatedObject(self, &AssociatedKey.formatter) as? NSString }
+        get {
+            objc_getAssociatedObject(self, &AssociatedKey.formatter) as? NSString
+        }
         set { objc_setAssociatedObject(self, &AssociatedKey.formatter, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     
@@ -51,9 +63,9 @@ public extension UILabel {
     ///   - duration: 動畫時間
     ///   - formatter: 格式化(默認".2f")
     @objc func count(fromValue: Double, to: Double, duration: Double,formatter:NSString?) {
-        self.startTime = CACurrentMediaTime()
+        startTime = CACurrentMediaTime()
         self.fromValue = fromValue
-        self.toValue = to
+        toValue = to
         self.duration = duration
         self.formatter = formatter
         displayLink = CADisplayLink(target: self, selector: #selector(updateValue))
@@ -64,14 +76,14 @@ public extension UILabel {
         let now = CACurrentMediaTime()
         let elapsedTime = now - startTime
         if elapsedTime > duration {
-            self.text = String(format: self.formatter! as String, toValue)
+            text = String(format: formatter! as String, toValue)
             displayLink?.invalidate()
             return
         }
         let percentage = elapsedTime / duration
         let value = fromValue + percentage * (toValue - fromValue)
         
-        self.text = String(format: self.formatter! as String, value)
+        text = String(format: formatter! as String, value)
     }
     
     //MARK: 計算文字的Size
@@ -82,13 +94,13 @@ public extension UILabel {
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
                        size:CGSize)->CGSize {
-        var dic = [NSAttributedString.Key.font:self.font] as! [NSAttributedString.Key:Any]
+        var dic = [NSAttributedString.Key.font: font] as! [NSAttributedString.Key:Any]
         if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
-        let size = self.text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        let size = text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
         return size
     }
 }
@@ -104,7 +116,7 @@ public extension PTPOP where Base: UILabel {
     ///   - paraSpace: 段间距，默认为0.0
     /// - Returns: label 的文本行数 & 每一行内容
     func linesCountAndLinesContent(lineSpace: CGFloat, textSpace: CGFloat = 0.0, paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
-        return accordWidthLinesCountAndLinesContent(accordWidth: base.frame.size.width, lineSpace: lineSpace, textSpace: textSpace, paraSpace: paraSpace)
+        accordWidthLinesCountAndLinesContent(accordWidth: base.frame.size.width, lineSpace: lineSpace, textSpace: textSpace, paraSpace: paraSpace)
     }
     
     //MARK: 获取已知 width 的 label 的文本行数 & 每一行内容
@@ -148,7 +160,7 @@ public extension PTPOP where Base: UILabel {
     //MARK: 获取第一行内容
     ///获取第一行内容
     var firstLineString: String? {
-        return self.linesCountAndLinesContent(lineSpace: 0.0).1?.first
+        self.linesCountAndLinesContent(lineSpace: 0.0).1?.first
     }
     
     //MARK: 改变行间距
@@ -156,16 +168,16 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///  - space: 行间距大小
     func changeLineSpace(space: CGFloat) {
-        if self.base.text == nil || self.base.text == "" {
+        if base.text == nil || base.text == "" {
             return
         }
-        let text = self.base.text
+        let text = base.text
         let attributedString = NSMutableAttributedString(string: text!)
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = space
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
         self.base.attributedText = attributedString
-        self.base.sizeToFit()
+        base.sizeToFit()
     }
     
     //MARK: 改变字间距
@@ -173,15 +185,15 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///  -  space: 字间距大小
     func changeWordSpace(space: CGFloat) {
-        if self.base.text == nil || self.base.text == "" {
+        if base.text == nil || base.text == "" {
             return
         }
-        let text = self.base.text
+        let text = base.text
         let attributedString = NSMutableAttributedString(string: text!, attributes: [NSAttributedString.Key.kern:space])
         let paragraphStyle = NSMutableParagraphStyle()
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
         self.base.attributedText = attributedString
-        self.base.sizeToFit()
+        base.sizeToFit()
     }
     
     //MARK: 改变字间距和行间距
@@ -190,16 +202,16 @@ public extension PTPOP where Base: UILabel {
     ///   - lineSpace: 行间距
     ///   - wordSpace: 字间距
     func changeSpace(lineSpace: CGFloat, wordSpace: CGFloat) {
-        if self.base.text == nil || self.base.text == "" {
+        if base.text == nil || base.text == "" {
             return
         }
-        let text = self.base.text
+        let text = base.text
         let attributedString = NSMutableAttributedString(string: text!, attributes: [NSAttributedString.Key.kern:wordSpace])
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = lineSpace
         attributedString.addAttribute(NSAttributedString.Key.paragraphStyle, value: paragraphStyle, range: .init(location: 0, length: text!.count))
         self.base.attributedText = attributedString
-        self.base.sizeToFit()
+        base.sizeToFit()
     }
     
     //MARK: label添加中划线

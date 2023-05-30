@@ -20,9 +20,9 @@ open class PFloatingButton: UIButton {
     ///長按回調
     public var longPressBlock:((_ button:PFloatingButton)->Void)? {
         didSet {
-            self.gestureRecognizers?.enumerated().forEach({ (index,gestureRecognizer) in
+            gestureRecognizers?.enumerated().forEach({ (index,gestureRecognizer) in
                 if gestureRecognizer.isKind(of: UILongPressGestureRecognizer.self) {
-                    self.removeGestureRecognizer(gestureRecognizer)
+                    removeGestureRecognizer(gestureRecognizer)
                 }
             })
             
@@ -49,7 +49,7 @@ open class PFloatingButton: UIButton {
             }
             longPressGestureRecognizer.cancelsTouchesInView = false
             longPressGestureRecognizer.allowableMovement = 0
-            self.addGestureRecognizer(longPressGestureRecognizer)
+            addGestureRecognizer(longPressGestureRecognizer)
         }
     }
     //MARK: 長按結束後回調
@@ -137,7 +137,7 @@ open class PFloatingButton: UIButton {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.defultSetting()
+        defultSetting()
     }
     
     public init(view:Any,frame:CGRect) {
@@ -150,11 +150,11 @@ open class PFloatingButton: UIButton {
             AppWindows!.addSubview(self)
         }
         
-        self.defultSetting()
+        defultSetting()
     }
     
     func defultSetting() {
-        self.addActionHandlers { sender in
+        addActionHandlers { sender in
             if !self.singleTapCanceled && self.tapBlock != nil && !self.isDragging && !self.skipTapEventOnce {
                 self.tapBlock!(self)
             } else {
@@ -190,14 +190,14 @@ open class PFloatingButton: UIButton {
             let offsetX = currentPoint!.x - touchBeginPoint!.x
             let offsetY = currentPoint!.y - touchBeginPoint!.y
 
-            self.resetCenter(center: CGPoint.init(x: center.x + offsetX, y: center.y + offsetY))
+            resetCenter(center: CGPoint.init(x: center.x + offsetX, y: center.y + offsetY))
             
             if isTraceEnabled {
-                self.addTraceButton()
+                addTraceButton()
             }
             
             if isRecordingDraggingPathEnabled {
-                draggingPath.addLine(to: self.center)
+                draggingPath.addLine(to: center)
             }
             
             if draggingBlock != nil {
@@ -216,10 +216,10 @@ open class PFloatingButton: UIButton {
         }
         
         if isDragging && autoDocking {
-            if !self.isDockPointAvailable() {
-                self.dockingToBorder()
+            if !isDockPointAvailable() {
+                dockingToBorder()
             } else {
-                self.dockingToPoint()
+                dockingToPoint()
             }
         }
         
@@ -246,70 +246,70 @@ open class PFloatingButton: UIButton {
     func resetCenter(center:CGPoint) {
         self.center = center
         
-        if self.isDockPointAvailable() && self.isLimitedDistanceAvailable() {
-            let bool = self.checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
+        if isDockPointAvailable() && isLimitedDistanceAvailable() {
+            let bool = checkIfExceedingLimitedDistanceThenFixIt(fixIt: true)
             PTNSLogConsole(bool)
         } else if !dragOutOfBoundsEnabled {
-            let bool = self.checkIfOutOfBoundsThenFixIt(fixIt: true)
+            let bool = checkIfOutOfBoundsThenFixIt(fixIt: true)
             PTNSLogConsole(bool)
         }
     }
     
     func isLimitedDistanceAvailable()->Bool {
-        return (limitedDistance > 0)
+        (limitedDistance > 0)
     }
     
     func checkIfExceedingLimitedDistanceThenFixIt(fixIt:Bool)->Bool {
-        let tmpPoint = CGPoint.init(x: self.center.x - dockPoint.x, y: self.center.y - dockPoint.y)
-        let distance = self.distanceFromPoint(point: dockPoint)
+        let tmpPoint = CGPoint.init(x: center.x - dockPoint.x, y: center.y - dockPoint.y)
+        let distance = distanceFromPoint(point: dockPoint)
         let willExceedingLimitedDistance = distance > limitedDistance
         if willExceedingLimitedDistance && fixIt {
-            self.center = CGPoint.init(x: tmpPoint.x * limitedDistance / distance + dockPoint.y, y: tmpPoint.y * limitedDistance / distance + dockPoint.y)
+            center = CGPoint.init(x: tmpPoint.x * limitedDistance / distance + dockPoint.y, y: tmpPoint.y * limitedDistance / distance + dockPoint.y)
         }
         return willExceedingLimitedDistance
     }
     
     func checkIfOutOfBoundsThenFixIt(fixIt:Bool)->Bool {
         var willOutOfBounds = true
-        let superviewFrame = self.superview!.frame
-        let frame = self.frame
+        let superviewFrame = superview!.frame
+        let frame = frame
         let leftLimitX = frame.size.width / 2
         let rightLimitX = superviewFrame.size.width - leftLimitX
         let topLimitY = frame.size.height / 2
         let bottomLimitY = superviewFrame.size.height - topLimitY
-        var fixedPoint = self.center
+        var fixedPoint = center
         
-        if self.center.x > rightLimitX {
+        if center.x > rightLimitX {
             fixedPoint.x = rightLimitX
-        } else if self.center.x <= leftLimitX {
+        } else if center.x <= leftLimitX {
             fixedPoint.x = leftLimitX
         }
         
-        if self.center.y > bottomLimitY {
+        if center.y > bottomLimitY {
             fixedPoint.y = bottomLimitY
-        } else if self.center.y <= topLimitY {
+        } else if center.y <= topLimitY {
             fixedPoint.y = topLimitY
         }
         
-        if __CGPointEqualToPoint(self.center, fixedPoint) {
+        if __CGPointEqualToPoint(center, fixedPoint) {
             willOutOfBounds = false
         } else if (fixIt) {
-            self.center = fixedPoint
+            center = fixedPoint
         }
         return willOutOfBounds
     }
     
     func distanceFromPoint(point:CGPoint)->CGFloat {
-        return hypot(self.center.x - point.x, self.center.y - point.y)
+        hypot(center.x - point.x, center.y - point.y)
     }
     
     func isDockPointAvailable()->Bool {
-        return !__CGPointEqualToPoint(self.dockPoint, PFloatingButton.RC_POINT_NULL)
+        !__CGPointEqualToPoint(dockPoint, PFloatingButton.RC_POINT_NULL)
     }
     
     func dockingToBorder() {
-        let superviewFrame:CGRect = (self.superview?.frame)!
-        let frame = self.frame
+        let superviewFrame:CGRect = (superview?.frame)!
+        let frame = frame
         let middleX = superviewFrame.size.width/2
 
         UIView.animate(withDuration: PFloatingButton.RC_DEFAULT_ANIMATE_DURATION) {
@@ -352,18 +352,18 @@ open class PFloatingButton: UIButton {
     
     func addTraceButton() {
         if traceButtons.count < PFloatingButton.RC_TRACES_NUMBER {
-            let traceButton = self.loadTraceButton
-            self.superview?.addSubview(traceButton)
+            let traceButton = loadTraceButton
+            superview?.addSubview(traceButton)
             traceButtons.add(traceButton)
         }
-        self.superview?.bringSubviewToFront(self)
+        superview?.bringSubviewToFront(self)
         
         if traceDismissTimer == nil {
-            traceDismissTimer = Timer.scheduledTimer(timeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, target: self, selector: #selector(self.dismissTraceButton), userInfo: nil, repeats: true)
+            traceDismissTimer = Timer.scheduledTimer(timeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, target: self, selector: #selector(dismissTraceButton), userInfo: nil, repeats: true)
         }
     }
     
-    @objc func dismissTraceButton() {
+    func dismissTraceButton() {
         if traceButtons.count > 0 {
             (traceButtons.firstObject as! PFloatingButton).removeFromSuperview()
             traceButtons.remove(traceButtons.firstObject as Any)
@@ -373,9 +373,9 @@ open class PFloatingButton: UIButton {
         }
     }
     
-    @objc func dismissSelf() {
-        self.isHidden = false
-        self.perform(#selector(self.removeFromSuperView), with: nil, afterDelay: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL)
+    func dismissSelf() {
+        isHidden = false
+        self.perform(#selector(removeFromSuperView), with: nil, afterDelay: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL)
     }
     
     class open func itemInView(view:Any?)->[PFloatingButton] {
@@ -432,8 +432,8 @@ open class PFloatingButton: UIButton {
     }
     
     func removeFromSuperviewInsideRect(rect:CGRect) {
-        if self.superview != nil && self.isInsideRect(rect: rect) {
-            self.removeFromSuperview()
+        if superview != nil && isInsideRect(rect: rect) {
+            removeFromSuperview()
         }
     }
     
@@ -446,8 +446,8 @@ open class PFloatingButton: UIButton {
     }
 
     func removeFromSuperviewIntersectsRect(rect:CGRect) {
-        if self.superview != nil && self.isIntersectsRect(rect: rect) {
-            self.removeFromSuperview()
+        if superview != nil && isIntersectsRect(rect: rect) {
+            removeFromSuperview()
         }
     }
     
@@ -460,12 +460,12 @@ open class PFloatingButton: UIButton {
     }
 
     func removeFromSuperviewCrossedRect(rect:CGRect) {
-        if self.superview != nil && self.isInsideRect(rect: rect) {
-            self.removeFromSuperview()
+        if superview != nil && isInsideRect(rect: rect) {
+            removeFromSuperview()
         }
     }
     
-    @objc func removeFromSuperView() {
+    func removeFromSuperView() {
         if willBeRemovedBlock != nil {
             willBeRemovedBlock!(self)
         }
@@ -475,15 +475,15 @@ open class PFloatingButton: UIButton {
     }
     
     func isInsideRect(rect:CGRect)->Bool {
-        return rect.contains(self.frame)
+        rect.contains(frame)
     }
     
     func isIntersectsRect(rect:CGRect)->Bool {
-        return rect.intersects(self.frame)
+        rect.intersects(frame)
     }
     
     func isCrossedRect(rect:CGRect)->Bool {
-        return self.isIntersectsRect(rect: rect) && !self.isInsideRect(rect: rect)
+        isIntersectsRect(rect: rect) && !isInsideRect(rect: rect)
     }
     
     class open func allInView(view:Any,point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
@@ -508,24 +508,24 @@ open class PFloatingButton: UIButton {
 
     func addTraceButtonsDuringMoveToPoint(point:CGPoint,duration:TimeInterval,delay:TimeInterval,options:UIView.AnimationOptions) {
         for count in 0...PFloatingButton.RC_TRACES_NUMBER {
-            let traceButton = self.loadTraceButton
+            let traceButton = loadTraceButton
             traceButton.center = moveBeginPoint!
-            self.superview?.addSubview(traceButton)
+            superview?.addSubview(traceButton)
             
             traceButton.moveToPoint(point: point, duration: duration + duration * Double(PFloatingButton.RC_TRACES_NUMBER - count) / Double(PFloatingButton.RC_TRACES_NUMBER), delay: delay, options: options, completion: nil)
             
-            traceButton.perform(#selector(self.dismissSelf), with: nil, afterDelay: Double(count) * duration / Double(PFloatingButton.RC_TRACES_NUMBER))
+            traceButton.perform(#selector(dismissSelf), with: nil, afterDelay: Double(count) * duration / Double(PFloatingButton.RC_TRACES_NUMBER))
         }
         
-        self.superview?.bringSubviewToFront(self)
+        superview?.bringSubviewToFront(self)
     }
     
     func moveToPoint(point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
         if !willBeRemoved {
-            moveBeginPoint = self.center
+            moveBeginPoint = center
             
             if isTraceEnabled {
-                self.addTraceButtonsDuringMoveToPoint(point: point, duration: duration!, delay: delay!, options: options!)
+                addTraceButtonsDuringMoveToPoint(point: point, duration: duration!, delay: delay!, options: options!)
             }
             
             UIView.animate(withDuration: duration!, delay: delay!, options: options!) {

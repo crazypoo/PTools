@@ -63,14 +63,14 @@ public class PTLaunchAdMonitor: NSObject {
         let dic = (param == nil) ? false : true
         monitor.callBack = callBack
         
-        let comLabel:Bool?
+        var comLabel: Bool
         if (year ?? "").stringIsEmpty() || (comName ?? "").stringIsEmpty() {
             comLabel = true
         } else {
             comLabel = false
         }
         
-        PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel!, comNameFont: comNameFont, skipFont: skipFont)
+        PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel, comNameFont: comNameFont, skipFont: skipFont)
     }
     
     class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?) {
@@ -284,7 +284,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    @objc class public func showDetail(sender:Any) {
+    class public func showDetail(sender:Any) {
         monitor.isTap = true
         var sup:UIView?
         switch monitor.imageType {

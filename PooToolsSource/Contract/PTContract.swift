@@ -34,7 +34,7 @@ public class PTContract: NSObject {
 
     static let share = PTContract()
     
-    func getContractData(handle:@escaping ((_ model:PTContractIndexModel?)->Void)) {
+    func getContractData(handle: @escaping (_ model:PTContractIndexModel?)->Void) {
         DispatchQueue.global(qos: .background).async {
             let store = CNContactStore()
             store.requestAccess(for: .contacts) { granted, error in

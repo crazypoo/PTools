@@ -19,8 +19,8 @@ typealias PTNumberKeyBoardBackSpace = (_ keyboard:PTNumberKeyBoard)->Void
 typealias PTNumberKeyBoardReturnSTH = (_ keyboard:PTNumberKeyBoard,_ result:String)->Void
 
 extension PTNumberKeyBoard {
-    @objc static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self {
-         return PTNumberKeyBoard.init(type: type, backSpace: backSpace, returnSTH: returnSTH) as! Self
+    static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self {
+        PTNumberKeyBoard.init(type: type, backSpace: backSpace, returnSTH: returnSTH) as! Self
      }
 }
 
@@ -34,10 +34,10 @@ public class PTNumberKeyBoard: UIView {
     
     fileprivate var kKeyW : CGFloat {
         get {
-            (self.bounds.size.width - CGFloat(PTNumberKeyBoard.kLineWidth * 2) - CGFloat(PTNumberKeyBoard.kButtonSpaceLeft * 4))/3
+            (bounds.size.width - CGFloat(PTNumberKeyBoard.kLineWidth * 2) - CGFloat(PTNumberKeyBoard.kButtonSpaceLeft * 4))/3
         } set {
-            if self.kKeyW != newValue {
-                self.kKeyW = newValue
+            if kKeyW != newValue {
+                kKeyW = newValue
             }
         }
     }
@@ -45,7 +45,7 @@ public class PTNumberKeyBoard: UIView {
     init(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) {
         super.init(frame: .zero)
         
-        self.bounds = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH, height: PTNumberKeyBoard.kKeyBoardH + (CGFloat.kTabbarSaveAreaHeight))
+        bounds = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH, height: PTNumberKeyBoard.kKeyBoardH + (CGFloat.kTabbarSaveAreaHeight))
         
         let colorNormal = UIColor(red: 252/255, green: 252/255, blue: 252/255, alpha: 1)
         let colorHightlighted = UIColor(red: 186/255, green: 189/255, blue: 194/255, alpha: 1)
@@ -76,7 +76,7 @@ public class PTNumberKeyBoard: UIView {
                         returnSTH(self,num)
                     }
                 }
-                self.addSubview(button)
+                addSubview(button)
                 button.snp.makeConstraints { make in
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)
                     make.width.equalTo(self.kKeyW)
@@ -129,7 +129,7 @@ public class PTNumberKeyBoard: UIView {
         super.layoutSubviews()
         for i in 0..<4 {
             for j in 0..<3 {
-                let button  = self.viewWithTag(j + 3 * i + 1)
+                let button  = viewWithTag(j + 3 * i + 1)
                 button!.snp.makeConstraints { make in
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)
                     make.width.equalTo(self.kKeyW)

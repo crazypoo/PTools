@@ -36,7 +36,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
     open override func commonInit() {
         super.commonInit()
 
-        contentView.addSubviews([self.imageIcon,self.titleLabel,self.subTitleLabel])
+        contentView.addSubviews([imageIcon, titleLabel, subTitleLabel])
         
         lineView.backgroundColor = UIColor(hexString: "#F8F8F8")
         lineView.isHidden = true
@@ -47,12 +47,12 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             make.top.bottom.equalToSuperview().inset(10)
         }
         
-        self.titleLabel.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalTo(self.contentView.snp.centerY)
         }
         
-        self.subTitleLabel.snp.makeConstraints { make in
+        subTitleLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(self.contentView.snp.centerY)
         }
@@ -63,17 +63,17 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
 
         //为什么使用`sizeThatFits`，而不用`sizeToFit`呢？在numberOfLines大于0的时候，cell进行重用的时候通过`sizeToFit`，label设置成错误的size。至于原因我用尽毕生所学，没有找到为什么。但是用`sizeThatFits`可以规避掉这个问题。
 
-        switch self.cellItemModel!.onlyShowTitle {
+        switch cellItemModel!.onlyShowTitle {
         case .OnlyTitle(type: .OnlyTitle):
             if cellItemModel?.index == 0 {
                 lineView.isHidden = true
             } else {
                 lineView.isHidden = false
             }
-            self.titleLabel.snp.remakeConstraints { make in
+            titleLabel.snp.remakeConstraints { make in
                 make.edges.equalToSuperview()
             }
-            self.subTitleLabel.isHidden = true
+            subTitleLabel.isHidden = true
         case .OnlyTitle(type: .Normal):
             if cellItemModel?.index == 0 {
                 lineView.isHidden = true
@@ -94,10 +94,10 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
                 }
             }
         case .OnlyImage:
-            self.titleLabel.isHidden = true
-            self.subTitleLabel.isHidden = true
-            self.contentView.addSubview(self.imageIcon)
-            self.imageIcon.snp.makeConstraints { make in
+            titleLabel.isHidden = true
+            subTitleLabel.isHidden = true
+            contentView.addSubview(imageIcon)
+            imageIcon.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         default:
@@ -117,13 +117,13 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             subTitleLabel.backgroundColor = myItemModel.subTitleCurrentBGColor
             
             let subAtt:ASAttributedString =  ASAttributedString("\(myItemModel.subTitle!)",.paragraph(.alignment(.center)),.font(myItemModel.isSelected ? myItemModel.subTitleSelectedFont : myItemModel.subTitleNormalFont),.foreground(myItemModel.subTitleCurrentColor))
-            self.subTitleLabel.attributed.text = subAtt
+            subTitleLabel.attributed.text = subAtt
 
         } else {
             subTitleLabel.backgroundColor = .clear
         }
 
-        switch self.cellItemModel!.onlyShowTitle! {
+        switch cellItemModel!.onlyShowTitle! {
         case .ImageTitle:
             ImageDownloader.default.downloadImage(with: URL.init(string: myItemModel.imageURL!)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption()) { result in
                 switch result {
@@ -154,7 +154,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             titleLabel.textColor = myItemModel.titleCurrentColor
             titleLabel.textAlignment = .center
         case .OnlyImage:
-            self.imageIcon.pt_SDWebImage(imageString: myItemModel.imageURL!)
+            imageIcon.pt_SDWebImage(imageString: myItemModel.imageURL!)
         }
                 
         startSelectedAnimationIfNeeded(itemModel: itemModel, selectedType: selectedType)

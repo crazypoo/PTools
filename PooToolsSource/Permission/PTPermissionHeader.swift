@@ -21,18 +21,18 @@ class PTPermissionHeader: PTBaseCollectionReusableView {
         return titleHeight + infoHeight + CGFloat.ScaleW(w: 5) * 3
     }
     
-    fileprivate lazy var titleLabel = self.pt_createLabel(text: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, bgColor: .clear, textColor: PTAppBaseConfig.share.permissionTitleColor, textAlignment: .left)
-    fileprivate lazy var infoLabel = self.pt_createLabel(text: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, bgColor: .clear, textColor: PTAppBaseConfig.share.permissionSubtitleColor, textAlignment: .left)
+    fileprivate lazy var titleLabel = pt_createLabel(text: PTPermissionHeader.headerTitle, font: PTAppBaseConfig.share.permissionTitleFont, bgColor: .clear, textColor: PTAppBaseConfig.share.permissionTitleColor, textAlignment: .left)
+    fileprivate lazy var infoLabel = pt_createLabel(text: PTPermissionHeader.headerInfo, font: PTAppBaseConfig.share.permissionSubtitleFont, bgColor: .clear, textColor: PTAppBaseConfig.share.permissionSubtitleColor, textAlignment: .left)
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubviews([self.titleLabel,self.infoLabel])
-        self.titleLabel.snp.makeConstraints { make in
+        addSubviews([titleLabel, infoLabel])
+        titleLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-        self.infoLabel.snp.makeConstraints { make in
+        infoLabel.snp.makeConstraints { make in
             make.top.equalTo(self.titleLabel.snp.bottom).offset(CGFloat.ScaleW(w: 5))
             make.left.right.equalTo(self.titleLabel)
             make.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 5))

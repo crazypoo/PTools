@@ -50,7 +50,7 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - value2: 被除数
     /// - Returns: 值
     static func getFloorIntValue(value1: Any, value2: Any) -> Int {
-        return decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).intValue
+        decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).intValue
     }
     
     //MARK: 一个数字能否整除另外一个数字
@@ -77,18 +77,21 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - type: 计算的类型
     ///   - value1: 值
     ///   - value2: 值
+    ///   - roundingMode:
+    ///   - scale:
     /// - Returns: 计算结果
     static func calculation(type: DecimalNumberHandlerType, value1: Any, value2: Any, roundingMode: NSDecimalNumber.RoundingMode, scale: Int16) -> NSDecimalNumber {
-        return decimalNumberHandlerValue(type: type, value1: value1, value2: value2, roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        decimalNumberHandlerValue(type: type, value1: value1, value2: value2, roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
     //MARK: 一个数字四舍五入返回
     ///一个数字四舍五入返回
     /// - Parameters:
     ///   - value: 值
+    ///   - scale:
     /// - Returns:四舍五入返回结果
     static func rounding(value: Any, scale: Int16 = 0) -> NSDecimalNumber {
-        return decimalNumberHandlerValue(type: .multiplying, value1: value, value2: "1", roundingMode: .plain, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        decimalNumberHandlerValue(type: .multiplying, value1: value, value2: "1", roundingMode: .plain, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
     //MARK: 数字取舍以及位数的处理
@@ -99,7 +102,7 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - scale: 保留位数
     /// - Returns: 处理结果
     static func digitalTradeOff(value1: Any, roundingMode: NSDecimalNumber.RoundingMode, scale: Int16) -> NSDecimalNumber {
-        return decimalNumberHandlerValue(type: .multiplying, value1: value1, value2: "1", roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
+        decimalNumberHandlerValue(type: .multiplying, value1: value1, value2: "1", roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
 }
 

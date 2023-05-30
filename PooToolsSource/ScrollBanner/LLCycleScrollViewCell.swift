@@ -91,7 +91,7 @@ class LLCycleScrollViewCell: UICollectionViewCell {
         // 默认模式
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        self.contentView.addSubview(imageView)
+        contentView.addSubview(imageView)
     }
     
     // Setup Label BackView
@@ -99,7 +99,7 @@ class LLCycleScrollViewCell: UICollectionViewCell {
         titleBackView = UIView.init()
         titleBackView.backgroundColor = titleBackViewBackgroundColor
         titleBackView.isHidden = true
-        self.contentView.addSubview(titleBackView)
+        contentView.addSubview(titleBackView)
     }
     
     // Setup Title
@@ -117,8 +117,8 @@ class LLCycleScrollViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageView.frame = self.bounds
-        titleBackView.frame = CGRect.init(x: 0, y: self.ll_h - titleLabelHeight, width: self.ll_w, height: titleLabelHeight)
-        titleLabel.frame = CGRect.init(x: titleLabelLeading, y: 0, width: self.ll_w - titleLabelLeading - 5, height: titleLabelHeight)
+        imageView.frame = bounds
+        titleBackView.frame = CGRect.init(x: 0, y: ll_h - titleLabelHeight, width: ll_w, height: titleLabelHeight)
+        titleLabel.frame = CGRect.init(x: titleLabelLeading, y: 0, width: ll_w - titleLabelLeading - 5, height: titleLabelHeight)
     }
 }

@@ -32,16 +32,16 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
             titleModel.onlyShowTitle = change!
             titleModel.index = index
             titleModel.itemSpace = itemSpacing
-            titleModel.titleNormalColor = self.titleNormalColor
-            titleModel.titleCurrentColor = self.titleNormalColor
-            titleModel.titleSelectedColor = self.titleSelectedColor
+            titleModel.titleNormalColor = titleNormalColor
+            titleModel.titleCurrentColor = titleNormalColor
+            titleModel.titleSelectedColor = titleSelectedColor
             titleModel.titleNormalFont = .appfont(size: 16)
             titleModel.titleSelectedFont = .appfont(size: 16,bold: true)
-            titleModel.subTitleSelectedColor = self.titleNormalColor
-            titleModel.subTitleNormalColor = self.titleNormalColor
-            titleModel.subTitleCurrentColor = self.titleSelectedColor
+            titleModel.subTitleSelectedColor = titleNormalColor
+            titleModel.subTitleNormalColor = titleNormalColor
+            titleModel.subTitleCurrentColor = titleSelectedColor
             titleModel.imageURL = model?.imageURL
-            titleModel.itemWidth = self.itemWidths
+            titleModel.itemWidth = itemWidths
             dataSource.append(titleModel)
         }
 
@@ -57,7 +57,7 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
     }
 
     public override func preferredSegmentedView(_ segmentedView: JXSegmentedView, widthForItemAt index: Int) -> CGFloat {
-        return dataSource.first!.itemWidth
+        dataSource.first!.itemWidth
     }
 
     //MARK: - JXSegmentedViewDataSource

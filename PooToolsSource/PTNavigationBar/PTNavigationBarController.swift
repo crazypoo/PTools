@@ -25,18 +25,18 @@ open class PTNavigationBarController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        if self.navigationController != nil && !self.jx_hideBaseNavBar && !self.jx_disableAutoSetCustomNavBar {
-            self.initNavBar()
-            self.setAutoBack()
+        if navigationController != nil && !jx_hideBaseNavBar && !jx_disableAutoSetCustomNavBar {
+            initNavBar()
+            setAutoBack()
         }
         
-        self.checkDoAutoSysBarAlpha()
-        self.handleCustomPopGesture()
+        checkDoAutoSysBarAlpha()
+        handleCustomPopGesture()
     }
     
     private func initNavBar() {
-        self.view.addSubview(self.jx_navBar)
-        self.view.bringSubviewToFront(self.jx_navBar)
+        view.addSubview(jx_navBar)
+        view.bringSubviewToFront(jx_navBar)
         
         PTGCDManager.gcdAfter(time: 0.1) {
             self.view.bringSubviewToFront(self.jx_navBar)
@@ -56,9 +56,9 @@ open class PTNavigationBarController: UIViewController {
     }
     
     private func getCurrentNavHeight() ->CGFloat {
-        if self.jx_navFixHeight == -1 {
+        if jx_navFixHeight == -1 {
             return CGFloat.statusBarHeight()
         }
-        return self.jx_navFixHeight
+        return jx_navFixHeight
     }
 }

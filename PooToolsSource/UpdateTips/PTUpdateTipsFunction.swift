@@ -21,7 +21,14 @@ public class PTUpdateTipsFunction: NSObject {
     /// - Parameters:
     ///   - oldVersion: 舊版本號
     ///   - newVersion: 新版本號
-    ///   - description: 更新信息
+    ///   - oV:
+    ///   - nV:
+    ///   - descriptionString:
+    ///   - url:
+    ///   - test:
+    ///   - isShowError:
+    ///   - isForcedUpgrade:
+    ///   - oV:
     ///   - downloadUrl: 下載URL
     ///   - isTest: 是否測試
     ///   - showError: 是否顯示錯誤
@@ -34,7 +41,7 @@ public class PTUpdateTipsFunction: NSObject {
                                showError isShowError:Bool = true,
                                forcedUpgrade isForcedUpgrade:Bool = false) {
         let cancelTitle:String = isForcedUpgrade ? "" : NSLocalizedString("取消升级", comment: "")
-        self.gobalTips(tipsTitle: NSLocalizedString("发现新版本", comment: ""), cancelTitle: cancelTitle, cancelBlock: { maskVC in
+        gobalTips(tipsTitle: NSLocalizedString("发现新版本", comment: ""), cancelTitle: cancelTitle, cancelBlock: { maskVC in
             if test {
                 if isShowError {
                     maskVC.dismiss(animated: true, completion: nil)

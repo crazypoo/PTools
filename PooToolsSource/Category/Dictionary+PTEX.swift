@@ -14,7 +14,7 @@ public extension Dictionary {
     //MARK: 检查字典里面是否有某个 key
     ///检查字典里面是否有某个 key
     func has(_ key: Key) -> Bool {
-        return index(forKey: key) != nil
+        index(forKey: key) != nil
     }
     
     //MARK: 字典的key或者value组成的数组
@@ -23,7 +23,7 @@ public extension Dictionary {
     ///  - map: map
     /// - Returns: 数组
     func toArray<V>(_ map: (Key, Value) -> V) -> [V] {
-        return self.map(map)
+        self.map(map)
     }
     
     //MARK: JSON字符串转字典
@@ -58,20 +58,20 @@ public extension Dictionary {
         /*
          shuffled：不会改变原数组，返回一个新的随机化的数组。  可以用于let 数组
          */
-        return self.keys.shuffled()
+        keys.shuffled()
     }
     
     //MARK: 字典里面所有的value
     ///字典里面所有的value
     /// - Returns: value 数组
     func allValues() -> [Value] {
-        return self.values.shuffled()
+        values.shuffled()
     }
     
     //MARK: 设置value
     subscript<Result>(key: Key, as type: Result.Type) -> Result? {
         get {
-            return self[key] as? Result
+            self[key] as? Result
         }
         set {
             // 如果传⼊ nil, 就删除现存的值。
@@ -136,11 +136,11 @@ public extension PTPOP where Base == Dictionary<String, Any> {
     ///字典转JSON
     @discardableResult
     func dictionaryToJson() -> String? {
-        if (!JSONSerialization.isValidJSONObject(self.base)) {
+        if (!JSONSerialization.isValidJSONObject(base)) {
             PTNSLogConsole("无法解析出JSONString")
             return nil
         }
-        if let data = try? JSONSerialization.data(withJSONObject: self.base) {
+        if let data = try? JSONSerialization.data(withJSONObject: base) {
             let JSONString = NSString(data:data,encoding: String.Encoding.utf8.rawValue)
             return JSONString! as String
         } else {

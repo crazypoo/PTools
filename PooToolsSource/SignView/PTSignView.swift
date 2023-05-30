@@ -97,36 +97,36 @@ public class PTSignView: UIView {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
         
-        self.addSubviews([self.devMaskView,self.viewNavView,self.signView])
-        self.devMaskView.snp.makeConstraints { make in
+        addSubviews([devMaskView, viewNavView, signView])
+        devMaskView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.viewNavView.snp.makeConstraints { make in
+        viewNavView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
             make.bottom.equalToSuperview().inset(240)
         }
         
-        self.viewNavView.addSubviews([self.saveBtn,self.clearBtn,self.infoLabel])
-        self.saveBtn.snp.makeConstraints { make in
+        viewNavView.addSubviews([saveBtn, clearBtn, infoLabel])
+        saveBtn.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(20)
             make.centerY.equalToSuperview()
         }
         
-        self.clearBtn.snp.makeConstraints { make in
+        clearBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(20)
             make.centerY.equalTo(self.saveBtn)
         }
-        self.infoLabel.snp.makeConstraints { make in
+        infoLabel.snp.makeConstraints { make in
             make.left.equalTo(self.clearBtn.snp.right).offset(10)
             make.right.equalTo(self.saveBtn.snp.left).offset(-10)
             make.top.bottom.equalToSuperview()
             make.centerX.equalToSuperview()
         }
-        self.infoLabel.isHidden = true
+        infoLabel.isHidden = true
         
-        self.signView.snp.makeConstraints { make in
+        signView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalTo(self.viewNavView.snp.bottom)
         }
@@ -144,9 +144,9 @@ public class PTSignView: UIView {
     }
     
     public func viewDismiss() {
-        self.removeFromSuperview()
-        if self.dismissBlock != nil {
-            self.dismissBlock!()
+        removeFromSuperview()
+        if dismissBlock != nil {
+            dismissBlock!()
         }
     }
 }

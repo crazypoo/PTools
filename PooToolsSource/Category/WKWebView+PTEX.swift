@@ -52,6 +52,7 @@ public extension PTPOP where Base: WKWebView {
     ///js交互
     /// - Parameters:
     ///  - jsCode: 注入的js代码
+    ///  - completionHandler:
     func evaluateJsCode(_ jsCode: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         base.evaluateJavaScript(jsCode, completionHandler: completionHandler)
     }

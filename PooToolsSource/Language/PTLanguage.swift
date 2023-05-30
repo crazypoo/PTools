@@ -90,7 +90,7 @@ public extension UIViewController {
     // 动态添加block属性
     private var block: ChangedBlock? {
         get {
-            return (objc_getAssociatedObject(self, &UIViewController.key) as! ChangedBlock)
+            (objc_getAssociatedObject(self, &UIViewController.key) as! ChangedBlock)
         }
         set {
             return objc_setAssociatedObject(self, &UIViewController.key, newValue, .OBJC_ASSOCIATION_COPY)
@@ -98,8 +98,8 @@ public extension UIViewController {
     }
     
     @objc private func notiLanguageChange(_ noti: Notification) {
-        if self.block != nil {
-            self.block!()
+        if block != nil {
+            block!()
         }
     }
     

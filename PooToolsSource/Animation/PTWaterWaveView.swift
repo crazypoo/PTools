@@ -73,8 +73,8 @@ public class PTWaterWaveView: UIView {
         super.init(frame: CGRectZero)
         self.startColor = startColor
         self.endColor = endColor
-        self.backgroundColor = UIColor.hex("0xedf0f4",alpha: 0.1)
-        self.layer.masksToBounds = true
+        backgroundColor = UIColor.hex("0xedf0f4",alpha: 0.1)
+        layer.masksToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -83,65 +83,65 @@ public class PTWaterWaveView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.configParam()
-        self.starWave()
+        configParam()
+        starWave()
     }
     
     func configParam() {
-        if self.waveWidth <= 0 {
-            self.waveWidth = self.frame.size.width
+        if waveWidth <= 0 {
+            waveWidth = frame.size.width
         }
         
-        if self.waveCycle <= 0 {
-            self.waveCycle = 1.29 * .pi / self.waveWidth
+        if waveCycle <= 0 {
+            waveCycle = 1.29 * .pi / waveWidth
         }
     }
     
     func changeFirstWaveLayerPath() {
         let path = CGMutablePath()
-        var y = self.wavePointY
+        var y = wavePointY
         path.move(to: CGPoint(x: 0, y: y))
         
-        for x in stride(from: 0, to: self.waveWidth, by: 0.1) {
-            y = self.waveAmplitude * 1.6 * sin((250 / self.waveWidth) * (x * .pi / 180) - self.waveOffsetX * .pi / 270) + self.wavePointY
+        for x in stride(from: 0, to: waveWidth, by: 0.1) {
+            y = waveAmplitude * 1.6 * sin((250 / waveWidth) * (x * .pi / 180) - waveOffsetX * .pi / 270) + wavePointY
             path.addLine(to: CGPoint(x: x, y: y))
         }
         
-        path.addLine(to: CGPoint(x: self.waveWidth, y: 0))
+        path.addLine(to: CGPoint(x: waveWidth, y: 0))
         path.addLine(to: CGPoint(x: 0, y: 0))
         path.closeSubpath()
-        self.shapeLayer1.path = path
+        shapeLayer1.path = path
     }
     
     func changeSecondWaveLayerPath() {
         let path = CGMutablePath()
-        var y = self.wavePointY
+        var y = wavePointY
         path.move(to: CGPoint(x: 0, y: y))
         
-        for x in stride(from: 0, to: self.waveWidth, by: 0.1) {
-            y = self.waveAmplitude * 1.6 * sin((250 / self.waveWidth) * (x * .pi / 180) - self.waveOffsetX * .pi / 180) + self.wavePointY
+        for x in stride(from: 0, to: waveWidth, by: 0.1) {
+            y = waveAmplitude * 1.6 * sin((250 / waveWidth) * (x * .pi / 180) - waveOffsetX * .pi / 180) + wavePointY
             path.addLine(to: CGPoint(x: x, y: y))
         }
         
-        path.addLine(to: CGPoint(x: self.waveWidth, y: 0))
+        path.addLine(to: CGPoint(x: waveWidth, y: 0))
         path.addLine(to: CGPoint(x: 0, y: 0))
         path.closeSubpath()
-        self.shapeLayer2.path = path
+        shapeLayer2.path = path
     }
     
     func getCurrentWave() {
-        self.waveOffsetX += self.waveSpeed
-        self.changeFirstWaveLayerPath()
-        self.changeSecondWaveLayerPath()
-        self.layer.addSublayer(self.gradientLayer1)
-        self.gradientLayer1.mask = self.shapeLayer1
-        self.layer.addSublayer(self.gradientLayer2)
-        self.gradientLayer2.mask = self.shapeLayer2
+        waveOffsetX += waveSpeed
+        changeFirstWaveLayerPath()
+        changeSecondWaveLayerPath()
+        layer.addSublayer(gradientLayer1)
+        gradientLayer1.mask = shapeLayer1
+        layer.addSublayer(gradientLayer2)
+        gradientLayer2.mask = shapeLayer2
     }
     
     func starWave() {
-        self.layer.addSublayer(self.shapeLayer1)
-        self.layer.addSublayer(self.shapeLayer2)
-        self.displayLink.add(to: .main, forMode: .common)
+        layer.addSublayer(shapeLayer1)
+        layer.addSublayer(shapeLayer2)
+        displayLink.add(to: .main, forMode: .common)
     }
 }

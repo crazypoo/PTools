@@ -18,18 +18,18 @@ open class PTBaseCollectionReusableView: UICollectionReusableView {
     }
 
     open class func cellSize() -> CGSize {
-        return CGSize(width: 1, height: 1)
+        CGSize(width: 1, height: 1)
     }
 
-    open class func cellIdentifier() -> String? {
-        return "\(type(of: self))"
+    open class func cellIdentifier() -> String {
+        "\(type(of: self))"
     }
     
-    open class func cellSizeByClass() -> NSNumber? {
-        return NSNumber(value: true)
+    open class func cellSizeByClass() -> NSNumber {
+        NSNumber(value: true)
     }
 
-    open class func cellSizeValue() -> NSValue? {
-        return NSValue(cgSize: self.cellSize())
+    open class func cellSizeValue() -> NSValue {
+        NSValue(cgSize: cellSize())
     }
 }

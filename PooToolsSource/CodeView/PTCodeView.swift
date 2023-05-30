@@ -24,7 +24,7 @@ public class PTCodeView: UIView {
     private var dismiss : Bool? = false
     
     deinit {
-        self.removeFromSuperview()
+        removeFromSuperview()
     }
 
     public init(numberOfCodes:Int,numberOfLines:Int,changeTimes:TimeInterval) {
@@ -43,7 +43,7 @@ public class PTCodeView: UIView {
         numberOfLine = numberOfLines
         changeTime = changeTimes
         changeResultString()
-        self.backgroundColor = UIColor.randomColor
+        backgroundColor = UIColor.randomColor
         if changeTimes != 0 {
             timeChange()
         }
@@ -55,7 +55,7 @@ public class PTCodeView: UIView {
     
     public override func removeFromSuperview() {
         super.removeFromSuperview()
-        self.dismiss = true
+        dismiss = true
     }
 
     private func timeChange() {

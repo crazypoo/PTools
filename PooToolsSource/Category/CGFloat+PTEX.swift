@@ -31,7 +31,7 @@ public extension CGFloat {
     ///等比例调整
     /// - Returns: CGFloat
     static func ScaleW(w:CGFloat)->CGFloat {
-        let width:CGFloat = w * self.kSCREEN_WIDTH/375
+        let width:CGFloat = w * kSCREEN_WIDTH/375
         return width
     }
 
@@ -86,7 +86,7 @@ public extension PTPOP where Base == CGFloat {
     ///   - scale: 保留小数的位数
     /// - Returns: 四舍五入返回结果
     func rounding(scale: Int16 = 1) -> CGFloat {
-        let value = NSDecimalNumberHandler.pt.rounding(value: self.base,scale: scale)
+        let value = NSDecimalNumberHandler.pt.rounding(value: base,scale: scale)
         return "\(value.floatValue)".cgFloat() ?? 0
     }
 }

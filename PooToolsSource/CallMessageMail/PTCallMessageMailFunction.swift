@@ -79,8 +79,8 @@ extension PTCallMessageMailFunction:WKNavigationDelegate {
 extension PTCallMessageMailFunction:MFMessageComposeViewControllerDelegate {
     public func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         controller.dismiss(animated: true)
-        if self.messageResultBlock != nil {
-            self.messageResultBlock!(result)
+        if messageResultBlock != nil {
+            messageResultBlock!(result)
         }
     }
 }

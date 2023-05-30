@@ -15,7 +15,7 @@ public extension UISwitch {
     
     @objc func addSwitchAction(handler:@escaping SwitchBlock) {
         objc_setAssociatedObject(self, &UISwitch.UISwitchBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        self.addTarget(self, action: #selector(self.actionValue(sender:)), for: .valueChanged)
+        addTarget(self, action: #selector(actionValue(sender:)), for: .valueChanged)
     }
     
     @objc func actionValue(sender:UISwitch) {

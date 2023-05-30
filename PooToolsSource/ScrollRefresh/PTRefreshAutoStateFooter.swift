@@ -17,14 +17,14 @@ public class PTRefreshAutoStateFooter: MJRefreshAutoStateFooter {
     
     public override func placeSubviews() {
         super.placeSubviews()
-        self.stateLabel?.isHidden = self.state != .noMoreData
+        stateLabel?.isHidden = state != .noMoreData
     }
     
     public override func scrollViewContentSizeDidChange(_ change: [AnyHashable : Any]?) {
         super.scrollViewContentSizeDidChange(change)
         
-        let contentHeight = self.scrollView!.mj_contentH + self.ignoredScrollViewContentInsetBottom
-        let scrollHeight = self.scrollView!.mj_h - self.scrollViewOriginalInset.top - self.scrollViewOriginalInset.bottom + self.ignoredScrollViewContentInsetBottom
-        self.mj_y = max(contentHeight,scrollHeight)
+        let contentHeight = scrollView!.mj_contentH + ignoredScrollViewContentInsetBottom
+        let scrollHeight = scrollView!.mj_h - scrollViewOriginalInset.top - scrollViewOriginalInset.bottom + ignoredScrollViewContentInsetBottom
+        mj_y = max(contentHeight,scrollHeight)
     }
 }

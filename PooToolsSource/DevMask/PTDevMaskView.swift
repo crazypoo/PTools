@@ -84,8 +84,8 @@ open class PTDevMaskView: PTBaseMaskView {
     
     public init(config:PTDevMaskConfig?) {
         super.init(frame: .zero)
-        self.viewConfig = (config == nil ? PTDevMaskConfig() : config)!
-        self.isMask = self.viewConfig.isMask
+        viewConfig = (config == nil ? PTDevMaskConfig() : config)!
+        isMask = viewConfig.isMask
         
         let image = UIImage.init(contentsOfFile: bundlePath!.path(forResource: "icon_clear", ofType: "png")!)
 
@@ -95,10 +95,10 @@ open class PTDevMaskView: PTBaseMaskView {
             make.edges.equalToSuperview()
         }
         
-        imageContent.image = image!.watermark(title: self.viewConfig.maskString,font: self.viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
+        imageContent.image = image!.watermark(title: viewConfig.maskString,font: viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
         
-        self.addSubview(self.springMotionView)
-        self.springMotionView.onPositionUpdate = { point in
+        addSubview(springMotionView)
+        springMotionView.onPositionUpdate = { point in
             let size = self.springMotionView.frame.size
             self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
         }
@@ -141,11 +141,11 @@ open class PTDevMaskView: PTBaseMaskView {
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        self.springMotionView.move(to: point)
+        springMotionView.move(to: point)
         
         let touchPointSize:CGFloat = 64
         let animation = PTTouchAnimationView(touchPoint: point)
-        self.addSubview(animation)
+        addSubview(animation)
         animation.snp.makeConstraints { make in
             make.width.height.equalTo(touchPointSize)
             make.left.equalTo(point.x / 2)
@@ -178,7 +178,7 @@ fileprivate class PTTouchAnimationView :UIView {
     override func draw(_ rect: CGRect) {
         let redbius:CGFloat = 40
         let startAngle:CGFloat = 0
-        let point = CGPoint(x: self.touchPoint.x / 2, y: self.touchPoint.y / 2)
+        let point = CGPoint(x: touchPoint.x / 2, y: touchPoint.y / 2)
         let endAngle = 2 * Double.pi
         
         let path = UIBezierPath(arcCenter: point, radius: redbius, startAngle: startAngle, endAngle: endAngle, clockwise: true)

@@ -76,7 +76,7 @@ class PTSwiftViewController: PTBaseViewController {
 //            customers
 //        })
         
-        group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10, itemWidth: 100) { index in
+        group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10, itemWidth: 100) { index,item in
             return CGFloat(arc4random() % 1000)
         }
         
@@ -284,9 +284,9 @@ class PTSwiftViewController: PTBaseViewController {
 
     func showCollectionViewData() {
                 
-        self.mSections.removeAll()
+        mSections.removeAll()
         
-        self.cellModels().enumerated().forEach { (index,value) in
+        cellModels().enumerated().forEach { (index,value) in
             var rows = [PTRows]()
             value.enumerated().forEach { subIndex,subValue in
                 let row_List = PTRows.init(title: subValue.name, placeholder: subValue.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: subValue)
@@ -296,8 +296,8 @@ class PTSwiftViewController: PTBaseViewController {
             mSections.append(cellSection)
         }
 
-        self.collectionView.pt_register(by: self.mSections)
-        self.collectionView.reloadData()
+        collectionView.pt_register(by: mSections)
+        collectionView.reloadData()
     }
 
     override func viewDidLoad() {
@@ -305,14 +305,14 @@ class PTSwiftViewController: PTBaseViewController {
 
         PTNSLogConsole(self)
         
-        self.view.addSubview(self.collectionView)
-        self.collectionView.snp.makeConstraints { make in
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
 //            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
             make.top.equalToSuperview()
         }
 
-        self.showCollectionViewData()
+        showCollectionViewData()
         
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"
@@ -585,15 +585,15 @@ class PTSwiftViewController: PTBaseViewController {
 
 extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.mSections.count
+        return mSections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.mSections[section].rows.count
+        return mSections[section].rows.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let itemSec = self.mSections[indexPath.section]
+        let itemSec = mSections[indexPath.section]
         let itemRow = itemSec.rows[indexPath.row]
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
         cell.dataContent.backgroundColor = .white

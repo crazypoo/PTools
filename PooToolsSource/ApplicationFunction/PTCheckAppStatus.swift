@@ -35,8 +35,8 @@ public class PCheckAppStatus: NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidBecomeActiveNotification), name: UIApplication.didBecomeActiveNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillResignActiveNotification), name: UIApplication.willResignActiveNotification, object: nil)
     }
     
     func createUI() {
@@ -51,7 +51,7 @@ public class PCheckAppStatus: NSObject {
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             }
 
-            displayLink = CADisplayLink.init(target: self, selector: #selector(self.displayLinkTick(link:)))
+            displayLink = CADisplayLink.init(target: self, selector: #selector(displayLinkTick(link:)))
             displayLink?.isPaused = false
             displayLink?.add(to: RunLoop.current, forMode: .common)
             
@@ -63,7 +63,7 @@ public class PCheckAppStatus: NSObject {
         closed = false
     }
     
-    @objc func displayLinkTick(link:CADisplayLink) {
+    func displayLinkTick(link:CADisplayLink) {
         if lastTime == 0 {
             lastTime = link.timestamp
             return
@@ -101,13 +101,13 @@ public class PCheckAppStatus: NSObject {
         avatar = nil
     }
     
-    @objc func applicationDidBecomeActiveNotification() {
+    func applicationDidBecomeActiveNotification() {
         if avatar != nil {
             displayLink!.isPaused = false
         }
     }
 
-    @objc func applicationWillResignActiveNotification() {
+    func applicationWillResignActiveNotification() {
         if avatar != nil {
             displayLink!.isPaused = true
         }

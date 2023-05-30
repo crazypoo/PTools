@@ -30,7 +30,7 @@ open class PTFloatPanelLayout: NSObject,FloatingPanelLayout {
     }
 
     open func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
-        return 0.45
+        0.45
     }
 }
 
@@ -57,6 +57,6 @@ open class PTCustomControlHeightPanelLayout: NSObject, FloatingPanelLayout {
     }
 
     open func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
-        return 0.45
+        0.45
     }
 }

@@ -54,7 +54,7 @@ class PTEasySignatureView: UIView {
     var path:UIBezierPath!
     func createPath()->UIBezierPath {
         let paths = UIBezierPath()
-        paths.lineWidth = self.viewConfig.lineWidth
+        paths.lineWidth = viewConfig.lineWidth
         paths.lineCapStyle = .round
         paths.lineJoinStyle = .round
         return paths
@@ -83,7 +83,7 @@ class PTEasySignatureView: UIView {
     init(viewConfig:PTSignatureConfig) {
         self.viewConfig = viewConfig
         super.init(frame: .zero)
-        self.commonInit()
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
@@ -91,17 +91,17 @@ class PTEasySignatureView: UIView {
     }
     
     func midPoint(p0:CGPoint,p1:CGPoint)->CGPoint {
-        return CGPoint(x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2)
+        CGPoint(x: (p0.x + p1.x) / 2, y: (p0.y + p1.y) / 2)
     }
     
     func check3DTouch()->Bool {
-        return self.traitCollection.forceTouchCapability == .available
+        traitCollection.forceTouchCapability == .available
     }
     
     func commonInit() {
-        self.backgroundColor = self.viewConfig.signViewBackground
+        backgroundColor = viewConfig.signViewBackground
 
-        self.path = self.createPath()
+        path = createPath()
         
         let pan = UIPanGestureRecognizer.init { sender in
             let senderPan = (sender as! UIPanGestureRecognizer)
@@ -142,72 +142,72 @@ class PTEasySignatureView: UIView {
         }
         pan.minimumNumberOfTouches = 1
         pan.maximumNumberOfTouches = 1
-        self.addGestureRecognizer(pan)
+        addGestureRecognizer(pan)
         
-        self.addSubview(self.infoLabel)
-        self.infoLabel.snp.makeConstraints { make in
+        addSubview(infoLabel)
+        infoLabel.snp.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
         }
     }
     
     override func draw(_ rect: CGRect) {
         
-        if self.check3DTouch() {
-            UIColor(white: 0, alpha: self.viewConfig.lineWidth * (1 - self.touchForce)).setStroke()
+        if check3DTouch() {
+            UIColor(white: 0, alpha: viewConfig.lineWidth * (1 - touchForce)).setStroke()
         } else {
             UIColor.black.setStroke()
         }
-        self.path.stroke()
+        path.stroke()
         
-        if !self.isSure && !self.isHaveDraw {
-            self.infoLabel.isHidden = false
+        if !isSure && !isHaveDraw {
+            infoLabel.isHidden = false
         } else {
-            self.infoLabel.isHidden = true
-            self.isSure = false
+            infoLabel.isHidden = true
+            isSure = false
         }
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touche = touches.first
-        if self.check3DTouch() {
-            self.touchForce = touche!.force
+        if check3DTouch() {
+            touchForce = touche!.force
         }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let touche = touches.first
-        if self.check3DTouch() {
-            self.touchForce = touche!.force
+        if check3DTouch() {
+            touchForce = touche!.force
         }
     }
     
     func clearSign() {
-        if self.currentPointArr.count > 0 {
-            self.currentPointArr.removeAllObjects()
+        if currentPointArr.count > 0 {
+            currentPointArr.removeAllObjects()
         }
-        self.hasSignatureImg = false
-        self.maxFloat = 0
-        self.minFloat = 0
-        self.isHaveDraw = false
-        self.path = self.createPath()
+        hasSignatureImg = false
+        maxFloat = 0
+        minFloat = 0
+        isHaveDraw = false
+        path = createPath()
         self.setNeedsDisplay()
-        if self.onSignatureWriteAction != nil {
-            self.onSignatureWriteAction!(false)
+        if onSignatureWriteAction != nil {
+            onSignatureWriteAction!(false)
         }
     }
     
     func saveSign() {
-        if self.minFloat == 0 && self.maxFloat == 0 {
-            self.minFloat = 0
-            self.maxFloat = 0
+        if minFloat == 0 && maxFloat == 0 {
+            minFloat = 0
+            maxFloat = 0
         }
-        self.isSure = true
+        isSure = true
         self.setNeedsDisplay()
-        self.imageRepresentation()
+        imageRepresentation()
     }
     
     func scaleToSize(image:UIImage)->UIImage {
-        let rect:CGRect = CGRect(x: 0, y: 0, width: image.size.width, height: self.frame.size.height)
+        let rect:CGRect = CGRect(x: 0, y: 0, width: image.size.width, height: frame.size.height)
         UIGraphicsBeginImageContext(rect.size)
         image.draw(in: rect)
         let scaledImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -218,14 +218,14 @@ class PTEasySignatureView: UIView {
     
     func cutImage(image:UIImage)->UIImage {
         var rect:CGRect!
-        if self.minFloat == 0 && self.maxFloat == 0 {
+        if minFloat == 0 && maxFloat == 0 {
             rect = .zero
         } else {
-            rect = CGRect(x: self.minFloat - 3, y: 0, width: self.maxFloat - self.minFloat + 6, height: self.frame.size.height)
+            rect = CGRect(x: minFloat - 3, y: 0, width: maxFloat - minFloat + 6, height: frame.size.height)
         }
         let imageRef = image.cgImage!.cropping(to: rect)
         let img = UIImage(cgImage: imageRef!)
-        let lastImage = self.addText(image: img, text: self.showMessage)
+        let lastImage = addText(image: img, text: showMessage)
         self.setNeedsDisplay()
         return lastImage
     }
@@ -233,7 +233,7 @@ class PTEasySignatureView: UIView {
     func addText(image:UIImage,text:String)->UIImage {
         let imageW = image.size.width
         let imageH = image.size.height
-        let textFont = self.viewConfig.signContentTitleFont
+        let textFont = viewConfig.signContentTitleFont
         let sizeToFit = text.nsString.boundingRect(with: CGSize(width: 128, height: 30),options: NSStringDrawingOptions.usesLineFragmentOrigin,attributes: [NSAttributedString.Key.font:textFont], context: nil).size
         
         UIGraphicsBeginImageContext(image.size)
@@ -246,17 +246,17 @@ class PTEasySignatureView: UIView {
     }
 
     func imageRepresentation() {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
-        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+        layer.render(in: UIGraphicsGetCurrentContext()!)
         var images:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         images = PTImageBlackToTransparent.imageBlackToTransparent(image: images) ?? UIImage()
         
-        if self.showMessage.stringIsEmpty() {
-            self.SignatureImg = self.scaleToSize(image: images)
+        if showMessage.stringIsEmpty() {
+            SignatureImg = scaleToSize(image: images)
         } else {
-            let img = self.cutImage(image: images)
-            self.SignatureImg = self.scaleToSize(image: img)
+            let img = cutImage(image: images)
+            SignatureImg = scaleToSize(image: img)
         }
     }
 }

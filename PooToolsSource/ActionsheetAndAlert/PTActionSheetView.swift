@@ -21,7 +21,7 @@ public class PTActionCell:UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.addSubview(cellButton)
+        addSubview(cellButton)
         cellButton.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -137,7 +137,7 @@ public class PTActionSheetView: UIView {
     ///   - selectedColor: 選中的動畫顏色
     ///   - corner: 邊框角弧度
     ///   - dismissWithTapBG: 是否支持點擊背景消失Alert
-    @objc public init(title:String? = "",
+    public init(title:String? = "",
          subTitle:String? = "",
          cancelButton:String? = "取消",
          destructiveButton:String? = "",
@@ -153,8 +153,8 @@ public class PTActionSheetView: UIView {
          corner:CGFloat = 15,
          dismissWithTapBG:Bool = true) {
         super.init(frame: .zero)
-        self.createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)
-        self.createView()
+        createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)
+        createView()
     }
         
     required init?(coder: NSCoder) {
@@ -199,8 +199,8 @@ public class PTActionSheetView: UIView {
             make.edges.equalToSuperview()
         }
         
-        self.addSubview(backgroundView)
-        self.addSubview(actionSheetView)
+        addSubview(backgroundView)
+        addSubview(actionSheetView)
         actionSheetView.addSubview(actionSheetScroll)
         
         if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
@@ -222,11 +222,11 @@ public class PTActionSheetView: UIView {
     }
     
     func destlineH()->CGFloat {
-        return destructiveButtonTitle.stringIsEmpty() ? 0 : kRowLineHeight
+        destructiveButtonTitle.stringIsEmpty() ? 0 : kRowLineHeight
     }
     
     func destRowH()->CGFloat {
-        return destructiveButtonTitle.stringIsEmpty() ? 0 : kRowHeight
+        destructiveButtonTitle.stringIsEmpty() ? 0 : kRowHeight
     }
     
     func titleHeight()->CGFloat {
@@ -251,7 +251,7 @@ public class PTActionSheetView: UIView {
     }
     
     func actionSheetRealHeight()->CGFloat {
-        return scrollContentHeight() + (titleHeight() + kRowLineHeight) + (kSeparatorHeight + kRowHeight) + destRowH() + destlineH() + kRowLineHeight * 2
+        scrollContentHeight() + (titleHeight() + kRowLineHeight) + (kSeparatorHeight + kRowHeight) + destRowH() + destlineH() + kRowLineHeight * 2
     }
     
     func actionSheetHeight(orientation:UIDeviceOrientation)->CGFloat {
@@ -265,12 +265,12 @@ public class PTActionSheetView: UIView {
     }
     
     func scrollHieght(orientation:UIDeviceOrientation)->CGFloat {
-        let a:CGFloat = self.actionSheetHeight(orientation: orientation)
+        let a:CGFloat = actionSheetHeight(orientation: orientation)
         let b:CGFloat = CGFloat.kSCREEN_HEIGHT
         if (a - b) <= 0 {
-            return a - (self.titleHeight() + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - (self.destRowH() + self.destlineH() + kRowLineHeight * 2)
+            return a - (titleHeight() + kRowLineHeight) - (kSeparatorHeight + kRowHeight) - (destRowH() + destlineH() + kRowLineHeight * 2)
         } else {
-            return self.scrollContentHeight()
+            return scrollContentHeight()
         }
     }
     
@@ -317,7 +317,7 @@ public class PTActionSheetView: UIView {
         }
         
         let contentW : CGFloat = CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2
-        actionSheetScroll.contentSize = CGSize.init(width: contentW, height: self.scrollContentHeight())
+        actionSheetScroll.contentSize = CGSize.init(width: contentW, height: scrollContentHeight())
         actionSheetScroll.showsVerticalScrollIndicator = false
         actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= CGFloat.kSCREEN_HEIGHT) ? true : false
         
@@ -327,7 +327,7 @@ public class PTActionSheetView: UIView {
             otherTitles.enumerated().forEach({ (index,value) in
                 let lineView = UIView()
                 lineView.backgroundColor = .lightGray
-                self.actionSheetScroll.addSubview(lineView)
+                actionSheetScroll.addSubview(lineView)
                 lineView.snp.makeConstraints { make in
                     make.height.equalTo(kRowLineHeight)
                     make.width.equalTo(CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2)
@@ -344,7 +344,7 @@ public class PTActionSheetView: UIView {
                 btn.cellButton.addActionHandlers { sender in
                     self.didSelection(sender: sender)
                 }
-                self.actionSheetScroll.addSubview(btn)
+                actionSheetScroll.addSubview(btn)
 
                 btn.snp.makeConstraints { make in
                     make.centerX.equalToSuperview()
@@ -364,7 +364,7 @@ public class PTActionSheetView: UIView {
                     }
                 }
                 
-                if index == (self.otherTitles.count - 1) {
+                if index == (otherTitles.count - 1) {
                     PTGCDManager.gcdAfter(time: 0.1) {
                         btn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.bottomLeft,.bottomRight])
                     }
@@ -428,7 +428,7 @@ public class PTActionSheetView: UIView {
     
     public func show() {
         let animation = POPSpringAnimation.init(propertyNamed: kPOPLayerTranslationY)
-        actionSheetView.layer.transform = CATransform3DMakeTranslation(0, self.actionSheetRealHeight(), 0)
+        actionSheetView.layer.transform = CATransform3DMakeTranslation(0, actionSheetRealHeight(), 0)
         animation?.toValue = 0
         animation?.springBounciness = 1
         actionSheetView.layer.pop_add(animation, forKey: "ActionSheetAnimation")

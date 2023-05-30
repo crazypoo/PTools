@@ -33,6 +33,6 @@ open class PTBaseModel: HandyJSON,Convertible {
     // 实现kj_modelKey方法
     // 会传入模型的属性`property`作为参数，返回值就是属性对应的key
     open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {
-        return property.name
+        property.name
     }
 }

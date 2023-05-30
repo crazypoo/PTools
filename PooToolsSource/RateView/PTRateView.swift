@@ -47,14 +47,14 @@ public class PTRateView: UIView {
     
     public var viewConfig:PTRateConfig? = PTRateConfig() {
         didSet {
-            self.scorePercent = self.viewConfig!.scorePercent
-            self.removeSubviews()
-            self.loaded = false
-            self.layoutSubviews()
+            scorePercent = viewConfig!.scorePercent
+            removeSubviews()
+            loaded = false
+            layoutSubviews()
         }
     }
-    fileprivate lazy var backgroundStarView:UIView = self.createStartView(image: self.viewConfig!.bImage, tag: PTRateBackgroundViewTags)
-    fileprivate lazy var foregroundStarView:UIView = self.createStartView(image: self.viewConfig!.fImage, tag: PTRateForegroundViewTags)
+    fileprivate lazy var backgroundStarView:UIView = createStartView(image: viewConfig!.bImage, tag: PTRateBackgroundViewTags)
+    fileprivate lazy var foregroundStarView:UIView = createStartView(image: viewConfig!.fImage, tag: PTRateForegroundViewTags)
 
     fileprivate var scorePercent:CGFloat? = 0 {
         didSet {
@@ -62,8 +62,8 @@ public class PTRateView: UIView {
                 self.layoutSubviews()
             }
             
-            if self.rateBlock != nil {
-                self.rateBlock!(self.scorePercent!)
+            if rateBlock != nil {
+                rateBlock!(scorePercent!)
             }
         }
     }
@@ -84,7 +84,7 @@ public class PTRateView: UIView {
                 self.scorePercent = CGFloat(starScore) / CGFloat(self.viewConfig!.numberOfStar)
             }
             tapGes.numberOfTapsRequired = 1
-            self.addGestureRecognizer(tapGes)
+            addGestureRecognizer(tapGes)
         }
     }
     
@@ -112,8 +112,8 @@ public class PTRateView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        if !self.loaded {
-            self.initView()
+        if !loaded {
+            initView()
         }
     }
     
@@ -122,7 +122,7 @@ public class PTRateView: UIView {
         contentV.clipsToBounds = true
         contentV.backgroundColor = .clear
         
-        for i in 0..<self.viewConfig!.numberOfStar {
+        for i in 0..<viewConfig!.numberOfStar {
             let imageV = UIImageView(image: image)
             imageV.contentMode = .scaleAspectFit
             imageV.tag = tag + i

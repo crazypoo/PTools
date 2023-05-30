@@ -22,11 +22,11 @@ public enum PTCountingLabelType {
     case Linear
     
     func lineUpdate(t:CGFloat)->CGFloat {
-        return t
+        t
     }
     
     func inUpdate(t:CGFloat)->CGFloat {
-        return CGFloat(powf(Float(t), Float(kPTLabelCounterRate)))
+        CGFloat(powf(Float(t), Float(kPTLabelCounterRate)))
     }
     
     func inOutUpdate(t:CGFloat)->CGFloat {
@@ -54,7 +54,7 @@ public class PTCountingLabel: UILabel {
     public var showCompletionBlock:PTCountingLabelShowCompletionBlock?
     public var format:String = "%f" {
         didSet {
-            self.textValue(value: self.currentValue())
+            textValue(value: currentValue())
         }
     }
     
@@ -68,23 +68,23 @@ public class PTCountingLabel: UILabel {
     var destinationValue:CGFloat = 0
     var startingValue:CGFloat = 0
     public func currentValue()->CGFloat {
-        if self.progress >= self.totalTime {
-            return self.destinationValue
+        if progress >= totalTime {
+            return destinationValue
         }
         
-        let percent = self.progress / self.totalTime
+        let percent = progress / totalTime
         var updateVal:CGFloat = 0
-        switch self.countingType {
+        switch countingType {
         case .Linear:
-            updateVal = self.countingType.lineUpdate(t: percent)
+            updateVal = countingType.lineUpdate(t: percent)
         case .In:
-            updateVal = self.countingType.inUpdate(t: percent)
+            updateVal = countingType.inUpdate(t: percent)
         case .Inout:
-            updateVal = self.countingType.inOutUpdate(t: percent)
+            updateVal = countingType.inOutUpdate(t: percent)
         default:
             break
         }
-        return self.startingValue + (updateVal * (self.destinationValue - self.startingValue))
+        return startingValue + (updateVal * (destinationValue - startingValue))
     }
     var timer:CADisplayLink?
     var easingRate:CGFloat = 3
@@ -98,15 +98,15 @@ public class PTCountingLabel: UILabel {
     }
     
     public func countFrom(value:CGFloat,toValue:CGFloat) {
-        self.countFrom(starValue: value, toValue: toValue, duration: self.animationDuration)
+        self.countFrom(starValue: value, toValue: toValue, duration: animationDuration)
     }
     
     public func countFromCurrentValue(toValue:CGFloat) {
-        self.countFrom(value: self.currentValue(), toValue: toValue)
+        self.countFrom(value: currentValue(), toValue: toValue)
     }
     
     public func countFormCurrentValue(toValue:CGFloat,duration:TimeInterval) {
-        self.countFrom(starValue: self.currentValue(), toValue: toValue,duration: duration)
+        self.countFrom(starValue: currentValue(), toValue: toValue,duration: duration)
     }
     
     public func countFromZero(toValue:CGFloat) {
@@ -118,71 +118,71 @@ public class PTCountingLabel: UILabel {
     }
     
     public func countFrom(starValue:CGFloat,toValue:CGFloat,duration:TimeInterval) {
-        self.startingValue = starValue
-        self.destinationValue = toValue
+        startingValue = starValue
+        destinationValue = toValue
         
-        self.timer?.invalidate()
-        self.timer = nil
+        timer?.invalidate()
+        timer = nil
         
         if duration == 0 {
-            self.textValue(value: toValue)
-            self.runCompletionBlock()
+            textValue(value: toValue)
+            runCompletionBlock()
         }
         
-        self.easingRate = 3
-        self.progress = 0
-        self.totalTime = duration
+        easingRate = 3
+        progress = 0
+        totalTime = duration
         
-        self.lastUpdate = Date.timeIntervalSinceReferenceDate
+        lastUpdate = Date.timeIntervalSinceReferenceDate
         
-        self.timer = CADisplayLink(target: self, selector: #selector(self.updateValue(timer:)))
-        self.timer?.preferredFramesPerSecond = 60
-        self.timer?.add(to: RunLoop.main, forMode: .default)
-        self.timer?.add(to: RunLoop.main, forMode: .tracking)
+        timer = CADisplayLink(target: self, selector: #selector(updateValue(timer:)))
+        timer?.preferredFramesPerSecond = 60
+        timer?.add(to: RunLoop.main, forMode: .default)
+        timer?.add(to: RunLoop.main, forMode: .tracking)
     }
     
-    @objc func updateValue(timer:Timer) {
+    func updateValue(timer:Timer) {
         let now = Date.timeIntervalSinceReferenceDate
-        self.progress += (now - self.lastUpdate)
-        self.lastUpdate = now
+        progress += (now - lastUpdate)
+        lastUpdate = now
         
-        if self.progress >= self.totalTime {
+        if progress >= totalTime {
             self.timer?.invalidate()
             self.timer = nil
-            self.progress = self.totalTime
+            progress = totalTime
         }
         
-        self.textValue(value: self.currentValue())
+        textValue(value: currentValue())
         
-        if self.progress == self.totalTime {
-            self.runCompletionBlock()
+        if progress == totalTime {
+            runCompletionBlock()
         }
     }
     
     func runCompletionBlock() {
-        if self.showCompletionBlock != nil {
-            self.showCompletionBlock!()
-            self.showCompletionBlock = nil
+        if showCompletionBlock != nil {
+            showCompletionBlock!()
+            showCompletionBlock = nil
         }
     }
     
     func textValue(value:CGFloat) {
-        if self.attributedFormatBlock != nil {
-            self.attributedText = self.attributedFormatBlock!(value)
-        } else if self.formatBlock != nil {
-            self.text = self.formatBlock!(value)
+        if attributedFormatBlock != nil {
+            attributedText = attributedFormatBlock!(value)
+        } else if formatBlock != nil {
+            text = formatBlock!(value)
         } else {
-            if self.format.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || self.format.nsString.range(of: "%(.*)i").location != NSNotFound {
-                self.text = String(format: self.format, value)
+            if format.nsString.range(of: "%(.*)d",options: NSString.CompareOptions.regularExpression).location != NSNotFound || format.nsString.range(of: "%(.*)i").location != NSNotFound {
+                text = String(format: format, value)
             } else {
-                if self.positiveFormat.nsString.length > 0 {
-                    let str = String(format: self.format, value)
+                if positiveFormat.nsString.length > 0 {
+                    let str = String(format: format, value)
                     let formatter = NumberFormatter()
                     formatter.numberStyle = .decimal
-                    formatter.positiveFormat = self.positiveFormat
-                    self.text = String(format: "%@", formatter.string(from: NSNumber(floatLiteral: str.double() ?? 0))!)
+                    formatter.positiveFormat = positiveFormat
+                    text = String(format: "%@", formatter.string(from: NSNumber(floatLiteral: str.double() ?? 0))!)
                 } else {
-                    self.text = String(format: self.format, value)
+                    text = String(format: format, value)
                 }
             }
         }

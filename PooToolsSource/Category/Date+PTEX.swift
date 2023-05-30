@@ -102,7 +102,7 @@ public extension Date {
     //MARK: Date格式化
     ///Date格式化
     func dateFormat(formatString:String = "yyyy-MM-dd")->String {
-        return self.toFormat(formatString)
+        self.toFormat(formatString)
     }
     
     //MARK: 合同时间状态检测
@@ -138,7 +138,7 @@ public extension Date {
     ///   - readyExpTime: 多久過期
     /// - Returns : 狀態
     static func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships {
-        return Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
+        Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }
 
@@ -149,7 +149,7 @@ public extension PTPOP where Base == Date {
     /// - Returns: 时间戳
     func dateToTimeStamp(timestampType: PTTimestampType = .second) -> String {
         // 10位数时间戳 和 13位数时间戳
-        let interval = timestampType == .second ? CLongLong(Int(self.base.timeIntervalSince1970)) : CLongLong(round(self.base.timeIntervalSince1970 * 1000))
+        let interval = timestampType == .second ? CLongLong(Int(base.timeIntervalSince1970)) : CLongLong(round(base.timeIntervalSince1970 * 1000))
         return "\(interval)"
     }
     
@@ -202,13 +202,14 @@ public extension PTPOP where Base == Date {
         // let dateFormatter = DateFormatter()
         jx_formatter.timeZone = TimeZone.autoupdatingCurrent
         jx_formatter.dateFormat = formatter
-        return jx_formatter.string(from: self.base)
+        return jx_formatter.string(from: base)
     }
     
     // MARK: 带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳，时间字符串和时间格式必须保持一致
     /// 带格式的时间转 时间戳，支持返回 13位 和 10位的时间戳，时间字符串和时间格式必须保持一致
     /// - Parameters:
     ///   - timeString: 时间字符串，如：2020-10-26 16:52:41
+    ///   - timesString:
     ///   - formatter: 时间格式，如：yyyy-MM-dd HH:mm:ss
     ///   - timestampType: 返回的时间戳类型，默认是秒 10 为的时间戳字符串
     /// - Returns: 返回转化后的时间戳

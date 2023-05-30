@@ -18,9 +18,9 @@ public extension UIImage {
     ///更改圖片大小
     @objc func transformImage(size:CGSize)->UIImage {
         if #available(iOS 15.0, *) {
-            return self.preparingThumbnail(of: size)!
+            return preparingThumbnail(of: size)!
         } else {
-            return self.transform(size: CGSize.init(width: size.width, height: size.height))
+            return transform(size: CGSize.init(width: size.width, height: size.height))
         }
     }
     
@@ -30,7 +30,7 @@ public extension UIImage {
         let sourceW = size.width
         let sourceH = size.height
         
-        let imageRef = self.cgImage
+        let imageRef = cgImage
         let bitmap:CGContext = CGContext(data: nil , width: Int(destW), height: Int(destH), bitsPerComponent: (imageRef?.bitsPerComponent)!, bytesPerRow: 4 * Int(destW), space: (imageRef?.colorSpace)!, bitmapInfo: (CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue))!
         
         bitmap.draw(imageRef!, in: CGRect.init(x: 0, y: 0, width: sourceW, height: sourceH))
@@ -43,7 +43,7 @@ public extension UIImage {
     //MARK: 圖片高斯模糊
     ///圖片高斯模糊
     @objc func blurImage()->UIImage {
-        return self.img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
+        img(alpha: 0.1, radius: 10, colorSaturationFactor: 1)
     }
     
     /*
@@ -55,20 +55,20 @@ public extension UIImage {
      */
     func img(alpha:Float,radius:Float,colorSaturationFactor:Float)->UIImage {
         let tintColor = UIColor.init(white: 1, alpha: CGFloat(alpha))
-        return self.imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
+        return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
     func imgBluredWithRadius(blurRadius:Float,tintColor:UIColor?,saturationDeltaFactor:Float,maskImage:UIImage?)->UIImage {
-        let imageRect = CGRect.init(origin: .zero, size: self.size)
+        let imageRect = CGRect.init(origin: .zero, size: size)
         var effectImage = self
         let hadBlur = blurRadius > Float.ulpOfOne
         let hasSaturationChange = abs(saturationDeltaFactor - 1) > Float.ulpOfOne
         if hadBlur || hasSaturationChange {
-            UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
+            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
             let effectContext = UIGraphicsGetCurrentContext()
             effectContext!.scaleBy(x: 1,y: -1)
-            effectContext!.translateBy(x: 0, y: -self.size.height)
-            effectContext!.draw(self.cgImage!, in: imageRect)
+            effectContext!.translateBy(x: 0, y: -size.height)
+            effectContext!.draw(cgImage!, in: imageRect)
             
             var effectInBuffer = vImage_Buffer()
             effectInBuffer.data = effectContext!.data
@@ -76,7 +76,7 @@ public extension UIImage {
             effectInBuffer.height = vImagePixelCount(effectContext!.height)
             effectInBuffer.rowBytes = effectContext!.bytesPerRow
             
-            UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
+            UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
             let effectOutContext = UIGraphicsGetCurrentContext()
             var effectOutBuffer = vImage_Buffer()
             effectOutBuffer.data = effectOutContext!.data
@@ -129,18 +129,18 @@ public extension UIImage {
             }
         }
         
-        UIGraphicsBeginImageContextWithOptions(self.size, false, UIScreen.main.scale)
+        UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
         let outputContext = UIGraphicsGetCurrentContext()
         outputContext?.scaleBy(x: 1, y: -1)
-        outputContext?.translateBy(x: 0, y: -self.size.height)
-        outputContext?.draw(self.cgImage!, in: imageRect)
+        outputContext?.translateBy(x: 0, y: -size.height)
+        outputContext?.draw(cgImage!, in: imageRect)
         
         if hadBlur {
             outputContext?.saveGState()
             if maskImage != nil {
                 outputContext?.clip(to: imageRect, mask: (maskImage?.cgImage)!)
             }
-            outputContext?.draw(self.cgImage!, in: imageRect)
+            outputContext?.draw(cgImage!, in: imageRect)
             outputContext?.restoreGState()
         }
         
@@ -208,15 +208,15 @@ public extension UIImage {
     }
 
     func imageScale(scaleSize:CGFloat)->UIImage {
-        UIGraphicsBeginImageContext(CGSize(width: self.size.width * scaleSize, height: self.size.height * scaleSize))
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width * scaleSize, height: self.size.height * scaleSize))
+        UIGraphicsBeginImageContext(CGSize(width: size.width * scaleSize, height: size.height * scaleSize))
+        self.draw(in: CGRect(x: 0, y: 0, width: size.width * scaleSize, height: size.height * scaleSize))
         UIGraphicsEndImageContext()
         return self
     }
     
     func imageMask(text:NSString,point:CGPoint,attributed:NSDictionary)->UIImage {
-        UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -224,8 +224,8 @@ public extension UIImage {
     }
     
     func imageMask(maskImage:UIImage,maskRect:CGRect)->UIImage {
-        UIGraphicsBeginImageContextWithOptions(self.size, false, 0)
-        self.draw(in: CGRect(x: 0, y: 0, width: self.size.width, height: self.size.height))
+        UIGraphicsBeginImageContextWithOptions(size, false, 0)
+        self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         maskImage.draw(in: maskRect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -235,13 +235,13 @@ public extension UIImage {
     //MARK: 獲取圖片中大部分占有的顏色
     ///獲取圖片中大部分占有的顏色
     @objc func imageMostColor()->UIColor {
-        let context = self.getImageContext()
+        let context = getImageContext()
                 
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
 
-        let cls = NSCountedSet.init(capacity: Int(self.size.width * self.size.height))
-        for i in 0...Int(self.size.width) {
-            for j in 0...Int(self.size.height) {
+        let cls = NSCountedSet.init(capacity: Int(size.width * size.height))
+        for i in 0...Int(size.width) {
+            for j in 0...Int(size.height) {
                 let offSet = 4 * (i * j)
                 let red = (newImgData + offSet).pointee
                 let green = (newImgData + (offSet + 1)).pointee
@@ -270,12 +270,12 @@ public extension UIImage {
     //MARK: 獲取圖片中某個像素點的顏色
     ///獲取圖片中某個像素點的顏色
     func getImgePointColor(point:CGPoint)->UIColor {
-        let context = self.getImageContext()
+        let context = getImageContext()
                 
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
         
         // 根据当前所选择的点计算出对应位图数据的index
-        let offset = Int(point.y * self.size.width + point.x) * 4
+        let offset = Int(point.y * size.width + point.x) * 4
         
         // 获取4种信息
         let alpha = (newImgData + offset).pointee
@@ -288,10 +288,10 @@ public extension UIImage {
     }
         
     func getImageContext()-> CGContext {
-        let currentImage = self.cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
+        let currentImage = cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
         
         let bitmapInfo = CGBitmapInfo.byteOrderDefault.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
-        let thumbSize = CGSize(width: self.size.width, height: self.size.height)
+        let thumbSize = CGSize(width: size.width, height: size.height)
         let colorSpace = CGColorSpaceCreateDeviceRGB()
         
         let context = CGContext.init(data: nil, width: Int(thumbSize.width), height: Int(thumbSize.height), bitsPerComponent: 8, bytesPerRow: Int(thumbSize.width) * 4, space: colorSpace, bitmapInfo: bitmapInfo)
@@ -344,6 +344,7 @@ public extension PTPOP where Base: UIImage {
     /// - Parameters:
     ///   - videoUrl: 视频 url
     ///   - maximumSize: 图片的最大尺寸
+    ///   - closure:
     /// - Returns: 视频的第一帧
     static func getVideoFirstImage(videoUrl: String, maximumSize: CGSize = CGSize(width: 1000, height: 1000), closure: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
@@ -392,10 +393,10 @@ public extension PTPOP where Base: UIImage {
         context?.translateBy(x: 0, y: -area.height)
         context?.setBlendMode(.multiply)
         context?.setAlpha(alpha)
-        context?.draw(self.base.cgImage!, in: area)
+        context?.draw(base.cgImage!, in: area)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-        return newImage ?? self.base
+        return newImage ?? base
     }
     
     //MARK: 更改图片颜色
@@ -411,11 +412,11 @@ public extension PTPOP where Base: UIImage {
         defer {
             UIGraphicsEndImageContext()
         }
-        let drawRect = CGRect(x: 0, y: 0, width: self.base.size.width, height: self.base.size.height)
-        UIGraphicsBeginImageContextWithOptions(self.base.size, false, self.base.scale)
+        let drawRect = CGRect(x: 0, y: 0, width: base.size.width, height: base.size.height)
+        UIGraphicsBeginImageContextWithOptions(base.size, false, base.scale)
         color.setFill()
         UIRectFill(drawRect)
-        self.base.draw(in: drawRect, blendMode: CGBlendMode.destinationIn, alpha: 1.0)
+        base.draw(in: drawRect, blendMode: CGBlendMode.destinationIn, alpha: 1.0)
         guard let tintedImage = UIGraphicsGetImageFromCurrentImageContext() else {
             return nil
         }
@@ -424,9 +425,9 @@ public extension PTPOP where Base: UIImage {
 
     //MARK: 保存图片到相册
     ///保存图片到相册
-    func savePhotosImageToAlbum(completion: @escaping ((Bool, Error?) -> Void)) {
+    func savePhotosImageToAlbum(completion: @escaping (Bool, Error?) -> Void) {
         PHPhotoLibrary.shared().performChanges {
-            PHAssetChangeRequest.creationRequestForAsset(from: self.base)
+            PHAssetChangeRequest.creationRequestForAsset(from: base)
         } completionHandler: { (isSuccess: Bool, error: Error?) in
             completion(isSuccess, error)
         }
@@ -515,7 +516,7 @@ public extension PTPOP where Base: UIImage {
     ///  - mode: 压缩模式
     /// - Returns: 压缩后Data
     func compress(mode: CompressionMode = .medium) -> Data? {
-        return resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
+        resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
     }
     
     //MARK: 异步图片压缩
@@ -528,9 +529,9 @@ public extension PTPOP where Base: UIImage {
                        queue: DispatchQueue = DispatchQueue.global(),
                        complete:@escaping (Data?, CGSize) -> Void) {
         queue.async {
-            let data = resizeIO(resizeSize: mode.resize(self.base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
+            let data = resizeIO(resizeSize: mode.resize(base.size))?.pt.compressDataSize(maxSize: mode.maxDataSize)
             PTGCDManager.gcdMain {
-                complete(data, mode.resize(self.base.size))
+                complete(data, mode.resize(base.size))
             }
         }
     }
@@ -542,7 +543,7 @@ public extension PTPOP where Base: UIImage {
     /// - Returns: 压缩后数据
     func compressDataSize(maxSize: Int = 1024 * 1024 * 2) -> Data? {
         var compression: CGFloat = 1
-        guard var data = self.base.jpegData(compressionQuality: 1) else { return nil }
+        guard var data = base.jpegData(compressionQuality: 1) else { return nil }
         if data.count < maxSize {
             return data
         }
@@ -552,7 +553,7 @@ public extension PTPOP where Base: UIImage {
         for _ in 0..<6 {
             count = count + 1
             compression = (max + min) / 2
-            data = self.base.jpegData(compressionQuality: compression)!
+            data = base.jpegData(compressionQuality: compression)!
             if CGFloat(data.count) < CGFloat(maxSize) * 0.9 {
                 min = compression
             } else if data.count > maxSize {
@@ -572,15 +573,15 @@ public extension PTPOP where Base: UIImage {
     /// - Parameter maxSize: 最大数据大小
     /// - Returns: 压缩后数据
     private func cycleCompressDataSize(maxSize: Int) -> Data? {
-        guard let oldData = self.base.jpegData(compressionQuality: 1) else { return nil }
+        guard let oldData = base.jpegData(compressionQuality: 1) else { return nil }
         if oldData.count < maxSize {
             return oldData
         }
         var compress: CGFloat = 0.9
-        guard var data = self.base.jpegData(compressionQuality: compress) else { return nil }
+        guard var data = base.jpegData(compressionQuality: compress) else { return nil }
         while data.count > maxSize && compress > 0.01 {
             compress -= 0.02
-            data = self.base.jpegData(compressionQuality: compress)!
+            data = base.jpegData(compressionQuality: compress)!
         }
         return data
     }
@@ -592,7 +593,7 @@ public extension PTPOP where Base: UIImage {
     /// - Returns: 调整后图片
     func resizeIO(resizeSize: CGSize) -> UIImage? {
         if base.size == resizeSize {
-            return self.base
+            return base
         }
         guard let imageData = base.pngData() else { return nil }
         guard let imageSource = CGImageSourceCreateWithData(imageData as CFData, nil) else { return nil }
@@ -615,9 +616,9 @@ public extension PTPOP where Base: UIImage {
     /// - Returns: 调整后图片
     func resizeCG(resizeSize: CGSize) -> UIImage? {
         if base.size == resizeSize {
-            return self.base
+            return base
         }
-        guard  let cgImage = self.base.cgImage else { return nil }
+        guard  let cgImage = base.cgImage else { return nil }
         guard  let colorSpace = cgImage.colorSpace else { return nil }
         guard let context = CGContext(data: nil,
                                       width: Int(resizeSize.width),

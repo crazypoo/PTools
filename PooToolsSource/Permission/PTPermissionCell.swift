@@ -148,7 +148,7 @@ class PTPermissionCell: PTBaseNormalCell {
             default:break
             }
 #endif
-            self.setButtonStatus()
+            setButtonStatus()
         }
     }
     
@@ -156,41 +156,41 @@ class PTPermissionCell: PTBaseNormalCell {
     {
         var permissionName = ""
         #if canImport(Permission)
-        switch self.cellModel!.type
+        switch cellModel!.type
         {
         case .tracking:
             permissionName = "用户数据追踪"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_tracking")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_tracking")
         case .camera:
             permissionName = "照相机"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_camera")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_camera")
         case .photoLibrary:
             permissionName = "相册"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_photoLibrary")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_photoLibrary")
         case .calendar:
             permissionName = "日历"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
         case .reminders:
             permissionName = "提醒"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_reminders")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_reminders")
         case .notification:
             permissionName = "通知推送"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_notification")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_notification")
         case .locationWhenInUse:
             permissionName = "定位"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
         case .locationAlways:
             permissionName = "保持使用定位"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
         case .speech:
             permissionName = "语音识别"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_speech")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_speech")
         case .health:
             permissionName = "健康"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_health")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_health")
         case .faceID:
             permissionName = "FaceID"
-            self.cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
         default:break
         }
         #endif
@@ -198,25 +198,25 @@ class PTPermissionCell: PTBaseNormalCell {
         var totalAtt:ASAttributedString = ASAttributedString(string: "")
         
         let att:ASAttributedString =  ASAttributedString("\(permissionName)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellTitleFont),.foreground(PTAppBaseConfig.share.permissionCellTitleTextColor))
-        if !(self.cellModel?.desc ?? "").stringIsEmpty() {
-            let descAtt:ASAttributedString =  ASAttributedString("\n\(self.cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
+        if !(cellModel?.desc ?? "").stringIsEmpty() {
+            let descAtt:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
             totalAtt = att + descAtt
         }
 
-        self.cellTitle.attributed.text = totalAtt
+        cellTitle.attributed.text = totalAtt
         
 #if canImport(Permission)
         switch self.cellStatus {
         case .authorized:
-            self.authorizedButton.isSelected = true
-            self.authorizedButton.isUserInteractionEnabled = false
-            self.authorizedButton.setTitle("已授权", for: .selected)
+            authorizedButton.isSelected = true
+            authorizedButton.isUserInteractionEnabled = false
+            authorizedButton.setTitle("已授权", for: .selected)
         case .denied:
-            self.authorizedButton.isSelected = true
-            self.authorizedButton.isUserInteractionEnabled = true
-            self.authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
-            self.authorizedButton.setTitle("已拒绝", for: .selected)
-            self.authorizedButton.addActionHandlers(handler: { sender in
+            authorizedButton.isSelected = true
+            authorizedButton.isUserInteractionEnabled = true
+            authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
+            authorizedButton.setTitle("已拒绝", for: .selected)
+            authorizedButton.addActionHandlers(handler: { sender in
                 switch self.cellModel!.type
                 {
                 case .tracking:
@@ -253,20 +253,20 @@ class PTPermissionCell: PTBaseNormalCell {
                 }
             })
         case .notDetermined:
-            self.authorizedButton.isSelected = false
-            self.authorizedButton.isUserInteractionEnabled = true
-            self.authorizedButton.setTitle("询问授权", for: .normal)
-            self.authorizedButton.addActionHandlers(handler: { sender in
+            authorizedButton.isSelected = false
+            authorizedButton.isUserInteractionEnabled = true
+            authorizedButton.setTitle("询问授权", for: .normal)
+            authorizedButton.addActionHandlers(handler: { sender in
                 if self.cellButtonTapBlock != nil
                 {
                     self.cellButtonTapBlock!(self.cellModel!.type)
                 }
             })
         case .notSupported:
-            self.authorizedButton.setTitle("不支持", for: .selected)
-            self.authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
-            self.authorizedButton.isSelected = true
-            self.authorizedButton.isUserInteractionEnabled = false
+            authorizedButton.setTitle("不支持", for: .selected)
+            authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
+            authorizedButton.isSelected = true
+            authorizedButton.isUserInteractionEnabled = false
         default:
             break
         }
@@ -283,7 +283,7 @@ class PTPermissionCell: PTBaseNormalCell {
         return view
     }()
     
-    fileprivate lazy var cellTitle = self.pt_createLabel(text: "",bgColor: .clear)
+    fileprivate lazy var cellTitle = pt_createLabel(text: "",bgColor: .clear)
     
     fileprivate lazy var cellIcon:UIImageView = {
         let view = UIImageView()
@@ -294,22 +294,22 @@ class PTPermissionCell: PTBaseNormalCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.backgroundColor = .clear
+        backgroundColor = .clear
         
-        self.contentView.addSubviews([self.authorizedButton,self.cellIcon,self.cellTitle])
-        self.authorizedButton.snp.makeConstraints { make in
+        contentView.addSubviews([authorizedButton, cellIcon, cellTitle])
+        authorizedButton.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 7.5))
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.equalTo(UIView.sizeFor(string: "询问授权", font: self.authorizedButton.titleLabel!.font!, height: 24, width: CGFloat(MAXFLOAT)).width + CGFloat.ScaleW(w: 10))
         }
         
-        self.cellIcon.snp.makeConstraints { make in
+        cellIcon.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
             make.width.equalTo(self.cellIcon.snp.height)
         }
         
-        self.cellTitle.snp.makeConstraints { make in
+        cellTitle.snp.makeConstraints { make in
             make.left.equalTo(self.cellIcon.snp.right).offset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
             make.right.equalTo(self.authorizedButton.snp.left).offset(-PTAppBaseConfig.share.defaultViewSpace)

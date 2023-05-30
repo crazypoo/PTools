@@ -13,7 +13,7 @@ public extension CGPoint {
     /// + returns: The distance from this point to the given point.
     func distance(to point: CGPoint) -> CGFloat {
         // Pythagoras
-        return sqrt(pow(point.x - self.x, 2) + pow(point.y - self.y, 2))
+        sqrt(pow(point.x - x, 2) + pow(point.y - y, 2))
     }
 }
 
@@ -25,7 +25,10 @@ public extension UISpringTimingParameters {
      - Parameters:
      - damping: ζ (damping ratio)
      - frequency: T (frequency response)
+     - response:
      - initialVelocity: [See Here](https://developer.apple.com/documentation/uikit/uispringtimingparameters/1649909-initialvelocity)
+     - response:
+     - response:
      */
     convenience init(damping: CGFloat, response: CGFloat, initialVelocity: CGVector = .zero) {
         // Stiffness represents the spring constant, k

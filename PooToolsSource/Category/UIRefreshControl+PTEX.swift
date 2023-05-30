@@ -14,7 +14,7 @@ public extension UIRefreshControl {
     
     @objc func addRefreshHandlers(handler:@escaping RefreshedBlock) {
         objc_setAssociatedObject(self, &UIRefreshControl.UIRefreshControlBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        self.addTarget(self, action: #selector(self.actionRefreshed(sender:)), for: .valueChanged)
+        addTarget(self, action: #selector(actionRefreshed(sender:)), for: .valueChanged)
     }
     
     @objc func actionRefreshed(sender:UIRefreshControl) {

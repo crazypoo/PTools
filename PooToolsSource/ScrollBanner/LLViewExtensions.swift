@@ -12,35 +12,35 @@ import UIKit
 extension UIView {
     public var ll_x: CGFloat {
         get {
-            return self.frame.origin.x
+            self.frame.origin.x
         }
         set(value) {
-            self.frame = CGRect(x: value, y: self.ll_y, width: self.ll_w, height: self.ll_h)
+            self.frame = CGRect(x: value, y: ll_y, width: ll_w, height: ll_h)
         }
     }
     
     public var ll_y: CGFloat {
         get {
-            return self.frame.origin.y
+            self.frame.origin.y
         }
         set(value) {
-            self.frame = CGRect(x: self.ll_x, y: value, width: self.ll_w, height: self.ll_h)
+            self.frame = CGRect(x: ll_x, y: value, width: ll_w, height: ll_h)
         }
     }
     
     public var ll_w: CGFloat {
         get {
-            return self.frame.size.width
+            self.frame.size.width
         } set(value) {
-            self.frame = CGRect(x: self.ll_x, y: self.ll_y, width: value, height: self.ll_h)
+            self.frame = CGRect(x: ll_x, y: ll_y, width: value, height: ll_h)
         }
     }
     
     public var ll_h: CGFloat {
         get {
-            return self.frame.size.height
+            self.frame.size.height
         } set(value) {
-            self.frame = CGRect(x: self.ll_x, y: self.ll_y, width: self.ll_w, height: value)
+            self.frame = CGRect(x: ll_x, y: ll_y, width: ll_w, height: value)
         }
     }
 }

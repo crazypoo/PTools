@@ -12,7 +12,7 @@ public extension TimeInterval {
     //MARK: 時間戳轉換成Date
     ///時間戳轉換成Date
     func timeToDate() -> Date {
-        return Date.init(timeIntervalSince1970: self)
+        Date.init(timeIntervalSince1970: self)
     }
     
     //MARK: 時間戳轉換成Date
@@ -23,7 +23,7 @@ public extension TimeInterval {
     }
     
     func toTimeString(dateFormat:String)->String {
-        return self.msTimeToDate().getTimeStr(dateFormat: dateFormat)
+        msTimeToDate().getTimeStr(dateFormat: dateFormat)
     }
     
     //MARK: 獲取播放時長(分:秒)

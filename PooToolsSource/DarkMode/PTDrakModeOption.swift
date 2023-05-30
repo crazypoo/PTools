@@ -145,7 +145,7 @@ public extension PTDarkModeOption {
 // MARK: - 动态颜色的使用
 public extension PTDarkModeOption {
     static func colorLightDark(lightColor: UIColor, darkColor: UIColor) -> UIColor {
-        return UIColor { (traitCollection) -> UIColor in
+        UIColor { (traitCollection) -> UIColor in
             if PTDarkModeOption.isFollowSystem {
                 if traitCollection.userInterfaceStyle == .light {
                     return lightColor

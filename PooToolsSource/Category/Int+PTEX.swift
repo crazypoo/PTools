@@ -12,7 +12,7 @@ public extension Int {
     //MARK: 隨機數
     ///隨機數
     func random()->Int {
-        return Int(arc4random_uniform(UInt32(self)))
+        Int(arc4random_uniform(UInt32(self)))
     }
     
     //MARK: 这是一个内置函数
@@ -35,6 +35,6 @@ public extension Int {
     ///是否是偶数
     /// - Returns: 结果
     func isEven() -> Bool {
-        return self % 2 == 0
+        self % 2 == 0
     }
 }

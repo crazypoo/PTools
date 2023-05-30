@@ -143,7 +143,7 @@ public class PTUtils: NSObject {
         }
     }
     
-    @objc open class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
+    open class dynamic func topMost(of viewController: UIViewController?) -> UIViewController? {
         // presented view controller
         if let presentedViewController = viewController?.presentedViewController {
             return topMost(of: presentedViewController)
@@ -200,8 +200,8 @@ public class PTUtils: NSObject {
     ///找出某views的superview
     class open func findCommonSuperView(firstView:UIView,other:UIView)->[UIView] {
         let result = NSMutableArray()
-        let sOne = self.findSuperViews(view: firstView)
-        let sOther = self.findSuperViews(view: other)
+        let sOne = findSuperViews(view: firstView)
+        let sOther = findSuperViews(view: other)
         var i = 0
         while i < min(sOne.count, sOther.count) {
             if sOne == sOther {
@@ -240,7 +240,7 @@ public class PTUtils: NSObject {
 
 //MARK: OC-FUNCTION
 public extension PTUtils {
-    @objc class func oc_isiPhoneSeries()->Bool {
-        return isIPhoneXSeries()
+    class func oc_isiPhoneSeries()->Bool {
+        isIPhoneXSeries()
     }
 }

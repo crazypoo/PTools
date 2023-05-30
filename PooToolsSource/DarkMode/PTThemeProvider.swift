@@ -23,7 +23,7 @@ public protocol PTThemeable: AnyObject {
 // MARK: - 设置遵守UITraitEnvironment的可以使用协议PTThemeable
 public extension PTThemeable where Self: UITraitEnvironment {
     var themeProvider: PTThemeProvider {
-        return LegacyThemeProvider.shared
+        LegacyThemeProvider.shared
     }
 }
 
@@ -46,7 +46,7 @@ public class LegacyThemeProvider: PTThemeProvider {
         if #available(iOS 13.0, *) {
             return
         }
-        self.observers.add(observer)
+        observers.add(observer)
     }
     
     // MARK: 通知监听对象更新theme

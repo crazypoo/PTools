@@ -57,7 +57,7 @@ public class PTDevFunction: NSObject {
     public func createLabBtn() {
         if UIApplication.applicationEnvironment() != .appStore {
             UserDefaults.standard.set(true,forKey: LocalConsole.ConsoleDebug)
-            if self.mn_PFloatingButton == nil {
+            if mn_PFloatingButton == nil {
                 mn_PFloatingButton = PFloatingButton.init(view: AppWindows as Any, frame: CGRect.init(x: 0, y: 200, width: 50, height: 50))
                 mn_PFloatingButton?.backgroundColor = .randomColor
                 
@@ -248,8 +248,8 @@ public class PTDevFunction: NSObject {
 
     public func lab_btn_release() {
         UserDefaults.standard.set(false,forKey: LocalConsole.ConsoleDebug)
-        self.mn_PFloatingButton?.removeFromSuperview()
-        self.mn_PFloatingButton = nil
+        mn_PFloatingButton?.removeFromSuperview()
+        mn_PFloatingButton = nil
     }
 
     //MARK: SDWebImage的加载失误图片方式(全局控制)

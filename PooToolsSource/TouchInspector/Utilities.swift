@@ -17,7 +17,7 @@ extension CGPoint {
     }
 }
 
-func animateBlock(_ block: @escaping (() -> Void), completion: (() -> Void)? = nil) {
+func animateBlock(_ block: @escaping () -> Void, completion: (() -> Void)? = nil) {
     let options = UIView.AnimationOptions(arrayLiteral: .curveEaseInOut, .allowUserInteraction, .beginFromCurrentState)
     UIView.animate(withDuration: 0.15, delay: 0, options: options) {
         block()

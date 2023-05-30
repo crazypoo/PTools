@@ -50,7 +50,7 @@ public extension Data {
     //MARK: 根據Data來獲取圖片的格式
     ///根據Data來獲取圖片的格式
     static func detectImageType(with data: Data) -> PTAboutImageType {
-        return data.detectImageType()
+        data.detectImageType()
     }
     
     //MARK: 根據圖片URL轉換成Data來獲取圖片的格式
@@ -93,13 +93,13 @@ public extension Data {
     //MARK: Data轉String
     ///Data轉String
     func toString(encoding: String.Encoding) -> String? {
-        return String(data: self, encoding: encoding)
+        String(data: self, encoding: encoding)
     }
     
     //MARK: Data轉Bytes
     ///Data轉Bytes
     func toBytes()->[UInt8]{
-        return [UInt8](self)
+        [UInt8](self)
     }
     
     //MARK: Data轉字典
@@ -116,7 +116,7 @@ public extension Data {
     //MARK: 从给定的JSON数据返回一个基础对象。
     ///从给定的JSON数据返回一个基础对象。
     func toObject(options: JSONSerialization.ReadingOptions = []) throws -> Any {
-        return try JSONSerialization.jsonObject(with: self, options: options)
+        try JSONSerialization.jsonObject(with: self, options: options)
     }
     
     //MARK: 指定Model类型

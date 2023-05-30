@@ -352,22 +352,22 @@ public class PTTerminal:PFloatingButton {
 
     override init(view:Any,frame:CGRect) {
         super.init(view: view, frame: frame)
-        self.backgroundColor = .black
-        self.draggable = true
-        self.layer.shadowRadius = 16
-        self.layer.shadowOpacity = 0.5
-        self.shadowOffset = CGSize.init(width: 0, height: 2)
-        self.layer.cornerRadius = 22
-        self.tag = SystemLogViewTag
-        self.layer.cornerCurve = .continuous
+        backgroundColor = .black
+        draggable = true
+        layer.shadowRadius = 16
+        layer.shadowOpacity = 0.5
+        shadowOffset = CGSize.init(width: 0, height: 2)
+        layer.cornerRadius = 22
+        tag = SystemLogViewTag
+        layer.cornerCurve = .continuous
 
         let borderView = UIView()
         borderView.layer.borderWidth = borderLine
         borderView.layer.borderColor = UIColor.randomColor.cgColor
-        borderView.layer.cornerRadius = (self.layer.cornerRadius) + 1
+        borderView.layer.cornerRadius = (layer.cornerRadius) + 1
         borderView.layer.cornerCurve = .continuous
         borderView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        self.addSubview(borderView)
+        addSubview(borderView)
         borderView.snp.makeConstraints { (make) in
             make.left.right.top.bottom.equalToSuperview()
         }
@@ -379,11 +379,11 @@ public class PTTerminal:PFloatingButton {
         systemText?.showsVerticalScrollIndicator = false
         systemText?.contentInsetAdjustmentBehavior = .never
         systemText?.backgroundColor = .clear
-        self.addSubview(systemText!)
+        addSubview(systemText!)
         systemText?.snp.makeConstraints { (make) in
             make.left.right.top.bottom.equalToSuperview().inset(borderLine * 4)
         }
-        systemText?.layer.cornerRadius = (self.layer.cornerRadius) - 2
+        systemText?.layer.cornerRadius = (layer.cornerRadius) - 2
         systemText?.layer.cornerCurve = .continuous
 
         menuButton = UIButton.init(type: .custom)
@@ -391,7 +391,7 @@ public class PTTerminal:PFloatingButton {
         menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
         menuButton.imageView?.contentMode = .scaleAspectFit
         menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
-        self.addSubview(menuButton)
+        addSubview(menuButton)
         menuButton.snp.makeConstraints { make in
             make.width.equalTo(44)
             make.height.equalTo(40)

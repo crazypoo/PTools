@@ -38,34 +38,34 @@ class PTEyeTrackingDataManager {
     }()
     
     public init() {
-        self.lookAtTargetEyeLNode.position.z = 2
-        self.lookAtTargetEyeRNode.position.z = 2
+        lookAtTargetEyeLNode.position.z = 2
+        lookAtTargetEyeRNode.position.z = 2
         
-        self.eyeLNode.addChildNode(self.lookAtTargetEyeLNode)
-        self.eyeRNode.addChildNode(self.lookAtTargetEyeRNode)
+        eyeLNode.addChildNode(lookAtTargetEyeLNode)
+        eyeRNode.addChildNode(lookAtTargetEyeRNode)
         
-        self.faceNode.addChildNode(self.eyeLNode)
-        self.faceNode.addChildNode(self.eyeRNode)
+        faceNode.addChildNode(eyeLNode)
+        faceNode.addChildNode(eyeRNode)
         
-        self.virtualPhoneNode.addChildNode(self.virtualScreenNode)
+        virtualPhoneNode.addChildNode(virtualScreenNode)
         
-        self.scene.rootNode.addChildNode(self.faceNode)
-        self.scene.rootNode.addChildNode(self.virtualPhoneNode)
+        scene.rootNode.addChildNode(faceNode)
+        scene.rootNode.addChildNode(virtualPhoneNode)
     }
     
     @available(iOS 12.0 , *)
     func calculateEyeLookAtPoint(anchor: ARFaceAnchor) -> CGPoint {
-        self.faceNode.simdTransform = anchor.transform
-        self.eyeLNode.simdTransform = anchor.leftEyeTransform
-        self.eyeRNode.simdTransform = anchor.rightEyeTransform
+        faceNode.simdTransform = anchor.transform
+        eyeLNode.simdTransform = anchor.leftEyeTransform
+        eyeRNode.simdTransform = anchor.rightEyeTransform
         
         var eyeLLookAt = CGPoint()
         var eyeRLookAt = CGPoint()
         
         
-        let phoneScreenEyeRHitTestResults = self.virtualScreenNode.hitTestWithSegment(from: self.lookAtTargetEyeRNode.worldPosition,to: self.eyeRNode.worldPosition,options: nil)
+        let phoneScreenEyeRHitTestResults = virtualScreenNode.hitTestWithSegment(from: lookAtTargetEyeRNode.worldPosition,to: eyeRNode.worldPosition,options: nil)
         
-        let phoneScreenEyeLHitTestResults = self.virtualScreenNode.hitTestWithSegment(from: self.lookAtTargetEyeLNode.worldPosition,to: self.eyeLNode.worldPosition,options: nil)
+        let phoneScreenEyeLHitTestResults = virtualScreenNode.hitTestWithSegment(from: lookAtTargetEyeLNode.worldPosition,to: eyeLNode.worldPosition,options: nil)
         
         for result in phoneScreenEyeRHitTestResults {
             eyeRLookAt.x = CGFloat(result.worldCoordinates.x)
@@ -77,15 +77,15 @@ class PTEyeTrackingDataManager {
             eyeLLookAt.y = CGFloat(result.worldCoordinates.y)
         }
         
-        self.eyeLookAtPositionXs.append((eyeRLookAt.y + eyeLLookAt.y) / 2)
-        self.eyeLookAtPositionYs.append((eyeRLookAt.x + eyeLLookAt.x) / 2)
-        self.eyeLookAtPositionXs = Array(self.eyeLookAtPositionXs.suffix(self.smoothingThreshold))
-        self.eyeLookAtPositionYs = Array(self.eyeLookAtPositionYs.suffix(self.smoothingThreshold))
-        let smoothEyeLookAtPositionX = self.eyeLookAtPositionXs.average ?? 0
-        let smoothEyeLookAtPositionY = self.eyeLookAtPositionYs.average ?? 0
+        eyeLookAtPositionXs.append((eyeRLookAt.y + eyeLLookAt.y) / 2)
+        eyeLookAtPositionYs.append((eyeRLookAt.x + eyeLLookAt.x) / 2)
+        eyeLookAtPositionXs = Array(eyeLookAtPositionXs.suffix(smoothingThreshold))
+        eyeLookAtPositionYs = Array(eyeLookAtPositionYs.suffix(smoothingThreshold))
+        let smoothEyeLookAtPositionX = eyeLookAtPositionXs.average ?? 0
+        let smoothEyeLookAtPositionY = eyeLookAtPositionYs.average ?? 0
         
-        let x = smoothEyeLookAtPositionX / (self.phoneScreenSize.width / 2) * self.screenSize.width
-        let y = smoothEyeLookAtPositionY / (self.phoneScreenSize.height / 2) * self.screenSize.height
+        let x = smoothEyeLookAtPositionX / (phoneScreenSize.width / 2) * screenSize.width
+        let y = smoothEyeLookAtPositionY / (phoneScreenSize.height / 2) * screenSize.height
         
         return CGPoint.init(x: x, y: y)
     }

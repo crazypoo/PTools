@@ -50,7 +50,7 @@ public class PTBiologyID: NSObject {
     
     private func verifyBiologyIDAction() {
         var error : NSError? = nil
-        let isCanEvaluatePolicy : Bool = self.security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
+        let isCanEvaluatePolicy : Bool = security.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error)
         if error != nil {
             if biologyStatusBlock != nil {
                 biologyStatusBlock!(.None)
@@ -136,8 +136,8 @@ public class PTBiologyID: NSObject {
             type = .AlertCancel
         default:break
         }
-        if self.biologyVerifyStatusBlock != nil {
-            self.biologyVerifyStatusBlock!(type)
+        if biologyVerifyStatusBlock != nil {
+            biologyVerifyStatusBlock!(type)
         }
     }
 }

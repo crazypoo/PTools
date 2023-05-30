@@ -260,7 +260,7 @@ public class PTCountryCodes: NSObject {
         ]
     
     public func codesModels()->[PTCountryCodeModel] {
-        let arr = Array(self.countryCodeDic.keys).sorted(by: <)
+        let arr = Array(countryCodeDic.keys).sorted(by: <)
         var models = [PTCountryCodeModel]()
         arr.enumerated().forEach { index,value in
             let model = PTCountryCodeModel()

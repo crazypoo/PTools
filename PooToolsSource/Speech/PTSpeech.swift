@@ -45,22 +45,22 @@ public class PTSpeech: NSObject {
     
     public override init() {
         super.init()
-        self.requestAuthorization()
-        self.setup()
+        requestAuthorization()
+        setup()
     }
     
     func errorFunction(code:Int,desc:String)->NSError {
-        return NSError(domain: NSStringFromClass(type(of: self)), code: code,userInfo: [NSLocalizedDescriptionKey:desc])
+        NSError(domain: NSStringFromClass(type(of: self)), code: code, userInfo: [NSLocalizedDescriptionKey: desc])
     }
     
     func createError(errorType:PTSpeechErrorType)->NSError {
         switch errorType {
         case .UnsupportedLocale:
-            return self.errorFunction(code: -999, desc: "不支持当前语言环境")
+            return errorFunction(code: -999, desc: "不支持当前语言环境")
         case .RecognitionDenied:
-            return self.errorFunction(code: 100, desc: "识别不出用户语音")
+            return errorFunction(code: 100, desc: "识别不出用户语音")
         case .IsBusy:
-            return self.errorFunction(code: 500, desc: "识别中")
+            return errorFunction(code: 500, desc: "识别中")
         }
     }
     
@@ -80,47 +80,47 @@ public class PTSpeech: NSObject {
     }
     
     func setup() {
-        if self.recognizer != nil {
-            self.recognizer?.defaultTaskHint = SFSpeechRecognitionTaskHint.dictation
-            self.request.interactionIdentifier = "com.Jax.interactionIdentifier"
-            let node = self.audioEndine.inputNode
+        if recognizer != nil {
+            recognizer?.defaultTaskHint = SFSpeechRecognitionTaskHint.dictation
+            request.interactionIdentifier = "com.Jax.interactionIdentifier"
+            let node = audioEndine.inputNode
             let recordingFormat = node.outputFormat(forBus: 0)
             node.installTap(onBus: 0, bufferSize: 1024, format: recordingFormat) { buffer, when in
                 self.request.append(buffer)
             }
         } else {
-            if self.errorBlock != nil {
-                self.errorBlock!(self.createError(errorType: .UnsupportedLocale))
+            if errorBlock != nil {
+                errorBlock!(createError(errorType: .UnsupportedLocale))
             }
         }
     }
     
     func isTaskInProgress()->Bool {
-        return self.currentTask.state == .running
+        currentTask.state == .running
     }
     
     func performRecognition() {
-        self.audioEndine.prepare()
+        audioEndine.prepare()
         
         do {
-            try self.audioEndine.start()
-            self.currentTask = self.recognizer?.recognitionTask(with: self.request, delegate: self)
+            try audioEndine.start()
+            currentTask = recognizer?.recognitionTask(with: request, delegate: self)
         } catch {
-            if self.errorBlock != nil
+            if errorBlock != nil
             {
-                self.errorBlock!(error as NSError)
+                errorBlock!(error as NSError)
             }
         }
     }
     
     public func startRecognize(handleBlock:((_ success:Bool)->Void)?) {
-        let isRunning = self.isTaskInProgress()
+        let isRunning = isTaskInProgress()
         if isRunning {
-            if self.errorBlock != nil {
-                self.errorBlock!(self.createError(errorType: .IsBusy))
+            if errorBlock != nil {
+                errorBlock!(createError(errorType: .IsBusy))
             }
         } else {
-            self.performRecognition()
+            performRecognition()
         }
         
         if handleBlock != nil {
@@ -129,26 +129,26 @@ public class PTSpeech: NSObject {
     }
     
     public func stopRecognize() {
-        if self.isTaskInProgress() {
-            self.currentTask.finish()
-            self.audioEndine.stop()
+        if isTaskInProgress() {
+            currentTask.finish()
+            audioEndine.stop()
         }
     }
 }
 
 extension PTSpeech:SFSpeechRecognitionTaskDelegate {
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishRecognition recognitionResult: SFSpeechRecognitionResult) {
-        self.buffer = recognitionResult.bestTranscription.formattedString
+        buffer = recognitionResult.bestTranscription.formattedString
     }
     
     public func speechRecognitionTask(_ task: SFSpeechRecognitionTask, didFinishSuccessfully successfully: Bool) {
         if !successfully {
-            if self.errorBlock != nil {
-                self.errorBlock!(task.error! as NSError)
+            if errorBlock != nil {
+                errorBlock!(task.error! as NSError)
             }
         } else {
-            if self.finishBlock != nil {
-                self.finishBlock!(self.buffer)
+            if finishBlock != nil {
+                finishBlock!(buffer)
             }
         }
     }

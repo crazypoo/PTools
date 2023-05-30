@@ -38,7 +38,7 @@ internal protocol PTSwiftPropertyCompatible {
     associatedtype T
     
     ///Alias for callback function
-    typealias SwiftCallBack = ((T?) -> ())
+    typealias SwiftCallBack = (T?) -> ()
     
     ///Define the calculated properties of the closure type
     var swiftCallBack: SwiftCallBack?  { get set }

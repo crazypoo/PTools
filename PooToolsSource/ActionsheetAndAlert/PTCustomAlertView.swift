@@ -132,7 +132,7 @@ public class PTCustomAlertView: UIView {
     ///   - customerBlock: 自定義View回調
     ///   - tapBlock: 點擊回調
     ///   - alertDismissBlock: 界面離開後的回調
-    @objc public class func alertFunction(superView:UIView = AppWindows!,
+    public class func alertFunction(superView:UIView = AppWindows!,
                                           titleString:String = "",
                                           titleFont:UIFont = .appfont(size: 15),
                                           titleColor:UIColor = .systemBlue,
@@ -146,9 +146,9 @@ public class PTCustomAlertView: UIView {
                                           cornerSize:CGFloat = 15,
                                           customAlertHeight:CGFloat = 100,
                                           alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
-                                          customerBlock:@escaping ((_ customerView:UIView)->Void),
-                                          tapBlock:@escaping ((_ index:NSInteger)->Void),
-                                          alertDismissBlock:@escaping (()->Void)) {
+                                          customerBlock: @escaping (_ customerView:UIView)->Void,
+                                          tapBlock: @escaping (_ index:NSInteger)->Void,
+                                          alertDismissBlock: @escaping ()->Void) {
         var buttonModels = [PTCustomBottomButtonModel]()
         buttons.enumerated().forEach { index,value in
             let model = PTCustomBottomButtonModel()
@@ -199,7 +199,7 @@ public class PTCustomAlertView: UIView {
     ///   - alertAnimationType: 動畫形式
     ///   - touchBackground: 是否支持點擊背景消失Alert
     ///   - cornerSize: Alert邊框角弧度
-    @objc public init(superView:UIView,
+    public init(superView:UIView,
          alertTitle:String = "",
          font:UIFont = UIFont.boldSystemFont(ofSize: 20),
          titleColor:UIColor = UIColor.black,
@@ -211,7 +211,7 @@ public class PTCustomAlertView: UIView {
          touchBackground:Bool = true,
          cornerSize:CGFloat = 15) {
         super.init(frame: .zero)
-        self.createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
+        createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
     }
     
     func createAlertView(superView:UIView,
@@ -242,7 +242,7 @@ public class PTCustomAlertView: UIView {
         animationType = alertAnimationType
         
         if touchBackground! {
-            let tapBackgroundView = UITapGestureRecognizer.init(target: self, action: #selector(self.dismiss))
+            let tapBackgroundView = UITapGestureRecognizer.init(target: self, action: #selector(dismiss))
             tapBackgroundView.numberOfTouchesRequired = 1
             tapBackgroundView.numberOfTapsRequired = 1
             backgroundView.addGestureRecognizer(tapBackgroundView)
@@ -301,7 +301,7 @@ public class PTCustomAlertView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width - 20, title: self.titleString)
+        let textH = PTCustomAlertView.getAlertTitleHeight(font: viewFont, alertWidth: frame.size.width - 20, title: titleString)
         if textH >= (CGFloat.kSCREEN_HEIGHT / 3) {
             titleLabel.text = titleString
             addSubview(titleScroller)
@@ -386,7 +386,7 @@ public class PTCustomAlertView: UIView {
                 cancelBtn.setBackgroundImage(heightlightedColorColor.createImageWithColor(), for: .highlighted)
                 cancelBtn.setTitleColor(value.titleColor, for: .normal)
                 cancelBtn.setTitle(value.titleName, for: .normal)
-                cancelBtn.titleLabel?.font = self.viewFont
+                cancelBtn.titleLabel?.font = viewFont
                 cancelBtn.tag = 100 + index
                 cancelBtn.addActionHandlers { sender in
                     if self.buttonClick != nil {
@@ -426,7 +426,7 @@ public class PTCustomAlertView: UIView {
         }
     }
     
-    @objc public func dismiss() {
+    public func dismiss() {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
 

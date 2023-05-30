@@ -32,8 +32,8 @@ public struct SVGProcessor: ImageProcessor {
                 let layer = SVGLayer()
                 layer.paths = path
                 let originRect = SVGBoundingRectForPaths(layer.paths)
-                layer.frame = CGRect(x: 0, y: 0, width: self.size.width, height: self.size.width * originRect.height / originRect.width)
-                let img = self.snapshotImage(for: layer)
+                layer.frame = CGRect(x: 0, y: 0, width: size.width, height: size.width * originRect.height / originRect.width)
+                let img = snapshotImage(for: layer)
                 return img
             }
             return nil
@@ -58,12 +58,13 @@ public extension UIImageView {
     /// - Parameters:
     ///   - url: SVG image url
     ///   - processor: SVG Image Processor
+    ///   - placeholder:
     func svgImage(from url: URL?, processor: SVGProcessor,placeholder:UIImage? = nil) {
         guard let url = url else {
-            self.image = placeholder
+            image = placeholder
             return
         }
-        self.image = placeholder
+        image = placeholder
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):
@@ -82,14 +83,16 @@ public extension UIButton {
     /// Use this function for downloading SVG image from URL
     /// - Parameters:
     ///   - url: SVG image url
+    ///   - state:
     ///   - processor: SVG Image Processor
+    ///   - placeholder:
     func svgImage(from url: URL?,state:UIControl.State, processor: SVGProcessor,placeholder:UIImage? = nil) {
         guard let url = url else {
-            self.setImage(placeholder, for: state)
+            setImage(placeholder, for: state)
             return
         }
         
-        self.setImage(placeholder, for: state)
+        setImage(placeholder, for: state)
         KingfisherManager.shared.retrieveImage(with: url, options: [.processor(processor), .forceRefresh]) {  result in
             switch result {
             case .success(let value):

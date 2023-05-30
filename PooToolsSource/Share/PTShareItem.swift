@@ -19,7 +19,7 @@ open class PTShareItem: NSObject,UIActivityItemSource {
     }
     
     public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
-        return ""
+        ""
     }
     
     public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
@@ -55,7 +55,9 @@ open class PTShare {
     ///初始化分享控件
     /// - Parameters:
     ///   - shareItems: 可以是文本,图片data,其他文件....... Sample:["123",someImage.pngData()]
+    ///   - items:
     ///   - showCompletion: 弹出界面后的回调
+    ///   - items:
     public func share(shareItems items:[Any],
                       showCompletion:(()->Void)? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)

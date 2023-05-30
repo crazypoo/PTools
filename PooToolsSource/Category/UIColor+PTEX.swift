@@ -29,12 +29,12 @@ public extension UIColor {
     }
     
     func cielabColorArray()->[NSNumber] {
-        var R = self.colorRValue
-        var G = self.colorGValue
-        var B = self.colorBValue
+        var R = colorRValue
+        var G = colorGValue
+        var B = colorBValue
         
         let deltaRGB: (CGFloat) -> CGFloat = {
-            return ($0 > 0.04045) ? pow(($0 + 0.055) / 1.055, 2.4) : ($0 / 12.92)
+            ($0 > 0.04045) ? pow(($0 + 0.055) / 1.055, 2.4) : ($0 / 12.92)
         }
         R = deltaRGB(R)
         G = deltaRGB(G)
@@ -52,7 +52,7 @@ public extension UIColor {
         let sideA:CGFloat = (1.0 / 3.0)
         let sideB:CGFloat = (4.0 / 29.0)
         let deltaF: (CGFloat) -> CGFloat = {
-            return ($0 > pow((6.0 / 29.0), 3.0)) ? pow($0, 1.0 / 3.0) : (sideA * pow((29.0 / 6.0), 2.0) * $0 + sideB)
+            ($0 > pow((6.0 / 29.0), 3.0)) ? pow($0, 1.0 / 3.0) : (sideA * pow((29.0 / 6.0), 2.0) * $0 + sideB)
         }
         X = deltaF(X)
         Y = deltaF(Y)
@@ -61,7 +61,7 @@ public extension UIColor {
         let L:NSNumber = NSNumber(floatLiteral: (116 * Y - 16))
         let A:NSNumber = NSNumber(floatLiteral: (500 * (X - Y)))
         let b:NSNumber = NSNumber(floatLiteral: (200 * (Y - Z)))
-        return [L,A,b,NSNumber(floatLiteral: self.colorAValue)]
+        return [L,A,b,NSNumber(floatLiteral: colorAValue)]
     }
     
     //MARK: Color from LAB Array
@@ -79,7 +79,7 @@ public extension UIColor {
         var Z:CGFloat = Y - B / 200
         
         let deltaXYZ: (CGFloat) -> CGFloat = {
-            return ($0 > 0.008856) ? pow($0, 3.0) : ($0 - 4/29.0)/7.787
+            ($0 > 0.008856) ? pow($0, 3.0) : ($0 - 4 / 29.0) / 7.787
         }
         
         X = deltaXYZ(X) * 0.95047
@@ -91,13 +91,13 @@ public extension UIColor {
         var _B:CGFloat = X * 0.0557 + Y * (-0.2040) + Z * 1.0570
         
         let deltaRGB: (CGFloat) -> CGFloat = {
-            return ($0 > 0.0031308) ? 1.055 * (pow($0, (1/2.4))) - 0.055 : $0 * 12.92
+            ($0 > 0.0031308) ? 1.055 * (pow($0, (1 / 2.4))) - 0.055 : $0 * 12.92
         }
         
         R = deltaRGB(R)
         G = deltaRGB(G)
         _B = deltaRGB(_B)
-        return self.colorBase(R: R, G: G, B: B, A: cielabData[3])
+        return colorBase(R: R, G: G, B: B, A: cielabData[3])
     }
     
     /**
@@ -128,11 +128,11 @@ public extension UIColor {
      */
     
     func RAD(degree:CGFloat)->CGFloat {
-        return degree * .pi / 180
+        degree * .pi / 180
     }
     
     func colorDistance(color:UIColor,type:ColorDistanceType)->CGFloat {
-        let lab1 = self.cielabColorArray()
+        let lab1 = cielabColorArray()
         let lab2 = color.cielabColorArray()
         
         let L1:CGFloat = CGFloat(lab1[0].floatValue)
@@ -178,21 +178,21 @@ public extension UIColor {
         let deltaCPrime:CGFloat = (cPrime1 - cPrime2)
         var hPrime1:CGFloat = atan2(B1, aPrime1)
         var hPrime2:CGFloat = atan2(B2, aPrime2)
-        hPrime1 = CGFloat(fmodf(Float(hPrime1), Float(self.RAD(degree: 360))))
-        hPrime2 = CGFloat(fmodf(Float(hPrime2), Float(self.RAD(degree: 360))))
+        hPrime1 = CGFloat(fmodf(Float(hPrime1), Float(RAD(degree: 360))))
+        hPrime2 = CGFloat(fmodf(Float(hPrime2), Float(RAD(degree: 360))))
         var deltahPrime:CGFloat = 0
-        if abs(hPrime1 - hPrime2) <= self.RAD(degree: 180) {
+        if abs(hPrime1 - hPrime2) <= RAD(degree: 180) {
             deltahPrime = hPrime2 - hPrime1
         } else {
-            deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + self.RAD(degree: 360)) : (hPrime2 - hPrime1 - self.RAD(degree: 360))
+            deltahPrime = hPrime2 <= hPrime1 ? (hPrime2 - hPrime1 + RAD(degree: 360)) : (hPrime2 - hPrime1 - RAD(degree: 360))
         }
         let deltaHPrime:CGFloat = 2 * sqrt(cPrime1 * cPrime2) * sin(deltahPrime / 2)
-        let meanHPrime = (abs(hPrime1 - hPrime2) <= self.RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : (hPrime1 + hPrime2 + self.RAD(degree: 360) / 2)
-        let T:CGFloat = 1 - 0.17 * cos(meanHPrime - self.RAD(degree: 30)) + 0.24 * cos(2 * meanHPrime) + 0.32 * cos(3 * meanHPrime + self.RAD(degree: 6)) - 0.2 * cos(4 * meanHPrime - self.RAD(degree: 63))
+        let meanHPrime = (abs(hPrime1 - hPrime2) <= RAD(degree: 180)) ? ((hPrime1 + hPrime2) / 2) : (hPrime1 + hPrime2 + RAD(degree: 360) / 2)
+        let T:CGFloat = 1 - 0.17 * cos(meanHPrime - RAD(degree: 30)) + 0.24 * cos(2 * meanHPrime) + 0.32 * cos(3 * meanHPrime + RAD(degree: 6)) - 0.2 * cos(4 * meanHPrime - RAD(degree: 63))
         sL = 1 + 0.015 * pow(meanL - 50, 2) / sqrt(20 + pow(meanL - 50, 2))
         sC = 1 + 0.045 * cMeanPrime
         sH = 1 + 0.015 * cMeanPrime * T
-        let Rt = -2 * sqrt(pow(cMeanPrime, 7) / (pow(cMeanPrime, 7) + pow(25.0, 7))) * sin(self.RAD(degree:60.0) * exp(-1 * pow((meanHPrime - self.RAD(degree:275.0)) / self.RAD(degree:25.0), 2)))
+        let Rt = -2 * sqrt(pow(cMeanPrime, 7) / (pow(cMeanPrime, 7) + pow(25.0, 7))) * sin(RAD(degree:60.0) * exp(-1 * pow((meanHPrime - RAD(degree:275.0)) / RAD(degree:25.0), 2)))
         return sqrt(pow((deltaLPrime / (kL * sL)), 2) + pow((deltaCPrime / (kC * sC)), 2) + pow((deltaHPrime / (kH * sH)), 2) + Rt * (deltaC / (kC * sC)) * (deltaHPrime / (kH * sH)))
     }
     
@@ -219,7 +219,7 @@ public extension UIColor {
         let R = 1 - C
         let G = 1 - M
         let B = 1 - Y
-        return self.colorBase(R: R, G: G, B: B, A: 1)
+        return colorBase(R: R, G: G, B: B, A: 1)
     }
         
     //MARK: 颜色转Hex字符串
@@ -232,7 +232,7 @@ public extension UIColor {
         
         let multiplier = CGFloat(255)
         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+        guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
             return nil
         }
         
@@ -293,12 +293,12 @@ public extension UIColor {
     ///返回随机颜色
     @objc class var randomColor:UIColor{
         get {
-            return UIColor.randomColorWithAlpha(alpha: 1)
+            UIColor.randomColorWithAlpha(alpha: 1)
         }
     }
     
     @objc class func randomColorWithAlpha(alpha:CGFloat)->UIColor {
-        return UIColor.colorBase(R: CGFloat(arc4random()%256), G: CGFloat(arc4random()%256), B: CGFloat(arc4random()%256), A: alpha)
+        UIColor.colorBase(R: CGFloat(arc4random() % 256), G: CGFloat(arc4random() % 256), B: CGFloat(arc4random() % 256), A: alpha)
     }
     
     //MARK: 颜色基础方法
@@ -311,7 +311,7 @@ public extension UIColor {
     }
     
     @objc class var DevMaskColor:UIColor {
-        return UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
+        UIColor(red: 0, green: 0, blue: 0, alpha: 0.15)
     }
     
     //MARK: 顏色轉圖片
@@ -320,7 +320,7 @@ public extension UIColor {
         let rect = CGRect.init(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
         let ccontext = UIGraphicsGetCurrentContext()
-        ccontext?.setFillColor(self.cgColor)
+        ccontext?.setFillColor(cgColor)
         ccontext!.fill(rect)
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
@@ -330,7 +330,7 @@ public extension UIColor {
     //MARK: 顏色的反色
     ///顏色的反色
     @objc func inverseColor()->UIColor {
-        let componentColors = self.cgColor.components
+        let componentColors = cgColor.components
         return UIColor(red: 1 - componentColors![0], green: 1 - componentColors![1], blue: 1 - componentColors![2], alpha:componentColors![3])
     }
     
@@ -339,7 +339,7 @@ public extension UIColor {
         var saturationF:CGFloat = 0
         var brightnessF:CGFloat = 0
         var alphaF:CGFloat = 0
-        guard self.getHue(&hueF, saturation: &saturationF, brightness: &brightnessF, alpha: &alphaF) else {
+        guard getHue(&hueF, saturation: &saturationF, brightness: &brightnessF, alpha: &alphaF) else {
             return PTColorHSBAModel()
         }
         
@@ -356,7 +356,7 @@ public extension UIColor {
         var greenF:CGFloat = 0
         var blueF:CGFloat = 0
         var alphaF:CGFloat = 0
-        guard self.getRed(&redF, green: &greenF, blue: &blueF, alpha: &alphaF) else {
+        guard getRed(&redF, green: &greenF, blue: &blueF, alpha: &alphaF) else {
             return PTColorRBGModel()
         }
         
@@ -371,7 +371,7 @@ public extension UIColor {
     //MARK: 混色
     ///混色
     internal func mixColor(otherColor:UIColor)->UIColor {
-        let rgbaModel = self.rgbaValueModel()
+        let rgbaModel = rgbaValueModel()
         let otherRgbaModel = otherColor.rgbaValueModel()
 
         let newAlpha = 1 - (1 - (rgbaModel.alphaFloat)) * (1 - otherRgbaModel.alphaFloat)
@@ -384,332 +384,332 @@ public extension UIColor {
     //MARK: 分别获取颜色的RGBA值
     ///分别获取颜色的RGBA值
     @objc var colorRValue:CGFloat {
-        return self.rgbaValueModel().redFloat
+        rgbaValueModel().redFloat
     }
     
     @objc var colorGValue:CGFloat {
-        return self.rgbaValueModel().greenFloat
+        rgbaValueModel().greenFloat
     }
     
     @objc var colorBValue:CGFloat {
-        return self.rgbaValueModel().blueFloat
+        rgbaValueModel().blueFloat
     }
     
     @objc var colorAValue:CGFloat {
-        return self.rgbaValueModel().alphaFloat
+        rgbaValueModel().alphaFloat
     }
     
     //MARK: 分别获取颜色的HSBA值
     ///分别获取颜色的HSBA值
     @objc var hsbaColorHValue:CGFloat {
-        return self.hsbaValueModel().hueFloat
+        hsbaValueModel().hueFloat
     }
     
     @objc var hsbaColorSValue:CGFloat {
-        return self.hsbaValueModel().saturationFloat
+        hsbaValueModel().saturationFloat
     }
     
     @objc var hsbaColorBValue:CGFloat {
-        return self.hsbaValueModel().brightnessFloat
+        hsbaValueModel().brightnessFloat
     }
     
     @objc var hsbaColorAValue:CGFloat {
-        return self.hsbaValueModel().alphaFloat
+        hsbaValueModel().alphaFloat
     }
     
     //MARK: 常规颜色配置
     //MARK: Whites
     @objc class var AntiqueWhiteColor:UIColor {
-        return UIColor.colorBase(R: 250, G: 235, B: 215, A: 1)
+        UIColor.colorBase(R: 250, G: 235, B: 215, A: 1)
     }
     @objc class var OldLaceColor:UIColor {
-        return UIColor.colorBase(R: 253, G: 245, B: 230, A: 1)
+        UIColor.colorBase(R: 253, G: 245, B: 230, A: 1)
     }
     @objc class var IvoryColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 255, B: 240, A: 1)
+        UIColor.colorBase(R: 255, G: 255, B: 240, A: 1)
     }
     @objc class var SeashellColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 245, B: 238, A: 1)
+        UIColor.colorBase(R: 255, G: 245, B: 238, A: 1)
     }
     @objc class var GhostWhiteColor:UIColor {
-        return UIColor.colorBase(R: 248, G: 248, B: 255, A: 1)
+        UIColor.colorBase(R: 248, G: 248, B: 255, A: 1)
     }
     @objc class var SnowColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 250, B: 250, A: 1)
+        UIColor.colorBase(R: 255, G: 250, B: 250, A: 1)
     }
     @objc class var LinenColor:UIColor {
-        return UIColor.colorBase(R: 250, G: 240, B: 230, A: 1)
+        UIColor.colorBase(R: 250, G: 240, B: 230, A: 1)
     }
     //MARK: Grays
     @objc class var Black25PercentColor:UIColor {
-        return UIColor(white: 0.25, alpha: 1)
+        UIColor(white: 0.25, alpha: 1)
     }
     @objc class var Black50PercentColor:UIColor {
-        return UIColor(white: 0.5, alpha: 1)
+        UIColor(white: 0.5, alpha: 1)
     }
     @objc class var Black75PercentColor:UIColor {
-        return UIColor(white: 0.75, alpha: 1)
+        UIColor(white: 0.75, alpha: 1)
     }
     @objc class var WarmGrayColor:UIColor {
-        return UIColor.colorBase(R: 133, G: 117, B: 112, A: 1)
+        UIColor.colorBase(R: 133, G: 117, B: 112, A: 1)
     }
     @objc class var CoolGrayColor:UIColor {
-        return UIColor.colorBase(R: 118, G: 122, B: 133, A: 1)
+        UIColor.colorBase(R: 118, G: 122, B: 133, A: 1)
     }
     @objc class var CharcoalColor:UIColor {
-        return UIColor.colorBase(R: 34, G: 34, B: 34, A: 1)
+        UIColor.colorBase(R: 34, G: 34, B: 34, A: 1)
     }
     //MARK: Blues
     @objc class var TealColor:UIColor {
-        return UIColor.colorBase(R: 28, G: 160, B: 170, A: 1)
+        UIColor.colorBase(R: 28, G: 160, B: 170, A: 1)
     }
     @objc class var SteelBlueColor:UIColor {
-        return UIColor.colorBase(R: 103, G: 153, B: 170, A: 1)
+        UIColor.colorBase(R: 103, G: 153, B: 170, A: 1)
     }
     @objc class var RobinEggColor:UIColor {
-        return UIColor.colorBase(R: 141, G: 218, B: 247, A: 1)
+        UIColor.colorBase(R: 141, G: 218, B: 247, A: 1)
     }
     @objc class var PastelBlueColor:UIColor {
-        return UIColor.colorBase(R: 99, G: 161, B: 247, A: 1)
+        UIColor.colorBase(R: 99, G: 161, B: 247, A: 1)
     }
     @objc class var TurquoiseColor:UIColor {
-        return UIColor.colorBase(R: 112, G: 219, B: 219, A: 1)
+        UIColor.colorBase(R: 112, G: 219, B: 219, A: 1)
     }
     @objc class var SkyBlueColor:UIColor {
-        return UIColor.colorBase(R: 0, G: 178, B: 238, A: 1)
+        UIColor.colorBase(R: 0, G: 178, B: 238, A: 1)
     }
     @objc class var IndigoColor:UIColor {
-        return UIColor.colorBase(R: 13, G: 79, B: 139, A: 1)
+        UIColor.colorBase(R: 13, G: 79, B: 139, A: 1)
     }
     @objc class var DenimColor:UIColor {
-        return UIColor.colorBase(R: 67, G: 114, B: 170, A: 1)
+        UIColor.colorBase(R: 67, G: 114, B: 170, A: 1)
     }
     @objc class var BlueberryColor:UIColor {
-        return UIColor.colorBase(R: 89, G: 113, B: 173, A: 1)
+        UIColor.colorBase(R: 89, G: 113, B: 173, A: 1)
     }
     @objc class var CornflowerColor:UIColor {
-        return UIColor.colorBase(R: 100, G: 149, B: 237, A: 1)
+        UIColor.colorBase(R: 100, G: 149, B: 237, A: 1)
     }
     @objc class var BabyBlueColor:UIColor {
-        return UIColor.colorBase(R: 190, G: 220, B: 230, A: 1)
+        UIColor.colorBase(R: 190, G: 220, B: 230, A: 1)
     }
     @objc class var MidnightBlueColor:UIColor {
-        return UIColor.colorBase(R: 13, G: 26, B: 35, A: 1)
+        UIColor.colorBase(R: 13, G: 26, B: 35, A: 1)
     }
     @objc class var FadedBlueColor:UIColor {
-        return UIColor.colorBase(R: 23, G: 137, B: 155, A: 1)
+        UIColor.colorBase(R: 23, G: 137, B: 155, A: 1)
     }
     @objc class var IcebergColor:UIColor {
-        return UIColor.colorBase(R: 200, G: 213, B: 219, A: 1)
+        UIColor.colorBase(R: 200, G: 213, B: 219, A: 1)
     }
     @objc class var WaveColor:UIColor {
-        return UIColor.colorBase(R: 102, G: 169, B: 251, A: 1)
+        UIColor.colorBase(R: 102, G: 169, B: 251, A: 1)
     }
     //MARK: Greens
     @objc class var EmeraldColor:UIColor {
-        return UIColor.colorBase(R: 1, G: 152, B: 117, A: 1)
+        UIColor.colorBase(R: 1, G: 152, B: 117, A: 1)
     }
     @objc class var GrassColor:UIColor {
-        return UIColor.colorBase(R: 99, G: 214, B: 74, A: 1)
+        UIColor.colorBase(R: 99, G: 214, B: 74, A: 1)
     }
     @objc class var PastelGreenColor:UIColor {
-        return UIColor.colorBase(R: 126, G: 242, B: 124, A: 1)
+        UIColor.colorBase(R: 126, G: 242, B: 124, A: 1)
     }
     @objc class var SeafoamColor:UIColor {
-        return UIColor.colorBase(R: 77, G: 226, B: 140, A: 1)
+        UIColor.colorBase(R: 77, G: 226, B: 140, A: 1)
     }
     @objc class var PaleGreenColor:UIColor {
-        return UIColor.colorBase(R: 176, G: 226, B: 172, A: 1)
+        UIColor.colorBase(R: 176, G: 226, B: 172, A: 1)
     }
     @objc class var CactusGreenColor:UIColor {
-        return UIColor.colorBase(R: 99, G: 111, B: 87, A: 1)
+        UIColor.colorBase(R: 99, G: 111, B: 87, A: 1)
     }
     @objc class var ChartreuseColor:UIColor {
-        return UIColor.colorBase(R: 69, G: 139, B: 0, A: 1)
+        UIColor.colorBase(R: 69, G: 139, B: 0, A: 1)
     }
     @objc class var HollyGreenColor:UIColor {
-        return UIColor.colorBase(R: 32, G: 87, B: 14, A: 1)
+        UIColor.colorBase(R: 32, G: 87, B: 14, A: 1)
     }
     @objc class var OliveColor:UIColor {
-        return UIColor.colorBase(R: 91, G: 114, B: 34, A: 1)
+        UIColor.colorBase(R: 91, G: 114, B: 34, A: 1)
     }
     @objc class var OliveDrabColor:UIColor {
-        return UIColor.colorBase(R: 107, G: 142, B: 35, A: 1)
+        UIColor.colorBase(R: 107, G: 142, B: 35, A: 1)
     }
     @objc class var MoneyGreenColor:UIColor {
-        return UIColor.colorBase(R: 134, G: 198, B: 124, A: 1)
+        UIColor.colorBase(R: 134, G: 198, B: 124, A: 1)
     }
     @objc class var HoneydewColor:UIColor {
-        return UIColor.colorBase(R: 216, G: 255, B: 231, A: 1)
+        UIColor.colorBase(R: 216, G: 255, B: 231, A: 1)
     }
     @objc class var LimeColor:UIColor {
-        return UIColor.colorBase(R: 56, G: 237, B: 56, A: 1)
+        UIColor.colorBase(R: 56, G: 237, B: 56, A: 1)
     }
     @objc class var CardTableColor:UIColor {
-        return UIColor.colorBase(R: 87, G: 121, B: 107, A: 1)
+        UIColor.colorBase(R: 87, G: 121, B: 107, A: 1)
     }
     //MARK: Reds
     @objc class var SalmonColor:UIColor {
-        return UIColor.colorBase(R: 233, G: 87, B: 95, A: 1)
+        UIColor.colorBase(R: 233, G: 87, B: 95, A: 1)
     }
     @objc class var BrickRedColor:UIColor {
-        return UIColor.colorBase(R: 151, G: 27, B: 16, A: 1)
+        UIColor.colorBase(R: 151, G: 27, B: 16, A: 1)
     }
     @objc class var EasterPinkColor:UIColor {
-        return UIColor.colorBase(R: 241, G: 167, B: 162, A: 1)
+        UIColor.colorBase(R: 241, G: 167, B: 162, A: 1)
     }
     @objc class var GrapefruitColor:UIColor {
-        return UIColor.colorBase(R: 228, G: 31, B: 54, A: 1)
+        UIColor.colorBase(R: 228, G: 31, B: 54, A: 1)
     }
     @objc class var PinkColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 95, B: 154, A: 1)
+        UIColor.colorBase(R: 255, G: 95, B: 154, A: 1)
     }
     @objc class var IndianRedColor:UIColor {
-        return UIColor.colorBase(R: 205, G: 92, B: 92, A: 1)
+        UIColor.colorBase(R: 205, G: 92, B: 92, A: 1)
     }
     @objc class var StrawberryColor:UIColor {
-        return UIColor.colorBase(R: 190, G: 38, B: 37, A: 1)
+        UIColor.colorBase(R: 190, G: 38, B: 37, A: 1)
     }
     @objc class var CoralColor:UIColor {
-        return UIColor.colorBase(R: 240, G: 128, B: 128, A: 1)
+        UIColor.colorBase(R: 240, G: 128, B: 128, A: 1)
     }
     @objc class var MaroonColor:UIColor {
-        return UIColor.colorBase(R: 80, G: 4, B: 28, A: 1)
+        UIColor.colorBase(R: 80, G: 4, B: 28, A: 1)
     }
     @objc class var WatermelonColor:UIColor {
-        return UIColor.colorBase(R: 242, G: 71, B: 63, A: 1)
+        UIColor.colorBase(R: 242, G: 71, B: 63, A: 1)
     }
     @objc class var TomatoColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 99, B: 71, A: 1)
+        UIColor.colorBase(R: 255, G: 99, B: 71, A: 1)
     }
     @objc class var PinkLipstickColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 105, B: 180, A: 1)
+        UIColor.colorBase(R: 255, G: 105, B: 180, A: 1)
     }
     @objc class var PaleRoseColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 228, B: 225, A: 1)
+        UIColor.colorBase(R: 255, G: 228, B: 225, A: 1)
     }
     @objc class var CrimsonColor:UIColor {
-        return UIColor.colorBase(R: 187, G: 18, B: 36, A: 1)
+        UIColor.colorBase(R: 187, G: 18, B: 36, A: 1)
     }
     //MARK: Purples
     @objc class var EggplantColor:UIColor {
-        return UIColor.colorBase(R: 105, G: 5, B: 98, A: 1)
+        UIColor.colorBase(R: 105, G: 5, B: 98, A: 1)
     }
     @objc class var PastelPurpleColor:UIColor {
-        return UIColor.colorBase(R: 207, G: 100, B: 235, A: 1)
+        UIColor.colorBase(R: 207, G: 100, B: 235, A: 1)
     }
     @objc class var PalePurpleColor:UIColor {
-        return UIColor.colorBase(R: 229, G: 180, B: 235, A: 1)
+        UIColor.colorBase(R: 229, G: 180, B: 235, A: 1)
     }
     @objc class var CoolPurpleColor:UIColor {
-        return UIColor.colorBase(R: 140, G: 93, B: 228, A: 1)
+        UIColor.colorBase(R: 140, G: 93, B: 228, A: 1)
     }
     @objc class var VioletColor:UIColor {
-        return UIColor.colorBase(R: 191, G: 95, B: 255, A: 1)
+        UIColor.colorBase(R: 191, G: 95, B: 255, A: 1)
     }
     @objc class var PlumColor:UIColor {
-        return UIColor.colorBase(R: 139, G: 102, B: 139, A: 1)
+        UIColor.colorBase(R: 139, G: 102, B: 139, A: 1)
     }
     @objc class var LavenderColor:UIColor {
-        return UIColor.colorBase(R: 204, G: 153, B: 204, A: 1)
+        UIColor.colorBase(R: 204, G: 153, B: 204, A: 1)
     }
     @objc class var RaspberryColor:UIColor {
-        return UIColor.colorBase(R: 135, G: 38, B: 87, A: 1)
+        UIColor.colorBase(R: 135, G: 38, B: 87, A: 1)
     }
     @objc class var FuschiaColor:UIColor {
-        return UIColor.colorBase(R: 255, G: 20, B: 147, A: 1)
+        UIColor.colorBase(R: 255, G: 20, B: 147, A: 1)
     }
     @objc class var GrapeColor:UIColor {
-        return UIColor.colorBase(R: 54, G: 11, B: 88, A: 1)
+        UIColor.colorBase(R: 54, G: 11, B: 88, A: 1)
     }
     @objc class var PeriwinkleColor:UIColor {
-        return UIColor.colorBase(R: 135, G: 159, B: 237, A: 1)
+        UIColor.colorBase(R: 135, G: 159, B: 237, A: 1)
     }
     @objc class var OrchidColor:UIColor {
-        return UIColor.colorBase(R: 218, G: 112, B: 214, A: 1)
+        UIColor.colorBase(R: 218, G: 112, B: 214, A: 1)
     }
     //MARK: Yellows
     @objc class var GoldenrodColor:UIColor {
-        return UIColor.colorBase(R: 215, G: 170, B: 51, A: 1)
+        UIColor.colorBase(R: 215, G: 170, B: 51, A: 1)
     }
     @objc class var YellowGreenColor:UIColor {
-        return UIColor.colorBase(R: 192, G: 242, B: 39, A: 1)
+        UIColor.colorBase(R: 192, G: 242, B: 39, A: 1)
     }
     @objc class var BananaColor:UIColor {
-        return UIColor.colorBase(R: 229, G: 227, B: 58, A: 1)
+        UIColor.colorBase(R: 229, G: 227, B: 58, A: 1)
     }
     @objc class var MustardColor:UIColor {
-        return UIColor.colorBase(R: 205, G: 171, B: 45, A: 1)
+        UIColor.colorBase(R: 205, G: 171, B: 45, A: 1)
     }
     @objc class var ButtermilkColor:UIColor {
-        return UIColor.colorBase(R: 254, G: 241, B: 181, A: 1)
+        UIColor.colorBase(R: 254, G: 241, B: 181, A: 1)
     }
     @objc class var GoldColor:UIColor {
-        return UIColor.colorBase(R: 139, G: 117, B: 18, A: 1)
+        UIColor.colorBase(R: 139, G: 117, B: 18, A: 1)
     }
     @objc class var CreamColor:UIColor {
-        return UIColor.colorBase(R: 240, G: 226, B: 187, A: 1)
+        UIColor.colorBase(R: 240, G: 226, B: 187, A: 1)
     }
     @objc class var LightCreamColor:UIColor {
-        return UIColor.colorBase(R: 240, G: 238, B: 215, A: 1)
+        UIColor.colorBase(R: 240, G: 238, B: 215, A: 1)
     }
     @objc class var WheatColor:UIColor {
-        return UIColor.colorBase(R: 240, G: 238, B: 215, A: 1)
+        UIColor.colorBase(R: 240, G: 238, B: 215, A: 1)
     }
     @objc class var BeigeColor:UIColor {
-        return UIColor.colorBase(R: 245, G: 245, B: 220, A: 1)
+        UIColor.colorBase(R: 245, G: 245, B: 220, A: 1)
     }
     //MARK: Oranges
     @objc class var PeachColor:UIColor {
-        return UIColor.colorBase(R: 242, G: 187, B: 97, A: 1)
+        UIColor.colorBase(R: 242, G: 187, B: 97, A: 1)
     }
     @objc class var BurntOrangeColor:UIColor {
-        return UIColor.colorBase(R: 184, G: 102, B: 37, A: 1)
+        UIColor.colorBase(R: 184, G: 102, B: 37, A: 1)
     }
     @objc class var PastelOrangeColor:UIColor {
-        return UIColor.colorBase(R: 248, G: 197, B: 143, A: 1)
+        UIColor.colorBase(R: 248, G: 197, B: 143, A: 1)
     }
     @objc class var CantaloupeColor:UIColor {
-        return UIColor.colorBase(R: 250, G: 154, B: 79, A: 1)
+        UIColor.colorBase(R: 250, G: 154, B: 79, A: 1)
     }
     @objc class var CarrotColor:UIColor {
-        return UIColor.colorBase(R: 237, G: 145, B: 33, A: 1)
+        UIColor.colorBase(R: 237, G: 145, B: 33, A: 1)
     }
     @objc class var MandarinColor:UIColor {
-        return UIColor.colorBase(R: 247, G: 145, B: 55, A: 1)
+        UIColor.colorBase(R: 247, G: 145, B: 55, A: 1)
     }
     //MARK: Browns
     @objc class var ChiliPowderColor:UIColor {
-        return UIColor.colorBase(R: 199, G: 63, B: 23, A: 1)
+        UIColor.colorBase(R: 199, G: 63, B: 23, A: 1)
     }
     @objc class var BurntSiennaColor:UIColor {
-        return UIColor.colorBase(R: 138, G: 54, B: 15, A: 1)
+        UIColor.colorBase(R: 138, G: 54, B: 15, A: 1)
     }
     @objc class var ChocolateColor:UIColor {
-        return UIColor.colorBase(R: 94, G: 38, B: 5, A: 1)
+        UIColor.colorBase(R: 94, G: 38, B: 5, A: 1)
     }
     @objc class var CoffeeColor:UIColor {
-        return UIColor.colorBase(R: 141, G: 60, B: 15, A: 1)
+        UIColor.colorBase(R: 141, G: 60, B: 15, A: 1)
     }
     @objc class var CinnamonColor:UIColor {
-        return UIColor.colorBase(R: 123, G: 63, B: 9, A: 1)
+        UIColor.colorBase(R: 123, G: 63, B: 9, A: 1)
     }
     @objc class var AlmondColor:UIColor {
-        return UIColor.colorBase(R: 196, G: 142, B: 72, A: 1)
+        UIColor.colorBase(R: 196, G: 142, B: 72, A: 1)
     }
     @objc class var EggshellColor:UIColor {
-        return UIColor.colorBase(R: 252, G: 230, B: 201, A: 1)
+        UIColor.colorBase(R: 252, G: 230, B: 201, A: 1)
     }
     @objc class var SandColor:UIColor {
-        return UIColor.colorBase(R: 222, G: 182, B: 151, A: 1)
+        UIColor.colorBase(R: 222, G: 182, B: 151, A: 1)
     }
     @objc class var MudColor:UIColor {
-        return UIColor.colorBase(R: 70, G: 45, B: 29, A: 1)
+        UIColor.colorBase(R: 70, G: 45, B: 29, A: 1)
     }
     @objc class var SiennaColor:UIColor {
-        return UIColor.colorBase(R: 160, G: 82, B: 45, A: 1)
+        UIColor.colorBase(R: 160, G: 82, B: 45, A: 1)
     }
     @objc class var DustColor:UIColor {
-        return UIColor.colorBase(R: 236, G: 214, B: 197, A: 1)
+        UIColor.colorBase(R: 236, G: 214, B: 197, A: 1)
     }
 }

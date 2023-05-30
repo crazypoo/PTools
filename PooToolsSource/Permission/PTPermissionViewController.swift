@@ -60,9 +60,9 @@ public class PTPermissionViewController: PTBaseViewController {
     {
         didSet
         {
-            if self.trackingRequest!
+            if trackingRequest!
             {
-                self.showRequestFunction()
+                showRequestFunction()
             }
         }
     }
@@ -125,7 +125,7 @@ public class PTPermissionViewController: PTBaseViewController {
 
     public init(datas:[PTPermissionModel]) {
         super.init(nibName: nil, bundle: nil)
-        self.permissions = datas
+        permissions = datas
     }
     
     required init?(coder: NSCoder) {
@@ -140,9 +140,9 @@ public class PTPermissionViewController: PTBaseViewController {
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
-        if self.viewDismissBlock != nil
+        if viewDismissBlock != nil
         {
-            self.viewDismissBlock!()
+            viewDismissBlock!()
         }
     }
     
@@ -154,7 +154,7 @@ public class PTPermissionViewController: PTBaseViewController {
 #endif
         
         let closeButton = UIButton.init(type: .close)
-        self.view?.addSubview(closeButton)
+        view?.addSubview(closeButton)
         closeButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.height.equalTo(34)
@@ -169,8 +169,8 @@ public class PTPermissionViewController: PTBaseViewController {
             }
         })
 
-        self.view.addSubview(self.viewCollection)
-        self.viewCollection.snp.makeConstraints { make in
+        view.addSubview(viewCollection)
+        viewCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
 #if POOTOOLS_NAVBARCONTROLLER
             make.top.equalTo(self.zx_navBar!.snp.bottom)
@@ -179,10 +179,10 @@ public class PTPermissionViewController: PTBaseViewController {
 #endif
         }
         
-        self.showDetail()
+        showDetail()
         
         var haveTracking:Bool? = false
-        for ( _ ,value) in self.permissions!.enumerated()
+        for ( _ ,value) in permissions!.enumerated()
         {
 #if canImport(Permission)
             if value.type == .tracking
@@ -204,18 +204,18 @@ public class PTPermissionViewController: PTBaseViewController {
             }
             else
             {
-                self.showRequestFunction()
+                showRequestFunction()
             }
         }
         else
         {
-            self.showRequestFunction()
+            showRequestFunction()
         }
     }
     
     func showRequestFunction()
     {
-        self.permissions?.enumerated().forEach({ index,value in
+        permissions?.enumerated().forEach({ index,value in
 #if canImport(Permission)
             switch value.type {
             case .camera:
@@ -282,29 +282,29 @@ public class PTPermissionViewController: PTBaseViewController {
     
     func showDetail()
     {
-        self.mSections.removeAll()
+        mSections.removeAll()
         
         var permissionRows = [PTRows]()
-        self.permissions?.enumerated().forEach({ index,value in
+        permissions?.enumerated().forEach({ index,value in
             let row = PTRows.init(title: value.name,content: value.desc,cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
             permissionRows.append(row)
         })
         
         let section = PTSection.init(headerCls:PTPermissionHeader.self,headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
-        self.mSections.append(section)
-        self.viewCollection.pt_register(by: self.mSections)
-        self.viewCollection.reloadData()
+        mSections.append(section)
+        viewCollection.pt_register(by: mSections)
+        viewCollection.reloadData()
     }
 }
 
 extension PTPermissionViewController : UICollectionViewDelegate,UICollectionViewDataSource
 {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.mSections.count
+        mSections.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.mSections[section].rows.count
+        mSections[section].rows.count
     }
     
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {

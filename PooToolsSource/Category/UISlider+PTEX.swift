@@ -15,7 +15,7 @@ public extension UISlider {
     
     @objc func addSliderAction(handler:@escaping SliderBlock) {
         objc_setAssociatedObject(self, &UISlider.UISliderBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        self.addTarget(self, action: #selector(self.actionValue(sender:)), for: .valueChanged)
+        addTarget(self, action: #selector(actionValue(sender:)), for: .valueChanged)
     }
     
     @objc func actionValue(sender:UISlider) {

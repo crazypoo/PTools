@@ -14,25 +14,25 @@ open class PTNavTitleLabel: UILabel {
     
     open override var text: String? {
         didSet {
-            self.noticeUpdateFrame()
+            noticeUpdateFrame()
         }
     }
     
     open override var attributedText: NSAttributedString? {
         didSet {
-            self.noticeUpdateFrame()
+            noticeUpdateFrame()
         }
     }
     
     open override var font: UIFont! {
         didSet {
-            self.noticeUpdateFrame()
+            noticeUpdateFrame()
         }
     }
     
     private func noticeUpdateFrame() {
-        if self.jx_titleLabelFrameUpdateBlock != nil {
-            self.jx_titleLabelFrameUpdateBlock!(self)
+        if jx_titleLabelFrameUpdateBlock != nil {
+            jx_titleLabelFrameUpdateBlock!(self)
         }
     }
 }

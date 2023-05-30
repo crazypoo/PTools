@@ -40,7 +40,7 @@ public class SSBlurView {
             if blur == nil {
                 applyBlurEffect()
             }
-            let alpha = self.alpha
+            let alpha = alpha
             UIView.animate(withDuration: animationDuration) {
                 self.blur?.alpha = alpha
             }
@@ -48,7 +48,7 @@ public class SSBlurView {
     }
     
     public init(to view: UIView) {
-        self.superview = view
+        superview = view
     }
     
     
@@ -57,7 +57,7 @@ public class SSBlurView {
             applyBlurEffect()
         }
         
-        self.blur?.isHidden = isHidden
+        blur?.isHidden = isHidden
     }
     
     private func applyBlurEffect() {
@@ -90,9 +90,9 @@ public class SSBlurView {
             maker.edges.equalToSuperview()
         }
         
-        self.blur = blurEffectView
-        self.blurContentView = blurEffectView.contentView
-        self.vibrancyContentView = vibrancyView.contentView
+        blur = blurEffectView
+        blurContentView = blurEffectView.contentView
+        vibrancyContentView = vibrancyView.contentView
     }
 }
 

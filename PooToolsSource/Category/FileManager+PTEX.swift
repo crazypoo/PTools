@@ -147,7 +147,7 @@ public extension PTPOP where Base: FileManager {
     }
     /// 文件管理器
     static var fileManager: FileManager {
-        return FileManager.default
+        FileManager.default
     }
 
     //MARK: 创建文件夹(蓝色的，文件夹和文件是不一样的)
@@ -367,6 +367,9 @@ public extension PTPOP where Base: FileManager {
     /// - Parameters:
     ///   - fromeFile: 拷贝的(文件夹/文件)路径
     ///   - toFile: 拷贝后的(文件夹/文件)路径
+    ///   - type:
+    ///   - fromeFilePath:
+    ///   - toFilePath:
     ///   - isOverwrite: 当要拷贝到的(文件夹/文件)路径存在，会拷贝失败，这里传入是否覆盖
     /// - Returns: 拷贝的结果
     @discardableResult
@@ -447,27 +450,27 @@ public extension PTPOP where Base: FileManager {
     ///   - path: (文件夹/文件) 的路径
     /// - Returns: (文件夹/文件) 的前一个路径
     static func directoryAtPath(path: String) -> String {
-        return (path as NSString).deletingLastPathComponent
+        (path as NSString).deletingLastPathComponent
     }
     
     //MARK: 判断目录是否可读
     static func judegeIsReadableFile(path: String) -> Bool {
-        return fileManager.isReadableFile(atPath: path)
+        fileManager.isReadableFile(atPath: path)
     }
     
     //MARK: 判断目录是否可写
     static func judegeIsWritableFile(path: String) -> Bool {
-        return fileManager.isReadableFile(atPath: path)
+        fileManager.isReadableFile(atPath: path)
     }
     
     //MARK: 判断目录是否可执行
     static func judegeIsExecutableFile(path: String) -> Bool {
-        return fileManager.isExecutableFile(atPath: path)
+        fileManager.isExecutableFile(atPath: path)
     }
     
     //MARK: 判断目录是否可删除
     static func judegeIsDeletableFile(path: String) -> Bool {
-        return fileManager.isDeletableFile(atPath: path)
+        fileManager.isDeletableFile(atPath: path)
     }
     
     //MARK: 根据文件路径获取文件扩展类型
@@ -476,7 +479,7 @@ public extension PTPOP where Base: FileManager {
     ///  - path: 文件路径
     /// - Returns: 文件扩展类型
     static func fileSuffixAtPath(path: String) -> String {
-        return (path as NSString).pathExtension
+        (path as NSString).pathExtension
     }
     
     //MARK: 根据文件路径获取文件名称，是否需要后缀
@@ -688,6 +691,7 @@ public extension PTPOP where Base: FileManager {
     ///通过网络视频文件路径获取截图
     /// - Parameters:
     ///   - videoPath: 视频在沙盒的路径
+    ///   - videoImage:
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图
     static func getServerVideoImage(videoPath: String, videoImage: @escaping (UIImage?) -> Void, preferredTrackTransform: Bool = true) {
@@ -705,6 +709,7 @@ public extension PTPOP where Base: FileManager {
     ///通过网络视频文件路径数组获取截图数组
     /// - Parameters:
     ///   - videoPaths: 视频在沙盒的路径数组
+    ///   - videoImages:
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图数组
     static func getServerVideoImages(videoPaths: [String], videoImages: @escaping ([UIImage?]) -> Void, preferredTrackTransform: Bool = true) {

@@ -21,7 +21,7 @@ public class PTCheckFWords: NSObject {
     
     public override init() {
         super.init()
-        self.initFilter()
+        initFilter()
     }
     
     func initFilter() {
@@ -33,7 +33,7 @@ public class PTCheckFWords: NSObject {
             let dataArr = dataFile?.components(separatedBy: "|")
             for item in dataArr! {
                 if item.count > 0 {
-                    self.insertWords(words: item as NSString)
+                    insertWords(words: item as NSString)
                 }
             }
         } catch {
@@ -42,7 +42,7 @@ public class PTCheckFWords: NSObject {
     }
     
     func insertWords(words:NSString) {
-        var node:NSMutableDictionary = self.root
+        var node:NSMutableDictionary = root
         for i in stride(from: 0, to: words.length, by: 1) {
             let word = words.substring(with: NSRange(location: i, length: 1))
             if node.object(forKey: word) == nil {
@@ -57,7 +57,7 @@ public class PTCheckFWords: NSObject {
     public func haveFWord(str:NSString)->Bool {
         for i in stride(from: 0, to: str.length, by: 1) {
             let subString:NSString = str.substring(from: i) as NSString
-            var node:NSMutableDictionary = self.root.mutableCopy() as! NSMutableDictionary
+            var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary
             var num = 0
             
             for j in stride(from: 0, to: subString.length, by: 1) {
@@ -81,14 +81,14 @@ public class PTCheckFWords: NSObject {
     }
     
     public func filter(str:NSString)->NSString {
-        if self.isFilterClose || self.root.count == 0 {
+        if isFilterClose || root.count == 0 {
             return str
         }
         
         let result:NSMutableString = str.mutableCopy() as! NSMutableString
         for var i in stride(from: 0, to: str.length, by: 1) {
             let subString:NSString = str.substring(from: i) as NSString
-            var node:NSMutableDictionary = self.root.mutableCopy() as! NSMutableDictionary
+            var node:NSMutableDictionary = root.mutableCopy() as! NSMutableDictionary
             var num = 0
             
             for j in stride(from: 0, to: subString.length, by: 1) {
@@ -118,6 +118,6 @@ public class PTCheckFWords: NSObject {
     }
     
     func freeFilter() {
-        self.root.removeAllObjects()
+        root.removeAllObjects()
     }
 }

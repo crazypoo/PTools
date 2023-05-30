@@ -19,7 +19,7 @@ public class ResponseModel:PTBaseModel {
 
     public var isSuccess:Bool {
         get {
-            return status == 200
+            status == 200
         }
     }
 }

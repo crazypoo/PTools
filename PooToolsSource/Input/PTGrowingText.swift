@@ -69,7 +69,7 @@ open class PTGrowingTextView: UITextView {
     }
     
     open override var intrinsicContentSize: CGSize {
-        return CGSize(width: UIView.noIntrinsicMetric, height: 30)
+        CGSize(width: UIView.noIntrinsicMetric, height: 30)
     }
     
     private func associateConstraints() {
@@ -120,9 +120,9 @@ open class PTGrowingTextView: UITextView {
             shouldScrollAfterHeightChanged = true
             heightConstraint!.constant = height
             
-            if self.growingTextDidChangeHeight != nil
+            if growingTextDidChangeHeight != nil
             {
-                self.growingTextDidChangeHeight!(self,height)
+                growingTextDidChangeHeight!(self,height)
             }
         } else if shouldScrollAfterHeightChanged {
             shouldScrollAfterHeightChanged = false
@@ -131,10 +131,10 @@ open class PTGrowingTextView: UITextView {
     }
     
     private func scrollToCorrectPosition() {
-        if self.isFirstResponder {
-            self.scrollRangeToVisible(NSRange(location: -1, length: 0)) // Scroll to bottom
+        if isFirstResponder {
+            scrollRangeToVisible(NSRange(location: -1, length: 0)) // Scroll to bottom
         } else {
-            self.scrollRangeToVisible(NSRange(location: 0, length: 0)) // Scroll to top
+            scrollRangeToVisible(NSRange(location: 0, length: 0)) // Scroll to top
         }
     }
     
@@ -170,7 +170,7 @@ open class PTGrowingTextView: UITextView {
     }
     
     // Trim white space and new line characters when end editing.
-    @objc func textDidEndEditing(notification: Notification) {
+    func textDidEndEditing(notification: Notification) {
         if let sender = notification.object as? PTGrowingTextView, sender == self {
             if trimWhiteSpaceWhenEndEditing {
                 text = text?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -181,7 +181,7 @@ open class PTGrowingTextView: UITextView {
     }
     
     // Limit the length of text
-    @objc func textDidChange(notification: Notification) {
+    func textDidChange(notification: Notification) {
         if let sender = notification.object as? PTGrowingTextView, sender == self {
             if maxLength > 0 && text.count > maxLength {
                 let endIndex = text.index(text.startIndex, offsetBy: maxLength)

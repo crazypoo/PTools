@@ -12,20 +12,20 @@ import ImageIO
 
 internal extension SCNVector3 {
     func length() -> Float {
-        return sqrtf(x * x + y * y + z * z)
+        sqrtf(x * x + y * y + z * z)
     }
 }
 
 internal func / (l: SCNVector3, r: Float) -> SCNVector3 {
-    return SCNVector3Make(l.x/r, l.y/r, l.z/r)
+    SCNVector3Make(l.x / r, l.y / r, l.z / r)
 }
 
 internal func - (l: SCNVector3, r: SCNVector3) -> SCNVector3 {
-    return SCNVector3Make(l.x - r.x, l.y - r.y, l.z - r.z)
+    SCNVector3Make(l.x - r.x, l.y - r.y, l.z - r.z)
 }
 
 internal func + (l: SCNVector3, r: SCNVector3) -> SCNVector3 {
-    return SCNVector3Make(l.x + r.x, l.y + r.y, l.z + r.z)
+    SCNVector3Make(l.x + r.x, l.y + r.y, l.z + r.z)
 }
 
 internal extension Collection where Element == CGFloat, Index == Int {
@@ -33,7 +33,7 @@ internal extension Collection where Element == CGFloat, Index == Int {
         guard !isEmpty else { return nil }
         
         let sum = reduce(CGFloat(0)) { current, next -> CGFloat in
-            return current + next
+            current + next
         }
         
         return sum / CGFloat(count)

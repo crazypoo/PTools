@@ -25,29 +25,29 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 判断机型
     ///小
     static func oneOfSmallDevice()->Bool {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
+        Gobal_device_info.isOneOf(Gobal_group_of_all_small_device)
     }
     
     ///大
     static func oneOfPlusDevice()->Bool {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
+        Gobal_device_info.isOneOf(Gobal_group_of_all_plus_device)
     }
 
     ///X
     static func oneOfXDevice()->Bool {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
+        Gobal_device_info.isOneOf(Gobal_group_of_all_X_device)
     }
     
     ///Pad
     static func oneOfPadDevice()->Bool {
-        return Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
+        Gobal_device_info.isOneOf(Gobal_group_of_all_iPad)
     }
 
     //MARK: 獲取當前設備的名稱
     ///獲取當前設備的名稱
     static var currentDeviceName:String {
         get {
-            return UIDevice.current.name
+            UIDevice.current.name
         }
     }
     
@@ -108,7 +108,7 @@ public extension PTPOP where Base: UIDevice {
     }
     
     static var volumes: String {
-        return String.init(format: "%d", Device.volumes!)
+        String.init(format: "%d", Device.volumes!)
     }
     
     //MARK: 当前硬盘可用空间
@@ -139,37 +139,37 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 獲取可用的儲存用量(字節為單位)
     ///獲取可用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForImportantUsage: String {
-        return String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
+        String.init(format: "%d", Device.volumeAvailableCapacityForImportantUsage!)
     }
     
     //MARK: 獲取不能用的儲存用量(字節為單位)
     ///獲取不能用的儲存用量(字節為單位)
     static var volumeAvailableCapacityForOpportunisticUsage: String {
-        return String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
+        String.init(format: "%d", Device.volumeAvailableCapacityForOpportunisticUsage!)
     }
 
     //MARK: 获取总内存大小
     ///获取总内存大小GB
     static var memoryTotal: Double {
-        return round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100
+        round(100 * Double(ProcessInfo.processInfo.physicalMemory) * pow(10, -9)) / 100
     }
     
     //MARK: 获取屏幕亮度
     ///获取屏幕亮度比例
     static var brightness: CGFloat {
-        return UIScreen.main.brightness
+        UIScreen.main.brightness
     }
     
     //MARK: 获取设备是否省电模式
     ///获取设备是否省电模式
     static var lowPowerMode: Bool {
-        return ProcessInfo.processInfo.isLowPowerModeEnabled
+        ProcessInfo.processInfo.isLowPowerModeEnabled
     }
     
     //MARK: 获取设备CPU数量
     ///获取设备CPU数量
     static var processorCount: Int {
-        return ProcessInfo.processInfo.processorCount
+        ProcessInfo.processInfo.processorCount
     }
     
     //MARK: 当前系统更新时间
@@ -197,13 +197,13 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 获取最高刷新率
     ///获取最高刷新率
     static var maximumFramesPerSecond:Int {
-        return UIScreen.main.maximumFramesPerSecond
+        UIScreen.main.maximumFramesPerSecond
     }
     
     //MARK: 获取手机的第一个语言
     ///获取手机的第一个语言
     static var currentDeviceLanguageInIos:String {
-        return Bundle.main.preferredLocalizations.first!
+        Bundle.main.preferredLocalizations.first!
     }
     
     //MARK: 获取手机的第一个语言字典
@@ -235,7 +235,7 @@ public extension PTPOP where Base: UIDevice {
     ///檢測當前系統是否小於某個版本系統
     /// - Returns: Bool
     static func lessThanSysVersion(version:NSString,equal:Bool) -> Bool {
-        return UIDevice.current.systemVersion.compare("\(version)",options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
+        UIDevice.current.systemVersion.compare("\(version)", options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
 }
 
@@ -404,7 +404,7 @@ public extension PTPOP where Base: UIDevice {
     //MARK: sim卡信息
     ///sim卡信息
     static func simCardInfos() -> [CTCarrier]? {
-        return getCarriers()
+        getCarriers()
     }
 }
 

@@ -27,7 +27,7 @@ public extension UIButton {
     
     @objc func addActionHandlers(handler:@escaping TouchedBlock) {
         objc_setAssociatedObject(self, &UIButton.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        self.addTarget(self, action: #selector(self.actionTouched(sender:)), for: .touchUpInside)
+        addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
     }
     
     @objc func actionTouched(sender:UIButton) {
@@ -46,11 +46,11 @@ public extension UIButton {
          * 如果同时有image和label，那这时候image的上左下是相对于button，右边是相对于label的；title的上右下是相对于button，左边是相对于image的。
          */
 
-        let imageWith = self.imageView?.frame.size.width
-        let imageHeight = self.imageView?.frame.size.height
+        let imageWith = imageView?.frame.size.width
+        let imageHeight = imageView?.frame.size.height
         
-        let labelWidth:CGFloat = (self.titleLabel?.frame.size.width)!
-        let labelHeight:CGFloat = (self.titleLabel?.frame.size.height)!
+        let labelWidth:CGFloat = (titleLabel?.frame.size.width)!
+        let labelHeight:CGFloat = (titleLabel?.frame.size.height)!
         
         var imageEdgeInsets = UIEdgeInsets.zero
         var labelEdgeInsets = UIEdgeInsets.zero
@@ -70,7 +70,7 @@ public extension UIButton {
             labelEdgeInsets = UIEdgeInsets(top: 0, left: -imageWith!-imageTitleSpace/2, bottom: 0, right: imageWith!+imageTitleSpace/2)
         }
         
-        self.titleEdgeInsets = labelEdgeInsets
+        titleEdgeInsets = labelEdgeInsets
         self.imageEdgeInsets = imageEdgeInsets
     }
     
@@ -82,13 +82,13 @@ public extension UIButton {
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
                        size:CGSize)->CGSize {
-        var dic = [NSAttributedString.Key.font:self.titleLabel!.font] as! [NSAttributedString.Key:Any]
+        var dic = [NSAttributedString.Key.font: titleLabel!.font] as! [NSAttributedString.Key:Any]
         if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
-        let size = self.titleLabel!.text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        let size = titleLabel!.text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
         return size
     }
 
@@ -98,7 +98,7 @@ public extension UIButton {
     ///   - timeInterval: 時間
     ///   - finishBlock:回調
     func buttonTimeRun_Base(timeInterval:TimeInterval,
-                            finishBlock:@escaping ((_ finish:Bool,_ time:Int)->Void)) {
+                            finishBlock: @escaping (_ finish:Bool, _ time:Int)->Void) {
         PTGCDManager.timeRunWithTime_base(timeInterval: timeInterval, finishBlock: finishBlock)
     }
     
@@ -107,6 +107,9 @@ public extension UIButton {
     /// - Parameters:
     ///   - timeInterval: 時間
     ///   - originalTitle: 原始標題
+    ///   - countdowningCanTap:
+    ///   - countdownFinishCanTap:
+    ///   - timeFinish:
     ///   - canTap: 倒計時後是否可以點擊
     ///   - finishBlock: 回調
     func buttonTimeRun(timeInterval:TimeInterval,
@@ -114,7 +117,7 @@ public extension UIButton {
                        countdowningCanTap:Bool = true,
                        countdownFinishCanTap:Bool = true,
                        timeFinish:(()->Void)?) {
-        self.buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
+        buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             if finish {
                 self.setTitle(originalTitle, for: self.state)
                 self.isUserInteractionEnabled = countdownFinishCanTap

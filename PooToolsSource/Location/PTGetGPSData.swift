@@ -26,9 +26,9 @@ public class PTGetGPSData: NSObject {
     
     public override init() {
         super.init()
-        self.locationManager.delegate = self
-        self.locationManager.desiredAccuracy = kCLLocationAccuracyBest
-        self.locationManager.distanceFilter = 1000
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        locationManager.distanceFilter = 1000
     }
     
     public func getUserLocation(block: ((_ lat:String,_ lon:String,_ cityName:String)->Void)?) {
@@ -42,8 +42,8 @@ public class PTGetGPSData: NSObject {
     }
     
     func setObjectFunction(city:String) {
-        let lon = "\(self.lon)"
-        let lat = "\(self.lat)"
+        let lon = "\(lon)"
+        let lat = "\(lat)"
         UserDefaults.standard.set(lon, forKey: "lon")
         UserDefaults.standard.set(lat, forKey: "lat")
         UserDefaults.standard.set(city, forKey: "locCity")
@@ -59,13 +59,13 @@ extension PTGetGPSData:CLLocationManagerDelegate {
             UIApplication.shared.open(settingUrl!)
         }
         
-        if self.errorBlock != nil {
-            self.errorBlock!()
+        if errorBlock != nil {
+            errorBlock!()
         }
     }
     
     public func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        self.locationManager.stopUpdatingLocation()
+        locationManager.stopUpdatingLocation()
         
         let currentLocation = locations.last
         let geoCoder = CLGeocoder()
@@ -148,8 +148,8 @@ extension PTGetGPSData:CLLocationManagerDelegate {
                 self.locationManager.requestAlwaysAuthorization()
             }
         } else {
-            if self.errorBlock != nil {
-                self.errorBlock!()
+            if errorBlock != nil {
+                errorBlock!()
             }
         }
     }

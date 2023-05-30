@@ -130,7 +130,7 @@ public class PTCheckUpdateFunction: NSObject {
             })
         } else {
             if !appid.stringIsEmpty() {
-                Network.requestApi(urlStr: "http://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self,showHud: showHub) { result, error in
+                Network.requestApi(urlStr: "https:///itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self,showHud: showHub) { result, error in
                     if error == nil {
                         guard let responseModel = result!.originalString.kj.model(PTCheckUpdateModel.self) else { return }
                         if responseModel.results.count > 0 {

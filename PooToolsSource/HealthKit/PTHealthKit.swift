@@ -26,19 +26,19 @@ public class PTHealthKit: NSObject {
     
     public override init() {
         super.init()
-        self.kitSetting()
+        kitSetting()
     }
     
     func dataTypesToRead()->Set<HKObjectType> {
-        
-        return [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!]
+
+        [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!]
     }
 
     func kitSetting() {
         if HKHealthStore.isHealthDataAvailable() {
-            let types = self.dataTypesToRead()
+            let types = dataTypesToRead()
             
-            self.healthStore.requestAuthorization(toShare: nil, read: types) { success, error in
+            healthStore.requestAuthorization(toShare: nil, read: types) { success, error in
                 if !success {
                     PTNSLogConsole("You didn't allow HealthKit to access these read data types. In your app, try to handle this error gracefully when a user decides not to provide access. The error was: \(String(describing: error)). If you're using a simulator, try it on a device.")
                     return
@@ -52,7 +52,7 @@ public class PTHealthKit: NSObject {
             PTNSLogConsole("HKHealthStore is not available")
         }
         
-        self.stepAll()
+        stepAll()
     }
     
     func stepAll() {
@@ -86,6 +86,6 @@ public class PTHealthKit: NSObject {
                 }
             })
         }
-        self.healthStore.execute(query)
+        healthStore.execute(query)
     }
 }

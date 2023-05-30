@@ -25,7 +25,7 @@ open class LLFilledPageControl: UIView {
         }
     }
     open var currentPage: Int {
-        return Int(round(progress))
+        Int(round(progress))
     }
     
     
@@ -33,7 +33,7 @@ open class LLFilledPageControl: UIView {
     
     override open var tintColor: UIColor! {
         didSet {
-            inactiveLayers.forEach() { $0.backgroundColor = tintColor.cgColor }
+            inactiveLayers.forEach { $0.backgroundColor = tintColor.cgColor }
         }
     }
     open var inactiveRingWidth: CGFloat = 1 {
@@ -53,7 +53,7 @@ open class LLFilledPageControl: UIView {
     }
     
     fileprivate var indicatorDiameter: CGFloat {
-        return indicatorRadius * 2
+        indicatorRadius * 2
     }
     
     fileprivate var inactiveLayers = [CALayer]()
@@ -77,18 +77,18 @@ open class LLFilledPageControl: UIView {
         // no need to update
         guard count != inactiveLayers.count else { return }
         // reset current layout
-        inactiveLayers.forEach() { $0.removeFromSuperlayer() }
+        inactiveLayers.forEach { $0.removeFromSuperlayer() }
         inactiveLayers = [CALayer]()
         // add layers for new page count
-        inactiveLayers = stride(from: 0, to:count, by:1).map() { _ in
+        inactiveLayers = stride(from: 0, to:count, by:1).map { _ in
             let layer = CALayer()
-            layer.backgroundColor = self.tintColor.cgColor
+            layer.backgroundColor = tintColor.cgColor
             self.layer.addSublayer(layer)
             return layer
         }
         layoutPageIndicators(inactiveLayers)
         updateActivePageIndicatorMasks(forProgress: progress)
-        self.invalidateIntrinsicContentSize()
+        invalidateIntrinsicContentSize()
     }
     
     
@@ -136,19 +136,19 @@ open class LLFilledPageControl: UIView {
     fileprivate func layoutPageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
         var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
-        layers.forEach() { layer in
-            layer.cornerRadius = self.indicatorRadius
+        layers.forEach { layer in
+            layer.cornerRadius = indicatorRadius
             layer.frame = layerFrame
             layerFrame.origin.x += layerDiameter + indicatorPadding
         }
         // 布局
-        let oldFrame = self.frame
+        let oldFrame = frame
         let width = CGFloat(inactiveLayers.count) * layerDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding
-        self.frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
+        frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
     }
     
     override open var intrinsicContentSize: CGSize {
-        return sizeThatFits(CGSize.zero)
+        sizeThatFits(CGSize.zero)
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {

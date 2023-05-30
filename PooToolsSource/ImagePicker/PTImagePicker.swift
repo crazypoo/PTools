@@ -107,7 +107,7 @@ private extension PTImagePicker.Controller {
     
     func pickObject() async throws -> T {
         try await withCheckedThrowingContinuation { continuation in
-            pickObject() { result in
+            pickObject { result in
                 continuation.resume(with: result)
             }
         }

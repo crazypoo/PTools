@@ -30,7 +30,7 @@ public class PTMotion: NSObject {
         }
         
         if CMPedometer.isStepCountingAvailable() {
-            self.pedometer.startUpdates(from: Date()) { pedomoterData, error in
+            pedometer.startUpdates(from: Date()) { pedomoterData, error in
                 if error != nil {
                     let data = pedomoterData!
                     self.stepCount = Int(truncating: data.numberOfSteps)
@@ -39,7 +39,7 @@ public class PTMotion: NSObject {
         }
         
         if CMMotionActivityManager.isActivityAvailable() {
-            self.activityManager.startActivityUpdates(to: self.operationQueue) { activity in
+            activityManager.startActivityUpdates(to: operationQueue) { activity in
                 PTGCDManager.gcdMain {
                     if self.motionBlock != nil {
                         self.motionBlock!(self.stepCount,self.activityConfidenceString(confidence: activity!.confidence),self.statusForActivity(activity: activity!))

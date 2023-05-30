@@ -26,7 +26,7 @@ public class TouchInspectorWindow: UIWindow {
     /**
      Whether to show the circular touch indicator.
      */
-    @objc public var showTouches: Bool = true {
+    public var showTouches: Bool = true {
         didSet {
             hideOverlaysIfNeeded()
         }
@@ -35,7 +35,7 @@ public class TouchInspectorWindow: UIWindow {
     /**
      Whether to show the hit-test debugging overlay. If enabled, touch indicators will also be shown.
      */
-    @objc public var showHitTesting: Bool = true {
+    public var showHitTesting: Bool = true {
         didSet {
             hideOverlaysIfNeeded()
         }

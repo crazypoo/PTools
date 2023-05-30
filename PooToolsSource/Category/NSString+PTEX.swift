@@ -28,12 +28,12 @@ public extension NSString {
             return false
         }
         
-        if self.length < 3 {
+        if length < 3 {
             return false
         }
         
-        let lastNum:NSString = self.substring(from: (self.length - 1)) as NSString
-        let forwardNum:NSString = self.substring(to: (self.length - 1)) as NSString
+        let lastNum:NSString = self.substring(from: (length - 1)) as NSString
+        let forwardNum:NSString = self.substring(to: (length - 1)) as NSString
         
         let forwardArr = NSMutableArray(capacity: 0)
         for i in 0..<forwardNum.length {
@@ -100,7 +100,7 @@ public extension NSString {
     ///檢測中國公民新份證
     /// - Returns: Bool
     func isValidateIdentity()->Bool {
-        if self.length != 18 {
+        if length != 18 {
             return false
         }
         
@@ -140,7 +140,7 @@ public extension NSString {
         var year:NSString = ""
         var month:NSString = ""
         var day:NSString = ""
-        if self.isValidateIdentity() {
+        if isValidateIdentity() {
             year = self.substring(with: NSMakeRange(6, 4)) as NSString
             month = self.substring(with: NSMakeRange(10, 2)) as NSString
             day = self.substring(with: NSMakeRange(12, 2)) as NSString
@@ -159,10 +159,10 @@ public extension NSString {
     //MARK: 从身份证上获取年龄
     ///从身份证上获取年龄
     func getIdentityCardAge()->NSString {
-        if self.isValidateIdentity() {
+        if isValidateIdentity() {
             let formatterTow = DateFormatter()
             formatterTow.dateFormat = "yyyy-MM-dd"
-            let birthday = self.birthdayFromIdentityCard()
+            let birthday = birthdayFromIdentityCard()
             let bsyDate = formatterTow.date(from: birthday as String)
             let dateDiff = bsyDate!.timeIntervalSinceNow
             let age = trunc(dateDiff / (60 * 60 * 24)) / 365
@@ -175,7 +175,7 @@ public extension NSString {
     //MARK: 獲取字符串中文件名的格式(媒體)
     ///獲取字符串中文件名的格式(媒體)
     @objc func contentTypeForUrl()->PTUrlStringVideoType {
-        let pathEX = self.pathExtension.lowercased()
+        let pathEX = pathExtension.lowercased()
         
         if pathEX.contains("mp4") {
             return .MP4
@@ -188,11 +188,11 @@ public extension NSString {
     }
     
     @objc func checkWithString(expression:NSString)->Bool {
-        return String(format: "%@", self).checkWithString(expression: String(format: "%@", expression))
+        String(format: "%@", self).checkWithString(expression: String(format: "%@", expression))
     }
     
     @objc func checkWithArray(expression:NSArray)->Bool {
-        return String(format: "%@", self).checkWithArray(expression: expression)
+        String(format: "%@", self).checkWithArray(expression: expression)
     }
     
     //MARK: 檢測字符串是否為空
@@ -206,7 +206,7 @@ public extension NSString {
     }
     
     @objc class func currentDate(dateFormatter:NSString)->NSString {
-        return String.currentDate(dateFormatterString: dateFormatter as String).nsString
+        String.currentDate(dateFormatterString: dateFormatter as String).nsString
     }
 }
 
@@ -244,7 +244,7 @@ public extension NSString {
         for key in style.allKeys {
             let newKey = NSString(format: "%@", key as! CVarArg)
             let value = style.value(forKey: newKey as String)
-            self.setTextStyle(styleName:newKey, value: value!, range: range, onAttributedString: onAttributedString)
+            setTextStyle(styleName:newKey, value: value!, range: range, onAttributedString: onAttributedString)
         }
     }
     
@@ -254,13 +254,13 @@ public extension NSString {
                 self.style(attributedString: attributedString, range: range, style: subStyle, styleBook: styleBook)
             }
         } else if style is NSDictionary {
-            self.setStyle(style: style as! NSDictionary, range: range, onAttributedString: attributedString)
+            setStyle(style: style as! NSDictionary, range: range, onAttributedString: attributedString)
         } else if style is UIFont {
             self.setFont(font: style as! UIFont, range: range, onAttributedString: attributedString)
         } else if style is UIColor {
-            self.setText(color: style as! UIColor, range: range, onAttributedString: attributedString)
+            setText(color: style as! UIColor, range: range, onAttributedString: attributedString)
         } else if style is NSURL {
-            self.setLink(url: style as! NSURL, range: range, onAttributedString: attributedString)
+            setLink(url: style as! NSURL, range: range, onAttributedString: attributedString)
         } else if style is NSString {
             self.style(attributedString: attributedString, range: range, style: style, styleBook: styleBook)
         } else if style is UIImage {
@@ -272,7 +272,7 @@ public extension NSString {
     
     func attributedString(fontBook:NSDictionary)->NSAttributedString {
         let tags = [NSDictionary]()
-        let ms:NSMutableString = self.mutableCopy() as! NSMutableString
+        let ms:NSMutableString = mutableCopy() as! NSMutableString
         ms.replaceOccurrences(of: "<br>", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
         ms.replaceOccurrences(of: "<br />", with: "\n",options: .caseInsensitive, range: NSMakeRange(0, ms.length))
         ms.replaceAllTags(intoArray:tags as! NSMutableArray)
@@ -282,7 +282,7 @@ public extension NSString {
         
         let bodyStyle = fontBook["body"]
         if bodyStyle != nil {
-            self.style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle!, styleBook: fontBook)
+            style(attributedString: attributedString, range: NSMakeRange(0, attributedString.length), style: bodyStyle!, styleBook: fontBook)
         }
         
         for tag in tags {

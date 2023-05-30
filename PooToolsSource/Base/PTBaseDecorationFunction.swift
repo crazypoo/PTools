@@ -23,7 +23,7 @@ open class PTBaseDecorationView_Corner: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = PTAppBaseConfig.share.decorationBackgroundColor
-        self.viewCorner(radius: PTAppBaseConfig.share.decorationBackgroundCornerRadius)
+        viewCorner(radius: PTAppBaseConfig.share.decorationBackgroundCornerRadius)
     }
     
     required public init?(coder: NSCoder) {

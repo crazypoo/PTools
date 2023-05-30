@@ -109,13 +109,13 @@ public class PTEyeTrackingManager: NSObject {
         super.init()
         if #available(iOS 12.0, *) {
             if PTEyeTrackingManager.isSupported {
-                self.dataManager = PTEyeTrackingDataManager()
-                self.sessionManager = PTEyeTrackingSessionManager()
-                if let sessionManager = self.sessionManager as? PTEyeTrackingSessionManager {
+                dataManager = PTEyeTrackingDataManager()
+                sessionManager = PTEyeTrackingSessionManager()
+                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
                     sessionManager.delegate = self
                 }
                 
-                NotificationCenter.default.addObserver(self, selector: #selector(self.rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
+                NotificationCenter.default.addObserver(self, selector: #selector(rotated), name: UIDevice.orientationDidChangeNotification, object: nil)
             } else {
                 PTNSLogConsole(Constants.ERR_MESSAGE)
             }
@@ -140,7 +140,7 @@ extension PTEyeTrackingManager {
     @objc public func run() {
         if #available(iOS 12.0, *) {
             if PTEyeTrackingManager.isSupported {
-                if let sessionManager = self.sessionManager as? PTEyeTrackingSessionManager {
+                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
                     sessionManager.run()
                 }
             }
@@ -155,7 +155,7 @@ extension PTEyeTrackingManager {
     @objc public func pause() {
         if #available(iOS 12.0, *) {
             if PTEyeTrackingManager.isSupported {
-                if let sessionManager = self.sessionManager as? PTEyeTrackingSessionManager {
+                if let sessionManager = sessionManager as? PTEyeTrackingSessionManager {
                     sessionManager.pause()
                 }
             }
@@ -176,7 +176,7 @@ extension PTEyeTrackingManager {
      - Parameter parent: 指定添加UILabel的父视图。
      */
     @objc public func showStatusView(parent: UIView) {
-        self.testUtility.showStatusView(parent: parent)
+        testUtility.showStatusView(parent: parent)
     }
     
     /**
@@ -190,21 +190,21 @@ extension PTEyeTrackingManager {
      
      */
     @objc public func showCursorView(parent: UIView) {
-        self.testUtility.showCursorView(parent: parent)
+        testUtility.showCursorView(parent: parent)
     }
     
     /**
      隐藏UILabel显示当前EyeTracking状态。
      */
     @objc public func hideStatusView() {
-        self.testUtility.hideStatusView()
+        testUtility.hideStatusView()
     }
     
     /**
      隐藏当前EyeTracking状态的CursorView。
      */
     @objc public func hideCursorView() {
-        self.testUtility.hideCursorView()
+        testUtility.hideCursorView()
     }
 }
 
@@ -213,16 +213,16 @@ extension PTEyeTrackingManager {
 extension PTEyeTrackingManager: PTEyeTrackingSessionManagerDelegate {
     
     func update(withFaceAnchor anchor: ARFaceAnchor) {
-        guard let dataManager = self.dataManager as? PTEyeTrackingDataManager else {
+        guard let dataManager = dataManager as? PTEyeTrackingDataManager else {
             return
         }
         
         let lookAtPoint = dataManager.calculateEyeLookAtPoint(anchor: anchor)
         
         //TODO: 重要的是顺序
-        self.findLookAt(with : lookAtPoint)
-        self.checkTrackingState(withFaceAnchor: anchor)
-        self.testUtility.updateTestViews(with: lookAtPoint)
+        findLookAt(with : lookAtPoint)
+        checkTrackingState(withFaceAnchor: anchor)
+        testUtility.updateTestViews(with: lookAtPoint)
     }
 }
 
@@ -235,15 +235,15 @@ extension PTEyeTrackingManager {
         switch UIDevice.current.orientation {
         case UIDeviceOrientation.portrait: fallthrough
         case UIDeviceOrientation.portraitUpsideDown:
-            self.screenSize = portraitScreenSize
+            screenSize = portraitScreenSize
         case UIDeviceOrientation.landscapeLeft: fallthrough
         case UIDeviceOrientation.landscapeRight:
-            self.screenSize = CGRect.init(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
+            screenSize = CGRect.init(x: 0, y: 0, width: portraitScreenSize.height, height: portraitScreenSize.width)
         default:break
         }
         
-        self.testUtility.screenSize = screenSize
-        self.testUtility.rotated()
+        testUtility.screenSize = screenSize
+        testUtility.rotated()
     }
 }
 
@@ -254,18 +254,18 @@ extension PTEyeTrackingManager {
     /// 发生您正在看的部分的事件。
     private func findLookAt(with lookAtPoint: CGPoint) {
         // 在无法追踪的情况下会被return。
-        if self.trackingState == .notTracked {
+        if trackingState == .notTracked {
             return
         }
         
-        guard let delegate = self.delegate else {
+        guard let delegate = delegate else {
             return
         }
         
         if delegate.responds(to: #selector(PTEyeTrackingDelegate.didChange(lookAtPoint:))) {
-            let x = max(-self.screenSize.width / 2, min(lookAtPoint.x, self.screenSize.width / 2))
-            let y = max(-self.screenSize.height / 2, min(lookAtPoint.y, self.screenSize.height / 2))
-            let point = CGPoint(x: self.screenSize.width / 2, y: self.screenSize.height / 2)
+            let x = max(-screenSize.width / 2, min(lookAtPoint.x, screenSize.width / 2))
+            let y = max(-screenSize.height / 2, min(lookAtPoint.y, screenSize.height / 2))
+            let point = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
             let transformedPoint = point.applying(CGAffineTransform(translationX: x, y: y))
             
             delegate.didChange(lookAtPoint: transformedPoint)
@@ -276,22 +276,22 @@ extension PTEyeTrackingManager {
     
     private func checkTrackingState(withFaceAnchor anchor: ARFaceAnchor) {
         let bufferSize = 6  // 每隔约60秒，约0.1秒。
-        self.eyeLTransformBuffer.append(anchor.leftEyeTransform)
-        self.eyeRTransformBuffer.append(anchor.rightEyeTransform)
-        self.eyeLTransformBuffer = Array(self.eyeLTransformBuffer.suffix(bufferSize))
-        self.eyeRTransformBuffer = Array(self.eyeRTransformBuffer.suffix(bufferSize))
+        eyeLTransformBuffer.append(anchor.leftEyeTransform)
+        eyeRTransformBuffer.append(anchor.rightEyeTransform)
+        eyeLTransformBuffer = Array(eyeLTransformBuffer.suffix(bufferSize))
+        eyeRTransformBuffer = Array(eyeRTransformBuffer.suffix(bufferSize))
         
-        guard self.eyeLTransformBuffer.count >= bufferSize && self.eyeRTransformBuffer.count >= bufferSize else { return }
-        guard let delegate = self.delegate else { return }
-        let isTrackingStopped = self.eyeLTransformBuffer.isAllEqual! && self.eyeRTransformBuffer.isAllEqual!
+        guard eyeLTransformBuffer.count >= bufferSize && eyeRTransformBuffer.count >= bufferSize else { return }
+        guard let delegate = delegate else { return }
+        let isTrackingStopped = eyeLTransformBuffer.isAllEqual! && eyeRTransformBuffer.isAllEqual!
         
-        if isTrackingStopped && self.trackingState == .tracking {
-            self.trackingState = .notTracked
+        if isTrackingStopped && trackingState == .tracking {
+            trackingState = .notTracked
             print(Constants.TRACHING_STOPPED)
             // 保持屏幕睡眠
             UIApplication.shared.isIdleTimerDisabled = false
-        } else if !isTrackingStopped && self.trackingState == .notTracked {
-            self.trackingState = .tracking
+        } else if !isTrackingStopped && trackingState == .notTracked {
+            trackingState = .tracking
             print(Constants.TRACHING_STARTED)
             // 为了不让画面变暗
             UIApplication.shared.isIdleTimerDisabled = true
@@ -300,7 +300,7 @@ extension PTEyeTrackingManager {
         }
         
         if delegate.responds(to: #selector(PTEyeTrackingDelegate.didChange(eyeTrackingState:))) {
-            delegate.didChange(eyeTrackingState: self.trackingState)
+            delegate.didChange(eyeTrackingState: trackingState)
         } else {
             PTNSLogConsole("didChange(eyeTrackingState:)  \(Constants.FUNC_NOT_DECLARED)")
         }

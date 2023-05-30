@@ -30,7 +30,7 @@ public enum PageControlPosition {
 /// LLCycleScrollViewDelegate
 @objc public protocol LLCycleScrollViewDelegate: AnyObject {
     
-    @objc func cycleScrollView(_ cycleScrollView: LLCycleScrollView, didSelectItemIndex index: NSInteger)
+    func cycleScrollView(_ cycleScrollView: LLCycleScrollView, didSelectItemIndex index: NSInteger)
     /// 开始拖拽的页码
     @objc optional func cycleScrollView(_ cycleScrollView: LLCycleScrollView, scrollFrom index: NSInteger)
     /// 拖到目的页码
@@ -38,8 +38,10 @@ public enum PageControlPosition {
     
     /// 滚动页内偏移量
     /// - Parameters:
+    ///   - cycleScrollView:
     ///   - index: 左边页面
     ///   - offSet: 偏移量大小
+    ///   - cycleScrollView:
     @objc optional func cycleScrollViewDidScroll(_ cycleScrollView: LLCycleScrollView, index: NSInteger, offSet: CGFloat)
 }
 
@@ -402,9 +404,11 @@ extension LLCycleScrollView {
     ///   - frame: Frame
     ///   - arrowLRImages: [LeftImage, RightImage]
     ///   - arrowLRPoint: [LeffImage.CGPoint, RightImage.CGPoint], default nil (center)
+    ///   - arrowLRFrame:
     ///   - imageURLPaths: URL Path Array
     ///   - titles: Title Array
     ///   - didSelectItemAtIndex: Closure
+    ///   - arrowLRFrame:
     /// - Returns: LLCycleScrollView
     public class func llCycleScrollViewWithArrow(_ frame: CGRect, arrowLRImages: [UIImage], arrowLRFrame: [CGRect]? = nil, imageURLPaths: Array<String>? = [], titles:Array<String>? = [], didSelectItemAtIndex: LLdidSelectItemAtIndexClosure? = nil) -> LLCycleScrollView {
         let llcycleScrollView: LLCycleScrollView = LLCycleScrollView.init(frame: frame)
@@ -435,9 +439,9 @@ extension LLCycleScrollView {
     
     func scrollViewReloadData()
     {
-        self.invalidateTimer()
-        self.collectionView.reloadData()
-        self.setupTimer()
+        invalidateTimer()
+        collectionView.reloadData()
+        setupTimer()
     }
 }
 
@@ -454,7 +458,7 @@ extension LLCycleScrollView {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.scrollsToTop = false
-        self.addSubview(collectionView)
+        addSubview(collectionView)
     }
     
     // MARK: 添加自定义箭头
@@ -489,7 +493,7 @@ extension LLCycleScrollView {
         leftImageView.isUserInteractionEnabled = true
         leftImageView.image = ali.first!
         leftImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(scrollByDirection(_:))))
-        self.addSubview(leftImageView)
+        addSubview(leftImageView)
         
         let rightImageView = UIImageView.init(frame: alf.last!)
         rightImageView.contentMode = .right
@@ -497,7 +501,7 @@ extension LLCycleScrollView {
         rightImageView.isUserInteractionEnabled = true
         rightImageView.image = ali.last!
         rightImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(scrollByDirection(_:))))
-        self.addSubview(rightImageView)
+        addSubview(rightImageView)
     }
     
     // MARK: 添加PageControl
@@ -518,15 +522,15 @@ extension LLCycleScrollView {
         
         if customPageControlStyle == .none {
             pageControl = UIPageControl.init()
-            pageControl?.numberOfPages = self.imagePaths.count
+            pageControl?.numberOfPages = imagePaths.count
         }
         
         if customPageControlStyle == .system {
             pageControl = UIPageControl.init()
             pageControl?.pageIndicatorTintColor = pageControlTintColor
             pageControl?.currentPageIndicatorTintColor = pageControlCurrentPageColor
-            pageControl?.numberOfPages = self.imagePaths.count
-            self.addSubview(pageControl!)
+            pageControl?.numberOfPages = imagePaths.count
+            addSubview(pageControl!)
             pageControl?.isHidden = false
         }
         
@@ -535,8 +539,8 @@ extension LLCycleScrollView {
             customPageControl?.tintColor = customPageControlTintColor
             (customPageControl as! LLFilledPageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! LLFilledPageControl).indicatorRadius = FillPageControlIndicatorRadius
-            (customPageControl as! LLFilledPageControl).pageCount = self.imagePaths.count
-            self.addSubview(customPageControl!)
+            (customPageControl as! LLFilledPageControl).pageCount = imagePaths.count
+            addSubview(customPageControl!)
         }
         
         if customPageControlStyle == .pill {
@@ -544,8 +548,8 @@ extension LLCycleScrollView {
             (customPageControl as! LLPillPageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! LLPillPageControl).activeTint = customPageControlTintColor
             (customPageControl as! LLPillPageControl).inactiveTint = customPageControlInActiveTintColor
-            (customPageControl as! LLPillPageControl).pageCount = self.imagePaths.count
-            self.addSubview(customPageControl!)
+            (customPageControl as! LLPillPageControl).pageCount = imagePaths.count
+            addSubview(customPageControl!)
         }
         
         if customPageControlStyle == .snake {
@@ -554,8 +558,8 @@ extension LLCycleScrollView {
             (customPageControl as! LLSnakePageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! LLSnakePageControl).indicatorRadius = FillPageControlIndicatorRadius
             (customPageControl as! LLSnakePageControl).inactiveTint = customPageControlInActiveTintColor
-            (customPageControl as! LLSnakePageControl).pageCount = self.imagePaths.count
-            self.addSubview(customPageControl!)
+            (customPageControl as! LLSnakePageControl).pageCount = imagePaths.count
+            addSubview(customPageControl!)
         }
         
         if customPageControlStyle == .image {
@@ -570,8 +574,8 @@ extension LLCycleScrollView {
                 (pageControl as? LLImagePageControl)?.dotInActiveImage = inActiveImage
             }
             
-            pageControl?.numberOfPages = self.imagePaths.count
-            self.addSubview(pageControl!)
+            pageControl?.numberOfPages = imagePaths.count
+            addSubview(pageControl!)
             pageControl?.isHidden = false
         }
         
@@ -668,7 +672,7 @@ extension LLCycleScrollView {
     /// 添加DTimer
     func setupTimer() {
         // 仅一张图不进行滚动操纵
-        if self.imagePaths.count <= 1 { return }
+        if imagePaths.count <= 1 { return }
         
         invalidateTimer()
         
@@ -736,8 +740,8 @@ extension LLCycleScrollView {
     ///
     /// - Parameter index: PageControl Index
     /// - Returns: Cell Index
-    func pageControlIndexWithCurrentCellIndex(index: NSInteger) -> (Int) {
-        return imagePaths.count == 0 ? 0 : Int(index % imagePaths.count)
+    func pageControlIndexWithCurrentCellIndex(index: NSInteger) -> Int {
+        imagePaths.count == 0 ? 0 : Int(index % imagePaths.count)
     }
     
     /// 滚动上一个/下一个
@@ -757,7 +761,7 @@ extension LLCycleScrollView {
 // MARK: UICollectionViewDelegate, UICollectionViewDataSource
 extension LLCycleScrollView: UICollectionViewDelegate, UICollectionViewDataSource {
     open func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return totalItemsCount == 0 ? 1:totalItemsCount
+        totalItemsCount == 0 ? 1 : totalItemsCount
     }
     
     open func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -906,7 +910,7 @@ extension LLCycleScrollView: UIScrollViewDelegate {
                         currentOffsetX = maxSwipeSize + currentOffsetX
                     }
                 }
-                if currentOffsetX >= CGFloat(self.imagePaths.count) * scrollView.frame.size.width && infiniteLoop{
+                if currentOffsetX >= CGFloat(imagePaths.count) * scrollView.frame.size.width && infiniteLoop{
                     collectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
                 }
                 progress = currentOffsetX / scrollView.frame.size.width
@@ -921,7 +925,7 @@ extension LLCycleScrollView: UIScrollViewDelegate {
                         currentOffsetY = maxSwipeSize + currentOffsetY
                     }
                 }
-                if currentOffsetY >= CGFloat(self.imagePaths.count) * scrollView.frame.size.height && infiniteLoop{
+                if currentOffsetY >= CGFloat(imagePaths.count) * scrollView.frame.size.height && infiniteLoop{
                     collectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
                 }
                 progress = currentOffsetY / scrollView.frame.size.height

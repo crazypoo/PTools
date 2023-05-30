@@ -30,7 +30,7 @@ public extension UIViewController {
         }
         
         logTag = tag!
-        self.swizzIt()
+        swizzIt()
     }
     
     class func undoSwizz() {
@@ -53,8 +53,8 @@ public extension UIViewController {
     
     // MARK: - Util Methods
     @objc fileprivate func swizzled_viewDidAppear(animated: Bool) {
-        self.printPath()
-        self.swizzled_viewDidAppear(animated: animated)
+        printPath()
+        swizzled_viewDidAppear(animated: animated)
     }
     
     private func logWithLevel(level: UInt) {
@@ -68,22 +68,22 @@ public extension UIViewController {
     
     private func printPath() {
         // no parent
-        if self.parent == nil {
-            self.logWithLevel(level: 0)
+        if parent == nil {
+            logWithLevel(level: 0)
             return
         }
         
         // tabbar
-        if (self.parent!.isKind(of: UITabBarController.classForCoder())) {
-            self.logWithLevel(level: 1)
+        if (parent!.isKind(of: UITabBarController.classForCoder())) {
+            logWithLevel(level: 1)
             return
         }
          
         // nav
-        if (self.parent!.isKind(of: UINavigationController.classForCoder())) {
-            let nav: UINavigationController = self.parent as! UINavigationController
+        if (parent!.isKind(of: UINavigationController.classForCoder())) {
+            let nav: UINavigationController = parent as! UINavigationController
             let integer = nav.viewControllers.firstIndex(of: self)
-            self.logWithLevel(level: UInt(integer!))
+            logWithLevel(level: UInt(integer!))
         }
     }
     

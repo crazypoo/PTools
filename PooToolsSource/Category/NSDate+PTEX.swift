@@ -29,18 +29,18 @@ public extension NSDate {
     //MARK: 判斷當前時間是否屬於白天
     /// 判斷當前時間是否屬於白天
     static func nowIsDayTime()->Bool {
-        return NSDate.nowTimeInTimePeriod(start: 6, end: 19)
+        NSDate.nowTimeInTimePeriod(start: 6, end: 19)
     }
     
     //MARK: 判斷當前時間是否屬於凌晨
     /// 判斷當前時間是否屬於凌晨
     static func nowIsEarlyMorning()->Bool {
-        return NSDate.nowTimeInTimePeriod(start: 0, end: 6)
+        NSDate.nowTimeInTimePeriod(start: 0, end: 6)
     }
     
     //MARK: 判斷當前時間是否屬於晚上
     /// 判斷當前時間是否屬於晚上
     static func nowIsNightTime()->Bool {
-        return NSDate.nowTimeInTimePeriod(start: 19, end: 23)
+        NSDate.nowTimeInTimePeriod(start: 19, end: 23)
     }
 }

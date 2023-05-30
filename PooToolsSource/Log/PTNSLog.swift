@@ -58,6 +58,7 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
 //MARK: - 自定义打印
 /// 自定义打印
 /// - Parameter msg: 打印的内容
+/// - Parameter isWriteLog:
 /// - Parameter file: 文件路径
 /// - Parameter line: 打印内容所在的 行
 /// - Parameter column: 打印内容所在的 列
@@ -208,7 +209,7 @@ public struct PTMems<T> {
     
     /// 获得变量的内存数据（字节数组格式）
     public static func memBytes(ofVal v: inout T) -> [UInt8] {
-        return _memBytes(ptr(ofVal: &v), MemoryLayout.stride(ofValue: v))
+        _memBytes(ptr(ofVal: &v), MemoryLayout.stride(ofValue: v))
     }
     
     /// 获得引用所指向的内存数据（字节数组格式）
@@ -219,6 +220,7 @@ public struct PTMems<T> {
     
     /// 获得变量的内存数据（字符串格式）
     ///
+    /// - Parameter v:
     /// - Parameter alignment: 决定了多少个字节为一组
     public static func memStr(ofVal v: inout T, alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofVal: &v)
@@ -228,6 +230,7 @@ public struct PTMems<T> {
     
     /// 获得引用所指向的内存数据（字符串格式）
     ///
+    /// - Parameter v:
     /// - Parameter alignment: 决定了多少个字节为一组
     public static func memStr(ofRef v: T, alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofRef: v)
@@ -237,7 +240,7 @@ public struct PTMems<T> {
     
     /// 获得变量的内存地址
     public static func ptr(ofVal v: inout T) -> UnsafeRawPointer {
-        return MemoryLayout.size(ofValue: v) == 0 ? _EMPTY_PTR : withUnsafePointer(to: &v) {
+        MemoryLayout.size(ofValue: v) == 0 ? _EMPTY_PTR : withUnsafePointer(to: &v) {
             UnsafeRawPointer($0)
         }
     }
@@ -261,12 +264,12 @@ public struct PTMems<T> {
     
     /// 获得变量所占用的内存大小
     public static func size(ofVal v: inout T) -> Int {
-        return MemoryLayout.size(ofValue: v) > 0 ? MemoryLayout.stride(ofValue: v) : 0
+        MemoryLayout.size(ofValue: v) > 0 ? MemoryLayout.stride(ofValue: v) : 0
     }
     
     /// 获得引用所指向内存的大小
     public static func size(ofRef v: T) -> Int {
-        return malloc_size(ptr(ofRef: v))
+        malloc_size(ptr(ofRef: v))
     }
 }
 
@@ -291,11 +294,15 @@ public struct PTMemsWrapper<Base> {
 public protocol PTMemsCompatible {}
 public extension PTMemsCompatible {
     static var mems: PTMemsWrapper<Self>.Type {
-        get { return PTMemsWrapper<Self>.self }
+        get {
+            PTMemsWrapper<Self>.self
+        }
         set {}
     }
     var mems: PTMemsWrapper<Self> {
-        get { return PTMemsWrapper(self) }
+        get {
+            PTMemsWrapper(self)
+        }
         set {}
     }
 }

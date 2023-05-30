@@ -25,15 +25,17 @@ public extension Character {
     //MARK: 检查标量是否将合并到emoji中
     /// 检查标量是否将合并到emoji中
     var isCombinedIntoEmoji: Bool {
-        return unicodeScalars.count > 1 &&
-            unicodeScalars.contains { $0.properties.isJoinControl || $0.properties.isVariationSelector }
+        unicodeScalars.count > 1 &&
+                unicodeScalars.contains {
+                    $0.properties.isJoinControl || $0.properties.isVariationSelector
+                }
     }
 
     //MARK: 是否为emoji表情
     /// 是否为emoji表情
     /// - Note: http://stackoverflow.com/questions/30757193/find-out-if-character-in-string-is-emoji
     var isEmoji: Bool {
-        return isSimpleEmoji || isCombinedIntoEmoji
+        isSimpleEmoji || isCombinedIntoEmoji
     }
 }
 
@@ -42,12 +44,14 @@ public extension PTPOP where Base == Character {
 
     //MARK: Character转String
     ///Character转String
-    var charToString: String { return String(self.base) }
+    var charToString: String {
+        String(base)
+    }
 
     //MARK: Character转Int
     ///Character转Int
     var charToInt: Int? {
-        return Int(String(self.base))
+        Int(String(base))
     }
 }
 

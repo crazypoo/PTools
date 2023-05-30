@@ -24,7 +24,7 @@ open class LLSnakePageControl: UIView {
         }
     }
     open var currentPage: Int {
-        return Int(round(progress))
+        Int(round(progress))
     }
     
     
@@ -37,7 +37,7 @@ open class LLSnakePageControl: UIView {
     }
     open var inactiveTint: UIColor = UIColor(white: 1, alpha: 0.3) {
         didSet {
-            inactiveLayers.forEach() { $0.backgroundColor = inactiveTint.cgColor }
+            inactiveLayers.forEach { $0.backgroundColor = inactiveTint.cgColor }
         }
     }
     open var indicatorPadding: CGFloat = 10 {
@@ -52,15 +52,15 @@ open class LLSnakePageControl: UIView {
     }
     
     fileprivate var indicatorDiameter: CGFloat {
-        return indicatorRadius * 2
+        indicatorRadius * 2
     }
     fileprivate var inactiveLayers = [CALayer]()
     fileprivate lazy var activeLayer: CALayer = { [unowned self] in
         let layer = CALayer()
         layer.frame = CGRect(origin: CGPoint.zero,
-                             size: CGSize(width: self.indicatorDiameter, height: self.indicatorDiameter))
-        layer.backgroundColor = self.activeTint.cgColor
-        layer.cornerRadius = self.indicatorRadius
+                             size: CGSize(width: indicatorDiameter, height: indicatorDiameter))
+        layer.backgroundColor = activeTint.cgColor
+        layer.cornerRadius = indicatorRadius
         layer.actions = [
             "bounds": NSNull(),
             "frame": NSNull(),
@@ -86,20 +86,20 @@ open class LLSnakePageControl: UIView {
         // no need to update
         guard count != inactiveLayers.count else { return }
         // reset current layout
-        inactiveLayers.forEach() { $0.removeFromSuperlayer() }
+        inactiveLayers.forEach { $0.removeFromSuperlayer() }
         inactiveLayers = [CALayer]()
         // add layers for new page count
-        inactiveLayers = stride(from: 0, to:count, by:1).map() { _ in
+        inactiveLayers = stride(from: 0, to:count, by:1).map { _ in
             let layer = CALayer()
-            layer.backgroundColor = self.inactiveTint.cgColor
+            layer.backgroundColor = inactiveTint.cgColor
             self.layer.addSublayer(layer)
             return layer
         }
         layoutInactivePageIndicators(inactiveLayers)
         // ensure active page indicator is on top
-        self.layer.addSublayer(activeLayer)
+        layer.addSublayer(activeLayer)
         layoutActivePageIndicator(progress)
-        self.invalidateIntrinsicContentSize()
+        invalidateIntrinsicContentSize()
     }
     
     
@@ -120,23 +120,23 @@ open class LLSnakePageControl: UIView {
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
         let layerDiameter = indicatorRadius * 2
         var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
-        layers.forEach() { layer in
-            layer.cornerRadius = self.indicatorRadius
+        layers.forEach { layer in
+            layer.cornerRadius = indicatorRadius
             layer.frame = layerFrame
             layerFrame.origin.x += layerDiameter + indicatorPadding
         }
         // 布局
-        let oldFrame = self.frame
+        let oldFrame = frame
         let width = CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding
-        self.frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
+        frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
     }
     
     override open var intrinsicContentSize: CGSize {
-        return sizeThatFits(CGSize.zero)
+        sizeThatFits(CGSize.zero)
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        return CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
-                      height: indicatorDiameter)
+        CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
+                height: indicatorDiameter)
     }
 }

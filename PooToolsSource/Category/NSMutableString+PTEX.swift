@@ -23,7 +23,7 @@ public extension NSMutableString {
         }
         let range = NSMakeRange(openTagRange.location, closeTagRange.location - openTagRange.location + 1)
         let tag = substring(with: range).nsString
-        self.replaceCharacters(in: range, with: "")
+        replaceCharacters(in: range, with: "")
         let isEndTag = tag.range(of: "<").length == 2
         if isEndTag {
             let openTag = tag.replacingOccurrences(of: "</", with: "<")

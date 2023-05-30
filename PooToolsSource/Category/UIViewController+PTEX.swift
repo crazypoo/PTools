@@ -92,7 +92,7 @@ public extension UIViewController {
     //MARK: 檢查當前的ViewController是Push還是Pop
     ///檢查當前的ViewController是Push還是Pop
     func checkVCIsPresenting() ->Bool {
-        let vcs = self.navigationController?.viewControllers
+        let vcs = navigationController?.viewControllers
         if (vcs?.count ?? 0) > 1 {
             if vcs![vcs!.count - 1] == self {
                 return false
@@ -106,14 +106,14 @@ public extension UIViewController {
     //MARK: ViewController退出
     ///ViewController退出
     func viewDismiss(dismissBolck:(()->Void)? = nil) {
-        if self.presentingViewController != nil {
-            self.dismiss(animated: true) {
+        if presentingViewController != nil {
+            dismiss(animated: true) {
                 if dismissBolck != nil {
                     dismissBolck!()
                 }
             }
         } else {
-            self.navigationController?.popViewController(animated: true) {
+            navigationController?.popViewController(animated: true) {
                 if dismissBolck != nil {
                     dismissBolck!()
                 }
@@ -124,10 +124,10 @@ public extension UIViewController {
     //MARK: Pop to ViewController
     ///Pop to ViewController
     func popToViewController(vcType:AnyClass) -> Bool {
-        guard let childrens = self.navigationController?.children else { return false }
+        guard let childrens = navigationController?.children else { return false }
         for thisVC in childrens {
             if thisVC.isKind(of: vcType) {
-                self.navigationController?.popToViewController(thisVC, animated: true)
+                navigationController?.popToViewController(thisVC, animated: true)
                 return true
             }
         }
@@ -296,6 +296,6 @@ public extension UIViewController {
 
 extension UIViewController:UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
+        .none
     }
 }

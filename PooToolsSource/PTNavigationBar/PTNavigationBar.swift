@@ -23,29 +23,29 @@ open class PTNavigationBar: UIView {
     
     open override var backgroundColor: UIColor? {
         didSet {
-            if self.jx_navEnableSmoothFromSystemNavBar {
-                AppWindows?.backgroundColor = self.backgroundColor
+            if jx_navEnableSmoothFromSystemNavBar {
+                AppWindows?.backgroundColor = backgroundColor
             }
             
             var components:[CGFloat] = [0,0,0]
             let rgbColorSpace = CGColorSpaceCreateDeviceRGB()
             var resultingPixel:[Int] = [0,0,0,0]
             let bitmap:CGContext = CGContext(data: &resultingPixel , width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: rgbColorSpace, bitmapInfo: CGImageAlphaInfo.noneSkipLast.rawValue)!
-            bitmap.setFillColor(self.backgroundColor?.cgColor ?? UIColor.clear.cgColor)
+            bitmap.setFillColor(backgroundColor?.cgColor ?? UIColor.clear.cgColor)
             bitmap.fill(CGRect(x: 0, y: 0, width: 1, height: 1))
             for i in 0...components.count {
                 components[i] = CGFloat(resultingPixel[i] / 255)
             }
-            self.jx_backgroundColorComponents = components
+            jx_backgroundColorComponents = components
         }
     }
     
     /// 导航栏背景渐变的CAGradientLayer
     public var jx_gradientLayer:CAGradientLayer? {
         get {
-            return nil
+            nil
         } set {
-            self.jx_gradientLayer?.removeFromSuperlayer()
+            jx_gradientLayer?.removeFromSuperlayer()
             
             PTGCDManager.gcdAfter(time: 0.1) {
                 if newValue != nil {
@@ -62,8 +62,8 @@ open class PTNavigationBar: UIView {
     /// 设置左右Button的大小(宽高相等)
     public var jx_itemSize:CGFloat = PTNavDefalutItemSize {
         didSet {
-            self.shouldRefLayou = true
-            self.relayoutSubviews()
+            shouldRefLayou = true
+            relayoutSubviews()
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.reloadInputViews()
             }
@@ -72,22 +72,22 @@ open class PTNavigationBar: UIView {
     /// 设置Item之间的间距
     public var jx_itemMargin:CGFloat = PTNavDefalutItemMargin {
         didSet {
-            self.shouldRefLayou = true
-            self.relayoutSubviews()
+            shouldRefLayou = true
+            relayoutSubviews()
         }
     }
     ///分割线的高度，默认为1
     public var jx_lineViewHeight:CGFloat = 0.5 {
         didSet {
-            self.shouldRefLayou = true
-            self.relayoutSubviews()
+            shouldRefLayou = true
+            relayoutSubviews()
         }
     }
 
     /// 导航栏背景ImageView
     public var jx_backImage:UIImage? {
         didSet {
-            self.jx_backImageView.image = self.jx_backImage
+            jx_backImageView.image = jx_backImage
         }
     }
 
@@ -181,7 +181,7 @@ open class PTNavigationBar: UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.initNavBar()
+        initNavBar()
     }
     
     required public init?(coder: NSCoder) {
@@ -191,135 +191,135 @@ open class PTNavigationBar: UIView {
     open override func layoutSubviews() {
         super.layoutSubviews()
         
-        if !self.shouldRelayoutSubviews {
+        if !shouldRelayoutSubviews {
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.shouldRelayoutSubviews = true
                 self.shouldRefLayou = true
                 self.relayoutSubviews()
             }
         } else {
-            self.relayoutSubviews()
+            relayoutSubviews()
         }
     }
     
     private func initNavBar() {
-        self.backgroundColor = PTNavDefalutBackColor
-        self.addSubviews([self.jx_backImageView,self.jx_leftBtn,self.jx_rightBtn,self.jx_subRightBtn,self.jx_subLeftBtn,self.jx_titleLabel,self.jx_titleView,self.jx_lineView])
+        backgroundColor = PTNavDefalutBackColor
+        addSubviews([jx_backImageView, jx_leftBtn, jx_rightBtn, jx_subRightBtn, jx_subLeftBtn, jx_titleLabel, jx_titleView, jx_lineView])
     }
     
     private func relayoutSubviews() {
-        if !self.shouldRelayoutSubviews {
-            if self.jx_leftBtn.frame == .zero {
-                self.jx_leftBtn.pt.jx_width = self.getInitItemBtnWidth(barItemBtn: self.jx_leftBtn)
-                self.jx_leftBtn.pt.jx_height = self.getInitItemBtnHeight(barItemBtn: self.jx_leftBtn)
+        if !shouldRelayoutSubviews {
+            if jx_leftBtn.frame == .zero {
+                jx_leftBtn.pt.jx_width = getInitItemBtnWidth(barItemBtn: jx_leftBtn)
+                jx_leftBtn.pt.jx_height = getInitItemBtnHeight(barItemBtn: jx_leftBtn)
             }
             
-            if self.jx_rightBtn.frame == .zero {
-                self.jx_rightBtn.pt.jx_width = self.getInitItemBtnWidth(barItemBtn: self.jx_rightBtn)
-                self.jx_rightBtn.pt.jx_height = self.getInitItemBtnHeight(barItemBtn: self.jx_rightBtn)
+            if jx_rightBtn.frame == .zero {
+                jx_rightBtn.pt.jx_width = getInitItemBtnWidth(barItemBtn: jx_rightBtn)
+                jx_rightBtn.pt.jx_height = getInitItemBtnHeight(barItemBtn: jx_rightBtn)
             }
             return
         }
         
         let centerOffet = CGFloat.statusBarHeight()
         var leftBtnSize:CGSize = .zero
-        let leftBtnFinalHeight = self.getItemBtnHeight(barItemBtn: self.jx_leftBtn)
-        let leftBtnFinalwidth = self.getItemBtnWidth(barItemBtn: self.jx_leftBtn)
-        if self.jx_leftBtn.currentImage != nil || !(self.jx_leftBtn.currentTitle ?? "").stringIsEmpty() || !(self.jx_leftBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || self.jx_leftBtn.jx_customView != nil {
+        let leftBtnFinalHeight = getItemBtnHeight(barItemBtn: jx_leftBtn)
+        let leftBtnFinalwidth = getItemBtnWidth(barItemBtn: jx_leftBtn)
+        if jx_leftBtn.currentImage != nil || !(jx_leftBtn.currentTitle ?? "").stringIsEmpty() || !(jx_leftBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || jx_leftBtn.jx_customView != nil {
             leftBtnSize = CGSize(width: leftBtnFinalwidth, height: leftBtnFinalHeight)
         }
-        var leftBtnLeftMargin = self.jx_itemMargin
-        if self.jx_leftBtn.jx_fixMarginLeft >= 0 {
-            leftBtnLeftMargin = self.jx_leftBtn.jx_fixMarginLeft
+        var leftBtnLeftMargin = jx_itemMargin
+        if jx_leftBtn.jx_fixMarginLeft >= 0 {
+            leftBtnLeftMargin = jx_leftBtn.jx_fixMarginLeft
         }
-        self.jx_leftBtn.frame = CGRect(x: leftBtnLeftMargin + PTHorizontaledSafeArea, y: (self.pt.jx_height - leftBtnFinalHeight + centerOffet) / 2, width: leftBtnSize.width, height: leftBtnSize.height)
-        self.handleItemBtnFrame(barItemBtn: self.jx_leftBtn)
+        jx_leftBtn.frame = CGRect(x: leftBtnLeftMargin + PTHorizontaledSafeArea, y: (pt.jx_height - leftBtnFinalHeight + centerOffet) / 2, width: leftBtnSize.width, height: leftBtnSize.height)
+        handleItemBtnFrame(barItemBtn: jx_leftBtn)
         
         var rightBtnSize:CGSize = .zero
-        let rightBtnFinalHeight = self.getItemBtnHeight(barItemBtn: self.jx_rightBtn)
-        let rightBtnFinalwidth = self.getItemBtnWidth(barItemBtn: self.jx_rightBtn)
-        if self.jx_rightBtn.currentImage != nil || !(self.jx_rightBtn.currentTitle ?? "").stringIsEmpty() || !(self.jx_rightBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || self.jx_rightBtn.jx_customView != nil {
+        let rightBtnFinalHeight = getItemBtnHeight(barItemBtn: jx_rightBtn)
+        let rightBtnFinalwidth = getItemBtnWidth(barItemBtn: jx_rightBtn)
+        if jx_rightBtn.currentImage != nil || !(jx_rightBtn.currentTitle ?? "").stringIsEmpty() || !(jx_rightBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || jx_rightBtn.jx_customView != nil {
             rightBtnSize = CGSize(width: rightBtnFinalwidth, height: rightBtnFinalHeight)
         }
-        var rightBtnRightMargin = self.jx_itemMargin
-        if self.jx_rightBtn.jx_fixMarginRight >= 0 {
-            rightBtnRightMargin = self.jx_rightBtn.jx_fixMarginRight
+        var rightBtnRightMargin = jx_itemMargin
+        if jx_rightBtn.jx_fixMarginRight >= 0 {
+            rightBtnRightMargin = jx_rightBtn.jx_fixMarginRight
         }
-        self.jx_rightBtn.frame = CGRect(x: self.pt.jx_width - rightBtnRightMargin - rightBtnSize.width - PTHorizontaledSafeArea, y: (self.pt.jx_height - rightBtnFinalHeight + centerOffet) / 2, width: rightBtnSize.width, height: rightBtnSize.height)
-        self.handleItemBtnFrame(barItemBtn: self.jx_rightBtn)
+        jx_rightBtn.frame = CGRect(x: pt.jx_width - rightBtnRightMargin - rightBtnSize.width - PTHorizontaledSafeArea, y: (pt.jx_height - rightBtnFinalHeight + centerOffet) / 2, width: rightBtnSize.width, height: rightBtnSize.height)
+        handleItemBtnFrame(barItemBtn: jx_rightBtn)
 
-        let subRightBtnFinalHeight = self.getItemBtnHeight(barItemBtn: self.jx_subRightBtn)
-        let subRightBtnFinalWidth = self.getItemBtnWidth(barItemBtn: self.jx_subRightBtn)
-        var subRightBtnRightMargin = self.jx_itemMargin
-        if self.jx_rightBtn.jx_fixMarginLeft >= 0 {
-            subRightBtnRightMargin = self.jx_rightBtn.jx_fixMarginLeft
+        let subRightBtnFinalHeight = getItemBtnHeight(barItemBtn: jx_subRightBtn)
+        let subRightBtnFinalWidth = getItemBtnWidth(barItemBtn: jx_subRightBtn)
+        var subRightBtnRightMargin = jx_itemMargin
+        if jx_rightBtn.jx_fixMarginLeft >= 0 {
+            subRightBtnRightMargin = jx_rightBtn.jx_fixMarginLeft
         }
 
-        if self.jx_subRightBtn.jx_fixMarginRight >= 0 {
-            subRightBtnRightMargin = self.jx_rightBtn.jx_fixMarginRight
+        if jx_subRightBtn.jx_fixMarginRight >= 0 {
+            subRightBtnRightMargin = jx_rightBtn.jx_fixMarginRight
         }
-        let subRightBtnRightFinalMargin = self.jx_rightBtn.pt.jx_width > 0 ? subRightBtnRightMargin : 0
-        if self.jx_subRightBtn.currentImage != nil || !(self.jx_subRightBtn.currentTitle ?? "").stringIsEmpty() || !(self.jx_subRightBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || self.jx_subRightBtn.jx_customView != nil {
-            self.jx_subRightBtn.frame = CGRect(x: CGRectGetMinX(self.jx_rightBtn.frame) - subRightBtnRightFinalMargin, y: self.jx_rightBtn.pt.jx_y, width: 0, height: 0)
+        let subRightBtnRightFinalMargin = jx_rightBtn.pt.jx_width > 0 ? subRightBtnRightMargin : 0
+        if jx_subRightBtn.currentImage != nil || !(jx_subRightBtn.currentTitle ?? "").stringIsEmpty() || !(jx_subRightBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || jx_subRightBtn.jx_customView != nil {
+            jx_subRightBtn.frame = CGRect(x: CGRectGetMinX(jx_rightBtn.frame) - subRightBtnRightFinalMargin, y: jx_rightBtn.pt.jx_y, width: 0, height: 0)
         } else {
-            self.jx_subRightBtn.frame = CGRect(x: CGRectGetMinX(self.jx_rightBtn.frame) - subRightBtnRightFinalMargin - subRightBtnFinalWidth, y: (self.pt.jx_height - subRightBtnFinalHeight + centerOffet) / 2, width: subRightBtnFinalWidth, height: subRightBtnFinalHeight)
+            jx_subRightBtn.frame = CGRect(x: CGRectGetMinX(jx_rightBtn.frame) - subRightBtnRightFinalMargin - subRightBtnFinalWidth, y: (pt.jx_height - subRightBtnFinalHeight + centerOffet) / 2, width: subRightBtnFinalWidth, height: subRightBtnFinalHeight)
         }
-        self.handleItemBtnFrame(barItemBtn: self.jx_subRightBtn)
+        handleItemBtnFrame(barItemBtn: jx_subRightBtn)
         
-        let subleftBtnFinalHeight = self.getItemBtnHeight(barItemBtn: self.jx_subLeftBtn)
-        let subleftBtnFinalWidth = self.getItemBtnWidth(barItemBtn: self.jx_subLeftBtn)
-        var subLeftBtnLeftMargin = self.jx_itemMargin
-        if self.jx_leftBtn.jx_fixMarginRight >= 0 {
-            subLeftBtnLeftMargin = self.jx_leftBtn.jx_fixMarginRight
+        let subleftBtnFinalHeight = getItemBtnHeight(barItemBtn: jx_subLeftBtn)
+        let subleftBtnFinalWidth = getItemBtnWidth(barItemBtn: jx_subLeftBtn)
+        var subLeftBtnLeftMargin = jx_itemMargin
+        if jx_leftBtn.jx_fixMarginRight >= 0 {
+            subLeftBtnLeftMargin = jx_leftBtn.jx_fixMarginRight
         }
 
-        if self.jx_subLeftBtn.jx_fixMarginLeft >= 0 {
-            subLeftBtnLeftMargin = self.jx_rightBtn.jx_fixMarginLeft
+        if jx_subLeftBtn.jx_fixMarginLeft >= 0 {
+            subLeftBtnLeftMargin = jx_rightBtn.jx_fixMarginLeft
         }
-        let subLeftBtnLeftFinalMargin = self.jx_leftBtn.pt.jx_width > 0 ? subLeftBtnLeftMargin : 0
-        if self.jx_subLeftBtn.currentImage != nil || !(self.jx_subLeftBtn.currentTitle ?? "").stringIsEmpty() || !(self.jx_subLeftBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || self.jx_subLeftBtn.jx_customView != nil {
-            self.jx_subLeftBtn.frame = CGRect(x: CGRectGetMinX(self.jx_leftBtn.frame) - subLeftBtnLeftFinalMargin, y: self.jx_leftBtn.pt.jx_y, width: 0, height: 0)
+        let subLeftBtnLeftFinalMargin = jx_leftBtn.pt.jx_width > 0 ? subLeftBtnLeftMargin : 0
+        if jx_subLeftBtn.currentImage != nil || !(jx_subLeftBtn.currentTitle ?? "").stringIsEmpty() || !(jx_subLeftBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() || jx_subLeftBtn.jx_customView != nil {
+            jx_subLeftBtn.frame = CGRect(x: CGRectGetMinX(jx_leftBtn.frame) - subLeftBtnLeftFinalMargin, y: jx_leftBtn.pt.jx_y, width: 0, height: 0)
         } else {
-            self.jx_subLeftBtn.frame = CGRect(x: CGRectGetMinX(self.jx_leftBtn.frame) + subLeftBtnLeftFinalMargin, y: (self.pt.jx_height - subleftBtnFinalHeight + centerOffet) / 2, width: subleftBtnFinalWidth, height: subleftBtnFinalHeight)
+            jx_subLeftBtn.frame = CGRect(x: CGRectGetMinX(jx_leftBtn.frame) + subLeftBtnLeftFinalMargin, y: (pt.jx_height - subleftBtnFinalHeight + centerOffet) / 2, width: subleftBtnFinalWidth, height: subleftBtnFinalHeight)
         }
-        self.handleItemBtnFrame(barItemBtn: self.jx_subLeftBtn)
+        handleItemBtnFrame(barItemBtn: jx_subLeftBtn)
 
-        var leftBtnFakeWidth = CGRectGetMaxX(self.jx_subLeftBtn.frame)
-        var titleLabelLeftMargin = self.jx_itemMargin
-        if self.jx_subLeftBtn.jx_fixMarginRight >= 0 {
-            titleLabelLeftMargin = self.jx_subLeftBtn.jx_fixMarginRight
+        var leftBtnFakeWidth = CGRectGetMaxX(jx_subLeftBtn.frame)
+        var titleLabelLeftMargin = jx_itemMargin
+        if jx_subLeftBtn.jx_fixMarginRight >= 0 {
+            titleLabelLeftMargin = jx_subLeftBtn.jx_fixMarginRight
         }
         
-        var titleLabelRightMargin = self.jx_itemMargin
-        if self.jx_subRightBtn.jx_fixMarginLeft >= 0 {
-            titleLabelRightMargin = self.jx_subRightBtn.jx_fixMarginLeft
+        var titleLabelRightMargin = jx_itemMargin
+        if jx_subRightBtn.jx_fixMarginLeft >= 0 {
+            titleLabelRightMargin = jx_subRightBtn.jx_fixMarginLeft
         }
-        if self.jx_subLeftBtn.pt.jx_width > 0 {
+        if jx_subLeftBtn.pt.jx_width > 0 {
             leftBtnFakeWidth += titleLabelLeftMargin
         }
         
-        var rightBtnFakeWidth = self.pt.jx_width - self.jx_subRightBtn.pt.jx_x
-        if self.jx_subRightBtn.pt.jx_width > 0 {
+        var rightBtnFakeWidth = pt.jx_width - jx_subRightBtn.pt.jx_x
+        if jx_subRightBtn.pt.jx_width > 0 {
             rightBtnFakeWidth += titleLabelRightMargin
         }
 
         let maxItemWidth = max(leftBtnFakeWidth, rightBtnFakeWidth)
-        self.jx_titleLabel.frame = CGRect(x: maxItemWidth, y: centerOffet, width: self.pt.jx_width - maxItemWidth * 2, height: self.pt.jx_height - centerOffet)
-        self.jx_titleView.frame = self.jx_titleLabel.frame
-        self.jx_lineView.frame = CGRect(x: 0, y: self.pt.jx_height - self.jx_lineViewHeight, width: self.pt.jx_width, height: self.jx_lineViewHeight)
-        self.jx_backImageView.frame = self.frame
-        self.shouldRefLayou = false
+        self.jx_titleLabel.frame = CGRect(x: maxItemWidth, y: centerOffet, width: pt.jx_width - maxItemWidth * 2, height: pt.jx_height - centerOffet)
+        jx_titleView.frame = jx_titleLabel.frame
+        jx_lineView.frame = CGRect(x: 0, y: pt.jx_height - jx_lineViewHeight, width: pt.jx_width, height: jx_lineViewHeight)
+        jx_backImageView.frame = frame
+        shouldRefLayou = false
         
-        if self.jx_gradientLayer != nil {
-            self.jx_gradientLayer?.frame = self.bounds
+        if jx_gradientLayer != nil {
+            jx_gradientLayer?.frame = bounds
         }
         
-        if self.jx_customNavBar != nil {
-            self.jx_customNavBar?.frame = self.bounds
+        if jx_customNavBar != nil {
+            jx_customNavBar?.frame = bounds
         }
 
-        if self.jx_customTitleView != nil {
-            self.jx_customTitleView?.frame = self.bounds
+        if jx_customTitleView != nil {
+            jx_customTitleView?.frame = bounds
         }
 
     }
@@ -329,7 +329,7 @@ open class PTNavigationBar: UIView {
         if barItemBtn.jx_fixHeight >= 0 {
             return barItemBtn.jx_fixHeight
         }
-        return self.jx_itemSize
+        return jx_itemSize
     }
     
     //MARK: 获取ItemBtn的初始宽度
@@ -337,7 +337,7 @@ open class PTNavigationBar: UIView {
         if barItemBtn.jx_fixHeight >= 0 {
             return barItemBtn.jx_fixWidth
         }
-        return self.jx_itemSize
+        return jx_itemSize
     }
 
     //MARK: 获取ItemBtn最终高度
@@ -347,9 +347,9 @@ open class PTNavigationBar: UIView {
         }
         
         if !(barItemBtn.currentTitle ?? "").stringIsEmpty() || !(barItemBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() {
-            return self.jx_itemSize + barItemBtn.jx_textAttachHeight
+            return jx_itemSize + barItemBtn.jx_textAttachHeight
         }
-        return self.jx_itemSize
+        return jx_itemSize
     }
 
     //MARK: 获取ItemBtn的最终宽度
@@ -373,7 +373,7 @@ open class PTNavigationBar: UIView {
             btnW += barItemBtn.jx_textAttachWidth + 5
             return btnW
         }
-        return self.jx_itemSize
+        return jx_itemSize
     }
     
     //MARK: 拦截处理ItemBtn的frame
@@ -383,7 +383,7 @@ open class PTNavigationBar: UIView {
             barItemBtn.frame = barItemBtn.frame
         }
         
-        if let frameUpdateBlock = barItemBtn.value(forKey: "zx_frameUpdateBlock") as? ((CGRect) -> Void) {
+        if let frameUpdateBlock = barItemBtn.value(forKey: "zx_frameUpdateBlock") as? (CGRect) -> Void {
                 frameUpdateBlock(barItemBtn.frame)
         }
         if barItemBtn.jx_setCornerRadiusRounded! {
@@ -396,12 +396,12 @@ open class PTNavigationBar: UIView {
     
     //MARK: 刷新导航栏titleView布局
     private func refNavBar() {
-        self.jx_titleLabel.pt.jx_width = CGRectGetMinX(self.jx_rightBtn.frame) - self.jx_itemMargin * 3 - self.jx_itemSize
-        self.jx_titleView.pt.jx_width = self.jx_titleLabel.pt.jx_width
+        jx_titleLabel.pt.jx_width = CGRectGetMinX(jx_rightBtn.frame) - jx_itemMargin * 3 - jx_itemSize
+        jx_titleView.pt.jx_width = jx_titleLabel.pt.jx_width
     }
     
     public func setMultiTitle(title:String,subTitle:String) {
-        self.setMultiTitle(title: title, subTitle: subTitle, subTitleFont: .appfont(size: PTNavDefalutSubTitleSize), subTitleTextColor: self.jx_titleLabel.textColor)
+        self.setMultiTitle(title: title, subTitle: subTitle, subTitleFont: .appfont(size: PTNavDefalutSubTitleSize), subTitleTextColor: jx_titleLabel.textColor)
     }
     
     public func setMultiTitle(title:String,subTitle:String,subTitleFont:UIFont,subTitleTextColor:UIColor) {
@@ -411,6 +411,6 @@ open class PTNavigationBar: UIView {
         \("\(subTitle)",.font(subTitleFont),.foreground(subTitleTextColor))
         """),.paragraph(.alignment(.center)))
         """
-        self.jx_titleLabel.attributed.text = att
+        jx_titleLabel.attributed.text = att
     }
 }

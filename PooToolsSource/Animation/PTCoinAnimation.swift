@@ -36,7 +36,7 @@ public class PTCoinAnimation: UIView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubviews([self.showLabel,self.backgroundView])
+        addSubviews([showLabel, backgroundView])
     }
     
     required init?(coder: NSCoder) {
@@ -45,24 +45,24 @@ public class PTCoinAnimation: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.showLabel.snp.makeConstraints { make in
+        showLabel.snp.makeConstraints { make in
             make.centerX.centerY.equalToSuperview()
         }
         
-        self.backgroundView.snp.makeConstraints { make in
+        backgroundView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
-        self.emitterLayer.frame = CGRect(x: 0, y: 0, width: self.showLabel.frame.size.width, height: self.showLabel.frame.size.height)
-        self.showLabel.layer.addSublayer(self.emitterLayer)
-        self.emitterLayer.emitterShape = .circle
-        self.emitterLayer.emitterMode = .outline
-        self.emitterLayer.emitterPosition = CGPoint(x: self.showLabel.frame.size.width / 2, y: self.showLabel.frame.size.height / 2)
-        self.emitterLayer.emitterSize = CGSize(width: 20, height: 20)
+        emitterLayer.frame = CGRect(x: 0, y: 0, width: showLabel.frame.size.width, height: showLabel.frame.size.height)
+        showLabel.layer.addSublayer(emitterLayer)
+        emitterLayer.emitterShape = .circle
+        emitterLayer.emitterMode = .outline
+        emitterLayer.emitterPosition = CGPoint(x: showLabel.frame.size.width / 2, y: showLabel.frame.size.height / 2)
+        emitterLayer.emitterSize = CGSize(width: 20, height: 20)
         
         let cell = CAEmitterCell()
         cell.name = "zanShape"
-        cell.contents = self.iconImage.cgImage
+        cell.contents = iconImage.cgImage
         cell.alphaSpeed = -0.5
         cell.lifetime = 3
         cell.birthRate = 0
@@ -72,12 +72,12 @@ public class PTCoinAnimation: UIView {
         cell.emissionLatitude = -.pi
         cell.emissionLongitude = -.pi / 2
         cell.yAcceleration = 250
-        self.emitterLayer.emitterCells = [cell]
+        emitterLayer.emitterCells = [cell]
     }
     
     public func beginAnimationFunction() {
-        self.showLabel.isHidden = false
-        self.backgroundView.isHidden = false
+        showLabel.isHidden = false
+        backgroundView.isHidden = false
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.3, initialSpringVelocity: 5,options: .curveLinear) {
             let effectAnimation = CABasicAnimation(keyPath: "emitterCells.zanShape.birthRate")
             effectAnimation.fromValue = 30
@@ -103,7 +103,7 @@ public class PTCoinAnimation: UIView {
     
     func babyCoinFadeAway() {
         let aniMove = CABasicAnimation(keyPath: "position")
-        aniMove.fromValue = self.showLabel.layer.position
+        aniMove.fromValue = showLabel.layer.position
         aniMove.toValue = CGPoint(x: CGFloat.kSCREEN_WIDTH, y: CGFloat.kSCREEN_HEIGHT)
         
         let aniScale = CABasicAnimation(keyPath: "transform.scale")
@@ -117,24 +117,24 @@ public class PTCoinAnimation: UIView {
         aniGroup.animations = [aniMove,aniScale]
         aniGroup.isRemovedOnCompletion = false
         
-        self.showLabel.layer.removeAllAnimations()
-        self.showLabel.layer.add(aniGroup, forKey: "aniMove_aniScale_groupAnimation")
+        showLabel.layer.removeAllAnimations()
+        showLabel.layer.add(aniGroup, forKey: "aniMove_aniScale_groupAnimation")
     }
 }
 
 extension PTCoinAnimation:CAAnimationDelegate {
     public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
-        if anim == self.showLabel.layer.animation(forKey: "babyCoin_scale") {
-            self.babyCoinFadeAway()
-            if self.animationBlock != nil {
-                self.animationBlock!(true)
+        if anim == showLabel.layer.animation(forKey: "babyCoin_scale") {
+            babyCoinFadeAway()
+            if animationBlock != nil {
+                animationBlock!(true)
             }
         }
         
-        if anim == self.showLabel.layer.animation(forKey: "aniMove_aniScale_groupAnimation") {
-            self.showLabel.isHidden = true
-            self.backgroundView.alpha = 0.6
-            self.backgroundView.isHidden = true
+        if anim == showLabel.layer.animation(forKey: "aniMove_aniScale_groupAnimation") {
+            showLabel.isHidden = true
+            backgroundView.alpha = 0.6
+            backgroundView.isHidden = true
         }
     }
 }

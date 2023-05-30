@@ -21,13 +21,13 @@ public enum PTSliderTitleShowType:Int {
 public class PTSlider: UISlider {
     fileprivate var isShowTitle:Bool? {
         didSet {
-            self.layoutSubviews()
+            layoutSubviews()
         }
     }
     
     fileprivate var isTitleValue:Bool? {
         didSet {
-            self.layoutSubviews()
+            layoutSubviews()
         }
     }
     public var titleStyle:PTSliderTitleShowType = .Top
@@ -52,8 +52,8 @@ public class PTSlider: UISlider {
     
     public init(showTitle:Bool,titleIsValue:Bool) {
         super.init(frame: .zero)
-        self.isShowTitle = showTitle
-        self.isTitleValue = titleIsValue
+        isShowTitle = showTitle
+        isTitleValue = titleIsValue
     }
     
     public override init(frame: CGRect) {
@@ -69,23 +69,23 @@ public class PTSlider: UISlider {
         newRect.origin.x = rect.origin.x - 10
         newRect.size.width = rect.size.width + 20
         let result = super.thumbRect(forBounds: bounds, trackRect: newRect, value: value)
-        self.lastBounds = result
+        lastBounds = result
         return result
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let result = super.hitTest(point, with: event)
-        if point.x < 0 || point.x > self.bounds.size.width {
+        if point.x < 0 || point.x > bounds.size.width {
             return result
         }
         
-        if point.y >= -thumbBound_y && point.y < (self.lastBounds!.size.height + thumbBound_y) {
+        if point.y >= -thumbBound_y && point.y < (lastBounds!.size.height + thumbBound_y) {
             var value:CGFloat = 0.0
-            value = point.x - self.bounds.origin.x
-            value = value / self.bounds.size.width
+            value = point.x - bounds.origin.x
+            value = value / bounds.size.width
             value = value < 0 ? 0 : value
             value = value > 1 ? 1: value
-            value = value * CGFloat(self.maximumValue - self.minimumValue) + CGFloat(self.minimumValue)
+            value = value * CGFloat(maximumValue - minimumValue) + CGFloat(minimumValue)
             self.setValue(Float(value), animated: true)
         }
         
@@ -95,7 +95,7 @@ public class PTSlider: UISlider {
     public override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
         var result = super.point(inside: point, with: event)
         if !result && point.y > -10 {
-            if point.x >= (self.lastBounds!.origin.x - thumbBound_x) && point.x <= (self.lastBounds!.origin.x + self.lastBounds!.size.width + thumbBound_x) && point.y < (self.lastBounds!.size.height + thumbBound_y) {
+            if point.x >= (lastBounds!.origin.x - thumbBound_x) && point.x <= (lastBounds!.origin.x + lastBounds!.size.width + thumbBound_x) && point.y < (lastBounds!.size.height + thumbBound_y) {
                 result = true
             }
         }
@@ -103,11 +103,11 @@ public class PTSlider: UISlider {
     }
     
     func createLabel() {
-        if self.isShowTitle! {
-            self.addTarget(self, action: #selector(self.sliderAction(slider:)), for: .valueChanged)
-            self.isContinuous = true
+        if isShowTitle! {
+            addTarget(self, action: #selector(sliderAction(slider:)), for: .valueChanged)
+            isContinuous = true
             
-            self.addSubview(self.sliderValueLabel)
+            addSubview(sliderValueLabel)
 
             PTGCDManager.gcdAfter(time: 0.1) {
                 
@@ -133,21 +133,21 @@ public class PTSlider: UISlider {
                 }
             }
         } else {
-            self.sliderValueLabel.removeFromSuperview()
+            sliderValueLabel.removeFromSuperview()
         }
     }
     
     func sliderAction(slider:UISlider) {
-        if !self.isTitleValue! {
-            self.sliderValueLabel.text = String(format: "%.0f%%", self.value/self.maximumValue * 100)
+        if !isTitleValue! {
+            sliderValueLabel.text = String(format: "%.0f%%", value / maximumValue * 100)
         } else {
-            self.sliderValueLabel.text = String(format: "%.0f%@", self.value,self.titleValueUnit)
+            sliderValueLabel.text = String(format: "%.0f%@", value, titleValueUnit)
         }
     }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.createLabel()
+        createLabel()
     }
     
     public override func layoutIfNeeded() {

@@ -14,7 +14,7 @@ fileprivate var ChangeStrKey = "getChangeStr"
 public extension NSMutableAttributedString {
     
     private func changeStr() -> String {
-        return (objc_getAssociatedObject(self, &ChangeStrKey) as? String) ?? ""
+        (objc_getAssociatedObject(self, &ChangeStrKey) as? String) ?? ""
     }
     
     private func changeStr(changeStr:String) {
@@ -29,7 +29,7 @@ public extension NSMutableAttributedString {
     ///   - lineBreakMode: 内容显示不完全时的省略方式
     /// - Returns: 本身
     @discardableResult func yb_paragraphStyle(lineSpacing: CGFloat = 0,paragraphSpacing:CGFloat = 0,alignment:NSTextAlignment = .left,lineBreakMode: NSLineBreakMode = .byTruncatingTail) -> Self {
-       self.getParagraphStyle(range: NSMakeRange(0, self.string.count)) { paragraphStyle,range in
+       getParagraphStyle(range: NSMakeRange(0, string.count)) { paragraphStyle,range in
            paragraphStyle.lineSpacing = lineSpacing
            paragraphStyle.paragraphSpacing = paragraphSpacing
            paragraphStyle.alignment = alignment
@@ -40,7 +40,7 @@ public extension NSMutableAttributedString {
    }
     
     @discardableResult func yb_lineSpacing(spacing: CGFloat) -> Self {
-        self.getParagraphStyle(range: NSMakeRange(0, self.string.count)) { paragraphStyle,range in
+        getParagraphStyle(range: NSMakeRange(0, string.count)) { paragraphStyle,range in
             paragraphStyle.lineSpacing = spacing
             self.addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
         }
@@ -51,7 +51,7 @@ public extension NSMutableAttributedString {
     /// - Parameter alignment: 对齐方式
     /// - Returns: 本身
     @discardableResult func yb_alignment(alignment:NSTextAlignment) -> Self {
-        self.getParagraphStyle(range: NSMakeRange(0, self.string.count)) { paragraphStyle,range in
+        getParagraphStyle(range: NSMakeRange(0, string.count)) { paragraphStyle,range in
             paragraphStyle.alignment = alignment
             self.addAttributes([NSAttributedString.Key.paragraphStyle:paragraphStyle], range: range)
         }
@@ -62,7 +62,7 @@ public extension NSMutableAttributedString {
     /// - Parameter spacing: 间距
     /// - Returns: 本身
     @discardableResult func yb_kern(spacing: CGFloat) -> Self {
-        self.addAttributes([NSAttributedString.Key.kern:spacing], range: NSMakeRange(0, self.string.count))
+        addAttributes([NSAttributedString.Key.kern:spacing], range: NSMakeRange(0, string.count))
         return self
     }
     
@@ -74,7 +74,7 @@ public extension NSMutableAttributedString {
     @discardableResult func yb_strikethrough(changeStr: String? = nil,style: NSUnderlineStyle = .single) -> Self {
         let changeString = changeStr ?? self.changeStr()
         self.changeStr(changeStr: changeString)
-        self.addAttribute(NSAttributedString.Key.strikethroughStyle, value: style.rawValue, range: (self.string as NSString).range(of: changeString))
+        addAttribute(NSAttributedString.Key.strikethroughStyle, value: style.rawValue, range: (string as NSString).range(of: changeString))
         return self
     }
     
@@ -86,7 +86,7 @@ public extension NSMutableAttributedString {
     @discardableResult func yb_underline(changeStr: String? = nil,style: NSUnderlineStyle = .single) -> Self {
         let changeString = changeStr ?? self.changeStr()
         self.changeStr(changeStr: changeString)
-        self.addAttribute(NSAttributedString.Key.underlineStyle, value: style.rawValue, range: (self.string as NSString).range(of: changeString))
+        addAttribute(NSAttributedString.Key.underlineStyle, value: style.rawValue, range: (string as NSString).range(of: changeString))
         return self
     }
     
@@ -100,22 +100,22 @@ public extension NSMutableAttributedString {
     @discardableResult func yb_stroke(changeStr: String? = nil,color: UIColor, value: CGFloat = 0) -> Self {
         let changeString = changeStr ?? self.changeStr()
         self.changeStr(changeStr: changeString)
-        self.addAttributes([NSAttributedString.Key.strokeColor: color,
-                            NSAttributedString.Key.strokeWidth: value], range: (self.string as NSString).range(of: changeString))
+        addAttributes([NSAttributedString.Key.strokeColor: color,
+                            NSAttributedString.Key.strokeWidth: value], range: (string as NSString).range(of: changeString))
         return self
     }
     
     @discardableResult func yb_font(font:UIFont,changeStr:String? = nil) -> Self {
         let changeString = changeStr ?? self.changeStr()
         self.changeStr(changeStr: changeString)
-        self.addAttribute(NSAttributedString.Key.font, value: font, range: (self.string as NSString).range(of: changeString))
+        addAttribute(NSAttributedString.Key.font, value: font, range: (string as NSString).range(of: changeString))
         return self
     }
     
     @discardableResult func yb_color(color:UIColor,changeStr:String? = nil) -> Self {
         let changeString = changeStr ?? self.changeStr()
         self.changeStr(changeStr: changeString)
-        self.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: (self.string as NSString).range(of: changeString))
+        addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: (string as NSString).range(of: changeString))
         return self
     }
     
@@ -127,10 +127,10 @@ public extension NSMutableAttributedString {
         for _ in changeString {
             replaceString.append(" ")
         }
-        var copyTotalString = self.string
+        var copyTotalString = string
         while copyTotalString.contains(changeString) {
             guard let range = copyTotalString.range(of: changeString, options: .caseInsensitive) else { return self}
-            self.addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(range,in:changeString))
+            addAttribute(NSAttributedString.Key.foregroundColor, value: color, range: NSRange(range,in:changeString))
             copyTotalString = copyTotalString.replacingCharacters(in: range, with: replaceString)
         }
         return self
@@ -144,17 +144,17 @@ public extension NSMutableAttributedString {
         for _ in changeString {
             replaceString.append(" ")
         }
-        var copyTotalString = self.string
+        var copyTotalString = string
         while copyTotalString.contains(changeString) {
             guard let range = copyTotalString.range(of: changeString, options: .caseInsensitive) else { return self}
-            self.addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(range,in:changeString))
+            addAttribute(NSAttributedString.Key.font, value: font, range: NSRange(range,in:changeString))
             copyTotalString = copyTotalString.replacingCharacters(in: range, with: replaceString)
         }
         return self
     }
     
-    func getParagraphStyle(range:NSRange, reslut:((NSMutableParagraphStyle,NSRange)->())) {
-        self.enumerateAttribute(NSAttributedString.Key.paragraphStyle, in: range, options: NSAttributedString.EnumerationOptions.init(rawValue: 0)) { value, subRange, stop in
+    func getParagraphStyle(range:NSRange, reslut: (NSMutableParagraphStyle, NSRange)->()) {
+        enumerateAttribute(NSAttributedString.Key.paragraphStyle, in: range, options: NSAttributedString.EnumerationOptions.init(rawValue: 0)) { value, subRange, stop in
             var style:NSMutableParagraphStyle?
             if (value != nil) {
                 if value is NSMutableParagraphStyle {
@@ -177,7 +177,7 @@ public extension UILabel {
     }
     
     @discardableResult func yb_color(color:UIColor) -> Self {
-        self.textColor = color
+        textColor = color
         return self
     }
     
@@ -187,12 +187,12 @@ public extension UILabel {
     }
     
     @discardableResult func yb_blodFont(blodFont:CGFloat) -> Self {
-        self.font = UIFont.boldSystemFont(ofSize: blodFont)
+        font = UIFont.boldSystemFont(ofSize: blodFont)
         return self
     }
     
     @discardableResult func yb_alignment(alignment:NSTextAlignment) -> Self {
-        self.textAlignment = alignment
+        textAlignment = alignment
         return self
     }
     

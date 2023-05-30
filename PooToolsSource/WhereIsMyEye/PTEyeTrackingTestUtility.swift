@@ -24,14 +24,14 @@ class PTEyeTrackingTestUtility {
     internal init(){
         // 指定纵向设备屏幕大小
         if CGFloat.kSCREEN_WIDTH < CGFloat.kSCREEN_HEIGHT {
-            self.portraitScreenSize = kSCREEN_BOUNDS
+            portraitScreenSize = kSCREEN_BOUNDS
         } else {
-            self.portraitScreenSize = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)
+            portraitScreenSize = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_HEIGHT, height: CGFloat.kSCREEN_WIDTH)
         }
     }
     
     internal func showStatusView(parent: UIView) {
-        if self.statusLabel == nil {
+        if statusLabel == nil {
             let label = UILabel(frame: CGRect(x: 50,
                                                     y: kSCREEN_BOUNDS.height / 2 - 15,
                                                     width: kSCREEN_BOUNDS.width - 50,
@@ -41,14 +41,14 @@ class PTEyeTrackingTestUtility {
             label.text = ""
             parent.addSubview(label)
             
-            self.statusLabel = label
+            statusLabel = label
         }
         
-        self.statusLabel?.isHidden = false
+        statusLabel?.isHidden = false
     }
     
     internal func showCursorView(parent: UIView) {
-        if self.cursorView == nil {
+        if cursorView == nil {
             let size = CGFloat(12)
             let view = UIView(frame: CGRect(x: kSCREEN_BOUNDS.width / 2 - size / 2,
                                             y: kSCREEN_BOUNDS.height / 2 - size / 2,
@@ -59,29 +59,29 @@ class PTEyeTrackingTestUtility {
             view.backgroundColor = .red
             parent.addSubview(view)
             
-            self.cursorView = view
+            cursorView = view
         }
         
-        self.cursorView?.isHidden = false
+        cursorView?.isHidden = false
     }
     
     /**
      隐藏UILabel显示当前EyeTracking状态。
      */
     internal func hideStatusView() {
-        self.statusLabel?.isHidden = true
+        statusLabel?.isHidden = true
     }
     
     /**
      隐藏当前EyeTracking状态的CursorView。
      */
     internal func hideCursorView() {
-        self.cursorView?.isHidden = true
+        cursorView?.isHidden = true
     }
     
     internal func updateTestViews(with lookAtPoint: CGPoint) {
         //self.updateStatusLabel(with: lookAtPoint)
-        self.updateCursorView(with: lookAtPoint)
+        updateCursorView(with: lookAtPoint)
     }
     
 //    internal func updateStatusLabel(with lookAtPoint: CGPoint) {
@@ -127,11 +127,11 @@ class PTEyeTrackingTestUtility {
     internal func rotated(){
         // 存在在屏幕旋转时无法准确定位光标的错误
         let size: CGFloat = 12
-        self.cursorView?.frame.origin.x = (kSCREEN_BOUNDS.width / 2) - (size / 2)
-        self.cursorView?.frame.origin.y = (kSCREEN_BOUNDS.height / 2) - (size / 2)
+        cursorView?.frame.origin.x = (kSCREEN_BOUNDS.width / 2) - (size / 2)
+        cursorView?.frame.origin.y = (kSCREEN_BOUNDS.height / 2) - (size / 2)
         
         
-        self.statusLabel?.frame = CGRect(x: kSCREEN_BOUNDS.width / 2,
+        statusLabel?.frame = CGRect(x: kSCREEN_BOUNDS.width / 2,
                                          y: kSCREEN_BOUNDS.height / 2,
                                          width: kSCREEN_BOUNDS.width - 50,
                                          height: 30)

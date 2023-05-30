@@ -189,7 +189,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 生命週期
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        self.navigationController?.setNavigationBarHidden(true, animated: false)
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -198,7 +198,7 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.removeTimer()
+        removeTimer()
     }
         
     public override func viewDidLoad() {
@@ -210,39 +210,39 @@ public class PTScanQRController: PTBaseViewController {
     public init(viewConfig:PTScanQRConfig) {
         super.init(nibName: nil, bundle: nil)
         self.viewConfig = viewConfig
-        self.qrCode = self.viewConfig.canScanQR
-        self.view.backgroundColor = .black
+        qrCode = self.viewConfig.canScanQR
+        view.backgroundColor = .black
         
         var views = [UIView]()
-        if self.device.hasTorch {
-            views = [self.backBtn,self.photosButton,self.flashButton]
+        if device.hasTorch {
+            views = [backBtn, photosButton, flashButton]
         } else {
-            views = [self.backBtn,self.photosButton]
+            views = [backBtn, photosButton]
         }
         
-        self.view.addSubviews(views)
-        self.backBtn.snp.makeConstraints { make in
+        view.addSubviews(views)
+        backBtn.snp.makeConstraints { make in
             make.width.height.equalTo(44)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
         }
         
-        self.photosButton.snp.makeConstraints { make in
+        photosButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.centerY.equalTo(self.backBtn)
             make.width.height.equalTo(self.backBtn)
         }
         
-        if self.device.hasTorch {
-            self.flashButton.snp.makeConstraints { make in
+        if device.hasTorch {
+            flashButton.snp.makeConstraints { make in
                 make.width.height.equalTo(self.backBtn)
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + CGFloat.ScaleW(w: 10))
             }
         }
         
-        self.addTimer()
-        self.startScanAction {
+        addTimer()
+        startScanAction {
             self.scanSession()
         }
     }
@@ -291,7 +291,7 @@ public class PTScanQRController: PTBaseViewController {
                 }
             }
         } else if status == .authorized {
-            self.enterPhotos()
+            enterPhotos()
         } else if status == .denied {
             let messageString = "[前往：设置 - 隐私 - 照片 - \(kAppName!)] 允许应用访问"
             UIAlertController.alertVC(title:"溫馨提示",msg: messageString,cancel: "好的") {
@@ -305,7 +305,7 @@ public class PTScanQRController: PTBaseViewController {
     }
     
     //MARK: 檢測相機模塊
-    func startScanAction(handle:@escaping (()->Void)) {
+    func startScanAction(handle: @escaping ()->Void) {
         let device = AVCaptureDevice.default(for: .video)
         if device != nil {
             let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
@@ -331,7 +331,7 @@ public class PTScanQRController: PTBaseViewController {
                     }
                 }
             } else {
-                self.processResult(result: "未檢測到攝像頭,要在真機上測試")
+                processResult(result: "未檢測到攝像頭,要在真機上測試")
             }
         }
     }
@@ -339,25 +339,25 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 開始掃描
     func scanSession() {
         do {
-            let deviceInput = try AVCaptureDeviceInput.init(device: self.device)
-            self.session.addOutput(self.metadataOutput)
-            self.session.addOutput(self.videoDataOutput)
-            self.session.addInput(deviceInput)
+            let deviceInput = try AVCaptureDeviceInput.init(device: device)
+            session.addOutput(metadataOutput)
+            session.addOutput(videoDataOutput)
+            session.addInput(deviceInput)
             
-            if self.qrCode {
-                self.metadataOutput.metadataObjectTypes = [.qr,.ean13,.ean8,.code128]
+            if qrCode {
+                metadataOutput.metadataObjectTypes = [.qr,.ean13,.ean8,.code128]
             } else {
-                self.metadataOutput.metadataObjectTypes = [.ean13,.ean8,.code128]
+                metadataOutput.metadataObjectTypes = [.ean13,.ean8,.code128]
             }
             
-            self.view.layer.insertSublayer(self.videoPreviewLayer, at: 0)
+            view.layer.insertSublayer(videoPreviewLayer, at: 0)
             PTGCDManager.gcdBackground {
                 self.session.startRunning()
             }
             
-            if !self.qrCode {
-                self.view.addSubview(self.tipsLabel)
-                self.tipsLabel.snp.makeConstraints { make in
+            if !qrCode {
+                view.addSubview(tipsLabel)
+                tipsLabel.snp.makeConstraints { make in
                     make.left.equalTo(self.backBtn.snp.right)
                     make.right.equalTo(self.photosButton.snp.left)
                     make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
@@ -370,62 +370,62 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 添加時間控制器
     func addTimer() {
-        if !self.session.isRunning && self.hasEntered {
+        if !session.isRunning && hasEntered {
             PTGCDManager.gcdBackground {
                 self.session.startRunning()
             }
         }
-        self.hasEntered = false
+        hasEntered = false
         
-        self.view.addSubview(self.scanningLine)
-        self.scanningLine.snp.makeConstraints { make in
+        view.addSubview(scanningLine)
+        scanningLine.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(self.scanningLineX)
             make.top.equalToSuperview().inset(self.scanningLineY)
             make.width.equalTo(self.scanningLineW)
             make.height.equalTo(self.scanningLineH)
         }
-        self.timer = Timer(timeInterval: self.animationTimeInterval, target: self, selector: #selector(self.beginRefreshUI), userInfo: nil, repeats: true)
-        RunLoop.main.add(self.timer, forMode: .common)
+        timer = Timer(timeInterval: animationTimeInterval, target: self, selector: #selector(beginRefreshUI), userInfo: nil, repeats: true)
+        RunLoop.main.add(timer, forMode: .common)
     }
     
     //MARK: 移除時間控制器
     func removeTimer() {
-        self.timer.invalidate()
-        self.scanningLine.removeFromSuperview()
-        if self.session.isRunning {
-            self.session.stopRunning()
+        timer.invalidate()
+        scanningLine.removeFromSuperview()
+        if session.isRunning {
+            session.stopRunning()
         }
     }
     
     //MARK: 刷新掃描線動畫
     func beginRefreshUI() {
-        if !self.session.isRunning {
-            self.removeTimer()
+        if !session.isRunning {
+            removeTimer()
         }
 
-        var frame = self.scanningLine.frame
-        if self.flag {
-            frame.origin.y = self.scanningLineY
-            self.flag = false
-            UIView.animate(withDuration: self.animationTimeInterval) {
+        var frame = scanningLine.frame
+        if flag {
+            frame.origin.y = scanningLineY
+            flag = false
+            UIView.animate(withDuration: animationTimeInterval) {
                 frame.origin.y += 2
                 self.scanningLine.frame = frame
             }
         } else {
-            if self.scanningLine.frame.origin.y >= self.scanningLineY {
-                let scanContentMaxY = self.view.frame.size.height - self.scanningLineY
+            if scanningLine.frame.origin.y >= scanningLineY {
+                let scanContentMaxY = view.frame.size.height - scanningLineY
                 if self.scanningLine.frame.origin.y >= scanContentMaxY - 10 {
-                    frame.origin.y = self.scanningLineY
-                    self.scanningLine.frame = frame
-                    self.flag = false
+                    frame.origin.y = scanningLineY
+                    scanningLine.frame = frame
+                    flag = false
                 } else {
-                    UIView.animate(withDuration: self.animationTimeInterval) {
+                    UIView.animate(withDuration: animationTimeInterval) {
                         frame.origin.y += 2
                         self.scanningLine.frame = frame
                     }
                 }
             } else {
-                self.flag = !self.flag
+                flag = !flag
             }
         }
     }
@@ -433,11 +433,11 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 獲取二維碼數據後處理回調
     func processResult(result:String) {
         PTNSLogConsole(result)
-        if self.resultBlock != nil {
-            self.resultBlock!(result)
+        if resultBlock != nil {
+            resultBlock!(result)
         }
-        self.returnFrontVC()
-        self.navigationController?.setNavigationBarHidden(false, animated: false)
+        returnFrontVC()
+        navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
     //MARK: 根據UIImage來查找QR code
@@ -445,34 +445,34 @@ public class PTScanQRController: PTBaseViewController {
         let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
         let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
         if features!.count == 0 {
-            self.processResult(result: "無法查找二維碼")
+            processResult(result: "無法查找二維碼")
         } else {
             let feature:CIQRCodeFeature = features![0] as! CIQRCodeFeature
             let resultString = feature.messageString
-            self.processResult(result: resultString!)
+            processResult(result: resultString!)
         }
     }
 }
 
 extension PTScanQRController:UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        self.returnFrontVC()
+        returnFrontVC()
     }
     
     public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         let image:UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        self.findQR(inImage: image)
+        findQR(inImage: image)
     }
 }
 
 extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
     func showMaskView(showTips:Bool)->UIView {
-        let maskView = UIView(frame: self.view.bounds)
+        let maskView = UIView(frame: view.bounds)
         maskView.backgroundColor = UIColor.colorBase(R: 0, G: 0, B: 0, A: 0.6)
         if showTips {
             let cancel = UIButton(type: .custom)
             cancel.setTitleColor(.white, for: .normal)
-            cancel.setTitle(self.viewConfig.cancelButtonName, for: .normal)
+            cancel.setTitle(viewConfig.cancelButtonName, for: .normal)
             cancel.addActionHandlers { sender in
                 if self.session.isRunning {
                     self.session.stopRunning()
@@ -495,7 +495,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
             }
             
             let tipsLabel = UILabel()
-            tipsLabel.text = self.viewConfig.scanedTips
+            tipsLabel.text = viewConfig.scanedTips
             tipsLabel.font = .appfont(size: 14,bold: true)
             tipsLabel.textAlignment = .center
             tipsLabel.textColor = .white
@@ -518,8 +518,8 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         }
         
         if icon {
-            btn.setImage(self.viewConfig.qrCodeImage, for: .normal)
-            btn.layer.add(self.btnAnimation(), forKey: "scale-layer")
+            btn.setImage(viewConfig.qrCodeImage, for: .normal)
+            btn.layer.add(btnAnimation(), forKey: "scale-layer")
         }
         btn.layer.cornerRadius = 20
         btn.clipsToBounds = true
@@ -543,7 +543,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
     
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         if metadataObjects.count > 0 {
-            self.removeTimer()
+            removeTimer()
             
             let impactLight = UIImpactFeedbackGenerator(style: .light)
             impactLight.impactOccurred()
@@ -552,9 +552,9 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         AudioServicesPlaySystemSound(1108)
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
         
-        let maskView = self.showMaskView(showTips: (metadataObjects.count > 1))
+        let maskView = showMaskView(showTips: (metadataObjects.count > 1))
         maskView.alpha = 0
-        self.view.addSubview(maskView)
+        view.addSubview(maskView)
         UIView.animate(withDuration: 0.6) {
             maskView.alpha = 1
         }
@@ -562,21 +562,21 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         let barInfo = PTScanBarInfo()
         barInfo.codeView = maskView
         barInfo.codeString = ""
-        self.layerArr.append(barInfo)
+        layerArr.append(barInfo)
         
         metadataObjects.enumerated().forEach { index,value in
-            let code:AVMetadataMachineReadableCodeObject = self.videoPreviewLayer.transformedMetadataObject(for: value) as! AVMetadataMachineReadableCodeObject
-            let codeBtn = self.showCodeButton(bounds: code.bounds, icon: (metadataObjects.count > 1))
+            let code:AVMetadataMachineReadableCodeObject = videoPreviewLayer.transformedMetadataObject(for: value) as! AVMetadataMachineReadableCodeObject
+            let codeBtn = showCodeButton(bounds: code.bounds, icon: (metadataObjects.count > 1))
             codeBtn.tag = index + 1
-            self.view.addSubview(codeBtn)
+            view.addSubview(codeBtn)
             
             let barInfo = PTScanBarInfo()
             barInfo.codeView = codeBtn
             barInfo.codeString = code.stringValue ?? ""
-            self.layerArr.append(barInfo)
+            layerArr.append(barInfo)
         }
         
-        self.backBtn.isHidden = true
+        backBtn.isHidden = true
         if metadataObjects.count == 1 {
             PTGCDManager.gcdAfter(time: 0.8) {
                 let barInfo = self.layerArr[1]

@@ -12,9 +12,9 @@ public extension NSMutableArray {
     //MARK: 打亂原始內部數據的內容排序
     ///打亂原始內部數據的內容排序
     func shuffle() {
-        for i in (0...(self.count - 1)).reversed() {
+        for i in (0...(count - 1)).reversed() {
             let j = arc4random() % UInt32(i)
-            self.exchangeObject(at: Int(j), withObjectAt: i)
+            exchangeObject(at: Int(j), withObjectAt: i)
         }
     }
     
