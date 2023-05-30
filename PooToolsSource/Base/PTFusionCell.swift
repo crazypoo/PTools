@@ -383,6 +383,7 @@ public class PTFusionCellContent:UIView {
             }
                         
             self.lineView.isHidden = !self.cellModel!.haveLine
+            self.topLineView.isHidden = !self.cellModel!.haveTopLine
 
             self.addSubviews([self.lineView,self.topLineView])
             self.lineView.snp.makeConstraints { make in

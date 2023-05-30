@@ -43,6 +43,8 @@ open class PTFusionCellModel: NSObject {
     open var accessoryType:PTFusionShowAccessoryType = .NoneAccessoryView
     ///是否有线
     open var haveLine:Bool = false
+    ///顶部线
+    open var haveTopLine:Bool = false
     ///字体
     open var cellFont:UIFont = .appfont(size: 16)
     ///Desc字体
