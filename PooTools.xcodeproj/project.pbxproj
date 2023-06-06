@@ -127,6 +127,7 @@
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
+		55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AC2A2EADE900A7B3AD /* PTMemory.swift */; };
 		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
 		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
 		55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTShareItem.swift */; };
@@ -368,6 +369,7 @@
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
+		55B389AC2A2EADE900A7B3AD /* PTMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMemory.swift; sourceTree = "<group>"; };
 		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
 		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
 		55BD5B8229C620C80023458A /* PTShareItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTShareItem.swift; sourceTree = "<group>"; };
@@ -876,6 +878,7 @@
 				55024DF329F372A600244E44 /* PTDebugFunction.swift */,
 				55D59C7528F558BF00B4FF76 /* PTDebugViewController.swift */,
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
+				55B389AC2A2EADE900A7B3AD /* PTMemory.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1755,6 +1758,7 @@
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
+				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,

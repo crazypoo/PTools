@@ -41,15 +41,9 @@ public class PCheckAppStatus: NSObject {
     
     func createUI() {
         if avatar == nil {
-            avatar = PFloatingButton.init(view: AppWindows as Any, frame: .zero)
+            avatar = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: 0, y: CGFloat.statusBarHeight(), width: 100, height: 30))
             avatar?.adjustsImageWhenHighlighted = false
             avatar?.tag = 9999
-            avatar!.snp.makeConstraints { make in
-                make.left.equalToSuperview()
-                make.width.equalTo(50)
-                make.height.equalTo(30)
-                make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
-            }
 
             displayLink = CADisplayLink.init(target: self, selector: #selector(displayLinkTick(link:)))
             displayLink?.isPaused = false
@@ -80,9 +74,7 @@ public class PCheckAppStatus: NSObject {
         
         let text = String.init(format: "FPS:%02.0f", round(fps))
         fpsLabel.text = text
-        avatar?.snp.updateConstraints { make in
-            make.width.equalTo(fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20)
-        }
+        self.avatar!.frame = CGRect(x: self.avatar!.frame.origin.x, y: self.avatar!.frame.origin.y, width: fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20, height: self.avatar!.frame.size.height)
         
         if fpsHandle != nil {
             fpsHandle!(NSInteger(round(fps)))

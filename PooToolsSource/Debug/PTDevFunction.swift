@@ -94,7 +94,7 @@ public class PTDevFunction: NSObject {
                     } else {
                         showTouchHit = "开启界面点击检测"
                     }
-                    let titles = ["FLEX","Log","FPS",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo]
+                    let titles = ["FLEX","Log","FPS","Memory",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
@@ -203,6 +203,12 @@ public class PTDevFunction: NSObject {
                                 self.maskView = PTDevMaskView(config: maskConfig)
                                 self.maskView?.frame = AppWindows!.frame
                                 AppWindows?.addSubview(self.maskView!)
+                            }
+                        } else if title == "Memory" {
+                            if PTMemory.share.closed {
+                                PTMemory.share.startMonitoring()
+                            } else {
+                                PTMemory.share.stopMonitoring()
                             }
                         }
                     }

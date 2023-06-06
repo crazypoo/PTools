@@ -20,13 +20,11 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             if let cur = scrollView {
                 if oldValue == nil {
                     initialScrollOffset = cur.contentOffset
-                    scrollBounce = cur.bounces
                     scrollIndictorVisible = cur.showsVerticalScrollIndicator
                 }
             } else {
                 if let pre = oldValue {
                     pre.isDirectionalLockEnabled = false
-                    pre.bounces = scrollBounce
                     pre.showsVerticalScrollIndicator = scrollIndictorVisible
                 }
             }
@@ -64,7 +62,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     // Scroll handling
     private var initialScrollOffset: CGPoint = .zero
     private var stopScrollDeceleration: Bool = false
-    private var scrollBounce = false
     private var scrollIndictorVisible = false
 
     // MARK: - Interface
@@ -388,11 +385,11 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             let velocity = value(of: panGesture.velocity(in: panGesture.view))
             let location = panGesture.location(in: surfaceView)
 
-            let belowEdgeMost = 0 > layoutAdapter.offsetFromMostExpandedAnchor + (1.0 / surfaceView.fp_displayScale)
+            let insideMostExpandedAnchor = 0 > layoutAdapter.offsetFromMostExpandedAnchor + (1.0 / surfaceView.fp_displayScale)
 
             log.debug("""
                 scroll gesture(\(state):\(panGesture.state)) -- \
-                belowTop = \(belowEdgeMost), \
+                inside expanded anchor = \(insideMostExpandedAnchor), \
                 interactionInProgress = \(interactionInProgress), \
                 scroll offset = \(value(of: scrollView.contentOffset)), \
                 location = \(value(of: location)), velocity = \(velocity)
@@ -400,7 +397,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
             let offsetDiff = value(of: scrollView.contentOffset - contentOffsetForPinning(of: scrollView))
 
-            if belowEdgeMost {
+            if insideMostExpandedAnchor {
                 // Scroll offset pinning
                 if state == layoutAdapter.mostExpandedState {
                     if interactionInProgress {
@@ -1033,11 +1030,11 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         }
         log.debug("lock scroll view")
 
-        scrollBounce = scrollView.bounces
         scrollIndictorVisible = scrollView.showsVerticalScrollIndicator
 
+        // Must not modify the UIScrollView.bounces property here. If you reset it to unlock the tracking scroll view,
+        // UIScrollView may unexpectedly alter the scroll offset when dealing with small scrollable content.
         scrollView.isDirectionalLockEnabled = true
-        scrollView.bounces = false
         scrollView.showsVerticalScrollIndicator = false
     }
 
@@ -1046,7 +1043,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         log.debug("unlock scroll view")
 
         scrollView.isDirectionalLockEnabled = false
-        scrollView.bounces = scrollBounce
         scrollView.showsVerticalScrollIndicator = scrollIndictorVisible
     }
 

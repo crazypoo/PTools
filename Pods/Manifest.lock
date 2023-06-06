@@ -36,7 +36,7 @@ PODS:
   - FaceAware (2.1.0)
   - FDFullscreenPopGesture (1.1)
   - FLEX (5.22.10)
-  - FloatingPanel (2.6.1)
+  - FloatingPanel (2.6.2)
   - FluentDarkModeKit (1.0.4)
   - GCDWebServer (3.5.4):
     - GCDWebServer/Core (= 3.5.4)
@@ -525,7 +525,7 @@ SPEC CHECKSUMS:
   FaceAware: f1266b8719a1a90da3d763b8cb428554edf0fa61
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
-  FloatingPanel: de6bb891912ede28da7b1140f7b583c474fec28a
+  FloatingPanel: 4c72e4f212b1cc26d6948b20e6b570d6d9639ca9
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
