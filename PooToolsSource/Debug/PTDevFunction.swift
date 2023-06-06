@@ -94,7 +94,7 @@ public class PTDevFunction: NSObject {
                     } else {
                         showTouchHit = "开启界面点击检测"
                     }
-                    let titles = ["FLEX","Log","FPS","Memory",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo]
+                    let titles = ["FLEX","Log","FPS","Memory","颜色检查",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
@@ -209,6 +209,12 @@ public class PTDevFunction: NSObject {
                                 PTMemory.share.startMonitoring()
                             } else {
                                 PTMemory.share.stopMonitoring()
+                            }
+                        } else if title == "颜色检查" {
+                            if PTColorPickPlugin.share.showed {
+                                PTColorPickPlugin.share.close()
+                            } else {
+                                PTColorPickPlugin.share.show()
                             }
                         }
                     }
