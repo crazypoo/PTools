@@ -135,6 +135,7 @@
 		55C5306D29FAA06800B0F4C9 /* PTNavigationBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C5306C29FAA06800B0F4C9 /* PTNavigationBarController.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */; };
+		55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
@@ -378,6 +379,7 @@
 		55C5306C29FAA06800B0F4C9 /* PTNavigationBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNavigationBarController.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTRefreshAutoStateFooter.swift; sourceTree = "<group>"; };
+		55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTViewRulerPlugin.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
@@ -882,6 +884,7 @@
 				55D59C7928F55F4300B4FF76 /* PTDevFunction.swift */,
 				55B389AC2A2EADE900A7B3AD /* PTMemory.swift */,
 				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
+				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1783,6 +1786,7 @@
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
+				55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,

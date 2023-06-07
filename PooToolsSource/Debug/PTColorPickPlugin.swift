@@ -12,9 +12,9 @@ import SnapKit
 
 public typealias PTColorPickMagnifyLayerBlock = (CGPoint) -> String
 
-fileprivate let kPTClosePluginNotification = "kPTClosePluginNotification"
+public let kPTClosePluginNotification = "kPTClosePluginNotification"
 
-fileprivate extension CGFloat {
+public extension CGFloat {
     static func SizeFrom750(x:CGFloat) -> CGFloat {
         return x * CGFloat.kSCREEN_WIDTH / 750
     }
