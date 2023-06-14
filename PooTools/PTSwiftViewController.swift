@@ -304,9 +304,7 @@ class PTSwiftViewController: PTBaseViewController {
         super.viewDidLoad()
 
         PTNSLogConsole(self)
-                     
-        PTViewRulerPlugin.share.show()
-        
+                                     
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

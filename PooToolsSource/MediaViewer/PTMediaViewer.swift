@@ -144,8 +144,7 @@ public class PTViewerConfig: NSObject {
     public var iCloudDocumentName:String = ""
 }
 
-public class PTMediaMediaView:UIView
-{
+public class PTMediaMediaView:UIView {
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
 
@@ -220,7 +219,7 @@ public class PTMediaMediaView:UIView
         let view = UISlider()
         view.addSliderAction { sender in
             self.player.player!.pause()
-            self.playInSomeTime(someTime: (sender as! UISlider).value)
+            self.playInSomeTime(someTime: sender.value)
         }
         let sliderTap = UITapGestureRecognizer.init { sender in
             self.player.player!.pause()
@@ -686,8 +685,7 @@ public class PTMediaMediaView:UIView
     }
 }
 
-extension PTMediaMediaView:UIScrollViewDelegate
-{
+extension PTMediaMediaView:UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView {
         imageView
     }

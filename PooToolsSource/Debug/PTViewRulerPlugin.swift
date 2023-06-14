@@ -40,24 +40,66 @@ open class PTViewRulerPlugin: NSObject {
     
     public func hide() {
         self.rulerView.hide()
-        self.rulerView.removeFromSuperview()
+        self.showed = false
     }
 }
 
-fileprivate class PTVisualInfoWindow:UIWindow {
-    fileprivate lazy var infoLabel:UILabel = {
+public class PTVisualInfoController:PTBaseViewController {
+    
+    public lazy var infoLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }()
     
-    private lazy var closeBtn:UIButton = {
+    public lazy var closeBtn:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 14)), for: .normal)
         view.addActionHandlers { sender in
+            PTNSLogConsole("123123123123123")
             NotificationCenter.default.post(name: NSNotification.Name(kPTClosePluginNotification), object: nil, userInfo: nil)
         }
         return view
+    }()
+
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        self.initUI()
+    }
+    
+    func initUI() {
+        PTGCDManager.gcdMain {
+            self.view.addSubviews([self.closeBtn,self.infoLabel])
+            self.closeBtn.snp.makeConstraints { make in
+                make.size.equalTo(CGFloat.SizeFrom750(x: 44))
+                make.centerY.equalToSuperview()
+                make.right.equalToSuperview().inset(10)
+            }
+            self.infoLabel.snp.makeConstraints { make in
+                make.left.top.bottom.equalToSuperview().inset(5)
+                make.right.equalTo(self.closeBtn.snp.left).offset(-10)
+            }
+        }
+    }
+    
+    public override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        PTGCDManager.gcdMain {
+            self.view.window?.frame = CGRectMake(CGFloat.SizeFrom750(x: 30), CGFloat.kSCREEN_HEIGHT - self.infoLabel.frame.size.height - CGFloat.SizeFrom750(x: 30), size.height, size.width)
+        }
+    }
+}
+
+fileprivate class PTVisualInfoWindow:UIWindow {
+    
+    public lazy var visualController:PTVisualInfoController = {
+        let vc = PTVisualInfoController()
+        return vc
     }()
 
     override init(frame: CGRect) {
@@ -71,11 +113,9 @@ fileprivate class PTVisualInfoWindow:UIWindow {
     
     private func commonInit() {
         self.backgroundColor = .white
-        PTGCDManager.gcdMain {
-            self.viewCorner(radius: CGFloat.SizeFrom750(x: 8), borderWidth: 1, borderColor: UIColor.hex("#999999", alpha: 0.2))
-        }
         self.windowLevel = .alert
-                
+        self.rootViewController = self.visualController
+        
         let pan = UIGestureRecognizer { sender in
             let pans = sender as! UIPanGestureRecognizer
             let panView = pans.view
@@ -91,15 +131,8 @@ fileprivate class PTVisualInfoWindow:UIWindow {
         }
         self.addGestureRecognizer(pan)
         
-        self.addSubviews([self.closeBtn,self.infoLabel])
-        self.closeBtn.snp.makeConstraints { make in
-            make.size.equalTo(CGFloat.SizeFrom750(x: 44))
-            make.centerY.equalToSuperview()
-            make.right.equalToSuperview().inset(10)
-        }
-        self.infoLabel.snp.makeConstraints { make in
-            make.left.top.bottom.equalToSuperview().inset(5)
-            make.right.equalTo(self.closeBtn.snp.left).offset(-10)
+        PTGCDManager.gcdMain {
+            self.viewCorner(radius: CGFloat.SizeFrom750(x: 8), borderWidth: 1, borderColor: UIColor.hex("#999999", alpha: 0.2))
         }
     }
 }
@@ -108,9 +141,15 @@ fileprivate class PTRulerInfoView:UIView {
     
     let viewPointSize:CGFloat = 62
     
+    fileprivate lazy var topImage:UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.image = "⬇️".emojiToImage(emojiFont: .appfont(size: 6))
+        return view
+    }()
+    
     fileprivate lazy var imageView : UIImageView = {
         let view = UIImageView()
-        view.image = "🛑".emojiToImage(emojiFont: .appfont(size: 6))
         view.isUserInteractionEnabled = true
         
         let pan = UIPanGestureRecognizer { sender in
@@ -149,6 +188,14 @@ fileprivate class PTRulerInfoView:UIView {
             self.configInfoLabelText()
         }
         view.addGestureRecognizer(pan)
+        
+        view.addSubviews([self.topImage])
+        self.topImage.snp.makeConstraints { make in
+            make.top.equalToSuperview()
+            make.bottom.equalTo(view.snp.centerY)
+            make.width.equalTo(self.topImage.snp.height)
+            make.centerX.equalToSuperview()
+        }
         
         return view
     }()
@@ -237,7 +284,7 @@ fileprivate class PTRulerInfoView:UIView {
         self.rightLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) + (self.frame.size.width - (self.imageView.frame.origin.x + self.imageView.frame.size.width / 2)) / 2, (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2) - self.rightLabel.frame.size.height, self.rightLabel.frame.size.width, self.rightLabel.frame.size.height)
         self.bottomLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) - self.bottomLabel.frame.size.width, (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2) + (self.frame.size.height - (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2)) / 2, self.bottomLabel.frame.size.width, self.bottomLabel.frame.size.height)
         
-        self.infoWindow.infoLabel.text = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0",self.bottomLabel.text ?? "0",self.rightLabel.text ?? "0")
+        self.infoWindow.visualController.infoLabel.text = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0",self.bottomLabel.text ?? "0",self.rightLabel.text ?? "0")
         self.infoWindow.isHidden = false
     }
     
@@ -247,7 +294,7 @@ fileprivate class PTRulerInfoView:UIView {
     
     func configInfoLabelText() {
         let stringInfo = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0",self.bottomLabel.text ?? "0",self.rightLabel.text ?? "0")
-        self.infoWindow.infoLabel.text = stringInfo
+        self.infoWindow.visualController.infoLabel.text = stringInfo
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {

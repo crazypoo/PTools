@@ -136,6 +136,8 @@
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */; };
 		55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */; };
+		55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */; };
+		55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */; };
 		55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */; };
 		55C9CBA328E851DA00DB6200 /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA228E851DA00DB6200 /* Network.swift */; };
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
@@ -380,6 +382,8 @@
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTRefreshAutoStateFooter.swift; sourceTree = "<group>"; };
 		55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTViewRulerPlugin.swift; sourceTree = "<group>"; };
+		55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefultsViewController.swift; sourceTree = "<group>"; };
+		55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseNavControl.swift; sourceTree = "<group>"; };
 		55C9CBA028E8505E00DB6200 /* PTBaseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBaseModel.swift; sourceTree = "<group>"; };
 		55C9CBA228E851DA00DB6200 /* Network.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
@@ -885,6 +889,7 @@
 				55B389AC2A2EADE900A7B3AD /* PTMemory.swift */,
 				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
 				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
+				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1279,6 +1284,7 @@
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
+				55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1774,6 +1780,7 @@
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
+				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				55025E4C29FA56D00024A960 /* PTNavigationBarBaseValues.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
@@ -1825,6 +1832,7 @@
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
+				55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
