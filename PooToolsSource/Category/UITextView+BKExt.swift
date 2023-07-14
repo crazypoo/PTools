@@ -15,15 +15,16 @@ import SnapKit
  2、使用 objc/runtime 动态添加了 bk_placeholderLabel 等属性
  */
 
-fileprivate var bk_placeholderLabelKey = "bk_placeholderLabelKey"
-fileprivate var bk_placeholderKey = "bk_placeholderKey"
-fileprivate var bk_attributedTextKey = "bk_attributedTextKey"
-fileprivate var bk_wordCountLabelKey = "bk_wordCountLabelKey"
-fileprivate var bk_maxWordCountKey = "bk_maxWordCountKey"
-fileprivate var pt_textCountPositionKey = "pt_textCountPositionKey"
-
 public extension UITextView {
-    
+    private struct AssociatedKeys {
+        static var bk_placeholderLabelKey = 999
+        static var bk_placeholderKey = 998
+        static var bk_attributedTextKey = 997
+        static var bk_wordCountLabelKey = 996
+        static var bk_maxWordCountKey = 995
+        static var pt_textCountPositionKey = 994
+    }
+
     /// 移除监听
     func bk_removeAllObservers() -> () {
         
@@ -35,9 +36,9 @@ public extension UITextView {
     ///設置TextView的Placeholder Label
     var bk_placeholderLabel: UILabel? {
         set{
-            objc_setAssociatedObject(self, &bk_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.bk_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
-            let obj =  objc_getAssociatedObject(self, &bk_placeholderLabelKey)
+            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.bk_placeholderLabelKey)
             guard let placeholderLabel = obj as? UILabel else {
                 let label = UILabel()
                 label.textAlignment = .left
@@ -53,7 +54,7 @@ public extension UITextView {
                 addConstraint(NSLayoutConstraint(item: label, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self, attribute: .width, multiplier: 1.0, constant: -8))
                 addConstraint(NSLayoutConstraint(item: label, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self, attribute: .height, multiplier: 1.0, constant: -7))
                 // 设置bk_placeholderLabel，自动调用set方法
-                bk_placeholderLabel = label
+                self.bk_placeholderLabel = label
                 
                 addObserver(self, forKeyPath: "text", options: NSKeyValueObservingOptions.new, context: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(bk_textDidChange), name: UITextView.textDidChangeNotification, object: nil)
@@ -70,11 +71,11 @@ public extension UITextView {
     ///設置TextView的Placeholder
     @objc var bk_placeholder: String? {
         set {
-            objc_setAssociatedObject(self, bk_placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.bk_placeholderKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let placeholder = newValue else { return }
             bk_placeholderLabel?.text = placeholder
         } get {
-            objc_getAssociatedObject(self, bk_placeholderKey) as? String
+            objc_getAssociatedObject(self, &AssociatedKeys.bk_placeholderKey) as? String
         }
     }
     
@@ -82,11 +83,11 @@ public extension UITextView {
     ///設置TextView的Placeholder的富文本
     @objc var bk_placeholderAttributedText: NSAttributedString? {
         set {
-            objc_setAssociatedObject(self, &bk_attributedTextKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.bk_attributedTextKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let attr = newValue else { return }
             bk_placeholderLabel?.attributedText = attr
         } get {
-            objc_getAssociatedObject(self, &bk_attributedTextKey) as? NSAttributedString
+            objc_getAssociatedObject(self, &AssociatedKeys.bk_attributedTextKey) as? NSAttributedString
         }
     }
     
@@ -95,9 +96,9 @@ public extension UITextView {
     var bk_wordCountLabel: UILabel? {
         set{
             // 调用 setter 的时候会执行此处代码，将自定义的label通过runtime保存起来
-            objc_setAssociatedObject(self, &bk_wordCountLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.bk_wordCountLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get{
-            let obj =  objc_getAssociatedObject(self, &bk_wordCountLabelKey) as? UILabel
+            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.bk_wordCountLabelKey) as? UILabel
             guard let wordCountLabel = obj else {
                 let label = UILabel()
                 label.textAlignment = .right
@@ -117,7 +118,7 @@ public extension UITextView {
                 }
                 
                 // 调用setter
-                bk_wordCountLabel = label
+                self.bk_wordCountLabel = label
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(bk_maxWordCountAction), name: UITextView.textDidChangeNotification, object: nil)
                 
@@ -131,12 +132,12 @@ public extension UITextView {
     ///設置TextView的字數限制
     @objc var pt_maxWordCount: NSNumber? {
         set {
-            objc_setAssociatedObject(self, &bk_maxWordCountKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+            objc_setAssociatedObject(self, &AssociatedKeys.bk_maxWordCountKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
             guard let count = newValue else { return }
             guard let label = bk_wordCountLabel else { return }
             label.text = "\(text.count)/\(count)"
         } get {
-            let num = objc_getAssociatedObject(self, &bk_maxWordCountKey) as? NSNumber
+            let num = objc_getAssociatedObject(self, &AssociatedKeys.bk_maxWordCountKey) as? NSNumber
             return num
         }
     }

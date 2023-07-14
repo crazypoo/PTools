@@ -84,16 +84,19 @@ public class PTLanguage: NSObject {
  2、增加方法快速移动监听
  */
 public extension UIViewController {
+        
+    private struct AssociatedKeys {
+        static var UIViewControllerBlockKey = 998
+    }
     
-    private static var key = "BLOCKL_KEY"
     typealias ChangedBlock = () -> ()
     // 动态添加block属性
     private var block: ChangedBlock? {
         get {
-            (objc_getAssociatedObject(self, &UIViewController.key) as! ChangedBlock)
+            (objc_getAssociatedObject(self, &AssociatedKeys.UIViewControllerBlockKey) as! ChangedBlock)
         }
         set {
-            return objc_setAssociatedObject(self, &UIViewController.key, newValue, .OBJC_ASSOCIATION_COPY)
+            return objc_setAssociatedObject(self, &AssociatedKeys.UIViewControllerBlockKey, newValue, .OBJC_ASSOCIATION_COPY)
         }
     }
     

@@ -128,13 +128,13 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
         
         var result = NSDecimalNumber()
         if type == .add {
-            result = (oneNumber ?? 0).adding((twoNumber ?? 0), withBehavior: amountHandler)
+            result = (oneNumber).adding((twoNumber), withBehavior: amountHandler)
         } else if type == .subtracting {
-            result = (oneNumber ?? 0).subtracting((twoNumber ?? 0), withBehavior: amountHandler)
+            result = (oneNumber).subtracting((twoNumber), withBehavior: amountHandler)
         } else if type == .multiplying {
-            result = (oneNumber ?? 0).multiplying(by: (twoNumber ?? 0), withBehavior: amountHandler)
+            result = (oneNumber).multiplying(by: (twoNumber), withBehavior: amountHandler)
         } else if type == .dividing {
-            result = (oneNumber ?? 0).dividing(by: (twoNumber ?? 0), withBehavior: amountHandler)
+            result = (oneNumber).dividing(by: (twoNumber), withBehavior: amountHandler)
         }
         return result
     }

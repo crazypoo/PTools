@@ -305,14 +305,14 @@ class PTSwiftViewController: PTBaseViewController {
 
         PTNSLogConsole(self)
                                      
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-//            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-            make.top.equalToSuperview()
-        }
-
-        showCollectionViewData()
+//        view.addSubview(collectionView)
+//        collectionView.snp.makeConstraints { make in
+//            make.left.right.bottom.equalToSuperview()
+////            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+//            make.top.equalToSuperview()
+//        }
+//
+//        showCollectionViewData()
         
 //        let config = PTTextCustomRightViewConfig()
 //        config.image = "DemoImage"

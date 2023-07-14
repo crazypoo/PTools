@@ -10,15 +10,18 @@ import UIKit
 public typealias RefreshedBlock = (_ sender:UIRefreshControl) -> Void
 
 public extension UIRefreshControl {
-    static var UIRefreshControlBlockKey = "UIRefreshControlBlockKey"
     
+    private struct AssociatedKeys {
+        static var UIRefreshControlBlockKey = 998
+    }
+
     @objc func addRefreshHandlers(handler:@escaping RefreshedBlock) {
-        objc_setAssociatedObject(self, &UIRefreshControl.UIRefreshControlBlockKey, handler, .OBJC_ASSOCIATION_COPY)
+        objc_setAssociatedObject(self, &AssociatedKeys.UIRefreshControlBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         addTarget(self, action: #selector(actionRefreshed(sender:)), for: .valueChanged)
     }
     
     @objc func actionRefreshed(sender:UIRefreshControl) {
-        let block:RefreshedBlock = objc_getAssociatedObject(self, &UIRefreshControl.UIRefreshControlBlockKey) as! RefreshedBlock
+        let block:RefreshedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIRefreshControlBlockKey) as! RefreshedBlock
         block(sender)
     }
 }

@@ -23,15 +23,17 @@ public enum PTButtonEdgeInsetsStyle:Int {
 }
 
 public extension UIButton {
-    static var UIButtonBlockKey = 998//"UIButtonBlockKey"
+    private struct AssociatedKeys {
+        static var UIButtonBlockKey = 998
+    }
     
     @objc func addActionHandlers(handler:@escaping TouchedBlock) {
-        objc_setAssociatedObject(self, &UIButton.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
+        objc_setAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         addTarget(self, action: #selector(actionTouched(sender:)), for: .touchUpInside)
     }
     
     @objc func actionTouched(sender:UIButton) {
-        let block:TouchedBlock = objc_getAssociatedObject(self, &UIButton.UIButtonBlockKey) as! TouchedBlock
+        let block:TouchedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIButtonBlockKey) as! TouchedBlock
         block(sender)
     }
     

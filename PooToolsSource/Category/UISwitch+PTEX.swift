@@ -11,15 +11,19 @@ import UIKit
 public typealias SwitchBlock = (_ sender:UISwitch) -> Void
 
 public extension UISwitch {
-    static var UISwitchBlockKey = "UISwitchBlockKey"
     
-    @objc func addSwitchAction(handler:@escaping SwitchBlock) {
-        objc_setAssociatedObject(self, &UISwitch.UISwitchBlockKey, handler, .OBJC_ASSOCIATION_COPY)
-        addTarget(self, action: #selector(actionValue(sender:)), for: .valueChanged)
+    private struct AssociatedKeys {
+        static var UISwitchBlockKey = 998
     }
     
-    @objc func actionValue(sender:UISwitch) {
-        let block:SwitchBlock = objc_getAssociatedObject(self, &UISwitch.UISwitchBlockKey) as! SwitchBlock
-        block(sender)
+    @objc func addSwitchAction(handler:@escaping SwitchBlock) {
+        objc_setAssociatedObject(self, &AssociatedKeys.UISwitchBlockKey, handler, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        addTarget(self, action: #selector(actionValue), for: .valueChanged)
+    }
+    
+    @objc private func actionValue() {
+        if let block = objc_getAssociatedObject(self, &AssociatedKeys.UISwitchBlockKey) as? SwitchBlock {
+            block(self)
+        }
     }
 }

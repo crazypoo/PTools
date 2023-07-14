@@ -686,7 +686,7 @@ public class PTMediaMediaView:UIView {
 }
 
 extension PTMediaMediaView:UIScrollViewDelegate {
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
     }
     

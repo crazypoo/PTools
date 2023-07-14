@@ -11,15 +11,18 @@ import UIKit
 public typealias SliderBlock = (_ sender:UISlider) -> Void
 
 public extension UISlider {
-    static var UISliderBlockKey = "UISliderBlockKey"
     
+    private struct AssociatedKeys {
+        static var UISliderBlockKey = 998
+    }
+
     @objc func addSliderAction(handler:@escaping SliderBlock) {
-        objc_setAssociatedObject(self, &UISlider.UISliderBlockKey, handler, .OBJC_ASSOCIATION_COPY)
+        objc_setAssociatedObject(self, &AssociatedKeys.UISliderBlockKey, handler, .OBJC_ASSOCIATION_COPY)
         addTarget(self, action: #selector(actionValue(sender:)), for: .valueChanged)
     }
     
     @objc func actionValue(sender:UISlider) {
-        let block:SliderBlock = objc_getAssociatedObject(self, &UISlider.UISliderBlockKey) as! SliderBlock
+        let block:SliderBlock = objc_getAssociatedObject(self, &AssociatedKeys.UISliderBlockKey) as! SliderBlock
         block(sender)
     }
 }

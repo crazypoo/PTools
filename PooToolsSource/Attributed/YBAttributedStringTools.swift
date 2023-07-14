@@ -9,16 +9,20 @@
 import Foundation
 import UIKit
 
-fileprivate var ChangeStrKey = "getChangeStr"
+//fileprivate var ChangeStrKey = "getChangeStr"
 
 public extension NSMutableAttributedString {
     
+    private struct AssociatedKey {
+        static var ChangeStrKey = 998
+    }
+
     private func changeStr() -> String {
-        (objc_getAssociatedObject(self, &ChangeStrKey) as? String) ?? ""
+        (objc_getAssociatedObject(self, &AssociatedKey.ChangeStrKey) as? String) ?? ""
     }
     
     private func changeStr(changeStr:String) {
-        objc_setAssociatedObject(self, &ChangeStrKey, changeStr, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        objc_setAssociatedObject(self, &AssociatedKey.ChangeStrKey, changeStr, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
     
     /// 设置段落属性

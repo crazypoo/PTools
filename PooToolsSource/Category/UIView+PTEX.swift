@@ -209,7 +209,7 @@ public extension UIView {
 
 public extension UIView {
     private struct AssociatedKeys {
-        static var layoutSubviewsCallback = "layoutSubviewsCallback"
+        static var layoutSubviewsCallback = 998
     }
 
     @objc func jx_layoutSubviews() {
