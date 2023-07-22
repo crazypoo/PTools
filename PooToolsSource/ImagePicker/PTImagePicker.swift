@@ -117,11 +117,11 @@ private extension PTImagePicker.Controller {
 // MARK: - 打開相冊
 @available(iOS 14.0, *)
 private extension PTImagePicker.Controller {
-    static func showAlbumPicker<T>(mediaType: PTImagePicker.PickerType) throws -> PTImagePicker.Controller<T> {
+    static func showAlbumPicker<U>(mediaType: PTImagePicker.PickerType) throws -> PTImagePicker.Controller<U> {
         guard let parentVC = UIApplication.shared.delegate?.window??.rootViewController else {
             throw PTImagePicker.PickerError.NullParentViewController
         }
-        let picker = PTImagePicker.Controller<T>()
+        let picker = PTImagePicker.Controller<U>()
         picker.modalPresentationStyle = .overFullScreen
         picker.mediaTypes = mediaType.types
         picker.videoQuality = .typeHigh
@@ -146,14 +146,14 @@ private extension PTImagePicker.Controller {
 //MARK: 打開相冊
 @available(iOS 14.0, *)
 extension PTImagePicker.Controller {
-    public static func openAlbum<T:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> T {
-        let picker:PTImagePicker.Controller<T> = try showAlbumPicker(mediaType: mediaType)
+    public static func openAlbum<U:PTImagePickerObject>(_ mediaType:PTImagePicker.PickerType) async throws -> U {
+        let picker:PTImagePicker.Controller<U> = try showAlbumPicker(mediaType: mediaType)
         return try await picker.pickObject()
     }
     
-    public static func openAlbum<T: PTImagePickerObject>(_ mediaType: PTImagePicker.PickerType, completion: @escaping PTImagePicker.Completion<T>) {
+    public static func openAlbum<F: PTImagePickerObject>(_ mediaType: PTImagePicker.PickerType, completion: @escaping PTImagePicker.Completion<F>) {
         do {
-            let picker: PTImagePicker.Controller<T> = try showAlbumPicker(mediaType: mediaType)
+            let picker: PTImagePicker.Controller<F> = try showAlbumPicker(mediaType: mediaType)
             picker.pickObject(completion: completion)
         } catch let pickerError as PTImagePicker.PickerError {
             completion(.failure(pickerError))
