@@ -1320,6 +1320,38 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         return nil
     }
     
+    //MARK: JSON字符串转urlencode
+    ///JSON字符串转urlencode
+    /// - Returns: String
+    func jsonStringToQueryString() -> String? {
+        let jsonString = base as! String
+        guard let jsonData = jsonString.data(using: .utf8) else {
+            return nil
+        }
+
+        do {
+            if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
+                var queryString = ""
+                for (key, value) in jsonObject {
+                    if let stringValue = value as? String {
+                        let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+                        queryString += "\(key)=\(encodedValue)&"
+                    } else {
+                        // Handle other value types if needed
+                    }
+                }
+                // Remove the trailing '&' character if present
+                if queryString.last == "&" {
+                    queryString.removeLast()
+                }
+                return queryString
+            }
+        } catch {
+            PTNSLogConsole("Error parsing JSON: \(error)")
+        }
+        return nil
+    }
+    
     //MARK: 转成拼音
     ///转成拼音
     /// - Parameters:
