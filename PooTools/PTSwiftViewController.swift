@@ -511,18 +511,18 @@ class PTSwiftViewController: PTBaseViewController {
 //        PTNSLogConsole("----------------------------->\(ccccccc.sizeFor(size: CGSize(width:CGFloat.kSCREEN_WIDTH,height:CGFloat(MAXFLOAT))))")
 //
 //
-//        let counting = UILabel()
+        let counting = UILabel()
 ////        let counting = PTCountingLabel()
 ////        counting.positiveFormat = "##0.00"
-//        counting.textColor = .randomColor
-//        self.view.addSubview(counting)
-//        counting.snp.makeConstraints { make in
-//            make.left.right.equalToSuperview()
-//            make.bottom.equalToSuperview()
-//            make.height.equalTo(100)
-//        }
+        counting.textColor = .randomColor
+        self.view.addSubview(counting)
+        counting.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(100)
+        }
 ////        counting.countFrom(starValue: 0, toValue: 100, duration: 3)
-//        counting.count(fromValue: 0, to: 100, duration: 3,formatter: "%.0f")
+        counting.count(fromValue: 0, to: 100, duration: 3,formatter: "%.0f")
 //        status.layoutSubviewsCallback = { someview in
 //            print("asdadadadad:\(someview)")
 //        }

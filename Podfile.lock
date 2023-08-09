@@ -36,7 +36,7 @@ PODS:
   - FaceAware (2.1.0)
   - FDFullscreenPopGesture (1.1)
   - FLEX (5.22.10)
-  - FloatingPanel (2.6.3)
+  - FloatingPanel (2.6.5)
   - FluentDarkModeKit (1.0.4)
   - GCDWebServer (3.5.4):
     - GCDWebServer/Core (= 3.5.4)
@@ -57,14 +57,14 @@ PODS:
   - JXPagingView/Paging (2.1.2)
   - JXSegmentedView (1.3.0)
   - KakaJSON (1.1.2)
-  - Kingfisher (7.8.1)
+  - Kingfisher (7.9.0)
   - LifetimeTracker (1.8.1)
   - LookinServer (1.1.7):
     - LookinServer/Core (= 1.1.7)
   - LookinServer/Core (1.1.7)
   - LXFProtocolTool/LXFEmptyDataSetable (0.2.0):
     - DZNEmptyDataSet (~> 1.8.1)
-  - MarqueeLabel (4.3.0)
+  - MarqueeLabel (4.3.1)
   - Masonry (1.1.0)
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.1)
@@ -100,40 +100,40 @@ PODS:
     - PermissionsKit/Core
   - PermissionsKit/TrackingPermission (9.0.4):
     - PermissionsKit/Core
-  - PhoneNumberKit (3.6.6):
-    - PhoneNumberKit/PhoneNumberKitCore (= 3.6.6)
-    - PhoneNumberKit/UIKit (= 3.6.6)
-  - PhoneNumberKit/PhoneNumberKitCore (3.6.6)
-  - PhoneNumberKit/UIKit (3.6.6):
+  - PhoneNumberKit (3.6.7):
+    - PhoneNumberKit/PhoneNumberKitCore (= 3.6.7)
+    - PhoneNumberKit/UIKit (= 3.6.7)
+  - PhoneNumberKit/PhoneNumberKitCore (3.6.7)
+  - PhoneNumberKit/UIKit (3.6.7):
     - PhoneNumberKit/PhoneNumberKitCore
-  - PocketSVG (2.7.2)
-  - PooTools/Animation (3.2.6):
+  - PocketSVG (2.7.3)
+  - PooTools/Animation (3.2.8):
     - PooTools/Core
-  - PooTools/Appz (3.2.6):
+  - PooTools/Appz (3.2.8):
     - Appz
     - PooTools/Core
-  - PooTools/BankCard (3.2.6):
+  - PooTools/BankCard (3.2.8):
     - PooTools/Core
-  - PooTools/BilogyID (3.2.6):
+  - PooTools/BilogyID (3.2.8):
     - PooTools/Core
-  - PooTools/Calendar (3.2.6):
+  - PooTools/Calendar (3.2.8):
     - PooTools/Core
-  - PooTools/CheckBox (3.2.6):
+  - PooTools/CheckBox (3.2.8):
     - PooTools/Core
-  - PooTools/CheckDirtyWord (3.2.6):
+  - PooTools/CheckDirtyWord (3.2.8):
     - PooTools/Core
-  - PooTools/CheckUpdate (3.2.6):
+  - PooTools/CheckUpdate (3.2.8):
     - PooTools/NetWork
-  - PooTools/CodeView (3.2.6):
+  - PooTools/CodeView (3.2.8):
     - PooTools/Core
-  - PooTools/ColorFunction (3.2.6):
+  - PooTools/ColorFunction (3.2.8):
     - DynamicColor
     - PooTools/Core
     - UIImageColors
-  - PooTools/ColorPicker (3.2.6):
+  - PooTools/ColorPicker (3.2.8):
     - ChromaColorPicker
     - PooTools/Core
-  - PooTools/Core (3.2.6):
+  - PooTools/Core (3.2.8):
     - AttributedString
     - CocoaLumberjack/Swift
     - DeviceKit
@@ -149,45 +149,45 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YYText
-  - PooTools/Country (3.2.6):
+  - PooTools/Country (3.2.8):
     - PooTools/Core
-  - PooTools/CustomerLabel (3.2.6):
+  - PooTools/CustomerLabel (3.2.8):
     - PooTools/Core
     - YYText
-  - PooTools/CustomerNumberKeyboard (3.2.6):
+  - PooTools/CustomerNumberKeyboard (3.2.8):
     - PooTools/Core
-  - PooTools/DarkModeSetting (3.2.6):
+  - PooTools/DarkModeSetting (3.2.8):
     - PooTools/Core
-  - PooTools/DataEncrypt (3.2.6):
+  - PooTools/DataEncrypt (3.2.8):
     - CryptoSwift
     - PooTools/Core
-  - PooTools/DEBUG (3.2.6):
+  - PooTools/DEBUG (3.2.8):
     - PooTools/Core
-  - PooTools/FloatPanel (3.2.6):
+  - PooTools/FloatPanel (3.2.8):
     - FloatingPanel
     - PooTools/Core
-  - PooTools/FocusFaceImageView (3.2.6):
+  - PooTools/FocusFaceImageView (3.2.8):
     - FaceAware
     - PooTools/Core
-  - PooTools/GCDWebServer (3.2.6):
+  - PooTools/GCDWebServer (3.2.8):
     - GCDWebServer
     - GCDWebServer/WebUploader
     - PooTools/Core
-  - PooTools/Guide (3.2.6):
+  - PooTools/Guide (3.2.8):
     - PooTools/Core
-  - PooTools/ImageColors (3.2.6):
+  - PooTools/ImageColors (3.2.8):
     - PooTools/Core
     - UIImageColors
-  - PooTools/ImagePicker (3.2.6):
+  - PooTools/ImagePicker (3.2.8):
     - PooTools/Core
     - TZImagePickerController
-  - PooTools/Input (3.2.6):
+  - PooTools/Input (3.2.8):
     - CRBoxInputView
     - PhoneNumberKit
     - PooTools/Core
     - TextFieldEffects
     - "UITextField+Shake"
-  - PooTools/InputAll (3.2.6):
+  - PooTools/InputAll (3.2.8):
     - PooTools/Animation
     - PooTools/Appz
     - PooTools/BankCard
@@ -250,37 +250,37 @@ PODS:
     - PooTools/Vision
     - PooTools/YB_Attributed
     - PooTools/ZipArchive
-  - PooTools/Instructions (3.2.6):
+  - PooTools/Instructions (3.2.8):
     - Instructions
     - PooTools/Core
-  - PooTools/KeyChain (3.2.6):
+  - PooTools/KeyChain (3.2.8):
     - PooTools/Core
-  - PooTools/LanguageSetting (3.2.6):
+  - PooTools/LanguageSetting (3.2.8):
     - PooTools/Core
-  - PooTools/LaunchTimeProfiler (3.2.6):
+  - PooTools/LaunchTimeProfiler (3.2.8):
     - AMKLaunchTimeProfiler
     - PooTools/Core
-  - PooTools/Layout (3.2.6):
+  - PooTools/Layout (3.2.8):
     - CollectionViewPagingLayout
     - PooTools/Core
-  - PooTools/Line (3.2.6):
+  - PooTools/Line (3.2.8):
     - PooTools/Core
-  - PooTools/ListEmptyData (3.2.6):
+  - PooTools/ListEmptyData (3.2.8):
     - EmptyDataSet-Swift
     - LXFProtocolTool/LXFEmptyDataSetable
     - PooTools/Core
-  - PooTools/Loading (3.2.6):
+  - PooTools/Loading (3.2.8):
     - PooTools/Core
-  - PooTools/Location (3.2.6):
+  - PooTools/Location (3.2.8):
     - PooTools/Core
-  - PooTools/MediaViewer (3.2.6):
+  - PooTools/MediaViewer (3.2.8):
     - PooTools/NetWork
-  - PooTools/Motion (3.2.6):
+  - PooTools/Motion (3.2.8):
     - PooTools/Core
-  - PooTools/NavBarController (3.2.6):
+  - PooTools/NavBarController (3.2.8):
     - PooTools/Core
     - ZXNavigationBar
-  - PooTools/NetWork (3.2.6):
+  - PooTools/NetWork (3.2.8):
     - Alamofire
     - HandyJSON
     - KakaJSON
@@ -288,65 +288,65 @@ PODS:
     - MJExtension
     - PooTools/Core
     - SwiftyJSON
-  - PooTools/NotificationBanner (3.2.6):
+  - PooTools/NotificationBanner (3.2.8):
     - NotificationBannerSwift
     - PooTools/Core
-  - PooTools/PagingControl (3.2.6):
+  - PooTools/PagingControl (3.2.8):
     - JXPagingView/Paging
     - JXSegmentedView
     - PooTools/Core
-  - PooTools/PhoneInfo (3.2.6):
+  - PooTools/PhoneInfo (3.2.8):
     - PooTools/Core
-  - PooTools/Picker (3.2.6):
+  - PooTools/Picker (3.2.8):
     - BRPickerView
     - PooTools/Core
-  - PooTools/PopoverKit (3.2.6):
+  - PooTools/PopoverKit (3.2.8):
     - PooTools/Core
     - Popovers
-  - PooTools/RateView (3.2.6):
+  - PooTools/RateView (3.2.8):
     - PooTools/Core
-  - PooTools/Rotation (3.2.6):
+  - PooTools/Rotation (3.2.8):
     - PooTools/Core
-  - PooTools/ScanQRCode (3.2.6):
+  - PooTools/ScanQRCode (3.2.8):
     - PooTools/Core
     - PooTools/ImagePicker
-  - PooTools/ScrollBanner (3.2.6):
+  - PooTools/ScrollBanner (3.2.8):
     - PooTools/Core
-  - PooTools/ScrollRefresh (3.2.6):
+  - PooTools/ScrollRefresh (3.2.8):
     - MJRefresh
     - PooTools/Core
-  - PooTools/SearchBar (3.2.6):
+  - PooTools/SearchBar (3.2.8):
     - PooTools/Core
-  - PooTools/Segmented (3.2.6):
+  - PooTools/Segmented (3.2.8):
     - PooTools/Core
-  - PooTools/Share (3.2.6):
+  - PooTools/Share (3.2.8):
     - PooTools/Core
-  - PooTools/Slider (3.2.6):
+  - PooTools/Slider (3.2.8):
     - PooTools/Core
     - RangeSeekSlider
-  - PooTools/SmartScreenshot (3.2.6):
+  - PooTools/SmartScreenshot (3.2.8):
     - PooTools/Core
     - SnapshotKit
-  - PooTools/Stepper (3.2.6):
+  - PooTools/Stepper (3.2.8):
     - PooTools/Core
-  - PooTools/SVG (3.2.6):
+  - PooTools/SVG (3.2.8):
     - PocketSVG
     - PooTools/Core
-  - PooTools/SwipeCell (3.2.6):
+  - PooTools/SwipeCell (3.2.8):
     - PooTools/Core
     - SwipeCellKit
-  - PooTools/Tabbar (3.2.6):
+  - PooTools/Tabbar (3.2.8):
     - ESTabBarController-swift
     - PooTools/Core
-  - PooTools/Telephony (3.2.6):
+  - PooTools/Telephony (3.2.8):
     - PooTools/Core
-  - PooTools/UpdateTips (3.2.6):
+  - PooTools/UpdateTips (3.2.8):
     - PooTools/Core
-  - PooTools/Vision (3.2.6):
+  - PooTools/Vision (3.2.8):
     - PooTools/Core
-  - PooTools/YB_Attributed (3.2.6):
+  - PooTools/YB_Attributed (3.2.8):
     - PooTools/Core
-  - PooTools/ZipArchive (3.2.6):
+  - PooTools/ZipArchive (3.2.8):
     - PooTools/Core
     - SSZipArchive
   - pop (1.0.12)
@@ -525,7 +525,7 @@ SPEC CHECKSUMS:
   FaceAware: f1266b8719a1a90da3d763b8cb428554edf0fa61
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
-  FloatingPanel: ff837f4a65b2a81716bf9bfb9e43c280627db993
+  FloatingPanel: cd924b71f05f14586260e83b3b52edbf5eb73340
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   GCDWebServer: 2c156a56c8226e2d5c0c3f208a3621ccffbe3ce4
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
@@ -536,20 +536,20 @@ SPEC CHECKSUMS:
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
   KakaJSON: cc5ff50a8c1cfbb09413db8496cb709a209e6137
-  Kingfisher: 63f677311d36a3473f6b978584f8a3845d023dc5
+  Kingfisher: 59f908b6d2f403b0a3e539debb0eec05cb27002c
   LifetimeTracker: be33b0d89357dd2f381eb8aca636d184b538d5e9
   LookinServer: 4ce0469b066871525611d009d8d16a7a50c23491
   LXFProtocolTool: 8d1e53c010f6941c273b9908be24bfc20d1ce2f2
-  MarqueeLabel: 02f5ac8fd6877c94564556cb93fa86c70c08baeb
+  MarqueeLabel: da4b9cf619fe70c75d7bab4580b0b4a0b868aa6b
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PermissionsKit: 2ee142d1fd69d1e8faa1801432d9241c84c132e1
-  PhoneNumberKit: 5b1be7ee4955dfeeb855f51eecdd829ab24b3484
-  PocketSVG: c597e6916641fd2674d2f0cabca0d1869cb82880
-  PooTools: eb663fd823d878c9be44a63ebc7ed1f344df4e9f
+  PhoneNumberKit: 43b5169526cc417398c8f13f77c97552c1c6ed76
+  PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
+  PooTools: 718a31dfa4a2bdcfe141f473b201765d131013bc
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5

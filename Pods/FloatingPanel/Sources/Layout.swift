@@ -1,6 +1,7 @@
 // Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import UIKit
+import os.log
 
 /// An interface for generating layout information for a panel.
 @objc public protocol FloatingPanelLayout {
@@ -265,12 +266,14 @@ class LayoutAdapter {
     }
 
     var offsetFromMostExpandedAnchor: CGFloat {
+        let offset: CGFloat
         switch position {
         case .top, .left:
-            return edgePosition(surfaceView.presentationFrame) - position(for: mostExpandedState)
+            offset = edgePosition(surfaceView.presentationFrame) - position(for: mostExpandedState)
         case .bottom, .right:
-            return position(for: mostExpandedState) - edgePosition(surfaceView.presentationFrame)
+            offset = position(for: mostExpandedState) - edgePosition(surfaceView.presentationFrame)
         }
+        return offset.rounded(by: surfaceView.fp_displayScale)
     }
 
     private var hiddenAnchor: FloatingPanelLayoutAnchoring {
@@ -710,7 +713,7 @@ class LayoutAdapter {
 
     func updateInteractiveEdgeConstraint(diff: CGFloat, scrollingContent: Bool, allowsRubberBanding: (UIRectEdge) -> Bool) {
         defer {
-            log.debug("update surface location = \(surfaceLocation)")
+            os_log(msg, log: devLog, type: .debug, "update surface location = \(surfaceLocation)")
         }
 
         let minConst: CGFloat = position(for: leastCoordinateState)
@@ -750,9 +753,9 @@ class LayoutAdapter {
         defer {
             if forceLayout {
                 layoutSurfaceIfNeeded()
-                log.debug("activateLayout for \(state) -- surface.presentation = \(self.surfaceView.presentationFrame) surface.frame = \(self.surfaceView.frame)")
+                os_log(msg, log: devLog, type: .debug, "activateLayout for \(state) -- surface.presentation = \(self.surfaceView.presentationFrame) surface.frame = \(self.surfaceView.frame)")
             } else {
-                log.debug("activateLayout for \(state)")
+                os_log(msg, log: devLog, type: .debug, "activateLayout for \(state)")
             }
         }
 
@@ -787,7 +790,7 @@ class LayoutAdapter {
             if let constraints = stateConstraints[state] {
                 NSLayoutConstraint.activate(constraints)
             } else {
-                log.error("Couldn't find any constraints for \(state)")
+                os_log(msg, log: sysLog, type: .fault, "Error: can not find any constraints for \(state)")
             }
         }
     }

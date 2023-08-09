@@ -14,45 +14,51 @@ public extension UILabel {
         static var fromValue: Double = 0
         static var toValue: Double = 0
         static var duration: Double = 0
-        static var displayLink: CADisplayLink?
+        static var displayLink: UnsafeRawPointer = UnsafeRawPointer(bitPattern: "displayLink".hashValue)!
         static var formatter:String = "%.2f"
     }
     private var startTime: CFTimeInterval {
         get {
             objc_getAssociatedObject(self, &AssociatedKey.startTime) as? CFTimeInterval ?? 0
-        }
-        set { objc_setAssociatedObject(self, &AssociatedKey.startTime, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } set {
+            objc_setAssociatedObject(self, &AssociatedKey.startTime, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
     }
     private var fromValue: Double {
         get {
             objc_getAssociatedObject(self, &AssociatedKey.fromValue) as? Double ?? 0
+        } set {
+            objc_setAssociatedObject(self, &AssociatedKey.fromValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-        set { objc_setAssociatedObject(self, &AssociatedKey.fromValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var toValue: Double {
         get {
             objc_getAssociatedObject(self, &AssociatedKey.toValue) as? Double ?? 0
+        } set {
+            objc_setAssociatedObject(self, &AssociatedKey.toValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-        set { objc_setAssociatedObject(self, &AssociatedKey.toValue, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var duration: Double {
         get {
             objc_getAssociatedObject(self, &AssociatedKey.duration) as? Double ?? 0
+        } set {
+            objc_setAssociatedObject(self, &AssociatedKey.duration, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-        set { objc_setAssociatedObject(self, &AssociatedKey.duration, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
     private var displayLink: CADisplayLink? {
         get {
             objc_getAssociatedObject(self, &AssociatedKey.displayLink) as? CADisplayLink
+        } set {
+            objc_setAssociatedObject(self, &AssociatedKey.displayLink, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         }
-        set { objc_setAssociatedObject(self, &AssociatedKey.displayLink, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
     }
-    private var formatter: NSString? {
+    private var formatter: String? {
         get {
-            objc_getAssociatedObject(self, &AssociatedKey.formatter) as? NSString
+            objc_getAssociatedObject(self, &AssociatedKey.formatter) as? String
         }
-        set { objc_setAssociatedObject(self, &AssociatedKey.formatter, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.formatter, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
     }
     
     //MARK: 數字跳動
@@ -62,7 +68,7 @@ public extension UILabel {
     ///   - to: 到哪個數值
     ///   - duration: 動畫時間
     ///   - formatter: 格式化(默認".2f")
-    @objc func count(fromValue: Double, to: Double, duration: Double,formatter:NSString?) {
+    @objc func count(fromValue: Double, to: Double, duration: Double,formatter:String?) {
         startTime = CACurrentMediaTime()
         self.fromValue = fromValue
         toValue = to

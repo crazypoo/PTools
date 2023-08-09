@@ -1,6 +1,7 @@
 // Copyright 2018-Present Shin Yamamoto. All rights reserved. MIT license.
 
 import UIKit
+import os.log
 
 ///
 /// The presentation model of FloatingPanel
@@ -35,7 +36,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     private(set) var state: FloatingPanelState = .hidden {
         didSet {
-            log.debug("state changed: \(oldValue) -> \(state)")
+            os_log(msg, log: devLog, type: .debug, "state changed: \(oldValue) -> \(state)")
             if let vc = ownerVC {
                 vc.delegate?.floatingPanelDidChangeState?(vc)
             }
@@ -66,6 +67,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     private var stopScrollDeceleration: Bool = false
     private var scrollBounce = false
     private var scrollIndictorVisible = false
+    private var scrollBounceThreshold: CGFloat = -30.0
 
     // MARK: - Interface
 
@@ -126,7 +128,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         if animated {
             let updateScrollView: () -> Void = { [weak self] in
                 guard let self = self else { return }
-                if self.state == self.layoutAdapter.mostExpandedState, abs(self.layoutAdapter.offsetFromMostExpandedAnchor) <= 1.0 {
+                if self.state == self.layoutAdapter.mostExpandedState, 0 == self.layoutAdapter.offsetFromMostExpandedAnchor {
                     self.unlockScrollView()
                 } else {
                     self.lockScrollView()
@@ -162,7 +164,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 self.updateLayout(to: to)
 
                 if shouldDoubleLayout {
-                    log.info("Lay out the surface again to modify an intrinsic size error according to UIStackView")
+                    os_log(msg, log: sysLog, type: .info, "Lay out the surface again to modify an intrinsic size error according to UIStackView")
                     self.updateLayout(to: to)
                 }
             }
@@ -231,7 +233,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     func getBackdropAlpha(at cur: CGFloat, with translation: CGFloat) -> CGFloat {
-        /* log.debug("currentY: \(currentY) translation: \(translation)") */
+        /* os_log(msg, log: devLog, type: .debug, "currentY: \(currentY) translation: \(translation)") */
         let forwardY = (translation >= 0)
 
         let segment = layoutAdapter.segment(at: cur, forward: forwardY)
@@ -264,7 +266,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
         guard gestureRecognizer == panGestureRecognizer else { return false }
 
-        /* log.debug("shouldRecognizeSimultaneouslyWith", otherGestureRecognizer) */
+        /* os_log(msg, log: devLog, type: .debug, "shouldRecognizeSimultaneouslyWith", otherGestureRecognizer) */
 
         switch otherGestureRecognizer {
         case is FloatingPanelPanGestureRecognizer:
@@ -337,7 +339,10 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                     if surfaceView.grabberAreaContains(gestureRecognizer.location(in: surfaceView)) {
                         return false
                     }
-                    return allowScrollPanGesture(for: scrollView)
+                    guard state == layoutAdapter.mostExpandedState else { return false }
+                    // The condition where offset > 0 must not be included here. Because it will stop recognizing
+                    // the panel pan gesture if a user starts scrolling content from an offset greater than 0.
+                    return allowScrollPanGesture(of: scrollView) { offset in offset <= scrollBounceThreshold  }
                 default:
                     return false
                 }
@@ -388,15 +393,16 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             let velocity = value(of: panGesture.velocity(in: panGesture.view))
             let location = panGesture.location(in: surfaceView)
 
-            let insideMostExpandedAnchor = 0 > layoutAdapter.offsetFromMostExpandedAnchor + (1.0 / surfaceView.fp_displayScale)
+            let insideMostExpandedAnchor = 0 > layoutAdapter.offsetFromMostExpandedAnchor
 
-            log.debug("""
+            os_log(msg, log: devLog, type: .debug, """
                 scroll gesture(\(state):\(panGesture.state)) -- \
                 inside expanded anchor = \(insideMostExpandedAnchor), \
                 interactionInProgress = \(interactionInProgress), \
                 scroll offset = \(value(of: scrollView.contentOffset)), \
                 location = \(value(of: location)), velocity = \(velocity)
-                """)
+                """
+            )
 
             let offsetDiff = value(of: scrollView.contentOffset - contentOffsetForPinning(of: scrollView))
 
@@ -404,7 +410,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 // Scroll offset pinning
                 if state == layoutAdapter.mostExpandedState {
                     if interactionInProgress {
-                        log.debug("settle offset --", value(of: initialScrollOffset))
+                        os_log(msg, log: devLog, type: .debug, "settle offset -- \(value(of: initialScrollOffset))")
                         stopScrolling(at: initialScrollOffset)
                     } else {
                         if surfaceView.grabberAreaContains(location) {
@@ -456,21 +462,24 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                     }
                 } else {
                     if state == layoutAdapter.mostExpandedState {
+                        let allowScroll = allowScrollPanGesture(of: scrollView) { offset in
+                            offset <= scrollBounceThreshold || 0 < offset
+                        }
                         switch layoutAdapter.position {
                         case .top, .left:
-                            if velocity < 0, !allowScrollPanGesture(for: scrollView) {
+                            if velocity < 0, !allowScroll {
                                 lockScrollView(strict: true)
                             }
-                            if velocity > 0, allowScrollPanGesture(for: scrollView) {
+                            if velocity > 0, allowScroll {
                                 unlockScrollView()
                             }
                         case .bottom, .right:
                             // Hide a scroll indicator just before starting an interaction by swiping a panel down.
-                            if velocity > 0, !allowScrollPanGesture(for: scrollView) {
+                            if velocity > 0, !allowScroll {
                                 lockScrollView(strict: true)
                             }
                             // Show a scroll indicator when an animation is interrupted at the top and content is scrolled up
-                            if velocity < 0, allowScrollPanGesture(for: scrollView) {
+                            if velocity < 0, allowScroll {
                                 unlockScrollView()
                             }
                         }
@@ -486,7 +495,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             let velocity = panGesture.velocity(in: panGesture.view)
             let location = panGesture.location(in: panGesture.view)
 
-            log.debug("""
+            os_log(msg, log: devLog, type: .debug, """
                 panel gesture(\(state):\(panGesture.state)) -- \
                 translation =  \(value(of: translation)), \
                 location = \(value(of: location)), \
@@ -536,19 +545,19 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     private func interruptAnimationIfNeeded() {
         if let animator = self.moveAnimator, animator.isRunning {
-            log.debug("the attraction animator interrupted!!!")
+            os_log(msg, log: devLog, type: .debug, "the attraction animator interrupted!!!")
             animator.stopAnimation(true)
             endAttraction(false)
         }
         if let animator = self.transitionAnimator {
             guard 0 >= layoutAdapter.offsetFromMostExpandedAnchor else { return }
-            log.debug("a panel animation(interruptible: \(animator.isInterruptible)) interrupted!!!")
+            os_log(msg, log: devLog, type: .debug, "a panel animation(interruptible: \(animator.isInterruptible)) interrupted!!!")
             if animator.isInterruptible {
                 animator.stopAnimation(false)
                 // A user can stop a panel at the nearest Y of a target position so this fine-tunes
                 // the a small gap between the presentation layer frame and model layer frame
                 // to unlock scroll view properly at finishAnimation(at:)
-                if abs(layoutAdapter.offsetFromMostExpandedAnchor) <= 1.0 {
+                if 0 == layoutAdapter.offsetFromMostExpandedAnchor {
                     layoutAdapter.surfaceLocation = layoutAdapter.surfaceLocation(for: layoutAdapter.mostExpandedState)
                 }
                 animator.finishAnimation(at: .current)
@@ -634,7 +643,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         // A user interaction does not always start from Began state of the pan gesture
         // because it can be recognized in scrolling a content in a content view controller.
         // So here just preserve the current state if needed.
-        log.debug("panningBegan -- location = \(value(of: location))")
+        os_log(msg, log: devLog, type: .debug, "panningBegan -- location = \(value(of: location))")
 
         guard let scrollView = scrollView else { return }
         if state == layoutAdapter.mostExpandedState {
@@ -647,7 +656,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     private func panningChange(with translation: CGPoint) {
-        log.debug("panningChange -- translation = \(value(of: translation))")
+        os_log(msg, log: devLog, type: .debug, "panningChange -- translation = \(value(of: translation))")
         let pre = value(of: layoutAdapter.surfaceLocation)
         let diff = value(of: translation - initialTranslation)
         let next = pre + diff
@@ -700,14 +709,15 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     private func panningEnd(with translation: CGPoint, velocity: CGPoint) {
-        log.debug("panningEnd -- translation = \(value(of: translation)), velocity = \(value(of: velocity))")
+        os_log(msg, log: devLog, type: .debug, "panningEnd -- translation = \(value(of: translation)), velocity = \(value(of: velocity))")
 
         if state == .hidden {
-            log.debug("Already hidden")
+            os_log(msg, log: devLog, type: .debug, "Already hidden")
             return
         }
 
-        stopScrollDeceleration = (0 > layoutAdapter.offsetFromMostExpandedAnchor + (1.0 / surfaceView.fp_displayScale)) // Projecting the dragging to the scroll dragging or not
+        // Determine whether the panel's dragging should be projected onto the scroll content scrolling
+        stopScrollDeceleration = 0 > layoutAdapter.offsetFromMostExpandedAnchor
         if stopScrollDeceleration {
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
@@ -792,7 +802,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     private func startInteraction(with translation: CGPoint, at location: CGPoint) {
         /* Don't lock a scroll view to show a scroll indicator after hitting the top */
-        log.debug("startInteraction  -- translation = \(value(of: translation)), location = \(value(of: location))")
+        os_log(msg, log: devLog, type: .debug, "startInteraction  -- translation = \(value(of: translation)), location = \(value(of: location))")
         guard interactionInProgress == false else { return }
 
         var offset: CGPoint = .zero
@@ -803,13 +813,14 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 initialScrollOffset = scrollView.contentOffset
             } else {
                 let pinningOffset = contentOffsetForPinning(of: scrollView)
-
-                // `scrollView.contentOffset` can be a value in [-30, 0) at this time by `allowScrollPanGesture(for:)`.
-                // Therefore the initial scroll offset must be reset to the pinning offset. Otherwise, the following
-                // `Fit the surface bounds` logic don't working and also the scroll content offset can be invalid.
+                
+                // `initialScrollOffset` must be reset to the pinning offset because the value of `scrollView.contentOffset`,
+                // for instance, is a value in [-30, 0) on a bottom positioned panel with `allowScrollPanGesture(of:condition:)`.
+                // If it's not reset, the following logic to shift the surface frame will not work and then the scroll
+                // content offset will become an unexpected value.
                 initialScrollOffset = pinningOffset
 
-                // Fit the surface bounds to a scroll offset content by startInteraction(at:offset:)
+                // Shift the surface frame to negate the scroll content offset at startInteraction(at:offset:)
                 let offsetDiff = scrollView.contentOffset - pinningOffset
                 switch layoutAdapter.position {
                 case .top, .left:
@@ -822,7 +833,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                     }
                 }
             }
-            log.debug("initial scroll offset --", initialScrollOffset)
+            os_log(msg, log: devLog, type: .debug, "initial scroll offset -- \(initialScrollOffset)")
         }
 
         initialTranslation = translation
@@ -839,10 +850,10 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     private func endInteraction(for targetPosition: FloatingPanelState) {
-        log.debug("endInteraction to \(targetPosition)")
+        os_log(msg, log: devLog, type: .debug, "endInteraction to \(targetPosition)")
 
         if let scrollView = scrollView {
-            log.debug("endInteraction -- scroll offset = \(scrollView.contentOffset)")
+            os_log(msg, log: devLog, type: .debug, "endInteraction -- scroll offset = \(scrollView.contentOffset)")
         }
 
         interactionInProgress = false
@@ -870,7 +881,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     private func startAttraction(to targetPosition: FloatingPanelState, with velocity: CGPoint) {
-        log.debug("startAnimation to \(targetPosition) -- velocity = \(value(of: velocity))")
+        os_log(msg, log: devLog, type: .debug, "startAnimation to \(targetPosition) -- velocity = \(value(of: velocity))")
         guard let vc = ownerVC else { return }
 
         isAttracting = true
@@ -918,17 +929,17 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         }
 
         if let scrollView = scrollView {
-            log.debug("finishAnimation -- scroll offset = \(scrollView.contentOffset)")
+            os_log(msg, log: devLog, type: .debug, "finishAnimation -- scroll offset = \(scrollView.contentOffset)")
         }
 
         stopScrollDeceleration = false
 
-        log.debug("""
+        os_log(msg, log: devLog, type: .debug, """
             finishAnimation -- state = \(state) \
             surface location = \(layoutAdapter.surfaceLocation) \
             edge most position = \(layoutAdapter.surfaceLocation(for: layoutAdapter.mostExpandedState))
             """)
-        if finished, state == layoutAdapter.mostExpandedState, abs(layoutAdapter.offsetFromMostExpandedAnchor) <= 1.0 {
+        if finished, state == layoutAdapter.mostExpandedState, 0 == layoutAdapter.offsetFromMostExpandedAnchor {
             unlockScrollView()
         } else if finished, shouldLooselyLockScrollView {
             unlockScrollView()
@@ -959,7 +970,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     func targetPosition(from currentY: CGFloat, with velocity: CGFloat) -> (FloatingPanelState) {
-        log.debug("targetPosition -- currentY = \(currentY), velocity = \(velocity)")
+        os_log(msg, log: devLog, type: .debug, "targetPosition -- currentY = \(currentY), velocity = \(velocity)")
 
         let sortedPositions = layoutAdapter.sortedAnchorStatesByCoordinate
 
@@ -985,7 +996,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         (fromPos, toPos) = forwardY ? (lowerPos, upperPos) : (upperPos, lowerPos)
 
         if behaviorAdapter.shouldProjectMomentum(to: toPos) == false {
-            log.debug("targetPosition -- negate projection: distance = \(distance)")
+            os_log(msg, log: devLog, type: .debug, "targetPosition -- negate projection: distance = \(distance)")
             let segment = layoutAdapter.segment(at: currentY, forward: forwardY)
             var (lowerPos, upperPos) = (segment.lower ?? sortedPositions.first!, segment.upper ?? sortedPositions.last!)
             // Equate the segment out of {top,bottom} most state to the {top,bottom} most segment
@@ -1034,10 +1045,10 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         guard let scrollView = scrollView else { return }
 
         if scrollView.isLocked {
-            log.debug("Already scroll locked.")
+            os_log(msg, log: devLog, type: .debug, "Already scroll locked.")
             return
         }
-        log.debug("lock scroll view")
+        os_log(msg, log: devLog, type: .debug, "lock scroll view")
 
         scrollIndictorVisible = scrollView.showsVerticalScrollIndicator
 
@@ -1057,7 +1068,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     private func unlockScrollView() {
         guard let scrollView = scrollView, scrollView.isLocked else { return }
-        log.debug("unlock scroll view")
+        os_log(msg, log: devLog, type: .debug, "unlock scroll view")
 
         scrollView.bounces = scrollBounce
         scrollView.isDirectionalLockEnabled = false
@@ -1103,16 +1114,15 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         }
     }
 
-    private func allowScrollPanGesture(for scrollView: UIScrollView) -> Bool {
-        guard state == layoutAdapter.mostExpandedState else { return false }
-        var offsetY: CGFloat = 0
+    private func allowScrollPanGesture(of scrollView: UIScrollView, condition: (_ offset: CGFloat) -> Bool) -> Bool {
+        var offset: CGFloat = 0
         switch layoutAdapter.position {
         case .top, .left:
-            offsetY = value(of: scrollView.fp_contentOffsetMax - scrollView.contentOffset)
+            offset = value(of: scrollView.fp_contentOffsetMax - scrollView.contentOffset)
         case .bottom, .right:
-            offsetY = value(of: scrollView.contentOffset - contentOffsetForPinning(of: scrollView))
+            offset = value(of: scrollView.contentOffset - contentOffsetForPinning(of: scrollView))
         }
-        return offsetY <= -30.0 || offsetY > 0
+        return condition(offset)
     }
 
     // MARK: - UIPanGestureRecognizer Intermediation
@@ -1236,7 +1246,7 @@ private class NumericSpringAnimator: NSObject {
         if isRunning {
             return false
         }
-        log.debug("startAnimation --", displayLink)
+        os_log(msg, log: devLog, type: .debug, "startAnimation --", displayLink)
         isRunning = true
         displayLink.add(to: RunLoop.main, forMode: .common)
         return true
@@ -1248,7 +1258,7 @@ private class NumericSpringAnimator: NSObject {
             if locked { lock.unlock() }
         }
 
-        log.debug("stopAnimation --", displayLink)
+        os_log(msg, log: devLog, type: .debug, "stopAnimation --", displayLink)
         isRunning = false
         displayLink.invalidate()
         if withoutFinishing {
