@@ -44,6 +44,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     let panGestureRecognizer: FloatingPanelPanGestureRecognizer
+    let panGestureDelegateRouter: FloatingPanelPanGestureRecognizer.DelegateRouter
     var isRemovalInteractionEnabled: Bool = false
 
     fileprivate var isSuspended: Bool = false // Prevent a memory leak in the modal transition
@@ -64,7 +65,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     // Scroll handling
     private var initialScrollOffset: CGPoint = .zero
-    private var stopScrollDeceleration: Bool = false
     private var scrollBounce = false
     private var scrollIndictorVisible = false
     private var scrollBounceThreshold: CGFloat = -30.0
@@ -86,17 +86,19 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         behaviorAdapter = BehaviorAdapter(vc: vc, behavior: behavior)
 
         panGestureRecognizer = FloatingPanelPanGestureRecognizer()
-
-        if #available(iOS 11.0, *) {
-            panGestureRecognizer.name = "FloatingPanelPanGestureRecognizer"
-        }
+        panGestureDelegateRouter = FloatingPanelPanGestureRecognizer.DelegateRouter(panGestureRecognizer: panGestureRecognizer)
 
         super.init()
 
-        panGestureRecognizer.floatingPanel = self
+        panGestureRecognizer.set(floatingPanel: self)
         surfaceView.addGestureRecognizer(panGestureRecognizer)
         panGestureRecognizer.addTarget(self, action: #selector(handle(panGesture:)))
-        panGestureRecognizer.delegate = self
+
+        // Assign the delegate router to `FloatingPanelPanGestureRecognizer.delegate` only after setting
+        // `FloatingPanelPanGestureRecognizer.floatingPanel` property.
+        // This is because `delegateOrigin` is used at the time of assignment to its `delegate` property
+        // through the delegate router.
+        panGestureRecognizer.delegate = panGestureDelegateRouter
 
         // Set the tap-to-dismiss action of the backdrop view.
         // It's disabled by default. See also BackdropView.dismissalTapGestureRecognizer.
@@ -143,10 +145,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                 let animationVector = CGVector(dx: abs(removalVector.dx), dy: abs(removalVector.dy))
                 animator = vc.animatorForDismissing(with: animationVector)
             default:
-                move(to: to, with: 0) { [weak self] in
-                    guard let self = self else { return }
-
-                    self.moveAnimator = nil
+                startAttraction(to: to, with: .zero) { [weak self] in
+                    self?.endAttraction(false)
                     updateScrollView()
                     completion?()
                 }
@@ -260,10 +260,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer,
                                   shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let result = panGestureRecognizer.delegateProxy?.gestureRecognizer?(gestureRecognizer, shouldRecognizeSimultaneouslyWith: otherGestureRecognizer) {
-            return result
-        }
-
         guard gestureRecognizer == panGestureRecognizer else { return false }
 
         /* os_log(msg, log: devLog, type: .debug, "shouldRecognizeSimultaneouslyWith", otherGestureRecognizer) */
@@ -291,10 +287,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let result = panGestureRecognizer.delegateProxy?.gestureRecognizer?(gestureRecognizer, shouldBeRequiredToFailBy: otherGestureRecognizer) {
-            return result
-        }
-
         if otherGestureRecognizer is FloatingPanelPanGestureRecognizer {
             // If this panel is the farthest descendant of visible panels,
             // its ancestors' pan gesture must wait for its pan gesture to fail
@@ -316,10 +308,6 @@ class Core: NSObject, UIGestureRecognizerDelegate {
     }
 
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        if let result = panGestureRecognizer.delegateProxy?.gestureRecognizer?(gestureRecognizer, shouldRequireFailureOf: otherGestureRecognizer) {
-            return result
-        }
-
         guard gestureRecognizer == panGestureRecognizer else { return false }
 
         // Should begin the pan gesture without waiting for the tracking scroll view's gestures.
@@ -716,21 +704,11 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             return
         }
 
-        // Determine whether the panel's dragging should be projected onto the scroll content scrolling
-        stopScrollDeceleration = 0 > layoutAdapter.offsetFromMostExpandedAnchor
-        if stopScrollDeceleration {
-            DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
-                
-                self.stopScrolling(at: self.initialScrollOffset)
-            }
-        }
-
         let currentPos = value(of: layoutAdapter.surfaceLocation)
         let mainVelocity = value(of: velocity)
-        var targetPosition = self.targetPosition(from: currentPos, with: mainVelocity)
+        var target = self.targetState(from: currentPos, with: mainVelocity)
 
-        endInteraction(for: targetPosition)
+        endInteraction(for: target)
 
         if isRemovalInteractionEnabled {
             let distToHidden = CGFloat(abs(currentPos - layoutAdapter.position(for: .hidden)))
@@ -747,17 +725,18 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         }
 
         if let vc = ownerVC {
-            vc.delegate?.floatingPanelWillEndDragging?(vc, withVelocity: velocity, targetState: &targetPosition)
+            vc.delegate?.floatingPanelWillEndDragging?(vc, withVelocity: velocity, targetState: &target)
         }
 
-        guard shouldAttract(to: targetPosition) else {
+        guard shouldAttract(to: target) else {
+            self.state = target
+            self.updateLayout(to: target)
+            self.unlockScrollView()
+            // The `floatingPanelDidEndDragging(_:willAttract:)` must be called after the state property changes.
+            // This allows library users to get the correct state in the delegate method.
             if let vc = ownerVC {
                 vc.delegate?.floatingPanelDidEndDragging?(vc, willAttract: false)
             }
-
-            self.state = targetPosition
-            self.updateLayout(to: targetPosition)
-            self.unlockScrollView()
             return
         }
 
@@ -765,18 +744,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             vc.delegate?.floatingPanelDidEndDragging?(vc, willAttract: true)
         }
 
-        // Workaround: Disable a tracking scroll to prevent bouncing a scroll content in a panel animating
-        let isScrollEnabled = scrollView?.isScrollEnabled
-        if let scrollView = scrollView, targetPosition != layoutAdapter.mostExpandedState {
-            scrollView.isScrollEnabled = false
-        }
-
-        startAttraction(to: targetPosition, with: velocity)
-
-        // Workaround: Reset `self.scrollView.isScrollEnabled`
-        if let scrollView = scrollView, targetPosition != layoutAdapter.mostExpandedState,
-            let isScrollEnabled = isScrollEnabled {
-            scrollView.isScrollEnabled = isScrollEnabled
+        startAttraction(to: target, with: velocity) { [weak self] in
+            self?.endAttraction(true)
         }
     }
 
@@ -809,11 +778,42 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
         initialSurfaceLocation = layoutAdapter.surfaceLocation
         if state == layoutAdapter.mostExpandedState, let scrollView = scrollView {
-            if surfaceView.grabberAreaContains(location) {
+            let scrollFrame = scrollView.convert(scrollView.bounds, to: nil)
+            let touchStartingPoint = surfaceView.convert(initialLocation, to: nil)
+
+            ifLabel: if surfaceView.grabberAreaContains(location) {
                 initialScrollOffset = scrollView.contentOffset
-            } else {
+            } else if scrollFrame.contains(touchStartingPoint) {
                 let pinningOffset = contentOffsetForPinning(of: scrollView)
-                
+
+                // This code block handles the scenario where there's a navigation bar or toolbar
+                // above the tracking scroll view with corresponding content insets set, and users
+                // move the panel by interacting with these bars. One case of the scenario can be
+                // tested with 'Show Navigation Controller' in Samples.app
+                do {
+                    // Adjust the location by subtracting scrollView's origin to reference the frame
+                    // rectangle of the scroll view itself.
+                    let _location = scrollView.convert(location, from: surfaceView) - scrollView.bounds.origin
+
+                    os_log(msg, log: devLog, type: .debug, "startInteraction -- location in scroll view = \(_location))")
+
+                    // Keep the scroll content offset if the current touch position is inside its
+                    // content inset area.
+                    switch layoutAdapter.position {
+                    case .top, .left:
+                        let base = value(of: scrollView.bounds.size)
+                        if value(of: pinningOffset) + (base - value(of: _location)) < 0 {
+                            initialScrollOffset = scrollView.contentOffset
+                            break ifLabel
+                        }
+                    case .bottom, .right:
+                        if value(of: pinningOffset) + value(of: _location) < 0 {
+                            initialScrollOffset = scrollView.contentOffset
+                            break ifLabel
+                        }
+                    }
+                }
+
                 // `initialScrollOffset` must be reset to the pinning offset because the value of `scrollView.contentOffset`,
                 // for instance, is a value in [-30, 0) on a bottom positioned panel with `allowScrollPanGesture(of:condition:)`.
                 // If it's not reset, the following logic to shift the surface frame will not work and then the scroll
@@ -832,6 +832,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                         offset = -offsetDiff
                     }
                 }
+            } else {
+                initialScrollOffset = scrollView.contentOffset
             }
             os_log(msg, log: devLog, type: .debug, "initial scroll offset -- \(initialScrollOffset)")
         }
@@ -849,8 +851,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         lockScrollView()
     }
 
-    private func endInteraction(for targetPosition: FloatingPanelState) {
-        os_log(msg, log: devLog, type: .debug, "endInteraction to \(targetPosition)")
+    private func endInteraction(for state: FloatingPanelState) {
+        os_log(msg, log: devLog, type: .debug, "endInteraction to \(state)")
 
         if let scrollView = scrollView {
             os_log(msg, log: devLog, type: .debug, "endInteraction -- scroll offset = \(scrollView.contentOffset)")
@@ -859,11 +861,11 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         interactionInProgress = false
 
         // Prevent to keep a scroll view indicator visible at the half/tip position
-        if targetPosition != layoutAdapter.mostExpandedState {
+        if state != layoutAdapter.mostExpandedState {
             lockScrollView()
         }
 
-        layoutAdapter.endInteraction(at: targetPosition)
+        layoutAdapter.endInteraction(at: state)
     }
 
     private func tearDownActiveInteraction() {
@@ -873,26 +875,24 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         panGestureRecognizer.isEnabled = true
     }
 
-    private func shouldAttract(to targetState: FloatingPanelState) -> Bool {
-        if layoutAdapter.position(for: targetState) == value(of: layoutAdapter.surfaceLocation) {
+    private func shouldAttract(to state: FloatingPanelState) -> Bool {
+        if layoutAdapter.position(for: state) == value(of: layoutAdapter.surfaceLocation) {
             return false
         }
         return true
     }
 
-    private func startAttraction(to targetPosition: FloatingPanelState, with velocity: CGPoint) {
-        os_log(msg, log: devLog, type: .debug, "startAnimation to \(targetPosition) -- velocity = \(value(of: velocity))")
+    private func startAttraction(to state: FloatingPanelState, with velocity: CGPoint, completion: @escaping (() -> Void)) {
+        os_log(msg, log: devLog, type: .debug, "startAnimation to \(state) -- velocity = \(value(of: velocity))")
         guard let vc = ownerVC else { return }
 
         isAttracting = true
-        vc.delegate?.floatingPanelWillBeginAttracting?(vc, to: targetPosition)
-        move(to: targetPosition, with: value(of: velocity)) {
-            self.endAttraction(true)
-        }
+        vc.delegate?.floatingPanelWillBeginAttracting?(vc, to: state)
+        move(to: state, with: value(of: velocity), completion: completion)
     }
 
-    private func move(to targetPosition: FloatingPanelState, with velocity: CGFloat, completion: @escaping (() -> Void)) {
-        let (animationConstraint, target) = layoutAdapter.setUpAttraction(to: targetPosition)
+    private func move(to state: FloatingPanelState, with velocity: CGFloat, completion: @escaping (() -> Void)) {
+        let (animationConstraint, target) = layoutAdapter.setUpAttraction(to: state)
         let initialData = NumericSpringAnimator.Data(value: animationConstraint.constant, velocity: velocity)
         moveAnimator = NumericSpringAnimator(
             initialData: initialData,
@@ -905,22 +905,34 @@ class Core: NSObject, UIGestureRecognizerDelegate {
                       let ownerVC = self.ownerVC // Ensure the owner vc is existing for `layoutAdapter.surfaceLocation`
                 else { return }
                 animationConstraint.constant = data.value
+
                 let current = self.value(of: self.layoutAdapter.surfaceLocation)
                 let translation = data.value - initialData.value
                 self.backdropView.alpha = self.getBackdropAlpha(at: current, with: translation)
+
+                // Pin the offset of the tracking scroll view while moving by this animator
+                if let scrollView = self.scrollView {
+                    self.stopScrolling(at: self.initialScrollOffset)
+                    os_log(msg, log: devLog, type: .debug, "move -- pinning scroll offset = \(scrollView.contentOffset)")
+                }
+
                 ownerVC.notifyDidMove()
         },
             completion: { [weak self] in
                 guard let self = self,
-                      self.ownerVC != nil else { return }
-                self.updateLayout(to: targetPosition)
+                      let ownerVC = self.ownerVC
+                else { return }
+                self.updateLayout(to: state)
+                // Notify when it has reached the target anchor point. At this point, the surface location is equal to
+                // the target anchor location.
+                ownerVC.notifyDidMove()
                 completion()
         })
         moveAnimator?.startAnimation()
-        state = targetPosition
+        self.state = state
     }
 
-    private func endAttraction(_ finished: Bool) {
+    private func endAttraction(_ tryUnlockScroll: Bool) {
         self.isAttracting = false
         self.moveAnimator = nil
 
@@ -932,17 +944,17 @@ class Core: NSObject, UIGestureRecognizerDelegate {
             os_log(msg, log: devLog, type: .debug, "finishAnimation -- scroll offset = \(scrollView.contentOffset)")
         }
 
-        stopScrollDeceleration = false
-
         os_log(msg, log: devLog, type: .debug, """
             finishAnimation -- state = \(state) \
             surface location = \(layoutAdapter.surfaceLocation) \
             edge most position = \(layoutAdapter.surfaceLocation(for: layoutAdapter.mostExpandedState))
             """)
-        if finished, state == layoutAdapter.mostExpandedState, 0 == layoutAdapter.offsetFromMostExpandedAnchor {
-            unlockScrollView()
-        } else if finished, shouldLooselyLockScrollView {
-            unlockScrollView()
+
+        if tryUnlockScroll {
+            if (state == layoutAdapter.mostExpandedState && 0 == layoutAdapter.offsetFromMostExpandedAnchor)
+                || shouldLooselyLockScrollView {
+                unlockScrollView()
+            }
         }
     }
 
@@ -969,8 +981,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         return (initialVelocity / 1000.0) * decelerationRate / (1.0 - decelerationRate)
     }
 
-    func targetPosition(from currentY: CGFloat, with velocity: CGFloat) -> (FloatingPanelState) {
-        os_log(msg, log: devLog, type: .debug, "targetPosition -- currentY = \(currentY), velocity = \(velocity)")
+    func targetState(from currentY: CGFloat, with velocity: CGFloat) -> FloatingPanelState {
+        os_log(msg, log: devLog, type: .debug, "targetState -- currentY = \(currentY), velocity = \(velocity)")
 
         let sortedPositions = layoutAdapter.sortedAnchorStatesByCoordinate
 
@@ -996,7 +1008,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         (fromPos, toPos) = forwardY ? (lowerPos, upperPos) : (upperPos, lowerPos)
 
         if behaviorAdapter.shouldProjectMomentum(to: toPos) == false {
-            os_log(msg, log: devLog, type: .debug, "targetPosition -- negate projection: distance = \(distance)")
+            os_log(msg, log: devLog, type: .debug, "targetState -- negate projection: distance = \(distance)")
             let segment = layoutAdapter.segment(at: currentY, forward: forwardY)
             var (lowerPos, upperPos) = (segment.lower ?? sortedPositions.first!, segment.upper ?? sortedPositions.last!)
             // Equate the segment out of {top,bottom} most state to the {top,bottom} most segment
@@ -1090,11 +1102,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         // Must use setContentOffset(_:animated) to force-stop deceleration
         guard let scrollView = scrollView else { return }
         var offset = scrollView.contentOffset
-        if contentOffset.y >= 0 {
-            setValue(contentOffset, to: &offset)
-        } else {
-            offset = CGPoint(x: 0, y: 0)
-        }
+        setValue(contentOffset, to: &offset)
         scrollView.setContentOffset(offset, animated: false)
     }
 
@@ -1124,32 +1132,31 @@ class Core: NSObject, UIGestureRecognizerDelegate {
         }
         return condition(offset)
     }
-
-    // MARK: - UIPanGestureRecognizer Intermediation
-    override func responds(to aSelector: Selector!) -> Bool {
-        return super.responds(to: aSelector) || panGestureRecognizer.delegateProxy?.responds(to: aSelector) == true
-    }
-
-    override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        if panGestureRecognizer.delegateProxy?.responds(to: aSelector) == true {
-            return panGestureRecognizer.delegateProxy
-        }
-        return super.forwardingTarget(for: aSelector)
-    }
 }
 
 /// A gesture recognizer that looks for panning (dragging) gestures in a panel.
 public final class FloatingPanelPanGestureRecognizer: UIPanGestureRecognizer {
-    fileprivate weak var floatingPanel: Core?
     fileprivate var initialLocation: CGPoint = .zero
+    private weak var floatingPanel: Core!  //  Core has this gesture recognizer as non-optional
+    fileprivate func set(floatingPanel: Core) {
+        self.floatingPanel = floatingPanel
+    }
+
+    init() {
+        super.init(target: nil, action: nil)
+        if #available(iOS 11.0, *) {
+            name = "FloatingPanelPanGestureRecognizer"
+        }
+    }
 
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
         super.touchesBegan(touches, with: event)
         initialLocation = touches.first?.location(in: view) ?? .zero
-        if floatingPanel?.transitionAnimator != nil || floatingPanel?.moveAnimator != nil {
+        if floatingPanel.transitionAnimator != nil || floatingPanel.moveAnimator != nil {
             self.state = .began
         }
     }
+
     /// The delegate of the gesture recognizer.
     ///
     /// - Note: The delegate is used by FloatingPanel itself. If you set your own delegate object, an
@@ -1159,10 +1166,12 @@ public final class FloatingPanelPanGestureRecognizer: UIPanGestureRecognizer {
             return super.delegate
         }
         set {
-            guard newValue is Core else {
-                let exception = NSException(name: .invalidArgumentException,
-                                            reason: "FloatingPanelController's built-in pan gesture recognizer must have its controller as its delegate. Use 'delegateProxy' property.",
-                                            userInfo: nil)
+            guard newValue is DelegateRouter else {
+                let exception = NSException(
+                    name: .invalidArgumentException,
+                    reason: "FloatingPanelController's built-in pan gesture recognizer must have its controller as its delegate. Use 'delegateProxy' property.",
+                    userInfo: nil
+                )
                 exception.raise()
                 return
             }
@@ -1170,12 +1179,44 @@ public final class FloatingPanelPanGestureRecognizer: UIPanGestureRecognizer {
         }
     }
 
-    /// An object to intercept the delegate of the gesture recognizer.
+    /// The default object implementing a set methods of the delegate of the gesture recognizer.
     ///
-    /// If an object adopting `UIGestureRecognizerDelegate` is set, the delegate methods are proxied to it.
+    /// Use this property with ``delegateProxy`` when you need to use the default gesture behaviors in a proxy implementation.
+    public var delegateOrigin: UIGestureRecognizerDelegate {
+        return floatingPanel
+    }
+
+    /// A proxy object to intercept the default behavior of the gesture recognizer.
+    ///
+    /// `UIGestureRecognizerDelegate` methods implementing by this object are called instead of the default delegate,
+    ///  ``delegateOrigin``.
     public weak var delegateProxy: UIGestureRecognizerDelegate? {
         didSet {
-            self.delegate = floatingPanel // Update the cached IMP
+            self.delegate = floatingPanel?.panGestureDelegateRouter // Update the cached IMP
+        }
+    }
+
+    final class DelegateRouter: NSObject, UIGestureRecognizerDelegate {
+        fileprivate unowned let panGestureRecognizer: FloatingPanelPanGestureRecognizer
+
+        init(panGestureRecognizer: FloatingPanelPanGestureRecognizer) {
+            self.panGestureRecognizer = panGestureRecognizer
+            super.init()
+        }
+
+        override func responds(to aSelector: Selector!) -> Bool {
+            return panGestureRecognizer.delegateProxy?.responds(to: aSelector) == true
+            || panGestureRecognizer.delegateOrigin.responds(to: aSelector)
+        }
+
+        override func forwardingTarget(for aSelector: Selector!) -> Any? {
+            if panGestureRecognizer.delegateProxy?.responds(to: aSelector) == true {
+                return panGestureRecognizer.delegateProxy
+            }
+            if panGestureRecognizer.delegateOrigin.responds(to: aSelector) {
+                return panGestureRecognizer.delegateOrigin
+            }
+            return nil
         }
     }
 }
@@ -1246,7 +1287,7 @@ private class NumericSpringAnimator: NSObject {
         if isRunning {
             return false
         }
-        os_log(msg, log: devLog, type: .debug, "startAnimation --", displayLink)
+        os_log(msg, log: devLog, type: .debug, "startAnimation -- \(displayLink)")
         isRunning = true
         displayLink.add(to: RunLoop.main, forMode: .common)
         return true
@@ -1258,7 +1299,7 @@ private class NumericSpringAnimator: NSObject {
             if locked { lock.unlock() }
         }
 
-        os_log(msg, log: devLog, type: .debug, "stopAnimation --", displayLink)
+        os_log(msg, log: devLog, type: .debug, "stopAnimation -- \(displayLink)")
         isRunning = false
         displayLink.invalidate()
         if withoutFinishing {

@@ -9,7 +9,7 @@
 FloatingPanel is a simple and easy-to-use UI component designed for a user interface featured in Apple Maps, Shortcuts and Stocks app.
 The user interface displays related content and utilities alongside the main content.
 
-Please see also [the API reference](https://floatingpanel.github.io/2.6.5/documentation/floatingpanel/) for more details.
+Please see also [the API reference](https://floatingpanel.github.io/2.7.0/documentation/floatingpanel/) for more details.
 
 ![Maps](https://github.com/SCENEE/FloatingPanel/blob/master/assets/maps.gif)
 ![Stocks](https://github.com/SCENEE/FloatingPanel/blob/master/assets/stocks.gif)
@@ -425,7 +425,7 @@ class ViewController: UIViewController, FloatingPanelControllerDelegate {
 class CustomPanelBehavior: FloatingPanelBehavior {
     let springDecelerationRate = UIScrollView.DecelerationRate.fast.rawValue + 0.02
     let springResponseTime = 0.4
-    func shouldProjectMomentum(_ fpc: FloatingPanelController, to proposedTargetPosition: FloatingPanelState) -> Bool {
+    func shouldProjectMomentum(_ fpc: FloatingPanelController, to proposedState: FloatingPanelState) -> Bool {
         return true
     }
 }
@@ -451,7 +451,7 @@ This allows full projectional panel behavior. For example, a user can swipe up a
 ```swift
 class MyPanelBehavior: FloatingPanelBehavior {
     ...
-    func shouldProjectMomentum(_ fpc: FloatingPanelController, to proposedTargetPosition: FloatingPanelPosition) -> Bool {
+    func shouldProjectMomentum(_ fpc: FloatingPanelController, to proposedState: FloatingPanelPosition) -> Bool {
         return true
     }
 }
