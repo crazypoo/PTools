@@ -9,8 +9,6 @@
 import UIKit
 import FloatingPanel
 
-public typealias FloatingBlock = () -> Void
-
 public class PTFloatingPanelFuction: NSObject {
     
     //MARK: 初始化創建FloatPanel
@@ -39,7 +37,7 @@ public class PTFloatingPanelFuction: NSObject {
                                   fpcSurfaceShadowColor:UIColor = .black,
                                   fpcSurfaceAppearanceRadius:CGFloat = 8,
                                   fpcSurfaceBackgroundColor:UIColor = .white,
-                                  floatingDismiss:FloatingBlock? = nil) {
+                                  floatingDismiss:PTActionTask? = nil) {
         let fpc = FloatingPanelController()
         fpc.set(contentViewController: vc)
         fpc.contentMode = fpcContentMode

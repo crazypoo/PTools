@@ -408,7 +408,7 @@ public class PTActionSheetView: UIView {
         }
     }
     
-    public func dismiss(block:(()->Void)?) {
+    public func dismiss(block:PTActionTask?) {
         let offscreenAnimation = POPBasicAnimation.easeOut()
         offscreenAnimation?.property = (POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty)
         offscreenAnimation?.toValue = actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight + 10

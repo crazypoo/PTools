@@ -12,7 +12,7 @@ public extension PTPOP where Base : UIScrollView {
     //MARK: 根据偏移量和页数绘制
     ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw
-    private func snapShotContentScrollPage(index: Int, maxIndex: Int, callback: @escaping () -> Void) {
+    private func snapShotContentScrollPage(index: Int, maxIndex: Int, callback: @escaping PTActionTask) {
         base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * base.frame.size.height), animated: false)
         let splitFrame = CGRect(x: 0, y: CGFloat(index) * base.frame.size.height, width: base.bounds.size.width, height: base.bounds.size.height)
         PTGCDManager.gcdAfter(time: 0.3) {
@@ -41,7 +41,7 @@ public extension PTPOP where Base : UIScrollView {
         /// 打开位图上下文大小为截图的大小
         UIGraphicsBeginImageContextWithOptions(base.contentSize, false, UIScreen.main.scale)
         /// 这个方法是一个绘图，里面可能有递归调用
-        snapShotContentScrollPage(index: 0, maxIndex: Int(page), callback: { () -> Void in
+        snapShotContentScrollPage(index: 0, maxIndex: Int(page)) {
             let screenShotImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
             /// 设置原点偏移
@@ -49,7 +49,7 @@ public extension PTPOP where Base : UIScrollView {
             snapShotView?.removeFromSuperview()
             /// 获取 snapShotContentScroll 时的回调图像
             completionHandler(screenShotImage)
-        })
+        }
     }
     
     func scrolToLeftAnimation(animation:Bool) {

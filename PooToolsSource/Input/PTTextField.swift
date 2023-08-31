@@ -25,7 +25,7 @@ public class PTTextField: UITextField {
         }
     }
     
-    public var rightTapBlock:(()->Void)?
+    public var rightTapBlock:PTActionTask?
     
     public var rightConfig:PTTextCustomRightViewConfig? {
         didSet {

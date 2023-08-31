@@ -28,7 +28,6 @@ public enum NetWorkEnvironment: String {
 
 public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
-public typealias NetWorkErrorBlock = () -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 
@@ -190,7 +189,7 @@ public class Network: NSObject {
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  showHud:Bool? = true,
                                  jsonRequest:Bool? = false,
-                                 netWorkErrorBlock:NetWorkErrorBlock? = nil,
+                                 netWorkErrorBlock:PTActionTask? = nil,
                                  netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
                                  resultBlock: @escaping ReslutClosure) {
         
@@ -325,7 +324,7 @@ public class Network: NSObject {
                                   jsonRequest:Bool? = false,
                                   pngData:Bool? = true,
                                   showHud:Bool? = true,
-                                  netWorkErrorBlock:NetWorkErrorBlock? = nil,
+                                  netWorkErrorBlock:PTActionTask? = nil,
                                   progressBlock:UploadProgress? = nil,
                                   resultBlock: @escaping ReslutClosure) {
         

@@ -10,7 +10,6 @@ import UIKit
 import SwifterSwift
 import Kingfisher
 
-public typealias DevTask = () -> Void
 public typealias FlexDevTask = (Bool) -> Void
 
 @objcMembers
@@ -19,7 +18,7 @@ public class PTDevFunction: NSObject {
     
     public var mn_PFloatingButton : PFloatingButton?
     //去開發人員設置界面
-    public var goToAppDevVC:DevTask?
+    public var goToAppDevVC:PTActionTask?
     //開啟/關閉Flex
     /*
      #if DEBUG
@@ -30,9 +29,9 @@ public class PTDevFunction: NSObject {
      }
      #endif
      */
-    public var flex:DevTask?
+    public var flex:PTActionTask?
     public var flexBool:FlexDevTask?
-    public var HyperioniOS:DevTask?
+    public var HyperioniOS:PTActionTask?
     public var TestHitShow:FlexDevTask?
     public var TestHitTouchesShow:FlexDevTask?
     //開啟/關閉inAppViewDebugger
@@ -41,7 +40,7 @@ public class PTDevFunction: NSObject {
         InAppViewDebugger.present()
      #endif
      */
-    public var inApp:DevTask?
+    public var inApp:PTActionTask?
     
     //MARK: 测试模式下检查界面的点击展示事件
     ///测试模式下检查界面的点击展示事件

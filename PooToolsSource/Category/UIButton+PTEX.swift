@@ -118,7 +118,7 @@ public extension UIButton {
                        originalTitle:String,
                        countdowningCanTap:Bool = true,
                        countdownFinishCanTap:Bool = true,
-                       timeFinish:(()->Void)?) {
+                       timeFinish:PTActionTask?) {
         buttonTimeRun_Base(timeInterval: timeInterval) { finish, time in
             if finish {
                 self.setTitle(originalTitle, for: self.state)

@@ -9,6 +9,8 @@
 import UIKit
 import DeviceKit
 
+public typealias PTActionTask = () -> Void
+
 public let AppWindows = UIApplication.shared.delegate?.window!
 
 //MARK: 設備信息

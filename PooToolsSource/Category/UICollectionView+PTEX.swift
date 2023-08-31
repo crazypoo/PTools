@@ -11,7 +11,7 @@ import UIKit
 public extension UICollectionView {
     //MARK: 撇除動畫重加載
     ///撇除動畫重加載
-    @objc func reloadDataWithOutAnimation(completion:(()->Void)?) {
+    @objc func reloadDataWithOutAnimation(completion:PTActionTask?) {
         UIView.performWithoutAnimation {
             self.reloadData {
                 if completion != nil {

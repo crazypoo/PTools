@@ -486,13 +486,13 @@ open class PFloatingButton: UIButton {
         isIntersectsRect(rect: rect) && !isInsideRect(rect: rect)
     }
     
-    class open func allInView(view:Any,point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
+    class open func allInView(view:Any,point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:PTActionTask?) {
         PFloatingButton.itemInView(view: view).enumerated().forEach { (index,value) in
             value.moveToPoint(point: point, duration: duration, delay: delay, options: options, completion: completion)
         }
     }
     
-    class open func inView(view:Any,tag:NSInteger,point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
+    class open func inView(view:Any,tag:NSInteger,point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:PTActionTask?) {
         PFloatingButton.itemInView(view: view).enumerated().forEach { (index,value) in
             if value.tag == tag {
                 value.moveToPoint(point: point, duration: duration, delay: delay, options: options, completion: completion)
@@ -500,7 +500,7 @@ open class PFloatingButton: UIButton {
         }
     }
 
-    class open func inViews(view:Any,tags:[NSInteger],point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
+    class open func inViews(view:Any,tags:[NSInteger],point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:PTActionTask?) {
         tags.enumerated().forEach { (index,value) in
             PFloatingButton.inView(view: view, tag: value, point: point, duration: duration, delay: delay, options: options, completion: completion)
         }
@@ -520,7 +520,7 @@ open class PFloatingButton: UIButton {
         superview?.bringSubviewToFront(self)
     }
     
-    func moveToPoint(point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:(()->Void)?) {
+    func moveToPoint(point:CGPoint,duration:TimeInterval? = PFloatingButton.RC_DEFAULT_ANIMATE_DURATION,delay:TimeInterval? = 0,options:UIView.AnimationOptions? = UIView.AnimationOptions.layoutSubviews,completion:PTActionTask?) {
         if !willBeRemoved {
             moveBeginPoint = center
             

@@ -105,7 +105,7 @@ public extension UIViewController {
     
     //MARK: ViewController退出
     ///ViewController退出
-    func viewDismiss(dismissBolck:(()->Void)? = nil) {
+    func viewDismiss(dismissBolck:PTActionTask? = nil) {
         if presentingViewController != nil {
             dismiss(animated: true) {
                 if dismissBolck != nil {
@@ -258,7 +258,7 @@ public extension UIViewController {
                                subTitleFont:UIFont? = UIFont.appfont(size: 16),
                                subTitleColor:UIColor? = .black,
                                bannerBackgroundColor:UIColor? = .white,
-                               notifiTap:(()->Void)? = nil) {
+                               notifiTap:PTActionTask? = nil) {
         var titleStr = ""
         if title == nil || (title ?? "").stringIsEmpty() {
             titleStr = ""

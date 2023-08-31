@@ -13,7 +13,6 @@ import SwifterSwift
 public let kPTLabelCounterRate:CGFloat = 3
 public typealias PTCountingLabelAttributedFormatBlock = (CGFloat) -> NSAttributedString
 public typealias PTCountingLabelFormatBlock = (CGFloat) -> String
-public typealias PTCountingLabelShowCompletionBlock = () -> Void
 
 public enum PTCountingLabelType {
     case Inout
@@ -51,7 +50,7 @@ public class PTCountingLabel: UILabel {
     public var countingType:PTCountingLabelType = .Linear
     public var attributedFormatBlock:PTCountingLabelAttributedFormatBlock?
     public var formatBlock:PTCountingLabelFormatBlock?
-    public var showCompletionBlock:PTCountingLabelShowCompletionBlock?
+    public var showCompletionBlock:PTActionTask?
     public var format:String = "%f" {
         didSet {
             textValue(value: currentValue())

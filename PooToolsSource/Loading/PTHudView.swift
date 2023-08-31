@@ -91,7 +91,7 @@ public class PTHudView: UIView {
         }
     }
     
-    func hide(completion:(()->Void)?) {
+    func hide(completion:PTActionTask?) {
         UIView.animate(withDuration: 1) {
             self.centerView.alpha = 0
         } completion: { finish in

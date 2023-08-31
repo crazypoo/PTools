@@ -201,7 +201,7 @@ class PTUserDefultsEditViewController:PTBaseViewController {
     
     private var viewModel:PTFusionCellModel!
     
-    var doneBlock:(()->Void)?
+    var doneBlock:PTActionTask?
     
 #if POOTOOLS_NAVBARCONTROLLER
     let haveZXbar:Bool = true

@@ -18,7 +18,6 @@ import Kingfisher
 public let PTViewerBaseTag = 9999
 public let PTSubViewBasicsIndex = 888
 public let PTViewerTitleHeight:CGFloat = 34
-public typealias PTViewerActionFinishBlock = () -> Void
 public typealias PTViewerSaveBlock = (_ finish:Bool) -> Void
 public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void
 
@@ -715,7 +714,7 @@ extension PTMediaMediaView:UIScrollViewDelegate {
 @objcMembers
 public class PTMediaViewer: UIView {
 
-    public var viewerDismissBlock:PTViewerActionFinishBlock?
+    public var viewerDismissBlock:PTActionTask?
     public var viewSaveImageBlock:PTViewerSaveBlock?
     public var viewDeleteImageBlock:PTViewerIndexBlock?
     public var viewMoreActionBlock:PTViewerIndexBlock?
@@ -1115,7 +1114,7 @@ public class PTMediaViewer: UIView {
         }
     }
     
-    func show(content:UIView,loadFinishBlock:@escaping PTViewerActionFinishBlock) {
+    func show(content:UIView,loadFinishBlock:@escaping PTActionTask) {
         content.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()

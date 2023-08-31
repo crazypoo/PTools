@@ -29,7 +29,7 @@ public class PTGuidePageHUD: UIView {
     
     public var slideInto : Bool? = false
     public var animationTime : CGFloat = 3.0
-    public var adHadRemove:(()->Void)?
+    public var adHadRemove:PTActionTask?
     
     let StartString = "开始体验"
     

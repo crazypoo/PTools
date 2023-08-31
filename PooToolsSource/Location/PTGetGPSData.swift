@@ -9,14 +9,12 @@
 import UIKit
 import CoreLocation
 
-public typealias PTGPSBlock = () -> Void
-
 @objcMembers
 public class PTGetGPSData: NSObject {
     static let share = PTGetGPSData()
-    public var errorBlock:PTGPSBlock?
-    public var selectCurrentBlock:PTGPSBlock?
-    public var selectNewBlock:PTGPSBlock?
+    public var errorBlock:PTActionTask?
+    public var selectCurrentBlock:PTActionTask?
+    public var selectNewBlock:PTActionTask?
     public var showChangeAlert:Bool = false
     
     var locationManager = CLLocationManager()

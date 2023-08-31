@@ -148,7 +148,7 @@ public class PTCustomAlertView: UIView {
                                           alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
                                           customerBlock: @escaping (_ customerView:UIView)->Void,
                                           tapBlock: @escaping (_ index:NSInteger)->Void,
-                                          alertDismissBlock: @escaping ()->Void) {
+                                          alertDismissBlock: @escaping PTActionTask) {
         var buttonModels = [PTCustomBottomButtonModel]()
         buttons.enumerated().forEach { index,value in
             let model = PTCustomBottomButtonModel()

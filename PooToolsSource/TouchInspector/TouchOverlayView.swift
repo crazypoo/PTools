@@ -117,7 +117,7 @@ class TouchOverlayView: UIView {
         }
     }
     
-    func hide(completion: @escaping () -> Void) {
+    func hide(completion: @escaping PTActionTask) {
         animateBlock {
             self.alpha = 0
             self.touchIndicatorView.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)

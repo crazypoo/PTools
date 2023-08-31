@@ -14,9 +14,9 @@ open class PTNavItemBtn: UIButton {
     ///NavItemBtn的frame更新回调
     public var jx_barItemFrameUpdateBlock:((_ barItemBtn:PTNavItemBtn)->Void)?
     ///开始点击的回调
-    public var jx_touchesBeganBlock:(()->Void)?
+    public var jx_touchesBeganBlock:PTActionTask?
     ///结束点击的回调
-    public var jx_touchesEndBlock:(()->Void)?
+    public var jx_touchesEndBlock:PTActionTask?
 
     ///设置NavItemBtn的固定宽度，若设置，则自动计算宽度无效，若要恢复初始值，可设置为-1
     public var jx_fixWidth:CGFloat = -1 {

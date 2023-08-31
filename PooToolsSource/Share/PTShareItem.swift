@@ -59,7 +59,7 @@ open class PTShare {
     ///   - showCompletion: 弹出界面后的回调
     ///   - items:
     public func share(shareItems items:[Any],
-                      showCompletion:(()->Void)? = nil) {
+                      showCompletion:PTActionTask? = nil) {
         let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: nil)
         PTUtils.getCurrentVC().present(activityViewController, animated: true,completion: showCompletion)
     }

@@ -9,7 +9,6 @@
 import UIKit
 
 public typealias CallBlock = (_ timeInterval:TimeInterval)->Void
-public typealias CancelBlock = ()->Void
 public typealias CanCall = (_ ok:Bool)->Void
 
 @objcMembers
@@ -19,10 +18,10 @@ class PTPhoneBlock: NSObject {
     private var callStartTime:Date?
     
     public var callBlock:CallBlock?
-    public var cancelBlock:CancelBlock?
+    public var cancelBlock:PTActionTask?
     public var canCall:CanCall?
 
-    public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping CancelBlock,canCall:@escaping CanCall) {
+    public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping PTActionTask,canCall:@escaping CanCall) {
         var canCallSomeOne:Bool? = false
         if PTPhoneBlock.validPhone(phoneNumber: phoneNumber) {
             let share = PTPhoneBlock.shared

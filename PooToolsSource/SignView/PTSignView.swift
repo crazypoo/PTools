@@ -12,7 +12,6 @@ import SwifterSwift
 import AttributedString
 
 public typealias SignImageBlock = (_ signImage:UIImage?) -> Void
-public typealias SignImageDismissBlock = () -> Void
 
 @objcMembers
 public class PTSignView: UIView {
@@ -20,7 +19,7 @@ public class PTSignView: UIView {
     var viewConfig:PTSignatureConfig!
     
     public var doneBlock:SignImageBlock?
-    public var dismissBlock:SignImageDismissBlock?
+    public var dismissBlock:PTActionTask?
 
     lazy var devMaskView:UIView = {
         let view = UIView()

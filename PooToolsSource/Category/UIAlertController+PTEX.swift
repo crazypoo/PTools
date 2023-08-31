@@ -16,7 +16,10 @@ public extension UIAlertController {
     ///   - msg: 內容
     ///   - cancel: 取消按鈕
     ///   - cancelBlock: 取消回調
-    @objc class func alertVC(title:String? = "",msg:String? = "",cancel:String? = "取消",cancelBlock:(()->Void)?) {
+    @objc class func alertVC(title:String? = "",
+                             msg:String? = "",
+                             cancel:String? = "取消",
+                             cancelBlock:PTActionTask?) {
         UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
     }
     
@@ -91,7 +94,7 @@ public extension UIAlertController {
                             doneBtnColors:[UIColor]? = [UIColor](),
                             alertBGColor:UIColor? = .white,
                             alertCornerRadius:NSNumber? = 15,
-                            cancel:(()->Void)? = nil,
+                            cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
         
@@ -197,7 +200,7 @@ public extension UIAlertController {
                                       textFieldDelegate:UITextFieldDelegate,
                                       alertBGColor:UIColor? = .white,
                                       alertCornerRadius:CGFloat? = 15,
-                                      cancel:(()->Void)? = nil,
+                                      cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String])->Void)?) {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
         

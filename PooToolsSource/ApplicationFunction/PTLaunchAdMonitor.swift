@@ -11,8 +11,6 @@ import AVKit
 import DeviceKit
 import SnapKit
 
-public typealias PTLaunchAdMonitorCallBack = () -> Void
-
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
@@ -26,7 +24,7 @@ public class PTLaunchAdMonitor: NSObject {
     private var videoUrl:URL?
     private var imgData:NSMutableData?
     private var imageType:PTAboutImageType?
-    private var callBack:PTLaunchAdMonitorCallBack?
+    private var callBack:PTActionTask?
     private var player:AVPlayerViewController?
     private var detailParam:NSMutableDictionary?
     private var isTap:Bool = false
@@ -50,7 +48,7 @@ public class PTLaunchAdMonitor: NSObject {
                              skipFont:UIFont?,
                              comName:String?,
                              comNameFont:UIFont,
-                             callBack:PTLaunchAdMonitorCallBack?) {
+                             callBack:PTActionTask?) {
         PTLaunchAdMonitor.shared.loadImageAtPath(path: path)
         while !monitor.imgLoaded! {
             RunLoop.current.run(mode: .default, before: Date.distantFuture)

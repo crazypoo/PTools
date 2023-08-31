@@ -43,8 +43,6 @@ import CameraPermission
 import TrackingPermission
 #endif
 
-public typealias PTPermissionViewBlock = () ->Void
-
 public let uPermission = "uPermission"
 
 @objcMembers
@@ -54,7 +52,7 @@ public class PTPermissionViewController: PTBaseViewController {
     
     fileprivate var permissions:[PTPermissionModel]?
     
-    public var viewDismissBlock:PTPermissionViewBlock?
+    public var viewDismissBlock:PTActionTask?
     
     fileprivate var trackingRequest:Bool?
     {
