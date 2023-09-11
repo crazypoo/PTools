@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.3.0",
+  "version": "3.3.1",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.3.0"
+    "tag": "3.3.1"
   },
   "license": {
     "type": "MIT",
@@ -82,7 +82,7 @@
         "AudioToolbox"
       ],
       "source_files": [
-        "PooToolsSource/Core/*.{h,m,swift}",
+        "PooToolsSource/Core/*.{h,m,swift,S}",
         "PooToolsSource/Blur/*.{h,m,swift}",
         "PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}",
         "PooToolsSource/Base/*.{h,m,swift}",
@@ -1269,6 +1269,18 @@
       }
     },
     {
+      "name": "Router",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/Router/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_ROUTER POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1455,6 +1467,9 @@
 
         ],
         "PooTools/NetWork": [
+
+        ],
+        "PooTools/Router": [
 
         ]
       },
