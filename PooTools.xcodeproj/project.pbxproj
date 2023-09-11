@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 46;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -110,6 +110,19 @@
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
 		5589FF5029A87BA700519383 /* PTContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContract.swift */; };
+		558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */; };
+		558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */; };
+		558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE42AAF4F8E00C02042 /* PTRouterParser.swift */; };
+		558D5EE72AAF52E300C02042 /* PTRouterPattern.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE62AAF52E300C02042 /* PTRouterPattern.swift */; };
+		558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE82AAF532B00C02042 /* PTRouterRequest.swift */; };
+		558D5EEB2AAF53A500C02042 /* PTRouterManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EEA2AAF53A500C02042 /* PTRouterManager.swift */; };
+		558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EEC2AAF548900C02042 /* PTRouterInterceptor.swift */; };
+		558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EEE2AAF54B600C02042 /* PTRouterBuilder.swift */; };
+		558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF02AAF54EA00C02042 /* PTRouterable.swift */; };
+		558D5EF32AAF552F00C02042 /* PTRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF22AAF552F00C02042 /* PTRouter.swift */; };
+		558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF42AAF586700C02042 /* URL+PTEX.swift */; };
+		558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */; };
+		558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
@@ -354,6 +367,19 @@
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
 		5589FF4F29A87BA700519383 /* PTContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContract.swift; sourceTree = "<group>"; };
+		558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceProtocol.swift; sourceTree = "<group>"; };
+		558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceManager.swift; sourceTree = "<group>"; };
+		558D5EE42AAF4F8E00C02042 /* PTRouterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterParser.swift; sourceTree = "<group>"; };
+		558D5EE62AAF52E300C02042 /* PTRouterPattern.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterPattern.swift; sourceTree = "<group>"; };
+		558D5EE82AAF532B00C02042 /* PTRouterRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterRequest.swift; sourceTree = "<group>"; };
+		558D5EEA2AAF53A500C02042 /* PTRouterManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterManager.swift; sourceTree = "<group>"; };
+		558D5EEC2AAF548900C02042 /* PTRouterInterceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterInterceptor.swift; sourceTree = "<group>"; };
+		558D5EEE2AAF54B600C02042 /* PTRouterBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterBuilder.swift; sourceTree = "<group>"; };
+		558D5EF02AAF54EA00C02042 /* PTRouterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterable.swift; sourceTree = "<group>"; };
+		558D5EF22AAF552F00C02042 /* PTRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouter.swift; sourceTree = "<group>"; };
+		558D5EF42AAF586700C02042 /* URL+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+PTEX.swift"; sourceTree = "<group>"; };
+		558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTJson+PTEX.swift"; sourceTree = "<group>"; };
+		558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTKeyedDecoding+PTEX.swift"; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
@@ -621,6 +647,7 @@
 				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
+				558D5EDF2AAF4D8300C02042 /* Router */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
 				55F7A73729D5949900CF6272 /* ScrollRefresh */,
 				55D59C6028F3E84900B4FF76 /* SearchBar */,
@@ -682,6 +709,8 @@
 				559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
 				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
+				558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */,
+				558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */,
 				55D59C7728F55D2D00B4FF76 /* PTList+EX.swift */,
 				231D15BD272CDEE9003D6F62 /* String+PTEX.swift */,
 				9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */,
@@ -708,6 +737,7 @@
 				231D15CF272CDEE9003D6F62 /* UIView+PTEX.swift */,
 				9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */,
 				231D1507272CDEE9003D6F62 /* UIViewController+Swizzled.swift */,
+				558D5EF42AAF586700C02042 /* URL+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
 			);
@@ -1076,6 +1106,23 @@
 				5589FF4F29A87BA700519383 /* PTContract.swift */,
 			);
 			path = Contract;
+			sourceTree = "<group>";
+		};
+		558D5EDF2AAF4D8300C02042 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				558D5EF22AAF552F00C02042 /* PTRouter.swift */,
+				558D5EF02AAF54EA00C02042 /* PTRouterable.swift */,
+				558D5EEE2AAF54B600C02042 /* PTRouterBuilder.swift */,
+				558D5EEC2AAF548900C02042 /* PTRouterInterceptor.swift */,
+				558D5EEA2AAF53A500C02042 /* PTRouterManager.swift */,
+				558D5EE42AAF4F8E00C02042 /* PTRouterParser.swift */,
+				558D5EE62AAF52E300C02042 /* PTRouterPattern.swift */,
+				558D5EE82AAF532B00C02042 /* PTRouterRequest.swift */,
+				558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */,
+				558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */,
+			);
+			path = Router;
 			sourceTree = "<group>";
 		};
 		55BD5B8129C620C10023458A /* Share */ = {
@@ -1492,7 +1539,7 @@
 				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "PooTools" */;
-			compatibilityVersion = "Xcode 3.2";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -1750,11 +1797,13 @@
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
+				558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */,
 				55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
+				558D5EE72AAF52E300C02042 /* PTRouterPattern.swift in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
@@ -1765,11 +1814,14 @@
 				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
+				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
+				558D5EF32AAF552F00C02042 /* PTRouter.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
+				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
@@ -1836,10 +1888,12 @@
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
 				231D1668272CDEEA003D6F62 /* ResizeController.swift in Sources */,
+				558D5EEB2AAF53A500C02042 /* PTRouterManager.swift in Sources */,
 				55024DE929F2999600244E44 /* PTEyeTrackingExtensions.swift in Sources */,
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				55D7382F29E529BB0027BDC3 /* CGRect+Extensions.swift in Sources */,
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
+				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				55025E4A29FA56D00024A960 /* PTNavBackImageView.swift in Sources */,
@@ -1847,6 +1901,7 @@
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
+				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
@@ -1861,6 +1916,8 @@
 				55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */,
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
+				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
+				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
@@ -1883,10 +1940,12 @@
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
+				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
+				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
@@ -1919,6 +1978,7 @@
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
+				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
@@ -2101,7 +2161,10 @@
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (
@@ -2143,7 +2206,10 @@
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";
 				INFOPLIST_FILE = "PooTools/PooTools-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
 				OTHER_LDFLAGS = (

@@ -631,3 +631,20 @@ extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSou
         }
     }
 }
+
+extension PTSwiftViewController: PTRouterable {
+    
+    static var patternString: [String] {
+        ["scheme://router/demo"]
+    }
+    
+    static var descriptions: String {
+        "PTSwiftViewController"
+    }
+    
+    static func registerAction(info: [String : Any]) -> Any {
+        PTNSLogConsole("Router info:\(info)")
+        let vc =  PTSwiftViewController()
+        return vc
+    }
+}

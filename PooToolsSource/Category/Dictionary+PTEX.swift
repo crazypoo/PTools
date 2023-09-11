@@ -127,6 +127,30 @@ public extension Dictionary {
         oldValue[keys[0]] = value1
         return result
     }
+    
+    //MARK: 路由用到
+    mutating func merge(dic:Dictionary) {
+        self.merge(dic) { (parama1, parama2) -> Value in
+            return parama1
+        }
+    }
+    
+    mutating func routerCombine(_ dict: Dictionary) {
+        var tem = self
+        dict.forEach({ (key, value) in
+            if let existValue = tem[key] {
+                // combine same name query
+                if let arrValue = existValue as? [Value] {
+                    tem[key] = (arrValue + [value]) as? Value
+                } else {
+                    tem[key] = ([existValue, value]) as? Value
+                }
+            } else {
+                tem[key] = value
+            }
+        })
+        self = tem
+    }
 }
 
 // MARK: 其他基本扩展

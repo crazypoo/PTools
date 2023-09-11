@@ -76,12 +76,14 @@
 
 #pragma mark - Host View
 
-- (void)setLks_hostView:(UIView *)lks_hostView {
-    [self lookin_bindObjectWeakly:lks_hostView forKey:@"lks_hostView"];
-}
-
 - (UIView *)lks_hostView {
-    return [self lookin_getBindObjectForKey:@"lks_hostView"];
+    if (self.delegate && [self.delegate isKindOfClass:UIView.class]) {
+        UIView *view = (UIView *)self.delegate;
+        if (view.layer == self) {
+            return view;
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Screenshot
@@ -168,8 +170,9 @@
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:2];
     if (self.lks_hostView) {
         [array addObject:[CALayer lks_getClassListOfObject:self.lks_hostView endingClass:@"UIView"]];
-        if (self.lks_hostView.lks_hostViewController) {
-            [array addObject:[CALayer lks_getClassListOfObject:self.lks_hostView.lks_hostViewController endingClass:@"UIViewController"]];
+        UIViewController* vc = [self.lks_hostView lks_findHostViewController];
+        if (vc) {
+            [array addObject:[CALayer lks_getClassListOfObject:vc endingClass:@"UIViewController"]];
         }
     } else {
         [array addObject:[CALayer lks_getClassListOfObject:self endingClass:@"CALayer"]];
@@ -190,10 +193,11 @@
     NSMutableArray *array = [NSMutableArray array];
     NSMutableArray<LookinIvarTrace *> *ivarTraces = [NSMutableArray array];
     if (self.lks_hostView) {
-        if (self.lks_hostView.lks_hostViewController) {
-            [array addObject:[NSString stringWithFormat:@"(%@ *).view", NSStringFromClass(self.lks_hostView.lks_hostViewController.class)]];
+        UIViewController* vc = [self.lks_hostView lks_findHostViewController];
+        if (vc) {
+            [array addObject:[NSString stringWithFormat:@"(%@ *).view", NSStringFromClass(vc.class)]];
             
-            [ivarTraces addObjectsFromArray:self.lks_hostView.lks_hostViewController.lks_ivarTraces];
+            [ivarTraces addObjectsFromArray:vc.lks_ivarTraces];
         }
         [ivarTraces addObjectsFromArray:self.lks_hostView.lks_ivarTraces];
     } else {

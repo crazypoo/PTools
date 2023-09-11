@@ -186,7 +186,7 @@ public class StatusBarManager {
     
     /// 负责打印状态树结构
     public func printAllStates(_ method: String = #function) {
-        debugPrint("\(method): currentState = \(currentState.key)")
+        PTNSLogConsole("\(method): currentState = \(currentState.key)", error: true)
         printAllStatesInTree(rootState, deep: 0, method: method)
     }
     
@@ -271,7 +271,7 @@ public class StatusBarManager {
         
     /// 打印状态树结构的递归方法
     fileprivate func printAllStatesInTree(_ state: StatusBarState, deep: Int = 0, method: String) {
-        debugPrint("\(method): \(deep) - state=\(state)")
+        PTNSLogConsole("\(method): \(deep) - state=\(state)", error: true)
         for subState in state.subStates {
             printAllStatesInTree(subState, deep: deep + 1, method: method)
         }

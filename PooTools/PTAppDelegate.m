@@ -43,8 +43,8 @@
 //    PNSLog(@"%@",string);
     
 //    PNSLog(@">>>>>>>>>>>>>>>>>%@",[PTUtils jsonStringToArrayWithJsonStr:@"{\"json\":11111,\"b\"123344}"]);
-
-    PNSLog(@"有没有敏感词%d",[[PTCheckFWords share] haveFWordWithStr:@"公安局"]);    
+    
+    PNSLog(@"有没有敏感词%d",[[PTCheckFWords share] haveFWordWithStr:@"公安局"]);
     PNSLog(@">>>>>>>>>>>>%@",[[UIColor.redColor createImageWithColor] transformImageWithSize:CGSizeMake(100, 100)]);
     [IQKeyboardManager sharedManager].enable = YES;
     [IQKeyboardManager sharedManager].keyboardDistanceFromTextField = 50;

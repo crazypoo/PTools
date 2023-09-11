@@ -679,8 +679,8 @@ extension LLCycleScrollView {
         let l_dtimer = DispatchSource.makeTimerSource()
         l_dtimer.schedule(deadline: .now()+autoScrollTimeInterval, repeating: autoScrollTimeInterval)
         l_dtimer.setEventHandler { [weak self] in
-            DispatchQueue.global(qos: .background).async {
-                DispatchQueue.main.async {
+            PTGCDManager.gcdGobal(qosCls: .background) {
+                PTGCDManager.gcdMain {
                     self?.automaticScroll()
                 }
             }

@@ -1240,6 +1240,32 @@ public extension String {
     func darkModeImage(bundle:Bundle = PTUtils.cgBaseBundle())->UIImage {
         image(bundle: bundle)
     }
+    
+    //MARK: 路由扩展
+    func containsSubString(substring: String) -> Bool {
+        return range(of: substring) != nil
+    }
+    
+    func dropFirst(_ count: Int) -> String {
+        let start = self.index(startIndex, offsetBy: 0)
+        let end = self.index(start, offsetBy: count)
+        let results = self[start...end]
+        return String(results)
+    }
+    
+    func dropLast(_ count: Int) -> String {
+        let start = self.index(endIndex, offsetBy: 0)
+        let end = self.index(endIndex, offsetBy: -count)
+        let results = self[start...end]
+        return String(results)
+    }
+    
+    func matchClass() -> AnyClass? {
+        if let cls: AnyClass  = NSClassFromString(self) {
+            return cls
+        }
+        return nil
+    }
 }
 
 public extension PTPOP where Base: ExpressibleByStringLiteral {

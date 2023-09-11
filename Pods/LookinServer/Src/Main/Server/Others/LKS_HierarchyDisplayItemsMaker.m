@@ -20,6 +20,7 @@
 @implementation LKS_HierarchyDisplayItemsMaker
 
 + (NSArray<LookinDisplayItem *> *)itemsWithScreenshots:(BOOL)hasScreenshots attrList:(BOOL)hasAttrList lowImageQuality:(BOOL)lowQuality includedWindows:(NSArray<UIWindow *> *)includedWindows excludedWindows:(NSArray<UIWindow *> *)excludedWindows {
+    
     [[LKS_TraceManager sharedInstance] reload];
     
     NSArray<UIWindow *> *windows = [[UIApplication sharedApplication].windows copy];
@@ -48,10 +49,15 @@
     }
     
     LookinDisplayItem *item = [LookinDisplayItem new];
-    if ([self validateFrame:layer.frame]) {
+    CGRect layerFrame = layer.frame;
+    UIView *hostView = layer.lks_hostView;
+    if (hostView && hostView.superview) {
+        layerFrame = [hostView.superview convertRect:layerFrame toView:nil];
+    }
+    if ([self validateFrame:layerFrame]) {
         item.frame = layer.frame;
     } else {
-        NSLog(@"LookinServer - 该 layer 的 frame(%@) 不太寻常，可能导致 Lookin 客户端中图像渲染错误，因此这里暂时将其视为 CGRectZero", NSStringFromCGRect(layer.frame));
+        NSLog(@"LookinServer - The layer frame(%@) seems really weird. Lookin will ignore it to avoid potential render error in Lookin.", NSStringFromCGRect(layer.frame));
         item.frame = CGRectZero;
     }
     item.bounds = layer.bounds;
@@ -76,8 +82,9 @@
         item.eventHandlers = [LKS_EventHandlerMaker makeForView:view];
         item.backgroundColor = view.backgroundColor;
         
-        if (view.lks_hostViewController) {
-            item.hostViewControllerObject = [LookinObject instanceWithObject:view.lks_hostViewController];
+        UIViewController* vc = [view lks_findHostViewController];
+        if (vc) {
+            item.hostViewControllerObject = [LookinObject instanceWithObject:vc];
         }
     } else {
         item.backgroundColor = [UIColor lks_colorWithCGColor:layer.backgroundColor];
