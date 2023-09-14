@@ -406,6 +406,12 @@ public extension PTPOP where Base: UIDevice {
     static func simCardInfos() -> [CTCarrier]? {
         getCarriers()
     }
+    
+    //MARK: 检测时候热启动
+    static func activePrewarm() ->Bool {
+        let boolValue = ProcessInfo.processInfo.environment["ActivePrewarm"] == "1" ? true : false
+        return boolValue
+    }
 }
 
 //MARK: 设备的震动

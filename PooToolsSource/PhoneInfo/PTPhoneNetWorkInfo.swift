@@ -24,6 +24,29 @@ public class PTPhoneNetWorkInfo:NSObject {
         let netmask: String
     }
     
+    class open func getPublicIdAddress(outSide:String? = "https://api.ipify.org",completion: @escaping (String?) -> Void) {
+        let url = URL(string: outSide!)
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            guard error == nil else {
+                print(error!)
+                completion(nil)
+                return
+            }
+            
+            guard let data = data else {
+                completion(nil)
+                return
+            }
+            
+            if let ipAddress = String(data: data, encoding: .utf8) {
+                completion(ipAddress)
+            } else {
+                completion(nil)
+            }
+        }
+        task.resume()
+    }
+    
     class open func ipv4String()->String {
         for info in PTPhoneNetWorkInfo.enumerate() {
             if info.name == "en0" {
