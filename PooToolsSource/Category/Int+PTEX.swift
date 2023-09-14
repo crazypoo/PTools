@@ -8,6 +8,12 @@
 
 import UIKit
 
+public enum PTMontiStatusType:Int {
+    case Feb
+    case Big
+    case Small
+}
+
 public extension Int {
     //MARK: 隨機數
     ///隨機數
@@ -36,5 +42,18 @@ public extension Int {
     /// - Returns: 结果
     func isEven() -> Bool {
         self % 2 == 0
+    }
+    
+    //MARK: 检查月份状态(大,小,二月)
+    ///检查月份状态(大,小,二月)
+    func monthStatus() -> PTMontiStatusType {
+        switch self {
+        case 1,3,5,7,8,10,12:
+            return .Big
+        case 2:
+            return .Feb
+        default:
+            return .Small
+        }
     }
 }
