@@ -5,7 +5,6 @@
 [![Coverage](https://img.shields.io/codeclimate/coverage/ephread/Instructions)](https://codeclimate.com/github/ephread/Instructions)
 [![CocoaPods Shield](https://img.shields.io/cocoapods/v/Instructions.svg)](https://cocoapods.org/pods/Instructions)
 [![Carthage compatible](https://img.shields.io/badge/carthage-compatible-4BC51D.svg?style=flat)](https://github.com/Carthage/Carthage)
-[![Join the chat at https://gitter.im/ephread/Instructions](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/ephread/Instructions?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Add customisable coach marks to your iOS project. Available for both iPhone and iPad.
 
@@ -77,7 +76,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 platform :ios, '9.0'
 use_frameworks!
 
-pod 'Instructions', '~> 2.2.0'
+pod 'Instructions', '~> 2.3.0'
 ```
 
 Then, run the following command:
@@ -90,7 +89,7 @@ $ pod install
 Add Instructions to your Cartfile:
 
 ```
-github "ephread/Instructions" ~> 2.2.0
+github "ephread/Instructions" ~> 2.3.0
 ```
 
 You can then update, build and drag the generated framework into your project:
@@ -179,7 +178,7 @@ func coachMarksController(
 Once the `dataSource` is set up, you can start displaying the coach marks. You will most likely supply `self` to `start`. While the overlay adds itself as a child of the current window (to be on top of everything), the `CoachMarksController` will add itself as a child of the view controller you provide. The `CoachMarksController` will receive size change events and react accordingly. Be careful; you can't call `start` in the `viewDidLoad` method since the view hierarchy has to be set up and ready for Instructions to work correctly.
 
 ```swift
-override func viewDidAppear(animated: Bool) {
+override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
     self.coachMarksController.start(in: .window(over: self))
@@ -190,7 +189,7 @@ override func viewDidAppear(animated: Bool) {
 You should always stop the flow once the view disappears. To avoid animation artefacts and timing issues, don't forget to add the following code to your `viewWillDisappear` method. Calling `stop(immediately: true)` will ensure that the flow is stopped immediately upon the disappearance of the view.
 
 ```swift
-override func viewWillDisappear(animated: Bool) {
+override func viewWillDisappear(_ animated: Bool) {
     super.viewWillDisappear(animated)
 
     self.coachMarksController.stop(immediately: true)
@@ -610,11 +609,11 @@ like this:
 
 ```ruby
 target 'Instructions App Extensions Example' do
-  pod 'Instructions', '~> 2.2.0'
+  pod 'Instructions', '~> 2.3.0'
 end
 
 target 'Keyboard Extension' do
-  pod 'InstructionsAppExtensions', '~> 2.2.0'
+  pod 'InstructionsAppExtensions', '~> 2.3.0'
 end
 ```
 

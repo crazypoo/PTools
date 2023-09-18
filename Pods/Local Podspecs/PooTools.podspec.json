@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.3.1",
+  "version": "3.3.4",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.3.1"
+    "tag": "3.3.4"
   },
   "license": {
     "type": "MIT",
@@ -778,7 +778,7 @@
         "PooTools/Core": [
 
         ],
-        "TZImagePickerController": [
+        "AnyImageKit": [
 
         ]
       },

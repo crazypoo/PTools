@@ -28,7 +28,7 @@ public class PTPhoneNetWorkInfo:NSObject {
         let url = URL(string: outSide!)
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             guard error == nil else {
-                print(error!)
+                PTNSLogConsole(error!)
                 completion(nil)
                 return
             }

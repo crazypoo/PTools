@@ -46,6 +46,22 @@ public enum UTF8StringType:Int {
     case UTF8StringTypeC
 }
 
+/// 字符串取类型的长度
+public enum StringTypeLength {
+    /// Unicode字符个数
+    case count
+    /// utf8
+    case utf8
+    /// utf16获取长度对应NSString的.length方法
+    case utf16
+    /// unicodeScalars
+    case unicodeScalars
+    /// utf8编码通过字节判断长度
+    case lengthOfBytesUtf8
+    /// 英文 = 1，数字 = 1，汉语 = 2
+    case customCountOfChars
+}
+
 public extension String {
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
@@ -1285,6 +1301,24 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         (base as! String).range(of: find) != nil
     }
     
+    // MARK: 字符串取类型的长度
+    /// 字符串取类型的长度
+    func typeLengh(_ type: StringTypeLength) -> Int {
+        let string = base as! String
+        if type == .utf8 {
+            return string.utf8.count
+        } else if type == .utf16 {
+            return string.utf16.count
+        } else if type == .unicodeScalars {
+            return string.unicodeScalars.count
+        } else if type == .lengthOfBytesUtf8 {
+            return string.lengthOfBytes(using: .utf8)
+        }  else if type == .customCountOfChars {
+            return string.pt.customCountOfChars()
+        }
+        return string.count
+    }
+
     //MARK: 判断是否包含某个子串(忽略大小写)
     ///判断是否包含某个子串 (忽略大小写)
     /// - Parameters:
@@ -1312,6 +1346,12 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         return String(data: decryptionData, encoding: .utf8)
     }
 
+    // MARK: 将16进制字符串转为Int
+    /// 将16进制字符串转为Int
+    var hexInt: Int {
+        return Int(base as! String, radix: 16) ?? 0
+    }
+    
     //MARK: 字符串转数组
     ///字符串转数组
     /// - Returns: 转化后的数组
@@ -1459,6 +1499,23 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         }
         let result = formatter.string(from: num)
         return result
+    }
+    
+    // MARK: 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    /// 计算字符个数（英文 = 1，数字 = 1，汉语 = 2）
+    /// - Returns: 返回字符的个数
+    func customCountOfChars() -> Int {
+        var count = 0
+        guard (self.base as! String).count > 0 else { return 0 }
+        for i in 0...(self.base as! String).count - 1 {
+            let c: unichar = ((self.base as! String) as NSString).character(at: i)
+            if (c >= 0x4E00) {
+                count += 2
+            } else {
+                count += 1
+            }
+        }
+        return count
     }
 }
 

@@ -579,9 +579,9 @@ public extension PTPOP where Base: FileManager {
         do {
             let attributes = try fileManager.attributesOfItem(atPath: path)
             /*
-            print("创建时间：\(attributes[FileAttributeKey.creationDate]!)")
-            print("修改时间：\(attributes[FileAttributeKey.modificationDate]!)")
-            print("文件大小：\(attributes[FileAttributeKey.size]!)")
+            PTNSLogConsole("创建时间：\(attributes[FileAttributeKey.creationDate]!)")
+            PTNSLogConsole("修改时间：\(attributes[FileAttributeKey.modificationDate]!)")
+            PTNSLogConsole("文件大小：\(attributes[FileAttributeKey.size]!)")
             */
             return attributes
         } catch _ {

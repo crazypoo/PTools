@@ -21,7 +21,7 @@ public class PTRouterManager: NSObject {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
-            debugPrint(matchFailedKey)
+            PTNSLogConsole(matchFailedKey)
             PTRouter.shareInstance.logcat?("PTRouter: globalOpenFailedHandler", .logError, "\(matchFailedKey)")
         }
         
@@ -101,7 +101,7 @@ extension PTRouterManager {
         PTRouter.shareInstance.logcat?("注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
         PTRouter.routerLoadStatus(true)
 #if DEBUG
-        debugPrint(mapJOSN)
+        PTNSLogConsole(mapJOSN)
         writeRouterMapToFile(mapArray: mapJOSN)
         routerForceRecheck()
 #endif
@@ -122,7 +122,7 @@ extension PTRouterManager {
             if (class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil),
                (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil),
                let cls = currentClass as? PTRouterServiceProtocol.Type {
-                print(currentClass)
+                PTNSLogConsole(currentClass)
                 resultXLClass.append(cls)
                 
                 PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
@@ -204,7 +204,7 @@ extension PTRouterManager {
     
     // MARK: - 路由映射文件导出
     public static func writeRouterMapToFile(mapArray: [[String: String]]) {
-        debugPrint(mapJOSN)
+        PTNSLogConsole(mapJOSN)
         let array: NSArray = mapJOSN as NSArray
         
         // 获得沙盒的根路径

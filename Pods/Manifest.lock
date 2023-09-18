@@ -5,6 +5,20 @@ PODS:
     - SSZipArchive
     - YYCache
     - YYModel
+  - AnyImageKit (0.16.0):
+    - AnyImageKit/Capture (= 0.16.0)
+    - AnyImageKit/Core (= 0.16.0)
+    - AnyImageKit/Editor (= 0.16.0)
+    - AnyImageKit/Picker (= 0.16.0)
+  - AnyImageKit/Capture (0.16.0):
+    - AnyImageKit/Core
+  - AnyImageKit/Core (0.16.0):
+    - Kingfisher
+    - SnapKit
+  - AnyImageKit/Editor (0.16.0):
+    - AnyImageKit/Core
+  - AnyImageKit/Picker (0.16.0):
+    - AnyImageKit/Core
   - Appz (3.2.0)
   - Aspects (1.4.1)
   - AttributedString (3.3.5)
@@ -52,7 +66,7 @@ PODS:
   - HyperioniOS/SlowAnimations (1.2.0):
     - HyperioniOS/Core
   - InAppViewDebugger (1.0.3)
-  - Instructions (2.2.0)
+  - Instructions (2.3.0)
   - IQKeyboardManager (6.5.12)
   - JXPagingView/Paging (2.1.2)
   - JXSegmentedView (1.3.0)
@@ -107,33 +121,33 @@ PODS:
   - PhoneNumberKit/UIKit (3.6.8):
     - PhoneNumberKit/PhoneNumberKitCore
   - PocketSVG (2.7.3)
-  - PooTools/Animation (3.3.1):
+  - PooTools/Animation (3.3.4):
     - PooTools/Core
-  - PooTools/Appz (3.3.1):
+  - PooTools/Appz (3.3.4):
     - Appz
     - PooTools/Core
-  - PooTools/BankCard (3.3.1):
+  - PooTools/BankCard (3.3.4):
     - PooTools/Core
-  - PooTools/BilogyID (3.3.1):
+  - PooTools/BilogyID (3.3.4):
     - PooTools/Core
-  - PooTools/Calendar (3.3.1):
+  - PooTools/Calendar (3.3.4):
     - PooTools/Core
-  - PooTools/CheckBox (3.3.1):
+  - PooTools/CheckBox (3.3.4):
     - PooTools/Core
-  - PooTools/CheckDirtyWord (3.3.1):
+  - PooTools/CheckDirtyWord (3.3.4):
     - PooTools/Core
-  - PooTools/CheckUpdate (3.3.1):
+  - PooTools/CheckUpdate (3.3.4):
     - PooTools/NetWork
-  - PooTools/CodeView (3.3.1):
+  - PooTools/CodeView (3.3.4):
     - PooTools/Core
-  - PooTools/ColorFunction (3.3.1):
+  - PooTools/ColorFunction (3.3.4):
     - DynamicColor
     - PooTools/Core
     - UIImageColors
-  - PooTools/ColorPicker (3.3.1):
+  - PooTools/ColorPicker (3.3.4):
     - ChromaColorPicker
     - PooTools/Core
-  - PooTools/Core (3.3.1):
+  - PooTools/Core (3.3.4):
     - AttributedString
     - CocoaLumberjack/Swift
     - DeviceKit
@@ -149,45 +163,45 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YYText
-  - PooTools/Country (3.3.1):
+  - PooTools/Country (3.3.4):
     - PooTools/Core
-  - PooTools/CustomerLabel (3.3.1):
+  - PooTools/CustomerLabel (3.3.4):
     - PooTools/Core
     - YYText
-  - PooTools/CustomerNumberKeyboard (3.3.1):
+  - PooTools/CustomerNumberKeyboard (3.3.4):
     - PooTools/Core
-  - PooTools/DarkModeSetting (3.3.1):
+  - PooTools/DarkModeSetting (3.3.4):
     - PooTools/Core
-  - PooTools/DataEncrypt (3.3.1):
+  - PooTools/DataEncrypt (3.3.4):
     - CryptoSwift
     - PooTools/Core
-  - PooTools/DEBUG (3.3.1):
+  - PooTools/DEBUG (3.3.4):
     - PooTools/Core
-  - PooTools/FloatPanel (3.3.1):
+  - PooTools/FloatPanel (3.3.4):
     - FloatingPanel
     - PooTools/Core
-  - PooTools/FocusFaceImageView (3.3.1):
+  - PooTools/FocusFaceImageView (3.3.4):
     - FaceAware
     - PooTools/Core
-  - PooTools/GCDWebServer (3.3.1):
+  - PooTools/GCDWebServer (3.3.4):
     - GCDWebServer
     - GCDWebServer/WebUploader
     - PooTools/Core
-  - PooTools/Guide (3.3.1):
+  - PooTools/Guide (3.3.4):
     - PooTools/Core
-  - PooTools/ImageColors (3.3.1):
+  - PooTools/ImageColors (3.3.4):
     - PooTools/Core
     - UIImageColors
-  - PooTools/ImagePicker (3.3.1):
+  - PooTools/ImagePicker (3.3.4):
+    - AnyImageKit
     - PooTools/Core
-    - TZImagePickerController
-  - PooTools/Input (3.3.1):
+  - PooTools/Input (3.3.4):
     - CRBoxInputView
     - PhoneNumberKit
     - PooTools/Core
     - TextFieldEffects
     - "UITextField+Shake"
-  - PooTools/InputAll (3.3.1):
+  - PooTools/InputAll (3.3.4):
     - PooTools/Animation
     - PooTools/Appz
     - PooTools/BankCard
@@ -251,37 +265,37 @@ PODS:
     - PooTools/Vision
     - PooTools/YB_Attributed
     - PooTools/ZipArchive
-  - PooTools/Instructions (3.3.1):
+  - PooTools/Instructions (3.3.4):
     - Instructions
     - PooTools/Core
-  - PooTools/KeyChain (3.3.1):
+  - PooTools/KeyChain (3.3.4):
     - PooTools/Core
-  - PooTools/LanguageSetting (3.3.1):
+  - PooTools/LanguageSetting (3.3.4):
     - PooTools/Core
-  - PooTools/LaunchTimeProfiler (3.3.1):
+  - PooTools/LaunchTimeProfiler (3.3.4):
     - AMKLaunchTimeProfiler
     - PooTools/Core
-  - PooTools/Layout (3.3.1):
+  - PooTools/Layout (3.3.4):
     - CollectionViewPagingLayout
     - PooTools/Core
-  - PooTools/Line (3.3.1):
+  - PooTools/Line (3.3.4):
     - PooTools/Core
-  - PooTools/ListEmptyData (3.3.1):
+  - PooTools/ListEmptyData (3.3.4):
     - EmptyDataSet-Swift
     - LXFProtocolTool/LXFEmptyDataSetable
     - PooTools/Core
-  - PooTools/Loading (3.3.1):
+  - PooTools/Loading (3.3.4):
     - PooTools/Core
-  - PooTools/Location (3.3.1):
+  - PooTools/Location (3.3.4):
     - PooTools/Core
-  - PooTools/MediaViewer (3.3.1):
+  - PooTools/MediaViewer (3.3.4):
     - PooTools/NetWork
-  - PooTools/Motion (3.3.1):
+  - PooTools/Motion (3.3.4):
     - PooTools/Core
-  - PooTools/NavBarController (3.3.1):
+  - PooTools/NavBarController (3.3.4):
     - PooTools/Core
     - ZXNavigationBar
-  - PooTools/NetWork (3.3.1):
+  - PooTools/NetWork (3.3.4):
     - Alamofire
     - HandyJSON
     - KakaJSON
@@ -289,67 +303,67 @@ PODS:
     - MJExtension
     - PooTools/Core
     - SwiftyJSON
-  - PooTools/NotificationBanner (3.3.1):
+  - PooTools/NotificationBanner (3.3.4):
     - NotificationBannerSwift
     - PooTools/Core
-  - PooTools/PagingControl (3.3.1):
+  - PooTools/PagingControl (3.3.4):
     - JXPagingView/Paging
     - JXSegmentedView
     - PooTools/Core
-  - PooTools/PhoneInfo (3.3.1):
+  - PooTools/PhoneInfo (3.3.4):
     - PooTools/Core
-  - PooTools/Picker (3.3.1):
+  - PooTools/Picker (3.3.4):
     - BRPickerView
     - PooTools/Core
-  - PooTools/PopoverKit (3.3.1):
+  - PooTools/PopoverKit (3.3.4):
     - PooTools/Core
     - Popovers
-  - PooTools/RateView (3.3.1):
+  - PooTools/RateView (3.3.4):
     - PooTools/Core
-  - PooTools/Rotation (3.3.1):
+  - PooTools/Rotation (3.3.4):
     - PooTools/Core
-  - PooTools/Router (3.3.1):
+  - PooTools/Router (3.3.4):
     - PooTools/Core
-  - PooTools/ScanQRCode (3.3.1):
+  - PooTools/ScanQRCode (3.3.4):
     - PooTools/Core
     - PooTools/ImagePicker
-  - PooTools/ScrollBanner (3.3.1):
+  - PooTools/ScrollBanner (3.3.4):
     - PooTools/Core
-  - PooTools/ScrollRefresh (3.3.1):
+  - PooTools/ScrollRefresh (3.3.4):
     - MJRefresh
     - PooTools/Core
-  - PooTools/SearchBar (3.3.1):
+  - PooTools/SearchBar (3.3.4):
     - PooTools/Core
-  - PooTools/Segmented (3.3.1):
+  - PooTools/Segmented (3.3.4):
     - PooTools/Core
-  - PooTools/Share (3.3.1):
+  - PooTools/Share (3.3.4):
     - PooTools/Core
-  - PooTools/Slider (3.3.1):
+  - PooTools/Slider (3.3.4):
     - PooTools/Core
     - RangeSeekSlider
-  - PooTools/SmartScreenshot (3.3.1):
+  - PooTools/SmartScreenshot (3.3.4):
     - PooTools/Core
     - SnapshotKit
-  - PooTools/Stepper (3.3.1):
+  - PooTools/Stepper (3.3.4):
     - PooTools/Core
-  - PooTools/SVG (3.3.1):
+  - PooTools/SVG (3.3.4):
     - PocketSVG
     - PooTools/Core
-  - PooTools/SwipeCell (3.3.1):
+  - PooTools/SwipeCell (3.3.4):
     - PooTools/Core
     - SwipeCellKit
-  - PooTools/Tabbar (3.3.1):
+  - PooTools/Tabbar (3.3.4):
     - ESTabBarController-swift
     - PooTools/Core
-  - PooTools/Telephony (3.3.1):
+  - PooTools/Telephony (3.3.4):
     - PooTools/Core
-  - PooTools/UpdateTips (3.3.1):
+  - PooTools/UpdateTips (3.3.4):
     - PooTools/Core
-  - PooTools/Vision (3.3.1):
+  - PooTools/Vision (3.3.4):
     - PooTools/Core
-  - PooTools/YB_Attributed (3.3.1):
+  - PooTools/YB_Attributed (3.3.4):
     - PooTools/Core
-  - PooTools/ZipArchive (3.3.1):
+  - PooTools/ZipArchive (3.3.4):
     - PooTools/Core
     - SSZipArchive
   - pop (1.0.12)
@@ -389,11 +403,6 @@ PODS:
   - Swinject (2.8.3)
   - SwipeCellKit (2.7.1)
   - TextFieldEffects (1.6.0)
-  - TZImagePickerController (3.8.3):
-    - TZImagePickerController/Basic (= 3.8.3)
-    - TZImagePickerController/Location (= 3.8.3)
-  - TZImagePickerController/Basic (3.8.3)
-  - TZImagePickerController/Location (3.8.3)
   - UIColor_Hex_Swift (5.1.9)
   - UIImageColors (2.1.0)
   - "UITextField+Shake (1.2.1)"
@@ -433,6 +442,7 @@ SPEC REPOS:
   trunk:
     - Alamofire
     - AMKLaunchTimeProfiler
+    - AnyImageKit
     - Appz
     - Aspects
     - AttributedString
@@ -486,7 +496,6 @@ SPEC REPOS:
     - Swinject
     - SwipeCellKit
     - TextFieldEffects
-    - TZImagePickerController
     - UIColor_Hex_Swift
     - UIImageColors
     - "UITextField+Shake"
@@ -511,6 +520,7 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   Alamofire: 0e92e751b3e9e66d7982db43919d01f313b8eb91
   AMKLaunchTimeProfiler: fa41438c274d994738a33b536ee7f3de19a27350
+  AnyImageKit: 5f30ce2cad2ffa9162c3e6d827ccb3a280553640
   Appz: 9afca8060886b75002092f4b5b5c238a0ab19bf0
   Aspects: 7595ba96a6727a58ebcbfc954497fc5d2fdde546
   AttributedString: 6d2d9d65310119556c3b5c6e4ea8d1ca339b703c
@@ -534,7 +544,7 @@ SPEC CHECKSUMS:
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   HyperioniOS: 4412ec61a390caadffcaaf3364733b06e103cf63
   InAppViewDebugger: 5f1cd0189d348679f153502da1343ba513b5cbae
-  Instructions: 07052901a398b42eb1d83de9755b8a0bac3e2f7d
+  Instructions: 3aac22d036495ba4c40e00747e0a275da40ce53d
   IQKeyboardManager: b1fd66ccf7a79095bdcc4a2735231586f744216e
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   JXSegmentedView: fec0d335355b6e019c494fe2e030bde8a36d2df6
@@ -552,7 +562,7 @@ SPEC CHECKSUMS:
   PermissionsKit: 2ee142d1fd69d1e8faa1801432d9241c84c132e1
   PhoneNumberKit: 962cb725d664c7d4ac5f3e6f93e2de5f543f0d05
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: a26d464531d899abad18105bc98b1864d617eb03
+  PooTools: d46d53afcd11560b2e8e7d5f2a371c701864b712
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   RangeSeekSlider: 650b11fa1edcb92e1e0ede797669d98622570fb5
@@ -566,7 +576,6 @@ SPEC CHECKSUMS:
   Swinject: 893c9a543000ac2f10ee4cbaf0933c6992c935d5
   SwipeCellKit: 3972254a826da74609926daf59b08d6c72e619ea
   TextFieldEffects: 529b8aff706fb40f82c41c780c0777941a893796
-  TZImagePickerController: e9909edbadf7381140efc5b5c9f5bdbfd630f7d4
   UIColor_Hex_Swift: 20cb4e8d51b63e168a9da6933bc5d39cd8fb4ab5
   UIImageColors: d2ef3b0877d203cbb06489eeb78ea8b7788caabe
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3

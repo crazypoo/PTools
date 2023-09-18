@@ -287,12 +287,12 @@ extension PTEyeTrackingManager {
         
         if isTrackingStopped && trackingState == .tracking {
             trackingState = .notTracked
-            print(Constants.TRACHING_STOPPED)
+            PTNSLogConsole(Constants.TRACHING_STOPPED)
             // 保持屏幕睡眠
             UIApplication.shared.isIdleTimerDisabled = false
         } else if !isTrackingStopped && trackingState == .notTracked {
             trackingState = .tracking
-            print(Constants.TRACHING_STARTED)
+            PTNSLogConsole(Constants.TRACHING_STARTED)
             // 为了不让画面变暗
             UIApplication.shared.isIdleTimerDisabled = true
         } else {
