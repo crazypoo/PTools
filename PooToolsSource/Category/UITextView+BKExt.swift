@@ -145,7 +145,7 @@ public extension UITextView {
     @objc private func bk_maxWordCountAction() -> () {
         
         guard let maxCount = pt_maxWordCount else { return }
-        if text.count >= maxCount.intValue {
+        if text.pt.typeLengh(.utf8) >= maxCount.intValue {
             /// 输入的文字超过最大值
             text = (self.text as NSString).substring(to: maxCount.intValue)
             PTNSLogConsole("已经超过限制的字数了！")
@@ -161,9 +161,12 @@ public extension UITextView {
         
         if let wordCountLabel = bk_wordCountLabel {
             guard let count = pt_maxWordCount else { return }
-            wordCountLabel.text = "\(text.count)/\(count)"
+            var valueInt = 0
+            if text.pt.typeLengh(.utf8) > count.intValue {
+                valueInt = (text.pt.typeLengh(.utf8) - count.intValue)
+            }
+            wordCountLabel.text = "\(text.pt.typeLengh(.utf8) - valueInt)/\(count)"
         }
-        
     }
     
     override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {

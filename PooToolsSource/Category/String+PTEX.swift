@@ -1675,3 +1675,82 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
         return hash as String
     }
 }
+
+// MARK: 字符串的转换
+public extension PTPOP where Base: ExpressibleByStringLiteral {
+    
+    // MARK: 字符串 转 CGFloat
+    /// 字符串 转 Float
+    /// - Returns: CGFloat
+    func toCGFloat() -> CGFloat? {
+        if let doubleValue = Double(base as! String) {
+            return CGFloat(doubleValue)
+        }
+        return nil
+    }
+    
+    // MARK: 字符串转 Bool
+    /// 字符串转 Bool
+    /// - Returns: Bool
+    func toBool() -> Bool? {
+        switch (base as! String).lowercased() {
+        case "true", "t", "yes", "y", "1":
+            return true
+        case "false", "f", "no", "n", "0":
+            return false
+        default:
+            return nil
+        }
+    }
+    
+    // MARK: 字符串转 Int
+    /// 字符串转 Int
+    /// - Returns: Int
+    func toInt() -> Int? {
+        if let num = NumberFormatter().number(from: base as! String) {
+            return num.intValue
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: 字符串转 Double
+    /// 字符串转 Double
+    /// - Returns: Double
+    func toDouble() -> Double? {
+        if let num = NumberFormatter().number(from: base as! String) {
+            return num.doubleValue
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: 字符串转 Float
+    /// 字符串转 Float
+    /// - Returns: Float
+    func toFloat() -> Float? {
+        if let num = NumberFormatter().number(from: base as! String) {
+            return num.floatValue
+        } else {
+            return nil
+        }
+    }
+    
+    // MARK: 字符串转 NSString
+    /// 字符串转 NSString
+    var toNSString: NSString {
+        return (base as! String) as NSString
+    }
+    
+    // MARK: 字符串转 Int64
+    /// 字符串转 Int64
+    var toInt64Value: Int64? {
+        return Int64(base as! String)
+    }
+    
+    // MARK: 字符串转 NSNumber
+    /// 字符串转 NSNumber
+    var toNumber: NSNumber? {
+        return self.toDouble()?.pt.number
+    }
+}

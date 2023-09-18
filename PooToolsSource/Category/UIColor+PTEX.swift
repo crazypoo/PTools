@@ -16,12 +16,32 @@ import UIKit
 
 public extension UIColor {
         
+    // MARK: 深色模式和浅色模式颜色设置，非layer颜色设置
+    /// 深色模式和浅色模式颜色设置，非layer颜色设置
+    /// - Parameters:
+    ///   - lightColor: 浅色模式的颜色
+    ///   - darkColor: 深色模式的颜色
+    /// - Returns: 返回一个颜色（UIColor）
+    static func darkModeColor(lightColor: UIColor, darkColor: UIColor) -> UIColor {
+       if #available(iOS 13.0, *) {
+          return UIColor { (traitCollection) -> UIColor in
+               if traitCollection.userInterfaceStyle == .dark {
+                   return darkColor
+               } else {
+                   return lightColor
+               }
+           }
+       } else {
+          return lightColor
+       }
+   }
+    
     //MARK: hex 色值
     /// - Parameters:
     ///   - hex:string that looks like @"#FF0000" or @"FF0000"
     ///   - alpha:0~1
     /// - Returns: UIColor
-    class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor{
+    class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor {
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         let hexint = intFromHexString_64(tempStr)
         let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
@@ -711,5 +731,22 @@ public extension UIColor {
     }
     @objc class var DustColor:UIColor {
         UIColor.colorBase(R: 236, G: 214, B: 197, A: 1)
+    }
+    
+    // MARK: color 转 RGBA
+    /// color 转 RGBA
+    /// - Returns: 返回对应的 RGBA
+    func colorToRGBA() -> (r: CGFloat?, g: CGFloat?, b: CGFloat?, a: CGFloat?) {
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        let multiplier = CGFloat(255.999999)
+        
+        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+            return (nil, nil, nil, nil)
+        }
+        return ("\(Int(red * multiplier))".pt.toCGFloat(), "\(Int(green * multiplier))".pt.toCGFloat(), "\(Int(blue * multiplier))".pt.toCGFloat(), alpha)
     }
 }

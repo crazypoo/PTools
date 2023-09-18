@@ -589,9 +589,9 @@ class PTSwiftViewController: PTBaseViewController {
             make.centerX.centerY.equalToSuperview()
         }
         btn.addActionHandlers { sender in
-            UIViewController.gobal_drop(title: "123123123123", notifiDismiss:  {
-                PTNSLogConsole("1231231231234444")
-            })
+            PTSendFeedBackAlert.shared.alertSendFeedBack(superView: AppWindows!) { title, content in
+                PTNSLogConsole("title:\(title),content:\(content)")
+            }
         }
     }
 }

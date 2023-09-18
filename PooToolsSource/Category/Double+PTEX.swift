@@ -8,6 +8,8 @@
 
 import UIKit
 
+extension Double:PTProtocolCompatible {}
+
 public extension Double {
     /*
      加速度单位 NSUnitAccelerationm /s²
@@ -45,7 +47,7 @@ public extension Double {
     
     //MARK: 數字金額轉換成人民幣大寫金額
     /// - Parameter return: 人民幣大寫金額
-    func cnySpellOut()->String{
+    func cnySpellOut()->String {
         let numString = String(format: "%.2f", self)
         let parts = numString.split(separator: ".")
         let integerPart = parts[0]
@@ -109,5 +111,13 @@ public extension Double {
     func roundTo(places: Int) -> Double {
         let divisor = pow(10.0, Double(places))
         return (self * divisor).rounded() / divisor
+    }
+}
+
+public extension PTPOP where Base == Double {
+    // MARK: 转 NSNumber
+    /// 转 NSNumber
+    var number: NSNumber { 
+        return NSNumber(value: self.base)
     }
 }

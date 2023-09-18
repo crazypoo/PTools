@@ -11,7 +11,7 @@ import WebKit
 
 extension WKWebView {
     fileprivate struct WKWebViewAssociateKeys {
-        static var confiDefault = 998//"WKWebView" + "confiDefault"
+        static var confiDefault = 998
     }
 }
 
