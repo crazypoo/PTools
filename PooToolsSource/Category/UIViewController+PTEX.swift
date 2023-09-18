@@ -249,16 +249,27 @@ public extension UIViewController {
         }
     }
 
-    
     //MARK: 弹出框
+    /// - Parameters:
+    ///   - title: 标题
+    ///   - titleFont: 标题字号
+    ///   - titleColor: 字体颜色
+    ///   - subTitle: 子标题
+    ///   - subTitleFont: 子标题字号
+    ///   - subTitleColor: 子标题颜色
+    ///   - bannerBackgroundColor: 背景颜色
+    ///   - duration: 点击回调
+    ///   - notifiTap: 点击回调
     @objc class func gobal_drop(title:String?,
-                               titleFont:UIFont? = UIFont.appfont(size: 16),
-                               titleColor:UIColor? = .black,
-                               subTitle:String? = nil,
-                               subTitleFont:UIFont? = UIFont.appfont(size: 16),
-                               subTitleColor:UIColor? = .black,
-                               bannerBackgroundColor:UIColor? = .white,
-                               notifiTap:PTActionTask? = nil) {
+                                titleFont:UIFont? = UIFont.appfont(size: 16),
+                                titleColor:UIColor? = .black,
+                                subTitle:String? = nil,
+                                subTitleFont:UIFont? = UIFont.appfont(size: 16),
+                                subTitleColor:UIColor? = .black,
+                                duration:CGFloat = 1.5,
+                                bannerBackgroundColor:UIColor? = .white,
+                                notifiTap:PTActionTask? = nil,
+                                notifiDismiss:PTActionTask? = nil) {
         var titleStr = ""
         if title == nil || (title ?? "").stringIsEmpty() {
             titleStr = ""
@@ -274,7 +285,7 @@ public extension UIViewController {
         }
 #if POOTOOLS_NOTIFICATIONBANNER
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
-        banner.duration = 1.5
+        banner.duration = duration
         banner.backgroundColor = bannerBackgroundColor!
         banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.subtitleLabel?.font = subTitleFont
@@ -288,8 +299,17 @@ public extension UIViewController {
                 notifiTap!()
             }
         }
+        PTGCDManager.gcdAfter(time: duration) {
+            if notifiDismiss != nil {
+                notifiDismiss!()
+            }
+        }
 #else
-        UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "好的")
+        UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "好的") {
+            if notifiDismiss != nil {
+                notifiDismiss!()
+            }
+        }
 #endif
     }
 }
