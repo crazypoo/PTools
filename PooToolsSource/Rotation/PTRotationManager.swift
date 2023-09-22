@@ -10,7 +10,7 @@ import UIKit
 
 @objcMembers
 public class PTRotationManager: NSObject {
-    static let share = PTRotationManager()
+    public static let share = PTRotationManager()
     
     /*! @brief 初始化
      * @see 在Appdelegate中加载此方法
@@ -50,5 +50,6 @@ public class PTRotationManager: NSObject {
         
         PTRotationManager.share.interfaceOrientationMask = interfaceOrientationMask
         UIDevice.current.setValue(orientation, forKey: "orientation")
+        UIViewController.attemptRotationToDeviceOrientation()
     }
 }
