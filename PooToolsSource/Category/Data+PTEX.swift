@@ -7,6 +7,9 @@
 //
 
 import UIKit
+import CommonCrypto
+
+extension Data: PTProtocolCompatible {}
 
 public extension Data {
     //MARK: 根據Data來獲取圖片的格式(底層方法)
@@ -129,4 +132,84 @@ public extension Data {
             return nil
         }
     }
+}
+
+public extension PTPOP where Base == Data {
+    ///hash计算
+    func hashString(hashType: PTHashType, lowercase: Bool = true) -> String {
+        var output = NSMutableString()
+        switch hashType {
+            case .md5:
+                var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_MD5(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+
+                output = NSMutableString(capacity: Int(CC_MD5_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+            case .sha1:
+                var digest = [UInt8](repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_SHA1(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+                output = NSMutableString(capacity: Int(CC_SHA1_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+            case .sha224:
+                var digest = [UInt8](repeating: 0, count: Int(CC_SHA224_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_SHA224(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+
+                output = NSMutableString(capacity: Int(CC_SHA224_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+            case .sha256:
+                var digest = [UInt8](repeating: 0, count: Int(CC_SHA256_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_SHA256(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+
+                output = NSMutableString(capacity: Int(CC_SHA256_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+            case .sha384:
+                var digest = [UInt8](repeating: 0, count: Int(CC_SHA384_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_SHA384(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+
+                output = NSMutableString(capacity: Int(CC_SHA384_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+            case .sha512:
+                var digest = [UInt8](repeating: 0, count: Int(CC_SHA512_DIGEST_LENGTH))
+                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
+                    CC_SHA512(messageBytes.baseAddress, CC_LONG(base.count), &digest)
+                    return true
+                }
+
+                output = NSMutableString(capacity: Int(CC_SHA512_DIGEST_LENGTH))
+                for byte in digest{
+                    output.appendFormat("%02x", byte)
+                }
+        }
+
+        if !lowercase {
+            return String(output).uppercased()
+        }
+        return String(output)
+    }
+
 }

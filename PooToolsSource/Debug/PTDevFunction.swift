@@ -93,7 +93,7 @@ public class PTDevFunction: NSObject {
                     } else {
                         showTouchHit = "开启界面点击检测"
                     }
-                    let titles = ["FLEX","Log","FPS","Memory","颜色检查","卡尺",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo,"UserDefults"]
+                    let titles = ["FLEX","Log","FPS","Memory","颜色检查","卡尺",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo,"UserDefults","App文件夹"]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
@@ -224,6 +224,12 @@ public class PTDevFunction: NSObject {
                         } else if title == "UserDefults" {
                             let currentVC = PTUtils.getCurrentVC()
                             let vc = PTUserDefultsViewController()
+                            let nav = PTBaseNavControl(rootViewController: vc)
+                            nav.modalPresentationStyle = .fullScreen
+                            currentVC.present(nav, animated: true)
+                        } else if title == "App文件夹" {
+                            let currentVC = PTUtils.getCurrentVC()
+                            let vc = PTFileBrowserViewController()
                             let nav = PTBaseNavControl(rootViewController: vc)
                             nav.modalPresentationStyle = .fullScreen
                             currentVC.present(nav, animated: true)

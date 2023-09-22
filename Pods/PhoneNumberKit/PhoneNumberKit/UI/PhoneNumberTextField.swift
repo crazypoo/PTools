@@ -121,18 +121,19 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
 
     private var _withDefaultPickerUI: Bool = false {
         didSet {
-            if #available(iOS 11.0, *), flagButton.actions(forTarget: self, forControlEvent: .touchUpInside) == nil {
+            if flagButton.actions(forTarget: self, forControlEvent: .touchUpInside) == nil {
                 flagButton.addTarget(self, action: #selector(didPressFlagButton), for: .touchUpInside)
             }
         }
     }
 
-    @available(iOS 11.0, *)
     public var withDefaultPickerUI: Bool {
         get { _withDefaultPickerUI }
         set { _withDefaultPickerUI = newValue }
     }
-    
+
+    public var withDefaultPickerUIOptions: CountryCodePickerOptions = CountryCodePickerOptions()
+
     public var modalPresentationStyle: UIModalPresentationStyle?
 
     public var isPartialFormatterEnabled = true
@@ -364,10 +365,10 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         self.attributedPlaceholder = ph
     }
 
-    @available(iOS 11.0, *)
     @objc func didPressFlagButton() {
         guard withDefaultPickerUI else { return }
-        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit)
+        let vc = CountryCodePickerViewController(phoneNumberKit: phoneNumberKit,
+                                                 options: withDefaultPickerUIOptions)
         vc.delegate = self
         if let nav = containingViewController?.navigationController, !PhoneNumberKit.CountryCodePicker.forceModalPresentation {
             nav.pushViewController(vc, animated: true)
@@ -449,11 +450,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 
     open func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        // This allows for the case when a user autocompletes a phone number:
-        if range == NSRange(location: 0, length: 0) && string.isBlank {
-            return true
-        }
-
         guard let text = text else {
             return false
         }
@@ -463,6 +459,11 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
             return false
         }
         guard self.isPartialFormatterEnabled else {
+            return true
+        }
+        
+        // This allows for the case when a user autocompletes a phone number:
+        if range == NSRange(location: 0, length: 0) && string.isBlank {
             return true
         }
 
@@ -527,7 +528,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
         self._delegate?.textFieldDidEndEditing?(textField)
     }
 
-    @available (iOS 10.0, tvOS 10.0, *)
     open func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         updateTextFieldDidEndEditing(textField)
         if let _delegate = _delegate {
@@ -564,7 +564,6 @@ open class PhoneNumberTextField: UITextField, UITextFieldDelegate {
     }
 }
 
-@available(iOS 11.0, *)
 extension PhoneNumberTextField: CountryCodePickerDelegate {
 
     public func countryCodePickerViewControllerDidPickCountry(_ country: CountryCodePickerViewController.Country) {

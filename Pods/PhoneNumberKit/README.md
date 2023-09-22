@@ -112,6 +112,34 @@ phoneNumberKit.countries(withCode: 33)
 phoneNumberKit.countryCode(for: "FR")
 ```
 
+## Customize Country Picker
+
+You can customize colors and fonts on the Country Picker View Controller by overriding the property "withDefaultPickerUIOptions"
+
+```swift
+let options = CountryCodePickerOptions(
+    backgroundColor: UIColor.systemGroupedBackground
+    separatorColor: UIColor.opaqueSeparator
+    textLabelColor: UIColor.label
+    textLabelFont: .preferredFont(forTextStyle: .callout)
+    detailTextLabelColor: UIColor.secondaryLabel
+    detailTextLabelFont: .preferredFont(forTextStyle: .body)
+    tintColor: UIView().tintColor
+    cellBackgroundColor: UIColor.secondarySystemGroupedBackground
+    cellBackgroundColorSelection: UIColor.tertiarySystemGroupedBackground
+)
+textField.withDefaultPickerUIOptions = options
+```
+
+Or you can change it directly:
+
+```swift
+textField.withDefaultPickerUIOptions.backgroundColor = .red
+```
+
+Please refer to `CountryCodePickerOptions` for more information about usage and how it affects the view. 
+
+
 ## Need more customization?
 
 You can access the metadata powering PhoneNumberKit yourself, this enables you to program any behaviours as they may be implemented in PhoneNumberKit itself. It does mean you are exposed to the less polished interface of the underlying file format. If you program something you find useful please push it upstream!
@@ -127,7 +155,7 @@ The [Swift Package Manager](https://swift.org/package-manager/) is now the prefe
 From Xcode 11+ :
 
 1. Select File > Swift Packages > Add Package Dependency. Enter `https://github.com/marmelroy/PhoneNumberKit.git` in the "Choose Package Repository" dialog.
-2. In the next page, specify the version resolving rule as "Up to Next Major" from "3.6.0".
+2. In the next page, specify the version resolving rule as "Up to Next Major" from "3.7.0".
 3. After Xcode checked out the source and resolving the version, you can choose the "PhoneNumberKit" library and add it to your app target.
 
 For more info, read [Adding Package Dependencies to Your App](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) from Apple.
@@ -136,7 +164,7 @@ Alternatively, you can also add PhoneNumberKit to your `Package.swift` file:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/marmelroy/PhoneNumberKit", from: "3.6.0")
+    .package(url: "https://github.com/marmelroy/PhoneNumberKit", from: "3.7.0")
 ]
 ```
 
@@ -160,5 +188,5 @@ github "marmelroy/PhoneNumberKit"
 ### Setting up with [CocoaPods](http://cocoapods.org/?q=PhoneNumberKit)
 
 ```ruby
-pod 'PhoneNumberKit', '~> 3.6'
+pod 'PhoneNumberKit', '~> 3.7'
 ```

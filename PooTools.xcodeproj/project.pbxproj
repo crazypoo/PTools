@@ -189,6 +189,14 @@
 		55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */; };
 		55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
+		55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB62ABDFF1C00858348 /* ICMP.swift */; };
+		55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB72ABDFF1C00858348 /* IPv4.swift */; };
+		55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB82ABDFF1C00858348 /* SimplePing.swift */; };
+		55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBBC2ABDFF3600858348 /* PTPingTool.swift */; };
+		55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBBD2ABDFF3600858348 /* PTPingActivityIndicator.swift */; };
+		55E3BBC12ABE0F8E00858348 /* PTFileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */; };
+		55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */; };
+		55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBC42ABE193200858348 /* PTFileBrowser.swift */; };
 		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
@@ -452,6 +460,14 @@
 		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
 		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
+		55E3BBB62ABDFF1C00858348 /* ICMP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICMP.swift; sourceTree = "<group>"; };
+		55E3BBB72ABDFF1C00858348 /* IPv4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPv4.swift; sourceTree = "<group>"; };
+		55E3BBB82ABDFF1C00858348 /* SimplePing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SimplePing.swift; sourceTree = "<group>"; };
+		55E3BBBC2ABDFF3600858348 /* PTPingTool.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPingTool.swift; sourceTree = "<group>"; };
+		55E3BBBD2ABDFF3600858348 /* PTPingActivityIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPingActivityIndicator.swift; sourceTree = "<group>"; };
+		55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFileModel.swift; sourceTree = "<group>"; };
+		55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFileBrowserViewController.swift; sourceTree = "<group>"; };
+		55E3BBC42ABE193200858348 /* PTFileBrowser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFileBrowser.swift; sourceTree = "<group>"; };
 		55E51757292C9DB200BFF122 /* PTDataEncryption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDataEncryption.swift; sourceTree = "<group>"; };
 		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
@@ -649,6 +665,7 @@
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				554929E828F9089100C82ABF /* Permission */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
+				55E3BBB52ABDFF0C00858348 /* Ping */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				55025E4029FA54B60024A960 /* Protocol */,
 				55025E4129FA56D00024A960 /* PTNavigationBar */,
@@ -929,6 +946,9 @@
 				55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */,
 				55C9046D2A3052BC00B7E83D /* PTViewRulerPlugin.swift */,
 				55C905172A31B40200B7E83D /* PTUserDefultsViewController.swift */,
+				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
+				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
+				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -1362,6 +1382,18 @@
 			path = ScrollBanner;
 			sourceTree = "<group>";
 		};
+		55E3BBB52ABDFF0C00858348 /* Ping */ = {
+			isa = PBXGroup;
+			children = (
+				55E3BBB62ABDFF1C00858348 /* ICMP.swift */,
+				55E3BBB72ABDFF1C00858348 /* IPv4.swift */,
+				55E3BBBD2ABDFF3600858348 /* PTPingActivityIndicator.swift */,
+				55E3BBBC2ABDFF3600858348 /* PTPingTool.swift */,
+				55E3BBB82ABDFF1C00858348 /* SimplePing.swift */,
+			);
+			path = Ping;
+			sourceTree = "<group>";
+		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -1671,6 +1703,7 @@
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
+				55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */,
 				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
@@ -1704,6 +1737,7 @@
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
+				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
@@ -1746,6 +1780,7 @@
 				55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */,
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
+				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
 				5581E8582AB9059900491065 /* PTSendFeedBackAlert.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				55C5306D29FAA06800B0F4C9 /* PTNavigationBarController.swift in Sources */,
@@ -1759,6 +1794,7 @@
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
+				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
@@ -1830,6 +1866,7 @@
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
+				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
@@ -1864,8 +1901,10 @@
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
 				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
 				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
+				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
+				55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
@@ -1875,6 +1914,7 @@
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
+				55E3BBC12ABE0F8E00858348 /* PTFileModel.swift in Sources */,
 				559C1C93293AF138002874BA /* NSURLResponse+PTEX.swift in Sources */,
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */,

@@ -57,6 +57,26 @@ public extension PTPOP where Base: FileManager {
         return homeDirectory
     }
     
+    //MARK: 根据类型获取文件夹路径
+    ///根据类型获取文件夹路径
+    static func getFileDirectory(type: BasePath) -> URL {
+        let homePath = NSHomeDirectory()
+        switch type {
+        case .Directory:
+            return URL(fileURLWithPath: self.homeDirectory())
+        case .Documnets:
+            return URL(fileURLWithPath: self.DocumnetsDirectory())
+        case .Library:
+            return URL(fileURLWithPath: self.LibraryDirectory())
+        case .Tmp:
+            return URL(fileURLWithPath: self.TmpDirectory())
+        case .Caches:
+            return URL(fileURLWithPath: self.CachesDirectory())
+        case .Preferences:
+            return URL(fileURLWithPath: self.PreferencesDirectory())
+        }
+    }
+    
     //MARK: 获取Documnets的完整路径名
     ///获取Documnets的完整路径名
     /// - Returns: Documnets的完整路径名

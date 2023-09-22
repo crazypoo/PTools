@@ -91,8 +91,8 @@
 - (UIImage *)lks_groupScreenshotWithLowQuality:(BOOL)lowQuality {
     
     CGFloat screenScale = [UIScreen mainScreen].scale;
-    CGFloat pixelWidth = self.bounds.size.width * screenScale;
-    CGFloat pixelHeight = self.bounds.size.height * screenScale;
+    CGFloat pixelWidth = self.frame.size.width * screenScale;
+    CGFloat pixelHeight = self.frame.size.height * screenScale;
     if (pixelWidth <= 0 || pixelHeight <= 0) {
         return nil;
     }
@@ -105,7 +105,9 @@
         renderScale = MIN(screenScale * LookinNodeImageMaxLengthInPx / maxLength, 1);
     }
     
-    UIGraphicsBeginImageContextWithOptions(self.frame.size, NO, renderScale);
+    CGSize contextSize = self.frame.size;
+    NSAssert(contextSize.width > 0 && contextSize.height > 0, @"");
+    UIGraphicsBeginImageContextWithOptions(contextSize, NO, renderScale);
     CGContextRef context = UIGraphicsGetCurrentContext();
     if (self.lks_hostView && !self.lks_hostView.lks_isChildrenViewOfTabBar) {
         [self.lks_hostView drawViewHierarchyInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) afterScreenUpdates:YES];
@@ -123,8 +125,8 @@
     }
     
     CGFloat screenScale = [UIScreen mainScreen].scale;
-    CGFloat pixelWidth = self.bounds.size.width * screenScale;
-    CGFloat pixelHeight = self.bounds.size.height * screenScale;
+    CGFloat pixelWidth = self.frame.size.width * screenScale;
+    CGFloat pixelHeight = self.frame.size.height * screenScale;
     if (pixelWidth <= 0 || pixelHeight <= 0) {
         return nil;
     }
@@ -147,7 +149,9 @@
             }
         }];
         
-        UIGraphicsBeginImageContextWithOptions(self.frame.size, NO, renderScale);
+        CGSize contextSize = self.frame.size;
+        NSAssert(contextSize.width > 0 && contextSize.height > 0, @"");
+        UIGraphicsBeginImageContextWithOptions(contextSize, NO, renderScale);
         CGContextRef context = UIGraphicsGetCurrentContext();
         if (self.lks_hostView && !self.lks_hostView.lks_isChildrenViewOfTabBar) {
             [self.lks_hostView drawViewHierarchyInRect:CGRectMake(0, 0, self.frame.size.width, self.frame.size.height) afterScreenUpdates:YES];
