@@ -30,7 +30,7 @@ public class PTSendFeedBackAlert {
     ///   - titleFont: 标题字体
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
-    func alertSendFeedBack(superView:UIView,
+    public func alertSendFeedBack(superView:UIView,
                            alertTitle:String? = "反馈问题",
                            feedBackTitlePlaceholder:String? = "请输入反馈标题",
                            feedBackTitleFont:UIFont? = .appfont(size: 16),
