@@ -34,6 +34,7 @@ public class PTDevFunction: NSObject {
     public var HyperioniOS:PTActionTask?
     public var TestHitShow:FlexDevTask?
     public var TestHitTouchesShow:FlexDevTask?
+    public var FoxNet:PTActionTask?
     //開啟/關閉inAppViewDebugger
     /*
      #if DEBUG
@@ -93,7 +94,7 @@ public class PTDevFunction: NSObject {
                     } else {
                         showTouchHit = "开启界面点击检测"
                     }
-                    let titles = ["FLEX","Log","FPS","Memory","颜色检查","卡尺",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo,"UserDefults","App文件夹"]
+                    let titles = ["FLEX","Log","FPS","Memory","颜色检查","卡尺",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo,"UserDefults","App文件夹","网络拦截"]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
@@ -233,6 +234,10 @@ public class PTDevFunction: NSObject {
                             let nav = PTBaseNavControl(rootViewController: vc)
                             nav.modalPresentationStyle = .fullScreen
                             currentVC.present(nav, animated: true)
+                        } else if title == "网络拦截" {
+                            if self.FoxNet != nil {
+                                self.FoxNet!()
+                            }
                         }
                     }
                 }

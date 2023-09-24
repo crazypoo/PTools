@@ -241,7 +241,9 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/YYModel/YYModel.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/YYText/YYText.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/ZXNavigationBar/ZXNavigationBar.framework"
+  install_framework "${BUILT_PRODUCTS_DIR}/netfox/netfox.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/pop/pop.framework"
+  install_framework "${PODS_XCFRAMEWORKS_BUILD_DIR}/WoodPeckeriOS/WoodPeckeriOS.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AMKLaunchTimeProfiler/AMKLaunchTimeProfiler.framework"

@@ -83,6 +83,7 @@ PODS:
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.1)
   - MJRefresh (3.7.5)
+  - netfox (1.21.0)
   - NotificationBannerSwift (3.2.1):
     - MarqueeLabel (~> 4.3.0)
     - SnapKit (~> 5.6.0)
@@ -410,6 +411,7 @@ PODS:
   - UIImageColors (2.1.0)
   - "UITextField+Shake (1.2.1)"
   - "UIViewController+Swizzled (1.4)"
+  - WoodPeckeriOS (1.4.1)
   - WZLBadge (1.2.6)
   - YYCache (1.0.4)
   - YYModel (1.0.4)
@@ -425,6 +427,7 @@ DEPENDENCIES:
   - InAppViewDebugger
   - LifetimeTracker
   - LookinServer
+  - netfox
   - PermissionsKit/CalendarPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/CameraPermission (from `https://github.com/sparrowcode/PermissionsKit`)
   - PermissionsKit/FaceIDPermission (from `https://github.com/sparrowcode/PermissionsKit`)
@@ -440,6 +443,7 @@ DEPENDENCIES:
   - PooTools/InputAll (from `PooTools.podspec`)
   - SwiftLint
   - Swinject
+  - WoodPeckeriOS
 
 SPEC REPOS:
   trunk:
@@ -483,6 +487,7 @@ SPEC REPOS:
     - MBProgressHUD
     - MJExtension
     - MJRefresh
+    - netfox
     - NotificationBannerSwift
     - PhoneNumberKit
     - PocketSVG
@@ -503,6 +508,7 @@ SPEC REPOS:
     - UIImageColors
     - "UITextField+Shake"
     - "UIViewController+Swizzled"
+    - WoodPeckeriOS
     - WZLBadge
     - YYCache
     - YYModel
@@ -561,6 +567,7 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
+  netfox: 9d5cc727fe7576c4c7688a2504618a156b7d44b7
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PermissionsKit: 2ee142d1fd69d1e8faa1801432d9241c84c132e1
   PhoneNumberKit: f8e2693b9b192ac170a1f9d039fab9f4e4f068ec
@@ -583,12 +590,13 @@ SPEC CHECKSUMS:
   UIImageColors: d2ef3b0877d203cbb06489eeb78ea8b7788caabe
   "UITextField+Shake": 298ac5a0f239d731bdab999b19b628c956ca0ac3
   "UIViewController+Swizzled": 1cd9397598ede6930f94fbcac4b43d63c7aa0dbb
+  WoodPeckeriOS: b78e1b6bb92570e498e102d615b54a149618f922
   WZLBadge: 9ec779dcfd94c825518b395e8315fccaabff1bfa
   YYCache: 8105b6638f5e849296c71f331ff83891a4942952
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 94f27a0f58f38ba9c1c30fe6cc3fc770c9f2c00e
+PODFILE CHECKSUM: 43c85a594813e0d3ae1bf63b940bd16539e5b35b
 
 COCOAPODS: 1.12.1
