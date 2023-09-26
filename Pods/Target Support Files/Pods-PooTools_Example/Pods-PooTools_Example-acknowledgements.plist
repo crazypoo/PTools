@@ -2530,16 +2530,6 @@ SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string></string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>WoodPeckeriOS</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>The MIT License (MIT)
 
 Copyright (c) 2015 ibireme &lt;ibireme@gmail.com&gt;

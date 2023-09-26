@@ -24,7 +24,7 @@ target 'PooTools_Example' do
   pod 'HyperioniOS/AttributesInspector', :configurations => ['Debug'] # Optional plugin
   pod 'HyperioniOS/Measurements', :configurations => ['Debug'] # Optional plugin
   pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
-  pod 'WoodPeckeriOS', :configurations => ['Debug']
+#  pod 'WoodPeckeriOS', :configurations => ['Debug']
   pod 'netfox', :configurations => ['Debug']
 
   #权限询问

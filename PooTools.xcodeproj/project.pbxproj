@@ -353,6 +353,7 @@
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
+		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+EXFuction.swift"; sourceTree = "<group>"; };
 		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
 		554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionViewController.swift; sourceTree = "<group>"; };
@@ -1427,6 +1428,7 @@
 		6003F58C195388D20070C39A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */,
 				55E51759292CB87500BFF122 /* CryptoSwift.framework */,
 				23898D872543FAEB004DDE1A /* Photos.framework */,
 				23898D852543FAD7004DDE1A /* AssetsLibrary.framework */,

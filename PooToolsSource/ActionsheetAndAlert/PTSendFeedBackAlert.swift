@@ -24,6 +24,7 @@ public class PTSendFeedBackAlert {
     ///   - feedBackContentPlaceholder: 反馈内容底字
     ///   - feedBackContentFont: 反馈内容字体
     ///   - feedBackContentCount: 最大输入字数
+    ///   - feedBackContentIsSecureTextEntry: 是否密码格式输入
     ///   - cancelString: 取消
     ///   - sendString: 完成
     ///   - canTapBackground: 是否支持點擊背景消失Alert
@@ -37,6 +38,7 @@ public class PTSendFeedBackAlert {
                            feedBackContentPlaceholder:String? = "请输入反馈内容",
                            feedBackContentFont:UIFont? = .appfont(size: 16),
                            feedBackContentCount:NSNumber? = 100,
+                           feedBackContentIsSecureTextEntry:Bool? = false,
                            cancelString:String? = "取消",
                            sendString:String? = "确定",
                            titleFont:UIFont? = .appfont(size: 18),
@@ -57,6 +59,7 @@ public class PTSendFeedBackAlert {
         feedBackContent.bk_placeholderLabel?.font = feedBackContentFont!
         feedBackContent.font = feedBackContentFont!
         feedBackContent.backgroundColor = .clear
+        feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry!
         
         PTCustomAlertView.alertFunction(superView:superView,titleString: alertTitle!,titleFont: titleFont!,buttons: [cancelString!,sendString!], buttonColor: [],touchBackground: canTapBackground!,customAlertHeight: 250,alertLeftAndRightSpace: 60) { customerView in
             customerView.addSubviews([feedBackTitle,feedBackContent])

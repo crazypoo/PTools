@@ -60,7 +60,6 @@ public extension PTPOP where Base: FileManager {
     //MARK: 根据类型获取文件夹路径
     ///根据类型获取文件夹路径
     static func getFileDirectory(type: BasePath) -> URL {
-        let homePath = NSHomeDirectory()
         switch type {
         case .Directory:
             return URL(fileURLWithPath: self.homeDirectory())

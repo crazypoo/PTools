@@ -590,7 +590,8 @@ class PTSwiftViewController: PTBaseViewController {
         }
         btn.addActionHandlers { sender in
             PTSendFeedBackAlert.shared.alertSendFeedBack(superView: AppWindows!) { title, content in
-                PTNSLogConsole("title:\(title),content:\(content)")
+//                PTNSLogConsole("title:\(title),content:\(content)")
+                PTNSLog("title:\(title),content:\(content)")
             }
         }
     }
