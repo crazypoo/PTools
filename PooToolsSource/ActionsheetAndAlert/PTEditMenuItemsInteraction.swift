@@ -12,13 +12,13 @@ import UIKit
 public class PTEditMenuItem:NSObject {
     let title: String
     var callback: PTActionTask?
-    init(title: String, callback: PTActionTask? = nil) {
+    public init(title: String, callback: PTActionTask? = nil) {
         self.title = title
         self.callback = callback
     }
 }
 
-class PTEditMenuItemsInteraction: NSObject {
+public class PTEditMenuItemsInteraction: NSObject {
     private var showingItems: [PTEditMenuItem]?
     private var targetRect: CGRect?
     private let seperator = "_"
@@ -58,7 +58,7 @@ class PTEditMenuItemsInteraction: NSObject {
 
     // MARK: public function
 
-    override init() {
+    public override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(willMenuControllerHide(_:)), name: UIMenuController.willHideMenuNotification, object: nil)
     }
@@ -68,7 +68,7 @@ class PTEditMenuItemsInteraction: NSObject {
     ///   - items:
     ///   - rect: 相对于interactionView的一个rect，一般为希望显示menu的selection的最小包围矩形
     ///   - indexPath:
-    func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
+    public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
 
         showingItems = items
@@ -96,7 +96,7 @@ class PTEditMenuItemsInteraction: NSObject {
         }
     }
 
-    func dismissMenu() {
+    public func dismissMenu() {
         if #available(iOS 16, *) {
             menuInteraction?.dismissMenu()
         } else {
@@ -162,7 +162,7 @@ class PTEditMenuItemsInteraction: NSObject {
 // MARK: UIEditMenuInteractionDelegate
 extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     @available(iOS 16.0, *)
-    func editMenuInteraction(_: UIEditMenuInteraction, targetRectFor _: UIEditMenuConfiguration) -> CGRect {
+    public func editMenuInteraction(_: UIEditMenuInteraction, targetRectFor _: UIEditMenuConfiguration) -> CGRect {
         guard let rect = targetRect else {
             return .zero
         }
@@ -170,7 +170,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     }
 
     @available(iOS 16.0, *)
-    func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
+    public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
         // items -> UIMenu
         guard let items = showingItems else { return nil }
 
