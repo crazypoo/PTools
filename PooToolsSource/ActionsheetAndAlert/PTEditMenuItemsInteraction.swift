@@ -10,8 +10,9 @@ import UIKit
 
 @objcMembers
 public class PTEditMenuItem:NSObject {
-    let title: String
+    var title: String = ""
     var callback: PTActionTask?
+    
     public init(title: String, callback: PTActionTask? = nil) {
         self.title = title
         self.callback = callback
@@ -26,8 +27,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     private lazy var menuController: UIMenuController = .shared
 
     private lazy var dummyView: PTEditMenuInteractionDummy = {
-        let view = PTEditMenuInteractionDummy { [weak self] selector in
-            guard let self = self else { return }
+        let view = PTEditMenuInteractionDummy { selector in
             self.selectMenuItem(selector)
         }
         return view
@@ -81,7 +81,7 @@ public class PTEditMenuItemsInteraction: NSObject {
             menuInteraction.presentEditMenu(with: config)
         } else {
             menuController.menuItems = nil
-            menuController.setMenuVisible(false, animated: false)
+            menuController.hideMenu()
 
             dummyView.updateActions(actionsForDummyView(items))
             view.addSubview(dummyView)
@@ -90,8 +90,7 @@ public class PTEditMenuItemsInteraction: NSObject {
             dummyView.becomeFirstResponder()
             PTGCDManager.gcdMain {
                 self.menuController.menuItems = self.menuItems(from: items)
-                self.menuController.setTargetRect(targetRect, in: self.dummyView)
-                self.menuController.setMenuVisible(true, animated: true)
+                self.menuController.showMenu(from: self.dummyView, rect: targetRect)
             }
         }
     }
@@ -100,7 +99,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         if #available(iOS 16, *) {
             menuInteraction?.dismissMenu()
         } else {
-            menuController.setMenuVisible(false, animated: true)
+            menuController.hideMenu()
         }
         clear()
     }
@@ -141,13 +140,13 @@ public class PTEditMenuItemsInteraction: NSObject {
         let selectorString = NSStringFromSelector(selector) as String
         let cmps = selectorString.components(separatedBy: seperator)
         guard let items = showingItems, cmps.count == 2, let index = Int(cmps[1])
-        else { return nil }
+        else {  return nil }
         return items[index]
     }
 
     private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
         // selector产生规则
-        Selector("clickMenuItem\(seperator)\(index)")
+        return Selector("clickMenuItem\(seperator)\(index)")
     }
 
     private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
@@ -173,17 +172,15 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
         // items -> UIMenu
         guard let items = showingItems else { return nil }
-
-        func action(from item: PTEditMenuItem) -> UIAction {
-            UIAction(title: item.title) { [weak self] _ in
-                guard let self = self else { return }
-                item.callback?()
-            }
-        }
-
         let actions = items.map {
             action(from: $0)
         }
         return UIMenu(children: actions)
+    }
+    
+    func action(from item: PTEditMenuItem) -> UIAction {
+        return UIAction(title: item.title) { _ in
+            item.callback?()
+        }
     }
 }

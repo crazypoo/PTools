@@ -589,10 +589,17 @@ class PTSwiftViewController: PTBaseViewController {
             make.centerX.centerY.equalToSuperview()
         }
         btn.addActionHandlers { sender in
-            PTSendFeedBackAlert.shared.alertSendFeedBack(superView: AppWindows!) { title, content in
-//                PTNSLogConsole("title:\(title),content:\(content)")
-                PTNSLog("title:\(title),content:\(content)")
+            let items = PTEditMenuItem(title: "12312312312312312312314444444123123123123123123123123") {
+                PTNSLogConsole("123123123123123")
             }
+            
+            let menu = PTEditMenuItemsInteraction.init()
+            menu.showMenu([items], targetRect: sender.frame, for: sender)
+            
+//            PTSendFeedBackAlert.shared.alertSendFeedBack(superView: AppWindows!) { title, content in
+////                PTNSLogConsole("title:\(title),content:\(content)")
+//                PTNSLog("title:\(title),content:\(content)")
+//            }
         }
     }
 }
