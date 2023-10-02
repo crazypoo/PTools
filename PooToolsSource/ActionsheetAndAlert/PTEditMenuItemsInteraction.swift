@@ -57,17 +57,17 @@ public class PTEditMenuItemsInteraction: NSObject {
     }
 
     // MARK: public function
-
     public override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(willMenuControllerHide(_:)), name: UIMenuController.willHideMenuNotification, object: nil)
     }
 
-    /// 显示menu
+    //MARK: 显示menu
+    ///显示menu
     /// - Parameters:
-    ///   - items:
+    ///   - items: Model
     ///   - rect: 相对于interactionView的一个rect，一般为希望显示menu的selection的最小包围矩形
-    ///   - indexPath:
+    ///   - view: 须要展示在x View上
     public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
 
