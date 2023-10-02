@@ -53,7 +53,8 @@ public extension PTPOP where Base: WKWebView {
     /// - Parameters:
     ///  - jsCode: 注入的js代码
     ///  - completionHandler:
-    func evaluateJsCode(_ jsCode: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
+    func evaluateJsCode(_ jsCode: String, 
+                        completionHandler: ((Any?, Error?) -> Void)? = nil) {
         base.evaluateJavaScript(jsCode, completionHandler: completionHandler)
     }
     
@@ -72,7 +73,8 @@ public extension PTPOP where Base: WKWebView {
     /// - Parameters:
     ///   - urlString: 链接
     ///   - additionalHttpHeaders: additionalHttpHeaders description
-    func loadUrl(_ urlString: String?, additionalHttpHeaders: [String: String]? = nil) {
+    func loadUrl(_ urlString: String?, 
+                 additionalHttpHeaders: [String: String]? = nil) {
         guard let urlString = urlString,
               let urlStr = urlString.removingPercentEncoding as String?,
               let url = URL(string: urlStr) as URL?

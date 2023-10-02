@@ -11,7 +11,8 @@ import UIKit
 public extension NSDate {
     //MARK: 判斷當前時間是否在某時間段內
     /// 判斷當前時間是否在某時間段內
-    static func nowTimeInTimePeriod(start:Int,end:Int)->Bool {
+    static func nowTimeInTimePeriod(start:Int,
+                                    end:Int)->Bool {
         if start > end && start > 23 && end > 23  {
             return false
         }

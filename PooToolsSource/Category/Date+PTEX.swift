@@ -137,7 +137,8 @@ public extension Date {
     ///   - endTime: 結束時間
     ///   - readyExpTime: 多久過期
     /// - Returns : 狀態
-    static func checkContractTimeType_now(endTime:String,readyExpTime:Int)->CheckContractTimeRelationships {
+    static func checkContractTimeType_now(endTime:String,
+                                          readyExpTime:Int)->CheckContractTimeRelationships {
         Date.checkContractTimeType(begainTime: Date().toFormat("yyyy-MM-dd"), endTime: endTime, readyExpTime: readyExpTime)
     }
 }
@@ -184,7 +185,8 @@ public extension PTPOP where Base == Date {
     ///   - timestamp: 时间戳
     ///   - format: 格式
     /// - Returns: 对应时间的字符串
-    static func timestampToFormatterTimeString(timestamp: String, format: String = "yyyy-MM-dd HH:mm:ss") -> String {
+    static func timestampToFormatterTimeString(timestamp: String,
+                                               format: String = "yyyy-MM-dd HH:mm:ss") -> String {
         // 时间戳转为Date
         let date = timestampToFormatterDate(timestamp: timestamp)
         // let dateFormatter = DateFormatter()
@@ -213,7 +215,9 @@ public extension PTPOP where Base == Date {
     ///   - formatter: 时间格式，如：yyyy-MM-dd HH:mm:ss
     ///   - timestampType: 返回的时间戳类型，默认是秒 10 为的时间戳字符串
     /// - Returns: 返回转化后的时间戳
-    static func formatterTimeStringToTimestamp(timesString: String, formatter: String, timestampType: PTTimestampType = .second) -> String {
+    static func formatterTimeStringToTimestamp(timesString: String, 
+                                               formatter: String,
+                                               timestampType: PTTimestampType = .second) -> String {
         jx_formatter.dateFormat = formatter
         guard let date = jx_formatter.date(from: timesString) else {
             #if DEBUG

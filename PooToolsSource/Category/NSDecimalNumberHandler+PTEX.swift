@@ -49,13 +49,15 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - value1: 除数
     ///   - value2: 被除数
     /// - Returns: 值
-    static func getFloorIntValue(value1: Any, value2: Any) -> Int {
+    static func getFloorIntValue(value1: Any,
+                                 value2: Any) -> Int {
         decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 0, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).intValue
     }
     
     //MARK: 一个数字能否整除另外一个数字
     ///一个数字能否整除另外一个数字
-    static func isDivisible(value1: Any, value2: Any) -> Bool {
+    static func isDivisible(value1: Any,
+                            value2: Any) -> Bool {
         let value = decimalNumberHandlerValue(type: .dividing, value1: value1, value2: value2, roundingMode: .down, scale: 3, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false).stringValue
         
         let valueArray = value.separatedByString(with: ".")
@@ -80,7 +82,11 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - roundingMode:
     ///   - scale:
     /// - Returns: 计算结果
-    static func calculation(type: DecimalNumberHandlerType, value1: Any, value2: Any, roundingMode: NSDecimalNumber.RoundingMode, scale: Int16) -> NSDecimalNumber {
+    static func calculation(type: DecimalNumberHandlerType, 
+                            value1: Any,
+                            value2: Any,
+                            roundingMode: NSDecimalNumber.RoundingMode,
+                            scale: Int16) -> NSDecimalNumber {
         decimalNumberHandlerValue(type: type, value1: value1, value2: value2, roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
@@ -90,7 +96,8 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - value: 值
     ///   - scale:
     /// - Returns:四舍五入返回结果
-    static func rounding(value: Any, scale: Int16 = 0) -> NSDecimalNumber {
+    static func rounding(value: Any, 
+                         scale: Int16 = 0) -> NSDecimalNumber {
         decimalNumberHandlerValue(type: .multiplying, value1: value, value2: "1", roundingMode: .plain, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
     
@@ -101,7 +108,9 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - roundingMode: 舍入方式
     ///   - scale: 保留位数
     /// - Returns: 处理结果
-    static func digitalTradeOff(value1: Any, roundingMode: NSDecimalNumber.RoundingMode, scale: Int16) -> NSDecimalNumber {
+    static func digitalTradeOff(value1: Any, 
+                                roundingMode: NSDecimalNumber.RoundingMode,
+                                scale: Int16) -> NSDecimalNumber {
         decimalNumberHandlerValue(type: .multiplying, value1: value1, value2: "1", roundingMode: roundingMode, scale: scale, raiseOnExactness: false, raiseOnOverflow: false, raiseOnUnderflow: false, raiseOnDivideByZero: false)
     }
 }
@@ -120,7 +129,15 @@ public extension PTPOP where Base: NSDecimalNumberHandler {
     ///   - underflow: 下溢错误处理
     ///   - divideByZero: 除以0的错误处理
     /// - Returns: NSDecimalNumber
-    static func decimalNumberHandlerValue(type: DecimalNumberHandlerType ,value1: Any, value2: Any, roundingMode: NSDecimalNumber.RoundingMode, scale: Int16, raiseOnExactness exact: Bool, raiseOnOverflow overflow: Bool, raiseOnUnderflow underflow: Bool, raiseOnDivideByZero divideByZero: Bool) -> NSDecimalNumber {
+    static func decimalNumberHandlerValue(type: DecimalNumberHandlerType,
+                                          value1: Any, 
+                                          value2: Any,
+                                          roundingMode: NSDecimalNumber.RoundingMode,
+                                          scale: Int16,
+                                          raiseOnExactness exact: Bool,
+                                          raiseOnOverflow overflow: Bool,
+                                          raiseOnUnderflow underflow: Bool,
+                                          raiseOnDivideByZero divideByZero: Bool) -> NSDecimalNumber {
 
         let amountHandler = NSDecimalNumberHandler(roundingMode: roundingMode, scale: scale, raiseOnExactness: exact, raiseOnOverflow: overflow, raiseOnUnderflow: underflow, raiseOnDivideByZero: divideByZero)
         let oneNumber = NSDecimalNumber(string: "\(value1)")

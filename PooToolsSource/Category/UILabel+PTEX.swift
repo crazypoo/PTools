@@ -68,7 +68,10 @@ public extension UILabel {
     ///   - to: 到哪個數值
     ///   - duration: 動畫時間
     ///   - formatter: 格式化(默認".2f")
-    @objc func count(fromValue: Double, to: Double, duration: Double,formatter:String?) {
+    @objc func count(fromValue: Double,
+                     to: Double,
+                     duration: Double,
+                     formatter:String?) {
         startTime = CACurrentMediaTime()
         self.fromValue = fromValue
         toValue = to
@@ -121,7 +124,9 @@ public extension PTPOP where Base: UILabel {
     ///   - textSpace: 字间距，默认为0.0
     ///   - paraSpace: 段间距，默认为0.0
     /// - Returns: label 的文本行数 & 每一行内容
-    func linesCountAndLinesContent(lineSpace: CGFloat, textSpace: CGFloat = 0.0, paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
+    func linesCountAndLinesContent(lineSpace: CGFloat, 
+                                   textSpace: CGFloat = 0.0,
+                                   paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
         accordWidthLinesCountAndLinesContent(accordWidth: base.frame.size.width, lineSpace: lineSpace, textSpace: textSpace, paraSpace: paraSpace)
     }
     
@@ -133,7 +138,10 @@ public extension PTPOP where Base: UILabel {
     ///   - textSpace: 字间距，默认为0.0
     ///   - paraSpace: 段间距，默认为0.0
     /// - Returns: description
-    func accordWidthLinesCountAndLinesContent(accordWidth: CGFloat, lineSpace: CGFloat, textSpace: CGFloat = 0.0, paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
+    func accordWidthLinesCountAndLinesContent(accordWidth: CGFloat, 
+                                              lineSpace: CGFloat,
+                                              textSpace: CGFloat = 0.0,
+                                              paraSpace: CGFloat = 0.0) -> (Int?, [String]?) {
         guard let t = base.text, let f = base.font else {return (0, nil)}
         let align = base.textAlignment
         let c_fn = f.fontName as CFString
@@ -207,7 +215,8 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///   - lineSpace: 行间距
     ///   - wordSpace: 字间距
-    func changeSpace(lineSpace: CGFloat, wordSpace: CGFloat) {
+    func changeSpace(lineSpace: CGFloat, 
+                     wordSpace: CGFloat) {
         if base.text == nil || base.text == "" {
             return
         }
@@ -225,7 +234,8 @@ public extension PTPOP where Base: UILabel {
     /// - Parameters:
     ///   - lineValue: value 越大,划线越粗
     ///   - underlineColor: 中划线的颜色
-    func centerLineText(lineValue: Int = 1, underlineColor: UIColor = .black) {
+    func centerLineText(lineValue: Int = 1, 
+                        underlineColor: UIColor = .black) {
         guard let content = base.text else {
             return
         }
@@ -245,7 +255,13 @@ public extension PTPOP where Base: UILabel {
     ///   - textSpace: 设定字符间距，取值为 NSNumber 对象（整数），正值间距加宽，负值间距变窄
     ///   - paraSpace: 段与段之间的间距
     /// - Returns: 返回样式 [NSAttributedString.Key : Any]
-    private static func genTextStyle(text: NSString, linebreakmode: NSLineBreakMode, align: NSTextAlignment, font: UIFont, lineSpace: CGFloat, textSpace: CGFloat, paraSpace: CGFloat) -> [NSAttributedString.Key : Any] {
+    private static func genTextStyle(text: NSString, 
+                                     linebreakmode: NSLineBreakMode,
+                                     align: NSTextAlignment,
+                                     font: UIFont,
+                                     lineSpace: CGFloat,
+                                     textSpace: CGFloat,
+                                     paraSpace: CGFloat) -> [NSAttributedString.Key : Any] {
         let style = NSMutableParagraphStyle()
         // 结尾部分的内容以……方式省略 ( "...wxyz" ,"abcd..." ,"ab...yz")
         /**

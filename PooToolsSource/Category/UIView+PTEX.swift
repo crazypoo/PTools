@@ -97,14 +97,19 @@ public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension UIView {
         
-    @objc func viewCorner(radius:CGFloat = 0,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear) {
+    @objc func viewCorner(radius:CGFloat = 0,
+                          borderWidth:CGFloat = 0,
+                          borderColor:UIColor = UIColor.clear) {
         layer.cornerRadius = radius
         layer.masksToBounds = true
         layer.borderWidth = borderWidth
         layer.borderColor = borderColor.cgColor
     }
         
-    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,borderWidth:CGFloat = 0,borderColor:UIColor = UIColor.clear,corner:UIRectCorner = .allCorners) {
+    @objc func viewCornerRectCorner(cornerRadii:CGFloat = 5,
+                                    borderWidth:CGFloat = 0,
+                                    borderColor:UIColor = UIColor.clear,
+                                    corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
             let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: cornerRadii, height: cornerRadii))
             let maskLayer = CAShapeLayer()
@@ -134,7 +139,11 @@ public extension UIView {
     
     //MARK: View的背景渐变
     ///View的背景渐变
-    func backgroundGradient(type:Imagegradien,colors:[UIColor],radius:CGFloat? = 0,borderWidth:CGFloat? = 0,borderColor:UIColor? = UIColor.clear) {
+    func backgroundGradient(type:Imagegradien,
+                            colors:[UIColor],
+                            radius:CGFloat? = 0,
+                            borderWidth:CGFloat? = 0,
+                            borderColor:UIColor? = UIColor.clear) {
         PTGCDManager.gcdMain {
             self.backgroundColor = .clear
             let maskLayer = CAGradientLayer()
@@ -254,7 +263,11 @@ public extension UIView {
         layer.add(keyFrame, forKey: "shake")
     }
     
-    @objc func pt_createLabel(text: String = "", font: UIFont = .systemFont(ofSize: 15), bgColor: UIColor = .clear, textColor: UIColor = .black, textAlignment: NSTextAlignment = .left) -> UILabel {
+    @objc func pt_createLabel(text: String = "", 
+                              font: UIFont = .systemFont(ofSize: 15),
+                              bgColor: UIColor = .clear,
+                              textColor: UIColor = .black,
+                              textAlignment: NSTextAlignment = .left) -> UILabel {
         
         let label = UILabel()
         label.backgroundColor = bgColor
@@ -270,7 +283,8 @@ public extension UIView {
 }
 
 public extension UILabel {
-    @objc func getLabelSize(width:CGFloat,height:CGFloat)->CGSize {
+    @objc func getLabelSize(width:CGFloat,
+                            height:CGFloat)->CGSize {
         UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     
@@ -284,7 +298,8 @@ public extension UILabel {
 }
 
 public extension UIButton {
-    @objc func getButtonSize(width:CGFloat,height:CGFloat)->CGSize {
+    @objc func getButtonSize(width:CGFloat,
+                             height:CGFloat)->CGSize {
         UIView.sizeFor(string: titleLabel!.text!, font: titleLabel!.font!, height: height, width: width)
     }
     
@@ -298,7 +313,8 @@ public extension UIButton {
 }
 
 public extension UITextView {
-    @objc func getTextViewSize(width:CGFloat,height:CGFloat)->CGSize {
+    @objc func getTextViewSize(width:CGFloat,
+                               height:CGFloat)->CGSize {
         UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     

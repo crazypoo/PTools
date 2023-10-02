@@ -10,7 +10,9 @@ import UIKit
 
 //MARK: 全局统一字体
 public extension UIFont {
-    @objc class func appfont(size:CGFloat,bold:Bool = false,scale:Bool = false)-> UIFont {
+    @objc class func appfont(size:CGFloat,
+                             bold:Bool = false,
+                             scale:Bool = false)-> UIFont {
         var fontSzie:CGFloat = 0
         if scale {
             fontSzie = CGFloat.ScaleW(w: size)
@@ -24,7 +26,9 @@ public extension UIFont {
         }
     }
         
-    @objc class func appCustomFont(size:CGFloat,customFont:String? = nil,scale:Bool = false)-> UIFont {
+    @objc class func appCustomFont(size:CGFloat,
+                                   customFont:String? = nil,
+                                   scale:Bool = false)-> UIFont {
         var fontSzie:CGFloat = 0
         if scale {
             fontSzie = CGFloat.ScaleW(w: size)
@@ -34,7 +38,9 @@ public extension UIFont {
         return UIFont.init(name: customFont!, size: fontSzie)!
     }
     
-    @objc class func systemFont(ofSize size: CGFloat, weight: UIFont.Weight, design: UIFontDescriptor.SystemDesign) -> UIFont {
+    @objc class func systemFont(ofSize size: CGFloat, 
+                                weight: UIFont.Weight,
+                                design: UIFontDescriptor.SystemDesign) -> UIFont {
         let descriptor = UIFontDescriptor.preferredFontDescriptor(withTextStyle: .body).addingAttributes([UIFontDescriptor.AttributeName.traits : [UIFontDescriptor.TraitKey.weight : weight]]).withDesign(design)
         
         return UIFont(descriptor: descriptor!, size: size)

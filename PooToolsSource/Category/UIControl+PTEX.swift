@@ -8,7 +8,8 @@
 import UIKit
 
 public extension UIControl {
-    func addActions(highlightAction: UIAction, unhighlightAction: UIAction) {
+    func addActions(highlightAction: UIAction,
+                    unhighlightAction: UIAction) {
         if #available(iOS 14.0, *) {
             addAction(highlightAction, for: .touchDown)
             addAction(highlightAction, for: .touchDragEnter)

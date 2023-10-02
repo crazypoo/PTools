@@ -17,9 +17,7 @@ public extension Character {
         guard let firstProperties = unicodeScalars.first?.properties else {
             return false
         }
-        return unicodeScalars.count == 1 &&
-        (firstProperties.isEmojiPresentation ||
-         firstProperties.generalCategory == .otherSymbol)
+        return unicodeScalars.count == 1 && (firstProperties.isEmojiPresentation || firstProperties.generalCategory == .otherSymbol)
     }
 
     //MARK: 检查标量是否将合并到emoji中

@@ -17,7 +17,8 @@ public extension PTPOP where Base: UserDefaults {
     ///   - value: 值
     ///   - key: 键
     @discardableResult
-    static func userDefaultsSetValue(value: Any?, key: String?) -> Bool {
+    static func userDefaultsSetValue(value: Any?,
+                                     key: String?) -> Bool {
         guard value != nil, key != nil else {
             return false
         }

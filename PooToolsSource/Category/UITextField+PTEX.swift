@@ -44,7 +44,8 @@ extension UITextField {
 }
 
 extension UITextField {
-    func set(associatedObject object: Any, forKey key: UnsafeRawPointer) {
+    func set(associatedObject object: Any,
+             forKey key: UnsafeRawPointer) {
         objc_setAssociatedObject(self, key, object, .OBJC_ASSOCIATION_RETAIN)
     }
 

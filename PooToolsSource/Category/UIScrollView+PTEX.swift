@@ -12,7 +12,9 @@ public extension PTPOP where Base : UIScrollView {
     //MARK: 根据偏移量和页数绘制
     ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw
-    private func snapShotContentScrollPage(index: Int, maxIndex: Int, callback: @escaping PTActionTask) {
+    private func snapShotContentScrollPage(index: Int,
+                                           maxIndex: Int,
+                                           callback: @escaping PTActionTask) {
         base.setContentOffset(CGPoint(x: 0, y: CGFloat(index) * base.frame.size.height), animated: false)
         let splitFrame = CGRect(x: 0, y: CGFloat(index) * base.frame.size.height, width: base.bounds.size.width, height: base.bounds.size.height)
         PTGCDManager.gcdAfter(time: 0.3) {

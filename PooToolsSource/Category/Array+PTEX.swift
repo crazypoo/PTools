@@ -127,7 +127,8 @@ public extension Array where Element : NSObjectProtocol {
     ///   - object: 元素
     ///   - isRepeat: 是否删除重复的元素
     @discardableResult
-    mutating func remove(object: NSObjectProtocol, isRepeat: Bool = true) -> Array {
+    mutating func remove(object: NSObjectProtocol,
+                         isRepeat: Bool = true) -> Array {
         var removeIndexs: [Int] = []
         for i in 0..<count {
             if self[i].isEqual(object) {
@@ -149,7 +150,8 @@ public extension Array where Element : NSObjectProtocol {
     ///   - objects: 遵守NSObjectProtocol的数组
     ///   - isRepeat: 是否删除重复的元素
     @discardableResult
-    mutating func removeArray(objects: [NSObjectProtocol], isRepeat: Bool = true) -> Array {
+    mutating func removeArray(objects: [NSObjectProtocol], 
+                              isRepeat: Bool = true) -> Array {
         for object in objects {
             if contains(where: {$0.isEqual(object)} ){
                 self.remove(object: object, isRepeat: isRepeat)

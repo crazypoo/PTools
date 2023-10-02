@@ -519,7 +519,9 @@ public extension String {
     ///   - digitsBefore: 前面保留的位数
     ///   - digitsAfter: 后面保留的位数
     /// - Returns: 返回隐藏的手机号
-    func hidePhone(combine: String = "*", digitsBefore: Int = 2, digitsAfter: Int = 2) -> String {
+    func hidePhone(combine: String = "*", 
+                   digitsBefore: Int = 2,
+                   digitsAfter: Int = 2) -> String {
         let phoneLength: Int = self.count
         if phoneLength > digitsBefore + digitsAfter {
             let combineCount: Int = phoneLength - digitsBefore - digitsAfter
@@ -542,7 +544,9 @@ public extension String {
     ///   - digitsBefore: 前面保留几位
     ///   - digitsAfter: 后面保留几位
     /// - Returns: 返回加密后的字符串
-    func hideEmail(combine: String = "*", digitsBefore: Int = 1, digitsAfter: Int = 1) -> String {
+    func hideEmail(combine: String = "*", 
+                   digitsBefore: Int = 1,
+                   digitsAfter: Int = 1) -> String {
         let emailArray = separatedByString(with: "@")
         if emailArray.count == 2 {
             let fistContent = emailArray[0]
@@ -566,7 +570,8 @@ public extension String {
 fileprivate extension PTUtils {
     //MARK: 創建一個圖片
     ///創建一個圖片
-    class func createNoneInterpolatedUIImage(image:CIImage,imageSize:CGFloat)->UIImage {
+    class func createNoneInterpolatedUIImage(image:CIImage,
+                                             imageSize:CGFloat)->UIImage {
         let extent = CGRectIntegral(image.extent)
         let scale = min(imageSize / extent.width, imageSize / extent.height)
         
@@ -1091,7 +1096,10 @@ public extension String {
     
     //MARK: 格式化時間字符串
     ///格式化時間字符串
-    func dateStringFormat(calendar:Calendars = Calendars.republicOfChina,zone:Zones = Zones.asiaShanghai,local:Locales = Locales.chineseChina,formatString:String = "yyyy-MM-dd") -> String {
+    func dateStringFormat(calendar:Calendars = Calendars.republicOfChina,
+                          zone:Zones = Zones.asiaShanghai,
+                          local:Locales = Locales.chineseChina,
+                          formatString:String = "yyyy-MM-dd") -> String {
         let regions = Region(calendar: calendar, zone: zone, locale: local)
         return self.toDate(formatString,region: regions)?.toString() ?? ""
     }
@@ -1566,7 +1574,10 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///   - encode: 编码还是解码
     ///   - encryptIV: 偏移量
     /// - Returns: 编码或者解码后的字符串
-    func scaCrypt(cryptType: DDYSCAType, key: String?, encode: Bool, encryptIV: String = "1") -> String? {
+    func scaCrypt(cryptType: DDYSCAType,
+                  key: String?,
+                  encode: Bool,
+                  encryptIV: String = "1") -> String? {
         
         let strData = encode ? (base as! String).data(using: .utf8) : Data(base64Encoded: (base as! String))
         // 创建数据编码后的指针
@@ -1627,7 +1638,8 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
 //MARK: 加密类型
 public enum DDYSHAType {
     case SHA1, SHA224, SHA256, SHA384, SHA512
-    var infoTuple: (algorithm: CCHmacAlgorithm, length: Int) {
+    var infoTuple: (algorithm: CCHmacAlgorithm, 
+                    length: Int) {
         switch self {
         case .SHA1:
             return (algorithm: CCHmacAlgorithm(kCCHmacAlgSHA1), length: Int(CC_SHA1_DIGEST_LENGTH))
@@ -1652,7 +1664,9 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     ///   - key: 加密的key
     ///   - lower: 大写还是小写，默认小写
     /// - Returns: 加密以后的字符串
-    func shaCrypt(cryptType: DDYSHAType = .SHA1, key: String?, lower: Bool = true) -> String? {
+    func shaCrypt(cryptType: DDYSHAType = .SHA1,
+                  key: String?,
+                  lower: Bool = true) -> String? {
         guard let cStr = (base as! String).cString(using: String.Encoding.utf8) else {
             return nil
         }

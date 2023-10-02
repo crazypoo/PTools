@@ -64,7 +64,8 @@ public extension CGFloat {
     
     //MARK: 华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
     ///华氏摄氏度转普通摄氏度/普通摄氏度转华氏摄氏度
-    static func temperatureUnitExchangeValue(value:CGFloat,changeToType:TemperatureUnit) ->CGFloat {
+    static func temperatureUnitExchangeValue(value:CGFloat,
+                                             changeToType:TemperatureUnit) ->CGFloat {
         switch changeToType {
         case .Fahrenheit:
             let values = 32 + 1.8 * value

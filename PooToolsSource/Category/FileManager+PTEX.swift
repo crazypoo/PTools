@@ -194,27 +194,23 @@ public extension PTPOP where Base: FileManager {
     ///    - filePath: 文件夹的路径
     ///    - fileName: 文件的名字
     @discardableResult
-    static func isFileExist(filePath:String,fileName:String)->Bool
-    {
+    static func isFileExist(filePath:String,
+                            fileName:String)->Bool {
         let filePaths = (filePath + "/").appendingPathComponent(fileName)
         let result = fileManager.fileExists(atPath: filePaths)
         return result
     }
     
     @discardableResult
-    static func renameFile(oldPath:String,newName:String)->(isSuccess:Bool,filePath:String)
-    {
+    static func renameFile(oldPath:String,newName:String)->(isSuccess:Bool,filePath:String) {
         let lastPathComponent = oldPath.lastPathComponent
         let fileExtension = oldPath.pathExtension
         let pathNew = oldPath.replacingOccurrences(of: lastPathComponent, with: "")
         let newPath = pathNew + newName + "." + fileExtension
-        do
-        {
+        do {
             try fileManager.moveItem(at: URL.init(fileURLWithPath: oldPath), to: URL(fileURLWithPath: pathNew))
             return (true,newPath)
-        }
-        catch
-        {
+        } catch {
             return (false,"")
         }
     }
@@ -297,7 +293,9 @@ public extension PTPOP where Base: FileManager {
     ///   - writePath: 写入路径
     /// - Returns: 写入的结果
     @discardableResult
-    static func writeToFile(writeType: FileWriteType, content: Any, writePath: String) -> (isSuccess: Bool, error: String) {
+    static func writeToFile(writeType: FileWriteType,
+                            content: Any,
+                            writePath: String) -> (isSuccess: Bool, error: String) {
         guard judgeFileOrFolderExists(filePath: directoryAtPath(path: writePath)) else {
             // 不存在的文件路径
             return (false, "不存在的文件路径")
@@ -349,7 +347,8 @@ public extension PTPOP where Base: FileManager {
     ///   - readPath: 读取文件路径
     /// - Returns: 返回读取的内容
     @discardableResult
-    static func readFromFile(readType: FileWriteType, readPath: String) -> (isSuccess: Bool, content: Any?, error: String) {
+    static func readFromFile(readType: FileWriteType,
+                             readPath: String) -> (isSuccess: Bool, content: Any?, error: String) {
         guard judgeFileOrFolderExists(filePath: readPath),  let readHandler =  FileHandle(forReadingAtPath: readPath) else {
             // 不存在的文件路径
             return (false, nil, "不存在的文件路径")
@@ -392,7 +391,10 @@ public extension PTPOP where Base: FileManager {
     ///   - isOverwrite: 当要拷贝到的(文件夹/文件)路径存在，会拷贝失败，这里传入是否覆盖
     /// - Returns: 拷贝的结果
     @discardableResult
-    static func copyFile(type: MoveOrCopyType, fromeFilePath: String, toFilePath: String, isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
+    static func copyFile(type: MoveOrCopyType,
+                         fromeFilePath: String,
+                         toFilePath: String,
+                         isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
         // 1、先判断被拷贝路径是否存在
         guard judgeFileOrFolderExists(filePath: fromeFilePath) else {
             return (false, "被拷贝的(文件夹/文件)路径不存在")
@@ -425,7 +427,10 @@ public extension PTPOP where Base: FileManager {
     ///   - fromeFile: 被移动的文件路径
     ///   - toFile: 移动后的文件路径
     @discardableResult
-    static func moveFile(type: MoveOrCopyType, fromeFilePath: String, toFilePath: String, isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
+    static func moveFile(type: MoveOrCopyType,
+                         fromeFilePath: String,
+                         toFilePath: String,
+                         isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
         // 1、先判断被拷贝路径是否存在
         guard judgeFileOrFolderExists(filePath: fromeFilePath) else {
             return (false, "被移动的(文件夹/文件)路径不存在")
@@ -507,7 +512,8 @@ public extension PTPOP where Base: FileManager {
     ///   - path: 文件路径
     ///   - suffix: 是否需要后缀，默认需要
     /// - Returns: 文件名称
-    static func fileName(path: String, suffix: Bool = true) -> String {
+    static func fileName(path: String,
+                         suffix: Bool = true) -> String {
         let fileName = (path as NSString).lastPathComponent
         guard suffix else {
             // 删除后缀
@@ -638,7 +644,8 @@ public extension PTPOP where Base: FileManager {
     
     //MARK: 文件/文件夹比较 是否一样
     ///文件/文件夹比较 是否一样
-    static func isEqual(filePath1: String, filePath2: String) -> Bool {
+    static func isEqual(filePath1: String,
+                        filePath2: String) -> Bool {
         // 先判断是否存在路径
         guard judgeFileOrFolderExists(filePath: filePath1), judgeFileOrFolderExists(filePath: filePath2) else {
             return false
@@ -684,7 +691,8 @@ public extension PTPOP where Base: FileManager {
     ///   - videoPath: 视频在沙盒的路径
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图
-    static func getLocalVideoImage(videoPath: String, preferredTrackTransform: Bool = true) -> UIImage? {
+    static func getLocalVideoImage(videoPath: String,
+                                   preferredTrackTransform: Bool = true) -> UIImage? {
         //  获取截图
         let videoImage = getVideoImage(videoUrlSouceType: .local, path: videoPath, seconds: 1, preferredTimescale: 10, maximumSize: nil, preferredTrackTransform: preferredTrackTransform)
         return videoImage
@@ -696,7 +704,8 @@ public extension PTPOP where Base: FileManager {
     ///   - videoPaths: 视频在沙盒的路径数组
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图数组
-    static func getLocalVideoImages(videoPaths: [String], preferredTrackTransform: Bool = true) -> [UIImage?] {
+    static func getLocalVideoImages(videoPaths: [String],
+                                    preferredTrackTransform: Bool = true) -> [UIImage?] {
         //  获取截图
         var allImageArray: [UIImage?] = []
         for path in videoPaths {
@@ -713,7 +722,9 @@ public extension PTPOP where Base: FileManager {
     ///   - videoImage:
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图
-    static func getServerVideoImage(videoPath: String, videoImage: @escaping (UIImage?) -> Void, preferredTrackTransform: Bool = true) {
+    static func getServerVideoImage(videoPath: String,
+                                    videoImage: @escaping (UIImage?) -> Void,
+                                    preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
         DispatchQueue.global().async {
             //  获取截图
@@ -731,7 +742,9 @@ public extension PTPOP where Base: FileManager {
     ///   - videoImages:
     ///   - preferredTrackTransform: 缩略图的方向
     /// - Returns: 视频的缩略图数组
-    static func getServerVideoImages(videoPaths: [String], videoImages: @escaping ([UIImage?]) -> Void, preferredTrackTransform: Bool = true) {
+    static func getServerVideoImages(videoPaths: [String],
+                                     videoImages: @escaping ([UIImage?]) -> Void,
+                                     preferredTrackTransform: Bool = true) {
         //异步获取网络视频缩略图，由于网络请求比较耗时，所以我们把获取在线视频的相关代码写在异步线程里
         DispatchQueue.global().async {
             //  获取截图
@@ -756,7 +769,12 @@ public extension PTPOP where Base: FileManager {
     ///   - maximumSize: 设置图片的最大size(分辨率)
     ///   - preferredTrackTransform: 设定缩略图的方向，如果不设定，可能会在视频旋转90/180/270°时，获取到的缩略图是被旋转过的，而不是正向的
     /// - Returns: 返回获取的图片
-    private static func getVideoImage(videoUrlSouceType: PTVideoUrlType = .local, path: String, seconds: Double = 1, preferredTimescale: CMTimeScale = 10, maximumSize: CGSize?, preferredTrackTransform: Bool = true) -> UIImage? {
+    private static func getVideoImage(videoUrlSouceType: PTVideoUrlType = .local,
+                                      path: String,
+                                      seconds: Double = 1,
+                                      preferredTimescale: CMTimeScale = 10,
+                                      maximumSize: CGSize?, 
+                                      preferredTrackTransform: Bool = true) -> UIImage? {
         var videoURL: URL?
         
         if videoUrlSouceType == .local {

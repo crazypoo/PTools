@@ -53,12 +53,17 @@ public extension UIImage {
      色彩饱和度(浓度)因子:  0是黑白灰, 9是浓彩色, 1是原色  默认1.8
      “彩度”，英文是称Saturation，即饱和度。将无彩色的黑白灰定为0，最鲜艳定为9s，这样大致分成十阶段，让数值和人的感官直觉一致。
      */
-    func img(alpha:Float,radius:Float,colorSaturationFactor:Float)->UIImage {
+    func img(alpha:Float,
+             radius:Float,
+             colorSaturationFactor:Float)->UIImage {
         let tintColor = UIColor.init(white: 1, alpha: CGFloat(alpha))
         return imgBluredWithRadius(blurRadius: radius, tintColor: tintColor, saturationDeltaFactor: colorSaturationFactor, maskImage: nil)
     }
     
-    func imgBluredWithRadius(blurRadius:Float,tintColor:UIColor?,saturationDeltaFactor:Float,maskImage:UIImage?)->UIImage {
+    func imgBluredWithRadius(blurRadius:Float,
+                             tintColor:UIColor?,
+                             saturationDeltaFactor:Float,
+                             maskImage:UIImage?)->UIImage {
         let imageRect = CGRect.init(origin: .zero, size: size)
         var effectImage = self
         let hadBlur = blurRadius > Float.ulpOfOne
@@ -158,7 +163,9 @@ public extension UIImage {
         
     //MARK: 加水印
     ///加水印
-    @objc func watermark(title:String,font:UIFont = UIFont.systemFont(ofSize: 23),color:UIColor?) -> UIImage {
+    @objc func watermark(title:String,
+                         font:UIFont = UIFont.systemFont(ofSize: 23),
+                         color:UIColor?) -> UIImage {
         let originalImage = self
         
         let HORIZONTAL_SPACE = 30
@@ -214,7 +221,9 @@ public extension UIImage {
         return self
     }
     
-    func imageMask(text:NSString,point:CGPoint,attributed:NSDictionary)->UIImage {
+    func imageMask(text:NSString,
+                   point:CGPoint,
+                   attributed:NSDictionary)->UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         text.draw(at: point,withAttributes: (attributed as! [NSAttributedString.Key : Any]))
@@ -223,7 +232,8 @@ public extension UIImage {
         return newImage!
     }
     
-    func imageMask(maskImage:UIImage,maskRect:CGRect)->UIImage {
+    func imageMask(maskImage:UIImage,
+                   maskRect:CGRect)->UIImage {
         UIGraphicsBeginImageContextWithOptions(size, false, 0)
         self.draw(in: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         maskImage.draw(in: maskRect)
@@ -310,7 +320,9 @@ public extension PTPOP where Base: UIImage {
     ///   - corners: 切圆角的方式
     ///   - imageSize: 图片的大小
     /// - Returns: 剪切后的图片
-    func isRoundCorner(radius: CGFloat = 3, byRoundingCorners corners: UIRectCorner = .allCorners, imageSize: CGSize?) -> UIImage? {
+    func isRoundCorner(radius: CGFloat = 3,
+                       byRoundingCorners corners: UIRectCorner = .allCorners,
+                       imageSize: CGSize?) -> UIImage? {
         let weakSize = imageSize ?? base.size
         let rect = CGRect(origin: CGPoint(x: 0, y: 0), size: weakSize)
         // 开始图形上下文
@@ -346,7 +358,9 @@ public extension PTPOP where Base: UIImage {
     ///   - maximumSize: 图片的最大尺寸
     ///   - closure:
     /// - Returns: 视频的第一帧
-    static func getVideoFirstImage(videoUrl: String, maximumSize: CGSize = CGSize(width: 1000, height: 1000), closure: @escaping (UIImage?) -> Void) {
+    static func getVideoFirstImage(videoUrl: String, 
+                                   maximumSize: CGSize = CGSize(width: 1000, height: 1000),
+                                   closure: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
             closure(nil)
             return
@@ -405,7 +419,8 @@ public extension PTPOP where Base: UIImage {
     ///   - color: 图片颜色
     ///   - blendMode: 模式
     /// - Returns: 返回更改后的图片颜色
-    func tint(color: UIColor, blendMode: CGBlendMode = .destinationIn) -> UIImage? {
+    func tint(color: UIColor, 
+              blendMode: CGBlendMode = .destinationIn) -> UIImage? {
         /**
          有时我们的App需要能切换不同的主题和场景，希望图片能动态的改变颜色以配合对应场景的色调。虽然我们可以根据不同主题事先创建不同颜色的图片供调用，但既然用的图片素材都一样，还一个个转换显得太麻烦，而且不便于维护。使用blendMode变可以满足这个需求。
          */

@@ -26,7 +26,9 @@ public extension UIViewController {
     
     //MARK: 设置该控制器的状态栏状态
     /// 设置该控制器的状态栏状态
-    func setStatusBar(isHidden: Bool? = nil, style: UIStatusBarStyle? = nil, animation: UIStatusBarAnimation? = nil) {
+    func setStatusBar(isHidden: Bool? = nil, 
+                      style: UIStatusBarStyle? = nil,
+                      animation: UIStatusBarAnimation? = nil) {
         StatusBarManager.shared.setState(for: statusBarKey, isHidden: isHidden, style: style, animation: animation)
     }
     

@@ -234,7 +234,8 @@ public extension PTPOP where Base: UIDevice {
     //MARK: 檢測當前系統是否小於某個版本系統
     ///檢測當前系統是否小於某個版本系統
     /// - Returns: Bool
-    static func lessThanSysVersion(version:NSString,equal:Bool) -> Bool {
+    static func lessThanSysVersion(version:NSString,
+                                   equal:Bool) -> Bool {
         UIDevice.current.systemVersion.compare("\(version)", options: .numeric) != (equal ? .orderedDescending : .orderedAscending)
     }
 }

@@ -17,7 +17,9 @@ public extension Timer {
     ///   - block: 执行代码的block
     /// - Returns: 返回 Timer
     @discardableResult
-    static func scheduledTimer(timeInterval: TimeInterval, repeats: Bool, block: @escaping ((Timer) -> Void)) -> Timer {
+    static func scheduledTimer(timeInterval: TimeInterval,
+                               repeats: Bool,
+                               block: @escaping ((Timer) -> Void)) -> Timer {
         return Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: repeats, block: block)
     }
 }

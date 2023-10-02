@@ -79,7 +79,8 @@ public extension Data {
     
     //MARK: 根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
     ///根據圖片名字先獲取圖片然後轉換成Data來獲取圖片的格式
-    static func detectImageType(with imageName: String, bundle: Bundle = Bundle.main) -> PTAboutImageType? {
+    static func detectImageType(with imageName: String,
+                                bundle: Bundle = Bundle.main) -> PTAboutImageType? {
         
         guard let path = bundle.path(forResource: imageName, ofType: "") else { return nil }
         let pathUrl = URL(fileURLWithPath: path)
@@ -136,7 +137,8 @@ public extension Data {
 
 public extension PTPOP where Base == Data {
     ///hash计算
-    func hashString(hashType: PTHashType, lowercase: Bool = true) -> String {
+    func hashString(hashType: PTHashType,
+                    lowercase: Bool = true) -> String {
         var output = NSMutableString()
         switch hashType {
             case .md5:

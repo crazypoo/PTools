@@ -22,7 +22,8 @@ public extension UIColor {
     ///   - lightColor: 浅色模式的颜色
     ///   - darkColor: 深色模式的颜色
     /// - Returns: 返回一个颜色（UIColor）
-    static func darkModeColor(lightColor: UIColor, darkColor: UIColor) -> UIColor {
+    static func darkModeColor(lightColor: UIColor,
+                              darkColor: UIColor) -> UIColor {
        if #available(iOS 13.0, *) {
           return UIColor { (traitCollection) -> UIColor in
                if traitCollection.userInterfaceStyle == .dark {
@@ -41,7 +42,8 @@ public extension UIColor {
     ///   - hex:string that looks like @"#FF0000" or @"FF0000"
     ///   - alpha:0~1
     /// - Returns: UIColor
-    class func hex(_ hex: String, alpha: CGFloat? = 1.0) -> UIColor {
+    class func hex(_ hex: String, 
+                   alpha: CGFloat? = 1.0) -> UIColor {
         let tempStr = hex.trimmingCharacters(in: .whitespacesAndNewlines)
         let hexint = intFromHexString_64(tempStr)
         let color = UIColor(red: ((CGFloat) ((hexint & 0xFF0000) >> 16))/255, green: ((CGFloat) ((hexint & 0xFF00) >> 8))/255, blue: ((CGFloat) (hexint & 0xFF))/255, alpha: alpha!)
@@ -151,7 +153,8 @@ public extension UIColor {
         degree * .pi / 180
     }
     
-    func colorDistance(color:UIColor,type:ColorDistanceType)->CGFloat {
+    func colorDistance(color:UIColor,
+                       type:ColorDistanceType)->CGFloat {
         let lab1 = cielabColorArray()
         let lab2 = color.cielabColorArray()
         
@@ -323,7 +326,10 @@ public extension UIColor {
     
     //MARK: 颜色基础方法
     ///颜色基础方法
-    @objc class func colorBase(R:CGFloat,G:CGFloat,B:CGFloat,A:CGFloat)->UIColor {
+    @objc class func colorBase(R:CGFloat,
+                               G:CGFloat,
+                               B:CGFloat,
+                               A:CGFloat)->UIColor {
         let red = R/255.0
         let green = G/255.0
         let blue = B/255.0

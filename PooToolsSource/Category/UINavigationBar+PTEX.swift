@@ -19,7 +19,8 @@ public extension UINavigationBar {
     }
     
     /// Creates a gradient image with the given settings
-    static func gradient(size : CGSize, colors : [UIColor]) -> UIImage? {
+    static func gradient(size : CGSize, 
+                         colors : [UIColor]) -> UIImage? {
         // Turn the colors into CGColors
         let cgcolors = colors.map { $0.cgColor }
         
