@@ -455,7 +455,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     @objc func cancel() {
-        UIAlertController.base_alertVC(title: "是否确定要离开",msg: "离开后将不会保存",okBtns: ["确定"],cancelBtn: "取消") {
+        UIAlertController.base_alertVC(title: "是否确定要离开",msg: "离开后将不会保存",okBtns: ["确定"],cancelBtn: "取消",showIn: self) {
         } moreBtn: { index, title in
             self.returnFrontVC()
         }
