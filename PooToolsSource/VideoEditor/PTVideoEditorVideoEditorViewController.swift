@@ -49,15 +49,14 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-        self.navigationController?.navigationBar.isHidden = true
-#else
-#endif
     }
     
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+    }
     // MARK: Init
 
-    public init(asset: AVAsset, 
+    public init(asset: AVAsset,
                 videoEdit: PTVideoEdit? = nil) {
         self.store = PTVideoEditorVideoEditorStore(asset: asset, videoEdit: videoEdit)
         self.viewFactory = PTVideoEditorVideoViewFactory()
@@ -73,7 +72,6 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
         setupUI()
         setupBindings()
 
@@ -183,6 +181,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func setupNavigationItems() {
 #if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navLineView?.isHidden = true
         self.zx_navBar!.addSubviews([self.saveButtonItem,self.dismissButtonItem])
         self.saveButtonItem.snp.makeConstraints { make in
             make.width.height.equalTo(34)
@@ -223,11 +222,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func setupConstraints() {
         videoPlayerController.view.snp.makeConstraints { make in
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
             make.left.right.equalToSuperview()
             make.bottom.equalTo(controlsStack.snp.top)
         }

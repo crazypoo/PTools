@@ -9,6 +9,9 @@
 import UIKit
 import Combine
 import SnapKit
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 class PTVideoEditorCropVideoControlViewController: PTBaseViewController {
     // MARK: Inner Types
@@ -54,7 +57,9 @@ class PTVideoEditorCropVideoControlViewController: PTBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#endif
         setupUI()
 
         loadPresets()

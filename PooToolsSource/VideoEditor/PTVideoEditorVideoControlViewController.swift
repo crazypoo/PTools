@@ -11,6 +11,9 @@ import Combine
 import AVFoundation
 import SnapKit
 import SwifterSwift
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 class PTVideoEditorVideoControlViewController: PTBaseViewController {
 
@@ -69,6 +72,13 @@ class PTVideoEditorVideoControlViewController: PTBaseViewController {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#endif
+
     }
 }
 

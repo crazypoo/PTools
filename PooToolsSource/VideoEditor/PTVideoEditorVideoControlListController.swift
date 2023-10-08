@@ -9,6 +9,9 @@
 import UIKit
 import Combine
 import SnapKit
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 final class PTVideoEditorVideoControlListController: PTBaseViewController {
 
@@ -39,7 +42,6 @@ final class PTVideoEditorVideoControlListController: PTBaseViewController {
          viewFactory: PTVideoEditorViewFactoryProtocol) {
         self.store = store
         self.viewFactory = viewFactory
-
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -49,6 +51,10 @@ final class PTVideoEditorVideoControlListController: PTBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#endif
 
         setupUI()
 

@@ -10,6 +10,9 @@ import UIKit
 import Combine
 import AVFoundation
 import SnapKit
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 final class PTVideoEditorTrimVideoControlViewController: PTBaseViewController {
     // MARK: Public Properties
@@ -56,7 +59,9 @@ final class PTVideoEditorTrimVideoControlViewController: PTBaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_hideBaseNavBar = true
+#endif
         setupUI()
         setupBindings()
     }
