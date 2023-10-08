@@ -47,6 +47,14 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
     private let store: PTVideoEditorVideoEditorStore
     private let viewFactory: PTVideoEditorViewFactoryProtocol
 
+    public override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+        self.navigationController?.navigationBar.isHidden = true
+#else
+#endif
+    }
+    
     // MARK: Init
 
     public init(asset: AVAsset, 
