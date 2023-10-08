@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.5.0'
+    s.version     = '3.5.1'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -745,7 +745,9 @@ Pod::Spec.new do |s|
     s.subspec 'VideoEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/VideoEditor/*.{h,m,swift}'
-        subspec.resources = 'PooToolsSource/VideoEditor/*.xcassets'
+        subspec.resource_bundles = {
+            'PTVideoEditorResources' => ['PooToolsSource/VideoEditor/*.xcassets']
+        }
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_VIDEOEDITOR POOTOOLS_COCOAPODS"
         }

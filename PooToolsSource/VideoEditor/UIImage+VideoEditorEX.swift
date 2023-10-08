@@ -11,7 +11,9 @@ import Foundation
 public extension UIImage {
     static func podBundleImage(_ imageName:String)->UIImage {
         let bundle = Bundle.main
-        let image = UIImage(named: imageName, in: bundle, compatibleWith: nil)
+        let resourcePath = bundle.path(forResource: "PTVideoEditorResources", ofType: "bundle")
+        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
         return image ?? UIImage()
     }
 }

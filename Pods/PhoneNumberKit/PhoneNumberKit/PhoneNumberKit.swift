@@ -36,19 +36,7 @@ public final class PhoneNumberKit {
     ///   - ignoreType: Avoids number type checking for faster performance.
     /// - Returns: PhoneNumber object.
     public func parse(_ numberString: String, withRegion region: String = PhoneNumberKit.defaultRegionCode(), ignoreType: Bool = false) throws -> PhoneNumber {
-        let region = region.uppercased()
-        do {
-            return try self.parseManager.parse(numberString, withRegion: region, ignoreType: ignoreType)
-        } catch {
-            guard numberString.first != "+", let regionMetadata = metadataManager.filterTerritories(byCountry: region) else {
-                throw error
-            }
-            let countryCode = String(regionMetadata.countryCode)
-            guard numberString.prefix(countryCode.count) == countryCode else {
-                throw error
-            }
-            return try self.parse("+\(numberString)", withRegion: region, ignoreType: ignoreType)
-        }
+        try self.parseManager.parse(numberString, withRegion: region, ignoreType: ignoreType)
     }
 
     /// Parses an array of number strings. Optimised for performance. Invalid numbers are ignored in the resulting array
@@ -296,6 +284,9 @@ public final class PhoneNumberKit {
     ///
     /// - returns: A computed value for the user's current region - based on the iPhone's carrier and if not available, the device region.
     public class func defaultRegionCode() -> String {
+        guard let regex = try? NSRegularExpression(pattern: PhoneNumberPatterns.countryCodePatten) else {
+            return PhoneNumberConstants.defaultCountry
+        }
         #if canImport(Contacts)
         if #available(iOS 12.0, macOS 10.13, macCatalyst 13.1, watchOS 4.0, *) {
             // macCatalyst OS bug if language is set to Korean
@@ -303,22 +294,33 @@ public final class PhoneNumberKit {
             // Failed parsing any phone number.
             let countryCode = CNContactsUserDefaults.shared().countryCode.uppercased()
             #if targetEnvironment(macCatalyst)
-                if "ko".caseInsensitiveCompare(countryCode) == .orderedSame {
-                    return "KR"
-                }
+            if "ko".caseInsensitiveCompare(countryCode) == .orderedSame {
+                return "KR"
+            }
             #endif
-            return countryCode
+
+            if regex.firstMatch(in: countryCode) != nil {
+                return countryCode
+            }
         }
         #endif
-        
-        let currentLocale = Locale.current
-        if let countryCode = (currentLocale as NSLocale).object(forKey: .countryCode) as? String {
+
+        let locale = Locale.current
+        #if !os(Linux)
+        if #available(iOS 17.0, tvOS 17.0, macOS 14.0, macCatalyst 17.0, watchOS 10.0, *),
+           let regionCode = locale.region?.identifier,
+           regex.firstMatch(in: regionCode) != nil {
+            return regionCode.uppercased()
+        }
+        #endif
+
+        if let countryCode = (locale as NSLocale).object(forKey: .countryCode) as? String,
+           regex.firstMatch(in: countryCode) != nil {
             return countryCode.uppercased()
         }
+
         return PhoneNumberConstants.defaultCountry
     }
-    
-    
 
     /// Default metadata callback, reads metadata from PhoneNumberMetadata.json file in bundle
     ///

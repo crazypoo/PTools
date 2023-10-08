@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.5.0"
+    "tag": "3.5.1"
   },
   "license": {
     "type": "MIT",
@@ -1301,7 +1301,11 @@
         ]
       },
       "source_files": "PooToolsSource/VideoEditor/*.{h,m,swift}",
-      "resources": "PooToolsSource/VideoEditor/*.xcassets",
+      "resource_bundles": {
+        "PTVideoEditorResources": [
+          "PooToolsSource/VideoEditor/*.xcassets"
+        ]
+      },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VIDEOEDITOR POOTOOLS_COCOAPODS"
       }
