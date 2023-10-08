@@ -10,6 +10,10 @@ import UIKit
 import Combine
 import AVFoundation
 import SnapKit
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
+import SwifterSwift
 
 public final class PTVideoEditorVideoEditorViewController: PTBaseViewController {
 
@@ -19,8 +23,8 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
 
     // MARK: Private Properties
 
-    private lazy var saveButtonItem: UIBarButtonItem = makeSaveButtonItem()
-    private lazy var dismissButtonItem: UIBarButtonItem = makeDismissButtonItem()
+    private lazy var saveButtonItem: UIButton = makeSaveButtonItem()
+    private lazy var dismissButtonItem: UIButton = makeDismissButtonItem()
 
     private lazy var videoPlayerController: PTVideoEditorVideoPlayerController = makeVideoPlayerController()
     private lazy var playButton: PTVideoEditorPlayPauseButton = makePlayButton()
@@ -170,14 +174,34 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func setupNavigationItems() {
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar!.addSubviews([self.saveButtonItem,self.dismissButtonItem])
+        self.saveButtonItem.snp.makeConstraints { make in
+            make.width.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        
+        self.dismissButtonItem.snp.makeConstraints { make in
+            make.width.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+#else
         let lNegativeSeperator = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         lNegativeSeperator.width = 10
 
         let rNegativeSeperator = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
         rNegativeSeperator.width = 10
 
-        navigationItem.rightBarButtonItems = [rNegativeSeperator, saveButtonItem]
-        navigationItem.leftBarButtonItems = [lNegativeSeperator, dismissButtonItem]
+        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        saveButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        let leftBarItems = UIBarButtonItem(customView: dismissButtonItem)
+        let rightBarItems = UIBarButtonItem(customView: saveButtonItem)
+
+        navigationItem.rightBarButtonItems = [rNegativeSeperator, rightBarItems]
+        navigationItem.leftBarButtonItems = [lNegativeSeperator, leftBarItems]
+#endif
     }
 
     func setupView() {
@@ -191,7 +215,12 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func setupConstraints() {
         videoPlayerController.view.snp.makeConstraints { make in
-            make.top.left.right.equalToSuperview()
+#if POOTOOLS_NAVBARCONTROLLER
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
+            make.top.equalToSuperview()
+#endif
+            make.left.right.equalToSuperview()
             make.bottom.equalTo(controlsStack.snp.top)
         }
 
@@ -241,18 +270,24 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
         currentTimeLabel.text = formattedCurrentTime
     }
 
-    func makeSaveButtonItem() -> UIBarButtonItem {
+    func makeSaveButtonItem() -> UIButton {
         let image = UIImage.podBundleImage("Check")
-        let buttonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(save))
-        buttonItem.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
+        let buttonItem = UIButton(type: .custom)
+        buttonItem.setImage(image, for: .normal)
+        buttonItem.addActionHandlers { sender in
+            self.save()
+        }
         return buttonItem
     }
 
-    func makeDismissButtonItem() -> UIBarButtonItem {
+    func makeDismissButtonItem() -> UIButton {
         let imageName = isModal ? "Close" : "Back"
         let image = UIImage.podBundleImage(imageName)
-        let buttonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(cancel))
-        buttonItem.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
+        let buttonItem = UIButton(type: .custom)
+        buttonItem.setImage(image, for: .normal)
+        buttonItem.addActionHandlers { sender in
+            self.cancel()
+        }
         return buttonItem
     }
 
