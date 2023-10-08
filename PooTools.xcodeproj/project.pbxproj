@@ -114,6 +114,7 @@
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
 		5589FF5029A87BA700519383 /* PTContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContract.swift */; };
+		558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */; };
 		558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */; };
 		558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */; };
 		558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE42AAF4F8E00C02042 /* PTRouterParser.swift */; };
@@ -387,6 +388,7 @@
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
 		5589FF4F29A87BA700519383 /* PTContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContract.swift; sourceTree = "<group>"; };
+		558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMapActionSheet.swift; sourceTree = "<group>"; };
 		558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceProtocol.swift; sourceTree = "<group>"; };
 		558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceManager.swift; sourceTree = "<group>"; };
 		558D5EE42AAF4F8E00C02042 /* PTRouterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterParser.swift; sourceTree = "<group>"; };
@@ -1230,6 +1232,7 @@
 				554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */,
 				554DE0F92AC8243100471FF3 /* PTEditMenuInteractionDummy.h */,
 				554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */,
+				558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -1782,6 +1785,7 @@
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
+				558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */,
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
 				5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
