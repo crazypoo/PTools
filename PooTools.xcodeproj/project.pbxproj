@@ -110,6 +110,50 @@
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
 		5581E8582AB9059900491065 /* PTSendFeedBackAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8572AB9059900491065 /* PTSendFeedBackAlert.swift */; };
+		5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6C82AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift */; };
+		5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6CA2AD2992C00F878B4 /* PTVideoEdit.swift */; };
+		5585F6CD2AD2996200F878B4 /* PTVideoEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6CC2AD2996200F878B4 /* PTVideoEditor.swift */; };
+		5585F6CF2AD299B700F878B4 /* PTVideoEditResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6CE2AD299B700F878B4 /* PTVideoEditResult.swift */; };
+		5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6D02AD299D500F878B4 /* PTVideoExporter.swift */; };
+		5585F6D32AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6D22AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift */; };
+		5585F6D52AD29B4700F878B4 /* CALayer+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6D42AD29B4700F878B4 /* CALayer+VideoEditorEX.swift */; };
+		5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6D62AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift */; };
+		5585F6D92AD29BC500F878B4 /* Publisher+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6D82AD29BC500F878B4 /* Publisher+VideoEditorEX.swift */; };
+		5585F6DB2AD29C2300F878B4 /* UIView+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6DA2AD29C2300F878B4 /* UIView+VideoEditorEX.swift */; };
+		5585F6DD2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6DC2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift */; };
+		5585F6DF2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6DE2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift */; };
+		5585F6E12AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6E02AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift */; };
+		5585F6E32AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6E22AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift */; };
+		5585F6E52AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6E42AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift */; };
+		5585F6E72AD29EF900F878B4 /* PTVideoEditorVideoPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6E62AD29EF900F878B4 /* PTVideoEditorVideoPlayerController.swift */; };
+		5585F6E92AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6E82AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift */; };
+		5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6EA2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift */; };
+		5585F6ED2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6EC2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift */; };
+		5585F6EF2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6EE2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift */; };
+		5585F6F12AD2A62100F878B4 /* UIColor+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6F02AD2A62100F878B4 /* UIColor+VideoEditorEX.swift */; };
+		5585F6F32AD2AAC200F878B4 /* PTVideoEditorLens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6F22AD2AAC200F878B4 /* PTVideoEditorLens.swift */; };
+		5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6F42AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift */; };
+		5585F6F72AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6F62AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift */; };
+		5585F6F92AD2AFE900F878B4 /* PTVideoEditorCropVideoControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6F82AD2AFE900F878B4 /* PTVideoEditorCropVideoControlViewController.swift */; };
+		5585F6FB2AD2B11900F878B4 /* PTVideoEditorVideoControlCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6FA2AD2B11900F878B4 /* PTVideoEditorVideoControlCell.swift */; };
+		5585F6FD2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6FC2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift */; };
+		5585F6FF2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F6FE2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift */; };
+		5585F7012AD2B1DA00F878B4 /* PTVideoEditorVideoControlListController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7002AD2B1DA00F878B4 /* PTVideoEditorVideoControlListController.swift */; };
+		5585F7032AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7022AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift */; };
+		5585F7052AD2B3AA00F878B4 /* PTVideoEditorSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7042AD2B3AA00F878B4 /* PTVideoEditorSlider.swift */; };
+		5585F7072AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7062AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift */; };
+		5585F7092AD2B55700F878B4 /* PTVideoEditorTrimmingControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7082AD2B55700F878B4 /* PTVideoEditorTrimmingControlView.swift */; };
+		5585F70B2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F70A2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift */; };
+		5585F70D2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F70C2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift */; };
+		5585F70F2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F70E2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift */; };
+		5585F7112AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7102AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift */; };
+		5585F7132AD2B85200F878B4 /* PTVideoEditorVideoControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7122AD2B85200F878B4 /* PTVideoEditorVideoControlViewController.swift */; };
+		5585F7152AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7142AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift */; };
+		5585F7172AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7162AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift */; };
+		5585F7192AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F7182AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift */; };
+		5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F71A2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift */; };
+		5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */; };
+		5585F71F2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5585F71E2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift */; };
 		5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF42299F314900519383 /* AnyClass+PTEX.swift */; };
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
@@ -384,6 +428,50 @@
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
 		5581E8572AB9059900491065 /* PTSendFeedBackAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSendFeedBackAlert.swift; sourceTree = "<group>"; };
+		5585F6C82AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorCroppingPreset.swift; sourceTree = "<group>"; };
+		5585F6CA2AD2992C00F878B4 /* PTVideoEdit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEdit.swift; sourceTree = "<group>"; };
+		5585F6CC2AD2996200F878B4 /* PTVideoEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditor.swift; sourceTree = "<group>"; };
+		5585F6CE2AD299B700F878B4 /* PTVideoEditResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditResult.swift; sourceTree = "<group>"; };
+		5585F6D02AD299D500F878B4 /* PTVideoExporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoExporter.swift; sourceTree = "<group>"; };
+		5585F6D22AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVPlayer+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6D42AD29B4700F878B4 /* CALayer+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CALayer+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6D62AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DateComponentsFormatter+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6D82AD29BC500F878B4 /* Publisher+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6DA2AD29C2300F878B4 /* UIView+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6DC2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6DE2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorProgressView.swift; sourceTree = "<group>"; };
+		5585F6E02AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorPlayPauseButton.swift; sourceTree = "<group>"; };
+		5585F6E22AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorPlayerView.swift; sourceTree = "<group>"; };
+		5585F6E42AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoPlayerStore.swift; sourceTree = "<group>"; };
+		5585F6E62AD29EF900F878B4 /* PTVideoEditorVideoPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoPlayerController.swift; sourceTree = "<group>"; };
+		5585F6E82AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorFullscreenVideoPlayerController.swift; sourceTree = "<group>"; };
+		5585F6EA2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorControlsView.swift; sourceTree = "<group>"; };
+		5585F6EC2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorControlsViewController.swift; sourceTree = "<group>"; };
+		5585F6EE2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoPlayerViewFactory.swift; sourceTree = "<group>"; };
+		5585F6F02AD2A62100F878B4 /* UIColor+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+VideoEditorEX.swift"; sourceTree = "<group>"; };
+		5585F6F22AD2AAC200F878B4 /* PTVideoEditorLens.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorLens.swift; sourceTree = "<group>"; };
+		5585F6F42AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorTimeLineGenerator.swift; sourceTree = "<group>"; };
+		5585F6F62AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorCroppingPresetCell.swift; sourceTree = "<group>"; };
+		5585F6F82AD2AFE900F878B4 /* PTVideoEditorCropVideoControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorCropVideoControlViewController.swift; sourceTree = "<group>"; };
+		5585F6FA2AD2B11900F878B4 /* PTVideoEditorVideoControlCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControlCell.swift; sourceTree = "<group>"; };
+		5585F6FC2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControlCellViewModel.swift; sourceTree = "<group>"; };
+		5585F6FE2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControl.swift; sourceTree = "<group>"; };
+		5585F7002AD2B1DA00F878B4 /* PTVideoEditorVideoControlListController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControlListController.swift; sourceTree = "<group>"; };
+		5585F7022AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorSpeedVideoControlViewController.swift; sourceTree = "<group>"; };
+		5585F7042AD2B3AA00F878B4 /* PTVideoEditorSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorSlider.swift; sourceTree = "<group>"; };
+		5585F7062AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorHandleLayer.swift; sourceTree = "<group>"; };
+		5585F7082AD2B55700F878B4 /* PTVideoEditorTrimmingControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorTrimmingControlView.swift; sourceTree = "<group>"; };
+		5585F70A2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoTimeLineView.swift; sourceTree = "<group>"; };
+		5585F70C2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorTrimVideoControlViewController.swift; sourceTree = "<group>"; };
+		5585F70E2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoTimeLineGenerator.swift; sourceTree = "<group>"; };
+		5585F7102AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControlViewModel.swift; sourceTree = "<group>"; };
+		5585F7122AD2B85200F878B4 /* PTVideoEditorVideoControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoControlViewController.swift; sourceTree = "<group>"; };
+		5585F7142AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoEditorStore.swift; sourceTree = "<group>"; };
+		5585F7162AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorVideoEditorViewController.swift; sourceTree = "<group>"; };
+		5585F7182AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorTimeLineViewController.swift; sourceTree = "<group>"; };
+		5585F71A2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorViewFactory.swift; sourceTree = "<group>"; };
+		5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PTVideoEditorAssets.xcassets; sourceTree = "<group>"; };
+		5585F71E2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+VideoEditorEX.swift"; sourceTree = "<group>"; };
 		5589FF42299F314900519383 /* AnyClass+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AnyClass+PTEX.swift"; sourceTree = "<group>"; };
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
@@ -625,6 +713,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				5585F6C72AD298C800F878B4 /* VideoEditor */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1119,6 +1208,57 @@
 				557FC36D2966A45000991C36 /* PTImagePickerObject.swift */,
 			);
 			path = ImagePicker;
+			sourceTree = "<group>";
+		};
+		5585F6C72AD298C800F878B4 /* VideoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				5585F6D22AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift */,
+				5585F6D42AD29B4700F878B4 /* CALayer+VideoEditorEX.swift */,
+				5585F6D62AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift */,
+				5585F6CA2AD2992C00F878B4 /* PTVideoEdit.swift */,
+				5585F6CC2AD2996200F878B4 /* PTVideoEditor.swift */,
+				5585F71C2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets */,
+				5585F6EA2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift */,
+				5585F6EC2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift */,
+				5585F6C82AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift */,
+				5585F6F62AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift */,
+				5585F6F82AD2AFE900F878B4 /* PTVideoEditorCropVideoControlViewController.swift */,
+				5585F6E82AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift */,
+				5585F7062AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift */,
+				5585F6F22AD2AAC200F878B4 /* PTVideoEditorLens.swift */,
+				5585F6E22AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift */,
+				5585F6E02AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift */,
+				5585F6DE2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift */,
+				5585F7042AD2B3AA00F878B4 /* PTVideoEditorSlider.swift */,
+				5585F7022AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift */,
+				5585F6F42AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift */,
+				5585F7182AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift */,
+				5585F7082AD2B55700F878B4 /* PTVideoEditorTrimmingControlView.swift */,
+				5585F70C2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift */,
+				5585F6FE2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift */,
+				5585F6FA2AD2B11900F878B4 /* PTVideoEditorVideoControlCell.swift */,
+				5585F6FC2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift */,
+				5585F7002AD2B1DA00F878B4 /* PTVideoEditorVideoControlListController.swift */,
+				5585F7122AD2B85200F878B4 /* PTVideoEditorVideoControlViewController.swift */,
+				5585F7102AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift */,
+				5585F7142AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift */,
+				5585F7162AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift */,
+				5585F6E62AD29EF900F878B4 /* PTVideoEditorVideoPlayerController.swift */,
+				5585F6E42AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift */,
+				5585F6EE2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift */,
+				5585F70E2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift */,
+				5585F70A2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift */,
+				5585F71A2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift */,
+				5585F6CE2AD299B700F878B4 /* PTVideoEditResult.swift */,
+				5585F6D02AD299D500F878B4 /* PTVideoExporter.swift */,
+				5585F6D82AD29BC500F878B4 /* Publisher+VideoEditorEX.swift */,
+				5585F6F02AD2A62100F878B4 /* UIColor+VideoEditorEX.swift */,
+				5585F71E2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift */,
+				5585F6DA2AD29C2300F878B4 /* UIView+VideoEditorEX.swift */,
+				5585F6DC2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift */,
+			);
+			path = VideoEditor;
 			sourceTree = "<group>";
 		};
 		5589FF4829A73E4400519383 /* QRCodeScan */ = {
@@ -1635,6 +1775,7 @@
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
+				5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				231D14D5272CDD2C003D6F62 /* README.md in Resources */,
@@ -1709,17 +1850,21 @@
 			files = (
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
+				5585F7192AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
+				5585F6FB2AD2B11900F878B4 /* PTVideoEditorVideoControlCell.swift in Sources */,
 				554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */,
 				55E3BBBB2ABDFF1D00858348 /* SimplePing.swift in Sources */,
+				5585F7092AD2B55700F878B4 /* PTVideoEditorTrimmingControlView.swift in Sources */,
 				55A5D70229B09AD300DCA096 /* DispatchQueue+PTEX.swift in Sources */,
 				55D59C7C28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift in Sources */,
 				231D167C272CDEEA003D6F62 /* UITextView+BKExt.swift in Sources */,
+				5585F7012AD2B1DA00F878B4 /* PTVideoEditorVideoControlListController.swift in Sources */,
 				9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
@@ -1746,28 +1891,35 @@
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				558D5EF32AAF552F00C02042 /* PTRouter.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
+				5585F7052AD2B3AA00F878B4 /* PTVideoEditorSlider.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
+				5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
 				231D167A272CDEEA003D6F62 /* BKCutsomButton.swift in Sources */,
 				550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */,
+				5585F6E72AD29EF900F878B4 /* PTVideoEditorVideoPlayerController.swift in Sources */,
 				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
+				5585F7072AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
+				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				55025E4C29FA56D00024A960 /* PTNavigationBarBaseValues.swift in Sources */,
+				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
 				55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */,
+				5585F6DD2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */,
 				5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */,
@@ -1784,7 +1936,10 @@
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
+				5585F6DF2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift in Sources */,
+				5585F70D2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
+				5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
 				558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */,
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
 				5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */,
@@ -1794,6 +1949,7 @@
 				55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */,
 				55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */,
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
+				5585F6E92AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
 				5581E8582AB9059900491065 /* PTSendFeedBackAlert.swift in Sources */,
@@ -1804,9 +1960,11 @@
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
 				55025E4D29FA56D00024A960 /* PTNavItemBtn.swift in Sources */,
+				5585F7032AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
+				5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
@@ -1815,6 +1973,7 @@
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
+				5585F6D92AD29BC500F878B4 /* Publisher+VideoEditorEX.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
@@ -1838,6 +1997,10 @@
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
+				5585F7172AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift in Sources */,
+				5585F6D32AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift in Sources */,
+				5585F6CD2AD2996200F878B4 /* PTVideoEditor.swift in Sources */,
+				5585F6F32AD2AAC200F878B4 /* PTVideoEditorLens.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
@@ -1845,7 +2008,9 @@
 				55025E4929FA56D00024A960 /* PTNavTitleView.swift in Sources */,
 				55F6D0C028E6CC6200ABABAC /* Application+PTEX.swift in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
+				5585F6ED2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
+				5585F6F12AD2A62100F878B4 /* UIColor+VideoEditorEX.swift in Sources */,
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
 				5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */,
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
@@ -1868,11 +2033,13 @@
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
 				5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */,
+				5585F6F72AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
 				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
+				5585F6CF2AD299B700F878B4 /* PTVideoEditResult.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
@@ -1880,11 +2047,13 @@
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
+				5585F6DB2AD29C2300F878B4 /* UIView+VideoEditorEX.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,
+				5585F6E12AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
@@ -1898,6 +2067,7 @@
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
+				5585F7152AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
@@ -1906,28 +2076,40 @@
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,
 				5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */,
+				5585F6E32AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift in Sources */,
 				55024DEF29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
+				5585F71F2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
 				55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */,
 				554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */,
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
+				5585F70F2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
+				5585F6F92AD2AFE900F878B4 /* PTVideoEditorCropVideoControlViewController.swift in Sources */,
+				5585F7132AD2B85200F878B4 /* PTVideoEditorVideoControlViewController.swift in Sources */,
 				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
 				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
 				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
 				55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */,
+				5585F6E52AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
+				5585F7112AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
+				5585F6FF2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
+				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
+				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
+				5585F6EF2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift in Sources */,
+				5585F6FD2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
 				55D59C7E28F57D8D00B4FF76 /* PTFloatPanelLayout.swift in Sources */,
 				55E3BBC12ABE0F8E00858348 /* PTFileModel.swift in Sources */,
@@ -1941,9 +2123,11 @@
 				557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				55025E4B29FA56D00024A960 /* PTNavTitleLabel.swift in Sources */,
+				5585F70B2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
+				5585F6D52AD29B4700F878B4 /* CALayer+VideoEditorEX.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

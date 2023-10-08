@@ -10,6 +10,9 @@ import CommonCrypto
 import CryptoSwift
 import SnapKit
 import UIKit
+import AnyImageKit
+import Photos
+import Combine
 
 #if canImport(LifetimeTracker)
 import LifetimeTracker
@@ -17,6 +20,9 @@ import LifetimeTracker
 
 class PTSwiftViewController: PTBaseViewController {
     
+    private var videoEdit: PTVideoEdit?
+    fileprivate var cancellables = Set<AnyCancellable>()
+
     lazy var cycleView: LLCycleScrollView = {
         
         let banner = LLCycleScrollView.llCycleScrollViewWithFrame(.zero)
@@ -589,17 +595,22 @@ class PTSwiftViewController: PTBaseViewController {
             make.centerX.centerY.equalToSuperview()
         }
         btn.addActionHandlers { sender in
-            let items = PTEditMenuItem(title: "12312312312312312312314444444123123123123123123123123") {
-                PTNSLogConsole("123123123123123")
-            }
-            
-            let menu = PTEditMenuItemsInteraction.init()
-            menu.showMenu([items], targetRect: sender.frame, for: sender)
-            
-//            PTSendFeedBackAlert.shared.alertSendFeedBack(superView: AppWindows!) { title, content in
-////                PTNSLogConsole("title:\(title),content:\(content)")
-//                PTNSLog("title:\(title),content:\(content)")
-//            }
+            var options = PickerOptionsInfo()
+            options.selectLimit = 1
+            options.selectOptions = .video
+            let controller = ImagePickerController(options: options, delegate: self)
+            controller.trackDelegate = self
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true, completion: nil)
+        }
+    }
+    
+    func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.version = .original
+
+        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, _ in
+            completion(avAsset)
         }
     }
 }
@@ -667,5 +678,58 @@ extension PTSwiftViewController: PTRouterable {
         PTNSLogConsole("Router info:\(info)")
         let vc =  PTSwiftViewController()
         return vc
+    }
+}
+
+// MARK: - ImagePickerControllerDelegate
+extension PTSwiftViewController: ImagePickerControllerDelegate {
+    
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+        PTNSLogConsole(result.assets.first!.image)
+        
+        picker.dismiss(animated: true, completion: nil)
+
+        self.convertPHAssetToAVAsset(phAsset: result.assets.first!.phAsset) { avAsset in
+            if let avAsset = avAsset {
+                PTGCDManager.gcdMain {
+                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+                    controller.onEditCompleted
+                        .sink {  editedPlayerItem, videoEdit in
+                            self.videoEdit = videoEdit
+                            
+//                            self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
+//                                if finish {
+//                                    UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
+//                                        self.resultImageView.image = images
+//                                    }
+//                                }
+//                            }
+                        }
+                        .store(in: &self.cancellables)
+                    let nav = PTBaseNavControl(rootViewController: controller)
+                    nav.modalPresentationStyle = .fullScreen
+                    self.navigationController?.present(nav, animated: true)
+                }
+            } else {
+                PTNSLogConsole("123", error: false)
+            }
+        }
+    }
+}
+
+// MARK: - ImageKitDataTrackDelegate
+extension PTSwiftViewController: ImageKitDataTrackDelegate {
+    
+    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
+        switch state {
+        case .enter:
+            PTNSLogConsole("[Data Track] ENTER Page: \(page.rawValue)")
+        case .leave:
+            PTNSLogConsole("[Data Track] LEAVE Page: \(page.rawValue)")
+        }
+    }
+    
+    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
+        PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
 }
