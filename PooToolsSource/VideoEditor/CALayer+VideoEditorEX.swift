@@ -33,13 +33,8 @@ extension CALayer {
         add(groupAnimation, forKey: "frame")
     }
     
-    func roundCorners(_ radius: CGFloat,
-                      _ corners: UIRectCorner) {
-        let path = UIBezierPath(
-            roundedRect: bounds,
-            byRoundingCorners: corners,
-            cornerRadii: CGSize(width: radius, height: radius)
-        )
+    func roundCorners(_ radius: CGFloat, _ corners: UIRectCorner) {
+        let path = UIBezierPath(roundedRect: bounds,byRoundingCorners: corners,cornerRadii: CGSize(width: radius, height: radius))
         let mask = CAShapeLayer()
         mask.path = path.cgPath
         self.mask = mask

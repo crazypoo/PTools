@@ -46,6 +46,16 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
 
     private let store: PTVideoEditorVideoEditorStore
     private let viewFactory: PTVideoEditorViewFactoryProtocol
+    
+    private lazy var mask : UIButton = {
+        let view = UIButton(type: .custom)
+        view.backgroundColor = .DevMaskColor
+        view.addActionHandlers { sender in
+            self.videoControlViewController.view.removeFromSuperview()
+            sender.removeFromSuperview()
+        }
+        return view
+    }()
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -387,31 +397,48 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func presentVideoControlController(for videoControl: PTVideoEditorVideoControl) {
+        var height: CGFloat = 0
+        switch videoControl {
+        case .crop:
+            let cropImage = UIImage.podBundleImage("Portrait")
+            let scale = 48 / cropImage.size.width
+            let cropHeight = cropImage.size.height * scale
+            height = cropHeight + 10 + UIFont.systemFont(ofSize: 12.0).pointSize + 44 + CGFloat.kTabbarHeight_Total
+        default:
+            height = 210.0
+        }
+        let offset = -(height + view.safeAreaInsets.bottom)
+
         if videoControlViewController.view.superview == nil {
             
-            var height: CGFloat = 0
-            switch videoControl {
-            case .crop:
-                height = 250.0
-            default:
-                height = 210.0
-            }
-            let offset = -(height + view.safeAreaInsets.bottom)
-
+            self.view.addSubview(self.mask)
             add(videoControlViewController)
 
-            videoControlViewController.view.snp.makeConstraints { make in
+            self.videoControlViewController.view.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(height)
                 make.bottom.equalToSuperview().inset(offset)
             }
+            
+            self.mask.snp.makeConstraints { make in
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalTo(self.videoControlViewController.view.snp.top)
+            }
+
             self.view.layoutIfNeeded()
+        } else {
+            self.view.addSubview(self.mask)
+            self.mask.snp.makeConstraints { make in
+                make.top.left.right.equalToSuperview()
+                make.bottom.equalToSuperview().inset(height + view.safeAreaInsets.bottom)
+            }            
         }
 
         let viewModel = PTVideoEditorVideoControlViewModel(videoControl: videoControl)
         videoControlViewController.configure(with: viewModel)
 
         animateVideoControlViewControllerIn()
+        
     }
 
     func animateVideoControlViewControllerIn() {
@@ -423,6 +450,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func animateVideoControlViewControllerOut() {
         UIView.animate(withDuration: 0.3, delay: 0.0, usingSpringWithDamping: 1.0, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
+            self.mask.removeFromSuperview()
             self.videoControlViewController.view.transform = .identity
         })
     }

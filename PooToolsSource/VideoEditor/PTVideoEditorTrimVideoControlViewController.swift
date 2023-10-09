@@ -19,17 +19,6 @@ final class PTVideoEditorTrimVideoControlViewController: PTBaseViewController {
 
     @Published var trimPositions: (Double, Double)
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            UITabBarItem(
-                title: "Trim",
-                image: UIImage.podBundleImage("Trim"),
-                selectedImage: UIImage.podBundleImage("Trim")
-            )
-        }
-        set {}
-    }
-
     // MARK: Private Properties
 
     private lazy var trimmingControlView: PTVideoEditorTrimmingControlView = makeTrimmingControlView()

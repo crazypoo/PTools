@@ -21,17 +21,6 @@ class PTVideoEditorSpeedVideoControlViewController: PTBaseViewController {
 
     @Published var isUpdating: Bool = false
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            UITabBarItem(
-                title: "Speed",
-                image: UIImage.podBundleImage("Speed"),
-                selectedImage: UIImage.podBundleImage("Speed")
-            )
-        }
-        set {}
-    }
-
     // MARK: Private Properties
 
     private lazy var slider: PTVideoEditorSlider = makeSlider()

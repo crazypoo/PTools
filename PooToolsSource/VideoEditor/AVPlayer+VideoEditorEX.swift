@@ -23,10 +23,7 @@ extension AVPlayer {
 //MARK: Notifications
 extension AVPlayer {
     var itemDidPlayToEnd: AnyPublisher<Void, Never> {
-        NotificationCenter.default
-            .publisher(for: .AVPlayerItemDidPlayToEndTime)
-            .map { _ in () }
-            .eraseToAnyPublisher()
+        NotificationCenter.default.publisher(for: .AVPlayerItemDidPlayToEndTime).map { _ in () }.eraseToAnyPublisher()
     }
 }
 

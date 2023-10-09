@@ -26,17 +26,6 @@ class PTVideoEditorCropVideoControlViewController: PTBaseViewController {
 
     var didSelectCroppingPreset = PassthroughSubject<PTVideoEditorCroppingPreset?, Never>()
 
-    override var tabBarItem: UITabBarItem! {
-        get {
-            UITabBarItem(
-                title: "Crop",
-                image: UIImage.podBundleImage("Crop"),
-                selectedImage: UIImage.podBundleImage("Crop")
-            )
-        }
-        set {}
-    }
-
     // MARK: Private Properties
 
     private lazy var collectionView: UICollectionView = makeCollectionView()
