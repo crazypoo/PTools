@@ -132,9 +132,9 @@ public class PTViewerConfig: NSObject {
     ///操作方式
     public var actionType:PTViewerActionType = .All
     ///关闭页面按钮图片连接/名字
-    public var closeViewerImage:UIImage = UIImage()
+    public var closeViewerImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 24))
     ///更多操作按钮图片连接/名字
-    public var moreActionImage:UIImage = UIImage()
+    public var moreActionImage:UIImage = "🗃️".emojiToImage(emojiFont: .appfont(size: 24))
     ///更多功能扩展,如果选择全部,则默认保存0删除1........
     public var moreActionEX:[String] = []
     ///是否显示Nav右边媒体的名字
@@ -938,7 +938,6 @@ public class PTMediaViewer: UIView {
             break
         }
         
-        
         addSubview(contentScrolView)
         contentScrolView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -953,7 +952,7 @@ public class PTMediaViewer: UIView {
         addSubview(bottomView)
         bottomView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(44)
+            make.height.equalTo(CGFloat.kTabbarHeight)
         }
 
         if self.viewConfig.mediaData.count > 1 {
@@ -1528,14 +1527,14 @@ extension PTMediaViewer:UIScrollViewDelegate {
                 if (bottonH * 2) > infoH && infoH > bottonH {
                     make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight)
                 } else if infoH < bottonH {
-                    make.height.equalTo(bottonH + CGFloat.kTabbarSaveAreaHeight)
+                    make.height.equalTo(bottonH + CGFloat.kTabbarSaveAreaHeight + 10)
                 } else if infoH > (bottonH * 2) {
                     make.height.equalTo(bottonH * 2 + CGFloat.kTabbarSaveAreaHeight)
                 }
             }
             bottomView.addSubview(moreActionButton)
             moreActionButton.snp.makeConstraints { make in
-                make.width.height.equalTo(bottonH)
+                make.width.height.equalTo(34)
                 make.right.equalToSuperview().inset(10)
                 make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             }

@@ -87,11 +87,11 @@ extension PTRouterManager {
                         let subString = fullName[range]
                         pagePathMap[cls.patternString[s]] = "\(subString)"
                         PTRouter.addRouterItem(cls.patternString[s], classString: "\(subString)")
-                        mapJOSN.append(["path": cls.patternString[s], "class": "\(subString)", "desc": cls.descriptions])
+                        mapJOSN.append(["path": cls.patternString[s], "class": "\(subString)"])
                     } else {
                         pagePathMap[cls.patternString[s]] = fullName
                         PTRouter.addRouterItem(cls.patternString[s], classString: fullName)
-                        mapJOSN.append(["path": cls.patternString[s], "class": fullName, "desc": cls.descriptions])
+                        mapJOSN.append(["path": cls.patternString[s], "class": fullName])
                     }
                 }
             }

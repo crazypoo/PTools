@@ -20,7 +20,7 @@ import UIKit
  // 路由懒加载注册
  PTRouter.lazyRegisterRouterHandle { url, userInfo in
      PTRouterManager.injectRouterServiceConfig(webRouterUrl, serivceHost)
-     return PTRouterManager.addGloableRouter([".The"], url, userInfo)
+     return PTRouterManager.addGloableRouter([".XXXXX"], url, userInfo)
  }
 
  // 动态注册服务
@@ -37,11 +37,7 @@ import UIKit
      static var patternString: [String] {
          ["scheme://router/demo"]
      }
-     
-     static var descriptions: String {
-         "XXXXXXXXXXXController"
-     }
-     
+          
      static func registerAction(info: [String : Any]) -> Any {
          let vc =  XXXXXXXXXXXController()
          vc.resultLabel.text = info.description
