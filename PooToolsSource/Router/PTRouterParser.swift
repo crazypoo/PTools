@@ -47,7 +47,7 @@ extension PTRouterParser {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
             return [String: Any]()
         }
-        let query = la_parserQuery(components)
+        let query = routerParserQuery(components)
         return (query as [String: Any])
     }
     
@@ -109,7 +109,7 @@ extension PTRouterParser {
     }
     
     /// 解析Query
-    private static func la_parserQuery(_ components: URLComponents) -> [String: Any] {
+    private static func routerParserQuery(_ components: URLComponents) -> [String: Any] {
         
         guard let items = components.queryItems,
               items.count > 0 else {

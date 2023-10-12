@@ -156,7 +156,7 @@ public class PTRouter: PTRouterParser {
         } else {
             var matchedPatterns = [PTRouterPattern]()
             
-            if la_webUrlCheck(urlString) {
+            if routerWebUrlCheck(urlString) {
                 matchedPatterns = patterns.filter{ ($0.patternString == PTRouter.shareInstance.webPath)}
                 assert(PTRouter.shareInstance.webPath != nil, "h5 jump path cannot be empty")
             } else {
@@ -166,7 +166,7 @@ public class PTRouter: PTRouterParser {
             
             for pattern in matchedPatterns {
                 let result = matchPattern(request, pattern: pattern)
-                if result.matched || la_webUrlCheck(urlString) {
+                if result.matched || routerWebUrlCheck(urlString) {
                     matched = pattern
                     queries.routerCombine(result.queries)
                     break
@@ -184,11 +184,11 @@ public class PTRouter: PTRouterParser {
             return (nil, [String: Any]())
         }
         
-        guard la_intercept(currentPattern.patternString, queries: queries) else {
+        guard routerIntercept(currentPattern.patternString, queries: queries) else {
             return (nil, [String: Any]())
         }
         
-        if la_webUrlCheck(urlString) {
+        if routerWebUrlCheck(urlString) {
             queries.routerCombine(["url" : urlString as Any])
             queries.routerCombine([PTJumpTypeKey: "\(PTJumpType.push.rawValue)" as Any])
             queries.routerCombine(matchUserInfo)
@@ -218,10 +218,9 @@ public class PTRouter: PTRouterParser {
         } else {
             return (false, [String: Any]())
         }
-        
     }
     
-    func la_webUrlCheck(_ urlString: String) -> Bool {
+    func routerWebUrlCheck(_ urlString: String) -> Bool {
         if let url = PTRouter.canOpenURLString(urlString) {
             if url.scheme == "https" || url.scheme == "http" {
                 return true
@@ -233,7 +232,7 @@ public class PTRouter: PTRouterParser {
     }
     
     // Intercep the request and return whether should continue
-    private func la_intercept(_ matchedPatternString: String, queries: [String: Any]) -> Bool {
+    private func routerIntercept(_ matchedPatternString: String, queries: [String: Any]) -> Bool {
         
         for interceptor in self.interceptors where !interceptor.whiteList.contains(matchedPatternString) {
             if !interceptor.handle(queries) {
