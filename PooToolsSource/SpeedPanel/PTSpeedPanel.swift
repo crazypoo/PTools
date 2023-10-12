@@ -11,12 +11,10 @@ import UIKit
 public typealias PTPanelDetailTask = (_ speed:CGFloat)->Void
 
 public class PTSpeedPanelConfig:NSObject {
-    static let share = PTSpeedPanelConfig()
-    
     // 最大速度
     public var maxValue:CGFloat = 100
     // 刻度线数量
-    public var numberOfTicks:Int = 8
+    public var numberOfTicks = 8
     // 刻度颜色
     public var ticksColor:UIColor = .white
     // 刻度颜色
@@ -32,7 +30,7 @@ public class PTSpeedPanelConfig:NSObject {
 public class PTSpeedPanel: UIView {
     public var callBack:PTPanelDetailTask? = nil
 
-    let viewConfig = PTSpeedPanelConfig.share
+    fileprivate var viewConfig : PTSpeedPanelConfig!
     
     // 当前速度
     fileprivate var currentSpeed: CGFloat = 0
@@ -51,6 +49,11 @@ public class PTSpeedPanel: UIView {
     // 刻度线图层
     let tickLayer = CAShapeLayer()
 
+    public init(viewConfig:PTSpeedPanelConfig) {
+        super.init(frame: .zero)
+        self.viewConfig = viewConfig
+    }
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -148,7 +151,7 @@ public class PTSpeedPanel: UIView {
     fileprivate func animationStart() {
         let timer = Timer.scheduledTimer(timeInterval: 0.005, repeats: true) { timer in
             self.currentSpeed += 1
-            self.updateSpeed(speed: CGFloat(self.viewConfig.numberOfTicks))
+            self.updateSpeed(speed: self.currentSpeed)
             if self.currentSpeed >= self.viewConfig.maxValue {
                 timer.invalidate()
                 self.animationEnd()
