@@ -9,6 +9,7 @@
 import UIKit
 import pop
 import SnapKit
+import AttributedString
 
 public class PTActionCell:UIView {
     private var blur:SSBlurView?
@@ -203,10 +204,32 @@ public class PTActionSheetView: UIView {
         addSubview(actionSheetView)
         actionSheetView.addSubview(actionSheetScroll)
         
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
-            let enterString = (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) ? "\n" : ""
-            let titleStr = String(format: "%@%@%@", actionSheetTitle as CVarArg,enterString,actionSheetMessage as CVarArg)
-            titleLbale.cellButton.setTitle(titleStr, for: .normal)
+        if !actionSheetTitle.stringIsEmpty() || !actionSheetMessage.stringIsEmpty() {
+            
+            let attTitle:ASAttributedString = """
+            \(wrap: .embedding("""
+            \(actionSheetTitle,.foreground(self.titleTitleColor),.font(self.titleFont),.paragraph(.alignment(.center)))
+            """))
+            """
+            
+            let attSubTitle:ASAttributedString = """
+            \(wrap: .embedding("""
+            
+            \(actionSheetMessage,.foreground(self.titleTitleColor),.font(self.titleFont),.paragraph(.alignment(.center)))
+            """))
+            """
+
+            var total:ASAttributedString!
+            
+            if !actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty() {
+                total = attTitle
+            } else if actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty() {
+                total = attSubTitle
+            } else if !actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty() {
+                total = attTitle + attSubTitle
+            }
+                 
+            titleLbale.cellButton.setAttributedTitle(total!.value, for: .normal)
             actionSheetView.addSubview(titleLbale)
         }
         
@@ -230,19 +253,23 @@ public class PTActionSheetView: UIView {
     }
     
     func titleHeight()->CGFloat {
-        var spacing:CGFloat = 0
         
-        var titleStr = ""
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
-            spacing = 25
-            let enterString = (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) ? "\n" : ""
-            titleStr = String(format: "%@%@%@", actionSheetTitle as CVarArg,enterString,actionSheetMessage as CVarArg)
-        } else {
-            spacing = 0
-            titleStr = ""
+        var titleH:CGFloat = 0
+        var subTitleH:CGFloat = 0
+        if !actionSheetTitle.stringIsEmpty() {
+            titleH = UIView.sizeFor(string: actionSheetTitle, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - self.LeftAndRightviewSpace * 2).height
         }
         
-        return UIView.sizeFor(string: titleStr, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + spacing * 2
+        if !actionSheetMessage.stringIsEmpty() {
+            subTitleH = UIView.sizeFor(string: actionSheetMessage, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - self.LeftAndRightviewSpace * 2).height
+        }
+        
+        var total:CGFloat = 0
+        if titleH > 0 || subTitleH > 0 {
+            total = titleH + subTitleH + 50
+        }
+                
+        return total
     }
     
     func scrollContentHeight()->CGFloat {
@@ -290,7 +317,7 @@ public class PTActionSheetView: UIView {
             make.height.equalTo(self.actionSheetHeight(orientation: device.orientation))
         }
                 
-        if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
+        if !actionSheetTitle.stringIsEmpty() || !actionSheetMessage.stringIsEmpty() {
             titleLbale.snp.makeConstraints { make in
                 make.left.right.top.equalToSuperview()
                 make.height.equalTo(self.titleHeight())
@@ -305,7 +332,11 @@ public class PTActionSheetView: UIView {
             }
             
             PTGCDManager.gcdAfter(time: 0.1) {
-                self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
+                if self.otherTitles.count == 0 {
+                    self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.allCorners])
+                } else {
+                    self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.topLeft,.topRight])
+                }
             }
         } else {
             let actionSheetScrollBottom = destructiveButtonTitle.stringIsEmpty() ? (kRowHeight + kSeparatorHeight + kRowLineHeight) : ((kRowHeight*2) + kSeparatorHeight * 1.5 + kRowLineHeight)
@@ -353,7 +384,7 @@ public class PTActionSheetView: UIView {
                     make.height.equalTo(kRowHeight)
                 }
                 
-                if (!actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (actionSheetTitle.stringIsEmpty() && !actionSheetMessage.stringIsEmpty()) || (!actionSheetTitle.stringIsEmpty() && actionSheetMessage.stringIsEmpty()) {
+                if !actionSheetTitle.stringIsEmpty() || !actionSheetMessage.stringIsEmpty() {
                     
                 } else {
                     if index == 0 {
