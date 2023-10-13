@@ -27,7 +27,7 @@ class PTPingActivityIndicator {
     }
 
     func update(time: Int) {
-        self.mLabel.text = "\(time)ms"
+        mLabel.text = "\(time)ms"
     }
 
     //MARK: UI
@@ -50,29 +50,29 @@ private extension PTPingActivityIndicator {
     func createUI() {
         if #available(iOS 13.0, *) {
             if let windowScene = UIApplication.shared.windows.first?.windowScene, let statusBarManager = windowScene.statusBarManager {
-                self.mIndicatorWindow.windowScene = windowScene
-                self.mIndicatorWindow.frame = statusBarManager.statusBarFrame
-                self.statusBarStyle = statusBarManager.statusBarStyle
+                mIndicatorWindow.windowScene = windowScene
+                mIndicatorWindow.frame = statusBarManager.statusBarFrame
+                statusBarStyle = statusBarManager.statusBarStyle
             }
         } else {
-            self.mIndicatorWindow.frame = UIApplication.shared.statusBarFrame
-            self.statusBarStyle = UIApplication.shared.statusBarStyle
+            mIndicatorWindow.frame = UIApplication.shared.statusBarFrame
+            statusBarStyle = UIApplication.shared.statusBarStyle
         }
-        if self.statusBarStyle == .lightContent {
-            self.mLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
+        if statusBarStyle == .lightContent {
+            mLabel.textColor = UIColor(red: 1, green: 1, blue: 1, alpha: 0.85)
         } else {
-            self.mLabel.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.85)
+            mLabel.textColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.85)
         }
 
-        self.mIndicatorWindow.addSubview(self.mLabel)
-        if self.mIndicatorWindow.frame.size.height > 30 {
-            self.mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            self.mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.rightAnchor, constant: -56).isActive = true
-            self.mLabel.topAnchor.constraint(equalTo: self.mIndicatorWindow.topAnchor).isActive = true
+        mIndicatorWindow.addSubview(mLabel)
+        if mIndicatorWindow.frame.size.height > 30 {
+            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+            mLabel.centerXAnchor.constraint(equalTo: mIndicatorWindow.rightAnchor, constant: -56).isActive = true
+            mLabel.topAnchor.constraint(equalTo: mIndicatorWindow.topAnchor).isActive = true
         } else {
-            self.mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
-            self.mLabel.centerXAnchor.constraint(equalTo: self.mIndicatorWindow.centerXAnchor, constant: self.mIndicatorWindow.frame.size.width/8).isActive = true
-            self.mLabel.centerYAnchor.constraint(equalTo: self.mIndicatorWindow.centerYAnchor).isActive = true
+            mLabel.font = UIFont.systemFont(ofSize: 12, weight: .bold)
+            mLabel.centerXAnchor.constraint(equalTo: mIndicatorWindow.centerXAnchor, constant: mIndicatorWindow.frame.size.width/8).isActive = true
+            mLabel.centerYAnchor.constraint(equalTo: mIndicatorWindow.centerYAnchor).isActive = true
         }
     }
 }

@@ -43,7 +43,7 @@ public class PTSendFeedBackAlert {
                            sendString:String? = "确定",
                            titleFont:UIFont? = .appfont(size: 18),
                            canTapBackground:Bool? = false,
-                           done:@escaping ((String,String) -> Void),
+                           done: @escaping (String, String) -> Void,
                            dismiss:PTActionTask? = nil) {
         let feedBackTitle = UITextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholder!

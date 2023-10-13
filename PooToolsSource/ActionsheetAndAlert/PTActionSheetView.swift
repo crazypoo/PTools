@@ -208,14 +208,14 @@ public class PTActionSheetView: UIView {
             
             let attTitle:ASAttributedString = """
             \(wrap: .embedding("""
-            \(actionSheetTitle,.foreground(self.titleTitleColor),.font(self.titleFont),.paragraph(.alignment(.center)))
+            \(actionSheetTitle,.foreground(titleTitleColor),.font(titleFont),.paragraph(.alignment(.center)))
             """))
             """
             
             let attSubTitle:ASAttributedString = """
             \(wrap: .embedding("""
             
-            \(actionSheetMessage,.foreground(self.titleTitleColor),.font(self.titleFont),.paragraph(.alignment(.center)))
+            \(actionSheetMessage,.foreground(titleTitleColor),.font(titleFont),.paragraph(.alignment(.center)))
             """))
             """
 
@@ -257,11 +257,11 @@ public class PTActionSheetView: UIView {
         var titleH:CGFloat = 0
         var subTitleH:CGFloat = 0
         if !actionSheetTitle.stringIsEmpty() {
-            titleH = UIView.sizeFor(string: actionSheetTitle, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - self.LeftAndRightviewSpace * 2).height
+            titleH = UIView.sizeFor(string: actionSheetTitle, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
         }
         
         if !actionSheetMessage.stringIsEmpty() {
-            subTitleH = UIView.sizeFor(string: actionSheetMessage, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - self.LeftAndRightviewSpace * 2).height
+            subTitleH = UIView.sizeFor(string: actionSheetMessage, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
         }
         
         var total:CGFloat = 0

@@ -259,9 +259,10 @@ public extension UIViewController {
     ///   - subTitle: 子标题
     ///   - subTitleFont: 子标题字号
     ///   - subTitleColor: 子标题颜色
-    ///   - bannerBackgroundColor: 背景颜色
     ///   - duration: 点击回调
+    ///   - bannerBackgroundColor: 背景颜色
     ///   - notifiTap: 点击回调
+    ///   - notifiDismiss:
     @objc class func gobal_drop(title:String?,
                                 titleFont:UIFont? = UIFont.appfont(size: 16),
                                 titleColor:UIColor? = .black,

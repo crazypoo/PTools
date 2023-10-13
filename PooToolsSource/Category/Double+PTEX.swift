@@ -117,7 +117,7 @@ public extension Double {
 public extension PTPOP where Base == Double {
     // MARK: 转 NSNumber
     /// 转 NSNumber
-    var number: NSNumber { 
-        return NSNumber(value: self.base)
+    var number: NSNumber {
+        NSNumber(value: base)
     }
 }

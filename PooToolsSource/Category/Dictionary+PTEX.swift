@@ -131,7 +131,7 @@ public extension Dictionary {
     //MARK: 路由用到
     mutating func merge(dic:Dictionary) {
         self.merge(dic) { (parama1, parama2) -> Value in
-            return parama1
+            parama1
         }
     }
     

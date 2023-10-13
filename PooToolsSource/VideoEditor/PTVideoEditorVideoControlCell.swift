@@ -31,8 +31,8 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
 
-        self.contentView.addSubviews([self.buttonView])
-        self.buttonView.snp.makeConstraints { make in
+        contentView.addSubviews([buttonView])
+        buttonView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
     }

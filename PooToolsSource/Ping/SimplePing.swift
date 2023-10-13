@@ -142,7 +142,7 @@ public class SimplePing {
 		}
 		
 		return hostAddress.withUnsafeBytes{ (bytes: UnsafePointer<sockaddr>) -> sa_family_t in
-			return bytes.pointee.sa_family
+			bytes.pointee.sa_family
 		}
 	}
 	
@@ -240,12 +240,12 @@ public class SimplePing {
 		let bytesSent: Int
 		if let socket = sock {
 			bytesSent = packet.withUnsafeBytes{ (packetBytes: UnsafePointer<UInt8>) -> Int in
-				return hostAddress.withUnsafeBytes{ (hostAddressBytes: UnsafePointer<sockaddr>) -> Int in
-					return sendto(
-						CFSocketGetNative(socket),
-						UnsafeRawPointer(packetBytes), packet.count,
-						0, /* flags */
-						hostAddressBytes, socklen_t(hostAddress.count)
+				hostAddress.withUnsafeBytes { (hostAddressBytes: UnsafePointer<sockaddr>) -> Int in
+					sendto(
+							CFSocketGetNative(socket),
+							UnsafeRawPointer(packetBytes), packet.count,
+							0, /* flags */
+							hostAddressBytes, socklen_t(hostAddress.count)
 					)
 				}
 			}

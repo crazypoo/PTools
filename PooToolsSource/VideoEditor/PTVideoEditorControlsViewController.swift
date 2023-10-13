@@ -54,7 +54,7 @@ final class PTVideoEditorControlsViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .clear
+        view.backgroundColor = .clear
         setupUI()
         setupBindings()
         setupGestureRecognizers()
@@ -160,10 +160,10 @@ fileprivate extension PTVideoEditorControlsViewController {
             isFullscreen: isFullscreen
         )
         view.fullscreenButtonAction = { [unowned self] in
-            self.fullscreenButtonTapped()
+            fullscreenButtonTapped()
         }
         view.playButtonAction = { [unowned self] in
-            self.playButtonTapped()
+            playButtonTapped()
         }
 
         return view

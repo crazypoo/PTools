@@ -59,12 +59,12 @@ class PTUserDefultsViewController: PTBaseViewController {
 
         // Do any additional setup after loading the view.
         
-        self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
         let dic = UserDefaults.standard.dictionaryRepresentation()
         PTNSLogConsole(dic)
 
-        if self.haveZXbar {
+        if haveZXbar {
 #if POOTOOLS_NAVBARCONTROLLER
             
             self.zx_navTitle = "UserDefults"
@@ -94,11 +94,11 @@ class PTUserDefultsViewController: PTBaseViewController {
             }
 #endif
         } else {
-            self.title = "UserDefults"
+            title = "UserDefults"
             let backBtn = UIButton(type: .custom)
             backBtn.frame = CGRectMake(0, 0, 34, 34)
             backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
             backBtn.addActionHandlers { sender in
                 self.returnFrontVC()
             }
@@ -106,14 +106,14 @@ class PTUserDefultsViewController: PTBaseViewController {
             let cleanBtn = UIButton(type: .custom)
             cleanBtn.frame = CGRectMake(0, 0, 34, 34)
             cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
             cleanBtn.addActionHandlers { sender in
                 self.clearUserdefults()
             }
         }
         
-        self.view.addSubview(self.collectionView)
-        self.collectionView.snp.makeConstraints { make in
+        view.addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             if self.haveZXbar {
                 make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
@@ -122,7 +122,7 @@ class PTUserDefultsViewController: PTBaseViewController {
             }
         }
         
-        self.showDetail()
+        showDetail()
     }
     
     func showDetail() {
@@ -149,8 +149,8 @@ class PTUserDefultsViewController: PTBaseViewController {
         let cellSection = PTSection.init(rows: rows)
         mSections.append(cellSection)
         
-        self.collectionView.pt_register(by: mSections)
-        self.collectionView.reloadData()
+        collectionView.pt_register(by: mSections)
+        collectionView.reloadData()
     }
     
     func clearUserdefults() {
@@ -168,11 +168,11 @@ class PTUserDefultsViewController: PTBaseViewController {
 
 extension PTUserDefultsViewController:UICollectionViewDelegate,UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return self.mSections.count
+        mSections.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.mSections[section].rows.count
+        mSections[section].rows.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -190,7 +190,7 @@ extension PTUserDefultsViewController:UICollectionViewDelegate,UICollectionViewD
         let itemRow = itemSec.rows[indexPath.row]
         let cellModel = (itemRow.dataModel as! PTFusionCellModel)
         let vc = PTUserDefultsEditViewController(viewModel: cellModel)
-        self.navigationController?.pushViewController(vc)
+        navigationController?.pushViewController(vc)
         vc.doneBlock = {
             self.showDetail()
         }
@@ -236,7 +236,7 @@ class PTUserDefultsEditViewController:PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if self.haveZXbar {
+        if haveZXbar {
 #if POOTOOLS_NAVBARCONTROLLER
             
             self.zx_navTitle = "EditUserDefults"
@@ -254,19 +254,19 @@ class PTUserDefultsEditViewController:PTBaseViewController {
             }
 #endif
         } else {
-            self.title = "EditUserDefults"
+            title = "EditUserDefults"
             
             let cleanBtn = UIButton(type: .custom)
             cleanBtn.frame = CGRectMake(0, 0, 34, 34)
             cleanBtn.setImage("⭕️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
             cleanBtn.addActionHandlers { sender in
                 self.saveAction()
             }
         }
         
-        self.view.addSubviews([self.keyLabel,self.textInputView])
-        self.keyLabel.snp.makeConstraints { make in
+        view.addSubviews([keyLabel, textInputView])
+        keyLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             if self.haveZXbar {
                 make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
@@ -275,17 +275,17 @@ class PTUserDefultsEditViewController:PTBaseViewController {
             }
         }
         
-        self.textInputView.snp.makeConstraints { make in
+        textInputView.snp.makeConstraints { make in
             make.left.right.equalTo(self.keyLabel)
             make.top.equalTo(self.keyLabel.snp.bottom).offset(10)
             make.bottom.equalTo(self.view.snp.centerY)
         }
-        self.textInputView.bk_placeholder = "value"
+        textInputView.bk_placeholder = "value"
     }
     
     func saveAction() {
-        UserDefaults.standard.setValue(self.textInputView.text, forKey: self.viewModel.name)
-        self.navigationController?.popViewController() {
+        UserDefaults.standard.setValue(textInputView.text, forKey: viewModel.name)
+        navigationController?.popViewController {
             if self.doneBlock != nil {
                 self.doneBlock!()
             }

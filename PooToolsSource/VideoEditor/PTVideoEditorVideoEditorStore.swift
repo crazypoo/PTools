@@ -53,10 +53,10 @@ final class PTVideoEditorVideoEditorStore {
          videoEdit: PTVideoEdit?,
          editor: PTVideoEditor = .init(),
          generator: PTVideoEditorVideoTimeLineGeneratorProtocol = PTVideoEditorVideoTimeLineGenerator()) {
-        self.originalAsset = asset
+        originalAsset = asset
         self.editor = editor
         self.generator = generator
-        self.editedPlayerItem = AVPlayerItem(asset: asset)
+        editedPlayerItem = AVPlayerItem(asset: asset)
         self.videoEdit = videoEdit ?? PTVideoEdit()
 
         setupBindings()

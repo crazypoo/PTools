@@ -17,11 +17,11 @@ class PTRouterRequest: PTRouterParser {
     
     init(_ urlString: String) {
         self.urlString = urlString
-        self.sheme = PTRouterRequest.parserSheme(urlString)
+        sheme = PTRouterRequest.parserSheme(urlString)
         
         let result = PTRouterRequest.parser(urlString)
-        self.paths = result.paths
-        self.queries = result.queries
+        paths = result.paths
+        queries = result.queries
     }
     
 }

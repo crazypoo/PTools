@@ -67,7 +67,7 @@ public extension Publishers {
             requested += demand
             guard timeObserverToken == nil, requested > .none else { return }
 
-            let interval = CMTime(seconds: self.interval, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+            let interval = CMTime(seconds: interval, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
             timeObserverToken = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] time in
                 self?.sendValue(time)
             }

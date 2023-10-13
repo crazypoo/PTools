@@ -32,7 +32,7 @@ extension PTRouterParser {
     }
     
     static func parserSheme(_ url: URL) -> String {
-        return url.scheme ?? ""
+        url.scheme ?? ""
     }
     
     static func parserPaths(_ url: URL) -> [String] {

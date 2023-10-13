@@ -67,6 +67,7 @@ public class PTEditMenuItemsInteraction: NSObject {
     /// - Parameters:
     ///   - items: Model
     ///   - rect: 相对于interactionView的一个rect，一般为希望显示menu的selection的最小包围矩形
+    ///   - targetRect:
     ///   - view: 须要展示在x View上
     public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
@@ -146,7 +147,7 @@ public class PTEditMenuItemsInteraction: NSObject {
 
     private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
         // selector产生规则
-        return Selector("clickMenuItem\(seperator)\(index)")
+        Selector("clickMenuItem\(seperator)\(index)")
     }
 
     private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
@@ -179,7 +180,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
     }
     
     func action(from item: PTEditMenuItem) -> UIAction {
-        return UIAction(title: item.title) { _ in
+        UIAction(title: item.title) { _ in
             item.callback?()
         }
     }

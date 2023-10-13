@@ -188,7 +188,7 @@ fileprivate extension PTVideoEditorFullscreenVideoPlayerController {
 // MARK: Actions
 
 fileprivate extension PTVideoEditorFullscreenVideoPlayerController {
-    @objc func close() {
+    func close() {
         animatePlayerLayerOut()
 
         PTGCDManager.gcdAfter(time: animationDuration) {

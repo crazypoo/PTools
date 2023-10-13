@@ -53,8 +53,8 @@ public final class PTVideoEditorVideoPlayerController: PTBaseViewController {
                 theme: Theme = Theme()) {
         self.capabilities = capabilities
         self.theme = theme
-        self.store = PTVideoEditorVideoPlayerStore()
-        self.viewFactory = PTVideoEditorVideoPlayerViewFactory()
+        store = PTVideoEditorVideoPlayerStore()
+        viewFactory = PTVideoEditorVideoPlayerViewFactory()
 
         super.init(nibName: nil, bundle: nil)
     }

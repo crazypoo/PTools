@@ -298,7 +298,7 @@ public class PTUtils: NSObject {
     //MARK: - 判断某视图是否已经在window 上
     public class func ifAddToWindow(view: AnyClass) -> Bool {
         let res = AppWindows!.subviews.filter { (subView: UIView) -> Bool in
-            return subView.isKind(of: view.self)
+            subView.isKind(of: view.self)
         }
         return res.count > 0
     }

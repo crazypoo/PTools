@@ -68,8 +68,8 @@ public final class PTVideoEditorVideoEditorViewController: PTBaseViewController 
 
     public init(asset: AVAsset,
                 videoEdit: PTVideoEdit? = nil) {
-        self.store = PTVideoEditorVideoEditorStore(asset: asset, videoEdit: videoEdit)
-        self.viewFactory = PTVideoEditorVideoViewFactory()
+        store = PTVideoEditorVideoEditorStore(asset: asset, videoEdit: videoEdit)
+        viewFactory = PTVideoEditorVideoViewFactory()
 
         super.init(nibName: nil, bundle: nil)
     }
@@ -174,7 +174,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
         videoControlViewController.onDismiss
             .sink { [unowned self] _ in
-                self.animateVideoControlViewControllerOut()
+                animateVideoControlViewControllerOut()
             }
             .store(in: &cancellables)
     }
@@ -192,14 +192,14 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     func setupNavigationItems() {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navLineView?.isHidden = true
-        self.zx_navBar!.addSubviews([self.saveButtonItem,self.dismissButtonItem])
-        self.saveButtonItem.snp.makeConstraints { make in
+        self.zx_navBar!.addSubviews([saveButtonItem, dismissButtonItem])
+        saveButtonItem.snp.makeConstraints { make in
             make.width.height.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
-        self.dismissButtonItem.snp.makeConstraints { make in
+        dismissButtonItem.snp.makeConstraints { make in
             make.width.height.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -411,24 +411,24 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
         if videoControlViewController.view.superview == nil {
             
-            self.view.addSubview(self.mask)
+            view.addSubview(mask)
             add(videoControlViewController)
 
-            self.videoControlViewController.view.snp.makeConstraints { make in
+            videoControlViewController.view.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(height)
                 make.bottom.equalToSuperview().inset(offset)
             }
             
-            self.mask.snp.makeConstraints { make in
+            mask.snp.makeConstraints { make in
                 make.top.left.right.equalToSuperview()
                 make.bottom.equalTo(self.videoControlViewController.view.snp.top)
             }
 
-            self.view.layoutIfNeeded()
+            view.layoutIfNeeded()
         } else {
-            self.view.addSubview(self.mask)
-            self.mask.snp.makeConstraints { make in
+            view.addSubview(mask)
+            mask.snp.makeConstraints { make in
                 make.top.left.right.equalToSuperview()
                 make.bottom.equalToSuperview().inset(height + view.safeAreaInsets.bottom)
             }            
@@ -459,11 +459,11 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 // MARK: Actions
 
 fileprivate extension PTVideoEditorVideoEditorViewController {
-    @objc func fullscreenButtonTapped() {
+    func fullscreenButtonTapped() {
         videoPlayerController.enterFullscreen()
     }
 
-    @objc func playButtonTapped() {
+    func playButtonTapped() {
         if videoPlayerController.isPlaying {
             videoPlayerController.pause()
         } else {
@@ -471,7 +471,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
         }
     }
 
-    @objc func save() {
+    func save() {
         let item = AVPlayerItem(asset: store.editedPlayerItem.asset)
 
         #if !targetEnvironment(simulator)
@@ -482,7 +482,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
         dismiss(animated: true)
     }
 
-    @objc func cancel() {
+    func cancel() {
         UIAlertController.base_alertVC(title: "是否确定要离开",msg: "离开后将不会保存",okBtns: ["确定"],cancelBtn: "取消",showIn: self) {
         } moreBtn: { index, title in
             self.returnFrontVC()

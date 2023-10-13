@@ -54,7 +54,7 @@ public extension UITextView {
                 addConstraint(NSLayoutConstraint(item: label, attribute: .width, relatedBy: .lessThanOrEqual, toItem: self, attribute: .width, multiplier: 1.0, constant: -8))
                 addConstraint(NSLayoutConstraint(item: label, attribute: .height, relatedBy: .lessThanOrEqual, toItem: self, attribute: .height, multiplier: 1.0, constant: -7))
                 // 设置bk_placeholderLabel，自动调用set方法
-                self.bk_placeholderLabel = label
+                bk_placeholderLabel = label
                 
                 addObserver(self, forKeyPath: "text", options: NSKeyValueObservingOptions.new, context: nil)
                 NotificationCenter.default.addObserver(self, selector: #selector(bk_textDidChange), name: UITextView.textDidChangeNotification, object: nil)
@@ -118,7 +118,7 @@ public extension UITextView {
                 }
                 
                 // 调用setter
-                self.bk_wordCountLabel = label
+                bk_wordCountLabel = label
                 
                 NotificationCenter.default.addObserver(self, selector: #selector(bk_maxWordCountAction), name: UITextView.textDidChangeNotification, object: nil)
                 

@@ -25,33 +25,33 @@ open class PTMemory: NSObject {
     }()
 
     open func startMonitoring() {
-        if self.avatar == nil {
-            self.avatar = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: CGFloat.kSCREEN_WIDTH - 150, y: CGFloat.statusBarHeight(), width: 150, height: 30))
-            self.avatar?.adjustsImageWhenHighlighted = false
-            self.avatar?.tag = 9999
-            self.avatar?.autoDocking = false
+        if avatar == nil {
+            avatar = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: CGFloat.kSCREEN_WIDTH - 150, y: CGFloat.statusBarHeight(), width: 150, height: 30))
+            avatar?.adjustsImageWhenHighlighted = false
+            avatar?.tag = 9999
+            avatar?.autoDocking = false
             
-            self.avatar?.addSubview(self.fpsLabel)
-            self.fpsLabel.snp.makeConstraints { make in
+            avatar?.addSubview(fpsLabel)
+            fpsLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-            self.timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
                 let memoryString = self.reportMemory()
                 self.fpsLabel.text = memoryString
                 let labelW = self.fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20
                 
                 self.avatar!.frame = CGRect(x: self.avatar!.frame.origin.x, y: self.avatar!.frame.origin.y, width: labelW, height: self.avatar!.frame.size.height)
             }
-            self.closed = false
+            closed = false
         }
     }
     
     open func stopMonitoring() {
-        self.timer?.invalidate()
-        self.timer = nil
-        self.avatar?.removeFromSuperview()
-        self.avatar = nil
-        self.closed = true
+        timer?.invalidate()
+        timer = nil
+        avatar?.removeFromSuperview()
+        avatar = nil
+        closed = true
     }
     
     func reportMemory() -> String {

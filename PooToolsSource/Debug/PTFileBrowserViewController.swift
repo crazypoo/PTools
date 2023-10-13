@@ -25,7 +25,7 @@ class PTFileBrowserViewController: PTBaseViewController {
     var extensionDirectoryPath = "" //选择的相对路径
     var operateFilePath: URL?  //操作的文件路径，例如复制、粘贴等
     var currentDirectoryPath: URL { //当前的文件夹
-        return PTFileBrowser.shared.rootDirectoryPath.appendingPathComponent(self.extensionDirectoryPath, isDirectory: true)
+        PTFileBrowser.shared.rootDirectoryPath.appendingPathComponent(extensionDirectoryPath, isDirectory: true)
     }
 
     var mSections = [PTSection]()
@@ -83,19 +83,19 @@ class PTFileBrowserViewController: PTBaseViewController {
             self.returnFrontVC()
         }
         let rightBarItem = UIBarButtonItem(customView: closeBtn)
-        self.navigationItem.rightBarButtonItem = rightBarItem
+        navigationItem.rightBarButtonItem = rightBarItem
         
         view.addSubviews([viewCollection])
         viewCollection.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
-        self.loadData()
+        loadData()
     }
     
     func loadData() {
         if extensionDirectoryPath.isEmpty {
-            self.navigationItem.leftBarButtonItem = nil
+            navigationItem.leftBarButtonItem = nil
         } else {
             let backBtn = UIButton(type: .custom)
             backBtn.setTitle("返回", for: .normal)
@@ -108,11 +108,11 @@ class PTFileBrowserViewController: PTBaseViewController {
                 self.loadData()
             }
             let leftBarItem = UIBarButtonItem(customView: backBtn)
-            self.navigationItem.leftBarButtonItem = leftBarItem
+            navigationItem.leftBarButtonItem = leftBarItem
         }
-        self.dataList.removeAll()
+        dataList.removeAll()
         let manager = FileManager.default
-        let fileDirectoryPth = self.currentDirectoryPath
+        let fileDirectoryPth = currentDirectoryPath
         if manager.fileExists(atPath: fileDirectoryPth.path), let subPath = try? manager.contentsOfDirectory(atPath: fileDirectoryPth.path) {
             for fileName in subPath {
                 let filePath = fileDirectoryPth.path.appending("/\(fileName)")
@@ -131,7 +131,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                             fileModel.size = fileAttributes[FileAttributeKey.size] as? Double ?? 0
                         }
                     }
-                    self.dataList.append(fileModel)
+                    dataList.append(fileModel)
                 }
             }
         }
@@ -226,14 +226,14 @@ extension PTFileBrowserViewController : UICollectionViewDelegate,UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
         cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
         
-        let cellRealModel = self.dataList[indexPath.row]
+        let cellRealModel = dataList[indexPath.row]
         
         var actionSheetDatas = [String]()
         if cellRealModel.fileType == .folder {
-            self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
+            operateFilePath = currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
             actionSheetDatas = ["分享","复制","移动","删除"]
         } else {
-            self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
+            operateFilePath = currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
             actionSheetDatas = ["分享","复制","移动","删除","hash值"]
         }
         
@@ -335,11 +335,11 @@ extension PTFileBrowserViewController : UICollectionViewDelegate,UICollectionVie
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cellModel = self.dataList[indexPath.row]
+        let cellModel = dataList[indexPath.row]
         switch cellModel.fileType {
         case .folder:
-            self.extensionDirectoryPath = extensionDirectoryPath + "/" + cellModel.name
-            self.loadData()
+            extensionDirectoryPath = extensionDirectoryPath + "/" + cellModel.name
+            loadData()
         default:
             
             let backBtn = UIButton(type: .custom)
@@ -350,23 +350,23 @@ extension PTFileBrowserViewController : UICollectionViewDelegate,UICollectionVie
                 self.returnFrontVC()
             }
             let rightBarItem = UIBarButtonItem(customView: backBtn)
-            self.navigationItem.leftBarButtonItem = rightBarItem
-            self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellModel.name, isDirectory: false)
+            navigationItem.leftBarButtonItem = rightBarItem
+            operateFilePath = currentDirectoryPath.appendingPathComponent(cellModel.name, isDirectory: false)
             //preview
             let previewVC = QLPreviewController()
             previewVC.delegate = self
             previewVC.dataSource = self
-            self.navigationController?.pushViewController(previewVC, animated: true)
+            navigationController?.pushViewController(previewVC, animated: true)
         }
     }
 }
 
 extension PTFileBrowserViewController: QLPreviewControllerDelegate, QLPreviewControllerDataSource {
     func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-        return 1
+        1
     }
     
     func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-        return self.operateFilePath! as QLPreviewItem
+        operateFilePath! as QLPreviewItem
     }
 }

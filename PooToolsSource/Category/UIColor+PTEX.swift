@@ -750,7 +750,7 @@ public extension UIColor {
         
         let multiplier = CGFloat(255.999999)
         
-        guard self.getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
+        guard getRed(&red, green: &green, blue: &blue, alpha: &alpha) else {
             return (nil, nil, nil, nil)
         }
         return ("\(Int(red * multiplier))".pt.toCGFloat(), "\(Int(green * multiplier))".pt.toCGFloat(), "\(Int(blue * multiplier))".pt.toCGFloat(), alpha)

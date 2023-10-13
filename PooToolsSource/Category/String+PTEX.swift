@@ -1276,7 +1276,7 @@ public extension String {
     
     //MARK: 路由扩展
     func containsSubString(substring: String) -> Bool {
-        return range(of: substring) != nil
+        range(of: substring) != nil
     }
     
     func dropFirst(_ count: Int) -> String {
@@ -1366,7 +1366,7 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     // MARK: 将16进制字符串转为Int
     /// 将16进制字符串转为Int
     var hexInt: Int {
-        return Int(base as! String, radix: 16) ?? 0
+        Int(base as! String, radix: 16) ?? 0
     }
     
     //MARK: 字符串转数组
@@ -1523,9 +1523,9 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     /// - Returns: 返回字符的个数
     func customCountOfChars() -> Int {
         var count = 0
-        guard (self.base as! String).count > 0 else { return 0 }
-        for i in 0...(self.base as! String).count - 1 {
-            let c: unichar = ((self.base as! String) as NSString).character(at: i)
+        guard (base as! String).count > 0 else { return 0 }
+        for i in 0...(base as! String).count - 1 {
+            let c: unichar = ((base as! String) as NSString).character(at: i)
             if (c >= 0x4E00) {
                 count += 2
             } else {
@@ -1762,18 +1762,18 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
     // MARK: 字符串转 NSString
     /// 字符串转 NSString
     var toNSString: NSString {
-        return (base as! String) as NSString
+        (base as! String) as NSString
     }
     
     // MARK: 字符串转 Int64
     /// 字符串转 Int64
     var toInt64Value: Int64? {
-        return Int64(base as! String)
+        Int64(base as! String)
     }
     
     // MARK: 字符串转 NSNumber
     /// 字符串转 NSNumber
     var toNumber: NSNumber? {
-        return self.toDouble()?.pt.number
+        self.toDouble()?.pt.number
     }
 }

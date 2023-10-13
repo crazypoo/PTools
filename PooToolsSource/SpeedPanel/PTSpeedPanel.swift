@@ -38,7 +38,7 @@ public class PTSpeedPanel: UIView {
     // 仪表盘半径
     fileprivate var panelRadius:CGFloat {
         get {
-            return self.bounds.size.width / 2
+            bounds.size.width / 2
         }
     }
     
@@ -65,12 +65,12 @@ public class PTSpeedPanel: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        self.createGaugeLayer()
-        self.createGaugeLayerBackground()
-        self.createTickLayer()
-        self.layer.addSublayer(self.panelLayerBackground)
-        self.layer.addSublayer(self.panelLayer)
-        self.layer.addSublayer(self.tickLayer)
+        createGaugeLayer()
+        createGaugeLayerBackground()
+        createTickLayer()
+        layer.addSublayer(panelLayerBackground)
+        layer.addSublayer(panelLayer)
+        layer.addSublayer(tickLayer)
         
         PTGCDManager.gcdAfter(time: 0.5) {
             self.animationStart()
@@ -79,42 +79,42 @@ public class PTSpeedPanel: UIView {
     
     // 创建仪表盘图层
     fileprivate func createGaugeLayer() {
-        let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let startAngle = -CGFloat.pi / 2
         let endAngle = startAngle + 2 * CGFloat.pi
         
-        let path = UIBezierPath(arcCenter: center, radius: self.panelRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        let path = UIBezierPath(arcCenter: center, radius: panelRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         
-        self.panelLayer.path = path.cgPath
-        self.panelLayer.strokeColor = self.viewConfig.progressColor.cgColor
-        self.panelLayer.fillColor = UIColor.clear.cgColor
-        self.panelLayer.lineWidth = 20
-        self.panelLayer.lineCap = .round
+        panelLayer.path = path.cgPath
+        panelLayer.strokeColor = viewConfig.progressColor.cgColor
+        panelLayer.fillColor = UIColor.clear.cgColor
+        panelLayer.lineWidth = 20
+        panelLayer.lineCap = .round
     }
     
     fileprivate func createGaugeLayerBackground() {
-        let center = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
+        let center = CGPoint(x: bounds.midX, y: bounds.midY)
         let startAngle = -CGFloat.pi / 2
         let endAngle = startAngle + 2 * CGFloat.pi
         
-        let path = UIBezierPath(arcCenter: center, radius: self.panelRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        let path = UIBezierPath(arcCenter: center, radius: panelRadius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
         
-        self.panelLayerBackground.path = path.cgPath
-        self.panelLayerBackground.strokeColor = self.viewConfig.progressBackgroundColor.cgColor
-        self.panelLayerBackground.fillColor = UIColor.clear.cgColor
-        self.panelLayerBackground.lineWidth = 20
-        self.panelLayerBackground.lineCap = .round
+        panelLayerBackground.path = path.cgPath
+        panelLayerBackground.strokeColor = viewConfig.progressBackgroundColor.cgColor
+        panelLayerBackground.fillColor = UIColor.clear.cgColor
+        panelLayerBackground.lineWidth = 20
+        panelLayerBackground.lineCap = .round
     }
     
     // 创建刻度线图层
     fileprivate func createTickLayer() {
-        let center = CGPoint(x: self.frame.size.width/2.0, y: self.frame.size.height/2.0)
-        let tickRadius = self.panelRadius
+        let center = CGPoint(x: frame.size.width/2.0, y: frame.size.height/2.0)
+        let tickRadius = panelRadius
         
         let tickPath = UIBezierPath()
         
-        for i in 0..<self.viewConfig.numberOfTicks {
-            let tickAngle = -CGFloat.pi / 2 + CGFloat(i) * (2 * CGFloat.pi / CGFloat(self.viewConfig.numberOfTicks))
+        for i in 0..<viewConfig.numberOfTicks {
+            let tickAngle = -CGFloat.pi / 2 + CGFloat(i) * (2 * CGFloat.pi / CGFloat(viewConfig.numberOfTicks))
             let startPoint = CGPoint(x: center.x + tickRadius * sin(tickAngle), y: center.y + tickRadius * cos(tickAngle))
             let endPoint = CGPoint(x: center.x + (tickRadius - 20) * sin(tickAngle), y: center.y + (tickRadius - 20) * cos(tickAngle))
             tickPath.move(to: startPoint)
@@ -126,13 +126,13 @@ public class PTSpeedPanel: UIView {
             label.textAlignment = .center
             label.font = self.viewConfig.ticksLableFont
             label.textColor = self.viewConfig.ticksLableColor
-            label.text = "\(Int(self.viewConfig.maxValue / CGFloat(self.viewConfig.numberOfTicks) * CGFloat(i)))"
+            label.text = "\(Int(viewConfig.maxValue / CGFloat(viewConfig.numberOfTicks) * CGFloat(i)))"
             self.addSubview(label)
         }
         
-        self.tickLayer.path = tickPath.cgPath
-        self.tickLayer.strokeColor = self.viewConfig.ticksColor.cgColor
-        self.tickLayer.lineWidth = 2
+        tickLayer.path = tickPath.cgPath
+        tickLayer.strokeColor = viewConfig.ticksColor.cgColor
+        tickLayer.lineWidth = 2
     }
         
     // 更新仪表盘
@@ -173,10 +173,10 @@ public class PTSpeedPanel: UIView {
     
     // 更新速度
     public func updateSpeed(speed: CGFloat) {
-        self.currentSpeed = speed
-        self.updatePanel()
-        if self.callBack != nil {
-            self.callBack!(self.currentSpeed)
+        currentSpeed = speed
+        updatePanel()
+        if callBack != nil {
+            callBack!(currentSpeed)
         }
     }
 }

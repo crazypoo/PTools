@@ -112,7 +112,7 @@ fileprivate extension PTVideoEditorTimeLineViewController {
     }
 
     func setupView() {
-        self.view.backgroundColor = .clear
+        view.backgroundColor = .clear
         view.addSubview(scrollView)
         scrollView.addSubview(videoTimelineView)
         view.layer.addSublayer(carretLayer)

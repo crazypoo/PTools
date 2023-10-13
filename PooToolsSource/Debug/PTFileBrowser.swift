@@ -24,7 +24,7 @@ public class PTFileBrowser: NSObject {
 
 public extension PTFileBrowser {
     func start() {
-        self.navigationController.dismiss(animated: false) {
+        navigationController.dismiss(animated: false) {
             PTUtils.getCurrentVC().present(self.navigationController, animated: true, completion: nil)
         }
     }
@@ -33,7 +33,7 @@ public extension PTFileBrowser {
         guard let filePath = filePath else { return .unknown }
         if (filePath.lastPathComponent.hasPrefix(".")) {
             return .system
-        } else if let utType = self.getFileUTType(filePath: filePath) {
+        } else if let utType = getFileUTType(filePath: filePath) {
             if UTTypeConformsTo(utType, kUTTypeDirectory) {
                 return .folder
             } else if UTTypeConformsTo(utType, kUTTypeImage) {

@@ -35,7 +35,7 @@ class PTVideoEditorHandleLayer: CALayer {
     }
 
     override init(layer: Any) {
-        self.side = .left
+        side = .left
         
         super.init(layer: layer)
     }

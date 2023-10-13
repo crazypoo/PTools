@@ -589,7 +589,7 @@ class PTSwiftViewController: PTBaseViewController {
         
         let btn = UIButton(type: .custom)
         btn.backgroundColor = .randomColor
-        self.view.addSubview(btn)
+        view.addSubview(btn)
         btn.snp.makeConstraints { make in
             make.width.height.equalTo(100)
             make.centerX.centerY.equalToSuperview()
@@ -602,15 +602,15 @@ class PTSwiftViewController: PTBaseViewController {
 //            controller.trackDelegate = self
 //            controller.modalPresentationStyle = .fullScreen
 //            self.present(controller, animated: true, completion: nil)
-            UIAlertController.baseActionSheet(title: "",subTitle: "", destructiveButtonName: "123123123",titles: ["123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123"]) { sheet in
-                
-            } cancelBlock: { sheet in
-                
-            } otherBlock: { sheet, index in
-                
-            } tapBackgroundBlock: { sheet in
-                
-            }
+//            UIAlertController.baseActionSheet(title: "",subTitle: "", destructiveButtonName: "123123123",titles: ["123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123","123"]) { sheet in
+//                
+//            } cancelBlock: { sheet in
+//                
+//            } otherBlock: { sheet, index in
+//                
+//            } tapBackgroundBlock: { sheet in
+//                
+//            }
         }
     }
     
@@ -698,7 +698,7 @@ extension PTSwiftViewController: ImagePickerControllerDelegate {
         
         picker.dismiss(animated: true, completion: nil)
 
-        self.convertPHAssetToAVAsset(phAsset: result.assets.first!.phAsset) { avAsset in
+        convertPHAssetToAVAsset(phAsset: result.assets.first!.phAsset) { avAsset in
             if let avAsset = avAsset {
                 PTGCDManager.gcdMain {
                     let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)

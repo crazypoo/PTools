@@ -62,17 +62,17 @@ public extension PTPOP where Base: FileManager {
     static func getFileDirectory(type: BasePath) -> URL {
         switch type {
         case .Directory:
-            return URL(fileURLWithPath: self.homeDirectory())
+            return URL(fileURLWithPath: homeDirectory())
         case .Documnets:
-            return URL(fileURLWithPath: self.DocumnetsDirectory())
+            return URL(fileURLWithPath: DocumnetsDirectory())
         case .Library:
-            return URL(fileURLWithPath: self.LibraryDirectory())
+            return URL(fileURLWithPath: LibraryDirectory())
         case .Tmp:
-            return URL(fileURLWithPath: self.TmpDirectory())
+            return URL(fileURLWithPath: TmpDirectory())
         case .Caches:
-            return URL(fileURLWithPath: self.CachesDirectory())
+            return URL(fileURLWithPath: CachesDirectory())
         case .Preferences:
-            return URL(fileURLWithPath: self.PreferencesDirectory())
+            return URL(fileURLWithPath: PreferencesDirectory())
         }
     }
     

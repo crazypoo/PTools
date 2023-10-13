@@ -26,7 +26,7 @@ extension KeyedDecodingContainer {
     
     func decode(_ type: Array<Any>.Type,
                 forKey key: K) throws -> Array<Any> {
-        var container = try self.nestedUnkeyedContainer(forKey: key)
+        var container = try nestedUnkeyedContainer(forKey: key)
         return try container.decode(type)
     }
     

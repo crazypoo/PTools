@@ -128,7 +128,7 @@ open class PTBaseNavControl: UINavigationController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        self.GobalNavControl(nav: self)
+        GobalNavControl(nav: self)
     }
     
     open override func viewDidLoad() {

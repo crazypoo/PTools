@@ -33,11 +33,11 @@ public class PTGCDManager :NSObject {
             return
         }
         
-        var timer = self.timerContainer[name!]
+        var timer = timerContainer[name!]
         if timer == nil {
             timer = DispatchSource.makeTimerSource(flags: [], queue: queue)
             timer?.resume()
-            self.timerContainer[name!] = timer
+            timerContainer[name!] = timer
         }
         //精度1毫秒
         timer?.schedule(deadline: .now(), repeating: timeInterval, leeway: DispatchTimeInterval.milliseconds(1))
@@ -53,11 +53,11 @@ public class PTGCDManager :NSObject {
     /// 取消定时器
     /// - Parameter name: 定时器名字
     public func cancleTimer(WithTimerName name: String?) {
-        let timer = self.timerContainer[name!]
+        let timer = timerContainer[name!]
         if timer == nil {
             return
         }
-        self.timerContainer.removeValue(forKey: name!)
+        timerContainer.removeValue(forKey: name!)
         timer?.cancel()
     }
     
@@ -66,7 +66,7 @@ public class PTGCDManager :NSObject {
     /// - Parameter name: 定时器名字
     /// - Returns: 是否已经存在定时器
     public func isExistTimer(WithTimerName name: String?) -> Bool {
-        if self.timerContainer[name!] != nil {
+        if timerContainer[name!] != nil {
             return true
         }
         return false

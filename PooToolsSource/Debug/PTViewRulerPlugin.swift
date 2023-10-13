@@ -23,24 +23,24 @@ open class PTViewRulerPlugin: NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
         
     @objc func closePlugin(nofiti:Notification) {
-        self.showed = false
-        self.hide()
+        showed = false
+        hide()
     }
     
     public func show() {
-        self.rulerView.hide()
-        AppWindows?.addSubview(self.rulerView)
-        self.rulerView.show()
-        self.showed = true
+        rulerView.hide()
+        AppWindows?.addSubview(rulerView)
+        rulerView.show()
+        showed = true
     }
     
     public func hide() {
-        self.rulerView.hide()
-        self.showed = false
+        rulerView.hide()
+        showed = false
     }
 }
 
@@ -69,7 +69,7 @@ public class PTVisualInfoController:PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.initUI()
+        initUI()
     }
     
     func initUI() {
@@ -104,7 +104,7 @@ fileprivate class PTVisualInfoWindow:UIWindow {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.commonInit()
+        commonInit()
     }
     
     required init?(coder: NSCoder) {
@@ -112,9 +112,9 @@ fileprivate class PTVisualInfoWindow:UIWindow {
     }
     
     private func commonInit() {
-        self.backgroundColor = .white
-        self.windowLevel = .alert
-        self.rootViewController = self.visualController
+        backgroundColor = .white
+        windowLevel = .alert
+        rootViewController = visualController
         
         let pan = UIGestureRecognizer { sender in
             let pans = sender as! UIPanGestureRecognizer
@@ -129,7 +129,7 @@ fileprivate class PTVisualInfoWindow:UIWindow {
                 panView?.center = centerPoint
             }
         }
-        self.addGestureRecognizer(pan)
+        addGestureRecognizer(pan)
         
         PTGCDManager.gcdMain {
             self.viewCorner(radius: CGFloat.SizeFrom750(x: 8), borderWidth: 1, borderColor: UIColor.hex("#999999", alpha: 0.2))
@@ -265,27 +265,27 @@ fileprivate class PTRulerInfoView:UIView {
     
     init() {
         super.init(frame: CGRectMake(0, 0, CGFloat.kSCREEN_WIDTH, CGFloat.kSCREEN_HEIGHT))
-        self.backgroundColor = .clear
-        self.layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
+        backgroundColor = .clear
+        layer.zPosition = CGFloat(Float.greatestFiniteMagnitude)
         
-        self.imageView.frame = CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - self.viewPointSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - self.viewPointSize / 2, self.viewPointSize, self.viewPointSize)
-        self.horizontalLine.frame = CGRectMake(0, self.imageView.frame.origin.y + self.imageView.frame.size.height / 2 - 0.25, self.frame.size.width, 0.5)
-        self.verticalLine.frame = CGRectMake(self.imageView.frame.origin.x + self.imageView.frame.size.width / 2 - 0.25, 0, 0.5, self.frame.size.height)
-        self.addSubviews([self.imageView,self.horizontalLine,self.verticalLine])
-        self.bringSubviewToFront(self.imageView)
+        imageView.frame = CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - viewPointSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - viewPointSize / 2, viewPointSize, viewPointSize)
+        self.horizontalLine.frame = CGRectMake(0, imageView.frame.origin.y + imageView.frame.size.height / 2 - 0.25, frame.size.width, 0.5)
+        self.verticalLine.frame = CGRectMake(imageView.frame.origin.x + imageView.frame.size.width / 2 - 0.25, 0, 0.5, frame.size.height)
+        addSubviews([imageView, horizontalLine, verticalLine])
+        bringSubviewToFront(imageView)
         
-        self.addSubviews([self.leftLabel,self.topLabel,self.rightLabel,self.bottomLabel])
-        self.leftLabel.sizeToFit()
-        self.topLabel.sizeToFit()
-        self.rightLabel.sizeToFit()
-        self.bottomLabel.sizeToFit()
-        self.leftLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) / 2, self.imageView.frame.origin.y + self.imageView.frame.size.height / 2 - self.leftLabel.frame.size.height, self.leftLabel.frame.size.width, self.leftLabel.frame.size.height)
-        self.topLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) - self.topLabel.frame.size.width, (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2) / 2, self.topLabel.frame.size.width, self.topLabel.frame.size.height)
-        self.rightLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) + (self.frame.size.width - (self.imageView.frame.origin.x + self.imageView.frame.size.width / 2)) / 2, (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2) - self.rightLabel.frame.size.height, self.rightLabel.frame.size.width, self.rightLabel.frame.size.height)
-        self.bottomLabel.frame = CGRectMake((self.imageView.frame.origin.x + self.imageView.frame.size.width / 2) - self.bottomLabel.frame.size.width, (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2) + (self.frame.size.height - (self.imageView.frame.origin.y + self.imageView.frame.size.height / 2)) / 2, self.bottomLabel.frame.size.width, self.bottomLabel.frame.size.height)
+        addSubviews([leftLabel, topLabel, rightLabel, bottomLabel])
+        leftLabel.sizeToFit()
+        topLabel.sizeToFit()
+        rightLabel.sizeToFit()
+        bottomLabel.sizeToFit()
+        self.leftLabel.frame = CGRectMake((self.imageView.frame.origin.x + imageView.frame.size.width / 2) / 2, imageView.frame.origin.y + imageView.frame.size.height / 2 - leftLabel.frame.size.height, leftLabel.frame.size.width, leftLabel.frame.size.height)
+        self.topLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - topLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) / 2, topLabel.frame.size.width, topLabel.frame.size.height)
+        self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
+        self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (self.frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
         
-        self.infoWindow.visualController.infoLabel.text = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0",self.bottomLabel.text ?? "0",self.rightLabel.text ?? "0")
-        self.infoWindow.isHidden = false
+        infoWindow.visualController.infoLabel.text = String(format: "位置: 上%@ 左%@ 下%@ 右%@", topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        infoWindow.isHidden = false
     }
     
     required init?(coder: NSCoder) {
@@ -293,24 +293,24 @@ fileprivate class PTRulerInfoView:UIView {
     }
     
     func configInfoLabelText() {
-        let stringInfo = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0",self.bottomLabel.text ?? "0",self.rightLabel.text ?? "0")
-        self.infoWindow.visualController.infoLabel.text = stringInfo
+        let stringInfo = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        infoWindow.visualController.infoLabel.text = stringInfo
     }
     
     override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if CGRectContainsPoint(self.imageView.frame, point) {
+        if CGRectContainsPoint(imageView.frame, point) {
             return true
         }
         return false
     }
     
     func show() {
-        self.infoWindow.isHidden = false
-        self.isHidden = false
+        infoWindow.isHidden = false
+        isHidden = false
     }
     
     func hide() {
-        self.infoWindow.isHidden = true
-        self.isHidden = true
+        infoWindow.isHidden = true
+        isHidden = true
     }
 }

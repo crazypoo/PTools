@@ -134,7 +134,7 @@ public class PTRouter: PTRouterParser {
     }
     
     func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
-        return matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
+        matchURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // MARK: - Private method
@@ -234,7 +234,7 @@ public class PTRouter: PTRouterParser {
     // Intercep the request and return whether should continue
     private func routerIntercept(_ matchedPatternString: String, queries: [String: Any]) -> Bool {
         
-        for interceptor in self.interceptors where !interceptor.whiteList.contains(matchedPatternString) {
+        for interceptor in interceptors where !interceptor.whiteList.contains(matchedPatternString) {
             if !interceptor.handle(queries) {
                 // interceptor handle return true will continue interceptor
                 return false
@@ -363,7 +363,7 @@ public extension PTRouter {
     /// - Parameter urlString: real request urlstring
     /// - Returns: whether register
     class func canOpenURL(_ urlString: String) -> Bool {
-        return shareInstance.canOpenURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces))
+        shareInstance.canOpenURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces))
     }
     
     /// request for url
@@ -373,7 +373,7 @@ public extension PTRouter {
     ///   - userInfo: custom userInfo, could contain Object
     /// - Returns: response for request, contain pattern and queries
     class func requestURL(_ urlString: String, userInfo: [String: Any] = [String: Any]()) -> RouteResponse {
-        return shareInstance.requestURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
+        shareInstance.requestURL(urlString.trimmingCharacters(in: CharacterSet.whitespaces), userInfo: userInfo)
     }
     
     // injectRouterServiceConfig
@@ -476,7 +476,7 @@ public protocol CustomRouterInfo {
 
 extension CustomRouterInfo {
     public var requiredURL: (String, [String: Any]) {
-        return PTRouter.generate(Self.patternString, params: self.params, jumpType: self.jumpType)
+        PTRouter.generate(Self.patternString, params: params, jumpType: jumpType)
     }
 }
 
@@ -538,13 +538,13 @@ extension PTRouter {
     
     @discardableResult
     public class func openWebURL(_ uriTuple: (String, [String: Any])) -> Any? {
-        return PTRouter.openURL(uriTuple)
+        PTRouter.openURL(uriTuple)
     }
     
     @discardableResult
     public class func openWebURL(_ urlString: String,
                                  userInfo: [String: Any] = [String: Any]()) -> Any? {
-        return PTRouter.openURL((urlString, userInfo))
+        PTRouter.openURL((urlString, userInfo))
     }
     
     
@@ -627,19 +627,19 @@ extension PTRouter {
         
         if let functionResultType = uriTuple.1[PTRouterFunctionResultKey] as? Int {
             if functionResultType == PTRouterFunctionResultType.voidType.rawValue {
-                self.performTargetVoidType(protocolName: protocols,
+                performTargetVoidType(protocolName: protocols,
                                            actionName: methods,
                                            param: uriTuple.1[PTRouterIvar1Key],
                                            otherParam: uriTuple.1[PTRouterIvar2Key])
                 return nil
             } else if functionResultType == PTRouterFunctionResultType.valueType.rawValue {
-                let exectueResult = self.performTarget(protocolName: protocols,
+                let exectueResult = performTarget(protocolName: protocols,
                                                        actionName: methods,
                                                        param: uriTuple.1[PTRouterIvar1Key],
                                                        otherParam: uriTuple.1[PTRouterIvar2Key])
                 return exectueResult?.takeUnretainedValue()
             } else if functionResultType == PTRouterFunctionResultType.referenceType.rawValue {
-                let exectueResult = self.performTarget(protocolName: protocols,
+                let exectueResult = performTarget(protocolName: protocols,
                                                        actionName: methods,
                                                        param: uriTuple.1[PTRouterIvar1Key],
                                                        otherParam: uriTuple.1[PTRouterIvar2Key])
@@ -767,7 +767,7 @@ public extension PTRouter {
     ///   - shouldCache: 是否需要缓存
     @discardableResult
     class func createService(named: String, shouldCache: Bool = true) -> Any? {
-        return PTRouterServiceManager.default.createService(named: named)
+        PTRouterServiceManager.default.createService(named: named)
     }
     
     /// 根据服务接口创建服务（如果缓存中已有服务实例，则不需要创建）
@@ -776,21 +776,21 @@ public extension PTRouter {
     ///   - shouldCache: 是否需要缓存
     @discardableResult
     class func createService<Service>(_ service: Service.Type, shouldCache: Bool = true) -> Service? {
-        return PTRouterServiceManager.default.createService(service)
+        PTRouterServiceManager.default.createService(service)
     }
     
     /// 通过服务名称获取服务
     /// - Parameter named: 服务名称
     @discardableResult
     class func getService(named: String) -> Any? {
-        return PTRouterServiceManager.default.getService(named: named)
+        PTRouterServiceManager.default.getService(named: named)
     }
     
     /// 通过服务接口获取服务
     /// - Parameter service: 服务接口
     @discardableResult
     class func getService<Service>(_ service: Service.Type) -> Service? {
-        return PTRouterServiceManager.default.getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        PTRouterServiceManager.default.getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 

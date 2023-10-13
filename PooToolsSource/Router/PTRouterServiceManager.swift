@@ -26,7 +26,7 @@ public final class PTRouterServiceManager {
 //MARK: - Service Register & Unregister
 public extension PTRouterServiceManager {
     class func serviceName<T>(of value: T) -> String {
-        return String(describing: value)
+        String(describing: value)
     }
     
     // MARK: - Register With Service Name
@@ -89,9 +89,9 @@ public extension PTRouterServiceManager {
     /// - Parameter named: 服务名称
     @discardableResult
     func unregisterService(named: String) -> Any? {
-        return serviceQueue.sync {
-            self.creatorsMap.removeValue(forKey: named)
-            return self.servicesCache.removeValue(forKey: named)
+        serviceQueue.sync {
+            creatorsMap.removeValue(forKey: named)
+            return servicesCache.removeValue(forKey: named)
         }
     }
     
@@ -99,7 +99,7 @@ public extension PTRouterServiceManager {
     /// - Parameter service: 服务接口
     @discardableResult
     func unregisterService<Service>(_ service: Service) -> Service? {
-        return unregisterService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        unregisterService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 
@@ -136,7 +136,7 @@ public extension PTRouterServiceManager {
         
         let service = creator()
         if shouldCache {
-            self.serviceQueue.async {
+            serviceQueue.async {
                 self.servicesCache[named] = service
             }
         }
@@ -148,7 +148,7 @@ public extension PTRouterServiceManager {
     ///   - service: 服务接口
     ///   - shouldCache: 是否需要缓存
     func createService<Service>(_ service: Service.Type, shouldCache: Bool = true) -> Service? {
-        return createService(named: PTRouterServiceManager.serviceName(of: service), shouldCache: shouldCache) as? Service
+        createService(named: PTRouterServiceManager.serviceName(of: service), shouldCache: shouldCache) as? Service
     }
 }
 
@@ -157,13 +157,13 @@ public extension PTRouterServiceManager {
     /// 通过服务名称获取服务
     /// - Parameter named: 服务名称
     func getService(named: String) -> Any? {
-        return self.createService(named: named)
+        createService(named: named)
     }
     
     /// 通过服务接口获取服务
     /// - Parameter service: 服务接口
     func getService<Service>(_ service: Service.Type) -> Service? {
-        return getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        getService(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }
 
@@ -177,13 +177,13 @@ public extension PTRouterServiceManager {
     
     @discardableResult
     func cleanServiceCache(named: String) -> Any? {
-        return serviceQueue.sync {
-            return self.servicesCache.removeValue(forKey: named)
+        serviceQueue.sync {
+            servicesCache.removeValue(forKey: named)
         }
     }
     
     @discardableResult
     func cleanServiceCache<Service>(by service: Service.Type) -> Service? {
-        return cleanServiceCache(named: PTRouterServiceManager.serviceName(of: service)) as? Service
+        cleanServiceCache(named: PTRouterServiceManager.serviceName(of: service)) as? Service
     }
 }

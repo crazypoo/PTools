@@ -104,12 +104,12 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
-        self.titleStack.setTitle(viewModel.title, for: .normal)
-        self.titleStack.setImage(UIImage.podBundleImage(viewModel.titleImageName), for: .normal)
+        titleStack.setTitle(viewModel.title, for: .normal)
+        titleStack.setImage(UIImage.podBundleImage(viewModel.titleImageName), for: .normal)
 
         currentVideoControlViewController?.remove()
 
-        let videoControlViewController = self.videoControlViewController(for: viewModel.videoControl)
+        let videoControlViewController = videoControlViewController(for: viewModel.videoControl)
 
         add(videoControlViewController)
 
@@ -118,7 +118,7 @@ extension PTVideoEditorVideoControlViewController {
             make.left.right.equalToSuperview()
             make.bottom.equalTo(dismissButton.snp.top)
         }
-        self.currentVideoControlViewController = videoControlViewController
+        currentVideoControlViewController = videoControlViewController
     }
 }
 
@@ -198,7 +198,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 // MARK: Actions
 
 fileprivate extension PTVideoEditorVideoControlViewController {
-    @objc func cancel() {
+    func cancel() {
         onDismiss.send()
     }
 }

@@ -25,12 +25,12 @@ public class PTRouterPattern: PTRouterParser {
                 priority: uint = 0,
                 handle: @escaping HandleBlock) {
         
-        self.patternString = string
+        patternString = string
         self.priority = priority
         self.handle = handle
-        self.sheme = PTRouterPattern.parserSheme(string)
-        self.patternPaths = PTRouterPattern.parserPaths(string)
-        self.paramsMatchDict = [String: Int]()
+        sheme = PTRouterPattern.parserSheme(string)
+        patternPaths = PTRouterPattern.parserPaths(string)
+        paramsMatchDict = [String: Int]()
         
         var matchPaths = [String]()
         for i in 0..<patternPaths.count {
@@ -42,6 +42,6 @@ public class PTRouterPattern: PTRouterParser {
             }
             matchPaths.append(pathComponent)
         }
-        self.matchString = matchPaths.joined(separator: "/")
+        matchString = matchPaths.joined(separator: "/")
     }
 }

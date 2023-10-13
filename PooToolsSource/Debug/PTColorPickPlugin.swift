@@ -16,7 +16,7 @@ public let kPTClosePluginNotification = "kPTClosePluginNotification"
 
 public extension CGFloat {
     static func SizeFrom750(x:CGFloat) -> CGFloat {
-        return x * CGFloat.kSCREEN_WIDTH / 750
+        x * CGFloat.kSCREEN_WIDTH / 750
     }
 }
 
@@ -27,23 +27,23 @@ open class PTColorPickPlugin : NSObject {
     
     public override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
     
     public func show() {
         PTColorPickWindow.share.show()
         PTColorPickInfoWindow.share.show()
-        self.showed = true
+        showed = true
     }
     
     public func close() {
         PTColorPickWindow.share.hide()
         PTColorPickInfoWindow.share.hide()
-        self.showed = false
+        showed = false
     }
     
     @objc func closePlugin(nofiti:Notification) {
-        self.showed = false
+        showed = false
     }
 }
 
@@ -65,16 +65,16 @@ fileprivate class PTColorPickMagnifyLayer: CALayer {
     
     public override init() {
         super.init()
-        self.bounds = CGRectMake(-PTColorPickMagnifyLayer.kMagnifySize / 2, -PTColorPickMagnifyLayer.kMagnifySize / 2, PTColorPickMagnifyLayer.kMagnifySize, PTColorPickMagnifyLayer.kMagnifySize)
-        self.anchorPoint = CGPoint(x: 0.5, y: 1)
+        bounds = CGRectMake(-PTColorPickMagnifyLayer.kMagnifySize / 2, -PTColorPickMagnifyLayer.kMagnifySize / 2, PTColorPickMagnifyLayer.kMagnifySize, PTColorPickMagnifyLayer.kMagnifySize)
+        anchorPoint = CGPoint(x: 0.5, y: 1)
         
-        let magnifyImage = self.magnifyImage()
+        let magnifyImage = magnifyImage()
         let magnifyLayer = CALayer()
-        magnifyLayer.bounds = self.bounds
-        magnifyLayer.position = CGPoint(x: CGRectGetMidX(self.bounds), y: CGRectGetMidY(self.bounds))
+        magnifyLayer.bounds = bounds
+        magnifyLayer.position = CGPoint(x: CGRectGetMidX(bounds), y: CGRectGetMidY(bounds))
         magnifyLayer.contents = magnifyImage.cgImage
         magnifyLayer.magnificationFilter = .nearest
-        self.addSublayer(magnifyLayer)
+        addSublayer(magnifyLayer)
     }
     
     required public init?(coder: NSCoder) {
@@ -82,15 +82,15 @@ fileprivate class PTColorPickMagnifyLayer: CALayer {
     }
     
     open override func draw(in ctx: CGContext) {
-        ctx.addPath(self.gridCirclePath)
+        ctx.addPath(gridCirclePath)
         ctx.clip()
-        self.drawGridInContext(ctx: ctx)
+        drawGridInContext(ctx: ctx)
     }
     
     func drawGridInContext(ctx:CGContext) {
         let gridSize:CGFloat = CGFloat(ceilf(Float(PTColorPickMagnifyLayer.kMagnifySize / CGFloat(kGridNum))))
         
-        var currentPoint:CGPoint = self.targetPoint
+        var currentPoint:CGPoint = targetPoint
         currentPoint.x -= CGFloat(kGridNum * kPixelSkip / 2)
         currentPoint.y -= CGFloat(kGridNum * kPixelSkip / 2)
         
@@ -98,8 +98,8 @@ fileprivate class PTColorPickMagnifyLayer: CALayer {
             for i in 0..<kGridNum {
                 let gridRect = CGRectMake(gridSize * CGFloat(i) - PTColorPickMagnifyLayer.kMagnifySize / 2, gridSize * CGFloat(j) - PTColorPickMagnifyLayer.kMagnifySize / 2, gridSize, gridSize)
                 var gridColor = UIColor.clear
-                if self.pointColorBlock != nil {
-                    let pointColorHexString = self.pointColorBlock!(currentPoint)
+                if pointColorBlock != nil {
+                    let pointColorHexString = pointColorBlock!(currentPoint)
                     gridColor = UIColor(hexString: pointColorHexString) ?? UIColor.randomColor
                 }
                 ctx.setFillColor(gridColor.cgColor)
@@ -112,20 +112,20 @@ fileprivate class PTColorPickMagnifyLayer: CALayer {
     }
     
     func magnifyImage() -> UIImage {
-        UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, 0)
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
         let ctx = UIGraphicsGetCurrentContext()
         
         let size = PTColorPickMagnifyLayer.kMagnifySize
         ctx?.translateBy(x: size / 2, y: size / 2)
         
         ctx?.saveGState()
-        ctx?.addPath(self.gridCirclePath)
+        ctx?.addPath(gridCirclePath)
         ctx?.clip()
         ctx?.restoreGState()
         
         ctx?.setLineWidth(PTColorPickMagnifyLayer.kRimThickness - 1)
         ctx?.setStrokeColor(UIColor.white.cgColor)
-        ctx?.addPath(self.gridCirclePath)
+        ctx?.addPath(gridCirclePath)
         ctx?.strokePath()
         
         let gridWidth:CGFloat = CGFloat(ceilf(Float(PTColorPickMagnifyLayer.kMagnifySize / CGFloat(kGridNum))))
@@ -157,9 +157,9 @@ fileprivate class PTColorPickInfoView : UIView {
     
     public var currentColor:String? {
         didSet {
-            if !(self.currentColor ?? "").stringIsEmpty() {
-                self.colorView.backgroundColor = UIColor(hexString: self.currentColor!)
-                self.colorValueLbl.text = self.currentColor!
+            if !(currentColor ?? "").stringIsEmpty() {
+                colorView.backgroundColor = UIColor(hexString: currentColor!)
+                colorValueLbl.text = currentColor!
             }
         }
     }
@@ -197,7 +197,7 @@ fileprivate class PTColorPickInfoView : UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        self.commonInit()
+        commonInit()
     }
     
     required public init?(coder: NSCoder) {
@@ -222,7 +222,7 @@ fileprivate class PTColorPickInfoView : UIView {
     }
     
     func commonInit() {
-        self.backgroundColor = UIColor.init(dynamicProvider: { traitCollection in
+        backgroundColor = UIColor.init(dynamicProvider: { traitCollection in
             if traitCollection.userInterfaceStyle == .light {
                 return .white
             } else {
@@ -230,7 +230,7 @@ fileprivate class PTColorPickInfoView : UIView {
             }
         })
                 
-        self.addSubviews([self.colorView,self.colorValueLbl,self.closeBtn])
+        addSubviews([colorView, colorValueLbl, closeBtn])
         
         PTGCDManager.gcdMain {
             self.viewCorner(radius: CGFloat.SizeFrom750(x: 8),borderWidth: 1,borderColor: UIColor.hex("#999999",alpha:0.2))
@@ -243,7 +243,7 @@ fileprivate class PTColorPickInfoView : UIView {
         let prePoint = touch?.previousLocation(in: self)
         let offsetX = currentPoint!.x - prePoint!.x
         let offsetY = currentPoint!.y - prePoint!.y
-        self.transform = CGAffineTransform(translationX: offsetX, y: offsetY)
+        transform = CGAffineTransform(translationX: offsetX, y: offsetY)
     }
 }
 
@@ -253,8 +253,8 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     
     public var currentColor:String? {
         didSet {
-            self.pickInfoView.currentColor = self.currentColor
-            PTNSLogConsole(self.currentColor!)
+            pickInfoView.currentColor = currentColor
+            PTNSLogConsole(currentColor!)
         }
     }
     
@@ -269,9 +269,9 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     init() {
         super.init(frame: CGRect(x: CGFloat.SizeFrom750(x: 30), y: CGFloat.kSCREEN_HEIGHT - CGFloat.SizeFrom750(x: 100) - CGFloat.SizeFrom750(x: 30) - CGFloat.kTabbarSaveAreaHeight, width: CGFloat.kSCREEN_WIDTH - 2 * CGFloat.SizeFrom750(x: 30), height: CGFloat.SizeFrom750(x: 100)))
         
-        self.windowLevel = .alert
+        windowLevel = .alert
         
-        self.addSubview(self.pickInfoView)
+        addSubview(pickInfoView)
         
         let pan = UIPanGestureRecognizer { sender in
             let pans = sender as! UIPanGestureRecognizer
@@ -285,9 +285,9 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
             let centerPoint = CGPoint(x: newX, y: newY)
             panView?.center = centerPoint
         }
-        self.addGestureRecognizer(pan)
+        addGestureRecognizer(pan)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
 
     }
     
@@ -296,15 +296,15 @@ fileprivate class PTColorPickInfoWindow : UIWindow {
     }
     
     @objc func closePlugin(nofiti:Notification) {
-        self.hide()
+        hide()
     }
     
     public func show() {
-        self.isHidden = false
+        isHidden = false
     }
     
     public func hide() {
-        self.isHidden = true
+        isHidden = true
     }
 }
 
@@ -323,15 +323,15 @@ fileprivate class PTColorPickWindow : UIWindow {
     }()
     
     init() {
-        super.init(frame: CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - self.kColorPickWindowSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - self.kColorPickWindowSize / 2, self.kColorPickWindowSize, self.kColorPickWindowSize))
-        self.backgroundColor = .clear
-        self.windowLevel = .statusBar + 1
+        super.init(frame: CGRectMake(CGFloat.kSCREEN_WIDTH / 2 - kColorPickWindowSize / 2, CGFloat.kSCREEN_HEIGHT / 2 - kColorPickWindowSize / 2, kColorPickWindowSize, kColorPickWindowSize))
+        backgroundColor = .clear
+        windowLevel = .statusBar + 1
         
-        self.magnifyLayer.frame = self.bounds
-        self.magnifyLayer.pointColorBlock = { point in
+        magnifyLayer.frame = bounds
+        magnifyLayer.pointColorBlock = { point in
             self.colorAtPoint(point: point)
         }
-        self.layer.addSublayer(self.magnifyLayer)
+        layer.addSublayer(magnifyLayer)
         
         let pan = UIPanGestureRecognizer { sender in
             let pans = sender as! UIPanGestureRecognizer
@@ -363,9 +363,9 @@ fileprivate class PTColorPickWindow : UIWindow {
             
             PTColorPickInfoWindow.share.currentColor = hexColor
         }
-        self.addGestureRecognizer(pan)
+        addGestureRecognizer(pan)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(closePlugin(nofiti:)), name: NSNotification.Name(kPTClosePluginNotification), object: nil)
     }
     
     required public init?(coder: NSCoder) {
@@ -373,7 +373,7 @@ fileprivate class PTColorPickWindow : UIWindow {
     }
     
     func colorAtPoint(point:CGPoint) -> String {
-        return self.colorAtPoint(point: point, inImage: self.screenShotImage)
+        self.colorAtPoint(point: point, inImage: screenShotImage)
     }
     
     func colorAtPoint(point:CGPoint,inImage:UIImage) -> String {
@@ -406,18 +406,18 @@ fileprivate class PTColorPickWindow : UIWindow {
         UIGraphicsBeginImageContext(UIScreen.main.bounds.size)
         AppWindows!.layer.render(in: UIGraphicsGetCurrentContext()!)
         let image = UIGraphicsGetImageFromCurrentImageContext()
-        self.screenShotImage = image!
+        screenShotImage = image!
     }
     
     @objc func closePlugin(nofiti:Notification) {
-        self.isHidden = true
+        isHidden = true
     }
     
     public func show() {
-        self.isHidden = false
+        isHidden = false
     }
     
     public func hide() {
-        self.isHidden = true
+        isHidden = true
     }
 }
