@@ -83,6 +83,8 @@
 		5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
+		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
+		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
@@ -400,6 +402,8 @@
 		5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsFunction.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
+		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
+		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+EXFuction.swift"; sourceTree = "<group>"; };
@@ -715,6 +719,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1135,6 +1140,15 @@
 				5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */,
 			);
 			path = UpdateTips;
+			sourceTree = "<group>";
+		};
+		551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */ = {
+			isa = PBXGroup;
+			children = (
+				551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */,
+				551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */,
+			);
+			path = NetworkSpeedTest;
 			sourceTree = "<group>";
 		};
 		5528375A28EA8FD600D12202 /* CheckUpdate */ = {
@@ -2032,6 +2046,7 @@
 				558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */,
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
+				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
@@ -2041,6 +2056,7 @@
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
 				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
+				551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
