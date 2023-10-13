@@ -96,6 +96,35 @@ import os.log
     @objc(floatingPanel:contentOffsetForPinningScrollView:)
     optional
     func floatingPanel(_ fpc: FloatingPanelController, contentOffsetForPinning trackingScrollView: UIScrollView) -> CGPoint
+
+    /// Returns a Boolean value that determines whether the tracking scroll view should
+    /// scroll or not
+    ///
+    ///
+    /// If you return true, the scroll content scrolls when its scroll position is not
+    /// at the top of the content. If the delegate doesn’t implement this method, its
+    /// content can be scrolled only in the most expanded state.
+    ///
+    /// Basically, the decision to scroll is based on the `state` property like the
+    /// following code.
+    /// ```swift
+    /// func floatingPanel(
+    ///     _ fpc: FloatingPanelController,
+    ///     shouldAllowToScroll scrollView: UIScrollView,
+    ///     in state: FloatingPanelState
+    /// ) -> Bool {
+    ///     return state == .full || state == .half
+    /// }
+    /// ```
+    ///
+    /// - Attention: It is recommended that this method always returns the most expanded state(i.e.
+    /// .full). If it excludes the state, the panel might do unexpected behaviors.
+    @objc(floatingPanel:shouldAllowToScroll:in:)
+    optional func floatingPanel(
+        _ fpc: FloatingPanelController,
+        shouldAllowToScroll scrollView: UIScrollView,
+        in state: FloatingPanelState
+    ) -> Bool
 }
 
 ///
@@ -120,7 +149,7 @@ open class FloatingPanelController: UIViewController {
     }
 
     /// The delegate of a panel controller object.
-    @objc 
+    @objc
     public weak var delegate: FloatingPanelControllerDelegate?{
         didSet{
             didUpdateDelegate()
@@ -201,7 +230,7 @@ open class FloatingPanelController: UIViewController {
     /// The behavior for determining the adjusted content offsets.
     ///
     /// This property specifies how the content area of the tracking scroll view is modified using ``adjustedContentInsets``. The default value of this property is FloatingPanelController.ContentInsetAdjustmentBehavior.always.
-    @objc 
+    @objc
     public var contentInsetAdjustmentBehavior: ContentInsetAdjustmentBehavior = .always
 
     /// A Boolean value that determines whether the removal interaction is enabled.
@@ -301,17 +330,17 @@ open class FloatingPanelController: UIViewController {
 
     open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        if #available(iOS 11.0, *) {
-            // Ensure to update the static constraint of a panel after rotating a device in static mode
-            if contentMode == .static {
-                floatingPanel.layoutAdapter.updateStaticConstraint()
-            }
-        } else {
-            // Because {top,bottom}LayoutGuide is managed as a view
-            if floatingPanel.isAttracting == false {
-                self.update(safeAreaInsets: fp_safeAreaInsets)
-            }
+        // Ensure to update the static constraint of a panel after rotating a device in static mode
+        if contentMode == .static {
+            floatingPanel.layoutAdapter.updateStaticConstraint()
         }
+    }
+
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        // Need to call this method just after the view appears, as the safe area is not
+        // correctly set before this time, for example, `show(animated:completion:)`.
+        floatingPanel.adjustScrollContentInsetIfNeeded()
     }
 
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -395,6 +424,7 @@ open class FloatingPanelController: UIViewController {
         }
 
         floatingPanel.layoutAdapter.updateStaticConstraint()
+        floatingPanel.adjustScrollContentInsetIfNeeded()
 
         if let contentOffset = contentOffset {
             trackingScrollView?.contentOffset = contentOffset
@@ -445,28 +475,23 @@ open class FloatingPanelController: UIViewController {
         // Must apply the current layout here
         activateLayout(forceLayout: true)
 
-        if #available(iOS 11.0, *) {
-            // Must track the safeAreaInsets of `self.view` to update the layout.
-            // There are 2 reasons.
-            // 1. This or the parent VC doesn't call viewSafeAreaInsetsDidChange() on the bottom
-            // inset's update expectedly.
-            // 2. The safe area top inset can be variable on the large title navigation bar(iOS11+).
-            // That's why it needs the observation to keep `adjustedContentInsets` correct.
-            safeAreaInsetsObservation = self.view.observe(\.safeAreaInsets, options: [.initial, .new, .old]) { [weak self] (_, change) in
-                // Use `self.view.safeAreaInsets` because `change.newValue` can be nil in particular case when
-                // is reported in https://github.com/SCENEE/FloatingPanel/issues/330
-                guard let self = self, change.oldValue != self.view.safeAreaInsets else { return }
+        // Must track the safeAreaInsets of `self.view` to update the layout.
+        // There are 2 reasons.
+        // 1. This or the parent VC doesn't call viewSafeAreaInsetsDidChange() on the bottom
+        // inset's update expectedly.
+        // 2. The safe area top inset can be variable on the large title navigation bar(iOS11+).
+        // That's why it needs the observation to keep `adjustedContentInsets` correct.
+        safeAreaInsetsObservation = self.view.observe(\.safeAreaInsets, options: [.initial, .new, .old]) { [weak self] (_, change) in
+            // Use `self.view.safeAreaInsets` because `change.newValue` can be nil in particular case when
+            // is reported in https://github.com/SCENEE/FloatingPanel/issues/330
+            guard let self = self, change.oldValue != self.view.safeAreaInsets else { return }
 
-                // Sometimes the bounding rectangle of the controlled view becomes invalid when the screen is rotated.
-                // This results in its safeAreaInsets change. In that case, `self.update(safeAreaInsets:)` leads
-                // an unsatisfied constraints error. So this method should not be called with those bounds.
-                guard self.view.bounds.height > 0 && self.view.bounds.width > 0 else { return }
+            // Sometimes the bounding rectangle of the controlled view becomes invalid when the screen is rotated.
+            // This results in its safeAreaInsets change. In that case, `self.update(safeAreaInsets:)` leads
+            // an unsatisfied constraints error. So this method should not be called with those bounds.
+            guard self.view.bounds.height > 0 && self.view.bounds.width > 0 else { return }
 
-                self.update(safeAreaInsets: self.view.safeAreaInsets)
-            }
-        } else {
-            // KVOs for topLayoutGuide & bottomLayoutGuide are not effective.
-            // Instead, update(safeAreaInsets:) is called at `viewDidLayoutSubviews()`
+            self.update(safeAreaInsets: self.view.safeAreaInsets)
         }
 
         move(to: floatingPanel.layoutAdapter.initialState,
@@ -598,18 +623,12 @@ open class FloatingPanelController: UIViewController {
 
         switch contentInsetAdjustmentBehavior {
         case .always:
-            if #available(iOS 11.0, *) {
-                scrollView.contentInsetAdjustmentBehavior = .never
-            } else {
-                children.forEach { (vc) in
-                    vc.automaticallyAdjustsScrollViewInsets = false
-                }
-            }
+            scrollView.contentInsetAdjustmentBehavior = .never
         default:
             break
         }
     }
-    
+
     /// [Experimental] Allows the panel to move as its tracking scroll view bounces.
     ///
     /// This method must be called in the delegate method, `UIScrollViewDelegate.scrollViewDidScroll(_:)`,

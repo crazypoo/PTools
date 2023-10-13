@@ -20,9 +20,9 @@ open class PTGrowingTextView: UITextView {
 
     override open var text: String! {
         didSet { setNeedsDisplay() }
-    }
-    private var heightConstraint: NSLayoutConstraint?
-    
+    }    
+    private var heightConstraintCustom: NSLayoutConstraint?
+        
     // Maximum length of text. 0 means no limit.
     @IBInspectable open var maxLength: Int = 0
     
@@ -76,7 +76,7 @@ open class PTGrowingTextView: UITextView {
         // iterate through all text view's constraints and identify
         for constraint in constraints {
             if constraint.firstAttribute == .height && constraint.relation == .equal {
-                heightConstraint = constraint
+                heightConstraintCustom = constraint
             }
         }
     }
@@ -110,18 +110,17 @@ open class PTGrowingTextView: UITextView {
         height = maxHeight > 0 ? min(height, maxHeight) : height
         
         // Add height constraint if it is not found
-        if heightConstraint == nil {
-            heightConstraint = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: height)
-            addConstraint(heightConstraint!)
+        if heightConstraintCustom == nil {
+            heightConstraintCustom = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: height)
+            addConstraint(heightConstraintCustom!)
         }
         
         // Update height constraint if needed
-        if height != heightConstraint!.constant {
+        if height != heightConstraintCustom!.constant {
             shouldScrollAfterHeightChanged = true
-            heightConstraint!.constant = height
+            heightConstraintCustom!.constant = height
             
-            if growingTextDidChangeHeight != nil
-            {
+            if growingTextDidChangeHeight != nil {
                 growingTextDidChangeHeight!(self,height)
             }
         } else if shouldScrollAfterHeightChanged {

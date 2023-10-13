@@ -10,6 +10,7 @@ import UIKit
 import DeviceKit
 import CoreFoundation
 import AttributedString
+import SwifterSwift
 
 public let LocalConsoleFontBaseSize:CGFloat = 7.5
 public let LocalConsoleFontMin:CGFloat = 4
@@ -356,7 +357,7 @@ public class PTTerminal:PFloatingButton {
         draggable = true
         layer.shadowRadius = 16
         layer.shadowOpacity = 0.5
-        shadowOffset = CGSize.init(width: 0, height: 2)
+        layerShadowOffset = CGSize.init(width: 0, height: 2)
         layer.cornerRadius = 22
         tag = SystemLogViewTag
         layer.cornerCurve = .continuous

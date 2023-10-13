@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.5.1",
+  "version": "3.6.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.5.1"
+    "tag": "3.6.0"
   },
   "license": {
     "type": "MIT",
@@ -1308,6 +1308,30 @@
       },
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_VIDEOEDITOR POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SpeedPanel",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/SpeedPanel/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPEEDPANEL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "NetworkSpeedTest",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/NetworkSpeedTest/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORKSPEEDTEST POOTOOLS_COCOAPODS"
       }
     },
     {
