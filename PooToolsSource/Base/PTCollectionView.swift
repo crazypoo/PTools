@@ -35,6 +35,7 @@ public class PTCollectionViewConfig:PTBaseModel {
 #if POOTOOLS_SCROLLREFRESH
     public var footerRefresh:Bool = false
 #endif
+    public var sectionEdges:NSDirectionalEdgeInsets = .zero
     
 #if POOTOOLS_LISTEMPTYDATA
     public var showEmptyAlert:Bool = false
@@ -67,7 +68,7 @@ public class PTCollectionView: UIView {
             group = UICollectionView.waterFallLayout(data: sectionModel.rows, rowCount: self.viewConfig.rowCount,itemOriginalX:self.viewConfig.itemOriginalX, itemOriginalY: self.viewConfig.contentTopAndBottom,itemSpace: self.viewConfig.cellLeadingSpace, itemHeight: self.waterFallLayout!)
         }
         
-        let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let sectionInsets = NSDirectionalEdgeInsets(top: self.viewConfig.sectionEdges.top, leading: self.viewConfig.sectionEdges.leading, bottom: self.viewConfig.sectionEdges.bottom, trailing: self.viewConfig.sectionEdges.trailing)
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
@@ -120,11 +121,11 @@ public class PTCollectionView: UIView {
         return control
     }()
     
-    public var headerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection?,_ index: IndexPath) -> (UICollectionReusableView))?
-    public var footerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection?,_ index: IndexPath) -> (UICollectionReusableView))?
-    public var cellInCollection:((_ collectionView:UICollectionView,_ cellId:String,_ cellModel:AnyObject?,_ index:IndexPath) -> (UICollectionViewCell))!
+    public var headerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    public var footerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    public var cellInCollection:((_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index:IndexPath) -> (UICollectionViewCell))!
         
-    public var collectionDidSelect:((_ index:IndexPath,_ cellModel:AnyObject?,_ cellId:String)->Void)?
+    public var collectionDidSelect:((_ index:IndexPath,_ sectionModel:PTSection)->Void)?
     
     public var headerRefreshTask:((UIRefreshControl)->Void)?
     public var footRefreshTask:PTActionTask?
@@ -213,15 +214,13 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        return self.cellInCollection(collectionView,itemRow.ID,itemRow.dataModel,indexPath)
+        return self.cellInCollection(collectionView,itemSec,indexPath)
     }
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
         if self.collectionDidSelect != nil {
-            self.collectionDidSelect!(indexPath,itemRow.dataModel,itemRow.ID)
+            self.collectionDidSelect!(indexPath,itemSec)
         }
     }
 }
