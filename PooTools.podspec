@@ -1,14 +1,14 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.6.1'
+    s.version     = '3.7.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
     s.source           = { :git => 'https://github.com/crazypoo/PTools.git', :tag => s.version.to_s }
     s.license          = { :type => 'MIT', :file => 'LICENSE' }
-    s.platform = :ios, '13.0'
+    s.platform = :ios, '13.1'
     s.requires_arc = true
-    s.ios.deployment_target = '13.0'
+    s.ios.deployment_target = '13.1'
     s.swift_versions = '5.0'
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|

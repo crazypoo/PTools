@@ -35,7 +35,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
         
         let cellSize = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
-        group = UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH,size: CGSize(width: cellSize, height: 54),cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace,contentTopAndBottom: 10,cellLeadingSpace: PTAppBaseConfig.share.defaultViewSpace,cellTrailingSpace: 0)
+        group = UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH,itemHeight: 54,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace,contentTopAndBottom: 10,cellLeadingSpace: PTAppBaseConfig.share.defaultViewSpace,cellTrailingSpace: 0)
         
         let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
         let laySection = NSCollectionLayoutSection(group: group)

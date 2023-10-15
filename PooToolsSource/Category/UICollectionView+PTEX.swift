@@ -41,7 +41,8 @@ public extension UICollectionView {
     ///   - cellTrailingSpace: 每一行相隔高度
     ///   - handle: 返回Group高度和[GroupCustomItem]
     @objc class func girdCollectionContentHeight(data:[AnyObject],
-                                                 size:CGSize = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
+                                                 groupW:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                                 itemHeight:CGFloat,
                                                  cellRowCount:NSInteger = 3,
                                                  originalX:CGFloat = 10,
                                                  contentTopAndBottom:CGFloat = 0,
@@ -50,8 +51,8 @@ public extension UICollectionView {
                                                  handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupH:CGFloat = 0
-        let itemH = size.height
-        let itemW = size.width
+        let itemH = itemHeight
+        let itemW = (groupW - originalX * 2 - CGFloat(cellRowCount - 1) * cellLeadingSpace) / CGFloat(cellRowCount)
         var x:CGFloat = originalX,y:CGFloat = 0 + contentTopAndBottom
         data.enumerated().forEach { (index,value) in
             if index < cellRowCount {
@@ -93,7 +94,7 @@ public extension UICollectionView {
     /// - Returns: Gird佈局
     @objc class func girdCollectionLayout(data:[AnyObject],
                                           groupWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
-                                          size:CGSize = CGSize.init(width: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3, height: (CGFloat.kSCREEN_WIDTH - 10 * 2)/3),
+                                          itemHeight:CGFloat,
                                           cellRowCount:NSInteger = 3,
                                           originalX:CGFloat = 10,
                                           contentTopAndBottom:CGFloat = 0,
@@ -107,7 +108,7 @@ public extension UICollectionView {
         var bannerGroupSize : NSCollectionLayoutSize
         
         var groupH:CGFloat = 0
-        UICollectionView.girdCollectionContentHeight(data: data,size: size,cellRowCount: cellRowCount,originalX: originalX,contentTopAndBottom: contentTopAndBottom,cellLeadingSpace: cellLeadingSpace,cellTrailingSpace: cellTrailingSpace) { groupHeight, groupItem in
+        UICollectionView.girdCollectionContentHeight(data: data,groupW: groupWidth,itemHeight: itemHeight,cellRowCount: cellRowCount,originalX: originalX,contentTopAndBottom: contentTopAndBottom,cellLeadingSpace: cellLeadingSpace,cellTrailingSpace: cellTrailingSpace) { groupHeight, groupItem in
             groupH = groupHeight
             customers = groupItem
         }
@@ -137,7 +138,6 @@ public extension UICollectionView {
                                      itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
                                      itemOriginalY:CGFloat = 10,
                                      itemSpace:CGFloat,
-                                     itemWidth:CGFloat,
                                      itemHeight:(Int,AnyObject)->CGFloat) -> NSCollectionLayoutGroup {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -145,7 +145,7 @@ public extension UICollectionView {
         let itemRightSapce:CGFloat = itemSpace
         let screenW:CGFloat = screenWidth
 
-        let cellWidth = itemWidth
+        let cellWidth = (screenWidth - itemOriginalX * 2 - CGFloat(rowCount - 1) * itemSpace) / CGFloat(rowCount)
         let originalX = itemOriginalX
         let contentTopAndBottom:CGFloat = itemOriginalY
         var x:CGFloat = originalX,y:CGFloat = 0 + contentTopAndBottom

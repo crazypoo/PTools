@@ -35,7 +35,7 @@ open class PTMemory: NSObject {
             fpsLabel.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-            timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
+            timer = Timer.scheduledTimer(timeInterval: 5, repeats: true) { _ in
                 let memoryString = self.reportMemory()
                 self.fpsLabel.text = memoryString
                 let labelW = self.fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20

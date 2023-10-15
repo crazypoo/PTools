@@ -39,18 +39,25 @@ public class PTCustomAlertView: UIView {
     public var didDismissBlock:PTCustomerDidDismissBlock?
     public var customerBlock:PTCustomerCustomerBlock?
 
-    class public func getAlertTitleHeight(font:UIFont,alertWidth:CGFloat,title:String)->CGFloat {
+    class public func getAlertTitleHeight(font:UIFont,
+                                          alertWidth:CGFloat,
+                                          title:String)->CGFloat {
         let height = UIView.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         let viewHeight = CGFloat.kSCREEN_HEIGHT / 3
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
-    class public func getBottomButtonHiehgt(font:UIFont,alertWidth:CGFloat,moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat {
+    class public func getBottomButtonHiehgt(font:UIFont,
+                                            alertWidth:CGFloat,
+                                            moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat {
         let buttonH = UIView.sizeFor(string: "HOLA", font: font, height: CGFloat(MAXFLOAT), width: (alertWidth - 20)).height + 5
         return (moreButtonTitles.count == 0 || moreButtonTitles.isEmpty) ? 0 : ((buttonH > BottomButtonHeight) ? buttonH : BottomButtonHeight)
     }
     
-    class public func titleAndBottomViewNormalHeight(width:CGFloat,title:String,font:UIFont,buttonArray:[PTCustomBottomButtonModel])->CGFloat {
+    class public func titleAndBottomViewNormalHeight(width:CGFloat,
+                                                     title:String,
+                                                     font:UIFont,
+                                                     buttonArray:[PTCustomBottomButtonModel])->CGFloat {
         var titleH : CGFloat? = 0
         titleH = PTCustomAlertView.getAlertTitleHeight(font: font, alertWidth: width, title: title)
         let btnW : CGFloat = (width - CGFloat(buttonArray.count - 1) * AlertLine) / CGFloat(buttonArray.count)

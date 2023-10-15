@@ -82,7 +82,7 @@ class PTSwiftViewController: PTBaseViewController {
 //            customers
 //        })
         
-        group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10, itemWidth: 100) { index,item in
+        group = UICollectionView.waterFallLayout(data: sectionModel.rows, itemSpace: 10) { index,item in
             CGFloat(arc4random() % 1000)
         }
         
@@ -310,7 +310,62 @@ class PTSwiftViewController: PTBaseViewController {
         super.viewDidLoad()
 
         PTNSLogConsole(self)
-                                     
+                           
+        let cConfig = PTCollectionViewConfig()
+        cConfig.viewType = .WaterFall
+        cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
+        cConfig.contentTopAndBottom = 0
+        cConfig.cellTrailingSpace = 0
+        cConfig.cellLeadingSpace = 0
+        cConfig.topRefresh = true
+        let aaaaaaa = PTCollectionView(viewConfig: cConfig)
+        
+        var sections = [PTSection]()
+        cellModels().enumerated().forEach { (index,value) in
+            var rows = [PTRows]()
+            value.enumerated().forEach { subIndex,subValue in
+                let row_List = PTRows.init(title: subValue.name, placeholder: subValue.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: subValue)
+                rows.append(row_List)
+            }
+            let cellSection = PTSection.init(headerTitle: "123123123123",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: rows)
+            sections.append(cellSection)
+        }
+        
+        aaaaaaa.headerInCollection = { kind,collectionView,model,index in
+            
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model!.headerID!, for: index) as! PTTestHeader
+            header.backgroundColor = .blue
+            return header
+        }
+        aaaaaaa.footerInCollection = { kind,collectionView,model,index in
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model!.footerID!, for: index) as! PTTestFooter
+            footer.backgroundColor = .red
+            return footer
+        }
+        aaaaaaa.cellInCollection = { collectionView ,id,dataModel,indexPath in
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: id, for: indexPath) as! PTFusionCell
+            cell.backgroundColor = .randomColor
+            return cell
+        }
+        aaaaaaa.headerRefreshTask = { sender in
+            PTGCDManager.gcdAfter(time: 3) {
+                sender.endRefreshing()
+            }
+        }
+        
+        aaaaaaa.waterFallLayout = { index,model in
+            let cellModel = (model as! PTRows).dataModel as! PTFusionCellModel
+            let h = UIView.sizeFor(string: cellModel.name.stringIsEmpty() ? "11111" : cellModel.name, font: cellModel.cellFont,lineSpacing: 5, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH).height + 44
+            return h
+        }
+
+        self.view.addSubview(aaaaaaa)
+        aaaaaaa.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        aaaaaaa.layoutIfNeeded()
+        aaaaaaa.showCollectionDetail(collectionData: sections)
+
 //        view.addSubview(collectionView)
 //        collectionView.snp.makeConstraints { make in
 //            make.left.right.bottom.equalToSuperview()
@@ -587,14 +642,14 @@ class PTSwiftViewController: PTBaseViewController {
 //            }
 //        }
         
-        let btn = UIButton(type: .custom)
-        btn.backgroundColor = .randomColor
-        view.addSubview(btn)
-        btn.snp.makeConstraints { make in
-            make.width.height.equalTo(100)
-            make.centerX.centerY.equalToSuperview()
-        }
-        btn.addActionHandlers { sender in
+//        let btn = UIButton(type: .custom)
+//        btn.backgroundColor = .randomColor
+//        view.addSubview(btn)
+//        btn.snp.makeConstraints { make in
+//            make.width.height.equalTo(100)
+//            make.centerX.centerY.equalToSuperview()
+//        }
+//        btn.addActionHandlers { sender in
 //            var options = PickerOptionsInfo()
 //            options.selectLimit = 1
 //            options.selectOptions = .video
@@ -611,7 +666,7 @@ class PTSwiftViewController: PTBaseViewController {
 //            } tapBackgroundBlock: { sheet in
 //                
 //            }
-        }
+//        }
     }
     
     func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {

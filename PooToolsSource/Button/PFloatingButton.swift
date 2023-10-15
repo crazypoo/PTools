@@ -359,7 +359,9 @@ open class PFloatingButton: UIButton {
         superview?.bringSubviewToFront(self)
         
         if traceDismissTimer == nil {
-            traceDismissTimer = Timer.scheduledTimer(timeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, target: self, selector: #selector(dismissTraceButton), userInfo: nil, repeats: true)
+            traceDismissTimer = Timer.scheduledTimer(timeInterval: PFloatingButton.RC_TRACE_DISMISS_TIME_INTERVAL, repeats: true, block: { timer in
+                self.dismissTraceButton()
+            })
         }
     }
     

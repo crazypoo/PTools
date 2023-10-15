@@ -40,7 +40,9 @@ public class PTCycleLoadingView: UIView {
         isAnimation = false
         
         anglePer = 0
-        timer = Timer.scheduledTimer(timeInterval: 0.02, target: self, selector: #selector(drawPathAnimation(timer:)), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 0.02, repeats: true, block: { timer in
+            self.drawPathAnimation(timer: timer)
+        })
         RunLoop.current.add(timer!, forMode: .common)
     }
     

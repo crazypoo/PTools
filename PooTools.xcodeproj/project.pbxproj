@@ -86,6 +86,8 @@
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
+		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
+		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
 		554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */; };
@@ -405,6 +407,8 @@
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
+		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
+		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppDelegate+EXFuction.swift"; sourceTree = "<group>"; };
 		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
@@ -719,7 +723,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -766,6 +769,7 @@
 				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
 				55D59C5D28F3E7C400B4FF76 /* Motion */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
+				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				554929E828F9089100C82ABF /* Permission */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				55E3BBB52ABDFF0C00858348 /* Ping */,
@@ -1541,6 +1545,7 @@
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 				55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */,
+				552F57502ADB86A500E0EB7C /* PTCollectionView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -1664,6 +1669,7 @@
 				6003F59D195388D20070C39A /* PTAppDelegate.m */,
 				CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */,
 				CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */,
+				552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */,
 				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 				6003F5A5195388D20070C39A /* PTViewController.h */,
 				6003F5A6195388D20070C39A /* PTViewController.m */,
@@ -1873,6 +1879,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				5585F7192AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift in Sources */,
@@ -1938,6 +1945,7 @@
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				55025E4C29FA56D00024A960 /* PTNavigationBarBaseValues.swift in Sources */,
+				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,

@@ -143,10 +143,7 @@ public class PTMainSegmentCell: JXSegmentedBaseCell {
             if myItemModel.isSelected {
                 titleLabel.font = myItemModel.titleSelectedFont
                 titleLabel.textColor = myItemModel.titleSelectedColor
-
-            }
-            else
-            {
+            } else {
                 titleLabel.font = myItemModel.titleNormalFont
                 titleLabel.textColor = myItemModel.titleNormalColor
             }

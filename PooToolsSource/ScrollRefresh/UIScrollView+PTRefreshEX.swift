@@ -13,7 +13,7 @@ public extension UIScrollView {
     
     //MARK: 自动判断上拉或下拉结束正在刷新状态
     ///自动判断上拉或下拉结束正在刷新状态
-   @objc func bk_endMJRefresh() {
+   @objc func pt_endMJRefresh() {
         
         if mj_header != nil {
             if mj_header!.isRefreshing {
@@ -27,8 +27,7 @@ public extension UIScrollView {
             }
         }
         
-        if mj_trailer != nil
-        {
+        if mj_trailer != nil {
             if mj_trailer!.isRefreshing {
                 mj_trailer!.endRefreshing()
             }
