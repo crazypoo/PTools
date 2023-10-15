@@ -39,7 +39,7 @@ public class PTCollectionViewConfig:PTBaseModel {
 #if POOTOOLS_LISTEMPTYDATA
     public var showEmptyAlert:Bool = false
     public var emptyViewConfig:[LXFEmptyDataSetAttributeKeyType : Any]?
-    public var buttonAtt:ASAttributedString = ASAttributedString()
+    public var buttonAtt:ASAttributedString?
 #endif
 }
 
@@ -97,7 +97,7 @@ public class PTCollectionView: UIView {
             view.refreshControl = self.refreshControl
         }
 #if POOTOOLS_SCROLLREFRESH
-        if self.footerRefresh {
+        if self.viewConfig.footerRefresh {
             let footerRefresh = PTRefreshAutoStateFooter(refreshingBlock: {
                 if self.footRefreshTask != nil {
                     self.footRefreshTask!()
@@ -154,7 +154,7 @@ public class PTCollectionView: UIView {
         }
         
 #if POOTOOLS_LISTEMPTYDATA
-        if self.showEmptyAlert {
+        if self.viewConfig.showEmptyAlert {
             self.showEmptyDataSet(currentScroller: self.collectionView)
             self.lxf_tapEmptyView(self.collectionView) { sender in
                 if self.emptyTap != nil {
@@ -229,14 +229,14 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
 #if POOTOOLS_LISTEMPTYDATA
 //MARK: LXFEmptyDataSetable
 extension PTCollectionView:LXFEmptyDataSetable {
-    open func showEmptyDataSet(currentScroller: UIScrollView) {
+    public func showEmptyDataSet(currentScroller: UIScrollView) {
         self.lxf_EmptyDataSet(currentScroller) { () -> ([LXFEmptyDataSetAttributeKeyType : Any]) in
-            return self.viewConfig.emptyViewConfig
+            return self.viewConfig.emptyViewConfig!
         }
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        return self.viewConfig.buttonAtt.value
+        return self.viewConfig.buttonAtt?.value
     }
 }
 #endif
