@@ -17,43 +17,64 @@ import LXFProtocolTool
 import AttributedString
 #endif
 
+//MARK: CollectionView展示的样式类型
 public enum PTCollectionViewType {
     case Normal
     case Gird
     case WaterFall
 }
 
+//MARK: Collection展示的Section底部样式类型
 public enum PTCollectionViewDecorationItemsType {
     case Corner
     case NoCorner
     case NoItems
 }
 
+//MARK: Collection展示的基本配置参数设置
 public class PTCollectionViewConfig:PTBaseModel {
+    ///CollectionView展示的样式类型
     public var viewType:PTCollectionViewType = .Normal
+    ///每行多少个(仅在瀑布流和Gird样式中使用)
     public var rowCount:Int = 3
+    ///item高度
     public var itemHeight:CGFloat = PTAppBaseConfig.share.baseCellHeight
+    ///item起始坐标X
     public var itemOriginalX:CGFloat = 0
+    ///item的展示距离顶部和底部的高度
     public var contentTopAndBottom:CGFloat = 0
+    ///每个item的间隔(左右)
     public var cellLeadingSpace:CGFloat = 0
+    ///每个item的间隔(上下)
     public var cellTrailingSpace:CGFloat = 0
+    ///是否开启头部刷新
     public var topRefresh:Bool = false
 #if POOTOOLS_SCROLLREFRESH
+    ///是否开启底部刷新
     public var footerRefresh:Bool = false
 #endif
+    ///section偏移
     public var sectionEdges:NSDirectionalEdgeInsets = .zero
+    ///头部长度偏移
     public var headerWidthOffset:CGFloat = 0
+    ///底部长度偏移
     public var footerWidthOffset:CGFloat = 0
 
 #if POOTOOLS_LISTEMPTYDATA
+    ///是否开启空数据展示
     public var showEmptyAlert:Bool = false
+    ///空数据展示参数设置
     public var emptyViewConfig:[LXFEmptyDataSetAttributeKeyType : Any]?
+    ///空数据展示按钮富文本设置
     public var buttonAtt:ASAttributedString?
 #endif
+    ///Collection展示的Section底部样式类型
     public var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
+    ///Collection展示的Section底部样式偏移
     public var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
 }
 
+//MARK: 界面展示
 public class PTCollectionView: UIView {
     
     let decorationViewOfKindCorner = "background"
@@ -156,18 +177,43 @@ public class PTCollectionView: UIView {
         return control
     }()
     
+    ///头部设置
+    /// - Parameters:
+    ///   - kind: header的头部kind
+    ///   - collectionView: collectionView
+    ///   - sectionModel: Section的model
+    ///   - index: 坐标
+    ///  - Return: UICollectionReusableView
     public var headerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    ///底部设置
+    /// - Parameters:
+    ///   - kind: footer的头部kind
+    ///   - collectionView: collectionView
+    ///   - sectionModel: Section的model
+    ///   - index: 坐标
+    ///  - Return: UICollectionReusableView
     public var footerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    ///item设置
+    /// - Parameters:
+    ///   - collectionView: collectionView
+    ///   - sectionModel: Section的model
+    ///   - index: 坐标
+    ///  - Return: UICollectionViewCell
     public var cellInCollection:((_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index:IndexPath) -> (UICollectionViewCell))!
         
+    ///item点击事件
     public var collectionDidSelect:((_ index:IndexPath,_ sectionModel:PTSection)->Void)?
     
+    ///头部刷新事件
     public var headerRefreshTask:((UIRefreshControl)->Void)?
+    ///底部刷新事件
     public var footRefreshTask:PTActionTask?
 
+    ///瀑布流item高度设置
     public var waterFallLayout:((Int, AnyObject) -> CGFloat)?
     
 #if POOTOOLS_LISTEMPTYDATA
+    ///空数据点击事件
     public var emptyTap:((UIView)->Void)?
 #endif
 
@@ -182,6 +228,7 @@ public class PTCollectionView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    ///展示界面
     public override func layoutIfNeeded() {
         super.layoutIfNeeded()
         self.addSubview(self.collectionView)
@@ -201,6 +248,7 @@ public class PTCollectionView: UIView {
 #endif
     }
     
+    ///加载数据并且刷新界面
     public func showCollectionDetail(collectionData:[PTSection]) {
         mSections.removeAll()
         
@@ -210,6 +258,7 @@ public class PTCollectionView: UIView {
         collectionView.reloadData()
     }
     
+    ///停止头部或者底部的刷新控件使用
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
         if self.viewConfig.footerRefresh {
@@ -223,12 +272,14 @@ public class PTCollectionView: UIView {
     }
     
 #if POOTOOLS_SCROLLREFRESH
+    ///展示底部已经没有更多数据
     public func footerRefreshNoMore () {
         self.collectionView.mj_footer?.endRefreshingWithNoMoreData()
     }
 #endif
 }
 
+//MARK: UICollectionViewDelegate && UICollectionViewDataSource
 extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         mSections.count

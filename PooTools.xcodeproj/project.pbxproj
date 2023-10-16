@@ -1541,11 +1541,11 @@
 				554929F328F911DB00C82ABF /* PTBaseCollectionReusableView.swift */,
 				554929F128F9108000C82ABF /* PTBaseDecorationFunction.swift */,
 				55BD5B7F29C620150023458A /* PTBaseMaskView.swift */,
+				55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */,
 				55D59C6B28F538B600B4FF76 /* PTBaseViewController.swift */,
+				552F57502ADB86A500E0EB7C /* PTCollectionView.swift */,
 				55D59C7128F54FBA00B4FF76 /* PTFusionCell.swift */,
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
-				55C905192A31B6F100B7E83D /* PTBaseNavControl.swift */,
-				552F57502ADB86A500E0EB7C /* PTCollectionView.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
