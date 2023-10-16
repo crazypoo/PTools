@@ -23,6 +23,12 @@ public enum PTCollectionViewType {
     case WaterFall
 }
 
+public enum PTCollectionViewDecorationItemsType {
+    case Corner
+    case NoCorner
+    case NoItems
+}
+
 public class PTCollectionViewConfig:PTBaseModel {
     public var viewType:PTCollectionViewType = .Normal
     public var rowCount:Int = 3
@@ -36,20 +42,30 @@ public class PTCollectionViewConfig:PTBaseModel {
     public var footerRefresh:Bool = false
 #endif
     public var sectionEdges:NSDirectionalEdgeInsets = .zero
-    
+    public var headerWidthOffset:CGFloat = 0
+    public var footerWidthOffset:CGFloat = 0
+
 #if POOTOOLS_LISTEMPTYDATA
     public var showEmptyAlert:Bool = false
     public var emptyViewConfig:[LXFEmptyDataSetAttributeKeyType : Any]?
     public var buttonAtt:ASAttributedString?
 #endif
+    public var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
+    public var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
 }
 
 public class PTCollectionView: UIView {
+    
+    let decorationViewOfKindCorner = "background"
+    let decorationViewOfKindNormal = "background_no"
+
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
             self.generateSection(section: section)
         }
+        layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: decorationViewOfKindCorner)
+        layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: decorationViewOfKindNormal)
         return layout
     }
     
@@ -68,13 +84,13 @@ public class PTCollectionView: UIView {
             group = UICollectionView.waterFallLayout(data: sectionModel.rows, rowCount: self.viewConfig.rowCount,itemOriginalX:self.viewConfig.itemOriginalX, itemOriginalY: self.viewConfig.contentTopAndBottom,itemSpace: self.viewConfig.cellLeadingSpace, itemHeight: self.waterFallLayout!)
         }
         
-        let sectionInsets = NSDirectionalEdgeInsets(top: self.viewConfig.sectionEdges.top, leading: self.viewConfig.sectionEdges.leading, bottom: self.viewConfig.sectionEdges.bottom, trailing: self.viewConfig.sectionEdges.trailing)
+        let sectionInsets = self.viewConfig.sectionEdges
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
 
-        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
-        let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.footerHeight ?? CGFloat.leastNormalMagnitude))
+        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
+        let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.footerHeight ?? CGFloat.leastNormalMagnitude))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
         let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
         var supplementarys = [NSCollectionLayoutBoundarySupplementaryItem]()
@@ -86,6 +102,25 @@ public class PTCollectionView: UIView {
         }
         laySection.boundarySupplementaryItems = supplementarys
 
+        switch self.viewConfig.decorationItemsType {
+        case .Corner,.NoCorner:
+            var itemKind = ""
+            switch self.viewConfig.decorationItemsType {
+            case .Corner:
+                itemKind = decorationViewOfKindCorner
+            case .NoCorner:
+                itemKind = decorationViewOfKindNormal
+            default:
+                break
+            }
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: itemKind)
+            backItem.contentInsets = self.viewConfig.decorationItemsEdges
+            laySection.decorationItems = [backItem]
+            
+            laySection.supplementariesFollowContentInsets = false
+        default:
+            break
+        }
         return laySection
     }
 
@@ -186,6 +221,12 @@ public class PTCollectionView: UIView {
             self.refreshControl.endRefreshing()
         }
     }
+    
+#if POOTOOLS_SCROLLREFRESH
+    public func footerRefreshNoMore () {
+        self.collectionView.mj_footer?.endRefreshingWithNoMoreData()
+    }
+#endif
 }
 
 extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
