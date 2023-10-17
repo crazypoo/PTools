@@ -58,32 +58,5 @@ public extension PTPOP where Base: AVAssetExportSession {
                 }
             }
         }
-        //
-        /*
-        exportSession.exportAsynchronously(completionHandler: {
-            switch exportSession.status{
-            case .waiting:
-                PTNSLogConsole("等待压缩")
-                break
-            case .exporting:
-                PTNSLogConsole("压缩中：")
-                break
-            case .completed:
-                PTNSLogConsole("转码成功")
-                //转码成功后获取视频视频地址
-                //上传
-                break
-            case .cancelled:
-                PTNSLogConsole("取消")
-                break
-            case .failed:
-                PTNSLogConsole("失败...\(String(describing: exportSession.error?.localizedDescription))")
-                break
-            default:
-                PTNSLogConsole("..")
-                break
-            }
-        })
-        */
     }
 }

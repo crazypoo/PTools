@@ -22,7 +22,8 @@ public struct SVGProcessor: ImageProcessor {
     }
     
     // Convert input data/image to target image and return it.
-    public func process(item: ImageProcessItem, options: KingfisherParsedOptionsInfo) -> UIImage? {
+    public func process(item: ImageProcessItem, 
+                        options: KingfisherParsedOptionsInfo) -> UIImage? {
         switch item {
         case .image(let image):
             return image
@@ -59,7 +60,9 @@ public extension UIImageView {
     ///   - url: SVG image url
     ///   - processor: SVG Image Processor
     ///   - placeholder:
-    func svgImage(from url: URL?, processor: SVGProcessor,placeholder:UIImage? = nil) {
+    func svgImage(from url: URL?,
+                  processor: SVGProcessor,
+                  placeholder:UIImage? = nil) {
         guard let url = url else {
             image = placeholder
             return
@@ -86,7 +89,9 @@ public extension UIButton {
     ///   - state:
     ///   - processor: SVG Image Processor
     ///   - placeholder:
-    func svgImage(from url: URL?,state:UIControl.State, processor: SVGProcessor,placeholder:UIImage? = nil) {
+    func svgImage(from url: URL?,state:UIControl.State, 
+                  processor: SVGProcessor,
+                  placeholder:UIImage? = nil) {
         guard let url = url else {
             setImage(placeholder, for: state)
             return

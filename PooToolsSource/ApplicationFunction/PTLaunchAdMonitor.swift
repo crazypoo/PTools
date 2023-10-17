@@ -14,6 +14,9 @@ import SnapKit
 public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification"
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
+/*
+    启动页面
+ */
 @objcMembers
 public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
@@ -49,7 +52,7 @@ public class PTLaunchAdMonitor: NSObject {
                              comName:String?,
                              comNameFont:UIFont,
                              callBack:PTActionTask?) {
-        PTLaunchAdMonitor.shared.loadImageAtPath(path: path)
+        monitor.loadImageAtPath(path: path)
         while !monitor.imgLoaded! {
             RunLoop.current.run(mode: .default, before: Date.distantFuture)
         }
@@ -71,7 +74,14 @@ public class PTLaunchAdMonitor: NSObject {
         PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel, comNameFont: comNameFont, skipFont: skipFont)
     }
     
-    class func showImageAt(onView:Any,timeInterval:TimeInterval,year:String?,comName:String?,dic:Bool,comlabel:Bool,comNameFont:UIFont?,skipFont:UIFont?) {
+    class func showImageAt(onView:Any,
+                           timeInterval:TimeInterval,
+                           year:String?,
+                           comName:String?,
+                           dic:Bool,
+                           comlabel:Bool,
+                           comNameFont:UIFont?,
+                           skipFont:UIFont?) {
         var f = UIScreen.main.bounds
         let v = UIView()
         v.backgroundColor = .lightGray
@@ -266,8 +276,8 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    public class func hideView(sender:Any) {
-        let sup = (sender as! UIButton).superview
+    @objc fileprivate class func hideView(sender:UIButton) {
+        let sup = sender.superview
         sup?.isUserInteractionEnabled = false
         if monitor.callBack != nil {
             monitor.callBack!()
@@ -282,7 +292,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    class public func showDetail(sender:Any) {
+    @objc fileprivate class func showDetail(sender:Any) {
         monitor.isTap = true
         var sup:UIView?
         switch monitor.imageType {

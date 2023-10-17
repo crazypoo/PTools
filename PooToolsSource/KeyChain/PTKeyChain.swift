@@ -25,7 +25,10 @@ public class PTKeyChain: NSObject {
     ///   - account: 帳號
     ///   - password: 密碼
     ///   - handle: 回調是否成功
-    class func saveAccountInfo(service:NSString,account:NSString,password:NSString,handle:PTKeyChainBlock?) {
+    class func saveAccountInfo(service:NSString,
+                               account:NSString,
+                               password:NSString,
+                               handle:PTKeyChainBlock?) {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
         let passwordData = password.data(using: String.Encoding.utf8.rawValue)!
         
@@ -53,7 +56,8 @@ public class PTKeyChain: NSObject {
     ///   - service: 保存到哪個域
     ///   - account: 帳號
     /// - Returns: 字符串
-    class func getPassword(service:NSString,account:NSString)->NSString {
+    class func getPassword(service:NSString,
+                           account:NSString)->NSString {
         let accountData = account.data(using: String.Encoding.utf8.rawValue)!
         let queryDic:[String:Any] = [
             kSecClass as String : kSecClassGenericPassword,
@@ -105,7 +109,9 @@ public class PTKeyChain: NSObject {
     ///   - service: 保存到哪個域
     ///   - account: 帳號
     ///   - handle: 回調是否成功
-    class func deleteAccountInfo(service:NSString,account:NSString?,handle:PTKeyChainBlock?) {
+    class func deleteAccountInfo(service:NSString,
+                                 account:NSString?,
+                                 handle:PTKeyChainBlock?) {
         let newAccount = String(format: "%@", account ?? "")
         var query = [String:Any]()
         if !newAccount.stringIsEmpty() {

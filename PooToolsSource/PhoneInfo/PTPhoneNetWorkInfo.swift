@@ -24,7 +24,8 @@ public class PTPhoneNetWorkInfo:NSObject {
         let netmask: String
     }
     
-    class open func getPublicIdAddress(outSide:String? = "https://api.ipify.org",completion: @escaping (String?) -> Void) {
+    class open func getPublicIdAddress(outSide:String? = "https://api.ipify.org",
+                                       completion: @escaping (String?) -> Void) {
         let url = URL(string: outSide!)
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             guard error == nil else {

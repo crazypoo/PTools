@@ -28,7 +28,7 @@ public class PTCheckFWords: NSObject {
         let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
         let filePath = bundlePath?.path(forResource: "minganci", ofType: "txt")
         var dataFile:NSString?
-        do{
+        do {
             dataFile = try NSString(contentsOfFile: filePath!, encoding: String.Encoding.utf8.rawValue)
             let dataArr = dataFile?.components(separatedBy: "|")
             for item in dataArr! {

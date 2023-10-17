@@ -48,11 +48,9 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
     } else {
         DDLog.add(DDOSLogger.sharedInstance)
         if error {
-//            DDLogError(msgStr)
             DDLogError(DDLogMessageFormat(stringLiteral: msgStr))
         } else {
             DDLogVerbose(DDLogMessageFormat(stringLiteral: msgStr))
-//            DDLogVerbose(msgStr)
         }
     }
 }
@@ -92,7 +90,6 @@ public func PTNSLog(_ msg: Any...,
     switch UIApplication.applicationEnvironment() {
     case .appStore:
         DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
-//        DDLogVerbose(prefix)
     default:
         print(prefix)
 #if POOTOOLS_DEBUG

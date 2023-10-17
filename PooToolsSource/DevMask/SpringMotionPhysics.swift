@@ -17,7 +17,8 @@ final class SpringMotionPhysics {
     private let velPosCoef: Double
     private let velVelCoef: Double
     
-    init(configuration: SpringConfiguration, timeStep: Float = 0.001) {
+    init(configuration: SpringConfiguration,
+         timeStep: Float = 0.001) {
         let c = configuration
         let omegaZeta = c.angularFrequency * c.dampingRatio
         let alpha = c.angularFrequency * sqrtf(1.0 - c.dampingRatio * c.dampingRatio)
@@ -35,10 +36,8 @@ final class SpringMotionPhysics {
         velVelCoef = Double(expCos - expOmegaZetaSin_Over_Alpha)
     }
     
-    func calculateNextState(
-        from state: SpringMotionState,
-        destinationPoint: CGPoint
-    ) -> SpringMotionState {
+    func calculateNextState(from state: SpringMotionState,
+                            destinationPoint: CGPoint) -> SpringMotionState {
         let relPos = state.position - destinationPoint
         let horVelCoef = state.velocity.horizontal * posVelCoef
         let verVelCoef = state.velocity.vertical * posVelCoef
@@ -53,10 +52,8 @@ final class SpringMotionPhysics {
         )
     }
     
-    func calculateAllStates(
-        from initialState: SpringMotionState,
-        destinationPoint: CGPoint
-    ) -> [SpringMotionState] {
+    func calculateAllStates(from initialState: SpringMotionState,
+                            destinationPoint: CGPoint) -> [SpringMotionState] {
         
         var currentState = initialState
         var allStates = [SpringMotionState]()

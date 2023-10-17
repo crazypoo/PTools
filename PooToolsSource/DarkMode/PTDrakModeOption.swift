@@ -119,8 +119,8 @@ public extension PTDarkModeOption {
     
     // MARK: 智能换肤时间选择后
     /// 智能换肤时间选择后
-    static func setSmartPeelingTimeChange(startTime: String, endTime: String) {
-        
+    static func setSmartPeelingTimeChange(startTime: String,
+                                          endTime: String) {
         /// 是否是浅色
         var light: Bool = false
         if PTDarkModeOption.isSmartPeelingTime(startTime: startTime, endTime: endTime), PTDarkModeOption.isLight {
@@ -144,7 +144,8 @@ public extension PTDarkModeOption {
 
 // MARK: - 动态颜色的使用
 public extension PTDarkModeOption {
-    static func colorLightDark(lightColor: UIColor, darkColor: UIColor) -> UIColor {
+    static func colorLightDark(lightColor: UIColor, 
+                               darkColor: UIColor) -> UIColor {
         UIColor { (traitCollection) -> UIColor in
             if PTDarkModeOption.isFollowSystem {
                 if traitCollection.userInterfaceStyle == .light {
@@ -163,7 +164,8 @@ public extension PTDarkModeOption {
     // MARK: 是否为智能换肤的时间：黑色
     /// 是否为智能换肤的时间：黑色
     /// - Returns: 结果
-    static func isSmartPeelingTime(startTime: String? = nil, endTime: String? = nil) -> Bool {
+    static func isSmartPeelingTime(startTime: String? = nil, 
+                                   endTime: String? = nil) -> Bool {
         // 获取暗黑模式时间的区间，转为两个时间戳，取出当前的时间戳，看是否在区间内，在的话：黑色，否则白色
         var timeIntervalValue: [String] = []
         if startTime != nil && endTime != nil {
@@ -194,7 +196,8 @@ public extension PTDarkModeOption {
     ///   - light: 浅色图片
     ///   - dark: 深色图片
     /// - Returns: 最终图片
-    static func image(light: UIImage?, dark: UIImage?) -> UIImage? {
+    static func image(light: UIImage?,
+                      dark: UIImage?) -> UIImage? {
         guard let weakLight = light, let weakDark = dark, let config = weakLight.configuration else { return light }
         let lightImage = weakLight.withConfiguration(config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.light)))
         lightImage.imageAsset?.register(weakDark, with: config.withTraitCollection(UITraitCollection(userInterfaceStyle: UIUserInterfaceStyle.dark)))

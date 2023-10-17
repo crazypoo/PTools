@@ -32,7 +32,9 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.webView.load(URLRequest.init(url: URL(string: urlPhoneString)!))
     }
     
-    open class func sendMessage(content:String,users:[String],resultBlock:MessageResultBlock?) {
+    open class func sendMessage(content:String,
+                                users:[String],
+                                resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
         vc.body = content
         vc.recipients = users
@@ -42,15 +44,20 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
-    open class func sendMail(title:String,content:String,recipients:[String]?,ccRecipients:[String]?,bccRecipients:[String]?,image:UIImage?,resultBlock:MailResultBlock?) {
+    open class func sendMail(title:String,
+                             content:String,
+                             recipients:[String]?,
+                             ccRecipients:[String]?,
+                             bccRecipients:[String]?,
+                             image:UIImage?,
+                             resultBlock:MailResultBlock?) {
         let vc = MFMailComposeViewController()
         vc.setSubject(title)
         vc.setMessageBody(content, isHTML: false)
         vc.setToRecipients(recipients)
         vc.setCcRecipients(ccRecipients)
         vc.setBccRecipients(bccRecipients)
-        if image != nil
-        {
+        if image != nil {
             let imageData = image!.pngData()
             vc.addAttachmentData(imageData!, mimeType: "image/png", fileName: "SendImage.png")
         }

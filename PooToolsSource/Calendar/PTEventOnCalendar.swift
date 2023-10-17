@@ -11,14 +11,6 @@ import EventKit
 import SwiftDate
 
 public class PTEventOnCalendar: NSObject {
-    /*! @brief 把数据插入到日历作提醒
-     * @param startDate 开始时间
-     * @param endDate 结束时间
-     * @param eventTitle 标题
-     * @param location 地址
-     * @param notes 备注
-     * @param remindTime 大于0是开始后提醒,小于0就开始时间前提醒
-     */
     //MARK: 把数据插入到日历作提醒
     ///把数据插入到日历作提醒
     /// - Parameters:

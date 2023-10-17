@@ -47,89 +47,17 @@ public class PTDebugViewController: PTBaseViewController {
         return [cell_mode,cell_input,cell_debug]
     }()
 
-    
-    var mSections = [PTSection]()
-    
-    func comboLayout()->UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout.init { section, environment in
-            self.generateSection(section: section)
-        }
-        return layout
-    }
-    
-    func generateSection(section:NSInteger)->NSCollectionLayoutSection {
-        let sectionModel = mSections[section]
-
-        var group : NSCollectionLayoutGroup
-        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
-
-        let bannerItemSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.fractionalWidth(1), heightDimension: NSCollectionLayoutDimension.fractionalHeight(1))
-        let bannerItem = NSCollectionLayoutItem.init(layoutSize: bannerItemSize)
+    lazy var newCollectionView:PTCollectionView = {
+        let config = PTCollectionViewConfig()
+        config.viewType = .Normal
+        config.itemOriginalX = 0
+        config.itemHeight = 44
+        config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
-        var bannerGroupSize : NSCollectionLayoutSize
-        
-        bannerItem.contentInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(44 * CGFloat(sectionModel.rows.count)))
-        group = NSCollectionLayoutGroup.vertical(layoutSize: bannerGroupSize, subitem: bannerItem, count: sectionModel.rows.count)
-
-        let sectionInsets = NSDirectionalEdgeInsets.init(top: 10, leading: 0, bottom: 0, trailing: 0)
-        let laySection = NSCollectionLayoutSection(group: group)
-        laySection.orthogonalScrollingBehavior = behavior
-        laySection.contentInsets = sectionInsets
-
-        return laySection
-    }
-
-    lazy var viewCollection : UICollectionView = {
-        let view = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: self.comboLayout())
-        view.delegate = self
-        view.dataSource = self
-        view.backgroundColor = .white
-        return view
-    }()
-
-    public override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.addSubviews([viewCollection])
-        viewCollection.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-        }
-        showDetail()
-    }
-    
-    func showDetail() {
-        mSections.removeAll()
-        
-        var rows = [PTRows]()
-        settingCellModels.enumerated().forEach { index,value in
-            let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
-            rows.append(row)
-        }
-        let section = PTSection.init(rows: rows)
-        mSections.append(section)
-        
-        viewCollection.pt_register(by: mSections)
-        viewCollection.reloadData()
-    }    
-}
-
-extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        mSections.count
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections[section].rows.count
-    }
-
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        if itemRow.ID == PTFusionCell.ID {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+        let view = PTCollectionView(viewConfig: config)
+        view.cellInCollection = { collection,itemSection,indexPath in
+            let itemRow = itemSection.rows[indexPath.row]
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
             if itemRow.title == .DebugMode {
                 cell.dataContent.valueSwitch.isOn = App_UI_Debug_Bool
@@ -159,66 +87,88 @@ extension PTDebugViewController : UICollectionViewDelegate,UICollectionViewDataS
                 }
             }
             return cell
-        } else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath)
-            return cell
         }
+        view.collectionDidSelect = { collection,indexPath,model in
+            let itemRow = model.rows[indexPath.row]
+            if itemRow.title == .ipMode {
+                let actionSheet = PTActionSheetView.init(title: "选择APP请求环境", subTitle: "", cancelButton: NSLocalizedString("取消", comment: ""),destructiveButton: "", otherButtonTitles: ["生产环境","测试","自定义"])
+                actionSheet.actionSheetSelectBlock = { (sheet,index) in
+                    switch index {
+                    case PTActionSheetView.DestructiveButtonTag:
+                        break
+                    case PTActionSheetView.CancelButtonTag:
+                        break
+                    default:
+                        UserDefaults.standard.set("\(index + 1)", forKey: "AppServiceIdentifier")
+                        
+                        var modeName = ""
+                        switch PTBaseURLMode {
+                        case .Development:
+                            modeName = "自定义环境"
+                        case .Test:
+                            modeName = "测试环境"
+                        case .Distribution:
+                            modeName = "生产环境"
+                        }
+
+                        self.settingCellModels[0].content = modeName
+                        let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                        cell.cellModel = self.settingCellModels[0]
+                    }
+                }
+                actionSheet.show()
+            } else if itemRow.title == .addressInput {
+                switch PTBaseURLMode {
+                case .Development:
+                    var current = ""
+                    let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
+                    let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
+                    if url_debug.isEmpty {
+                        current = Network.share.serverAddress_dev
+                    } else {
+                        current = url_debug
+                    }
+                    
+                    UIAlertController.base_textfiele_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                        let newURL = result.values.first
+                        UserDefaults.standard.set(newURL, forKey: "UI_test_url")
+                        
+                        self.settingCellModels[1].content = newURL!
+                        let cell = collection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell
+                        cell.cellModel = self.settingCellModels[1]
+                    }
+                default:
+                    UIViewController.gobal_drop(title: "仅在自定义模式中输入")
+                }
+            }
+        }
+        return view
+    }()
+
+    public override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.addSubviews([newCollectionView])
+        newCollectionView.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+        }
+        showDetail()
     }
     
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        if itemRow.title == .ipMode {
-            let actionSheet = PTActionSheetView.init(title: "选择APP请求环境", subTitle: "", cancelButton: NSLocalizedString("取消", comment: ""),destructiveButton: "", otherButtonTitles: ["生产环境","测试","自定义"])
-            actionSheet.actionSheetSelectBlock = { (sheet,index) in
-                switch index {
-                case PTActionSheetView.DestructiveButtonTag:
-                    break
-                case PTActionSheetView.CancelButtonTag:
-                    break
-                default:
-                    UserDefaults.standard.set("\(index + 1)", forKey: "AppServiceIdentifier")
-                    
-                    var modeName = ""
-                    switch PTBaseURLMode {
-                    case .Development:
-                        modeName = "自定义环境"
-                    case .Test:
-                        modeName = "测试环境"
-                    case .Distribution:
-                        modeName = "生产环境"
-                    }
-
-                    self.settingCellModels[0].content = modeName
-                    let cell = self.viewCollection.cellForItem(at: indexPath) as! PTFusionCell
-                    cell.cellModel = self.settingCellModels[0]
-                }
-            }
-            actionSheet.show()
-        } else if itemRow.title == .addressInput {
-            switch PTBaseURLMode {
-            case .Development:
-                var current = ""
-                let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
-                let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
-                if url_debug.isEmpty {
-                    current = Network.share.serverAddress_dev
-                } else {
-                    current = url_debug
-                }
-                
-                UIAlertController.base_textfiele_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
-                    let newURL = result.values.first
-                    UserDefaults.standard.set(newURL, forKey: "UI_test_url")
-                    
-                    self.settingCellModels[1].content = newURL!
-                    let cell = self.viewCollection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell
-                    cell.cellModel = self.settingCellModels[1]
-                }
-            default:
-                UIViewController.gobal_drop(title: "仅在自定义模式中输入")
-            }
+    func showDetail() {
+        var mSections = [PTSection]()
+        
+        var rows = [PTRows]()
+        settingCellModels.enumerated().forEach { index,value in
+            let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            rows.append(row)
         }
+        let section = PTSection.init(rows: rows)
+        mSections.append(section)
+        
+        self.newCollectionView.layoutIfNeeded()
+        self.newCollectionView.showCollectionDetail(collectionData: mSections)
     }
 }
 

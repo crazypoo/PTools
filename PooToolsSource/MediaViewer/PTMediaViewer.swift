@@ -55,7 +55,7 @@ public let PTLoadingItemSpace :CGFloat = 10
 public class PTLoadingView: UIView {
     
     public var progress:CGFloat = 0 {
-        didSet{
+        didSet {
             self.setNeedsDisplay()
             if progress >= 1 {
                 removeFromSuperview()

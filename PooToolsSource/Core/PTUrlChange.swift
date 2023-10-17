@@ -13,7 +13,8 @@ public class PTUrlChange: NSObject {
         url.addingPercentEncoding(withAllowedCharacters: Foundation.CharacterSet.lowercaseLetters)!
     }
     
-    public class func getRange(text:String,findText:String)->NSMutableArray {
+    public class func getRange(text:String,
+                               findText:String)->NSMutableArray {
         let arrayRanges = NSMutableArray.init(capacity: 3)
         if (text).stringIsEmpty() {
             return NSMutableArray()

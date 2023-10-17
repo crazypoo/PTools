@@ -47,6 +47,9 @@ public class PTOpenSystemConfig:NSObject {
     public var scheme : String = ""
 }
 
+/*
+    根據所需跳轉某Setting內的方法
+ */
 @objcMembers
 public class PTOpenSystemFunction: NSObject {
     private class func functionAlert(msg:String) {
@@ -241,9 +244,7 @@ public class PTOpenSystemFunction: NSObject {
         default:
             break
         }
-        if uriString!.stringIsEmpty() {
-            
-        } else {
+        if !uriString!.stringIsEmpty() {
             UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
         }
     }

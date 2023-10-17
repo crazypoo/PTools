@@ -35,10 +35,19 @@ public class PTCustomBottomButtonModel:NSObject {
 @objcMembers
 public class PTCustomAlertView: UIView {
 
+    ///按钮点击回调
     public var buttonClick:PTCustomerAlertClickBlock?
+    ///Alert消失回调
     public var didDismissBlock:PTCustomerDidDismissBlock?
+    ///Alert自定义界面回调
     public var customerBlock:PTCustomerCustomerBlock?
 
+    //MARK: 计算标题高度
+    ///计算标题高度
+    /// - Parameters:
+    ///   - font: 字体
+    ///   - alertWidth: 弹框width
+    ///   - title: 标题
     class public func getAlertTitleHeight(font:UIFont,
                                           alertWidth:CGFloat,
                                           title:String)->CGFloat {
@@ -47,6 +56,12 @@ public class PTCustomAlertView: UIView {
         return title.stringIsEmpty() ? 0 : ((height >= viewHeight) ? viewHeight : height)
     }
     
+    //MARK: 计算下按钮高度
+    ///计算下按钮高度
+    /// - Parameters:
+    ///   - font: 字体
+    ///   - alertWidth: 弹框width
+    ///   - moreButtonTitles: 按钮s
     class public func getBottomButtonHiehgt(font:UIFont,
                                             alertWidth:CGFloat,
                                             moreButtonTitles:[PTCustomBottomButtonModel])->CGFloat {
@@ -54,6 +69,13 @@ public class PTCustomAlertView: UIView {
         return (moreButtonTitles.count == 0 || moreButtonTitles.isEmpty) ? 0 : ((buttonH > BottomButtonHeight) ? buttonH : BottomButtonHeight)
     }
     
+    //MARK: 计算标题&下按钮高度
+    ///计算标题&下按钮高度
+    /// - Parameters:
+    ///   - font: 字体
+    ///   - width: 弹框width
+    ///   - moreButtonTitles: 按钮s
+    ///   - title: 标题
     class public func titleAndBottomViewNormalHeight(width:CGFloat,
                                                      title:String,
                                                      font:UIFont,
@@ -153,7 +175,7 @@ public class PTCustomAlertView: UIView {
                                           cornerSize:CGFloat = 15,
                                           customAlertHeight:CGFloat = 100,
                                           alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
-                                          customerBlock: @escaping (_ customerView:UIView)->Void,
+                                          customerBlock: @escaping PTCustomerCustomerBlock,
                                           tapBlock: @escaping (_ index:NSInteger)->Void,
                                           alertDismissBlock: @escaping PTActionTask) {
         var buttonModels = [PTCustomBottomButtonModel]()
@@ -433,6 +455,8 @@ public class PTCustomAlertView: UIView {
         }
     }
     
+    //MARK: 界面消失
+    ///界面消失
     public func dismiss() {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0

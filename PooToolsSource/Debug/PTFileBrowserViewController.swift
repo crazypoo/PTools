@@ -28,47 +28,151 @@ class PTFileBrowserViewController: PTBaseViewController {
         PTFileBrowser.shared.rootDirectoryPath.appendingPathComponent(extensionDirectoryPath, isDirectory: true)
     }
 
-    var mSections = [PTSection]()
-    
-    func comboLayout()->UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout.init { section, environment in
-            self.generateSection(section: section)
-        }
-        return layout
-    }
-    
-    func generateSection(section:NSInteger)->NSCollectionLayoutSection {
-        let sectionModel = mSections[section]
-
-        var group : NSCollectionLayoutGroup
-        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
+    lazy var newCollectionView:PTCollectionView = {
+        let config = PTCollectionViewConfig()
+        config.viewType = .Normal
+        config.itemOriginalX = 0
+        config.itemHeight = 64
+        config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
-        var bannerGroupSize : NSCollectionLayoutSize
-        var customers = [NSCollectionLayoutGroupCustomItem]()
-        var groupH:CGFloat = 0
-        sectionModel.rows.enumerated().forEach { (index,model) in
-            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: 0, y: groupH, width: CGFloat.kSCREEN_WIDTH, height: 64), zIndex: 1000+index)
-            customers.append(customItem)
-            groupH += 64
+        let view = PTCollectionView(viewConfig: config)
+        view.cellInCollection = { collection,itemSection,indexPath in
+            let itemRow = itemSection.rows[indexPath.row]
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            
+            let cellRealModel = self.dataList[indexPath.row]
+            
+            var actionSheetDatas = [String]()
+            if cellRealModel.fileType == .folder {
+                self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
+                actionSheetDatas = ["分享","复制","移动","删除"]
+            } else {
+                self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
+                actionSheetDatas = ["分享","复制","移动","删除","hash值"]
+            }
+            
+            let longTap = UILongPressGestureRecognizer { sender in
+                self.showAction = !self.showAction
+                if self.showAction {
+                    UIAlertController.baseActionSheet(title: "更多操作", titles: actionSheetDatas) { sheet in
+                        
+                    } cancelBlock: { sheet in
+                        self.showAction = false
+                    } otherBlock: { sheet, index in
+                        self.showAction = false
+                        switch index {
+                        case 0:
+                            guard let filePath = self.operateFilePath else { return }
+                            let activityVC = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
+                            if UIDevice.current.model == "iPad" {
+                                activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
+                                activityVC.popoverPresentationController?.sourceView = self.view
+                                activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)
+                            }
+                            self.present(activityVC, animated: true, completion: nil)
+                        case 1:
+                            let closeBtn = UIButton(type: .custom)
+                            closeBtn.setTitle("关闭", for: .normal)
+                            closeBtn.setTitleColor(.systemBlue, for: .normal)
+                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                            closeBtn.addActionHandlers { sender in
+                                self.returnFrontVC()
+                            }
+                            let rightBarItem = UIBarButtonItem(customView: closeBtn)
+                            self.navigationItem.rightBarButtonItem = rightBarItem
+
+                            guard let filePath = self.operateFilePath else { return }
+                            let manager = FileManager.default
+                            //同名
+                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
+                            do {
+                                try manager.copyItem(at: filePath, to: currentPath)
+                            } catch {
+                                PTNSLogConsole(error)
+                            }
+                            self.loadData()
+                        case 2:
+                            let closeBtn = UIButton(type: .custom)
+                            closeBtn.setTitle("关闭", for: .normal)
+                            closeBtn.setTitleColor(.systemBlue, for: .normal)
+                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                            closeBtn.addActionHandlers { sender in
+                                self.returnFrontVC()
+                            }
+                            let rightBarItem = UIBarButtonItem(customView: closeBtn)
+                            self.navigationItem.rightBarButtonItem = rightBarItem
+
+                            guard let filePath = self.operateFilePath else { return }
+                            let manager = FileManager.default
+                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
+                            do {
+                                try manager.moveItem(at: filePath, to: currentPath)
+                            } catch {
+                                PTNSLogConsole(error)
+                            }
+                            self.loadData()
+                        case 3:
+                            guard let filePath = self.operateFilePath else { return }
+                            let manager = FileManager.default
+                            do {
+                                try manager.removeItem(at: filePath)
+                            } catch {
+                                PTNSLogConsole(error)
+                            }
+                            self.loadData()
+                        default:
+                            guard let filePath = self.operateFilePath else { return }
+                            var hashValue = ""
+                            do {
+                                let data = try Data(contentsOf: filePath)
+
+                                hashValue = "MD5: \n" + data.pt.hashString(hashType: .md5) + "\n\n" + "SHA1: \n" + data.pt.hashString(hashType: .sha1) + "\n\n" + "SHA256: \n" + data.pt.hashString(hashType: .sha256) + "\n\n" + "SHA384: \n" + data.pt.hashString(hashType: .sha384) + "\n\n" + "SHA512: \n" + data.pt.hashString(hashType: .sha512)
+                            } catch  {
+                                PTNSLogConsole(error)
+                                hashValue = error.localizedDescription
+                            }
+                            
+                            UIAlertController.base_alertVC(title: "hash值",msg: hashValue,okBtns: ["复制"],cancelBtn: "取消") {
+                                
+                            } moreBtn: { index, title in
+                                hashValue.copyToPasteboard()
+                            }
+                        }
+                    } tapBackgroundBlock: { sheet in
+                        self.showAction = false
+                    }
+                }
+            }
+            longTap.minimumPressDuration = 1
+            cell.addGestureRecognizer(longTap)
+            return cell
         }
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-        group = NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-            customers
-        })
-        
-        let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        let laySection = NSCollectionLayoutSection(group: group)
-        laySection.orthogonalScrollingBehavior = behavior
-        laySection.contentInsets = sectionInsets
-
-        return laySection
-    }
-
-    lazy var viewCollection : UICollectionView = {
-        let view = UICollectionView.init(frame: CGRect.zero, collectionViewLayout: self.comboLayout())
-        view.delegate = self
-        view.dataSource = self
-        view.backgroundColor = .white
+        view.collectionDidSelect = { collection,indexPath,model in
+            let cellModel = self.dataList[indexPath.row]
+            switch cellModel.fileType {
+            case .folder:
+                self.extensionDirectoryPath = self.extensionDirectoryPath + "/" + cellModel.name
+                self.loadData()
+            default:
+                
+                let backBtn = UIButton(type: .custom)
+                backBtn.setTitle("返回", for: .normal)
+                backBtn.setTitleColor(.systemBlue, for: .normal)
+                backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                backBtn.addActionHandlers { sender in
+                    self.returnFrontVC()
+                }
+                let rightBarItem = UIBarButtonItem(customView: backBtn)
+                self.navigationItem.leftBarButtonItem = rightBarItem
+                self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellModel.name, isDirectory: false)
+                //preview
+                let previewVC = QLPreviewController()
+                previewVC.delegate = self
+                previewVC.dataSource = self
+                self.navigationController?.pushViewController(previewVC, animated: true)
+            }
+        }
         return view
     }()
 
@@ -85,8 +189,8 @@ class PTFileBrowserViewController: PTBaseViewController {
         let rightBarItem = UIBarButtonItem(customView: closeBtn)
         navigationItem.rightBarButtonItem = rightBarItem
         
-        view.addSubviews([viewCollection])
-        viewCollection.snp.makeConstraints { make in
+        view.addSubviews([newCollectionView])
+        newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.top.equalToSuperview()
         }
@@ -137,7 +241,7 @@ class PTFileBrowserViewController: PTBaseViewController {
         }
         
         PTGCDManager.gcdAfter(time: 0.5) {
-            self.mSections.removeAll()
+            var mSections = [PTSection]()
             
             var rows = [PTRows]()
             self.dataList.enumerated().forEach { index,value in
@@ -165,10 +269,10 @@ class PTFileBrowserViewController: PTBaseViewController {
                 rows.append(row)
             }
             let section = PTSection.init(rows: rows)
-            self.mSections.append(section)
+            mSections.append(section)
             
-            self.viewCollection.pt_register(by: self.mSections)
-            self.viewCollection.reloadData()
+            self.newCollectionView.layoutIfNeeded()
+            self.newCollectionView.showCollectionDetail(collectionData: mSections)
         }
     }
 
@@ -206,157 +310,6 @@ class PTFileBrowserViewController: PTBaseViewController {
             return "📜".emojiToImage(emojiFont: .appfont(size: 24))
         case .db:
             return "💾".emojiToImage(emojiFont: .appfont(size: 24))
-        }
-    }
-}
-
-extension PTFileBrowserViewController : UICollectionViewDelegate,UICollectionViewDataSource {
-    public func numberOfSections(in collectionView: UICollectionView) -> Int {
-        mSections.count
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections[section].rows.count
-    }
-
-    public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-        cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
-        
-        let cellRealModel = dataList[indexPath.row]
-        
-        var actionSheetDatas = [String]()
-        if cellRealModel.fileType == .folder {
-            operateFilePath = currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
-            actionSheetDatas = ["分享","复制","移动","删除"]
-        } else {
-            operateFilePath = currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
-            actionSheetDatas = ["分享","复制","移动","删除","hash值"]
-        }
-        
-        let longTap = UILongPressGestureRecognizer { sender in
-            self.showAction = !self.showAction
-            if self.showAction {
-                UIAlertController.baseActionSheet(title: "更多操作", titles: actionSheetDatas) { sheet in
-                    
-                } cancelBlock: { sheet in
-                    self.showAction = false
-                } otherBlock: { sheet, index in
-                    self.showAction = false
-                    switch index {
-                    case 0:
-                        guard let filePath = self.operateFilePath else { return }
-                        let activityVC = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
-                        if UIDevice.current.model == "iPad" {
-                            activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
-                            activityVC.popoverPresentationController?.sourceView = self.view
-                            activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)
-                        }
-                        self.present(activityVC, animated: true, completion: nil)
-                    case 1:
-                        let closeBtn = UIButton(type: .custom)
-                        closeBtn.setTitle("关闭", for: .normal)
-                        closeBtn.setTitleColor(.systemBlue, for: .normal)
-                        closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
-                        closeBtn.addActionHandlers { sender in
-                            self.returnFrontVC()
-                        }
-                        let rightBarItem = UIBarButtonItem(customView: closeBtn)
-                        self.navigationItem.rightBarButtonItem = rightBarItem
-
-                        guard let filePath = self.operateFilePath else { return }
-                        let manager = FileManager.default
-                        //同名
-                        let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-                        do {
-                            try manager.copyItem(at: filePath, to: currentPath)
-                        } catch {
-                            PTNSLogConsole(error)
-                        }
-                        self.loadData()
-                    case 2:
-                        let closeBtn = UIButton(type: .custom)
-                        closeBtn.setTitle("关闭", for: .normal)
-                        closeBtn.setTitleColor(.systemBlue, for: .normal)
-                        closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
-                        closeBtn.addActionHandlers { sender in
-                            self.returnFrontVC()
-                        }
-                        let rightBarItem = UIBarButtonItem(customView: closeBtn)
-                        self.navigationItem.rightBarButtonItem = rightBarItem
-
-                        guard let filePath = self.operateFilePath else { return }
-                        let manager = FileManager.default
-                        let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-                        do {
-                            try manager.moveItem(at: filePath, to: currentPath)
-                        } catch {
-                            PTNSLogConsole(error)
-                        }
-                        self.loadData()
-                    case 3:
-                        guard let filePath = self.operateFilePath else { return }
-                        let manager = FileManager.default
-                        do {
-                            try manager.removeItem(at: filePath)
-                        } catch {
-                            PTNSLogConsole(error)
-                        }
-                        self.loadData()
-                    default:
-                        guard let filePath = self.operateFilePath else { return }
-                        var hashValue = ""
-                        do {
-                            let data = try Data(contentsOf: filePath)
-
-                            hashValue = "MD5: \n" + data.pt.hashString(hashType: .md5) + "\n\n" + "SHA1: \n" + data.pt.hashString(hashType: .sha1) + "\n\n" + "SHA256: \n" + data.pt.hashString(hashType: .sha256) + "\n\n" + "SHA384: \n" + data.pt.hashString(hashType: .sha384) + "\n\n" + "SHA512: \n" + data.pt.hashString(hashType: .sha512)
-                        } catch  {
-                            PTNSLogConsole(error)
-                            hashValue = error.localizedDescription
-                        }
-                        
-                        UIAlertController.base_alertVC(title: "hash值",msg: hashValue,okBtns: ["复制"],cancelBtn: "取消") {
-                            
-                        } moreBtn: { index, title in
-                            hashValue.copyToPasteboard()
-                        }
-                    }
-                } tapBackgroundBlock: { sheet in
-                    self.showAction = false
-                }
-            }
-        }
-        longTap.minimumPressDuration = 1
-        cell.addGestureRecognizer(longTap)
-        return cell
-    }
-    
-    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cellModel = dataList[indexPath.row]
-        switch cellModel.fileType {
-        case .folder:
-            extensionDirectoryPath = extensionDirectoryPath + "/" + cellModel.name
-            loadData()
-        default:
-            
-            let backBtn = UIButton(type: .custom)
-            backBtn.setTitle("返回", for: .normal)
-            backBtn.setTitleColor(.systemBlue, for: .normal)
-            backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
-            backBtn.addActionHandlers { sender in
-                self.returnFrontVC()
-            }
-            let rightBarItem = UIBarButtonItem(customView: backBtn)
-            navigationItem.leftBarButtonItem = rightBarItem
-            operateFilePath = currentDirectoryPath.appendingPathComponent(cellModel.name, isDirectory: false)
-            //preview
-            let previewVC = QLPreviewController()
-            previewVC.delegate = self
-            previewVC.dataSource = self
-            navigationController?.pushViewController(previewVC, animated: true)
         }
     }
 }

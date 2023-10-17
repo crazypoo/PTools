@@ -18,7 +18,8 @@ extension PTBaseViewController {
         
     }
 
-    open override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+    open override func motionEnded(_ motion: UIEvent.EventSubtype, 
+                                   with event: UIEvent?) {
         if UIApplication.applicationEnvironment() != .appStore {
             let uidebug:Bool = App_UI_Debug_Bool
             UserDefaults.standard.set(!uidebug, forKey: LocalConsole.ConsoleDebug)

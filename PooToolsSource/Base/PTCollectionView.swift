@@ -202,7 +202,7 @@ public class PTCollectionView: UIView {
     public var cellInCollection:((_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index:IndexPath) -> (UICollectionViewCell))!
         
     ///item点击事件
-    public var collectionDidSelect:((_ index:IndexPath,_ sectionModel:PTSection)->Void)?
+    public var collectionDidSelect:((_ collectionView:UICollectionView,_ index:IndexPath,_ sectionModel:PTSection)->Void)?
     
     ///头部刷新事件
     public var headerRefreshTask:((UIRefreshControl)->Void)?
@@ -312,7 +312,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
         if self.collectionDidSelect != nil {
-            self.collectionDidSelect!(indexPath,itemSec)
+            self.collectionDidSelect!(collectionView,indexPath,itemSec)
         }
     }
 }

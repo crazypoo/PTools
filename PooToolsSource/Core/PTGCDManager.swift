@@ -14,7 +14,7 @@ public class PTGCDManager :NSObject {
     public static let shared = PTGCDManager()
     
     lazy var timerContainer = [String: DispatchSourceTimer]()
-
+    
     //MARK: GCD定时器
     /// GCD定时器
     /// - Parameters:

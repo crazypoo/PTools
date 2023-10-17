@@ -29,7 +29,7 @@ public class PCleanCache: NSObject {
             exception.raise()
         }
         #endif
-        
+                
         let subpathArray = PCleanCache.fileManager.subpaths(atPath: PCleanCache.cachePath!)
         var filePath = ""
         var totalSize : Float = 0

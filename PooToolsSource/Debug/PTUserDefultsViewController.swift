@@ -18,39 +18,31 @@ class PTUserDefultsViewController: PTBaseViewController {
     let haveZXbar:Bool = false
 #endif
     
-    var mSections = [PTSection]()
-    func comboLayout()->UICollectionViewCompositionalLayout {
-        let layout = UICollectionViewCompositionalLayout.init { section, environment in
-            self.generateSection(section: section)
+    lazy var newCollectionView:PTCollectionView = {
+        let config = PTCollectionViewConfig()
+        config.viewType = .Normal
+        config.itemOriginalX = 0
+        config.itemHeight = 44
+        config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
+        
+        let view = PTCollectionView(viewConfig: config)
+        view.cellInCollection = { collection,itemSection,indexPath in
+            let itemRow = itemSection.rows[indexPath.row]
+            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            cell.contentView.backgroundColor = .white
+            cell.cellModel = cellModel
+            return cell
         }
-        layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: "background")
-        layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: "background_no")
-        return layout
-    }
-    
-    func generateSection(section:NSInteger)->NSCollectionLayoutSection {
-        let sectionModel = mSections[section]
-
-        var group : NSCollectionLayoutGroup
-        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
-        
-        let cellSize = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
-        group = UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: CGFloat.kSCREEN_WIDTH,itemHeight: 54,cellRowCount: 1,originalX: PTAppBaseConfig.share.defaultViewSpace,contentTopAndBottom: 10,cellLeadingSpace: PTAppBaseConfig.share.defaultViewSpace,cellTrailingSpace: 0)
-        
-        let sectionInsets = NSDirectionalEdgeInsets.init(top: 0, leading: 0, bottom: 0, trailing: 0)
-        let laySection = NSCollectionLayoutSection(group: group)
-        laySection.orthogonalScrollingBehavior = behavior
-        laySection.contentInsets = sectionInsets
-        laySection.supplementariesFollowContentInsets = false
-
-        return laySection
-    }
-
-    lazy var collectionView : UICollectionView = {
-        let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
-        view.backgroundColor = .clear
-        view.delegate = self
-        view.dataSource = self
+        view.collectionDidSelect = { collection,indexPath,model in
+            let itemRow = model.rows[indexPath.row]
+            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            let vc = PTUserDefultsEditViewController(viewModel: cellModel)
+            self.navigationController?.pushViewController(vc)
+            vc.doneBlock = {
+                self.showDetail()
+            }
+        }
         return view
     }()
 
@@ -112,8 +104,8 @@ class PTUserDefultsViewController: PTBaseViewController {
             }
         }
         
-        view.addSubview(collectionView)
-        collectionView.snp.makeConstraints { make in
+        view.addSubview(newCollectionView)
+        newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             if self.haveZXbar {
                 make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
@@ -126,7 +118,7 @@ class PTUserDefultsViewController: PTBaseViewController {
     }
     
     func showDetail() {
-        mSections.removeAll()
+        var mSections = [PTSection]()
 
         var userdefultArrs = [PTFusionCellModel]()
         let dic = UserDefaults.standard.dictionaryRepresentation()
@@ -149,8 +141,8 @@ class PTUserDefultsViewController: PTBaseViewController {
         let cellSection = PTSection.init(rows: rows)
         mSections.append(cellSection)
         
-        collectionView.pt_register(by: mSections)
-        collectionView.reloadData()
+        self.newCollectionView.layoutIfNeeded()
+        self.newCollectionView.showCollectionDetail(collectionData: mSections)
     }
     
     func clearUserdefults() {
@@ -161,37 +153,6 @@ class PTUserDefultsViewController: PTBaseViewController {
             
             UserDefaults.standard.removePersistentDomain(forName: bundleIdentifier!)
             
-            self.showDetail()
-        }
-    }
-}
-
-extension PTUserDefultsViewController:UICollectionViewDelegate,UICollectionViewDataSource {
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        mSections.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        mSections[section].rows.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-        cell.contentView.backgroundColor = .white
-        cell.cellModel = cellModel
-        return cell
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let itemSec = mSections[indexPath.section]
-        let itemRow = itemSec.rows[indexPath.row]
-        let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-        let vc = PTUserDefultsEditViewController(viewModel: cellModel)
-        navigationController?.pushViewController(vc)
-        vc.doneBlock = {
             self.showDetail()
         }
     }

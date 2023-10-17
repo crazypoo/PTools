@@ -100,6 +100,7 @@
 		554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
+		555C1E8F2ADEC36400B52A2F /* PTCircularButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555C1E8E2ADEC36400B52A2F /* PTCircularButtonView.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
 		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
 		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
@@ -108,7 +109,6 @@
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
-		5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */; };
 		5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
@@ -286,7 +286,6 @@
 		9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */; };
 		9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */; };
 		9AE4468028585F20007DC2B5 /* UIScrollView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */; };
-		9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */; };
 		9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446832858618C007DC2B5 /* StatusBarManager.swift */; };
 		9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */; };
 		9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */; };
@@ -423,6 +422,7 @@
 		554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTEditMenuInteractionDummy.m; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
+		555C1E8E2ADEC36400B52A2F /* PTCircularButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCircularButtonView.swift; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
 		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
 		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
@@ -431,7 +431,6 @@
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
-		5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocationFunction.swift; sourceTree = "<group>"; };
 		5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGetGPSData.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
@@ -625,7 +624,6 @@
 		9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Number+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+PTEX.swift"; sourceTree = "<group>"; };
 		9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTEX.swift"; sourceTree = "<group>"; };
-		9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YBAttributedStringTools.swift; sourceTree = "<group>"; };
 		9AE446832858618C007DC2B5 /* StatusBarManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StatusBarManager.swift; sourceTree = "<group>"; };
 		9AE44685285861D6007DC2B5 /* UIViewController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PTEX.swift"; sourceTree = "<group>"; };
 		9AE446872858627F007DC2B5 /* TimeInterval+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimeInterval+PTEX.swift"; sourceTree = "<group>"; };
@@ -1216,7 +1214,6 @@
 		5578EE5829ADC45C00F3E0AC /* Location */ = {
 			isa = PBXGroup;
 			children = (
-				5578EE5929ADC46E00F3E0AC /* PTLocationFunction.swift */,
 				5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */,
 			);
 			path = Location;
@@ -1527,7 +1524,6 @@
 		55D59C6828F3E98200B4FF76 /* Attributed */ = {
 			isa = PBXGroup;
 			children = (
-				9AE4468128586159007DC2B5 /* YBAttributedStringTools.swift */,
 			);
 			path = Attributed;
 			sourceTree = "<group>";
@@ -1674,6 +1670,7 @@
 				6003F5A5195388D20070C39A /* PTViewController.h */,
 				6003F5A6195388D20070C39A /* PTViewController.m */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				555C1E8E2ADEC36400B52A2F /* PTCircularButtonView.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -1954,8 +1951,8 @@
 				55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */,
 				5585F6DD2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
+				555C1E8F2ADEC36400B52A2F /* PTCircularButtonView.swift in Sources */,
 				5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */,
-				5578EE5A29ADC46E00F3E0AC /* PTLocationFunction.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
@@ -2079,7 +2076,6 @@
 				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
-				9AE4468228586159007DC2B5 /* YBAttributedStringTools.swift in Sources */,
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,

@@ -418,7 +418,8 @@ public class PTUtils: NSObject {
     
     //MARK: 找出某views的superview
     ///找出某views的superview
-    class open func findCommonSuperView(firstView:UIView,other:UIView)->[UIView] {
+    class open func findCommonSuperView(firstView:UIView,
+                                        other:UIView)->[UIView] {
         let result = NSMutableArray()
         let sOne = findSuperViews(view: firstView)
         let sOther = findSuperViews(view: other)
@@ -435,7 +436,9 @@ public class PTUtils: NSObject {
     }
         
     //MARK: 这个方法可以用于UITextField中,检测金额输入
-    class open func textInputAmoutRegex(text:NSString,range:NSRange,replacementString:NSString)->Bool {
+    class open func textInputAmoutRegex(text:NSString,
+                                        range:NSRange,
+                                        replacementString:NSString)->Bool {
         let len = (range.length > 0) ? (text.length - range.length) : (text.length + replacementString.length)
         if len > 20 {
             return false
@@ -445,7 +448,8 @@ public class PTUtils: NSObject {
     }
     
     //MARK: 查找某字符在字符串的位置
-    class open func rangeOfSubString(fullStr:NSString,subStr:NSString)->[String] {
+    class open func rangeOfSubString(fullStr:NSString,
+                                     subStr:NSString)->[String] {
         var rangeArray = [String]()
         for i in 0..<fullStr.length {
             let temp:NSString = fullStr.substring(with: NSMakeRange(i, subStr.length)) as NSString

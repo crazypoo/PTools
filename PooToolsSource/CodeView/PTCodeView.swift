@@ -27,7 +27,9 @@ public class PTCodeView: UIView {
         removeFromSuperview()
     }
 
-    public init(numberOfCodes:Int,numberOfLines:Int,changeTimes:TimeInterval) {
+    public init(numberOfCodes:Int,
+                numberOfLines:Int,
+                changeTimes:TimeInterval) {
         super.init(frame: CGRectZero)
         
         for index in 0..<10 {

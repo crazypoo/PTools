@@ -8,6 +8,9 @@
 
 import UIKit
 
+/*
+    FPS检测
+ */
 @objcMembers
 public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
@@ -81,11 +84,13 @@ public class PCheckAppStatus: NSObject {
         }
     }
     
+    ///开启
     public func open() {
         createUI()
         displayLink?.isPaused = false
     }
     
+    ///关闭
     public func close() {
         displayLink?.isPaused = true
         closed = true

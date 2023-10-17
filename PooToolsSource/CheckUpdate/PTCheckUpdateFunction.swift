@@ -100,7 +100,13 @@ public class PTCheckUpdateFunction: NSObject {
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,test:Bool,url:URL?,version:String?,note:String?,force:Bool,showHub:Bool? = false) {
+    public func checkTheVersionWithappid(appid:String,
+                                         test:Bool,
+                                         url:URL?,
+                                         version:String?,
+                                         note:String?,
+                                         force:Bool,
+                                         showHub:Bool? = false) {
         if test {
             var okBtns = [String]()
             if force {

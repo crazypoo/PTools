@@ -16,8 +16,7 @@ public struct SwizzlePair{
     let swizzled:Selector
 }
 
-extension Selector
-{
+extension Selector {
     public static func <->(original:Selector,swizzled:Selector) -> SwizzlePair{
         SwizzlePair(original: original, swizzled: swizzled)
     }
@@ -31,7 +30,7 @@ extension Selector
      }
  }
  */
-public struct Swizzle{
+public struct Swizzle {
     @resultBuilder
     public struct SwizzleFunctionBuilder{
         public static func buildBlock(_ swizzlePairs:SwizzlePair...) -> [SwizzlePair]{

@@ -18,6 +18,7 @@ public class PTGuidePageModel: NSObject {
     public var skipShow:Bool = false
     public var forwardImage:String = ""
     public var backImage:String = ""
+    public var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
 }
 
 @objcMembers
@@ -114,7 +115,7 @@ public class PTGuidePageHUD: UIView {
                 startButton.setTitle(StartString, for: .normal)
                 startButton.setTitleColor(UIColor(red: 164/255, green: 201/255, blue: 67/255, alpha: 1), for: .normal)
                 startButton.titleLabel?.font = .systemFont(ofSize: 21)
-                startButton.setBackgroundImage(UIImage(named: "GuideImage.bundle/guideImage_button_backgound"), for: .normal)
+                startButton.setBackgroundImage(viewModel.startBackgroundImage, for: .normal)
                 startButton.addActionHandlers { sender in
                     self.buttonClick(sender: sender)
                 }
@@ -187,7 +188,8 @@ public class PTGuidePageHUD: UIView {
         }
     }
     
-    public init(mainView:UIView,videlURL:URL) {
+    public init(mainView:UIView,
+                videlURL:URL) {
         super.init(frame: mainView.frame)
         player.player = AVPlayer.init(url: videlURL)
         player.showsPlaybackControls = false
