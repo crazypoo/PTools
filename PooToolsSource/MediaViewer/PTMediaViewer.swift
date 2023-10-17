@@ -782,7 +782,7 @@ public class PTMediaViewer: UIView {
         let view = UIButton.init(type: .custom)
         view.setImage(self.viewConfig.moreActionImage, for: .normal)
         view.addActionHandlers { sender in
-            UIAlertController.baseActionSheet(title: "更多操作",cancelButtonName: "取消", titles: self.actionSheetTitle) { sheet in
+            UIAlertController.baseActionSheet(title: "更多操作", cancelButtonName: "取消",titles: []) { sheet in
                 
             } cancelBlock: { sheet in
                 

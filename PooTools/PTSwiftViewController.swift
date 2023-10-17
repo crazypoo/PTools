@@ -650,6 +650,8 @@ class PTSwiftViewController: PTBaseViewController {
 //            make.centerX.centerY.equalToSuperview()
 //        }
 //        btn.addActionHandlers { sender in
+//            let vc = PTMotoTestViewController()
+//            self.navigationController?.pushViewController(vc, animated: true)
 //            var options = PickerOptionsInfo()
 //            options.selectLimit = 1
 //            options.selectOptions = .video
@@ -716,15 +718,15 @@ extension PTSwiftViewController:UICollectionViewDelegate,UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        UIAlertController.baseActionSheet(title: "1",cancelButtonName: "213",destructiveButtonName: "4444444", titles: ["123"]) { sheet in
-            
-        } cancelBlock: { sheet in
-            
-        } otherBlock: { sheet, index in
-            
-        } tapBackgroundBlock: { sheet in
-            
-        }
+//        UIAlertController.baseActionSheet(title: "1",cancelButtonName: "213",destructiveButtonName: "4444444", titles: ["123"]) { sheet in
+//            
+//        } cancelBlock: { sheet in
+//            
+//        } otherBlock: { sheet, index in
+//            
+//        } tapBackgroundBlock: { sheet in
+//            
+//        }
     }
 }
 
