@@ -297,6 +297,13 @@ public class PTCollectionView: UIView {
         self.collectionView.mj_footer?.endRefreshingWithNoMoreData()
     }
 #endif
+    
+#if POOTOOLS_PAGINGCONTROL
+    ///用于SegmentView上
+    public func segmentScrolView() -> UIScrollView {
+        self.collectionView
+    }
+#endif
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
