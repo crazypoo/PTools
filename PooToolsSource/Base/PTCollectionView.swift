@@ -31,6 +31,31 @@ public enum PTCollectionViewDecorationItemsType {
     case NoItems
 }
 
+///ReusableView回调
+/// - Parameters:
+///   - kind: header的头部kind
+///   - collectionView: collectionView
+///   - sectionModel: Section的model
+///   - indexPath: 坐标
+///  - Return: UICollectionReusableView
+public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> (UICollectionReusableView)
+
+///Cell设置
+/// - Parameters:
+///   - collectionView: collectionView
+///   - sectionModel: Section的model
+///   - index: 坐标
+///  - Return: UICollectionViewCell
+public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> (UICollectionViewCell)
+
+///Cell点击事件
+/// - Parameters:
+///   - collectionView: collectionView
+///   - sectionModel: Section的model
+///   - indexPath: 坐标
+///  - Return: 事件
+public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
+
 //MARK: Collection展示的基本配置参数设置
 public class PTCollectionViewConfig:PTBaseModel {
     ///CollectionView展示的样式类型
@@ -177,32 +202,17 @@ public class PTCollectionView: UIView {
         return control
     }()
     
+    //MARK: Cell datasource handler
     ///头部设置
-    /// - Parameters:
-    ///   - kind: header的头部kind
-    ///   - collectionView: collectionView
-    ///   - sectionModel: Section的model
-    ///   - index: 坐标
-    ///  - Return: UICollectionReusableView
-    public var headerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    public var headerInCollection:PTReusableViewHandler?
     ///底部设置
-    /// - Parameters:
-    ///   - kind: footer的头部kind
-    ///   - collectionView: collectionView
-    ///   - sectionModel: Section的model
-    ///   - index: 坐标
-    ///  - Return: UICollectionReusableView
-    public var footerInCollection:((_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index: IndexPath) -> (UICollectionReusableView))?
+    public var footerInCollection:PTReusableViewHandler?
     ///item设置
-    /// - Parameters:
-    ///   - collectionView: collectionView
-    ///   - sectionModel: Section的model
-    ///   - index: 坐标
-    ///  - Return: UICollectionViewCell
-    public var cellInCollection:((_ collectionView:UICollectionView,_ sectionModel:PTSection,_ index:IndexPath) -> (UICollectionViewCell))!
+    public var cellInCollection:PTCellInCollectionHandler!
         
+    //MARK: Cell delegate handler
     ///item点击事件
-    public var collectionDidSelect:((_ collectionView:UICollectionView,_ index:IndexPath,_ sectionModel:PTSection)->Void)?
+    public var collectionDidSelect:PTCellDidSelectedHandler?
     
     ///头部刷新事件
     public var headerRefreshTask:((UIRefreshControl)->Void)?
@@ -312,7 +322,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
         if self.collectionDidSelect != nil {
-            self.collectionDidSelect!(collectionView,indexPath,itemSec)
+            self.collectionDidSelect!(collectionView,itemSec,indexPath)
         }
     }
 }

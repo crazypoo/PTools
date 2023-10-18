@@ -683,12 +683,6 @@ class PTSwiftViewController: PTBaseViewController {
 //        // 更新扇形的角度，这里示例设置扇形起始角度为0，结束角度为π/2
 //        fanShapeView.updateFanShape(startAngle: 30, endAngle: .pi / 2 + 30)
 
-        let fanShapeView = CircularFanView(frame: .zero)
-        self.view.addSubview(fanShapeView)
-        fanShapeView.snp.makeConstraints { make in
-            make.width.height.equalTo(radius * 2)
-            make.centerX.centerY.equalToSuperview()
-        }
     }
     
     func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
