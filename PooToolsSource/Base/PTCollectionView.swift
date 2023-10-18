@@ -22,6 +22,7 @@ public enum PTCollectionViewType {
     case Normal
     case Gird
     case WaterFall
+    case Custom
 }
 
 //MARK: Collection展示的Section底部样式类型
@@ -128,6 +129,8 @@ public class PTCollectionView: UIView {
             group = UICollectionView.girdCollectionLayout(data: sectionModel.rows,groupWidth: self.frame.size.width,itemHeight: self.viewConfig.itemHeight,cellRowCount: 1,originalX: self.viewConfig.itemOriginalX,contentTopAndBottom: self.viewConfig.contentTopAndBottom,cellTrailingSpace: self.viewConfig.cellTrailingSpace)
         case .WaterFall:
             group = UICollectionView.waterFallLayout(data: sectionModel.rows, rowCount: self.viewConfig.rowCount,itemOriginalX:self.viewConfig.itemOriginalX, itemOriginalY: self.viewConfig.contentTopAndBottom,itemSpace: self.viewConfig.cellLeadingSpace, itemHeight: self.waterFallLayout!)
+        case .Custom:
+            group = self.customerLayout!(sectionModel)
         }
         
         let sectionInsets = self.viewConfig.sectionEdges
@@ -219,8 +222,13 @@ public class PTCollectionView: UIView {
     ///底部刷新事件
     public var footRefreshTask:PTActionTask?
 
+    //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
     ///瀑布流item高度设置
     public var waterFallLayout:((Int, AnyObject) -> CGFloat)?
+    
+    ///自定义情况下调用该设置
+    ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
+    public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
 #if POOTOOLS_LISTEMPTYDATA
     ///空数据点击事件
@@ -229,6 +237,7 @@ public class PTCollectionView: UIView {
 
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
+    //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
@@ -268,6 +277,7 @@ public class PTCollectionView: UIView {
         collectionView.reloadData()
     }
     
+    //MARK: 刷新相关
     ///停止头部或者底部的刷新控件使用
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH

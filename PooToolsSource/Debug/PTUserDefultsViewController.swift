@@ -34,7 +34,7 @@ class PTUserDefultsViewController: PTBaseViewController {
             cell.cellModel = cellModel
             return cell
         }
-        view.collectionDidSelect = { collection,indexPath,model in
+        view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)
             let vc = PTUserDefultsEditViewController(viewModel: cellModel)

@@ -148,7 +148,7 @@ class PTFileBrowserViewController: PTBaseViewController {
             cell.addGestureRecognizer(longTap)
             return cell
         }
-        view.collectionDidSelect = { collection,indexPath,model in
+        view.collectionDidSelect = { collection,model,indexPath in
             let cellModel = self.dataList[indexPath.row]
             switch cellModel.fileType {
             case .folder:

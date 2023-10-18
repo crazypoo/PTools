@@ -88,7 +88,7 @@ public class PTDebugViewController: PTBaseViewController {
             }
             return cell
         }
-        view.collectionDidSelect = { collection,indexPath,model in
+        view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             if itemRow.title == .ipMode {
                 let actionSheet = PTActionSheetView.init(title: "选择APP请求环境", subTitle: "", cancelButton: NSLocalizedString("取消", comment: ""),destructiveButton: "", otherButtonTitles: ["生产环境","测试","自定义"])
