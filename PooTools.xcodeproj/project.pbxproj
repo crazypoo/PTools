@@ -810,7 +810,6 @@
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				555E8FE628D01CF600AF5E63 /* LocalConsole */,
 				5578EE5829ADC45C00F3E0AC /* Location */,
-				55B4FA052AE0F62C006D35F3 /* LocationPermission */,
 				9AE4468D2858680A007DC2B5 /* Log */,
 				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
 				55B4FA2F2AE10B25006D35F3 /* MeidaLibraryPermission */,
@@ -1261,6 +1260,10 @@
 			isa = PBXGroup;
 			children = (
 				5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */,
+				55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
+				55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
+				55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */,
+				55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -1385,17 +1388,6 @@
 				55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */,
 			);
 			path = NotificationPermission;
-			sourceTree = "<group>";
-		};
-		55B4FA052AE0F62C006D35F3 /* LocationPermission */ = {
-			isa = PBXGroup;
-			children = (
-				55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
-				55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
-				55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */,
-				55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */,
-			);
-			path = LocationPermission;
 			sourceTree = "<group>";
 		};
 		55B4FA0E2AE0F9A0006D35F3 /* CameraPermission */ = {
