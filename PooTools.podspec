@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.8.6'
+    s.version     = '3.8.7'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -519,9 +519,6 @@ Pod::Spec.new do |s|
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
-#    subspec.dependency 'FLEX', :configurations => ['Debug']
-#    subspec.dependency 'InAppViewDebugger', :configurations => ['Debug']
-#    subspec.dependency 'LookinServer', :configurations => ['Debug']
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUG POOTOOLS_COCOAPODS"
     }
@@ -799,7 +796,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
         subspec.dependency 'PooTools/Animation'
-        subspec.dependency 'PooTools/YB_Attributed'
         subspec.dependency 'PooTools/BankCard'
         subspec.dependency 'PooTools/BilogyID'
         subspec.dependency 'PooTools/Calendar'
