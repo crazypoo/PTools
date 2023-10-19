@@ -199,10 +199,6 @@
 		55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */; };
 		55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */; };
 		55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */; };
-		55B4FA072AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */; };
-		55B4FA092AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
-		55B4FA0B2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */; };
-		55B4FA0D2AE0F6F4006D35F3 /* PTPermissionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */; };
 		55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0F2AE0F9D8006D35F3 /* PTPermissionCamera.swift */; };
 		55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA122AE0FAD4006D35F3 /* PTPermissionCalendar.swift */; };
 		55B4FA162AE0FC3E006D35F3 /* PTPermissionMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA152AE0FC3E006D35F3 /* PTPermissionMotion.swift */; };
@@ -218,6 +214,10 @@
 		55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA332AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift */; };
 		55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA352AE10CA5006D35F3 /* PTPermissionBluetooth.swift */; };
 		55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */; };
+		55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3B2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift */; };
+		55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */; };
+		55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
+		55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */; };
 		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
 		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
 		55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTShareItem.swift */; };
@@ -544,10 +544,6 @@
 		55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionText.swift; sourceTree = "<group>"; };
 		55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermission.swift; sourceTree = "<group>"; };
 		55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionNotification.swift; sourceTree = "<group>"; };
-		55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAlwaysHandler.swift; sourceTree = "<group>"; };
-		55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
-		55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
-		55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocation.swift; sourceTree = "<group>"; };
 		55B4FA0F2AE0F9D8006D35F3 /* PTPermissionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionCamera.swift; sourceTree = "<group>"; };
 		55B4FA122AE0FAD4006D35F3 /* PTPermissionCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionCalendar.swift; sourceTree = "<group>"; };
 		55B4FA152AE0FC3E006D35F3 /* PTPermissionMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionMotion.swift; sourceTree = "<group>"; };
@@ -563,6 +559,10 @@
 		55B4FA332AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionBluetoothHandler.swift; sourceTree = "<group>"; };
 		55B4FA352AE10CA5006D35F3 /* PTPermissionBluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionBluetooth.swift; sourceTree = "<group>"; };
 		55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSiri.swift; sourceTree = "<group>"; };
+		55B4FA3B2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAlwaysHandler.swift; sourceTree = "<group>"; };
+		55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocation.swift; sourceTree = "<group>"; };
+		55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
+		55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
 		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
 		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
 		55BD5B8229C620C80023458A /* PTShareItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTShareItem.swift; sourceTree = "<group>"; };
@@ -763,6 +763,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55B4FA3A2AE149C5006D35F3 /* LocationPermission */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1260,10 +1261,6 @@
 			isa = PBXGroup;
 			children = (
 				5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */,
-				55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
-				55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
-				55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */,
-				55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */,
 			);
 			path = Location;
 			sourceTree = "<group>";
@@ -1501,6 +1498,17 @@
 				55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */,
 			);
 			path = SiriPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA3A2AE149C5006D35F3 /* LocationPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA3B2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
+				55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */,
+				55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
+				55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */,
+			);
+			path = LocationPermission;
 			sourceTree = "<group>";
 		};
 		55BD5B8129C620C10023458A /* Share */ = {
@@ -2075,7 +2083,6 @@
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */,
-				55B4FA072AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
 				55B4FA162AE0FC3E006D35F3 /* PTPermissionMotion.swift in Sources */,
@@ -2095,7 +2102,9 @@
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
+				55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */,
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
+				55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
@@ -2108,7 +2117,6 @@
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */,
-				55B4FA0B2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
@@ -2138,7 +2146,6 @@
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */,
-				55B4FA0D2AE0F6F4006D35F3 /* PTPermissionLocation.swift in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
@@ -2154,6 +2161,7 @@
 				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				5585F70D2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
+				55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */,
 				5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
 				558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */,
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
@@ -2208,7 +2216,6 @@
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
-				55B4FA092AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
 				55025E4A29FA56D00024A960 /* PTNavBackImageView.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
@@ -2237,6 +2244,7 @@
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
 				55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */,
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
+				55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */,
 				55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */,
