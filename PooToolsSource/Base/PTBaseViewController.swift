@@ -137,11 +137,11 @@ open class PTBaseViewController: ZXNavigationBarController {
         }
     }
     
-    @objc public func returnFrontVC() {
+    @objc public func returnFrontVC(completion:PTActionTask? = nil) {
         if self.presentingViewController != nil {
-            self.dismiss(animated: true, completion: nil)
+            self.dismiss(animated: true, completion: completion)
         } else {
-            self.navigationController?.popViewController(animated: true, nil)
+            self.navigationController?.popViewController(animated: true, completion)
         }
     }
 }
@@ -246,11 +246,11 @@ open class PTBaseViewController: UIViewController {
         }
     }
     
-    public func returnFrontVC() {
+    public func returnFrontVC(completion:PTActionTask? = nil) {
         if presentingViewController != nil {
-            dismiss(animated: true, completion: nil)
+            dismiss(animated: true, completion: completion)
         } else {
-            navigationController?.popViewController(animated: true, nil)
+            navigationController?.popViewController(animated: true, completion)
         }
     }
 }

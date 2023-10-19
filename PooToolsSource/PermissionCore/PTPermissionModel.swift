@@ -7,14 +7,9 @@
 //
 
 import UIKit
-#if canImport(Permission)
-import Permission
-#endif
 
 public class PTPermissionModel: NSObject {
     public var name:String!
     public var desc:String = ""
-#if canImport(Permission)
-    public var type:Permission.Kind!
-#endif
+    public var type:PTPermission.Kind!
 }

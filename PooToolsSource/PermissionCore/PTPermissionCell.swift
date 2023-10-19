@@ -10,154 +10,141 @@ import UIKit
 import SwifterSwift
 import SnapKit
 import AttributedString
-#if canImport(Permission)
-import Permission
-#endif
-#if canImport(HealthKit)
+
+#if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
-#endif
-#if canImport(HealthPermission)
-import HealthPermission
-#endif
-#if canImport(SpeechPermission)
-import SpeechPermission
-#endif
-#if canImport(FaceIDPermission)
-import FaceIDPermission
-#endif
-#if canImport(LocationWhenInUsePermission)
-import LocationWhenInUsePermission
-#endif
-#if canImport(NotificationPermission)
-import NotificationPermission
-#endif
-#if canImport(RemindersPermission)
-import RemindersPermission
-#endif
-#if canImport(CalendarPermission)
-import CalendarPermission
-#endif
-#if canImport(PhotoLibraryPermission)
-import PhotoLibraryPermission
-#endif
-#if canImport(CameraPermission)
-import CameraPermission
-#endif
-#if canImport(TrackingPermission)
-import TrackingPermission
 #endif
 
 class PTPermissionCell: PTBaseNormalCell {
     
     static let ID = "PTPermissionCell"
     
-#if canImport(Permission)
-    var cellStatus:Permission.Status? = .notDetermined
-    var cellButtonTapBlock:((_ type:Permission.Kind)->Void)?
-#endif
+    var cellStatus:PTPermission.Status? = .notDetermined
+    var cellButtonTapBlock:((_ type:PTPermission.Kind)->Void)?
     
-    var cellModel:PTPermissionModel?
-    {
-        didSet{
+    var cellModel:PTPermissionModel? {
+        didSet {
                     
-#if canImport(Permission)
-            switch cellModel!.type
-            {
+            switch cellModel!.type {
             case .tracking:
-#if canImport(TrackingPermission)
-                if #available(iOS 14.5, *) {
-                    self.cellStatus = Permission.tracking.status
+#if POOTOOLS_PERMISSION_TRACKING
+                if #available(iOS 14.0, *) {
+                    self.cellStatus = PTPermission.tracking.status
                 }
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
-#endif
 #endif
             case .camera:
-#if canImport(CameraPermission)
-                self.cellStatus = Permission.camera.status
+#if POOTOOLS_PERMISSION_CAMERA
+                self.cellStatus = PTPermission.camera.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
-#endif
 #endif
             case .photoLibrary:
-#if canImport(PhotoLibraryPermission)
-                self.cellStatus = Permission.photoLibrary.status
+#if POOTOOLS_PERMISSION_PHOTO
+                self.cellStatus = PTPermission.photoLibrary.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
 #endif
-#endif
-            case .calendar:
-#if canImport(CalendarPermission)
-                self.cellStatus = Permission.calendar.status
+            case .calendar(access: .full):
+#if POOTOOLS_PERMISSION_CALENDAR
+                self.cellStatus = PTPermission.calendar(access: .full).status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
 #endif
+            case .calendar(access: .write):
+#if POOTOOLS_PERMISSION_CALENDAR
+                self.cellStatus = PTPermission.calendar(access: .write).status
+#else
+                self.cellStatus = .notSupported
 #endif
             case .reminders:
-#if canImport(RemindersPermission)
-                self.cellStatus = Permission.reminders.status
+#if POOTOOLS_PERMISSION_REMINDERS
+                self.cellStatus = PTPermission.reminders.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
-#endif
 #endif
             case .notification:
-#if canImport(NotificationPermission)
-                self.cellStatus = Permission.notification.status
+#if POOTOOLS_PERMISSION_NOTIFICATION
+                self.cellStatus = PTPermission.notification.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
 #endif
-#endif
-            case .locationWhenInUse:
-#if canImport(LocationWhenInUsePermission)
-                self.cellStatus = Permission.locationWhenInUse.status
+            case .location(access: .whenInUse):
+#if POOTOOLS_PERMISSION_LOCATION
+                self.cellStatus = PTPermission.location(access: .whenInUse).status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
 #endif
+            case .location(access: .always):
+#if POOTOOLS_PERMISSION_LOCATION
+                self.cellStatus = PTPermission.location(access: .always).status
+#else
+                self.cellStatus = .notSupported
 #endif
             case .faceID:
-#if canImport(FaceIDPermission)
-                self.cellStatus = Permission.faceID.status
+#if POOTOOLS_PERMISSION_FACEIDPERMISSION
+                self.cellStatus = PTPermission.faceID.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
-#endif
 #endif
             case .speech:
-#if canImport(SpeechPermission)
-                self.cellStatus = Permission.speech.status
+#if POOTOOLS_PERMISSION_SPEECH
+                self.cellStatus = PTPermission.speech.status
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
-#endif
 #endif
             case .health:
-#if canImport(HealthKit) && canImport(HealthPermission)
-                self.cellStatus = HealthPermission.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
+#if POOTOOLS_PERMISSION_HEALTH
+                self.cellStatus = PTPermissionHealth.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
 #else
-#if canImport(Permission)
                 self.cellStatus = .notSupported
 #endif
+            case .motion:
+#if POOTOOLS_PERMISSION_MOTION
+                self.cellStatus = PTPermission.motion.status
+#else
+                self.cellStatus = .notSupported
+#endif
+            case .contacts:
+#if POOTOOLS_PERMISSION_MIC
+                self.cellStatus = PTPermission.contacts.status
+#else
+                self.cellStatus = .notSupported
+#endif
+            case .microphone:
+#if POOTOOLS_PERMISSION_MIC
+                self.cellStatus = PTPermission.microphone.status
+#else
+                self.cellStatus = .notSupported
+#endif
+            case .mediaLibrary:
+#if POOTOOLS_PERMISSION_MEDIA
+                self.cellStatus = PTPermission.mediaLibrary.status
+#else
+                self.cellStatus = .notSupported
+#endif
+            case .bluetooth:
+#if POOTOOLS_PERMISSION_BLUETOOTH
+                self.cellStatus = PTPermission.bluetooth.status
+#else
+                self.cellStatus = .notSupported
+#endif
+            case .siri:
+#if POOTOOLS_PERMISSION_SIRI
+                self.cellStatus = PTPermission.siri.status
+#else
+                self.cellStatus = .notSupported
 #endif
             default:break
             }
-#endif
             setButtonStatus()
         }
     }
     
-    func setButtonStatus()
-    {
+    func setButtonStatus() {
         var permissionName = ""
-        #if canImport(Permission)
-        switch cellModel!.type
-        {
+        switch cellModel!.type {
         case .tracking:
             permissionName = "用户数据追踪"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_tracking")
@@ -167,8 +154,11 @@ class PTPermissionCell: PTBaseNormalCell {
         case .photoLibrary:
             permissionName = "相册"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_photoLibrary")
-        case .calendar:
-            permissionName = "日历"
+        case .calendar(access: .full):
+            permissionName = "完全使用日历"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
+        case .calendar(access: .write):
+            permissionName = "写入数据到日历"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
         case .reminders:
             permissionName = "提醒"
@@ -176,10 +166,10 @@ class PTPermissionCell: PTBaseNormalCell {
         case .notification:
             permissionName = "通知推送"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_notification")
-        case .locationWhenInUse:
-            permissionName = "定位"
+        case .location(access: .whenInUse):
+            permissionName = "须要时使用定位"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
-        case .locationAlways:
+        case .location(access: .always):
             permissionName = "保持使用定位"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
         case .speech:
@@ -191,9 +181,26 @@ class PTPermissionCell: PTBaseNormalCell {
         case .faceID:
             permissionName = "FaceID"
             cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
+        case .motion:
+            permissionName = "运动数据"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_motion")
+        case .contacts:
+            permissionName = "通讯录"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_contact")
+        case .microphone:
+            permissionName = "麦克风"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_mic")
+        case .mediaLibrary:
+            permissionName = "多媒体"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_media")
+        case .bluetooth:
+            permissionName = "蓝牙"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_bluetooth")
+        case .siri:
+            permissionName = "Siri"
+            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_siri")
         default:break
         }
-        #endif
         
         var totalAtt:ASAttributedString = ASAttributedString(string: "")
         
@@ -205,7 +212,6 @@ class PTPermissionCell: PTBaseNormalCell {
 
         cellTitle.attributed.text = totalAtt
         
-#if canImport(Permission)
         switch self.cellStatus {
         case .authorized:
             authorizedButton.isSelected = true
@@ -217,37 +223,80 @@ class PTPermissionCell: PTBaseNormalCell {
             authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
             authorizedButton.setTitle("已拒绝", for: .selected)
             authorizedButton.addActionHandlers(handler: { sender in
-                switch self.cellModel!.type
-                {
+                switch self.cellModel!.type {
                 case .tracking:
-#if canImport(TrackingPermission)
-                    if #available(iOS 14.5, *) {
-                        Permission.tracking.openSettingPage()
+#if POOTOOLS_PERMISSION_TRACKING
+                    if #available(iOS 14.0, *) {
+                        PTPermission.tracking.openSettingPage()
                     }
 #endif
                 case .camera:
-#if canImport(CameraPermission)
-                    Permission.camera.openSettingPage()
+#if POOTOOLS_PERMISSION_CAMERA
+                    PTPermission.camera.openSettingPage()
 #endif
                 case .photoLibrary:
-#if canImport(PhotoLibraryPermission)
-                    Permission.photoLibrary.openSettingPage()
+#if POOTOOLS_PERMISSION_PHOTO
+                    PTPermission.photoLibrary.openSettingPage()
 #endif
-                case .calendar:
-#if canImport(CalendarPermission)
-                    Permission.calendar.openSettingPage()
+                case .calendar(access: .full):
+#if POOTOOLS_PERMISSION_CALENDAR
+                    PTPermission.calendar(access: .full).openSettingPage()
+#endif
+                case .calendar(access: .write):
+#if POOTOOLS_PERMISSION_CALENDAR
+                    PTPermission.calendar(access: .write).openSettingPage()
 #endif
                 case .reminders:
-#if canImport(RemindersPermission)
-                    Permission.reminders.openSettingPage()
+#if POOTOOLS_PERMISSION_REMINDERS
+                    PTPermission.reminders.openSettingPage()
 #endif
                 case .notification:
-#if canImport(NotificationPermission)
-                    Permission.notification.openSettingPage()
+#if POOTOOLS_PERMISSION_NOTIFICATION
+                    PTPermission.notification.openSettingPage()
 #endif
-                case .locationWhenInUse:
-#if canImport(LocationWhenInUsePermission)
-                    Permission.locationWhenInUse.openSettingPage()
+                case .location(access: .whenInUse):
+#if POOTOOLS_PERMISSION_LOCATION
+                    PTPermission.location(access: .whenInUse).openSettingPage()
+#endif
+                case .location(access: .always):
+#if POOTOOLS_PERMISSION_LOCATION
+                    PTPermission.location(access: .always).openSettingPage()
+#endif
+                case .motion:
+#if POOTOOLS_PERMISSION_MOTION
+                    PTPermission.motion.openSettingPage()
+#endif
+                case .faceID:
+#if POOTOOLS_PERMISSION_FACEIDPERMISSION
+                    PTPermission.faceID.openSettingPage()
+#endif
+                case .health:
+#if POOTOOLS_PERMISSION_HEALTH
+                    PTPermission.health.openSettingPage()
+#endif
+                case .speech:
+#if POOTOOLS_PERMISSION_SPEECH
+                    PTPermission.speech.openSettingPage()
+#endif
+                case .contacts:
+#if POOTOOLS_PERMISSION_CONTACTS
+                    PTPermission.contacts.openSettingPage()
+#endif
+                case .microphone:
+#if POOTOOLS_PERMISSION_MIC
+                    PTPermission.microphone.openSettingPage()
+#endif
+                case .mediaLibrary:
+#if POOTOOLS_PERMISSION_MEDIA
+                    PTPermission.mediaLibrary.openSettingPage()
+#endif
+                case .bluetooth:
+#if POOTOOLS_PERMISSION_BLUETOOTH
+                    PTPermission.bluetooth.openSettingPage()
+#endif
+                case .siri:
+#if POOTOOLS_PERMISSION_SIRI
+                    PTPermission.siri.openSettingPage()
 #endif
                 default:break
                 }
@@ -257,8 +306,7 @@ class PTPermissionCell: PTBaseNormalCell {
             authorizedButton.isUserInteractionEnabled = true
             authorizedButton.setTitle("询问授权", for: .normal)
             authorizedButton.addActionHandlers(handler: { sender in
-                if self.cellButtonTapBlock != nil
-                {
+                if self.cellButtonTapBlock != nil {
                     self.cellButtonTapBlock!(self.cellModel!.type)
                 }
             })
@@ -270,7 +318,6 @@ class PTPermissionCell: PTBaseNormalCell {
         default:
             break
         }
-#endif
     }
     
     fileprivate lazy var authorizedButton:UIButton = {

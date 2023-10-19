@@ -196,6 +196,28 @@
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
 		55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AC2A2EADE900A7B3AD /* PTMemory.swift */; };
 		55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */; };
+		55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */; };
+		55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */; };
+		55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */; };
+		55B4FA072AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */; };
+		55B4FA092AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
+		55B4FA0B2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */; };
+		55B4FA0D2AE0F6F4006D35F3 /* PTPermissionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */; };
+		55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA0F2AE0F9D8006D35F3 /* PTPermissionCamera.swift */; };
+		55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA122AE0FAD4006D35F3 /* PTPermissionCalendar.swift */; };
+		55B4FA162AE0FC3E006D35F3 /* PTPermissionMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA152AE0FC3E006D35F3 /* PTPermissionMotion.swift */; };
+		55B4FA192AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA182AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift */; };
+		55B4FA1C2AE0FEB6006D35F3 /* PTPermissionTracking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA1B2AE0FEB6006D35F3 /* PTPermissionTracking.swift */; };
+		55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA1E2AE0FFAE006D35F3 /* PTPermissionReminders.swift */; };
+		55B4FA222AE10094006D35F3 /* PTPermissionFaceID.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA212AE10094006D35F3 /* PTPermissionFaceID.swift */; };
+		55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA242AE101AC006D35F3 /* PTPermissionHealth.swift */; };
+		55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA272AE10303006D35F3 /* PTPermissionSpeech.swift */; };
+		55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA2A2AE108FE006D35F3 /* PTPermissionContacts.swift */; };
+		55B4FA2E2AE10A16006D35F3 /* PTPermissionMic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA2D2AE10A16006D35F3 /* PTPermissionMic.swift */; };
+		55B4FA312AE10B3D006D35F3 /* PTPermissionMedia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA302AE10B3D006D35F3 /* PTPermissionMedia.swift */; };
+		55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA332AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift */; };
+		55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA352AE10CA5006D35F3 /* PTPermissionBluetooth.swift */; };
+		55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */; };
 		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
 		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
 		55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTShareItem.swift */; };
@@ -519,6 +541,28 @@
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
 		55B389AC2A2EADE900A7B3AD /* PTMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMemory.swift; sourceTree = "<group>"; };
 		55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorPickPlugin.swift; sourceTree = "<group>"; };
+		55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionText.swift; sourceTree = "<group>"; };
+		55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermission.swift; sourceTree = "<group>"; };
+		55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionNotification.swift; sourceTree = "<group>"; };
+		55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAlwaysHandler.swift; sourceTree = "<group>"; };
+		55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
+		55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
+		55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionLocation.swift; sourceTree = "<group>"; };
+		55B4FA0F2AE0F9D8006D35F3 /* PTPermissionCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionCamera.swift; sourceTree = "<group>"; };
+		55B4FA122AE0FAD4006D35F3 /* PTPermissionCalendar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionCalendar.swift; sourceTree = "<group>"; };
+		55B4FA152AE0FC3E006D35F3 /* PTPermissionMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionMotion.swift; sourceTree = "<group>"; };
+		55B4FA182AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionPhotoLibrary.swift; sourceTree = "<group>"; };
+		55B4FA1B2AE0FEB6006D35F3 /* PTPermissionTracking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionTracking.swift; sourceTree = "<group>"; };
+		55B4FA1E2AE0FFAE006D35F3 /* PTPermissionReminders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionReminders.swift; sourceTree = "<group>"; };
+		55B4FA212AE10094006D35F3 /* PTPermissionFaceID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionFaceID.swift; sourceTree = "<group>"; };
+		55B4FA242AE101AC006D35F3 /* PTPermissionHealth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionHealth.swift; sourceTree = "<group>"; };
+		55B4FA272AE10303006D35F3 /* PTPermissionSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSpeech.swift; sourceTree = "<group>"; };
+		55B4FA2A2AE108FE006D35F3 /* PTPermissionContacts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionContacts.swift; sourceTree = "<group>"; };
+		55B4FA2D2AE10A16006D35F3 /* PTPermissionMic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionMic.swift; sourceTree = "<group>"; };
+		55B4FA302AE10B3D006D35F3 /* PTPermissionMedia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionMedia.swift; sourceTree = "<group>"; };
+		55B4FA332AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionBluetoothHandler.swift; sourceTree = "<group>"; };
+		55B4FA352AE10CA5006D35F3 /* PTPermissionBluetooth.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionBluetooth.swift; sourceTree = "<group>"; };
+		55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSiri.swift; sourceTree = "<group>"; };
 		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
 		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
 		55BD5B8229C620C80023458A /* PTShareItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTShareItem.swift; sourceTree = "<group>"; };
@@ -729,24 +773,30 @@
 				55D59C6928F537BA00B4FF76 /* Base */,
 				55D59C6128F3E87600B4FF76 /* BioID */,
 				231D15FC272CDEE9003D6F62 /* BlackMagic */,
+				55B4FA322AE10C62006D35F3 /* BluetoothPermission */,
 				55D59C5128F296F600B4FF76 /* Blur */,
 				55D59C5028F279C200B4FF76 /* Button */,
 				55D59C5528F2984B00B4FF76 /* Calendar */,
+				55B4FA112AE0FAB0006D35F3 /* CalendarPermission */,
 				55D59C4728F14A3100B4FF76 /* CallMessageMail */,
+				55B4FA0E2AE0F9A0006D35F3 /* CameraPermission */,
 				231D14F3272CDEE9003D6F62 /* Category */,
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				5528375A28EA8FD600D12202 /* CheckUpdate */,
 				55D59C5E28F3E81000B4FF76 /* CodeView */,
+				55B4FA292AE108E3006D35F3 /* ContactsPermission */,
 				5589FF4E29A87B7E00519383 /* Contract */,
 				55D59C5B28F3E6FB00B4FF76 /* Core */,
 				231D15F9272CDEE9003D6F62 /* Country */,
 				55D59C5F28F3E82E00B4FF76 /* DarkMode */,
 				55024DF029F370DB00244E44 /* Debug */,
 				555A8B4228C2E7A700692501 /* DevMask */,
+				55B4FA202AE1005E006D35F3 /* FaceIDPermission */,
 				55024DEA29F36A0900244E44 /* FloatPanel */,
 				55D59C5628F298CC00B4FF76 /* Guide */,
 				5507026828F6A8DF00C48239 /* HealthKit */,
+				55B4FA232AE1016A006D35F3 /* HealthPermission */,
 				557FC36A2966A2BC00991C36 /* ImagePicker */,
 				231D1537272CDEE9003D6F62 /* Input */,
 				231D15A1272CDEE9003D6F62 /* Json */,
@@ -761,19 +811,26 @@
 				231D14E0272CDEE9003D6F62 /* Loading */,
 				555E8FE628D01CF600AF5E63 /* LocalConsole */,
 				5578EE5829ADC45C00F3E0AC /* Location */,
+				55B4FA052AE0F62C006D35F3 /* LocationPermission */,
 				9AE4468D2858680A007DC2B5 /* Log */,
 				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
+				55B4FA2F2AE10B25006D35F3 /* MeidaLibraryPermission */,
+				55B4FA2C2AE10A06006D35F3 /* MicPermission */,
 				55D59C5D28F3E7C400B4FF76 /* Motion */,
+				55B4FA142AE0FC2E006D35F3 /* MotionPermission */,
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
-				554929E828F9089100C82ABF /* Permission */,
+				55B4FA022AE0F04A006D35F3 /* NotificationPermission */,
+				55B4F9FD2AE0EE14006D35F3 /* PermissionCore */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
+				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,
 				55E3BBB52ABDFF0C00858348 /* Ping */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				55025E4029FA54B60024A960 /* Protocol */,
 				55025E4129FA56D00024A960 /* PTNavigationBar */,
 				5589FF4829A73E4400519383 /* QRCodeScan */,
 				55D59C4F28F2799C00B4FF76 /* RateView */,
+				55B4FA1D2AE0FF8E006D35F3 /* RemindersPermission */,
 				231D15F1272CDEE9003D6F62 /* Rotation */,
 				558D5EDF2AAF4D8300C02042 /* Router */,
 				55E0558D28EA8AA10097F3ED /* ScrollBanner */,
@@ -783,12 +840,15 @@
 				231D1547272CDEE9003D6F62 /* Segmented */,
 				55BD5B8129C620C10023458A /* Share */,
 				231D159C272CDEE9003D6F62 /* SignView */,
+				55B4FA372AE10D88006D35F3 /* SiriPermission */,
 				231D1586272CDEE9003D6F62 /* Slider */,
 				5507026B28F6B33E00C48239 /* Speech */,
+				55B4FA262AE102E9006D35F3 /* SpeechPremission */,
 				55C742582AD7BE2F007FC330 /* SpeedPanel */,
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				5589FF4B29A8527D00519383 /* Stepper */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
+				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
 				5517EC0929B0482400C68FF4 /* UpdateTips */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
 				5517CAC429F5530500E33ACE /* Vision */,
@@ -1159,17 +1219,6 @@
 			path = CheckUpdate;
 			sourceTree = "<group>";
 		};
-		554929E828F9089100C82ABF /* Permission */ = {
-			isa = PBXGroup;
-			children = (
-				554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */,
-				554929EC28F9089D00C82ABF /* PTPermissionCell.swift */,
-				554929E928F9089D00C82ABF /* PTPermissionModel.swift */,
-				554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */,
-			);
-			path = Permission;
-			sourceTree = "<group>";
-		};
 		555A8B4228C2E7A700692501 /* DevMask */ = {
 			isa = PBXGroup;
 			children = (
@@ -1316,6 +1365,151 @@
 				558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		55B4F9FD2AE0EE14006D35F3 /* PermissionCore */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */,
+				554929EC28F9089D00C82ABF /* PTPermissionCell.swift */,
+				554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */,
+				554929E928F9089D00C82ABF /* PTPermissionModel.swift */,
+				55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */,
+				554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */,
+			);
+			path = PermissionCore;
+			sourceTree = "<group>";
+		};
+		55B4FA022AE0F04A006D35F3 /* NotificationPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */,
+			);
+			path = NotificationPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA052AE0F62C006D35F3 /* LocationPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA062AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift */,
+				55B4FA082AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */,
+				55B4FA0A2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift */,
+				55B4FA0C2AE0F6F4006D35F3 /* PTPermissionLocation.swift */,
+			);
+			path = LocationPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA0E2AE0F9A0006D35F3 /* CameraPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA0F2AE0F9D8006D35F3 /* PTPermissionCamera.swift */,
+			);
+			path = CameraPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA112AE0FAB0006D35F3 /* CalendarPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA122AE0FAD4006D35F3 /* PTPermissionCalendar.swift */,
+			);
+			path = CalendarPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA142AE0FC2E006D35F3 /* MotionPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA152AE0FC3E006D35F3 /* PTPermissionMotion.swift */,
+			);
+			path = MotionPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA182AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift */,
+			);
+			path = PhotoLibraryPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA1B2AE0FEB6006D35F3 /* PTPermissionTracking.swift */,
+			);
+			path = TrackingPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA1D2AE0FF8E006D35F3 /* RemindersPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA1E2AE0FFAE006D35F3 /* PTPermissionReminders.swift */,
+			);
+			path = RemindersPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA202AE1005E006D35F3 /* FaceIDPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA212AE10094006D35F3 /* PTPermissionFaceID.swift */,
+			);
+			path = FaceIDPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA232AE1016A006D35F3 /* HealthPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA242AE101AC006D35F3 /* PTPermissionHealth.swift */,
+			);
+			path = HealthPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA262AE102E9006D35F3 /* SpeechPremission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA272AE10303006D35F3 /* PTPermissionSpeech.swift */,
+			);
+			path = SpeechPremission;
+			sourceTree = "<group>";
+		};
+		55B4FA292AE108E3006D35F3 /* ContactsPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA2A2AE108FE006D35F3 /* PTPermissionContacts.swift */,
+			);
+			path = ContactsPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA2C2AE10A06006D35F3 /* MicPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA2D2AE10A16006D35F3 /* PTPermissionMic.swift */,
+			);
+			path = MicPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA2F2AE10B25006D35F3 /* MeidaLibraryPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA302AE10B3D006D35F3 /* PTPermissionMedia.swift */,
+			);
+			path = MeidaLibraryPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA322AE10C62006D35F3 /* BluetoothPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA332AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift */,
+				55B4FA352AE10CA5006D35F3 /* PTPermissionBluetooth.swift */,
+			);
+			path = BluetoothPermission;
+			sourceTree = "<group>";
+		};
+		55B4FA372AE10D88006D35F3 /* SiriPermission */ = {
+			isa = PBXGroup;
+			children = (
+				55B4FA382AE10D98006D35F3 /* PTPermissionSiri.swift */,
+			);
+			path = SiriPermission;
 			sourceTree = "<group>";
 		};
 		55BD5B8129C620C10023458A /* Share */ = {
@@ -1880,6 +2074,7 @@
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
 				231D168B272CDEEA003D6F62 /* SSBlurView.swift in Sources */,
 				55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */,
+				55B4FA192AE0FDF4006D35F3 /* PTPermissionPhotoLibrary.swift in Sources */,
 				55D59C4928F14A9300B4FF76 /* PTCallMessageMailFunction.swift in Sources */,
 				9AE4469B28597ABA007DC2B5 /* PTProtocol.swift in Sources */,
 				9AE4467A28585C26007DC2B5 /* Array+PTEX.swift in Sources */,
@@ -1896,22 +2091,27 @@
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */,
+				55B4FA072AE0F65B006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */,
 				231D1676272CDEEA003D6F62 /* PTGuidePageHUD.swift in Sources */,
+				55B4FA162AE0FC3E006D35F3 /* PTPermissionMotion.swift in Sources */,
 				554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */,
 				55BD5B8329C620C80023458A /* PTShareItem.swift in Sources */,
 				55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
+				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
 				558D5EE72AAF52E300C02042 /* PTRouterPattern.swift in Sources */,
 				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
+				55B4FA2E2AE10A16006D35F3 /* PTPermissionMic.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
 				231D166E272CDEEA003D6F62 /* GestureEndpointPredictor.swift in Sources */,
 				55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */,
 				9AE4467C28585C77007DC2B5 /* Number+PTEX.swift in Sources */,
+				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
@@ -1924,6 +2124,7 @@
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */,
+				55B4FA0B2AE0F6CC006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
@@ -1953,6 +2154,7 @@
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				6003F59E195388D20070C39A /* PTAppDelegate.m in Sources */,
 				55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */,
+				55B4FA0D2AE0F6F4006D35F3 /* PTPermissionLocation.swift in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
@@ -1961,9 +2163,11 @@
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
+				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				5585F6DF2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift in Sources */,
+				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				5585F70D2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
 				5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
@@ -1973,6 +2177,7 @@
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
+				55B4FA312AE10B3D006D35F3 /* PTPermissionMedia.swift in Sources */,
 				55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */,
 				55A5D70029B09A1E00DCA096 /* Dictionary+PTEX.swift in Sources */,
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
@@ -1990,15 +2195,18 @@
 				5585F7032AD2B34800F878B4 /* PTVideoEditorSpeedVideoControlViewController.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,
+				55B4FA222AE10094006D35F3 /* PTPermissionFaceID.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
+				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PooSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
+				55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				5585F6D92AD29BC500F878B4 /* Publisher+VideoEditorEX.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
@@ -2016,6 +2224,7 @@
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
+				55B4FA092AE0F68F006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
 				55025E4A29FA56D00024A960 /* PTNavBackImageView.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
@@ -2038,6 +2247,7 @@
 				5585F6ED2AD2A15400F878B4 /* PTVideoEditorControlsViewController.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				5585F6F12AD2A62100F878B4 /* UIColor+VideoEditorEX.swift in Sources */,
+				55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */,
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
 				5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */,
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
@@ -2045,6 +2255,7 @@
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */,
+				55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */,
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
@@ -2052,6 +2263,7 @@
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
 				6003F5A7195388D20070C39A /* PTViewController.m in Sources */,
 				55025E4829FA56D00024A960 /* PTNavigationBar.swift in Sources */,
+				55B4FA1C2AE0FEB6006D35F3 /* PTPermissionTracking.swift in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D7383329E529BB0027BDC3 /* CGPoint+Extensions.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
@@ -2092,6 +2304,7 @@
 				55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */,
 				5589FF5029A87BA700519383 /* PTContract.swift in Sources */,
 				231D166B272CDEEA003D6F62 /* PFloatingButton.swift in Sources */,
+				55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */,
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
@@ -2107,6 +2320,7 @@
 				5585F6E32AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift in Sources */,
 				55024DEF29F36CDE00244E44 /* PTBaseViewController+ListEmptyData.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
+				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,
 				5585F71F2AD2D4B200F878B4 /* UIImage+VideoEditorEX.swift in Sources */,
 				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
@@ -2132,6 +2346,7 @@
 				5585F6FF2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
+				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
@@ -2149,6 +2364,7 @@
 				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
 				55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */,
 				557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */,
+				55B4FA362AE10CA5006D35F3 /* PTPermissionBluetooth.swift in Sources */,
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				55025E4B29FA56D00024A960 /* PTNavTitleLabel.swift in Sources */,
 				5585F70B2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift in Sources */,
