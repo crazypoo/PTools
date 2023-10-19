@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.8.13'
+    s.version     = '3.8.14'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -358,6 +358,7 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'Location' do |subspec|
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/LocationPermission'
         subspec.source_files = 'PooToolsSource/Location/*.{h,m,swift}'
         subspec.frameworks = 'CoreLocation'
@@ -562,6 +563,7 @@ Pod::Spec.new do |s|
     end
     
     s.subspec 'LocationPermission' do |subspec|
+        subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/PermissionCore'
         subspec.source_files = 'PooToolsSource/LocationPermission/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
