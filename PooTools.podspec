@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.8.4'
+    s.version     = '3.8.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -457,6 +457,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/PhotoLibraryPermission'
+        subspec.dependency 'PooTools/CameraPermission'
         subspec.source_files = 'PooToolsSource/QRCodeScan/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCANQRCODE POOTOOLS_COCOAPODS"
