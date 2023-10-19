@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.8.0",
+  "version": "3.8.7",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.8.0"
+    "tag": "3.8.7"
   },
   "license": {
     "type": "MIT",
@@ -93,7 +93,8 @@
         "PooToolsSource/Category/*.{h,m,swift}",
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/StatusBar/*.{h,m,swift}",
-        "PooToolsSource/Protocol/*.{h,m,swift}"
+        "PooToolsSource/Protocol/*.{h,m,swift}",
+        "PooToolsSource/PermissionCore/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -226,18 +227,6 @@
       }
     },
     {
-      "name": "YB_Attributed",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/Attributed/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_YBATTRIBUTED POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "BankCard",
       "dependencies": {
         "PooTools/Core": [
@@ -257,6 +246,9 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "PooTools/FaceIDPermission": [
+
         ]
       },
       "frameworks": [
@@ -272,6 +264,9 @@
       "name": "Calendar",
       "dependencies": {
         "PooTools/Core": [
+
+        ],
+        "PooTools/CalendarPermission": [
 
         ]
       },
@@ -475,6 +470,9 @@
       "dependencies": {
         "PooTools/NetWork": [
 
+        ],
+        "PooTools/PhotoLibraryPermission": [
+
         ]
       },
       "frameworks": [
@@ -491,6 +489,9 @@
       "name": "Motion",
       "dependencies": {
         "PooTools/Core": [
+
+        ],
+        "PooTools/MotionPermission": [
 
         ]
       },
@@ -630,11 +631,12 @@
     {
       "name": "Location",
       "dependencies": {
-        "PooTools/Core": [
+        "PooTools/LocationPermission": [
 
         ]
       },
       "source_files": "PooToolsSource/Location/*.{h,m,swift}",
+      "frameworks": "CoreLocation",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_LOCATION POOTOOLS_COCOAPODS"
       }
@@ -657,6 +659,9 @@
       "name": "SmartScreenshot",
       "dependencies": {
         "PooTools/Core": [
+
+        ],
+        "PooTools/PhotoLibraryPermission": [
 
         ],
         "SnapshotKit": [
@@ -781,6 +786,9 @@
         ],
         "AnyImageKit": [
 
+        ],
+        "PooTools/PhotoLibraryPermission": [
+
         ]
       },
       "source_files": "PooToolsSource/ImagePicker/*.{h,m,swift}",
@@ -795,6 +803,12 @@
 
         ],
         "PooTools/ImagePicker": [
+
+        ],
+        "PooTools/PhotoLibraryPermission": [
+
+        ],
+        "PooTools/CameraPermission": [
 
         ]
       },
@@ -870,10 +884,7 @@
         ]
       },
       "frameworks": "HealthKit",
-      "source_files": [
-        "PooToolsSource/HealthKit/*.{h,m,swift}",
-        "PooToolsSource/Permission/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/HealthKit/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
       }
@@ -895,27 +906,9 @@
         "Speech",
         "AVFoundation"
       ],
-      "source_files": [
-        "PooToolsSource/Speech/*.{h,m,swift}",
-        "PooToolsSource/Permission/*.{h,m,swift}"
-      ],
+      "source_files": "PooToolsSource/Speech/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SPEECH POOTOOLS_COCOAPODS"
-      }
-    },
-    {
-      "name": "PermissionFunction",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": [
-        "PooToolsSource/Permission/*.{h,m,swift}",
-        "PooToolsSource/PermissionsKit/*.{h,m,swift}"
-      ],
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -951,24 +944,9 @@
       }
     },
     {
-      "name": "PermissionCore",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/PermissionCore/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CORE POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "NotificationPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -982,9 +960,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/CameraPermission/*.{h,m,swift}",
@@ -996,9 +971,6 @@
       "name": "LocationPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1012,9 +984,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/CalendarPermission/*.{h,m,swift}",
@@ -1026,9 +995,6 @@
       "name": "MotionPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1042,9 +1008,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}",
@@ -1056,9 +1019,6 @@
       "name": "TrackingPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1072,9 +1032,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/RemindersPermission/*.{h,m,swift}",
@@ -1086,9 +1043,6 @@
       "name": "SpeechRecognizerPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1102,9 +1056,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/HealthPermission/*.{h,m,swift}",
@@ -1116,9 +1067,6 @@
       "name": "FaceIDPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1132,9 +1080,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/ContactsPermission/*.{h,m,swift}",
@@ -1146,9 +1091,6 @@
       "name": "MicPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1162,9 +1104,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/MeidaLibraryPermission/*.{h,m,swift}",
@@ -1177,9 +1116,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/BluetoothPermission/*.{h,m,swift}",
@@ -1191,9 +1127,6 @@
       "name": "SiriPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1360,6 +1293,9 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "PooTools/PhotoLibraryPermission": [
+
         ]
       },
       "source_files": "PooToolsSource/VideoEditor/*.{h,m,swift}",
@@ -1406,9 +1342,6 @@
 
         ],
         "PooTools/Animation": [
-
-        ],
-        "PooTools/YB_Attributed": [
 
         ],
         "PooTools/BankCard": [
