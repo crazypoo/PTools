@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.8.1'
+    s.version     = '3.8.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -545,7 +545,6 @@ Pod::Spec.new do |s|
     }
     end
 
-####################Permission####################
     s.subspec 'PermissionCore' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/PermissionCore/*.{h,m,swift}'
@@ -681,7 +680,6 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_SIRI POOTOOLS_COCOAPODS"
         }
     end
-####################Permission####################
 
     s.subspec 'Harbeth' do |subspec|
         subspec.dependency 'PooTools/Core'
