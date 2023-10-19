@@ -768,7 +768,6 @@
 				55D59C5228F2971E00B4FF76 /* Animation */,
 				5503F9DA28F016CC00030F41 /* ApplicationFunction */,
 				55D59C4C28F17DEA00B4FF76 /* AppStore */,
-				55D59C6828F3E98200B4FF76 /* Attributed */,
 				231D15EE272CDEE9003D6F62 /* BankCard */,
 				55D59C6928F537BA00B4FF76 /* Base */,
 				55D59C6128F3E87600B4FF76 /* BioID */,
@@ -1711,13 +1710,6 @@
 				555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */,
 			);
 			path = Line;
-			sourceTree = "<group>";
-		};
-		55D59C6828F3E98200B4FF76 /* Attributed */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Attributed;
 			sourceTree = "<group>";
 		};
 		55D59C6928F537BA00B4FF76 /* Base */ = {

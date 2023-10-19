@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.8.3'
+    s.version     = '3.8.4'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -106,15 +106,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'YB_Attributed' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Attributed/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_YBATTRIBUTED POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'BankCard' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/BankCard/*.{h,m,swift}','PooToolsSource/BankCard/*.{h,m,swift}'
@@ -125,7 +117,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'BilogyID' do |subspec|
         subspec.dependency 'PooTools/Core'
-#        subspec.dependency 'PooTools/FaceIDPermission'
+        subspec.dependency 'PooTools/FaceIDPermission'
         subspec.frameworks = 'LocalAuthentication','Security'
         subspec.source_files = 'PooToolsSource/BioID/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -135,6 +127,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'Calendar' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/CalendarPermission'
         subspec.frameworks = 'EventKit'
         subspec.source_files = 'PooToolsSource/Calendar/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -273,6 +266,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Motion' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/MotionPermission'
         subspec.frameworks = 'CoreMotion'
         subspec.source_files = 'PooToolsSource/Motion/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -365,6 +359,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'Location' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/LocationPermission'
         subspec.source_files = 'PooToolsSource/Location/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LOCATION POOTOOLS_COCOAPODS"
@@ -381,6 +376,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'SmartScreenshot' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PhotoLibraryPermission'
         subspec.dependency 'SnapshotKit'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SMARTSCREENSHOT POOTOOLS_COCOAPODS"
@@ -450,6 +446,7 @@ Pod::Spec.new do |s|
     s.subspec 'ImagePicker' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'AnyImageKit'
+        subspec.dependency 'PooTools/PhotoLibraryPermission'
         subspec.source_files = 'PooToolsSource/ImagePicker/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
@@ -459,6 +456,7 @@ Pod::Spec.new do |s|
     s.subspec 'ScanQRCode' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/ImagePicker'
+        subspec.dependency 'PooTools/PhotoLibraryPermission'
         subspec.source_files = 'PooToolsSource/QRCodeScan/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCANQRCODE POOTOOLS_COCOAPODS"
@@ -501,7 +499,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/HealthPermission'
         subspec.frameworks = 'HealthKit'
-        subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/HealthKit/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPCOUNT POOTOOLS_COCOAPODS"
         }
@@ -512,20 +510,12 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/SpeechRecognizerPermission'
         subspec.dependency 'OSSSpeechKit'
         subspec.frameworks = 'Speech','AVFoundation'
-        subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}','PooToolsSource/Permission/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Speech/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SPEECH POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'PermissionFunction' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Permission/*.{h,m,swift}','PooToolsSource/PermissionsKit/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'DEBUG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/Debug/*.{h,m,swift}','PooToolsSource/LocalConsole/*.{h,m,swift}','PooToolsSource/DevMask/*.{h,m,swift}','PooToolsSource/TouchInspector/*.{h,m,swift}'
@@ -546,6 +536,7 @@ Pod::Spec.new do |s|
     }
     end
 
+    #########Permission#########
     s.subspec 'PermissionCore' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/PermissionCore/*.{h,m,swift}'
@@ -681,6 +672,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PERMISSION_SIRI POOTOOLS_COCOAPODS"
         }
     end
+    #########Permission#########
 
     s.subspec 'Harbeth' do |subspec|
         subspec.dependency 'PooTools/Core'
@@ -777,6 +769,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'VideoEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PhotoLibraryPermission'
         subspec.source_files = 'PooToolsSource/VideoEditor/*.{h,m,swift}'
         subspec.resource_bundles = {
             'PTVideoEditorResources' => ['PooToolsSource/VideoEditor/*.xcassets']
