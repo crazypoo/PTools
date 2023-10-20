@@ -304,6 +304,11 @@ public class PTCollectionView: UIView {
         self.collectionView
     }
 #endif
+    
+    ///用户获取CollectionView的可视cell
+    public func visibleCells() -> [UICollectionViewCell] {
+        self.collectionView.visibleCells
+    }
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource

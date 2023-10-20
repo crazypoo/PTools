@@ -14,13 +14,12 @@ import HealthKit
 #endif
 
 public let uPermission = "uPermission"
+public let PTPermissionFirst : String = (UserDefaults.standard.value(forKey: uPermission) == nil) ? "0" : (UserDefaults.standard.value(forKey: uPermission) as! String)
 
 @objcMembers
 public class PTPermissionViewController: PTBaseViewController {
     
-    public let appfirst : String = (UserDefaults.standard.value(forKey: uPermission) == nil) ? "0" : (UserDefaults.standard.value(forKey: uPermission) as! String)
-    
-    fileprivate var permissions:[PTPermissionModel]?
+    fileprivate var permissions:[PTPermissionModel]!
     
     public var viewDismissBlock:PTActionTask?
     
@@ -246,7 +245,7 @@ public class PTPermissionViewController: PTBaseViewController {
     }
     
     func showRequestFunction() {
-        permissions?.enumerated().forEach({ index,value in
+        permissions.enumerated().forEach({ index,value in
             switch value.type {
             case .camera:
 #if POOTOOLS_PERMISSION_CAMERA
@@ -360,10 +359,10 @@ public class PTPermissionViewController: PTBaseViewController {
         var mSections = [PTSection]()
         
         var permissionRows = [PTRows]()
-        permissions?.enumerated().forEach({ index,value in
-            let row = PTRows.init(title: value.name,content: value.desc,cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
+        permissions.enumerated().forEach { index,value in
+            let row = PTRows.init(content: value.desc,cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
             permissionRows.append(row)
-        })
+        }
         
         let section = PTSection.init(headerCls:PTPermissionHeader.self,headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
         mSections.append(section)
