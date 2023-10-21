@@ -24,7 +24,7 @@ class PTPermissionCell: PTBaseNormalCell {
     
     var cellModel:PTPermissionModel? {
         didSet {
-                    
+            
             switch cellModel!.type {
             case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
@@ -209,7 +209,7 @@ class PTPermissionCell: PTBaseNormalCell {
             let descAtt:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(3)),.font(PTAppBaseConfig.share.permissionCellSubtitleFont),.foreground(PTAppBaseConfig.share.permissionCellSubtitleTextColor))
             totalAtt = att + descAtt
         }
-
+        
         cellTitle.attributed.text = totalAtt
         
         switch self.cellStatus {

@@ -35,12 +35,12 @@ import Security
 @objcMembers
 public class PTBiologyID: NSObject {
     public static let shared = PTBiologyID()
-
+    
     private var security = LAContext()
-        
+    
     public var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
     public var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
-
+    
     private override init() {
         super.init()
         PTGCDManager.gcdMain {
@@ -86,7 +86,7 @@ public class PTBiologyID: NSObject {
     public func biologyStart(alertTitle:String? = "生物技术验证") {
         var evaluatePolicyType : LAPolicy?
         evaluatePolicyType = .deviceOwnerAuthentication
-
+        
         security.evaluatePolicy(evaluatePolicyType!, localizedReason: alertTitle!) { success, error in
             if success {
                 if self.biologyVerifyStatusBlock != nil {

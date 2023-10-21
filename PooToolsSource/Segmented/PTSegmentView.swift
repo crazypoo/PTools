@@ -12,20 +12,20 @@ import SwifterSwift
 import Kingfisher
 import WZLBadge
 
-@objc public enum PooSegmentSelectedType : Int {
+@objc public enum PTSegmentSelectedType : Int {
     case UnderLine
     case Background
     case Dog
 }
 
 @objcMembers
-public class PooSegmentConfig: NSObject {
+public class PTSegmentConfig: NSObject {
     ///选中字体
     public var selectedFont:UIFont = .systemFont(ofSize: 16)
     ///未选中字体
     public var normalFont:UIFont = .boldSystemFont(ofSize: 14)
     ///显示类型
-    public var showType:PooSegmentSelectedType = PooSegmentSelectedType(rawValue: 0)!
+    public var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
     ///选中颜色
     public var selectedColor:UIColor = .red
     ///普通颜色
@@ -41,7 +41,7 @@ public class PooSegmentConfig: NSObject {
     ///设置底线角
     public var underlineRadius:Bool = true
     ///文字图片位置
-    public var imagePosition:BKLayoutButtonStyle = BKLayoutButtonStyle(rawValue: 0)!
+    public var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
     ///文字图片间距
     public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
@@ -49,7 +49,7 @@ public class PooSegmentConfig: NSObject {
 }
 
 @objcMembers
-public class PooSegmentModel:NSObject {
+public class PTSegmentModel:NSObject {
     ///标题
     public var titles:String = ""
     ///图片
@@ -60,22 +60,22 @@ public class PooSegmentModel:NSObject {
     public var selectedImageURL:String = ""
 }
 
-public enum ButtonShowType:Int {
+public enum PTSegmentButtonShowType:Int {
     case OnlyTitle
     case OnlyImage
     case TitleImage
 }
 
 @objcMembers
-public class PooSegmentSubView:UIView {
-    private var viewConfig = PooSegmentConfig()
-
-//    private let lineSqare:CGFloat = 5
+public class PTSegmentSubView:UIView {
+    private var viewConfig = PTSegmentConfig()
     
-    public var buttonShowType:ButtonShowType = .OnlyTitle
-
-    lazy var imageBtn:BKLayoutButton = {
-        let btn = BKLayoutButton()
+    //    private let lineSqare:CGFloat = 5
+    
+    public var buttonShowType:PTSegmentButtonShowType = .OnlyTitle
+    
+    lazy var imageBtn:PTLayoutButton = {
+        let btn = PTLayoutButton()
         btn.setTitleColor(self.viewConfig.normalColor, for: .normal)
         btn.setTitleColor(self.viewConfig.selectedColor, for: .selected)
         btn.setMidSpacing(self.viewConfig.imageTitleSpace)
@@ -100,11 +100,11 @@ public class PooSegmentSubView:UIView {
         label.setBackgroundImage(self.viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
         return label
     }()
-
-    public init(config:PooSegmentConfig,subViewModels:PooSegmentModel,contentW:CGFloat) {
+    
+    public init(config:PTSegmentConfig,subViewModels:PTSegmentModel,contentW:CGFloat) {
         viewConfig = config
         super.init(frame: .zero)
-
+        
         if subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && subViewModels.selectedImageURL.stringIsEmpty() {
             buttonShowType = .OnlyTitle
             label.titleLabel?.font = config.normalFont
@@ -115,13 +115,13 @@ public class PooSegmentSubView:UIView {
             label.contentMode = .scaleAspectFit
             
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
-
+            
             if subViewModels.imageURL.isValidUrl {
                 label.kf.setImage(with: URL.init(string: subViewModels.imageURL), for: .normal,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
             } else {
                 label.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
-
+            
             if subViewModels.selectedImageURL.isValidUrl {
                 label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
             } else {
@@ -139,7 +139,7 @@ public class PooSegmentSubView:UIView {
             } else {
                 imageBtn.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
             }
-
+            
             if subViewModels.selectedImageURL.isURL() {
                 label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
             } else {
@@ -228,7 +228,7 @@ public class PooSegmentSubView:UIView {
                 make.bottom.equalToSuperview().inset((self.viewConfig.bottomSquare-lineHight)/2)
                 underLine.viewCorner(radius: lineHight/2)
             }
-
+            
         case .Background:
             switch buttonShowType {
             case .TitleImage:
@@ -248,13 +248,13 @@ public class PooSegmentSubView:UIView {
 }
 
 @objcMembers
-public class PooSegmentView: UIView {
+public class PTSegmentView: UIView {
     
-    private var viewConfig = PooSegmentConfig()
+    private var viewConfig = PTSegmentConfig()
     private var subViewArr = [UIView]()
     
-    public var viewDatas = [PooSegmentModel]()
-
+    public var viewDatas = [PTSegmentModel]()
+    
     public enum PooSegmentBadgePosition {
         case TopLeft
         case TopMiddle
@@ -271,9 +271,9 @@ public class PooSegmentView: UIView {
             setSelectItem(indexs: selectedIndex!)
         }
     }
-
+    
     public var segTapBlock:((_ currentIndex:Int)->Void)?
-
+    
     lazy var scrolView : UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
@@ -281,15 +281,15 @@ public class PooSegmentView: UIView {
         view.isPagingEnabled = false
         return view
     }()
-        
-    public init(config:PooSegmentConfig? = PooSegmentConfig()) {
+    
+    public init(config:PTSegmentConfig? = PTSegmentConfig()) {
         super.init(frame: .zero)
         viewConfig = config!
     }
     
     public func reloadViewData(block:((_ index:Int)->Void)?) {
         subViewArr.forEach { (value) in
-            let subV = value as! PooSegmentSubView
+            let subV = value as! PTSegmentSubView
             subV.removeFromSuperview()
         }
         subViewArr.removeAll()
@@ -300,7 +300,7 @@ public class PooSegmentView: UIView {
         }
     }
     
-    private func setUI(datas:[PooSegmentModel]) {
+    private func setUI(datas:[PTSegmentModel]) {
         PTGCDManager.gcdAfter(time: 0.1) {
             var scrolContentW:CGFloat = 0
             if datas.count > 0 {
@@ -327,10 +327,10 @@ public class PooSegmentView: UIView {
                         default:break
                         }
                     }
-
-                    let subView = PooSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
                     
-                    var subShowType:ButtonShowType!
+                    let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
+                    
+                    var subShowType:PTSegmentButtonShowType!
                     if value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty() {
                         subShowType = .OnlyImage
                     } else if !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() && value.imageURL.stringIsEmpty() {
@@ -392,17 +392,17 @@ public class PooSegmentView: UIView {
     
     public func setSelectItem(indexs:Int) {
         if indexs <= (subViewArr.count - 1) {
-            let subV = subViewArr[indexs] as! PooSegmentSubView
-
+            let subV = subViewArr[indexs] as! PTSegmentSubView
+            
             switch indexs {
             case 0:
                 scrolView.pt.scrolToLeftAnimation(animation: true)
             default:
                 scrolView.scrollRectToVisible(CGRect.init(x: (subV.frame.origin.x) + (subV.frame.size.width) / 2, y: 0, width: (subV.frame.size.width), height: frame.size.height), animated: true)
             }
-
+            
             subViewArr.enumerated().forEach { (index,value) in
-                let viewInArr = value as! PooSegmentSubView
+                let viewInArr = value as! PTSegmentSubView
                 if index != indexs {
                     switch viewConfig.showType {
                     case .UnderLine:
@@ -441,7 +441,7 @@ public class PooSegmentView: UIView {
         PTGCDManager.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
                 if index == indexView {
-                    let subViews = (value as! PooSegmentSubView)
+                    let subViews = (value as! PTSegmentSubView)
                     var badgePoint = CGPoint.init(x: 0, y: 0)
                     switch badgePosition {
                     case .TopLeft:
@@ -473,7 +473,7 @@ public class PooSegmentView: UIView {
     public func removeBadgeAtIndex(indexView:Int) {
         subViewArr.enumerated().forEach { (index,value) in
             if index == indexView {
-                let subViews = (value as! PooSegmentSubView)
+                let subViews = (value as! PTSegmentSubView)
                 subViews.clearBadge()
             }
         }
@@ -481,7 +481,7 @@ public class PooSegmentView: UIView {
     
     public func removeAllBadge() {
         subViewArr.enumerated().forEach { (index,value) in
-            let subViews = (value as! PooSegmentSubView)
+            let subViews = (value as! PTSegmentSubView)
             subViews.clearBadge()
         }
     }

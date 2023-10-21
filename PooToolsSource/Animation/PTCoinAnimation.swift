@@ -123,7 +123,8 @@ public class PTCoinAnimation: UIView {
 }
 
 extension PTCoinAnimation:CAAnimationDelegate {
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    public func animationDidStop(_ anim: CAAnimation, 
+                                 finished flag: Bool) {
         if anim == showLabel.layer.animation(forKey: "babyCoin_scale") {
             babyCoinFadeAway()
             if animationBlock != nil {

@@ -12,7 +12,7 @@ import CommonCrypto
 
 @objcMembers
 public class PTDataEncryption {
-        
+    
     //        /* Generate a key from a `password`. Optional if you already have a key */
     //        var key : Array<UInt8> = []
     //        do{
@@ -28,7 +28,7 @@ public class PTDataEncryption {
     //
     //        /* Generate random IV value. IV is public value. Either need to generate, or get it from elsewhere */
     //        let iv = AES.randomIV(AES.blockSize)
-
+    
     //MARK: AES加密
     ///AES加密
     /// - Parameters:
@@ -36,7 +36,10 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - iv: iv
     ///   - handle: 輸出
-    public static func aesEncryption(data:Data,key:String,iv:String,handle:(_ encryptionString:String)->Void) {
+    public static func aesEncryption(data:Data,
+                                     key:String,
+                                     iv:String,
+                                     handle:(_ encryptionString:String)->Void) {
         /* Encrypt Data */
         do {
             let aes = try AES(key: key,iv: iv).encrypt(data.bytes)
@@ -54,7 +57,10 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - iv: iv
     ///   - handle: 輸出
-    public static func aseDecrypt(data:Data,key:String,iv:String,handle:(_ decryptData:Data)->Void) {
+    public static func aseDecrypt(data:Data,
+                                  key:String,
+                                  iv:String,
+                                  handle:(_ decryptData:Data)->Void) {
         /* Decrypt Data */
         do {
             let aes = try AES(key: key,iv: iv).decrypt(data.bytes)
@@ -71,7 +77,9 @@ public class PTDataEncryption {
     ///   - data: 加密內容
     ///   - key: key
     ///   - handle: 輸出
-    public static func aesECBEncryption(data:Data,key:String,handle:(_ encryptionString:String)->Void) {
+    public static func aesECBEncryption(data:Data,
+                                        key:String,
+                                        handle:(_ encryptionString:String)->Void) {
         /* Encrypt Data */
         do {
             let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs5).encrypt(data.bytes)
@@ -88,7 +96,9 @@ public class PTDataEncryption {
     ///   - data: 加密內容
     ///   - key: key
     ///   - handle: 輸出
-    public static func aseECBDecrypt(data:Data,key:String,handle:(_ decryptData:Data)->Void) {
+    public static func aseECBDecrypt(data:Data,
+                                     key:String,
+                                     handle:(_ decryptData:Data)->Void) {
         /* Decrypt Data */
         do {
             let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs5).decrypt(data.bytes)
@@ -106,7 +116,10 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - dataString: 被加密內容
     ///   - handle: 輸出
-    public static func desCrypt(operation:CCOperation, key: String,dataString:String!,handle:(_ outputString:String)->Void) {
+    public static func desCrypt(operation:CCOperation, 
+                                key: String,
+                                dataString:String!,
+                                handle:(_ outputString:String)->Void) {
         
         guard let keyData = key.data(using: .utf8) else {
             handle("")
@@ -150,10 +163,10 @@ public class PTDataEncryption {
         
         var data: Data?
         data = Data(bytes: dataOut, count: dataOutMoved.pointee)
-
+        
         dataOutMoved.deallocate()
         dataOut.deallocate()
-                
+        
         if operation == kCCEncrypt {
             data = data!.base64EncodedData()
         }

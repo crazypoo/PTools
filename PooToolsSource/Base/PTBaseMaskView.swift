@@ -13,7 +13,8 @@ open class PTBaseMaskView: UIView {
 
     public var isMask : Bool = false
         
-    public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+    public override func hitTest(_ point: CGPoint,
+                                 with event: UIEvent?) -> UIView? {
         if isMask {
             return super.hitTest(point, with: event)
         } else {

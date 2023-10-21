@@ -21,15 +21,15 @@ public class PCleanCache: NSObject {
     ///獲取緩存容量
     /// - Returns: 容量字符串
     class public func getCacheSize()->String {
-        #if DEBUG
+#if DEBUG
         var isDirectory:ObjCBool = false
         let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
         if !isExist || !isDirectory.boolValue {
             let exception = NSException.init(name: NSExceptionName(rawValue: "文件错误"), reason: "请检查你的文件路径!", userInfo: nil)
             exception.raise()
         }
-        #endif
-                
+#endif
+        
         let subpathArray = PCleanCache.fileManager.subpaths(atPath: PCleanCache.cachePath!)
         var filePath = ""
         var totalSize : Float = 0
@@ -46,12 +46,12 @@ public class PCleanCache: NSObject {
                 let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: filePath)
                 let fileSize = fileAttributes[FileAttributeKey.size]
                 totalSize += fileSize as! Float
-
+                
             } catch {
                 PTNSLogConsole(error.localizedDescription)
             }
         }
-        #if canImport(SDWebImage)
+#if canImport(SDWebImage)
         totalSize += Float(SDImageCache.shared.totalDiskSize())
         
         ImageCache.default.calculateDiskStorageSize(completion: { result in
@@ -62,7 +62,7 @@ public class PCleanCache: NSObject {
                 PTNSLogConsole("Kingfisher:\(failure)")
             }
         })
-        #else
+#else
         ImageCache.default.calculateDiskStorageSize(completion: { result in
             switch result {
             case .success(let success):
@@ -71,7 +71,7 @@ public class PCleanCache: NSObject {
                 PTNSLogConsole("Kingfisher:\(failure)")
             }
         })
-        #endif
+#endif
         
         var totalSizeString = ""
         
@@ -91,7 +91,7 @@ public class PCleanCache: NSObject {
     class public func clearCaches()->Bool {
         var filePath = ""
         var flag = false
-
+        
         do {
             let subpathArray = try PCleanCache.fileManager.contentsOfDirectory(atPath: PCleanCache.cachePath!)
             if subpathArray.count == 0 {
@@ -120,7 +120,7 @@ public class PCleanCache: NSObject {
                     flag = true
                 }
             }
-
+            
         } catch {
             PTNSLogConsole(error.localizedDescription)
         }
@@ -156,7 +156,7 @@ public class PCleanCache: NSObject {
     /// - Returns: 文件夾Size大小
     class public func folderSizeAtPath(path:String)->Float {
         if !PCleanCache.fileManager.fileExists(atPath: path) {
-           return 0
+            return 0
         }
         
         let childFilesEnumerator = PCleanCache.fileManager.subpaths(atPath: path)

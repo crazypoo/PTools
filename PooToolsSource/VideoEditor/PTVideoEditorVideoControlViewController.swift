@@ -29,8 +29,8 @@ class PTVideoEditorVideoControlViewController: PTBaseViewController {
 
     private lazy var borderTop: UIView = makeBorderTop()
 
-    private lazy var titleStack:BKLayoutButton = {
-        let view = BKLayoutButton()
+    private lazy var titleStack:PTLayoutButton = {
+        let view = PTLayoutButton()
         view.layoutStyle = .leftImageRightTitle
         view.setMidSpacing(10)
         view.setTitleColor(.black, for: .normal)
@@ -105,7 +105,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
         titleStack.setTitle(viewModel.title, for: .normal)
-        titleStack.setImage(UIImage.podBundleImage(viewModel.titleImageName), for: .normal)
+        titleStack.setImage(UIImage.podBundleImage(viewModel.titleImageName,bundleName:PTVideoEditorPodBundleName), for: .normal)
 
         currentVideoControlViewController?.remove()
 
@@ -185,7 +185,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 
     func makeDismissButton() -> UIButton {
         let button = UIButton()
-        let image = UIImage.podBundleImage("Check")
+        let image = UIImage.podBundleImage("Check",bundleName:PTVideoEditorPodBundleName)
         button.setImage(image, for: .normal)
         button.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
         button.addActionHandlers { sender in

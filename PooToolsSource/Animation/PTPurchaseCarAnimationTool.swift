@@ -15,7 +15,10 @@ public class PTPurchaseCarAnimationTool: NSObject {
     public var block:AnimationFinishBlock?
     public var layer:CALayer?
     
-    public func startAnimationand(view:UIView,rect:CGRect,finishPoint:CGPoint,handle: AnimationFinishBlock?) {
+    public func startAnimationand(view:UIView,
+                                  rect:CGRect,
+                                  finishPoint:CGPoint,
+                                  handle: AnimationFinishBlock?) {
         var newRect = rect
         layer = CALayer()
         layer?.contents = view.layer.contents
@@ -42,7 +45,8 @@ public class PTPurchaseCarAnimationTool: NSObject {
         view.layer.add(animation, forKey: nil)
     }
     
-    public func createAnimation(rect:CGRect,finishPoint:CGPoint) {
+    public func createAnimation(rect:CGRect,
+                                finishPoint:CGPoint) {
         let path = UIBezierPath()
         path.move(to: layer!.position)
         path.addQuadCurve(to: finishPoint, controlPoint: CGPoint.init(x: CGFloat.kSCREEN_WIDTH/2, y: rect.origin.y - 80))
@@ -66,7 +70,8 @@ public class PTPurchaseCarAnimationTool: NSObject {
 }
 
 extension PTPurchaseCarAnimationTool:CAAnimationDelegate {
-    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+    public func animationDidStop(_ anim: CAAnimation, 
+                                 finished flag: Bool) {
         if anim == layer?.animation(forKey: "group") {
             layer!.removeFromSuperlayer()
             layer = nil

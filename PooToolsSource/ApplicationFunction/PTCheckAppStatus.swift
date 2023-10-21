@@ -9,12 +9,12 @@
 import UIKit
 
 /*
-    FPS检测
+ FPS检测
  */
 @objcMembers
 public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
-
+    
     public var fpsHandle:((_ fps:NSInteger)->Void)?
     public var closed:Bool = true
     
@@ -47,7 +47,7 @@ public class PCheckAppStatus: NSObject {
             avatar = PFloatingButton.init(view: AppWindows as Any, frame: CGRect(x: 0, y: CGFloat.statusBarHeight(), width: 100, height: 30))
             avatar?.adjustsImageWhenHighlighted = false
             avatar?.tag = 9999
-
+            
             displayLink = CADisplayLink.init(target: self, selector: #selector(displayLinkTick(link:)))
             displayLink?.isPaused = false
             displayLink?.add(to: RunLoop.current, forMode: .common)
@@ -65,7 +65,7 @@ public class PCheckAppStatus: NSObject {
             lastTime = link.timestamp
             return
         }
-                
+        
         count! += 1
         let interval:Double = link.timestamp - lastTime!
         if interval < 1 {
@@ -103,7 +103,7 @@ public class PCheckAppStatus: NSObject {
             displayLink!.isPaused = false
         }
     }
-
+    
     func applicationWillResignActiveNotification() {
         if avatar != nil {
             displayLink!.isPaused = true

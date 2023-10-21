@@ -10,6 +10,8 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
+let PTVideoEditorPodBundleName = "PTVideoEditorResources"
+
 final class PTVideoEditorControlsView: UIView {
 
     // MARK: Public Properties
@@ -160,7 +162,7 @@ fileprivate extension PTVideoEditorControlsView {
     func makeFullscreenButton() -> UIButton {
         let button = UIButton()
         let name = isFullscreen ? "ExitFullscreen" : "EnterFullscreen"
-        let image = UIImage.podBundleImage(name)
+        let image = UIImage.podBundleImage(name,bundleName:PTVideoEditorPodBundleName)
         button.addActionHandlers { sender in
             self.fullscreenButtonTapped()
         }

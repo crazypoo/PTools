@@ -26,14 +26,14 @@ fileprivate extension UIView {
 public class PTFusionCellContent:UIView {
     public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
     public var switchValueChangeBLock:PTCellSwitchBlock?
-
+    
     enum PTFusionContentCellType {
         case Name
         case NameContent
         case Content
         case None
     }
-
+    
     enum PTFusionCellImageType {
         case OnlyLeftImage
         case OnlyRightImage
@@ -42,14 +42,14 @@ public class PTFusionCellContent:UIView {
         case RightImageContent(type:PTFusionContentCellType)
         case None(type:PTFusionContentCellType)
     }
-
+    
     enum PTFusionCellAccessoryView {
         case Switch(type:PTFusionCellImageType)
         case DisclosureIndicator(type:PTFusionCellImageType)
         case NoneAccessoryView(type:PTFusionCellImageType)
         case Error
     }
-
+    
     public var cellModel:PTFusionCellModel? {
         didSet {
             var cellType:PTFusionCellAccessoryView = .NoneAccessoryView(type: .None(type: .None))
@@ -93,7 +93,7 @@ public class PTFusionCellContent:UIView {
                 } else {
                     accessV.image = UIColor.random.createImageWithColor()
                 }
-
+                
                 addSubview(accessV)
                 accessV.snp.makeConstraints { make in
                     make.width.height.equalTo(14)
@@ -143,11 +143,11 @@ public class PTFusionCellContent:UIView {
                 } else if cellModel!.leftImage is Data {
                     cellIcon.image = UIImage(data: (cellModel!.leftImage as! Data))
                 }
-
+                
             default:
                 cellIcon.removeFromSuperview()
             }
-
+            
             switch cellType {
             case .Switch(type: .OnlyRightImage),
                     .Switch(type: .BothImage),
@@ -177,7 +177,7 @@ public class PTFusionCellContent:UIView {
                 } else if cellModel!.contentIcon is Data {
                     cellContentIcon.image = UIImage(data: (cellModel!.contentIcon as! Data))
                 }
-
+                
                 addSubview(cellContentIcon)
                 cellContentIcon.snp.makeConstraints { make in
                     make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
@@ -204,7 +204,7 @@ public class PTFusionCellContent:UIView {
             default:
                 cellContentIcon.removeFromSuperview()
             }
-                  
+            
             switch cellType {
             case .Switch(type: .LeftImageContent(type: .Name)),
                     .Switch(type: .LeftImageContent(type: .NameContent)),
@@ -248,7 +248,7 @@ public class PTFusionCellContent:UIView {
                     }
                     nameTitle.attributed.text = atts
                 }
-
+                
                 addSubview(nameTitle)
                 nameTitle.snp.makeConstraints { make in
                     switch cellType {
@@ -340,7 +340,7 @@ public class PTFusionCellContent:UIView {
                 addSubview(contentLabel)
                 contentLabel.snp.makeConstraints { make in
                     make.top.bottom.equalToSuperview()
-
+                    
                     switch cellType {
                     case .Switch(type: .None(type: .Content)),
                             .DisclosureIndicator(type: .None(type: .Content)):
@@ -381,10 +381,10 @@ public class PTFusionCellContent:UIView {
             default:
                 contentLabel.removeFromSuperview()
             }
-                        
+            
             lineView.isHidden = !cellModel!.haveLine
             topLineView.isHidden = !cellModel!.haveTopLine
-
+            
             addSubviews([lineView, topLineView])
             lineView.snp.makeConstraints { make in
                 make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
@@ -429,7 +429,7 @@ public class PTFusionCellContent:UIView {
                 make.height.equalTo(1)
                 make.left.equalTo(self.lineView)
             }
-
+            
             if cellModel!.conrner != [] {
                 PTGCDManager.gcdMain {
                     self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
@@ -441,13 +441,13 @@ public class PTFusionCellContent:UIView {
             }
         }
     }
-        
+    
     fileprivate lazy var nameTitle:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
     }()
-        
+    
     lazy var accessV:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -479,7 +479,7 @@ public class PTFusionCellContent:UIView {
         view.contentMode = .scaleAspectFill
         return view
     }()
-
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -680,22 +680,22 @@ public class PTFusionCellContent:UIView {
 @objcMembers
 open class PTFusionCell: PTBaseNormalCell {
     public static let ID = "PTFusionCell"
-                
+    
     open var switchValueChangeBLock:PTCellSwitchBlock?
-
+    
     open var cellModel:PTFusionCellModel? {
         didSet {
             contentView.addSubview(dataContent)
             dataContent.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-
+            
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.dataContent.cellModel = self.cellModel
             }
         }
     }
-        
+    
     open lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBLock = self.switchValueChangeBLock
@@ -715,22 +715,22 @@ open class PTFusionCell: PTBaseNormalCell {
 @objcMembers
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
-                
+    
     open var switchValueChangeBLock:PTCellSwitchBlock?
-
+    
     open var cellModel:PTFusionCellModel? {
         didSet {
             self.contentView.addSubview(self.dataContent)
             self.dataContent.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
-
+            
             PTGCDManager.gcdAfter(time: 0.1) {
                 self.dataContent.cellModel = self.cellModel
             }
         }
     }
-        
+    
     open lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.switchValueChangeBLock = self.switchValueChangeBLock

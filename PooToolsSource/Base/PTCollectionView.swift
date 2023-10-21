@@ -85,7 +85,7 @@ public class PTCollectionViewConfig:PTBaseModel {
     public var headerWidthOffset:CGFloat = 0
     ///底部长度偏移
     public var footerWidthOffset:CGFloat = 0
-
+    
 #if POOTOOLS_LISTEMPTYDATA
     ///是否开启空数据展示
     public var showEmptyAlert:Bool = false
@@ -105,7 +105,7 @@ public class PTCollectionView: UIView {
     
     let decorationViewOfKindCorner = "background"
     let decorationViewOfKindNormal = "background_no"
-
+    
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
@@ -118,7 +118,7 @@ public class PTCollectionView: UIView {
     
     fileprivate func generateSection(section:NSInteger)->NSCollectionLayoutSection {
         let sectionModel = mSections[section]
-
+        
         var group : NSCollectionLayoutGroup
         let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
         
@@ -137,7 +137,7 @@ public class PTCollectionView: UIView {
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
-
+        
         let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.headerHeight ?? CGFloat.leastNormalMagnitude))
         let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel.footerHeight ?? CGFloat.leastNormalMagnitude))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
@@ -150,7 +150,7 @@ public class PTCollectionView: UIView {
             supplementarys.append(footerItem)
         }
         laySection.boundarySupplementaryItems = supplementarys
-
+        
         switch self.viewConfig.decorationItemsType {
         case .Corner,.NoCorner:
             var itemKind = ""
@@ -172,7 +172,7 @@ public class PTCollectionView: UIView {
         }
         return laySection
     }
-
+    
     fileprivate lazy var collectionView : UICollectionView = {
         let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
@@ -212,7 +212,7 @@ public class PTCollectionView: UIView {
     public var footerInCollection:PTReusableViewHandler?
     ///item设置
     public var cellInCollection:PTCellInCollectionHandler!
-        
+    
     //MARK: Cell delegate handler
     ///item点击事件
     public var collectionDidSelect:PTCellDidSelectedHandler?
@@ -221,7 +221,7 @@ public class PTCollectionView: UIView {
     public var headerRefreshTask:((UIRefreshControl)->Void)?
     ///底部刷新事件
     public var footRefreshTask:PTActionTask?
-
+    
     //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
     ///瀑布流item高度设置
     public var waterFallLayout:((Int, AnyObject) -> CGFloat)?
@@ -234,7 +234,7 @@ public class PTCollectionView: UIView {
     ///空数据点击事件
     public var emptyTap:((UIView)->Void)?
 #endif
-
+    
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
     //MARK: 界面展示

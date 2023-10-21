@@ -25,14 +25,14 @@ public class PTEditMenuItemsInteraction: NSObject {
     private let seperator = "_"
     // iOS 16之前使用官方的UIMenuController
     private lazy var menuController: UIMenuController = .shared
-
+    
     private lazy var dummyView: PTEditMenuInteractionDummy = {
         let view = PTEditMenuInteractionDummy { selector in
             self.selectMenuItem(selector)
         }
         return view
     }()
-
+    
     // iOS 16之后使用官方的UIEditMenuInteraction
     private lazy var rawMenuInteraction: Any? = {
         if #available(iOS 16, *) {
@@ -40,7 +40,7 @@ public class PTEditMenuItemsInteraction: NSObject {
         }
         return nil
     }()
-
+    
     @available(iOS 16, *)
     private var menuInteraction: UIEditMenuInteraction? {
         get {
@@ -50,18 +50,18 @@ public class PTEditMenuItemsInteraction: NSObject {
             rawMenuInteraction = newValue
         }
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
         clear()
     }
-
+    
     // MARK: public function
     public override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(willMenuControllerHide(_:)), name: UIMenuController.willHideMenuNotification, object: nil)
     }
-
+    
     //MARK: 显示menu
     ///显示menu
     /// - Parameters:
@@ -71,10 +71,10 @@ public class PTEditMenuItemsInteraction: NSObject {
     ///   - view: 须要展示在x View上
     public func showMenu(_ items: [PTEditMenuItem], targetRect: CGRect, for view: UIView) {
         guard !items.isEmpty else { return }
-
+        
         showingItems = items
         self.targetRect = targetRect
-
+        
         if #available(iOS 16, *) {
             guard let menuInteraction = menuInteraction else { return }
             view.addInteraction(menuInteraction)
@@ -83,11 +83,11 @@ public class PTEditMenuItemsInteraction: NSObject {
         } else {
             menuController.menuItems = nil
             menuController.hideMenu()
-
+            
             dummyView.updateActions(actionsForDummyView(items))
             view.addSubview(dummyView)
             dummyView.frame = view.bounds
-
+            
             dummyView.becomeFirstResponder()
             PTGCDManager.gcdMain {
                 self.menuController.menuItems = self.menuItems(from: items)
@@ -95,7 +95,7 @@ public class PTEditMenuItemsInteraction: NSObject {
             }
         }
     }
-
+    
     public func dismissMenu() {
         if #available(iOS 16, *) {
             menuInteraction?.dismissMenu()
@@ -104,20 +104,20 @@ public class PTEditMenuItemsInteraction: NSObject {
         }
         clear()
     }
-
+    
     /// 选中某个menuitem时执行。该方法仅在iOS 16之前会执行
     func selectMenuItem(_ selector: Selector) {
         guard let item = menuItem(from: selector) else { return }
         item.callback?()
     }
-
+    
     // MARK: private function
-
+    
     @objc private func willMenuControllerHide(_: Notification) {
         guard let _ = showingItems else { return }
         clear()
     }
-
+    
     private func clear() {
         if #available(iOS 16, *) {
         } else {
@@ -129,14 +129,14 @@ public class PTEditMenuItemsInteraction: NSObject {
         showingItems = nil
         targetRect = nil
     }
-
+    
     private func menuItems(from items: [PTEditMenuItem]) -> [UIMenuItem] {
         items.enumerated().compactMap {
             let item = $0.element
             return UIMenuItem(title: item.title, action: selector(from: item, index: $0.offset))
         }
     }
-
+    
     private func menuItem(from selector: Selector) -> PTEditMenuItem? {
         let selectorString = NSStringFromSelector(selector) as String
         let cmps = selectorString.components(separatedBy: seperator)
@@ -144,12 +144,12 @@ public class PTEditMenuItemsInteraction: NSObject {
         else {  return nil }
         return items[index]
     }
-
+    
     private func selector(from _: PTEditMenuItem, index: Int) -> Selector {
         // selector产生规则
         Selector("clickMenuItem\(seperator)\(index)")
     }
-
+    
     private func actionsForDummyView(_ items: [PTEditMenuItem]) -> Set<String> {
         var set = Set<String>()
         items.enumerated().forEach {
@@ -168,7 +168,7 @@ extension PTEditMenuItemsInteraction: UIEditMenuInteractionDelegate {
         }
         return rect
     }
-
+    
     @available(iOS 16.0, *)
     public func editMenuInteraction(_: UIEditMenuInteraction, menuFor _: UIEditMenuConfiguration, suggestedActions _: [UIMenuElement]) -> UIMenu? {
         // items -> UIMenu

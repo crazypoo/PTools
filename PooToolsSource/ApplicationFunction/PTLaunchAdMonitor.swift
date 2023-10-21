@@ -15,13 +15,13 @@ public let PLaunchAdDetailDisplayNotification = "PShowLaunchAdDetailNotification
 public let PLaunchAdSkipNotification = "PLaunchAdSkipNotification"
 
 /*
-    启动页面
+ 启动页面
  */
 @objcMembers
 public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
     public static let monitor : PTLaunchAdMonitor = PTLaunchAdMonitor.shared
-
+    
     private var playMovie:Bool?
     private var imgLoaded:Bool? = false
     private var videoUrl:URL?
@@ -124,7 +124,7 @@ public class PTLaunchAdMonitor: NSObject {
         if Gobal_device_info.isPad {
             var orientation:UIInterfaceOrientation = .unknown
             orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
-
+            
             switch orientation {
             case .landscapeLeft:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
@@ -303,7 +303,7 @@ public class PTLaunchAdMonitor: NSObject {
         }
         
         sup?.isUserInteractionEnabled = false
-                
+        
         UIView.animate(withDuration: 0.25) {
             sup?.alpha = 0
         } completion: { finish in

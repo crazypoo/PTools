@@ -12,16 +12,30 @@ import SnapKit
 import SwifterSwift
 import Kingfisher
 
+/*
+ Guide初始配置
+ */
 @objcMembers
 public class PTGuidePageModel: NSObject {
+    ///是否显示开始体验
     public var tapHidden:Bool = false
+    ///图片s
     public var imageArrays:[Any] = []
+    ///展示在X
     public var mainView:UIView = UIView()
+    ///是否显示Pagecontrol
     public var pageControl:Bool = false
+    ///是否显示跳过按钮
     public var skipShow:Bool = false
+    ///上一张按钮图片
     public var forwardImage:Any?
+    ///下一张按钮图片
     public var backImage:Any?
+    ///开始体验按钮背景
     public var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
+    ///开始体验按钮字体颜色
+    public var startTextColor:UIColor = UIColor.randomColor
+    ///iCloud文件夹名字
     public var iCloudDocumentName:String = ""
 }
 
@@ -91,7 +105,7 @@ public class PTGuidePageHUD: UIView {
         viewModel.imageArrays.enumerated().forEach { (index,value) in
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
-
+            
             let contentData = viewModel.imageArrays[index]
             PTLoadImageFunction.loadImage(contentData: contentData, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
                 if images.count > 1 {
@@ -114,7 +128,7 @@ public class PTGuidePageHUD: UIView {
                 
                 let startButton = UIButton(type: .custom)
                 startButton.setTitle(StartString, for: .normal)
-                startButton.setTitleColor(UIColor(red: 164/255, green: 201/255, blue: 67/255, alpha: 1), for: .normal)
+                startButton.setTitleColor(viewModel.startTextColor, for: .normal)
                 startButton.titleLabel?.font = .systemFont(ofSize: 21)
                 startButton.setBackgroundImage(viewModel.startBackgroundImage, for: .normal)
                 startButton.addActionHandlers { sender in
@@ -123,9 +137,9 @@ public class PTGuidePageHUD: UIView {
                 imageView.addSubview(startButton)
                 startButton.snp.makeConstraints { make in
                     make.width.equalTo(100)
-                    make.height.equalTo(50)
+                    make.height.equalTo(44)
                     make.centerX.equalTo(imageView)
-                    make.bottom.equalTo(imageView).inset(CGFloat.kTabbarSaveAreaHeight + 20)
+                    make.bottom.equalTo(imageView).inset(CGFloat.kTabbarSaveAreaHeight + 40)
                 }
             }
         }
@@ -138,7 +152,7 @@ public class PTGuidePageHUD: UIView {
         imagePageControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.height.equalTo(30)
-            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
         
         imagePageControl.isHidden = viewModel.pageControl ? false : true
@@ -146,8 +160,8 @@ public class PTGuidePageHUD: UIView {
         
         addSubview(forwardButton)
         forwardButton.snp.makeConstraints { make in
-            make.width.height.equalTo(64)
-            make.bottom.equalToSuperview().offset(-(CGFloat.kTabbarSaveAreaHeight + 10))
+            make.width.height.equalTo(44)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
             make.left.equalToSuperview().inset(10)
         }
         forwardButton.isHidden = true
@@ -170,7 +184,7 @@ public class PTGuidePageHUD: UIView {
                 guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
             }
         }
-                
+        
         if !NSObject.checkObject((viewModel.forwardImage as! NSObject)) && !NSObject.checkObject((viewModel.backImage as! NSObject)) {
             if viewModel.imageArrays.count > 1 {
                 nextButton.isHidden = false
@@ -289,5 +303,5 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
             forwardButton.isHidden = true
             forwardButton.isUserInteractionEnabled = false
         }
-    }    
+    }
 }

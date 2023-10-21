@@ -48,7 +48,7 @@ public class PTOpenSystemConfig:NSObject {
 }
 
 /*
-    根據所需跳轉某Setting內的方法
+ 根據所需跳轉某Setting內的方法
  */
 @objcMembers
 public class PTOpenSystemFunction: NSObject {

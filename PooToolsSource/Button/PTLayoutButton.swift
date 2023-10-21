@@ -8,7 +8,7 @@
 
 import UIKit
 
-@objc public enum BKLayoutButtonStyle : Int {
+@objc public enum PTLayoutButtonStyle : Int {
     case leftImageRightTitle // 系统默认
     case leftTitleRightImage
     case upImageDownTitle
@@ -18,9 +18,9 @@ import UIKit
 // MARK: - 上图下文 上文下图 左图右文(系统默认) 右图左文
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
 @objcMembers
-public class BKLayoutButton: UIButton {
+public class PTLayoutButton: UIButton {
     /// 布局方式
-    public var layoutStyle: BKLayoutButtonStyle!
+    public var layoutStyle: PTLayoutButtonStyle!
     /// 图片和文字的间距，默认值5
     private var midSpacing: CGFloat = 0.5
     /// 指定图片size

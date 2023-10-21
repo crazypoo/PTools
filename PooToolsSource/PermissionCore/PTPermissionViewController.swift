@@ -30,7 +30,7 @@ public class PTPermissionViewController: PTBaseViewController {
             }
         }
     }
-        
+    
     private lazy var newCollectionView:PTCollectionView = {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Normal
@@ -52,123 +52,123 @@ public class PTPermissionViewController: PTBaseViewController {
             cell.cellButtonTapBlock = { type in
                 switch type {
                 case .tracking:
-    #if POOTOOLS_PERMISSION_TRACKING
+#if POOTOOLS_PERMISSION_TRACKING
                     if #available(iOS 14.0, *) {
                         PTPermission.tracking.request {
                             self.showDetail()
                         }
                     }
-    #endif
+#endif
                 case .camera:
-    #if POOTOOLS_PERMISSION_CAMERA
+#if POOTOOLS_PERMISSION_CAMERA
                     PTPermission.camera.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .photoLibrary:
-    #if POOTOOLS_PERMISSION_PHOTO
+#if POOTOOLS_PERMISSION_PHOTO
                     PTPermission.photoLibrary.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .calendar(access: .full):
-    #if POOTOOLS_PERMISSION_CALENDAR
+#if POOTOOLS_PERMISSION_CALENDAR
                     PTPermission.calendar(access: .full).request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .calendar(access: .write):
-    #if POOTOOLS_PERMISSION_CALENDAR
+#if POOTOOLS_PERMISSION_CALENDAR
                     PTPermission.calendar(access: .write).request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .reminders:
-    #if POOTOOLS_PERMISSION_REMINDERS
+#if POOTOOLS_PERMISSION_REMINDERS
                     PTPermission.reminders.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .notification:
-    #if POOTOOLS_PERMISSION_NOTIFICATION
+#if POOTOOLS_PERMISSION_NOTIFICATION
                     PTPermission.notification.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .location(access: .whenInUse):
-    #if POOTOOLS_PERMISSION_LOCATION
+#if POOTOOLS_PERMISSION_LOCATION
                     PTPermission.location(access: .whenInUse).request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .location(access: .always):
-    #if POOTOOLS_PERMISSION_LOCATION
+#if POOTOOLS_PERMISSION_LOCATION
                     PTPermission.location(access: .always).request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .health:
-    #if POOTOOLS_PERMISSION_HEALTH
+#if POOTOOLS_PERMISSION_HEALTH
                     PTPermissionHealth.request(forReading: [HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!],writing:Set<HKSampleType>()) {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .speech:
-    #if POOTOOLS_PERMISSION_SPEECH
+#if POOTOOLS_PERMISSION_SPEECH
                     PTPermission.speech.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .faceID:
-    #if POOTOOLS_PERMISSION_FACEIDPERMISSION
+#if POOTOOLS_PERMISSION_FACEIDPERMISSION
                     PTPermission.faceID.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .motion:
-    #if POOTOOLS_PERMISSION_MOTION
+#if POOTOOLS_PERMISSION_MOTION
                     PTPermission.motion.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .contacts:
-    #if POOTOOLS_PERMISSION_CONTACTS
+#if POOTOOLS_PERMISSION_CONTACTS
                     PTPermission.contacts.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .microphone:
-    #if POOTOOLS_PERMISSION_MIC
+#if POOTOOLS_PERMISSION_MIC
                     PTPermission.microphone.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .mediaLibrary:
-    #if POOTOOLS_PERMISSION_MEDIA
+#if POOTOOLS_PERMISSION_MEDIA
                     PTPermission.mediaLibrary.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .bluetooth:
-    #if POOTOOLS_PERMISSION_BLUETOOTH
+#if POOTOOLS_PERMISSION_BLUETOOTH
                     PTPermission.bluetooth.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 case .siri:
-    #if POOTOOLS_PERMISSION_SIRI
+#if POOTOOLS_PERMISSION_SIRI
                     PTPermission.siri.request {
                         self.showDetail()
                     }
-    #endif
+#endif
                 }
             }
             return cell
         }
-
+        
         return view
     }()
-
+    
     public init(datas:[PTPermissionModel]) {
         super.init(nibName: nil, bundle: nil)
         permissions = datas
@@ -182,7 +182,7 @@ public class PTPermissionViewController: PTBaseViewController {
         super.viewDidAppear(animated)
         UserDefaults.standard.set("1", forKey: uPermission)
     }
-
+    
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         
@@ -212,7 +212,7 @@ public class PTPermissionViewController: PTBaseViewController {
                 }
             }
         })
-
+        
         view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

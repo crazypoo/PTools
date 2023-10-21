@@ -32,19 +32,19 @@ public class PTSendFeedBackAlert {
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
     public func alertSendFeedBack(superView:UIView,
-                           alertTitle:String? = "反馈问题",
-                           feedBackTitlePlaceholder:String? = "请输入反馈标题",
-                           feedBackTitleFont:UIFont? = .appfont(size: 16),
-                           feedBackContentPlaceholder:String? = "请输入反馈内容",
-                           feedBackContentFont:UIFont? = .appfont(size: 16),
-                           feedBackContentCount:NSNumber? = 100,
-                           feedBackContentIsSecureTextEntry:Bool? = false,
-                           cancelString:String? = "取消",
-                           sendString:String? = "确定",
-                           titleFont:UIFont? = .appfont(size: 18),
-                           canTapBackground:Bool? = false,
-                           done: @escaping (String, String) -> Void,
-                           dismiss:PTActionTask? = nil) {
+                                  alertTitle:String? = "反馈问题",
+                                  feedBackTitlePlaceholder:String? = "请输入反馈标题",
+                                  feedBackTitleFont:UIFont? = .appfont(size: 16),
+                                  feedBackContentPlaceholder:String? = "请输入反馈内容",
+                                  feedBackContentFont:UIFont? = .appfont(size: 16),
+                                  feedBackContentCount:NSNumber? = 100,
+                                  feedBackContentIsSecureTextEntry:Bool? = false,
+                                  cancelString:String? = "取消",
+                                  sendString:String? = "确定",
+                                  titleFont:UIFont? = .appfont(size: 18),
+                                  canTapBackground:Bool? = false,
+                                  done: @escaping (String, String) -> Void,
+                                  dismiss:PTActionTask? = nil) {
         let feedBackTitle = UITextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholder!
         feedBackTitle.setPlaceHolderTextColor(.lightGray)

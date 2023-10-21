@@ -13,7 +13,7 @@ import ZXNavigationBar
 
 #if POOTOOLS_NAVBARCONTROLLER
 open class PTBaseNavControl: ZXNavigationBarNavigationController {
-
+    
     open override var prefersStatusBarHidden: Bool {
         StatusBarManager.shared.isHidden
     }
@@ -36,7 +36,7 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
     
     /// 修改导航栏返回按钮
     open override func pushViewController(_ viewController: UIViewController, animated: Bool) {
- 
+        
         if viewControllers.count > 0 {
             let backBtn = UIButton.init(type: .custom)
             backBtn.setImage(PTAppBaseConfig.share.viewControllerBackItemImage, for: .normal)
@@ -124,7 +124,7 @@ extension PTBaseNavControl: UIGestureRecognizerDelegate,UINavigationControllerDe
 
 #else
 open class PTBaseNavControl: UINavigationController {
-
+    
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -133,17 +133,19 @@ open class PTBaseNavControl: UINavigationController {
     
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
     
-    open func GobalNavControl(nav:UINavigationController,textColor:UIColor? = .black,navColor:UIColor? = .white) {
+    open func GobalNavControl(nav:UINavigationController,
+                              textColor:UIColor? = .black,
+                              navColor:UIColor? = .white) {
         let colors:UIColor? = navColor
         let textColors:UIColor? = textColor
         
         //修改导航栏文字颜色字号
         let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
-
+        
         let images = UIColor.clear.createImageWithColor()
         if #available(iOS 15.0, *) {
             let navigationBarAppearance = UINavigationBarAppearance()
@@ -166,11 +168,11 @@ open class PTBaseNavControl: UINavigationController {
         } else {
             /// 去掉导航栏底部黑线。需要同时设置shadowImage 和 setBackgroundImage
             nav.navigationBar.shadowImage = images
-
+            
             /// 导航栏背景图片
             nav.navigationController?.navigationBar.backgroundColor = colors
             nav.navigationController?.navigationBar.setBackgroundImage(colors!.createImageWithColor(), for: .default)
-
+            
             nav.navigationBar.apply(gradient: [colors!])
             
             /// 修改UINavigationBar上各个item的文字、图形的颜色

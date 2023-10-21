@@ -11,8 +11,9 @@ import Foundation
 import CocoaLumberjack
 import SwifterSwift
 
-public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
-        
+public func PTNSLogConsole(_ any:Any...,
+                           error:Bool = false) {
+    
     var msgStr = ""
     for element in any {
         
@@ -41,7 +42,7 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
         
         msgStr += "\(newString)\n"
     }
-
+    
     if UIApplication.shared.inferredEnvironment != .appStore {
         DDLog.add(DDOSLogger.sharedInstance)
         PTNSLog(msgStr)
@@ -64,11 +65,11 @@ public func PTNSLogConsole(_ any:Any...,error:Bool = false) {
 /// - Parameter column: 打印内容所在的 列
 /// - Parameter fn: 打印内容的函数名
 public func PTNSLog(_ msg: Any...,
-               isWriteLog: Bool = false,
-                     file: NSString = #file,
-                     line: Int = #line,
-                   column: Int = #column,
-                       fn: String = #function) {
+                    isWriteLog: Bool = false,
+                    file: NSString = #file,
+                    line: Int = #line,
+                    column: Int = #column,
+                    fn: String = #function) {
     var msgStr = ""
     for element in msg {
         msgStr += "\(element)\n"
@@ -83,10 +84,10 @@ public func PTNSLog(_ msg: Any...,
     default:
         currentAppStatus = "<<<DEBUG环境>>>"
     }
-
+    
     let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:SS")
     let prefix = "🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌"
-
+    
     switch UIApplication.applicationEnvironment() {
     case .appStore:
         DDLogVerbose(DDLogMessageFormat(stringLiteral: prefix))
@@ -109,7 +110,9 @@ public func PTNSLog(_ msg: Any...,
 }
 
 // 在文件末尾追加新内容
-private func appendText(fileURL: URL, string: String, currentDate: String) {
+private func appendText(fileURL: URL,
+                        string: String,
+                        currentDate: String) {
     do {
         // 如果文件不存在则新建一个
         FileManager.pt.createFile(filePath: fileURL.path)
@@ -222,7 +225,8 @@ public struct PTMems<T> {
     ///
     /// - Parameter v:
     /// - Parameter alignment: 决定了多少个字节为一组
-    public static func memStr(ofVal v: inout T, alignment: PTMemAlign? = nil) -> String {
+    public static func memStr(ofVal v: inout T,
+                              alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofVal: &v)
         return _memStr(p, MemoryLayout.stride(ofValue: v),
                        alignment != nil ? alignment!.rawValue : MemoryLayout.alignment(ofValue: v))
@@ -232,7 +236,8 @@ public struct PTMems<T> {
     ///
     /// - Parameter v:
     /// - Parameter alignment: 决定了多少个字节为一组
-    public static func memStr(ofRef v: T, alignment: PTMemAlign? = nil) -> String {
+    public static func memStr(ofRef v: T,
+                              alignment: PTMemAlign? = nil) -> String {
         let p = ptr(ofRef: v)
         return _memStr(p, malloc_size(p),
                        alignment != nil ? alignment!.rawValue : MemoryLayout.alignment(ofValue: v))
@@ -312,7 +317,7 @@ public extension PTMemsWrapper where Base == String {
     mutating func type() -> PTStringMemType {
         let ptr = PTMems.ptr(ofVal: &base)
         return PTStringMemType(rawValue: (ptr + 15).load(as: UInt8.self) & 0xf0)
-            ?? PTStringMemType(rawValue: (ptr + 7).load(as: UInt8.self) & 0xf0)
-            ?? .unknow
+        ?? PTStringMemType(rawValue: (ptr + 7).load(as: UInt8.self) & 0xf0)
+        ?? .unknow
     }
 }

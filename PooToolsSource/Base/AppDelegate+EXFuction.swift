@@ -13,7 +13,8 @@ public class AppDelegateEXFunction:NSObject {
     
     public var isFullScreen:Bool = false
     
-    public func faceOrientationMask(app:UIApplication,windos:UIWindow) -> UIInterfaceOrientationMask {
+    public func faceOrientationMask(app:UIApplication,
+                                    windos:UIWindow) -> UIInterfaceOrientationMask {
         if isFullScreen {
             if #available(iOS 16.0, *) {
                 return .landscape

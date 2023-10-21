@@ -155,18 +155,18 @@ CGFloat const tagItemSpace = 5;
         case ShowFunctionSegmented:
         {
             
-            PooSegmentModel * segModel = [[PooSegmentModel alloc] init];
+            PTSegmentModel * segModel = [[PTSegmentModel alloc] init];
             segModel.titles = @"aaaaaa";
             segModel.imageURL = @"DemoImage";
             segModel.selectedImageURL = @"DemoImage";
 
-            PooSegmentModel * segModels = [[PooSegmentModel alloc] init];
+            PTSegmentModel * segModels = [[PTSegmentModel alloc] init];
             segModels.titles = @"22222";
             segModels.imageURL = @"DemoImage";
             segModels.selectedImageURL = @"DemoImage";
-            PooSegmentConfig *config = [[PooSegmentConfig alloc] init];
+            PTSegmentConfig *config = [[PTSegmentConfig alloc] init];
 
-            PooSegmentView *sgView = [[PooSegmentView alloc] initWithConfig:config];
+            PTSegmentView *sgView = [[PTSegmentView alloc] initWithConfig:config];
             sgView.backgroundColor = UIColor.randomColor;
             sgView.viewDatas = @[segModel,segModels];
             [sgView reloadViewDataWithBlock:^(NSInteger index) {

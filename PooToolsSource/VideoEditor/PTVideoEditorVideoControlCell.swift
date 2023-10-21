@@ -13,8 +13,8 @@ import SwifterSwift
 final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
     // MARK: Private Properties
     
-    private lazy var buttonView : BKLayoutButton = {
-        let view = BKLayoutButton()
+    private lazy var buttonView : PTLayoutButton = {
+        let view = PTLayoutButton()
         view.layoutStyle = .upImageDownTitle
         view.setMidSpacing(10)
         view.setTitleColor(.black, for: .normal)
@@ -47,7 +47,7 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
 extension PTVideoEditorVideoControlCell {
     func configure(with viewModel: PTVideoEditorVideoControlCellViewModel) {
         buttonView.setTitle(viewModel.name, for: .normal)
-        buttonView.setImage(UIImage.podBundleImage(viewModel.imageName), for: .normal)
+        buttonView.setImage(UIImage.podBundleImage(viewModel.imageName,bundleName:PTVideoEditorPodBundleName), for: .normal)
 
         self.viewModel = viewModel
     }

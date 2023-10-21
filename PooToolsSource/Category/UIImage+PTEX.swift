@@ -89,7 +89,7 @@ public extension UIImage {
             effectOutBuffer.height = vImagePixelCount(effectOutContext!.height)
             effectOutBuffer.rowBytes = effectOutContext!.bytesPerRow
             
-//            var redPointer = [0xFF,0x00,0x00]
+            //            var redPointer = [0xFF,0x00,0x00]
             if hadBlur {
                 let inputRadius = blurRadius * Float(UIScreen.main.scale)
                 let sqartReslut = sqrt(2 * Double.pi)
@@ -160,7 +160,7 @@ public extension UIImage {
         UIGraphicsEndImageContext()
         return effectImage
     }
-        
+    
     //MARK: 加水印
     ///加水印
     @objc func watermark(title:String,
@@ -193,10 +193,10 @@ public extension UIImage {
         
         let orignX = -(sqrtLength - viewWidth)/2
         let orignY = -(sqrtLength - viewHeight)/2
-
+        
         var tempOrignX = orignX
         var tempOrignY = orignY
-
+        
         let totalCount : Int = Int(horCount * verCount)
         for i in 0...totalCount {
             mark.draw(in: CGRect.init(x: tempOrignX, y: tempOrignY, width: strWidth, height: strHeight), withAttributes: attr)
@@ -213,7 +213,7 @@ public extension UIImage {
         context.restoreGState()
         return finalImg
     }
-
+    
     func imageScale(scaleSize:CGFloat)->UIImage {
         UIGraphicsBeginImageContext(CGSize(width: size.width * scaleSize, height: size.height * scaleSize))
         self.draw(in: CGRect(x: 0, y: 0, width: size.width * scaleSize, height: size.height * scaleSize))
@@ -246,9 +246,9 @@ public extension UIImage {
     ///獲取圖片中大部分占有的顏色
     @objc func imageMostColor()->UIColor {
         let context = getImageContext()
-                
+        
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
-
+        
         let cls = NSCountedSet.init(capacity: Int(size.width * size.height))
         for i in 0...Int(size.width) {
             for j in 0...Int(size.height) {
@@ -281,7 +281,7 @@ public extension UIImage {
     ///獲取圖片中某個像素點的顏色
     func getImgePointColor(point:CGPoint)->UIColor {
         let context = getImageContext()
-                
+        
         let newImgData = unsafeBitCast(context.data, to: UnsafeMutablePointer<CUnsignedChar>.self)
         
         // 根据当前所选择的点计算出对应位图数据的index
@@ -296,7 +296,7 @@ public extension UIImage {
         // 得到颜色
         return UIColor(red: CGFloat(red)/255.0, green: CGFloat(green)/255.0, blue: CGFloat(blue)/255.0, alpha: CGFloat(alpha)/255.0)
     }
-        
+    
     func getImageContext()-> CGContext {
         let currentImage = cgImage ?? UIColor.red.createImageWithColor().transformImage(size: CGSize(width: 100, height: 100)).cgImage!
         
@@ -309,6 +309,15 @@ public extension UIImage {
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
+    }
+    
+    static func podBundleImage(_ imageName:String,
+                               bundleName:String) -> UIImage {
+        let bundle = Bundle.main
+        let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
+        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
+        return image ?? UIImage()
     }
 }
 
@@ -350,7 +359,7 @@ public extension PTPOP where Base: UIImage {
         UIGraphicsEndImageContext()
         return output
     }
-
+    
     //MARK: 获取视频的第一帧
     ///获取视频的第一帧
     /// - Parameters:
@@ -358,7 +367,7 @@ public extension PTPOP where Base: UIImage {
     ///   - maximumSize: 图片的最大尺寸
     ///   - closure:
     /// - Returns: 视频的第一帧
-    static func getVideoFirstImage(videoUrl: String, 
+    static func getVideoFirstImage(videoUrl: String,
                                    maximumSize: CGSize = CGSize(width: 1000, height: 1000),
                                    closure: @escaping (UIImage?) -> Void) {
         guard let url = URL(string: videoUrl) else {
@@ -393,7 +402,7 @@ public extension PTPOP where Base: UIImage {
             }
         }
     }
-
+    
     //MARK: 设置图片透明度
     ///设置图片透明度
     /// - Parameters:
@@ -419,7 +428,7 @@ public extension PTPOP where Base: UIImage {
     ///   - color: 图片颜色
     ///   - blendMode: 模式
     /// - Returns: 返回更改后的图片颜色
-    func tint(color: UIColor, 
+    func tint(color: UIColor,
               blendMode: CGBlendMode = .destinationIn) -> UIImage? {
         /**
          有时我们的App需要能切换不同的主题和场景，希望图片能动态的改变颜色以配合对应场景的色调。虽然我们可以根据不同主题事先创建不同颜色的图片供调用，但既然用的图片素材都一样，还一个个转换显得太麻烦，而且不便于维护。使用blendMode变可以满足这个需求。
@@ -437,7 +446,7 @@ public extension PTPOP where Base: UIImage {
         }
         return tintedImage
     }
-
+    
     //MARK: 保存图片到相册
     ///保存图片到相册
     func savePhotosImageToAlbum(completion: @escaping (Bool, Error?) -> Void) {

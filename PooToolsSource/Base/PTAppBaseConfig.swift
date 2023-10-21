@@ -28,7 +28,7 @@ public class PTAppBaseConfig: NSObject {
     ///App全局的导航栏返回按钮
     public var viewControllerBackItemImage:UIImage = UIImage(systemName: "chevron.left")!
     public var navTitleFont:UIFont = .appfont(size: 24)
-
+    
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
     public var permissionTitleColor:UIColor = .black
@@ -40,7 +40,7 @@ public class PTAppBaseConfig: NSObject {
     public var permissionCellTitleTextColor:UIColor = .black
     public var permissionCellSubtitleFont:UIFont = .appfont(size: 12)
     public var permissionCellSubtitleTextColor:UIColor = .black
-
+    
     //MARK: Collection
     public var decorationBackgroundColor:UIColor = UIColor.white
     public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)

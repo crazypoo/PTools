@@ -284,7 +284,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func makeSaveButtonItem() -> UIButton {
-        let image = UIImage.podBundleImage("Check")
+        let image = UIImage.podBundleImage("Check",bundleName:PTVideoEditorPodBundleName)
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -295,7 +295,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func makeDismissButtonItem() -> UIButton {
         let imageName = isModal ? "Close" : "Back"
-        let image = UIImage.podBundleImage(imageName)
+        let image = UIImage.podBundleImage(imageName,bundleName:PTVideoEditorPodBundleName)
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -358,7 +358,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func makeFullscreenButton() -> UIButton {
         let button = UIButton()
-        let image = UIImage.podBundleImage("EnterFullscreen")
+        let image = UIImage.podBundleImage("EnterFullscreen",bundleName:PTVideoEditorPodBundleName)
         button.addActionHandlers { sender in
             self.fullscreenButtonTapped()
         }
@@ -400,7 +400,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
         var height: CGFloat = 0
         switch videoControl {
         case .crop:
-            let cropImage = UIImage.podBundleImage("Portrait")
+            let cropImage = UIImage.podBundleImage("Portrait",bundleName:PTVideoEditorPodBundleName)
             let scale = 48 / cropImage.size.width
             let cropHeight = cropImage.size.height * scale
             height = cropHeight + 10 + UIFont.systemFont(ofSize: 12.0).pointSize + 44 + CGFloat.kTabbarHeight_Total

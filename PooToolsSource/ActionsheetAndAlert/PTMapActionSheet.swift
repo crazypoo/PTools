@@ -48,16 +48,16 @@ open class PTMapActionSheet: NSObject {
         if UIApplication.shared.canOpenURL(URL.init(string: "comgooglemaps://")!) {
             navAppName.append(.GoogleMap)
         }
-
+        
         if UIApplication.shared.canOpenURL(URL.init(string: "qqmap://")!) && !qqKey!.stringIsEmpty() {
             navAppName.append(.QQMap)
         }
-
+        
         UIAlertController.baseActionSheet(title: "选择导航软件",destructiveButtonName:"Apple Map", titles: navAppName) { sheet in
             let currentLocation = MKMapItem.forCurrentLocation()
             let toLocation = MKMapItem.init(placemark: MKPlacemark.init(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
-
+            
         } cancelBlock: { sheet in
             if dismissTask != nil {
                 dismissTask!()
@@ -73,11 +73,11 @@ open class PTMapActionSheet: NSObject {
             } else if navAppName[index] == .QQMap {
                 let lat : String? = UserDefaults.standard.value(forKey: "lat") as? String
                 let lon : String? = UserDefaults.standard.value(forKey: "lon") as? String
-
+                
                 urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", lat!,lon!,locations.latitude,locations.longitude,qqKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
             }
             UIApplication.shared.open(URL.init(string: urlString as String)!, options: [:], completionHandler: nil)
-
+            
         } tapBackgroundBlock: { sheet in
             if dismissTask != nil {
                 dismissTask!()

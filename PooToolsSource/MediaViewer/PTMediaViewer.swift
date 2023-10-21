@@ -475,6 +475,7 @@ public class PTMediaMediaView:UIView {
                         loading.removeFromSuperview()
                         self.createReloadButton()
                         self.adjustFrame()
+                        self.hasLoadedImage = false
                     }
                 }                
             default:

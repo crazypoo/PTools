@@ -27,8 +27,8 @@ public final class PTVideoEditorPlayPauseButton: UIButton {
     }
 
     func setup() {
-        setImage(UIImage.podBundleImage("Play"), for: .normal)
-        setImage(UIImage.podBundleImage("Pause"), for: .selected)
+        setImage(UIImage.podBundleImage("Play",bundleName:PTVideoEditorPodBundleName), for: .normal)
+        setImage(UIImage.podBundleImage("Pause",bundleName:PTVideoEditorPodBundleName), for: .selected)
     }
 
     func updateImage() {

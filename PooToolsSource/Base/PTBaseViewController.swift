@@ -22,7 +22,7 @@ import SwifterSwift
 #if POOTOOLS_NAVBARCONTROLLER
 @objcMembers
 open class PTBaseViewController: ZXNavigationBarController {
-
+    
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
     open override var prefersStatusBarHidden:Bool {
@@ -71,10 +71,10 @@ open class PTBaseViewController: ZXNavigationBarController {
         self.init()
         self.zx_hideBaseNavBar = hideBaseNavBar
     }
-
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
         self.edgesForExtendedLayout = []
@@ -91,10 +91,10 @@ open class PTBaseViewController: ZXNavigationBarController {
         self.fd_prefersNavigationBarHidden = true
         //当您通过zx_handlePopBlock拦截侧滑返回手势时，请设置fd_interactivePopDisabled为YES以关闭FDFullscreenPopGesture在当前控制器的全屏返回手势，否则无法拦截。
         self.fd_interactivePopDisabled = true
-                
+        
         self.zx_handlePopBlock = popBlock
     }
-
+    
     //MARK: 動態更換StatusBar
     ///動態更換StatusBar
     open func changeStatusBar(type:VCStatusBarChangeStatusType) {
@@ -148,7 +148,7 @@ open class PTBaseViewController: ZXNavigationBarController {
 #else
 @objcMembers
 open class PTBaseViewController: UIViewController {
-
+    
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
     open override var prefersStatusBarHidden:Bool {
@@ -192,10 +192,10 @@ open class PTBaseViewController: UIViewController {
         self.init()
         navigationController?.navigationBar.isHidden = hideBaseNavBar
     }
-
+    
     open override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
         edgesForExtendedLayout = []

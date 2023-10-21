@@ -69,7 +69,8 @@ public class PTWaterWaveView: UIView {
     ///週期
     public var waveCycle:CGFloat = 0
 
-    public init(startColor:UIColor,endColor:UIColor) {
+    public init(startColor:UIColor,
+                endColor:UIColor) {
         super.init(frame: CGRectZero)
         self.startColor = startColor
         self.endColor = endColor

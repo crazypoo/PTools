@@ -34,14 +34,14 @@ public class PTCustomBottomButtonModel:NSObject {
 
 @objcMembers
 public class PTCustomAlertView: UIView {
-
+    
     ///按钮点击回调
     public var buttonClick:PTCustomerAlertClickBlock?
     ///Alert消失回调
     public var didDismissBlock:PTCustomerDidDismissBlock?
     ///Alert自定义界面回调
     public var customerBlock:PTCustomerCustomerBlock?
-
+    
     //MARK: 计算标题高度
     ///计算标题高度
     /// - Parameters:
@@ -140,7 +140,7 @@ public class PTCustomAlertView: UIView {
         let view = UIView()
         return view
     }()
-        
+    
     //MARK: 初始化創建Alert
     ///初始化創建Alert
     /// - Parameters:
@@ -162,22 +162,22 @@ public class PTCustomAlertView: UIView {
     ///   - tapBlock: 點擊回調
     ///   - alertDismissBlock: 界面離開後的回調
     public class func alertFunction(superView:UIView = AppWindows!,
-                                          titleString:String = "",
-                                          titleFont:UIFont = .appfont(size: 15),
-                                          titleColor:UIColor = .systemBlue,
-                                          alertVerLineColor:UIColor = .lightGray,
-                                          alertBackgroundColor:UIColor = .white,
-                                          alertHeightlightedColor:UIColor = .systemBlue,
-                                          alertAnimationType:PTAlertAnimationType = .Bottom,
-                                          buttons:[String],
-                                          buttonColor:[UIColor],
-                                          touchBackground:Bool = true,
-                                          cornerSize:CGFloat = 15,
-                                          customAlertHeight:CGFloat = 100,
-                                          alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
-                                          customerBlock: @escaping PTCustomerCustomerBlock,
-                                          tapBlock: @escaping (_ index:NSInteger)->Void,
-                                          alertDismissBlock: @escaping PTActionTask) {
+                                    titleString:String = "",
+                                    titleFont:UIFont = .appfont(size: 15),
+                                    titleColor:UIColor = .systemBlue,
+                                    alertVerLineColor:UIColor = .lightGray,
+                                    alertBackgroundColor:UIColor = .white,
+                                    alertHeightlightedColor:UIColor = .systemBlue,
+                                    alertAnimationType:PTAlertAnimationType = .Bottom,
+                                    buttons:[String],
+                                    buttonColor:[UIColor],
+                                    touchBackground:Bool = true,
+                                    cornerSize:CGFloat = 15,
+                                    customAlertHeight:CGFloat = 100,
+                                    alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
+                                    customerBlock: @escaping PTCustomerCustomerBlock,
+                                    tapBlock: @escaping (_ index:NSInteger)->Void,
+                                    alertDismissBlock: @escaping PTActionTask) {
         var buttonModels = [PTCustomBottomButtonModel]()
         buttons.enumerated().forEach { index,value in
             let model = PTCustomBottomButtonModel()
@@ -213,7 +213,7 @@ public class PTCustomAlertView: UIView {
             alertDismissBlock()
         }
     }
-
+    
     //MARK: 初始化創建Alert
     ///初始化創建Alert
     /// - Parameters:
@@ -229,16 +229,16 @@ public class PTCustomAlertView: UIView {
     ///   - touchBackground: 是否支持點擊背景消失Alert
     ///   - cornerSize: Alert邊框角弧度
     public init(superView:UIView,
-         alertTitle:String = "",
-         font:UIFont = UIFont.boldSystemFont(ofSize: 20),
-         titleColor:UIColor = UIColor.black,
-         alertVerLineColor:UIColor = UIColor.lightGray,
-         alertBackgroundColor:UIColor = UIColor.white,
-         heightlightedColor:UIColor = UIColor.lightGray,
-         moreButtons:[PTCustomBottomButtonModel] = [PTCustomBottomButtonModel](),
-         alertAnimationType:PTAlertAnimationType,
-         touchBackground:Bool = true,
-         cornerSize:CGFloat = 15) {
+                alertTitle:String = "",
+                font:UIFont = UIFont.boldSystemFont(ofSize: 20),
+                titleColor:UIColor = UIColor.black,
+                alertVerLineColor:UIColor = UIColor.lightGray,
+                alertBackgroundColor:UIColor = UIColor.white,
+                heightlightedColor:UIColor = UIColor.lightGray,
+                moreButtons:[PTCustomBottomButtonModel] = [PTCustomBottomButtonModel](),
+                alertAnimationType:PTAlertAnimationType,
+                touchBackground:Bool = true,
+                cornerSize:CGFloat = 15) {
         super.init(frame: .zero)
         createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
     }
@@ -281,17 +281,17 @@ public class PTCustomAlertView: UIView {
         blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         blur!.alpha = 0.9
         blur!.enable()
-
+        
         mainView.addSubview(self)
         PTGCDManager.gcdAfter(time: 0.1) {
             self.viewCornerRectCorner(cornerRadii: cornerSize!, corner: .allCorners)
         }
-                
+        
         addSubview(customView)
-
+        
         var propertyNamed = ""
         var transform = CATransform3DMakeTranslation(0, 0, 0)
-
+        
         switch animationType {
         case .Top:
             propertyNamed = kPOPLayerTranslationY
@@ -460,7 +460,7 @@ public class PTCustomAlertView: UIView {
     public func dismiss() {
         var propertyNamed = ""
         var offsetValue : CGFloat = 0
-
+        
         switch animationType {
         case .Top:
             propertyNamed = kPOPLayerTranslationY
