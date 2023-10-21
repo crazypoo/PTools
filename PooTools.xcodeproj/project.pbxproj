@@ -106,6 +106,7 @@
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
+		5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */; };
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
 		5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */; };
@@ -449,6 +450,7 @@
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
+		5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadImageFunction.swift; sourceTree = "<group>"; };
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
 		5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGetGPSData.swift; sourceTree = "<group>"; };
@@ -1627,6 +1629,7 @@
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
+				5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2244,6 +2247,7 @@
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
 				55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */,
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
+				5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */,
 				55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
 				558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */,

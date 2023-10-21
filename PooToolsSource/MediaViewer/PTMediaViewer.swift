@@ -454,87 +454,29 @@ public class PTMediaMediaView:UIView {
                 self.imageView.contentMode = .scaleAspectFit
                 self.contentScrolView.addSubview(self.imageView)
                 
-                if dataModel.imageURL is UIImage {
-                    self.gifImage = dataModel.imageURL as? UIImage
-                    self.imageView.image = dataModel.imageURL as? UIImage
-                    self.adjustFrame()
-                    self.hasLoadedImage = true
-                    loading.removeFromSuperview()
-                } else if dataModel.imageURL is String {
-                    let urlString = dataModel.imageURL as! String
-                    if FileManager.pt.judgeFileOrFolderExists(filePath: urlString) {
-                        self.gifImage = UIImage(contentsOfFile: urlString)
-                        self.imageView.image = UIImage(contentsOfFile: urlString)
+                PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: self.viewConfig.iCloudDocumentName) { receivedSize, totalSize in
+                    loading.progress = CGFloat(receivedSize / totalSize)
+                } taskHandle: { images in
+                    if images.count > 1 {
+                        self.gifImage = images.first
+                        self.imageView.animationImages = images
+                        self.imageView.animationDuration = 2
+                        self.imageView.startAnimating()
                         self.adjustFrame()
                         self.hasLoadedImage = true
                         loading.removeFromSuperview()
-                    } else if urlString.isURL() {
-                        if urlString.contains("file://") {
-                            if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(self.viewConfig.iCloudDocumentName) {
-                                let imageURL = icloudURL.appendingPathComponent(urlString.lastPathComponent)
-                                if let imageData = try? Data(contentsOf: imageURL) {
-                                    self.gifImage = UIImage(data: imageData)
-                                    self.imageView.image = UIImage(data: imageData)
-                                    self.adjustFrame()
-                                    self.hasLoadedImage = true
-                                    loading.removeFromSuperview()
-                                }
-                            } else {
-                                self.gifImage = UIImage(contentsOfFile: urlString)
-                                self.imageView.image = UIImage(contentsOfFile: urlString)
-                                self.adjustFrame()
-                                self.hasLoadedImage = true
-                                loading.removeFromSuperview()
-                            }
-                        } else {
-                            ImageDownloader.default.downloadImage(with: URL(string: urlString)!,options: PTAppBaseConfig.share.gobalWebImageLoadOption(), progressBlock: { receivedSize, totalSize in
-                                PTGCDManager.gcdMain {
-                                    loading.progress = CGFloat(receivedSize / totalSize)
-                                }
-                            }) { result in
-                                switch result {
-                                case .success(let value):
-                                    loading.removeFromSuperview()
-                                    self.gifImage = value.image
-
-                                    switch self.dataModel.imageShowType {
-                                    case .Normal:
-                                        self.imageView.image = value.image
-                                        self.adjustFrame()
-                                        self.hasLoadedImage = true
-                                    case .GIF:
-                                        let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                        let frameCount = CGImageSourceGetCount(source!)
-                                        var frames = [UIImage]()
-                                        for i in 0...frameCount {
-                                            let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                            let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                            frames.append(imageName)
-                                        }
-                                        self.imageView.animationImages = frames
-                                        self.imageView.animationDuration = 2
-                                        self.imageView.startAnimating()
-                                        self.adjustFrame()
-                                        self.hasLoadedImage = true
-                                    default:
-                                        break
-                                    }
-                                case .failure(let error):
-                                    loading.removeFromSuperview()
-                                    PTNSLogConsole(error)
-                                    self.createReloadButton()
-                                    self.adjustFrame()
-                                }
-                            }
-                        }
+                    } else if images.count == 1 {
+                        self.gifImage = images.first
+                        self.imageView.image = images.first
+                        self.adjustFrame()
+                        self.hasLoadedImage = true
+                        loading.removeFromSuperview()
                     } else {
-                        self.gifImage = UIImage(named: urlString)
-                        self.imageView.image = UIImage(named: urlString)
-                        self.adjustFrame()
-                        self.hasLoadedImage = true
                         loading.removeFromSuperview()
+                        self.createReloadButton()
+                        self.adjustFrame()
                     }
-                }
+                }                
             default:
                 break
             }

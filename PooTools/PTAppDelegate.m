@@ -150,19 +150,19 @@
     
     PTGuidePageModel *model = [PTGuidePageModel new];
     model.mainView = self.window;
-    model.imageArrays = @[@"DemoImage.png",@"image_aircondition_gray.png",@"DemoImage.png",@"DemoImage.png",@"DemoImage.png"];
-    model.tapHidden = YES;
-    model.forwardImage = @"image_aircondition_gray.png";
+    model.imageArrays = @[@"DemoImage.png",@"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif",@"image_aircondition_gray.png",@"DemoImage.png",@"DemoImage.png",@"DemoImage.png",@"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"];
+    model.tapHidden = false;
+    model.forwardImage = @"DemoImage.png";
     model.backImage = @"DemoImage.png";
-    model.pageControl = false;
-    model.skipShow = false;
+    model.pageControl = YES;
+    model.skipShow = YES;
 
     PTGuidePageHUD *aasdasd = [[PTGuidePageHUD alloc] initWithViewModel:model];
     aasdasd.animationTime = 1.5;
     aasdasd.adHadRemove = ^{
         
     };
-    [self.window addSubview:aasdasd];
+    [aasdasd guideShow];
     
 //    [PTUtils timeRunWithTime_baseWithCustomQueName:@"11111" timeInterval:10 finishBlock:^(BOOL finish, NSInteger time) {
 //        PNSLog(@"111111%d>>>>>>%ld",finish,(long)time);

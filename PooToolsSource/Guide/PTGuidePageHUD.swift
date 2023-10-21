@@ -8,22 +8,26 @@
 
 import UIKit
 import AVKit
+import SnapKit
+import SwifterSwift
+import Kingfisher
 
 @objcMembers
 public class PTGuidePageModel: NSObject {
     public var tapHidden:Bool = false
-    public var imageArrays:[String] = []
+    public var imageArrays:[Any] = []
     public var mainView:UIView = UIView()
     public var pageControl:Bool = false
     public var skipShow:Bool = false
-    public var forwardImage:String = ""
-    public var backImage:String = ""
+    public var forwardImage:Any?
+    public var backImage:Any?
     public var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
+    public var iCloudDocumentName:String = ""
 }
 
 @objcMembers
 public class PTGuidePageHUD: UIView {
-    fileprivate var imageArray : [String]?
+    fileprivate var imageArray : [Any]?
     fileprivate var imagePageControl = UIPageControl()
     fileprivate var slideIntoNumber : Int = 0
     fileprivate var player = AVPlayerViewController()
@@ -44,8 +48,11 @@ public class PTGuidePageHUD: UIView {
         return btn
     }()
     
+    fileprivate var viewModel = PTGuidePageModel()
+    
     public init(viewModel:PTGuidePageModel) {
         super.init(frame: viewModel.mainView.frame)
+        self.viewModel = viewModel
         if viewModel.tapHidden {
             imageArray = viewModel.imageArrays
         }
@@ -84,22 +91,16 @@ public class PTGuidePageHUD: UIView {
         viewModel.imageArrays.enumerated().forEach { (index,value) in
             let imageView = UIImageView()
             imageView.contentMode = .scaleAspectFit
-            let contentImage = UIImage.init(named: viewModel.imageArrays[index])
-            let data = contentImage!.pngData()
-            if data?.detectImageType() == .GIF {
-                let source = CGImageSourceCreateWithData(data! as CFData, nil)
-                let frameCount = CGImageSourceGetCount(source!)
-                var frames = [UIImage]()
-                for i in 0...frameCount {
-                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                    let imageName = UIImage.init(cgImage: imageref!)
-                    frames.append(imageName)
+
+            let contentData = viewModel.imageArrays[index]
+            PTLoadImageFunction.loadImage(contentData: contentData, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
+                if images.count > 1 {
+                    imageView.animationImages = images
+                    imageView.animationDuration = 2
+                    imageView.startAnimating()
+                } else if images.count == 1 {
+                    imageView.image = images.first
                 }
-                imageView.animationImages = frames
-                imageView.animationDuration = 1
-                imageView.startAnimating()
-            } else {
-                imageView.image = contentImage
             }
             guidePageView.addSubview(imageView)
             imageView.snp.makeConstraints { make in
@@ -169,8 +170,8 @@ public class PTGuidePageHUD: UIView {
                 guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
             }
         }
-        
-        if !viewModel.forwardImage.isEmpty && !viewModel.backImage.isEmpty {
+                
+        if !NSObject.checkObject((viewModel.forwardImage as! NSObject)) && !NSObject.checkObject((viewModel.backImage as! NSObject)) {
             if viewModel.imageArrays.count > 1 {
                 nextButton.isHidden = false
                 nextButton.isUserInteractionEnabled = true
@@ -178,8 +179,17 @@ public class PTGuidePageHUD: UIView {
                 nextButton.isHidden = true
                 nextButton.isUserInteractionEnabled = false
             }
-            nextButton.setImage(UIImage.init(named: viewModel.backImage), for: .normal)
-            forwardButton.setImage(UIImage.init(named: viewModel.forwardImage), for: .normal)
+            
+            PTLoadImageFunction.loadImage(contentData: viewModel.backImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
+                if images.count != 0 {
+                    self.nextButton.setImage(images.first, for: .normal)
+                }
+            }
+            PTLoadImageFunction.loadImage(contentData: viewModel.forwardImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
+                if images.count != 0 {
+                    self.forwardButton.setImage(images.first, for: .normal)
+                }
+            }
         } else {
             nextButton.isHidden = true
             nextButton.isUserInteractionEnabled = false
@@ -240,11 +250,19 @@ public class PTGuidePageHUD: UIView {
             adHadRemove!()
         }
     }
+    
+    public func guideShow() {
+        self.viewModel.mainView.addSubview(self)
+        self.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+    }
 }
 
 extension PTGuidePageHUD : UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+        PTNSLogConsole(page)
         if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto! {
             buttonClick(sender: nil)
         }
@@ -262,17 +280,14 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
                 }
             }
         }
-    }
-    
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let currentInt = "\((scrollView.contentOffset.x / scrollView.frame.size.width) + 0.5)".int ?? 0
-        imagePageControl.currentPage = currentInt
-        if currentInt >= 1 {
+        
+        imagePageControl.currentPage = page
+        if page >= 1 {
             forwardButton.isHidden = false
             forwardButton.isUserInteractionEnabled = true
         } else {
             forwardButton.isHidden = true
             forwardButton.isUserInteractionEnabled = false
         }
-    }
+    }    
 }
