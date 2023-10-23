@@ -322,20 +322,20 @@ class PTSwiftViewController: PTBaseViewController {
 //        btn.addActionHandlers { sender in
 //        }
         
-        let ios15Btn = PTLayoutButton()
-        ios15Btn.layoutStyle = .leftImageRightTitle
-        ios15Btn.midSpacing = 0
-        ios15Btn.setTitle("11111", for: .normal)
-        ios15Btn.imageSize = CGSize(width: 12, height: 12)
-        ios15Btn.setImage(UIImage(systemName: "globe"), for: .normal)
-        ios15Btn.addActionHandlers { sender in
-            sender.isSelected = true
-        }
-        view.addSubview(ios15Btn)
-        ios15Btn.snp.makeConstraints { make in
-            make.width.height.equalTo(150)
-            make.centerX.centerY.equalToSuperview()
-        }
+//        let ios15Btn = PTLayoutButton()
+//        ios15Btn.layoutStyle = .leftImageRightTitle
+//        ios15Btn.midSpacing = 0
+//        ios15Btn.setTitle("11111", for: .normal)
+//        ios15Btn.imageSize = CGSize(width: 12, height: 12)
+//        ios15Btn.setImage(UIImage(systemName: "globe"), for: .normal)
+//        ios15Btn.addActionHandlers { sender in
+//            sender.isSelected = true
+//        }
+//        view.addSubview(ios15Btn)
+//        ios15Btn.snp.makeConstraints { make in
+//            make.width.height.equalTo(150)
+//            make.centerX.centerY.equalToSuperview()
+//        }
     }
     
     func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {

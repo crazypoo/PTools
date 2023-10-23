@@ -36,6 +36,9 @@ public class PTEmptyDataViewConfig : PTBaseModel {
     var buttonTextColor:UIColor = .systemBlue
     var image:UIImage? = UIImage(systemName: "exclamationmark.triangle")!
     var backgroundColor:UIColor = .clear
+    var imageToTextPadding:CGFloat = 10
+    var textToSecondaryTextPadding:CGFloat = 5
+    var buttonToSecondaryButtonPadding:CGFloat = 15
 }
 
 #if POOTOOLS_NAVBARCONTROLLER
@@ -57,6 +60,9 @@ open class PTBaseViewController: ZXNavigationBarController {
     @available(iOS 17, *)
     fileprivate func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
         var configs = UIContentUnavailableConfiguration.empty()
+        configs.imageToTextPadding = self.emptyDataViewConfig!.imageToTextPadding
+        configs.textToButtonPadding = self.emptyDataViewConfig!.textToSecondaryTextPadding
+        configs.buttonToSecondaryButtonPadding = self.emptyDataViewConfig!.buttonToSecondaryButtonPadding
         if self.emptyDataViewConfig?.mainTitleAtt != nil {
             configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
         }
@@ -225,6 +231,9 @@ open class PTBaseViewController: UIViewController {
     @available(iOS 17, *)
     fileprivate func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
         var configs = UIContentUnavailableConfiguration.empty()
+        configs.imageToTextPadding = self.emptyDataViewConfig!.imageToTextPadding
+        configs.textToButtonPadding = self.emptyDataViewConfig!.textToSecondaryTextPadding
+        configs.buttonToSecondaryButtonPadding = self.emptyDataViewConfig!.buttonToSecondaryButtonPadding
         if self.emptyDataViewConfig?.mainTitleAtt != nil {
             configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
         }
