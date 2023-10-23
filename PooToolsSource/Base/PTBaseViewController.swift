@@ -12,6 +12,7 @@ import ZXNavigationBar
 #endif
 import FDFullscreenPopGesture
 import SwifterSwift
+import AttributedString
 
 @objc public enum VCStatusBarChangeStatusType : Int {
     case Dark
@@ -19,10 +20,70 @@ import SwifterSwift
     case Auto
 }
 
+public class PTEmptyDataViewConfig : PTBaseModel {
+    var mainTitleAtt:ASAttributedString? = """
+            \(wrap: .embedding("""
+            \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
+            """))
+            """
+    var secondaryEmptyAtt:ASAttributedString? = """
+            \(wrap: .embedding("""
+            \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+            """))
+            """
+    var buttonTitle:String? = ""
+    var buttonFont:UIFont = .appfont(size: 18)
+    var buttonTextColor:UIColor = .systemBlue
+    var image:UIImage? = UIImage(systemName: "exclamationmark.triangle")!
+    var backgroundColor:UIColor = .clear
+}
+
 #if POOTOOLS_NAVBARCONTROLLER
 @objcMembers
 open class PTBaseViewController: ZXNavigationBarController {
     
+    public var emptyDataViewConfig:PTEmptyDataViewConfig?
+    
+    @available(iOS 17, *)
+    fileprivate func emptyButtonConfig() -> UIButton.Configuration {
+        var plainConfig = UIButton.Configuration.plain()
+        plainConfig.title = self.emptyDataViewConfig!.buttonTitle!
+        plainConfig.titleTextAttributesTransformer = .init({ container in
+            container.merging(AttributeContainer.font(self.emptyDataViewConfig!.buttonFont).foregroundColor(self.emptyDataViewConfig!.buttonTextColor))
+        })
+        return plainConfig
+    }
+    
+    @available(iOS 17, *)
+    fileprivate func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
+        var configs = UIContentUnavailableConfiguration.empty()
+        if self.emptyDataViewConfig?.mainTitleAtt != nil {
+            configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
+        }
+        
+        if self.emptyDataViewConfig?.secondaryEmptyAtt != nil {
+            configs.secondaryAttributedText = self.emptyDataViewConfig!.secondaryEmptyAtt!.value
+        }
+        
+        if self.emptyDataViewConfig?.image != nil {
+            configs.image = self.emptyDataViewConfig!.image!
+        }
+        if !(self.emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
+            configs.button = self.emptyButtonConfig()
+        }
+        configs.buttonProperties.primaryAction = UIAction() { sender in
+            if task != nil {
+                task!()
+            }
+        }
+        var configBackground = UIBackgroundConfiguration.clear()
+        configBackground.backgroundColor = self.emptyDataViewConfig!.backgroundColor
+        
+        configs.background = configBackground
+
+        return configs
+    }
+
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
     open override var prefersStatusBarHidden:Bool {
@@ -149,6 +210,48 @@ open class PTBaseViewController: ZXNavigationBarController {
 @objcMembers
 open class PTBaseViewController: UIViewController {
     
+    public var emptyDataViewConfig:PTEmptyDataViewConfig?
+    
+    @available(iOS 17, *)
+    fileprivate func emptyButtonConfig() -> UIButton.Configuration {
+        var plainConfig = UIButton.Configuration.plain()
+        plainConfig.title = self.emptyDataViewConfig!.buttonTitle!
+        plainConfig.titleTextAttributesTransformer = .init({ container in
+            container.merging(AttributeContainer.font(self.emptyDataViewConfig!.buttonFont).foregroundColor(self.emptyDataViewConfig!.buttonTextColor))
+        })
+        return plainConfig
+    }
+    
+    @available(iOS 17, *)
+    fileprivate func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
+        var configs = UIContentUnavailableConfiguration.empty()
+        if self.emptyDataViewConfig?.mainTitleAtt != nil {
+            configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
+        }
+        
+        if self.emptyDataViewConfig?.secondaryEmptyAtt != nil {
+            configs.secondaryAttributedText = self.emptyDataViewConfig!.secondaryEmptyAtt!.value
+        }
+        
+        if self.emptyDataViewConfig?.image != nil {
+            configs.image = self.emptyDataViewConfig!.image!
+        }
+        if !(self.emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
+            configs.button = self.emptyButtonConfig()
+        }
+        configs.buttonProperties.primaryAction = UIAction() { sender in
+            if task != nil {
+                task!()
+            }
+        }
+        var configBackground = UIBackgroundConfiguration.clear()
+        configBackground.backgroundColor = self.emptyDataViewConfig!.backgroundColor
+        
+        configs.background = configBackground
+
+        return configs
+    }
+
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
     open override var prefersStatusBarHidden:Bool {
@@ -255,3 +358,27 @@ open class PTBaseViewController: UIViewController {
     }
 }
 #endif
+
+@available(iOS 17, *)
+extension PTBaseViewController {
+    public func showEmptyView(task: PTActionTask? = nil) {
+        if self.emptyDataViewConfig != nil {
+            let config = self.emptyConfig(task:task)
+            self.contentUnavailableConfiguration = config
+        } else {
+            assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
+        }
+    }
+    
+    public func hideEmptyView(task:PTActionTask? = nil) {
+        self.contentUnavailableConfiguration = nil
+        if task != nil {
+            task!()
+        }
+    }
+    
+    public func emptyViewLoading() {
+        let loadingConfig = UIContentUnavailableConfiguration.loading()
+        self.contentUnavailableConfiguration = loadingConfig
+    }
+}

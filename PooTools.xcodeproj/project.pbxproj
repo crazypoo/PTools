@@ -86,6 +86,7 @@
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
+		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
@@ -427,6 +428,7 @@
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
+		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
@@ -1854,6 +1856,7 @@
 				6003F5A5195388D20070C39A /* PTViewController.h */,
 				6003F5A6195388D20070C39A /* PTViewController.m */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				552893122AE65125009135F9 /* PTTip.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2188,6 +2191,7 @@
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,
 				55B4FA222AE10094006D35F3 /* PTPermissionFaceID.swift in Sources */,
+				552893132AE65125009135F9 /* PTTip.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
 				5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,

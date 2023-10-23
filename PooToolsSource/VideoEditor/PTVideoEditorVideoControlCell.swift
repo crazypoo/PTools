@@ -16,10 +16,10 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
     private lazy var buttonView : PTLayoutButton = {
         let view = PTLayoutButton()
         view.layoutStyle = .upImageDownTitle
-        view.setMidSpacing(10)
+        view.midSpacing = 10
+        view.imageSize = CGSizeMake(30, 30)
         view.setTitleColor(.black, for: .normal)
         view.titleLabel?.font = .appfont(size: 12)
-        view.setImageSize(CGSizeMake(30, 30))
         view.isUserInteractionEnabled = false
         return view
     }()

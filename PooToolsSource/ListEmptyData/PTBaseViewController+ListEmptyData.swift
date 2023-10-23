@@ -9,6 +9,7 @@
 import UIKit
 import LXFProtocolTool
 
+@available(iOS, introduced: 13.1, deprecated: 17.0,renamed: "showEmptyView(task:)")
 //MARK: 添加emptydataset
 extension PTBaseViewController:LXFEmptyDataSetable {
     //MARK: 添加emptydataset

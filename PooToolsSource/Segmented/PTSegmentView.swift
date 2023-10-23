@@ -78,10 +78,10 @@ public class PTSegmentSubView:UIView {
         let btn = PTLayoutButton()
         btn.setTitleColor(self.viewConfig.normalColor, for: .normal)
         btn.setTitleColor(self.viewConfig.selectedColor, for: .selected)
-        btn.setMidSpacing(self.viewConfig.imageTitleSpace)
+        btn.midSpacing = self.viewConfig.imageTitleSpace
         btn.imageView?.contentMode = .scaleAspectFit
         btn.layoutStyle = self.viewConfig.imagePosition
-        btn.setImageSize(CGSize(width: 30, height: 30))
+        btn.imageSize = CGSize(width: 30, height: 30)
         return btn
     }()
     

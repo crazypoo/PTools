@@ -32,10 +32,10 @@ class PTVideoEditorVideoControlViewController: PTBaseViewController {
     private lazy var titleStack:PTLayoutButton = {
         let view = PTLayoutButton()
         view.layoutStyle = .leftImageRightTitle
-        view.setMidSpacing(10)
+        view.midSpacing = 10
         view.setTitleColor(.black, for: .normal)
         view.titleLabel?.font = .appfont(size: 12)
-        view.setImageSize(CGSizeMake(20, 20))
+        view.imageSize = CGSizeMake(20, 20)
         view.isUserInteractionEnabled = false
         return view
     }()

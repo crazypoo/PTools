@@ -13,13 +13,15 @@ import UIKit
 import AnyImageKit
 import Photos
 import Combine
+import TipKit
+import AttributedString
 
 #if canImport(LifetimeTracker)
 import LifetimeTracker
 #endif
 
 class PTSwiftViewController: PTBaseViewController {
-    
+        
     private var videoEdit: PTVideoEdit?
     fileprivate var cancellables = Set<AnyCancellable>()
 
@@ -235,182 +237,104 @@ class PTSwiftViewController: PTBaseViewController {
 
         return [[onlyLeft,onlyLeftRight,onlyLeft_a,onlyRight_a,onlyRight],[onlyLeftRight_n_a,onlyLeftRight_nc_a,onlyLeftRight_nd_a,onlyLeftRight_c_a,onlyRight_n_a,onlyRight_nc_a,onlyRight_nd_a,onlyRight_c_a],[only_n_a,only_nc_a,only_nd_a,only_c_a],[onlyLeft_n_a,onlyLeft_nc_a,onlyLeft_nd_a,onlyLeft_c_a]]
     }
+    
+    lazy var newCollectionView : PTCollectionView = {
+        let cConfig = PTCollectionViewConfig()
+        cConfig.viewType = .Custom
+        cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
+        cConfig.contentTopAndBottom = 0
+        cConfig.cellTrailingSpace = 0
+        cConfig.cellLeadingSpace = 0
+        cConfig.topRefresh = true
+        let aaaaaaa = PTCollectionView(viewConfig: cConfig)
+                
+        aaaaaaa.headerInCollection = { kind,collectionView,model,index in
+            
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTTestHeader
+            header.backgroundColor = .blue
+            return header
+        }
+        aaaaaaa.footerInCollection = { kind,collectionView,model,index in
+            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
+            footer.backgroundColor = .red
+            return footer
+        }
+        aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
+            let itemRow = dataModel.rows[indexPath.row]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+            cell.backgroundColor = .randomColor
+            return cell
+        }
+        aaaaaaa.headerRefreshTask = { sender in
+            PTGCDManager.gcdAfter(time: 3) {
+                sender.endRefreshing()
+            }
+        }
+        
+        aaaaaaa.customerLayout = { sectionModel in
+            var bannerGroupSize : NSCollectionLayoutSize
+            var customers = [NSCollectionLayoutGroupCustomItem]()
+            var groupH:CGFloat = 0
+            var cellHeight:CGFloat = 0
+            cellHeight = CGFloat.ScaleW(w: 44 + 12.5)
+            sectionModel.rows.enumerated().forEach { (index,model) in
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: cConfig.itemOriginalX, y: groupH, width: CGFloat.kSCREEN_WIDTH - cConfig.itemOriginalX * 2, height: cellHeight), zIndex: 1000+index)
+                customers.append(customItem)
+                groupH += cellHeight
+            }
+            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH - cConfig.itemOriginalX * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+                customers
+            })
+        }
+        return aaaaaaa
+    }()
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+//        if #available(iOS 17, *) {
+//            self.aaaaaa()
+//        } else {
+//            // Fallback on earlier versions
+//        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         PTNSLogConsole(self)
-                           
-//        let cConfig = PTCollectionViewConfig()
-//        cConfig.viewType = .Custom
-//        cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
-//        cConfig.contentTopAndBottom = 0
-//        cConfig.cellTrailingSpace = 0
-//        cConfig.cellLeadingSpace = 0
-//        cConfig.topRefresh = true
-//        let aaaaaaa = PTCollectionView(viewConfig: cConfig)
-//        
-//        var sections = [PTSection]()
-//        cellModels().enumerated().forEach { (index,value) in
-//            var rows = [PTRows]()
-//            value.enumerated().forEach { subIndex,subValue in
-//                let row_List = PTRows.init(title: subValue.name, placeholder: subValue.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: subValue)
-//                rows.append(row_List)
-//            }
-//            let cellSection = PTSection.init(headerTitle: "123123123123",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: rows)
-//            sections.append(cellSection)
-//        }
-//        
-//        aaaaaaa.headerInCollection = { kind,collectionView,model,index in
-//            
-//            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTTestHeader
-//            header.backgroundColor = .blue
-//            return header
-//        }
-//        aaaaaaa.footerInCollection = { kind,collectionView,model,index in
-//            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
-//            footer.backgroundColor = .red
-//            return footer
-//        }
-//        aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
-//            let itemRow = dataModel.rows[indexPath.row]
-//            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-//            cell.backgroundColor = .randomColor
-//            return cell
-//        }
-//        aaaaaaa.headerRefreshTask = { sender in
-//            PTGCDManager.gcdAfter(time: 3) {
-//                sender.endRefreshing()
-//            }
-//        }
-//        
-//        aaaaaaa.customerLayout = { sectionModel in
-//            var bannerGroupSize : NSCollectionLayoutSize
-//            var customers = [NSCollectionLayoutGroupCustomItem]()
-//            var groupH:CGFloat = 0
-//            var cellHeight:CGFloat = 0
-//            cellHeight = CGFloat.ScaleW(w: 44 + 12.5)
-//            sectionModel.rows.enumerated().forEach { (index,model) in
-//                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: cConfig.itemOriginalX, y: groupH, width: CGFloat.kSCREEN_WIDTH - cConfig.itemOriginalX * 2, height: cellHeight), zIndex: 1000+index)
-//                customers.append(customItem)
-//                groupH += cellHeight
-//            }
-//            bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(CGFloat.kSCREEN_WIDTH - cConfig.itemOriginalX * 2), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
-//            return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-//                customers
-//            })
-//        }
-//
-//        self.view.addSubview(aaaaaaa)
-//        aaaaaaa.snp.makeConstraints { make in
-//            make.edges.equalToSuperview()
-//        }
-//        aaaaaaa.layoutIfNeeded()
-//        aaaaaaa.showCollectionDetail(collectionData: sections)
 
-        
-        let btn = UIButton(type: .custom)
-        btn.backgroundColor = .randomColor
-        view.addSubview(btn)
-        btn.snp.makeConstraints { make in
-            make.width.height.equalTo(100)
-            make.centerX.centerY.equalToSuperview()
+        self.view.addSubview(newCollectionView)
+        newCollectionView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
         }
-        btn.addActionHandlers { sender in
-            
-            let bt = PTPermissionModel()
-            bt.type = .bluetooth
-            bt.name = "123123123"
-            bt.desc = "33333333"
-            
-            let calendarF = PTPermissionModel()
-            calendarF.type = .calendar(access: .full)
-            calendarF.name = "123123123"
-            calendarF.desc = "33333333"
-
-            let calendarW = PTPermissionModel()
-            calendarW.type = .calendar(access: .write)
-            calendarW.name = "123123123"
-            calendarW.desc = "33333333"
-
-            let camera = PTPermissionModel()
-            camera.type = .camera
-            camera.name = "123123123"
-            camera.desc = "33333333"
-
-            let contacts = PTPermissionModel()
-            contacts.type = .contacts
-            contacts.name = "123123123"
-            contacts.desc = "33333333"
-
-            let faceID = PTPermissionModel()
-            faceID.type = .faceID
-            faceID.name = "123123123"
-            faceID.desc = "33333333"
-
-            let health = PTPermissionModel()
-            health.type = .health
-            health.name = "123123123"
-            health.desc = "33333333"
-
-            let locationA = PTPermissionModel()
-            locationA.type = .location(access: .always)
-            locationA.name = "123123123"
-            locationA.desc = "33333333"
-
-            let locationW = PTPermissionModel()
-            locationW.type = .location(access: .whenInUse)
-            locationW.name = "123123123"
-            locationW.desc = "33333333"
-
-            let media = PTPermissionModel()
-            media.type = .mediaLibrary
-            media.name = "123123123"
-            media.desc = "33333333"
-
-            let mic = PTPermissionModel()
-            mic.type = .microphone
-            mic.name = "123123123"
-            mic.desc = "33333333"
-
-            let motion = PTPermissionModel()
-            motion.type = .motion
-            motion.name = "123123123"
-            motion.desc = "33333333"
-
-            let notification = PTPermissionModel()
-            notification.type = .notification
-            notification.name = "123123123"
-            notification.desc = "33333333"
-
-            let photo = PTPermissionModel()
-            photo.type = .photoLibrary
-            photo.name = "123123123"
-            photo.desc = "33333333"
-
-            let reminders = PTPermissionModel()
-            reminders.type = .reminders
-            reminders.name = "123123123"
-            reminders.desc = "33333333"
-
-            let siri = PTPermissionModel()
-            siri.type = .siri
-            siri.name = "123123123"
-            siri.desc = "33333333"
-
-            let speech = PTPermissionModel()
-            speech.type = .speech
-            speech.name = "123123123"
-            speech.desc = "33333333"
-
-            let tracking = PTPermissionModel()
-            tracking.type = .tracking
-            tracking.name = "123123123"
-            tracking.desc = "33333333"
-
-            let aaaaa = PTPermissionViewController(datas: [bt,calendarF,calendarW,camera,contacts,faceID,health,locationA,locationW,media,mic,motion,notification,photo,reminders,siri,speech,tracking])
-//            let nav = PTBaseNavControl(rootViewController: aaaaa)
-            self.present(aaaaa, animated: true)
+        
+        
+        
+//        let btn = UIButton(type: .custom)
+//        btn.backgroundColor = .randomColor
+//        view.addSubview(btn)
+//        btn.snp.makeConstraints { make in
+//            make.width.height.equalTo(100)
+//            make.centerX.centerY.equalToSuperview()
+//        }
+//                
+//        btn.addActionHandlers { sender in
+//        }
+        
+        let ios15Btn = PTLayoutButton()
+        ios15Btn.layoutStyle = .leftImageRightTitle
+        ios15Btn.midSpacing = 0
+        ios15Btn.setTitle("11111", for: .normal)
+        ios15Btn.imageSize = CGSize(width: 12, height: 12)
+        ios15Btn.setImage(UIImage(systemName: "globe"), for: .normal)
+        ios15Btn.addActionHandlers { sender in
+            sender.isSelected = true
+        }
+        view.addSubview(ios15Btn)
+        ios15Btn.snp.makeConstraints { make in
+            make.width.height.equalTo(150)
+            make.centerX.centerY.equalToSuperview()
         }
     }
     
@@ -421,6 +345,99 @@ class PTSwiftViewController: PTBaseViewController {
         PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, _ in
             completion(avAsset)
         }
+    }
+    
+    @available(iOS 17, *)
+    func aaaaaa() {
+        
+//        let attTitle:ASAttributedString = """
+//        \(wrap: .embedding("""
+//        \("123123123",.foreground(.random),.font(.appfont(size: 16)),.paragraph(.alignment(.center)),.action {
+//        PTNSLogConsole("22222222222222222")
+//        //        self.aaaaaa()
+//                    self.contentUnavailableConfiguration = nil
+//        })
+//        """))
+//        """
+//
+//        let attBottom:ASAttributedString = """
+//        \(wrap: .embedding("""
+//        \("123123123123123123123123123123123123123",.foreground(.random),.font(.appfont(size: 16)),.paragraph(.alignment(.center)),.action {
+//        PTNSLogConsole("123123123123123123")
+//        //        self.aaaaaa()
+//                    self.contentUnavailableConfiguration = nil
+//        })
+//        """))
+//        """
+//        
+//        var emptyConfig = UIContentUnavailableConfiguration.empty()
+////        emptyConfig.text = "暂无数据"
+//        emptyConfig.attributedText = attBottom.value
+//        emptyConfig.image = UIImage(systemName: "exclamationmark.triangle")
+//        emptyConfig.secondaryAttributedText = attTitle.value
+////        let aaaaa = UIButton(type: .custom)
+////        aaaaa.bounds = CGRectMake(0, 0, 100, 100)
+////        aaaaa.backgroundColor = .randomColor
+//        
+//        var plainConfig = UIButton.Configuration.plain()
+//        plainConfig.title = "22222222222"
+//        plainConfig.titleTextAttributesTransformer = .init({ container in
+//            container.merging(AttributeContainer.font(UIFont.appfont(size: 24)).foregroundColor(UIColor.YellowGreenColor))
+//        })
+////        plainConfig.attributedTitle = AttributedString(stringLiteral: "11111")//NSAttributedString(string: "123123123",attributes: [NSForegroundColorAttributeName:UIColor.red])
+//        
+//        var filledConfig = UIButton.Configuration.filled()
+//        filledConfig.title = "11111"
+//        
+//        emptyConfig.button = plainConfig
+//        emptyConfig.buttonProperties.primaryAction = UIAction() { sender in
+//            PTNSLogConsole("123123123123123")
+//        }
+//        var listB = UIBackgroundConfiguration.clear()
+//        listB.backgroundColor = .systemRed
+//        
+//        emptyConfig.background = listB
+//
+//        contentUnavailableConfiguration = emptyConfig
+        
+        self.emptyDataViewConfig = PTEmptyDataViewConfig()
+        self.emptyDataViewConfig?.buttonTitle = "123123"
+        self.emptyDataViewConfig?.backgroundColor = .BabyBlueColor
+        
+        self.showEmptyView() {
+            PTNSLogConsole("123")
+        }
+
+//        let una = UIContentUnavailableView(configuration: emptyConfig)
+//        una.frame = UIScreen.main.bounds
+//        self.view.addSubview(una)
+        
+        // 切换UIContentUnavailableConfiguration
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            let loadingConfig = UIContentUnavailableConfiguration.loading()
+//            self.contentUnavailableConfiguration = loadingConfig
+//        }
+//        // 移除UIContentUnavailableConfiguration
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 6) {
+//            self.contentUnavailableConfiguration = nil
+//            self.showCollectionViewData()
+//        }
+
+    }
+    
+    func showCollectionViewData() {
+        var sections = [PTSection]()
+        cellModels().enumerated().forEach { (index,value) in
+            var rows = [PTRows]()
+            value.enumerated().forEach { subIndex,subValue in
+                let row_List = PTRows.init(title: subValue.name, placeholder: subValue.content,cls: PTFusionCell.self, ID: PTFusionCell.ID, dataModel: subValue)
+                rows.append(row_List)
+            }
+            let cellSection = PTSection.init(headerTitle: "123123123123",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: rows)
+            sections.append(cellSection)
+        }
+        self.newCollectionView.layoutIfNeeded()
+        self.newCollectionView.showCollectionDetail(collectionData: sections)
     }
 }
 
@@ -492,4 +509,9 @@ extension PTSwiftViewController: ImageKitDataTrackDelegate {
     func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
         PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
+}
+
+@available(iOS 17, *)
+#Preview {
+    PTSwiftViewController()
 }
