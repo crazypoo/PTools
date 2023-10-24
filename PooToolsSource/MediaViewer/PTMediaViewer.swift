@@ -456,18 +456,18 @@ public class PTMediaMediaView:UIView {
                 
                 PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: self.viewConfig.iCloudDocumentName) { receivedSize, totalSize in
                     loading.progress = CGFloat(receivedSize / totalSize)
-                } taskHandle: { images in
-                    if images.count > 1 {
-                        self.gifImage = images.first
+                } taskHandle: { images,image in
+                    if (images?.count ?? 0) > 1 {
+                        self.gifImage = image
                         self.imageView.animationImages = images
                         self.imageView.animationDuration = 2
                         self.imageView.startAnimating()
                         self.adjustFrame()
                         self.hasLoadedImage = true
                         loading.removeFromSuperview()
-                    } else if images.count == 1 {
-                        self.gifImage = images.first
-                        self.imageView.image = images.first
+                    } else if images?.count == 1 {
+                        self.gifImage = image
+                        self.imageView.image = image
                         self.adjustFrame()
                         self.hasLoadedImage = true
                         loading.removeFromSuperview()
@@ -1354,8 +1354,7 @@ public class PTMediaViewer: UIView {
             self.coverView.removeFromSuperview()
             currentView.alpha = 0
             self.viewDismissAction()
-            if self.viewerDismissBlock != nil
-            {
+            if self.viewerDismissBlock != nil {
                 self.viewerDismissBlock!()
             }
         }

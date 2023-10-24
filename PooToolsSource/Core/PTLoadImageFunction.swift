@@ -15,25 +15,30 @@ public class PTLoadImageFunction: NSObject {
     public class func loadImage(contentData:Any,
                                 iCloudDocumentName:String? = "",
                                 progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
-                                taskHandle:(([UIImage])->Void)!) {
+                                taskHandle:(([UIImage]?,UIImage?)->Void)!) {
         if contentData is UIImage {
-            taskHandle([(contentData as! UIImage)])
+            let image = (contentData as! UIImage)
+            taskHandle([image],image)
         } else if contentData is String {
             let dataUrlString = contentData as! String
             if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
-                taskHandle([UIImage(contentsOfFile: dataUrlString)!])
+                let image = UIImage(contentsOfFile: dataUrlString)!
+                taskHandle([image],image)
             } else if dataUrlString.isURL() {
                 if dataUrlString.contains("file://") {
                     if (iCloudDocumentName ?? "").stringIsEmpty() {
-                        taskHandle([UIImage(contentsOfFile: dataUrlString)!])
+                        let image = UIImage(contentsOfFile: dataUrlString)!
+                        taskHandle([image],image)
                     } else {
                         if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName!) {
                             let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
                             if let imageData = try? Data(contentsOf: imageURL) {
-                                taskHandle([UIImage(data: imageData)!])
+                                let image = UIImage(data: imageData)!
+                                taskHandle([image],image)
                             }
                         } else {
-                            taskHandle([UIImage(contentsOfFile: dataUrlString)!])
+                            let image = UIImage(contentsOfFile: dataUrlString)!
+                            taskHandle([image],image)
                         }
                     }
                 } else {
@@ -53,18 +58,19 @@ public class PTLoadImageFunction: NSObject {
                                     let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
                                     frames.append(imageName)
                                 }
-                                taskHandle(frames)
+                                taskHandle(frames,value.image)
                             } else {
-                                taskHandle([value.image])
+                                taskHandle([value.image],value.image)
                             }
                         case .failure(let error):
                             PTNSLogConsole(error)
-                            taskHandle([])
+                            taskHandle([],nil)
                         }
                     }
                 }
             } else {
-                taskHandle([UIImage(named: dataUrlString)!])
+                let image = UIImage(named: dataUrlString)!
+                taskHandle([image],image)
             }
         }
     }

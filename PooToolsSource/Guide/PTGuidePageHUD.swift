@@ -107,13 +107,13 @@ public class PTGuidePageHUD: UIView {
             imageView.contentMode = .scaleAspectFit
             
             let contentData = viewModel.imageArrays[index]
-            PTLoadImageFunction.loadImage(contentData: contentData, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
-                if images.count > 1 {
+            PTLoadImageFunction.loadImage(contentData: contentData, iCloudDocumentName: viewModel.iCloudDocumentName) { images,image in
+                if (images?.count ?? 0) > 1 {
                     imageView.animationImages = images
                     imageView.animationDuration = 2
                     imageView.startAnimating()
-                } else if images.count == 1 {
-                    imageView.image = images.first
+                } else if images?.count == 1 {
+                    imageView.image = images!.first
                 }
             }
             guidePageView.addSubview(imageView)
@@ -194,14 +194,14 @@ public class PTGuidePageHUD: UIView {
                 nextButton.isUserInteractionEnabled = false
             }
             
-            PTLoadImageFunction.loadImage(contentData: viewModel.backImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
-                if images.count != 0 {
-                    self.nextButton.setImage(images.first, for: .normal)
+            PTLoadImageFunction.loadImage(contentData: viewModel.backImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images,image in
+                if images?.count != 0 {
+                    self.nextButton.setImage(images!.first, for: .normal)
                 }
             }
-            PTLoadImageFunction.loadImage(contentData: viewModel.forwardImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images in
-                if images.count != 0 {
-                    self.forwardButton.setImage(images.first, for: .normal)
+            PTLoadImageFunction.loadImage(contentData: viewModel.forwardImage as Any, iCloudDocumentName: viewModel.iCloudDocumentName) { images,image in
+                if images?.count != 0 {
+                    self.forwardButton.setImage(images!.first, for: .normal)
                 }
             }
         } else {

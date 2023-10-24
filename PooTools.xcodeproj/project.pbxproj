@@ -87,6 +87,11 @@
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
 		552893132AE65125009135F9 /* PTTip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893122AE65125009135F9 /* PTTip.swift */; };
+		552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893142AE78D49009135F9 /* PTMediaBrowserController.swift */; };
+		552893172AE78F79009135F9 /* PTMediaBrowserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893162AE78F79009135F9 /* PTMediaBrowserCell.swift */; };
+		552893192AE7E076009135F9 /* PTMediaBrowserNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */; };
+		5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */; };
+		5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
@@ -429,6 +434,11 @@
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
 		552893122AE65125009135F9 /* PTTip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTip.swift; sourceTree = "<group>"; };
+		552893142AE78D49009135F9 /* PTMediaBrowserController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserController.swift; sourceTree = "<group>"; };
+		552893162AE78F79009135F9 /* PTMediaBrowserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserCell.swift; sourceTree = "<group>"; };
+		552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserNav.swift; sourceTree = "<group>"; };
+		5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserBottom.swift; sourceTree = "<group>"; };
+		5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageControl+PTEX.swift"; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
@@ -932,6 +942,7 @@
 				558D5EF42AAF586700C02042 /* URL+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1694,6 +1705,10 @@
 			isa = PBXGroup;
 			children = (
 				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
+				552893142AE78D49009135F9 /* PTMediaBrowserController.swift */,
+				552893162AE78F79009135F9 /* PTMediaBrowserCell.swift */,
+				552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */,
+				5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */,
 			);
 			path = MediaViewer;
 			sourceTree = "<group>";
@@ -2137,6 +2152,7 @@
 				55025E4C29FA56D00024A960 /* PTNavigationBarBaseValues.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
+				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
@@ -2199,6 +2215,7 @@
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
+				552893192AE7E076009135F9 /* PTMediaBrowserNav.swift in Sources */,
 				231D1685272CDEEA003D6F62 /* PTSegmentView.swift in Sources */,
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
@@ -2227,6 +2244,7 @@
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
+				552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				5585F7172AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift in Sources */,
 				5585F6D32AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift in Sources */,
@@ -2255,6 +2273,7 @@
 				55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */,
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
+				5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
@@ -2310,6 +2329,7 @@
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
+				552893172AE78F79009135F9 /* PTMediaBrowserCell.swift in Sources */,
 				554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */,
 				554929F428F911DB00C82ABF /* PTBaseCollectionReusableView.swift in Sources */,
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,

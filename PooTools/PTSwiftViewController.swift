@@ -311,16 +311,40 @@ class PTSwiftViewController: PTBaseViewController {
         
         
         
-//        let btn = UIButton(type: .custom)
-//        btn.backgroundColor = .randomColor
-//        view.addSubview(btn)
-//        btn.snp.makeConstraints { make in
-//            make.width.height.equalTo(100)
-//            make.centerX.centerY.equalToSuperview()
-//        }
-//                
-//        btn.addActionHandlers { sender in
-//        }
+        let btn = UIButton(type: .custom)
+        btn.backgroundColor = .randomColor
+        view.addSubview(btn)
+        btn.snp.makeConstraints { make in
+            make.width.height.equalTo(100)
+            make.centerX.centerY.equalToSuperview()
+        }
+                
+        btn.addActionHandlers { sender in
+            
+            let media1 = PTViewerModel()
+            media1.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
+            media1.imageShowType = .Normal
+            media1.imageInfo = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123"
+            
+            let media2 = PTViewerModel()
+            media2.imageURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+            media2.imageShowType = .Video
+
+            let media3 = PTViewerModel()
+            media3.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
+            media3.imageShowType = .GIF
+
+            let mediaConfig = PTViewerConfig()
+            mediaConfig.actionType = .All
+            mediaConfig.defultIndex = 5
+            mediaConfig.mediaData = [media1,media2,media3]
+            
+            let aaaaa = PTMediaBrowserController()
+            aaaaa.viewConfig = mediaConfig
+            aaaaa.modalPresentationStyle = .fullScreen
+            self.present(aaaaa, animated: true) {
+            }
+        }
         
 //        let ios15Btn = PTLayoutButton()
 //        ios15Btn.layoutStyle = .leftImageRightTitle
@@ -346,6 +370,7 @@ class PTSwiftViewController: PTBaseViewController {
             completion(avAsset)
         }
     }
+    
     
     @available(iOS 17, *)
     func aaaaaa() {
