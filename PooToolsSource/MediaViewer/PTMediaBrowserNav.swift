@@ -27,7 +27,7 @@ class PTMediaBrowserNav: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.4)
+        backgroundColor = MediaBrowserToolBarColor
 
         self.addSubviews([self.closeButton,self.titleLabel])
         self.closeButton.snp.makeConstraints { make in

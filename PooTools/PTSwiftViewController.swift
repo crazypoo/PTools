@@ -321,22 +321,24 @@ class PTSwiftViewController: PTBaseViewController {
                 
         btn.addActionHandlers { sender in
             
-            let media1 = PTViewerModel()
+            UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
+                PTNSLogConsole("检测是否视频\(String(describing: image))")
+            })
+            
+            let media1 = PTMediaBrowserModel()
             media1.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-            media1.imageShowType = .Normal
             media1.imageInfo = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123"
             
-            let media2 = PTViewerModel()
+            let media2 = PTMediaBrowserModel()
             media2.imageURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-            media2.imageShowType = .Video
 
-            let media3 = PTViewerModel()
+            let media3 = PTMediaBrowserModel()
             media3.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-            media3.imageShowType = .GIF
 
-            let mediaConfig = PTViewerConfig()
-            mediaConfig.actionType = .All
-            mediaConfig.defultIndex = 5
+            let mediaConfig = PTMediaBrowserConfig()
+            mediaConfig.actionType = .Empty
+            mediaConfig.defultIndex = 0
+            mediaConfig.dynamicBackground = true
             mediaConfig.mediaData = [media1,media2,media3]
             
             let aaaaa = PTMediaBrowserController()

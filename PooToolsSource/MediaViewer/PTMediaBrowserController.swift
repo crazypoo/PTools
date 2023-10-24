@@ -12,12 +12,16 @@ import SnapKit
 import ZXNavigationBar
 #endif
 import SwifterSwift
+import AttributedString
 
+let numberOfVisibleLines = 2
+
+@objcMembers
 public class PTMediaBrowserController: PTBaseViewController {
 
     public var viewDismissBlock:PTActionTask?
 
-    public var viewConfig:PTViewerConfig! {
+    public var viewConfig:PTMediaBrowserConfig! {
         didSet {
             self.showCollectionViewData()
         }
@@ -49,6 +53,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     fileprivate lazy var bottomControl:PTMediaBrowserBottom = {
         let view = PTMediaBrowserBottom(viewConfig: self.viewConfig)
+        view.isUserInteractionEnabled = true
         switch self.viewConfig.actionType {
         case .Empty:
             view.moreActionButton.isHidden = true
@@ -119,7 +124,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     }()
     
     fileprivate lazy var newCollectionView : PTCollectionView = {
-        let cellHeight = CGFloat.kSCREEN_HEIGHT - CGFloat.kNavBarHeight_Total
+        let cellHeight = CGFloat.kSCREEN_HEIGHT
         let cellWidth = CGFloat.kSCREEN_WIDTH
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
@@ -134,13 +139,19 @@ public class PTMediaBrowserController: PTBaseViewController {
             let itemRow = dataModel.rows[indexPath.row]
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaBrowserCell
             cell.viewConfig = self.viewConfig
-            cell.dataModel = (itemRow.dataModel as! PTViewerModel)
+            cell.dataModel = (itemRow.dataModel as! PTMediaBrowserModel)
             cell.viewerDismissBlock = {
                 self.returnFrontVC() {
                     if self.viewDismissBlock != nil {
                         self.viewDismissBlock!()
                     }
                 }
+            }
+            cell.zoomTask = { boolValue in
+                self.toolBarControl(boolValue: boolValue)
+            }
+            cell.tapTask = {
+                self.toolBarControl(boolValue: !self.navControl.isHidden)
             }
             return cell
         }
@@ -162,13 +173,9 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
             let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTViewerModel)
+            let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
             let endCell = cell as! PTMediaBrowserCell
-            switch cellModel.imageShowType {
-            case .Video:
-                endCell.player.player?.pause()
-                endCell.playedVideo = false
-                endCell.stopBtn.isSelected = true
+            switch endCell.currentCellType {
             case .GIF:
                 endCell.imageView.stopAnimating()
             default:
@@ -187,9 +194,9 @@ public class PTMediaBrowserController: PTBaseViewController {
             self.bottomControl.pageControlView.currentPage = indexPath.row
 
             let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTViewerModel)
+            let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
             let endCell = cell as! PTMediaBrowserCell
-            switch cellModel.imageShowType {
+            switch endCell.currentCellType {
             case .GIF:
                 endCell.imageView.startAnimating()
             default:
@@ -204,32 +211,26 @@ public class PTMediaBrowserController: PTBaseViewController {
         collectionView.collectionViewDidScrol = { collectionViewScrol in
             let cellModel = self.viewConfig.mediaData[self.bottomControl.pageControlView.currentPage]
             let currentCell = collectionView.visibleCells().first as! PTMediaBrowserCell
-            switch cellModel.imageShowType {
-            case .GIF,.Normal,.Video:
-                if abs(collectionViewScrol.contentOffset.y) > 0 {
-                    currentCell.contentScrolView.isUserInteractionEnabled = false
-                    currentCell.contentScrolView.isScrollEnabled = false
-                    currentCell.prepareForHide()
-                    var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
-                    delt = max(delt, 0)
-                    let s = max(delt, 0.5)
-                    let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: collectionViewScrol.contentOffset.y / s)
-                    let scale = CGAffineTransform(scaleX: s, y: s)
-                    currentCell.tempView.transform = translation.concatenating(scale)
-                }
-                
-                if abs(collectionViewScrol.contentOffset.y) > 200 {
-                    currentCell.hideAnimation()
-                } else if collectionViewScrol.contentOffset.y == 0 {
-                    currentCell.bounceToOriginal()
-                    currentCell.contentScrolView.isUserInteractionEnabled = true
-                    currentCell.contentScrolView.isScrollEnabled = true
-                }
-            default:
-                break
+            if abs(collectionViewScrol.contentOffset.y) > 0 {
+                currentCell.contentScrolView.isUserInteractionEnabled = false
+                currentCell.contentScrolView.isScrollEnabled = false
+                currentCell.prepareForHide()
+                var delt = 1 - abs(collectionViewScrol.contentOffset.y ) / currentCell.contentView.frame.size.height
+                delt = max(delt, 0)
+                let s = max(delt, 0.5)
+                let translation = CGAffineTransform(translationX: collectionViewScrol.contentOffset.x / s, y: collectionViewScrol.contentOffset.y / s)
+                let scale = CGAffineTransform(scaleX: s, y: s)
+                currentCell.tempView.transform = translation.concatenating(scale)
+            }
+            
+            if abs(collectionViewScrol.contentOffset.y) > 200 {
+                currentCell.hideAnimation()
+            } else if collectionViewScrol.contentOffset.y == 0 {
+                currentCell.bounceToOriginal()
+                currentCell.contentScrolView.isUserInteractionEnabled = true
+                currentCell.contentScrolView.isScrollEnabled = true
             }
         }
-                
         return collectionView
     }()
     
@@ -246,7 +247,11 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .DevMaskColor
+        if self.viewConfig.dynamicBackground {
+            self.view.backgroundColor = .clear
+        } else {
+            self.view.backgroundColor = .DevMaskColor
+        }
         
         let closeButton = UIButton.init(type: .close)
         closeButton.addActionHandlers(handler: { sender in
@@ -361,17 +366,20 @@ public class PTMediaBrowserController: PTBaseViewController {
     func viewMoreActionDismiss() {
         let currentCell = self.newCollectionView.visibleCells()
         let endCell = currentCell.first as! PTMediaBrowserCell
-        switch endCell.dataModel.imageShowType {
-        case .Video:
-            endCell.player.player?.pause()
-            endCell.playedVideo = false
-            endCell.stopBtn.isSelected = true
+        switch endCell.currentCellType {
         case .GIF:
             endCell.imageView.stopAnimating()
         default:
             break
         }
         self.returnFrontVC()
+    }
+    
+    func toolBarControl(boolValue:Bool) {
+        self.navControl.isHidden = boolValue
+        self.bottomControl.moreActionButton.isHidden = self.navControl.isHidden
+        self.bottomControl.titleLabel.isHidden = self.navControl.isHidden
+        self.bottomControl.backgroundColor = self.navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
 }
 
@@ -380,16 +388,7 @@ fileprivate extension PTMediaBrowserController {
         let model = self.viewConfig.mediaData[self.bottomControl.pageControlView.currentPage]
         
         let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
-        switch model.imageShowType {
-        case .FullView,.ThreeD:
-            if currentView.hasLoadedImage! {
-                let fullImage = currentView.panoramaNode?.geometry?.firstMaterial?.diffuse.contents as! UIImage
-                saveImageToPhotos(saveImage: fullImage)
-            } else {
-                if viewSaveImageBlock != nil {
-                    viewSaveImageBlock!(false)
-                }
-            }
+        switch currentView.currentCellType {
         case .Video:
             saveVideoAction(url: model.imageURL as! String)
         default:
@@ -399,8 +398,8 @@ fileprivate extension PTMediaBrowserController {
     
     func saveVideoAction(url:String) {
         let currentMediaView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
-        let loadingView = PTLoadingView.init(type: .LoopDiagram)
-        currentMediaView.player.view.addSubview(loadingView)
+        let loadingView = PTMediaBrowserLoadingView.init(type: .LoopDiagram)
+        currentMediaView.contentView.addSubview(loadingView)
         loadingView.snp.makeConstraints { make in
             make.width.equalTo(currentMediaView.frame.size.width * 0.5)
             make.height.equalTo(currentMediaView.frame.size.height * 0.5)
@@ -459,11 +458,9 @@ fileprivate extension PTMediaBrowserController {
         } else {
             let index = self.bottomControl.pageControlView.currentPage
             let currentImages = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
-            switch currentImages.dataModel.imageShowType {
+            switch currentImages.currentCellType {
             case .GIF:
                 currentImages.imageView.stopAnimating()
-            case .Video:
-                currentImages.player.player?.pause()
             default:
                 break
             }
@@ -509,36 +506,134 @@ fileprivate extension PTMediaBrowserController {
         }
     }
 
-    func updateBottom(models:PTViewerModel) {
-        
-        let bottonH:CGFloat = 44
+    func labelMoreAtt(models:PTMediaBrowserModel) ->ASAttributedString {
+        let atts:ASAttributedString = """
+        \(wrap: .embedding("""
+        \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))\(".....更多",.foreground(.systemBlue),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    let fullAtts:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \(models.imageInfo,.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
+                    """))
+                    """
+                    self.bottomControl.setLabelAtt(att: fullAtts)
+                }
 
-        let emptyContentHeight = CGFloat.kTabbarHeight_Total - PageControlHeight - PageControlBottomSpace - 5 - CGFloat.kTabbarSaveAreaHeight
-        var labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
-
+                let maskView = UIView()
+                maskView.backgroundColor = .DevMaskColor
+                self.view.addSubview(maskView)
         
+                let tapGes = UITapGestureRecognizer { sender in
+                    maskView.removeFromSuperview()
+                    self.updateBottom(models: models)
+                }
+                maskView.addGestureRecognizer(tapGes)
+                maskView.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalTo(self.navControl.snp.bottom)
+                    make.bottom.equalTo(self.bottomControl.snp.top)
+                }
+        
+                self.bottomControl.snp.updateConstraints { make in
+                    make.left.right.bottom.equalToSuperview()
+                    make.height.equalTo(self.heightForString(models.imageInfo) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
+                }
+        })
+        """))
+        """
+        return atts
+    }
+    
+    func updateBottom(models:PTMediaBrowserModel) {
+                
+        if self.numberOfLines(models.imageInfo) > numberOfVisibleLines {
+            self.bottomControl.setLabelAtt(att: self.labelMoreAtt(models: models))
+            self.bottomControl.snp.updateConstraints { make in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(self.heightForString(self.truncatedText(fullText:models.imageInfo) + ".....更多") + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
+            }
+        } else {
+            var bottomH:CGFloat = 0
+            if models.imageInfo.stringIsEmpty() {
+                self.bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
+                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+            } else {
+                var textH:CGFloat = self.heightForString(models.imageInfo)
+                if textH < 34 {
+                    textH = 34
+                }
+                
+                let atts:ASAttributedString = """
+                \(wrap: .embedding("""
+                \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
+                """))
+                """
+
+                self.bottomControl.setLabelAtt(att: atts)
+                bottomH = textH + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+            }
+            self.bottomControl.snp.updateConstraints { make in
+                make.left.right.bottom.equalToSuperview()
+                make.height.equalTo(bottomH)
+            }
+        }
+    }
+    
+    func heightForString(_ string: String) -> CGFloat {
+        var labelW:CGFloat = 0
+
         switch self.viewConfig.actionType {
         case .Empty:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
         default:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
-        
-        let infoH = UIView.sizeFor(string: models.imageInfo, font: self.bottomControl.titleLabel.font,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
-        self.bottomControl.labelScroller.contentSize = CGSize.init(width: labelW, height: infoH)
 
-        self.bottomControl.snp.updateConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            if (bottonH * 2) > infoH && infoH > bottonH {
-                make.height.equalTo(infoH + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace)
-            } else if infoH < emptyContentHeight {
-                make.height.equalTo(CGFloat.kTabbarHeight_Total)
-            } else if infoH > (bottonH * 2) {
-                make.height.equalTo(bottonH * 2 + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace)
-            }
+        return UIView.sizeFor(string: string, font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+    }
+
+     func numberOfLines(_ string: String) -> Int {
+        var labelW:CGFloat = 0
+
+        switch self.viewConfig.actionType {
+        case .Empty:
+            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        default:
+            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
-        
-        self.bottomControl.updateBottomSize(models: models)
 
+      let lineHeight = UIView.sizeFor(string: "A", font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+      let totalHeight = heightForString(string)
+
+      return Int(totalHeight / lineHeight)
+    }
+    
+    func truncatedText(fullText:String) -> String {
+        var truncatedText = fullText
+
+        guard numberOfLines(fullText) > 2 else {
+          return truncatedText
+        }
+
+        // Perform quick "rough cut"
+        while numberOfLines(truncatedText) > numberOfVisibleLines * 2 {
+            truncatedText = String(truncatedText.prefix(truncatedText.count / 2))
+        }
+
+        // Capture the endIndex of truncatedText before appending ellipsis
+        var truncatedTextCursor = truncatedText.endIndex
+
+        // Remove characters ahead of ellipsis until the text is the right number of lines
+        while numberOfLines(truncatedText) > numberOfVisibleLines {
+          // To avoid "Cannot decrement before startIndex"
+          guard truncatedTextCursor > truncatedText.startIndex else {
+            break
+          }
+
+          truncatedTextCursor = truncatedText.index(before: truncatedTextCursor)
+          truncatedText.remove(at: truncatedTextCursor)
+        }
+
+        return truncatedText
     }
 }

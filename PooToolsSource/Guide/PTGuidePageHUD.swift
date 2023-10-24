@@ -148,6 +148,14 @@ public class PTGuidePageHUD: UIView {
         imagePageControl.numberOfPages = viewModel.imageArrays.count
         imagePageControl.pageIndicatorTintColor = .gray
         imagePageControl.currentPageIndicatorTintColor = .white
+        imagePageControl.addPageControlHandlers { sender in
+            
+            if viewModel.imageArrays.count == (sender.currentPage + 1) {
+                self.buttonClick(sender: nil)
+            } else {
+                guidePageView.contentOffset.x = guidePageView.contentOffset.x + guidePageView.frame.size.width
+            }
+        }
         addSubview(imagePageControl)
         imagePageControl.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -271,12 +279,8 @@ public class PTGuidePageHUD: UIView {
             make.edges.equalToSuperview()
         }
     }
-}
-
-extension PTGuidePageHUD : UIScrollViewDelegate {
-    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
-        PTNSLogConsole(page)
+    
+    fileprivate func pageControlAction(page:Int) {
         if (imageArray?.count ?? 0) > 0 && page == (imageArray!.count - 1) && !slideInto! {
             buttonClick(sender: nil)
         }
@@ -303,5 +307,14 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
             forwardButton.isHidden = true
             forwardButton.isUserInteractionEnabled = false
         }
+
+    }
+}
+
+extension PTGuidePageHUD : UIScrollViewDelegate {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
+        PTNSLogConsole(page)
+        self.pageControlAction(page: page)
     }
 }

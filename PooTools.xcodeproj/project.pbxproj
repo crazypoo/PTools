@@ -82,7 +82,6 @@
 		5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */; };
 		5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
-		551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908F28B73D6600AAA856 /* PTMediaViewer.swift */; };
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
 		5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */; };
@@ -92,6 +91,9 @@
 		552893192AE7E076009135F9 /* PTMediaBrowserNav.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */; };
 		5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */; };
 		5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */; };
+		5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5528931E2AE88378009135F9 /* PTMediaBrowserLoadingView.swift */; };
+		552893212AE884A1009135F9 /* PTMediaBrowserConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893202AE884A1009135F9 /* PTMediaBrowserConfig.swift */; };
+		552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
 		554929E728F8F51300C82ABF /* AppDelegate+EXFuction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E628F8F51300C82ABF /* AppDelegate+EXFuction.swift */; };
@@ -429,7 +431,6 @@
 		5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImageBlackToTransparent.swift; sourceTree = "<group>"; };
 		5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsFunction.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
-		551D908F28B73D6600AAA856 /* PTMediaViewer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaViewer.swift; sourceTree = "<group>"; };
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
 		5528375B28EA8FF100D12202 /* PTCheckUpdateFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckUpdateFunction.swift; sourceTree = "<group>"; };
@@ -439,6 +440,9 @@
 		552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserNav.swift; sourceTree = "<group>"; };
 		5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserBottom.swift; sourceTree = "<group>"; };
 		5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPageControl+PTEX.swift"; sourceTree = "<group>"; };
+		5528931E2AE88378009135F9 /* PTMediaBrowserLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserLoadingView.swift; sourceTree = "<group>"; };
+		552893202AE884A1009135F9 /* PTMediaBrowserConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserConfig.swift; sourceTree = "<group>"; };
+		552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaBrowserModel.swift; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
@@ -1704,11 +1708,13 @@
 		55D59C6428F3E8FE00B4FF76 /* MediaViewer */ = {
 			isa = PBXGroup;
 			children = (
-				551D908F28B73D6600AAA856 /* PTMediaViewer.swift */,
-				552893142AE78D49009135F9 /* PTMediaBrowserController.swift */,
-				552893162AE78F79009135F9 /* PTMediaBrowserCell.swift */,
-				552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */,
 				5528931A2AE7E8F8009135F9 /* PTMediaBrowserBottom.swift */,
+				552893162AE78F79009135F9 /* PTMediaBrowserCell.swift */,
+				552893202AE884A1009135F9 /* PTMediaBrowserConfig.swift */,
+				552893142AE78D49009135F9 /* PTMediaBrowserController.swift */,
+				5528931E2AE88378009135F9 /* PTMediaBrowserLoadingView.swift */,
+				552893222AE885A8009135F9 /* PTMediaBrowserModel.swift */,
+				552893182AE7E076009135F9 /* PTMediaBrowserNav.swift */,
 			);
 			path = MediaViewer;
 			sourceTree = "<group>";
@@ -2077,6 +2083,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
@@ -2150,6 +2157,7 @@
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				55025E4C29FA56D00024A960 /* PTNavigationBarBaseValues.swift in Sources */,
+				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
@@ -2198,7 +2206,6 @@
 				5581E8582AB9059900491065 /* PTSendFeedBackAlert.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
 				55C5306D29FAA06800B0F4C9 /* PTNavigationBarController.swift in Sources */,
-				551D909028B73D6600AAA856 /* PTMediaViewer.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				231D1691272CDEEA003D6F62 /* LocalConsole.swift in Sources */,
@@ -2239,6 +2246,7 @@
 				231D167F272CDEEA003D6F62 /* PTCheckAppStatus.swift in Sources */,
 				55025E4A29FA56D00024A960 /* PTNavBackImageView.swift in Sources */,
 				55C9CBA328E851DA00DB6200 /* Network.swift in Sources */,
+				552893212AE884A1009135F9 /* PTMediaBrowserConfig.swift in Sources */,
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,

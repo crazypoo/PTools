@@ -143,6 +143,9 @@ public class PTGCDManager :NSObject {
         DispatchQueue.global(qos: .userInitiated).async(execute: block)
     }
     
+    public class func gcdGobalNormal(block: @escaping PTActionTask) {
+        DispatchQueue.global().async(execute: block)
+    }
     //MARK: gcdBackground
     //gcdBackground
     public class func gcdBackground(block: @escaping PTActionTask) {

@@ -280,35 +280,31 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     
                     
-                    PTViewerModel *imageModelV = [[PTViewerModel alloc] init];
+                    PTMediaBrowserModel *imageModelV = [[PTMediaBrowserModel alloc] init];
                     imageModelV.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-                    imageModelV.imageShowType = PTViewerDataTypeNormal;
                     imageModelV.imageInfo = @"56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551312333444444>>>>>>>>>>>>>>>>>>>>>";
                     
-                    PTViewerModel *imageModel1 = [[PTViewerModel alloc] init];
+                    PTMediaBrowserModel *imageModel1 = [[PTMediaBrowserModel alloc] init];
                     imageModel1.imageURL = @"http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg";
-                    imageModel1.imageShowType = PTViewerDataTypeNormal;
                     imageModel1.imageInfo = @"123";
 
-                    PTViewerModel *imageModel1aaaa = [[PTViewerModel alloc] init];
+                    PTMediaBrowserModel *imageModel1aaaa = [[PTMediaBrowserModel alloc] init];
                     imageModel1aaaa.imageURL = @"http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
-                    imageModel1aaaa.imageShowType = PTViewerDataTypeVideo;
                     imageModel1aaaa.imageInfo = @"123";
 
-                    PTViewerModel *imageModel1aaaag = [[PTViewerModel alloc] init];
+                    PTMediaBrowserModel *imageModel1aaaag = [[PTMediaBrowserModel alloc] init];
                     imageModel1aaaag.imageURL = @"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif";
-                    imageModel1aaaag.imageShowType = PTViewerDataTypeGIF;
                     imageModel1aaaag.imageInfo = @"12344444";
 
-                    PTViewerConfig *config = [[PTViewerConfig alloc] init];
+                    PTMediaBrowserConfig *config = [[PTMediaBrowserConfig alloc] init];
                     config.actionType = PTViewerActionTypeAll;
 //                    config.closeViewerImage = [UIImage imageNamed:@"DemoImage"];
 //                    config.moreActionImage = [UIImage imageNamed:@"DemoImage"];
                     config.mediaData = @[imageModelV,imageModel1,imageModel1aaaa,imageModel1aaaag];
                     
-                    PTMediaViewer *viewer = [[PTMediaViewer alloc] initWithViewConfig:config];
-                    [viewer showImageViewer];
-                    [viewer setViewerDismissBlock:^{
+                    PTMediaBrowserController *viewer = [[PTMediaBrowserController alloc] init];
+                    viewer.viewConfig = config;
+                    [self presentViewController:viewer animated:YES completion:^{
                         
                     }];
 //

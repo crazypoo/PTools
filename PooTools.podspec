@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.10.2'
+    s.version     = '3.11.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -257,7 +257,7 @@ Pod::Spec.new do |s|
     s.subspec 'MediaViewer' do |subspec|
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/PhotoLibraryPermission'
-        subspec.frameworks = 'CoreMotion','SceneKit','Photos'
+        subspec.frameworks = 'Photos'
         subspec.source_files = 'PooToolsSource/MediaViewer/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_MEDIAVIEWER POOTOOLS_COCOAPODS"

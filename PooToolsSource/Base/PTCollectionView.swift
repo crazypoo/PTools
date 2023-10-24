@@ -189,7 +189,7 @@ public class PTCollectionView: UIView {
         return laySection
     }
     
-    public lazy var collectionView : UICollectionView = {
+    fileprivate lazy var collectionView : UICollectionView = {
         let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
         view.delegate = self
@@ -236,6 +236,8 @@ public class PTCollectionView: UIView {
     public var collectionWillDisplay:PTCellDisplayHandler?
     ///item消失事件
     public var collectionDidEndDisplay:PTCellDisplayHandler?
+    ///UICollectionView的Scroll事件
+    public var collectionViewDidScrol:((UICollectionView)->Void)?
 
     ///头部刷新事件
     public var headerRefreshTask:((UIRefreshControl)->Void)?
@@ -250,7 +252,6 @@ public class PTCollectionView: UIView {
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
     public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
-    public var collectionViewDidScrol:((UICollectionView)->Void)?
 #if POOTOOLS_LISTEMPTYDATA
     ///空数据点击事件
     public var emptyTap:((UIView)->Void)?

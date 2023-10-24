@@ -374,7 +374,8 @@ public extension PTPOP where Base: UIImage {
             closure(nil)
             return
         }
-        DispatchQueue.global().async {
+        
+        PTGCDManager.gcdGobalNormal {
             let opts = [AVURLAssetPreferPreciseDurationAndTimingKey: false]
             let avAsset = AVURLAsset(url: url, options: opts)
             let generator = AVAssetImageGenerator(asset: avAsset)

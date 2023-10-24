@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.9.1",
+  "version": "3.11.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.9.1"
+    "tag": "3.11.0"
   },
   "license": {
     "type": "MIT",
@@ -474,11 +474,7 @@
 
         ]
       },
-      "frameworks": [
-        "CoreMotion",
-        "SceneKit",
-        "Photos"
-      ],
+      "frameworks": "Photos",
       "source_files": "PooToolsSource/MediaViewer/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_MEDIAVIEWER POOTOOLS_COCOAPODS"
