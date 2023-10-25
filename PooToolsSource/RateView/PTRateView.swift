@@ -30,9 +30,9 @@ public class PTRateConfig: NSObject {
     ///展示的数量,默认5个
     public var numberOfStar : Int = 5
     ///已经选择的图片
-    public var fImage:UIImage = UIColor.red.createImageWithColor()
+    public var fImage:UIImage = "🌟".emojiToImage(emojiFont: .appfont(size: 24))
     ///未选择的图片
-    public var bImage:UIImage = UIColor.blue.createImageWithColor()
+    public var bImage:UIImage = "⭐️".emojiToImage(emojiFont: .appfont(size: 24))
     ///是否可以点击
     public var canTap:Bool = false
     ///是否有动画
@@ -45,7 +45,7 @@ public class PTRateConfig: NSObject {
 public class PTRateView: UIView {
     public var rateBlock:PTRateScoreBlock?
     
-    public var viewConfig:PTRateConfig? = PTRateConfig() {
+    public var viewConfig:PTRateConfig? {
         didSet {
             scorePercent = viewConfig!.scorePercent
             removeSubviews()
@@ -82,6 +82,9 @@ public class PTRateView: UIView {
                 let realStartScore = offSet / (self.frame.size.width / CGFloat(self.viewConfig!.numberOfStar))
                 let starScore = self.viewConfig!.allowIncompleteStar ? Float(realStartScore) : ceilf(Float(realStartScore))
                 self.scorePercent = CGFloat(starScore) / CGFloat(self.viewConfig!.numberOfStar)
+                self.foregroundStarView.snp.updateConstraints({ make in
+                    make.width.equalTo(self.frame.size.width * self.scorePercent!)
+                })
             }
             tapGes.numberOfTapsRequired = 1
             addGestureRecognizer(tapGes)
@@ -90,6 +93,8 @@ public class PTRateView: UIView {
     
     func initView() {
         PTGCDManager.gcdAfter(time: 0.1) {
+            
+            self.scorePercent = self.viewConfig!.scorePercent
             self.addSubviews([self.backgroundStarView,self.foregroundStarView])
 
             self.backgroundStarView.snp.makeConstraints({ make in
@@ -97,12 +102,16 @@ public class PTRateView: UIView {
             })
             
             self.foregroundStarView.snp.makeConstraints({ make in
-                make.edges.equalToSuperview()
+                make.top.bottom.equalToSuperview()
+                make.left.equalToSuperview()
+                make.width.equalTo(0)
             })
             
             let animationTimeInterval = self.viewConfig!.hadAnimation ? 0.2 : 0
             UIView.animate(withDuration: animationTimeInterval) {
-                self.foregroundStarView.frame = CGRect.init(x: 0, y: 0, width: self.frame.size.width * self.scorePercent!, height: self.frame.size.height)
+                self.foregroundStarView.snp.updateConstraints({ make in
+                    make.width.equalTo(self.frame.size.width * self.scorePercent!)
+                })
             }
             
             self.loaded = true

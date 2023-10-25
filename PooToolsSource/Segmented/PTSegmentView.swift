@@ -69,9 +69,7 @@ public enum PTSegmentButtonShowType:Int {
 @objcMembers
 public class PTSegmentSubView:UIView {
     private var viewConfig = PTSegmentConfig()
-    
-    //    private let lineSqare:CGFloat = 5
-    
+        
     public var buttonShowType:PTSegmentButtonShowType = .OnlyTitle
     
     lazy var imageBtn:PTLayoutButton = {

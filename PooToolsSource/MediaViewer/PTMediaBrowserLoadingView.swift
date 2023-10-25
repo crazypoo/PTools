@@ -15,6 +15,7 @@ import UIKit
 
 public let PTLoadingBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
 public let PTLoadingItemSpace :CGFloat = 10
+
 @objcMembers
 public class PTMediaBrowserLoadingView: UIView {
     

@@ -138,6 +138,7 @@ CGFloat const tagItemSpace = 5;
             config.canTap = YES;
             config.hadAnimation = YES;
             config.scorePercent = 2.f;
+            config.allowIncompleteStar = YES;
             
             PTRateView *rV = [[PTRateView alloc] initWithViewConfig:config];
             rV.rateBlock = ^(CGFloat score){

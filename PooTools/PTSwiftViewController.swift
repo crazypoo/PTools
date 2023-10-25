@@ -336,7 +336,7 @@ class PTSwiftViewController: PTBaseViewController {
             media3.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
             let mediaConfig = PTMediaBrowserConfig()
-            mediaConfig.actionType = .Empty
+            mediaConfig.actionType = .All
             mediaConfig.defultIndex = 0
             mediaConfig.dynamicBackground = true
             mediaConfig.mediaData = [media1,media2,media3]

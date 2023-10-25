@@ -19,17 +19,25 @@ let numberOfVisibleLines = 2
 @objcMembers
 public class PTMediaBrowserController: PTBaseViewController {
 
+    ///界面消失后回调
     public var viewDismissBlock:PTActionTask?
 
+    ///界面配置
     public var viewConfig:PTMediaBrowserConfig! {
         didSet {
             self.showCollectionViewData()
         }
     }
     
+    ///更多按钮操作
     public var viewMoreActionBlock:PTViewerIndexBlock?
+    ///保存回调
     public var viewSaveImageBlock:PTViewerSaveBlock?
+    ///删除回调
     public var viewDeleteImageBlock:PTViewerIndexBlock?
+    
+    ///查看到哪儿
+    public var browserCurrentDataBlock:((Int)->Void)?
 
     fileprivate var firstLoad:Bool = false
     fileprivate var hideToolBar:Bool = false
@@ -206,6 +214,10 @@ public class PTMediaBrowserController: PTBaseViewController {
                 self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.viewConfig.mediaData.count)"
             }
             self.updateBottom(models: cellModel)
+            
+            if self.browserCurrentDataBlock != nil {
+                self.browserCurrentDataBlock!(indexPath.row)
+            }
         }
         
         collectionView.collectionViewDidScrol = { collectionViewScrol in
@@ -248,7 +260,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         super.viewDidLoad()
 
         if self.viewConfig.dynamicBackground {
-            self.view.backgroundColor = .clear
+            self.view.backgroundColor = self.viewConfig.viewerContentBackgroundColor
         } else {
             self.view.backgroundColor = .DevMaskColor
         }
@@ -471,8 +483,6 @@ fileprivate extension PTMediaBrowserController {
                     newIndex = 0
                 } else if newIndex == 0 {
                     newIndex = 0
-                } else {
-                    newIndex = index - 1
                 }
                     
                 self.newCollectionView.scrolToItem(indexPath: IndexPath(row: newIndex, section: 0), position: .right)
@@ -509,7 +519,7 @@ fileprivate extension PTMediaBrowserController {
     func labelMoreAtt(models:PTMediaBrowserModel) ->ASAttributedString {
         let atts:ASAttributedString = """
         \(wrap: .embedding("""
-        \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))\(".....更多",.foreground(.systemBlue),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
+        \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))\(self.viewConfig.showMore,.foreground(.systemBlue),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
                 PTGCDManager.gcdAfter(time: 0.1) {
                     let fullAtts:ASAttributedString = """
                     \(wrap: .embedding("""
@@ -550,7 +560,7 @@ fileprivate extension PTMediaBrowserController {
             self.bottomControl.setLabelAtt(att: self.labelMoreAtt(models: models))
             self.bottomControl.snp.updateConstraints { make in
                 make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(self.heightForString(self.truncatedText(fullText:models.imageInfo) + ".....更多") + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
+                make.height.equalTo(self.heightForString(self.truncatedText(fullText:models.imageInfo) + self.viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
             }
         } else {
             var bottomH:CGFloat = 0
@@ -589,7 +599,7 @@ fileprivate extension PTMediaBrowserController {
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
 
-        return UIView.sizeFor(string: string, font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+        return UIView.sizeFor(string: string, font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
     }
 
      func numberOfLines(_ string: String) -> Int {
@@ -602,7 +612,7 @@ fileprivate extension PTMediaBrowserController {
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
 
-      let lineHeight = UIView.sizeFor(string: "A", font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat(MAXFLOAT), width: labelW).height
+      let lineHeight = UIView.sizeFor(string: "A", font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
       let totalHeight = heightForString(string)
 
       return Int(totalHeight / lineHeight)
@@ -611,7 +621,7 @@ fileprivate extension PTMediaBrowserController {
     func truncatedText(fullText:String) -> String {
         var truncatedText = fullText
 
-        guard numberOfLines(fullText) > 2 else {
+        guard numberOfLines(fullText) > numberOfVisibleLines else {
           return truncatedText
         }
 

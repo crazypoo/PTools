@@ -23,8 +23,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
-
-    var isFullWidthForLandScape:Bool = false
     
     lazy var contentScrolView:UIScrollView = {
         let view = UIScrollView()
@@ -97,11 +95,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     //MARK: 图片相关
     fileprivate var scrollOffset:CGPoint? = CGPoint.zero
     public lazy var zoomImageSize:CGSize? = CGSize.init(width: frame.size.width, height: frame.size.height)
-    var hasLoadedImage:Bool? = false
+    
     fileprivate lazy var reloadButton:UIButton = {
         let view = UIButton.init(type: .custom)
         view.viewCorner(radius: 2,borderWidth:1,borderColor: .white)
-        view.titleLabel?.font = UIFont.init(name: self.viewConfig.viewerFont.familyName, size: self.viewConfig.viewerFont.pointSize * 0.7)
+        view.titleLabel?.font = self.viewConfig.viewerFont
         view.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.3)
         view.setTitle("图片加载失败,点击重试", for: .normal)
         view.setTitleColor(.white, for: .normal)
@@ -145,25 +143,12 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     func adjustFrame() {
         if gifImage != nil {
             let imageSize = gifImage!.size
-            var imageFrame = CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
-            if isFullWidthForLandScape {
-                let ratio = contentView.frame.size.width / imageFrame.size.width
-                imageFrame.size.height = imageFrame.size.height * ratio
-                imageFrame.size.width = contentView.frame.size.width
-            } else {
-                if frame.size.width <= frame.size.height {
-                    let ratio = contentView.frame.size.width / imageFrame.size.width
-                    imageFrame.size.height = imageFrame.size.height * ratio
-                    imageFrame.size.width = contentView.frame.size.width
-                } else {
-                    let ratio = frame.size.height / imageFrame.size.height
-                    imageFrame.size.width = imageFrame.size.width * ratio
-                    imageFrame.size.height = contentView.frame.size.height
-                }
-            }
-            imageView.frame = imageFrame
-            contentScrolView.contentSize = imageView.frame.size
-            imageView.center = PTMediaBrowserCell.centerOfScrollVIewContent(scrollView: contentScrolView)
+            let imageFrame = CGRect.init(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+            
+            contentScrolView.contentSize = imageFrame.size
+            
+            let iamgeHeight = CGFloat.kSCREEN_WIDTH / imageSize.width * imageSize.height
+            imageView.frame = CGRectMake(0, (CGFloat.kSCREEN_HEIGHT - iamgeHeight) / 2, CGFloat.kSCREEN_WIDTH, iamgeHeight)
             
             var maxScale = frame.size.height / imageFrame.size.height
             maxScale = frame.size.width / imageFrame.width > maxScale ? frame.width / imageFrame.width : maxScale
@@ -181,11 +166,10 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
             
     func createReloadButton() {
-        hasLoadedImage = false
         contentView.addSubview(reloadButton)
         reloadButton.snp.makeConstraints { make in
             make.width.equalTo(200)
-            make.height.equalTo(40)
+            make.height.equalTo(34)
             make.centerY.centerX.equalToSuperview()
         }
         bringSubviewToFront(reloadButton)
@@ -193,7 +177,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         
     open class func centerOfScrollVIewContent(scrollView:UIScrollView) ->CGPoint {
         let offsetX = (scrollView.bounds.size.width > scrollView.contentSize.width) ? ((scrollView.bounds.size.width - scrollView.contentSize.width) * 0.5) : 0
-        let offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ? ((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5) : (0 + CGFloat.kNavBarHeight_Total + CGFloat.kTabbarHeight_Total)
+        let offsetY = (scrollView.bounds.size.height > scrollView.contentSize.height) ? ((scrollView.bounds.size.height - scrollView.contentSize.height) * 0.5) : 0
         let actualCenter = CGPoint.init(x: scrollView.contentSize.width * 0.5 + offsetX, y: scrollView.contentSize.height * 0.5 + offsetY)
         return actualCenter
     }
@@ -246,7 +230,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 }
 
                 self.adjustFrame()
-                self.hasLoadedImage = true
                 loading.removeFromSuperview()
             } else if images?.count == 1 {
                 self.currentCellType = .Normal
@@ -257,17 +240,14 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 }
 
                 self.adjustFrame()
-                self.hasLoadedImage = true
                 loading.removeFromSuperview()
             } else {
                 self.currentCellType = .None
                 loading.removeFromSuperview()
                 self.createReloadButton()
                 self.adjustFrame()
-                self.hasLoadedImage = false
             }
         }
-
     }
     
     func cellLoadData() {
@@ -316,7 +296,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                         self.gifImage = image
                         self.imageView.image = image
                         self.adjustFrame()
-                        self.hasLoadedImage = true
                         if self.viewConfig.dynamicBackground {
                             self.backgroundImageView.image = image
                         }
@@ -377,7 +356,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             self.tempView.transform = CGAffineTransform.identity
             self.contentView.alpha = 1
         } completion: { finish in
-            self.isUserInteractionEnabled = true
+            self.contentView.isUserInteractionEnabled = true
             self.tempView.removeFromSuperview()
             self.imageView.alpha = 1
             self.contentView.alpha = 1

@@ -39,7 +39,7 @@ public class PTMediaBrowserConfig: NSObject {
     ///内容字体
     public var viewerFont:UIFont = UIFont.systemFont(ofSize: 13)
     ///内容的容器背景颜色
-    public var viewerContentBackgroundColor:UIColor = UIColor.black
+    public var viewerContentBackgroundColor:UIColor = .clear
     ///操作方式
     public var actionType:PTViewerActionType = .All
     ///关闭页面按钮图片连接/名字
@@ -50,10 +50,10 @@ public class PTMediaBrowserConfig: NSObject {
     public var playButtonImage:UIImage = UIImage(systemName: "play.fill")!
     ///更多功能扩展,如果选择全部,则默认保存0删除1........
     public var moreActionEX:[String] = []
-    ///是否显示Nav右边媒体的名字
-    public var showMediaTypeLabel:Bool = true
     ///iCloudDocumentName
     public var iCloudDocumentName:String = ""
     ///背景模糊
     public var dynamicBackground:Bool = false
+    ///更多文字设置
+    public var showMore:String = "...更多"
 }
