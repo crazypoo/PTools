@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.11.3'
+    s.version     = '3.11.4'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -807,6 +807,24 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/NetworkSpeedTest/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_NETWORKSPEEDTEST POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    #
+    #<key>LSApplicationQueriesSchemes</key>
+    #<array>
+    #    <string>undecimus</string>
+    #    <string>sileo</string>
+    #    <string>zbra</string>
+    #    <string>filza</string>
+    #   <string>activator</string>
+    #</array>
+    #
+    s.subspec 'SecuritySuite' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'securing/IOSSecuritySuite'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SECURITYSUITE POOTOOLS_COCOAPODS"
         }
     end
     
