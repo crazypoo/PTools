@@ -556,21 +556,23 @@ fileprivate extension PTMediaBrowserController {
     
     func updateBottom(models:PTMediaBrowserModel) {
                 
-        if self.numberOfLines(models.imageInfo) > numberOfVisibleLines {
-            self.bottomControl.setLabelAtt(att: self.labelMoreAtt(models: models))
-            self.bottomControl.snp.updateConstraints { make in
-                make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(self.heightForString(self.truncatedText(fullText:models.imageInfo) + self.viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10)
+        var bottomH:CGFloat = 0
+        if models.imageInfo.stringIsEmpty() {
+            self.bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
+            switch self.viewConfig.actionType {
+            case .Empty:
+                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+            default:
+                bottomH = CGFloat.kTabbarHeight_Total
             }
         } else {
-            var bottomH:CGFloat = 0
-            if models.imageInfo.stringIsEmpty() {
-                self.bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
-                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+            if self.numberOfLines(models.imageInfo) > numberOfVisibleLines {
+                bottomH = self.heightForString(self.truncatedText(fullText:models.imageInfo) + self.viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+                self.bottomControl.setLabelAtt(att: self.labelMoreAtt(models: models))
             } else {
                 var textH:CGFloat = self.heightForString(models.imageInfo)
-                if textH < 34 {
-                    textH = 34
+                if textH < 44 {
+                    textH = 44
                 }
                 
                 let atts:ASAttributedString = """
@@ -582,10 +584,11 @@ fileprivate extension PTMediaBrowserController {
                 self.bottomControl.setLabelAtt(att: atts)
                 bottomH = textH + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
             }
-            self.bottomControl.snp.updateConstraints { make in
-                make.left.right.bottom.equalToSuperview()
-                make.height.equalTo(bottomH)
-            }
+        }
+        
+        self.bottomControl.snp.updateConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(bottomH)
         }
     }
     

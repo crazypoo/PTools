@@ -66,11 +66,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     lazy var tempView:UIImageView = {
         let view = UIImageView()
         
-        var tempImageX:CGFloat = 0
-        var tempImageY:CGFloat = 0
-
-        tempImageX = self.imageView.frame.origin.x - self.scrollOffset!.x
-        tempImageY = self.imageView.frame.origin.y - self.scrollOffset!.y
+        let tempImageX:CGFloat = self.imageView.frame.origin.x - self.scrollOffset!.x
+        var tempImageY:CGFloat = self.imageView.frame.origin.y - self.scrollOffset!.y
 
         let tempImageW = self.zoomImageSize!.width
         var tempImageH = self.zoomImageSize!.height
@@ -94,7 +91,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 
     //MARK: 图片相关
     fileprivate var scrollOffset:CGPoint? = CGPoint.zero
-    public lazy var zoomImageSize:CGSize? = CGSize.init(width: frame.size.width, height: frame.size.height)
+    fileprivate lazy var zoomImageSize:CGSize? = CGSize.init(width: frame.size.width, height: frame.size.height)
     
     fileprivate lazy var reloadButton:UIButton = {
         let view = UIButton.init(type: .custom)
@@ -204,7 +201,6 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             }
         }
         doubleTap.numberOfTapsRequired = 2
-        self.imageView.addGestureRecognizer(doubleTap)
         
         let singleTap = UITapGestureRecognizer.init { sender in
             if self.tapTask != nil {
@@ -212,7 +208,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             }
         }
         singleTap.numberOfTapsRequired = 1
-        self.imageView.addGestureRecognizer(singleTap)
+
+        self.imageView.addGestureRecognizers([singleTap,doubleTap])
 
         PTLoadImageFunction.loadImage(contentData: self.dataModel.imageURL as Any,iCloudDocumentName: self.viewConfig.iCloudDocumentName) { receivedSize, totalSize in
             loading.progress = CGFloat(receivedSize / totalSize)
@@ -253,7 +250,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     func cellLoadData() {
         
         let loading = PTMediaBrowserLoadingView(type: .LoopDiagram)
-        addSubview(loading)
+        contentView.addSubview(loading)
         loading.snp.makeConstraints { make in
             make.width.height.equalTo(50)
             make.centerX.centerY.equalToSuperview()
