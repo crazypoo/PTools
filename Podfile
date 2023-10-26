@@ -14,7 +14,6 @@ post_install do |installer|
 end
 
 target 'PooTools_Example' do
-  pod 'PooTools/InputAll', :path => 'PooTools.podspec'
   
   pod 'FLEX', :configurations => ['Debug']
   pod 'InAppViewDebugger', :configurations => ['Debug']
@@ -26,24 +25,11 @@ target 'PooTools_Example' do
   pod 'HyperioniOS/SlowAnimations', :configurations => ['Debug'] # Optional plugin
 #  pod 'WoodPeckeriOS', :configurations => ['Debug']
   pod 'netfox', :configurations => ['Debug']
+  pod 'DiDiPrism'
+  pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
 
   #权限询问
-  pod 'PooTools/NotificationPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/LocationPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/CameraPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/CalendarPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/MotionPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/PhotoLibraryPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/TrackingPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/RemindersPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/FaceIDPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/HealthPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/SpeechRecognizerPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/ContactsPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/MicPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/MeidaPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/BluetoothPermission', :path => 'PooTools.podspec'
-  pod 'PooTools/SiriPermission', :path => 'PooTools.podspec'
+  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','PhotoLibraryPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
   
   pod 'SwiftLint'
   pod 'Swinject'

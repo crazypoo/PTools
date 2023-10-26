@@ -309,12 +309,16 @@ class PTSwiftViewController: PTBaseViewController {
             make.edges.equalToSuperview()
         }
         
-        
+        let layoutBtn = PTLayoutButton()
+        layoutBtn.layoutStyle = .leftImageRightTitle
+        layoutBtn.setTitle("123", for: .normal)
+        layoutBtn.midSpacing = 0
+        layoutBtn.imageSize = CGSizeMake(100, 100)
         
         let btn = UIButton(type: .custom)
-        btn.backgroundColor = .randomColor
-        view.addSubview(btn)
-        btn.snp.makeConstraints { make in
+        layoutBtn.backgroundColor = .randomColor
+        view.addSubview(layoutBtn)
+        layoutBtn.snp.makeConstraints { make in
             make.width.height.equalTo(100)
             make.centerX.centerY.equalToSuperview()
         }

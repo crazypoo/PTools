@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.11.0",
+  "version": "3.11.4",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.11.0"
+    "tag": "3.11.4"
   },
   "license": {
     "type": "MIT",
@@ -1388,6 +1388,20 @@
       "source_files": "PooToolsSource/NetworkSpeedTest/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_NETWORKSPEEDTEST POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "SecuritySuite",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "securing/IOSSecuritySuite": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SECURITYSUITE POOTOOLS_COCOAPODS"
       }
     },
     {

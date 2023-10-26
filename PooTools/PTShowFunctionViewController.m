@@ -159,17 +159,18 @@ CGFloat const tagItemSpace = 5;
             PTSegmentModel * segModel = [[PTSegmentModel alloc] init];
             segModel.titles = @"aaaaaa";
             segModel.imageURL = @"DemoImage";
-            segModel.selectedImageURL = @"DemoImage";
+            segModel.selectedImageURL = @"image_aircondition_gray";
 
             PTSegmentModel * segModels = [[PTSegmentModel alloc] init];
             segModels.titles = @"22222";
             segModels.imageURL = @"DemoImage";
-            segModels.selectedImageURL = @"DemoImage";
+            segModels.selectedImageURL = @"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif";
             PTSegmentConfig *config = [[PTSegmentConfig alloc] init];
+            config.showType = PTSegmentSelectedTypeUnderLine;
 
             PTSegmentView *sgView = [[PTSegmentView alloc] initWithConfig:config];
             sgView.backgroundColor = UIColor.randomColor;
-            sgView.viewDatas = @[segModel,segModels];
+            sgView.viewDatas = @[segModel,segModels,segModels,segModels,segModels,segModels];
             [sgView reloadViewDataWithBlock:^(NSInteger index) {
 
             }];

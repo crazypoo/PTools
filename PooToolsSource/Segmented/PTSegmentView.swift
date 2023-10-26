@@ -31,7 +31,7 @@ public class PTSegmentConfig: NSObject {
     ///普通颜色
     public var normalColor:UIColor = .black
     ///选中颜色(背景)
-    public var selectedColor_BG:UIColor = .red
+    public var selectedColor_BG:UIColor = .systemBlue
     ///底线height
     public var underHight:CGFloat = 3
     ///默认选中第X
@@ -46,6 +46,8 @@ public class PTSegmentConfig: NSObject {
     public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
     public var bottomSquare:CGFloat = 5
+    
+    public var leftEdges:Bool = false
 }
 
 @objcMembers
@@ -53,11 +55,13 @@ public class PTSegmentModel:NSObject {
     ///标题
     public var titles:String = ""
     ///图片
-    public var imageURL:String = ""
+    public var imageURL:Any?
     ///图片
     public var imagePlaceHolder:String = ""
     ///选中图片
-    public var selectedImageURL:String = ""
+    public var selectedImageURL:Any?
+    
+    public var iCloudDocument:String = ""
 }
 
 public enum PTSegmentButtonShowType:Int {
@@ -69,8 +73,8 @@ public enum PTSegmentButtonShowType:Int {
 @objcMembers
 public class PTSegmentSubView:UIView {
     private var viewConfig = PTSegmentConfig()
-        
-    public var buttonShowType:PTSegmentButtonShowType = .OnlyTitle
+            
+    var buttonShowType:PTSegmentButtonShowType = .OnlyTitle
     
     lazy var imageBtn:PTLayoutButton = {
         let btn = PTLayoutButton()
@@ -79,18 +83,9 @@ public class PTSegmentSubView:UIView {
         btn.midSpacing = self.viewConfig.imageTitleSpace
         btn.imageView?.contentMode = .scaleAspectFit
         btn.layoutStyle = self.viewConfig.imagePosition
-        btn.imageSize = CGSize(width: 30, height: 30)
         return btn
     }()
-    
-    lazy var label:UIButton = {
-        let label = UIButton(type: .custom)
-        label.titleLabel!.textAlignment = .center
-        label.setTitleColor(self.viewConfig.normalColor, for: .normal)
-        label.setTitleColor(self.viewConfig.selectedColor, for: .selected)
-        return label
-    }()
-    
+        
     lazy var underLine:UIButton = {
         let label = UIButton(type: .custom)
         
@@ -99,104 +94,67 @@ public class PTSegmentSubView:UIView {
         return label
     }()
     
-    public init(config:PTSegmentConfig,subViewModels:PTSegmentModel,contentW:CGFloat) {
+    public init(config:PTSegmentConfig,
+                subViewModels:PTSegmentModel,
+                contentW:CGFloat,
+                showType:PTSegmentButtonShowType) {
         viewConfig = config
+        buttonShowType = showType
         super.init(frame: .zero)
         
-        if subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && subViewModels.selectedImageURL.stringIsEmpty() {
-            buttonShowType = .OnlyTitle
-            label.titleLabel?.font = config.normalFont
-            label.setTitle(subViewModels.titles, for: .normal)
-        } else if !subViewModels.imageURL.stringIsEmpty() && subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty() {
-            //MARK:图片地址判断
-            buttonShowType = .OnlyImage
-            label.contentMode = .scaleAspectFit
+        switch showType {
+        case .OnlyTitle:
+            imageBtn.titleLabel?.font = config.normalFont
+            imageBtn.setTitle(subViewModels.titles, for: .normal)
+            imageBtn.midSpacing = 0
+            imageBtn.imageSize = .zero
+            imageBtn.layoutStyle = .leftImageRightTitle
+            imageBtn.titleLabel?.textAlignment = .center
+        case .OnlyImage:
+            imageBtn.midSpacing = 0
+            imageBtn.layoutStyle = .leftImageRightTitle
             
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             
-            if subViewModels.imageURL.isValidUrl {
-                label.kf.setImage(with: URL.init(string: subViewModels.imageURL), for: .normal,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
-            } else {
-                label.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
-            }
-            
-            if subViewModels.selectedImageURL.isValidUrl {
-                label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
-            } else {
-                label.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
-            }
-        } else if !subViewModels.imageURL.stringIsEmpty() && !subViewModels.titles.stringIsEmpty() && !subViewModels.selectedImageURL.stringIsEmpty() {
-            let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
+            self.setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
+        case .TitleImage:
             //MARK:两个都有
-            buttonShowType = .TitleImage
+            let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             imageBtn.contentMode = .scaleAspectFit
             imageBtn.titleLabel?.font = config.normalFont
             imageBtn.setTitle(subViewModels.titles, for: .normal)
-            if subViewModels.imageURL.isURL() {
-                label.kf.setImage(with: URL.init(string: subViewModels.imageURL), for: .normal,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
-            } else {
-                imageBtn.setImage(UIImage.init(named: subViewModels.imageURL), for: .normal)
-            }
-            
-            if subViewModels.selectedImageURL.isURL() {
-                label.kf.setImage(with: URL.init(string: subViewModels.selectedImageURL), for: .selected,placeholder: placeHolderImage,options: PTDevFunction.gobalWebImageLoadOption())
-            } else {
-                imageBtn.setImage(UIImage.init(named: subViewModels.selectedImageURL), for: .selected)
-            }
+            self.setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         }
         
-        switch buttonShowType {
-        case .TitleImage:
-            addSubview(imageBtn)
-            imageBtn.snp.makeConstraints { (make) in
-                switch config.showType {
-                case .UnderLine:
-                    make.width.equalTo(contentW as ConstraintRelatableTarget)
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                    make.top.equalToSuperview()
-                case .Dog:
-                    make.width.equalTo(contentW as ConstraintRelatableTarget)
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                    make.top.equalToSuperview()
-                case .Background:
-                    make.left.right.equalToSuperview().inset(10)
-                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                default:break
-                }
-            }
-        default:
-            addSubview(label)
-            label.snp.makeConstraints { (make) in
-                switch config.showType {
-                case .UnderLine:
-                    make.width.equalTo(contentW as ConstraintRelatableTarget)
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                    make.top.equalToSuperview()
-                case .Dog:
-                    make.width.equalTo(contentW as ConstraintRelatableTarget)
-                    make.centerX.equalToSuperview()
-                    make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                    make.top.equalToSuperview()
-                case .Background:
-                    make.left.right.equalToSuperview().inset(10)
-                    make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
-                default:break
-                }
+        addSubview(imageBtn)
+        imageBtn.snp.makeConstraints { (make) in
+            switch config.showType {
+            case .UnderLine:
+                make.width.equalTo(contentW as ConstraintRelatableTarget)
+                make.centerX.equalToSuperview()
+                make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
+                make.top.equalToSuperview()
+            case .Dog:
+                make.width.equalTo(contentW as ConstraintRelatableTarget)
+                make.centerX.equalToSuperview()
+                make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
+                make.top.equalToSuperview()
+            case .Background:
+                make.left.right.equalToSuperview()
+                make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
+            default:break
             }
         }
-        
+
         switch config.showType {
         case .UnderLine:
             addSubview(underLine)
             underLine.snp.makeConstraints { (make) in
-                switch self.buttonShowType {
+                switch showType {
                 case .TitleImage:
                     make.left.right.equalTo(self.imageBtn)
                 default:
-                    make.left.right.equalTo(self.label)
+                    make.left.right.equalTo(self.imageBtn)
                 }
                 var lineHight: CGFloat
                 if self.viewConfig.underHight >= self.viewConfig.bottomSquare {
@@ -228,20 +186,57 @@ public class PTSegmentSubView:UIView {
             }
             
         case .Background:
-            switch buttonShowType {
-            case .TitleImage:
-                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-            default:
-                label.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-                label.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-            }
+            break
+//            switch showType {
+//            case .TitleImage:
+//                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+//                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
+//            default:
+//                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+//                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
+//            }
         default:break
         }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage) {
+        PTLoadImageFunction.loadImage(contentData: subViewModels.imageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument) { images, image in
+            if (images?.count ?? 0) > 1 {
+                self.imageBtn.imageView!.animationImages = images
+                self.imageBtn.imageView!.animationDuration = 2
+                self.imageBtn.imageView!.startAnimating()
+            } else if images?.count == 1 {
+                self.imageBtn.setImage(image, for: .normal)
+            } else {
+                self.imageBtn.setImage(placeHolderImage, for: .normal)
+            }
+        }
+        
+        PTLoadImageFunction.loadImage(contentData: subViewModels.selectedImageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument) { images, image in
+            if (images?.count ?? 0) > 1 {
+                self.imageBtn.imageView!.animationImages = images
+                self.imageBtn.imageView!.animationDuration = 2
+                self.imageBtn.imageView!.startAnimating()
+            } else if images?.count == 1 {
+                self.imageBtn.setImage(image, for: .selected)
+            } else {
+                self.imageBtn.setImage(placeHolderImage, for: .selected)
+            }
+        }
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        switch buttonShowType {
+        case .OnlyImage,.TitleImage:
+            self.imageBtn.imageSize = CGSize(width: self.frame.size.height - 5, height: self.frame.size.height - 5)
+        default:
+            self.imageBtn.imageSize = .zero
+        }
     }
 }
 
@@ -298,52 +293,107 @@ public class PTSegmentView: UIView {
         }
     }
     
+    private func getContentWidth(datas:[PTSegmentModel],
+                                 enumeratedHandle:((PTSegmentModel,Int,CGFloat,CGFloat,PTSegmentButtonShowType)->Void),
+                                 completeHandle:((CGFloat,Bool)->Void)) {
+        var scrolContentW:CGFloat = 0
+        var isExceed:Bool = false
+        if datas.count > 0 {
+            datas.enumerated().forEach { (index,value) in
+                var subContentW:CGFloat = 0
+                var subShowType:PTSegmentButtonShowType!
+                self.getCurrentSubWidthAndType(value: value) { currentWidth, showType in
+                    subShowType = showType
+                    subContentW = currentWidth
+                }
+
+                enumeratedHandle(value,index,subContentW,scrolContentW,subShowType)
+                scrolContentW += subContentW
+                
+                if index == (datas.count - 1) {
+                    if scrolContentW > self.frame.size.width {
+                        isExceed = true
+                    }
+                    completeHandle(scrolContentW,isExceed)
+                }
+            }
+        } else {
+            completeHandle(0,false)
+        }
+    }
+    
+    func getTotalW(datas:[PTSegmentModel],completeHandle:((CGFloat,Bool)->Void)) {
+        var scrolContentW:CGFloat = 0
+        var isExceed:Bool = false
+        if datas.count > 0 {
+            datas.enumerated().forEach { (index,value) in
+                self.getCurrentSubWidthAndType(value: value) { currentWidth, showType in
+                    scrolContentW += currentWidth
+                }
+                
+                if index == (datas.count - 1) {
+                    if scrolContentW > self.frame.size.width {
+                        isExceed = true
+                    }
+                    completeHandle(scrolContentW,isExceed)
+                }
+            }
+        } else {
+            completeHandle(0,false)
+        }
+    }
+    
+    func getCurrentSubWidthAndType(value:PTSegmentModel,handle:((CGFloat,PTSegmentButtonShowType)->Void)) {
+        var subShowType:PTSegmentButtonShowType!
+        let normalW = UIView.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+        let selectedW = UIView.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+        
+        var subContentW:CGFloat = 0
+        if selectedW >= normalW {
+            subContentW = selectedW + self.viewConfig.subViewInContentSpace + 10
+        } else {
+            subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
+        }
+        
+        if NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && NSObject.checkObject(value.selectedImageURL as? NSObject) {
+            subShowType = .OnlyTitle
+            subContentW = subContentW + 10
+        } else if !NSObject.checkObject(value.imageURL as? NSObject) && value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
+            subShowType = .OnlyImage
+            subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace + 10
+        } else if !NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
+            subShowType = .TitleImage
+            switch self.viewConfig.imagePosition {
+            case .leftImageRightTitle,.leftTitleRightImage:
+                subContentW = subContentW + self.viewConfig.imageTitleSpace + (self.frame.height-5) + 10
+            default:
+                subContentW = subContentW + 10
+            }
+        } else {
+            subShowType = .OnlyTitle
+            subContentW = subContentW + 10
+        }
+        handle(subContentW,subShowType)
+    }
+    
     private func setUI(datas:[PTSegmentModel]) {
         PTGCDManager.gcdAfter(time: 0.1) {
-            var scrolContentW:CGFloat = 0
-            if datas.count > 0 {
-                datas.enumerated().forEach { (index,value) in                    
-                    let normalW = UIView.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
-                    let selectedW = UIView.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
-                    var subContentW:CGFloat?
-                    if selectedW >= normalW {
-                        subContentW = selectedW + self.viewConfig.subViewInContentSpace + 10
-                    } else {
-                        subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
-                    }
+            
+            self.getTotalW(datas: datas) { totalWidth, isExceed in
+                self.getContentWidth(datas: datas) { currentModel, index,subContentW,x,showType in
+                    var newX = x
                     
-                    if value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() {
-                        
-                    } else if !value.imageURL.stringIsEmpty() && value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() {
-                        subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace
-                    } else if !value.imageURL.stringIsEmpty() && !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() {
-                        switch self.viewConfig.imagePosition {
-                        case .leftImageRightTitle:
-                            subContentW = subContentW! + self.viewConfig.imageTitleSpace + (self.frame.height-5)
-                        case .leftTitleRightImage:
-                            subContentW = subContentW! + self.viewConfig.imageTitleSpace + (self.frame.height-5)
-                        default:break
+                    if !self.viewConfig.leftEdges {
+                        if !isExceed {
+                            newX += (self.frame.size.width - totalWidth) / 2
                         }
                     }
                     
-                    let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: value,contentW: (subContentW!-self.viewConfig.subViewInContentSpace))
-                    
-                    var subShowType:PTSegmentButtonShowType!
-                    if value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty() {
-                        subShowType = .OnlyImage
-                    } else if !value.titles.stringIsEmpty() && value.selectedImageURL.stringIsEmpty() && value.imageURL.stringIsEmpty() {
-                        subShowType = .OnlyTitle
-                    } else if !value.titles.stringIsEmpty() && !value.selectedImageURL.stringIsEmpty() && !value.imageURL.stringIsEmpty() {
-                        subShowType = .TitleImage
-                    } else {
-                        subShowType = .OnlyTitle
-                    }
-                    subView.buttonShowType = subShowType
+                    let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: currentModel,contentW: (subContentW-self.viewConfig.subViewInContentSpace),showType: showType)
                     subView.tag = index
-                    subView.frame = CGRect.init(x: scrolContentW, y: 0, width: subContentW!, height: self.frame.size.height)
-                    scrolContentW += subContentW!
+                    subView.frame = CGRect.init(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
                     
-                    switch subView.buttonShowType {
+                    switch showType {
                     case .TitleImage:
                         subView.imageBtn.tag = index
                         subView.imageBtn.addActionHandlers { (sender) in
@@ -353,8 +403,8 @@ public class PTSegmentView: UIView {
                             }
                         }
                     default:
-                        subView.label.tag = index
-                        subView.label.addActionHandlers { (sender) in
+                        subView.imageBtn.tag = index
+                        subView.imageBtn.addActionHandlers { (sender) in
                             self.setSelectItem(indexs: sender.tag)
                             if self.segTapBlock != nil {
                                 self.segTapBlock!(sender.tag)
@@ -363,25 +413,16 @@ public class PTSegmentView: UIView {
                     }
                     self.scrolView.addSubview(subView)
                     self.subViewArr.append(subView)
-                }
-                
-                self.addSubview(self.scrolView)
-                self.scrolView.snp.makeConstraints { (make) in
-                    if scrolContentW >= CGFloat.kSCREEN_WIDTH {
+
+                } completeHandle: { totalWidth, isExceed in
+                    self.addSubview(self.scrolView)
+                    self.scrolView.snp.makeConstraints { (make) in
                         make.edges.equalToSuperview()
-                    } else {
-                        make.width.equalTo(scrolContentW)
-                        make.height.equalToSuperview()
-                        make.centerX.equalToSuperview()
                     }
-                }
-                self.scrolView.contentSize = CGSize.init(width: scrolContentW, height: self.frame.size.height)
-                self.selectedIndex = self.viewConfig.normalSelecdIndex
-                
-                if scrolContentW >= CGFloat.kSCREEN_WIDTH {
-                    self.scrolView.isScrollEnabled = true
-                } else {
-                    self.scrolView.isScrollEnabled = false
+                    self.scrolView.contentSize = CGSize.init(width: totalWidth, height: self.frame.size.height)
+                    self.selectedIndex = self.viewConfig.normalSelecdIndex
+                    
+                    self.scrolView.isScrollEnabled = isExceed
                 }
             }
             self.layoutSubviews()
@@ -403,39 +444,35 @@ public class PTSegmentView: UIView {
                 let viewInArr = value as! PTSegmentSubView
                 if index != indexs {
                     switch viewConfig.showType {
-                    case .UnderLine:
+                    case .UnderLine,.Dog:
                         viewInArr.underLine.isSelected = false
-                    case .Dog:
-                        viewInArr.underLine.isSelected = false
+                    case .Background:
+                        viewInArr.backgroundColor = .clear
                     default:break
                     }
-                    viewInArr.label.isSelected = false
-                    switch viewInArr.buttonShowType {
-                    case .TitleImage:
-                        viewInArr.imageBtn.titleLabel?.font = viewConfig.normalFont
-                    default:
-                        viewInArr.label.titleLabel?.font = viewConfig.normalFont
-                    }
+                    viewInArr.imageBtn.isSelected = false
+                    viewInArr.imageBtn.titleLabel?.font = viewConfig.normalFont
                 } else {
                     switch viewConfig.showType {
-                    case .UnderLine:
+                    case .UnderLine,.Dog:
                         viewInArr.underLine.isSelected = true
-                    case .Dog:
-                        viewInArr.underLine.isSelected = true
+                    case .Background:
+                        viewInArr.backgroundColor = self.viewConfig.selectedColor_BG
                     default:break
                     }
-                    switch viewInArr.buttonShowType {
-                    case .TitleImage:
-                        viewInArr.imageBtn.titleLabel?.font = viewConfig.selectedFont
-                    default:
-                        viewInArr.label.titleLabel?.font = viewConfig.selectedFont
-                    }
+                    viewInArr.imageBtn.isSelected = true
+                    viewInArr.imageBtn.titleLabel?.font = viewConfig.selectedFont
                 }
             }
         }
     }
     
-    public func setSegBadge(indexView:Int,badgePosition:PooSegmentBadgePosition? = .TopRight,badgeBGColor:UIColor? = UIColor.red,badgeShowType:WBadgeStyle? = .redDot,badgeAnimation:WBadgeAnimType? = .breathe,badgeValue:Int? = 1) {
+    public func setSegBadge(indexView:Int,
+                            badgePosition:PooSegmentBadgePosition? = .TopRight,
+                            badgeBGColor:UIColor? = UIColor.red,
+                            badgeShowType:WBadgeStyle? = .redDot,
+                            badgeAnimation:WBadgeAnimType? = .breathe,
+                            badgeValue:Int? = 1) {
         PTGCDManager.gcdAfter(time: 0.1) {
             self.subViewArr.enumerated().forEach { (index,value) in
                 if index == indexView {
