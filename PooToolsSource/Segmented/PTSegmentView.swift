@@ -16,6 +16,7 @@ import WZLBadge
     case UnderLine
     case Background
     case Dog
+    case SubBackground
 }
 
 @objcMembers
@@ -46,8 +47,12 @@ public class PTSegmentConfig: NSObject {
     public var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
     public var bottomSquare:CGFloat = 5
-    
+    ///是否左对齐
     public var leftEdges:Bool = false
+    ///每个item的间隙
+    public var itemSpace:CGFloat = 0
+    ///初始x(左对齐生效)
+    public var originalX:CGFloat = 0
 }
 
 @objcMembers
@@ -60,7 +65,7 @@ public class PTSegmentModel:NSObject {
     public var imagePlaceHolder:String = ""
     ///选中图片
     public var selectedImageURL:Any?
-    
+    ///iCloud文件夹名称
     public var iCloudDocument:String = ""
 }
 
@@ -94,7 +99,7 @@ public class PTSegmentSubView:UIView {
         return label
     }()
     
-    public init(config:PTSegmentConfig,
+    fileprivate init(config:PTSegmentConfig,
                 subViewModels:PTSegmentModel,
                 contentW:CGFloat,
                 showType:PTSegmentButtonShowType) {
@@ -139,7 +144,7 @@ public class PTSegmentSubView:UIView {
                 make.centerX.equalToSuperview()
                 make.bottom.equalToSuperview().inset(self.viewConfig.bottomSquare)
                 make.top.equalToSuperview()
-            case .Background:
+            case .Background,.SubBackground:
                 make.left.right.equalToSuperview()
                 make.bottom.top.equalToSuperview().inset(self.viewConfig.bottomSquare)
             default:break
@@ -187,14 +192,15 @@ public class PTSegmentSubView:UIView {
             
         case .Background:
             break
-//            switch showType {
-//            case .TitleImage:
-//                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-//                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-//            default:
-//                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-//                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-//            }
+        case .SubBackground:
+            switch showType {
+            case .TitleImage:
+                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
+            default:
+                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
+                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
+            }
         default:break
         }
     }
@@ -242,10 +248,8 @@ public class PTSegmentSubView:UIView {
 
 @objcMembers
 public class PTSegmentView: UIView {
-    
-    private var viewConfig = PTSegmentConfig()
-    private var subViewArr = [UIView]()
-    
+        
+    ///数据
     public var viewDatas = [PTSegmentModel]()
     
     public enum PooSegmentBadgePosition {
@@ -259,6 +263,7 @@ public class PTSegmentView: UIView {
         case BottomRight
     }
     
+    ///选中某个index
     public var selectedIndex:Int? {
         didSet {
             setSelectItem(indexs: selectedIndex!)
@@ -267,6 +272,9 @@ public class PTSegmentView: UIView {
     
     public var segTapBlock:((_ currentIndex:Int)->Void)?
     
+    private var viewConfig = PTSegmentConfig()
+    private var subViewArr = [UIView]()
+
     lazy var scrolView : UIScrollView = {
         let view = UIScrollView()
         view.showsVerticalScrollIndicator = false
@@ -275,11 +283,13 @@ public class PTSegmentView: UIView {
         return view
     }()
     
+    ///初始化
     public init(config:PTSegmentConfig? = PTSegmentConfig()) {
         super.init(frame: .zero)
         viewConfig = config!
     }
     
+    ///刷新items
     public func reloadViewData(block:((_ index:Int)->Void)?) {
         subViewArr.forEach { (value) in
             let subV = value as! PTSegmentSubView
@@ -294,10 +304,8 @@ public class PTSegmentView: UIView {
     }
     
     private func getContentWidth(datas:[PTSegmentModel],
-                                 enumeratedHandle:((PTSegmentModel,Int,CGFloat,CGFloat,PTSegmentButtonShowType)->Void),
-                                 completeHandle:((CGFloat,Bool)->Void)) {
+                                 enumeratedHandle:((PTSegmentModel,Int,CGFloat,CGFloat,PTSegmentButtonShowType)->Void)) {
         var scrolContentW:CGFloat = 0
-        var isExceed:Bool = false
         if datas.count > 0 {
             datas.enumerated().forEach { (index,value) in
                 var subContentW:CGFloat = 0
@@ -307,18 +315,20 @@ public class PTSegmentView: UIView {
                     subContentW = currentWidth
                 }
 
-                enumeratedHandle(value,index,subContentW,scrolContentW,subShowType)
-                scrolContentW += subContentW
-                
-                if index == (datas.count - 1) {
-                    if scrolContentW > self.frame.size.width {
-                        isExceed = true
+                if self.viewConfig.leftEdges {
+                    if index == 0 {
+                        scrolContentW = self.viewConfig.originalX
                     }
-                    completeHandle(scrolContentW,isExceed)
                 }
+
+                enumeratedHandle(value,index,subContentW,scrolContentW,subShowType)
+                var space:CGFloat = 0
+                if index != (datas.count - 1) {
+                    space = self.viewConfig.itemSpace
+                }
+
+                scrolContentW += (subContentW + space)
             }
-        } else {
-            completeHandle(0,false)
         }
     }
     
@@ -334,6 +344,15 @@ public class PTSegmentView: UIView {
                 if index == (datas.count - 1) {
                     if scrolContentW > self.frame.size.width {
                         isExceed = true
+                    }
+                    
+                    if self.viewConfig.itemSpace > 0 {
+                        scrolContentW = scrolContentW + CGFloat(datas.count - 1) * self.viewConfig.itemSpace
+                    }
+
+                    
+                    if self.viewConfig.leftEdges {
+                        scrolContentW += self.viewConfig.originalX
                     }
                     completeHandle(scrolContentW,isExceed)
                 }
@@ -388,7 +407,7 @@ public class PTSegmentView: UIView {
                             newX += (self.frame.size.width - totalWidth) / 2
                         }
                     }
-                    
+                                        
                     let subView = PTSegmentSubView(config: self.viewConfig,subViewModels: currentModel,contentW: (subContentW-self.viewConfig.subViewInContentSpace),showType: showType)
                     subView.tag = index
                     subView.frame = CGRect.init(x: newX, y: 0, width: subContentW, height: self.frame.size.height)
@@ -413,22 +432,22 @@ public class PTSegmentView: UIView {
                     }
                     self.scrolView.addSubview(subView)
                     self.subViewArr.append(subView)
-
-                } completeHandle: { totalWidth, isExceed in
-                    self.addSubview(self.scrolView)
-                    self.scrolView.snp.makeConstraints { (make) in
-                        make.edges.equalToSuperview()
-                    }
-                    self.scrolView.contentSize = CGSize.init(width: totalWidth, height: self.frame.size.height)
-                    self.selectedIndex = self.viewConfig.normalSelecdIndex
-                    
-                    self.scrolView.isScrollEnabled = isExceed
                 }
+                
+                self.addSubview(self.scrolView)
+                self.scrolView.snp.makeConstraints { (make) in
+                    make.edges.equalToSuperview()
+                }
+                self.scrolView.contentSize = CGSize.init(width: totalWidth, height: self.frame.size.height)
+                self.selectedIndex = self.viewConfig.normalSelecdIndex
+                
+                self.scrolView.isScrollEnabled = isExceed
             }
             self.layoutSubviews()
         }
     }
     
+    ///选择某个item
     public func setSelectItem(indexs:Int) {
         if indexs <= (subViewArr.count - 1) {
             let subV = subViewArr[indexs] as! PTSegmentSubView
@@ -444,7 +463,7 @@ public class PTSegmentView: UIView {
                 let viewInArr = value as! PTSegmentSubView
                 if index != indexs {
                     switch viewConfig.showType {
-                    case .UnderLine,.Dog:
+                    case .UnderLine,.Dog,.SubBackground:
                         viewInArr.underLine.isSelected = false
                     case .Background:
                         viewInArr.backgroundColor = .clear
@@ -454,7 +473,7 @@ public class PTSegmentView: UIView {
                     viewInArr.imageBtn.titleLabel?.font = viewConfig.normalFont
                 } else {
                     switch viewConfig.showType {
-                    case .UnderLine,.Dog:
+                    case .UnderLine,.Dog,.SubBackground:
                         viewInArr.underLine.isSelected = true
                     case .Background:
                         viewInArr.backgroundColor = self.viewConfig.selectedColor_BG
@@ -467,6 +486,7 @@ public class PTSegmentView: UIView {
         }
     }
     
+    ///设置某个Badge
     public func setSegBadge(indexView:Int,
                             badgePosition:PooSegmentBadgePosition? = .TopRight,
                             badgeBGColor:UIColor? = UIColor.red,
@@ -505,6 +525,7 @@ public class PTSegmentView: UIView {
         }
     }
     
+    ///移除某个Badge
     public func removeBadgeAtIndex(indexView:Int) {
         subViewArr.enumerated().forEach { (index,value) in
             if index == indexView {
@@ -514,6 +535,7 @@ public class PTSegmentView: UIView {
         }
     }
     
+    ///移除全部Badge
     public func removeAllBadge() {
         subViewArr.enumerated().forEach { (index,value) in
             let subViews = (value as! PTSegmentSubView)

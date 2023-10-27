@@ -166,11 +166,14 @@ CGFloat const tagItemSpace = 5;
             segModels.imageURL = @"DemoImage";
             segModels.selectedImageURL = @"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif";
             PTSegmentConfig *config = [[PTSegmentConfig alloc] init];
-            config.showType = PTSegmentSelectedTypeUnderLine;
-
+            config.showType = PTSegmentSelectedTypeBackground;
+            config.itemSpace = 10.0f;
+            config.leftEdges = YES;
+            config.originalX = 20;
+            
             PTSegmentView *sgView = [[PTSegmentView alloc] initWithConfig:config];
             sgView.backgroundColor = UIColor.randomColor;
-            sgView.viewDatas = @[segModel,segModels,segModels,segModels,segModels,segModels];
+            sgView.viewDatas = @[segModel,segModels/*,segModels,segModels,segModels,segModels*/];
             [sgView reloadViewDataWithBlock:^(NSInteger index) {
 
             }];
