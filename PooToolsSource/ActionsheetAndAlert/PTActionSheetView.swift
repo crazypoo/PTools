@@ -440,29 +440,19 @@ public class PTActionSheetView: UIView {
     }
     
     public func dismiss(block:PTActionTask?) {
-        let offscreenAnimation = POPBasicAnimation.easeOut()
-        offscreenAnimation?.property = (POPAnimatableProperty.property(withName: kPOPLayerTranslationY) as! POPAnimatableProperty)
-        offscreenAnimation?.toValue = actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight + 10
-        offscreenAnimation!.duration = 0.35
-        offscreenAnimation?.completionBlock = { (anim,finish) in
-            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
-                self.backgroundView.alpha = 0
-            } completion: { animationFinish in
-                self.removeFromSuperview()
-                if block != nil {
-                    block!()
-                }
+        
+        PTAnimationFunction.animationOut(animationView: actionSheetView, animationType: .Bottom, toValue: (actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight + 10)) {
+            self.backgroundView.alpha = 0
+        } completion: { ok in
+            self.removeFromSuperview()
+            if block != nil {
+                block!()
             }
         }
-        actionSheetView.layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
     }
     
     public func show() {
-        let animation = POPSpringAnimation.init(propertyNamed: kPOPLayerTranslationY)
-        actionSheetView.layer.transform = CATransform3DMakeTranslation(0, actionSheetRealHeight(), 0)
-        animation?.toValue = 0
-        animation?.springBounciness = 1
-        actionSheetView.layer.pop_add(animation, forKey: "ActionSheetAnimation")
+        PTAnimationFunction.animationIn(animationView: actionSheetView, animationType: .Bottom, transformValue: actionSheetRealHeight())
     }
     
     func didSelection(sender:UIButton) {

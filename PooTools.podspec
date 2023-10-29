@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.12.1'
+    s.version     = '3.12.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -29,7 +29,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'FluentDarkModeKit'
         subspec.dependency 'Kingfisher'
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -98,15 +98,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_STEPPER POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'Animation' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Animation/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_ANIMATION POOTOOLS_COCOAPODS"
-        }
-    end
-        
+            
     s.subspec 'BankCard' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/BankCard/*.{h,m,swift}','PooToolsSource/BankCard/*.{h,m,swift}'
@@ -831,7 +823,6 @@ Pod::Spec.new do |s|
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
-        subspec.dependency 'PooTools/Animation'
         subspec.dependency 'PooTools/BankCard'
         subspec.dependency 'PooTools/BilogyID'
         subspec.dependency 'PooTools/Calendar'

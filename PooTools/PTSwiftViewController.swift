@@ -304,10 +304,10 @@ class PTSwiftViewController: PTBaseViewController {
 
         PTNSLogConsole(self)
 
-        self.view.addSubview(newCollectionView)
-        newCollectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+//        self.view.addSubview(newCollectionView)
+//        newCollectionView.snp.makeConstraints { make in
+//            make.edges.equalToSuperview()
+//        }
         
         let layoutBtn = PTLayoutButton()
         layoutBtn.layoutStyle = .leftImageRightTitle
@@ -323,7 +323,7 @@ class PTSwiftViewController: PTBaseViewController {
             make.centerX.centerY.equalToSuperview()
         }
                 
-        btn.addActionHandlers { sender in
+        layoutBtn.addActionHandlers { sender in
             
             UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
                 PTNSLogConsole("检测是否视频\(String(describing: image))")
@@ -472,8 +472,7 @@ class PTSwiftViewController: PTBaseViewController {
     }
 }
 
-extension PTSwiftViewController: PTRouterable {
-    
+extension PTSwiftViewController:PTRouterable {
     static var patternString: [String] {
         ["scheme://router/demo"]
     }

@@ -13,6 +13,15 @@ import ZXNavigationBar
 import FDFullscreenPopGesture
 import SwifterSwift
 import AttributedString
+import Photos
+import SnapKit
+
+public typealias PTScreenShotImageHandle = (PTScreenShotActionType,UIImage) -> Void
+
+public enum PTScreenShotActionType {
+    case Share
+    case Feedback
+}
 
 @objc public enum VCStatusBarChangeStatusType : Int {
     case Dark
@@ -47,6 +56,11 @@ open class PTBaseViewController: ZXNavigationBarController {
     
     public var emptyDataViewConfig:PTEmptyDataViewConfig?
     
+    public var screenShotHandle:((UIImage?)->Void)?
+
+    fileprivate var screenFunc:PTBaseScreenShotAlert?
+    public var screenShotActionHandle:PTScreenShotImageHandle?
+
     @available(iOS 17, *)
     fileprivate func emptyButtonConfig() -> UIButton.Configuration {
         var plainConfig = UIButton.Configuration.plain()
@@ -142,6 +156,8 @@ open class PTBaseViewController: ZXNavigationBarController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        PHPhotoLibrary.shared().register(self)
+
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
         self.edgesForExtendedLayout = []
@@ -218,6 +234,11 @@ open class PTBaseViewController: UIViewController {
     
     public var emptyDataViewConfig:PTEmptyDataViewConfig?
     
+    public var screenShotHandle:((UIImage?)->Void)?
+    
+    fileprivate var screenFunc:PTBaseScreenShotAlert?
+    public var screenShotActionHandle:PTScreenShotImageHandle?
+
     @available(iOS 17, *)
     fileprivate func emptyButtonConfig() -> UIButton.Configuration {
         var plainConfig = UIButton.Configuration.plain()
@@ -308,6 +329,8 @@ open class PTBaseViewController: UIViewController {
     open override func viewDidLoad() {
         super.viewDidLoad()
         
+        PHPhotoLibrary.shared().register(self)
+
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
         edgesForExtendedLayout = []
@@ -315,7 +338,7 @@ open class PTBaseViewController: UIViewController {
         
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
     }
-    
+        
     //MARK: 動態更換StatusBar
     ///動態更換StatusBar
     open func changeStatusBar(type:VCStatusBarChangeStatusType) {
@@ -389,5 +412,219 @@ extension PTBaseViewController {
     public func emptyViewLoading() {
         let loadingConfig = UIContentUnavailableConfiguration.loading()
         self.contentUnavailableConfiguration = loadingConfig
+    }
+}
+
+extension PTBaseViewController: PHPhotoLibraryChangeObserver {
+    
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        PTGCDManager.gcdAfter(time: 1) {
+            let fetchOptions = PHFetchOptions()
+            fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: false)]
+            let assets = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+            
+            if let lastAsset = assets.firstObject {
+                if lastAsset.mediaSubtypes == .photoScreenshot {
+                    if let image = self.getImage(for: lastAsset) {
+                        PTNSLogConsole("产生了截图")
+                        // 在这里使用截图
+                        if self.screenShotHandle != nil {
+                            self.screenShotHandle!(image)
+                        } else {
+                            if self.screenFunc == nil {
+                                self.screenFunc = PTBaseScreenShotAlert(screenShotImage: image,dismiss: {
+                                    self.screenFunc = nil
+                                })
+                                self.screenFunc?.actionHandle = self.screenShotActionHandle
+                            }
+                        }
+                    } else {
+                        if self.screenShotHandle != nil {
+                            self.screenShotHandle!(nil)
+                        }
+                    }
+                } else {
+                    if self.screenShotHandle != nil {
+                        self.screenShotHandle!(nil)
+                    }
+                }
+            } else {
+                if self.screenShotHandle != nil {
+                    self.screenShotHandle!(nil)
+                }
+            }
+        }
+    }
+    
+    func getImage(for asset: PHAsset) -> UIImage? {
+        let imageManager = PHImageManager.default()
+        let options = PHImageRequestOptions()
+        options.isSynchronous = true
+
+        var image: UIImage?
+        imageManager.requestImage(for: asset, targetSize: CGSize(width: asset.pixelWidth, height: asset.pixelHeight), contentMode: .aspectFit, options: options) { (result, info) in
+            image = result
+        }
+
+        return image
+    }
+    
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        guard let touch = touches.first else {
+            return
+        }
+                
+        let touchLocation = touch.location(in: view)
+        if self.screenFunc != nil {
+            if !self.screenFunc!.frame.contains(touchLocation) {
+                self.screenFunc!.dismissAlert()
+            }
+        }
+    }
+}
+
+/**
+    ScreenShot的小控件
+ */
+class PTBaseScreenShotAlert:UIView {
+                
+    let ItemWidth:CGFloat = 88
+    let ItemHeight:CGFloat = 164
+    
+    var dismissTask:PTActionTask?
+    
+    var actionHandle:PTScreenShotImageHandle!
+    
+    private var AnimationValue:CGFloat {
+        return ItemWidth + PTAppBaseConfig.share.defaultViewSpace
+    }
+    
+    private lazy var closeButton : UIButton = {
+        let view = UIButton(type: .close)
+        view.addActionHandlers() { sender in
+            self.dismissAlert()
+        }
+        return view
+    }()
+    
+    lazy var shareImageView:UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        return view
+    }()
+    
+    private lazy var feedback:PTLayoutButton = {
+        let view = self.viewLayoutBtnSet(title: "意见反馈", image: "square.and.pencil")
+        view.addActionHandlers() { sender in
+            self.actionHandle(.Feedback,self.shareImageView.image!)
+            self.dismissAlert()
+        }
+        return view
+    }()
+    
+    private lazy var share:PTLayoutButton = {
+        let view = self.viewLayoutBtnSet(title: "分享好友", image: "square.and.arrow.up")
+        view.addActionHandlers() { sender in
+            self.actionHandle(.Share,self.shareImageView.image!)
+            self.dismissAlert()
+        }
+        return view
+    }()
+
+    private lazy var line:UIView = {
+        let view = UIView()
+        view.backgroundColor = .lightGray
+        return view
+    }()
+
+    init(screenShotImage:UIImage,dismiss: PTActionTask? = nil) {
+        super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))
+        self.backgroundColor = .DevMaskColor
+        
+        self.dismissTask = dismiss
+        
+        self.addSubviews([closeButton,feedback,line,share,shareImageView])
+        closeButton.snp.makeConstraints { make in
+            make.right.top.equalToSuperview().inset(5)
+            make.width.height.equalTo(15)
+        }
+        
+        feedback.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(5)
+            make.bottom.equalToSuperview()
+            make.height.equalTo(24)
+        }
+        
+        line.snp.makeConstraints { make in
+            make.left.right.equalTo(self.feedback)
+            make.height.equalTo(1)
+            make.top.equalTo(self.feedback.snp.top)
+        }
+        
+        share.snp.makeConstraints { make in
+            make.left.right.height.equalTo(self.feedback)
+            make.bottom.equalTo(self.line.snp.top)
+        }
+        
+        shareImageView.image = screenShotImage
+        shareImageView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(5)
+            make.top.equalTo(closeButton.snp.bottom).offset(5)
+            make.bottom.equalTo(self.share.snp.top).offset(-5)
+        }
+        
+        PTUtils.getCurrentVC().view.addSubview(self)
+        showAlert()
+        
+        PTGCDManager.gcdMain {
+            self.viewCorner(radius: 5,borderWidth: 0,borderColor: .clear)
+            self.shareImageView.viewCorner(radius: 5)
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func showAlert() {
+        PTAnimationFunction.animationIn(animationView: self, animationType: .Right, transformValue: AnimationValue)
+    }
+    
+    func dismissAlert() {
+        PTAnimationFunction.animationOut(animationView: self, animationType: .Right, toValue: AnimationValue, animation: {
+            self.alpha = 0
+        }) { ok in
+            self.removeFromSuperview()
+            if self.dismissTask != nil {
+                self.dismissTask!()
+            }
+        }
+    }
+    
+    func viewLayoutBtnSet(title:String,image:String) -> PTLayoutButton {
+        let view = PTLayoutButton()
+        view.layoutStyle = .leftImageRightTitle
+        view.midSpacing = 5
+        view.imageSize = CGSize(width: 15, height: 15)
+        view.titleLabel?.font = .appfont(size: 13)
+        view.setTitle(title, for: .normal)
+        view.setTitleColor(.white, for: .normal)
+        PTLoadImageFunction.loadImage(contentData: image) { images, image in
+            if (images?.count ?? 0) > 1 {
+                view.imageView?.animationImages = images
+                view.imageView?.animationDuration = 2
+                view.imageView?.startAnimating()
+            } else if images?.count == 1 {
+                view.setImage(image, for: .normal)
+            }
+        }
+        
+        return view
     }
 }

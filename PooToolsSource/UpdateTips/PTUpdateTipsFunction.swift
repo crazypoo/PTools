@@ -21,14 +21,7 @@ public class PTUpdateTipsFunction: NSObject {
     /// - Parameters:
     ///   - oldVersion: 舊版本號
     ///   - newVersion: 新版本號
-    ///   - oV:
-    ///   - nV:
     ///   - descriptionString:
-    ///   - url:
-    ///   - test:
-    ///   - isShowError:
-    ///   - isForcedUpgrade:
-    ///   - oV:
     ///   - downloadUrl: 下載URL
     ///   - isTest: 是否測試
     ///   - showError: 是否顯示錯誤

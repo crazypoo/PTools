@@ -289,33 +289,8 @@ public class PTCustomAlertView: UIView {
         
         addSubview(customView)
         
-        var propertyNamed = ""
-        var transform = CATransform3DMakeTranslation(0, 0, 0)
-        
-        switch animationType {
-        case .Top:
-            propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, -(CGFloat.kSCREEN_HEIGHT / 2), 0)
-        case .Bottom:
-            propertyNamed = kPOPLayerTranslationY
-            transform = CATransform3DMakeTranslation(0, (CGFloat.kSCREEN_HEIGHT / 2), 0)
-        case .Left:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(-(CGFloat.kSCREEN_HEIGHT / 2), 0, 0)
-        case .Right:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation((CGFloat.kSCREEN_HEIGHT / 2), 0, 0)
-        default:
-            propertyNamed = kPOPLayerTranslationX
-            transform = CATransform3DMakeTranslation(0, 0, 0)
-        }
-        
-        let animation = POPSpringAnimation.init(propertyNamed: propertyNamed)
-        layer.transform = transform
-        animation?.toValue = 0
-        animation?.springBounciness = 1
-        layer.pop_add(animation, forKey: "AlertAnimation")
-        
+        PTAnimationFunction.animationIn(animationView: self, animationType: animationType, transformValue: (CGFloat.kSCREEN_HEIGHT / 2))
+                
         PTGCDManager.gcdAfter(time: 0.1) {
             if self.customerBlock != nil {
                 self.customerBlock!(self.customView)
@@ -458,45 +433,31 @@ public class PTCustomAlertView: UIView {
     //MARK: 界面消失
     ///界面消失
     public func dismiss() {
-        var propertyNamed = ""
-        var offsetValue : CGFloat = 0
-        
+        var offsetValue:CGFloat = 0
         switch animationType {
         case .Top:
-            propertyNamed = kPOPLayerTranslationY
             offsetValue = -layer.position.y
         case .Bottom:
-            propertyNamed = kPOPLayerTranslationY
             offsetValue = layer.position.y
         case .Left:
-            propertyNamed = kPOPLayerTranslationX
             offsetValue = -layer.position.x - frame.size.width / 2
         case .Right:
-            propertyNamed = kPOPLayerTranslationX
             offsetValue = layer.position.x + frame.size.width / 2
         default:
-            propertyNamed = kPOPLayerTranslationX
             offsetValue = -layer.position.x
         }
         
-        let offscreenAnimation = POPBasicAnimation.easeOut()
-        offscreenAnimation?.property = (POPAnimatableProperty.property(withName: propertyNamed) as! POPAnimatableProperty)
-        offscreenAnimation?.toValue = offsetValue
-        offscreenAnimation?.duration = 0.35
-        offscreenAnimation?.completionBlock = { (anim,finish) in
-            UIView.animate(withDuration: 0.35, delay: 0, usingSpringWithDamping: 0.9, initialSpringVelocity: 0.7, options: [.curveEaseOut,.beginFromCurrentState,.layoutSubviews]) {
-                self.backgroundView.alpha = 0
-                self.alpha = 0
-            } completion: { ok in
-                self.backgroundView.removeFromSuperview()
-                self.customView.removeSubviews()
-                self.removeFromSuperview()
-                if self.didDismissBlock != nil {
-                    self.didDismissBlock!(self)
-                }
+        PTAnimationFunction.animationOut(animationView: self, animationType: animationType,toValue: offsetValue, animation: {
+            self.backgroundView.alpha = 0
+            self.alpha = 0
+        }, completion: { ok in
+            self.backgroundView.removeFromSuperview()
+            self.customView.removeSubviews()
+            self.removeFromSuperview()
+            if self.didDismissBlock != nil {
+                self.didDismissBlock!(self)
             }
-        }
-        layer.pop_add(offscreenAnimation, forKey: "offscreenAnimation")
+        })
     }
     
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
