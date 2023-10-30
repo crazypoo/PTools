@@ -11,7 +11,7 @@ import Photos
 public extension PTPermission {
     
     static var photoLibrary: PTPermissionPhotoLibrary {
-        return PTPermissionPhotoLibrary()
+        PTPermissionPhotoLibrary()
     }
 }
 

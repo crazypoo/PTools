@@ -33,13 +33,17 @@ public extension UICollectionView {
     ///計算CollectionView的Group高度和設置佈局(Gird形式)
     /// - Parameters:
     ///   - data: 數據(數組)
-    ///   - size: 佈局大小
+    ///   - groupW:
+    ///   - itemHeight:
     ///   - cellRowCount: 每一行多少個數量
     ///   - originalX: 每行第一個起始位置
     ///   - contentTopAndBottom: 起始行的起始高度
     ///   - cellLeadingSpace: 每個item相隔距離
     ///   - cellTrailingSpace: 每一行相隔高度
     ///   - handle: 返回Group高度和[GroupCustomItem]
+    ///   - itemHeight:
+    ///   - groupW:
+    ///   - groupW:
     @objc class func girdCollectionContentHeight(data:[AnyObject],
                                                  groupW:CGFloat = CGFloat.kSCREEN_WIDTH,
                                                  itemHeight:CGFloat,
@@ -84,13 +88,15 @@ public extension UICollectionView {
     /// - Parameters:
     ///   - data: 數據(數組)
     ///   - groupWidth: group的實際展示寬度
-    ///   - size: 佈局大小
+    ///   - itemHeight:
     ///   - cellRowCount: 每一行多少個數量
     ///   - originalX: 每行第一個起始位置
     ///   - contentTopAndBottom: 起始行的起始高度
     ///   - cellLeadingSpace: 每個item相隔距離
     ///   - cellTrailingSpace: 每一行相隔高度
     ///   - sectionContentInsets: 佈局偏移
+    ///   - itemHeight:
+    ///   - itemHeight:
     /// - Returns: Gird佈局
     @objc class func girdCollectionLayout(data:[AnyObject],
                                           groupWidth:CGFloat = CGFloat.kSCREEN_WIDTH,

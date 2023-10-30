@@ -11,7 +11,7 @@ import UserNotifications
 public extension PTPermission {
     
     static var notification: PTPermissionNotification {
-        return PTPermissionNotification()
+        PTPermissionNotification()
     }
 }
 

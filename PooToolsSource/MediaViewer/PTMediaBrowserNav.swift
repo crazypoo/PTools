@@ -29,14 +29,14 @@ class PTMediaBrowserNav: UIView {
         
         backgroundColor = MediaBrowserToolBarColor
 
-        self.addSubviews([self.closeButton,self.titleLabel])
-        self.closeButton.snp.makeConstraints { make in
+        addSubviews([closeButton, titleLabel])
+        closeButton.snp.makeConstraints { make in
             make.width.height.equalTo(34)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.bottom.equalToSuperview().inset(5)
         }
         
-        self.titleLabel.snp.makeConstraints { make in
+        titleLabel.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
             make.height.bottom.equalTo(self.closeButton)
         }

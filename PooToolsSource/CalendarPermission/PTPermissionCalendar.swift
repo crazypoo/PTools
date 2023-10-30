@@ -23,10 +23,10 @@ public class PTPermissionCalendar: PTPermission {
     // MARK: - Init
     
     init(kind: PTPermission.Kind) {
-        self._kind = kind
+        _kind = kind
     }
     
-    open override var kind: PTPermission.Kind { self._kind }
+    open override var kind: PTPermission.Kind { _kind }
     open var usageDescriptionKey: String? {
         if #available(iOS 17, *) {
             switch kind {

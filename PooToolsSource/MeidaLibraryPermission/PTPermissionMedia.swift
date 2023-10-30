@@ -12,7 +12,7 @@ import MediaPlayer
 public extension PTPermission {
     
     static var mediaLibrary: PTPermissionMedia {
-        return PTPermissionMedia()
+        PTPermissionMedia()
     }
 }
 
@@ -32,7 +32,7 @@ public class PTPermissionMedia: PTPermission {
     }
     
     public override func request(completion: @escaping () -> Void) {
-        MPMediaLibrary.requestAuthorization() { status in
+        MPMediaLibrary.requestAuthorization { status in
             PTGCDManager.gcdMain {
                 completion()
             }

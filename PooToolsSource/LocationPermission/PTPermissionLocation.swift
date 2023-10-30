@@ -23,10 +23,10 @@ public class PTPermissionLocation: PTPermission {
     // MARK: - Init
     
     init(kind: PTPermission.Kind) {
-        self._kind = kind
+        _kind = kind
     }
     
-    open override var kind: PTPermission.Kind { self._kind }
+    open override var kind: PTPermission.Kind { _kind }
     open var usageDescriptionKey: String? {
         switch _kind {
         case .location(let access):
@@ -42,19 +42,19 @@ public class PTPermissionLocation: PTPermission {
     }
     
     public override var status: PTPermission.Status {
-        let authorizationStatus: CLAuthorizationStatus = {
-            let locationManager = CLLocationManager()
-            if #available(iOS 14.0, tvOS 14.0, *) {
-                return locationManager.authorizationStatus
-            } else {
-                return CLLocationManager.authorizationStatus()
-            }
-        }()
-        
+        let result: CLAuthorizationStatus
+        let locationManager = CLLocationManager()
+        if #available(iOS 14.0, tvOS 14.0, *) {
+            result = locationManager.authorizationStatus
+        } else {
+            result = CLLocationManager.authorizationStatus()
+        }
+        let authorizationStatus: CLAuthorizationStatus = result
+
         switch authorizationStatus {
-        #if os(iOS)
+            #if os(iOS)
         case .authorized: return .authorized
-        #endif
+            #endif
         case .denied: return .denied
         case .notDetermined: return .notDetermined
         case .restricted: return .denied
@@ -91,7 +91,7 @@ public class PTPermissionLocation: PTPermission {
             switch access {
             case .whenInUse:
                 PTPermissionLocationWhenInUseHandler.shared = PTPermissionLocationWhenInUseHandler()
-                PTPermissionLocationWhenInUseHandler.shared?.requestPermission() {
+                PTPermissionLocationWhenInUseHandler.shared?.requestPermission {
                     PTGCDManager.gcdMain {
                         completion()
                         PTPermissionLocationWhenInUseHandler.shared = nil
@@ -99,7 +99,7 @@ public class PTPermissionLocation: PTPermission {
                 }
             case .always:
                 PTPermissionLocationAlwaysHandler.shared = PTPermissionLocationAlwaysHandler()
-                PTPermissionLocationAlwaysHandler.shared?.requestPermission() {
+                PTPermissionLocationAlwaysHandler.shared?.requestPermission {
                     PTGCDManager.gcdMain {
                         completion()
                         PTPermissionLocationAlwaysHandler.shared = nil

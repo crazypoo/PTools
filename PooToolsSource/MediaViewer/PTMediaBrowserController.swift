@@ -25,7 +25,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     ///界面配置
     public var viewConfig:PTMediaBrowserConfig! {
         didSet {
-            self.showCollectionViewData()
+            showCollectionViewData()
         }
     }
     
@@ -70,7 +70,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.setImage(self.viewConfig.moreActionImage, for: .normal)
             view.moreActionButton.isHidden = false
             view.moreActionButton.isUserInteractionEnabled = true
-            view.moreActionButton.addActionHandlers() { sender in
+            view.moreActionButton.addActionHandlers { sender in
                 UIAlertController.baseActionSheet(title: "更多操作", cancelButtonName: "取消",titles: self.actionSheetTitle) { sheet in
                     
                 } cancelBlock: { sheet in
@@ -149,7 +149,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             cell.viewConfig = self.viewConfig
             cell.dataModel = (itemRow.dataModel as! PTMediaBrowserModel)
             cell.viewerDismissBlock = {
-                self.returnFrontVC() {
+                self.returnFrontVC {
                     if self.viewDismissBlock != nil {
                         self.viewDismissBlock!()
                     }
@@ -252,17 +252,17 @@ public class PTMediaBrowserController: PTBaseViewController {
         self.zx_navBarBackgroundColorAlpha = 0
         self.zx_hideBaseNavBar = true
 #else
-        self.navigationController?.isNavigationBarHidden = true
+        navigationController?.isNavigationBarHidden = true
 #endif
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.viewConfig.dynamicBackground {
-            self.view.backgroundColor = self.viewConfig.viewerContentBackgroundColor
+        if viewConfig.dynamicBackground {
+            view.backgroundColor = viewConfig.viewerContentBackgroundColor
         } else {
-            self.view.backgroundColor = .DevMaskColor
+            view.backgroundColor = .DevMaskColor
         }
         
         let closeButton = UIButton.init(type: .close)
@@ -308,7 +308,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         var sections = [PTSection]()
         
         var rows = [PTRows]()
-        self.viewConfig.mediaData.enumerated().forEach { index,value in
+        viewConfig.mediaData.enumerated().forEach { index,value in
             let row_List = PTRows.init(cls: PTMediaBrowserCell.self, ID: PTMediaBrowserCell.ID,dataModel: value)
             rows.append(row_List)
         }
@@ -334,40 +334,40 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
         }
 
-        if self.viewConfig.mediaData.count >= 10 {
-            self.navControl.titleLabel.isHidden = false
-            self.navControl.titleLabel.text = "1/\(self.viewConfig.mediaData.count)"
+        if viewConfig.mediaData.count >= 10 {
+            navControl.titleLabel.isHidden = false
+            navControl.titleLabel.text = "1/\(viewConfig.mediaData.count)"
         } else {
-            self.navControl.titleLabel.isHidden = true
+            navControl.titleLabel.isHidden = true
         }
         
-        if self.viewConfig.mediaData.count > 1 {
-            self.bottomControl.pageControlView.isHidden = false
-            self.bottomControl.pageControlView.numberOfPages = self.viewConfig.mediaData.count
-            self.bottomControl.pageControlView.currentPage = 0
+        if viewConfig.mediaData.count > 1 {
+            bottomControl.pageControlView.isHidden = false
+            bottomControl.pageControlView.numberOfPages = viewConfig.mediaData.count
+            bottomControl.pageControlView.currentPage = 0
         } else {
-            self.bottomControl.pageControlView.isHidden = true
+            bottomControl.pageControlView.isHidden = true
         }
 
-        self.actionSheetTitle.removeAll()
-        switch self.viewConfig.actionType {
+        actionSheetTitle.removeAll()
+        switch viewConfig.actionType {
         case .All:
             actionSheetTitle = ["保存媒体","删除图片"]
-            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+            viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .Save:
             actionSheetTitle = ["保存媒体"]
-            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+            viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .Delete:
             actionSheetTitle = ["删除图片"]
-            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+            viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .DIY:
-            self.viewConfig.moreActionEX.enumerated().forEach { index,value in
+            viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         default:
@@ -376,7 +376,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     }
     
     func viewMoreActionDismiss() {
-        let currentCell = self.newCollectionView.visibleCells()
+        let currentCell = newCollectionView.visibleCells()
         let endCell = currentCell.first as! PTMediaBrowserCell
         switch endCell.currentCellType {
         case .GIF:
@@ -384,22 +384,22 @@ public class PTMediaBrowserController: PTBaseViewController {
         default:
             break
         }
-        self.returnFrontVC()
+        returnFrontVC()
     }
     
     func toolBarControl(boolValue:Bool) {
-        self.navControl.isHidden = boolValue
-        self.bottomControl.moreActionButton.isHidden = self.navControl.isHidden
-        self.bottomControl.titleLabel.isHidden = self.navControl.isHidden
-        self.bottomControl.backgroundColor = self.navControl.isHidden ? .clear : MediaBrowserToolBarColor
+        navControl.isHidden = boolValue
+        bottomControl.moreActionButton.isHidden = navControl.isHidden
+        bottomControl.titleLabel.isHidden = navControl.isHidden
+        bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
 }
 
 fileprivate extension PTMediaBrowserController {
     func saveImage() {
-        let model = self.viewConfig.mediaData[self.bottomControl.pageControlView.currentPage]
+        let model = viewConfig.mediaData[bottomControl.pageControlView.currentPage]
         
-        let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
+        let currentView = newCollectionView.visibleCells().first as! PTMediaBrowserCell
         switch currentView.currentCellType {
         case .Video:
             saveVideoAction(url: model.imageURL as! String)
@@ -409,7 +409,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func saveVideoAction(url:String) {
-        let currentMediaView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
+        let currentMediaView = newCollectionView.visibleCells().first as! PTMediaBrowserCell
         let loadingView = PTMediaBrowserLoadingView.init(type: .LoopDiagram)
         currentMediaView.contentView.addSubview(loadingView)
         loadingView.snp.makeConstraints { make in
@@ -462,14 +462,14 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func deleteImage() {
-        if self.viewConfig.mediaData.count == 1 {
+        if viewConfig.mediaData.count == 1 {
             if viewDeleteImageBlock != nil {
                 viewDeleteImageBlock!(0)
             }
-            self.viewMoreActionDismiss()
+            viewMoreActionDismiss()
         } else {
-            let index = self.bottomControl.pageControlView.currentPage
-            let currentImages = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
+            let index = bottomControl.pageControlView.currentPage
+            let currentImages = newCollectionView.visibleCells().first as! PTMediaBrowserCell
             switch currentImages.currentCellType {
             case .GIF:
                 currentImages.imageView.stopAnimating()
@@ -490,7 +490,7 @@ fileprivate extension PTMediaBrowserController {
 
                 var textIndex = newIndex + 1
                 PTGCDManager.gcdAfter(time: 0.35) {
-                    self.showCollectionViewData() { reloadCollectionView in
+                    self.showCollectionViewData { reloadCollectionView in
                         if textIndex == 0 {
                             textIndex = 1
                         }
@@ -519,7 +519,7 @@ fileprivate extension PTMediaBrowserController {
     func labelMoreAtt(models:PTMediaBrowserModel) ->ASAttributedString {
         let atts:ASAttributedString = """
         \(wrap: .embedding("""
-        \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))\(self.viewConfig.showMore,.foreground(.systemBlue),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
+        \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))\(viewConfig.showMore,.foreground(.systemBlue),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)),.action {
                 PTGCDManager.gcdAfter(time: 0.1) {
                     let fullAtts:ASAttributedString = """
                     \(wrap: .embedding("""
@@ -558,35 +558,35 @@ fileprivate extension PTMediaBrowserController {
                 
         var bottomH:CGFloat = 0
         if models.imageInfo.stringIsEmpty() {
-            self.bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
-            switch self.viewConfig.actionType {
+            bottomControl.setLabelAtt(att: ASAttributedString(stringLiteral: ""))
+            switch viewConfig.actionType {
             case .Empty:
                 bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
             default:
                 bottomH = CGFloat.kTabbarHeight_Total
             }
         } else {
-            if self.numberOfLines(models.imageInfo) > numberOfVisibleLines {
-                bottomH = self.heightForString(self.truncatedText(fullText:models.imageInfo) + self.viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
-                self.bottomControl.setLabelAtt(att: self.labelMoreAtt(models: models))
+            if numberOfLines(models.imageInfo) > numberOfVisibleLines {
+                bottomH = heightForString(truncatedText(fullText:models.imageInfo) + viewConfig.showMore) + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
+                bottomControl.setLabelAtt(att: labelMoreAtt(models: models))
             } else {
-                var textH:CGFloat = self.heightForString(models.imageInfo)
+                var textH:CGFloat = heightForString(models.imageInfo)
                 if textH < 44 {
                     textH = 44
                 }
                 
                 let atts:ASAttributedString = """
                 \(wrap: .embedding("""
-                \(self.truncatedText(fullText:models.imageInfo),.foreground(self.viewConfig.titleColor),.font(self.viewConfig.viewerFont),.paragraph(.alignment(.left)))
+                \(truncatedText(fullText:models.imageInfo),.foreground(viewConfig.titleColor),.font(viewConfig.viewerFont),.paragraph(.alignment(.left)))
                 """))
                 """
 
-                self.bottomControl.setLabelAtt(att: atts)
+                bottomControl.setLabelAtt(att: atts)
                 bottomH = textH + CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
             }
         }
         
-        self.bottomControl.snp.updateConstraints { make in
+        bottomControl.snp.updateConstraints { make in
             make.left.right.bottom.equalToSuperview()
             make.height.equalTo(bottomH)
         }
@@ -595,27 +595,27 @@ fileprivate extension PTMediaBrowserController {
     func heightForString(_ string: String) -> CGFloat {
         var labelW:CGFloat = 0
 
-        switch self.viewConfig.actionType {
+        switch viewConfig.actionType {
         case .Empty:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
         default:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
 
-        return UIView.sizeFor(string: string, font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
+        return UIView.sizeFor(string: string, font: viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
     }
 
      func numberOfLines(_ string: String) -> Int {
         var labelW:CGFloat = 0
 
-        switch self.viewConfig.actionType {
+        switch viewConfig.actionType {
         case .Empty:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
         default:
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
 
-      let lineHeight = UIView.sizeFor(string: "A", font: self.viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
+      let lineHeight = UIView.sizeFor(string: "A", font: viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
       let totalHeight = heightForString(string)
 
       return Int(totalHeight / lineHeight)

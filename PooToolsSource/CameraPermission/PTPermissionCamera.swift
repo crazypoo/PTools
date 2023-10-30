@@ -13,7 +13,7 @@ import AVFoundation
 public extension PTPermission {
     
     static var camera: PTPermissionCamera {
-        return PTPermissionCamera()
+        PTPermissionCamera()
     }
 }
 

@@ -441,7 +441,7 @@ public class PTActionSheetView: UIView {
     
     public func dismiss(block:PTActionTask?) {
         
-        PTAnimationFunction.animationOut(animationView: actionSheetView, animationType: .Bottom, toValue: (actionSheetRealHeight() + CGFloat.kTabbarSaveAreaHeight + 10)) {
+        PTAnimationFunction.animationOut(animationView: actionSheetView, animationType: .Bottom) {
             self.backgroundView.alpha = 0
         } completion: { ok in
             self.removeFromSuperview()

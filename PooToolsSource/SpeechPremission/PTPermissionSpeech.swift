@@ -12,7 +12,7 @@ import Speech
 public extension PTPermission {
 
     static var speech: PTPermissionSpeech {
-        return PTPermissionSpeech()
+        PTPermissionSpeech()
     }
 }
 

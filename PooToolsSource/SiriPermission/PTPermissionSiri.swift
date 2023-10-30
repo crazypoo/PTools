@@ -12,7 +12,7 @@ import Intents
 public extension PTPermission {
 
     static var siri: PTPermissionSiri {
-        return PTPermissionSiri()
+        PTPermissionSiri()
     }
 }
 

@@ -274,7 +274,7 @@ public class PTGuidePageHUD: UIView {
     }
     
     public func guideShow() {
-        self.viewModel.mainView.addSubview(self)
+        viewModel.mainView.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
@@ -315,6 +315,6 @@ extension PTGuidePageHUD : UIScrollViewDelegate {
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let page : Int = Int(scrollView.contentOffset.x / scrollView.frame.size.width)
         PTNSLogConsole(page)
-        self.pageControlAction(page: page)
+        pageControlAction(page: page)
     }
 }

@@ -72,10 +72,11 @@ public class PTCustomAlertView: UIView {
     //MARK: 计算标题&下按钮高度
     ///计算标题&下按钮高度
     /// - Parameters:
-    ///   - font: 字体
     ///   - width: 弹框width
-    ///   - moreButtonTitles: 按钮s
     ///   - title: 标题
+    ///   - moreButtonTitles: 按钮s
+    ///   - font: 字体
+    ///   - buttonArray:
     class public func titleAndBottomViewNormalHeight(width:CGFloat,
                                                      title:String,
                                                      font:UIFont,

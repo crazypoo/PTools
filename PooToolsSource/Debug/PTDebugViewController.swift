@@ -167,8 +167,8 @@ public class PTDebugViewController: PTBaseViewController {
         let section = PTSection.init(rows: rows)
         mSections.append(section)
         
-        self.newCollectionView.layoutIfNeeded()
-        self.newCollectionView.showCollectionDetail(collectionData: mSections)
+        newCollectionView.layoutIfNeeded()
+        newCollectionView.showCollectionDetail(collectionData: mSections)
     }
 }
 

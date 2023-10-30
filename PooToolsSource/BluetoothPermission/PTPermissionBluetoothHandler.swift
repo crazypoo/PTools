@@ -27,7 +27,7 @@ class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
     
     func reqeustUpdate() {
         if manager == nil {
-            self.manager = CBCentralManager(delegate: self, queue: nil, options: [:])
+            manager = CBCentralManager(delegate: self, queue: nil, options: [:])
         } else {
             completion()
         }
@@ -39,14 +39,14 @@ class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
             case .notDetermined:
                 break
             default:
-                self.completion()
+                completion()
             }
         } else {
             switch CBPeripheralManager.authorizationStatus() {
             case .notDetermined:
                 break
             default:
-                self.completion()
+                completion()
             }
         }
     }

@@ -13,7 +13,7 @@ import CloudKit
 public extension PTPermission {
     
     static var bluetooth: PTPermissionBluetooth {
-        return PTPermissionBluetooth()
+        PTPermissionBluetooth()
     }
 }
 

@@ -12,7 +12,7 @@ import AVFoundation
 public extension PTPermission {
     
     static var microphone: PTPermissionMic {
-        return PTPermissionMic()
+        PTPermissionMic()
     }
 }
 

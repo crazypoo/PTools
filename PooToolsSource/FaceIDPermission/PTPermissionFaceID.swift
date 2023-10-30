@@ -12,7 +12,7 @@ import LocalAuthentication
 public extension PTPermission {
     
     static var faceID: PTPermissionFaceID {
-        return PTPermissionFaceID()
+        PTPermissionFaceID()
     }
 }
 

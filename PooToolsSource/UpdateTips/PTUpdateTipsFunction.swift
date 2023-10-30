@@ -19,13 +19,13 @@ public class PTUpdateTipsFunction: NSObject {
     //MARK: 初始化UpdateTips
     ///初始化UpdateTips
     /// - Parameters:
-    ///   - oldVersion: 舊版本號
-    ///   - newVersion: 新版本號
-    ///   - descriptionString:
-    ///   - downloadUrl: 下載URL
-    ///   - isTest: 是否測試
-    ///   - showError: 是否顯示錯誤
-    ///   - forcedUpgrade: 是否強制升級
+    ///   - oV: 舊版本號
+    ///   - nV: 新版本號
+    ///   - descriptionString: 更新信息
+    ///   - url: 下載URL
+    ///   - test: 是否測試
+    ///   - isShowError: 是否顯示錯誤
+    ///   - isForcedUpgrade: 是否強制升級
     public func showUpdateTips(oldVersion oV: String,
                                newVersion nV: String,
                                description descriptionString: String,

@@ -11,23 +11,23 @@ import UIKit
 open class PTPermission {
     
     open var authorized: Bool {
-        return status == .authorized
+        status == .authorized
     }
     
     open var denied: Bool {
-        return status == .denied
+        status == .denied
     }
     
     open var notDetermined: Bool {
-        return status == .notDetermined
+        status == .notDetermined
     }
     
     open var debugName: String {
-        return kind.name
+        kind.name
     }
     
     open var localisedName: String {
-        return PTPermissionText.permission_name(for: kind)
+        PTPermissionText.permission_name(for: kind)
     }
     
     /**
@@ -60,7 +60,7 @@ open class PTPermission {
     }
     
     open var canBePresentWithCustomInterface: Bool {
-        return true
+        true
     }
     
     // MARK: Internal

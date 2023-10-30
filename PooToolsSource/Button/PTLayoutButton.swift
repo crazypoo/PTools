@@ -142,13 +142,13 @@ public class PTLayoutButton: UIButton {
     /// 图片和文字的间距，默认值5
     public var midSpacing: CGFloat = 5 {
         didSet {
-            self.setNeedsLayout()
+            setNeedsLayout()
         }
     }
     /// 指定图片size
     public var imageSize :CGSize = .zero {
         didSet {
-            self.setNeedsLayout()
+            setNeedsLayout()
         }
     }
     
@@ -163,7 +163,7 @@ public class PTLayoutButton: UIButton {
     public override func layoutSubviews() {
         super.layoutSubviews()
 
-        self.switchLayoutStyle()
+        switchLayoutStyle()
     }
     
 //    @available(iOS 15.0 ,*)

@@ -367,7 +367,7 @@ public class PTPermissionViewController: PTBaseViewController {
         let section = PTSection.init(headerCls:PTPermissionHeader.self,headerID:PTPermissionHeader.ID,headerHeight:PTPermissionHeader.cellHeight(),rows: permissionRows)
         mSections.append(section)
         
-        self.newCollectionView.layoutIfNeeded()
-        self.newCollectionView.showCollectionDetail(collectionData: mSections)
+        newCollectionView.layoutIfNeeded()
+        newCollectionView.showCollectionDetail(collectionData: mSections)
     }
 }

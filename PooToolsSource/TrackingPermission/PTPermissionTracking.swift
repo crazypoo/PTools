@@ -12,7 +12,7 @@ import AppTrackingTransparency
 public extension PTPermission {
 
     static var tracking: PTPermissionTracking {
-        return PTPermissionTracking()
+        PTPermissionTracking()
     }
 }
 

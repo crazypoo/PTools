@@ -431,11 +431,11 @@ class PTSwiftViewController: PTBaseViewController {
 //
 //        contentUnavailableConfiguration = emptyConfig
         
-        self.emptyDataViewConfig = PTEmptyDataViewConfig()
-        self.emptyDataViewConfig?.buttonTitle = "123123"
-        self.emptyDataViewConfig?.backgroundColor = .BabyBlueColor
+        emptyDataViewConfig = PTEmptyDataViewConfig()
+        emptyDataViewConfig?.buttonTitle = "123123"
+        emptyDataViewConfig?.backgroundColor = .BabyBlueColor
         
-        self.showEmptyView() {
+        showEmptyView {
             PTNSLogConsole("123")
         }
 
@@ -467,8 +467,8 @@ class PTSwiftViewController: PTBaseViewController {
             let cellSection = PTSection.init(headerTitle: "123123123123",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: rows)
             sections.append(cellSection)
         }
-        self.newCollectionView.layoutIfNeeded()
-        self.newCollectionView.showCollectionDetail(collectionData: sections)
+        newCollectionView.layoutIfNeeded()
+        newCollectionView.showCollectionDetail(collectionData: sections)
     }
 }
 

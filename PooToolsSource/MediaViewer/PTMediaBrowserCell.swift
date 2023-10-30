@@ -50,7 +50,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     var viewConfig:PTMediaBrowserConfig!
     var dataModel:PTMediaBrowserModel! {
         didSet {
-            if self.viewConfig.dynamicBackground {
+            if viewConfig.dynamicBackground {
                 effectView.frame = contentView.frame
                 backgroundImageView.frame = effectView.frame
                 contentView.insertSubview(effectView, at: 0)
@@ -59,7 +59,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 effectView.removeFromSuperview()
                 backgroundImageView.removeFromSuperview()
             }
-            self.cellLoadData()
+            cellLoadData()
         }
     }
 
@@ -180,9 +180,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
     
     func setImageTypeView(loading:PTMediaBrowserLoadingView) {
-        self.gifImage = nil
-        self.imageView.contentMode = .scaleAspectFit
-        self.contentScrolView.addSubview(self.imageView)
+        gifImage = nil
+        imageView.contentMode = .scaleAspectFit
+        contentScrolView.addSubview(imageView)
         
         let doubleTap = UITapGestureRecognizer.init { sender in
             let touchPoint = (sender as! UITapGestureRecognizer).location(in: self)
@@ -209,9 +209,9 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
         singleTap.numberOfTapsRequired = 1
 
-        self.imageView.addGestureRecognizers([singleTap,doubleTap])
+        imageView.addGestureRecognizers([singleTap,doubleTap])
 
-        PTLoadImageFunction.loadImage(contentData: self.dataModel.imageURL as Any,iCloudDocumentName: self.viewConfig.iCloudDocumentName) { receivedSize, totalSize in
+        PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName) { receivedSize, totalSize in
             loading.progress = CGFloat(receivedSize / totalSize)
         } taskHandle: { images,image in
             if (images?.count ?? 0) > 1 {
@@ -256,8 +256,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             make.centerX.centerY.equalToSuperview()
         }
         
-        if self.dataModel.imageURL is String {
-            let urlString = self.dataModel.imageURL as! String
+        if dataModel.imageURL is String {
+            let urlString = dataModel.imageURL as! String
 
             UIImage.pt.getVideoFirstImage(videoUrl: urlString, closure: { image in
                 if image == nil {
@@ -297,7 +297,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                             self.backgroundImageView.image = image
                         }
 
-                        self.playBtn.addActionHandlers() { sender in
+                        self.playBtn.addActionHandlers { sender in
                             let videoController = AVPlayerViewController()
                             videoController.player = AVPlayer(url: videoUrl! as URL)
 
@@ -309,21 +309,21 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 }
             })
         } else {
-            self.setImageTypeView(loading: loading)
+            setImageTypeView(loading: loading)
         }
     }
     
     func prepareForHide() {
-        self.contentView.addSubview(tempView)
-        self.contentView.backgroundColor = .clear
-        self.imageView.alpha = 0
+        contentView.addSubview(tempView)
+        contentView.backgroundColor = .clear
+        imageView.alpha = 0
     }
     
     func hideAnimation() {
-        self.contentView.isUserInteractionEnabled = false
+        contentView.isUserInteractionEnabled = false
         let window = AppWindows!
         var targetTemp:CGRect? = CGRect.init(x: window.center.x, y: window.center.y, width: 0, height: 0)
-        targetTemp = self.contentView.convert(self.contentView.frame, to: self.contentView)
+        targetTemp = contentView.convert(contentView.frame, to: contentView)
 
         window.windowLevel = .normal
         UIView.animate(withDuration: 0.35) {
@@ -347,8 +347,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     }
 
     func bounceToOriginal() {
-        self.contentScrolView.isUserInteractionEnabled = true
-        self.contentView.isUserInteractionEnabled = false
+        contentScrolView.isUserInteractionEnabled = true
+        contentView.isUserInteractionEnabled = false
         UIView.animate(withDuration: 0.35) {
             self.tempView.transform = CGAffineTransform.identity
             self.contentView.alpha = 1
@@ -362,7 +362,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 }
 
 extension PTMediaBrowserCell:UIScrollViewDelegate {
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView {
         imageView
     }
     

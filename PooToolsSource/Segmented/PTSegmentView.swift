@@ -121,14 +121,14 @@ public class PTSegmentSubView:UIView {
             
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             
-            self.setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
+            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         case .TitleImage:
             //MARK:两个都有
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             imageBtn.contentMode = .scaleAspectFit
             imageBtn.titleLabel?.font = config.normalFont
             imageBtn.setTitle(subViewModels.titles, for: .normal)
-            self.setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
+            setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         }
         
         addSubview(imageBtn)
@@ -239,9 +239,9 @@ public class PTSegmentSubView:UIView {
         super.layoutSubviews()
         switch buttonShowType {
         case .OnlyImage,.TitleImage:
-            self.imageBtn.imageSize = CGSize(width: self.frame.size.height - 5, height: self.frame.size.height - 5)
+            imageBtn.imageSize = CGSize(width: frame.size.height - 5, height: frame.size.height - 5)
         default:
-            self.imageBtn.imageSize = .zero
+            imageBtn.imageSize = .zero
         }
     }
 }
@@ -304,27 +304,27 @@ public class PTSegmentView: UIView {
     }
     
     private func getContentWidth(datas:[PTSegmentModel],
-                                 enumeratedHandle:((PTSegmentModel,Int,CGFloat,CGFloat,PTSegmentButtonShowType)->Void)) {
+                                 enumeratedHandle: (PTSegmentModel, Int, CGFloat, CGFloat, PTSegmentButtonShowType)->Void) {
         var scrolContentW:CGFloat = 0
         if datas.count > 0 {
             datas.enumerated().forEach { (index,value) in
                 var subContentW:CGFloat = 0
                 var subShowType:PTSegmentButtonShowType!
-                self.getCurrentSubWidthAndType(value: value) { currentWidth, showType in
+                getCurrentSubWidthAndType(value: value) { currentWidth, showType in
                     subShowType = showType
                     subContentW = currentWidth
                 }
 
-                if self.viewConfig.leftEdges {
+                if viewConfig.leftEdges {
                     if index == 0 {
-                        scrolContentW = self.viewConfig.originalX
+                        scrolContentW = viewConfig.originalX
                     }
                 }
 
                 enumeratedHandle(value,index,subContentW,scrolContentW,subShowType)
                 var space:CGFloat = 0
                 if index != (datas.count - 1) {
-                    space = self.viewConfig.itemSpace
+                    space = viewConfig.itemSpace
                 }
 
                 scrolContentW += (subContentW + space)
@@ -332,27 +332,27 @@ public class PTSegmentView: UIView {
         }
     }
     
-    func getTotalW(datas:[PTSegmentModel],completeHandle:((CGFloat,Bool)->Void)) {
+    func getTotalW(datas:[PTSegmentModel],completeHandle: (CGFloat, Bool)->Void) {
         var scrolContentW:CGFloat = 0
         var isExceed:Bool = false
         if datas.count > 0 {
             datas.enumerated().forEach { (index,value) in
-                self.getCurrentSubWidthAndType(value: value) { currentWidth, showType in
+                getCurrentSubWidthAndType(value: value) { currentWidth, showType in
                     scrolContentW += currentWidth
                 }
                 
                 if index == (datas.count - 1) {
-                    if scrolContentW > self.frame.size.width {
+                    if scrolContentW > frame.size.width {
                         isExceed = true
                     }
                     
-                    if self.viewConfig.itemSpace > 0 {
-                        scrolContentW = scrolContentW + CGFloat(datas.count - 1) * self.viewConfig.itemSpace
+                    if viewConfig.itemSpace > 0 {
+                        scrolContentW = scrolContentW + CGFloat(datas.count - 1) * viewConfig.itemSpace
                     }
 
                     
-                    if self.viewConfig.leftEdges {
-                        scrolContentW += self.viewConfig.originalX
+                    if viewConfig.leftEdges {
+                        scrolContentW += viewConfig.originalX
                     }
                     completeHandle(scrolContentW,isExceed)
                 }
@@ -362,16 +362,16 @@ public class PTSegmentView: UIView {
         }
     }
     
-    func getCurrentSubWidthAndType(value:PTSegmentModel,handle:((CGFloat,PTSegmentButtonShowType)->Void)) {
+    func getCurrentSubWidthAndType(value:PTSegmentModel,handle: (CGFloat, PTSegmentButtonShowType)->Void) {
         var subShowType:PTSegmentButtonShowType!
-        let normalW = UIView.sizeFor(string: value.titles, font: self.viewConfig.normalFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
-        let selectedW = UIView.sizeFor(string: value.titles, font: self.viewConfig.selectedFont, height: self.frame.size.height, width:  CGFloat(MAXFLOAT)).width
+        let normalW = UIView.sizeFor(string: value.titles, font: viewConfig.normalFont, height: frame.size.height, width:  CGFloat(MAXFLOAT)).width
+        let selectedW = UIView.sizeFor(string: value.titles, font: viewConfig.selectedFont, height: frame.size.height, width:  CGFloat(MAXFLOAT)).width
         
         var subContentW:CGFloat = 0
         if selectedW >= normalW {
-            subContentW = selectedW + self.viewConfig.subViewInContentSpace + 10
+            subContentW = selectedW + viewConfig.subViewInContentSpace + 10
         } else {
-            subContentW = normalW + self.viewConfig.subViewInContentSpace + 10
+            subContentW = normalW + viewConfig.subViewInContentSpace + 10
         }
         
         if NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && NSObject.checkObject(value.selectedImageURL as? NSObject) {
@@ -379,12 +379,12 @@ public class PTSegmentView: UIView {
             subContentW = subContentW + 10
         } else if !NSObject.checkObject(value.imageURL as? NSObject) && value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
             subShowType = .OnlyImage
-            subContentW = self.frame.height - 5 + self.viewConfig.subViewInContentSpace + 10
+            subContentW = frame.height - 5 + viewConfig.subViewInContentSpace + 10
         } else if !NSObject.checkObject(value.imageURL as? NSObject) && !value.titles.stringIsEmpty() && !NSObject.checkObject(value.selectedImageURL as? NSObject) {
             subShowType = .TitleImage
-            switch self.viewConfig.imagePosition {
+            switch viewConfig.imagePosition {
             case .leftImageRightTitle,.leftTitleRightImage:
-                subContentW = subContentW + self.viewConfig.imageTitleSpace + (self.frame.height-5) + 10
+                subContentW = subContentW + viewConfig.imageTitleSpace + (frame.height-5) + 10
             default:
                 subContentW = subContentW + 10
             }
@@ -476,7 +476,7 @@ public class PTSegmentView: UIView {
                     case .UnderLine,.Dog,.SubBackground:
                         viewInArr.underLine.isSelected = true
                     case .Background:
-                        viewInArr.backgroundColor = self.viewConfig.selectedColor_BG
+                        viewInArr.backgroundColor = viewConfig.selectedColor_BG
                     default:break
                     }
                     viewInArr.imageBtn.isSelected = true

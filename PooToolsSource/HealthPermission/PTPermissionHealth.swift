@@ -12,7 +12,7 @@ import HealthKit
 public extension PTPermission {
     
     static var health: PTPermissionHealth {
-        return PTPermissionHealth()
+        PTPermissionHealth()
     }
 }
 
@@ -32,7 +32,7 @@ public class PTPermissionHealth: PTPermission {
         }
     }
     
-    public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping (() -> Void)) {
+    public static func request(forReading readingTypes: Set<HKObjectType>, writing writingTypes: Set<HKSampleType>, completion: @escaping () -> Void) {
         HKHealthStore().requestAuthorization(toShare: writingTypes, read: readingTypes) { _, _ in
             PTGCDManager.gcdMain {
                 completion()

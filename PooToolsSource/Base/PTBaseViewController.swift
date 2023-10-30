@@ -91,7 +91,7 @@ open class PTBaseViewController: ZXNavigationBarController {
         if !(self.emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
             configs.button = self.emptyButtonConfig()
         }
-        configs.buttonProperties.primaryAction = UIAction() { sender in
+        configs.buttonProperties.primaryAction = UIAction { sender in
             if task != nil {
                 task!()
             }
@@ -242,7 +242,7 @@ open class PTBaseViewController: UIViewController {
     @available(iOS 17, *)
     fileprivate func emptyButtonConfig() -> UIButton.Configuration {
         var plainConfig = UIButton.Configuration.plain()
-        plainConfig.title = self.emptyDataViewConfig!.buttonTitle!
+        plainConfig.title = emptyDataViewConfig!.buttonTitle!
         plainConfig.titleTextAttributesTransformer = .init({ container in
             container.merging(AttributeContainer.font(self.emptyDataViewConfig!.buttonFont).foregroundColor(self.emptyDataViewConfig!.buttonTextColor))
         })
@@ -252,30 +252,30 @@ open class PTBaseViewController: UIViewController {
     @available(iOS 17, *)
     fileprivate func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
         var configs = UIContentUnavailableConfiguration.empty()
-        configs.imageToTextPadding = self.emptyDataViewConfig!.imageToTextPadding
-        configs.textToButtonPadding = self.emptyDataViewConfig!.textToSecondaryTextPadding
-        configs.buttonToSecondaryButtonPadding = self.emptyDataViewConfig!.buttonToSecondaryButtonPadding
-        if self.emptyDataViewConfig?.mainTitleAtt != nil {
-            configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
+        configs.imageToTextPadding = emptyDataViewConfig!.imageToTextPadding
+        configs.textToButtonPadding = emptyDataViewConfig!.textToSecondaryTextPadding
+        configs.buttonToSecondaryButtonPadding = emptyDataViewConfig!.buttonToSecondaryButtonPadding
+        if emptyDataViewConfig?.mainTitleAtt != nil {
+            configs.attributedText = emptyDataViewConfig!.mainTitleAtt!.value
         }
         
-        if self.emptyDataViewConfig?.secondaryEmptyAtt != nil {
-            configs.secondaryAttributedText = self.emptyDataViewConfig!.secondaryEmptyAtt!.value
+        if emptyDataViewConfig?.secondaryEmptyAtt != nil {
+            configs.secondaryAttributedText = emptyDataViewConfig!.secondaryEmptyAtt!.value
         }
         
-        if self.emptyDataViewConfig?.image != nil {
-            configs.image = self.emptyDataViewConfig!.image!
+        if emptyDataViewConfig?.image != nil {
+            configs.image = emptyDataViewConfig!.image!
         }
-        if !(self.emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
-            configs.button = self.emptyButtonConfig()
+        if !(emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
+            configs.button = emptyButtonConfig()
         }
-        configs.buttonProperties.primaryAction = UIAction() { sender in
+        configs.buttonProperties.primaryAction = UIAction { sender in
             if task != nil {
                 task!()
             }
         }
         var configBackground = UIBackgroundConfiguration.clear()
-        configBackground.backgroundColor = self.emptyDataViewConfig!.backgroundColor
+        configBackground.backgroundColor = emptyDataViewConfig!.backgroundColor
         
         configs.background = configBackground
 
@@ -394,16 +394,16 @@ open class PTBaseViewController: UIViewController {
 @available(iOS 17, *)
 extension PTBaseViewController {
     public func showEmptyView(task: PTActionTask? = nil) {
-        if self.emptyDataViewConfig != nil {
-            let config = self.emptyConfig(task:task)
-            self.contentUnavailableConfiguration = config
+        if emptyDataViewConfig != nil {
+            let config = emptyConfig(task:task)
+            contentUnavailableConfiguration = config
         } else {
             assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
         }
     }
     
     public func hideEmptyView(task:PTActionTask? = nil) {
-        self.contentUnavailableConfiguration = nil
+        contentUnavailableConfiguration = nil
         if task != nil {
             task!()
         }
@@ -411,7 +411,7 @@ extension PTBaseViewController {
     
     public func emptyViewLoading() {
         let loadingConfig = UIContentUnavailableConfiguration.loading()
-        self.contentUnavailableConfiguration = loadingConfig
+        contentUnavailableConfiguration = loadingConfig
     }
 }
 
@@ -477,9 +477,9 @@ extension PTBaseViewController: PHPhotoLibraryChangeObserver {
         }
                 
         let touchLocation = touch.location(in: view)
-        if self.screenFunc != nil {
-            if !self.screenFunc!.frame.contains(touchLocation) {
-                self.screenFunc!.dismissAlert()
+        if screenFunc != nil {
+            if !screenFunc!.frame.contains(touchLocation) {
+                screenFunc!.dismissAlert()
             }
         }
     }
@@ -498,12 +498,12 @@ class PTBaseScreenShotAlert:UIView {
     var actionHandle:PTScreenShotImageHandle!
     
     private var AnimationValue:CGFloat {
-        return ItemWidth + PTAppBaseConfig.share.defaultViewSpace
+        ItemWidth + PTAppBaseConfig.share.defaultViewSpace
     }
     
     private lazy var closeButton : UIButton = {
         let view = UIButton(type: .close)
-        view.addActionHandlers() { sender in
+        view.addActionHandlers { sender in
             self.dismissAlert()
         }
         return view
@@ -517,7 +517,7 @@ class PTBaseScreenShotAlert:UIView {
     
     private lazy var feedback:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "意见反馈", image: "square.and.pencil")
-        view.addActionHandlers() { sender in
+        view.addActionHandlers { sender in
             self.actionHandle(.Feedback,self.shareImageView.image!)
             self.dismissAlert()
         }
@@ -526,7 +526,7 @@ class PTBaseScreenShotAlert:UIView {
     
     private lazy var share:PTLayoutButton = {
         let view = self.viewLayoutBtnSet(title: "分享好友", image: "square.and.arrow.up")
-        view.addActionHandlers() { sender in
+        view.addActionHandlers { sender in
             self.actionHandle(.Share,self.shareImageView.image!)
             self.dismissAlert()
         }
@@ -541,11 +541,11 @@ class PTBaseScreenShotAlert:UIView {
 
     init(screenShotImage:UIImage,dismiss: PTActionTask? = nil) {
         super.init(frame: CGRect(x: CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace - ItemWidth, y: CGFloat.kSCREEN_HEIGHT - CGFloat.kTabbarHeight_Total - ItemHeight - 15 - CGFloat.kNavBarHeight_Total, width: ItemWidth, height: ItemHeight))
-        self.backgroundColor = .DevMaskColor
+        backgroundColor = .DevMaskColor
         
-        self.dismissTask = dismiss
+        dismissTask = dismiss
         
-        self.addSubviews([closeButton,feedback,line,share,shareImageView])
+        addSubviews([closeButton,feedback,line,share,shareImageView])
         closeButton.snp.makeConstraints { make in
             make.right.top.equalToSuperview().inset(5)
             make.width.height.equalTo(15)

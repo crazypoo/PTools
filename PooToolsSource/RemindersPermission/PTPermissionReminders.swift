@@ -12,7 +12,7 @@ import EventKit
 public extension PTPermission {
 
     static var reminders: PTPermissionReminders {
-        return PTPermissionReminders()
+        PTPermissionReminders()
     }
 }
 

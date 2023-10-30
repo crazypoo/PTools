@@ -279,7 +279,7 @@ fileprivate class PTRulerInfoView:UIView {
         topLabel.sizeToFit()
         rightLabel.sizeToFit()
         bottomLabel.sizeToFit()
-        self.leftLabel.frame = CGRectMake((self.imageView.frame.origin.x + imageView.frame.size.width / 2) / 2, imageView.frame.origin.y + imageView.frame.size.height / 2 - leftLabel.frame.size.height, leftLabel.frame.size.width, leftLabel.frame.size.height)
+        self.leftLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) / 2, imageView.frame.origin.y + imageView.frame.size.height / 2 - leftLabel.frame.size.height, leftLabel.frame.size.width, leftLabel.frame.size.height)
         self.topLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - topLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) / 2, topLabel.frame.size.width, topLabel.frame.size.height)
         self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
         self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (self.frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)

@@ -29,112 +29,112 @@ class PTPermissionCell: PTBaseNormalCell {
             case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
                 if #available(iOS 14.0, *) {
-                    self.cellStatus = PTPermission.tracking.status
+                    cellStatus = PTPermission.tracking.status
                 }
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .camera:
 #if POOTOOLS_PERMISSION_CAMERA
-                self.cellStatus = PTPermission.camera.status
+                cellStatus = PTPermission.camera.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .photoLibrary:
 #if POOTOOLS_PERMISSION_PHOTO
-                self.cellStatus = PTPermission.photoLibrary.status
+                cellStatus = PTPermission.photoLibrary.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .calendar(access: .full):
 #if POOTOOLS_PERMISSION_CALENDAR
-                self.cellStatus = PTPermission.calendar(access: .full).status
+                cellStatus = PTPermission.calendar(access: .full).status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .calendar(access: .write):
 #if POOTOOLS_PERMISSION_CALENDAR
-                self.cellStatus = PTPermission.calendar(access: .write).status
+                cellStatus = PTPermission.calendar(access: .write).status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .reminders:
 #if POOTOOLS_PERMISSION_REMINDERS
-                self.cellStatus = PTPermission.reminders.status
+                cellStatus = PTPermission.reminders.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .notification:
 #if POOTOOLS_PERMISSION_NOTIFICATION
-                self.cellStatus = PTPermission.notification.status
+                cellStatus = PTPermission.notification.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .location(access: .whenInUse):
 #if POOTOOLS_PERMISSION_LOCATION
-                self.cellStatus = PTPermission.location(access: .whenInUse).status
+                cellStatus = PTPermission.location(access: .whenInUse).status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .location(access: .always):
 #if POOTOOLS_PERMISSION_LOCATION
-                self.cellStatus = PTPermission.location(access: .always).status
+                cellStatus = PTPermission.location(access: .always).status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .faceID:
 #if POOTOOLS_PERMISSION_FACEIDPERMISSION
-                self.cellStatus = PTPermission.faceID.status
+                cellStatus = PTPermission.faceID.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .speech:
 #if POOTOOLS_PERMISSION_SPEECH
-                self.cellStatus = PTPermission.speech.status
+                cellStatus = PTPermission.speech.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .health:
 #if POOTOOLS_PERMISSION_HEALTH
-                self.cellStatus = PTPermissionHealth.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
+                cellStatus = PTPermissionHealth.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .motion:
 #if POOTOOLS_PERMISSION_MOTION
-                self.cellStatus = PTPermission.motion.status
+                cellStatus = PTPermission.motion.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .contacts:
 #if POOTOOLS_PERMISSION_MIC
-                self.cellStatus = PTPermission.contacts.status
+                cellStatus = PTPermission.contacts.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .microphone:
 #if POOTOOLS_PERMISSION_MIC
-                self.cellStatus = PTPermission.microphone.status
+                cellStatus = PTPermission.microphone.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .mediaLibrary:
 #if POOTOOLS_PERMISSION_MEDIA
-                self.cellStatus = PTPermission.mediaLibrary.status
+                cellStatus = PTPermission.mediaLibrary.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .bluetooth:
 #if POOTOOLS_PERMISSION_BLUETOOTH
-                self.cellStatus = PTPermission.bluetooth.status
+                cellStatus = PTPermission.bluetooth.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             case .siri:
 #if POOTOOLS_PERMISSION_SIRI
-                self.cellStatus = PTPermission.siri.status
+                cellStatus = PTPermission.siri.status
 #else
-                self.cellStatus = .notSupported
+                cellStatus = .notSupported
 #endif
             default:break
             }
@@ -212,7 +212,7 @@ class PTPermissionCell: PTBaseNormalCell {
         
         cellTitle.attributed.text = totalAtt
         
-        switch self.cellStatus {
+        switch cellStatus {
         case .authorized:
             authorizedButton.isSelected = true
             authorizedButton.isUserInteractionEnabled = false

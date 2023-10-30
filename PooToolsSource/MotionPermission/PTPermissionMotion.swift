@@ -12,7 +12,7 @@ import CoreMotion
 public extension PTPermission {
     
     static var motion: PTPermissionMotion {
-        return PTPermissionMotion()
+        PTPermissionMotion()
     }
 }
 

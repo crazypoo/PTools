@@ -12,7 +12,7 @@ import Contacts
 public extension PTPermission {
 
     static var contacts: PTPermissionContacts {
-        return PTPermissionContacts()
+        PTPermissionContacts()
     }
 }
 

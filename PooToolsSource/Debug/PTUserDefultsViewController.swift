@@ -141,8 +141,8 @@ class PTUserDefultsViewController: PTBaseViewController {
         let cellSection = PTSection.init(rows: rows)
         mSections.append(cellSection)
         
-        self.newCollectionView.layoutIfNeeded()
-        self.newCollectionView.showCollectionDetail(collectionData: mSections)
+        newCollectionView.layoutIfNeeded()
+        newCollectionView.showCollectionDetail(collectionData: mSections)
     }
     
     func clearUserdefults() {

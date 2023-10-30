@@ -39,7 +39,7 @@ public enum PTCollectionViewDecorationItemsType {
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: UICollectionReusableView
-public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> (UICollectionReusableView)
+public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView
 
 ///Cell设置
 /// - Parameters:
@@ -47,7 +47,7 @@ public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UIColl
 ///   - sectionModel: Section的model
 ///   - index: 坐标
 ///  - Return: UICollectionViewCell
-public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> (UICollectionViewCell)
+public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell
 
 ///Cell点击事件
 /// - Parameters:
@@ -129,33 +129,33 @@ public class PTCollectionView: UIView {
     fileprivate func generateSection(section:NSInteger)->NSCollectionLayoutSection {
         
         var group : NSCollectionLayoutGroup
-        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = self.viewConfig.collectionViewBehavior
+        let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = viewConfig.collectionViewBehavior
         
         var sectionModel:PTSection?
         if  mSections.count > 0 {
             sectionModel = mSections[section]
-            switch self.viewConfig.viewType {
+            switch viewConfig.viewType {
             case .Gird:
-                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: self.frame.size.width,itemHeight: self.viewConfig.itemHeight,cellRowCount: self.viewConfig.rowCount,originalX: self.viewConfig.itemOriginalX,contentTopAndBottom: self.viewConfig.contentTopAndBottom,cellLeadingSpace: self.viewConfig.cellLeadingSpace,cellTrailingSpace: self.viewConfig.cellTrailingSpace)
+                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: frame.size.width,itemHeight: viewConfig.itemHeight,cellRowCount: viewConfig.rowCount,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellLeadingSpace: viewConfig.cellLeadingSpace,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .Normal:
-                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: self.frame.size.width,itemHeight: self.viewConfig.itemHeight,cellRowCount: 1,originalX: self.viewConfig.itemOriginalX,contentTopAndBottom: self.viewConfig.contentTopAndBottom,cellTrailingSpace: self.viewConfig.cellTrailingSpace)
+                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: frame.size.width,itemHeight: viewConfig.itemHeight,cellRowCount: 1,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .WaterFall:
-                group = UICollectionView.waterFallLayout(data: sectionModel!.rows, rowCount: self.viewConfig.rowCount,itemOriginalX:self.viewConfig.itemOriginalX, itemOriginalY: self.viewConfig.contentTopAndBottom,itemSpace: self.viewConfig.cellLeadingSpace, itemHeight: self.waterFallLayout!)
+                group = UICollectionView.waterFallLayout(data: sectionModel!.rows, rowCount: viewConfig.rowCount,itemOriginalX: viewConfig.itemOriginalX, itemOriginalY: viewConfig.contentTopAndBottom,itemSpace: viewConfig.cellLeadingSpace, itemHeight: waterFallLayout!)
             case .Custom:
-                group = self.customerLayout!(sectionModel!)
+                group = customerLayout!(sectionModel!)
             }
         } else {
             let bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(0), heightDimension: NSCollectionLayoutDimension.absolute(0))
             group = NSCollectionLayoutGroup.init(layoutSize: bannerGroupSize)
         }
         
-        let sectionInsets = self.viewConfig.sectionEdges
+        let sectionInsets = viewConfig.sectionEdges
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
         
-        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude))
-        let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(self.frame.size.width - self.viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude))
+        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude))
+        let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude))
         let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
         let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
         var supplementarys = [NSCollectionLayoutBoundarySupplementaryItem]()
@@ -167,10 +167,10 @@ public class PTCollectionView: UIView {
         }
         laySection.boundarySupplementaryItems = supplementarys
         
-        switch self.viewConfig.decorationItemsType {
+        switch viewConfig.decorationItemsType {
         case .Corner,.NoCorner:
             var itemKind = ""
-            switch self.viewConfig.decorationItemsType {
+            switch viewConfig.decorationItemsType {
             case .Corner:
                 itemKind = decorationViewOfKindCorner
             case .NoCorner:
@@ -179,7 +179,7 @@ public class PTCollectionView: UIView {
                 break
             }
             let backItem = NSCollectionLayoutDecorationItem.background(elementKind: itemKind)
-            backItem.contentInsets = self.viewConfig.decorationItemsEdges
+            backItem.contentInsets = viewConfig.decorationItemsEdges
             laySection.decorationItems = [backItem]
             
             laySection.supplementariesFollowContentInsets = false
@@ -263,15 +263,15 @@ public class PTCollectionView: UIView {
     public init(viewConfig: PTCollectionViewConfig!) {
         super.init(frame: .zero)
         self.viewConfig = viewConfig
-        self.addSubview(self.collectionView)
-        self.collectionView.snp.makeConstraints { make in
+        addSubview(collectionView)
+        collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
-            self.showEmptyDataSet(currentScroller: self.collectionView)
-            self.lxf_tapEmptyView(self.collectionView) { sender in
+            self.showEmptyDataSet(currentScroller: collectionView)
+            self.lxf_tapEmptyView(collectionView) { sender in
                 if self.emptyTap != nil {
                     self.emptyTap!(sender)
                 }
@@ -326,13 +326,13 @@ public class PTCollectionView: UIView {
     ///停止头部或者底部的刷新控件使用
     public func endRefresh() {
 #if POOTOOLS_SCROLLREFRESH
-        if self.viewConfig.footerRefresh {
-            self.collectionView.pt_endMJRefresh()
+        if viewConfig.footerRefresh {
+            collectionView.pt_endMJRefresh()
         }
 #endif
         
-        if self.viewConfig.topRefresh {
-            self.refreshControl.endRefreshing()
+        if viewConfig.topRefresh {
+            refreshControl.endRefreshing()
         }
     }
     
@@ -352,12 +352,12 @@ public class PTCollectionView: UIView {
     
     ///用户获取CollectionView的可视cell
     public func visibleCells() -> [UICollectionViewCell] {
-        self.collectionView.visibleCells
+        collectionView.visibleCells
     }
     
     ///滚动到某一个Item
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
-        self.collectionView.scrollToItem(at: indexPath, at: position, animated: true)
+        collectionView.scrollToItem(at: indexPath, at: position, animated: true)
     }
 }
 
@@ -377,9 +377,9 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
             let itemSec = mSections[indexPath.section]
             if !(itemSec.headerID ?? "").stringIsEmpty() || !(itemSec.footerID ?? "").stringIsEmpty() {
                 if kind == UICollectionView.elementKindSectionHeader {
-                    return self.headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                    return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
                 } else if kind == UICollectionView.elementKindSectionFooter {
-                    return self.footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
+                    return footerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
                 } else {
                     return UICollectionReusableView()
                 }
@@ -394,7 +394,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            return self.cellInCollection(collectionView,itemSec,indexPath)
+            return cellInCollection(collectionView,itemSec,indexPath)
         } else {
             return UICollectionViewCell()
         }
@@ -402,16 +402,16 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     
     public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let itemSec = mSections[indexPath.section]
-        if self.collectionDidSelect != nil {
-            self.collectionDidSelect!(collectionView,itemSec,indexPath)
+        if collectionDidSelect != nil {
+            collectionDidSelect!(collectionView,itemSec,indexPath)
         }
     }
     
     public func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if self.collectionDidEndDisplay != nil {
-                self.collectionDidEndDisplay!(collectionView,cell,itemSec,indexPath)
+            if collectionDidEndDisplay != nil {
+                collectionDidEndDisplay!(collectionView,cell,itemSec,indexPath)
             }
         }
     }
@@ -419,15 +419,15 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if self.collectionWillDisplay != nil {
-                self.collectionWillDisplay!(collectionView,cell,itemSec,indexPath)
+            if collectionWillDisplay != nil {
+                collectionWillDisplay!(collectionView,cell,itemSec,indexPath)
             }
         }
     }    
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if self.collectionViewDidScrol != nil {
-            self.collectionViewDidScrol!(self.collectionView)
+        if collectionViewDidScrol != nil {
+            collectionViewDidScrol!(self.collectionView)
         }
     }
     
@@ -442,13 +442,13 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
 //MARK: LXFEmptyDataSetable
 extension PTCollectionView:LXFEmptyDataSetable {
     public func showEmptyDataSet(currentScroller: UIScrollView) {
-        self.lxf_EmptyDataSet(currentScroller) { () -> ([LXFEmptyDataSetAttributeKeyType : Any]) in
-            return self.viewConfig.emptyViewConfig!
+        self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
+            self.viewConfig.emptyViewConfig!
         }
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        return self.viewConfig.buttonAtt?.value
+        self.viewConfig.buttonAtt?.value
     }
 }
 #endif

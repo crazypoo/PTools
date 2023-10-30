@@ -88,7 +88,7 @@ public extension PTRouterServiceManager {
     /// 通过服务名称取消注册服务
     /// - Parameter named: 服务名称
     @discardableResult
-    func unregisterService(named: String) -> Any? {
+    func unregisterService(named: String) -> Any {
         serviceQueue.sync {
             creatorsMap.removeValue(forKey: named)
             return servicesCache.removeValue(forKey: named)

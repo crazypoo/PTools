@@ -46,29 +46,29 @@ class PTMediaBrowserBottom: UIView {
         
         backgroundColor = MediaBrowserToolBarColor
 
-        self.addSubviews([self.pageControlView,self.moreActionButton,self.titleLabel])
-        self.pageControlView.snp.makeConstraints { make in
+        addSubviews([pageControlView, moreActionButton, titleLabel])
+        pageControlView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace)
             make.height.equalTo(PageControlHeight)
         }
         
-        self.moreActionButton.snp.makeConstraints { make in
+        moreActionButton.snp.makeConstraints { make in
             make.width.height.equalTo(34)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }
         switch viewConfig.actionType {
         case .Empty:
-            self.moreActionButton.isHidden = true
-            self.titleLabel.snp.makeConstraints { make in
+            moreActionButton.isHidden = true
+            titleLabel.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.bottom.equalTo(self.pageControlView.snp.top).offset(5)
                 make.top.equalTo(self.moreActionButton)
             }
         default:
-            self.moreActionButton.isHidden = false
-            self.titleLabel.snp.makeConstraints { make in
+            moreActionButton.isHidden = false
+            titleLabel.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.bottom.equalTo(self.pageControlView.snp.top).offset(5)
                 make.top.equalTo(self.moreActionButton)
@@ -82,6 +82,6 @@ class PTMediaBrowserBottom: UIView {
     }
     
     func setLabelAtt(att:ASAttributedString) {
-        self.titleLabel.attributed.text = att
+        titleLabel.attributed.text = att
     }
 }
