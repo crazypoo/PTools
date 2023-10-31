@@ -83,7 +83,7 @@
         else
         {
             [(UIViewController *)self.popover dismissViewControllerAnimated:YES completion:^{
-                PTSwiftViewController *vc = [PTSwiftViewController new];
+                PTSwiftViewController *vc = [[PTSwiftViewController alloc] initWithHideBaseNavBar:YES];
                 [self.navigationController pushViewController:vc animated:YES];
             }];
         }

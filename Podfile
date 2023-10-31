@@ -29,7 +29,7 @@ target 'PooTools_Example' do
   pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
 
   #权限询问
-  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','PhotoLibraryPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
+  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
   
   pod 'SwiftLint'
   pod 'Swinject'

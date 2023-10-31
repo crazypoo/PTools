@@ -379,6 +379,10 @@ class PTSwiftViewController: PTBaseViewController {
 //            make.width.height.equalTo(150)
 //            make.centerX.centerY.equalToSuperview()
 //        }
+        
+        self.screenShotHandle = { image in
+            PTNSLogConsole("123123123123123123123123\(image)")
+        }
     }
     
     func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {

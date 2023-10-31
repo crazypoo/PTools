@@ -11,6 +11,7 @@
 
 #import "PMacros.h"
 
+#import <Masonry/Masonry.h>
 #import <IQKeyboardManager/IQKeyboardManager.h>
 
 #define FontName @"HelveticaNeue-Light"

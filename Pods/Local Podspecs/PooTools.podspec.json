@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.12.4",
+  "version": "3.12.6",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.12.4"
+    "tag": "3.12.6"
   },
   "license": {
     "type": "MIT",
@@ -94,7 +94,9 @@
         "PooToolsSource/Log/*.{h,m,swift}",
         "PooToolsSource/StatusBar/*.{h,m,swift}",
         "PooToolsSource/Protocol/*.{h,m,swift}",
-        "PooToolsSource/Animation/*.{h,m,swift}"
+        "PooToolsSource/Animation/*.{h,m,swift}",
+        "PooToolsSource/PermissionCore/*.{h,m,swift}",
+        "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -456,10 +458,10 @@
     {
       "name": "MediaViewer",
       "dependencies": {
-        "PooTools/NetWork": [
+        "PooTools/Core": [
 
         ],
-        "PooTools/PhotoLibraryPermission": [
+        "PooTools/NetWork": [
 
         ]
       },
@@ -648,9 +650,6 @@
         "PooTools/Core": [
 
         ],
-        "PooTools/PhotoLibraryPermission": [
-
-        ],
         "SnapshotKit": [
 
         ]
@@ -773,9 +772,6 @@
         ],
         "AnyImageKit": [
 
-        ],
-        "PooTools/PhotoLibraryPermission": [
-
         ]
       },
       "source_files": "PooToolsSource/ImagePicker/*.{h,m,swift}",
@@ -790,9 +786,6 @@
 
         ],
         "PooTools/ImagePicker": [
-
-        ],
-        "PooTools/PhotoLibraryPermission": [
 
         ],
         "PooTools/CameraPermission": [
@@ -931,24 +924,9 @@
       }
     },
     {
-      "name": "PermissionCore",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/PermissionCore/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_CORE POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "NotificationPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -962,9 +940,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/CameraPermission/*.{h,m,swift}",
@@ -976,9 +951,6 @@
       "name": "LocationPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -992,9 +964,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/CalendarPermission/*.{h,m,swift}",
@@ -1007,9 +976,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/MotionPermission/*.{h,m,swift}",
@@ -1018,27 +984,9 @@
       }
     },
     {
-      "name": "PhotoLibraryPermission",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PERMISSION_PHOTO POOTOOLS_COCOAPODS"
-      }
-    },
-    {
       "name": "TrackingPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1052,9 +1000,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/RemindersPermission/*.{h,m,swift}",
@@ -1066,9 +1011,6 @@
       "name": "SpeechRecognizerPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1082,9 +1024,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/HealthPermission/*.{h,m,swift}",
@@ -1096,9 +1035,6 @@
       "name": "FaceIDPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1112,9 +1048,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/ContactsPermission/*.{h,m,swift}",
@@ -1126,9 +1059,6 @@
       "name": "MicPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1142,9 +1072,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/MeidaLibraryPermission/*.{h,m,swift}",
@@ -1157,9 +1084,6 @@
       "dependencies": {
         "PooTools/Core": [
 
-        ],
-        "PooTools/PermissionCore": [
-
         ]
       },
       "source_files": "PooToolsSource/BluetoothPermission/*.{h,m,swift}",
@@ -1171,9 +1095,6 @@
       "name": "SiriPermission",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PermissionCore": [
 
         ]
       },
@@ -1327,9 +1248,6 @@
       "name": "VideoEditor",
       "dependencies": {
         "PooTools/Core": [
-
-        ],
-        "PooTools/PhotoLibraryPermission": [
 
         ]
       },
