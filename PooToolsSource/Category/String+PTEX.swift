@@ -580,7 +580,12 @@ public extension String {
         let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, height: CGFloat.greatestFiniteMagnitude, width: labelShowWidth).height
 
         return Int(totalHeight / lineHeight)
-    }    
+    }   
+    
+    //MARK: 用于类似推文的操作
+    func trim(to maximumCharacters: Int) -> String {
+        return "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."
+    }
 }
 
 fileprivate extension PTUtils {
