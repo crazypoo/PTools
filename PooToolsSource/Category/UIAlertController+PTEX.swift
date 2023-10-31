@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public extension UIAlertController {
     //MARK: 單按鈕Alert
@@ -186,7 +187,7 @@ public extension UIAlertController {
     ///   - alertCornerRadius: 圓角
     ///   - cancel: 取消回調
     ///   - doneBtn: 更多按鈕點擊回調
-    class func base_textfiele_alertVC(title:String? = "",
+    class func base_textfield_alertVC(title:String? = "",
                                       titleColor:UIColor? = UIColor.black,
                                       titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
@@ -255,4 +256,61 @@ public extension UIAlertController {
         showIn!.present(alert, animated: true, completion: nil)
     }
 
+    class func alert_Tips(tipsTitle:String? = "",
+                          cancelTitle:String = "",
+                          cancelBlock: PTActionTask? = nil,
+                          doneTitle:String,
+                          doneBlock: PTActionTask? = nil,
+                          tipContentView:((_ contentView:UIView)->Void)?) {
+        let tipsControl = PTUpdateTipsViewController(titleString: tipsTitle,cancelTitle: cancelTitle, doneTitle: doneTitle)
+        tipsControl.modalPresentationStyle = .fullScreen
+        if cancelBlock != nil {
+            tipsControl.cancelTask = cancelBlock!
+        }
+        if doneBlock != nil {
+            tipsControl.doneTask = doneBlock!
+        }
+
+        if tipContentView != nil {
+            tipContentView!(tipsControl.contentView)
+        }
+        PTUtils.getCurrentVC().present(tipsControl, animated: true, completion: nil)
+    }
+    
+    //MARK: 初始化UpdateTips
+    ///初始化UpdateTips
+    /// - Parameters:
+    ///   - oV: 舊版本號
+    ///   - nV: 新版本號
+    ///   - descriptionString: 更新信息
+    ///   - url: 下載URL
+    ///   - test: 是否測試
+    ///   - isShowError: 是否顯示錯誤
+    ///   - isForcedUpgrade: 是否強制升級
+    class func alert_updateTips(oldVersion oV: String,
+                                newVersion nV: String,
+                                description descriptionString: String,
+                                downloadUrl url: URL,
+                                isTest test:Bool = false,
+                                showError isShowError:Bool = true,
+                                forcedUpgrade isForcedUpgrade:Bool = false) {
+        let cancelTitle:String = isForcedUpgrade ? "" : NSLocalizedString("取消升级", comment: "")
+        UIAlertController.alert_Tips(tipsTitle: NSLocalizedString("发现新版本", comment: ""),cancelTitle: cancelTitle,cancelBlock: {
+            if test {
+                if isShowError {
+                    UserDefaults.standard.set(1, forKey: uAppNoMoreShowUpdate)
+                }
+            }
+        },doneTitle: NSLocalizedString("升级", comment: "")) {
+            let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL.init(string: "https://" + url.description)! : url
+            UIApplication.shared.open(realURL, options: .init(), completionHandler: nil)
+        } tipContentView: { contentView in
+            
+            let tipsContent = PTUpdateTipsContentView(oV: oV, nV: nV, descriptionString: descriptionString)
+            contentView.addSubview(tipsContent)
+            tipsContent.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
+    }
 }

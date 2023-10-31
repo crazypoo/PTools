@@ -129,7 +129,7 @@ public class PTDebugViewController: PTBaseViewController {
                         current = url_debug
                     }
                     
-                    UIAlertController.base_textfiele_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                    UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                         let newURL = result.values.first
                         UserDefaults.standard.set(newURL, forKey: "UI_test_url")
                         

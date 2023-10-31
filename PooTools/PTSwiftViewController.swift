@@ -309,6 +309,13 @@ class PTSwiftViewController: PTBaseViewController {
 //            make.edges.equalToSuperview()
 //        }
         
+//        let progressView = ProgressView(frame: CGRect(x: 50, y: 50, width: 200, height: 100))
+//        progressView.backgroundColor = .red
+//        view.addSubview(progressView)
+//        
+//        // 设置进度（0.0 到 1.0）
+//        progressView.progress = 0.68
+
         let layoutBtn = PTLayoutButton()
         layoutBtn.layoutStyle = .leftImageRightTitle
         layoutBtn.setTitle("123", for: .normal)
@@ -316,40 +323,46 @@ class PTSwiftViewController: PTBaseViewController {
         layoutBtn.imageSize = CGSizeMake(100, 100)
         
         let btn = UIButton(type: .custom)
-        layoutBtn.backgroundColor = .randomColor
+        layoutBtn.backgroundColor = .systemBlue
         view.addSubview(layoutBtn)
         layoutBtn.snp.makeConstraints { make in
             make.width.height.equalTo(100)
             make.centerX.centerY.equalToSuperview()
         }
-                
+        
+        PTGCDManager.gcdMain {
+            layoutBtn.layerProgress(value: 0.5,borderWidth: 4)
+        }
+        
         layoutBtn.addActionHandlers { sender in
+            layoutBtn.updateLayerProgress(progress: 0.75)
+//            UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
+//                PTNSLogConsole("检测是否视频\(String(describing: image))")
+//            })
+//            
+//            let media1 = PTMediaBrowserModel()
+//            media1.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
+//            media1.imageInfo = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123"
+//            
+//            let media2 = PTMediaBrowserModel()
+//            media2.imageURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
+//
+//            let media3 = PTMediaBrowserModel()
+//            media3.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
+//
+//            let mediaConfig = PTMediaBrowserConfig()
+//            mediaConfig.actionType = .All
+//            mediaConfig.defultIndex = 0
+//            mediaConfig.dynamicBackground = true
+//            mediaConfig.mediaData = [media1,media2,media3]
+//            
+//            let aaaaa = PTMediaBrowserController()
+//            aaaaa.viewConfig = mediaConfig
+//            aaaaa.modalPresentationStyle = .fullScreen
+//            self.present(aaaaa, animated: true) {
+//            }
             
-            UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
-                PTNSLogConsole("检测是否视频\(String(describing: image))")
-            })
-            
-            let media1 = PTMediaBrowserModel()
-            media1.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-            media1.imageInfo = "123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123123"
-            
-            let media2 = PTMediaBrowserModel()
-            media2.imageURL = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4"
-
-            let media3 = PTMediaBrowserModel()
-            media3.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
-
-            let mediaConfig = PTMediaBrowserConfig()
-            mediaConfig.actionType = .All
-            mediaConfig.defultIndex = 0
-            mediaConfig.dynamicBackground = true
-            mediaConfig.mediaData = [media1,media2,media3]
-            
-            let aaaaa = PTMediaBrowserController()
-            aaaaa.viewConfig = mediaConfig
-            aaaaa.modalPresentationStyle = .fullScreen
-            self.present(aaaaa, animated: true) {
-            }
+//            UIAlertController.alert_updateTips(oldVersion: "1.0.0", newVersion: "1.0.1", description: "1231231231231231231231231231231", downloadUrl: URL(string: "www.qq.com")!)
         }
         
 //        let ios15Btn = PTLayoutButton()
@@ -544,4 +557,104 @@ extension PTSwiftViewController: ImageKitDataTrackDelegate {
 @available(iOS 17, *)
 #Preview {
     PTSwiftViewController()
+}
+
+class ProgressView: UIView {
+    private let shapeLayer = CAShapeLayer()
+    
+    var progress: CGFloat = 0.0 {
+        didSet {
+            updateProgress()
+        }
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
+    }
+    
+    private func setup() {
+        // 创建一个矩形的路径
+        let path = UIBezierPath(rect: .zero)
+        
+        // 设置CAShapeLayer属性
+        shapeLayer.path = path.cgPath
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = UIColor.blue.cgColor
+        shapeLayer.lineWidth = 10.0
+        shapeLayer.lineCap = .round
+        
+        // 添加CAShapeLayer到视图的layer中
+        layer.addSublayer(shapeLayer)
+        
+        // 初始时更新进度
+        updateProgress()
+    }
+    
+    private func updateProgress() {
+        let progressPath = UIBezierPath(rect: .zero)
+        
+        let widthAndHeightTotal = (bounds.height + bounds.width)
+        if progress <= 0.5 {
+            let progressScale = progress / 0.5
+            let currentValue = widthAndHeightTotal * progressScale
+            if currentValue > bounds.width {
+                progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                
+                let heightValue = currentValue - bounds.width
+
+                progressPath.move(to: CGPoint(x: bounds.width, y:  heightValue))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+            } else {
+                progressPath.move(to: CGPoint(x: currentValue, y: 0))
+                progressPath.addLine(to: CGPoint(x: 0, y: 0))
+            }
+        } else {
+            let newProgress = (progress - 0.5)
+            
+            let progressScale = newProgress / 0.5
+
+            let currentValue = widthAndHeightTotal * progressScale
+            if currentValue > bounds.width {
+                
+                progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                
+                progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+
+                progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+                
+                progressPath.move(to: CGPoint(x: bounds.width, y: bounds.height))
+                progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
+
+                let heightValue = bounds.height - (currentValue - bounds.width)
+
+                progressPath.move(to: CGPoint(x: 0, y:  heightValue))
+                progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
+            } else {
+                progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                
+                progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+
+                progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+                                
+                let widthValue = bounds.width - currentValue
+
+                progressPath.move(to: CGPoint(x: widthValue, y: bounds.height))
+                progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+            }
+        }
+        shapeLayer.path = progressPath.cgPath
+    }
 }

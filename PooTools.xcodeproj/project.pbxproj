@@ -77,11 +77,11 @@
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
 		550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */; };
 		550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE49D2AEC27410052539D /* PTAnimationFunction.swift */; };
+		550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
 		5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */; };
 		5517CAC629F5532600E33ACE /* PTVision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517CAC529F5532600E33ACE /* PTVision.swift */; };
 		5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */; };
-		5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */; };
 		551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */; };
 		551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */; };
 		551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */; };
@@ -427,11 +427,11 @@
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
 		550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+PTEX.swift"; sourceTree = "<group>"; };
 		550CE49D2AEC27410052539D /* PTAnimationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAnimationFunction.swift; sourceTree = "<group>"; };
+		550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsViewController.swift; sourceTree = "<group>"; };
 		5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Kingfisher+SVG.swift"; sourceTree = "<group>"; };
 		5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+PTEX.swift"; sourceTree = "<group>"; };
 		5517CAC529F5532600E33ACE /* PTVision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVision.swift; sourceTree = "<group>"; };
 		5517EC0729AF16D100C68FF4 /* PTImageBlackToTransparent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImageBlackToTransparent.swift; sourceTree = "<group>"; };
-		5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsFunction.swift; sourceTree = "<group>"; };
 		551D908D28B620E100AAA856 /* PTEventOnCalendar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTEventOnCalendar.swift; sourceTree = "<group>"; };
 		551FDB4E2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedTestFunction.swift; sourceTree = "<group>"; };
 		551FDB502AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTNetworkSpeedHistoriaModel.swift; sourceTree = "<group>"; };
@@ -866,7 +866,6 @@
 				5589FF4B29A8527D00519383 /* Stepper */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
-				5517EC0929B0482400C68FF4 /* UpdateTips */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
 				5517CAC429F5530500E33ACE /* Vision */,
 				55024DDB29F282F600244E44 /* WhereIsMyEye */,
@@ -1210,14 +1209,6 @@
 				5517CAC529F5532600E33ACE /* PTVision.swift */,
 			);
 			path = Vision;
-			sourceTree = "<group>";
-		};
-		5517EC0929B0482400C68FF4 /* UpdateTips */ = {
-			isa = PBXGroup;
-			children = (
-				5517EC0A29B049A200C68FF4 /* PTUpdateTipsFunction.swift */,
-			);
-			path = UpdateTips;
 			sourceTree = "<group>";
 		};
 		551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */ = {
@@ -1640,13 +1631,14 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */,
 				558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */,
+				558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */,
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,
+				5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */,
 				231D15DA272CDEE9003D6F62 /* PTMarcos_swift.swift */,
+				550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
-				5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2124,6 +2116,7 @@
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
 				5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */,
+				550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */,
 				55B4FA2E2AE10A16006D35F3 /* PTPermissionMic.swift in Sources */,
 				9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */,
 				55D3D9E22976E67800F2E57C /* UILabel+PTEX.swift in Sources */,
@@ -2195,7 +2188,6 @@
 				5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,
 				558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */,
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
-				5517EC0B29B049A200C68FF4 /* PTUpdateTipsFunction.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,

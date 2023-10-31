@@ -101,7 +101,7 @@ public extension String {
     static let ALPHABETUPPERCASED = "^[A-Za-z0-9]+$"
     static let CNCARLICENSE = "^[\\u4e00-\\u9fa5]{1}[a-zA-Z]{1}[a-zA-Z_0-9]{4}[a-zA-Z_0-9_\\u4e00-\\u9fa5]$"
     static let NUMBERANDWORD = "^[0-9_a-zA-Z]*$"
-        
+     
     //MARK: 判斷字符串是否帶有數字和字母
     ///判斷字符串是否帶有數字和字母
     func isNumberAndWord()->Bool {
@@ -244,7 +244,7 @@ public extension String {
             }
         }
     }
-        
+     
     //MARK: 正則表達式基類
     ///正則表達式基類
     /// - Parameters:
@@ -285,7 +285,7 @@ public extension String {
         
         return String(data: data, encoding: .utf8)
     }
-            
+         
     @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這是因為MD5算法已被證明是不安全的，不應在安全上下文中使用,所以在iOS13之後用sha256算法比較合適")
     var md5:String {
         let data = Data(self.utf8)
@@ -328,7 +328,7 @@ public extension String {
     
     //MARK: 是否包含emoji
     /// 是否包含emoji
-   var isContainEmoji: Bool {
+    var isContainEmoji: Bool {
         for scalar in unicodeScalars {
             return self.containEmoji(scalar)
         }
@@ -432,7 +432,7 @@ public extension String {
     func timeContrastStatus(timeInterval:TimeInterval)->String {
         let dateFormatter = "yyyy-MM-dd HH:mm:ss"
         let timeString = timeInterval.toTimeString(dateFormat: dateFormatter)
-                
+             
         let regions = Region(calendar: Calendars.republicOfChina,zone: Zones.asiaMacau,locale: Locales.chineseChina)
         var timeInterval = timeString.toDate(dateFormatter,region: regions)!.date.timeIntervalSinceNow
         timeInterval = -timeInterval
@@ -519,7 +519,7 @@ public extension String {
     ///   - digitsBefore: 前面保留的位数
     ///   - digitsAfter: 后面保留的位数
     /// - Returns: 返回隐藏的手机号
-    func hidePhone(combine: String = "*", 
+    func hidePhone(combine: String = "*",
                    digitsBefore: Int = 2,
                    digitsAfter: Int = 2) -> String {
         let phoneLength: Int = self.count
@@ -544,7 +544,7 @@ public extension String {
     ///   - digitsBefore: 前面保留几位
     ///   - digitsAfter: 后面保留几位
     /// - Returns: 返回加密后的字符串
-    func hideEmail(combine: String = "*", 
+    func hideEmail(combine: String = "*",
                    digitsBefore: Int = 1,
                    digitsAfter: Int = 1) -> String {
         let emailArray = separatedByString(with: "@")
@@ -565,6 +565,22 @@ public extension String {
             return false
         }
     }
+    
+    //MARK: 获取该字符的行数
+    ///获取该字符的行数
+    /// - Parameters:
+    ///   - font: 字体
+    ///   - labelShowWidth: 展示的Width
+    ///   - lineSpacing: 每行间隔
+    /// - Returns: 行数
+    func numberOfLines(font:UIFont,
+                       labelShowWidth:CGFloat,
+                       lineSpacing:NSNumber? = nil) -> Int {
+        let lineHeight = UIView.sizeFor(string: "A", font: font,lineSpacing: lineSpacing, height: CGFloat.greatestFiniteMagnitude, width: labelShowWidth).height
+        let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, height: CGFloat.greatestFiniteMagnitude, width: labelShowWidth).height
+
+        return Int(totalHeight / lineHeight)
+    }    
 }
 
 fileprivate extension PTUtils {

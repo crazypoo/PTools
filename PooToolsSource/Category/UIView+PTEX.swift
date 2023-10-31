@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 @objc public enum Imagegradien:Int {
     case LeftToRight
@@ -96,7 +97,159 @@ public extension PTPOP where Base:UIView {
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension UIView {
+                
+    private struct AssociatedKeys {
+        static var layoutSubviewsCallback = 998
+        static var layoutShapeLayerCallback = 996
+        static var layoutShapeLayerProgressLabelCallback = 995
+    }
+
+    private var viewShapeLayer:CAShapeLayer? {
+        set{
+            objc_setAssociatedObject(self, &AssociatedKeys.layoutShapeLayerCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } get {
+            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.layoutShapeLayerCallback)
+            guard let haveShape = obj as? CAShapeLayer else {
+                return nil
+            }
+            return haveShape
+        }
+    }
+    
+    private var viewShapeLayerProgressLabel:UILabel? {
+        set{
+            objc_setAssociatedObject(self, &AssociatedKeys.layoutShapeLayerProgressLabelCallback, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } get {
+            let obj =  objc_getAssociatedObject(self, &AssociatedKeys.layoutShapeLayerProgressLabelCallback)
+            guard let progressLabel = obj as? UILabel else {
+                return nil
+            }
+            return progressLabel
+        }
+    }
+
+    func layerProgress(value:CGFloat,
+                       borderWidth:CGFloat? = 1,
+                       borderColor:UIColor? = .systemRed,
+                       showValueLabel:Bool? = true,
+                       valueLabelFont:UIFont? = .appfont(size: 16,bold: true),
+                       valueLabelColor:UIColor? = .white,
+                       uniCount:Int? = 0) {
+        if self.viewShapeLayer != nil {
+            updateLayerProgress(progress: value)
+        } else {
+            // 创建一个矩形的路径
+            let path = UIBezierPath(rect: .zero)
+            
+            // 设置CAShapeLayer属性
+            viewShapeLayer = CAShapeLayer()
+            viewShapeLayer!.path = path.cgPath
+            viewShapeLayer!.fillColor = UIColor.clear.cgColor
+            viewShapeLayer!.strokeColor = borderColor!.cgColor
+            viewShapeLayer!.lineWidth = borderWidth!
+            viewShapeLayer!.lineCap = .round
+            
+            // 添加CAShapeLayer到视图的layer中
+            layer.addSublayer(viewShapeLayer!)
+            
+            if showValueLabel! {
+                viewShapeLayerProgressLabel = UILabel()
+                viewShapeLayerProgressLabel?.font = valueLabelFont!
+                viewShapeLayerProgressLabel?.textColor = valueLabelColor!
+                viewShapeLayerProgressLabel?.textAlignment = .center
+                addSubview(viewShapeLayerProgressLabel!)
+                viewShapeLayerProgressLabel?.snp.makeConstraints({ make in
+                    make.edges.equalToSuperview()
+                })
+            }
+            
+            updateLayerProgress(progress: value)
+        }
+    }
+    
+    func updateLayerProgress(progress:CGFloat,
+                             uniCount:Int? = 0) {
+        if viewShapeLayer != nil {
+            let widthAndHeightTotal = (bounds.height + bounds.width)
+            if progress >= 1 {
+                clearProgressLayer()
+            } else {
+                let progressPath = UIBezierPath(rect: .zero)
+
+                if progress <= 0.5 {
+                    let progressScale = progress / 0.5
+                    let currentValue = widthAndHeightTotal * progressScale
+                    if currentValue > bounds.width {
+                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                        
+                        let heightValue = currentValue - bounds.width
+
+                        progressPath.move(to: CGPoint(x: bounds.width, y:  heightValue))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+                    } else {
+                        progressPath.move(to: CGPoint(x: currentValue, y: 0))
+                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                    }
+                } else {
+                    let newProgress = (progress - 0.5)
+                    
+                    let progressScale = newProgress / 0.5
+
+                    let currentValue = widthAndHeightTotal * progressScale
+                    if currentValue > bounds.width {
+                        
+                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                        
+                        progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+
+                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+                        
+                        progressPath.move(to: CGPoint(x: bounds.width, y: bounds.height))
+                        progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
+
+                        let heightValue = bounds.height - (currentValue - bounds.width)
+
+                        progressPath.move(to: CGPoint(x: 0, y:  heightValue))
+                        progressPath.addLine(to: CGPoint(x: 0, y: bounds.height))
+                    } else {
+                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                        progressPath.addLine(to: CGPoint(x: 0, y: 0))
+                        
+                        progressPath.move(to: CGPoint(x: bounds.width, y:  bounds.height))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: 0))
+
+                        progressPath.move(to: CGPoint(x: bounds.width, y: 0))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+                                        
+                        let widthValue = bounds.width - currentValue
+
+                        progressPath.move(to: CGPoint(x: widthValue, y: bounds.height))
+                        progressPath.addLine(to: CGPoint(x: bounds.width, y: bounds.height))
+                    }
+                }
+                viewShapeLayer!.path = progressPath.cgPath
+            
+                viewShapeLayerProgressLabel?.text = String(format: "%.\(uniCount!)f%%", (100 * progress))
+            }
+        }
+    }
+    
+    func clearProgressLayer() {
+        if viewShapeLayer != nil {
+            viewShapeLayer!.removeFromSuperlayer()
+            viewShapeLayer = nil
+        }
         
+        if viewShapeLayerProgressLabel != nil {
+            viewShapeLayerProgressLabel?.removeFromSuperview()
+            viewShapeLayerProgressLabel = nil
+        }
+    }
+    
     @objc func viewCorner(radius:CGFloat = 0,
                           borderWidth:CGFloat = 0,
                           borderColor:UIColor = UIColor.clear) {
@@ -217,9 +370,6 @@ public extension UIView {
 }
 
 public extension UIView {
-    private struct AssociatedKeys {
-        static var layoutSubviewsCallback = 998
-    }
 
     @objc func jx_layoutSubviews() {
         jx_layoutSubviews()

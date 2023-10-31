@@ -606,19 +606,15 @@ fileprivate extension PTMediaBrowserController {
     }
 
      func numberOfLines(_ string: String) -> Int {
-        var labelW:CGFloat = 0
+         var labelW:CGFloat = 0
 
-        switch viewConfig.actionType {
-        case .Empty:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
-        default:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
-        }
-
-      let lineHeight = UIView.sizeFor(string: "A", font: viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
-      let totalHeight = heightForString(string)
-
-      return Int(totalHeight / lineHeight)
+         switch viewConfig.actionType {
+         case .Empty:
+             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+         default:
+             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
+         }
+         return string.numberOfLines(font: viewConfig.viewerFont, labelShowWidth: labelW, lineSpacing: 2)
     }
     
     func truncatedText(fullText:String) -> String {
