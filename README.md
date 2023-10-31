@@ -31,10 +31,6 @@ pod 'PooTools/Core', :git => 'https://github.com/crazypoo/PTools.git'
 ```ruby
 ### 数据加密
 pod 'PooTools/DataEncrypt', :git => 'https://github.com/crazypoo/PTools.git'
-### 动画
-pod 'PooTools/Animation', :git => 'https://github.com/crazypoo/PTools.git'
-### 彬仔做的富文本
-pod 'PooTools/YB_Attributed', :git => 'https://github.com/crazypoo/PTools.git'
 ### 银行卡
 pod 'PooTools/BankCard', :git => 'https://github.com/crazypoo/PTools.git'
 ### 生物验证(Face ID/Touch ID)
@@ -135,6 +131,48 @@ pod 'PooTools/ScanQRCode', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Stepper', :git => 'https://github.com/crazypoo/PTools.git'
 ### Location相關
 pod 'PooTools/Location', :git => 'https://github.com/crazypoo/PTools.git'
+### Permission相关
+pod 'PooTools/NotificationPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CameraPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/LocationPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/CalendarPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/MotionPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/TrackingPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/RemindersPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/SpeechRecognizerPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/HealthPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/FaceIDPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/ContactsPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/MicPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/MeidaPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/BluetoothPermission', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/SiriPermission', :git => 'https://github.com/crazypoo/PTools.git'
+### Harbeth照片特效
+pod 'PooTools/Harbeth', :git => 'https://github.com/crazypoo/PTools.git'
+### ScrollRefresh刷新
+pod 'PooTools/ScrollRefresh', :git => 'https://github.com/crazypoo/PTools.git'
+### SVG相关(关联了kingfisher)
+pod 'PooTools/SVG', :git => 'https://github.com/crazypoo/PTools.git'
+### 分享
+pod 'PooTools/Share', :git => 'https://github.com/crazypoo/PTools.git'
+### FloatPanel
+pod 'PooTools/FloatPanel', :git => 'https://github.com/crazypoo/PTools.git'
+### 空数据
+pod 'PooTools/ListEmptyData', :git => 'https://github.com/crazypoo/PTools.git'
+### DEBUG工具
+pod 'PooTools/DEBUG', :git => 'https://github.com/crazypoo/PTools.git'
+### Vision
+pod 'PooTools/Vision', :git => 'https://github.com/crazypoo/PTools.git'
+### 导航栏相关
+pod 'PooTools/NavBarController', :git => 'https://github.com/crazypoo/PTools.git'
+### 软件内通知栏
+pod 'PooTools/NotificationBanner', :git => 'https://github.com/crazypoo/PTools.git'
+### Controller Router
+pod 'PooTools/Router', :git => 'https://github.com/crazypoo/PTools.git'
+### Ping
+pod 'PooTools/Ping', :git => 'https://github.com/crazypoo/PTools.git'
+### 视频编辑
+pod 'PooTools/VideoEditor', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 
