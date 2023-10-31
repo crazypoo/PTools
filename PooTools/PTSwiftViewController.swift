@@ -20,6 +20,9 @@ import AttributedString
 import LifetimeTracker
 #endif
 
+private let shareText = "Lorem ipsum dolor sit amet, usu an fugit expetendis referrentur. Assum fuisset volumus duo te, ei ubique inimicus eum, nostrum mandamus mel in. Platonem quaerendum comprehensam et nam, at per exerci aliquip persius."
+private let shareURLString = "https://www.qq.com"
+
 class PTSwiftViewController: PTBaseViewController {
         
     private var videoEdit: PTVideoEdit?
@@ -335,7 +338,25 @@ class PTSwiftViewController: PTBaseViewController {
         }
         
         layoutBtn.addActionHandlers { sender in
-            layoutBtn.updateLayerProgress(progress: 0.75)
+            guard let url = URL(string: shareURLString) else {
+                return
+            }
+
+
+            let aaaaa = PTShareCustomActivity()
+            aaaaa.text = "123123123"
+            aaaaa.url = URL(string: "www.qq.com")
+            aaaaa.image = UIImage(named: "DemoImage")
+            aaaaa.customActivityTitle = "123123123123123123123123"
+            aaaaa.customActivityImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 54))
+
+            let items: [Any] = [shareText, url, UIImage(named: "DemoImage")!]
+
+            let vc = PTActivityViewController(activityItems: items,applicationActivities: [aaaaa])
+            vc.previewNumberOfLines = 10
+            vc.presentActionSheet(self, from: sender)
+
+//            layoutBtn.updateLayerProgress(progress: 0.75)
 //            UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
 //                PTNSLogConsole("检测是否视频\(String(describing: image))")
 //            })
@@ -465,7 +486,6 @@ class PTSwiftViewController: PTBaseViewController {
             
         })
     }
-
     
     func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
         let options = PHVideoRequestOptions()

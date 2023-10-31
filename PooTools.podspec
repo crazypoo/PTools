@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.13.0'
+    s.version     = '3.14.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -770,7 +770,7 @@ Pod::Spec.new do |s|
     #
     s.subspec 'SecuritySuite' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'securing/IOSSecuritySuite'
+        subspec.dependency 'IOSSecuritySuite'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SECURITYSUITE POOTOOLS_COCOAPODS"
         }
@@ -832,6 +832,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/FloatPanel'
         subspec.dependency 'PooTools/ListEmptyData'
         subspec.dependency 'PooTools/DEBUG'
+        subspec.dependency 'PooTools/DEBUG_TrackingEyes'
         subspec.dependency 'PooTools/Vision'
         subspec.dependency 'PooTools/NavBarController'
         subspec.dependency 'PooTools/NotificationBanner'
@@ -840,6 +841,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Router'
         subspec.dependency 'PooTools/Ping'
         subspec.dependency 'PooTools/VideoEditor'
+        subspec.dependency 'PooTools/SecuritySuite'
 
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"

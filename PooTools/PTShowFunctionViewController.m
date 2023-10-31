@@ -23,7 +23,6 @@ CGFloat const tagItemSpace = 5;
 
 #import "PMacros.h"
 #import <Masonry/Masonry.h>
-#import "PTAppDelegate.h"
 
 #import <GCDWebServer/GCDWebUploader.h>
 
@@ -482,11 +481,11 @@ CGFloat const tagItemSpace = 5;
             
             NSArray <PTCustomBottomButtonModel *>* titles = @[models];
             
-            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:title font:[UIFont appCustomFontWithSize:25 customFont:FontName scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
+            PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[AppDelegate appDelegate].window alertTitle:title font:[UIFont appCustomFontWithSize:25 customFont:FontName scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:titles alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
             [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
                 make.height.offset(64+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:title font:[UIFont appCustomFontWithSize:25 customFont:FontName scale:NO] buttonArray:titles]);
                 make.width.offset(kSCREEN_WIDTH-20);
-                make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
+                make.centerX.centerY.equalTo([AppDelegate appDelegate].window);
             }];
             alerts.customerBlock = ^(UIView * customerView) {
                 UITextField *textField = [UITextField new];

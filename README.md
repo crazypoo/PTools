@@ -161,6 +161,7 @@ pod 'PooTools/FloatPanel', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/ListEmptyData', :git => 'https://github.com/crazypoo/PTools.git'
 ### DEBUG工具
 pod 'PooTools/DEBUG', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/DEBUG_TrackingEyes', :git => 'https://github.com/crazypoo/PTools.git'
 ### Vision
 pod 'PooTools/Vision', :git => 'https://github.com/crazypoo/PTools.git'
 ### 导航栏相关
@@ -173,6 +174,8 @@ pod 'PooTools/Router', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/Ping', :git => 'https://github.com/crazypoo/PTools.git'
 ### 视频编辑
 pod 'PooTools/VideoEditor', :git => 'https://github.com/crazypoo/PTools.git'
+### APP安全
+pod 'PooTools/SecuritySuite', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

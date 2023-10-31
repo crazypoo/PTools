@@ -8,7 +8,6 @@
 
 #import "PTViewController.h"
 #import "PMacros.h"
-#import "PTAppDelegate.h"
 
 #import "PTShowFunctionViewController.h"
 
@@ -480,7 +479,7 @@ static NSString *cellIdentifier = @"CELL";
                 {
                     PTCodeView *codeView = [[PTCodeView alloc] initWithNumberOfCodes:4 numberOfLines:3 changeTimes:3];
                     
-                    [PTCustomAlertView alertFunctionWithSuperView:[PTAppDelegate appDelegate].window titleString:@"验证码图片" titleFont:[UIFont appfontWithSize:15 bold:YES scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor alertHeightlightedColor:UIColor.randomColor alertAnimationType:PTAlertAnimationTypeTop buttons:@[@"222",@"123123",@"123123"] buttonColor:@[] touchBackground:YES cornerSize:15 customAlertHeight:100 alertLeftAndRightSpace:20 customerBlock:^(UIView * _Nonnull customView) {
+                    [PTCustomAlertView alertFunctionWithSuperView:[AppDelegate appDelegate].window titleString:@"验证码图片" titleFont:[UIFont appfontWithSize:15 bold:YES scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor alertHeightlightedColor:UIColor.randomColor alertAnimationType:PTAlertAnimationTypeTop buttons:@[@"222",@"123123",@"123123"] buttonColor:@[] touchBackground:YES cornerSize:15 customAlertHeight:100 alertLeftAndRightSpace:20 customerBlock:^(UIView * _Nonnull customView) {
                         [customView addSubview:codeView];
                         [codeView mas_makeConstraints:^(MASConstraintMaker *make) {
                             make.centerX.centerY.equalTo(customView);
@@ -592,11 +591,11 @@ static NSString *cellIdentifier = @"CELL";
         [arr addObject:models];
     }
             
-    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[PTAppDelegate appDelegate].window alertTitle:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
+    PTCustomAlertView * alerts = [[PTCustomAlertView alloc] initWithSuperView:[AppDelegate appDelegate].window alertTitle:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName scale:NO] titleColor:UIColor.randomColor alertVerLineColor:UIColor.randomColor alertBackgroundColor:UIColor.randomColor heightlightedColor:UIColor.randomColor moreButtons:arr alertAnimationType:PTAlertAnimationTypeTop touchBackground:YES cornerSize:15];
     [alerts mas_makeConstraints:^(MASConstraintMaker *make) {
         make.height.offset(cH+[PTCustomAlertView titleAndBottomViewNormalHeightWithWidth:kSCREEN_WIDTH-20 title:alertTitle font:[UIFont appCustomFontWithSize:15 customFont:FontName scale:NO] buttonArray:arr]);
         make.width.offset(kSCREEN_WIDTH-20);
-        make.centerX.centerY.equalTo([PTAppDelegate appDelegate].window);
+        make.centerX.centerY.equalTo([AppDelegate appDelegate].window);
     }];
     alerts.customerBlock = ^(UIView * customerView) {
         createBlock(customerView);

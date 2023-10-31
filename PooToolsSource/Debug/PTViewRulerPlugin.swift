@@ -56,7 +56,6 @@ public class PTVisualInfoController:PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 14)), for: .normal)
         view.addActionHandlers { sender in
-            PTNSLogConsole("123123123123123")
             NotificationCenter.default.post(name: NSNotification.Name(kPTClosePluginNotification), object: nil, userInfo: nil)
         }
         return view
