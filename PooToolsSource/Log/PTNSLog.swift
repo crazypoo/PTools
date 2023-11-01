@@ -11,7 +11,13 @@ import Foundation
 import CocoaLumberjack
 import SwifterSwift
 
+//PTNSLog(_ msg: Any...,
 public func PTNSLogConsole(_ any:Any...,
+                           isWriteLog: Bool = false,
+                           file: NSString = #file,
+                           line: Int = #line,
+                           column: Int = #column,
+                           fn: String = #function,
                            error:Bool = false) {
     
     var msgStr = ""
@@ -45,7 +51,7 @@ public func PTNSLogConsole(_ any:Any...,
     
     if UIApplication.shared.inferredEnvironment != .appStore {
         DDLog.add(DDOSLogger.sharedInstance)
-        PTNSLog(msgStr)
+        PTNSLog(msgStr,isWriteLog: isWriteLog,file: file,line: line,column:column,fn:fn)
     } else {
         DDLog.add(DDOSLogger.sharedInstance)
         if error {
@@ -85,7 +91,7 @@ public func PTNSLog(_ msg: Any...,
         currentAppStatus = "<<<DEBUG环境>>>"
     }
     
-    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:SS")
+    let currentDate = String.currentDate(dateFormatterString: "yyyy-MM-dd HH:MM:ss")
     let prefix = "🔨\(currentAppStatus)Empezar🔨\n⏰Ahora⏰：\(currentDate)\n📁当前文件完整的路径是📁：\(file)\n📄当前文件是📄：\(file.lastPathComponent)\n➡️第 \(line) 行⬅️ \n➡️第 \(column) 列⬅️ \n🧾函数名🧾：\(fn)\n📝打印内容如下📝：\n\(msgStr)❌Conclusión❌"
     
     switch UIApplication.applicationEnvironment() {

@@ -31,7 +31,7 @@ class PTPhoneBlock: NSObject {
             
             let simplePhoneNumber = (phoneNumber.components(separatedBy: CharacterSet.decimalDigits.inverted) as NSArray).componentsJoined(by: "")
             let stringURL = ("telprompt://" as NSString).appending(simplePhoneNumber)
-            UIApplication.shared.open(URL(string: stringURL)!, options: [:], completionHandler: nil)
+            PTAppStoreFunction.jumpLink(url: URL(string: stringURL)!)
             canCallSomeOne = true
         }
         canCall(canCallSomeOne!)

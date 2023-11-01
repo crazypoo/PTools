@@ -65,28 +65,38 @@ struct IPv4Header {
 		var headerChecksumI: UInt16 = 0
 		var sourceAddressI = Address()
 		var destinationAddressI = Address()
-		data.withUnsafeBytes{ (bytes: UnsafePointer<UInt8>) in
-			var curPosUInt8 = bytes
-			versionAndHeaderLengthI = curPosUInt8.pointee; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			differentiatedServicesI = curPosUInt8.pointee; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			
-			var curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
-			totalLengthI = curPosUInt16.pointee;            curPosUInt16 = curPosUInt16.advanced(by: 1)
-			identificationI = curPosUInt16.pointee;         curPosUInt16 = curPosUInt16.advanced(by: 1)
-			flagsAndFragmentOffsetI = curPosUInt16.pointee; curPosUInt16 = curPosUInt16.advanced(by: 1)
-			
-			curPosUInt8 = UnsafePointer<UInt8>(OpaquePointer(curPosUInt16))
-			timeToLiveI = curPosUInt8.pointee; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			protocolI = curPosUInt8.pointee;   curPosUInt8 = curPosUInt8.advanced(by: 1)
-			
-			curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
-			headerChecksumI = curPosUInt16.pointee; curPosUInt16 = curPosUInt16.advanced(by: 1)
-			
-			curPosUInt8 = UnsafePointer<UInt8>(OpaquePointer(curPosUInt16))
-			sourceAddressI = Address(dataPointer: &curPosUInt8)
-			destinationAddressI = Address(dataPointer: &curPosUInt8)
-		}
-		
+
+        data.withUnsafeBytes { (rawBufferPointer) in
+            let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
+
+            versionAndHeaderLengthI = bytes.pointee
+            var curPosUInt8 = bytes + 1
+            differentiatedServicesI = curPosUInt8.pointee
+            curPosUInt8 = curPosUInt8 + 1
+
+            var curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
+            totalLengthI = curPosUInt16.pointee
+            curPosUInt16 = curPosUInt16 + 1
+            identificationI = curPosUInt16.pointee
+            curPosUInt16 = curPosUInt16 + 1
+            flagsAndFragmentOffsetI = curPosUInt16.pointee
+            curPosUInt16 = curPosUInt16 + 1
+
+            curPosUInt8 = UnsafePointer<UInt8>(OpaquePointer(curPosUInt16))
+            timeToLiveI = curPosUInt8.pointee
+            curPosUInt8 = curPosUInt8 + 1
+            protocolI = curPosUInt8.pointee
+            curPosUInt8 = curPosUInt8 + 1
+
+            curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
+            headerChecksumI = curPosUInt16.pointee
+            curPosUInt16 = curPosUInt16 + 1
+
+            curPosUInt8 = UnsafePointer<UInt8>(OpaquePointer(curPosUInt16))
+            sourceAddressI = Address(dataPointer: &curPosUInt8)
+            destinationAddressI = Address(dataPointer: &curPosUInt8)
+        }
+
 		versionAndHeaderLength = versionAndHeaderLengthI
 		differentiatedServices = differentiatedServicesI
 		totalLength = totalLengthI

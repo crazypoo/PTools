@@ -37,7 +37,7 @@ public class PTNumberKeyBoard: UIView {
             (bounds.size.width - CGFloat(PTNumberKeyBoard.kLineWidth * 2) - CGFloat(PTNumberKeyBoard.kButtonSpaceLeft * 4))/3
         } set {
             if kKeyW != newValue {
-                kKeyW = newValue
+                self.kKeyW = newValue
             }
         }
     }

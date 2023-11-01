@@ -84,6 +84,16 @@
 		550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4A72AF17C090052539D /* AppDelegate.swift */; };
 		550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */; };
 		550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */; };
+		550CE4B22AF233F50052539D /* OSSVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AE2AF233F40052539D /* OSSVoice.swift */; };
+		550CE4B32AF233F50052539D /* OSSSpeechUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */; };
+		550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4B02AF233F50052539D /* OSSUtterance.swift */; };
+		550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4B12AF233F50052539D /* OSSSpeech.swift */; };
+		550CE4B72AF234E10052539D /* OSSKitImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 550CE4B62AF234E10052539D /* OSSKitImages.xcassets */; };
+		550CE4B92AF235020052539D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 550CE4B82AF235020052539D /* Localizable.strings */; };
+		550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */; };
+		550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */; };
+		550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4C22AF295B10052539D /* PTSpeechViewController.swift */; };
+		550CE4C52AF296CE0052539D /* PTSoundRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */; };
 		5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */; };
 		5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */; };
 		5517CAC629F5532600E33ACE /* PTVision.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5517CAC529F5532600E33ACE /* PTVision.swift */; };
@@ -337,7 +347,6 @@
 		9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */; };
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
 		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
-		CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
@@ -437,6 +446,16 @@
 		550CE4A72AF17C090052539D /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncNameViewController.swift; sourceTree = "<group>"; };
 		550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncDetailViewController.swift; sourceTree = "<group>"; };
+		550CE4AE2AF233F40052539D /* OSSVoice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSVoice.swift; sourceTree = "<group>"; };
+		550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSSpeechUtility.swift; sourceTree = "<group>"; };
+		550CE4B02AF233F50052539D /* OSSUtterance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSUtterance.swift; sourceTree = "<group>"; };
+		550CE4B12AF233F50052539D /* OSSSpeech.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSSpeech.swift; sourceTree = "<group>"; };
+		550CE4B62AF234E10052539D /* OSSKitImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OSSKitImages.xcassets; sourceTree = "<group>"; };
+		550CE4B82AF235020052539D /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSoundVisualizerView.swift; sourceTree = "<group>"; };
+		550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTVoiceActionView.swift; sourceTree = "<group>"; };
+		550CE4C22AF295B10052539D /* PTSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeechViewController.swift; sourceTree = "<group>"; };
+		550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSoundRecorder.swift; sourceTree = "<group>"; };
 		5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Kingfisher+SVG.swift"; sourceTree = "<group>"; };
 		5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIRefreshControl+PTEX.swift"; sourceTree = "<group>"; };
 		5517CAC529F5532600E33ACE /* PTVision.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVision.swift; sourceTree = "<group>"; };
@@ -710,8 +729,6 @@
 		C8AFD6F12155E96400F2FA10 /* TextFieldEffects.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TextFieldEffects.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C8AFD6F32155E96400F2FA10 /* UINavigation_SXFixSpace.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = UINavigation_SXFixSpace.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC1256B42098286400E31A38 /* PooTools.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = PooTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTShowFunctionViewController.h; sourceTree = "<group>"; };
-		CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTShowFunctionViewController.m; sourceTree = "<group>"; };
 		CC658CDE20AC3F7C00949DF6 /* AFNetworking.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = AFNetworking.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658CE020AC3F7C00949DF6 /* CYLTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CYLTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC658CE220AC3F7C00949DF6 /* DHSmartScreenshot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = DHSmartScreenshot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -842,6 +859,7 @@
 				231D1550272CDEE9003D6F62 /* NetWork */,
 				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				55B4FA022AE0F04A006D35F3 /* NotificationPermission */,
+				550CE4AD2AF233B60052539D /* OSSKit */,
 				55B4F9FD2AE0EE14006D35F3 /* PermissionCore */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,
@@ -1200,6 +1218,19 @@
 				5507026C28F6B35E00C48239 /* PTSpeech.swift */,
 			);
 			path = Speech;
+			sourceTree = "<group>";
+		};
+		550CE4AD2AF233B60052539D /* OSSKit */ = {
+			isa = PBXGroup;
+			children = (
+				550CE4B82AF235020052539D /* Localizable.strings */,
+				550CE4B12AF233F50052539D /* OSSSpeech.swift */,
+				550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */,
+				550CE4B02AF233F50052539D /* OSSUtterance.swift */,
+				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
+				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
+			);
+			path = OSSKit;
 			sourceTree = "<group>";
 		};
 		5516CCBF29E8557200614980 /* KingfisherSVG */ = {
@@ -1873,11 +1904,13 @@
 				231D14D6272CDEE9003D6F62 /* PooToolsSource */,
 				550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */,
 				550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */,
-				CC36CE6E21800A8E0096739A /* PTShowFunctionViewController.h */,
-				CC36CE6F21800A8E0096739A /* PTShowFunctionViewController.m */,
+				550CE4C42AF296CE0052539D /* PTSoundRecorder.swift */,
+				550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */,
+				550CE4C22AF295B10052539D /* PTSpeechViewController.swift */,
 				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 				552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */,
 				552893122AE65125009135F9 /* PTTip.swift */,
+				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 			);
 			name = "Example for PooTools";
@@ -1944,6 +1977,7 @@
 				6003F588195388D20070C39A /* Resources */,
 				E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */,
 				559C1C91293AE247002874BA /* ShellScript */,
+				F57C4F5A41AE58F7ACD9301D /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2008,8 +2042,10 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
+				550CE4B92AF235020052539D /* Localizable.strings in Resources */,
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
 				5585F71D2AD2D47A00F878B4 /* PTVideoEditorAssets.xcassets in Resources */,
+				550CE4B72AF234E10052539D /* OSSKitImages.xcassets in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				231D14D5272CDD2C003D6F62 /* README.md in Resources */,
@@ -2075,6 +2111,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		F57C4F5A41AE58F7ACD9301D /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -2136,12 +2189,14 @@
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				550CE4A42AF12F8B0052539D /* PTActiveBuilder.swift in Sources */,
 				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
+				550CE4C52AF296CE0052539D /* PTSoundRecorder.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				558D5EF32AAF552F00C02042 /* PTRouter.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				5585F7052AD2B3AA00F878B4 /* PTVideoEditorSlider.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
+				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
@@ -2254,10 +2309,12 @@
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
+				550CE4B22AF233F50052539D /* OSSVoice.swift in Sources */,
 				552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				5585F7172AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift in Sources */,
 				5585F6D32AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift in Sources */,
+				550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */,
 				5585F6CD2AD2996200F878B4 /* PTVideoEditor.swift in Sources */,
 				5585F6F32AD2AAC200F878B4 /* PTVideoEditorLens.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
@@ -2285,7 +2342,9 @@
 				55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */,
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
+				550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */,
 				5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */,
+				550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
@@ -2303,7 +2362,6 @@
 				5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */,
 				5585F6F72AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
-				CC36CE7021800A8E0096739A /* PTShowFunctionViewController.m in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
@@ -2375,6 +2433,7 @@
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
+				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
@@ -2397,6 +2456,7 @@
 				5585F70B2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
+				550CE4B32AF233F50052539D /* OSSSpeechUtility.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
 				5585F6D52AD29B4700F878B4 /* CALayer+VideoEditorEX.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,

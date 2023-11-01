@@ -13,6 +13,11 @@ post_install do |installer|
   end
 end
 
+#添加此处是因为harbeth库无法添加
+pre_install do |installer|
+Pod::Installer::Xcode::TargetValidator.send(:define_method, :verify_no_static_framework_transitive_dependencies) {}
+end
+
 target 'PooTools_Example' do
   
   pod 'FLEX', :configurations => ['Debug']

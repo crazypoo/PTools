@@ -15,7 +15,7 @@ public extension UILabel {
         static var toValue: Double = 0
         static var duration: Double = 0
         static var displayLink: UnsafeRawPointer = UnsafeRawPointer(bitPattern: "displayLink".hashValue)!
-        static var formatter:String = "%.2f"
+        static var formatter = 998
     }
     private var startTime: CFTimeInterval {
         get {
@@ -71,7 +71,7 @@ public extension UILabel {
     @objc func count(fromValue: Double,
                      to: Double,
                      duration: Double,
-                     formatter:String?) {
+                     formatter:String? = "%.2f") {
         startTime = CACurrentMediaTime()
         self.fromValue = fromValue
         toValue = to

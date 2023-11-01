@@ -85,11 +85,11 @@ class PTUpdateTipsContentView : UIView {
         valueLabel.attributed.text = att
         
         scrollView.contentSize = CGSize(width: baseContentSize.width, height: tmpHight + 10)
-        scrollView.contentOffset = CGPoint(x: 0, y: -15)
-        
+                
         let contentLine = descriptionString.numberOfLines(font: .appfont(size: 14), labelShowWidth: baseContentSize.width, lineSpacing: 2)
         scrollView.isScrollEnabled = contentLine > 4
-        
+        scrollView.contentOffset = CGPoint(x: 0, y: (contentLine > 1 ? -15 : 0))
+
         let nameLabel = UILabel()
         nameLabel.text = nameArr.last
         nameLabel.font = .appfont(size: 14)

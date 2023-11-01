@@ -21,6 +21,8 @@ public extension String {
     static let videoEditor = "视频编辑"
     static let sign = "签名"
     static let dymanicCode = "动态验证码"
+    static let osskit = "语音"
+    static let vision = "看图识字"
 
     static let phoneSimpleInfo = "手机信息"
     static let phoneCall = "打电话"
@@ -31,6 +33,8 @@ public extension String {
     static let slider = "滑动条"
     static let rate = "评价星星"
     static let segment = "分选栏目"
+    static let countLabel = "跳动Label"
+    static let throughLabel = "划线Label"
 }
 
 class PTFuncNameViewController: PTBaseViewController {
@@ -88,7 +92,17 @@ class PTFuncNameViewController: PTBaseViewController {
         dymanicCode.accessoryType = .DisclosureIndicator
         dymanicCode.disclosureIndicatorImage = self.disclosureIndicatorImage
 
-        let mediaArrs = [imageReview,videoEditor,sign,dymanicCode]
+        let oss = PTFusionCellModel()
+        oss.name = .osskit
+        oss.accessoryType = .DisclosureIndicator
+        oss.disclosureIndicatorImage = self.disclosureIndicatorImage
+
+        let vision = PTFusionCellModel()
+        vision.name = .vision
+        vision.accessoryType = .DisclosureIndicator
+        vision.disclosureIndicatorImage = self.disclosureIndicatorImage
+        
+        let mediaArrs = [imageReview,videoEditor,sign,dymanicCode,oss,vision]
         
         var mediaRows = [PTRows]()
         mediaArrs.enumerated().forEach { index,value in
@@ -159,7 +173,17 @@ class PTFuncNameViewController: PTBaseViewController {
         segment.accessoryType = .DisclosureIndicator
         segment.disclosureIndicatorImage = self.disclosureIndicatorImage
 
-        let uikitArrs = [slider,rate,segment]
+        let countLabel = PTFusionCellModel()
+        countLabel.name = .countLabel
+        countLabel.accessoryType = .DisclosureIndicator
+        countLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        
+        let throughLabel = PTFusionCellModel()
+        throughLabel.name = .throughLabel
+        throughLabel.accessoryType = .DisclosureIndicator
+        throughLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -283,6 +307,9 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .rotation {
                 let r:Int = Int(arc4random_uniform(6))
                 PTRotationManager.share.setOrientation(orientation: UIDeviceOrientation.init(rawValue: r)!)
+            } else if itemRow.title == .osskit {
+                let vc = PTSpeechViewController()
+                self.navigationController?.pushViewController(vc)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

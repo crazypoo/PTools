@@ -15,6 +15,7 @@ import Photos
 import Combine
 import TipKit
 import AttributedString
+import MBProgressHUD
 
 #if canImport(LifetimeTracker)
 import LifetimeTracker
@@ -338,23 +339,40 @@ class PTSwiftViewController: PTBaseViewController {
         }
         
         layoutBtn.addActionHandlers { sender in
-            guard let url = URL(string: shareURLString) else {
-                return
-            }
-
-
-            let aaaaa = PTShareCustomActivity()
-            aaaaa.text = "123123123"
-            aaaaa.url = URL(string: "www.qq.com")
-            aaaaa.image = UIImage(named: "DemoImage")
-            aaaaa.customActivityTitle = "123123123123123123123123"
-            aaaaa.customActivityImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 54))
-
-            let items: [Any] = [shareText, url, UIImage(named: "DemoImage")!]
-
-            let vc = PTActivityViewController(activityItems: items,applicationActivities: [aaaaa])
-            vc.previewNumberOfLines = 10
-            vc.presentActionSheet(self, from: sender)
+            
+//        http://v.juhe.cn/laohuangli/d
+//            Network.hud.show(animated: true)
+//            Task.init {
+//                Network.hud.hide(animated: true)
+//                do {
+//                    let dic = ["date":"2023-11-02","key":"eac83dc8b0705f551e15b26c18b6f880"]
+//                    let model = try await Network.requestApi(urlStr: "/v.juhe.cn/laohuangli",method: .get,parameters: dic)
+//                    PTNSLogConsole("Done here!")
+//                    PTNSLogConsole("\(model.originalString)")
+//                } catch {
+//                    PTNSLogConsole("Que?")
+//                    PTNSLogConsole("\(error.localizedDescription)")
+//                }
+//            }
+            PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: "www.qq.com"), version: "1.0.0", note: "123", force: false,alertType: .User)
+            
+//            guard let url = URL(string: shareURLString) else {
+//                return
+//            }
+//
+//
+//            let aaaaa = PTShareCustomActivity()
+//            aaaaa.text = "123123123"
+//            aaaaa.url = URL(string: "www.qq.com")
+//            aaaaa.image = UIImage(named: "DemoImage")
+//            aaaaa.customActivityTitle = "123123123123123123123123"
+//            aaaaa.customActivityImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 54))
+//
+//            let items: [Any] = [shareText, url, UIImage(named: "DemoImage")!]
+//
+//            let vc = PTActivityViewController(activityItems: items,applicationActivities: [aaaaa])
+//            vc.previewNumberOfLines = 10
+//            vc.presentActionSheet(self, from: sender)
 
 //            layoutBtn.updateLayerProgress(progress: 0.75)
 //            UIImage.pt.getVideoFirstImage(videoUrl: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", closure: { image in
@@ -479,6 +497,16 @@ class PTSwiftViewController: PTBaseViewController {
             make.top.equalToSuperview().inset(40)
             make.height.equalTo(300)
         }
+        
+        let countLabel = UILabel()
+        countLabel.count(fromValue: 0, to: 100, duration: 3)
+        view.addSubview(countLabel)
+        countLabel.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(20)
+            make.top.equalTo(label.snp.bottom).offset(10)
+            make.height.equalTo(300)
+        }
+
     }
     
     func alert(_ title: String, message: String) {

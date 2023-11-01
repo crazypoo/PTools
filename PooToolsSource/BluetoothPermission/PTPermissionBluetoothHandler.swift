@@ -34,20 +34,18 @@ class PTPermissionBluetoothHandler: NSObject, CBCentralManagerDelegate {
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if #available(iOS 13.0, tvOS 13, *) {
-            switch central.authorization {
-            case .notDetermined:
-                break
-            default:
-                completion()
-            }
-        } else {
-            switch CBPeripheralManager.authorizationStatus() {
-            case .notDetermined:
-                break
-            default:
-                completion()
-            }
+        switch central.state {
+        case .unauthorized,.unsupported,.unknown:
+            // 用户未授权使用蓝牙
+            // 设备不支持蓝牙
+            break
+        default:
+            // 中央管理器已准备好，可以开始扫描外围设备
+            // 中央管理器已关闭
+            // 中央管理器正在重置
+            // 中央管理器状态未知
+            // 处理其他未知状态
+            completion()
         }
     }
 }

@@ -44,9 +44,30 @@ public struct ICMPHeader {
 	
 	public var type: UInt8 {didSet {headerBytes[0] = type}}
 	public var code: UInt8 {didSet {headerBytes[1] = type}}
-	public var checksum: UInt16       {didSet {headerBytes[2...].withUnsafeMutableBytes{ (bytes: UnsafeMutablePointer<UInt16>) in bytes.pointee = checksum.bigEndian }}}
-	public var identifier: UInt16     {didSet {headerBytes[4...].withUnsafeMutableBytes{ (bytes: UnsafeMutablePointer<UInt16>) in bytes.pointee = identifier.bigEndian }}}
-	public var sequenceNumber: UInt16 {didSet {headerBytes[6...].withUnsafeMutableBytes{ (bytes: UnsafeMutablePointer<UInt16>) in bytes.pointee = sequenceNumber.bigEndian }}}
+    public var checksum: UInt16 {
+        didSet {
+            headerBytes[2...].withUnsafeMutableBytes { (rawBufferPointer) in
+                let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt16.self)
+                bytes.pointee = checksum.bigEndian
+            }
+        }
+    }
+    public var identifier: UInt16 {
+        didSet {
+            headerBytes[4...].withUnsafeMutableBytes { (rawBufferPointer) in
+                let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt16.self)
+                bytes.pointee = identifier.bigEndian
+            }
+        }
+    }
+    public var sequenceNumber: UInt16 {
+        didSet {
+            headerBytes[6...].withUnsafeMutableBytes { (rawBufferPointer) in
+                let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt16.self)
+                bytes.pointee = sequenceNumber.bigEndian
+            }
+        }
+    }
 	/* data... */
 	
 	public private(set) var headerBytes: Data
@@ -59,16 +80,23 @@ public struct ICMPHeader {
 		sequenceNumber = n
 		
 		headerBytes = Data(count: ICMPHeader.size)
-		headerBytes.withUnsafeMutableBytes{ (bytes: UnsafeMutablePointer<UInt8>) in
-			var curPosUInt8 = bytes
-			curPosUInt8.pointee = type; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			curPosUInt8.pointee = code; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			
-			var curPosUInt16 = UnsafeMutablePointer<UInt16>(OpaquePointer(curPosUInt8))
-			curPosUInt16.pointee = checksum.bigEndian; curPosUInt16 = curPosUInt16.advanced(by: 1)
-			curPosUInt16.pointee = identifier.bigEndian; curPosUInt16 = curPosUInt16.advanced(by: 1)
-			curPosUInt16.pointee = sequenceNumber.bigEndian; curPosUInt16 = curPosUInt16.advanced(by: 1)
-		}
+        
+        headerBytes.withUnsafeMutableBytes { (rawBufferPointer) in
+            let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
+
+            bytes.pointee = type
+            var curPosUInt8 = bytes + 1
+            curPosUInt8.pointee = code
+            curPosUInt8 = curPosUInt8 + 1
+
+            var curPosUInt16 = UnsafeMutablePointer<UInt16>(OpaquePointer(curPosUInt8))
+            curPosUInt16.pointee = checksum.bigEndian
+            curPosUInt16 = curPosUInt16 + 1
+            curPosUInt16.pointee = identifier.bigEndian
+            curPosUInt16 = curPosUInt16 + 1
+            curPosUInt16.pointee = sequenceNumber.bigEndian
+            curPosUInt16 = curPosUInt16 + 1
+        }
 	}
 	
 	public init(data: Data) {
@@ -79,17 +107,23 @@ public struct ICMPHeader {
 		var checksumI: UInt16 = 0
 		var identifierI: UInt16 = 0
 		var sequenceNumberI: UInt16 = 0
-		data.withUnsafeBytes{ (bytes: UnsafePointer<UInt8>) in
-			var curPosUInt8 = bytes
-			typeI = curPosUInt8.pointee; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			codeI = curPosUInt8.pointee; curPosUInt8 = curPosUInt8.advanced(by: 1)
-			
-			/* Note: UInt16(bigEndian:) <=> CFSwapInt16BigToHost() */
-			var curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
-			checksumI = UInt16(bigEndian: curPosUInt16.pointee); curPosUInt16 = curPosUInt16.advanced(by: 1)
-			identifierI = UInt16(bigEndian: curPosUInt16.pointee); curPosUInt16 = curPosUInt16.advanced(by: 1)
-			sequenceNumberI = UInt16(bigEndian: curPosUInt16.pointee); curPosUInt16 = curPosUInt16.advanced(by: 1)
-		}
+        
+        data.withUnsafeBytes { (rawBufferPointer) in
+            let bytes = rawBufferPointer.baseAddress!.assumingMemoryBound(to: UInt8.self)
+
+            typeI = bytes.pointee
+            var curPosUInt8 = bytes + 1
+            codeI = curPosUInt8.pointee
+            curPosUInt8 = curPosUInt8 + 1
+
+            /* Note: UInt16(bigEndian:) <=> CFSwapInt16BigToHost() */
+            var curPosUInt16 = UnsafePointer<UInt16>(OpaquePointer(curPosUInt8))
+            checksumI = UInt16(bigEndian: curPosUInt16.pointee)
+            curPosUInt16 = curPosUInt16 + 1
+            identifierI = UInt16(bigEndian: curPosUInt16.pointee)
+            curPosUInt16 = curPosUInt16 + 1
+            sequenceNumberI = UInt16(bigEndian: curPosUInt16.pointee)
+        }
 		
 		type = typeI
 		code = codeI

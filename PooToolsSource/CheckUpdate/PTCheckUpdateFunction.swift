@@ -81,6 +81,11 @@ class PTCheckUpdateModel:PTBaseModel {
 public class PTCheckUpdateFunction: NSObject {
     public static let share = PTCheckUpdateFunction()
     
+    public enum PTUpdateAlertType {
+        case System
+        case User
+    }
+    
     func compareVesionWithServerVersion(version:String)->Bool {
         let currentVersion = kAppVersion
         let versionArray = version.components(separatedBy: ".")
@@ -106,7 +111,7 @@ public class PTCheckUpdateFunction: NSObject {
                                          version:String?,
                                          note:String?,
                                          force:Bool,
-                                         showHub:Bool? = false) {
+                                         alertType:PTUpdateAlertType? = .System) {
         if test {
             var okBtns = [String]()
             if force {
@@ -119,14 +124,14 @@ public class PTCheckUpdateFunction: NSObject {
                 case 0:
                     if force {
                         if url != nil {
-                            self.jumpToDownloadLink(link: url!)
+                            PTAppStoreFunction.jumpLink(url: url!)
                         } else {
                             PTNSLogConsole("非法url")
                         }
                     }
                 case 1:
                     if url != nil {
-                        self.jumpToDownloadLink(link: url!)
+                        PTAppStoreFunction.jumpLink(url: url!)
                     } else {
                         PTNSLogConsole("非法url")
                     }
@@ -136,9 +141,10 @@ public class PTCheckUpdateFunction: NSObject {
             })
         } else {
             if !appid.stringIsEmpty() {
-                Network.requestApi(urlStr: "https:///itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self,showHud: showHub) { result, error in
-                    if error == nil {
-                        guard let responseModel = result!.originalString.kj.model(PTCheckUpdateModel.self) else { return }
+                Task.init {
+                    do {
+                        let result = try await Network.requestApi(needGobal:false,urlStr: "https://itunes.apple.com/cn/lookup?id=\(appid)",modelType: PTCheckUpdateModel.self)
+                        let responseModel = result.customerModel as! PTCheckUpdateModel
                         if responseModel.results.count > 0 {
                             let versionModel = responseModel.results.first!
                             let versionStr = versionModel.version
@@ -164,21 +170,32 @@ public class PTCheckUpdateFunction: NSObject {
                                     } else {
                                         okBtns = ["稍后再说","更新"]
                                     }
-                                    UIAlertController.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
-                                        switch index {
-                                        case 0:
-                                            if force {
-                                                self.jumpToAppStore(appid: appid)
+                                    switch alertType {
+                                    case .System:
+                                        await UIAlertController.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
+                                            switch index {
+                                            case 0:
+                                                if force {
+                                                    PTAppStoreFunction.jumpToAppStore(appid: appid)
+                                                }
+                                            case 1:
+                                                PTAppStoreFunction.jumpToAppStore(appid: appid)
+                                            default:
+                                                break
                                             }
-                                        case 1:
-                                            self.jumpToAppStore(appid: appid)
-                                        default:
-                                            break
+                                        })
+                                    case .User:
+                                        PTGCDManager.gcdMain() {
+                                            self.alert_updateTips(oldVersion: version!, newVersion: versionStr, description: (versionModel.releaseNotes), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
                                         }
-                                    })
+                                    default:
+                                        break
+                                    }
                                 }
                             }
                         }
+                    } catch {
+                        PTNSLogConsole(error.localizedDescription)
                     }
                 }
             } else {
@@ -186,13 +203,62 @@ public class PTCheckUpdateFunction: NSObject {
             }
         }
     }
-    
-    private func jumpToAppStore(appid:String) {
-        let uriString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
-        UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
+        
+    func alert_Tips(tipsTitle:String? = "",
+                          cancelTitle:String = "",
+                          cancelBlock: PTActionTask? = nil,
+                          doneTitle:String,
+                          doneBlock: PTActionTask? = nil,
+                          tipContentView:((_ contentView:UIView)->Void)?) {
+        let tipsControl = PTUpdateTipsViewController(titleString: tipsTitle,cancelTitle: cancelTitle, doneTitle: doneTitle)
+        tipsControl.modalPresentationStyle = .fullScreen
+        if cancelBlock != nil {
+            tipsControl.cancelTask = cancelBlock!
+        }
+        if doneBlock != nil {
+            tipsControl.doneTask = doneBlock!
+        }
+
+        if tipContentView != nil {
+            tipContentView!(tipsControl.contentView)
+        }
+        PTUtils.getCurrentVC().present(tipsControl, animated: true, completion: nil)
     }
     
-    private func jumpToDownloadLink(link:URL) {
-        UIApplication.shared.open(link, options: [:], completionHandler: nil)
+    //MARK: 初始化UpdateTips
+    ///初始化UpdateTips
+    /// - Parameters:
+    ///   - oV: 舊版本號
+    ///   - nV: 新版本號
+    ///   - descriptionString: 更新信息
+    ///   - url: 下載URL
+    ///   - test: 是否測試
+    ///   - isShowError: 是否顯示錯誤
+    ///   - isForcedUpgrade: 是否強制升級
+    func alert_updateTips(oldVersion oV: String,
+                                newVersion nV: String,
+                                description descriptionString: String,
+                                downloadUrl url: URL,
+                                isTest test:Bool = false,
+                                showError isShowError:Bool = true,
+                                forcedUpgrade isForcedUpgrade:Bool = false) {
+        let cancelTitle:String = isForcedUpgrade ? "" : NSLocalizedString("取消升级", comment: "")
+        self.alert_Tips(tipsTitle: NSLocalizedString("发现新版本", comment: ""),cancelTitle: cancelTitle,cancelBlock: {
+            if test {
+                if isShowError {
+                    UserDefaults.standard.set(1, forKey: uAppNoMoreShowUpdate)
+                }
+            }
+        },doneTitle: NSLocalizedString("升级", comment: "")) {
+            let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL.init(string: "https://" + url.description)! : url
+            PTAppStoreFunction.jumpLink(url: realURL)
+        } tipContentView: { contentView in
+            
+            let tipsContent = PTUpdateTipsContentView(oV: oV, nV: nV, descriptionString: descriptionString)
+            contentView.addSubview(tipsContent)
+            tipsContent.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        }
     }
 }

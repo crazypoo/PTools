@@ -11,6 +11,10 @@ import FloatingPanel
 import GCDWebServer
 import Alamofire
 import SnapKit
+import AnyImageKit
+import Photos
+import Vision
+import VisionKit
 
 let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
 
@@ -152,6 +156,67 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.height.equalTo(44)
                 make.centerY.equalToSuperview()
             }
+        case String.countLabel:
+            let countLabel = PTCountingLabel()
+            countLabel.textAlignment = .center
+            countLabel.font = .appfont(size: 30)
+            countLabel.textColor = .black
+            self.view.addSubview(countLabel)
+            countLabel.format = "%.2f"
+            countLabel.countFrom(starValue: 99999999.99, toValue: 0, duration: 1)
+            countLabel.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+        case String.throughLabel:
+            let throughLabel = PTLabel()
+            throughLabel.text = "111111111"
+            throughLabel.backgroundColor = .random
+            throughLabel.setVerticalAlignment(value: .Middle)
+            throughLabel.setStrikeThroughAlignment(value: .Middle)
+            throughLabel.strikeThroughColor = .random
+            PTGCDManager.gcdAfter(time: 2) {
+                throughLabel.setStrikeThroughEnabled(value: true)
+            }
+            self.view.addSubview(throughLabel)
+            throughLabel.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(16)
+                make.left.right.equalToSuperview()
+                make.height.equalTo(44)
+            }
+            
+            let setBtn = UIButton(type: .custom)
+            setBtn.backgroundColor = .random
+            self.view.addSubview(setBtn)
+            setBtn.snp.makeConstraints { make in
+                make.size.equalTo(64)
+                make.top.equalTo(throughLabel.snp.bottom).offset(10)
+                make.centerX.equalToSuperview()
+            }
+            setBtn.addActionHandlers { sender in
+                throughLabel.setVerticalAlignment(value: PTVerticalAlignment(rawValue: Int(arc4random())%3)!)
+                throughLabel.setStrikeThroughAlignment(value: PTStrikeThroughAlignment(rawValue: Int(arc4random())%3)!)
+                throughLabel.setStrikeThroughEnabled(value: (Int(arc4random())%2 == 1 ? true : false))
+            }
+        case String.vision:
+            
+            let view = UIButton(type: .custom)
+            view.backgroundColor = .random
+            self.view.addSubview(view)
+            view.snp.makeConstraints { make in
+                make.size.equalTo(64)
+                make.centerX.centerY.equalToSuperview()
+            }
+            view.addActionHandlers { sender in
+                var options = PickerOptionsInfo()
+                options.selectLimit = 1
+                options.selectOptions = .photo
+                
+                let controller = ImagePickerController(options: options, delegate: self)
+                controller.trackDelegate = self
+                controller.modalPresentationStyle = .fullScreen
+                self.present(controller, animated: true, completion: nil)
+            }
+
         default:
             break
         }
@@ -184,3 +249,50 @@ extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     }
 }
 
+// MARK: - ImagePickerControllerDelegate
+extension PTFuncDetailViewController: ImagePickerControllerDelegate {
+    
+    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+        PTNSLogConsole(result.assets.first!.image)
+        
+        picker.dismiss(animated: true, completion: nil)
+
+        result.assets.first!.phAsset.loadImage { result in
+            switch result {
+            case .success(let success):
+                
+                if #available(iOS 14.0, *) {
+                    let vision = PTVision.share
+                    
+                    var visionVersion:Int = VNRecognizeTextRequestRevision2
+                    if #available(iOS 16.0, *) {
+                        visionVersion = VNRecognizeTextRequestRevision3
+                    }
+                    
+                    vision.findText(withImage: success,revision: visionVersion) { resultText, textObservations in
+                        UIViewController.gobal_drop(title: resultText)
+                    }
+                }
+            case .failure(let failure):
+                PTNSLogConsole(failure)
+            }
+        }
+    }
+}
+
+// MARK: - ImageKitDataTrackDelegate
+extension PTFuncDetailViewController: ImageKitDataTrackDelegate {
+    
+    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
+        switch state {
+        case .enter:
+            PTNSLogConsole("[Data Track] ENTER Page: \(page.rawValue)")
+        case .leave:
+            PTNSLogConsole("[Data Track] LEAVE Page: \(page.rawValue)")
+        }
+    }
+    
+    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
+        PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
+    }
+}

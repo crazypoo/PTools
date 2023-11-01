@@ -17,6 +17,20 @@ public class PTAppStoreFunction: NSObject {
     ///   - appid: App的App id
     class open func rateApp(appid:String) {
         let openAppStore = "itms-apps://itunes.apple.com/app/id\(appid)?action=write-review"
-        UIApplication.shared.open(URL(string: openAppStore)!)
+        PTAppStoreFunction.jumpLink(url: URL(string: openAppStore)!)
     }
+    
+    class open func appStoreURL(appid:String) -> String {
+        let urlString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
+        return urlString
+    }
+    
+    class open func jumpToAppStore(appid:String) {
+        PTAppStoreFunction.jumpLink(url: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
+    }
+
+    class open func jumpLink(url:URL) {
+        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+
 }

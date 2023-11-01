@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.13.0",
+  "version": "3.14.1",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.13.0"
+    "tag": "3.14.1"
   },
   "license": {
     "type": "MIT",
@@ -1104,7 +1104,7 @@
       }
     },
     {
-      "name": "Harbeth",
+      "name": "HarbethKit",
       "dependencies": {
         "PooTools/Core": [
 
@@ -1114,7 +1114,7 @@
         ]
       },
       "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HARBETH POOTOOLS_COCOAPODS"
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HARBETHKIT POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1300,6 +1300,30 @@
       }
     },
     {
+      "name": "OSSKitSpeech",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PooTools/SpeechRecognizerPermission": [
+
+        ]
+      },
+      "frameworks": "Speech",
+      "source_files": "PooToolsSource/OSSKit/*.{h,m,swift}",
+      "resource_bundles": {
+        "OSSKitResources": [
+          "PooToolsSource/OSSKit/*.xcassets"
+        ],
+        "OSSKitLocalizable": [
+          "PooToolsSource/OSSKit/*.strings"
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1431,6 +1455,9 @@
         "PooTools/LaunchTimeProfiler": [
 
         ],
+        "PooTools/HarbethKit": [
+
+        ],
         "PooTools/ColorFunction": [
 
         ],
@@ -1492,6 +1519,9 @@
 
         ],
         "PooTools/SecuritySuite": [
+
+        ],
+        "PooTools/OSSKitSpeech": [
 
         ]
       },

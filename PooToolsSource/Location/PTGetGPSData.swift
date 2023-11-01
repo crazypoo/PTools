@@ -54,7 +54,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
             
         } moreBtn: { index, title in
             let settingUrl = URL(string: UIApplication.openSettingsURLString)
-            UIApplication.shared.open(settingUrl!)
+            PTAppStoreFunction.jumpLink(url: settingUrl!)
         }
         
         if errorBlock != nil {

@@ -16,6 +16,7 @@ public class ResponseModel:PTBaseModel {
     public let msg: String = ""
     public let totalCount: Int = 0
     public var originalString: String = ""
+    public var customerModel: Any? = nil
 
     public var isSuccess:Bool {
         get {

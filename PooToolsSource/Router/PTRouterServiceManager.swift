@@ -91,7 +91,7 @@ public extension PTRouterServiceManager {
     func unregisterService(named: String) -> Any {
         serviceQueue.sync {
             creatorsMap.removeValue(forKey: named)
-            return servicesCache.removeValue(forKey: named)
+            return servicesCache.removeValue(forKey: named) as Any
         }
     }
     

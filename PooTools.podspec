@@ -646,11 +646,11 @@ Pod::Spec.new do |s|
     end
     #########Permission#########
 
-    s.subspec 'Harbeth' do |subspec|
+    s.subspec 'HarbethKit' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'Harbeth'
         subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HARBETH POOTOOLS_COCOAPODS"
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HARBETHKIT POOTOOLS_COCOAPODS"
         }
     end
     
@@ -776,6 +776,20 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'OSSKitSpeech' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/SpeechRecognizerPermission'
+        subspec.frameworks = 'Speech'
+        subspec.source_files = 'PooToolsSource/OSSKit/*.{h,m,swift}'
+        subspec.resource_bundles = {
+            'OSSKitResources' => ['PooToolsSource/OSSKit/*.xcassets'],
+            'OSSKitLocalizable' => ['PooToolsSource/OSSKit/*.strings']
+        }
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -820,7 +834,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'
         subspec.dependency 'PooTools/LaunchTimeProfiler'
-#        subspec.dependency 'PooTools/Harbeth'
+        subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/ColorFunction'
         subspec.dependency 'PooTools/PopoverKit'
         subspec.dependency 'PooTools/ScanQRCode'
@@ -842,7 +856,8 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Ping'
         subspec.dependency 'PooTools/VideoEditor'
         subspec.dependency 'PooTools/SecuritySuite'
-
+        subspec.dependency 'PooTools/OSSKitSpeech'
+        
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

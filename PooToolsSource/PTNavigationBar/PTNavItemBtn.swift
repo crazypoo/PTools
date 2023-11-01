@@ -94,7 +94,7 @@ open class PTNavItemBtn: UIButton {
                 if subviews.contains(where: {$0 == jx_customView!}) {
                     jx_customView?.removeFromSuperview()
                 }
-                jx_customView = nil
+                self.jx_customView = nil
                 noticeUpdateFrame()
             }
             

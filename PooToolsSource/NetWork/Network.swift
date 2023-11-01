@@ -170,16 +170,8 @@ public class Network: NSObject {
     ///   - parameters: 请求参数，默认nil
     ///   - modelType: 是否需要传入接口的数据模型，默认nil
     ///   - encoder: 编码方式，默认url编码
-    ///   - showHud: 是否需要loading，默认true
     ///   - jsonRequest:
-    ///   - netWorkErrorBlock:
-    ///   - netWorkServerStatusBlock:
-    ///   - resultBlock: 方法回调
-    ///   - jsonRequest:
-    ///   - header:
-    ///   - header:
-    ///   - needGobal:
-    ///   - needGobal:
+    ///  - Returns: ResponseModel
     class public func requestApi(needGobal:Bool? = true,
                                  urlStr:String,
                                  method: HTTPMethod = .post,
@@ -187,26 +179,17 @@ public class Network: NSObject {
                                  parameters: Parameters? = nil,
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
-                                 showHud:Bool? = true,
-                                 jsonRequest:Bool? = false,
-                                 netWorkErrorBlock:PTActionTask? = nil,
-                                 netWorkServerStatusBlock:NetWorkServerStatusBlock? = nil,
-                                 resultBlock: @escaping ReslutClosure) {
+                                 jsonRequest:Bool? = false) async throws -> ResponseModel {
         
-        let urlStr = (needGobal! ? Network.gobalUrl() : "") + urlStr
-        if !urlStr.isURL() {
-            resultBlock(nil,nil)
-            PTNSLogConsole("不是合法的URL")
-            return
+        let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
+        if !urlStr1.isURL() {
+            throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "不是合法的URL", code: 99999999997)))
         }
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                if netWorkErrorBlock != nil {
-                    netWorkErrorBlock!()
-                }
-                return
+                throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "没有网络连接", code: 99999999996)))
             }
         }
         
@@ -233,10 +216,6 @@ public class Network: NSObject {
             }
         }
         
-        if showHud! {
-            Network.hud.show(animated: true)
-        }
-        
         var postString = ""
         switch method {
         case .post:
@@ -246,49 +225,44 @@ public class Network: NSObject {
         default:
             postString = "其他"
         }
-        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
+        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
         
-        Network.manager.request(urlStr, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
-            if showHud! {
-                Network.hud.hide(animated: true)
-            }
-            switch data.result {
-            case .success(_):
-                let json = JSON(data.value ?? "")
-                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
-                    return
+        return try await withCheckedThrowingContinuation { continuation in
+            Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
+                switch data.result {
+                case .success(_):
+                    let json = JSON(data.value ?? "")
+                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
+                        return
+                    }
+                    
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
+                    
+                    guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
+                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
+                        return
+                    }
+                    responseModel.originalString = jsonStr
+                                        
+                    guard let modelType1 = modelType else { continuation.resume(returning: responseModel); return }
+                    if responseModel.data is [String : Any] {
+                        guard let reslut = responseModel.data as? [String : Any] else { continuation.resume(returning: responseModel); return }
+                        responseModel.data = reslut.kj.model(type: modelType1)
+                    } else if responseModel.data is Array<Any> {
+                        responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
+                    } else {
+                        responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+                    }
+                    continuation.resume(returning: responseModel)
+                case .failure(let error):
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    continuation.resume(throwing: error)
                 }
-                
-                PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr)\n💛2.result:\(jsonStr)🌐")
-
-                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
-                    return
-                }
-                responseModel.originalString = jsonStr
-                
-                if netWorkServerStatusBlock != nil {
-                    netWorkServerStatusBlock!(responseModel)
-                }
-                
-                guard let modelType = modelType else { resultBlock(responseModel,nil); return }
-                if responseModel.data is [String : Any] {
-                    guard let reslut = responseModel.data as? [String : Any] else {resultBlock(responseModel,nil); return }
-                    responseModel.data = reslut.kj.model(type: modelType)
-                }else if responseModel.data is Array<Any> {
-                    responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType)
-                }
-
-                resultBlock(responseModel,nil)
-
-            case .failure(let error):
-                PTNSLogConsole("❌接口:\(urlStr)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
-                resultBlock(nil,error)
             }
         }
     }
-    
+        
     /// 图片上传接口
     /// - Parameters:
     ///   - needGobal:
@@ -300,47 +274,31 @@ public class Network: NSObject {
     ///   - jsonRequest:
     ///   - pngData:
     ///   - showHud:
-    ///   - netWorkErrorBlock:
     ///   - progressBlock: 进度回调
     ///   - resultBlock:
-    ///   - header:
-    ///   - header:
-    ///   - parmas:
-    ///   - parmas:
-    ///   - fileKey:
-    ///   - fileKey:
-    ///   - path:
-    ///   - path:
-    ///   - needGobal:
-    ///   - needGobal:
-    ///   - success: 成功回调
-    ///   - failure: 失败回调
     class public func imageUpload(needGobal:Bool? = true,
                                   images:[UIImage]?,
                                   path:String? = "/api/project/ossImg",
                                   fileKey:[String]? = ["images"],
                                   parmas:[String:String]? = nil,
                                   header:HTTPHeaders? = nil,
+                                  modelType: Convertible.Type? = nil,
                                   jsonRequest:Bool? = false,
                                   pngData:Bool? = true,
                                   showHud:Bool? = true,
-                                  netWorkErrorBlock:PTActionTask? = nil,
                                   progressBlock:UploadProgress? = nil,
                                   resultBlock: @escaping ReslutClosure) {
         
         let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
         if !pathUrl.isURL() {
-            resultBlock(nil,nil)
-            PTNSLogConsole("不是合法的URL")
+            resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "不是合法的URL", code: 99999999997))))
             return
         }
 
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                if netWorkErrorBlock != nil {
-                    netWorkErrorBlock!()
-                }
+                resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "没有网络连接", code: 99999999996))))
                 return
             }
         }
@@ -416,6 +374,16 @@ public class Network: NSObject {
                 
                 responseModel.originalString = jsonStr
                 PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐")
+                guard let modelType1 = modelType else { resultBlock(responseModel,nil); return }
+                if responseModel.data is [String : Any] {
+                    guard let reslut = responseModel.data as? [String : Any] else { resultBlock(responseModel,nil); return }
+                    responseModel.data = reslut.kj.model(type: modelType1)
+                } else if responseModel.data is Array<Any> {
+                    responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
+                } else {
+                    responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+                }
+
                 resultBlock(responseModel,nil)
             case .failure(let error):
                 PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌",error: true)

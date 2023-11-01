@@ -362,7 +362,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
 }
 
 extension PTMediaBrowserCell:UIScrollViewDelegate {
-    public func viewForZooming(in scrollView: UIScrollView) -> UIView {
+    public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
         imageView
     }
     

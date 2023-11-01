@@ -8,6 +8,7 @@
 
 import UIKit
 import CommonCrypto
+import CryptoKit
 
 extension Data: PTProtocolCompatible {}
 
@@ -142,16 +143,9 @@ public extension PTPOP where Base == Data {
         var output = NSMutableString()
         switch hashType {
             case .md5:
-                var digest = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-                _ = base.withUnsafeBytes { (messageBytes) -> Bool in
-                    CC_MD5(messageBytes.baseAddress, CC_LONG(base.count), &digest)
-                    return true
-                }
-
-                output = NSMutableString(capacity: Int(CC_MD5_DIGEST_LENGTH))
-                for byte in digest{
-                    output.appendFormat("%02x", byte)
-                }
+                output = NSMutableString(capacity: Int(CC_MD5_DIGEST_LENGTH))                
+                let digestData = Insecure.MD5.hash(data: base)
+                output.append(String(digestData.map { String(format: "%02hhx", $0)}.joined().prefix(32)))
             case .sha1:
                 var digest = [UInt8](repeating: 0, count: Int(CC_SHA1_DIGEST_LENGTH))
                 _ = base.withUnsafeBytes { (messageBytes) -> Bool in

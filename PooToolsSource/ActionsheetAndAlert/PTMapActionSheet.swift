@@ -76,8 +76,7 @@ open class PTMapActionSheet: NSObject {
                 
                 urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", lat!,lon!,locations.latitude,locations.longitude,qqKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
             }
-            UIApplication.shared.open(URL.init(string: urlString as String)!, options: [:], completionHandler: nil)
-            
+            PTAppStoreFunction.jumpLink(url: URL.init(string: urlString as String)!)
         } tapBackgroundBlock: { sheet in
             if dismissTask != nil {
                 dismissTask!()

@@ -6,8 +6,6 @@
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
 	<string>${PRODUCT_NAME}</string>
-	<key>CFBundleDocumentTypes</key>
-	<array/>
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIdentifier</key>
@@ -66,6 +64,8 @@
 	<string>相册添加</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>相册使用</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>yuyin</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>跟踪数据</string>
 	<key>UILaunchStoryboardName</key>

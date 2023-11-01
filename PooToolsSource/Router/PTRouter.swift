@@ -794,3 +794,12 @@ public extension PTRouter {
     }
 }
 
+public extension PTRouter {
+    class func routeJump(vcName:String,scheme:String) {
+        let relocationMap: NSDictionary = ["routerType": 2 ,"className": vcName, "path": scheme]
+        let data = try! JSONSerialization.data(withJSONObject: relocationMap, options: [])
+        let routeReMapInfo = try! JSONDecoder().decode(PTRouterInfo.self, from: data)
+        PTRouterManager.addRelocationHandle(routerMapList: [routeReMapInfo])
+        PTRouter.openURL(scheme)
+    }
+}

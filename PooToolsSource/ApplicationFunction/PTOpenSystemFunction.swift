@@ -245,7 +245,7 @@ public class PTOpenSystemFunction: NSObject {
             break
         }
         if !uriString!.stringIsEmpty() {
-            UIApplication.shared.open(URL(string: uriString)!, options: [:], completionHandler: nil)
+            PTAppStoreFunction.jumpLink(url: URL(string: uriString)!)
         }
     }
 }
