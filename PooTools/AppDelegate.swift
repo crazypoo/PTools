@@ -81,7 +81,7 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
         window = UIWindow.init(frame: UIScreen.main.bounds)
 #endif
         
-        let vc = PTViewController()
+        let vc = PTFuncNameViewController()
         let mainNav = PTBaseNavControl(rootViewController: vc)
         window!.rootViewController = mainNav
         window!.makeKeyAndVisible()

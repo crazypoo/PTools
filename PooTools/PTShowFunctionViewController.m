@@ -133,55 +133,11 @@ CGFloat const tagItemSpace = 5;
             break;
             case ShowFunctionStarRate:
         {
-            PTRateConfig *config = [[PTRateConfig alloc] init];
-            config.canTap = YES;
-            config.hadAnimation = YES;
-            config.scorePercent = 2.f;
-            config.allowIncompleteStar = YES;
-            
-            PTRateView *rV = [[PTRateView alloc] initWithViewConfig:config];
-            rV.rateBlock = ^(CGFloat score){
-                PNSLog(@"%f",score);
-            };
-            [self.view addSubview:rV];
-            [rV mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.centerY.equalTo(self.view);
-                make.height.offset(100);
-                make.left.right.equalTo(self.view);
-            }];
             
         }
             break;
         case ShowFunctionSegmented:
         {
-            
-            PTSegmentModel * segModel = [[PTSegmentModel alloc] init];
-            segModel.titles = @"aaaaaa";
-            segModel.imageURL = @"DemoImage";
-            segModel.selectedImageURL = @"image_aircondition_gray";
-
-            PTSegmentModel * segModels = [[PTSegmentModel alloc] init];
-            segModels.titles = @"22222";
-            segModels.imageURL = @"DemoImage";
-            segModels.selectedImageURL = @"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif";
-            PTSegmentConfig *config = [[PTSegmentConfig alloc] init];
-            config.showType = PTSegmentSelectedTypeBackground;
-            config.itemSpace = 10.0f;
-            config.leftEdges = YES;
-            config.originalX = 20;
-            
-            PTSegmentView *sgView = [[PTSegmentView alloc] initWithConfig:config];
-            sgView.backgroundColor = UIColor.randomColor;
-            sgView.viewDatas = @[segModel,segModels/*,segModels,segModels,segModels,segModels*/];
-            [sgView reloadViewDataWithBlock:^(NSInteger index) {
-
-            }];
-            [self.view addSubview:sgView];
-            [sgView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerY.equalTo(self.view);
-                make.height.offset(44);
-                make.left.right.equalTo(self.view);
-            }];
         }
             break;
             case ShowFunctionTagLabel:
