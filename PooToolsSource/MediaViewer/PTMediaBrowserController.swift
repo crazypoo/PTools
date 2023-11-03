@@ -605,44 +605,23 @@ fileprivate extension PTMediaBrowserController {
         return UIView.sizeFor(string: string, font: viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
     }
 
-     func numberOfLines(_ string: String) -> Int {
-         var labelW:CGFloat = 0
+    func labelContentWidth() -> CGFloat {
+        var labelW:CGFloat = 0
 
-         switch viewConfig.actionType {
-         case .Empty:
-             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
-         default:
-             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
-         }
-         return string.numberOfLines(font: viewConfig.viewerFont, labelShowWidth: labelW, lineSpacing: 2)
+        switch viewConfig.actionType {
+        case .Empty:
+            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        default:
+            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
+        }
+        return labelW
+    }
+    
+     func numberOfLines(_ string: String) -> Int {
+         return string.numberOfLines(font: viewConfig.viewerFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
     }
     
     func truncatedText(fullText:String) -> String {
-        var truncatedText = fullText
-
-        guard numberOfLines(fullText) > numberOfVisibleLines else {
-          return truncatedText
-        }
-
-        // Perform quick "rough cut"
-        while numberOfLines(truncatedText) > numberOfVisibleLines * 2 {
-            truncatedText = String(truncatedText.prefix(truncatedText.count / 2))
-        }
-
-        // Capture the endIndex of truncatedText before appending ellipsis
-        var truncatedTextCursor = truncatedText.endIndex
-
-        // Remove characters ahead of ellipsis until the text is the right number of lines
-        while numberOfLines(truncatedText) > numberOfVisibleLines {
-          // To avoid "Cannot decrement before startIndex"
-          guard truncatedTextCursor > truncatedText.startIndex else {
-            break
-          }
-
-          truncatedTextCursor = truncatedText.index(before: truncatedTextCursor)
-          truncatedText.remove(at: truncatedTextCursor)
-        }
-
-        return truncatedText
+        return fullText.truncatedText(maxLineNumber: numberOfVisibleLines, font: viewConfig.viewerFont, labelShowWidth: labelContentWidth())
     }
 }

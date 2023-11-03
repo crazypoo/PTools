@@ -165,8 +165,22 @@ class PTFuncDetailViewController: PTBaseViewController {
             countLabel.format = "%.2f"
             countLabel.countFrom(starValue: 99999999.99, toValue: 0, duration: 1)
             countLabel.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(20)
+                make.bottom.equalTo(self.view.snp.centerY)
             }
+            
+            let countLabelEx = UILabel()
+            countLabelEx.textAlignment = .center
+            countLabelEx.font = .appfont(size: 30)
+            countLabelEx.count(fromValue: 99999999.99, to: 0, duration: 1,formatter: "%.2f")
+            view.addSubview(countLabelEx)
+            countLabelEx.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalTo(countLabel.snp.bottom)
+                make.bottom.equalToSuperview()
+            }
+
         case String.throughLabel:
             let throughLabel = PTLabel()
             throughLabel.text = "111111111"
@@ -216,10 +230,119 @@ class PTFuncDetailViewController: PTBaseViewController {
                 controller.modalPresentationStyle = .fullScreen
                 self.present(controller, animated: true, completion: nil)
             }
+        case String.twitterLabel:
+            let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"
+            let customType2 = PTActiveType.custom(pattern: "\\s标签\\b") //Looks for "标签"
+            let customType3 = PTActiveType.custom(pattern: "\\s支持\\b") //Looks for "支持"
 
+            let label = PTActiveLabel()
+
+            label.enabledTypes.append(customType)
+            label.enabledTypes.append(customType2)
+            label.enabledTypes.append(customType3)
+
+            label.urlMaximumLength = 10
+
+            label.customize { label in
+                label.text = "我是一个推文 #推文1 #我是辣鸡 @crazypoo. 推文发自" +
+                " https://192.168.0.1 . 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
+                    "还可以缩短链接长度: \n https://github.com/crazypoo"
+                label.numberOfLines = 0
+                label.lineSpacing = 4
+                
+                label.textColor = UIColor(red: 102.0/255, green: 117.0/255, blue: 127.0/255, alpha: 1)
+                label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+                label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
+                label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
+                label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
+
+                label.handleMentionTap { text in
+                    self.alert(title:"Mention", message: text)
+                }
+                label.handleHashtagTap { text in
+                    self.alert(title:"Hashtag", message: text)
+                }
+                label.handleURLTap { url in
+                    self.alert(title:"URL", message: url.absoluteString)
+                }
+
+                //Custom types
+
+                label.customColor[customType] = UIColor.purple
+                label.customSelectedColor[customType] = UIColor.green
+                label.customColor[customType2] = UIColor.magenta
+                label.customSelectedColor[customType2] = UIColor.green
+                
+                label.configureLinkAttribute = { (type, attributes, isSelected) in
+                    var atts = attributes
+                    switch type {
+                    case PTActiveType.hashtag:
+                        atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)
+                    case customType3:
+                        atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
+                    default: ()
+                    }
+                    
+                    return atts
+                }
+
+                label.handleCustomTap(for: customType) { text in
+                    self.alert(title:"Custom type", message: text)
+                }
+                label.handleCustomTap(for: customType) { text in
+                    self.alert(title:"Custom type", message: text)
+                }
+                label.handleCustomTap(for: customType2) { text in
+                    self.alert(title:"Custom type", message: text)
+                }
+                label.handleCustomTap(for: customType3) { text in
+                    self.alert(title:"Custom type", message: text)
+                }
+            }
+
+            view.addSubview(label)
+            label.snp.makeConstraints { make in
+                make.left.right.equalToSuperview().inset(20)
+                make.top.equalToSuperview().inset(40)
+                make.height.equalTo(300)
+            }
+        case String.movieCutOutput,String.share:
+            let layoutBtn = PTLayoutButton()
+            layoutBtn.layoutStyle = .leftImageRightTitle
+            layoutBtn.setTitle("123", for: .normal)
+            layoutBtn.midSpacing = 0
+            layoutBtn.imageSize = CGSizeMake(100, 100)
+            layoutBtn.backgroundColor = .systemBlue
+            view.addSubview(layoutBtn)
+            layoutBtn.snp.makeConstraints { make in
+                make.width.height.equalTo(100)
+                make.centerX.centerY.equalToSuperview()
+            }
+            switch self.typeString {
+            case String.movieCutOutput:
+                PTGCDManager.gcdAfter(time: 1) {
+                    layoutBtn.layerProgress(value: 0.5,borderWidth: 4)
+                }
+            default:
+                break
+            }
+            layoutBtn.addActionHandlers { sender in
+                switch self.typeString {
+                case String.movieCutOutput:
+                    layoutBtn.updateLayerProgress(progress: 0.7)
+                default:
+                    break
+                }
+            }
         default:
             break
         }
+    }
+}
+
+extension PTFuncDetailViewController {
+    func alert(title:String,message:String) {
+        UIViewController.gobal_drop(title: title,subTitle: message)
     }
 }
 

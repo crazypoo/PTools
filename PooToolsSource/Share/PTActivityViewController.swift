@@ -143,20 +143,9 @@ open class PTActivityViewController:UIActivityViewController {
     private lazy var previewLabel:PTActiveLabel = {
         let label = PTActiveLabel()
         
-        let attributedString = NSMutableAttributedString()
-        
-        for (index, item) in activityItems.enumerated() {
-            
-            if let url = item as? URL {
-                attributedString.append(NSAttributedString(string: "\n\(url.absoluteString)"))
-            } else if let text = item as? String {
-                attributedString.append(NSAttributedString(string: text))
-            }
-        }
-
         label.urlMaximumLength = 31
         label.customize { label in
-            label.text = attributedString.string
+            label.text = self.contentAtt.string
             label.font = previewFont
             label.numberOfLines = previewNumberOfLines
             label.lineSpacing = 2
@@ -223,6 +212,38 @@ open class PTActivityViewController:UIActivityViewController {
     /// Content的间隔(bottom)
     public var previewBottomMargin: CGFloat = 8
         
+    private var haveImage:Bool = false
+    private lazy var fullContentHeight:CGFloat = {
+        let value:CGFloat = (CGFloat.kSCREEN_HEIGHT / 2) - previewBottomMargin * 5 - (CGFloat.kNavBarHeight_Total + previewTopMargin)
+        return value
+    }()
+    private lazy var contentAtt:NSMutableAttributedString = {
+        let attributedString = NSMutableAttributedString()
+        
+        var urlString = ""
+        var contentString = ""
+        for (index, item) in activityItems.enumerated() {
+            if let url = item as? URL {
+                urlString = url.absoluteString
+            } else if let text = item as? String {
+                contentString = text
+            }
+        }
+        
+        var urlLines = 0
+        if !urlString.stringIsEmpty() {
+            urlLines = numberOfLines(urlString)
+        }
+        
+        let contentLines = numberOfLines(contentString)
+        let textMaxLines = (previewNumberOfLines - urlLines)
+
+        let contentText = contentString.truncatedText(maxLineNumber: textMaxLines, font: self.previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
+        attributedString.append(NSAttributedString(string: contentText + (contentLines > textMaxLines ? "...." : "")))
+        attributedString.append(NSAttributedString(string: "\n\(urlString)"))
+        return attributedString
+    }()
+    
     @objc public convenience init(activityItems: [Any]) {
         self.init(activityItems: activityItems, applicationActivities: nil)
     }
@@ -265,8 +286,12 @@ open class PTActivityViewController:UIActivityViewController {
         
         preview.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + previewTopMargin)
-            make.bottom.equalTo(self.view.snp.top).offset(-previewBottomMargin)
+            if #available(iOS 17.0, *) {
+                make.bottom.equalTo(AppWindows!.snp.centerY).offset(-(previewBottomMargin * 5))
+            } else {
+                make.bottom.equalTo(self.view.snp.top).offset(-previewBottomMargin)
+            }
+            make.height.equalTo(self.fullContentHeight)
         }
     }
     
@@ -284,6 +309,7 @@ open class PTActivityViewController:UIActivityViewController {
         super.viewDidLoad()
         
         if let previewImage = activityItems.first(where: { $0 is UIImage }) as? UIImage {
+            self.haveImage = true
             preview.contentView.addSubviews([previewImageView,previewLabel])
             previewImageView.image = previewImage
             previewImageView.snp.makeConstraints { make in
@@ -300,6 +326,8 @@ open class PTActivityViewController:UIActivityViewController {
             }
 
         } else {
+            self.haveImage = false
+            
             preview.contentView.addSubviews([previewLabel])
             previewLabel.snp.makeConstraints { make in
                 make.left.right.equalToSuperview().inset(previewPadding)
@@ -313,6 +341,15 @@ open class PTActivityViewController:UIActivityViewController {
         }
         swipeGesture.direction = .down
         preview.addGestureRecognizer(swipeGesture)
+        
+        var showContentHeight:CGFloat = fullContentHeight
+        let contentHeight = UIView.sizeFor(string: contentAtt.string, font: previewFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelContentWidth()).height + previewPadding * 2
+        if contentHeight < fullContentHeight {
+            showContentHeight = contentHeight
+        }
+        preview.snp.updateConstraints { make in
+            make.height.equalTo(showContentHeight)
+        }
     }
         
     @objc public func presentActionSheet(_ vc: UIViewController, from view: UIView) {
@@ -323,4 +360,18 @@ open class PTActivityViewController:UIActivityViewController {
         }
         vc.present(self, animated: true, completion: nil)
     }
+    
+    func labelContentWidth() -> CGFloat {
+        var labelW:CGFloat = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
+        if haveImage {
+            labelW = (labelW - previewImageSideLength - previewPadding * 3)
+        } else {
+            labelW = (labelW - previewPadding * 2)
+        }
+        return labelW
+    }
+    
+    func numberOfLines(_ string: String) -> Int {
+        return string.numberOfLines(font: previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
+   }
 }

@@ -46,6 +46,10 @@ public class PTAppBaseConfig: NSObject {
     public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
     public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
     
+    //MARK: ScreenShot
+    public var screenShotShare:Any = UIImage(systemName: "square.and.pencil") as Any
+    public var screenShotFeedback:Any = UIImage(systemName: "square.and.arrow.up") as Any
+
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public func gobalWebImageLoadOption()->KingfisherOptionsInfo {

@@ -582,6 +582,38 @@ public extension String {
         return Int(totalHeight / lineHeight)
     }   
     
+    func truncatedText(maxLineNumber:Int,
+                       font:UIFont,
+                       labelShowWidth:CGFloat,
+                       lineSpacing:NSNumber? = nil) -> String {
+       var truncatedText = self
+
+        guard self.numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > maxLineNumber else {
+         return self
+       }
+
+       // Perform quick "rough cut"
+       while truncatedText.numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > (maxLineNumber * 2) {
+           truncatedText = String(truncatedText.prefix(truncatedText.count / 2))
+       }
+
+       // Capture the endIndex of truncatedText before appending ellipsis
+       var truncatedTextCursor = truncatedText.endIndex
+
+       // Remove characters ahead of ellipsis until the text is the right number of lines
+       while truncatedText.numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > maxLineNumber {
+         // To avoid "Cannot decrement before startIndex"
+         guard truncatedTextCursor > truncatedText.startIndex else {
+           break
+         }
+
+         truncatedTextCursor = truncatedText.index(before: truncatedTextCursor)
+         truncatedText.remove(at: truncatedTextCursor)
+       }
+
+       return truncatedText
+   }
+
     //MARK: 用于类似推文的操作
     func trim(to maximumCharacters: Int) -> String {
         return "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."

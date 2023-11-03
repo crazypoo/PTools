@@ -425,7 +425,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     }()
     
     private lazy var feedback:PTLayoutButton = {
-        let view = self.viewLayoutBtnSet(title: "意见反馈", image: "square.and.pencil")
+        let view = self.viewLayoutBtnSet(title: "意见反馈", image: PTAppBaseConfig.share.screenShotFeedback)
         view.addActionHandlers { sender in
             if self.actionHandle != nil {
                 self.actionHandle!(.Feedback,self.shareImageView.image!)
@@ -436,7 +436,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     }()
     
     private lazy var share:PTLayoutButton = {
-        let view = self.viewLayoutBtnSet(title: "分享好友", image: "square.and.arrow.up")
+        let view = self.viewLayoutBtnSet(title: "分享好友", image: PTAppBaseConfig.share.screenShotShare)
         view.addActionHandlers { sender in
             if self.actionHandle != nil {
                 self.actionHandle!(.Share,self.shareImageView.image!)
@@ -520,7 +520,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
         }
     }
     
-    func viewLayoutBtnSet(title:String,image:String) -> PTLayoutButton {
+    func viewLayoutBtnSet(title:String,image:Any) -> PTLayoutButton {
         let view = PTLayoutButton()
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 5

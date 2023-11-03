@@ -29,12 +29,16 @@ public extension String {
     static let cleanCache = "清理缓存"
     static let touchID = "TouchID"
     static let rotation = "旋转屏幕"
+    static let share = "分享"
+    static let checkUpdate = "检测更新"
 
     static let slider = "滑动条"
     static let rate = "评价星星"
     static let segment = "分选栏目"
     static let countLabel = "跳动Label"
     static let throughLabel = "划线Label"
+    static let twitterLabel = "推文Label"
+    static let movieCutOutput = "类似剪映的视频输出进度效果"
 }
 
 class PTFuncNameViewController: PTBaseViewController {
@@ -145,7 +149,17 @@ class PTFuncNameViewController: PTBaseViewController {
         rotation.accessoryType = .DisclosureIndicator
         rotation.disclosureIndicatorImage = self.disclosureIndicatorImage
 
-        let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation]
+        let share = PTFusionCellModel()
+        share.name = .share
+        share.accessoryType = .DisclosureIndicator
+        share.disclosureIndicatorImage = self.disclosureIndicatorImage
+
+        let checkUpdate = PTFusionCellModel()
+        checkUpdate.name = .checkUpdate
+        checkUpdate.accessoryType = .DisclosureIndicator
+        checkUpdate.disclosureIndicatorImage = self.disclosureIndicatorImage
+
+        let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation,share,checkUpdate]
         
         var phoneRows = [PTRows]()
         phoneArrs.enumerated().forEach { index,value in
@@ -183,7 +197,17 @@ class PTFuncNameViewController: PTBaseViewController {
         throughLabel.accessoryType = .DisclosureIndicator
         throughLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel]
+        let twitterLabel = PTFusionCellModel()
+        twitterLabel.name = .twitterLabel
+        twitterLabel.accessoryType = .DisclosureIndicator
+        twitterLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        
+        let movieCutOutput = PTFusionCellModel()
+        movieCutOutput.name = .movieCutOutput
+        movieCutOutput.accessoryType = .DisclosureIndicator
+        movieCutOutput.disclosureIndicatorImage = self.disclosureIndicatorImage
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -203,18 +227,19 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.topRefresh = true
         if #available(iOS 17.0, *) {
         } else {
-//            cConfig.showEmptyAlert = true
+#if POOTOOLS_LISTEMPTYDATA
+            cConfig.showEmptyAlert = true
+#endif
         }
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
                 
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTTestHeader
-            header.backgroundColor = .blue
+            header.sectionModel = model
             return header
         }
         aaaaaaa.footerInCollection = { kind,collectionView,model,index in
             let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
-            footer.backgroundColor = .red
             return footer
         }
         aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
@@ -310,6 +335,26 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .osskit {
                 let vc = PTSpeechViewController()
                 self.navigationController?.pushViewController(vc)
+            } else if itemRow.title == .share {
+                guard let url = URL(string: shareURLString) else {
+                    return
+                }
+
+                let share = PTShareCustomActivity()
+                share.text = shareText
+                share.url = url
+                share.image = UIImage(named: "DemoImage")
+                share.customActivityTitle = "测试Title"
+                share.customActivityImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 54))
+
+                let items: [Any] = [shareText, url, UIImage(named: "DemoImage")!]
+
+                let vc = PTActivityViewController(activityItems: items,applicationActivities: [share])
+                vc.previewNumberOfLines = 10
+                vc.presentActionSheet(self, from: collectionViews.cellForItem(at: indexPath)!)
+
+            } else if itemRow.title == .checkUpdate {
+                PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
@@ -372,7 +417,6 @@ class PTFuncNameViewController: PTBaseViewController {
         more.addActionHandlers { sender in
             self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
-        
         
         self.view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
