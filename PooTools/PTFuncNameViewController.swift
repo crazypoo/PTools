@@ -52,16 +52,22 @@ class PTFuncNameViewController: PTBaseViewController {
     private var videoEdit: PTVideoEdit?
     fileprivate var cancellables = Set<AnyCancellable>()
 
-    let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
+    func rowBaseModel(name:String) -> PTFusionCellModel {
+        let models = PTFusionCellModel()
+        models.name = .localNetWork
+        models.haveLine = true
+        models.accessoryType = .DisclosureIndicator
+        models.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
+        return models
+    }
     
     lazy var cSections : [PTSection] = {
+        let disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
+        let sectionTitleFont:UIFont = .appfont(size: 18,bold: true)
         /**
             网络
          */
-        let localNet = PTFusionCellModel()
-        localNet.name = .localNetWork
-        localNet.accessoryType = .DisclosureIndicator
-        localNet.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let localNet = self.rowBaseModel(name: .localNetWork)
         
         let netArrs = [localNet]
         
@@ -71,40 +77,29 @@ class PTFuncNameViewController: PTBaseViewController {
             netRows.append(row)
         }
         
-        let netSection = PTSection.init(headerTitle: "网络",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: netRows)
+        let sectionModel_net = PTFusionCellModel()
+        sectionModel_net.name = "网络"
+        sectionModel_net.cellFont = sectionTitleFont
+        sectionModel_net.accessoryType = .More
+        sectionModel_net.disclosureIndicatorImage = disclosureIndicatorImage
+        sectionModel_net.moreLayoutStyle = .upImageDownTitle
+
+        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: netRows,headerDataModel: sectionModel_net)
         
         /**
             图片
          */
-        let imageReview = PTFusionCellModel()
-        imageReview.name = .imageReview
-        imageReview.accessoryType = .DisclosureIndicator
-        imageReview.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let imageReview = self.rowBaseModel(name: .imageReview)
         
-        let videoEditor = PTFusionCellModel()
-        videoEditor.name = .videoEditor
-        videoEditor.accessoryType = .DisclosureIndicator
-        videoEditor.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let videoEditor = self.rowBaseModel(name: .videoEditor)
 
-        let sign = PTFusionCellModel()
-        sign.name = .sign
-        sign.accessoryType = .DisclosureIndicator
-        sign.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let sign = self.rowBaseModel(name: .sign)
 
-        let dymanicCode = PTFusionCellModel()
-        dymanicCode.name = .dymanicCode
-        dymanicCode.accessoryType = .DisclosureIndicator
-        dymanicCode.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let dymanicCode = self.rowBaseModel(name: .dymanicCode)
 
-        let oss = PTFusionCellModel()
-        oss.name = .osskit
-        oss.accessoryType = .DisclosureIndicator
-        oss.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let oss = self.rowBaseModel(name: .osskit)
 
-        let vision = PTFusionCellModel()
-        vision.name = .vision
-        vision.accessoryType = .DisclosureIndicator
-        vision.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let vision = self.rowBaseModel(name: .vision)
         
         let mediaArrs = [imageReview,videoEditor,sign,dymanicCode,oss,vision]
         
@@ -114,7 +109,14 @@ class PTFuncNameViewController: PTBaseViewController {
             mediaRows.append(row)
         }
         
-        let mediaSection = PTSection.init(headerTitle: "多媒体",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows)
+        let sectionModel_media = PTFusionCellModel()
+        sectionModel_media.name = "多媒体"
+        sectionModel_media.cellFont = sectionTitleFont
+        sectionModel_media.accessoryType = .More
+        sectionModel_media.disclosureIndicatorImage = disclosureIndicatorImage
+        sectionModel_media.moreLayoutStyle = .leftImageRightTitle
+
+        let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
 
         /**
             本机
@@ -125,39 +127,21 @@ class PTFuncNameViewController: PTBaseViewController {
         jailBroken.desc = "是否X类型:\(UIDevice.pt.oneOfXDevice() ? "是" : "否"),是否越狱了:\(UIDevice.pt.isJailBroken ? "是" : "否"),机型:\(Device.identifier),运营商:\(String(describing: UIDevice.pt.carrierNames()?.first))"
         jailBroken.accessoryType = .NoneAccessoryView
         
-        let callPhone = PTFusionCellModel()
-        callPhone.name = .phoneCall
+        let callPhone = self.rowBaseModel(name: .phoneCall)
         callPhone.cellDescFont = .appfont(size: 12)
         callPhone.desc = "打电话到13800138000"
-        callPhone.accessoryType = .DisclosureIndicator
-        callPhone.disclosureIndicatorImage = self.disclosureIndicatorImage
 
-        let cleanCaches = PTFusionCellModel()
-        cleanCaches.name = .cleanCache
+        let cleanCaches = self.rowBaseModel(name: .cleanCache)
         cleanCaches.cellDescFont = .appfont(size: 12)
         cleanCaches.desc = "缓存:\(String(format: "%@", PCleanCache.getCacheSize()))"
-        cleanCaches.accessoryType = .DisclosureIndicator
-        cleanCaches.disclosureIndicatorImage = self.disclosureIndicatorImage
 
-        let touchID = PTFusionCellModel()
-        touchID.name = .touchID
-        touchID.accessoryType = .DisclosureIndicator
-        touchID.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let touchID = self.rowBaseModel(name: .touchID)
 
-        let rotation = PTFusionCellModel()
-        rotation.name = .rotation
-        rotation.accessoryType = .DisclosureIndicator
-        rotation.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let rotation = self.rowBaseModel(name: .rotation)
 
-        let share = PTFusionCellModel()
-        share.name = .share
-        share.accessoryType = .DisclosureIndicator
-        share.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let share = self.rowBaseModel(name: .share)
 
-        let checkUpdate = PTFusionCellModel()
-        checkUpdate.name = .checkUpdate
-        checkUpdate.accessoryType = .DisclosureIndicator
-        checkUpdate.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let checkUpdate = self.rowBaseModel(name: .checkUpdate)
 
         let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation,share,checkUpdate]
         
@@ -167,45 +151,31 @@ class PTFuncNameViewController: PTBaseViewController {
             phoneRows.append(row)
         }
         
-        let phoneSection = PTSection.init(headerTitle: "本机",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: phoneRows)
+        let sectionModel_phone = PTFusionCellModel()
+        sectionModel_phone.name = "本机"
+        sectionModel_phone.cellFont = sectionTitleFont
+        sectionModel_phone.accessoryType = .More
+        sectionModel_phone.disclosureIndicatorImage = disclosureIndicatorImage
+        sectionModel_phone.moreLayoutStyle = .leftTitleRightImage
+
+        let phoneSection = PTSection.init(headerTitle: sectionModel_phone.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: phoneRows,headerDataModel: sectionModel_phone)
         
         /**
             UIKIT
          */
-        let slider = PTFusionCellModel()
-        slider.name = .slider
-        slider.accessoryType = .DisclosureIndicator
-        slider.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let slider = self.rowBaseModel(name: .slider)
         
-        let rate = PTFusionCellModel()
-        rate.name = .rate
-        rate.accessoryType = .DisclosureIndicator
-        rate.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let rate = self.rowBaseModel(name: .rate)
 
-        let segment = PTFusionCellModel()
-        segment.name = .segment
-        segment.accessoryType = .DisclosureIndicator
-        segment.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let segment = self.rowBaseModel(name: .segment)
 
-        let countLabel = PTFusionCellModel()
-        countLabel.name = .countLabel
-        countLabel.accessoryType = .DisclosureIndicator
-        countLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let countLabel = self.rowBaseModel(name: .countLabel)
         
-        let throughLabel = PTFusionCellModel()
-        throughLabel.name = .throughLabel
-        throughLabel.accessoryType = .DisclosureIndicator
-        throughLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let throughLabel = self.rowBaseModel(name: .throughLabel)
         
-        let twitterLabel = PTFusionCellModel()
-        twitterLabel.name = .twitterLabel
-        twitterLabel.accessoryType = .DisclosureIndicator
-        twitterLabel.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let twitterLabel = self.rowBaseModel(name: .twitterLabel)
         
-        let movieCutOutput = PTFusionCellModel()
-        movieCutOutput.name = .movieCutOutput
-        movieCutOutput.accessoryType = .DisclosureIndicator
-        movieCutOutput.disclosureIndicatorImage = self.disclosureIndicatorImage
+        let movieCutOutput = self.rowBaseModel(name: .movieCutOutput)
         
         let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput]
         
@@ -215,7 +185,14 @@ class PTFuncNameViewController: PTBaseViewController {
             uikitRows.append(row)
         }
         
-        let uikitSection = PTSection.init(headerTitle: "UIKIT",headerCls: PTTestHeader.self,headerID: PTTestHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: uikitRows)
+        let sectionModel_uikit = PTFusionCellModel()
+        sectionModel_uikit.name = "UIKIT"
+        sectionModel_uikit.cellFont = sectionTitleFont
+        sectionModel_uikit.accessoryType = .More
+        sectionModel_uikit.disclosureIndicatorImage = disclosureIndicatorImage
+        sectionModel_uikit.moreLayoutStyle = .upTitleDownImage
+
+        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
 
         return [netSection,mediaSection,phoneSection,uikitSection]
     }()
@@ -234,13 +211,18 @@ class PTFuncNameViewController: PTBaseViewController {
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
                 
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
-            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTTestHeader
-            header.sectionModel = model
+            let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
+            header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
             return header
         }
         aaaaaaa.footerInCollection = { kind,collectionView,model,index in
-            let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
-            return footer
+            if model.footerID == PTVersionFooter.ID {
+                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTVersionFooter
+                return footer
+            } else {
+                let footer = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.footerID!, for: index) as! PTTestFooter
+                return footer
+            }
         }
         aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
             let itemRow = dataModel.rows[indexPath.row]

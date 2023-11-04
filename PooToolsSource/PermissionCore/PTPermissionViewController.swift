@@ -360,7 +360,7 @@ public class PTPermissionViewController: PTBaseViewController {
         
         var permissionRows = [PTRows]()
         permissions.enumerated().forEach { index,value in
-            let row = PTRows.init(content: value.desc,cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
+            let row = PTRows.init(cls: PTPermissionCell.self,ID: PTPermissionCell.ID,dataModel: value)
             permissionRows.append(row)
         }
         

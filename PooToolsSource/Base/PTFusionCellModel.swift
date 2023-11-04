@@ -12,6 +12,7 @@ import AttributedString
 public enum PTFusionShowAccessoryType:Int {
     case Switch
     case DisclosureIndicator
+    case More
     case NoneAccessoryView
 }
 
@@ -69,4 +70,20 @@ open class PTFusionCellModel: NSObject {
     open var cellCorner:CGFloat = 10
     ///Cell的Switch的顏色
     open var switchTinColor:UIColor = .systemGreen
+    ///Section的更多文字
+    open var moreString:String = "更多"
+    ///Section的更多文字颜色
+    open var moreColor:UIColor = .lightGray
+    ///更多的字体
+    open var moreFont:UIFont = .appfont(size: 13)
+    ///更多与箭头的间隙
+    open var moreDisclosureIndicatorSpace:CGFloat = 5
+    ///更多箭头的大小
+    open var moreDisclosureIndicatorSize:CGSize = CGSizeMake(14, 14)
+    ///更多展示方式
+    open var moreLayoutStyle: PTLayoutButtonStyle = .leftTitleRightImage
+    ///Section的更多箭头图片
+    open var moreDisclosureIndicator :Any? = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
+    ///iCloudDocument地址
+    open var iCloudDocument:String = ""
 }

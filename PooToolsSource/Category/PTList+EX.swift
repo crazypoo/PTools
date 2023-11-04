@@ -11,7 +11,6 @@ import UIKit
 open class PTSection: NSObject {
     
     public var headerTitle: String?
-    public var headerPlaceholder:String?
     public var headerCls: AnyClass?
     public var headerID: String?
     public var footerCls: AnyClass?
@@ -19,14 +18,9 @@ open class PTSection: NSObject {
     public var footerHeight: CGFloat? = CGFloat.leastNormalMagnitude
     public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
     public var rows: [PTRows]!
-    public var haveDisclosureIndicator:Bool? = false
-    public var disclosureIndicatorTitle:String?
-    public var disclosureIndicatorImage:String? = ""
-    public var disclosureIndicatorSelectImage:String? = ""
-    public var isSelectIndicator:Bool? = false
+    public var headerDataModel: AnyObject?
 
     public init(headerTitle: String? = "",
-                headerPlaceholder: String? = "",
                 headerCls: AnyClass? = nil,
                 headerID: String? = "",
                 footerCls:AnyClass? = nil,
@@ -34,16 +28,10 @@ open class PTSection: NSObject {
                 footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
                 headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
                 rows:[PTRows]!,
-                haveDisclosureIndicator:Bool? = false,
-                disclosureIndicatorTitle:String? = "",
-                disclosureIndicatorImage:String? = "",
-                disclosureIndicatorSelectImage:String? = "",
-                isSelectIndicator:Bool? = false
-         ) {
+                headerDataModel:AnyObject? = nil) {
         super.init()
         
         self.headerTitle = headerTitle
-        self.headerPlaceholder = headerPlaceholder
         self.headerCls = headerCls
         self.headerID = headerID
         self.footerCls = footerCls
@@ -51,11 +39,7 @@ open class PTSection: NSObject {
         self.footerHeight = footerHeight
         self.headerHeight = headerHeight
         self.rows = rows
-        self.haveDisclosureIndicator = haveDisclosureIndicator
-        self.disclosureIndicatorTitle = disclosureIndicatorTitle
-        self.disclosureIndicatorImage = disclosureIndicatorImage
-        self.disclosureIndicatorSelectImage = disclosureIndicatorSelectImage
-        self.isSelectIndicator = isSelectIndicator
+        self.headerDataModel = headerDataModel
     }
 }
 
@@ -63,54 +47,24 @@ open class PTSection: NSObject {
 open class PTRows: NSObject {
     
     open var title = ""
-    open var placeholder = ""
     open var cls: AnyClass?
     open var ID: String = ""
     open var dataModel: AnyObject?
-    open var titleColor = UIColor.randomColor
-    open var haveDisclosureIndicator = false
-    open var haveSwitchView = false
-    open var textEdit = false
-    open var keyboard:UIKeyboardType = .default
-    open var infoColor = UIColor.randomColor
-    open var iconName = ""
     open var nibName = ""
-    open var content = ""
-    open var contentColor = UIColor.randomColor
     open var badge:Int = 0
 
     public init(title: String = "",
-         placeholder: String = "",
-         content:String = "",
-         cls: AnyClass? = nil,
-         nibName:String? = "",
-         ID: String? = "",
-         titleColor:UIColor? = UIColor.randomColor,
-         haveDisclosureIndicator:Bool? = false,
-         haveSwitchView:Bool? = false,
-         textEdit:Bool? = false,
-         keyboard:UIKeyboardType? = .default,
-         infoColor:UIColor? = UIColor.randomColor,
-         contentColor:UIColor? = UIColor.randomColor,
-         iconName:String? = "",
-         dataModel:AnyObject? = nil,
-         badge:Int? = 0) {
+                cls: AnyClass? = nil,
+                nibName:String? = "",
+                ID: String? = "",
+                dataModel:AnyObject? = nil,
+                badge:Int? = 0) {
         super.init()
         self.title = title
-        self.placeholder = placeholder
         self.ID = ID!
         self.cls = cls
-        self.titleColor = titleColor!
-        self.haveDisclosureIndicator = haveDisclosureIndicator!
-        self.textEdit = textEdit!
-        self.keyboard = keyboard!
-        self.infoColor = infoColor!
-        self.iconName = iconName!
         self.dataModel = dataModel
         self.nibName = nibName!
-        self.haveSwitchView = haveSwitchView!
-        self.content = content
-        self.contentColor = contentColor!
         self.badge = badge!
     }
 }

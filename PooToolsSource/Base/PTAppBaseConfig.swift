@@ -50,6 +50,10 @@ public class PTAppBaseConfig: NSObject {
     public var screenShotShare:Any = UIImage(systemName: "square.and.pencil") as Any
     public var screenShotFeedback:Any = UIImage(systemName: "square.and.arrow.up") as Any
 
+    //MARK: App的隐私连接
+    public var privacyURL:String = "https://www.qq.com"
+    public var privacyNameFont:UIFont = .appfont(size: 13)
+
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public func gobalWebImageLoadOption()->KingfisherOptionsInfo {
