@@ -68,6 +68,9 @@ public class PTLoadImageFunction: NSObject {
                         }
                     }
                 }
+            } else if dataUrlString.isSingleEmoji {
+                let emojiImage = dataUrlString.emojiToImage()
+                taskHandle([emojiImage],emojiImage)
             } else {
                 if let image = UIImage(named: dataUrlString) {
                     taskHandle([image],image)
@@ -76,6 +79,9 @@ public class PTLoadImageFunction: NSObject {
                     taskHandle([systemImage],systemImage)
                 }
             }
+        } else if contentData is Data {
+            let dataImage = UIImage(data: contentData as! Data)!
+            taskHandle([dataImage],dataImage)
         }
     }
 }

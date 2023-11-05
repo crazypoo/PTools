@@ -297,12 +297,10 @@ public class PTCollectionView: UIView {
         mSections = collectionData
         
         collectionView.pt_register(by: mSections)
-        PTGCDManager.gcdAfter(time: 0.1) {
-            self.collectionView.reloadData {
-                PTGCDManager.gcdAfter(time: 0.35) {
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
-                    }
+        self.collectionView.reloadData {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                if finishTask != nil {
+                    finishTask!(self.collectionView)
                 }
             }
         }

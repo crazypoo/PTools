@@ -20,8 +20,8 @@ open class PTFusionCellModel: NSObject {
     ///图片名
     open var leftImage:Any?
     ///图片上下间隔默认CGFloat.ScaleW(w: 5)
-    open var imageTopOffset:CGFloat = CGFloat.ScaleW(w: 5)
-    open var imageBottomOffset:CGFloat = CGFloat.ScaleW(w: 5)
+    open var imageTopOffset:CGFloat = 5
+    open var imageBottomOffset:CGFloat = 5
     ///名
     open var name:String = ""
     ///名字颜色

@@ -54,7 +54,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
     func rowBaseModel(name:String) -> PTFusionCellModel {
         let models = PTFusionCellModel()
-        models.name = .localNetWork
+        models.name = name
         models.haveLine = true
         models.accessoryType = .DisclosureIndicator
         models.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
@@ -68,7 +68,10 @@ class PTFuncNameViewController: PTBaseViewController {
             网络
          */
         let localNet = self.rowBaseModel(name: .localNetWork)
-        
+        localNet.leftImage = "🌐".emojiToImage(emojiFont: .appfont(size: 24))
+        localNet.contentIcon = "🌠".emojiToImage(emojiFont: .appfont(size: 24))
+        localNet.content = "1231231231234444444123"
+
         let netArrs = [localNet]
         
         var netRows = [PTRows]()
@@ -226,8 +229,9 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
             let itemRow = dataModel.rows[indexPath.row]
+            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
-            cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            cell.cellModel = cellModel
             return cell
         }
         aaaaaaa.collectionDidSelect = { collectionViews,sModel,indexPath in
