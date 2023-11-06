@@ -102,14 +102,15 @@ public extension UILabel {
     ///   - size: size
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
-                       size:CGSize)->CGSize {
+                       height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                       width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         var dic = [NSAttributedString.Key.font: font] as! [NSAttributedString.Key:Any]
         if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
-        let size = text!.boundingRect(with: CGSize.init(width: size.width, height: size.height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        let size = text!.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin], attributes: dic, context: nil).size
         return size
     }
 }

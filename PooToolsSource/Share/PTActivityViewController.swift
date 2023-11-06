@@ -343,7 +343,7 @@ open class PTActivityViewController:UIActivityViewController {
         preview.addGestureRecognizer(swipeGesture)
         
         var showContentHeight:CGFloat = fullContentHeight
-        let contentHeight = UIView.sizeFor(string: contentAtt.string, font: previewFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelContentWidth()).height + previewPadding * 2
+        let contentHeight = UIView.sizeFor(string: contentAtt.string, font: previewFont,lineSpacing: 2, width: labelContentWidth()).height + previewPadding * 2
         if contentHeight < fullContentHeight {
             showContentHeight = contentHeight
         }

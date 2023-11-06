@@ -237,10 +237,10 @@ open class PTNavItemBtn: UIButton {
         
         var btnW:CGFloat = 0
         if currentAttributedTitle != nil {
-            btnW = UIView.sizeFor(string: currentAttributedTitle!.string, font: titleLabel?.font ?? .systemFont(ofSize: 14), height: 34, width: CGFloat(MAXFLOAT)).width + 5
+            btnW = UIView.sizeFor(string: currentAttributedTitle!.string, font: titleLabel?.font ?? .systemFont(ofSize: 14), height: 34).width + 5
         } else {
             if !(currentTitle ?? "").stringIsEmpty() {
-                btnW = UIView.sizeFor(string: currentTitle!, font: titleLabel?.font ?? .systemFont(ofSize: 14), height: 34, width: CGFloat(MAXFLOAT)).width + 5
+                btnW = UIView.sizeFor(string: currentTitle!, font: titleLabel?.font ?? .systemFont(ofSize: 14), height: 34).width + 5
             }
         }
         

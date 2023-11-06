@@ -70,7 +70,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let localNet = self.rowBaseModel(name: .localNetWork)
         localNet.leftImage = "🌐".emojiToImage(emojiFont: .appfont(size: 24))
         localNet.contentIcon = "🌠".emojiToImage(emojiFont: .appfont(size: 24))
-        localNet.content = "1231231231234444444123"
+        localNet.content = "12312312312312312312312312312312312312312312321"
 
         let netArrs = [localNet]
         

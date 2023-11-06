@@ -38,7 +38,7 @@ open class PTMemory: NSObject {
             timer = Timer.scheduledTimer(timeInterval: 5, repeats: true) { _ in
                 let memoryString = self.reportMemory()
                 self.fpsLabel.text = memoryString
-                let labelW = self.fpsLabel.sizeFor(size: CGSize(width: CGFloat(MAXFLOAT), height: 30)).width + 20
+                let labelW = self.fpsLabel.sizeFor(height: 30).width + 20
                 
                 self.avatar!.frame = CGRect(x: self.avatar!.frame.origin.x, y: self.avatar!.frame.origin.y, width: labelW, height: self.avatar!.frame.size.height)
             }

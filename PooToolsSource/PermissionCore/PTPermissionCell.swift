@@ -347,7 +347,7 @@ class PTPermissionCell: PTBaseNormalCell {
         authorizedButton.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 7.5))
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(UIView.sizeFor(string: "询问授权", font: self.authorizedButton.titleLabel!.font!, height: 24, width: CGFloat(MAXFLOAT)).width + CGFloat.ScaleW(w: 10))
+            make.width.equalTo(UIView.sizeFor(string: "询问授权", font: self.authorizedButton.titleLabel!.font!, height: 24).width + CGFloat.ScaleW(w: 10))
         }
         
         cellIcon.snp.makeConstraints { make in

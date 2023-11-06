@@ -66,7 +66,7 @@ class PTUpdateTipsContentView : UIView {
             make.bottom.equalToSuperview()
         }
                                 
-        let tmpHight = UIView.sizeFor(string: descriptionString, font: .appfont(size: 14),lineSpacing: 2, height: CGFloat(MAXFLOAT), width: baseContentSize.width).height
+        let tmpHight = UIView.sizeFor(string: descriptionString, font: .appfont(size: 14),lineSpacing: 2, width: baseContentSize.width).height
         
         let valueLabel = UILabel()
         valueLabel.numberOfLines = 0

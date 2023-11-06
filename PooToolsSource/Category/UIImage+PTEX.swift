@@ -181,8 +181,8 @@ public extension UIImage {
         let sqrtLength = sqrt(viewWidth * viewWidth + viewHeight * viewHeight)
         let attr = [NSAttributedString.Key.font:font,NSAttributedString.Key.foregroundColor:newColor!]
         let mark : NSString = title as NSString
-        let strWidth = UIView.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: CGFloat(MAXFLOAT)).width
-        let strHeight = UIView.sizeFor(string: title, font: font, height: CGFloat(MAXFLOAT), width: CGFloat(MAXFLOAT)).height
+        let strWidth = UIView.sizeFor(string: title, font: font).width
+        let strHeight = UIView.sizeFor(string: title, font: font).height
         let context = UIGraphicsGetCurrentContext()!
         context.concatenate(CGAffineTransform(translationX: viewWidth/2, y: viewHeight/2))
         context.concatenate(CGAffineTransform(rotationAngle: (Double.pi / 2 / 3)))

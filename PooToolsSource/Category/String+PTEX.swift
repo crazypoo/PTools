@@ -576,8 +576,8 @@ public extension String {
     func numberOfLines(font:UIFont,
                        labelShowWidth:CGFloat,
                        lineSpacing:NSNumber? = nil) -> Int {
-        let lineHeight = UIView.sizeFor(string: "A", font: font,lineSpacing: lineSpacing, height: CGFloat.greatestFiniteMagnitude, width: labelShowWidth).height
-        let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, height: CGFloat.greatestFiniteMagnitude, width: labelShowWidth).height
+        let lineHeight = UIView.sizeFor(string: "A", font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
+        let totalHeight = UIView.sizeFor(string: self, font: font,lineSpacing: lineSpacing, width: labelShowWidth).height
 
         return Int(totalHeight / lineHeight)
     }   

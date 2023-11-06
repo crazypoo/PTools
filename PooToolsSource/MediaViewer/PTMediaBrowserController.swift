@@ -602,7 +602,7 @@ fileprivate extension PTMediaBrowserController {
             labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
         }
 
-        return UIView.sizeFor(string: string, font: viewConfig.viewerFont,lineSpacing: 2, height: CGFloat.greatestFiniteMagnitude, width: labelW).height
+        return UIView.sizeFor(string: string, font: viewConfig.viewerFont,lineSpacing: 2, width: labelW).height
     }
 
     func labelContentWidth() -> CGFloat {

@@ -359,14 +359,14 @@ open class PTNavigationBar: UIView {
         }
         
         if !(barItemBtn.currentAttributedTitle?.string ?? "").stringIsEmpty() {
-            var btnW:CGFloat = UIView.sizeFor(string: barItemBtn.currentAttributedTitle!.string, font: barItemBtn.titleLabel?.font ?? .systemFont(ofSize: 14), height: 34, width: CGFloat(MAXFLOAT)).width
+            var btnW:CGFloat = UIView.sizeFor(string: barItemBtn.currentAttributedTitle!.string, font: barItemBtn.titleLabel?.font ?? .systemFont(ofSize: 14), height: 34).width
             if barItemBtn.imageView?.image != nil {
                 btnW += barItemBtn.imageView!.pt.jx_width
             }
             btnW += barItemBtn.jx_textAttachWidth + 5
             return btnW
         } else if !(barItemBtn.currentTitle ?? "").stringIsEmpty() {
-            var btnW:CGFloat = UIView.sizeFor(string: barItemBtn.currentTitle!, font: barItemBtn.titleLabel?.font ?? .systemFont(ofSize: 14), height: 34, width: CGFloat(MAXFLOAT)).width
+            var btnW:CGFloat = UIView.sizeFor(string: barItemBtn.currentTitle!, font: barItemBtn.titleLabel?.font ?? .systemFont(ofSize: 14), height: 34).width
             if barItemBtn.imageView?.image != nil {
                 btnW += barItemBtn.imageView!.pt.jx_width
             }

@@ -22,6 +22,7 @@ open class PTFusionCellModel: NSObject {
     ///图片上下间隔默认CGFloat.ScaleW(w: 5)
     open var imageTopOffset:CGFloat = 5
     open var imageBottomOffset:CGFloat = 5
+    open var labelLineSpace:CGFloat = 2
     ///名
     open var name:String = ""
     ///名字颜色

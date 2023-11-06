@@ -364,8 +364,8 @@ public class PTSegmentView: UIView {
     
     func getCurrentSubWidthAndType(value:PTSegmentModel,handle: (CGFloat, PTSegmentButtonShowType)->Void) {
         var subShowType:PTSegmentButtonShowType!
-        let normalW = UIView.sizeFor(string: value.titles, font: viewConfig.normalFont, height: frame.size.height, width:  CGFloat(MAXFLOAT)).width
-        let selectedW = UIView.sizeFor(string: value.titles, font: viewConfig.selectedFont, height: frame.size.height, width:  CGFloat(MAXFLOAT)).width
+        let normalW = UIView.sizeFor(string: value.titles, font: viewConfig.normalFont, height: frame.size.height).width
+        let selectedW = UIView.sizeFor(string: value.titles, font: viewConfig.selectedFont, height: frame.size.height).width
         
         var subContentW:CGFloat = 0
         if selectedW >= normalW {

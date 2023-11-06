@@ -337,11 +337,37 @@ public class PTLayoutButton: UIButton {
         
         let totalWidth: CGFloat = leftViewFrame.width + midSpacing + rightViewFrame.width
 
-        leftViewFrame.origin.x = (frame.width - totalWidth) / 2.0
+        var leftOrighialX:CGFloat = 0
+        var rightOrighialX:CGFloat = 0
+        switch self.contentHorizontalAlignment {
+        case .center:
+            leftOrighialX = (frame.width - totalWidth) / 2.0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        case .left:
+            leftOrighialX = 0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        case .right:
+            leftOrighialX = frame.width - rightViewFrame.width - midSpacing - leftViewFrame.width
+            rightOrighialX = frame.width - rightViewFrame.width
+        case .fill:
+            leftOrighialX = (frame.width - totalWidth) / 2.0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        case .leading:
+            leftOrighialX = (frame.width - totalWidth) / 2.0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        case .trailing:
+            leftOrighialX = (frame.width - totalWidth) / 2.0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        default:
+            leftOrighialX = (frame.width - totalWidth) / 2.0
+            rightOrighialX = leftViewFrame.maxX + midSpacing
+        }
+        
+        leftViewFrame.origin.x = leftOrighialX
         leftViewFrame.origin.y = (frame.height - leftViewFrame.height) / 2.0
         leftView?.frame = leftViewFrame
 
-        rightViewFrame.origin.x = leftViewFrame.maxX + midSpacing
+        rightViewFrame.origin.x = rightOrighialX
         rightViewFrame.origin.y = (frame.height - rightViewFrame.height) / 2.0
         rightView?.frame = rightViewFrame
     }

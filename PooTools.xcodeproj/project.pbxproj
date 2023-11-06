@@ -124,6 +124,7 @@
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */; };
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
+		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
@@ -489,6 +490,7 @@
 		554DE0F92AC8243100471FF3 /* PTEditMenuInteractionDummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTEditMenuInteractionDummy.h; sourceTree = "<group>"; };
 		554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTEditMenuInteractionDummy.m; sourceTree = "<group>"; };
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
+		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
@@ -929,6 +931,7 @@
 				9AE4469C28597B1F007DC2B5 /* FileManager+PTEX.swift */,
 				9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */,
 				9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */,
+				555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */,
 				559C1C96293F7ED8002874BA /* NSData+PTEX.swift */,
 				55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */,
 				55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */,
@@ -957,6 +960,7 @@
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
 				55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */,
 				9AE4468B28586309007DC2B5 /* UINavigationBar+PTEX.swift */,
+				5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */,
 				5516CCC029E8622400614980 /* UIRefreshControl+PTEX.swift */,
 				55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */,
 				9AE4467F28585F20007DC2B5 /* UIScrollView+PTEX.swift */,
@@ -971,7 +975,6 @@
 				558D5EF42AAF586700C02042 /* URL+PTEX.swift */,
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				5528931C2AE84886009135F9 /* UIPageControl+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2337,6 +2340,7 @@
 				55024DE429F2855300244E44 /* PTEyeTrackingSessionManager.swift in Sources */,
 				5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */,
 				558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */,
+				555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */,
 				55024DF429F372A600244E44 /* PTDebugFunction.swift in Sources */,
 				55024DDD29F2831500244E44 /* PTFaceEye.swift in Sources */,
 				5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */,

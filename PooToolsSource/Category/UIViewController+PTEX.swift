@@ -290,10 +290,10 @@ public extension UIViewController {
         let banner = FloatingNotificationBanner(title:titleStr,subtitle: subTitleStr)
         banner.duration = duration
         banner.backgroundColor = bannerBackgroundColor!
-        banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
+        banner.subtitleLabel?.textAlignment = UIView.sizeFor(string: subTitleStr, font: subTitleFont!, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.subtitleLabel?.font = subTitleFont
         banner.subtitleLabel?.textColor = subTitleColor!
-        banner.titleLabel?.textAlignment = UIView.sizeFor(string: titleStr, font: titleFont!, height:44, width: CGFloat(MAXFLOAT)).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
+        banner.titleLabel?.textAlignment = UIView.sizeFor(string: titleStr, font: titleFont!, height:44).width > (CGFloat.kSCREEN_WIDTH - 36) ? .left : .center
         banner.titleLabel?.font = titleFont
         banner.titleLabel?.textColor = titleColor!
         banner.show(queuePosition: .front, bannerPosition: .top ,cornerRadius: 15)

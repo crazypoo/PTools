@@ -257,11 +257,11 @@ public class PTActionSheetView: UIView {
         var titleH:CGFloat = 0
         var subTitleH:CGFloat = 0
         if !actionSheetTitle.stringIsEmpty() {
-            titleH = UIView.sizeFor(string: actionSheetTitle, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
+            titleH = UIView.sizeFor(string: actionSheetTitle, font: viewFont, width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
         }
         
         if !actionSheetMessage.stringIsEmpty() {
-            subTitleH = UIView.sizeFor(string: actionSheetMessage, font: viewFont, height: CGFloat(MAXFLOAT), width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
+            subTitleH = UIView.sizeFor(string: actionSheetMessage, font: viewFont, width: CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2).height
         }
         
         var total:CGFloat = 0

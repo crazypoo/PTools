@@ -245,7 +245,7 @@ extension PTSpeechViewController:OSSSpeechDelegate {
         if self.translateToText {
             soundVisualizerMaskView.translateLabel.text = text
             soundVisualizerMaskView.translateLabel.isHidden = false
-            var textHeight = soundVisualizerMaskView.translateLabel.sizeFor(size: CGSize(width: CGFloat.kSCREEN_WIDTH - 40, height: CGFloat(MAXFLOAT))).height + 10
+            var textHeight = soundVisualizerMaskView.translateLabel.sizeFor(width: CGFloat.kSCREEN_WIDTH - 40).height + 10
             
             let centerY = CGFloat.kSCREEN_HEIGHT / 2
             let textMaxHeight = (centerY - CGFloat.statusBarHeight() - 44 - 5)

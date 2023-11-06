@@ -354,17 +354,17 @@ public extension UIView {
     }
     
     @objc class func sizeFor(string:String,
-                              font:UIFont,
-                              lineSpacing:NSNumber? = nil,
-                              height:CGFloat,
-                              width:CGFloat)->CGSize {
+                             font:UIFont,
+                             lineSpacing:NSNumber? = nil,
+                             height:CGFloat = CGFloat.greatestFiniteMagnitude,
+                             width:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         var dic = [NSAttributedString.Key.font:font] as! [NSAttributedString.Key:Any]
         if lineSpacing != nil {
             let paraStyle = NSMutableParagraphStyle()
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
-        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin,.usesDeviceMetrics], attributes: dic, context: nil).size
+        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin], attributes: dic, context: nil).size
         return size
     }
 }
@@ -433,46 +433,46 @@ public extension UIView {
 }
 
 public extension UILabel {
-    @objc func getLabelSize(width:CGFloat,
-                            height:CGFloat)->CGSize {
+    @objc func getLabelSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                            height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat {
-        getLabelSize(width: CGFloat(MAXFLOAT), height: height).width
+        getLabelSize(height: height).width
     }
     
     @objc func getLabelHeight(width:CGFloat)->CGFloat {
-        getLabelSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getLabelSize(width: width).height
     }
 }
 
 public extension UIButton {
-    @objc func getButtonSize(width:CGFloat,
-                             height:CGFloat)->CGSize {
+    @objc func getButtonSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                             height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         UIView.sizeFor(string: titleLabel!.text!, font: titleLabel!.font!, height: height, width: width)
     }
     
     @objc func getButtonWidth(height:CGFloat)->CGFloat {
-        getButtonSize(width: CGFloat(MAXFLOAT), height: height).width
+        getButtonSize(height: height).width
     }
     
     @objc func getButtonHeight(width:CGFloat)->CGFloat {
-        getButtonSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getButtonSize(width: width).height
     }
 }
 
 public extension UITextView {
-    @objc func getTextViewSize(width:CGFloat,
-                               height:CGFloat)->CGSize {
+    @objc func getTextViewSize(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+                               height:CGFloat = CGFloat.greatestFiniteMagnitude)->CGSize {
         UIView.sizeFor(string: text!, font: font!, height: height, width: width)
     }
     
     @objc func getLabelWidth(height:CGFloat)->CGFloat {
-        getTextViewSize(width: CGFloat(MAXFLOAT), height: height).width
+        getTextViewSize(height: height).width
     }
     
     @objc func getLabelHeight(width:CGFloat)->CGFloat {
-        getTextViewSize(width: width, height: CGFloat(MAXFLOAT)).height
+        getTextViewSize(width: width).height
     }
 }

@@ -101,7 +101,7 @@ public class PTFusionCellContent:UIView {
             valueSwitch.removeFromSuperview()
             
             var moreWith:CGFloat = 0
-            let moreStringWidth = UIView.sizeFor(string: self.cellModel!.moreString, font: self.cellModel!.moreFont, height: self.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset), width: CGFloat.greatestFiniteMagnitude).width
+            let moreStringWidth = UIView.sizeFor(string: self.cellModel!.moreString, font: self.cellModel!.moreFont, height: self.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset)).width
             if !NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //两个都有
                 PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
@@ -167,23 +167,6 @@ public class PTFusionCellContent:UIView {
             sectionMore.removeFromSuperview()
         }
         
-//        PTGCDManager.gcdGobal {
-//            PTGCDManager.gcdMain {
-//                self.accessoryViewType(type: self.cellModel!.accessoryType,finish: { cellType in
-//                    PTGCDManager.gcdGobal {
-//                        PTGCDManager.gcdMain {
-//                            self.setContentButton(cellType: cellType)
-//                            if self.cellModel!.conrner != [] {
-//                                self.viewCornerRectCorner(cornerRadii: self.cellModel!.cellCorner, corner: self.cellModel!.conrner)
-//                            } else {
-//                                self.viewCornerRectCorner(cornerRadii: 0, corner: [.allCorners])
-//                            }
-//                        }
-//                    }
-//                })
-//            }
-//        }
-
         accessoryViewType(type: cellModel!.accessoryType) { cellType in
             setLeftIconView(cellType: cellType)
             setRightIconView(cellType: cellType)
@@ -232,17 +215,11 @@ public class PTFusionCellContent:UIView {
     
     fileprivate lazy var sectionMore:PTLayoutButton = {
         let view = PTLayoutButton()
+        view.titleLabel?.textAlignment = .right
+        view.contentHorizontalAlignment = .right
         return view
     }()
-    
-    fileprivate lazy var contentButtonLabel:PTLayoutButton = {
-        let view = PTLayoutButton()
-        view.titleLabel?.numberOfLines = 0
-        view.layoutStyle = .leftImageRightTitle
-        view.isUserInteractionEnabled = false
-        return view
-    }()
-    
+        
     public lazy var topLineView = drawLine()
     public lazy var lineView = drawLine()
     
@@ -479,115 +456,7 @@ public class PTFusionCellContent:UIView {
             finish(.Error)
         }
     }
-    
-    func setContentButton(cellType:PTFusionCellAccessoryView) {
         
-        if !NSObject.checkObject(cellModel!.leftImage as? NSObject) || (cellModel!.nameAttr != nil || !cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty()) {
-            addSubview(contentButtonLabel)
-            
-            var imageWidth:CGFloat = 0
-            if !NSObject.checkObject(cellModel!.leftImage as? NSObject) {
-                PTLoadImageFunction.loadImage(contentData: cellModel!.leftImage as Any,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
-                    if (images?.count ?? 0) > 1 {
-                        self.contentButtonLabel.imageSize = CGSize(width: self.frame.height, height: self.frame.height)
-                        self.contentButtonLabel.imageView?.animationImages = images
-                        self.contentButtonLabel.imageView?.startAnimating()
-                        imageWidth = self.frame.height
-                    } else if (images?.count ?? 0) == 1 {
-                        self.contentButtonLabel.imageSize = CGSize(width: self.frame.height, height: self.frame.height)
-                        self.contentButtonLabel.imageView?.contentMode = .scaleAspectFit
-                        self.contentButtonLabel.setImage(image, for: .normal)
-                        imageWidth = self.frame.height
-                    } else {
-                        imageWidth = 0
-                        self.contentButtonLabel.imageSize = .zero
-                        self.contentButtonLabel.setImage(nil, for: .normal)
-                    }
-                }
-            } else {
-                imageWidth = 0
-                self.contentButtonLabel.imageSize = .zero
-                self.contentButtonLabel.setImage(nil, for: .normal)
-            }
-            
-            if !NSObject.checkObject(cellModel!.leftImage as? NSObject) && (cellModel!.nameAttr != nil || !cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty()) {
-                contentButtonLabel.midSpacing = self.cellModel!.leftSpace
-            } else {
-                contentButtonLabel.midSpacing = 0
-            }
-            
-            var contentW:CGFloat = 0
-            if cellModel!.nameAttr != nil || !cellModel!.name.stringIsEmpty() || !cellModel!.desc.stringIsEmpty() {
-                if  cellModel!.nameAttr != nil {
-                    contentButtonLabel.setAttributedTitle(cellModel!.nameAttr?.value, for: .normal)
-                    var maxFontSize: CGFloat = 0.0
-                    cellModel!.nameAttr!.value.enumerateAttributes(in: NSRange(location: 0, length: cellModel!.nameAttr!.value.length), options: []) { (attributes, range, stop) in
-                        if let font = attributes[NSAttributedString.Key.font] as? UIFont {
-                            if font.pointSize > maxFontSize {
-                                maxFontSize = font.pointSize
-                            }
-                        }
-                    }
-                    contentW = UIView.sizeFor(string: cellModel!.nameAttr!.value.string, font: .appfont(size: maxFontSize), height: frame.size.height, width: CGFloat(MAXFLOAT)).width
-                    self.contentButtonLabel.snp.makeConstraints { make in
-                        make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                        make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                        make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                        make.width.equalTo(contentW + imageWidth + self.contentButtonLabel.midSpacing)
-                    }
-                } else {
-                    var atts:ASAttributedString = ASAttributedString(string: "")
-                    if !cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() {
-                        let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
-                        atts = nameAtts
-                        contentW = UIView.sizeFor(string: cellModel!.name, font: cellModel!.cellFont, height: self.frame.height, width: CGFloat(MAXFLOAT)).width
-                        self.contentButtonLabel.snp.makeConstraints { make in
-                            make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                            make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                            make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                            make.width.equalTo(contentW + imageWidth + self.contentButtonLabel.midSpacing)
-                        }
-                    } else if cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                        let descAtts:ASAttributedString =  ASAttributedString("\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
-                        atts = descAtts
-                        PTGCDManager.gcdGobal {
-                            PTGCDManager.gcdMain {
-                                contentW = UIView.sizeFor(string: self.cellModel!.desc, font: self.cellModel!.cellDescFont, height: self.frame.size.height, width: CGFloat(MAXFLOAT)).width
-                                self.contentButtonLabel.snp.makeConstraints { make in
-                                    make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                                    make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                                    make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                                    make.width.equalTo(contentW + imageWidth + self.contentButtonLabel.midSpacing)
-                                }
-                            }
-                        }
-                    } else if !cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                        let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
-                        let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
-                        atts = nameAtts + descAtts
-                        let titleWidth = UIView.sizeFor(string: cellModel!.name, font: cellModel!.cellFont, height: frame.size.height, width: CGFloat(MAXFLOAT)).width
-                        let descWidth = UIView.sizeFor(string: cellModel!.desc, font: cellModel!.cellDescFont, height: frame.size.height, width: CGFloat(MAXFLOAT)).width
-
-                        PTGCDManager.gcdGobal {
-                            PTGCDManager.gcdMain {
-                                contentW = descWidth > titleWidth ? descWidth : titleWidth
-                                self.contentButtonLabel.snp.makeConstraints { make in
-                                    make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
-                                    make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                                    make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                                    make.width.equalTo(contentW + imageWidth + self.contentButtonLabel.midSpacing)
-                                }
-                            }
-                        }
-                    }
-                    contentButtonLabel.setAttributedTitle(atts.value, for: .normal)
-                }
-            }
-        } else {
-            contentButtonLabel.removeFromSuperview()
-        }
-    }
-    
     //MARK: 设置左图标
     func setLeftIconView(cellType:PTFusionCellAccessoryView) {
         switch cellType {
@@ -723,14 +592,14 @@ public class PTFusionCellContent:UIView {
             } else {
                 var atts:ASAttributedString = ASAttributedString(string: "")
                 if !cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
+                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor),.baselineOffset(self.cellModel!.labelLineSpace))
                     atts = nameAtts
                 } else if cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                    let descAtts:ASAttributedString =  ASAttributedString("\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
+                    let descAtts:ASAttributedString =  ASAttributedString("\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor),.baselineOffset(self.cellModel!.labelLineSpace))
                     atts = descAtts
                 } else if !cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
-                    let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
+                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor),.baselineOffset(self.cellModel!.labelLineSpace))
+                    let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor),.baselineOffset(self.cellModel!.labelLineSpace))
                     atts = nameAtts + descAtts
                 }
                 nameTitle.attributed.text = atts
@@ -848,7 +717,7 @@ public class PTFusionCellContent:UIView {
             if cellModel!.contentAttr != nil && cellModel!.content.stringIsEmpty() {
                 contentLabel.attributed.text = cellModel!.contentAttr
             } else if cellModel!.contentAttr == nil && !cellModel!.content.stringIsEmpty() {
-                let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor))
+                let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor),.baselineOffset(self.cellModel!.labelLineSpace))
                 contentLabel.attributed.text = contentAtts
             }
             
@@ -965,7 +834,6 @@ public class PTFusionCellContent:UIView {
             make.height.equalTo(1)
             make.left.equalTo(self.lineView)
         }
-
     }
 }
 

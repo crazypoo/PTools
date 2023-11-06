@@ -75,7 +75,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                             let closeBtn = UIButton(type: .custom)
                             closeBtn.setTitle("关闭", for: .normal)
                             closeBtn.setTitleColor(.systemBlue, for: .normal)
-                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
                             closeBtn.addActionHandlers { sender in
                                 self.returnFrontVC()
                             }
@@ -96,7 +96,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                             let closeBtn = UIButton(type: .custom)
                             closeBtn.setTitle("关闭", for: .normal)
                             closeBtn.setTitleColor(.systemBlue, for: .normal)
-                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
                             closeBtn.addActionHandlers { sender in
                                 self.returnFrontVC()
                             }
@@ -159,7 +159,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                 let backBtn = UIButton(type: .custom)
                 backBtn.setTitle("返回", for: .normal)
                 backBtn.setTitleColor(.systemBlue, for: .normal)
-                backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+                backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
                 backBtn.addActionHandlers { sender in
                     self.returnFrontVC()
                 }
@@ -182,7 +182,7 @@ class PTFileBrowserViewController: PTBaseViewController {
         let closeBtn = UIButton(type: .custom)
         closeBtn.setTitle("关闭", for: .normal)
         closeBtn.setTitleColor(.systemBlue, for: .normal)
-        closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+        closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
         closeBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -204,7 +204,7 @@ class PTFileBrowserViewController: PTBaseViewController {
             let backBtn = UIButton(type: .custom)
             backBtn.setTitle("返回", for: .normal)
             backBtn.setTitleColor(.systemBlue, for: .normal)
-            backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(size: CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34)).width, 34)
+            backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
             backBtn.addActionHandlers { sender in
                 var array = self.extensionDirectoryPath.components(separatedBy: "/")
                 array.removeLast()
