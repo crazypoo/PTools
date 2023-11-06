@@ -142,12 +142,10 @@ extension PTBaseViewController {
         navigationController?.navigationBar.isHidden = hideBaseNavBar
 #endif
     }
-    
+        
     @objc open override func viewDidLoad() {
         super.viewDidLoad()
         
-        PHPhotoLibrary.shared().register(self)
-
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
         self.edgesForExtendedLayout = []
@@ -204,6 +202,12 @@ extension PTBaseViewController {
         } else {
             self.navigationController?.popViewController(animated: true, completion)
         }
+    }
+    
+    //MARK: 截图反馈注册
+    ///截图反馈注册
+    @objc public func registerScreenShotService() {
+        PHPhotoLibrary.shared().register(self)
     }
 }
 

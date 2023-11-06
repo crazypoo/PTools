@@ -88,7 +88,7 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
         window!.makeKeyAndVisible()
         
         PTLaunchAdMonitor.showAt(path: ["http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"], onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {
-            PTNSLogConsole("123123123123123123123123")
+            PTNSLogConsole("广告消失了")
         }
         
 #if canImport(netfox)

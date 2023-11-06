@@ -376,6 +376,8 @@ class PTFuncNameViewController: PTBaseViewController {
 
         // Do any additional setup after loading the view.
         
+        self.registerScreenShotService()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(self.flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
         let more = UIButton(type: .custom)

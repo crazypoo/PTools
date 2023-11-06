@@ -22,6 +22,7 @@ public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
     public static let monitor : PTLaunchAdMonitor = PTLaunchAdMonitor.shared
     
+    private var images:[UIImage]? = [UIImage]()
     private var playMovie:Bool?
     private var imgLoaded:Bool? = false
     private var videoUrl:URL?
@@ -185,19 +186,10 @@ public class PTLaunchAdMonitor: NSObject {
                 make.height.equalTo(h)
             }
         } else {
-            switch monitor.imageType {
-            case .GIF:
-                let source = CGImageSourceCreateWithData(monitor.imgData!, nil)
-                let frameCount = CGImageSourceGetCount(source!)
-                var frames = [UIImage]()
-                for i in 0...frameCount {
-                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                    let imageName = UIImage.init(cgImage: imageref!)
-                    frames.append(imageName)
-                }
-                
+            
+            if (monitor.images?.count ?? 0) > 1 {
                 let imageView = UIImageView()
-                imageView.animationImages = frames
+                imageView.animationImages = monitor.images!
                 imageView.animationDuration = 1
                 imageView.startAnimating()
                 v.addSubview(imageView)
@@ -208,17 +200,12 @@ public class PTLaunchAdMonitor: NSObject {
                 
                 let tapGesture = UITapGestureRecognizer.init(target: self, action: #selector(PTLaunchAdMonitor.showDetail(sender:)))
                 imageView.addGestureRecognizer(tapGesture)
-            default:
+            } else if (monitor.images?.count ?? 0) == 1 {
                 let imageBtn = UIButton.init(type: .custom)
-                if monitor.imgData != nil {
-                    imageBtn.setImage(UIImage(data: monitor.imgData! as Data), for: .normal)
-                } else {
-                    imageBtn.setImage(UIColor.randomColor.createImageWithColor(), for: .normal)
-                }
+                imageBtn.setImage(monitor.images!.first, for: .normal)
                 imageBtn.addActionHandlers { sender in
                     PTLaunchAdMonitor.showDetail(sender: sender)
                 }
-                monitor.imgData?.length = 0
                 imageBtn.isUserInteractionEnabled = dic
                 v.addSubview(imageBtn)
                 imageBtn.snp.makeConstraints { make in
@@ -322,34 +309,11 @@ public class PTLaunchAdMonitor: NSObject {
             videoUrl = ((imageStr as! NSString).range(of: "/var").length > 0 ) ? URL.init(fileURLWithPath: imageStr as! String) : URL.init(string: (imageStr as! NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed))
         } else {
             playMovie = false
-            if imageStr is String {
-                loadImage(path: imageStr as! String)
-            } else if imageStr is URL {
-                loadImage(path:(imageStr as! URL).description)
-            } else if imageStr is UIImage {
-                imgData = NSMutableData()
-                imgData?.append((imageStr as! UIImage).pngData()!)
-                imgLoaded = true
-            }
-        }
-    }
-    
-    func loadImage(path:String) {
-        let url = URL.init(string: path)
-        let request = URLRequest.init(url: url!)
-        let session = URLSession.shared
-        let dataTask = session.dataTask(with: request) { data, response, error in
             
-            let resp = response as? HTTPURLResponse
-            if resp?.statusCode != 200 {
+            PTLoadImageFunction.loadImage(contentData: imageStr as Any) { images, image in
                 self.imgLoaded = true
-                return
+                self.images = images
             }
-            self.imgData = NSMutableData()
-            self.imageType = data?.detectImageType()
-            self.imgData?.append(data!)
-            self.imgLoaded = true
         }
-        dataTask.resume()
     }
 }
