@@ -13,7 +13,13 @@ import AttributedString
 public class PTFusionHeader: PTBaseCollectionReusableView {
     static let ID = "PTFusionHeader"
     
-    open var switchValueChangeBLock:PTCellSwitchBlock?
+    open var switchValueChangeBlock:PTCellSwitchBlock?
+    open var moreActionBlock:PTSectionMoreBlock?
+    open var switchValue:Bool? {
+        didSet {
+            dataContent.valueSwitch.isOn = self.switchValue!
+        }
+    }
     
     open var sectionModel:PTFusionCellModel? {
         didSet {
@@ -21,9 +27,18 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
         }
     }
     
-    open lazy var dataContent:PTFusionCellContent = {
+    fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.switchValueChangeBLock = self.switchValueChangeBLock
+        view.valueSwitch.addSwitchAction { sender in
+            if self.switchValueChangeBlock != nil {
+                self.switchValueChangeBlock!(self.sectionModel!.name,sender)
+            }
+        }
+        view.sectionMore.addActionHandlers { sender in
+            if self.moreActionBlock != nil {
+                self.moreActionBlock!(self.sectionModel!.name,sender)
+            }
+        }
         return view
     }()
 

@@ -11,17 +11,51 @@ import SnapKit
 import SwifterSwift
 import DeviceKit
 
+public var PTDevMaskTouchBubbleShowValue:Bool {
+    get {
+        let userDefaults = UserDefaults.standard.value(forKey: PTDevMaskView.PTDevMaskTouchBubbleKey)
+        let ui_debug:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
+        return ui_debug
+    }
+    set {
+        UserDefaults.standard.setValue(newValue, forKey: PTDevMaskView.PTDevMaskTouchBubbleKey)
+        UserDefaults.standard.synchronize()
+    }
+}
+
+public var PTDevMaskShowValue:Bool {
+    get {
+        let userDefaults = UserDefaults.standard.value(forKey: PTDevMaskView.PTDevMaskKey)
+        let ui_debug:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
+        return ui_debug
+    }
+    set {
+        UserDefaults.standard.setValue(newValue, forKey: PTDevMaskView.PTDevMaskKey)
+        UserDefaults.standard.synchronize()
+    }
+}
+
 @objcMembers
 open class PTDevMaskConfig:NSObject {
     public var isMask:Bool = false
     public var maskString:String = "测试模式"
     public var maskFont:UIFont = .appfont(size: 100,bold: true)
     public var motionColor:UIColor = .randomColor
+    public var showTouch:Bool = PTDevMaskTouchBubbleShowValue
 }
 
 @objcMembers
 open class PTDevMaskView: PTBaseMaskView {
 
+    public static let PTDevMaskTouchBubbleKey = "PTDevMaskTouchBubbleKey"
+    public static let PTDevMaskKey = "PTDevMaskKey"
+
+    public var showTouch:Bool? {
+        didSet {
+            viewConfig.showTouch = showTouch!
+        }
+    }
+    
     private var viewConfig : PTDevMaskConfig = PTDevMaskConfig()
     
     let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
@@ -97,10 +131,12 @@ open class PTDevMaskView: PTBaseMaskView {
         
         imageContent.image = image!.watermark(title: viewConfig.maskString,font: viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
         
-        addSubview(springMotionView)
-        springMotionView.onPositionUpdate = { point in
-            let size = self.springMotionView.frame.size
-            self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
+        if viewConfig.showTouch {
+            addSubview(springMotionView)
+            springMotionView.onPositionUpdate = { point in
+                let size = self.springMotionView.frame.size
+                self.springMotionView.frame = CGRect(x: point.x - size.width / 2, y: point.y - size.height / 2, width: 20, height: 20)
+            }
         }
         
 #if POOTOOLS_DEBUGTRACKINGEYES
@@ -141,21 +177,31 @@ open class PTDevMaskView: PTBaseMaskView {
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        springMotionView.move(to: point)
-        
-        let touchPointSize:CGFloat = 64
-        let animation = PTTouchAnimationView(touchPoint: point)
-        addSubview(animation)
-        animation.snp.makeConstraints { make in
-            make.width.height.equalTo(touchPointSize)
-            make.left.equalTo(point.x / 2)
-            make.top.equalTo(point.y / 2)
-        }
-        UIView.animate(withDuration: 0.5) {
-            animation.transform = CGAffineTransformScale(animation.transform, 4, 4)
-            animation.alpha = 0
-        } completion: { finish in
-            animation.removeFromSuperview()
+        if viewConfig.showTouch {
+             subviews.enumerated().forEach({ index,value in
+                if value is SpringMotionView {
+                    springMotionView.move(to: point)
+                } else {
+                    addSubview(springMotionView)
+                }
+            })
+            
+            let touchPointSize:CGFloat = 64
+            let animation = PTTouchAnimationView(touchPoint: point)
+            addSubview(animation)
+            animation.snp.makeConstraints { make in
+                make.width.height.equalTo(touchPointSize)
+                make.left.equalTo(point.x / 2)
+                make.top.equalTo(point.y / 2)
+            }
+            UIView.animate(withDuration: 0.5) {
+                animation.transform = CGAffineTransformScale(animation.transform, 4, 4)
+                animation.alpha = 0
+            } completion: { finish in
+                animation.removeFromSuperview()
+            }
+        } else {
+            springMotionView.removeFromSuperview()
         }
 
         return super.hitTest(point, with: event)

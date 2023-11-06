@@ -22,9 +22,15 @@ public let borderLine:CGFloat = 5
 public let diameter:CGFloat = 28
 
 public var App_UI_Debug_Bool:Bool {
-    let userDefaults = UserDefaults.standard.value(forKey: LocalConsole.ConsoleDebug)
-    let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
-    return ui_debug
+    get {
+        let userDefaults = UserDefaults.standard.value(forKey: LocalConsole.ConsoleDebug)
+        let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
+        return ui_debug
+    }
+    set {
+        UserDefaults.standard.setValue(newValue, forKey: LocalConsole.ConsoleDebug)
+        UserDefaults.standard.synchronize()
+    }
 }
 
 class ConsoleWindow: UIWindow {

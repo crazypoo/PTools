@@ -12,6 +12,29 @@ import Kingfisher
 
 public typealias FlexDevTask = (Bool) -> Void
 
+fileprivate extension String {
+    static let openAll = "全部开启"
+    static let closeAll = "全部关闭"
+    static let closeTouches = "关闭检测界面点击特效"
+    static let openTouches = "开启检测界面点击特效"
+    static let closeTouchesHits = "关闭界面点击检测"
+    static let openTouchesHits = "开启界面点击检测"
+    static let flex = "FLEX"
+    static let log = "LOG"
+    static let fps = "FPS"
+    static let memory = "Memory"
+    static let colorCheck = "颜色检查"
+    static let ruler = "卡尺"
+    static let debugController = "调试功能界面"
+    static let inAppViewsCheck = "界面图层展示"
+    static let hyperioniOS = "HyperioniOS"
+    static let devMask = "DEVMask"
+    static let devMaskEvent = "DevMaskEvent"
+    static let userDefults = "UserDefults"
+    static let appDocument = "App文件夹"
+    static let netPit = "网络拦截"
+}
+
 @objcMembers
 public class PTDevFunction: NSObject {
     public static let share = PTDevFunction()
@@ -45,18 +68,38 @@ public class PTDevFunction: NSObject {
     
     //MARK: 测试模式下检查界面的点击展示事件
     ///测试模式下检查界面的点击展示事件
-    public private(set) var touchesType: Bool = false
+    public private(set) var touchesType: Bool = App_TouchInspect_Debug_Bool {
+        didSet {
+            App_TouchInspect_Debug_Bool = self.touchesType
+        }
+    }
 
     //MARK: 测试模式下检查界面的点击展示事件开关
     ///测试模式下检查界面的点击展示事件开关
-    public private(set) var touchesTestHit: Bool = false
+    public private(set) var touchesTestHit: Bool = App_TouchInspect_Hits_Debug_Bool {
+        didSet {
+            App_TouchInspect_Hits_Debug_Bool = self.touchesTestHit
+        }
+    }
     
     private var maskView:PTDevMaskView?
     private var isAllOpen:Bool = false
     
     public func createLabBtn() {
         if UIApplication.applicationEnvironment() != .appStore {
-            UserDefaults.standard.set(true,forKey: LocalConsole.ConsoleDebug)
+            App_UI_Debug_Bool = true
+            
+            if PTDevMaskShowValue {
+                if maskView == nil {
+                    PTDevMaskShowValue = true
+                    let maskConfig = PTDevMaskConfig()
+                    
+                    self.maskView = PTDevMaskView(config: maskConfig)
+                    self.maskView?.frame = AppWindows!.frame
+                    AppWindows?.addSubview(self.maskView!)
+                }
+            }
+            
             if mn_PFloatingButton == nil {
                 mn_PFloatingButton = PFloatingButton.init(view: AppWindows as Any, frame: CGRect.init(x: 0, y: 200, width: 50, height: 50))
                 mn_PFloatingButton?.backgroundColor = .randomColor
@@ -76,30 +119,31 @@ public class PTDevFunction: NSObject {
                 mn_PFloatingButton?.longPressBlock = { (sender) in
                     var allOpenString = ""
                     if self.isAllOpen {
-                        allOpenString = "全部关闭"
+                        allOpenString = .closeAll
                     } else {
-                        allOpenString = "全部开启"
+                        allOpenString = .openAll
                     }
                     
                     var touchTypeInfo = ""
                     if self.touchesType {
-                        touchTypeInfo = "关闭检测界面点击特效"
+                        touchTypeInfo = .closeTouches
                     } else {
-                        touchTypeInfo = "开启检测界面点击特效"
+                        touchTypeInfo = .openTouches
                     }
                     
                     var showTouchHit = ""
                     if self.touchesTestHit {
-                        showTouchHit = "关闭界面点击检测"
+                        showTouchHit = .closeTouchesHits
                     } else {
-                        showTouchHit = "开启界面点击检测"
+                        showTouchHit = .openTouchesHits
                     }
-                    let titles = ["FLEX","Log","FPS","Memory","颜色检查","卡尺",allOpenString,"调试功能界面","检测界面","HyperioniOS","DEVMask",showTouchHit,touchTypeInfo,"UserDefults","App文件夹","网络拦截"]
+                    
+                    let titles = [.flex,.log,.fps,.memory,.colorCheck,.ruler,allOpenString,.debugController,.inAppViewsCheck,.hyperioniOS,.devMask,.devMaskEvent,showTouchHit,touchTypeInfo,.userDefults,.appDocument,.netPit]
 
                     UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
                         
                     } moreBtn: { index, title in
-                        if title == "全部开启" {
+                        if title == .openAll {
                             self.isAllOpen = true
                             PTDevFunction.GobalDevFunction_open { show in
                                 if self.flexBool != nil {
@@ -122,7 +166,7 @@ public class PTDevFunction: NSObject {
                                     self.TestHitTouchesShow!(show)
                                 }
                             }
-                        } else if title == "全部关闭" {
+                        } else if title == .closeAll {
                             self.isAllOpen = false
                             PTDevFunction.GobalDevFunction_close { show in
                                 if self.flexBool != nil {
@@ -145,96 +189,104 @@ public class PTDevFunction: NSObject {
                                     self.TestHitTouchesShow!(show)
                                 }
                             }
-                        } else if title == "关闭界面点击检测" {
+                        } else if title == .closeTouchesHits {
                             self.touchesTestHit = false
                             if self.TestHitShow != nil {
                                 self.TestHitShow!(self.touchesTestHit)
                             }
-                        } else if title == "开启界面点击检测" {
+                        } else if title == .openTouchesHits {
                             self.touchesTestHit = true
                             if self.TestHitShow != nil {
                                 self.TestHitShow!(self.touchesTestHit)
                             }
-                        } else if title == "关闭检测界面点击特效" {
+                        } else if title == .closeTouches {
                             self.touchesType = false
                             if self.TestHitTouchesShow != nil {
                                 self.TestHitTouchesShow!(self.touchesType)
                             }
-                        } else if title == "开启检测界面点击特效" {
+                        } else if title == .openTouches {
                             self.touchesType = true
                             if self.TestHitTouchesShow != nil {
                                 self.TestHitTouchesShow!(self.touchesType)
                             }
-                        } else if title == "FLEX" {
+                        } else if title == .flex {
                             if self.flex != nil {
                                 self.flex!()
                             }
-                        } else if title == "Log" {
+                        } else if title == .log {
                             if PTLocalConsoleFunction.share.localconsole.terminal == nil {
                                 PTLocalConsoleFunction.share.localconsole.createSystemLogView()
                             } else {
                                 PTLocalConsoleFunction.share.localconsole.cleanSystemLogView()
                             }
-                        } else if title == "FPS" {
+                        } else if title == .fps {
                             if PCheckAppStatus.shared.closed {
                                 PCheckAppStatus.shared.open()
                             } else {
                                 PCheckAppStatus.shared.close()
                             }
-                        } else if title == "调试功能界面" {
+                        } else if title == .debugController {
                             if self.goToAppDevVC != nil {
                                 self.goToAppDevVC!()
                             }
-                        } else if title == "检测界面" {
+                        } else if title == .inAppViewsCheck {
                             if self.inApp != nil {
                                 self.inApp!()
                             }
-                        } else if title == "HyperioniOS" {
+                        } else if title == .hyperioniOS {
                             if self.HyperioniOS != nil {
                                 self.HyperioniOS!()
                             }
-                        } else if title == "DEVMask" {
+                        } else if title == .devMask {
                             if self.maskView != nil {
+                                PTDevMaskShowValue = false
                                 self.maskView?.removeFromSuperview()
                                 self.maskView = nil
                             } else {
+                                PTDevMaskShowValue = true
+                                
                                 let maskConfig = PTDevMaskConfig()
                                 
                                 self.maskView = PTDevMaskView(config: maskConfig)
                                 self.maskView?.frame = AppWindows!.frame
                                 AppWindows?.addSubview(self.maskView!)
                             }
-                        } else if title == "Memory" {
+                        } else if title == .devMaskEvent {
+                            PTDevMaskTouchBubbleShowValue = !PTDevMaskTouchBubbleShowValue
+                            if self.maskView != nil {
+                                self.maskView!.showTouch = PTDevMaskTouchBubbleShowValue
+                            }
+                        } else if title == .memory {
                             if PTMemory.share.closed {
                                 PTMemory.share.startMonitoring()
                             } else {
                                 PTMemory.share.stopMonitoring()
                             }
-                        } else if title == "颜色检查" {
+                        } else if title == .colorCheck {
                             if PTColorPickPlugin.share.showed {
                                 PTColorPickPlugin.share.close()
                             } else {
                                 PTColorPickPlugin.share.show()
                             }
-                        } else if title == "卡尺" {
+                        } else if title == .ruler {
                             if PTViewRulerPlugin.share.showed {
                                 PTViewRulerPlugin.share.hide()
                             } else {
                                 PTViewRulerPlugin.share.show()
                             }
-                        } else if title == "UserDefults" {
+                        } else if title == .userDefults {
                             let currentVC = PTUtils.getCurrentVC()
                             let vc = PTUserDefultsViewController()
                             let nav = PTBaseNavControl(rootViewController: vc)
                             nav.modalPresentationStyle = .fullScreen
                             currentVC.present(nav, animated: true)
-                        } else if title == "App文件夹" {
+                        } else if title == .appDocument {
                             let currentVC = PTUtils.getCurrentVC()
                             let vc = PTFileBrowserViewController()
                             let nav = PTBaseNavControl(rootViewController: vc)
                             nav.modalPresentationStyle = .fullScreen
                             currentVC.present(nav, animated: true)
-                        } else if title == "网络拦截" {
+                        } else if title == .netPit {
                             if self.FoxNet != nil {
                                 self.FoxNet!()
                             }
@@ -255,6 +307,7 @@ public class PTDevFunction: NSObject {
             devShare.touchesTestHit = true
             devShare.touchesType = true
             if devShare.maskView == nil {
+                PTDevMaskShowValue = true
                 let maskConfig = PTDevMaskConfig()
                 
                 devShare.maskView = PTDevMaskView(config: maskConfig)
@@ -274,6 +327,7 @@ public class PTDevFunction: NSObject {
             devShare.touchesTestHit = false
             devShare.touchesType = false
             if devShare.maskView != nil {
+                PTDevMaskShowValue = false
                 devShare.maskView?.removeFromSuperview()
                 devShare.maskView = nil
             }
@@ -281,7 +335,7 @@ public class PTDevFunction: NSObject {
     }
 
     public func lab_btn_release() {
-        UserDefaults.standard.set(false,forKey: LocalConsole.ConsoleDebug)
+        App_UI_Debug_Bool = false
         mn_PFloatingButton?.removeFromSuperview()
         mn_PFloatingButton = nil
     }

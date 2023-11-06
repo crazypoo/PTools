@@ -85,7 +85,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_net.cellFont = sectionTitleFont
         sectionModel_net.accessoryType = .More
         sectionModel_net.disclosureIndicatorImage = disclosureIndicatorImage
-        sectionModel_net.moreLayoutStyle = .upImageDownTitle
+        sectionModel_net.moreLayoutStyle = .leftTitleRightImage
 
         let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: netRows,headerDataModel: sectionModel_net)
         
@@ -115,9 +115,7 @@ class PTFuncNameViewController: PTBaseViewController {
         let sectionModel_media = PTFusionCellModel()
         sectionModel_media.name = "多媒体"
         sectionModel_media.cellFont = sectionTitleFont
-        sectionModel_media.accessoryType = .More
-        sectionModel_media.disclosureIndicatorImage = disclosureIndicatorImage
-        sectionModel_media.moreLayoutStyle = .leftImageRightTitle
+        sectionModel_media.accessoryType = .Switch
 
         let mediaSection = PTSection.init(headerTitle: sectionModel_media.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: mediaRows,headerDataModel: sectionModel_media)
 
@@ -214,8 +212,19 @@ class PTFuncNameViewController: PTBaseViewController {
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
                 
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
+            let sectionModel = (model.headerDataModel as! PTFusionCellModel)
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
-            header.sectionModel = (model.headerDataModel as! PTFusionCellModel)
+            header.sectionModel = sectionModel
+            if sectionModel.name == "网络" {
+                header.moreActionBlock = { text,sender in
+                    PTNSLogConsole("点击了More")
+                }
+            } else if sectionModel.name == "多媒体" {
+                header.switchValue = true
+                header.switchValueChangeBlock = { text,sender in
+                    PTNSLogConsole("点击了Switch")
+                }
+            }
             return header
         }
         aaaaaaa.footerInCollection = { kind,collectionView,model,index in

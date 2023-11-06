@@ -12,6 +12,7 @@ import AttributedString
 import SwifterSwift
 
 public typealias PTCellSwitchBlock = (_ rowText:String,_ sender:UISwitch)->Void
+public typealias PTSectionMoreBlock = (_ rowText:String,_ sender:UIButton)->Void
 
 fileprivate extension UIView {
     /// 绘制简单横线
@@ -26,8 +27,8 @@ fileprivate extension UIView {
 @objcMembers
 public class PTFusionCellContent:UIView {
     public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
-    public var switchValueChangeBLock:PTCellSwitchBlock?
-    
+    public var switchValueChangeBlock:PTCellSwitchBlock?
+
     enum PTFusionContentCellType {
         case Name
         case NameContent
@@ -65,17 +66,19 @@ public class PTFusionCellContent:UIView {
             accessV.removeFromSuperview()
             sectionMore.removeFromSuperview()
             
-            valueSwitch.onTintColor = cellModel!.switchTinColor
+            valueSwitch.onTintColor = cellModel!.switchOnTinColor
+            valueSwitch.thumbTintColor = cellModel!.switchThumbTintColor
+            valueSwitch.tintColor = cellModel!.switchTintColor
+            valueSwitch.backgroundColor = cellModel!.switchBackgroundColor
             addSubview(valueSwitch)
             valueSwitch.snp.makeConstraints { (make) in
                 make.width.equalTo(51)
                 make.centerY.equalToSuperview()
                 make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             }
-            valueSwitch.addSwitchAction { sender in
-                if self.switchValueChangeBLock != nil {
-                    self.switchValueChangeBLock!(self.nameTitle.text!,sender)
-                }
+            
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.valueSwitch.viewCorner(radius: self.valueSwitch.frame.height / 2)
             }
         case .DisclosureIndicator:
             valueSwitch.removeFromSuperview()
@@ -213,10 +216,11 @@ public class PTFusionCellContent:UIView {
         return view
     }()
     
-    fileprivate lazy var sectionMore:PTLayoutButton = {
+    public lazy var sectionMore:PTLayoutButton = {
         let view = PTLayoutButton()
         view.titleLabel?.textAlignment = .right
         view.contentHorizontalAlignment = .right
+        view.isUserInteractionEnabled = true
         return view
     }()
         
@@ -841,17 +845,32 @@ public class PTFusionCellContent:UIView {
 open class PTFusionCell: PTBaseNormalCell {
     public static let ID = "PTFusionCell"
     
-    open var switchValueChangeBLock:PTCellSwitchBlock?
-    
+    open var switchValueChangeBlock:PTCellSwitchBlock?
+    open var moreActionBlock:PTSectionMoreBlock?
+    open var switchValue:Bool? {
+        didSet {
+            dataContent.valueSwitch.isOn = self.switchValue!
+        }
+    }
+
     open var cellModel:PTFusionCellModel? {
         didSet {
             self.dataContent.cellModel = self.cellModel
         }
     }
     
-    open lazy var dataContent:PTFusionCellContent = {
+    fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.switchValueChangeBLock = self.switchValueChangeBLock
+        view.valueSwitch.addSwitchAction { sender in
+            if self.switchValueChangeBlock != nil {
+                self.switchValueChangeBlock!(self.cellModel!.name,sender)
+            }
+        }
+        view.sectionMore.addActionHandlers { sender in
+            if self.moreActionBlock != nil {
+                self.moreActionBlock!(self.cellModel!.name,sender)
+            }
+        }
         return view
     }()
     
@@ -874,17 +893,32 @@ open class PTFusionCell: PTBaseNormalCell {
 open class PTFusionSwipeCell: PTBaseSwipeCell {
     public static let ID = "PTFusionSwipeCell"
     
-    open var switchValueChangeBLock:PTCellSwitchBlock?
-    
+    open var switchValueChangeBlock:PTCellSwitchBlock?
+    open var moreActionBlock:PTSectionMoreBlock?
+    open var switchValue:Bool? {
+        didSet {
+            dataContent.valueSwitch.isOn = self.switchValue!
+        }
+    }
+
     open var cellModel:PTFusionCellModel? {
         didSet {
             self.dataContent.cellModel = self.cellModel
         }
     }
     
-    open lazy var dataContent:PTFusionCellContent = {
+    fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
-        view.switchValueChangeBLock = self.switchValueChangeBLock
+        view.valueSwitch.addSwitchAction { sender in
+            if self.switchValueChangeBlock != nil {
+                self.switchValueChangeBlock!(self.cellModel!.name,sender)
+            }
+        }
+        view.sectionMore.addActionHandlers { sender in
+            if self.moreActionBlock != nil {
+                self.moreActionBlock!(self.cellModel!.name,sender)
+            }
+        }
         return view
     }()
     
@@ -896,7 +930,7 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
             make.edges.equalToSuperview()
         }
     }
-    
+        
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

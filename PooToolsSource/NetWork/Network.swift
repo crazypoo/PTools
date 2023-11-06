@@ -26,6 +26,8 @@ public enum NetWorkEnvironment: String {
     case Distribution = "生产环境"
 }
 
+public var DevNetWorkKey = "UI_test_url"
+
 public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
@@ -142,7 +144,7 @@ public class Network: NSObject {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)")
             switch PTBaseURLMode {
             case .Development:
-                let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
+                let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
                 let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
                 if url_debug.isEmpty {
                     return Network.share.serverAddress_dev

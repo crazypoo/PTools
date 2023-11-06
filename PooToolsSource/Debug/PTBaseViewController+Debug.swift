@@ -11,18 +11,18 @@ import UIKit
 //MARK: 导入此模块须要引用camera的权限调用
 
 //MARK: 用來調用測試模式
-extension PTBaseViewController {
+public extension PTBaseViewController {
     //MARK: 這裏提供給Flex使用
     ///這裏提供給Flex使用
-    public func showFlexFunction(show:Bool) {
+    func showFlexFunction(show:Bool) {
         
     }
 
-    open override func motionEnded(_ motion: UIEvent.EventSubtype, 
+    override func motionEnded(_ motion: UIEvent.EventSubtype, 
                                    with event: UIEvent?) {
         if UIApplication.applicationEnvironment() != .appStore {
             let uidebug:Bool = App_UI_Debug_Bool
-            UserDefaults.standard.set(!uidebug, forKey: LocalConsole.ConsoleDebug)
+            App_UI_Debug_Bool = !App_UI_Debug_Bool
             if uidebug {
                 if PTDevFunction.share.mn_PFloatingButton != nil {
                     PTDevFunction.share.lab_btn_release()

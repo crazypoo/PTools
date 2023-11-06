@@ -109,24 +109,22 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.centerY.equalToSuperview()
             }
         case String.rate:
-            PTGCDManager.gcdAfter(time: 1, block: {
-                let rateConfig = PTRateConfig()
-                rateConfig.canTap = true
-                rateConfig.hadAnimation = true
-                rateConfig.scorePercent = 0.2
-                rateConfig.allowIncompleteStar = true
-                
-                let rate = PTRateView(viewConfig: rateConfig)
-                rate.rateBlock = { score in
-                    PTNSLogConsole(score)
-                }
-                self.view.addSubview(rate)
-                rate.snp.makeConstraints { make in
-                    make.left.right.equalToSuperview()
-                    make.height.equalTo(100)
-                    make.centerY.equalToSuperview()
-                }
-            })
+            let rateConfig = PTRateConfig()
+            rateConfig.canTap = true
+            rateConfig.hadAnimation = true
+            rateConfig.scorePercent = 0.8
+            rateConfig.allowIncompleteStar = true
+            
+            let rate = PTRateView(viewConfig: rateConfig)
+            rate.rateBlock = { score in
+                PTNSLogConsole(score)
+            }
+            self.view.addSubview(rate)
+            rate.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.height.equalTo(100)
+                make.centerY.equalToSuperview()
+            }
         case String.segment:
             let model1 = PTSegmentModel()
             model1.titles = "aaaaa"

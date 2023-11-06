@@ -54,6 +54,8 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
 //                    developmentDevice: debugDevice,
 //                    config: buglyConfig)
 
+        PTDebugFunction.registerDefaultsFromSettingsBundle()
+
         IQKeyboardManager.shared().isEnabled = true
         IQKeyboardManager.shared().keyboardDistanceFromTextField = 50
         
@@ -125,24 +127,19 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
             }
         }
         devFunction.FoxNet = {
+#if canImport(netfox)
             if NFX.sharedInstance().isStarted() {
                 NFX.sharedInstance().show()
             }
+#endif
         }
         devFunction.goToAppDevVC = {
             let vc = PTDebugViewController()
             let nav = PTBaseNavControl(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
             PTUtils.getCurrentVC().present(nav, animated: true)
         }
-        
-        let config = PTDevMaskConfig()
-        config.isMask = false
-        maskView = PTDevMaskView(config:config)
-        window?.addSubview(maskView!)
-        maskView!.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
+                        
         let guideModel = PTGuidePageModel()
         guideModel.mainView = self.window!
         guideModel.imageArrays = ["DemoImage.png","http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif","image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]

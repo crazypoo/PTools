@@ -9,10 +9,10 @@
 import UIKit
 
 public extension NSAttributedString {
-    func sizeOfAttributedString(width:CGFloat = CGFloat.greatestFiniteMagnitude,
+    @objc func sizeOfAttributedString(width:CGFloat = CGFloat.greatestFiniteMagnitude,
                                 height:CGFloat = CGFloat.greatestFiniteMagnitude,
                                 options:NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]) -> CGSize {
         let attributedStringSize = self.boundingRect(with: CGSizeMake(width, height), options: options, context: nil)
-        return CGSize(width: attributedStringSize.width, height: attributedStringSize.height)
+        return attributedStringSize.size
     }
 }

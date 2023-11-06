@@ -69,8 +69,14 @@ open class PTFusionCellModel: NSObject {
     open var leftSpace:CGFloat = 10
     ///Cell的圓角度數
     open var cellCorner:CGFloat = 10
-    ///Cell的Switch的顏色
-    open var switchTinColor:UIColor = .systemGreen
+    ///Cell的Switch的开顏色
+    open var switchOnTinColor:UIColor = .systemGreen
+    ///Cell的Switch的按钮顏色
+    open var switchThumbTintColor:UIColor = .white
+    ///Cell的Switch的边框顏色
+    open var switchTintColor:UIColor = .clear
+    ///Cell的Switch的背景顏色
+    open var switchBackgroundColor:UIColor = .clear
     ///Section的更多文字
     open var moreString:String = "更多"
     ///Section的更多文字颜色

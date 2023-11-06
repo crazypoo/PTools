@@ -13,20 +13,38 @@ import Foundation
 import UIKit
 
 public var App_TouchInspect_Debug_Bool:Bool {
-    let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorDebug)
-    let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
-    return ui_debug
+    get {
+        let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorDebug)
+        let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
+        return ui_debug
+    }
+    set {
+        UserDefaults.standard.setValue(newValue, forKey: TouchInspectorWindow.TouchInspectorDebug)
+        UserDefaults.standard.synchronize()
+    }
 }
 
+public var App_TouchInspect_Hits_Debug_Bool:Bool {
+    get {
+        let userDefaults = UserDefaults.standard.value(forKey: TouchInspectorWindow.TouchInspectorHitsDebug)
+        let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
+        return ui_debug
+    }
+    set {
+        UserDefaults.standard.setValue(newValue, forKey: TouchInspectorWindow.TouchInspectorHitsDebug)
+        UserDefaults.standard.synchronize()
+    }
+}
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
     
     public static let TouchInspectorDebug = "TS_debug"
+    public static let TouchInspectorHitsDebug = "TS_Hit_debug"
 
     /**
      Whether to show the circular touch indicator.
      */
-    public var showTouches: Bool = true {
+    public var showTouches: Bool = App_TouchInspect_Debug_Bool {
         didSet {
             hideOverlaysIfNeeded()
         }
@@ -35,7 +53,7 @@ public class TouchInspectorWindow: UIWindow {
     /**
      Whether to show the hit-test debugging overlay. If enabled, touch indicators will also be shown.
      */
-    public var showHitTesting: Bool = true {
+    public var showHitTesting: Bool = App_TouchInspect_Hits_Debug_Bool {
         didSet {
             hideOverlaysIfNeeded()
         }

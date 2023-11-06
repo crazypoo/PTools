@@ -14,6 +14,8 @@ public class PTDebugViewController: PTBaseViewController {
     
     lazy var settingCellModels:[PTFusionCellModel] = {
         
+        let disclosureImage = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
+        
         var modeName = ""
         switch PTBaseURLMode {
         case .Development:
@@ -28,10 +30,11 @@ public class PTDebugViewController: PTBaseViewController {
         cell_mode.name = .ipMode
         cell_mode.content = modeName
         cell_mode.accessoryType = .DisclosureIndicator
+        cell_mode.disclosureIndicatorImage = disclosureImage
         
         let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
-        let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
+        let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
         let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
         if url_debug.isEmpty {
             cell_input.content = Network.gobalUrl()
@@ -39,6 +42,7 @@ public class PTDebugViewController: PTBaseViewController {
             cell_input.content = url_debug
         }
         cell_input.accessoryType = .DisclosureIndicator
+        cell_input.disclosureIndicatorImage = disclosureImage
 
         let cell_debug = PTFusionCellModel()
         cell_debug.name = .DebugMode
@@ -60,8 +64,8 @@ public class PTDebugViewController: PTBaseViewController {
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
             if itemRow.title == .DebugMode {
-                cell.dataContent.valueSwitch.isOn = App_UI_Debug_Bool
-                cell.switchValueChangeBLock = { title,sender in
+                cell.switchValue = App_UI_Debug_Bool
+                cell.switchValueChangeBlock = { title,sender in
                     let value = !App_UI_Debug_Bool
                     UserDefaults.standard.set(value, forKey: LocalConsole.ConsoleDebug)
                     if value {
@@ -121,7 +125,7 @@ public class PTDebugViewController: PTBaseViewController {
                 switch PTBaseURLMode {
                 case .Development:
                     var current = ""
-                    let userDefaults_url = UserDefaults.standard.value(forKey: "UI_test_url")
+                    let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
                     let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
                     if url_debug.isEmpty {
                         current = Network.share.serverAddress_dev
@@ -131,7 +135,7 @@ public class PTDebugViewController: PTBaseViewController {
                     
                     UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                         let newURL = result.values.first
-                        UserDefaults.standard.set(newURL, forKey: "UI_test_url")
+                        UserDefaults.standard.set(newURL, forKey: DevNetWorkKey)
                         
                         self.settingCellModels[1].content = newURL!
                         let cell = collection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell
@@ -148,10 +152,31 @@ public class PTDebugViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        let backBtn = UIButton(type: .custom)
+        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        backBtn.addActionHandlers { sender in
+            self.returnFrontVC()
+        }
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.addSubview(backBtn)
+        backBtn.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+        }
+#else
+        backBtn.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
+#endif
+
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
+#if POOTOOLS_NAVBARCONTROLLER
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
+            make.top.equalToSuperview()
+#endif
         }
         showDetail()
     }

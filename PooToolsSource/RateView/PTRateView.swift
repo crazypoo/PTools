@@ -82,19 +82,22 @@ public class PTRateView: UIView {
                 let realStartScore = offSet / (self.frame.size.width / CGFloat(self.viewConfig!.numberOfStar))
                 let starScore = self.viewConfig!.allowIncompleteStar ? Float(realStartScore) : ceilf(Float(realStartScore))
                 self.scorePercent = CGFloat(starScore) / CGFloat(self.viewConfig!.numberOfStar)
+                let foregroundWidth = self.frame.size.width * self.scorePercent!
                 self.foregroundStarView.snp.updateConstraints({ make in
-                    make.width.equalTo(self.frame.size.width * self.scorePercent!)
+                    make.width.equalTo(foregroundWidth)
                 })
             }
             tapGes.numberOfTapsRequired = 1
             addGestureRecognizer(tapGes)
         }
+        
+        self.scorePercent = self.viewConfig!.scorePercent
+        
+        self.initView()
     }
     
     func initView() {
         PTGCDManager.gcdAfter(time: 0.1) {
-            
-            self.scorePercent = self.viewConfig!.scorePercent
             self.addSubviews([self.backgroundStarView,self.foregroundStarView])
 
             self.backgroundStarView.snp.makeConstraints({ make in
@@ -120,17 +123,14 @@ public class PTRateView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        
-        if !loaded {
-            initView()
-        }
     }
     
     fileprivate func createStartView(image:UIImage,tag:Int) ->UIView {
         let contentV = UIView()
         contentV.clipsToBounds = true
         contentV.backgroundColor = .clear
-        
+        contentV.isUserInteractionEnabled = tag == PTRateForegroundViewTags ? true : false
+
         for i in 0..<viewConfig!.numberOfStar {
             let imageV = UIImageView(image: image)
             imageV.contentMode = .scaleAspectFit
