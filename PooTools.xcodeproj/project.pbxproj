@@ -127,6 +127,7 @@
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
 		555818A92AF8DE8F0051C0AA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 555818A82AF8DE8F0051C0AA /* Settings.bundle */; };
 		555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */; };
+		555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818AC2AFA33570051C0AA /* PTRouteViewController.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
@@ -495,6 +496,7 @@
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
 		555818A82AF8DE8F0051C0AA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPropertyWrapperFunction.swift; sourceTree = "<group>"; };
+		555818AC2AFA33570051C0AA /* PTRouteViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouteViewController.swift; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
@@ -1924,6 +1926,7 @@
 				552893122AE65125009135F9 /* PTTip.swift */,
 				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
+				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2212,6 +2215,7 @@
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
+				555818AD2AFA33570051C0AA /* PTRouteViewController.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,

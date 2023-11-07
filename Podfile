@@ -32,6 +32,7 @@ target 'PooTools_Example' do
   pod 'netfox', :configurations => ['Debug']
   pod 'DiDiPrism'
   pod 'DiDiPrism_Ability', :subspecs => ['WithBehaviorRecord', 'WithBehaviorReplay', 'WithBehaviorDetect', 'WithDataVisualization']
+  pod 'Bugly'
 
   #权限询问
   pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'

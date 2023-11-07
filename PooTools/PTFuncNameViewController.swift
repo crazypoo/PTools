@@ -39,6 +39,8 @@ public extension String {
     static let throughLabel = "划线Label"
     static let twitterLabel = "推文Label"
     static let movieCutOutput = "类似剪映的视频输出进度效果"
+    
+    static let route = "路由"
 }
 
 struct AppUserDefultsWrapper {
@@ -197,9 +199,29 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_uikit.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_uikit.moreLayoutStyle = .upTitleDownImage
 
-        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
+        let uikitSection = PTSection.init(headerTitle: sectionModel_uikit.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: uikitRows,headerDataModel: sectionModel_uikit)
+        
+        /**
+            Route
+         */
+        let route = self.rowBaseModel(name: .route)
 
-        return [netSection,mediaSection,phoneSection,uikitSection]
+        let routeArrs = [route]
+        
+        var routeRows = [PTRows]()
+        routeArrs.enumerated().forEach { index,value in
+            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            routeRows.append(row)
+        }
+        
+        let sectionModel_route = PTFusionCellModel()
+        sectionModel_route.name = "Route"
+        sectionModel_route.cellFont = sectionTitleFont
+        sectionModel_route.accessoryType = .NoneAccessoryView
+
+        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
+
+        return [netSection,mediaSection,phoneSection,uikitSection,routeSection]
     }()
     
     lazy var collectionView : PTCollectionView = {
@@ -354,6 +376,34 @@ class PTFuncNameViewController: PTBaseViewController {
 
             } else if itemRow.title == .checkUpdate {
                 PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
+            } else if itemRow.title == .route {
+                UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"]) { sheet in
+                    
+                } cancelBlock: { sheet in
+                    
+                } otherBlock: { sheet, index in
+
+                    switch index {
+                    case 0:
+                        PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
+                    case 1:
+                        PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
+                        let model = PTRouterExampleModel()
+                        PTRouter.openURL(("scheme://route/route",["model":model]))
+                    case 2:
+                        PTRouter.addRouterItem(RouteItem(path: PTRouteViewController.patternString.first!, className: NSStringFromClass(PTRouteViewController.self)))
+                        
+                        let handler = { (value:String) in
+                            UIViewController.gobal_drop(title: value)
+                        }
+                        
+                        PTRouter.openURL(("scheme://route/route",["task":handler]))
+                    default:
+                        break
+                    }
+                } tapBackgroundBlock: { sheet in
+                    
+                }
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
