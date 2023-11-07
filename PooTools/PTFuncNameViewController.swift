@@ -437,10 +437,20 @@ class PTFuncNameViewController: PTBaseViewController {
         } else {
             self.showCollectionViewData()
         }
+        
+        self.inputValueSample(value: 15)
     }
     
     func flashAd(notifi:Notification) {
-        PTNSLogConsole("启动广告")
+        let obj = notifi.object as! [String:Any]
+        obj.allKeys().enumerated().forEach { index,value in
+            let keyValue = obj[value]
+            if keyValue is String {
+                if (keyValue as! String).isURL() {
+                    PTAppStoreFunction.jumpLink(url: URL(string: (keyValue as! String))!)
+                }
+            }
+        }
     }
     
     @available(iOS 17, *)
@@ -455,6 +465,10 @@ class PTFuncNameViewController: PTBaseViewController {
     
     func showCollectionViewData() {
         collectionView.showCollectionDetail(collectionData: cSections)
+    }
+    
+    func inputValueSample(@PTClampedProperyWrapper(range:1...10) value:Int = 1) {
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>\(value)")
     }
 }
 

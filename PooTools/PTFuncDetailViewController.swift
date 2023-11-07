@@ -127,33 +127,42 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.segment:
             let model1 = PTSegmentModel()
-            model1.titles = "aaaaa"
+            model1.titles = "1"
             model1.imageURL = "DemoImage"
             model1.selectedImageURL = "image_aircondition_gray"
             
             let model2 = PTSegmentModel()
-            model2.titles = "2222"
+            model2.titles = "2"
             model2.imageURL = "DemoImage"
             model2.selectedImageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
+            let model3 = PTSegmentModel()
+            model3.titles = "3"
+            model3.imageURL = "DemoImage"
+            model3.selectedImageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
+            
+            let model4 = PTSegmentModel()
+            model4.titles = "3"
+
             let config = PTSegmentConfig()
-            config.showType = .Background
-            config.itemSpace = 10
+            config.showType = .UnderLine
+            config.itemSpace = 0
             config.leftEdges = true
-            config.originalX = 20
+            config.originalX = 0
             
             let segView = PTSegmentView(config: config)
             segView.backgroundColor = .random
-            segView.viewDatas = [model1,model2]
-            segView.reloadViewData { index in
-                
-            }
+            segView.viewDatas = [model1,model2,model3,model4]
             self.view.addSubview(segView)
             segView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(44)
                 make.centerY.equalToSuperview()
             }
+            segView.reloadViewData { index in
+                
+            }
+
         case String.countLabel:
             let countLabel = PTCountingLabel()
             countLabel.textAlignment = .center

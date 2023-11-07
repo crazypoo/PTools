@@ -18,6 +18,7 @@ public class PTCodeView: UIView {
     private var changeTime : TimeInterval = 0
     private var dataSource = [String]()
     private var changeString = ""
+    var timerCode:DispatchSourceTimer!
 
     public var codeBlock:((_ codeView:PTCodeView, _ code:String)->Void)?
 
@@ -27,8 +28,8 @@ public class PTCodeView: UIView {
         removeFromSuperview()
     }
 
-    public init(numberOfCodes:Int,
-                numberOfLines:Int,
+    public init(numberOfCodes:Int = 4,
+                numberOfLines:Int = 4,
                 changeTimes:TimeInterval) {
         super.init(frame: CGRectZero)
         
@@ -58,6 +59,7 @@ public class PTCodeView: UIView {
     public override func removeFromSuperview() {
         super.removeFromSuperview()
         dismiss = true
+        timerCode.suspend()
     }
 
     private func timeChange() {
@@ -82,6 +84,7 @@ public class PTCodeView: UIView {
             }
         }
         timer.resume()
+        timerCode = timer
     }
         
     public func changeCode() {
@@ -89,13 +92,14 @@ public class PTCodeView: UIView {
     }
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        timerCode.suspend()
         changeResultString()
+        timeChange()
     }
 
     private func changeResultString() {
         let tempString = NSMutableString()
         for i in 0..<numberOfCode {
-            PTNSLogConsole("\(i)")
             let index = arc4random() % UInt32(dataSource.count - 1)
             tempString.append(dataSource[Int(index)])
         }
@@ -127,7 +131,6 @@ public class PTCodeView: UIView {
         let context = UIGraphicsGetCurrentContext()
         context?.setLineWidth(1)
         for count in 0..<numberOfLine {
-            PTNSLogConsole("count:\(count)")
             context?.setStrokeColor(UIColor.randomColor.cgColor)
             pX = CGFloat(arc4random() % UInt32(rect.size.width))
             pY = CGFloat(arc4random() % UInt32(rect.size.height))

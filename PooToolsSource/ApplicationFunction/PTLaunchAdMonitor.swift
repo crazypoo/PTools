@@ -44,7 +44,7 @@ public class PTLaunchAdMonitor: NSObject {
     ///   - comName: 公司名字
     ///   - comNameFont: 公司字體
     ///   - callBack: 回調
-    public class func showAt(path:NSArray,
+    public class func showAt(path:Any,
                              onView:Any,
                              timeInterval:TimeInterval,
                              param:NSDictionary?,
@@ -127,18 +127,14 @@ public class PTLaunchAdMonitor: NSObject {
             orientation = PTUtils.getCurrentVC().view.window!.windowScene!.interfaceOrientation
             
             switch orientation {
-            case .landscapeLeft:
-                newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
-            case .landscapeRight:
+            case .landscapeLeft,.landscapeRight:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
             default:
                 newFont = skipFont != nil ? skipFont! : UIFont.systemFont(ofSize: 16)
             }
         } else {
             switch device.orientation {
-            case .landscapeLeft:
-                newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
-            case .landscapeRight:
+            case .landscapeLeft,.landscapeRight:
                 newFont = skipFont != nil ? UIFont.init(name: skipFont!.familyName, size: skipFont!.pointSize/2.5) : UIFont.systemFont(ofSize: 16)
             default:
                 newFont = skipFont != nil ? skipFont! : UIFont.systemFont(ofSize: 16)
@@ -301,16 +297,25 @@ public class PTLaunchAdMonitor: NSObject {
         }
     }
     
-    func loadImageAtPath(path:NSArray) {
-        let imageStr = path.firstObject
-        if (imageStr as! NSString).contentTypeForUrl() == PTUrlStringVideoType.MP4 {
-            playMovie = true
-            imgLoaded = true
-            videoUrl = ((imageStr as! NSString).range(of: "/var").length > 0 ) ? URL.init(fileURLWithPath: imageStr as! String) : URL.init(string: (imageStr as! NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed))
+    func loadImageAtPath(path:Any) {
+        if path is String {
+            let imagePath = (path as! String)
+            if imagePath.contentTypeForUrl() == PTUrlStringVideoType.MP4 {
+                playMovie = true
+                imgLoaded = true
+                videoUrl = ((imagePath as NSString).range(of: "/var").length > 0 ) ? URL.init(fileURLWithPath: imagePath) : URL.init(string: (imagePath as NSString).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed))
+            } else {
+                playMovie = false
+                
+                PTLoadImageFunction.loadImage(contentData: path as Any) { images, image in
+                    self.imgLoaded = true
+                    self.images = images
+                }
+            }
         } else {
             playMovie = false
             
-            PTLoadImageFunction.loadImage(contentData: imageStr as Any) { images, image in
+            PTLoadImageFunction.loadImage(contentData: path as Any) { images, image in
                 self.imgLoaded = true
                 self.images = images
             }
