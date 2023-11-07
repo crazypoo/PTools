@@ -126,6 +126,7 @@
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
 		555818A92AF8DE8F0051C0AA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 555818A82AF8DE8F0051C0AA /* Settings.bundle */; };
+		555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
@@ -493,6 +494,7 @@
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
 		555818A82AF8DE8F0051C0AA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPropertyWrapperFunction.swift; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
@@ -1684,6 +1686,7 @@
 				550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */,
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
+				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2211,6 +2214,7 @@
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				5585F6C92AD298F000F878B4 /* PTVideoEditorCroppingPreset.swift in Sources */,
+				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,

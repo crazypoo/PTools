@@ -41,6 +41,10 @@ public extension String {
     static let movieCutOutput = "类似剪映的视频输出进度效果"
 }
 
+struct AppUserDefultsWrapper {
+    @PTUserDefault(withKey: "TestKey", defaultValue: "123") static var testValue:String
+}
+
 class PTFuncNameViewController: PTBaseViewController {
 
     fileprivate lazy var outputURL :URL = {
@@ -439,6 +443,16 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         self.inputValueSample(value: 15)
+        
+        
+        @PTLockAtomic
+        var json:[String:String]?
+        json = ["A":"1"]
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>\(String(describing: json))")
+        
+        PTNSLogConsole("AppUserDefultsWrapper before:\(AppUserDefultsWrapper.testValue)")
+        AppUserDefultsWrapper.testValue = "333"
+        PTNSLogConsole("AppUserDefultsWrapper after:\(AppUserDefultsWrapper.testValue)")
     }
     
     func flashAd(notifi:Notification) {
@@ -582,3 +596,4 @@ extension PTFuncNameViewController: ImageKitDataTrackDelegate {
         PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
 }
+

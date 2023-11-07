@@ -457,12 +457,3 @@ public extension PTUtils {
         isIPhoneXSeries()
     }
 }
-
-//MARK: 此方法用于设定范围,且不会小于和多于相关数值
-@propertyWrapper struct PTClampedProperyWrapper<T: Comparable> {
-    let wrappedValue: T
-
-    public init(wrappedValue: T, range: ClosedRange<T>) {
-        self.wrappedValue = min(max(wrappedValue, range.lowerBound), range.upperBound)
-    }
-}
