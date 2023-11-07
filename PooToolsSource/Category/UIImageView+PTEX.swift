@@ -24,4 +24,13 @@ public extension UIImageView {
     func pt_SDWebImage(imageString:String) {
         self.kf.setImage(with: URL.init(string: imageString),placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
+    
+    func blur(withStyle style: UIBlurEffect.Style) {
+        let blurEffect = UIBlurEffect(style: style)
+        let blurEffectView = UIVisualEffectView(effect: blurEffect)
+        blurEffectView.frame = bounds
+        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        addSubview(blurEffectView)
+        clipsToBounds = true
+    }
 }

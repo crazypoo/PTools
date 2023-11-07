@@ -12,7 +12,7 @@ import SwifterSwift
 
 private var maxLengthKey:UInt8 = 0
 
-extension UITextField {
+public extension UITextField {
     var maxLength: Int {
         get {
             guard let length = getAssociatedObject(forKey: &maxLengthKey) as? Int else { return Int.max }
@@ -41,9 +41,13 @@ extension UITextField {
         cursor.backgroundColor = .randomColor
         addSubview(cursor)
     }
+    
+    func removeTargetsAndActions() {
+        self.removeTarget(nil, action: nil, for: .allEvents)
+    }
 }
 
-extension UITextField {
+public extension UITextField {
     func set(associatedObject object: Any,
              forKey key: UnsafeRawPointer) {
         objc_setAssociatedObject(self, key, object, .OBJC_ASSOCIATION_RETAIN)

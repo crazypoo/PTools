@@ -9,6 +9,46 @@
 import UIKit
 
 public extension PTPOP where Base : UIScrollView {
+    
+    var visibleRect: CGRect {
+        let contentWidth = base.contentSize.width - base.contentOffset.x
+        let contentHeight = base.contentSize.height - base.contentOffset.y
+        return CGRect(
+            origin: base.contentOffset,
+            size: CGSize(
+                width: min(min(base.bounds.size.width, base.contentSize.width), contentWidth),
+                height: min(min(base.bounds.size.height, base.contentSize.height), contentHeight)
+            )
+        )
+    }
+    
+    enum Side {
+        case top, bottom, left, right
+    }
+    
+    func scrollTo(_ side: Side, animated: Bool) {
+        let point: CGPoint
+        switch side {
+        case .top:
+            if base.contentSize.height < base.bounds.height { return }
+            point = CGPoint(
+                x: base.contentOffset.x,
+                y: -(base.contentInset.top + base.safeAreaInsets.top)
+            )
+        case .bottom:
+            if base.contentSize.height < base.bounds.height { return }
+            point = CGPoint(
+                x: base.contentOffset.x,
+                y: max(0, base.contentSize.height - base.bounds.height) + base.contentInset.bottom + base.safeAreaInsets.bottom
+            )
+        case .left:
+            point = CGPoint(x: -base.contentInset.left, y: base.contentOffset.y)
+        case .right:
+            point = CGPoint(x: max(0, base.contentSize.width - base.bounds.width) + base.contentInset.right, y: base.contentOffset.y)
+        }
+        base.setContentOffset(point, animated: animated)
+    }
+    
     //MARK: 根据偏移量和页数绘制
     ///根据偏移量和页数绘制
     /// 此方法为绘图，根据偏移量和页数可能会递归调用insideraw

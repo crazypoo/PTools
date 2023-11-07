@@ -173,7 +173,7 @@ public class PTCustomAlertView: UIView {
                                     buttons:[String],
                                     buttonColor:[UIColor],
                                     touchBackground:Bool = true,
-                                    cornerSize:CGFloat = 15,
+    @PTClampedProperyWrapper(range:0...15) cornerSize:CGFloat = 15,
                                     customAlertHeight:CGFloat = 100,
                                     alertLeftAndRightSpace:CGFloat = CGFloat.ScaleW(w: 20),
                                     customerBlock: @escaping PTCustomerCustomerBlock,
@@ -239,7 +239,7 @@ public class PTCustomAlertView: UIView {
                 moreButtons:[PTCustomBottomButtonModel] = [PTCustomBottomButtonModel](),
                 alertAnimationType:PTAlertAnimationType,
                 touchBackground:Bool = true,
-                cornerSize:CGFloat = 15) {
+    @PTClampedProperyWrapper(range:0...15) cornerSize:CGFloat = 15) {
         super.init(frame: .zero)
         createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
     }

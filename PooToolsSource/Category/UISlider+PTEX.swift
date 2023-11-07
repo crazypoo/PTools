@@ -25,4 +25,20 @@ public extension UISlider {
         let block:SliderBlock = objc_getAssociatedObject(self, &AssociatedKeys.UISliderBlockKey) as! SliderBlock
         block(sender)
     }
+    
+    func setValue(_ value: Float,
+                  animated: Bool = true,
+                  duration: TimeInterval,
+                  completion: PTActionTask? = nil) {
+        if animated {
+            UIView.animate(withDuration: duration, animations: {
+                self.setValue(value, animated: true)
+            }, completion: { _ in
+                completion?()
+            })
+        } else {
+            setValue(value, animated: false)
+            completion?()
+        }
+    }
 }

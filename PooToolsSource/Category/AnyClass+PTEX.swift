@@ -24,6 +24,8 @@ public extension NSObject {
         free(ivars)
     }
     
+    var className: String { String(describing: type(of: self)) }
+    
     //MARK: 檢測Obj是否為空
     ///檢測Obj是否為空
     class func checkObject(_ obj: NSObject?) -> Bool {

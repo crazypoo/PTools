@@ -39,8 +39,14 @@ public extension String {
     static let throughLabel = "划线Label"
     static let twitterLabel = "推文Label"
     static let movieCutOutput = "类似剪映的视频输出进度效果"
-    
+    static let progressBar = "进度条"
+    static let alert = "Alert"
+    static let feedbackAlert = "反馈弹框"
+    static let menu = "Menu"
+
     static let route = "路由"
+    
+    static let encryption = "Encryption"
 }
 
 struct AppUserDefultsWrapper {
@@ -184,7 +190,13 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let movieCutOutput = self.rowBaseModel(name: .movieCutOutput)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput]
+        let progressBar = self.rowBaseModel(name: .progressBar)
+        
+        let asTips = self.rowBaseModel(name: .alert)
+        
+        let menu = self.rowBaseModel(name: .menu)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -219,9 +231,29 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_route.cellFont = sectionTitleFont
         sectionModel_route.accessoryType = .NoneAccessoryView
 
-        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
+        let routeSection = PTSection.init(headerTitle: sectionModel_route.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: routeRows,headerDataModel: sectionModel_route)
+        
+        /**
+            Encryption
+         */
+        let encryption = self.rowBaseModel(name: .encryption)
 
-        return [netSection,mediaSection,phoneSection,uikitSection,routeSection]
+        let encryptionArrs = [encryption]
+        
+        var encryptionRows = [PTRows]()
+        encryptionArrs.enumerated().forEach { index,value in
+            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+            encryptionRows.append(row)
+        }
+        
+        let sectionModel_encryption = PTFusionCellModel()
+        sectionModel_encryption.name = "Encryption"
+        sectionModel_encryption.cellFont = sectionTitleFont
+        sectionModel_encryption.accessoryType = .NoneAccessoryView
+
+        let encryptionSection = PTSection.init(headerTitle: sectionModel_encryption.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTVersionFooter.self,footerID: PTVersionFooter.ID,footerHeight: 88,headerHeight: 44, rows: encryptionRows,headerDataModel: sectionModel_route)
+
+        return [netSection,mediaSection,phoneSection,uikitSection,routeSection,encryptionSection]
     }()
     
     lazy var collectionView : PTCollectionView = {
@@ -404,6 +436,48 @@ class PTFuncNameViewController: PTBaseViewController {
                 } tapBackgroundBlock: { sheet in
                     
                 }
+            } else if itemRow.title == .alert {
+                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert]) { sheet in
+                    
+                } cancelBlock: { sheet in
+                    
+                } otherBlock: { sheet, index in
+
+                    switch index {
+                    case 0:
+                        PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
+                    case 1:
+                        PTAlertTipControl.present(title:"Hola!",subtitle: "Que?",icon:.Error,style: .SupportVisionOS)
+                    case 2:
+                        UIAlertController.alertSendFeedBack { title, content in
+                            UIAlertController.gobal_drop(title: title,subTitle: content) {
+                                UIAlertController.base_textfield_alertVC(okBtn: "好的", cancelBtn: "取消", placeHolders: ["placeholder"], textFieldTexts: ["Test"], keyboardType: [.default], textFieldDelegate: self) { result in
+                                    
+                                }
+                            } notifiDismiss: {
+                                UIAlertController.alertVC(title: "notifi消失之后", msg: "哦", cancel: "取消", cancelBlock: {
+                                    
+                                })
+                            }
+
+                        }
+                    default:
+                        break
+                    }
+                } tapBackgroundBlock: { sheet in
+                    
+                }
+
+            } else if itemRow.title == .menu {
+                
+                let cell = collectionViews.cellForItem(at: indexPath) as! PTFusionCell
+                
+                let menuItems = PTEditMenuItem(title: "111") {
+                    PTNSLogConsole("我点击了")
+                }
+                
+                let menu = PTEditMenuItemsInteraction()
+                menu.showMenu([menuItems], targetRect: collectionViews.cellInWindow(cellFrame: cell.frame), for: cell)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
@@ -647,3 +721,4 @@ extension PTFuncNameViewController: ImageKitDataTrackDelegate {
     }
 }
 
+extension PTFuncNameViewController:UITextFieldDelegate {}

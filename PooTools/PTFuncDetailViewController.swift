@@ -15,6 +15,8 @@ import AnyImageKit
 import Photos
 import Vision
 import VisionKit
+import SwifterSwift
+import CommonCrypto
 
 let PTUploadFilePath = FileManager.pt.LibraryDirectory() + "/UploadFile"
 
@@ -341,6 +343,155 @@ class PTFuncDetailViewController: PTBaseViewController {
                     break
                 }
             }
+        case String.progressBar:
+            let verProgress = PTProgressBar(showType: .Vertical)
+            let horProgress = PTProgressBar(showType: .Horizontal)
+
+            self.view.addSubviews([verProgress,horProgress])
+            verProgress.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(20)
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
+                make.width.equalTo(22)
+            }
+            
+            horProgress.snp.makeConstraints { make in
+                make.top.equalTo(verProgress)
+                make.left.equalTo(verProgress.snp.right).offset(10)
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.height.equalTo(22)
+            }
+
+            PTGCDManager.gcdMain() {
+                verProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
+                horProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
+            }
+            
+            PTGCDManager.gcdAfter(time: 1) {
+                verProgress.animationProgress(duration: 1, value: 0.5)
+                horProgress.animationProgress(duration: 1, value: 0.75)
+            }
+        case String.encryption:
+            
+            let testKey = "0523iZTd7tkX0820"
+            let testIV = "1333000000000000"
+
+            let returnButton = UIButton(type: .custom)
+            returnButton.setImage(UIImage.system("arrowshape.turn.up.left"), for: .normal)
+            
+            let switchDES = UISwitch()
+            switchDES.onTintColor = .systemBlue
+            switchDES.isOn = false
+            
+            let switchAESECB = UISwitch()
+            switchAESECB.onTintColor = .systemRed
+            switchAESECB.isOn = false
+
+            let switchAESCBC = UISwitch()
+            switchAESCBC.onTintColor = .systemGreen
+            switchAESCBC.isOn = false
+
+            let contentLabel = UILabel()
+            contentLabel.textColor = .black
+            contentLabel.text = "潮州周杰伦是GAY"
+            contentLabel.numberOfLines = 0
+            contentLabel.textAlignment = .center
+            self.view.addSubviews([returnButton,contentLabel,switchDES,switchAESECB,switchAESCBC])
+            returnButton.snp.makeConstraints { make in
+                make.size.equalTo(34)
+                make.top.equalToSuperview().inset(20)
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            }
+            contentLabel.snp.makeConstraints { make in
+                make.top.equalTo(returnButton.snp.bottom).offset(5)
+                make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            }
+            
+            switchDES.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.height.equalTo(34)
+                make.top.equalTo(contentLabel.snp.bottom).offset(10)
+            }
+            
+            switchAESECB.snp.makeConstraints { make in
+                make.top.bottom.equalTo(switchDES)
+                make.left.equalTo(switchDES.snp.right).offset(20)
+            }
+            
+            switchAESCBC.snp.makeConstraints { make in
+                make.top.bottom.equalTo(switchDES)
+                make.left.equalTo(switchAESECB.snp.right).offset(20)
+            }
+            
+            switchDES.addSwitchAction { sender in
+                if sender.isOn {
+                    Task.init {
+                        do {
+                            contentLabel.text = try await PTDataEncryption.desCrypt(operation: CCOperation(kCCEncrypt), key: testKey, dataString: contentLabel.text!)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                } else {
+                    Task.init {
+                        do {
+                            contentLabel.text = try await PTDataEncryption.desCrypt(operation: CCOperation(kCCDecrypt), key: testKey, dataString: contentLabel.text!)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+            
+            switchAESECB.addSwitchAction { sender in
+                if sender.isOn {
+                    Task.init {
+                        do {
+                            contentLabel.text = try await PTDataEncryption.aesECBEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                } else {
+                    Task.init {
+                        do {
+                            let datas = try await PTDataEncryption.aesECBDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey)
+                            contentLabel.text = String(data: datas, encoding: .utf8)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+            
+            switchAESCBC.addSwitchAction { sender in
+                if sender.isOn {
+                    Task.init {
+                        do {
+                            contentLabel.text = try await PTDataEncryption.aesEncryption(data: contentLabel.text!.data(using: .utf8)!, key: testKey, iv: testIV)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                } else {
+                    Task.init {
+                        do {
+                            let datas = try await PTDataEncryption.aesDecrypt(data: Data(base64Encoded: contentLabel.text!)!, key: testKey, iv: testIV)
+                            contentLabel.text = String(data: datas, encoding: .utf8)
+                        } catch {
+                            PTNSLogConsole(error.localizedDescription)
+                        }
+                    }
+                }
+            }
+            
+            returnButton.addActionHandlers { sender in
+                contentLabel.text = "潮州周杰伦是GAY"
+                switchDES.isOn = false
+                switchAESECB.isOn = false
+                switchAESCBC.isOn = false
+            }
+
         default:
             break
         }

@@ -118,6 +118,29 @@ public extension Array {
         let JSONString = NSString(data:data as Data,encoding: String.Encoding.utf8.rawValue)
         return JSONString! as String
     }
+    
+    /**
+     */
+    func rearrange(fromIndex: Int, toIndex: Int) -> [Element] {
+        var array = self
+        let element = array.remove(at: fromIndex)
+        array.insert(element, at: toIndex)
+        return array
+    }
+    
+    /**
+        数组分组 Example:
+     ```
+     let array = [1,2,3,4,5,6,7]
+     array.chuncked(by: 3) // [[1,2,3], [4,5,6], [7]]
+     ```
+     - parameter chunkSize: 分多少组
+     */
+    func chunked(by chunkSize: Int) -> [[Element]] {
+        return stride(from: 0, to: self.count, by: chunkSize).map {
+            Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
+        }
+    }
 }
 
 //MARK: 遵守NSObjectProtocol协议对应数组的扩展方法

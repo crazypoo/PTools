@@ -30,4 +30,8 @@ public extension UIGestureRecognizer {
         let block:TapedBlock = objc_getAssociatedObject(self, &AssociatedKeys.UIGestureRecognizerBlockKey) as! TapedBlock
         block(sender)
     }
+    
+    func removeFromView() {
+        view?.removeGestureRecognizer(self)
+    }
 }

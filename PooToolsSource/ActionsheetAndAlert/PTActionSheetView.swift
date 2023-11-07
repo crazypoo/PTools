@@ -151,7 +151,7 @@ public class PTActionSheetView: UIView {
                 cancelCellTitleColor:UIColor? = UIColor.systemBlue,
                 titleCellTitleColor:UIColor? = UIColor.systemGray,
                 selectedColor:UIColor? = UIColor.lightGray,
-                corner:CGFloat = 15,
+    @PTClampedProperyWrapper(range:0...15) corner:CGFloat = 15,
                 dismissWithTapBG:Bool = true) {
         super.init(frame: .zero)
         createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)

@@ -618,6 +618,36 @@ public extension String {
     func trim(to maximumCharacters: Int) -> String {
         return "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."
     }
+    
+    //MARK: 强制第一个大写
+    ///强制第一个大写
+    func uppercasedFirstLetter() -> String {
+        let lowercaseSctring = self.lowercased()
+        return lowercaseSctring.prefix(1).uppercased() + lowercaseSctring.dropFirst()
+    }
+    
+    func removedSuffix(_ suffix: String) -> String {
+        if self.hasSuffix(suffix) {
+            return String(dropLast(suffix.count))
+        } else {
+            return self
+        }
+    }
+    
+    func removedPrefix(_ prefix: String) -> String {
+        if self.hasPrefix(prefix) {
+            return String(dropFirst(prefix.count))
+        } else {
+            return self
+        }
+    }
+    
+    //MARK: 替换
+    ///替换
+    func replace(_ replacingString: String,
+                 with newString: String) -> String {
+        return self.replacingOccurrences(of: replacingString, with: newString)
+    }
 }
 
 fileprivate extension PTUtils {

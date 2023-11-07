@@ -9,6 +9,26 @@
 import UIKit
 
 public extension UICollectionView {
+    
+    func isValidIndexPath(_ indexPath: IndexPath) -> Bool {
+        return indexPath.section >= 0 &&
+        indexPath.item >= 0 &&
+        indexPath.section < numberOfSections &&
+        indexPath.item < numberOfItems(inSection: indexPath.section)
+    }
+    
+    //MARK: 重载Layout
+    ///重载Layout
+    func invalidateLayout(animated: Bool) {
+        if animated {
+            performBatchUpdates({
+                self.collectionViewLayout.invalidateLayout()
+            }, completion: nil)
+        } else {
+            collectionViewLayout.invalidateLayout()
+        }
+    }
+    
     //MARK: 撇除動畫重加載
     ///撇除動畫重加載
     @objc func reloadDataWithOutAnimation(completion:PTActionTask?) {

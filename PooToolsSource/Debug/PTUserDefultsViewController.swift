@@ -241,7 +241,7 @@ class PTUserDefultsEditViewController:PTBaseViewController {
             make.top.equalTo(self.keyLabel.snp.bottom).offset(10)
             make.bottom.equalTo(self.view.snp.centerY)
         }
-        textInputView.bk_placeholder = "value"
+        textInputView.pt_placeholder = "value"
     }
     
     func saveAction() {

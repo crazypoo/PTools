@@ -37,7 +37,11 @@ public extension UIButton {
         block(sender)
     }
     
-    func pt_SDWebImage(imageString:String) {
+    @objc func removeTargerAndAction() {
+        self.removeTarget(nil, action: nil, for: .allEvents)
+    }
+    
+    @objc func pt_SDWebImage(imageString:String) {
         self.kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     

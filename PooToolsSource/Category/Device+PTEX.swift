@@ -22,6 +22,21 @@ public enum UIDeviceApplePencilSupportType {
 }
 
 public extension PTPOP where Base: UIDevice {
+    
+    //MARK: 判断是否Mac
+    var isMac: Bool {
+        if #available(iOS 14.0, tvOS 14.0, *) {
+            if UIDevice.current.userInterfaceIdiom == .mac {
+                return true
+            }
+        }
+        #if targetEnvironment(macCatalyst)
+        return true
+        #else
+        return false
+        #endif
+    }
+    
     //MARK: 判断机型
     ///小
     static func oneOfSmallDevice()->Bool {

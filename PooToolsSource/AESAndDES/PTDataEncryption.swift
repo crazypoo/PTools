@@ -34,20 +34,15 @@ public class PTDataEncryption {
     /// - Parameters:
     ///   - data: 加密內容
     ///   - key: key
-    ///   - iv: iv
+    ///   - iv: iv(16位)
     ///   - handle: 輸出
     public static func aesEncryption(data:Data,
                                      key:String,
-                                     iv:String,
-                                     handle:(_ encryptionString:String)->Void) {
+                                     iv:String) async throws -> String {
         /* Encrypt Data */
-        do {
-            let aes = try AES(key: key,iv: iv).encrypt(data.bytes)
-            let encryptedData = Data(aes)
-            handle(encryptedData.base64EncodedString())
-        } catch{
-            PTNSLogConsole(error.localizedDescription)
-        }
+        let aes = try AES(key: key,iv: iv).encrypt(data.bytes)
+        let encryptedData = Data(aes)
+        return encryptedData.base64EncodedString()
     }
     
     //MARK: AES解密
@@ -57,18 +52,12 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - iv: iv
     ///   - handle: 輸出
-    public static func aseDecrypt(data:Data,
+    public static func aesDecrypt(data:Data,
                                   key:String,
-                                  iv:String,
-                                  handle:(_ decryptData:Data)->Void) {
+                                  iv:String) async throws -> Data {
         /* Decrypt Data */
-        do {
-            let aes = try AES(key: key,iv: iv).decrypt(data.bytes)
-            let decryptData = Data(aes)
-            handle(decryptData)
-        } catch {
-            PTNSLogConsole(error.localizedDescription)
-        }
+        let aes = try AES(key: key,iv: iv).decrypt(data.bytes)
+        return Data(aes)
     }
     
     //MARK: AES加密(ECB)
@@ -78,16 +67,11 @@ public class PTDataEncryption {
     ///   - key: key
     ///   - handle: 輸出
     public static func aesECBEncryption(data:Data,
-                                        key:String,
-                                        handle:(_ encryptionString:String)->Void) {
+                                        key:String) async throws -> String {
         /* Encrypt Data */
-        do {
-            let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs5).encrypt(data.bytes)
-            let encryptedData = Data(aes)
-            handle(encryptedData.base64EncodedString())
-        } catch{
-            PTNSLogConsole(error.localizedDescription)
-        }
+        let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).encrypt(data.bytes)
+        let encryptedData = Data(aes)
+        return encryptedData.base64EncodedString()
     }
     
     //MARK: AES解密(ECB)
@@ -96,17 +80,11 @@ public class PTDataEncryption {
     ///   - data: 加密內容
     ///   - key: key
     ///   - handle: 輸出
-    public static func aseECBDecrypt(data:Data,
-                                     key:String,
-                                     handle:(_ decryptData:Data)->Void) {
+    public static func aesECBDecrypt(data:Data,
+                                     key:String) async throws -> Data {
         /* Decrypt Data */
-        do {
-            let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs5).decrypt(data.bytes)
-            let decryptData = Data(aes)
-            handle(decryptData)
-        } catch {
-            PTNSLogConsole(error.localizedDescription)
-        }
+        let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).decrypt(data.bytes)
+        return Data(aes)
     }
     
     //MARK: Des加密

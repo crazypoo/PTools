@@ -22,9 +22,10 @@ public extension UIColor {
     ///   - lightColor: 浅色模式的颜色
     ///   - darkColor: 深色模式的颜色
     /// - Returns: 返回一个颜色（UIColor）
+#if !os(watchOS)
     static func darkModeColor(lightColor: UIColor,
                               darkColor: UIColor) -> UIColor {
-       if #available(iOS 13.0, *) {
+        if #available(iOS 13.0,tvOS 13.0, *) {
           return UIColor { (traitCollection) -> UIColor in
                if traitCollection.userInterfaceStyle == .dark {
                    return darkColor
@@ -36,6 +37,39 @@ public extension UIColor {
           return lightColor
        }
    }
+#endif
+    
+#if !os(watchOS) && !os(tvOS)
+    convenience init(baseInterfaceLevel: UIColor, elevatedInterfaceLevel: UIColor ) {
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            self.init { traitCollection in
+                switch traitCollection.userInterfaceLevel {
+                case .base:
+                    return baseInterfaceLevel
+                case .elevated:
+                    return elevatedInterfaceLevel
+                case .unspecified:
+                    return baseInterfaceLevel
+                @unknown default:
+                    return baseInterfaceLevel
+                }
+            }
+        }
+        else {
+            self.init(cgColor: baseInterfaceLevel.cgColor)
+        }
+    }
+#endif
+    
+#if !os(watchOS)
+    static var systemColorfulColors: [UIColor] {
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemIndigo, .systemPink, .systemPurple]
+        } else {
+            return [.systemRed, .systemOrange, .systemYellow, .systemGreen, .systemTeal, .systemBlue, .systemPink, .systemPurple]
+        }
+    }
+#endif
     
     //MARK: hex 色值
     /// - Parameters:

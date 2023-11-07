@@ -367,6 +367,73 @@ public extension UIView {
         let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin], attributes: dic, context: nil).size
         return size
     }
+    
+    var viewController: UIViewController? {
+        weak var parentResponder: UIResponder? = self
+        while parentResponder != nil {
+            parentResponder = parentResponder!.next
+            if let viewController = parentResponder as? UIViewController {
+                return viewController
+            }
+        }
+        return nil
+    }
+    
+    var hasSuperview: Bool { superview != nil }
+
+    func allSubViewsOf<T : UIView>(type : T.Type) -> [T] {
+        var all = [T]()
+        func getSubview(view: UIView) {
+            if let aView = view as? T{
+                all.append(aView)
+            }
+            guard view.subviews.count>0 else { return }
+            view.subviews.forEach{ getSubview(view: $0) }
+        }
+        getSubview(view: self)
+        return all
+    }
+
+    var screenshot: UIImage? {
+        /*UIGraphicsBeginImageContextWithOptions(layer.frame.size, false, 0)
+         defer {
+         UIGraphicsEndImageContext()
+         }
+         guard let context = UIGraphicsGetCurrentContext() else { return nil }
+         layer.render(in: context)
+         return UIGraphicsGetImageFromCurrentImageContext()*/
+        let renderer = UIGraphicsImageRenderer(bounds: bounds)
+        return renderer.image { rendererContext in
+            layer.render(in: rendererContext.cgContext)
+        }
+    }
+
+    func addShadow(ofColor color: UIColor, radius: CGFloat, offset: CGSize, opacity: Float) {
+        layer.shadowColor = color.cgColor
+        layer.shadowOffset = offset
+        layer.shadowRadius = radius
+        layer.shadowOpacity = opacity
+        layer.masksToBounds = false
+    }
+    
+    func addParalax(amount: CGFloat) {
+        motionEffects.removeAll()
+        let horizontal = UIInterpolatingMotionEffect(keyPath: "center.x", type: .tiltAlongHorizontalAxis)
+        horizontal.minimumRelativeValue = -amount
+        horizontal.maximumRelativeValue = amount
+        
+        let vertical = UIInterpolatingMotionEffect(keyPath: "center.y", type: .tiltAlongVerticalAxis)
+        vertical.minimumRelativeValue = -amount
+        vertical.maximumRelativeValue = amount
+        
+        let group = UIMotionEffectGroup()
+        group.motionEffects = [horizontal, vertical]
+        self.addMotionEffect(group)
+    }
+    
+    func removeParalax() {
+        motionEffects.removeAll()
+    }
 }
 
 public extension UIView {

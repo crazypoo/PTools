@@ -82,7 +82,7 @@ public extension UIAlertController {
     ///   - cancel: 取消回調
     ///   - moreBtn: 更多按鈕點擊回調
     ///   - msgFont:
-    @objc class func base_alertVC(title:String? = "",
+    class func base_alertVC(title:String? = "",
                             titleColor:UIColor? = UIColor.black,
                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                             msg:String? = "",
@@ -94,7 +94,7 @@ public extension UIAlertController {
                             cancelBtnColor:UIColor? = .systemBlue,
                             doneBtnColors:[UIColor]? = [UIColor](),
                             alertBGColor:UIColor? = .white,
-                            alertCornerRadius:NSNumber? = 15,
+    @PTClampedProperyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                             cancel:PTActionTask? = nil,
                             moreBtn: ((_ index:Int,_ title:String)->Void)? = nil) {
         let alert = UIAlertController(title: title, message: msg, preferredStyle: .alert)
@@ -163,7 +163,7 @@ public extension UIAlertController {
         if alertBGColor != .white {
             alertContentView.backgroundColor = alertBGColor
         }
-        alertContentView.layer.cornerRadius = CGFloat(alertCornerRadius!.floatValue)
+                                alertContentView.layer.cornerRadius = alertCornerRadius
         
         showIn!.present(alert, animated: true, completion: nil)
     }
@@ -200,7 +200,7 @@ public extension UIAlertController {
                                       keyboardType:[UIKeyboardType]?,
                                       textFieldDelegate:UITextFieldDelegate,
                                       alertBGColor:UIColor? = .white,
-                                      alertCornerRadius:CGFloat? = 15,
+    @PTClampedProperyWrapper(range:0...15) alertCornerRadius:CGFloat = 15,
                                       cancel:PTActionTask? = nil,
                                       doneBtn:((_ result:[String:String])->Void)?) {
         let alert = UIAlertController(title: title, message: "", preferredStyle: .alert)
@@ -252,7 +252,84 @@ public extension UIAlertController {
         if alertBGColor != .white {
             alertContentView.backgroundColor = alertBGColor
         }
-        alertContentView.layer.cornerRadius = alertCornerRadius!
+        alertContentView.layer.cornerRadius = alertCornerRadius
         showIn!.present(alert, animated: true, completion: nil)
     }
+    
+    //MARK: 初始化創建Alert
+    ///初始化創建Alert
+    /// - Parameters:
+    ///   - superView: 加載在?上
+    ///   - alertTitle: 標題
+    ///   - feedBackTitlePlaceholder: 反馈底字
+    ///   - feedBackTitleFont: 反馈字体
+    ///   - feedBackContentPlaceholder: 反馈内容底字
+    ///   - feedBackContentFont: 反馈内容字体
+    ///   - feedBackContentCount: 最大输入字数
+    ///   - feedBackContentIsSecureTextEntry: 是否密码格式输入
+    ///   - cancelString: 取消
+    ///   - sendString: 完成
+    ///   - canTapBackground: 是否支持點擊背景消失Alert
+    ///   - titleFont: 标题字体
+    ///   - done: 完成回調(标题,内容)
+    ///   - dismiss: 界面離開後的回調
+    class func alertSendFeedBack(superView:UIView? = AppWindows,
+                                  alertTitle:String? = "反馈问题",
+                                  feedBackTitlePlaceholder:String? = "请输入反馈标题",
+                                  feedBackTitleFont:UIFont? = .appfont(size: 16),
+                                  feedBackContentPlaceholder:String? = "请输入反馈内容",
+                                  feedBackContentFont:UIFont? = .appfont(size: 16),
+                                  feedBackContentCount:NSNumber? = 100,
+                                  feedBackContentIsSecureTextEntry:Bool? = false,
+                                  cancelString:String? = "取消",
+                                  sendString:String? = "确定",
+                                  titleFont:UIFont? = .appfont(size: 18),
+                                  canTapBackground:Bool? = false,
+                                  done: @escaping (String, String) -> Void,
+                                  dismiss:PTActionTask? = nil) {
+        let feedBackTitle = UITextField()
+        feedBackTitle.placeholder = feedBackTitlePlaceholder!
+        feedBackTitle.setPlaceHolderTextColor(.lightGray)
+        feedBackTitle.clearButtonMode = .whileEditing
+        feedBackTitle.font = feedBackTitleFont!
+        feedBackTitle.addPaddingLeft(5)
+        feedBackTitle.backgroundColor = .clear
+        
+        let feedBackContent = UITextView()
+        feedBackContent.pt_placeholder = feedBackContentPlaceholder!
+        feedBackContent.pt_placeholderLabel?.textColor = .lightGray
+        feedBackContent.pt_placeholderLabel?.font = feedBackContentFont!
+        feedBackContent.font = feedBackContentFont!
+        feedBackContent.backgroundColor = .clear
+        feedBackContent.isSecureTextEntry = feedBackContentIsSecureTextEntry!
+        
+        PTCustomAlertView.alertFunction(superView:superView!,titleString: alertTitle!,titleFont: titleFont!,buttons: [cancelString!,sendString!], buttonColor: [],touchBackground: canTapBackground!,customAlertHeight: 250,alertLeftAndRightSpace: 60) { customerView in
+            customerView.addSubviews([feedBackTitle,feedBackContent])
+            feedBackTitle.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview()
+                make.height.equalTo(44)
+            }
+            
+            feedBackContent.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.bottom.equalToSuperview()
+                make.top.equalTo(feedBackTitle.snp.bottom)
+            }
+            
+            feedBackContent.pt_wordCountLabel?.backgroundColor = .clear
+            feedBackContent.pt_wordCountLabel?.font = .appfont(size: 12)
+            feedBackContent.pt_maxWordCount = feedBackContentCount!
+
+        } tapBlock: { index in
+            if index == 1 {
+                done(feedBackTitle.text ?? "",feedBackContent.text ?? "")
+            }
+        } alertDismissBlock: {
+            if dismiss != nil {
+                dismiss!()
+            }
+        }
+    }
+
 }
