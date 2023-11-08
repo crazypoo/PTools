@@ -50,7 +50,7 @@ public class PTDataEncryption {
     /// - Parameters:
     ///   - data: 加密內容
     ///   - key: key
-    ///   - iv: iv
+    ///   - iv: iv(16位)
     ///   - handle: 輸出
     public static func aesDecrypt(data:Data,
                                   key:String,

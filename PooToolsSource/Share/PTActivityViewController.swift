@@ -145,7 +145,8 @@ open class PTActivityViewController:UIActivityViewController {
         
         label.urlMaximumLength = 31
         label.customize { label in
-            label.text = self.contentAtt.string
+            label.attributedText = self.contentAtt
+//            label.text = self.contentAtt.string
             label.font = previewFont
             label.numberOfLines = previewNumberOfLines
             label.lineSpacing = 2
@@ -238,9 +239,8 @@ open class PTActivityViewController:UIActivityViewController {
         let contentLines = numberOfLines(contentString)
         let textMaxLines = (previewNumberOfLines - urlLines)
 
-        let contentText = contentString.truncatedText(maxLineNumber: textMaxLines, font: self.previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
-        attributedString.append(NSAttributedString(string: contentText + (contentLines > textMaxLines ? "...." : "")))
-        attributedString.append(NSAttributedString(string: "\n\(urlString)"))
+        let contentText = contentString.truncatedText(maxLineNumber: (textMaxLines - (urlLines + 1)), font: self.previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
+        attributedString.append(NSAttributedString(string: contentText + (contentLines > textMaxLines ? "...." : "") + "\n\(urlString)"))
         return attributedString
     }()
     

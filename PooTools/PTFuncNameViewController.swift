@@ -43,6 +43,7 @@ public extension String {
     static let alert = "Alert"
     static let feedbackAlert = "反馈弹框"
     static let menu = "Menu"
+    static let loading = "Loading"
 
     static let route = "路由"
     
@@ -98,6 +99,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_net.accessoryType = .More
         sectionModel_net.disclosureIndicatorImage = disclosureIndicatorImage
         sectionModel_net.moreLayoutStyle = .leftTitleRightImage
+        sectionModel_net.moreDisclosureIndicator = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
         let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: netRows,headerDataModel: sectionModel_net)
         
@@ -195,8 +197,10 @@ class PTFuncNameViewController: PTBaseViewController {
         let asTips = self.rowBaseModel(name: .alert)
         
         let menu = self.rowBaseModel(name: .menu)
+        
+        let loading = self.rowBaseModel(name: .loading)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu]
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -478,6 +482,42 @@ class PTFuncNameViewController: PTBaseViewController {
                 
                 let menu = PTEditMenuItemsInteraction()
                 menu.showMenu([menuItems], targetRect: collectionViews.cellInWindow(cellFrame: cell.frame), for: cell)
+            } else if itemRow.title == .loading {
+                UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"]) { sheet in
+                    
+                } cancelBlock: { sheet in
+                    
+                } otherBlock: { sheet, index in
+
+                    switch index {
+                    case 0:
+                        let hud = PTHudView()
+                        hud.hudShow()
+                        PTGCDManager.gcdAfter(time: 5) {
+                            hud.hide {
+                                
+                            }
+                        }
+                    case 1:
+                        let cycle = PTCycleLoadingView()
+                        self.view.addSubviews([cycle])
+                        cycle.snp.makeConstraints { make in
+                            make.size.equalTo(100)
+                            make.centerX.centerY.equalToSuperview()
+                        }
+                        cycle.startAnimation()
+                        PTGCDManager.gcdAfter(time: 5) {
+                            cycle.stopAnimation() {
+                                cycle.removeFromSuperview()
+                            }
+                        }
+                    default:
+                        break
+                    }
+                } tapBackgroundBlock: { sheet in
+                    
+                }
+
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
@@ -503,7 +543,7 @@ class PTFuncNameViewController: PTBaseViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        
+                
         self.registerScreenShotService()
         
         NotificationCenter.default.addObserver(self, selector: #selector(self.flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)

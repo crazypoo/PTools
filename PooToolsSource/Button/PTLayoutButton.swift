@@ -6,308 +6,532 @@
 //  Copyright © 2019 kooun. All rights reserved.
 //
 
+import AttributedString
 import UIKit
 
-@objc public enum PTLayoutButtonStyle : Int {
+@objc public enum PTLayoutButtonStyle: Int {
     case leftImageRightTitle // 系统默认
     case leftTitleRightImage
     case upImageDownTitle
     case upTitleDownImage
 }
 
-//@objc public enum PTLayoutButtonConnerStyle : Int {
-//    case none
-//    case fixed
-//    case dynamic
-//    case small
-//    case medium
-//    case large
-//    case capsule
-//}
-//
-//@objc public enum PTLayoutButtonSizeStyle : Int {
-//    case none
-//    case mini
-//    case small
-//    case mediun
-//    case large
-//}
-//
-//public class PTLayoutButtonConfig:PTBaseModel {
-//    /// 布局方式
-//    public var layoutStyle: PTLayoutButtonStyle! = .leftImageRightTitle
-//    /// 图片和文字的间距，默认值5
-//    public var midSpacing: CGFloat = 5
-//    /// 指定图片size
-//    public var imageSize :CGSize = .zero
-//    /// 按钮圆角风格
-//    public var cornerStyle: PTLayoutButtonConnerStyle = .none
-//    /// 按钮Border粗度
-//    public var borderWidth:CGFloat = 0
-//    /// 按钮Border颜色
-//    public var borderColor:UIColor = .clear
-//    /// 按钮圆角大小
-//    public var cornerRadius:CGFloat = 0
-//    public var backgroundColor:UIColor = .clear
-//    public var buttonSizeStyle:PTLayoutButtonSizeStyle = .none
-//    public var titlePadding:CGFloat = 0
-//    public var showHightlightActivity:Bool = false
-//    public var activityColor:UIColor = .systemPurple
-//    
-//    public var normalImage:UIImage?
-//    public var selectedImage:UIImage?
-//    public var hightlightImage:UIImage?
-//    public var disabledImage:UIImage?
-//    
-//    public var normalTitle:String = ""
-//    public var selectedTitle:String {
-//        get {
-//            self.normalTitle
-//        } set {
-//            newValue
-//        }
-//    }
-//    public var hightlightTitle:String {
-//        get {
-//            self.normalTitle
-//        } set {
-//            if self.hightlightTitle != newValue {
-//                self.hightlightTitle = newValue
-//            }
-//        }
-//    }
-//    public var disabledTitle:String {
-//        get {
-//            self.normalTitle
-//        } set {
-//            if self.disabledTitle != newValue {
-//                self.disabledTitle = newValue
-//            }
-//        }
-//    }
-//    public var normalTitleColor:UIColor = .black
-//    public var selectedTitleColor:UIColor = .green
-//    public var hightlightTitleColor:UIColor = .systemBlue
-//    public var disabledTitleColor:UIColor = .lightGray
-//    public var normalTitleFont:UIFont = .appfont(size: 14)
-//    public var selectedTitleFont:UIFont = .appfont(size: 14)
-//    public var hightlightTitleFont:UIFont = .appfont(size: 14)
-//    public var disabledTitleFont:UIFont = .appfont(size: 14)
-//    
-//    public var normalSubTitle:String? = ""
-//    public var selectedSubTitle:String {
-//        get {
-//            self.normalSubTitle!
-//        } set {
-//            if self.selectedSubTitle != newValue {
-//                self.selectedSubTitle = newValue
-//            }
-//        }
-//    }
-//    public var hightlightSubTitle:String {
-//        get {
-//            self.normalSubTitle!
-//        } set {
-//            if self.hightlightSubTitle != newValue {
-//                self.hightlightSubTitle = newValue
-//            }
-//        }
-//    }
-//    public var disabledSubTitle:String {
-//        get {
-//            self.normalSubTitle!
-//        } set {
-//            if self.disabledSubTitle != newValue {
-//                self.disabledSubTitle = newValue
-//            }
-//        }
-//    }
-//    public var normalSubTitleColor:UIColor = .black
-//    public var selectedSubTitleColor:UIColor = .green
-//    public var hightlightSubTitleColor:UIColor = .systemBlue
-//    public var disabledSubTitleColor:UIColor = .lightGray
-//    public var normalSubTitleFont:UIFont = .appfont(size: 12)
-//    public var selectedSubTitleFont:UIFont = .appfont(size: 12)
-//    public var hightlightSubTitleFont:UIFont = .appfont(size: 12)
-//    public var disabledSubTitleFont:UIFont = .appfont(size: 12)
-//}
+@objc public enum PTLayoutButtonConnerStyle: Int {
+    case none
+    case fixed
+    case dynamic
+    case small
+    case medium
+    case large
+    case capsule
+}
+
+@objc public enum PTLayoutButtonSizeStyle: Int {
+    case none
+    case mini
+    case small
+    case mediun
+    case large
+}
+
+@objc public enum PTLayoutButtonTitleAlignmentStyle: Int {
+    case automatic
+    case leading
+    case center
+    case trailing
+}
 
 // MARK: - 上图下文 上文下图 左图右文(系统默认) 右图左文
 /// 重写layoutSubviews的方式实现布局，忽略imageEdgeInsets、titleEdgeInsets和contentEdgeInsets
 @objcMembers
 public class PTLayoutButton: UIButton {
-//    public var buttonLayoutConfig:PTLayoutButtonConfig = PTLayoutButtonConfig()
     /// 布局方式
-    public var layoutStyle: PTLayoutButtonStyle! = .leftImageRightTitle
+    public var layoutStyle: PTLayoutButtonStyle! = .leftImageRightTitle {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setNeedsLayout()
+            }
+        }
+    }
     /// 图片和文字的间距，默认值5
     public var midSpacing: CGFloat = 5 {
         didSet {
-            setNeedsLayout()
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setNeedsLayout()
+            }
         }
     }
     /// 指定图片size
-    public var imageSize :CGSize = .zero {
+    public var imageSize: CGSize = .zero {
         didSet {
-            setNeedsLayout()
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setNeedsLayout()
+            }
         }
     }
-    
-    public override init(frame: CGRect) {
-        super.init(frame: frame)
+    /// 按钮圆角风格
+    public var cornerStyle: PTLayoutButtonConnerStyle = .none {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
     }
-    
-    required init?(coder: NSCoder) {
+    /// 按钮Border粗度
+    public var borderWidth: CGFloat = 0 {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
+            }
+        }
+    }
+    /// 文本对齐方向
+    public var textAlignment: PTLayoutButtonTitleAlignmentStyle = .center {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+    /// 按钮Border颜色
+    public var borderColor: UIColor = .clear {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
+            }
+        }
+    }
+    /// 按钮圆角大小
+    public var cornerRadius: CGFloat = 0 {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                viewCorner(radius: cornerRadius, borderWidth: borderWidth, borderColor: borderColor)
+            }
+        }
+    }
+    public var configBackgroundColor: UIColor = .clear {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                backgroundColor = configBackgroundColor
+            }
+        }
+    }
+    public var configBackgroundSelectedColor: UIColor = .clear {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                backgroundColor = configBackgroundSelectedColor
+            }
+        }
+    }
+    public var buttonSizeStyle: PTLayoutButtonSizeStyle = .none {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+    public var titlePadding: CGFloat = 0 {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setNeedsLayout()
+            }
+        }
+    }
+    public var showHightlightActivity: Bool = false {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+    public var activityColor: UIColor = .systemPurple {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+    public var loadingCanTap: Bool = false {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+
+    public var normalImage: UIImage? = nil {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setImage(normalImage, for: .normal)
+            }
+        }
+    }
+    public var selectedImage: UIImage? = nil {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setImage(selectedImage, for: .selected)
+            }
+        }
+    }
+    public var hightlightImage: UIImage? = nil {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setImage(hightlightImage, for: .highlighted)
+            }
+        }
+    }
+    public var disabledImage: UIImage? = nil {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setImage(disabledImage, for: .disabled)
+            }
+        }
+    }
+
+    public var normalTitle: String = "" {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitle(normalTitle, for: .normal)
+            }
+        }
+    }
+    public var selectedTitle: String {
+        get {
+            normalTitle
+        } set {
+            if self.selectedTitle != newValue {
+                self.selectedTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setTitle(selectedTitle, for: .selected)
+                }
+            }
+        }
+    }
+    public var hightlightTitle: String {
+        get {
+            normalTitle
+        } set {
+            if self.hightlightTitle != newValue {
+                self.hightlightTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setTitle(hightlightTitle, for: .highlighted)
+                }
+            }
+        }
+    }
+    public var disabledTitle: String {
+        get {
+            normalTitle
+        } set {
+            if self.disabledTitle != newValue {
+                self.disabledTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setTitle(disabledTitle, for: .disabled)
+                }
+            }
+        }
+    }
+
+    public var normalTitleColor: UIColor = .black {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitleColor(normalTitleColor, for: .normal)
+            }
+        }
+    }
+    public var selectedTitleColor: UIColor = .black {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitleColor(selectedTitleColor, for: .disabled)
+            }
+        }
+    }
+    public var hightlightTitleColor: UIColor = .black {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitleColor(hightlightTitleColor, for: .disabled)
+            }
+        }
+    }
+    public var disabledTitleColor: UIColor = .lightGray {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitleColor(disabledTitleColor, for: .disabled)
+            }
+        }
+    }
+
+    public var normalTitleFont: UIFont = .appfont(size: 14) {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                titleLabel?.font = normalTitleFont
+                setNeedsLayout()
+            }
+        }
+    }
+    public var selectedTitleFont: UIFont = .appfont(size: 14) {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                titleLabel?.font = selectedTitleFont
+                setNeedsLayout()
+            }
+        }
+    }
+    public var hightlightTitleFont: UIFont = .appfont(size: 14) {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                if isHighlighted {
+                    titleLabel?.font = hightlightTitleFont
+                } else {
+                    titleLabel?.font = normalTitleFont
+                }
+                setNeedsLayout()
+            }
+        }
+    }
+    public var disabledTitleFont: UIFont = .appfont(size: 14) {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                if isEnabled {
+                    titleLabel?.font = normalTitleFont
+                } else {
+                    titleLabel?.font = disabledTitleFont
+                }
+                setNeedsLayout()
+            }
+        }
+    }
+
+    public var normalSubTitle: String? = "" {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
+            }
+        }
+    }
+    public var selectedSubTitle: String {
+        get {
+            normalSubTitle!
+        } set {
+            if self.selectedSubTitle != newValue {
+                self.selectedSubTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
+                }
+            }
+        }
+    }
+    public var hightlightSubTitle: String {
+        get {
+            normalSubTitle!
+        } set {
+            if self.hightlightSubTitle != newValue {
+                self.hightlightSubTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: hightlightTitle, titleFont: hightlightTitleFont, titleColor: hightlightTitleColor, subTitle: hightlightSubTitle, subTitleFont: hightlightSubTitleFont, subTitleColor: hightlightSubTitleColor, state: .highlighted)
+                }
+            }
+        }
+    }
+    public var disabledSubTitle: String {
+        get {
+            normalSubTitle!
+        } set {
+            if self.disabledSubTitle != newValue {
+                self.disabledSubTitle = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
+                }
+            }
+        }
+    }
+
+    public var normalSubTitleColor: UIColor = .black {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
+            }
+        }
+    }
+    public var selectedSubTitleColor: UIColor {
+        get {
+            normalSubTitleColor
+        } set {
+            if self.selectedSubTitleColor != newValue {
+                self.selectedSubTitleColor = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
+                }
+            }
+        }
+    }
+    public var hightlightSubTitleColor: UIColor {
+        get {
+            normalSubTitleColor
+        } set {
+            if self.hightlightSubTitleColor != newValue {
+                self.hightlightSubTitleColor = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: hightlightTitle, titleFont: hightlightTitleFont, titleColor: hightlightTitleColor, subTitle: hightlightSubTitle, subTitleFont: hightlightSubTitleFont, subTitleColor: hightlightSubTitleColor, state: .highlighted)
+                }
+            }
+        }
+    }
+    public var disabledSubTitleColor: UIColor = .lightGray {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
+            }
+        }
+    }
+
+    public var normalSubTitleFont: UIFont = .appfont(size: 12) {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setAttValue(title: normalTitle, titleFont: normalTitleFont, titleColor: normalTitleColor, subTitle: normalSubTitle ?? "", subTitleFont: normalSubTitleFont, subTitleColor: normalSubTitleColor, state: .normal)
+            }
+        }
+    }
+    public var selectedSubTitleFont: UIFont {
+        get {
+            normalSubTitleFont
+        } set {
+            if self.selectedSubTitleFont != newValue {
+                self.selectedSubTitleFont = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: selectedTitle, titleFont: selectedTitleFont, titleColor: selectedTitleColor, subTitle: selectedSubTitle, subTitleFont: selectedSubTitleFont, subTitleColor: selectedSubTitleColor, state: .selected)
+                }
+            }
+        }
+    }
+    public var hightlightSubTitleFont: UIFont {
+        get {
+            normalSubTitleFont
+        } set {
+            if self.hightlightSubTitleFont != newValue {
+                self.hightlightSubTitleFont = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
+                }
+            }
+        }
+    }
+    public var disabledSubTitleFont: UIFont {
+        get {
+            normalSubTitleFont
+        } set {
+            if self.disabledSubTitleFont != newValue {
+                self.disabledSubTitleFont = newValue
+                if #available(iOS 15.0, *) {
+                    configuration = layoutConfig
+                } else {
+                    setAttValue(title: disabledTitle, titleFont: disabledTitleFont, titleColor: disabledTitleColor, subTitle: disabledSubTitle, subTitleFont: disabledSubTitleFont, subTitleColor: disabledSubTitleColor, state: .disabled)
+                }
+            }
+        }
+    }
+
+    public var contentEdges: NSDirectionalEdgeInsets = .zero {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            }
+        }
+    }
+
+    private var isButtonLoading: Bool = false
+
+    override public init(frame: CGRect) {
+        super.init(frame: frame)
+        if #available(iOS 15.0, *) {
+            self.configuration = layoutConfig
+        }
+    }
+
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    public override func layoutSubviews() {
-        super.layoutSubviews()
 
-        switchLayoutStyle()
+    override public func layoutSubviews() {
+        super.layoutSubviews()
+        if #unavailable(iOS 15.0) {
+            switchLayoutStyle()
+        }
     }
-    
-//    @available(iOS 15.0 ,*)
-//    public func newLayoutStyle() {
-//        var btnconfig = UIButton.Configuration.filled()
-//        switch self.buttonLayoutConfig.cornerStyle {
-//        case .none:
-//            break
-//        case .fixed:
-//            btnconfig.cornerStyle = .fixed
-//        case .dynamic:
-//            btnconfig.cornerStyle = .dynamic
-//        case .small:
-//            btnconfig.cornerStyle = .dynamic
-//        case .medium:
-//            btnconfig.cornerStyle = .medium
-//        case .large:
-//            btnconfig.cornerStyle = .large
-//        case .capsule:
-//            btnconfig.cornerStyle = .capsule
-//        }
-//        btnconfig.background.strokeWidth = self.buttonLayoutConfig.borderWidth
-//        btnconfig.background.strokeColor = self.buttonLayoutConfig.borderColor
-//        btnconfig.background.cornerRadius = self.buttonLayoutConfig.cornerRadius
-//        btnconfig.baseBackgroundColor = self.buttonLayoutConfig.backgroundColor
-//        switch self.buttonLayoutConfig.buttonSizeStyle {
-//        case .none:
-//            break
-//        case .mini:
-//            btnconfig.buttonSize = .mini
-//        case .small:
-//            btnconfig.buttonSize = .small
-//        case .mediun:
-//            btnconfig.buttonSize = .medium
-//        case .large:
-//            btnconfig.buttonSize = .large
-//        }
-//        switch self.buttonLayoutConfig.layoutStyle {
-//        case .leftImageRightTitle:
-//            btnconfig.imagePlacement = .leading
-//        case .leftTitleRightImage:
-//            btnconfig.imagePlacement = .trailing
-//        case .upImageDownTitle:
-//            btnconfig.imagePlacement = .top
-//        case .upTitleDownImage:
-//            btnconfig.imagePlacement = .bottom
-//        default:
-//            break
-//        }
-//        btnconfig.imagePadding = self.buttonLayoutConfig.midSpacing
-//        btnconfig.titlePadding = self.buttonLayoutConfig.titlePadding
-//                                
-//        configurationUpdateHandler = { sender in
-//            switch sender.state {
-//            case .normal:
-//                btnconfig.showsActivityIndicator = false
-//                if !self.buttonLayoutConfig.normalTitle.stringIsEmpty() {
-//                    btnconfig.attributedTitle = AttributedString(self.buttonLayoutConfig.normalTitle)
-//                    btnconfig.titleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.normalTitleFont).foregroundColor(self.buttonLayoutConfig.normalTitleColor))
-//                    })
-//                }
-//                
-//                if !(self.buttonLayoutConfig.normalSubTitle ?? "").stringIsEmpty() {
-//                    btnconfig.attributedSubtitle = AttributedString(self.buttonLayoutConfig.normalSubTitle!)
-//                    btnconfig.subtitleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.normalSubTitleFont).foregroundColor(self.buttonLayoutConfig.normalSubTitleColor))
-//                    })
-//                }
-//                
-//                btnconfig.image = self.buttonLayoutConfig.normalImage
-//                sender.configuration = btnconfig
-//            case .highlighted:
-//                btnconfig.showsActivityIndicator = self.buttonLayoutConfig.showHightlightActivity
-//                
-//                if !self.buttonLayoutConfig.hightlightTitle.stringIsEmpty() {
-//                    btnconfig.attributedTitle = AttributedString(self.buttonLayoutConfig.hightlightTitle)
-//                    btnconfig.titleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.hightlightTitleFont).foregroundColor(self.buttonLayoutConfig.hightlightTitleColor))
-//                    })
-//                }
-//
-//                if !self.buttonLayoutConfig.hightlightSubTitle.stringIsEmpty() {
-//                    btnconfig.attributedSubtitle = AttributedString(self.buttonLayoutConfig.hightlightSubTitle)
-//                    btnconfig.subtitleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.hightlightSubTitleFont).foregroundColor(self.buttonLayoutConfig.hightlightSubTitleColor))
-//                    })
-//                }
-//
-//                if !self.buttonLayoutConfig.showHightlightActivity {
-//                    btnconfig.image = self.buttonLayoutConfig.hightlightImage
-//                }
-//
-//                btnconfig.activityIndicatorColorTransformer = .init({ color in
-//                    return self.buttonLayoutConfig.activityColor
-//                })
-//
-//                sender.configuration = btnconfig
-//            case .selected:
-//                btnconfig.showsActivityIndicator = false
-//                
-//                if !self.buttonLayoutConfig.selectedTitle.stringIsEmpty() {
-//                    btnconfig.attributedTitle = AttributedString(self.buttonLayoutConfig.selectedTitle)
-//                    btnconfig.titleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.selectedTitleFont).foregroundColor(self.buttonLayoutConfig.selectedTitleColor))
-//                    })
-//                }
-//
-//                if !self.buttonLayoutConfig.selectedSubTitle.stringIsEmpty() {
-//                    btnconfig.attributedSubtitle = AttributedString(self.buttonLayoutConfig.selectedSubTitle)
-//                    btnconfig.subtitleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.selectedSubTitleFont).foregroundColor(self.buttonLayoutConfig.selectedSubTitleColor))
-//                    })
-//                }
-//
-//                btnconfig.image = self.buttonLayoutConfig.selectedImage
-//
-//                sender.configuration = btnconfig
-//            case .disabled:
-//                btnconfig.showsActivityIndicator = false
-//                if !self.buttonLayoutConfig.disabledTitle.stringIsEmpty() {
-//                    btnconfig.attributedTitle = AttributedString(self.buttonLayoutConfig.disabledTitle)
-//                    btnconfig.titleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.disabledTitleFont).foregroundColor(self.buttonLayoutConfig.disabledTitleColor))
-//                    })
-//                }
-//
-//                if !self.buttonLayoutConfig.disabledSubTitle.stringIsEmpty() {
-//                    btnconfig.attributedSubtitle = AttributedString(self.buttonLayoutConfig.disabledSubTitle)
-//                    btnconfig.subtitleTextAttributesTransformer = .init({ container in
-//                        container.merging(AttributeContainer.font(self.buttonLayoutConfig.disabledTitleFont).foregroundColor(self.buttonLayoutConfig.disabledSubTitleColor))
-//                    })
-//                }
-//
-//                btnconfig.image = self.buttonLayoutConfig.disabledImage
-//
-//                sender.configuration = btnconfig
-//
-//            default:
-//                break
-//            }
-//        }
-//    }
-//    
+
     fileprivate func switchLayoutStyle() {
         if CGSize.zero.equalTo(imageSize) {
             imageView?.sizeToFit()
@@ -331,15 +555,14 @@ public class PTLayoutButton: UIButton {
     }
 
     public func layoutHorizontal(withLeftView leftView: UIView?, rightView: UIView?) {
-        
         guard var leftViewFrame = leftView?.frame,
-            var rightViewFrame = rightView?.frame else { return }
-        
+              var rightViewFrame = rightView?.frame else { return }
+
         let totalWidth: CGFloat = leftViewFrame.width + midSpacing + rightViewFrame.width
 
-        var leftOrighialX:CGFloat = 0
-        var rightOrighialX:CGFloat = 0
-        switch self.contentHorizontalAlignment {
+        var leftOrighialX: CGFloat = 0
+        var rightOrighialX: CGFloat = 0
+        switch contentHorizontalAlignment {
         case .center:
             leftOrighialX = (frame.width - totalWidth) / 2.0
             rightOrighialX = leftViewFrame.maxX + midSpacing
@@ -362,7 +585,7 @@ public class PTLayoutButton: UIButton {
             leftOrighialX = (frame.width - totalWidth) / 2.0
             rightOrighialX = leftViewFrame.maxX + midSpacing
         }
-        
+
         leftViewFrame.origin.x = leftOrighialX
         leftViewFrame.origin.y = (frame.height - leftViewFrame.height) / 2.0
         leftView?.frame = leftViewFrame
@@ -371,11 +594,10 @@ public class PTLayoutButton: UIButton {
         rightViewFrame.origin.y = (frame.height - rightViewFrame.height) / 2.0
         rightView?.frame = rightViewFrame
     }
-    
+
     public func layoutVertical(withUp upView: UIView?, downView: UIView?) {
-        
         guard var upViewFrame = upView?.frame,
-            var downViewFrame = downView?.frame else { return }
+              var downViewFrame = downView?.frame else { return }
 
         let totalHeight: CGFloat = upViewFrame.height + midSpacing + downViewFrame.height
 
@@ -388,13 +610,231 @@ public class PTLayoutButton: UIButton {
         downView?.frame = downViewFrame
     }
 
-    public override func setImage(_ image: UIImage?, for state: UIControl.State) {
+    override public func setImage(_ image: UIImage?, for state: UIControl.State) {
         super.setImage(image, for: state)
         setNeedsLayout()
     }
 
-    public override func setTitle(_ title: String?, for state: UIControl.State) {
+    override public func setTitle(_ title: String?, for state: UIControl.State) {
         super.setTitle(title, for: state)
         setNeedsLayout()
+    }
+
+    @available(iOS 15.0,*)
+    private var layoutConfig: UIButton.Configuration {
+        var btnconfig:UIButton.Configuration
+        if configBackgroundSelectedColor != .clear {
+            btnconfig = UIButton.Configuration.filled()
+        } else {
+            btnconfig = UIButton.Configuration.plain()
+        }
+        switch cornerStyle {
+        case .none:
+            break
+        case .fixed:
+            btnconfig.cornerStyle = .fixed
+        case .dynamic:
+            btnconfig.cornerStyle = .dynamic
+        case .small:
+            btnconfig.cornerStyle = .dynamic
+        case .medium:
+            btnconfig.cornerStyle = .medium
+        case .large:
+            btnconfig.cornerStyle = .large
+        case .capsule:
+            btnconfig.cornerStyle = .capsule
+        }
+        btnconfig.background.strokeWidth = borderWidth
+        btnconfig.background.strokeColor = borderColor
+        btnconfig.background.cornerRadius = cornerRadius
+
+        switch buttonSizeStyle {
+        case .none:
+            break
+        case .mini:
+            btnconfig.buttonSize = .mini
+        case .small:
+            btnconfig.buttonSize = .small
+        case .mediun:
+            btnconfig.buttonSize = .medium
+        case .large:
+            btnconfig.buttonSize = .large
+        }
+        switch layoutStyle {
+        case .leftImageRightTitle:
+            btnconfig.imagePlacement = .leading
+        case .leftTitleRightImage:
+            btnconfig.imagePlacement = .trailing
+        case .upImageDownTitle:
+            btnconfig.imagePlacement = .top
+        case .upTitleDownImage:
+            btnconfig.imagePlacement = .bottom
+        default:
+            break
+        }
+        btnconfig.imagePadding = midSpacing
+        btnconfig.titlePadding = titlePadding
+        btnconfig.contentInsets = contentEdges
+        switch textAlignment {
+        case .automatic:
+            btnconfig.titleAlignment = .automatic
+        case .leading:
+            btnconfig.titleAlignment = .leading
+        case .center:
+            btnconfig.titleAlignment = .center
+        case .trailing:
+            btnconfig.titleAlignment = .trailing
+        }
+        configurationUpdateHandler = { sender in
+            switch sender.state {
+            case .normal:
+                btnconfig.showsActivityIndicator = self.isButtonLoading
+                if !self.normalTitle.stringIsEmpty() {
+                    btnconfig.attributedTitle = AttributedString(self.normalTitle)
+                    btnconfig.titleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.normalTitleFont).foregroundColor(self.normalTitleColor))
+                    }
+                }
+
+                if !(self.normalSubTitle ?? "").stringIsEmpty() {
+                    btnconfig.attributedSubtitle = AttributedString(self.normalSubTitle!)
+                    btnconfig.subtitleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.normalSubTitleFont).foregroundColor(self.normalSubTitleColor))
+                    }
+                }
+
+                if self.isButtonLoading {
+                    btnconfig.activityIndicatorColorTransformer = .init { _ in
+                        self.activityColor
+                    }
+                } else {
+                    if self.imageSize != .zero && self.normalImage != nil {
+                        btnconfig.image = self.normalImage!.transformImage(size: self.imageSize)
+                    }
+                }
+                btnconfig.baseBackgroundColor = self.configBackgroundColor
+                sender.configuration = btnconfig
+            case .highlighted:
+                btnconfig.showsActivityIndicator = self.showHightlightActivity
+
+                if !self.hightlightTitle.stringIsEmpty() {
+                    btnconfig.attributedTitle = AttributedString(self.hightlightTitle)
+                    btnconfig.titleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.hightlightTitleFont).foregroundColor(self.hightlightTitleColor))
+                    }
+                }
+
+                if !self.hightlightSubTitle.stringIsEmpty() {
+                    btnconfig.attributedSubtitle = AttributedString(self.hightlightSubTitle)
+                    btnconfig.subtitleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.hightlightSubTitleFont).foregroundColor(self.hightlightSubTitleColor))
+                    }
+                }
+
+                if !self.showHightlightActivity {
+                    if self.imageSize != .zero && self.hightlightImage != nil {
+                        btnconfig.image = self.hightlightImage!.transformImage(size: self.imageSize)
+                    }
+                }
+
+                btnconfig.activityIndicatorColorTransformer = .init { _ in
+                    self.activityColor
+                }
+
+                sender.configuration = btnconfig
+            case .selected:
+                btnconfig.showsActivityIndicator = false
+
+                if !self.selectedTitle.stringIsEmpty() {
+                    btnconfig.attributedTitle = AttributedString(self.selectedTitle)
+                    btnconfig.titleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.selectedTitleFont).foregroundColor(self.selectedTitleColor))
+                    }
+                }
+
+                if !self.selectedSubTitle.stringIsEmpty() {
+                    btnconfig.attributedSubtitle = AttributedString(self.selectedSubTitle)
+                    btnconfig.subtitleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.selectedSubTitleFont).foregroundColor(self.selectedSubTitleColor))
+                    }
+                }
+
+                if self.imageSize != .zero && self.selectedImage != nil {
+                    btnconfig.image = self.selectedImage!.transformImage(size: self.imageSize)
+                }
+                btnconfig.baseBackgroundColor = self.configBackgroundSelectedColor
+                sender.configuration = btnconfig
+            case .disabled:
+                btnconfig.showsActivityIndicator = false
+                if !self.disabledTitle.stringIsEmpty() {
+                    btnconfig.attributedTitle = AttributedString(self.disabledTitle)
+                    btnconfig.titleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.disabledTitleFont).foregroundColor(self.disabledTitleColor))
+                    }
+                }
+
+                if !self.disabledSubTitle.stringIsEmpty() {
+                    btnconfig.attributedSubtitle = AttributedString(self.disabledSubTitle)
+                    btnconfig.subtitleTextAttributesTransformer = .init { container in
+                        container.merging(AttributeContainer.font(self.disabledTitleFont).foregroundColor(self.disabledSubTitleColor))
+                    }
+                }
+
+                if self.imageSize != .zero && self.disabledImage != nil {
+                    btnconfig.image = self.disabledImage!.transformImage(size: self.imageSize)
+                }
+
+                sender.configuration = btnconfig
+
+            default:
+                break
+            }
+        }
+        return btnconfig
+    }
+
+    @available(iOS 15, *)
+    public func isLoading(value: Bool? = false) {
+        isButtonLoading = value!
+        configuration = layoutConfig
+        if value! {
+            isUserInteractionEnabled = loadingCanTap
+        } else {
+            isUserInteractionEnabled = true
+        }
+    }
+
+    private func setAttValue(title: String,
+                             titleFont: UIFont,
+                             titleColor: UIColor,
+                             subTitle: String,
+                             subTitleFont: UIFont,
+                             subTitleColor: UIColor,
+                             state: UIControl.State)
+    {
+        if title.stringIsEmpty() {
+            titleLabel?.font = subTitleFont
+            setTitle(subTitle, for: state)
+            setTitleColor(subTitleColor, for: state)
+        } else {
+            var textAlignment: NSTextAlignment = .center
+            switch self.textAlignment {
+            case .automatic:
+                textAlignment = .natural
+            case .leading:
+                textAlignment = .left
+            case .center:
+                textAlignment = .center
+            case .trailing:
+                textAlignment = .right
+            }
+
+            let att: ASAttributedString = """
+            \(wrap: .embedding("""
+            \(title, .foreground(titleColor), .font(titleFont), .paragraph(.alignment(textAlignment)))\("\n ", .foreground(.clear), .font(.appfont(size: titlePadding)), .paragraph(.alignment(textAlignment)))\("\n\(subTitle)", .foreground(subTitleColor), .font(subTitleFont), .paragraph(.alignment(textAlignment)))
+            """))
+            """
+            setAttributedTitle(att.value, for: state)
+        }
     }
 }

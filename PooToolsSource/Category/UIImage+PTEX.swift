@@ -70,7 +70,7 @@ public extension UIImage {
     }
     
     #if canImport(CoreImage)
-    func resize(newWidth desiredWidth: CGFloat) -> UIImage {
+    fileprivate func resize(newWidth desiredWidth: CGFloat) -> UIImage {
         let oldWidth = size.width
         let scaleFactor = desiredWidth / oldWidth
         let newHeight = size.height * scaleFactor
@@ -79,14 +79,14 @@ public extension UIImage {
         return resize(targetSize: newSize)
     }
     
-    func resize(newHeight desiredHeight: CGFloat) -> UIImage {
+    fileprivate func resize(newHeight desiredHeight: CGFloat) -> UIImage {
         let scaleFactor = desiredHeight / size.height
         let newWidth = size.width * scaleFactor
         let newSize = CGSize(width: newWidth, height: desiredHeight)
         return resize(targetSize: newSize)
     }
     
-    func resize(targetSize: CGSize) -> UIImage {
+    fileprivate func resize(targetSize: CGSize) -> UIImage {
         return UIGraphicsImageRenderer(size:targetSize).image { _ in
             self.draw(in: CGRect(origin: .zero, size: targetSize))
         }
@@ -97,9 +97,17 @@ public extension UIImage {
     ///更改圖片大小
     @objc func transformImage(size:CGSize)->UIImage {
         if #available(iOS 15.0, *) {
-            return preparingThumbnail(of: size)!
+            if isSymbolImage {
+                return resize(targetSize: size)
+            } else {
+                return preparingThumbnail(of: size)!
+            }
         } else {
-            return transform(size: CGSize.init(width: size.width, height: size.height))
+            if isSymbolImage {
+                return resize(targetSize: size)
+            } else {
+                return transform(size: CGSize.init(width: size.width, height: size.height))
+            }
         }
     }
     

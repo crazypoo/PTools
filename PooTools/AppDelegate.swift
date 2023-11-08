@@ -23,7 +23,7 @@ import HyperionCore
 #if canImport(netfox)
 import netfox
 #endif
-import Bugly
+//import Bugly
 
 /// 服务路由
 public let serivceHost = "scheme://services?"
@@ -40,20 +40,20 @@ class AppDelegate: UIResponder,UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
-        var debugDevice = false
-        let buglyConfig = BuglyConfig()
-        #if DEBUG
-        debugDevice = true
-        buglyConfig.debugMode = true
-        #endif
-        buglyConfig.channel = "iOS"
-        buglyConfig.blockMonitorEnable = true
-        buglyConfig.blockMonitorTimeout = 2
-        buglyConfig.consolelogEnable = false
-        buglyConfig.viewControllerTrackingEnable = false
-        Bugly.start(withAppId: "32b6206a5d",
-                    developmentDevice: debugDevice,
-                    config: buglyConfig)
+//        var debugDevice = false
+//        let buglyConfig = BuglyConfig()
+//        #if DEBUG
+//        debugDevice = true
+//        buglyConfig.debugMode = true
+//        #endif
+//        buglyConfig.channel = "iOS"
+//        buglyConfig.blockMonitorEnable = true
+//        buglyConfig.blockMonitorTimeout = 2
+//        buglyConfig.consolelogEnable = false
+//        buglyConfig.viewControllerTrackingEnable = false
+//        Bugly.start(withAppId: "32b6206a5d",
+//                    developmentDevice: debugDevice,
+//                    config: buglyConfig)
 
         PTDebugFunction.registerDefaultsFromSettingsBundle()
 

@@ -129,25 +129,25 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.segment:
             let model1 = PTSegmentModel()
-            model1.titles = "1"
+            model1.titles = "111111111111"
             model1.imageURL = "DemoImage"
             model1.selectedImageURL = "image_aircondition_gray"
             
             let model2 = PTSegmentModel()
-            model2.titles = "2"
+            model2.titles = "2222222222222"
             model2.imageURL = "DemoImage"
             model2.selectedImageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
             let model3 = PTSegmentModel()
-            model3.titles = "3"
+            model3.titles = "3333333333333"
             model3.imageURL = "DemoImage"
             model3.selectedImageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
             
             let model4 = PTSegmentModel()
-            model4.titles = "3"
+            model4.titles = "4444444444444"
 
             let config = PTSegmentConfig()
-            config.showType = .UnderLine
+            config.showType = .SubBackground
             config.itemSpace = 0
             config.leftEdges = true
             config.originalX = 0
@@ -318,10 +318,16 @@ class PTFuncDetailViewController: PTBaseViewController {
         case String.movieCutOutput,String.share:
             let layoutBtn = PTLayoutButton()
             layoutBtn.layoutStyle = .leftImageRightTitle
-            layoutBtn.setTitle("123", for: .normal)
+            layoutBtn.normalTitle = "Title"
+            layoutBtn.normalSubTitle = "SubTitle"
+            layoutBtn.selectedTitleColor = .red
+            layoutBtn.selectedTitleFont = .appfont(size: 16)
             layoutBtn.midSpacing = 0
-            layoutBtn.imageSize = CGSizeMake(100, 100)
-            layoutBtn.backgroundColor = .systemBlue
+            layoutBtn.titlePadding = 20
+            layoutBtn.imageSize = CGSizeMake(30, 30)
+            layoutBtn.normalImage = UIImage(named: "DemoImage")!
+            layoutBtn.selectedImage = UIImage(named: "image_day_normal_3")!
+            layoutBtn.configBackgroundColor = .systemBlue
             view.addSubview(layoutBtn)
             layoutBtn.snp.makeConstraints { make in
                 make.width.height.equalTo(100)
@@ -330,18 +336,22 @@ class PTFuncDetailViewController: PTBaseViewController {
             switch self.typeString {
             case String.movieCutOutput:
                 PTGCDManager.gcdAfter(time: 1) {
-                    layoutBtn.layerProgress(value: 0.5,borderWidth: 4)
+                    var value:CGFloat = 0
+                    let timer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { timer in
+                        layoutBtn.layerProgress(value: value,borderWidth: 4)
+                        value += 0.1
+                        if value >= 1 {
+                            timer.invalidate()
+                            layoutBtn.clearProgressLayer()
+                        }
+                    }
+                    timer.fire()
                 }
             default:
                 break
             }
             layoutBtn.addActionHandlers { sender in
-                switch self.typeString {
-                case String.movieCutOutput:
-                    layoutBtn.updateLayerProgress(progress: 0.7)
-                default:
-                    break
-                }
+                layoutBtn.isSelected = !sender.isSelected
             }
         case String.progressBar:
             let verProgress = PTProgressBar(showType: .Vertical)
@@ -361,10 +371,11 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(22)
             }
-
+            
             PTGCDManager.gcdMain() {
                 verProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 horProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
+                
             }
             
             PTGCDManager.gcdAfter(time: 1) {
@@ -491,7 +502,6 @@ class PTFuncDetailViewController: PTBaseViewController {
                 switchAESECB.isOn = false
                 switchAESCBC.isOn = false
             }
-
         default:
             break
         }

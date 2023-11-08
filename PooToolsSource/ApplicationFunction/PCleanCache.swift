@@ -46,33 +46,22 @@ public class PCleanCache: NSObject {
                 let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: filePath)
                 let fileSize = fileAttributes[FileAttributeKey.size]
                 totalSize += fileSize as! Float
-                
             } catch {
                 PTNSLogConsole(error.localizedDescription)
             }
         }
 #if canImport(SDWebImage)
         totalSize += Float(SDImageCache.shared.totalDiskSize())
-        
-        ImageCache.default.calculateDiskStorageSize(completion: { result in
-            switch result {
-            case .success(let success):
-                totalSize += Float(success)
-            case .failure(let failure):
-                PTNSLogConsole("Kingfisher:\(failure)")
-            }
-        })
-#else
-        ImageCache.default.calculateDiskStorageSize(completion: { result in
-            switch result {
-            case .success(let success):
-                totalSize += Float(success)
-            case .failure(let failure):
-                PTNSLogConsole("Kingfisher:\(failure)")
-            }
-        })
 #endif
-        
+        ImageCache.default.calculateDiskStorageSize(completion: { result in
+            switch result {
+            case .success(let success):
+                totalSize += Float(success)
+            case .failure(let failure):
+                PTNSLogConsole("Kingfisher:\(failure)")
+            }
+        })
+
         var totalSizeString = ""
         
         if totalSize > (1000 * 1000) {

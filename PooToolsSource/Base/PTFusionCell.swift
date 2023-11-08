@@ -103,22 +103,23 @@ public class PTFusionCellContent:UIView {
             accessV.removeFromSuperview()
             valueSwitch.removeFromSuperview()
             
+            addSubview(sectionMore)
+
             var moreWith:CGFloat = 0
             let moreStringWidth = UIView.sizeFor(string: self.cellModel!.moreString, font: self.cellModel!.moreFont, height: self.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset)).width
             if !NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //两个都有
                 PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
-                    self.sectionMore.titleLabel?.font = self.cellModel!.moreFont
-                    self.sectionMore.setTitle(self.cellModel!.moreString, for: .normal)
-                    self.sectionMore.setTitleColor(self.cellModel!.moreColor, for: .normal)
+                    self.sectionMore.normalTitleFont = self.cellModel!.moreFont
+                    self.sectionMore.normalTitle = self.cellModel!.moreString
+                    self.sectionMore.normalTitleColor = self.cellModel!.moreColor
                     self.sectionMore.midSpacing = self.cellModel!.moreDisclosureIndicatorSpace
                     self.sectionMore.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore.layoutStyle = self.cellModel!.moreLayoutStyle
                     if (images?.count ?? 0) > 1 {
-                        self.sectionMore.imageView?.animationImages = images
-                        self.sectionMore.imageView?.startAnimating()
+                        self.sectionMore.normalImage = UIImage.animatedImage(with: images!, duration: 2)
                     } else if (images?.count ?? 0) == 1 {
-                        self.sectionMore.setImage(image, for: .normal)
+                        self.sectionMore.normalImage = image
                     }
                     
                     switch self.cellModel!.moreLayoutStyle {
@@ -131,16 +132,30 @@ public class PTFusionCellContent:UIView {
                             moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
                         }
                     }
+                    self.sectionMore.snp.makeConstraints { make in
+                        make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
+                        make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
+                        make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+                        make.centerY.equalToSuperview()
+                        make.width.equalTo(moreWith)
+                    }
                 }
             } else if NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //没图片
-                self.sectionMore.titleLabel?.font = self.cellModel!.moreFont
-                self.sectionMore.setTitle(self.cellModel!.moreString, for: .normal)
-                self.sectionMore.setTitleColor(self.cellModel!.moreColor, for: .normal)
+                self.sectionMore.normalTitleFont = self.cellModel!.moreFont
+                self.sectionMore.normalTitle = self.cellModel!.moreString
+                self.sectionMore.normalTitleColor = self.cellModel!.moreColor
                 self.sectionMore.midSpacing = 0
                 self.sectionMore.imageSize = .zero
                 self.sectionMore.layoutStyle = self.cellModel!.moreLayoutStyle
                 moreWith = moreStringWidth + 5
+                self.sectionMore.snp.makeConstraints { make in
+                    make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
+                    make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
+                    make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+                    make.centerY.equalToSuperview()
+                    make.width.equalTo(moreWith)
+                }
             } else if NSObject.checkObject(cellModel!.moreDisclosureIndicator as? NSObject) && !cellModel!.moreString.stringIsEmpty() {
                 //没字
                 PTLoadImageFunction.loadImage(contentData: cellModel!.moreDisclosureIndicator!,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
@@ -148,22 +163,21 @@ public class PTFusionCellContent:UIView {
                     self.sectionMore.imageSize = self.cellModel!.moreDisclosureIndicatorSize
                     self.sectionMore.layoutStyle = self.cellModel!.moreLayoutStyle
                     if (images?.count ?? 0) > 1 {
-                        self.sectionMore.imageView?.animationImages = images
-                        self.sectionMore.imageView?.startAnimating()
+                        self.sectionMore.normalImage = UIImage.animatedImage(with: images!, duration: 2)
                     } else if (images?.count ?? 0) == 1 {
-                        self.sectionMore.setImage(image, for: .normal)
+                        self.sectionMore.normalImage = image
                     }
                     moreWith = self.cellModel!.moreDisclosureIndicatorSize.width + 5
+                    self.sectionMore.snp.makeConstraints { make in
+                        make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
+                        make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
+                        make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+                        make.centerY.equalToSuperview()
+                        make.width.equalTo(moreWith)
+                    }
                 }
             }
-            addSubview(sectionMore)
-            sectionMore.snp.makeConstraints { make in
-                make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)
-                make.bottom.equalToSuperview().inset(self.cellModel!.imageBottomOffset)
-                make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
-                make.centerY.equalToSuperview()
-                make.width.equalTo(moreWith)
-            }
+
         case .NoneAccessoryView:
             accessV.removeFromSuperview()
             valueSwitch.removeFromSuperview()
@@ -218,8 +232,6 @@ public class PTFusionCellContent:UIView {
     
     public lazy var sectionMore:PTLayoutButton = {
         let view = PTLayoutButton()
-        view.titleLabel?.textAlignment = .right
-        view.contentHorizontalAlignment = .right
         view.isUserInteractionEnabled = true
         return view
     }()
@@ -596,14 +608,14 @@ public class PTFusionCellContent:UIView {
             } else {
                 var atts:ASAttributedString = ASAttributedString(string: "")
                 if !cellModel!.name.stringIsEmpty() && cellModel!.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor),.baselineOffset(self.cellModel!.labelLineSpace))
+                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left),.lineSpacing(self.cellModel!.labelLineSpace)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
                     atts = nameAtts
                 } else if cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                    let descAtts:ASAttributedString =  ASAttributedString("\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor),.baselineOffset(self.cellModel!.labelLineSpace))
+                    let descAtts:ASAttributedString =  ASAttributedString("\(cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(self.cellModel!.labelLineSpace)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
                     atts = descAtts
                 } else if !cellModel!.name.stringIsEmpty() && !cellModel!.desc.stringIsEmpty() {
-                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor),.baselineOffset(self.cellModel!.labelLineSpace))
-                    let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor),.baselineOffset(self.cellModel!.labelLineSpace))
+                    let nameAtts:ASAttributedString =  ASAttributedString("\(cellModel!.name)",.paragraph(.alignment(.left),.lineSpacing(self.cellModel!.labelLineSpace)),.font(cellModel!.cellFont),.foreground(cellModel!.nameColor))
+                    let descAtts:ASAttributedString =  ASAttributedString("\n\(cellModel!.desc)",.paragraph(.alignment(.left),.lineSpacing(self.cellModel!.labelLineSpace)),.font(cellModel!.cellDescFont),.foreground(cellModel!.descColor))
                     atts = nameAtts + descAtts
                 }
                 nameTitle.attributed.text = atts
@@ -721,7 +733,7 @@ public class PTFusionCellContent:UIView {
             if cellModel!.contentAttr != nil && cellModel!.content.stringIsEmpty() {
                 contentLabel.attributed.text = cellModel!.contentAttr
             } else if cellModel!.contentAttr == nil && !cellModel!.content.stringIsEmpty() {
-                let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor),.baselineOffset(self.cellModel!.labelLineSpace))
+                let contentAtts:ASAttributedString =  ASAttributedString("\(cellModel!.content)",.paragraph(.alignment(.right),.lineSpacing(self.cellModel!.labelLineSpace)),.font(cellModel!.contentFont),.foreground(cellModel!.contentTextColor))
                 contentLabel.attributed.text = contentAtts
             }
             

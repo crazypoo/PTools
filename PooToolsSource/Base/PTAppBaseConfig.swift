@@ -28,6 +28,7 @@ public class PTAppBaseConfig: NSObject {
     ///App全局的导航栏返回按钮
     public var viewControllerBackItemImage:UIImage = UIImage(systemName: "chevron.left")!
     public var navTitleFont:UIFont = .appfont(size: 24)
+    public var hidesBarsOnSwipe:Bool = false
     
     //MARK: 权限请求配置
     public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)

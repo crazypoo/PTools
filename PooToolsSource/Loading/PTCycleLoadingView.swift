@@ -34,8 +34,9 @@ public class PTCycleLoadingView: UIView {
     
     public func startAnimation() {
         if isAnimation {
-            stopAnimation()
-            layer.removeAllAnimations()
+            stopAnimation() {
+                self.layer.removeAllAnimations()
+            }
         }
         isAnimation = false
         
@@ -46,7 +47,7 @@ public class PTCycleLoadingView: UIView {
         RunLoop.current.add(timer!, forMode: .common)
     }
     
-    public func stopAnimation() {
+    public func stopAnimation(handle:PTActionTask? = nil) {
         isAnimation = false
         if timer != nil {
             if timer!.isValid {
@@ -54,7 +55,7 @@ public class PTCycleLoadingView: UIView {
                 timer = nil
             }
         }
-        stopRotateAnimation()
+        stopRotateAnimation(handle:handle)
     }
     
     func drawPathAnimation(timer:Timer) {
@@ -76,13 +77,14 @@ public class PTCycleLoadingView: UIView {
         layer.add(animation, forKey: "keyFrameAnimation")
     }
     
-    func stopRotateAnimation() {
+    func stopRotateAnimation(handle:PTActionTask?) {
         UIView.animate(withDuration: 0.3) {
             self.alpha = 0
         } completion: { finish in
             self.anglePer = 0
             self.layer.removeAllAnimations()
             self.alpha = 1
+            handle?()
         }
     }
     

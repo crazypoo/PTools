@@ -66,7 +66,7 @@ public class PTHudView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func hudShow() {
+    public func hudShow() {
         if hudConfig.hudColors.count < 2 {
             PTNSLogConsole("不可以小于两个颜色")
             return
@@ -91,7 +91,7 @@ public class PTHudView: UIView {
         }
     }
     
-    func hide(completion:PTActionTask?) {
+    public func hide(completion:PTActionTask?) {
         UIView.animate(withDuration: 1) {
             self.centerView.alpha = 0
         } completion: { finish in

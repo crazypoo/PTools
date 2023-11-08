@@ -33,8 +33,8 @@ class PTVideoEditorVideoControlViewController: PTBaseViewController {
         let view = PTLayoutButton()
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 10
-        view.setTitleColor(.black, for: .normal)
-        view.titleLabel?.font = .appfont(size: 12)
+        view.normalTitleColor = .black
+        view.normalTitleFont = .appfont(size: 12)
         view.imageSize = CGSizeMake(20, 20)
         view.isUserInteractionEnabled = false
         return view
@@ -104,8 +104,8 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
-        titleStack.setTitle(viewModel.title, for: .normal)
-        titleStack.setImage(UIImage.podBundleImage(viewModel.titleImageName,bundleName:PTVideoEditorPodBundleName), for: .normal)
+        titleStack.normalTitle = viewModel.title
+        titleStack.normalImage = UIImage.podBundleImage(viewModel.titleImageName,bundleName:PTVideoEditorPodBundleName)
 
         currentVideoControlViewController?.remove()
 

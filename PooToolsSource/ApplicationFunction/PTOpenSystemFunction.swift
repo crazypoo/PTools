@@ -53,11 +53,7 @@ public class PTOpenSystemConfig:NSObject {
 @objcMembers
 public class PTOpenSystemFunction: NSObject {
     private class func functionAlert(msg:String) {
-        UIAlertController.base_alertVC(title: "提示", msg: msg, cancelBtn: "好的") {
-            
-        } moreBtn: { index, title in
-            
-        }
+        UIAlertController.gobal_drop(title: "提示",subTitle: msg)
     }
     
     //MARK: 根據所需跳轉某Setting內的方法

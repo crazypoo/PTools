@@ -152,6 +152,11 @@ extension PTBaseViewController {
         self.definesPresentationContext = true
         
         self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
+#endif
     }
     
     //MARK: 動態更換StatusBar
@@ -216,7 +221,7 @@ extension PTBaseViewController {
 extension PTBaseViewController {
     
     public var emptyDataViewConfig:PTEmptyDataViewConfig? {
-        set{
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.emptyViewConfigCallBack, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
             let obj =  objc_getAssociatedObject(self, &AssociatedKeys.emptyViewConfigCallBack)
@@ -294,7 +299,7 @@ extension PTBaseViewController {
 extension PTBaseViewController: PHPhotoLibraryChangeObserver {
         
     public var screenShotHandle:PTScreenShotOnlyGetImageHandle? {
-        set{
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.screenShotOnlyGetImageCallBack, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
             let obj =  objc_getAssociatedObject(self, &AssociatedKeys.screenShotOnlyGetImageCallBack)
@@ -306,7 +311,7 @@ extension PTBaseViewController: PHPhotoLibraryChangeObserver {
     }
 
     public var screenShotActionHandle:PTScreenShotImageHandle? {
-        set{
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.screenShotActionCallBack, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
             let obj =  objc_getAssociatedObject(self, &AssociatedKeys.screenShotActionCallBack)
@@ -318,7 +323,7 @@ extension PTBaseViewController: PHPhotoLibraryChangeObserver {
     }
 
     fileprivate var screenFunc:PTBaseScreenShotAlert? {
-        set{
+        set {
             objc_setAssociatedObject(self, &AssociatedKeys.screenShotAlertCallBack, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
             let obj =  objc_getAssociatedObject(self, &AssociatedKeys.screenShotAlertCallBack)
@@ -529,19 +534,16 @@ fileprivate class PTBaseScreenShotAlert:UIView {
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 5
         view.imageSize = CGSize(width: 15, height: 15)
-        view.titleLabel?.font = .appfont(size: 13)
-        view.setTitle(title, for: .normal)
-        view.setTitleColor(.white, for: .normal)
+        view.normalTitleFont = .appfont(size: 13)
+        view.normalTitle = title
+        view.normalTitleColor = .white
         PTLoadImageFunction.loadImage(contentData: image) { images, image in
             if (images?.count ?? 0) > 1 {
-                view.imageView?.animationImages = images
-                view.imageView?.animationDuration = 2
-                view.imageView?.startAnimating()
+                view.normalImage = UIImage.animatedImage(with: images!, duration: 2)
             } else if images?.count == 1 {
-                view.setImage(image, for: .normal)
+                view.normalImage = image
             }
         }
-        
         return view
     }
 }

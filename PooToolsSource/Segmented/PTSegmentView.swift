@@ -31,6 +31,8 @@ public class PTSegmentConfig: NSObject {
     public var selectedColor:UIColor = .red
     ///普通颜色
     public var normalColor:UIColor = .black
+    
+    public var normalColor_BG:UIColor = .clear
     ///选中颜色(背景)
     public var selectedColor_BG:UIColor = .systemBlue
     ///底线height
@@ -83,11 +85,12 @@ public class PTSegmentSubView:UIView {
     
     lazy var imageBtn:PTLayoutButton = {
         let btn = PTLayoutButton()
-        btn.setTitleColor(self.viewConfig.normalColor, for: .normal)
-        btn.setTitleColor(self.viewConfig.selectedColor, for: .selected)
+        btn.normalTitleColor = self.viewConfig.normalColor
+        btn.selectedTitleColor = self.viewConfig.selectedColor
         btn.midSpacing = self.viewConfig.imageTitleSpace
-        btn.imageView?.contentMode = .scaleAspectFit
         btn.layoutStyle = self.viewConfig.imagePosition
+        btn.selectedTitleFont = viewConfig.selectedFont
+        btn.normalTitleFont = viewConfig.normalFont
         return btn
     }()
         
@@ -109,25 +112,20 @@ public class PTSegmentSubView:UIView {
         
         switch showType {
         case .OnlyTitle:
-            imageBtn.titleLabel?.font = config.normalFont
-            imageBtn.setTitle(subViewModels.titles, for: .normal)
+            imageBtn.normalTitle = subViewModels.titles
             imageBtn.midSpacing = 0
             imageBtn.imageSize = .zero
             imageBtn.layoutStyle = .leftImageRightTitle
-            imageBtn.titleLabel?.textAlignment = .center
         case .OnlyImage:
             imageBtn.midSpacing = 0
             imageBtn.layoutStyle = .leftImageRightTitle
-            
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
             
             setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         case .TitleImage:
             //MARK:两个都有
             let placeHolderImage = subViewModels.imagePlaceHolder.stringIsEmpty() ? UIColor.randomColor.createImageWithColor() : UIImage(named: subViewModels.imagePlaceHolder)
-            imageBtn.contentMode = .scaleAspectFit
-            imageBtn.titleLabel?.font = config.normalFont
-            imageBtn.setTitle(subViewModels.titles, for: .normal)
+            imageBtn.normalTitle = subViewModels.titles
             setBtnImage(subViewModels: subViewModels, placeHolderImage: placeHolderImage!)
         }
         
@@ -193,14 +191,8 @@ public class PTSegmentSubView:UIView {
         case .Background:
             break
         case .SubBackground:
-            switch showType {
-            case .TitleImage:
-                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-            default:
-                imageBtn.setBackgroundImage(UIColor.clear.createImageWithColor(), for: .normal)
-                imageBtn.setBackgroundImage(viewConfig.selectedColor_BG.createImageWithColor(), for: .selected)
-            }
+            imageBtn.configBackgroundColor = viewConfig.normalColor_BG
+            imageBtn.configBackgroundSelectedColor = viewConfig.selectedColor_BG
         default:break
         }
     }
@@ -212,25 +204,21 @@ public class PTSegmentSubView:UIView {
     func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage) {
         PTLoadImageFunction.loadImage(contentData: subViewModels.imageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument) { images, image in
             if (images?.count ?? 0) > 1 {
-                self.imageBtn.imageView!.animationImages = images
-                self.imageBtn.imageView!.animationDuration = 2
-                self.imageBtn.imageView!.startAnimating()
+                self.imageBtn.normalImage = UIImage.animatedImage(with: images!, duration: 2)
             } else if images?.count == 1 {
-                self.imageBtn.setImage(image, for: .normal)
+                self.imageBtn.normalImage = image
             } else {
-                self.imageBtn.setImage(placeHolderImage, for: .normal)
+                self.imageBtn.normalImage = placeHolderImage
             }
         }
         
         PTLoadImageFunction.loadImage(contentData: subViewModels.selectedImageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument) { images, image in
             if (images?.count ?? 0) > 1 {
-                self.imageBtn.imageView!.animationImages = images
-                self.imageBtn.imageView!.animationDuration = 2
-                self.imageBtn.imageView!.startAnimating()
+                self.imageBtn.selectedImage = UIImage.animatedImage(with: images!, duration: 2)
             } else if images?.count == 1 {
-                self.imageBtn.setImage(image, for: .selected)
+                self.imageBtn.selectedImage = image
             } else {
-                self.imageBtn.setImage(placeHolderImage, for: .selected)
+                self.imageBtn.selectedImage = placeHolderImage
             }
         }
     }
@@ -466,11 +454,10 @@ public class PTSegmentView: UIView {
                     case .UnderLine,.Dog,.SubBackground:
                         viewInArr.underLine.isSelected = false
                     case .Background:
-                        viewInArr.backgroundColor = .clear
+                        viewInArr.backgroundColor = viewConfig.normalColor_BG
                     default:break
                     }
                     viewInArr.imageBtn.isSelected = false
-                    viewInArr.imageBtn.titleLabel?.font = viewConfig.normalFont
                 } else {
                     switch viewConfig.showType {
                     case .UnderLine,.Dog,.SubBackground:
@@ -480,7 +467,6 @@ public class PTSegmentView: UIView {
                     default:break
                     }
                     viewInArr.imageBtn.isSelected = true
-                    viewInArr.imageBtn.titleLabel?.font = viewConfig.selectedFont
                 }
             }
         }

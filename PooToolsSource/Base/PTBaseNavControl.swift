@@ -13,17 +13,7 @@ import ZXNavigationBar
 
 #if POOTOOLS_NAVBARCONTROLLER
 open class PTBaseNavControl: ZXNavigationBarNavigationController {
-    
-    open override var prefersStatusBarHidden: Bool {
-        StatusBarManager.shared.isHidden
-    }
-    open override var preferredStatusBarStyle: UIStatusBarStyle {
-        StatusBarManager.shared.style
-    }
-    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
-        StatusBarManager.shared.animation
-    }
-    
+        
     open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
         clearSubStatusBars(isUpdate: false)
         pushStatusBars(for: viewControllers)
@@ -93,16 +83,6 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
     }
-    
-    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        super.traitCollectionDidChange(previousTraitCollection)
-        if #available(iOS 13.0, *) {
-            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-                StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
-                setNeedsStatusBarAppearanceUpdate()
-            }
-        }
-    }
 }
 
 // MARK: - 左滑手势返回
@@ -119,7 +99,6 @@ extension PTBaseNavControl: UIGestureRecognizerDelegate,UINavigationControllerDe
         /******处理右滑手势与scrollview手势冲突*******/
         gestureRecognizer is UIScreenEdgePanGestureRecognizer
     }
-    
 }
 
 #else
@@ -135,6 +114,7 @@ open class PTBaseNavControl: UINavigationController {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
     }
     
     open func GobalNavControl(nav:UINavigationController,
@@ -183,3 +163,26 @@ open class PTBaseNavControl: UINavigationController {
     }
 }
 #endif
+
+extension PTBaseNavControl {
+    
+    open override var prefersStatusBarHidden: Bool {
+        StatusBarManager.shared.isHidden
+    }
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
+        StatusBarManager.shared.style
+    }
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+        StatusBarManager.shared.animation
+    }
+    
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if #available(iOS 13.0, *) {
+            if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+                StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                setNeedsStatusBarAppearanceUpdate()
+            }
+        }
+    }
+}

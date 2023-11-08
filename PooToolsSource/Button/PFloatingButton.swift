@@ -120,7 +120,7 @@ open class PFloatingButton: UIButton {
     
     lazy var loadTraceButton : PFloatingButton = {
         do {
-            let view : PFloatingButton = try NSKeyedUnarchiver.unarchivedObject(ofClass: PFloatingButton.self, from: NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false))!//NSKeyedUnarchiver.unarchiveObject(with: NSKeyedArchiver.archivedData(withRootObject: self)) as! PFloatingButton
+            let view : PFloatingButton = try NSKeyedUnarchiver.unarchivedObject(ofClass: PFloatingButton.self, from: NSKeyedArchiver.archivedData(withRootObject: self, requiringSecureCoding: false))!
             view.alpha = 0.8
             view.isSelected = false
             view.isHighlighted = false
