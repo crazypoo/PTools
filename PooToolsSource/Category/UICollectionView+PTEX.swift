@@ -10,6 +10,19 @@ import UIKit
 
 public extension UICollectionView {
     
+    /**
+        Total count of rows.
+     */
+    func numberOfItems() -> Int {
+        var section = 0
+        var itemsCount = 0
+        while section < numberOfSections {
+            itemsCount += numberOfItems(inSection: section)
+            section += 1
+        }
+        return itemsCount
+    }
+
     func isValidIndexPath(_ indexPath: IndexPath) -> Bool {
         return indexPath.section >= 0 &&
         indexPath.item >= 0 &&

@@ -72,6 +72,52 @@ public enum PTHashType {
 }
 
 public extension String {
+    
+    /**
+        Wrapper of emtry string "".
+     */
+    static var empty: String { return "" }
+    
+    /**
+        Wrapper of space string " ".
+     */
+    static var space: String { return " " }
+    
+    /**
+        Wrapper of dot string ".".
+     */
+    static var dot: String { return "." }
+    
+    /**
+        Wrapper of new line string "\n".
+     */
+    static var newline: String { return "\n" }
+
+    /**
+        Get words in string.
+     */
+    var words: [String] {
+        return components(separatedBy: .punctuationCharacters).joined().components(separatedBy: .whitespaces)
+    }
+        
+    /**
+        Removed whitespaces and new lines.
+     */
+    var trimString: String {
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+    
+    /**
+        Get count of lines.
+     */
+    func lines() -> [String] {
+        var result = [String]()
+        enumerateLines { line, _ in
+            result.append(line)
+        }
+        return result
+    }
+    
     static let URLCHECKSTRING = "(https|http|ftp|rtsp|igmp|file|rtspt|rtspu)://((((25[0-5]|2[0-4]\\d|1?\\d?\\d)\\.){3}(25[0-5]|2[0-4]\\d|1?\\d?\\d))|([0-9a-z_!~*'()-]*\\.?))([0-9a-z][0-9a-z-]{0,61})?[0-9a-z]\\.([a-z]{2,6})(:[0-9]{1,4})?([a-zA-Z/?_=]*)\\.\\w{1,5}"
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
     static let URLSTRING = "[a-zA-z]+://.*"
@@ -626,6 +672,24 @@ public extension String {
         return lowercaseSctring.prefix(1).uppercased() + lowercaseSctring.dropFirst()
     }
     
+    /**
+        Uppercase first letter for current object.
+     */
+    mutating func uppercaseFirstLetter() {
+        self = self.uppercasedFirstLetter()
+    }
+    
+    /**
+        Remove suffix for string and change current object.
+     
+     - parameter suffix: String which need remove.
+     */
+    mutating func removeSuffix(_ suffix: String) {
+        if self.hasSuffix(suffix) {
+            self = String(dropLast(suffix.count))
+        }
+    }
+
     func removedSuffix(_ suffix: String) -> String {
         if self.hasSuffix(suffix) {
             return String(dropLast(suffix.count))
@@ -634,6 +698,17 @@ public extension String {
         }
     }
     
+    /**
+        Remove prefix for string and change current object.
+     
+     - parameter prefix: String which need remove.
+     */
+    mutating func removePrefix(_ prefix: String) {
+        if self.hasPrefix(prefix) {
+            self = String(dropFirst(prefix.count))
+        }
+    }
+
     func removedPrefix(_ prefix: String) -> String {
         if self.hasPrefix(prefix) {
             return String(dropFirst(prefix.count))
@@ -642,6 +717,15 @@ public extension String {
         }
     }
     
+    /**
+        Replace some string in current object with new string and change current object.
+     
+     - parameter replacingString: Searching string for replace.
+     - parameter newString: Replace to this string.
+     */
+    mutating func replace(_ replacingString: String, with newString: String) {
+        self = self.replacingOccurrences(of: replacingString, with: newString)
+    }
     //MARK: 替换
     ///替换
     func replace(_ replacingString: String,
@@ -693,6 +777,19 @@ public extension String {
 }
 
 public extension String {
+    
+    /**
+        Convert string to double with locale.
+     
+     -  parameter locale: Converting `Locale`.
+     */
+    func double(locale: Locale = .current) -> Double? {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.allowsFloats = true
+        return formatter.number(from: self)?.doubleValue
+    }
+    
     static func currencySymbol()->String {
         let locale:NSLocale = NSLocale.current as NSLocale
         let currency = locale.object(forKey: NSLocale.Key.currencySymbol)
@@ -743,6 +840,14 @@ public extension String {
     ///判斷字符串是否為空
     func stringIsEmpty()->Bool {
         (self as NSString).length == 0 || (charactersArray.count < 1) ? true : false
+    }
+    
+    /**
+        Check if string has useful content exclude spaces and new lines.
+     */
+    var isEmptyContent: Bool {
+        let filtered = self.components(separatedBy: .whitespacesAndNewlines).joined()
+        return filtered == ""
     }
     
     //MARK: 轉換成數字字符串

@@ -6,6 +6,7 @@
 //  Copyright © 2021 DO. All rights reserved.
 //
 
+#if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
 import SnapKit
 
@@ -434,6 +435,120 @@ public extension UIView {
     func removeParalax() {
         motionEffects.removeAll()
     }
+    
+    /**
+        If view has LTR interface.
+     */
+    var ltr: Bool { effectiveUserInterfaceLayoutDirection == .leftToRight }
+    
+    /**
+        If view has TRL interface.
+     */
+    var rtl: Bool { effectiveUserInterfaceLayoutDirection == .rightToLeft }
+    
+    /**
+         Wrapper for layer property `masksToBounds`.
+     */
+    var masksToBounds: Bool {
+        get {
+            return layer.masksToBounds
+        }
+        set {
+            layer.masksToBounds = newValue
+        }
+    }
+    
+    /**
+        Round corners .
+     
+     - parameter corners: Case of `CACornerMask`. Which corners need to round.
+     - parameter curve: Case of `CornerCurve`. Style of rounded corners.
+     - parameter radius: Amount of radius.
+     */
+    func roundCorners(_ corners: CACornerMask = [.layerMaxXMaxYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner, .layerMinXMinYCorner], curve: CornerCurve = .continuous, radius: CGFloat) {
+        layer.cornerRadius = radius
+        layer.maskedCorners = corners
+        
+        if #available(iOS 13.0, tvOS 13.0, *) {
+            layer.cornerCurve = curve.layerCornerCurve
+        }
+    }
+    
+    /**
+        Round side by minimum `height` or `width`.
+     */
+    func roundMinimumSide() {
+        roundCorners(radius: min(frame.width / 2, frame.height / 2))
+    }
+    
+    /**
+        Wrapper for layer property `customBorderColor`.
+     */
+    var customBorderColor: UIColor? {
+        get {
+            guard let color = layer.borderColor else { return nil }
+            return UIColor(cgColor: color)
+        }
+        set {
+            guard let color = newValue else {
+                layer.borderColor = nil
+                return
+            }
+            // Fix React-Native conflict issue
+            guard String(describing: type(of: color)) != "__NSCFType" else { return }
+            layer.borderColor = color.cgColor
+        }
+    }
+    
+    /**
+        Wrapper for layer property `customBorderWidth`.
+     */
+    var customBorderWidth: CGFloat {
+        get {
+            return layer.borderWidth
+        }
+        set {
+            layer.borderWidth = newValue
+        }
+    }
+    
+    /**
+        Appear view with fade in animation.
+     
+     - parameter duration: Duration of animation.
+     - parameter completion: Completion when animation ended.
+     */
+    func fadeIn(duration: TimeInterval = 0.3, completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: duration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: {
+            self.alpha = 1
+        }, completion: completion)
+    }
+    
+    /**
+        Hide view with fade out animation.
+     
+     - parameter duration: Duration of animation.
+     - parameter completion: Completion when animation ended.
+     */
+    func fadeOut(duration: TimeInterval = 0.3, completion: ((Bool) -> Void)? = nil) {
+        UIView.animate(withDuration: duration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: {
+            self.alpha = 0
+        }, completion: completion)
+    }
+        
+    enum CornerCurve {
+        
+        case circle
+        case continuous
+        
+        @available(iOS 13.0, tvOS 13.0, *)
+        var layerCornerCurve: CALayerCornerCurve {
+            switch self {
+            case .circle: return .circular
+            case .continuous: return .continuous
+            }
+        }
+    }
 }
 
 public extension UIView {
@@ -543,3 +658,36 @@ public extension UITextView {
         getTextViewSize(width: width).height
     }
 }
+
+public protocol UIFadeOut {}
+
+extension UIFadeOut where Self: UIView {
+    
+    /**
+        Hide view with fade out animation.
+     
+     - parameter duration: Duration of all animation.
+     - parameter delay: Pause when view dissapear in middle of animation.
+     - parameter work: Apply view changes here.
+     - parameter completion: Call after end of animation.
+     */
+    public func fadeUpdate(duration: TimeInterval = 1, delay: TimeInterval = 0.15, work: @escaping (Self)->Void, completion: (()->Void)? = nil) {
+        let partDuration = (duration - delay) / 2
+        let storedAlpha = self.alpha
+        UIView.animate(withDuration: partDuration, delay: .zero, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
+            self?.alpha = .zero
+        }, completion: { [weak self] finished in
+            if let self = self {
+                work(self)
+            }
+            UIView.animate(withDuration: partDuration, delay: delay, options: [.beginFromCurrentState, .allowUserInteraction], animations: { [weak self] in
+                self?.alpha = storedAlpha
+            }, completion: { finished in
+                completion?()
+            })
+        })
+    }
+}
+
+extension UIView: UIFadeOut {}
+#endif

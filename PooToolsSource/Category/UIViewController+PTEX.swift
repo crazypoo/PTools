@@ -18,6 +18,13 @@ import NotificationBannerSwift
 // MARK: - 状态栏扩展
 public extension UIViewController {
     
+    /**
+        Indicate if controller is loaded and presented.
+     */
+    var isVisible: Bool {
+        return isViewLoaded && view.window != nil
+    }
+        
     var systemSafeAreaInsets: UIEdgeInsets {
         return UIEdgeInsets(
             top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
@@ -339,6 +346,7 @@ public extension UIViewController {
 #endif
     }
     
+    @available(iOS 13, tvOS 13, *)
     @available(iOSApplicationExtension, unavailable)
     @available(tvOSApplicationExtension, unavailable)
     func destruct(scene name: String) {
@@ -383,6 +391,7 @@ public extension UIViewController {
     }
     #endif
 
+    //MARK: 增加了当点击需要隐藏键盘时观察的手势。应该添加下面的使用视图，如文本字段。
     func dismissKeyboardWhenTappedAround() {
         let tap = UITapGestureRecognizer(target: self, action: #selector(UIViewController.dismissKeyboardTappedAround(_:)))
         tap.cancelsTouchesInView = false

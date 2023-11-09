@@ -35,12 +35,4 @@ public extension Locale {
         let text = nslocale.displayName(forKey: NSLocale.Key.identifier, value: currentLanguageCode)
         return text?.localizedCapitalized
     }
-    
-    static func flagEmoji(forRegionCode isoRegionCode: String) -> String? {
-        guard isoRegionCodes.contains(isoRegionCode) else { return nil }
-        return isoRegionCode.unicodeScalars.reduce(into: String()) {
-            guard let flagScalar = UnicodeScalar(UInt32(127_397) + $1.value) else { return }
-            $0.unicodeScalars.append(flagScalar)
-        }
-    }
 }

@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.15.1",
+  "version": "3.15.2",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.15.1"
+    "tag": "3.15.2"
   },
   "license": {
     "type": "MIT",
@@ -1324,6 +1324,20 @@
       }
     },
     {
+      "name": "SF",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "SafeSFSymbols": [
+
+        ]
+      },
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SF POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1522,6 +1536,9 @@
 
         ],
         "PooTools/OSSKitSpeech": [
+
+        ],
+        "PooTools/SF": [
 
         ]
       },

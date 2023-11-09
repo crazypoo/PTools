@@ -11,6 +11,50 @@ import UIKit
 // MARK: - UINavigationBar扩展,获得渐变颜色效果
 public extension UINavigationBar {
     
+    /**
+        Change font of title.
+     
+     - parameter font: New font of title.
+     */
+    open func setTitleFont(_ font: UIFont) {
+        titleTextAttributes = [.font: font]
+    }
+    
+    /**
+        Change color of title.
+     
+     - parameter color: New color of title.
+     */
+    func setTitleColor(_ color: UIColor) {
+        titleTextAttributes = [.foregroundColor: color]
+    }
+    
+    /**
+        Change background and title colors.
+     
+     - parameter backgroundColor: New background color of navigation.
+     - parameter textColor: New text color of title.
+     */
+    func setColors(backgroundColor: UIColor, textColor: UIColor) {
+        isTranslucent = false
+        self.backgroundColor = backgroundColor
+        barTintColor = backgroundColor
+        setBackgroundImage(UIImage(), for: .default)
+        tintColor = textColor
+        titleTextAttributes = [.foregroundColor: textColor]
+    }
+    
+    /**
+        Make transparent of background of navigation.
+     */
+    func makeTransparent() {
+        isTranslucent = true
+        backgroundColor = .clear
+        barTintColor = .clear
+        setBackgroundImage(UIImage(), for: .default)
+        shadowImage = UIImage()
+    }
+
     /// Applies a background gradient with the given colors
     func apply(gradient colors : [UIColor]) {
         var frameAndStatusBar: CGRect = bounds
