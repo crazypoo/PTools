@@ -68,17 +68,17 @@ public class PTDevFunction: NSObject {
     
     //MARK: 测试模式下检查界面的点击展示事件
     ///测试模式下检查界面的点击展示事件
-    public private(set) var touchesType: Bool = App_TouchInspect_Debug_Bool {
+    public private(set) var touchesType: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShow {
         didSet {
-            App_TouchInspect_Debug_Bool = self.touchesType
+            PTCoreUserDefultsWrapper.AppTouchInspectShow = self.touchesType
         }
     }
 
     //MARK: 测试模式下检查界面的点击展示事件开关
     ///测试模式下检查界面的点击展示事件开关
-    public private(set) var touchesTestHit: Bool = App_TouchInspect_Hits_Debug_Bool {
+    public private(set) var touchesTestHit: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShowHits {
         didSet {
-            App_TouchInspect_Hits_Debug_Bool = self.touchesTestHit
+            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = self.touchesTestHit
         }
     }
     
@@ -87,13 +87,12 @@ public class PTDevFunction: NSObject {
     
     public func createLabBtn() {
         if UIApplication.applicationEnvironment() != .appStore {
-            App_UI_Debug_Bool = true
+            PTCoreUserDefultsWrapper.AppDebugMode = true
             
-            if PTDevMaskShowValue {
+            if PTCoreUserDefultsWrapper.AppDebbugMark {
                 if maskView == nil {
-                    PTDevMaskShowValue = true
+                    PTCoreUserDefultsWrapper.AppDebbugMark = true
                     let maskConfig = PTDevMaskConfig()
-                    
                     self.maskView = PTDevMaskView(config: maskConfig)
                     self.maskView?.frame = AppWindows!.frame
                     AppWindows?.addSubview(self.maskView!)
@@ -239,22 +238,21 @@ public class PTDevFunction: NSObject {
                             }
                         } else if title == .devMask {
                             if self.maskView != nil {
-                                PTDevMaskShowValue = false
+                                PTCoreUserDefultsWrapper.AppDebbugMark = false
                                 self.maskView?.removeFromSuperview()
                                 self.maskView = nil
                             } else {
-                                PTDevMaskShowValue = true
+                                PTCoreUserDefultsWrapper.AppDebbugMark = true
                                 
                                 let maskConfig = PTDevMaskConfig()
-                                
                                 self.maskView = PTDevMaskView(config: maskConfig)
                                 self.maskView?.frame = AppWindows!.frame
                                 AppWindows?.addSubview(self.maskView!)
                             }
                         } else if title == .devMaskEvent {
-                            PTDevMaskTouchBubbleShowValue = !PTDevMaskTouchBubbleShowValue
+                            PTCoreUserDefultsWrapper.AppDebbugTouchBubble = !PTCoreUserDefultsWrapper.AppDebbugTouchBubble
                             if self.maskView != nil {
-                                self.maskView!.showTouch = PTDevMaskTouchBubbleShowValue
+                                self.maskView!.showTouch = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
                             }
                         } else if title == .memory {
                             if PTMemory.share.closed {
@@ -307,9 +305,8 @@ public class PTDevFunction: NSObject {
             devShare.touchesTestHit = true
             devShare.touchesType = true
             if devShare.maskView == nil {
-                PTDevMaskShowValue = true
+                PTCoreUserDefultsWrapper.AppDebbugMark = true
                 let maskConfig = PTDevMaskConfig()
-                
                 devShare.maskView = PTDevMaskView(config: maskConfig)
                 devShare.maskView?.frame = AppWindows!.frame
                 AppWindows?.addSubview(devShare.maskView!)
@@ -327,7 +324,7 @@ public class PTDevFunction: NSObject {
             devShare.touchesTestHit = false
             devShare.touchesType = false
             if devShare.maskView != nil {
-                PTDevMaskShowValue = false
+                PTCoreUserDefultsWrapper.AppDebbugMark = false
                 devShare.maskView?.removeFromSuperview()
                 devShare.maskView = nil
             }
@@ -335,7 +332,7 @@ public class PTDevFunction: NSObject {
     }
 
     public func lab_btn_release() {
-        App_UI_Debug_Bool = false
+        PTCoreUserDefultsWrapper.AppDebugMode = false
         mn_PFloatingButton?.removeFromSuperview()
         mn_PFloatingButton = nil
     }
@@ -344,8 +341,7 @@ public class PTDevFunction: NSObject {
     ///SDWebImage的加载失误图片方式(全局控制)
     public class func gobalWebImageLoadOption()->KingfisherOptionsInfo {
         #if DEBUG
-        let userDefaults = UserDefaults.standard.value(forKey: "sdwebimage_option")
-        let devServer:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
+        let devServer:Bool = PTCoreUserDefultsWrapper.WebImageOption
         if devServer {
             return [KingfisherOptionsInfoItem.cacheOriginalImage]
         } else {

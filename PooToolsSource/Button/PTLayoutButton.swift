@@ -623,7 +623,7 @@ public class PTLayoutButton: UIButton {
     @available(iOS 15.0,*)
     private var layoutConfig: UIButton.Configuration {
         var btnconfig:UIButton.Configuration
-        if configBackgroundSelectedColor != .clear {
+        if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear {
             btnconfig = UIButton.Configuration.filled()
         } else {
             btnconfig = UIButton.Configuration.plain()

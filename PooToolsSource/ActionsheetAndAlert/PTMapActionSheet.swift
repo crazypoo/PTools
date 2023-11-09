@@ -31,6 +31,7 @@ open class PTMapActionSheet: NSObject {
     open class func mapNavAlert(currentAppScheme:String,
                                 currentAppName:String? = kAppDisplayName!,
                                 qqKey:String? = "",
+                                formLocation:CLLocationCoordinate2D? = CLLocationCoordinate2D(latitude: 0, longitude: 0),
                                 location:CLLocationCoordinate2D,
                                 dismissTask:PTActionTask? = nil) {
         let appScheme = currentAppScheme
@@ -49,7 +50,7 @@ open class PTMapActionSheet: NSObject {
             navAppName.append(.GoogleMap)
         }
         
-        if UIApplication.shared.canOpenURL(URL.init(string: "qqmap://")!) && !qqKey!.stringIsEmpty() {
+        if UIApplication.shared.canOpenURL(URL.init(string: "qqmap://")!) && !qqKey!.stringIsEmpty() && (formLocation?.latitude != 0 && formLocation?.longitude != 0) {
             navAppName.append(.QQMap)
         }
         
@@ -71,10 +72,7 @@ open class PTMapActionSheet: NSObject {
             } else if navAppName[index] == .GoogleMap {
                 urlString = NSString.init(format: "comgooglemaps://?x-source=%@&x-success=%@&saddr=&daddr=%f,%f&directionsmode=driving", appName,appScheme,locations.latitude,locations.longitude).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
             } else if navAppName[index] == .QQMap {
-                let lat : String? = UserDefaults.standard.value(forKey: "lat") as? String
-                let lon : String? = UserDefaults.standard.value(forKey: "lon") as? String
-                
-                urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", lat!,lon!,locations.latitude,locations.longitude,qqKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
+                urlString = NSString.init(format: "qqmap://map/routeplan?type=drive&fromcoord=%f,%f&tocoord=%f,%f&referer=%@", formLocation!.longitude,formLocation!.latitude,locations.latitude,locations.longitude,qqKey!).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString
             }
             PTAppStoreFunction.jumpLink(url: URL.init(string: urlString as String)!)
         } tapBackgroundBlock: { sheet in

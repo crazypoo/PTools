@@ -50,10 +50,6 @@ public extension String {
     static let encryption = "Encryption"
 }
 
-struct AppUserDefultsWrapper {
-    @PTUserDefault(withKey: "TestKey", defaultValue: "123") static var testValue:String
-}
-
 class PTFuncNameViewController: PTBaseViewController {
 
     fileprivate lazy var outputURL :URL = {
@@ -413,12 +409,7 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .checkUpdate {
                 PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
             } else if itemRow.title == .route {
-                UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"]) { sheet in
-                    
-                } cancelBlock: { sheet in
-                    
-                } otherBlock: { sheet, index in
-
+                UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index in
                     switch index {
                     case 0:
                         PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
@@ -437,16 +428,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     default:
                         break
                     }
-                } tapBackgroundBlock: { sheet in
-                    
-                }
+                })
             } else if itemRow.title == .alert {
-                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert]) { sheet in
-                    
-                } cancelBlock: { sheet in
-                    
-                } otherBlock: { sheet, index in
-
+                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert], otherBlock: { sheet,index in
                     switch index {
                     case 0:
                         PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
@@ -463,32 +447,14 @@ class PTFuncNameViewController: PTBaseViewController {
                                     
                                 })
                             }
-
                         }
                     default:
                         break
                     }
-                } tapBackgroundBlock: { sheet in
-                    
-                }
+                })
 
-            } else if itemRow.title == .menu {
-                
-                let cell = collectionViews.cellForItem(at: indexPath) as! PTFusionCell
-                
-                let menuItems = PTEditMenuItem(title: "111") {
-                    PTNSLogConsole("我点击了")
-                }
-                
-                let menu = PTEditMenuItemsInteraction()
-                menu.showMenu([menuItems], targetRect: collectionViews.cellInWindow(cellFrame: cell.frame), for: cell)
             } else if itemRow.title == .loading {
-                UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"]) { sheet in
-                    
-                } cancelBlock: { sheet in
-                    
-                } otherBlock: { sheet, index in
-
+                UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"], otherBlock: { sheet,index in
                     switch index {
                     case 0:
                         let hud = PTHudView()
@@ -514,10 +480,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     default:
                         break
                     }
-                } tapBackgroundBlock: { sheet in
-                    
-                }
-
+                })
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
@@ -612,11 +575,7 @@ class PTFuncNameViewController: PTBaseViewController {
         @PTLockAtomic
         var json:[String:String]?
         json = ["A":"1"]
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>\(String(describing: json))")
-        
-        PTNSLogConsole("AppUserDefultsWrapper before:\(AppUserDefultsWrapper.testValue)")
-        AppUserDefultsWrapper.testValue = "333"
-        PTNSLogConsole("AppUserDefultsWrapper after:\(AppUserDefultsWrapper.testValue)")
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>\(String(describing: json))")        
     }
     
     func flashAd(notifi:Notification) {

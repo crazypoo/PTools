@@ -21,18 +21,6 @@ public let systemLog_base_height:CGFloat = 142
 public let borderLine:CGFloat = 5
 public let diameter:CGFloat = 28
 
-public var App_UI_Debug_Bool:Bool {
-    get {
-        let userDefaults = UserDefaults.standard.value(forKey: LocalConsole.ConsoleDebug)
-        let ui_debug:Bool = userDefaults == nil ? false : (userDefaults as! Bool)
-        return ui_debug
-    }
-    set {
-        UserDefaults.standard.setValue(newValue, forKey: LocalConsole.ConsoleDebug)
-        UserDefaults.standard.synchronize()
-    }
-}
-
 class ConsoleWindow: UIWindow {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -128,7 +116,7 @@ public class LocalConsole: NSObject {
             LocalConsole.SystemReportKey,
             LocalConsole.RestoreFirstKey,
             LocalConsole.AppUpdateKey,
-            App_UI_Debug_Bool ? LocalConsole.DEBUGKey : LocalConsole.NORMALKey,
+            PTCoreUserDefultsWrapper.AppDebugMode ? LocalConsole.DEBUGKey : LocalConsole.NORMALKey,
             LocalConsole.DEBUGSETTINGKey
         ]
         return baseArr
@@ -159,9 +147,7 @@ public class LocalConsole: NSObject {
             terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
             terminal?.tag = SystemLogViewTag
             terminal!.menuButton.addActionHandlers { sender in
-                let actionSheet = PTActionSheetView.init(title: "调试功能", destructiveButton: "关闭",otherButtonTitles: self.popoverTitles,dismissWithTapBG: false)
-                actionSheet.show()
-                actionSheet.actionSheetSelectBlock = { (sheet,index) in
+                UIAlertController.baseActionSheet(title: "调试功能", cancelButtonName: "关闭",titles: self.popoverTitles, otherBlock: { sheet,index in
                     switch index {
                     case PTActionSheetView.DestructiveButtonTag:
                         self.cleanSystemLogView()
@@ -170,7 +156,7 @@ public class LocalConsole: NSObject {
                     default:
                         self.popoverDidselect(dataName: self.popoverTitles[index])
                     }
-                }
+                })
             }
         }
     }
@@ -314,8 +300,8 @@ public class LocalConsole: NSObject {
                 consoleActionBlock!(.AppUpdate,false,URL(string: "nil")!)
             }
         } else if dataName == LocalConsole.DEBUGKey || dataName == LocalConsole.NORMALKey {
-            let newBool:Bool = !App_UI_Debug_Bool
-            UserDefaults.standard.set(newBool, forKey: LocalConsole.ConsoleDebug)
+            let newBool:Bool = !PTCoreUserDefultsWrapper.AppDebugMode
+            PTCoreUserDefultsWrapper.AppDebugMode = newBool
             
             popoverTitles.enumerated().forEach { (index,value) in
                 if value == LocalConsole.DEBUGKey {

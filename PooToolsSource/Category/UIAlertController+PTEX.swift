@@ -9,6 +9,9 @@
 import UIKit
 import SnapKit
 
+public typealias PTActionSheetHandler = (_ sheet:PTActionSheetView) -> Void
+public typealias PTActionSheetIndexHandler = (_ sheet:PTActionSheetView, _ index:Int)->Void
+
 public extension UIAlertController {
     //MARK: 單按鈕Alert
     ///單按鈕Alert
@@ -42,25 +45,24 @@ public extension UIAlertController {
                                      cancelButtonName:String? = "取消",
                                      destructiveButtonName:String? = "",
                                      titles:[String],
-                                     destructiveBlock: @escaping (_ sheet:PTActionSheetView)->Void,
-                                     cancelBlock: @escaping (_ sheet:PTActionSheetView)->Void,
-                                     otherBlock: @escaping (_ sheet:PTActionSheetView, _ index:Int)->Void,
-                                     tapBackgroundBlock: @escaping (_ sheet:PTActionSheetView)->Void) {
-        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles)
+                                     canTapBackground:Bool = true,
+                                     destructiveBlock:PTActionSheetHandler? = nil,
+                                     cancelBlock: PTActionSheetHandler? = nil,
+                                     otherBlock: @escaping PTActionSheetIndexHandler,
+                                     tapBackgroundBlock: PTActionSheetHandler? = nil) {
+        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles,dismissWithTapBG:canTapBackground)
         actionSheet.actionSheetSelectBlock = { (sheet,index) in
             switch index {
             case PTActionSheetView.DestructiveButtonTag:
-                destructiveBlock(sheet)
+                destructiveBlock?(sheet)
             case PTActionSheetView.CancelButtonTag:
-                cancelBlock(sheet)
+                cancelBlock?(sheet)
             default:
                 otherBlock(sheet,index)
             }
         }
         actionSheet.show()
-        actionSheet.actionSheetTapDismissBlock = { sheet in
-            tapBackgroundBlock(sheet)
-        }
+        actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
     }
     
     //MARK: ALERT真正基类

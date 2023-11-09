@@ -13,9 +13,6 @@ import SnapKit
 import HealthKit
 #endif
 
-public let uPermission = "uPermission"
-public let PTPermissionFirst : String = (UserDefaults.standard.value(forKey: uPermission) == nil) ? "0" : (UserDefaults.standard.value(forKey: uPermission) as! String)
-
 @objcMembers
 public class PTPermissionViewController: PTBaseViewController {
     
@@ -180,7 +177,7 @@ public class PTPermissionViewController: PTBaseViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UserDefaults.standard.set("1", forKey: uPermission)
+        PTCoreUserDefultsWrapper.AppFirstPermissionShowed = true
     }
     
     public override func viewDidDisappear(_ animated: Bool) {

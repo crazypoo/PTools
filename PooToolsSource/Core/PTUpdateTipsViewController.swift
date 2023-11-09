@@ -11,9 +11,6 @@ import SnapKit
 import SwifterSwift
 import AttributedString
 
-public let uAppNoMoreShowUpdate = "AppNoMoreShowUpdate"
-public let updateTipsShowed:Bool = UserDefaults.standard.value(forKey: uAppNoMoreShowUpdate) == nil ? false : (UserDefaults.standard.value(forKey: uAppNoMoreShowUpdate) as! Int == 1 ? true : false)
-
 class PTUpdateTipsContentView : UIView {
     init(oV:String,nV:String,descriptionString:String) {
         super.init(frame: .zero)

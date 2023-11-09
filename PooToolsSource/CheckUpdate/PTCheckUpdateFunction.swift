@@ -246,7 +246,7 @@ public class PTCheckUpdateFunction: NSObject {
         self.alert_Tips(tipsTitle: NSLocalizedString("发现新版本", comment: ""),cancelTitle: cancelTitle,cancelBlock: {
             if test {
                 if isShowError {
-                    UserDefaults.standard.set(1, forKey: uAppNoMoreShowUpdate)
+                    PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true
                 }
             }
         },doneTitle: NSLocalizedString("升级", comment: "")) {

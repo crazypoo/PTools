@@ -315,7 +315,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.top.equalToSuperview().inset(40)
                 make.height.equalTo(300)
             }
-        case String.movieCutOutput,String.share:
+        case String.movieCutOutput,String.share,String.menu:
             let layoutBtn = PTLayoutButton()
             layoutBtn.layoutStyle = .leftImageRightTitle
             layoutBtn.normalTitle = "Title"
@@ -327,7 +327,8 @@ class PTFuncDetailViewController: PTBaseViewController {
             layoutBtn.imageSize = CGSizeMake(30, 30)
             layoutBtn.normalImage = UIImage(named: "DemoImage")!
             layoutBtn.selectedImage = UIImage(named: "image_day_normal_3")!
-            layoutBtn.configBackgroundColor = .systemBlue
+            layoutBtn.configBackgroundColor = .AlmondColor
+            layoutBtn.configBackgroundSelectedColor = .systemBlue
             view.addSubview(layoutBtn)
             layoutBtn.snp.makeConstraints { make in
                 make.width.height.equalTo(100)
@@ -352,6 +353,17 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
             layoutBtn.addActionHandlers { sender in
                 layoutBtn.isSelected = !sender.isSelected
+                switch self.typeString {
+                case String.menu:
+                    let menuItems = PTEditMenuItem(title: "111") {
+                        PTNSLogConsole("我点击了")
+                    }
+                    
+                    let menu = PTEditMenuItemsInteraction()
+                    menu.showMenu([menuItems], targetRect: sender.frame, for: sender)
+                default:
+                    break
+                }
             }
         case String.progressBar:
             let verProgress = PTProgressBar(showType: .Vertical)

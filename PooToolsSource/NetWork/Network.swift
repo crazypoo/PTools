@@ -34,7 +34,7 @@ public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 
 public var PTBaseURLMode:NetWorkEnvironment {
-    guard let sliderValue = UserDefaults.standard.value(forKey: "AppServiceIdentifier") as? String else { return .Distribution }
+    guard let sliderValue = PTCoreUserDefultsWrapper.AppServiceIdentifier else { return .Distribution }
     if sliderValue == "1" {
         return .Distribution
     } else if sliderValue == "2" {
@@ -144,8 +144,7 @@ public class Network: NSObject {
             PTNSLogConsole("PTBaseURLMode:\(PTBaseURLMode)")
             switch PTBaseURLMode {
             case .Development:
-                let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
-                let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
+                let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
                 if url_debug.isEmpty {
                     return Network.share.serverAddress_dev
                 } else {

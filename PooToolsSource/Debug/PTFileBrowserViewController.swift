@@ -55,11 +55,9 @@ class PTFileBrowserViewController: PTBaseViewController {
             let longTap = UILongPressGestureRecognizer { sender in
                 self.showAction = !self.showAction
                 if self.showAction {
-                    UIAlertController.baseActionSheet(title: "更多操作", titles: actionSheetDatas) { sheet in
-                        
-                    } cancelBlock: { sheet in
+                    UIAlertController.baseActionSheet(title: "更多操作", titles: actionSheetDatas, cancelBlock: { sheet in
                         self.showAction = false
-                    } otherBlock: { sheet, index in
+                    },otherBlock: { sheet,index in
                         self.showAction = false
                         switch index {
                         case 0:
@@ -139,7 +137,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                                 hashValue.copyToPasteboard()
                             }
                         }
-                    } tapBackgroundBlock: { sheet in
+                    }) { sheet in
                         self.showAction = false
                     }
                 }

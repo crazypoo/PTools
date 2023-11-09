@@ -21,8 +21,8 @@ public extension PTBaseViewController {
     override func motionEnded(_ motion: UIEvent.EventSubtype, 
                                    with event: UIEvent?) {
         if UIApplication.applicationEnvironment() != .appStore {
-            let uidebug:Bool = App_UI_Debug_Bool
-            App_UI_Debug_Bool = !App_UI_Debug_Bool
+            let uidebug:Bool = PTCoreUserDefultsWrapper.AppDebugMode
+            PTCoreUserDefultsWrapper.AppDebugMode = !PTCoreUserDefultsWrapper.AppDebugMode
             if uidebug {
                 if PTDevFunction.share.mn_PFloatingButton != nil {
                     PTDevFunction.share.lab_btn_release()

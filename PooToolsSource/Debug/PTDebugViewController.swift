@@ -34,8 +34,7 @@ public class PTDebugViewController: PTBaseViewController {
         
         let cell_input = PTFusionCellModel()
         cell_input.name = .addressInput
-        let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
-        let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
+        let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
         if url_debug.isEmpty {
             cell_input.content = Network.gobalUrl()
         } else {
@@ -64,10 +63,10 @@ public class PTDebugViewController: PTBaseViewController {
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = (itemRow.dataModel as! PTFusionCellModel)
             if itemRow.title == .DebugMode {
-                cell.switchValue = App_UI_Debug_Bool
+                cell.switchValue = PTCoreUserDefultsWrapper.AppDebugMode
                 cell.switchValueChangeBlock = { title,sender in
-                    let value = !App_UI_Debug_Bool
-                    UserDefaults.standard.set(value, forKey: LocalConsole.ConsoleDebug)
+                    let value = !PTCoreUserDefultsWrapper.AppDebugMode
+                    PTCoreUserDefultsWrapper.AppDebugMode = value
                     if value {
                         if PTDevFunction.share.mn_PFloatingButton == nil {
                             //开了
@@ -95,16 +94,15 @@ public class PTDebugViewController: PTBaseViewController {
         view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             if itemRow.title == .ipMode {
-                let actionSheet = PTActionSheetView.init(title: "选择APP请求环境", subTitle: "", cancelButton: NSLocalizedString("取消", comment: ""),destructiveButton: "", otherButtonTitles: ["生产环境","测试","自定义"])
-                actionSheet.actionSheetSelectBlock = { (sheet,index) in
+                UIAlertController.baseActionSheet(title: "选择APP请求环境", cancelButtonName: NSLocalizedString("取消", comment: ""),titles: ["生产环境","测试","自定义"], otherBlock: { sheet,index in
                     switch index {
                     case PTActionSheetView.DestructiveButtonTag:
                         break
                     case PTActionSheetView.CancelButtonTag:
                         break
                     default:
-                        UserDefaults.standard.set("\(index + 1)", forKey: "AppServiceIdentifier")
-                        
+                        PTCoreUserDefultsWrapper.AppServiceIdentifier = "\(index + 1)"
+
                         var modeName = ""
                         switch PTBaseURLMode {
                         case .Development:
@@ -119,14 +117,12 @@ public class PTDebugViewController: PTBaseViewController {
                         let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
                         cell.cellModel = self.settingCellModels[0]
                     }
-                }
-                actionSheet.show()
+                })
             } else if itemRow.title == .addressInput {
                 switch PTBaseURLMode {
                 case .Development:
                     var current = ""
-                    let userDefaults_url = UserDefaults.standard.value(forKey: DevNetWorkKey)
-                    let url_debug:String = userDefaults_url == nil ? "" : (userDefaults_url as! String)
+                    let url_debug:String = PTCoreUserDefultsWrapper.AppRequestUrl
                     if url_debug.isEmpty {
                         current = Network.share.serverAddress_dev
                     } else {
@@ -135,7 +131,7 @@ public class PTDebugViewController: PTBaseViewController {
                     
                     UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                         let newURL = result.values.first
-                        UserDefaults.standard.set(newURL, forKey: DevNetWorkKey)
+                        PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
                         
                         self.settingCellModels[1].content = newURL!
                         let cell = collection.cellForItem(at: IndexPath.init(row: 1, section: 0)) as! PTFusionCell

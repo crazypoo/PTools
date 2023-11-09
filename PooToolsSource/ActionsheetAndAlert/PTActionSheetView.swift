@@ -47,8 +47,8 @@ public class PTActionSheetView: UIView {
     public static let CancelButtonTag = 99999
     public static let DestructiveButtonTag = 99998
     
-    public var actionSheetSelectBlock:((_ sheet:PTActionSheetView,_ selectIndex:Int)->Void)?
-    public var actionSheetTapDismissBlock:((_ sheet:PTActionSheetView)->Void)?
+    public var actionSheetSelectBlock:PTActionSheetIndexHandler?
+    public var actionSheetTapDismissBlock:PTActionSheetHandler?
     
     private let kRowLineHeight:CGFloat = 0.5
     private let kRowHeight:CGFloat = 54

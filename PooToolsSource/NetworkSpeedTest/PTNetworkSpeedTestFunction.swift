@@ -8,8 +8,6 @@
 
 import UIKit
 
-public let uPTNetworkSpeedTestFunctionHistoria = "uPTNetworkSpeedTestFunctionHistoria"
-
 public enum PTNetworkSpeedTestStateType {
     case Download
     case Upload
@@ -100,16 +98,13 @@ public class PTNetworkSpeedTestFunction: NSObject {
     }
     
     public func saveHistory(jsonString:String) {
-        if let userHistoryModelString :String = UserDefaults.standard.value(forKey: uPTNetworkSpeedTestFunctionHistoria) as? String {
-            if !userHistoryModelString.stringIsEmpty() {
-                var userModelsStringArr = userHistoryModelString.components(separatedBy: "[,]")
-                userModelsStringArr.append(jsonString)
-                UserDefaults.standard.set(userModelsStringArr.joined(separator: "[,]"), forKey: uPTNetworkSpeedTestFunctionHistoria)
-            } else {
-                UserDefaults.standard.set(jsonString, forKey: uPTNetworkSpeedTestFunctionHistoria)
-            }
+        let userHistoryModelString = PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria
+        if !userHistoryModelString.stringIsEmpty() {
+            var userModelsStringArr = userHistoryModelString.components(separatedBy: "[,]")
+            userModelsStringArr.append(jsonString)
+            PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria = userModelsStringArr.joined(separator: "[,]")
         } else {
-            UserDefaults.standard.set(jsonString, forKey: uPTNetworkSpeedTestFunctionHistoria)
+            PTCoreUserDefultsWrapper.NetworkSpeedTestFunctionHistoria = jsonString
         }
     }
 }

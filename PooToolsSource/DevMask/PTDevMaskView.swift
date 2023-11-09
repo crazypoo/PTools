@@ -11,37 +11,13 @@ import SnapKit
 import SwifterSwift
 import DeviceKit
 
-public var PTDevMaskTouchBubbleShowValue:Bool {
-    get {
-        let userDefaults = UserDefaults.standard.value(forKey: PTDevMaskView.PTDevMaskTouchBubbleKey)
-        let ui_debug:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
-        return ui_debug
-    }
-    set {
-        UserDefaults.standard.setValue(newValue, forKey: PTDevMaskView.PTDevMaskTouchBubbleKey)
-        UserDefaults.standard.synchronize()
-    }
-}
-
-public var PTDevMaskShowValue:Bool {
-    get {
-        let userDefaults = UserDefaults.standard.value(forKey: PTDevMaskView.PTDevMaskKey)
-        let ui_debug:Bool = userDefaults == nil ? true : (userDefaults as! Bool)
-        return ui_debug
-    }
-    set {
-        UserDefaults.standard.setValue(newValue, forKey: PTDevMaskView.PTDevMaskKey)
-        UserDefaults.standard.synchronize()
-    }
-}
-
 @objcMembers
 open class PTDevMaskConfig:NSObject {
     public var isMask:Bool = false
     public var maskString:String = "测试模式"
     public var maskFont:UIFont = .appfont(size: 100,bold: true)
     public var motionColor:UIColor = .randomColor
-    public var showTouch:Bool = PTDevMaskTouchBubbleShowValue
+    public var showTouch:Bool = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
 }
 
 @objcMembers

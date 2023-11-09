@@ -48,16 +48,10 @@ public class PTLanguage: NSObject {
     
     public var language: String {
         get {
-            if let lang = UserDefaults.standard.value(forKey: LanguageKey) {
-                return lang as! String
-            } else {
-                // 默认的语言，可以根据需求来进行默认。zh-Hans.lproj
-                return "zh-Hans"
-            }
+            return PTCoreUserDefultsWrapper.AppLanguage
         } set {
             // 保存当前的语言
-            UserDefaults.standard.set(newValue, forKey: LanguageKey)
-            UserDefaults.standard.synchronize()
+            PTCoreUserDefultsWrapper.AppLanguage = newValue
             // 发通知，语言已发生改变
             NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
         }

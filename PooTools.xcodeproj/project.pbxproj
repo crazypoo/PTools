@@ -153,6 +153,7 @@
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
+		5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */; };
 		5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */; };
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
@@ -538,6 +539,7 @@
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
+		5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppUserdefault.swift; sourceTree = "<group>"; };
 		5578BB122AE377EC00E9D22F /* PTLoadImageFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLoadImageFunction.swift; sourceTree = "<group>"; };
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
@@ -1745,6 +1747,7 @@
 				231D15B4272CDEE9003D6F62 /* PTUrlChange.swift */,
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
 				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
+				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2471,6 +2474,7 @@
 				5585F6E12AD29D5000F878B4 /* PTVideoEditorPlayPauseButton.swift in Sources */,
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
+				5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
 				555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */,
