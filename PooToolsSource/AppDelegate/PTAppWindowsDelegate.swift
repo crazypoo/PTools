@@ -11,10 +11,24 @@ import UIKit
 
 open class PTAppWindowsDelegate: PTAppDelegate {
     open var window: UIWindow?
-    
+#if POOTOOLS_DEBUG
+    #if DEBUG
+        open var devFunction:PTDevFunction = PTDevFunction()
+    #endif
+#endif
     open func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
-        let frame = UIScreen.main.bounds
-        window = UIWindow(frame: frame)
+#if POOTOOLS_DEBUG
+    #if DEBUG
+        window = TouchInspectorWindow(frame: UIScreen.main.bounds)
+        (window as! TouchInspectorWindow).showTouches = devFunction.touchesType
+        (window as! TouchInspectorWindow).showHitTesting = devFunction.touchesTestHit
+        window?.tintColor = tint
+    #else
+        window = UIWindow.init(frame: UIScreen.main.bounds)
+    #endif
+#else
+        window = UIWindow.init(frame: UIScreen.main.bounds)
+#endif
         window?.tintColor = tint
         window?.rootViewController = createViewControllerHandler()
         window?.makeKeyAndVisible()
@@ -27,4 +41,10 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     }
 }
 
+extension PTAppWindowsDelegate {
+    
+    public override class func appDelegate() -> PTAppWindowsDelegate? {
+        UIApplication.shared.delegate as? PTAppWindowsDelegate
+    }
+}
 #endif
