@@ -20,7 +20,6 @@ class PTPermissionCell: PTBaseNormalCell {
     static let ID = "PTPermissionCell"
     
     var cellStatus:PTPermission.Status? = .notDetermined
-    var cellButtonTapBlock:((_ type:PTPermission.Kind)->Void)?
     
     var cellModel:PTPermissionModel? {
         didSet {
@@ -216,102 +215,14 @@ class PTPermissionCell: PTBaseNormalCell {
         switch cellStatus {
         case .authorized:
             authorizedButton.isSelected = true
-            authorizedButton.isUserInteractionEnabled = false
         case .denied:
             authorizedButton.isSelected = true
             authorizedButton.setTitle("已拒绝", for: .normal)
             authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .normal)
-            authorizedButton.isUserInteractionEnabled = true
-            authorizedButton.addActionHandlers(handler: { sender in
-                switch self.cellModel!.type {
-                case .tracking:
-#if POOTOOLS_PERMISSION_TRACKING
-                    if #available(iOS 14.0, *) {
-                        PTPermission.tracking.openSettingPage()
-                    }
-#endif
-                case .camera:
-#if POOTOOLS_PERMISSION_CAMERA
-                    PTPermission.camera.openSettingPage()
-#endif
-                case .photoLibrary:
-#if POOTOOLS_PERMISSION_PHOTO
-                    PTPermission.photoLibrary.openSettingPage()
-#endif
-                case .calendar(access: .full):
-#if POOTOOLS_PERMISSION_CALENDAR
-                    PTPermission.calendar(access: .full).openSettingPage()
-#endif
-                case .calendar(access: .write):
-#if POOTOOLS_PERMISSION_CALENDAR
-                    PTPermission.calendar(access: .write).openSettingPage()
-#endif
-                case .reminders:
-#if POOTOOLS_PERMISSION_REMINDERS
-                    PTPermission.reminders.openSettingPage()
-#endif
-                case .notification:
-#if POOTOOLS_PERMISSION_NOTIFICATION
-                    PTPermission.notification.openSettingPage()
-#endif
-                case .location(access: .whenInUse):
-#if POOTOOLS_PERMISSION_LOCATION
-                    PTPermission.location(access: .whenInUse).openSettingPage()
-#endif
-                case .location(access: .always):
-#if POOTOOLS_PERMISSION_LOCATION
-                    PTPermission.location(access: .always).openSettingPage()
-#endif
-                case .motion:
-#if POOTOOLS_PERMISSION_MOTION
-                    PTPermission.motion.openSettingPage()
-#endif
-                case .faceID:
-#if POOTOOLS_PERMISSION_FACEIDPERMISSION
-                    PTPermission.faceID.openSettingPage()
-#endif
-                case .health:
-#if POOTOOLS_PERMISSION_HEALTH
-                    PTPermission.health.openSettingPage()
-#endif
-                case .speech:
-#if POOTOOLS_PERMISSION_SPEECH
-                    PTPermission.speech.openSettingPage()
-#endif
-                case .contacts:
-#if POOTOOLS_PERMISSION_CONTACTS
-                    PTPermission.contacts.openSettingPage()
-#endif
-                case .microphone:
-#if POOTOOLS_PERMISSION_MIC
-                    PTPermission.microphone.openSettingPage()
-#endif
-                case .mediaLibrary:
-#if POOTOOLS_PERMISSION_MEDIA
-                    PTPermission.mediaLibrary.openSettingPage()
-#endif
-                case .bluetooth:
-#if POOTOOLS_PERMISSION_BLUETOOTH
-                    PTPermission.bluetooth.openSettingPage()
-#endif
-                case .siri:
-#if POOTOOLS_PERMISSION_SIRI
-                    PTPermission.siri.openSettingPage()
-#endif
-                default:break
-                }
-            })
         case .notDetermined:
             authorizedButton.isSelected = false
-            authorizedButton.isUserInteractionEnabled = true
-            authorizedButton.addActionHandlers(handler: { sender in
-                if self.cellButtonTapBlock != nil {
-                    self.cellButtonTapBlock!(self.cellModel!.type)
-                }
-            })
         case .notSupported:
             authorizedButton.isEnabled = false
-            authorizedButton.isUserInteractionEnabled = false
         default:
             break
         }
@@ -326,6 +237,7 @@ class PTPermissionCell: PTBaseNormalCell {
         view.setTitle("已授权", for: .selected)
         view.setTitle("不支持", for: .disabled)
         view.setTitleColor(PTAppBaseConfig.share.permissionNotSupportColor, for: .disabled)
+        view.isUserInteractionEnabled = false
         return view
     }()
     
