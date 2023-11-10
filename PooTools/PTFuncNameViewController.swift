@@ -44,6 +44,7 @@ public extension String {
     static let feedbackAlert = "反馈弹框"
     static let menu = "Menu"
     static let loading = "Loading"
+    static let permission = "Permission"
 
     static let route = "路由"
     
@@ -196,7 +197,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let loading = self.rowBaseModel(name: .loading)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading]
+        let permission = self.rowBaseModel(name: .permission)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -481,6 +484,33 @@ class PTFuncNameViewController: PTBaseViewController {
                         break
                     }
                 })
+            } else if itemRow.title == .permission {
+                let locationAlways = PTPermissionModel()
+                locationAlways.type = .location(access: .always)
+                locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
+                
+                let locationWhen = PTPermissionModel()
+                locationWhen.type = .location(access: .whenInUse)
+                locationWhen.desc = "我们有需要的时候使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
+
+                let camera = PTPermissionModel()
+                camera.type = .camera
+                camera.desc = "我们需要使用你的照相机,来实现拍照后图片编辑功能"
+
+                let mic = PTPermissionModel()
+                mic.type = .microphone
+                mic.desc = "我们需要访问你的麦克风,来实现视频拍摄和编辑功能"
+
+                let photo = PTPermissionModel()
+                photo.type = .photoLibrary
+                photo.desc = "我们需要访问你的相册和照片,来使用图片的编辑功能"
+
+                let permissionVC = PTPermissionViewController(datas: [locationAlways,locationWhen,camera,mic,photo])
+                permissionVC.modalPresentationStyle = .fullScreen
+                self.present(permissionVC, animated: true)
+                permissionVC.viewDismissBlock = {
+                }
+
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

@@ -36,6 +36,7 @@ public class PTAppBaseConfig: NSObject {
     public var permissionSubtitleFont:UIFont = .appfont(size: 14)
     public var permissionSubtitleColor:UIColor = .black
     public var permissionDeniedColor:UIColor = .red
+    public var permissionNotSupportColor:UIColor = .lightGray
     public var permissionAuthorizedButtonFont:UIFont = .appfont(size: 14)
     public var permissionCellTitleFont:UIFont = .appfont(size: 14)
     public var permissionCellTitleTextColor:UIColor = .black

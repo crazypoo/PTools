@@ -24,121 +24,122 @@ class PTPermissionCell: PTBaseNormalCell {
     
     var cellModel:PTPermissionModel? {
         didSet {
-            
-            switch cellModel!.type {
-            case .tracking:
-#if POOTOOLS_PERMISSION_TRACKING
-                if #available(iOS 14.0, *) {
-                    cellStatus = PTPermission.tracking.status
+            PTGCDManager.gcdMain() {
+                switch self.cellModel!.type {
+                case .tracking:
+    #if POOTOOLS_PERMISSION_TRACKING
+                    if #available(iOS 14.0, *) {
+                        self.cellStatus = PTPermission.tracking.status
+                    }
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .camera:
+    #if POOTOOLS_PERMISSION_CAMERA
+                    self.cellStatus = PTPermission.camera.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .photoLibrary:
+    #if POOTOOLS_PERMISSION_PHOTO
+                    self.cellStatus = PTPermission.photoLibrary.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .calendar(access: .full):
+    #if POOTOOLS_PERMISSION_CALENDAR
+                    self.cellStatus = PTPermission.calendar(access: .full).status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .calendar(access: .write):
+    #if POOTOOLS_PERMISSION_CALENDAR
+                    self.cellStatus = PTPermission.calendar(access: .write).status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .reminders:
+    #if POOTOOLS_PERMISSION_REMINDERS
+                    self.cellStatus = PTPermission.reminders.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .notification:
+    #if POOTOOLS_PERMISSION_NOTIFICATION
+                    self.cellStatus = PTPermission.notification.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .location(access: .whenInUse):
+    #if POOTOOLS_PERMISSION_LOCATION
+                    self.cellStatus = PTPermission.location(access: .whenInUse).status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .location(access: .always):
+    #if POOTOOLS_PERMISSION_LOCATION
+                    self.cellStatus = PTPermission.location(access: .always).status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .faceID:
+    #if POOTOOLS_PERMISSION_FACEIDPERMISSION
+                    self.cellStatus = PTPermission.faceID.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .speech:
+    #if POOTOOLS_PERMISSION_SPEECH
+                    self.cellStatus = PTPermission.speech.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .health:
+    #if POOTOOLS_PERMISSION_HEALTH
+                    self.cellStatus = PTPermissionHealth.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .motion:
+    #if POOTOOLS_PERMISSION_MOTION
+                    self.cellStatus = PTPermission.motion.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .contacts:
+    #if POOTOOLS_PERMISSION_MIC
+                    self.cellStatus = PTPermission.contacts.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .microphone:
+    #if POOTOOLS_PERMISSION_MIC
+                    self.cellStatus = PTPermission.microphone.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .mediaLibrary:
+    #if POOTOOLS_PERMISSION_MEDIA
+                    self.cellStatus = PTPermission.mediaLibrary.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .bluetooth:
+    #if POOTOOLS_PERMISSION_BLUETOOTH
+                    self.cellStatus = PTPermission.bluetooth.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                case .siri:
+    #if POOTOOLS_PERMISSION_SIRI
+                    self.cellStatus = PTPermission.siri.status
+    #else
+                    self.cellStatus = .notSupported
+    #endif
+                default:break
                 }
-#else
-                cellStatus = .notSupported
-#endif
-            case .camera:
-#if POOTOOLS_PERMISSION_CAMERA
-                cellStatus = PTPermission.camera.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .photoLibrary:
-#if POOTOOLS_PERMISSION_PHOTO
-                cellStatus = PTPermission.photoLibrary.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .calendar(access: .full):
-#if POOTOOLS_PERMISSION_CALENDAR
-                cellStatus = PTPermission.calendar(access: .full).status
-#else
-                cellStatus = .notSupported
-#endif
-            case .calendar(access: .write):
-#if POOTOOLS_PERMISSION_CALENDAR
-                cellStatus = PTPermission.calendar(access: .write).status
-#else
-                cellStatus = .notSupported
-#endif
-            case .reminders:
-#if POOTOOLS_PERMISSION_REMINDERS
-                cellStatus = PTPermission.reminders.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .notification:
-#if POOTOOLS_PERMISSION_NOTIFICATION
-                cellStatus = PTPermission.notification.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .location(access: .whenInUse):
-#if POOTOOLS_PERMISSION_LOCATION
-                cellStatus = PTPermission.location(access: .whenInUse).status
-#else
-                cellStatus = .notSupported
-#endif
-            case .location(access: .always):
-#if POOTOOLS_PERMISSION_LOCATION
-                cellStatus = PTPermission.location(access: .always).status
-#else
-                cellStatus = .notSupported
-#endif
-            case .faceID:
-#if POOTOOLS_PERMISSION_FACEIDPERMISSION
-                cellStatus = PTPermission.faceID.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .speech:
-#if POOTOOLS_PERMISSION_SPEECH
-                cellStatus = PTPermission.speech.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .health:
-#if POOTOOLS_PERMISSION_HEALTH
-                cellStatus = PTPermissionHealth.status(for: HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!)
-#else
-                cellStatus = .notSupported
-#endif
-            case .motion:
-#if POOTOOLS_PERMISSION_MOTION
-                cellStatus = PTPermission.motion.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .contacts:
-#if POOTOOLS_PERMISSION_MIC
-                cellStatus = PTPermission.contacts.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .microphone:
-#if POOTOOLS_PERMISSION_MIC
-                cellStatus = PTPermission.microphone.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .mediaLibrary:
-#if POOTOOLS_PERMISSION_MEDIA
-                cellStatus = PTPermission.mediaLibrary.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .bluetooth:
-#if POOTOOLS_PERMISSION_BLUETOOTH
-                cellStatus = PTPermission.bluetooth.status
-#else
-                cellStatus = .notSupported
-#endif
-            case .siri:
-#if POOTOOLS_PERMISSION_SIRI
-                cellStatus = PTPermission.siri.status
-#else
-                cellStatus = .notSupported
-#endif
-            default:break
+                self.setButtonStatus()
             }
-            setButtonStatus()
         }
     }
     
@@ -216,12 +217,11 @@ class PTPermissionCell: PTBaseNormalCell {
         case .authorized:
             authorizedButton.isSelected = true
             authorizedButton.isUserInteractionEnabled = false
-            authorizedButton.setTitle("已授权", for: .selected)
         case .denied:
             authorizedButton.isSelected = true
+            authorizedButton.setTitle("已拒绝", for: .normal)
+            authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .normal)
             authorizedButton.isUserInteractionEnabled = true
-            authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
-            authorizedButton.setTitle("已拒绝", for: .selected)
             authorizedButton.addActionHandlers(handler: { sender in
                 switch self.cellModel!.type {
                 case .tracking:
@@ -304,16 +304,13 @@ class PTPermissionCell: PTBaseNormalCell {
         case .notDetermined:
             authorizedButton.isSelected = false
             authorizedButton.isUserInteractionEnabled = true
-            authorizedButton.setTitle("询问授权", for: .normal)
             authorizedButton.addActionHandlers(handler: { sender in
                 if self.cellButtonTapBlock != nil {
                     self.cellButtonTapBlock!(self.cellModel!.type)
                 }
             })
         case .notSupported:
-            authorizedButton.setTitle("不支持", for: .selected)
-            authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .selected)
-            authorizedButton.isSelected = true
+            authorizedButton.isEnabled = false
             authorizedButton.isUserInteractionEnabled = false
         default:
             break
@@ -327,6 +324,8 @@ class PTPermissionCell: PTBaseNormalCell {
         view.setTitle("询问授权", for: .normal)
         view.setTitleColor(.systemBlue, for: .selected)
         view.setTitle("已授权", for: .selected)
+        view.setTitle("不支持", for: .disabled)
+        view.setTitleColor(PTAppBaseConfig.share.permissionNotSupportColor, for: .disabled)
         return view
     }()
     
@@ -345,15 +344,15 @@ class PTPermissionCell: PTBaseNormalCell {
         
         contentView.addSubviews([authorizedButton, cellIcon, cellTitle])
         authorizedButton.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 7.5))
+            make.top.bottom.equalToSuperview().inset(10)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.width.equalTo(UIView.sizeFor(string: "询问授权", font: self.authorizedButton.titleLabel!.font!, height: 24).width + CGFloat.ScaleW(w: 10))
         }
         
         cellIcon.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.bottom.equalToSuperview().inset(CGFloat.ScaleW(w: 5))
-            make.width.equalTo(self.cellIcon.snp.height)
+            make.size.equalTo(44)
+            make.centerY.equalToSuperview()
         }
         
         cellTitle.snp.makeConstraints { make in

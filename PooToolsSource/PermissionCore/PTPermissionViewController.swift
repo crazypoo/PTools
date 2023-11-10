@@ -32,7 +32,7 @@ public class PTPermissionViewController: PTBaseViewController {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Normal
         cConfig.itemOriginalX = PTAppBaseConfig.share.defaultViewSpace
-        cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
+        cConfig.itemHeight = 88
         cConfig.headerWidthOffset = PTAppBaseConfig.share.defaultViewSpace
         cConfig.decorationItemsType = .Corner
         cConfig.decorationItemsEdges = NSDirectionalEdgeInsets.init(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
