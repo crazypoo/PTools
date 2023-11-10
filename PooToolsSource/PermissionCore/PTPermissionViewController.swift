@@ -246,7 +246,7 @@ public class PTPermissionViewController: PTBaseViewController {
         switch type {
         case .tracking:
 #if POOTOOLS_PERMISSION_TRACKING
-            if !showTracking {
+            if !showTracking! {
                 if #available(iOS 14.0, *) {
                     PTPermission.tracking.request {
                         self.showDetail()

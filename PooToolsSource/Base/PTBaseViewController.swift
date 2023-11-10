@@ -15,6 +15,7 @@ import SwifterSwift
 import AttributedString
 import Photos
 import SnapKit
+import SafeSFSymbols
 
 public typealias PTScreenShotImageHandle = (PTScreenShotActionType,UIImage) -> Void
 public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
@@ -44,7 +45,7 @@ public class PTEmptyDataViewConfig : PTBaseModel {
     var buttonTitle:String? = ""
     var buttonFont:UIFont = .appfont(size: 18)
     var buttonTextColor:UIColor = .systemBlue
-    var image:UIImage? = UIImage(systemName: "exclamationmark.triangle")!
+    var image:UIImage? = UIImage(.exclamationmark.triangle)
     var backgroundColor:UIColor = .clear
     var imageToTextPadding:CGFloat = 10
     var textToSecondaryTextPadding:CGFloat = 5

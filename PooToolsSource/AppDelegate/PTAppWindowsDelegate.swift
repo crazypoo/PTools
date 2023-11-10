@@ -10,6 +10,12 @@
 import UIKit
 import SwifterSwift
 
+/// 服务路由
+public var serivceHost = "scheme://services?"
+
+/// web跳转路由
+public var webRouterUrl = "scheme://webview/home"
+
 open class PTAppWindowsDelegate: PTAppDelegate {
     open var window: UIWindow?
 #if POOTOOLS_DEBUG
@@ -82,12 +88,48 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         }
     }
 #endif
+    
+#if POOTOOLS_ROTATION
+    open func registerRotation() {
+        PTRotationManager.share.interfaceOrientationMask = .portrait
+    }
+#endif
+    
+#if POOTOOLS_ROUTER
+    open func registerRouter(PrifxArray:[String]? = [".Jax"]) {
+        PTRouter.lazyRegisterRouterHandle { url ,userInfo in
+            PTRouter.injectRouterServiceConfig(webRouterUrl, serivceHost)
+            return PTRouterManager.addGloableRouter(PrifxArray!, url, userInfo)
+        }
+        PTRouterManager.registerServices()
+        PTRouter.logcat { url, logType, errorMsg in
+            PTNSLogConsole("PTRouter: logMsg- \(url) \(logType.rawValue) \(errorMsg)")
+        }
+    }
+#endif
+
+    open func createSettingBundle() {
+        if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
+            PTDebugFunction.registerDefaultsFromSettingsBundle()
+        }
+    }
 }
 
+//MARK: 全局参数
 extension PTAppWindowsDelegate {
-    
     public override class func appDelegate() -> PTAppWindowsDelegate? {
         UIApplication.shared.delegate as? PTAppWindowsDelegate
+    }
+}
+
+//MARK: 旋转
+extension PTAppWindowsDelegate {
+    open func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
+#if POOTOOLS_ROTATION
+        PTRotationManager.share.interfaceOrientationMask
+#else
+        return .portrait
+#endif
     }
 }
 #endif

@@ -8,6 +8,7 @@
 
 import UIKit
 import Kingfisher
+import SafeSFSymbols
 
 @objcMembers
 public class PTAppBaseConfig: NSObject {
@@ -26,7 +27,7 @@ public class PTAppBaseConfig: NSObject {
     
     //MARK: App全局的导航栏返回按钮
     ///App全局的导航栏返回按钮
-    public var viewControllerBackItemImage:UIImage = UIImage(systemName: "chevron.left")!
+    public var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
     public var navTitleFont:UIFont = .appfont(size: 24)
     public var hidesBarsOnSwipe:Bool = false
     
@@ -49,8 +50,8 @@ public class PTAppBaseConfig: NSObject {
     public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
     
     //MARK: ScreenShot
-    public var screenShotShare:Any = UIImage(systemName: "square.and.pencil") as Any
-    public var screenShotFeedback:Any = UIImage(systemName: "square.and.arrow.up") as Any
+    public var screenShotShare:Any = UIImage(.square.andPencil) as Any
+    public var screenShotFeedback:Any = UIImage(.square.andArrowUp) as Any
 
     //MARK: App的隐私连接
     public var privacyURL:String = "https://www.qq.com"
@@ -58,7 +59,7 @@ public class PTAppBaseConfig: NSObject {
 
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
-    public func gobalWebImageLoadOption()->KingfisherOptionsInfo {
+    public func gobalWebImageLoadOption() -> KingfisherOptionsInfo {
         PTDevFunction.gobalWebImageLoadOption()
     }
 }

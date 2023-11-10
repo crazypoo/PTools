@@ -11,6 +11,7 @@ import DeviceKit
 import CoreFoundation
 import AttributedString
 import SwifterSwift
+import SafeSFSymbols
 
 public let LocalConsoleFontBaseSize:CGFloat = 7.5
 public let LocalConsoleFontMin:CGFloat = 4
@@ -379,9 +380,10 @@ public class PTTerminal:PFloatingButton {
         systemText?.layer.cornerRadius = (layer.cornerRadius) - 2
         systemText?.layer.cornerCurve = .continuous
 
+        
         menuButton = UIButton.init(type: .custom)
         menuButton.backgroundColor = UIColor(white: 0.2, alpha: 0.95)
-        menuButton.setImage(UIImage(systemName: "ellipsis", withConfiguration: UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
+        menuButton.setImage(UIImage(.ellipsis).withConfiguration(UIImage.SymbolConfiguration(pointSize: 17)), for: .normal)
         menuButton.imageView?.contentMode = .scaleAspectFit
         menuButton.autoresizingMask = [.flexibleLeftMargin, .flexibleTopMargin]
         addSubview(menuButton)
