@@ -23,6 +23,7 @@ public class TouchInspectorWindow: UIWindow {
      */
     public var showTouches: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShow {
         didSet {
+            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = self.showTouches
             hideOverlaysIfNeeded()
         }
     }
@@ -32,6 +33,7 @@ public class TouchInspectorWindow: UIWindow {
      */
     public var showHitTesting: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShowHits {
         didSet {
+            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = self.showHitTesting
             hideOverlaysIfNeeded()
         }
     }

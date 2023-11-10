@@ -31,7 +31,12 @@ open class PTWindowSceneDelegate: UIResponder,UIWindowSceneDelegate {
 
 public extension PTWindowSceneDelegate {
     @objc class func sceneDelegate() -> PTWindowSceneDelegate? {
-        UIApplication.shared.delegate as? PTWindowSceneDelegate
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+            let sceneDelegate = windowScene.delegate as? PTWindowSceneDelegate {
+            return sceneDelegate
+        } else {
+            return nil
+        }
     }
 }
 

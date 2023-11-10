@@ -518,6 +518,7 @@ Pod::Spec.new do |s|
     s.subspec 'DEBUG_TrackingEyes' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DEBUG'
+        subspec.dependency 'PooTools/CameraPermission'
         subspec.source_files = 'PooToolsSource/WhereIsMyEye/*.{h,m,swift}'
     subspec.pod_target_xcconfig = {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_DEBUGTRACKINGEYES POOTOOLS_COCOAPODS"
