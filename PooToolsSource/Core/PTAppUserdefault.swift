@@ -37,10 +37,10 @@ public struct PTCoreUserDefultsWrapper {
     @PTUserDefault(withKey: PTDevMaskView.PTDevMaskKey, defaultValue: true) public static var AppDebbugMark:Bool
     //MARK: App测试环境点击信息(YES是)
     ///App测试环境点击信息(YES是)
-    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorDebug, defaultValue: false) public static var AppTouchInspectShow:Bool
+    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorDebug, defaultValue: true) public static var AppTouchInspectShow:Bool
     //MARK: App测试环境点击信息Hits(YES是)
     ///App测试环境点击信息Hits(YES是)
-    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorHitsDebug, defaultValue: false) public static var AppTouchInspectShowHits:Bool
+    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorHitsDebug, defaultValue: true) public static var AppTouchInspectShowHits:Bool
     
     /**
         语言

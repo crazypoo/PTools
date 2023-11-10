@@ -20,8 +20,8 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #if POOTOOLS_DEBUG
     #if DEBUG
         window = TouchInspectorWindow(frame: UIScreen.main.bounds)
-        (window as! TouchInspectorWindow).showTouches = devFunction.touchesType
-        (window as! TouchInspectorWindow).showHitTesting = devFunction.touchesTestHit
+        (window as! TouchInspectorWindow).showTouches = PTCoreUserDefultsWrapper.AppTouchInspectShow
+        (window as! TouchInspectorWindow).showHitTesting = PTCoreUserDefultsWrapper.AppTouchInspectShowHits
         window?.tintColor = tint
     #else
         window = UIWindow.init(frame: UIScreen.main.bounds)
