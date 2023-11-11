@@ -53,6 +53,8 @@ public extension String {
 
 class PTFuncNameViewController: PTBaseViewController {
 
+    fileprivate var vcEmpty:Bool = true
+    
     fileprivate lazy var outputURL :URL = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
         let outputURL = documentsDirectory.appendingPathComponent("output.mp4")
@@ -81,15 +83,10 @@ class PTFuncNameViewController: PTBaseViewController {
         localNet.leftImage = "🌐".emojiToImage(emojiFont: .appfont(size: 24))
         localNet.contentIcon = "🌠".emojiToImage(emojiFont: .appfont(size: 24))
         localNet.content = "12312312312312312312312312312312312312312312321"
-
+        localNet.cellClass = PTFusionCell.self
+        localNet.cellID = PTFusionCell.ID
         let netArrs = [localNet]
-        
-        var netRows = [PTRows]()
-        netArrs.enumerated().forEach { index,value in
-            let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
-            netRows.append(row)
-        }
-        
+                
         let sectionModel_net = PTFusionCellModel()
         sectionModel_net.name = "网络"
         sectionModel_net.cellFont = sectionTitleFont
@@ -98,7 +95,7 @@ class PTFuncNameViewController: PTBaseViewController {
         sectionModel_net.moreLayoutStyle = .leftTitleRightImage
         sectionModel_net.moreDisclosureIndicator = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
 
-        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: netRows,headerDataModel: sectionModel_net)
+        let netSection = PTSection.init(headerTitle: sectionModel_net.name,headerCls: PTFusionHeader.self,headerID: PTFusionHeader.ID,footerCls: PTTestFooter.self,footerID: PTTestFooter.ID,footerHeight: 44,headerHeight: 44, rows: UICollectionView.sectionRows(rowsModel: netArrs),headerDataModel: sectionModel_net)
         
         /**
             图片
@@ -264,7 +261,7 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.viewType = .Normal
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
         cConfig.topRefresh = true
-        cConfig.showEmptyAlert = false
+        cConfig.showEmptyAlert = !vcEmpty
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
                 
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
@@ -512,8 +509,23 @@ class PTFuncNameViewController: PTBaseViewController {
             }
         }
         aaaaaaa.headerRefreshTask = { sender in
-            PTGCDManager.gcdAfter(time: 3) {
+            if #available(iOS 17, *) {
+                self.collectionView.clearAllData { collectionview in
+                    sender.endRefreshing()
+                }
+            } else {
                 sender.endRefreshing()
+            }
+        }
+        
+        aaaaaaa.emptyTap = { sender in
+            if #available(iOS 17, *) {
+                self.collectionView.showEmptyLoading()
+                PTGCDManager.gcdAfter(time: 1, block: {
+                    self.collectionView.hideEmptyLoading(task: {
+                        self.showCollectionViewData()
+                    })
+                })
             }
         }
         return aaaaaaa
@@ -581,17 +593,19 @@ class PTFuncNameViewController: PTBaseViewController {
             make.left.right.bottom.equalToSuperview()
         }
         
-        if #available(iOS 17.0, *) {
-            self.emptyDataViewConfig = PTEmptyDataViewConfig()
-            self.showEmptyView {
-                self.emptyReload()
-            }
-            
-            PTGCDManager.gcdAfter(time: 5) {
-                self.emptyReload()
-            }
-        } else {
+        if #unavailable(iOS 17.0) {
             self.showCollectionViewData()
+        } else {
+            if vcEmpty {
+                self.emptyDataViewConfig = PTEmptyDataViewConfig()
+                self.showEmptyView {
+                    self.emptyReload()
+                }
+                
+                PTGCDManager.gcdAfter(time: 5) {
+                    self.emptyReload()
+                }
+            }
         }
         
         self.inputValueSample(value: 15)

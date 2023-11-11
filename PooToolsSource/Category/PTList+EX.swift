@@ -90,6 +90,16 @@ extension UITableView {
 }
 
 extension UICollectionView {
+    
+    public static func sectionRows(rowsModel:[PTFusionCellModel]) -> [PTRows] {
+        var rows = [PTRows]()
+        rowsModel.enumerated().forEach { index,value in
+            let row = PTRows(title:value.name,cls:value.cellClass,ID: value.cellID,dataModel: value)
+            rows.append(row)
+        }
+        return rows
+    }
+    
     //MARK: 註冊CollectionView的Cell
     ///註冊CollectionView的Cell
     public func pt_register(by ptSections: [PTSection]) {

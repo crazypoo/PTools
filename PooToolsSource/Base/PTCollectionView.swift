@@ -67,6 +67,8 @@ public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cel
 
 //MARK: Collection展示的基本配置参数设置
 public class PTCollectionViewConfig:PTBaseModel {
+    public var showsVerticalScrollIndicator:Bool = true
+    public var showsHorizontalScrollIndicator:Bool = true
     ///CollectionView展示的样式类型
     public var viewType:PTCollectionViewType = .Normal
     ///每行多少个(仅在瀑布流和Gird样式中使用)
@@ -111,6 +113,9 @@ public class PTCollectionView: UIView {
     
     let decorationViewOfKindCorner = "background"
     let decorationViewOfKindNormal = "background_no"
+    
+    @available(iOS 17.0, *)
+    private static let share = PTUnavailableFunction.share
     
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
@@ -190,6 +195,8 @@ public class PTCollectionView: UIView {
         view.backgroundColor = .clear
         view.delegate = self
         view.dataSource = self
+        view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
+        view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
         if self.viewConfig.topRefresh {
             view.refreshControl = self.refreshControl
         }
@@ -248,10 +255,7 @@ public class PTCollectionView: UIView {
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
     public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
-#if POOTOOLS_LISTEMPTYDATA
-    ///空数据点击事件
-    public var emptyTap:((UIView)->Void)?
-#endif
+    public var emptyTap:((UIView?)->Void)?
     
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
@@ -266,11 +270,7 @@ public class PTCollectionView: UIView {
         
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
-            if #available(iOS 17.0, *) {
-                self.showEmptyView {
-                    self.emptyViewLoading()
-                }
-            } else {
+            if #unavailable(iOS 17.0) {
                 self.showEmptyDataSet(currentScroller: collectionView)
                 self.lxf_tapEmptyView(collectionView) { sender in
                     if self.emptyTap != nil {
@@ -280,14 +280,21 @@ public class PTCollectionView: UIView {
             }
         }
 #else
-        if self.viewConfig.showEmptyAlert {
+        PTGCDManager.gcdAfter(time: 0.1) {
             if #available(iOS 17.0, *) {
-                self.showEmptyView {
-                    self.emptyViewLoading()
-                }
+                self.showEmptyConfig()
             }
         }
 #endif
+        
+        if #available(iOS 17.0, *) {
+            PTCollectionView.share.emptyTap = {
+                if self.emptyTap != nil {
+                    self.emptyTap!(nil)
+                }
+                self.showEmptyLoading()
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
@@ -297,7 +304,10 @@ public class PTCollectionView: UIView {
     ///展示界面
     public override func layoutIfNeeded() {
         super.layoutIfNeeded()
-        
+    }
+    
+    public override func layoutSubviews() {
+        super.layoutSubviews()
     }
     
     ///加载数据并且刷新界面
@@ -308,13 +318,10 @@ public class PTCollectionView: UIView {
         
         collectionView.pt_register(by: mSections)
         self.collectionView.reloadData {
-            if self.viewConfig.showEmptyAlert {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyView {
-                        self.emptyViewLoading()
-                    }
-                }
+            if #available(iOS 17.0, *) {
+                self.showEmptyConfig()
             }
+
             PTGCDManager.gcdAfter(time: 0.1) {
                 if finishTask != nil {
                     finishTask!(self.collectionView)
@@ -328,12 +335,8 @@ public class PTCollectionView: UIView {
         collectionView.pt_register(by: mSections)
         PTGCDManager.gcdAfter(time: 0.1) {
             self.collectionView.reloadData {
-                if self.viewConfig.showEmptyAlert {
-                    if #available(iOS 17.0, *) {
-                        self.showEmptyView {
-                            self.emptyViewLoading()
-                        }
-                    }
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
                 }
                 PTGCDManager.gcdAfter(time: 0.35) {
                     if finishTask != nil {
@@ -381,84 +384,23 @@ public class PTCollectionView: UIView {
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
         collectionView.scrollToItem(at: indexPath, at: position, animated: true)
     }
-    
-    @available(iOS 17, *)
-    private func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
-        var configs = UIContentUnavailableConfiguration.empty()
-        configs.imageToTextPadding = self.viewConfig.emptyViewConfig.imageToTextPadding
-        configs.textToButtonPadding = self.viewConfig.emptyViewConfig.textToSecondaryTextPadding
-        configs.buttonToSecondaryButtonPadding = self.viewConfig.emptyViewConfig.buttonToSecondaryButtonPadding
-        if self.viewConfig.emptyViewConfig.mainTitleAtt != nil {
-            configs.attributedText = self.viewConfig.emptyViewConfig.mainTitleAtt!.value
-        }
         
-        if self.viewConfig.emptyViewConfig.secondaryEmptyAtt != nil {
-            configs.secondaryAttributedText = self.viewConfig.emptyViewConfig.secondaryEmptyAtt!.value
-        }
-        
-        if self.viewConfig.emptyViewConfig.image != nil {
-            configs.image = self.viewConfig.emptyViewConfig.image!
-        }
-        if !(self.viewConfig.emptyViewConfig.buttonTitle ?? "").stringIsEmpty() {
-            configs.button = self.emptyButtonConfig()
-        }
-        configs.buttonProperties.primaryAction = UIAction { sender in
-            if task != nil {
-                task!()
-            }
-        }
-        var configBackground = UIBackgroundConfiguration.clear()
-        configBackground.backgroundColor = self.viewConfig.emptyViewConfig.backgroundColor
-        
-        configs.background = configBackground
-
-        return configs
-    }
-    
     @available(iOS 17, *)
-    private func emptyButtonConfig() -> UIButton.Configuration {
-        var plainConfig = UIButton.Configuration.plain()
-        plainConfig.title = viewConfig.emptyViewConfig.buttonTitle!
-        plainConfig.titleTextAttributesTransformer = .init({ container in
-            container.merging(AttributeContainer.font(self.viewConfig.emptyViewConfig.buttonFont).foregroundColor(self.viewConfig.emptyViewConfig.buttonTextColor))
-        })
-        return plainConfig
-    }
-    
-    @available(iOS 17, *)
-    private func createUnavailableView(task: PTActionTask? = nil) -> UIContentUnavailableView {
-        let config = emptyConfig(task:task)
-        let unavailableView = UIContentUnavailableView(configuration: config)
-        unavailableView.frame = self.bounds
-        unavailableView.tag = 999
-        return unavailableView
-    }
-    
-    @available(iOS 17, *)
-    public func showEmptyView(task: PTActionTask? = nil) {
-        let unavailableView = createUnavailableView(task: task)
-        self.addSubview(unavailableView)
-    }
-    
-    @available(iOS 17, *)
-    public func hideEmptyView(task:PTActionTask? = nil) {
-        let unavailableView = self.viewWithTag(999)
-        unavailableView?.removeFromSuperview()
-        
-        let unavailableLoadingView = self.viewWithTag(998)
-        unavailableLoadingView?.removeFromSuperview()
-        if task != nil {
-            task!()
+    private func showEmptyConfig() {
+        if viewConfig.showEmptyAlert && mSections.count == 0 {
+            PTCollectionView.share.emptyViewConfig = self.viewConfig.emptyViewConfig
+            PTCollectionView.share.showEmptyView(showIn: self)
         }
     }
     
     @available(iOS 17, *)
-    public func emptyViewLoading() {
-        let loadingConfig = UIContentUnavailableConfiguration.loading()
-        let unavailableView = UIContentUnavailableView(configuration: loadingConfig)
-        unavailableView.frame = self.bounds
-        unavailableView.tag = 998
-        self.addSubview(unavailableView)
+    public func hideEmptyLoading(task: PTActionTask?) {
+        PTCollectionView.share.hideUnavailableView(task: task,showIn: self)
+    }
+    
+    @available(iOS 17, *)
+    public func showEmptyLoading() {
+        PTCollectionView.share.showEmptyLoadingView(showIn: self)
     }
 }
 
@@ -543,35 +485,30 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
 //MARK: LXFEmptyDataSetable
 extension PTCollectionView:LXFEmptyDataSetable {
     
-//    var mainTitleAtt:ASAttributedString? = """
-//            \(wrap: .embedding("""
-//            \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
-//            """))
-//            """
-//    var secondaryEmptyAtt:ASAttributedString? = """
-//            \(wrap: .embedding("""
-//            \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
-//            """))
-//            """
-//    var buttonTitle:String? = ""
-//    var buttonFont:UIFont = .appfont(size: 18)
-//    var buttonTextColor:UIColor = .systemBlue
-//    var image:UIImage? = UIImage(.exclamationmark.triangle)
-//    var backgroundColor:UIColor = .clear
-//    var imageToTextPadding:CGFloat = 10
-//    var textToSecondaryTextPadding:CGFloat = 5
-//    var buttonToSecondaryButtonPadding:CGFloat = 15
-
     public func showEmptyDataSet(currentScroller: UIScrollView) {
-        self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
-            self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
-                [
-                    .tipStr: self.viewConfig.emptyViewConfig.mainTitleAtt?.value.string,
-                    .tipColor: UIColor.black,
-                    .verticalOffset: 0,
-                    .tipImage: self.viewConfig.emptyViewConfig.image
-                ]
+        
+        var font:UIFont = .appfont(size: 15)
+        var textColor:UIColor = .black
+
+        let range = NSRange(location:0,length:self.viewConfig.emptyViewConfig.mainTitleAtt?.value.length ?? 0)
+        self.viewConfig.emptyViewConfig.mainTitleAtt?.value.enumerateAttributes(in: range, options: [], using: { att,range,_ in
+            if let attFont = att[NSAttributedString.Key.font] as? UIFont {
+                font = attFont
             }
+            
+            if let attColor = att[NSAttributedString.Key.foregroundColor] as? UIColor {
+                textColor = attColor
+            }
+        })
+        
+        self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
+            [
+                .tipStr: self.viewConfig.emptyViewConfig.mainTitleAtt?.value.string as Any,
+                .tipColor: textColor,
+                .tipFont:font,
+                .verticalOffset: 0,
+                .tipImage: self.viewConfig.emptyViewConfig.image as Any
+            ]
         }
     }
     

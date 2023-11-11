@@ -17,6 +17,10 @@ import Photos
 import SnapKit
 import SafeSFSymbols
 
+#if POOTOOLS_LISTEMPTYDATA
+import LXFProtocolTool
+#endif
+
 public typealias PTScreenShotImageHandle = (PTScreenShotActionType,UIImage) -> Void
 public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
 
@@ -29,27 +33,6 @@ public enum PTScreenShotActionType {
     case Dark
     case Light
     case Auto
-}
-
-public class PTEmptyDataViewConfig : PTBaseModel {
-    var mainTitleAtt:ASAttributedString? = """
-            \(wrap: .embedding("""
-            \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
-            """))
-            """
-    var secondaryEmptyAtt:ASAttributedString? = """
-            \(wrap: .embedding("""
-            \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
-            """))
-            """
-    var buttonTitle:String? = ""
-    var buttonFont:UIFont = .appfont(size: 18)
-    var buttonTextColor:UIColor = .systemBlue
-    var image:UIImage? = UIImage(.exclamationmark.triangle)
-    var backgroundColor:UIColor = .clear
-    var imageToTextPadding:CGFloat = 10
-    var textToSecondaryTextPadding:CGFloat = 5
-    var buttonToSecondaryButtonPadding:CGFloat = 15
 }
 
 #if POOTOOLS_NAVBARCONTROLLER
@@ -225,10 +208,7 @@ extension PTBaseViewController {
     }
 }
 
-//MARK: 空数据的界面展示iOS17之后
-@available(iOS 17, *)
 extension PTBaseViewController {
-    
     public var emptyDataViewConfig:PTEmptyDataViewConfig? {
         set {
             objc_setAssociatedObject(self, &AssociatedKeys.emptyViewConfigCallBack, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
@@ -240,69 +220,82 @@ extension PTBaseViewController {
             return config
         }
     }
-    
-    private func emptyButtonConfig() -> UIButton.Configuration {
-        var plainConfig = UIButton.Configuration.plain()
-        plainConfig.title = emptyDataViewConfig!.buttonTitle!
-        plainConfig.titleTextAttributesTransformer = .init({ container in
-            container.merging(AttributeContainer.font(self.emptyDataViewConfig!.buttonFont).foregroundColor(self.emptyDataViewConfig!.buttonTextColor))
-        })
-        return plainConfig
-    }
-    
-    private func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
-        var configs = UIContentUnavailableConfiguration.empty()
-        configs.imageToTextPadding = self.emptyDataViewConfig!.imageToTextPadding
-        configs.textToButtonPadding = self.emptyDataViewConfig!.textToSecondaryTextPadding
-        configs.buttonToSecondaryButtonPadding = self.emptyDataViewConfig!.buttonToSecondaryButtonPadding
-        if self.emptyDataViewConfig?.mainTitleAtt != nil {
-            configs.attributedText = self.emptyDataViewConfig!.mainTitleAtt!.value
-        }
-        
-        if self.emptyDataViewConfig?.secondaryEmptyAtt != nil {
-            configs.secondaryAttributedText = self.emptyDataViewConfig!.secondaryEmptyAtt!.value
-        }
-        
-        if self.emptyDataViewConfig?.image != nil {
-            configs.image = self.emptyDataViewConfig!.image!
-        }
-        if !(self.emptyDataViewConfig?.buttonTitle ?? "").stringIsEmpty() {
-            configs.button = self.emptyButtonConfig()
-        }
-        configs.buttonProperties.primaryAction = UIAction { sender in
-            if task != nil {
-                task!()
-            }
-        }
-        var configBackground = UIBackgroundConfiguration.clear()
-        configBackground.backgroundColor = self.emptyDataViewConfig!.backgroundColor
-        
-        configs.background = configBackground
+}
 
-        return configs
-    }
-
+//MARK: 空数据的界面展示iOS17之后
+@available(iOS 17, *)
+extension PTBaseViewController {
+        
     public func showEmptyView(task: PTActionTask? = nil) {
         if emptyDataViewConfig != nil {
-            let config = emptyConfig(task:task)
-            contentUnavailableConfiguration = config
+            let share = PTUnavailableFunction.share
+            share.emptyViewConfig = emptyDataViewConfig!
+            share.emptyTap = task
+            share.showEmptyView(viewController: self)
         } else {
             assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
         }
     }
     
     public func hideEmptyView(task:PTActionTask? = nil) {
-        contentUnavailableConfiguration = nil
+        let share = PTUnavailableFunction.share
+        share.hideUnavailableView(viewController: self, task: task)
         if task != nil {
             task!()
         }
     }
     
     public func emptyViewLoading() {
-        let loadingConfig = UIContentUnavailableConfiguration.loading()
-        contentUnavailableConfiguration = loadingConfig
+        let share = PTUnavailableFunction.share
+        share.showEmptyLoadingView(viewController: self)
     }
 }
+
+#if POOTOOLS_LISTEMPTYDATA
+//MARK: 添加emptydataset
+@available(iOS, introduced: 13.1, deprecated: 17.0,renamed: "showEmptyView(task:)")
+extension PTBaseViewController:LXFEmptyDataSetable {
+    //MARK: 添加emptydataset
+    ///添加emptydataset,设置无数据空页面
+    open func showEmptyDataSet(currentScroller:UIScrollView) {
+        if emptyDataViewConfig != nil {
+            var font:UIFont = .appfont(size: 15)
+            var textColor:UIColor = .black
+
+            let range = NSRange(location:0,length:emptyDataViewConfig!.mainTitleAtt!.value.length)
+            emptyDataViewConfig!.mainTitleAtt!.value.enumerateAttributes(in: range, options: [], using: { att,range,_ in
+                if let attFont = att[NSAttributedString.Key.font] as? UIFont {
+                    font = attFont
+                }
+                
+                if let attColor = att[NSAttributedString.Key.foregroundColor] as? UIColor {
+                    textColor = attColor
+                }
+            })
+
+            self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
+                [
+                    .tipStr: self.emptyDataViewConfig!.mainTitleAtt!.value.string as Any,
+                    .tipColor: textColor,
+                    .tipFont:font,
+                    .verticalOffset: 0,
+                    .tipImage: self.emptyDataViewConfig!.image as Any
+                ]
+            }
+        } else {
+            assertionFailure("如果使用该功能,则须要设置emptyDataViewConfig")
+        }
+    }
+    
+    open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
+        if emptyDataViewConfig != nil {
+            return emptyDataViewConfig!.secondaryEmptyAtt!.value
+        } else {
+            return NSAttributedString()
+        }
+    }
+}
+#endif
 
 //MARK: 界面截图后,提供分享以及反馈引导操作
 extension PTBaseViewController: PHPhotoLibraryChangeObserver {
