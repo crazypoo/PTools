@@ -235,6 +235,14 @@ public class PTFusionCellContent:UIView {
         view.isUserInteractionEnabled = true
         return view
     }()
+    
+    fileprivate lazy var contentButtonLabel:PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.titleLabel?.numberOfLines = 0
+        view.layoutStyle = .leftImageRightTitle
+        view.isUserInteractionEnabled = false
+        return view
+    }()
         
     public lazy var topLineView = drawLine()
     public lazy var lineView = drawLine()
@@ -871,6 +879,18 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
     
+    open var hideTopLine:Bool! {
+        didSet {
+            self.dataContent.topLineView.isHidden = self.hideTopLine
+        }
+    }
+    
+    open var hideBottomLine:Bool! {
+        didSet {
+            self.dataContent.lineView.isHidden = self.hideBottomLine
+        }
+    }
+    
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.valueSwitch.addSwitchAction { sender in
@@ -919,6 +939,18 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
         }
     }
     
+    open var hideTopLine:Bool! {
+        didSet {
+            self.dataContent.topLineView.isHidden = self.hideTopLine
+        }
+    }
+    
+    open var hideBottomLine:Bool! {
+        didSet {
+            self.dataContent.lineView.isHidden = self.hideBottomLine
+        }
+    }
+
     fileprivate lazy var dataContent:PTFusionCellContent = {
         let view = PTFusionCellContent()
         view.valueSwitch.addSwitchAction { sender in

@@ -264,12 +264,7 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.viewType = .Normal
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
         cConfig.topRefresh = true
-        if #available(iOS 17.0, *) {
-        } else {
-#if POOTOOLS_LISTEMPTYDATA
-            cConfig.showEmptyAlert = true
-#endif
-        }
+        cConfig.showEmptyAlert = false
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
                 
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in

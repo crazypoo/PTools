@@ -94,14 +94,10 @@ public class PTCollectionViewConfig:PTBaseModel {
     ///底部长度偏移
     public var footerWidthOffset:CGFloat = 0
     
-#if POOTOOLS_LISTEMPTYDATA
     ///是否开启空数据展示
     public var showEmptyAlert:Bool = false
     ///空数据展示参数设置
-    public var emptyViewConfig:[LXFEmptyDataSetAttributeKeyType : Any]?
-    ///空数据展示按钮富文本设置
-    public var buttonAtt:ASAttributedString?
-#endif
+    public var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
     ///Collection展示的Section底部样式类型
     public var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
@@ -270,10 +266,24 @@ public class PTCollectionView: UIView {
         
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
-            self.showEmptyDataSet(currentScroller: collectionView)
-            self.lxf_tapEmptyView(collectionView) { sender in
-                if self.emptyTap != nil {
-                    self.emptyTap!(sender)
+            if #available(iOS 17.0, *) {
+                self.showEmptyView {
+                    self.emptyViewLoading()
+                }
+            } else {
+                self.showEmptyDataSet(currentScroller: collectionView)
+                self.lxf_tapEmptyView(collectionView) { sender in
+                    if self.emptyTap != nil {
+                        self.emptyTap!(sender)
+                    }
+                }
+            }
+        }
+#else
+        if self.viewConfig.showEmptyAlert {
+            if #available(iOS 17.0, *) {
+                self.showEmptyView {
+                    self.emptyViewLoading()
                 }
             }
         }
@@ -298,6 +308,13 @@ public class PTCollectionView: UIView {
         
         collectionView.pt_register(by: mSections)
         self.collectionView.reloadData {
+            if self.viewConfig.showEmptyAlert {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyView {
+                        self.emptyViewLoading()
+                    }
+                }
+            }
             PTGCDManager.gcdAfter(time: 0.1) {
                 if finishTask != nil {
                     finishTask!(self.collectionView)
@@ -311,6 +328,13 @@ public class PTCollectionView: UIView {
         collectionView.pt_register(by: mSections)
         PTGCDManager.gcdAfter(time: 0.1) {
             self.collectionView.reloadData {
+                if self.viewConfig.showEmptyAlert {
+                    if #available(iOS 17.0, *) {
+                        self.showEmptyView {
+                            self.emptyViewLoading()
+                        }
+                    }
+                }
                 PTGCDManager.gcdAfter(time: 0.35) {
                     if finishTask != nil {
                         finishTask!(self.collectionView)
@@ -356,6 +380,85 @@ public class PTCollectionView: UIView {
     ///滚动到某一个Item
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
         collectionView.scrollToItem(at: indexPath, at: position, animated: true)
+    }
+    
+    @available(iOS 17, *)
+    private func emptyConfig(task:PTActionTask? = nil) -> UIContentUnavailableConfiguration {
+        var configs = UIContentUnavailableConfiguration.empty()
+        configs.imageToTextPadding = self.viewConfig.emptyViewConfig.imageToTextPadding
+        configs.textToButtonPadding = self.viewConfig.emptyViewConfig.textToSecondaryTextPadding
+        configs.buttonToSecondaryButtonPadding = self.viewConfig.emptyViewConfig.buttonToSecondaryButtonPadding
+        if self.viewConfig.emptyViewConfig.mainTitleAtt != nil {
+            configs.attributedText = self.viewConfig.emptyViewConfig.mainTitleAtt!.value
+        }
+        
+        if self.viewConfig.emptyViewConfig.secondaryEmptyAtt != nil {
+            configs.secondaryAttributedText = self.viewConfig.emptyViewConfig.secondaryEmptyAtt!.value
+        }
+        
+        if self.viewConfig.emptyViewConfig.image != nil {
+            configs.image = self.viewConfig.emptyViewConfig.image!
+        }
+        if !(self.viewConfig.emptyViewConfig.buttonTitle ?? "").stringIsEmpty() {
+            configs.button = self.emptyButtonConfig()
+        }
+        configs.buttonProperties.primaryAction = UIAction { sender in
+            if task != nil {
+                task!()
+            }
+        }
+        var configBackground = UIBackgroundConfiguration.clear()
+        configBackground.backgroundColor = self.viewConfig.emptyViewConfig.backgroundColor
+        
+        configs.background = configBackground
+
+        return configs
+    }
+    
+    @available(iOS 17, *)
+    private func emptyButtonConfig() -> UIButton.Configuration {
+        var plainConfig = UIButton.Configuration.plain()
+        plainConfig.title = viewConfig.emptyViewConfig.buttonTitle!
+        plainConfig.titleTextAttributesTransformer = .init({ container in
+            container.merging(AttributeContainer.font(self.viewConfig.emptyViewConfig.buttonFont).foregroundColor(self.viewConfig.emptyViewConfig.buttonTextColor))
+        })
+        return plainConfig
+    }
+    
+    @available(iOS 17, *)
+    private func createUnavailableView(task: PTActionTask? = nil) -> UIContentUnavailableView {
+        let config = emptyConfig(task:task)
+        let unavailableView = UIContentUnavailableView(configuration: config)
+        unavailableView.frame = self.bounds
+        unavailableView.tag = 999
+        return unavailableView
+    }
+    
+    @available(iOS 17, *)
+    public func showEmptyView(task: PTActionTask? = nil) {
+        let unavailableView = createUnavailableView(task: task)
+        self.addSubview(unavailableView)
+    }
+    
+    @available(iOS 17, *)
+    public func hideEmptyView(task:PTActionTask? = nil) {
+        let unavailableView = self.viewWithTag(999)
+        unavailableView?.removeFromSuperview()
+        
+        let unavailableLoadingView = self.viewWithTag(998)
+        unavailableLoadingView?.removeFromSuperview()
+        if task != nil {
+            task!()
+        }
+    }
+    
+    @available(iOS 17, *)
+    public func emptyViewLoading() {
+        let loadingConfig = UIContentUnavailableConfiguration.loading()
+        let unavailableView = UIContentUnavailableView(configuration: loadingConfig)
+        unavailableView.frame = self.bounds
+        unavailableView.tag = 998
+        self.addSubview(unavailableView)
     }
 }
 
@@ -439,14 +542,41 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
 #if POOTOOLS_LISTEMPTYDATA
 //MARK: LXFEmptyDataSetable
 extension PTCollectionView:LXFEmptyDataSetable {
+    
+//    var mainTitleAtt:ASAttributedString? = """
+//            \(wrap: .embedding("""
+//            \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
+//            """))
+//            """
+//    var secondaryEmptyAtt:ASAttributedString? = """
+//            \(wrap: .embedding("""
+//            \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+//            """))
+//            """
+//    var buttonTitle:String? = ""
+//    var buttonFont:UIFont = .appfont(size: 18)
+//    var buttonTextColor:UIColor = .systemBlue
+//    var image:UIImage? = UIImage(.exclamationmark.triangle)
+//    var backgroundColor:UIColor = .clear
+//    var imageToTextPadding:CGFloat = 10
+//    var textToSecondaryTextPadding:CGFloat = 5
+//    var buttonToSecondaryButtonPadding:CGFloat = 15
+
     public func showEmptyDataSet(currentScroller: UIScrollView) {
         self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
-            self.viewConfig.emptyViewConfig!
+            self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
+                [
+                    .tipStr: self.viewConfig.emptyViewConfig.mainTitleAtt?.value.string,
+                    .tipColor: UIColor.black,
+                    .verticalOffset: 0,
+                    .tipImage: self.viewConfig.emptyViewConfig.image
+                ]
+            }
         }
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        self.viewConfig.buttonAtt?.value
+        self.viewConfig.emptyViewConfig.secondaryEmptyAtt?.value
     }
 }
 #endif
