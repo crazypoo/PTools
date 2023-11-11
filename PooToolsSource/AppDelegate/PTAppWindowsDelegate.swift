@@ -17,6 +17,9 @@ public var serivceHost = "scheme://services?"
 public var webRouterUrl = "scheme://webview/home"
 
 open class PTAppWindowsDelegate: PTAppDelegate {
+    
+    public var isFullScreen:Bool = false
+    
     open var window: UIWindow?
 #if POOTOOLS_DEBUG
 #endif
@@ -112,6 +115,18 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
             PTDebugFunction.registerDefaultsFromSettingsBundle()
         }
+    }
+    
+    public func faceOrientationMask(app:UIApplication,
+                                    windos:UIWindow) -> UIInterfaceOrientationMask {
+        if isFullScreen {
+            if #available(iOS 16.0, *) {
+                return .landscape
+            } else {
+                return .landscapeRight
+            }
+        }
+        return .portrait
     }
 }
 

@@ -296,10 +296,10 @@ public class LLCycleScrollView: UIView {
     fileprivate var position: UICollectionView.ScrollPosition! = .centeredHorizontally
     
     /// 加载状态图
-    fileprivate var placeHolderViewImage: UIImage! = UIImage(named: "PooTools.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
+    fileprivate var placeHolderViewImage: UIImage! = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "llplaceholder")
     
     /// 空数据占位图
-    fileprivate var coverViewImage: UIImage! = UIImage(named: "PooTools.bundle/llplaceholder.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)
+    fileprivate var coverViewImage: UIImage! = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "llplaceholder")
     
     /// 计时器
     fileprivate var dtimer: DispatchSourceTimer?

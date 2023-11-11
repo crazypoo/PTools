@@ -9,6 +9,8 @@
 import UIKit
 import DeviceKit
 
+public let CorePodBundleName = "PooToolsResource"
+
 public typealias PTActionTask = () -> Void
 
 public let AppWindows = UIApplication.shared.delegate?.window!

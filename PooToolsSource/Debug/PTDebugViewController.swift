@@ -94,7 +94,7 @@ public class PTDebugViewController: PTBaseViewController {
         view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             if itemRow.title == .ipMode {
-                UIAlertController.baseActionSheet(title: "选择APP请求环境", cancelButtonName: NSLocalizedString("取消", comment: ""),titles: ["生产环境","测试","自定义"], otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "选择APP请求环境", cancelButtonName: "PT Button cancel".localized(),titles: ["生产环境","测试","自定义"], otherBlock: { sheet,index in
                     switch index {
                     case PTActionSheetView.DestructiveButtonTag:
                         break
@@ -129,7 +129,7 @@ public class PTDebugViewController: PTBaseViewController {
                         current = url_debug
                     }
                     
-                    UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "取消", showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                    UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "确定", cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                         let newURL = result.values.first
                         PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
                         

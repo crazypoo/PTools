@@ -22,7 +22,7 @@ public extension UIAlertController {
     ///   - cancelBlock: 取消回調
     @objc class func alertVC(title:String? = "",
                              msg:String? = "",
-                             cancel:String? = "取消",
+                             cancel:String? = "PT Button cancel".localized(),
                              cancelBlock:PTActionTask?) {
         UIAlertController.base_alertVC(title: title,msg: msg,cancelBtn:cancel,cancel: cancelBlock)
     }
@@ -42,7 +42,7 @@ public extension UIAlertController {
     ///   - tapBackgroundBlock:
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
-                                     cancelButtonName:String? = "取消",
+                                     cancelButtonName:String? = "PT Button cancel".localized(),
                                      destructiveButtonName:String? = "",
                                      titles:[String],
                                      canTapBackground:Bool = true,
@@ -283,7 +283,7 @@ public extension UIAlertController {
                                   feedBackContentFont:UIFont? = .appfont(size: 16),
                                   feedBackContentCount:NSNumber? = 100,
                                   feedBackContentIsSecureTextEntry:Bool? = false,
-                                  cancelString:String? = "取消",
+                                  cancelString:String? = "PT Button cancel".localized(),
                                   sendString:String? = "确定",
                                   titleFont:UIFont? = .appfont(size: 18),
                                   canTapBackground:Bool? = false,

@@ -47,7 +47,7 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
 extension PTVideoEditorVideoControlCell {
     func configure(with viewModel: PTVideoEditorVideoControlCellViewModel) {
         buttonView.normalTitle = viewModel.name
-        buttonView.normalImage = UIImage.podBundleImage(viewModel.imageName,bundleName:PTVideoEditorPodBundleName)
+        buttonView.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.imageName)
 
         self.viewModel = viewModel
     }

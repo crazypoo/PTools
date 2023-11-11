@@ -159,7 +159,7 @@ public class PTActionSheetView: UIView {
     ///   - dismissWithTapBG: 是否支持點擊背景消失Alert
     public init(title:String? = "",
                 subTitle:String? = "",
-                cancelButton:String? = "取消",
+                cancelButton:String? = "PT Button cancel".localized(),
                 destructiveButton:String? = "",
                 otherButtonTitles:[String]? = [String](),
                 buttonFont:UIFont? = .systemFont(ofSize: 20),
@@ -183,7 +183,7 @@ public class PTActionSheetView: UIView {
     
     func createData(title:String? = "",
                     subTitle:String? = "",
-                    cancelButton:String? = "取消",
+                    cancelButton:String? = "PT Button cancel".localized(),
                     destructiveButton:String? = "",
                     otherButtonTitles:[String]? = [String](),
                     buttonFont:UIFont? = .systemFont(ofSize: 20),

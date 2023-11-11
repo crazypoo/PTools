@@ -120,6 +120,7 @@ public extension Array {
     }
     
     /**
+        把某个数据插入到某位置
      */
     func rearrange(fromIndex: Int, toIndex: Int) -> [Element] {
         var array = self

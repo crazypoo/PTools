@@ -139,7 +139,7 @@ public class PTDevFunction: NSObject {
                     
                     let titles = [.flex,.log,.fps,.memory,.colorCheck,.ruler,allOpenString,.debugController,.inAppViewsCheck,.hyperioniOS,.devMask,.devMaskEvent,showTouchHit,touchTypeInfo,.userDefults,.appDocument,.netPit]
 
-                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "取消") {
+                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "PT Button cancel".localized()) {
                         
                     } moreBtn: { index, title in
                         if title == .openAll {

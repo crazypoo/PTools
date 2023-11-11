@@ -115,11 +115,11 @@ public class PTCheckUpdateFunction: NSObject {
         if test {
             var okBtns = [String]()
             if force {
-                okBtns = ["更新"]
+                okBtns = ["PT Upgrade".localized()]
             } else {
-                okBtns = ["稍后再说","更新"]
+                okBtns = ["PT Upgrade later".localized(),"PT Upgrade".localized()]
             }
-            UIAlertController.base_alertVC(title:"发现新版本\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
+            UIAlertController.base_alertVC(title:"\("PT Found new version".localized())\(version ?? "1.0.0")\n\(note ?? "")",titleFont: .appfont(size: 17,bold: true),msg: "PT Upgrade question mark".localized(),okBtns: okBtns,moreBtn: { index,title in
                 switch index {
                 case 0:
                     if force {
@@ -166,13 +166,13 @@ public class PTCheckUpdateFunction: NSObject {
                                 if appStoreVersion.float()! > currentVersion!.float()! {
                                     var okBtns = [String]()
                                     if force {
-                                        okBtns = ["更新"]
+                                        okBtns = ["PT Upgrade".localized()]
                                     } else {
-                                        okBtns = ["稍后再说","更新"]
+                                        okBtns = ["PT Upgrade later".localized(),"PT Upgrade".localized()]
                                     }
                                     switch alertType {
                                     case .System:
-                                        await UIAlertController.base_alertVC(title:"发现新版本\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "是否更新?",okBtns: okBtns,moreBtn: { index,title in
+                                        await UIAlertController.base_alertVC(title:"\("PT Found new version".localized())\(versionStr)\n\(versionModel.releaseNotes)",titleFont: .appfont(size: 17,bold: true),msg: "PT Upgrade question mark".localized(),okBtns: okBtns,moreBtn: { index,title in
                                             switch index {
                                             case 0:
                                                 if force {
@@ -242,14 +242,14 @@ public class PTCheckUpdateFunction: NSObject {
                                 isTest test:Bool = false,
                                 showError isShowError:Bool = true,
                                 forcedUpgrade isForcedUpgrade:Bool = false) {
-        let cancelTitle:String = isForcedUpgrade ? "" : NSLocalizedString("取消升级", comment: "")
-        self.alert_Tips(tipsTitle: NSLocalizedString("发现新版本", comment: ""),cancelTitle: cancelTitle,cancelBlock: {
+        let cancelTitle:String = isForcedUpgrade ? "" : "PT Cancel upgrade".localized()
+        self.alert_Tips(tipsTitle: "PT Found new version".localized(),cancelTitle: cancelTitle,cancelBlock: {
             if test {
                 if isShowError {
                     PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true
                 }
             }
-        },doneTitle: NSLocalizedString("升级", comment: "")) {
+        },doneTitle: "PT Upgrade".localized()) {
             let realURL:URL = (url.scheme ?? "").stringIsEmpty() ? URL.init(string: "https://" + url.description)! : url
             PTAppStoreFunction.jumpLink(url: realURL)
         } tipContentView: { contentView in

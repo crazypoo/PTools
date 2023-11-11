@@ -9,11 +9,30 @@
 import UIKit
 
 public extension Bundle {
-    class func imageWithName(imageName:String)->UIImage {
-        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
-        let filePath = bundlePath?.path(forResource: imageName, ofType: "png")
-        let image = UIImage(contentsOfFile: filePath!)
-        return image!
+    
+    class func podBundleImage(bundleName:String,
+                               imageName:String) -> UIImage {
+        let bundle = Bundle.main
+        let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
+        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
+        return image ?? UIImage()
+    }
+    
+    class func podBundleResource(bundleName:String,
+                                 sourceName:String,
+                                 type:String) -> String? {
+        let bundle = Bundle.main
+        let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
+        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let filePath = resourceBundle.path(forResource: sourceName, ofType: type)
+        return filePath
+    }
+
+    class func bundleResource(bundle:String,resourceName:String,type:String) -> String? {
+        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: bundle, ofType: "bundle")!)
+        let filePath = bundlePath?.path(forResource: resourceName, ofType: type)
+        return filePath
     }
     
     class func appScheme()->[String] {

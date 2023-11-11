@@ -53,6 +53,7 @@ open class PTFusionCellModel: NSObject {
     open var cellDescFont:UIFont = .appfont(size: 14)
     ///ID
     open var cellID:String? = ""
+    ///ClassName
     open var cellClass: AnyClass? = nil
     
     ///是否已经选择了

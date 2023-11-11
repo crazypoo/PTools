@@ -131,7 +131,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                                 hashValue = error.localizedDescription
                             }
                             
-                            UIAlertController.base_alertVC(title: "hash值",msg: hashValue,okBtns: ["复制"],cancelBtn: "取消") {
+                            UIAlertController.base_alertVC(title: "hash值",msg: hashValue,okBtns: ["复制"],cancelBtn: "PT Button cancel".localized()) {
                                 
                             } moreBtn: { index, title in
                                 hashValue.copyToPasteboard()

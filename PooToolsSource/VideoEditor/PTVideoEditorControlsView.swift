@@ -162,7 +162,7 @@ fileprivate extension PTVideoEditorControlsView {
     func makeFullscreenButton() -> UIButton {
         let button = UIButton()
         let name = isFullscreen ? "ExitFullscreen" : "EnterFullscreen"
-        let image = UIImage.podBundleImage(name,bundleName:PTVideoEditorPodBundleName)
+        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:name)
         button.addActionHandlers { sender in
             self.fullscreenButtonTapped()
         }

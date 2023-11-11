@@ -44,9 +44,9 @@ class PTVideoEditorCroppingPresetCell: PTBaseNormalCell {
 extension PTVideoEditorCroppingPresetCell {
     func configure(with viewModel: PTVideoEditorCroppingPresetCellViewModel) {
         title.text = viewModel.name
-        imageView.image = UIImage.podBundleImage(viewModel.imageName,bundleName:PTVideoEditorPodBundleName)
-
-        let scale = 48 / UIImage.podBundleImage(viewModel.imageName,bundleName:PTVideoEditorPodBundleName).size.width
+        imageView.image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.imageName)
+    
+        let scale = 48 / Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.imageName).size.width
         imageView.snp.remakeConstraints { make in
             make.width.equalTo(imageView.image!.size.width * scale)
             make.height.equalTo(imageView.image!.size.height * scale)

@@ -143,62 +143,44 @@ class PTPermissionCell: PTBaseNormalCell {
     }
     
     func setButtonStatus() {
-        var permissionName = ""
+        var permissionName = PTPermissionText.permission_name(for: cellModel!.type)
         switch cellModel!.type {
         case .tracking:
-            permissionName = "用户数据追踪"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_tracking")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_tracking")
         case .camera:
-            permissionName = "照相机"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_camera")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_camera")
         case .photoLibrary:
-            permissionName = "相册"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_photoLibrary")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_photoLibrary")
         case .calendar(access: .full):
-            permissionName = "完全使用日历"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_calendar")
         case .calendar(access: .write):
-            permissionName = "写入数据到日历"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_calendar")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_calendar")
         case .reminders:
-            permissionName = "提醒"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_reminders")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_reminders")
         case .notification:
-            permissionName = "通知推送"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_notification")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_notification")
         case .location(access: .whenInUse):
-            permissionName = "须要时使用定位"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_location")
         case .location(access: .always):
-            permissionName = "保持使用定位"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_location")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_location")
         case .speech:
-            permissionName = "语音识别"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_speech")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_speech")
         case .health:
-            permissionName = "健康"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_health")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_health")
         case .faceID:
-            permissionName = "FaceID"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_faceid")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_faceid")
         case .motion:
-            permissionName = "运动数据"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_motion")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_motion")
         case .contacts:
-            permissionName = "通讯录"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_contact")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_contact")
         case .microphone:
-            permissionName = "麦克风"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_mic")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_mic")
         case .mediaLibrary:
-            permissionName = "多媒体"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_media")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_media")
         case .bluetooth:
-            permissionName = "蓝牙"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_bluetooth")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_bluetooth")
         case .siri:
-            permissionName = "Siri"
-            cellIcon.image = Bundle.imageWithName(imageName: "icon_permission_siri")
+            cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_siri")
         default:break
         }
         

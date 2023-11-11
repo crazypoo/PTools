@@ -24,12 +24,11 @@ public class PTCheckFWords: NSObject {
         initFilter()
     }
     
-    func initFilter() {
-        let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
-        let filePath = bundlePath?.path(forResource: "minganci", ofType: "txt")
+    func initFilter(filePath:String = Bundle.podBundleResource(bundleName: "PooToolsCheckDirtyWordResource", sourceName: "minganci", type: "txt")!) {
+        
         var dataFile:NSString?
         do {
-            dataFile = try NSString(contentsOfFile: filePath!, encoding: String.Encoding.utf8.rawValue)
+            dataFile = try NSString(contentsOfFile: filePath, encoding: String.Encoding.utf8.rawValue)
             let dataArr = dataFile?.components(separatedBy: "|")
             for item in dataArr! {
                 if item.count > 0 {
@@ -38,8 +37,7 @@ public class PTCheckFWords: NSObject {
             }
         } catch {
             PTNSLogConsole(error.localizedDescription)
-        }
-    }
+        }    }
     
     func insertWords(words:NSString) {
         var node:NSMutableDictionary = root

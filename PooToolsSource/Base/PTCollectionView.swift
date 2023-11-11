@@ -14,7 +14,6 @@ import MJRefresh
 
 #if POOTOOLS_LISTEMPTYDATA
 import LXFProtocolTool
-import AttributedString
 #endif
 
 //MARK: CollectionView展示的样式类型
@@ -255,6 +254,7 @@ public class PTCollectionView: UIView {
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
     public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
+    ///当空数据View展示的时候,点击回调
     public var emptyTap:((UIView?)->Void)?
     
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()

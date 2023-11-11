@@ -100,6 +100,6 @@ final class PTVideoEditorCroppingPresetCellViewModel: NSObject {
     }
 
     var imageName: String {
-        "\(name)"
+        return name
     }
 }

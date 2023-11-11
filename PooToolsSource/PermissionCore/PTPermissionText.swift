@@ -12,48 +12,39 @@ enum PTPermissionText {
     static func permission_name(for kind: PTPermission.Kind) -> String {
         switch kind {
         case .camera:
-            return NSLocalizedString("permission camera name", bundle: bundle, comment: "")
+            return "PT Permission camera ".localized()
         case .photoLibrary:
-            return NSLocalizedString("permission photoLibrary name", bundle: bundle, comment: "")
+            return "PT Permission photoLibrary".localized()
         case .microphone:
-            return NSLocalizedString("permission microphone name", bundle: bundle, comment: "")
+            return "PT Permission microphone".localized()
         case .calendar(access: .full), .calendar(access: .write):
-            return NSLocalizedString("permission calendar name", bundle: bundle, comment: "")
+            return "PT Permission calendar".localized()
         case .contacts:
-            return NSLocalizedString("permission contacts name", bundle: bundle, comment: "")
+            return "PT Permission contacts".localized()
         case .reminders:
-            return NSLocalizedString("permission reminders name", bundle: bundle, comment: "")
+            return "PT Permission reminders".localized()
         case .speech:
-            return NSLocalizedString("permission speech name", bundle: bundle, comment: "")
+            return "PT Permission speech".localized()
         case .motion:
-            return NSLocalizedString("permission motion name", bundle: bundle, comment: "")
+            return "PT Permission motion".localized()
         case .mediaLibrary:
-            return NSLocalizedString("permission media library name", bundle: bundle, comment: "")
+            return "PT Permission media library".localized()
         case .bluetooth:
-            return NSLocalizedString("permission bluetooth name", bundle: bundle, comment: "")
+            return "PT Permission bluetooth".localized()
         case .notification:
-            return NSLocalizedString("permission notification name", bundle: bundle, comment: "")
+            return "PT Permission notification".localized()
         case .location(access: .whenInUse):
-            return NSLocalizedString("permission location when in use name", bundle: bundle, comment: "")
+            return "PT Permission location when in use".localized()
         case .location(access: .always):
-            return NSLocalizedString("permission location always name", bundle: bundle, comment: "")
+            return "PT Permission location always".localized()
         case .tracking:
-            return NSLocalizedString("permission tracking name", bundle: bundle, comment: "")
+            return "PT Permission tracking".localized()
         case .faceID:
-            return NSLocalizedString("permission faceid name", bundle: bundle, comment: "")
+            return "PT Permission faceid".localized()
         case .siri:
-            return NSLocalizedString("permission siri name", bundle: bundle, comment: "")
+            return "PT Permission siri".localized()
         case .health:
-            return NSLocalizedString("permission health name", bundle: bundle, comment: "")
+            return "PT Permission health".localized()
         }
     }
-    
-    // MARK: - Internal
-    
-    static var bundle: Bundle {
-        let path = Bundle(for: PTPermission.self).path(forResource: "PTPermission", ofType: "bundle") ?? ""
-        let bundle = Bundle(path: path) ?? Bundle.main
-        return bundle
-    }
-
 }

@@ -396,16 +396,7 @@ public extension UIImage {
         let drawRect = CGRect(x: 0, y: 0, width: thumbSize.width, height: thumbSize.height)
         context?.draw(currentImage, in: drawRect)
         return context!
-    }
-    
-    static func podBundleImage(_ imageName:String,
-                               bundleName:String) -> UIImage {
-        let bundle = Bundle.main
-        let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
-        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
-        let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
-        return image ?? UIImage()
-    }
+    }    
 }
 
 public extension PTPOP where Base: UIImage {

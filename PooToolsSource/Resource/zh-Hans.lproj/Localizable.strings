@@ -1,0 +1,43 @@
+// Localizable.strings
+// PooTools
+// Created by 邓杰豪 on 11/11/23.
+// Copyright © 2023 crazypoo. All rights reserved.
+"Test" = "测试";
+"PT Cancel upgrade" = "取消升级";
+"PT Found new version" = "发现新版本";
+"PT Upgrade" = "升级";
+"PT Upgrade later" = "稍候再说";
+"PT Upgrade question mark" = "升级?";
+"PT Current version" = "当前版本";
+"PT New version" = "新版本";
+"PT Version info" = "版本信息";
+"PT Copy log" = "复制Log";
+"PT Share log" = "分享Log";
+"PT Screen Size" = "设置视窗大小";
+"PT Respring" = "重启手机界面";
+"PT Clean log" = "清除Log";
+"PT Show layout" = "显示布局";
+"PT System info" = "系统信息";
+"PT Reset userdefault" = "重置UserDefault";
+"PT Application upgrade" = "更新App";
+"PT Debug mode" = "调试模式";
+"PT Normal mode" = "正常模式";
+"PT Debug setting" = "调试模式";
+"PT Permission camera " = "相机";
+"PT Permission photoLibrary" = "相册";
+"PT Permission microphone" = "麦克风";
+"PT Permission calendar" = "日历";
+"PT Permission contacts" = "通信录";
+"PT Permission reminders" = "提醒";
+"PT Permission speech" = "语音";
+"PT Permission motion" = "运动";
+"PT Permission media library" = "多媒体库";
+"PT Permission bluetooth" = "蓝牙";
+"PT Permission notification" = "通知";
+"PT Permission location when in use" = "使用时的位置";
+"PT Permission location always" = "保持持续定位";
+"PT Permission tracking" = "追踪";
+"PT Permission faceid" = " Face ID";
+"PT Permission siri" = "Siri";
+"PT Permission health" = "健康";
+"PT Button cancel" = "取消";

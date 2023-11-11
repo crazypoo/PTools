@@ -20,6 +20,10 @@ public class PTAppStoreFunction: NSObject {
         PTAppStoreFunction.jumpLink(url: URL(string: openAppStore)!)
     }
     
+    //MARK: 跳转到AppStore
+    ///跳转到AppStore
+    /// - Parameters:
+    ///   - appid: App的App id
     class open func appStoreURL(appid:String) -> String {
         let urlString = String(format: "itms-apps://itunes.apple.com/app/id%@",appid)
         return urlString

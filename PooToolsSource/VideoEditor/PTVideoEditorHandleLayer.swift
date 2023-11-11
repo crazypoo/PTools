@@ -52,7 +52,7 @@ class PTVideoEditorHandleLayer: CALayer {
 
     func makeImageLayer() -> CALayer {
         let layer = CALayer()
-        let image = UIImage.podBundleImage(side.imageName,bundleName:PTVideoEditorPodBundleName).cgImage
+        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:side.imageName).cgImage
         layer.frame = CGRect(x: 0, y: 0, width: 6, height: 16)
         layer.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         layer.position = CGPoint(x: bounds.midX, y: bounds.midY)

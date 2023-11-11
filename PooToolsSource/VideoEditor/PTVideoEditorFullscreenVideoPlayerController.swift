@@ -169,7 +169,8 @@ fileprivate extension PTVideoEditorFullscreenVideoPlayerController {
 
     func makeCloseButton() -> UIButton {
         let button = UIButton()
-        let image = UIImage.podBundleImage("Close_white",bundleName:PTVideoEditorPodBundleName)
+        
+        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:"Close_white")
         button.setImage(image, for: .normal)
         button.imageEdgeInsets = UIEdgeInsets(top: 12.0, left: 12.0, bottom: 12.0, right: 12.0)
         button.addActionHandlers { sender in

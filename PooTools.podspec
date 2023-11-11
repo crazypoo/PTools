@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.15.11'
+    s.version     = '3.16.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -12,7 +12,9 @@ Pod::Spec.new do |s|
     s.swift_versions = '5.0'
     s.default_subspec = "Core"
     s.subspec "Core" do |subspec|
-        subspec.resource = 'PooToolsSource/PooTools.bundle'
+        subspec.resource_bundles = {
+            'PooToolsResource' => ['PooToolsSource/Resource/**/*']
+        }
         subspec.dependency 'SwiftDate'
         subspec.dependency 'WZLBadge'
         subspec.dependency 'SnapKit'
@@ -30,7 +32,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'Kingfisher'
         subspec.dependency 'SafeSFSymbols'
         subspec.frameworks = 'UIKit','Foundation','AVKit','CoreFoundation','CoreText','AVFoundation','Photos','AudioToolbox'
-        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/Core/*.{h,m,swift,S}','PooToolsSource/Blur/*.{h,m,swift}','PooToolsSource/ActionsheetAndAlert/*.{h,m,swift}','PooToolsSource/Base/*.{h,m,swift}','PooToolsSource/AppStore/*.{h,m,swift}','PooToolsSource/ApplicationFunction/*.{h,m,swift}','PooToolsSource/BlackMagic/*.{h,m,swift}','PooToolsSource/Button/*.{h,m,swift}','PooToolsSource/Category/*.{h,m,swift}','PooToolsSource/Log/*.{h,m,swift}','PooToolsSource/StatusBar/*.{h,m,swift}','PooToolsSource/Protocol/*.{h,m,swift}','PooToolsSource/Animation/*.{h,m,swift}','PooToolsSource/PermissionCore/*.{h,m,swift}','PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}','PooToolsSource/AppDelegate/*.{h,m,swift}','PooToolsSource/Foundation/*.{h,m,swift}','PooToolsSource/Language/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_COCOAPODS"
         }
@@ -148,6 +150,9 @@ Pod::Spec.new do |s|
     s.subspec 'CheckDirtyWord' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/CheckDirtyWord/*.{h,m,swift}'
+        subspec.resource_bundles = {
+            'PooToolsCheckDirtyWordResource' => ['PooToolsSource/CheckDirtyWord/Resource/**/*']
+        }
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CHECKDIRTYWORD POOTOOLS_COCOAPODS"
         }
@@ -222,15 +227,7 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CUSTOMERLABEL POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'LanguageSetting' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.source_files = 'PooToolsSource/Language/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_LANGUAGESETTING POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'Line' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.source_files = 'PooToolsSource/Line/*.{h,m,swift}'
@@ -808,7 +805,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/CustomerNumberKeyboard'
         subspec.dependency 'PooTools/KeyChain'
         subspec.dependency 'PooTools/CustomerLabel'
-        subspec.dependency 'PooTools/LanguageSetting'
         subspec.dependency 'PooTools/Line'
         subspec.dependency 'PooTools/Loading'
         subspec.dependency 'PooTools/MediaViewer'

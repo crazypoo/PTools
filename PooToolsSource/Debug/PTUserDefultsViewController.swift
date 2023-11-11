@@ -146,7 +146,7 @@ class PTUserDefultsViewController: PTBaseViewController {
     }
     
     func clearUserdefults() {
-        UIAlertController.base_alertVC(title: "提示",msg: "是否删除所有除系统生成外的数据?",okBtns: ["好的"],cancelBtn: "取消") {
+        UIAlertController.base_alertVC(title: "提示",msg: "是否删除所有除系统生成外的数据?",okBtns: ["好的"],cancelBtn: "PT Button cancel".localized()) {
             
         } moreBtn: { index, title in
             let bundleIdentifier = Bundle.main.bundleIdentifier

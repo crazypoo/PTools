@@ -93,18 +93,18 @@ public class LocalConsole: NSObject {
         }
     }
 
-    static let CopyKey : String = NSLocalizedString("复制当前Log", comment: "")
-    static let ShareKey : String = NSLocalizedString("分享当前Log", comment: "")
-    static let ResizeKey : String = NSLocalizedString("设置视窗大小", comment: "")
-    static let RespringKey : String = NSLocalizedString("重启手机界面", comment: "")
-    static let CleanKey : String = NSLocalizedString("清除输出", comment: "")
-    static let ViewFrameKey : String = NSLocalizedString("显示界面的布局", comment: "")
-    static let SystemReportKey : String = NSLocalizedString("系统信息", comment: "")
-    static let RestoreFirstKey : String = NSLocalizedString("重置UserDefult", comment: "")
-    static let AppUpdateKey : String = NSLocalizedString("应用更新", comment: "")
-    static let DEBUGKey : String = NSLocalizedString("调试模式", comment: "")
-    static let NORMALKey : String = NSLocalizedString("正常模式", comment: "")
-    static let DEBUGSETTINGKey : String = NSLocalizedString("调试设置", comment: "")
+    static let CopyKey : String = "PT Copy log".localized()
+    static let ShareKey : String = "PT Share log".localized()
+    static let ResizeKey : String = "PT Screen Size".localized()
+    static let RespringKey : String = "PT Respring".localized()
+    static let CleanKey : String = "PT Clean log".localized()
+    static let ViewFrameKey : String = "PT Show layout".localized()
+    static let SystemReportKey : String = "PT System info".localized()
+    static let RestoreFirstKey : String = "PT Reset userdefault".localized()
+    static let AppUpdateKey : String = "PT Application upgrade".localized()
+    static let DEBUGKey : String = "PT Debug mode".localized()
+    static let NORMALKey : String = "PT Normal mode".localized()
+    static let DEBUGSETTINGKey : String = "PT Debug setting".localized()
     
     var popoverTitles : [String] = {
         var baseArr = [

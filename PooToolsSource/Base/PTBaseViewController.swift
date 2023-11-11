@@ -167,8 +167,9 @@ extension PTBaseViewController {
     }
     
     @objc open func switchOrientation(isFullScreen:Bool) {
-        AppDelegateEXFunction.share.isFullScreen = isFullScreen
         
+        PTAppWindowsDelegate.appDelegate()?.isFullScreen = isFullScreen
+                
         if #available(iOS 16.0, *) {
             setNeedsUpdateOfPrefersPointerLocked()
             guard let scence = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }

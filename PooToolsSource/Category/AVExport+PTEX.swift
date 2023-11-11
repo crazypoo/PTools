@@ -23,9 +23,9 @@ public extension PTPOP where Base: AVAssetExportSession {
     static func assetExportSession(inputPath: String,
                                    outputPath: String,
                                    outputFileType: AVFileType = .mp4,
-                                   completionHandler handler: @escaping (AVAssetExportSession, Float64, String, String) -> Void,
                                    shouldOptimizeForNetworkUse: Bool = true,
-                                   exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality) {
+                                   exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality,
+                                   completionHandler handler: @escaping (AVAssetExportSession, Float64, String, String) -> Void) {
         // 1、先检查是否存在输入是视频路径
         guard FileManager.pt.judgeFileOrFolderExists(filePath: inputPath) else {
             return

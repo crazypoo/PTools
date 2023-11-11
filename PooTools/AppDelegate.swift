@@ -119,8 +119,11 @@ class AppDelegate: PTAppWindowsDelegate {
                 
             }
             guideHud.guideShow()
-
         }
+        
+        PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
+                
+        PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
         return true
     }
 }

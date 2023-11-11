@@ -12,8 +12,8 @@ import Foundation
 open class LLImagePageControl: UIPageControl {
 
     
-    open var dotInActiveImage: UIImage = UIImage(named: "PooTools.bundle/lldotInActive.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)!
-    open var dotActiveImage: UIImage = UIImage(named: "PooTools.bundle/lldotActive.png", in: Bundle(for: LLCycleScrollView.self), compatibleWith: nil)!
+    open var dotInActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    open var dotActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     
     override open var numberOfPages: Int {
         didSet {

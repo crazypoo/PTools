@@ -105,7 +105,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
         titleStack.normalTitle = viewModel.title
-        titleStack.normalImage = UIImage.podBundleImage(viewModel.titleImageName,bundleName:PTVideoEditorPodBundleName)
+        titleStack.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName)
 
         currentVideoControlViewController?.remove()
 
@@ -185,7 +185,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 
     func makeDismissButton() -> UIButton {
         let button = UIButton()
-        let image = UIImage.podBundleImage("Check",bundleName:PTVideoEditorPodBundleName)
+        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:"Check")
         button.setImage(image, for: .normal)
         button.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
         button.addActionHandlers { sender in

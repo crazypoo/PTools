@@ -14,7 +14,7 @@ import AttributedString
 class PTUpdateTipsContentView : UIView {
     init(oV:String,nV:String,descriptionString:String) {
         super.init(frame: .zero)
-        let nameArr = [NSLocalizedString("当前版本", comment: ""), NSLocalizedString("新版本", comment: ""), NSLocalizedString("版本信息", comment: "")]
+        let nameArr = ["PT Current version".localized(), "PT New version".localized(), "PT Version info".localized()]
         let valueArr = [oV, nV, descriptionString]
         for index in 0...nameArr.count - 2 {
             let nameLabel = UILabel()

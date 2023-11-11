@@ -23,7 +23,7 @@ final class PTVideoEditorVideoControlViewModel {
     }
 
     var titleImageName: String {
-        "\(title)"
+        return title
     }
 
     init(videoControl: PTVideoEditorVideoControl) {

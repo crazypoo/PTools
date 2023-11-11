@@ -32,7 +32,7 @@ public class PTScanQRConfig:NSObject {
     ///條形碼提示
     public var barCodeTips:String = "掃描條形碼"
     ///取消按鈕名字
-    public var cancelButtonName:String = "取消"
+    public var cancelButtonName:String = "PT Button cancel".localized()
     ///掃描二維碼後提示
     public var scanedTips:String = "轻触小蓝点，选中识别二维码"
     ///是否可以掃二維碼

@@ -88,7 +88,7 @@ class PTSpeechViewController: PTBaseViewController {
                                     make.width.equalTo(150)
                                     make.centerX.equalToSuperview().offset(-(screenCenterX / 2))
                                 }
-                                voiceButton.setTitle("取消", for: .normal)
+                                voiceButton.setTitle("PT Button cancel".localized(), for: .normal)
                                 self.soundVisualizerMaskView.actionInfoLabel.isHidden = false
                                 self.soundVisualizerMaskView.actionInfoLabel.text = "取消发送"
                             } else if abs(newX) <= 44 {
@@ -106,7 +106,7 @@ class PTSpeechViewController: PTBaseViewController {
                                     make.centerX.equalToSuperview().offset(newX)
                                     make.width.equalTo(150)
                                 }
-                                voiceButton.setTitle("取消", for: .normal)
+                                voiceButton.setTitle("PT Button cancel".localized(), for: .normal)
                                 self.soundVisualizerMaskView.actionInfoLabel.isHidden = false
                                 self.soundVisualizerMaskView.actionInfoLabel.text = "取消发送"
                             }

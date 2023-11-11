@@ -97,7 +97,7 @@ open class PTDevMaskView: PTBaseMaskView {
         viewConfig = (config == nil ? PTDevMaskConfig() : config)!
         isMask = viewConfig.isMask
         
-        let image = UIImage.init(contentsOfFile: bundlePath!.path(forResource: "icon_clear", ofType: "png")!)
+        let image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_clear")
 
         let imageContent = UIImageView()
         addSubview(imageContent)
@@ -105,7 +105,7 @@ open class PTDevMaskView: PTBaseMaskView {
             make.edges.equalToSuperview()
         }
         
-        imageContent.image = image!.watermark(title: viewConfig.maskString,font: viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
+        imageContent.image = image.watermark(title: viewConfig.maskString,font: viewConfig.maskFont, color: UIColor(red: 1, green: 1, blue: 1, alpha: 0.4))
         
         if viewConfig.showTouch {
             addSubview(springMotionView)

@@ -1,0 +1,43 @@
+// Localizable.strings
+// PooTools
+// Created by 邓杰豪 on 11/11/23.
+// Copyright © 2023 crazypoo. All rights reserved.
+"Test" = "Test";
+"PT Cancel upgrade" = "Cancel upgrade";
+"PT Found new version" = "Found new version";
+"PT Upgrade" = "Upgrade";
+"PT Upgrade later" = "Later";
+"PT Upgrade question mark" = "Upgrade?";
+"PT Current version" = "Current version";
+"PT New version" = "New version";
+"PT Version info" = "Version infomation";
+"PT Copy log" = "Copy log";
+"PT Share log" = "Share log";
+"PT Screen Size" = "Set screen size";
+"PT Respring" = "Respring";
+"PT Clean log" = "Clean log";
+"PT Show layout" = "Show layout";
+"PT System info" = "System info";
+"PT Reset userdefault" = "Reset UserDefault";
+"PT Application upgrade" = "Application upgrade";
+"PT Debug mode" = "Debug mode";
+"PT Normal mode" = "Normal mode";
+"PT Debug setting" = "Debug setting";
+"PT Permission camera " = "Camera";
+"PT Permission photoLibrary" = "Photo Library";
+"PT Permission microphone" = "Mic";
+"PT Permission calendar" = "Calendar";
+"PT Permission contacts" = "Contacts";
+"PT Permission reminders" = "Reminders";
+"PT Permission speech" = "Speech";
+"PT Permission motion" = "Motion";
+"PT Permission media library" = "Media library";
+"PT Permission bluetooth" = "Bluetooth";
+"PT Permission notification" = "Notification";
+"PT Permission location when in use" = "Location when in use";
+"PT Permission location always" = "Location always";
+"PT Permission tracking" = "Tracking";
+"PT Permission faceid" = " Face ID";
+"PT Permission siri" = "Siri";
+"PT Permission health" = "Health";
+"PT Button cancel" = "Cancel";

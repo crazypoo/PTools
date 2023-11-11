@@ -1,0 +1,43 @@
+// Localizable.strings
+// PooTools
+// Created by 邓杰豪 on 11/11/23.
+// Copyright © 2023 crazypoo. All rights reserved.
+"Test" = "Texo";
+"PT Cancel upgrade" = "Cancelar actualización";
+"PT Found new version" = "Encontré una nueva versión";
+"PT Upgrade" = "Actualización";
+"PT Upgrade later" = "Más tarde";
+"PT Upgrade question mark" = "¿Actualización?";
+"PT Current version" = "Versión actual";
+"PT New version" = "Nueva versión";
+"PT Version info" = "Versión infomation";
+"PT Copy log" = "Copiar registro";
+"PT Share log" = "Compartir registro";
+"PT Screen Size" = "Establecer el tamaño de la pantalla";
+"PT Respring" = "Reinicie la interfaz del teléfono móvil";
+"PT Clean log" = "Registro limpio";
+"PT Show layout" = "Mostrar diseño";
+"PT System info" = "Información del sistema";
+"PT Reset userdefault" = "Restablecer UserDefault";
+"PT Application upgrade" = "Actualización de la aplicación";
+"PT Debug mode" = "Modo de depuración";
+"PT Normal mode" = "Modo normal";
+"PT Debug setting" = "Configuración de depuración";
+"PT Permission camera " = "Habitación";
+"PT Permission photoLibrary" = "Fototeca";
+"PT Permission microphone" = "Mic";
+"PT Permission calendar" = "Calendario";
+"PT Permission contacts" = "Contactos";
+"PT Permission reminders" = "Recordatorios";
+"PT Permission speech" = "Discurso";
+"PT Permission motion" = "Movimiento";
+"PT Permission media library" = "Biblioteca multimedia";
+"PT Permission bluetooth" = "Bluetooth";
+"PT Permission notification" = "Notificación";
+"PT Permission location when in use" = "Ubicación cuando está en uso";
+"PT Permission location always" = "Mantener un posicionamiento continuo";
+"PT Permission tracking" = "Seguimiento";
+"PT Permission faceid" = " Face ID";
+"PT Permission siri" = "Siri";
+"PT Permission health" = "Salud";
+"PT Button cancel" = "Cancelar";

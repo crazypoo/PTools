@@ -71,7 +71,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.isHidden = false
             view.moreActionButton.isUserInteractionEnabled = true
             view.moreActionButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "更多操作", cancelButtonName: "取消",titles: self.actionSheetTitle, otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "更多操作", cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
                     switch self.viewConfig.actionType {
                     case .Save:
                         switch index {
