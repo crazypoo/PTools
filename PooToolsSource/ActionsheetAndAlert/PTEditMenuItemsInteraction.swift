@@ -19,6 +19,7 @@ public class PTEditMenuItem:NSObject {
     }
 }
 
+@objcMembers
 public class PTEditMenuItemsInteraction: NSObject {
     private var showingItems: [PTEditMenuItem]?
     private var targetRect: CGRect?

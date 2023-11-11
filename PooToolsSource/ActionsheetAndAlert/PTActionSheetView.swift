@@ -11,13 +11,34 @@ import pop
 import SnapKit
 import AttributedString
 
+
 public class PTActionCell:UIView {
-    private var blur:SSBlurView?
+        
+    private lazy var blur:SSBlurView = {
+        let blurs = SSBlurView.init(to: self)
+        blurs.alpha = 0.9
+        blurs.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+        return blurs
+    }()
     
     lazy var cellButton : UIButton = {
         let view = UIButton(type: .custom)
         return view
     }()
+    
+    public override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                self.blur.style = previousTraitCollection.userInterfaceStyle == .dark ? .dark : .extraLight
+            }
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     public override func layoutSubviews() {
         super.layoutSubviews()
@@ -27,17 +48,15 @@ public class PTActionCell:UIView {
             make.edges.equalToSuperview()
         }
         
-        blur = SSBlurView.init(to: self)
-        blur!.alpha = 0.9
-        blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
-        blur!.enable()
+        blur.enable()
     }
     
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             // 适配代码
-            blur!.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
+            blur.style = UITraitCollection.current.userInterfaceStyle == .dark ? .dark : .extraLight
         }
     }
 }

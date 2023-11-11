@@ -19,6 +19,7 @@ fileprivate extension String {
 /*
  须要在info.plist中的Queried URL Scheme中添加以下对应的scheme
  */
+@objcMembers
 open class PTMapActionSheet: NSObject {
     //MARK: 地图跳转ActionSheet
     ///地图跳转ActionSheet

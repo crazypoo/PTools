@@ -82,6 +82,13 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
         delegate = self
         
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
     }
 }
 
@@ -115,6 +122,13 @@ open class PTBaseNavControl: UINavigationController {
         
         // Do any additional setup after loading the view.
         view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
     }
     
     open func GobalNavControl(nav:UINavigationController,
@@ -176,6 +190,7 @@ extension PTBaseNavControl {
         StatusBarManager.shared.animation
     }
     
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if #available(iOS 13.0, *) {

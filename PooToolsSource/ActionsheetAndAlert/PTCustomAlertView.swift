@@ -242,6 +242,12 @@ public class PTCustomAlertView: UIView {
     @PTClampedProperyWrapper(range:0...15) cornerSize:CGFloat = 15) {
         super.init(frame: .zero)
         createAlertView(superView: superView, alertTitle: alertTitle, font: font, titleColor: titleColor, alertVerLineColor: alertVerLineColor, alertBackgroundColor: alertBackgroundColor, heightlightedColor: heightlightedColor, moreButtons: moreButtons, alertAnimationType: alertAnimationType, touchBackground: touchBackground, cornerSize: cornerSize)
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                self.blur!.style = previousTraitCollection.userInterfaceStyle == .dark ? .dark : .extraLight
+            }
+        }
     }
     
     func createAlertView(superView:UIView,
@@ -254,7 +260,7 @@ public class PTCustomAlertView: UIView {
                          moreButtons:[PTCustomBottomButtonModel]? = [PTCustomBottomButtonModel](),
                          alertAnimationType:PTAlertAnimationType,
                          touchBackground:Bool? = true,
-                         cornerSize:CGFloat? = 15) {
+    @PTClampedProperyWrapper(range:0...15) cornerSize:CGFloat = 15) {
         bottombuttonArray = moreButtons!
         mainView = superView
         
@@ -285,7 +291,7 @@ public class PTCustomAlertView: UIView {
         
         mainView.addSubview(self)
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.viewCornerRectCorner(cornerRadii: cornerSize!, corner: .allCorners)
+            self.viewCornerRectCorner(cornerRadii: cornerSize, corner: .allCorners)
         }
         
         addSubview(customView)
@@ -461,6 +467,7 @@ public class PTCustomAlertView: UIView {
         })
     }
     
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     public override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {

@@ -171,7 +171,6 @@ class ResizeController {
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
                     self.terminalView.center = CGPoint.init(x: Double(self.terminalView.bounds.width)/2, y: Double(self.terminalView.bounds.height)/2 + Double(CGFloat.statusBarHeight()))
-//
 //                    // Update grabbers (layout constraints)
                     AppWindows!.backgroundColor = .clear
                 }.startAnimation()
@@ -421,6 +420,11 @@ class PlatterView: UIView,UITextFieldDelegate {
             make.centerY.equalTo(fontSizeTitle)
         }
 
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                self.layer.borderColor = UIColor.randomColor.cgColor
+            }
+        }
     }
     
     lazy var backgroundButton: UIButton = {
@@ -483,9 +487,7 @@ class PlatterView: UIView,UITextFieldDelegate {
                 self.terminalView.fontSize = LocalConsoleFontBaseSize
                 AppWindows!.layoutIfNeeded()
             }.startAnimation()
-
         }
-        
         return button
     }()
     
@@ -526,6 +528,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         backgroundButton.isHidden = true
     }
     
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         layer.borderColor = UIColor.randomColor.cgColor
     }

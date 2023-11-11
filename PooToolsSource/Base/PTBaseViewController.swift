@@ -158,6 +158,13 @@ extension PTBaseViewController {
 #else
         navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
 #endif
+        
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
+                self.setNeedsStatusBarAppearanceUpdate()
+            }
+        }
     }
     
     //MARK: 動態更換StatusBar
@@ -194,6 +201,7 @@ extension PTBaseViewController {
         }
     }
     
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     @objc open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
