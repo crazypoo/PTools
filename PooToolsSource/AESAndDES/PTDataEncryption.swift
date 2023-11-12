@@ -99,7 +99,7 @@ public class PTDataEncryption {
                                 dataString:String!) async throws -> String {
         return try await withUnsafeThrowingContinuation { continuation in
             guard let keyData = key.data(using: .utf8) else {
-                continuation.resume(throwing: NSError(domain: "字符转换失败", code: 1, userInfo: nil) as Error)
+                continuation.resume(throwing: NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil) as Error)
                 return
             }
             
@@ -112,7 +112,7 @@ public class PTDataEncryption {
             }
             
             guard cryptData != nil else {
-                continuation.resume(throwing: NSError(domain: "数据已加密", code: 2, userInfo: nil) as Error)
+                continuation.resume(throwing: NSError(domain: "PT Crypt had encode".localized(), code: 2, userInfo: nil) as Error)
                 return
             }
             
@@ -134,7 +134,7 @@ public class PTDataEncryption {
             let cryptStatus = CCCrypt(operation, algoritm, option, keyBytes, keyLength, keyBytes, dataIn, dataInlength, dataOut, dataOutAvailable, dataOutMoved)
             
             guard CCStatus(cryptStatus) == CCStatus(kCCSuccess) else {
-                continuation.resume(throwing: NSError(domain: "数据已加密", code: 2, userInfo: nil) as Error)
+                continuation.resume(throwing: NSError(domain: "PT Crypt had encode".localized(), code: 2, userInfo: nil) as Error)
                 return
             }
             

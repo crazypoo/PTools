@@ -483,7 +483,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func cancel() {
-        UIAlertController.base_alertVC(title: "是否确定要离开",msg: "离开后将不会保存",okBtns: ["确定"],cancelBtn: "PT Button cancel".localized(),showIn: self) {
+        UIAlertController.base_alertVC(title: "是否确定要离开",msg: "离开后将不会保存",okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized(),showIn: self) {
         } moreBtn: { index, title in
             self.returnFrontVC()
         }

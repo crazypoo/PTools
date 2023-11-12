@@ -11,6 +11,10 @@ import CoreGraphics
 
 public extension CGRect {
     
+    var center: CGPoint {
+        .init(x: midX, y: midY)
+    }
+    
     mutating func setMaxX(_ value: CGFloat) {
         origin.x = value - width
     }

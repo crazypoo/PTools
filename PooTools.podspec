@@ -781,7 +781,6 @@ Pod::Spec.new do |s|
         subspec.source_files = 'PooToolsSource/OSSKit/*.{h,m,swift}'
         subspec.resource_bundles = {
             'OSSKitResources' => ['PooToolsSource/OSSKit/*.xcassets'],
-            'OSSKitLocalizable' => ['PooToolsSource/OSSKit/*.strings']
         }
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"

@@ -167,7 +167,7 @@ public class PTLaunchAdMonitor: NSObject {
             exit.backgroundColor = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.2)
             exit.setTitleColor(.white, for: .normal)
             exit.titleLabel?.font = newFont
-            exit.setTitle("跳过", for: .normal)
+            exit.setTitle("PT Button skip".localized(), for: .normal)
             exit.addActionHandlers { sender in
                 PTLaunchAdMonitor.hideView(sender: sender)
             }
@@ -247,7 +247,7 @@ public class PTLaunchAdMonitor: NSObject {
                 label.lineBreakMode = .byCharWrapping
                 label.font = comNameFont != nil ? comNameFont! : UIFont.systemFont(ofSize: 12)
                 label.textColor = .black
-                label.text = String.init(format:"Copyright (c) %@年 %@.\n All rights reserved.",year!,comName!)
+                label.text = String.init(format:"Copyright (c) \("PT LA year".localized()) %@.\n All rights reserved.",year!,comName!)
                 label.textAlignment = .center
                 v.addSubview(label)
                 label.snp.makeConstraints { make in

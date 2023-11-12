@@ -8,9 +8,21 @@
 
 #if canImport(CoreGraphics)
 import CoreGraphics
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 public extension CGPoint {
-    
+    var nsValue: NSValue {
+        #if os(iOS)
+        return NSValue(cgPoint: self)
+        #else
+        return NSValue(point: NSPointFromCGPoint(self))
+        #endif
+    }
+
     func distance(from point: CGPoint) -> CGFloat {
         return CGPoint.distance(from: self, to: point)
     }
@@ -30,5 +42,22 @@ public extension CGPoint {
     static func * (scalar: CGFloat, point: CGPoint) -> CGPoint {
         return CGPoint(x: point.x * scalar, y: point.y * scalar)
     }
+    
+    static func + (left: CGPoint, right: CGPoint) -> CGPoint {
+        CGPoint(x: left.x + right.x, y: left.y + right.y)
+    }
+
+    static func += (left: inout CGPoint, right: CGPoint) {
+        left = left + right
+    }
+
+    static func - (left: CGPoint, right: CGPoint) -> CGPoint {
+        CGPoint(x: left.x - right.x, y: left.y - right.y)
+    }
+
+    static func -= (left: inout CGPoint, right: CGPoint) {
+        left = left - right
+    }
+
 }
 #endif

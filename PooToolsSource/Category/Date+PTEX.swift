@@ -43,25 +43,25 @@ public extension Date {
         var weekDayStr = ""
         switch weekDay {
         case 1:
-            weekDayStr = "星期天"
+            weekDayStr = "PT Date sunday".localized()
             break
         case 2:
-            weekDayStr =  "星期一"
+            weekDayStr =  "PT Date monday".localized()
             break
         case 3:
-            weekDayStr = "星期二"
+            weekDayStr = "PT Date tuesday".localized()
             break
         case 4:
-            weekDayStr = "星期三"
+            weekDayStr = "PT Date wednesday".localized()
             break
         case 5:
-            weekDayStr = "星期四"
+            weekDayStr = "PT Date thursday".localized()
             break
         case 6:
-            weekDayStr = "星期五"
+            weekDayStr = "PT Date friday".localized()
             break
         case 7:
-            weekDayStr = "星期六"
+            weekDayStr = "PT Date saturday".localized()
             break
         default:
             weekDayStr = ""

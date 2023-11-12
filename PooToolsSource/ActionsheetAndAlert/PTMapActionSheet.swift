@@ -10,10 +10,10 @@ import UIKit
 import MapKit
 
 fileprivate extension String {
-    static let BaiduMap = "百度地图"
-    static let AMap = "高德地图"
-    static let QQMap = "腾讯地图"
-    static let GoogleMap = "谷歌地图"
+    static let BaiduMap = "PT Map baidu".localized()
+    static let AMap = "PT Map avi".localized()
+    static let QQMap = "PT Map qq".localized()
+    static let GoogleMap = "PT Map google".localized()
 }
 
 /*
@@ -55,7 +55,7 @@ open class PTMapActionSheet: NSObject {
             navAppName.append(.QQMap)
         }
         
-        UIAlertController.baseActionSheet(title: "选择导航软件",destructiveButtonName:"Apple Map", titles: navAppName) { sheet in
+        UIAlertController.baseActionSheet(title: "PT Select nav".localized(),destructiveButtonName:"Apple Map", titles: navAppName) { sheet in
             let currentLocation = MKMapItem.forCurrentLocation()
             let toLocation = MKMapItem.init(placemark: MKPlacemark.init(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])

@@ -37,7 +37,8 @@ public class PTCheckFWords: NSObject {
             }
         } catch {
             PTNSLogConsole(error.localizedDescription)
-        }    }
+        }
+    }
     
     func insertWords(words:NSString) {
         var node:NSMutableDictionary = root

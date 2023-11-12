@@ -16,7 +16,7 @@ public extension UINavigationBar {
      
      - parameter font: New font of title.
      */
-    open func setTitleFont(_ font: UIFont) {
+    func setTitleFont(_ font: UIFont) {
         titleTextAttributes = [.font: font]
     }
     

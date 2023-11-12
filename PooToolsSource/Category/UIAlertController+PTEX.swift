@@ -284,7 +284,7 @@ public extension UIAlertController {
                                   feedBackContentCount:NSNumber? = 100,
                                   feedBackContentIsSecureTextEntry:Bool? = false,
                                   cancelString:String? = "PT Button cancel".localized(),
-                                  sendString:String? = "确定",
+                                 sendString:String? = "PT Button comfirm".localized(),
                                   titleFont:UIFont? = .appfont(size: 18),
                                   canTapBackground:Bool? = false,
                                   done: @escaping (String, String) -> Void,

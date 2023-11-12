@@ -25,7 +25,7 @@ public class PCleanCache: NSObject {
         var isDirectory:ObjCBool = false
         let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
         if !isExist || !isDirectory.boolValue {
-            let exception = NSException.init(name: NSExceptionName(rawValue: "文件错误"), reason: "请检查你的文件路径!", userInfo: nil)
+            let exception = NSException.init(name: NSExceptionName(rawValue: "PT Clean cache title".localized()), reason: "PT Clean cache check".localized(), userInfo: nil)
             exception.raise()
         }
 #endif

@@ -84,7 +84,7 @@ public class PTGuidePageHUD: UIView {
         }
         
         let skipButton = UIButton.init(type: .custom)
-        skipButton.setTitle("跳过", for: .normal)
+        skipButton.setTitle("PT Button skip".localized(), for: .normal)
         skipButton.titleLabel?.font = .systemFont(ofSize: 14)
         skipButton.backgroundColor = .gray
         skipButton.setTitleColor(.white, for: .normal)

@@ -136,9 +136,7 @@ public class StatusBarManager {
                 updateStatusBar()
             }
             
-        }
-//        printAllStates()
-        
+        }        
     }
     
     /// 更改某个状态(root)下要显示直接的子状态节点(key)
@@ -160,8 +158,6 @@ public class StatusBarManager {
             currentState = newCurrentState
             updateStatusBar()
         }
-//        printAllStates()
-        
     }
     
     /// 删除某个状态下的子状态树
@@ -180,8 +176,6 @@ public class StatusBarManager {
         if needUpdate && isUpdate {
             updateStatusBar()
         }
-//        printAllStates()
-        
     }
     
     /// 负责打印状态树结构

@@ -338,7 +338,7 @@ public extension UIViewController {
             }
         }
 #else
-        UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "好的") {
+        UIAlertController.base_alertVC(title: titleStr,titleColor: titleColor,titleFont: titleFont,msg: subTitleStr,msgColor: subTitleColor,msgFont: subTitleFont,cancelBtn: "PT Button comfirm".localized()) {
             if notifiDismiss != nil {
                 notifiDismiss!()
             }

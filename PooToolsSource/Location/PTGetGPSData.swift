@@ -50,7 +50,7 @@ public class PTGetGPSData: NSObject {
 
 extension PTGetGPSData:CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        UIAlertController.base_alertVC(title:"提示",msg: "您还未开启定位服务，是否需要开启？",okBtns: ["确定"],cancelBtn: "PT Button cancel".localized()) {
+        UIAlertController.base_alertVC(title:"PT Alert Opps".localized(),msg: "您还未开启定位服务，是否需要开启？",okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized()) {
             
         } moreBtn: { index, title in
             let settingUrl = URL(string: UIApplication.openSettingsURLString)
@@ -94,7 +94,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
                                 if self.isShow < 2 {
                                     let cancelStr = "继续选择\(getUserLocCtiy!)"
                                     let doneStr = "切换到\(cityStr)"
-                                    UIAlertController.base_alertVC(title: "提示",msg: "系统检测到你当前地区与您所选的地区不相符是否切换",okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
+                                    UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "系统检测到你当前地区与您所选的地区不相符是否切换",okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
                                         
                                         if self.selectCurrentBlock != nil {
                                             self.selectCurrentBlock!()

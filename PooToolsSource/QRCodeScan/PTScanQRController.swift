@@ -296,11 +296,11 @@ public class PTScanQRController: PTBaseViewController {
             enterPhotos()
         } else if status == .denied {
             let messageString = "[前往：设置 - 隐私 - 照片 - \(kAppName!)] 允许应用访问"
-            UIAlertController.alertVC(title:"溫馨提示",msg: messageString,cancel: "好的") {
+            UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: messageString,cancel: "PT Button comfirm".localized()) {
                 
             }
         } else {
-            UIAlertController.alertVC(title:"溫馨提示",msg: "由于系统原因, 无法访问相册",cancel: "好的") {
+            UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: "由于系统原因, 无法访问相册",cancel: "PT Button comfirm".localized()) {
                 
             }
         }
@@ -312,12 +312,12 @@ public class PTScanQRController: PTBaseViewController {
         if device != nil {
             let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
             if authStatus == .restricted {
-                UIAlertController.alertVC(title:"溫馨提示",msg: "由于系统原因, 无法访问相机",cancel: "好的") {
+                UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: "由于系统原因, 无法访问相机",cancel: "PT Button comfirm".localized()) {
                     self.returnFrontVC()
                 }
             } else if authStatus == .denied {
                 let messageString = "[前往：设置 - 相机 - 照片 - \(kAppName!)] 允许应用访问"
-                UIAlertController.alertVC(title:"溫馨提示",msg: messageString,cancel: "好的") {
+                UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: messageString,cancel: "PT Button comfirm".localized()) {
                     self.returnFrontVC()
                 }
             } else if authStatus == .authorized {
