@@ -2048,8 +2048,7 @@ public extension String {
         if let path = bundle.path(forResource: Localize.currentLanguage(), ofType: "lproj"),
             let bundle = Bundle(path: path) {
             return bundle.localizedString(forKey: self, value: nil, table: tableName)
-        }
-        else if let path = bundle.path(forResource: PTBaseBundle, ofType: "lproj"),
+        } else if let path = bundle.path(forResource: PTBaseBundle, ofType: "lproj"),
             let bundle = Bundle(path: path) {
             return bundle.localizedString(forKey: self, value: nil, table: tableName)
         }

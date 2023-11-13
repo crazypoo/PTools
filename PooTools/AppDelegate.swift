@@ -45,8 +45,9 @@ class AppDelegate: PTAppWindowsDelegate {
 //                    developmentDevice: debugDevice,
 //                    config: buglyConfig)
         
-        
-        StatusBarManager.shared.style = .darkContent
+        PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        PTDarkModeOption.defaultDark()
+        StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
         
         createSettingBundle()
 
@@ -124,7 +125,6 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
-                
         XMNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { state in
             
         }

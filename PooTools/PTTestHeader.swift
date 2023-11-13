@@ -48,7 +48,7 @@ class PTTestFooter: PTBaseCollectionReusableView {
         let view = UILabel()
         view.textAlignment = .left
         view.font = .appfont(size: 18,bold: true)
-        view.textColor = .black
+        view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.text = "----------------------------------------"
         return view
     }()

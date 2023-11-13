@@ -31,6 +31,8 @@ public extension String {
     static let rotation = "旋转屏幕"
     static let share = "分享"
     static let checkUpdate = "检测更新"
+    static let language = "語言"
+    static let darkMode = "DarkMode"
 
     static let slider = "滑动条"
     static let rate = "评价星星"
@@ -52,6 +54,43 @@ public extension String {
 }
 
 class PTFuncNameViewController: PTBaseViewController {
+
+    lazy var currentSelectedLanguage : String = {
+        let string = LanguageKey(rawValue: PTLanguage.share.language)!.desc
+        return string
+    }()
+
+    enum LanguageKey : String {
+        case ChineseHans = "zh-Hans"
+        case ChineseHK = "zh-HK"
+        case English = "en"
+        case Spanish = "es"
+        
+        static var allValues : [LanguageKey] {
+            return [.ChineseHans, .ChineseHK, .English,.Spanish]
+        }
+        
+        var desc:String {
+            switch self {
+            case .ChineseHans:
+                return "中文(简体)"
+            case .ChineseHK:
+                return "中文(繁体)"
+            case .English:
+                return "English"
+            case .Spanish:
+                return "Español"
+            }
+        }
+        
+        static var allNames : [String] {
+            var values = [String]()
+            self.allValues.enumerated().forEach { index,value in
+                values.append(value.desc)
+            }
+            return values
+        }
+    }
 
     fileprivate var vcEmpty:Bool = true
     
@@ -151,8 +190,12 @@ class PTFuncNameViewController: PTBaseViewController {
         let share = self.rowBaseModel(name: .share)
 
         let checkUpdate = self.rowBaseModel(name: .checkUpdate)
-
-        let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation,share,checkUpdate]
+        
+        let language = self.rowBaseModel(name: .language)
+        
+        let darkMode = self.rowBaseModel(name: .darkMode)
+        
+        let phoneArrs = [jailBroken,callPhone,cleanCaches,touchID,rotation,share,checkUpdate,language,darkMode]
         
         var phoneRows = [PTRows]()
         phoneArrs.enumerated().forEach { index,value in
@@ -294,6 +337,14 @@ class PTFuncNameViewController: PTBaseViewController {
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = cellModel
+            cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
+            
+            if dataModel.rows.count == 1 {
+                cell.hideTopLine = true
+            } else {
+                cell.hideTopLine = indexPath.row == 0 ? true : false
+            }
+            cell.hideBottomLine = (dataModel.rows.count - 1) == indexPath.row ? true : false
             return cell
         }
         aaaaaaa.collectionDidSelect = { collectionViews,sModel,indexPath in
@@ -503,6 +554,14 @@ class PTFuncNameViewController: PTBaseViewController {
                 permissionVC.viewDismissBlock = {
                 }
 
+            } else if itemRow.title == .language {
+                UIAlertController.baseActionSheet(title: .language,subTitle: self.currentSelectedLanguage, titles: LanguageKey.allNames, otherBlock: { sheet,index in
+                    self.currentSelectedLanguage = LanguageKey.allValues[index].desc
+                    PTLanguage.share.language = LanguageKey.allValues[index].rawValue
+                })                
+            } else if itemRow.title == .darkMode {
+                let vc = PTDarkModeControl()
+                self.navigationController?.pushViewController(vc)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

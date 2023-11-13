@@ -8,17 +8,11 @@
 
 import Foundation
 
-/// Internal current language key
-let PTCurrentLanguageKey = "PTCurrentLanguageKey"
-
 /// Default language. English. If English is unavailable defaults to base localization.
 let PTDefaultLanguage = "en"
 
 /// Base bundle as fallback.
 let PTBaseBundle = "Base"
-
-/// Name for language change notification
-public let PTLanguageChangeNotification = "PTLanguageChangeNotification"
 
 // MARK: Localization Syntax
 
@@ -114,10 +108,7 @@ open class Localize: NSObject {
      - Returns: The current language. String.
      */
     open class func currentLanguage() -> String {
-        if let currentLanguage = UserDefaults.standard.object(forKey: PTCurrentLanguageKey) as? String {
-            return currentLanguage
-        }
-        return defaultLanguage()
+        return PTCoreUserDefultsWrapper.AppLanguage
     }
     
     /**
@@ -127,9 +118,8 @@ open class Localize: NSObject {
     open class func setCurrentLanguage(_ language: String) {
         let selectedLanguage = availableLanguages().contains(language) ? language : defaultLanguage()
         if (selectedLanguage != currentLanguage()){
-            UserDefaults.standard.set(selectedLanguage, forKey: PTCurrentLanguageKey)
-            UserDefaults.standard.synchronize()
-            NotificationCenter.default.post(name: Notification.Name(rawValue: PTLanguageChangeNotification), object: nil)
+            PTCoreUserDefultsWrapper.AppLanguage = selectedLanguage
+            NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
         }
     }
     

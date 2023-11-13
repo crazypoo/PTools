@@ -23,12 +23,14 @@ public class PTAppBaseConfig: NSObject {
     
     //MARK: App的全局背景顏色
     ///App的全局背景顏色
-    public var viewControllerBaseBackgroundColor:UIColor = UIColor(hexString:"#eeeff4")!
-    
+    public var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
+    public var viewDefaultTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+
     //MARK: App全局的导航栏返回按钮
     ///App全局的导航栏返回按钮
     public var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
     public var navTitleFont:UIFont = .appfont(size: 24)
+    public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
     public var hidesBarsOnSwipe:Bool = false
     
     //MARK: 权限请求配置
@@ -48,7 +50,7 @@ public class PTAppBaseConfig: NSObject {
     public var decorationBackgroundColor:UIColor = UIColor.white
     public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
     public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
-    
+    public var baseCellBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .Black25PercentColor)
     //MARK: ScreenShot
     public var screenShotShare:Any = UIImage(.square.andPencil) as Any
     public var screenShotFeedback:Any = UIImage(.square.andArrowUp) as Any

@@ -26,7 +26,7 @@ open class PTFusionCellModel: NSObject {
     ///名
     open var name:String = ""
     ///名字颜色
-    open var nameColor:UIColor = UIColor.black
+    open var nameColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
     ///主标题下的描述
     open var desc:String = ""
     ///主标题下文字颜色
@@ -36,7 +36,7 @@ open class PTFusionCellModel: NSObject {
     ///描述
     open var content:String = ""
     ///描述文字颜色
-    open var contentTextColor:UIColor = UIColor.black
+    open var contentTextColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
     ///Content的富文本
     open var contentAttr:ASAttributedString?
     ///content字体

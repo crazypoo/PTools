@@ -47,8 +47,6 @@ pod 'PooTools/CheckDirtyWord', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/CodeView', :git => 'https://github.com/crazypoo/PTools.git'
 ### 国家代号
 pod 'PooTools/Country', :git => 'https://github.com/crazypoo/PTools.git'
-### 黑暗模式
-pod 'PooTools/DarkModeSetting', :git => 'https://github.com/crazypoo/PTools.git'
 ### 引导模式
 pod 'PooTools/Guide', :git => 'https://github.com/crazypoo/PTools.git'
 ### 文字输入

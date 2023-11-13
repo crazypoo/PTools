@@ -176,3 +176,14 @@
 "PT App current mode" = "El entorno de red actual es -> %@ \n El entorno en ejecución actual es -> %@";
 "PT Debug eye switch" = "Interruptor de seguimiento ocular";
 "PT Debug eys track" = "¿El seguimiento ocular sincroniza los eventos de clic?";
+"PT Theme black" = "Charm Black";
+"PT Theme follow system" = "Seguir el sistema";
+"PT Theme mt" = "Configuración manual";
+"PT Theme night" = "Tema nocturno";
+"PT Theme smart" = "Inteligente";
+"PT Theme smart info" = "Después de entrar en el período establecido, la aplicación cambiará automáticamente al tema nocturno de Charm Black, y cambiará al tema original cuando termine la hora del tema";
+"PT Theme system info" = "Cuando se habilita, seguirá el sistema para abrir o cerrar el tema nocturno";
+"PT Theme time" = "Timpo del tema";
+"PT Theme title" = "Configuración del tema";
+"PT Theme white" = "Simple White";
+"PT Theme time set error" = "La hora de inicio no debe ser igual a la hora de finalización.";

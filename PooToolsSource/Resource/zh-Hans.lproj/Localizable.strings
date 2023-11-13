@@ -176,3 +176,14 @@
 "PT App current mode" = "当前网络环境为-> %@ \n当前运行环境为-> %@";
 "PT Debug eye switch" = "眼球追踪开关";
 "PT Debug eys track" = "眼球追踪是否同步点击事件";
+"PT Theme black" = "魅力黑";
+"PT Theme follow system" = "跟随系统";
+"PT Theme mt" = "手动设置";
+"PT Theme night" = "夜间主题";
+"PT Theme smart" = "智能";
+"PT Theme smart info" = "进入设置时段后，App将自动切换至魅力黑夜间主题，主题时间结束，切换为原始主题";
+"PT Theme system info" = "开启后将跟随系统打开或关闭夜间主题";
+"PT Theme time" = "主题时间";
+"PT Theme title" = "主题设置";
+"PT Theme white" = "简洁白";
+"PT Theme time set error" = "开始时间必须不等于结束时间";

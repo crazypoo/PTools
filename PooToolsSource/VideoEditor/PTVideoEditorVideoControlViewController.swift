@@ -105,7 +105,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
         titleStack.normalTitle = viewModel.title
-        titleStack.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName)
+        titleStack.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal)
 
         currentVideoControlViewController?.remove()
 

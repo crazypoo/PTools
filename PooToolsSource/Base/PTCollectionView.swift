@@ -38,7 +38,7 @@ public enum PTCollectionViewDecorationItemsType {
 ///   - sectionModel: Section的model
 ///   - indexPath: 坐标
 ///  - Return: UICollectionReusableView
-public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView
+public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath: IndexPath) -> UICollectionReusableView?
 
 ///Cell设置
 /// - Parameters:
@@ -46,7 +46,7 @@ public typealias PTReusableViewHandler = (_ kind: String,_ collectionView:UIColl
 ///   - sectionModel: Section的model
 ///   - index: 坐标
 ///  - Return: UICollectionViewCell
-public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell
+public typealias PTCellInCollectionHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> UICollectionViewCell?
 
 ///Cell点击事件
 /// - Parameters:
@@ -105,6 +105,8 @@ public class PTCollectionViewConfig:NSObject {
     public var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
     ///Collection展示的Section底部样式偏移
     public var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
+    ///是否开启自定义Header和Footer
+    public var customReuseViews:Bool = false
 }
 
 //MARK: 界面展示
@@ -154,18 +156,23 @@ public class PTCollectionView: UIView {
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
         
-        let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude))
-        let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude))
-        let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
-        let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
-        var supplementarys = [NSCollectionLayoutBoundarySupplementaryItem]()
-        if !(sectionModel?.headerID ?? "").stringIsEmpty() {
-            supplementarys.append(headerItem)
+        if viewConfig.customReuseViews {
+            let items = customerReuseViews?(sectionModel!) ?? [NSCollectionLayoutBoundarySupplementaryItem]()
+            laySection.boundarySupplementaryItems = items
+        } else {
+            let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.headerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude))
+            let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(frame.size.width - viewConfig.footerWidthOffset), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude))
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing)
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing)
+            var supplementarys = [NSCollectionLayoutBoundarySupplementaryItem]()
+            if !(sectionModel?.headerID ?? "").stringIsEmpty() {
+                supplementarys.append(headerItem)
+            }
+            if !(sectionModel?.footerID ?? "").stringIsEmpty() {
+                supplementarys.append(footerItem)
+            }
+            laySection.boundarySupplementaryItems = supplementarys
         }
-        if !(sectionModel?.footerID ?? "").stringIsEmpty() {
-            supplementarys.append(footerItem)
-        }
-        laySection.boundarySupplementaryItems = supplementarys
         
         switch viewConfig.decorationItemsType {
         case .Corner,.NoCorner:
@@ -229,7 +236,7 @@ public class PTCollectionView: UIView {
     ///底部设置
     public var footerInCollection:PTReusableViewHandler?
     ///item设置
-    public var cellInCollection:PTCellInCollectionHandler!
+    public var cellInCollection:PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
     ///item点击事件
@@ -254,6 +261,10 @@ public class PTCollectionView: UIView {
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
     public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
+    ///自定义情况下调用该设置
+    ///这个是用来设置Header跟Footer的
+    public var customerReuseViews:((PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
+
     ///当空数据View展示的时候,点击回调
     public var emptyTap:((UIView?)->Void)?
     
@@ -437,7 +448,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            return cellInCollection(collectionView,itemSec,indexPath)
+            return cellInCollection?(collectionView,itemSec,indexPath) ?? UICollectionViewCell()
         } else {
             return UICollectionViewCell()
         }

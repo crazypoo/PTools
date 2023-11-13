@@ -138,6 +138,8 @@ extension PTBaseViewController {
         self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
 #if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
+        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
 #else
         navigationController?.hidesBarsOnSwipe = PTAppBaseConfig.share.hidesBarsOnSwipe
 #endif

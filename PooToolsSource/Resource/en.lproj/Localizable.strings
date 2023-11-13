@@ -176,3 +176,14 @@
 "PT App current mode" = "The current network environment is -> %@ \n The current running environment is -> %@";
 "PT Debug eye switch" = "Eye tracking switch";
 "PT Debug eys track" = "Does eye tracking synchronize click events?";
+"PT Theme black" = "Charm Black";
+"PT Theme follow system" = "Follow system";
+"PT Theme mt" = "Manual setting";
+"PT Theme night" = "Night theme";
+"PT Theme smart" = "Smart";
+"PT Theme smart info" = "After entering the set period, the App will automatically switch to the night theme of Charm Black, and switch to the original theme when the theme time is over";
+"PT Theme system info" = "When enabled, it will follow the system to open or close the night theme";
+"PT Theme time" = "Theme time";
+"PT Theme title" = "Theme setting";
+"PT Theme white" = "Simple White";
+"PT Theme time set error" = "The start time should not be the same as the end time.";

@@ -342,6 +342,13 @@
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
 		55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */; };
 		55F7A73B29D5C80900CF6272 /* PTTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F7A73A29D5C80900CF6272 /* PTTextField.swift */; };
+		55FA6CB12B02354800BC464B /* PTDarkSmartFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */; };
+		55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */; };
+		55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */; };
+		55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB42B02357E00BC464B /* PTDarkModeControl.swift */; };
+		55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */; };
+		55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */; };
+		55FA6CBF2B02860D00BC464B /* icon_cycle_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -753,6 +760,13 @@
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
 		55F7A73829D594E200CF6272 /* UIScrollView+PTRefreshEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScrollView+PTRefreshEX.swift"; sourceTree = "<group>"; };
 		55F7A73A29D5C80900CF6272 /* PTTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTextField.swift; sourceTree = "<group>"; };
+		55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkSmartFooter.swift; sourceTree = "<group>"; };
+		55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModeHeader.swift; sourceTree = "<group>"; };
+		55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkFollowSystemFooter.swift; sourceTree = "<group>"; };
+		55FA6CB42B02357E00BC464B /* PTDarkModeControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModeControl.swift; sourceTree = "<group>"; };
+		55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModePickerView.swift; sourceTree = "<group>"; };
+		55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_selected@3x.png"; sourceTree = "<group>"; };
+		55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_unselected@3x.png"; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1306,6 +1320,8 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */,
+				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
 				55102ADF2AFFD3C100E9529D /* llplaceholder.png */,
 				55102ADD2AFFD39700E9529D /* lldotActive.png */,
 				55102ADE2AFFD39700E9529D /* lldotInActive.png */,
@@ -1844,8 +1860,13 @@
 		55D59C5F28F3E82E00B4FF76 /* DarkMode */ = {
 			isa = PBXGroup;
 			children = (
-				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
+				55FA6CB02B02354800BC464B /* PTDarkFollowSystemFooter.swift */,
+				55FA6CB42B02357E00BC464B /* PTDarkModeControl.swift */,
+				55FA6CAF2B02354800BC464B /* PTDarkModeHeader.swift */,
+				55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */,
+				55FA6CAE2B02354800BC464B /* PTDarkSmartFooter.swift */,
 				9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */,
+				9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */,
 			);
 			path = DarkMode;
 			sourceTree = "<group>";
@@ -2169,7 +2190,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
+				55FA6CBF2B02860D00BC464B /* icon_cycle_unselected@3x.png in Resources */,
 				55102AAE2AFFAB5900E9529D /* icon_permission_faceid.png in Resources */,
+				55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				55102AAF2AFFAB5900E9529D /* icon_permission_health.png in Resources */,
 				55102AB02AFFAB5900E9529D /* icon_permission_tracking.png in Resources */,
@@ -2430,6 +2453,7 @@
 				5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */,
+				55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
 				55B4FA342AE10C7A006D35F3 /* PTPermissionBluetoothHandler.swift in Sources */,
 				55E3BBBF2ABDFF3600858348 /* PTPingActivityIndicator.swift in Sources */,
@@ -2500,6 +2524,7 @@
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
 				550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */,
+				55FA6CB12B02354800BC464B /* PTDarkSmartFooter.swift in Sources */,
 				5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */,
 				555818D02AFA7E400051C0AA /* UIToolbar+PTEX.swift in Sources */,
 				550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */,
@@ -2534,6 +2559,7 @@
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
+				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
@@ -2556,6 +2582,7 @@
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				5585F7152AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
+				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
@@ -2596,6 +2623,7 @@
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
+				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,

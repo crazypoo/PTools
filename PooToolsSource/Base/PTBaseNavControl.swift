@@ -114,7 +114,7 @@ open class PTBaseNavControl: UINavigationController {
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        GobalNavControl(nav: self)
+        PTBaseNavControl.GobalNavControl(nav: self)
     }
     
     open override func viewDidLoad() {
@@ -128,51 +128,6 @@ open class PTBaseNavControl: UINavigationController {
                 StatusBarManager.shared.style = previousTraitCollection.userInterfaceStyle == .dark ? .lightContent : .darkContent
                 self.setNeedsStatusBarAppearanceUpdate()
             }
-        }
-    }
-    
-    open func GobalNavControl(nav:UINavigationController,
-                              textColor:UIColor? = .black,
-                              navColor:UIColor? = .white) {
-        let colors:UIColor? = navColor
-        let textColors:UIColor? = textColor
-        
-        //修改导航栏文字颜色字号
-        let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
-        
-        let images = UIColor.clear.createImageWithColor()
-        if #available(iOS 15.0, *) {
-            let navigationBarAppearance = UINavigationBarAppearance()
-            navigationBarAppearance.backgroundColor = colors
-            navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
-            navigationBarAppearance.shadowImage = images
-            navigationBarAppearance.backgroundImage = colors!.createImageWithColor()
-            navigationBarAppearance.setBackIndicatorImage(colors!.createImageWithColor(), transitionMaskImage: colors!.createImageWithColor())
-            nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
-            nav.navigationBar.standardAppearance = navigationBarAppearance
-            nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
-            nav.navigationBar.setBackgroundImage(colors!.createImageWithColor(), for: .compact)
-            
-            let toolBarAppearance = UIToolbarAppearance()
-            toolBarAppearance.backgroundColor = colors
-            nav.toolbar.setBackgroundImage(colors!.createImageWithColor(), forToolbarPosition: .any, barMetrics: .compact)
-            nav.toolbar.scrollEdgeAppearance = toolBarAppearance
-            nav.toolbar.standardAppearance = toolBarAppearance
-            nav.toolbar.compactScrollEdgeAppearance = toolBarAppearance
-        } else {
-            /// 去掉导航栏底部黑线。需要同时设置shadowImage 和 setBackgroundImage
-            nav.navigationBar.shadowImage = images
-            
-            /// 导航栏背景图片
-            nav.navigationController?.navigationBar.backgroundColor = colors
-            nav.navigationController?.navigationBar.setBackgroundImage(colors!.createImageWithColor(), for: .default)
-            
-            nav.navigationBar.apply(gradient: [colors!])
-            
-            /// 修改UINavigationBar上各个item的文字、图形的颜色
-            nav.navigationBar.tintColor = textColors
-            
-            nav.navigationBar.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
         }
     }
 }
@@ -198,6 +153,51 @@ extension PTBaseNavControl {
                 StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
                 setNeedsStatusBarAppearanceUpdate()
             }
+        }
+    }
+    
+    public class func GobalNavControl(nav:UINavigationController,
+                              textColor:UIColor? = PTAppBaseConfig.share.navTitleTextColor,
+                              navColor:UIColor? = PTAppBaseConfig.share.viewControllerBaseBackgroundColor) {
+        let colors:UIColor? = navColor
+        let textColors:UIColor? = textColor
+        
+        //修改导航栏文字颜色字号
+        let attrs = [NSAttributedString.Key.foregroundColor: textColors, NSAttributedString.Key.font: PTAppBaseConfig.share.navTitleFont]
+        
+        let images = UIColor.clear.createImageWithColor()
+        if #available(iOS 15.0, *) {
+            let navigationBarAppearance = UINavigationBarAppearance()
+            navigationBarAppearance.backgroundColor = colors
+            navigationBarAppearance.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
+            navigationBarAppearance.shadowImage = images
+            navigationBarAppearance.setBackIndicatorImage(colors!.createImageWithColor(), transitionMaskImage: colors!.createImageWithColor())
+            nav.navigationBar.scrollEdgeAppearance = navigationBarAppearance
+            nav.navigationBar.standardAppearance = navigationBarAppearance
+            nav.navigationBar.compactScrollEdgeAppearance = navigationBarAppearance
+            nav.navigationBar.tintColor = textColor
+            nav.navigationItem.leftBarButtonItem?.tintColor = textColors
+
+            let toolBarAppearance = UIToolbarAppearance()
+            toolBarAppearance.backgroundColor = colors
+            nav.toolbar.scrollEdgeAppearance = toolBarAppearance
+            nav.toolbar.standardAppearance = toolBarAppearance
+            nav.toolbar.compactScrollEdgeAppearance = toolBarAppearance
+            nav.toolbar.isTranslucent = false
+        } else {
+            /// 去掉导航栏底部黑线。需要同时设置shadowImage 和 setBackgroundImage
+            nav.navigationBar.shadowImage = images
+            nav.navigationItem.leftBarButtonItem?.tintColor = textColors
+            /// 导航栏背景图片
+            nav.navigationController?.navigationBar.backgroundColor = colors
+            nav.navigationController?.navigationBar.setBackgroundImage(colors!.createImageWithColor(), for: .default)
+            
+            nav.navigationBar.apply(gradient: [colors!])
+            
+            /// 修改UINavigationBar上各个item的文字、图形的颜色
+            nav.navigationBar.tintColor = textColors
+            
+            nav.navigationBar.titleTextAttributes = attrs as [NSAttributedString.Key : Any]
         }
     }
 }

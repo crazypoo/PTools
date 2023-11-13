@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.16.4",
+  "version": "3.16.6",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.16.4"
+    "tag": "3.16.6"
   },
   "license": {
     "type": "MIT",
@@ -106,7 +106,8 @@
         "PooToolsSource/PhotoLibraryPermission/*.{h,m,swift}",
         "PooToolsSource/AppDelegate/*.{h,m,swift}",
         "PooToolsSource/Foundation/*.{h,m,swift}",
-        "PooToolsSource/Language/*.{h,m,swift}"
+        "PooToolsSource/Language/*.{h,m,swift}",
+        "PooToolsSource/DarkMode/*.{h,m,swift}"
       ],
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COCOAPODS"
@@ -344,18 +345,6 @@
       "source_files": "PooToolsSource/Country/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_COUNTRY POOTOOLS_COCOAPODS"
-      }
-    },
-    {
-      "name": "DarkModeSetting",
-      "dependencies": {
-        "PooTools/Core": [
-
-        ]
-      },
-      "source_files": "PooToolsSource/DarkMode/*.{h,m,swift}",
-      "pod_target_xcconfig": {
-        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_DARKMODESETTING POOTOOLS_COCOAPODS"
       }
     },
     {
@@ -1359,9 +1348,6 @@
 
         ],
         "PooTools/Country": [
-
-        ],
-        "PooTools/DarkModeSetting": [
 
         ],
         "PooTools/Guide": [

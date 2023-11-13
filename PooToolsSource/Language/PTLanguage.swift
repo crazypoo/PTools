@@ -25,15 +25,11 @@ import UIKit
 1、设置语言
  PTLanguage.share.language = "zh-Hans"
 2、根据key获取语言包中对应的文本
- PTLanguage.text(forKey:"Home_follow")
+ "Home_follow".localize
 3、监听语言切换
  1）、开发者可以监听 LanguageDidChangedKey，最后记得移除监听。
  2）、本文件扩展了 UIViewController，开发者也可以使用 pt_observerLangauge 来监听，使用 pt_removeObserverLangauge 来移除监听。
 */
-
-public func LocalizedString(_ key: String) -> String {
-    PTLanguage.share.text(forKey: key)
-}
 
 // Noti Key: 语言已切换
 public let LanguageDidChangedKey = PTLanguage.didChangedKey
@@ -55,20 +51,6 @@ public class PTLanguage: NSObject {
             // 发通知，语言已发生改变
             NotificationCenter.default.post(name: LanguageDidChangedKey, object: nil)
         }
-    }
-    
-    public func text(forKey key: String) -> String {
-        
-        guard let path = Bundle.main.path(forResource: PTLanguage.share.language, ofType: "lproj"), let bundle = Bundle(path: path) else {
-            
-            // Base.lproj
-            guard let path = Bundle.main.path(forResource: "Base", ofType: "lproj"), let bundle = Bundle(path: path) else {
-                return ""
-            }
-            return NSLocalizedString(key, tableName: nil, bundle: bundle, value: "", comment: "")
-        }
-        
-        return NSLocalizedString(key, tableName: nil, bundle: bundle, value: "", comment: "")
     }
 }
 

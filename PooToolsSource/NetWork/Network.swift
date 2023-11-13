@@ -112,8 +112,10 @@ public class XMNetWorkStatus {
     
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
-        detectNetWork { (status, environment,statusType)  in            
+        detectNetWork { (status, environment,statusType)  in   
+                        
             PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment))
+
             if handle != nil {
                 handle!(statusType)
             }
