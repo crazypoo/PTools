@@ -9,6 +9,12 @@
 import UIKit
 
 public extension TimeInterval {
+    var formattedString: String? {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute, .second]
+        return formatter.string(from: self)
+    }
+
     //MARK: 時間戳轉換成Date
     ///時間戳轉換成Date
     func timeToDate() -> Date {

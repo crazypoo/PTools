@@ -329,14 +329,6 @@ public class LocalConsole: NSObject {
     }
 }
 
-public extension TimeInterval {
-    var formattedString: String? {
-        let formatter = DateComponentsFormatter()
-        formatter.allowedUnits = [.hour, .minute, .second]
-        return formatter.string(from: self)
-    }
-}
-
 public class PTTerminal:PFloatingButton {
     public var systemText : PTInvertedTextView?
     public lazy var menuButton = UIButton()
