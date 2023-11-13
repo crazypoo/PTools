@@ -378,7 +378,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         addSubview(grabber)
         
         let titleLabel = UILabel()
-        titleLabel.text = "Resize Console"
+        titleLabel.text = "RPT Console title".localized()
         titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
         titleLabel.sizeToFit()
         titleLabel.center.x = bounds.width / 2
@@ -387,7 +387,7 @@ class PlatterView: UIView,UITextFieldDelegate {
         addSubview(titleLabel)
         
         let subtitleLabel = UILabel()
-        subtitleLabel.text = "Use the grabbers to resize the console."
+        subtitleLabel.text = "PT Console subtitle".localized()
         subtitleLabel.font = .systemFont(ofSize: 17, weight: .medium)
         subtitleLabel.sizeToFit()
         subtitleLabel.alpha = 0.5
@@ -406,7 +406,7 @@ class PlatterView: UIView,UITextFieldDelegate {
                                     y: UIScreen.portraitSize.height - possibleEndpoints[0].y * 2)
         doneButton.roundOriginToPixel()
         
-        fontSizeTitle.text = "Font Size:"
+        fontSizeTitle.text = "PT Console font".localized()
         addSubview(fontSizeTitle)
         fontSizeTitle.snp.makeConstraints { make in
             make.left.equalTo(resetButton.snp.left)
@@ -442,10 +442,7 @@ class PlatterView: UIView,UITextFieldDelegate {
     lazy var doneButton: UIButton = {
         let button = UIButton(type: .custom)
         button.backgroundColor = UIColor.systemBlue.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
-
-        button.setTitle("Done", for: .normal)
-        button.setTitleColor(.white, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        button.setImage("✅".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
         button.layer.cornerCurve = .continuous
@@ -468,9 +465,7 @@ class PlatterView: UIView,UITextFieldDelegate {
             }
         })
 
-        button.setTitle("Reset", for: .normal)
-        button.setTitleColor(.randomColor, for: .normal)
-        button.titleLabel?.font = .systemFont(ofSize: 17, weight: .medium)
+        button.setImage("🔄".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
         button.frame.size = CGSize(width: 116, height: 52)
         button.layer.cornerRadius = 20
         button.layer.cornerCurve = .continuous

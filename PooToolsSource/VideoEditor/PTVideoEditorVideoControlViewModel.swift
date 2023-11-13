@@ -10,8 +10,19 @@ import Foundation
 
 final class PTVideoEditorVideoControlViewModel {
     let videoControl: PTVideoEditorVideoControl
-
+    
     var title: String {
+        switch videoControl {
+        case .speed:
+            return "PT Video editor function speed".localized()
+        case .trim:
+            return "PT Video editor function trim".localized()
+        case .crop:
+            return "PT Video editor function crop".localized()
+        }
+    }
+
+    var titleImageName: String {
         switch videoControl {
         case .speed:
             return "Speed"
@@ -20,10 +31,6 @@ final class PTVideoEditorVideoControlViewModel {
         case .crop:
             return "Crop"
         }
-    }
-
-    var titleImageName: String {
-        return title
     }
 
     init(videoControl: PTVideoEditorVideoControl) {

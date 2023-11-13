@@ -146,7 +146,7 @@ public class LocalConsole: NSObject {
             terminal = PTTerminal.init(view: AppWindows!, frame: CGRect.init(x: 0, y: CGFloat.kNavBarHeight_Total, width: systemLog_base_width, height: systemLog_base_height))
             terminal?.tag = SystemLogViewTag
             terminal!.menuButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "调试功能", cancelButtonName: "关闭",titles: self.popoverTitles, otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "PT Debug function".localized(), cancelButtonName: "❌",titles: self.popoverTitles, otherBlock: { sheet,index in
                     switch index {
                     case PTActionSheetView.DestructiveButtonTag:
                         self.cleanSystemLogView()

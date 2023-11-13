@@ -20,15 +20,22 @@ final class PTVideoEditorVideoControlCellViewModel: NSObject {
     var name: String {
         switch videoControl {
         case .speed:
+            return "PT Video editor function speed".localized()
+        case .trim:
+            return "PT Video editor function trim".localized()
+        case .crop:
+            return "PT Video editor function crop".localized()
+        }
+    }
+
+    var imageName: String {
+        switch videoControl {
+        case .speed:
             return "Speed"
         case .trim:
             return "Trim"
         case .crop:
             return "Crop"
         }
-    }
-
-    var imageName: String {
-        "\(name)"
     }
 }

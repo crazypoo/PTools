@@ -109,7 +109,7 @@ public class PTDevFunction: NSObject {
                 btnLabel.textAlignment = .center
                 btnLabel.font = .systemFont(ofSize: 13)
                 btnLabel.numberOfLines = 0
-                btnLabel.text = "实验室"
+                btnLabel.text = "Lib"
                 mn_PFloatingButton?.addSubview(btnLabel)
                 btnLabel.snp.makeConstraints { (make) in
                     make.edges.equalToSuperview()
@@ -139,7 +139,7 @@ public class PTDevFunction: NSObject {
                     
                     let titles = [.flex,.log,.fps,.memory,.colorCheck,.ruler,allOpenString,.debugController,.inAppViewsCheck,.hyperioniOS,.devMask,.devMaskEvent,showTouchHit,touchTypeInfo,.userDefults,.appDocument,.netPit]
 
-                    UIAlertController.base_alertVC(msg: "调试框架",okBtns: titles,cancelBtn: "PT Button cancel".localized()) {
+                    UIAlertController.base_alertVC(msg: "PT Debug function".localized(),okBtns: titles,cancelBtn: "PT Button cancel".localized()) {
                         
                     } moreBtn: { index, title in
                         if title == .openAll {

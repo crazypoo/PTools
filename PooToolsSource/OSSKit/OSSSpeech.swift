@@ -41,13 +41,13 @@ public enum OSSSpeechKitAuthorizationStatus: Int {
     public var message: String {
         switch self {
         case .notDetermined:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitAuthorizationStatus_messageNotDetermined", defaultValue: "The app's authorization status has not yet been determined.")
+            return "PT OSS messageNotDetermined".localized()
         case .denied:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitAuthorizationStatus_messageDenied", defaultValue: "The user denied your app's request to perform speech recognition.")
+            return "PT OSS messageDenied".localized()
         case .restricted:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitAuthorizationStatus_messageRestricted", defaultValue: "The device prevents your app from performing speech recognition.")
+            return "PT OSS messageRestricted".localized()
         case .authorized:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitAuthorizationStatus_messageAuthorized", defaultValue: "The user granted your app's request to perform speech recognition.")
+            return "PT OSS messageAuthorized".localized()
         }
     }
 }
@@ -83,27 +83,27 @@ public enum OSSSpeechKitErrorType: Int {
     public var errorMessage: String {
         switch self {
         case .noMicrophoneAccess:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageNoMicAccess", defaultValue: "Access to the microphone is unavailable.")
+            return "PT OSS messageNoMicAccess".localized()
         case .invalidUtterance:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidUtterance", defaultValue: "The utterance is invalid. Please ensure you have created one or passed in valid text to speak.")
+            return "PT OSS messageInvalidUtterance".localized()
         case .invalidText:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidText", defaultValue: "The text provided to the utterance is either empty or has not been set.")
+            return "PT OSS messageInvalidText".localized()
         case .invalidVoice:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidVoice", defaultValue: "In order to speak text, a valid voice is required.")
+            return "PT OSS messageInvalidVoice".localized()
         case .invalidSpeechRequest:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidSpeechRequest", defaultValue: "The speech request is invalid. Please ensure the string provided contains text.")
+            return "PT OSS messageInvalidSpeechRequest".localized()
         case .invalidAudioEngine:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidAudioEngine", defaultValue: "The audio engine is unavailable. Please try again soon.")
+            return "PT OSS messageInvalidAudioEngine".localized()
         case .recogniserUnavailble:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageRecogniserUnavailable", defaultValue: "The Speech Recognition service is currently unavailable.")
+            return "PT OSS messageRecogniserUnavailable".localized()
         case .invalidRecordVoice:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidRecordVoice", defaultValue: "The user voice recoeder service is not working.")
+            return "PT OSS messageInvalidRecordVoice".localized()
         case .invalidVoiceFilePath:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidVoiceFolePath", defaultValue: "The user voice file path can not create.")
+            return "PT OSS messageInvalidVoiceFolePath".localized()
         case .invalidDeleteVoiceFilePath:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidDeleteVoiceFilePath", defaultValue: "The user voice file path can not delete.")
+            return "PT OSS messageInvalidDeleteVoiceFilePath".localized()
         case .invalidTranscriptionFilePath:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_messageInvalidTranscriptionFilePath", defaultValue: "Voice record file path can not transcription.")
+            return "PT OSS messageInvalidTranscriptionFilePath".localized()
         }
     }
 
@@ -115,18 +115,18 @@ public enum OSSSpeechKitErrorType: Int {
         case .noMicrophoneAccess,
             .invalidAudioEngine,
             .invalidRecordVoice:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_requestTypeNoMicAccess", defaultValue: "Recording")
+            return "PT OSS requestTypeNoMicAccess".localized()
         case .invalidUtterance:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_requestTypeInvalidUtterance", defaultValue: "Speech or Recording")
+            return "PT OSS requestTypeInvalidUtterance".localized()
         case .invalidText,
              .invalidVoice,
              .invalidSpeechRequest,
              .recogniserUnavailble:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_requestTypeInvalidSpeech", defaultValue: "Speech")
+            return "PT OSS requestTypeInvalidSpeech".localized()
         case .invalidVoiceFilePath,.invalidDeleteVoiceFilePath:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_requestTypeInvalidFilePath", defaultValue: "File")
+            return "PT OSS requestTypeInvalidFilePath".localized()
         case .invalidTranscriptionFilePath:
-            return OSSSpeechUtility().getString(forLocalizedName: "OSSSpeechKitErrorType_requestTypeInvalidTranscriptionFilePath", defaultValue: "Transcription")
+            return "PT OSS requestTypeInvalidTranscriptionFilePath".localized()
         }
     }
 

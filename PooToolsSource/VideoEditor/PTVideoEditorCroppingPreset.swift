@@ -85,6 +85,23 @@ final class PTVideoEditorCroppingPresetCellViewModel: NSObject {
     var name: String {
         switch croppingPreset {
         case .vertical:
+            return "PT Video editor crop vertical".localized()
+        case .standard:
+            return "PT Video editor crop standar".localized()
+        case .portrait:
+            return "PT Video editor crop portrait".localized()
+        case .square:
+            return "PT Video editor crop square".localized()
+        case .landscape:
+            return "PT Video editor crop landscape".localized()
+        case .instagram:
+            return "PT Video editor crop instagram".localized()
+        }
+    }
+
+    var imageName: String {
+        switch croppingPreset {
+        case .vertical:
             return "Vertical"
         case .standard:
             return "Standard"
@@ -97,9 +114,5 @@ final class PTVideoEditorCroppingPresetCellViewModel: NSObject {
         case .instagram:
             return "Instagram"
         }
-    }
-
-    var imageName: String {
-        return name
     }
 }

@@ -13,6 +13,10 @@ import KakaJSON
 import SwiftyJSON
 import Network
 
+public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
+public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
+public let NetWorkModelExplainError = NSError(domain: "PT Network model fail".localized(), code: 99999999999)
+
 public enum NetWorkStatus: String {
     case unknown      = "未知网络"
     case notReachable = "网络无连接"
@@ -182,13 +186,13 @@ public class Network: NSObject {
         
         let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
         if !urlStr1.isURL() {
-            throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "不是合法的URL", code: 99999999997)))
+            throw AFError.invalidURL(url: "https://www.qq.com")
         }
         
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                throw AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "没有网络连接", code: 99999999996)))
+                throw AFError.createURLRequestFailed(error: NetWorkNoError)
             }
         }
         
@@ -232,14 +236,14 @@ public class Network: NSObject {
                 case .success(_):
                     let json = JSON(data.value ?? "")
                     guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
+                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
                         return
                     }
                     
                     PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
                     
                     guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
+                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
                         return
                     }
                     responseModel.originalString = jsonStr
@@ -290,14 +294,14 @@ public class Network: NSObject {
         
         let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
         if !pathUrl.isURL() {
-            resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "不是合法的URL", code: 99999999997))))
+            resultBlock(nil,AFError.invalidURL(url: "https://www.qq.com"))
             return
         }
 
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "没有网络连接", code: 99999999996))))
+                resultBlock(nil,AFError.createURLRequestFailed(error: NetWorkNoError))
                 return
             }
         }
@@ -362,12 +366,12 @@ public class Network: NSObject {
             case .success(_):
                 let json = JSON(response.value! ?? "")
                 guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "JSON解释失败", code: 99999999998))))
+                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
                     return
                 }
 
                 guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NSError(domain: "基础模型解析失败", code: 99999999999))))
+                    resultBlock(nil,AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
                     return
                 }
                 
@@ -484,7 +488,7 @@ public class PTFileDownloadApi: NSObject {
                 }
             } else {
                 PTGCDManager.gcdMain {
-                    self.fail?(NSError(domain: "文件下载失败", code: 12345, userInfo: nil) as Error)
+                    self.fail?(NSError(domain: "PT Network download fail".localized(), code: 12345, userInfo: nil) as Error)
                 }
             }
         case .failure:

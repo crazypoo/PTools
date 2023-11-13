@@ -70,7 +70,7 @@ extension PTGetGPSData:CLLocationManagerDelegate {
         UserDefaults.standard.set(["zh-hans"], forKey: "AppleLanguages")
         geoCoder.reverseGeocodeLocation(currentLocation!) { placemarks, error in
             var distance:CLLocationDistance = 0
-            var cityStr = "⟳定位失败"
+            var cityStr = "PT Location fail".localized()
             if placemarks?.count ?? 0 > 0 {
                 let placeMark:CLPlacemark = placemarks![0]
                 let city = placeMark.locality
@@ -91,9 +91,9 @@ extension PTGetGPSData:CLLocationManagerDelegate {
                             if getUserLocCtiy != cityStr {
                                 self.isShow += 1
                                 if self.isShow < 2 {
-                                    let cancelStr = "继续选择\(getUserLocCtiy!)"
-                                    let doneStr = "切换到\(cityStr)"
-                                    UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "系统检测到你当前地区与您所选的地区不相符是否切换",okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
+                                    let cancelStr = "\("PT Location continue select".localized())\(getUserLocCtiy!)"
+                                    let doneStr = "\("PT Location change to".localized())\(cityStr)"
+                                    UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT Location change".localized(),okBtns: [doneStr],cancelBtn: cancelStr,cancelBtnColor: .black,doneBtnColors: [.black]) {
                                         
                                         if self.selectCurrentBlock != nil {
                                             self.selectCurrentBlock!()

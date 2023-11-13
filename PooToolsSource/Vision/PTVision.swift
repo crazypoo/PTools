@@ -19,9 +19,11 @@ public class PTVision: NSObject {
     /// - Parameters:
     ///   - image: 图片
     ///   - revision: Vision版本(VNRecognizeTextRequestRevision2 iOS14,VNRecognizeTextRequestRevision3 iOS16)
+    ///   - recognitionLanguages: 識別語言(默認中,英,西)
     ///   - resultBlock: 回调
     public func findText(withImage image:UIImage,
                          revision:Int = VNRecognizeTextRequestRevision2,
+                         recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"],
                          resultBlock:((_ resultText:String,_ textObservations:[VNRecognizedTextObservation])->Void)?) {
         PTGCDManager.gcdGobal {
             let textDetectionRequest = VNRecognizeTextRequest { request, error in
@@ -50,7 +52,7 @@ public class PTVision: NSObject {
                 }
             }
             
-            textDetectionRequest.recognitionLanguages = ["zh-cn"]
+            textDetectionRequest.recognitionLanguages = recognitionLanguages
             textDetectionRequest.recognitionLevel = .accurate
             textDetectionRequest.revision = revision
             

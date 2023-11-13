@@ -146,7 +146,7 @@ class PTUserDefultsViewController: PTBaseViewController {
     }
     
     func clearUserdefults() {
-        UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "是否删除所有除系统生成外的数据?",okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized()) {
+        UIAlertController.base_alertVC(title: "PT Alert Opps".localized(),msg: "PT UserDefault delete".localized(),okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized()) {
             
         } moreBtn: { index, title in
             let bundleIdentifier = Bundle.main.bundleIdentifier

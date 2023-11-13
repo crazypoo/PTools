@@ -56,11 +56,11 @@ public class PTSpeech: NSObject {
     func createError(errorType:PTSpeechErrorType)->NSError {
         switch errorType {
         case .UnsupportedLocale:
-            return errorFunction(code: -999, desc: "不支持当前语言环境")
+            return errorFunction(code: -999, desc: "PT Speech not support".localized())
         case .RecognitionDenied:
-            return errorFunction(code: 100, desc: "识别不出用户语音")
+            return errorFunction(code: 100, desc: "PT Speech denied".localized())
         case .IsBusy:
-            return errorFunction(code: 500, desc: "识别中")
+            return errorFunction(code: 500, desc: "PT Speech speeching".localized())
         }
     }
     

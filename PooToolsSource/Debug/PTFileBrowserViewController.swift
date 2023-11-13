@@ -46,16 +46,16 @@ class PTFileBrowserViewController: PTBaseViewController {
             var actionSheetDatas = [String]()
             if cellRealModel.fileType == .folder {
                 self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: true)
-                actionSheetDatas = ["分享","复制","移动","删除"]
+                actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized()]
             } else {
                 self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellRealModel.name, isDirectory: false)
-                actionSheetDatas = ["分享","复制","移动","删除","hash值"]
+                actionSheetDatas = ["PT Screen share".localized(),"PT File copy".localized(),"PT File move".localized(),"PT Button delete".localized(),"PT File hash".localized()]
             }
             
             let longTap = UILongPressGestureRecognizer { sender in
                 self.showAction = !self.showAction
                 if self.showAction {
-                    UIAlertController.baseActionSheet(title: "更多操作", titles: actionSheetDatas, cancelBlock: { sheet in
+                    UIAlertController.baseActionSheet(title: "PT Media option".localized(), titles: actionSheetDatas, cancelBlock: { sheet in
                         self.showAction = false
                     },otherBlock: { sheet,index in
                         self.showAction = false
@@ -71,7 +71,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                             self.present(activityVC, animated: true, completion: nil)
                         case 1:
                             let closeBtn = UIButton(type: .custom)
-                            closeBtn.setTitle("关闭", for: .normal)
+                            closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
                             closeBtn.setTitleColor(.systemBlue, for: .normal)
                             closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
                             closeBtn.addActionHandlers { sender in
@@ -92,7 +92,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                             self.loadData()
                         case 2:
                             let closeBtn = UIButton(type: .custom)
-                            closeBtn.setTitle("关闭", for: .normal)
+                            closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
                             closeBtn.setTitleColor(.systemBlue, for: .normal)
                             closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
                             closeBtn.addActionHandlers { sender in
@@ -131,7 +131,7 @@ class PTFileBrowserViewController: PTBaseViewController {
                                 hashValue = error.localizedDescription
                             }
                             
-                            UIAlertController.base_alertVC(title: "hash值",msg: hashValue,okBtns: ["复制"],cancelBtn: "PT Button cancel".localized()) {
+                            UIAlertController.base_alertVC(title: "PT File hash".localized(),msg: hashValue,okBtns: ["PT File copy".localized()],cancelBtn: "PT Button cancel".localized()) {
                                 
                             } moreBtn: { index, title in
                                 hashValue.copyToPasteboard()
@@ -155,7 +155,7 @@ class PTFileBrowserViewController: PTBaseViewController {
             default:
                 
                 let backBtn = UIButton(type: .custom)
-                backBtn.setTitle("返回", for: .normal)
+                backBtn.setTitle("PT Nav back".localized(), for: .normal)
                 backBtn.setTitleColor(.systemBlue, for: .normal)
                 backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
                 backBtn.addActionHandlers { sender in
@@ -178,8 +178,7 @@ class PTFileBrowserViewController: PTBaseViewController {
         super.viewDidLoad()
 
         let closeBtn = UIButton(type: .custom)
-        closeBtn.setTitle("关闭", for: .normal)
-        closeBtn.setTitleColor(.systemBlue, for: .normal)
+        closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
         closeBtn.addActionHandlers { sender in
             self.returnFrontVC()
@@ -200,7 +199,7 @@ class PTFileBrowserViewController: PTBaseViewController {
             navigationItem.leftBarButtonItem = nil
         } else {
             let backBtn = UIButton(type: .custom)
-            backBtn.setTitle("返回", for: .normal)
+            backBtn.setTitle("PT Nav back".localized(), for: .normal)
             backBtn.setTitleColor(.systemBlue, for: .normal)
             backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
             backBtn.addActionHandlers { sender in
