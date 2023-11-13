@@ -15,6 +15,7 @@ import ZXNavigationBar
 #endif
 import SwifterSwift
 
+@objcMembers
 public final class PTVideoEditorVideoEditorViewController: PTBaseViewController {
 
     // MARK: Published Properties
