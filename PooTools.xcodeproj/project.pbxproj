@@ -1412,7 +1412,6 @@
 		555E8FE628D01CF600AF5E63 /* LocalConsole */ = {
 			isa = PBXGroup;
 			children = (
-				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
 				231D15DC272CDEE9003D6F62 /* LocalConsole.swift */,
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
@@ -1809,6 +1808,7 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */,
 				558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */,
 				55B316A92999D41D00D8C39B /* PTGCDManager.swift */,

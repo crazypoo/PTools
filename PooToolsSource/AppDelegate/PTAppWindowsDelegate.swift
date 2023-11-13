@@ -113,7 +113,9 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 
     open func createSettingBundle() {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
+#if POOTOOLS_DEBUG
             PTDebugFunction.registerDefaultsFromSettingsBundle()
+#endif
         }
     }
     

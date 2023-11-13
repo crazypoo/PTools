@@ -10,7 +10,7 @@ import UIKit
 import AttributedString
 import SafeSFSymbols
 
-public class PTEmptyDataViewConfig : PTBaseModel {
+public class PTEmptyDataViewConfig : NSObject {
     var mainTitleAtt:ASAttributedString? = """
             \(wrap: .embedding("""
             \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))

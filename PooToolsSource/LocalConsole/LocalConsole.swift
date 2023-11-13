@@ -48,9 +48,7 @@ public typealias PTLocalConsoleBlock = (_ actionType:LocalConsoleActionType,_ de
 @objcMembers
 public class LocalConsole: NSObject {
     public static let shared = LocalConsole()
-    
-    public static let ConsoleDebug = "UI_debug"
-    
+        
     public var consoleActionBlock:PTLocalConsoleBlock?
     
     public var terminal:PTTerminal?

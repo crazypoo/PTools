@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import SnapKit
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit

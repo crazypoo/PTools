@@ -8,6 +8,13 @@
 
 import Foundation
 
+public let DevNetWorkKey = "UI_test_url"
+public let PTDevMaskTouchBubbleKey = "PTDevMaskTouchBubbleKey"
+public let PTDevMaskKey = "PTDevMaskKey"
+public let ConsoleDebug = "UI_debug"
+public let TouchInspectorDebug = "TS_debug"
+public let TouchInspectorHitsDebug = "TS_Hit_debug"
+
 public struct PTCoreUserDefultsWrapper {
 
     //MARK: 是否再显示更新框(0继续显示1不再显示)
@@ -25,22 +32,22 @@ public struct PTCoreUserDefultsWrapper {
     @PTUserDefault(withKey: DevNetWorkKey, defaultValue: "") public static var AppRequestUrl:String
     //MARK: App测试环境(YES是)
     ///App测试环境(YES是)
-    @PTUserDefault(withKey: LocalConsole.ConsoleDebug, defaultValue: false) public static var AppDebugMode:Bool
+    @PTUserDefault(withKey: ConsoleDebug, defaultValue: false) public static var AppDebugMode:Bool
     //MARK: App测试环境图片选项(YES是)
     ///App测试环境图片选项(YES是)
     @PTUserDefault(withKey: "WebImageOption", defaultValue: false) public static var WebImageOption:Bool
     //MARK: App测试环境点击泡泡(YES是)
     ///App测试环境点击泡泡(YES是)
-    @PTUserDefault(withKey: PTDevMaskView.PTDevMaskTouchBubbleKey, defaultValue: true) public static var AppDebbugTouchBubble:Bool
+    @PTUserDefault(withKey: PTDevMaskTouchBubbleKey, defaultValue: true) public static var AppDebbugTouchBubble:Bool
     //MARK: App测试环境标识(YES是)
     ///App测试环境标识(YES是)
-    @PTUserDefault(withKey: PTDevMaskView.PTDevMaskKey, defaultValue: true) public static var AppDebbugMark:Bool
+    @PTUserDefault(withKey: PTDevMaskKey, defaultValue: true) public static var AppDebbugMark:Bool
     //MARK: App测试环境点击信息(YES是)
     ///App测试环境点击信息(YES是)
-    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorDebug, defaultValue: true) public static var AppTouchInspectShow:Bool
+    @PTUserDefault(withKey: TouchInspectorDebug, defaultValue: true) public static var AppTouchInspectShow:Bool
     //MARK: App测试环境点击信息Hits(YES是)
     ///App测试环境点击信息Hits(YES是)
-    @PTUserDefault(withKey: TouchInspectorWindow.TouchInspectorHitsDebug, defaultValue: true) public static var AppTouchInspectShowHits:Bool
+    @PTUserDefault(withKey: TouchInspectorHitsDebug, defaultValue: true) public static var AppTouchInspectShowHits:Bool
     
     /**
         语言

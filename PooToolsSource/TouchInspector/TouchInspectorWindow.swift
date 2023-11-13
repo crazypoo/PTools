@@ -14,9 +14,6 @@ import UIKit
 
 @objcMembers
 public class TouchInspectorWindow: UIWindow {
-    
-    public static let TouchInspectorDebug = "TS_debug"
-    public static let TouchInspectorHitsDebug = "TS_Hit_debug"
 
     /**
      Whether to show the circular touch indicator.

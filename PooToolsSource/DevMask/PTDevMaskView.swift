@@ -23,9 +23,6 @@ open class PTDevMaskConfig:NSObject {
 @objcMembers
 open class PTDevMaskView: PTBaseMaskView {
 
-    public static let PTDevMaskTouchBubbleKey = "PTDevMaskTouchBubbleKey"
-    public static let PTDevMaskKey = "PTDevMaskKey"
-
     public var showTouch:Bool? {
         didSet {
             viewConfig.showTouch = showTouch!

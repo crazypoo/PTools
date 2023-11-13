@@ -65,7 +65,7 @@ public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_
 public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 //MARK: Collection展示的基本配置参数设置
-public class PTCollectionViewConfig:PTBaseModel {
+public class PTCollectionViewConfig:NSObject {
     public var showsVerticalScrollIndicator:Bool = true
     public var showsHorizontalScrollIndicator:Bool = true
     ///CollectionView展示的样式类型

@@ -26,8 +26,6 @@ public enum NetWorkEnvironment: String {
     case Distribution = "生产环境"
 }
 
-public var DevNetWorkKey = "UI_test_url"
-
 public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void

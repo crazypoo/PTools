@@ -60,6 +60,10 @@ public class PTAppBaseConfig: NSObject {
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
     public func gobalWebImageLoadOption() -> KingfisherOptionsInfo {
+#if POOTOOLS_DEBUG
         PTDevFunction.gobalWebImageLoadOption()
+#else
+        return [KingfisherOptionsInfoItem.cacheOriginalImage]
+#endif
     }
 }
