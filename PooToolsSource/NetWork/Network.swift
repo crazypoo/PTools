@@ -16,6 +16,7 @@ import Network
 public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
 public let NetWorkModelExplainError = NSError(domain: "PT Network model fail".localized(), code: 99999999999)
+public let NetWorkDownloadError = NSError(domain: "PT Network download fail".localized(), code: 99999999997)
 
 public let AppTestMode = "PT App network environment test".localized()
 public let AppCustomMode = "PT App network environment custom".localized()
@@ -58,7 +59,6 @@ public enum NetWorkEnvironment: Int {
     }
 }
 
-public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
@@ -297,17 +297,17 @@ public class Network: NSObject {
         
     /// 图片上传接口
     /// - Parameters:
-    ///   - needGobal:
+    ///   - needGobal:是否使用全局URL
     ///   - images: 图片集合
-    ///   - path:
-    ///   - fileKey:
-    ///   - parmas:
-    ///   - header:
-    ///   - jsonRequest:
-    ///   - pngData:
-    ///   - showHud:
+    ///   - path:路徑
+    ///   - fileKey:fileKey
+    ///   - parmas:數據
+    ///   - header:頭部
+    ///   - modelType:Model
+    ///   - jsonRequest:是否jsonRequest
+    ///   - pngData:是否Png
     ///   - progressBlock: 进度回调
-    ///   - resultBlock:
+    /// - Returns:ResponseModel
     class public func imageUpload(needGobal:Bool? = true,
                                   images:[UIImage]?,
                                   path:String? = "/api/project/ossImg",
@@ -317,21 +317,17 @@ public class Network: NSObject {
                                   modelType: Convertible.Type? = nil,
                                   jsonRequest:Bool? = false,
                                   pngData:Bool? = true,
-                                  showHud:Bool? = true,
-                                  progressBlock:UploadProgress? = nil,
-                                  resultBlock: @escaping ReslutClosure) {
+                                  progressBlock:UploadProgress? = nil) async throws -> ResponseModel {
         
         let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
         if !pathUrl.isURL() {
-            resultBlock(nil,AFError.invalidURL(url: "https://www.qq.com"))
-            return
+            throw AFError.invalidURL(url: "https://www.qq.com")
         }
 
         // 判断网络是否可用
         if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
-                resultBlock(nil,AFError.createURLRequestFailed(error: NetWorkNoError))
-                return
+                throw AFError.createURLRequestFailed(error: NetWorkNoError)
             }
         }
         
@@ -357,69 +353,63 @@ public class Network: NSObject {
                 apiHeader["Accept"] = "application/json"
             }
         }
-        
-        if showHud! {
-            Network.hud.show(animated: true)
-        }
-        
-        Network.manager.upload(multipartFormData: { (multipartFormData) in
-            images?.enumerated().forEach { index,image in
-                if pngData! {
-                    if let imgData = image.pngData() {
-                        multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
-                    }
-                } else {
-                    if let imgData = image.jpegData(compressionQuality: 0.2) {
-                        multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+
+        return try await withCheckedThrowingContinuation { continuation in
+            Network.manager.upload(multipartFormData: { multipartFormData in
+                images?.enumerated().forEach { index,image in
+                    if pngData! {
+                        if let imgData = image.pngData() {
+                            multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+                        }
+                    } else {
+                        if let imgData = image.jpegData(compressionQuality: 0.2) {
+                            multipartFormData.append(imgData, withName: fileKey![index],fileName: "image_\(index).png", mimeType: "image/png")
+                        }
                     }
                 }
-            }
-            if parmas != nil {
-                parmas?.keys.enumerated().forEach({ index,value in
-                    multipartFormData.append(Data(parmas![value]!.utf8), withName: value)
-                })
-            }
-        }, to: pathUrl,method: .post, headers: apiHeader) { (result) in
-        }
-        .uploadProgress(closure: { (progress) in
-            if progressBlock != nil {
-                progressBlock!(progress)
-            }
-        })
-        .response { response in
-            if showHud! {
-                Network.hud.hide(animated: true)
-            }
-
-            switch response.result {
-            case .success(_):
-                let json = JSON(response.value! ?? "")
-                guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                    resultBlock(nil,AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
-                    return
+                if parmas != nil {
+                    parmas?.keys.enumerated().forEach({ index,value in
+                        multipartFormData.append(Data(parmas![value]!.utf8), withName: value)
+                    })
                 }
-
-                guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                    resultBlock(nil,AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
-                    return
+            }, to: pathUrl,method: .post,headers: apiHeader).uploadProgress(closure: { progress in
+                PTGCDManager.gcdMain() {
+                    if progressBlock != nil {
+                        progressBlock!(progress)
+                    }
                 }
-                
-                responseModel.originalString = jsonStr
-                PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐")
-                guard let modelType1 = modelType else { resultBlock(responseModel,nil); return }
-                if responseModel.data is [String : Any] {
-                    guard let reslut = responseModel.data as? [String : Any] else { resultBlock(responseModel,nil); return }
-                    responseModel.data = reslut.kj.model(type: modelType1)
-                } else if responseModel.data is Array<Any> {
-                    responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
-                } else {
-                    responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+            }).response { response in
+                switch response.result {
+                case .success(_):
+                    let json = JSON(response.value! ?? "")
+                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
+                        return
+                    }
+                    
+                    guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
+                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
+                        return
+                    }
+                    
+                    responseModel.originalString = jsonStr
+                    PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐")
+                    guard let modelType1 = modelType else {
+                        continuation.resume(returning: responseModel); return }
+                    if responseModel.data is [String : Any] {
+                        guard let reslut = responseModel.data as? [String : Any] else { continuation.resume(returning: responseModel); return }
+                        responseModel.data = reslut.kj.model(type: modelType1)
+                    } else if responseModel.data is Array<Any> {
+                        responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
+                    } else {
+                        responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+                    }
+                    
+                    continuation.resume(returning: responseModel)
+                case .failure(let error):
+                    PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌",error: true)
+                    continuation.resume(throwing:error)
                 }
-
-                resultBlock(responseModel,nil)
-            case .failure(let error):
-                PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌",error: true)
-                resultBlock(nil,error)
             }
         }
     }
@@ -517,7 +507,7 @@ public class PTFileDownloadApi: NSObject {
                 }
             } else {
                 PTGCDManager.gcdMain {
-                    self.fail?(NSError(domain: "PT Network download fail".localized(), code: 12345, userInfo: nil) as Error)
+                    self.fail?(NetWorkDownloadError as Error)
                 }
             }
         case .failure:
