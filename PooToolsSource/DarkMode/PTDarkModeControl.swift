@@ -238,6 +238,7 @@ extension PTDarkModeControl: PTThemeable {
     }
 }
 
+#if POOTOOLS_ROUTER
 extension PTDarkModeControl:PTRouterable {
     public static var patternString: [String] {
         ["scheme://route/darkmode"]
@@ -248,3 +249,4 @@ extension PTDarkModeControl:PTRouterable {
         return vc
     }
 }
+#endif
