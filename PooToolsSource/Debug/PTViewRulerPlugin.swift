@@ -283,7 +283,7 @@ fileprivate class PTRulerInfoView:UIView {
         self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
         self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (self.frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
         
-        infoWindow.visualController.infoLabel.text = String(format: "位置: 上%@ 左%@ 下%@ 右%@", topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        infoWindow.visualController.infoLabel.text = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
         infoWindow.isHidden = false
     }
     
@@ -292,7 +292,7 @@ fileprivate class PTRulerInfoView:UIView {
     }
     
     func configInfoLabelText() {
-        let stringInfo = String(format: "位置: 上%@ 左%@ 下%@ 右%@", self.topLabel.text ?? "0",self.leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        let stringInfo = String(format: "PT Ruler".localized(), self.topLabel.text ?? "0",self.leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
         infoWindow.visualController.infoLabel.text = stringInfo
     }
     

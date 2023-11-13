@@ -55,5 +55,5 @@ public class PTMediaBrowserConfig: NSObject {
     ///背景模糊
     public var dynamicBackground:Bool = false
     ///更多文字设置
-    public var showMore:String = "...更多"
+    public var showMore:String = "...\("PT More".localized())"
 }

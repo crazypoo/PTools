@@ -199,12 +199,8 @@ public extension UIViewController {
     /// 定位权限
     func locationAuthorize() {
         PTGCDManager.gcdMain {
-            UIAlertController.base_alertVC(title:"打开定位开关",msg: "定位服务未开启,请进入系统设置>隐私>定位服务中打开开关,并允许App使用定位服务",okBtns: ["设置"],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    if UIApplication.shared.canOpenURL(url) {
-                        PTAppStoreFunction.jumpLink(url: url)
-                    }
-                }
+            UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg: String.authorizationSet(type: PTPermission.Kind.location(access: .whenInUse)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
             })
         }
     }
@@ -231,21 +227,17 @@ public extension UIViewController {
             var msg: String?
             switch avMediaType {
             case .video:
-                title = "相机访问受限"
-                msg = "请在iPhone的\"设置-隐私-相机\"中允许访问相机"
+                title = String.CameraAuthorizationFail
+                msg = String.authorizationSet(type: PTPermission.Kind.camera)
             case .audio:
-                title = "麦克风访问受限"
-                msg = "点击\"设置\"，允许访问您的麦克风"
+                title = String.MicAuthorizationFail
+                msg = String.authorizationSet(type: PTPermission.Kind.microphone)
             default:
                 break
             }
             PTGCDManager.gcdMain {
-                UIAlertController.base_alertVC(title:title,msg: msg,okBtns: ["设置"],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        if UIApplication.shared.canOpenURL(url) {
-                            PTAppStoreFunction.jumpLink(url: url)
-                        }
-                    }
+                UIAlertController.base_alertVC(title:title,msg: msg,okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                    PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
             }
             return false
@@ -269,12 +261,8 @@ public extension UIViewController {
             return false
         default:
             PTGCDManager.gcdMain {
-                UIAlertController.base_alertVC(title:"相册访问受限",msg: "请在iPhone的\"设置-隐私-相册\"中允许访问相册",okBtns: ["设置"],cancelBtn: "PT Button cancel".localized(),moreBtn: { index,title in
-                    if let url = URL(string: UIApplication.openSettingsURLString) {
-                        if UIApplication.shared.canOpenURL(url) {
-                            PTAppStoreFunction.jumpLink(url: url)
-                        }
-                    }
+                UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg: String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index,title in
+                    PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
             }
             return false

@@ -124,6 +124,10 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
+                
+//        let error = NSError(domain: NSStringFromClass(type(of: self)), code: 100, userInfo: [NSLocalizedDescriptionKey: "4444444444444444"])
+//        PTNSLogConsole(">>>>>>>>>>>>>>\(error.localizedDescription)")
+
         return true
     }
 }

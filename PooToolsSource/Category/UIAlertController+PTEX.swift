@@ -276,19 +276,19 @@ public extension UIAlertController {
     ///   - done: 完成回調(标题,内容)
     ///   - dismiss: 界面離開後的回調
     class func alertSendFeedBack(superView:UIView? = AppWindows,
-                                  alertTitle:String? = "反馈问题",
-                                  feedBackTitlePlaceholder:String? = "请输入反馈标题",
-                                  feedBackTitleFont:UIFont? = .appfont(size: 16),
-                                  feedBackContentPlaceholder:String? = "请输入反馈内容",
-                                  feedBackContentFont:UIFont? = .appfont(size: 16),
-                                  feedBackContentCount:NSNumber? = 100,
-                                  feedBackContentIsSecureTextEntry:Bool? = false,
-                                  cancelString:String? = "PT Button cancel".localized(),
+                                 alertTitle:String? = "PT Screen feedback".localized(),
+                                 feedBackTitlePlaceholder:String? = "PT Feedback input title".localized(),
+                                 feedBackTitleFont:UIFont? = .appfont(size: 16),
+                                 feedBackContentPlaceholder:String? = "PT Feedback input content".localized(),
+                                 feedBackContentFont:UIFont? = .appfont(size: 16),
+                                 feedBackContentCount:NSNumber? = 100,
+                                 feedBackContentIsSecureTextEntry:Bool? = false,
+                                 cancelString:String? = "PT Button cancel".localized(),
                                  sendString:String? = "PT Button comfirm".localized(),
-                                  titleFont:UIFont? = .appfont(size: 18),
-                                  canTapBackground:Bool? = false,
-                                  done: @escaping (String, String) -> Void,
-                                  dismiss:PTActionTask? = nil) {
+                                 titleFont:UIFont? = .appfont(size: 18),
+                                 canTapBackground:Bool? = false,
+                                 done: @escaping (String, String) -> Void,
+                                 dismiss:PTActionTask? = nil) {
         let feedBackTitle = UITextField()
         feedBackTitle.placeholder = feedBackTitlePlaceholder!
         feedBackTitle.setPlaceHolderTextColor(.lightGray)

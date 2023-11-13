@@ -12,7 +12,7 @@ import UIKit
 public class PTSearchBar: UISearchBar {
     //MARK: 輸入框Placeholder
     ///輸入框Placeholder
-    public var searchPlaceholder : String? = "请输入文字"
+    public var searchPlaceholder : String? = "PT Input text".localized()
     //MARK: 輸入框Placeholder字體
     ///輸入框Placeholder字體
     public var searchPlaceholderFont : UIFont? = .systemFont(ofSize: 16)

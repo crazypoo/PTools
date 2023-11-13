@@ -98,7 +98,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         view.viewCorner(radius: 2,borderWidth:1,borderColor: .white)
         view.titleLabel?.font = self.viewConfig.viewerFont
         view.backgroundColor = UIColor(red: 0.1, green: 0.1, blue: 0.1, alpha: 0.3)
-        view.setTitle("图片加载失败,点击重试", for: .normal)
+        view.setTitle("PT Image load fail".localized(), for: .normal)
         view.setTitleColor(.white, for: .normal)
         view.addActionHandlers { sender in
             self.reloadButton.removeFromSuperview()

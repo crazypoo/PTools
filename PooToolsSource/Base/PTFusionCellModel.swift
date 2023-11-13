@@ -81,7 +81,7 @@ open class PTFusionCellModel: NSObject {
     ///Cell的Switch的背景顏色
     open var switchBackgroundColor:UIColor = .clear
     ///Section的更多文字
-    open var moreString:String = "更多"
+    open var moreString:String = "PT More".localized()
     ///Section的更多文字颜色
     open var moreColor:UIColor = .lightGray
     ///更多的字体

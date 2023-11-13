@@ -30,11 +30,11 @@ public class PTScanQRConfig:NSObject {
     ///點擊二維碼圖片
     public var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///條形碼提示
-    public var barCodeTips:String = "掃描條形碼"
+    public var barCodeTips:String = "PT Scan code".localized()
     ///取消按鈕名字
     public var cancelButtonName:String = "PT Button cancel".localized()
     ///掃描二維碼後提示
-    public var scanedTips:String = "轻触小蓝点，选中识别二维码"
+    public var scanedTips:String = "PT Scan tap".localized()
     ///是否可以掃二維碼
     public var canScanQR:Bool = true
     ///是否自动返回
@@ -294,15 +294,10 @@ public class PTScanQRController: PTBaseViewController {
             }
         } else if status == .authorized {
             enterPhotos()
-        } else if status == .denied {
-            let messageString = "[前往：设置 - 隐私 - 照片 - \(kAppName!)] 允许应用访问"
-            UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: messageString,cancel: "PT Button comfirm".localized()) {
-                
-            }
-        } else {
-            UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: "由于系统原因, 无法访问相册",cancel: "PT Button comfirm".localized()) {
-                
-            }
+        }  else {
+            UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
+            })
         }
     }
     
@@ -311,16 +306,8 @@ public class PTScanQRController: PTBaseViewController {
         let device = AVCaptureDevice.default(for: .video)
         if device != nil {
             let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
-            if authStatus == .restricted {
-                UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: "由于系统原因, 无法访问相机",cancel: "PT Button comfirm".localized()) {
-                    self.returnFrontVC()
-                }
-            } else if authStatus == .denied {
-                let messageString = "[前往：设置 - 相机 - 照片 - \(kAppName!)] 允许应用访问"
-                UIAlertController.alertVC(title:"PT Alert Opps".localized(),msg: messageString,cancel: "PT Button comfirm".localized()) {
-                    self.returnFrontVC()
-                }
-            } else if authStatus == .authorized {
+            
+            if authStatus == .authorized {
                 handle()
             } else if authStatus == .notDetermined {
                 AVCaptureDevice.requestAccess(for: .video) { granted in
@@ -329,11 +316,19 @@ public class PTScanQRController: PTBaseViewController {
                             handle()
                         }
                     } else {
-                        self.processResult(result: "用戶拒絕使用相機")
+                        self.processResult(result: "PT Setting reject camera".localized())
                     }
                 }
+            } else if authStatus == .restricted {
+                UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                    PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
+                })
+            } else if authStatus == .denied {
+                UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+                    PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
+                })
             } else {
-                processResult(result: "未檢測到攝像頭,要在真機上測試")
+                processResult(result: "PT Setting camera no".localized())
             }
         }
     }
@@ -450,7 +445,7 @@ public class PTScanQRController: PTBaseViewController {
         let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
         let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
         if features!.count == 0 {
-            processResult(result: "無法查找二維碼")
+            processResult(result: "PT Scan no code".localized())
         } else {
             let feature:CIQRCodeFeature = features![0] as! CIQRCodeFeature
             let resultString = feature.messageString

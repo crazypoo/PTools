@@ -37,11 +37,8 @@ open class PTPermission {
      */
     @available(iOSApplicationExtension, unavailable)
     open func openSettingPage() {
-        DispatchQueue.main.async {
-            guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else { return }
-            if UIApplication.shared.canOpenURL(settingsUrl) {
-                PTAppStoreFunction.jumpLink(url: settingsUrl)
-            }
+        PTGCDManager.gcdMain {
+            PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
         }
     }
     

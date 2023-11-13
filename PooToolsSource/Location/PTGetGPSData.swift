@@ -50,12 +50,11 @@ public class PTGetGPSData: NSObject {
 
 extension PTGetGPSData:CLLocationManagerDelegate {
     public func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        UIAlertController.base_alertVC(title:"PT Alert Opps".localized(),msg: "您还未开启定位服务，是否需要开启？",okBtns: ["PT Button comfirm".localized()],cancelBtn: "PT Button cancel".localized()) {
-            
-        } moreBtn: { index, title in
-            let settingUrl = URL(string: UIApplication.openSettingsURLString)
-            PTAppStoreFunction.jumpLink(url: settingUrl!)
-        }
+        
+        UIAlertController.base_alertVC(title:String.LocationAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.location(access: .always)),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
+            PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
+        })
+
         
         if errorBlock != nil {
             errorBlock!()

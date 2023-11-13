@@ -72,6 +72,27 @@ public enum PTHashType {
 }
 
 public extension String {
+    static let CameraAuthorizationFail = "PT Setting camera fail".localized()
+    static let PhotoAuthorizationFail = "PT Setting photo fail".localized()
+    static let MicAuthorizationFail = "PT Setting mic fail".localized()
+    static let LocationAuthorizationFail = "PT Setting location fail".localized()
+    
+    static func authorizationSet(type:PTPermission.Kind) -> String {
+        var name:String = ""
+        switch type {
+        case PTPermission.Kind.location:
+            name = "PT Setting location".localized()
+        case PTPermission.Kind.calendar:
+            name = "PT Permission calendar".localized()
+        default:
+            name = PTPermissionText.permission_name(for:type)
+        }
+        
+        return "\("PT Setting go to".localized())\"\("PT Setting".localized())-\(kAppName!)\"\(String(format: "PT Setting allow".localized(), name))"
+    }
+}
+
+public extension String {
     
     /**
         Wrapper of emtry string "".

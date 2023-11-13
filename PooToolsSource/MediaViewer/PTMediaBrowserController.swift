@@ -71,7 +71,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.isHidden = false
             view.moreActionButton.isUserInteractionEnabled = true
             view.moreActionButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "更多操作", cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
                     switch self.viewConfig.actionType {
                     case .Save:
                         switch index {
@@ -345,17 +345,17 @@ public class PTMediaBrowserController: PTBaseViewController {
         actionSheetTitle.removeAll()
         switch viewConfig.actionType {
         case .All:
-            actionSheetTitle = ["保存媒体","删除图片"]
+            actionSheetTitle = ["PT Media save".localized(),"PT Media delete".localized()]
             viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .Save:
-            actionSheetTitle = ["保存媒体"]
+            actionSheetTitle = ["PT Media save".localized()]
             viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }
         case .Delete:
-            actionSheetTitle = ["删除图片"]
+            actionSheetTitle = ["PT Media delete".localized()]
             viewConfig.moreActionEX.enumerated().forEach { index,value in
                 actionSheetTitle.append(value)
             }

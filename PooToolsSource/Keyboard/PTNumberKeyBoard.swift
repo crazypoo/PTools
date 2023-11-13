@@ -113,7 +113,7 @@ public class PTNumberKeyBoard: UIView {
                         button.setTitle("", for: .normal)
                     }
                 } else {
-                    button.setTitle("删除", for: .normal)
+                    button.setTitle("PT Button delete".localized(), for: .normal)
                 }
                 button.setBackgroundImage(cN!.createImageWithColor(), for: .normal)
                 button.setBackgroundImage(cH!.createImageWithColor(), for: .highlighted)

@@ -66,7 +66,7 @@ public class PTVersionFooter: PTBaseCollectionReusableView {
         let att:ASAttributedString = """
         \(wrap: .embedding("""
         \("\(kAppName! + " " + kAppVersion! + "(\(kAppBuildVersion!))")",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
-        \("隐私政策",.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue),.action {
+        \("PT Privacy".localized(),.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue),.action {
                 let url = URL(string: PTAppBaseConfig.share.privacyURL)!
                 PTAppStoreFunction.jumpLink(url: url)
         })

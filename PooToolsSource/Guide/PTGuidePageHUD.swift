@@ -50,7 +50,7 @@ public class PTGuidePageHUD: UIView {
     public var animationTime : CGFloat = 3.0
     public var adHadRemove:PTActionTask?
     
-    let StartString = "开始体验"
+    let StartString = "PT Guide start".localized()
     
     lazy var forwardButton:UIButton = {
         let btn = UIButton.init(type: .custom)

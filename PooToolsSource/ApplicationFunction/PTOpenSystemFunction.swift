@@ -42,7 +42,7 @@ import Foundation
 
 @objcMembers
 public class PTOpenSystemConfig:NSObject {
-    public var types : SystemFunctionType = SystemFunctionType(rawValue: 27)!
+    public var types : SystemFunctionType = SystemFunctionType(rawValue: 26)!
     public var content : String = ""
     public var scheme : String = ""
 }
@@ -235,12 +235,7 @@ public class PTOpenSystemFunction: NSObject {
                 uriString = String(format: "%@:root=CASTLE",config.scheme)
             }
         case .Setting:
-            if config.scheme.stringIsEmpty() {
-                PTOpenSystemFunction.functionAlert(msg: PTOpenSystemFunction.setScheme)
-                return
-            } else {
-                uriString = String(format: "%@",UIApplication.openSettingsURLString)
-            }
+            uriString = String(format: "%@",UIApplication.openSettingsURLString)
         default:
             break
         }

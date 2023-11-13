@@ -40,7 +40,7 @@ public enum PTScreenShotActionType {
 open class PTBaseViewController: ZXNavigationBarController {
     deinit {
         PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
-        self.removeFromSuperStatusBar()
+        removeFromSuperStatusBar()
     }
         
     //MARK: 拦截返回上一页
@@ -437,7 +437,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     }()
     
     private lazy var feedback:PTLayoutButton = {
-        let view = self.viewLayoutBtnSet(title: "意见反馈", image: PTAppBaseConfig.share.screenShotFeedback)
+        let view = self.viewLayoutBtnSet(title: "PT Screen feedback".localized(), image: PTAppBaseConfig.share.screenShotFeedback)
         view.addActionHandlers { sender in
             if self.actionHandle != nil {
                 self.actionHandle!(.Feedback,self.shareImageView.image!)
@@ -448,7 +448,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
     }()
     
     private lazy var share:PTLayoutButton = {
-        let view = self.viewLayoutBtnSet(title: "分享好友", image: PTAppBaseConfig.share.screenShotShare)
+        let view = self.viewLayoutBtnSet(title: "PT Screen share".localized(), image: PTAppBaseConfig.share.screenShotShare)
         view.addActionHandlers { sender in
             if self.actionHandle != nil {
                 self.actionHandle!(.Share,self.shareImageView.image!)

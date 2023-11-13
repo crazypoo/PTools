@@ -184,7 +184,7 @@ public extension PTPOP where Base: FileManager {
             try fileManager.createDirectory(atPath: folderPath, withIntermediateDirectories: true, attributes: nil)
             return (true, "")
         } catch _ {
-            return (false, "创建失败")
+            return (false, "PT FileManager create fail".localized())
         }
     }
         
@@ -231,7 +231,7 @@ public extension PTPOP where Base: FileManager {
             try fileManager.removeItem(atPath: filePath)
             return (true, "")
         } catch _ {
-            return (false, "删除失败")
+            return (false, "PT FileManager delete fail".localized())
         }
     }
 
@@ -266,7 +266,7 @@ public extension PTPOP where Base: FileManager {
             try fileManager.removeItem(atPath: filePath)
             return (true, "")
         } catch _ {
-            return (false, "移除文件失败")
+            return (false, "PT FileManager delete fail".localized())
         }
     }
     
@@ -298,7 +298,7 @@ public extension PTPOP where Base: FileManager {
                             writePath: String) -> (isSuccess: Bool, error: String) {
         guard judgeFileOrFolderExists(filePath: directoryAtPath(path: writePath)) else {
             // 不存在的文件路径
-            return (false, "不存在的文件路径")
+            return (false, "PT FileManager no document path".localized())
         }
         // 1、文字，2、图片，3、数组，4、字典写入文件
         switch writeType {
@@ -312,7 +312,7 @@ public extension PTPOP where Base: FileManager {
                 try info.write(toFile: writePath, atomically: true, encoding: String.Encoding.utf8)
                 return (true, "")
             } catch _ {
-                return (false, "写入失败")
+                return (false, "PT FileManager write fail".localized())
             }
         case .ImageType:
             let data = content as! Data
@@ -320,7 +320,7 @@ public extension PTPOP where Base: FileManager {
                 try data.write(to: URL(fileURLWithPath: writePath))
                 return (true, "")
             } catch _ {
-                return (false, "写入失败")
+                return (false, "PT FileManager write fail".localized())
             }
         case .ArrayType:
             let array = content as! NSArray
@@ -328,14 +328,14 @@ public extension PTPOP where Base: FileManager {
             if result {
                 return (true, "")
             } else {
-                return (false, "写入失败")
+                return (false, "PT FileManager write fail".localized())
             }
         case .DictionaryType:
             let result = (content as! NSDictionary).write(toFile: writePath, atomically: true)
             if result {
                 return (true, "")
             } else {
-                return (false, "写入失败")
+                return (false, "PT FileManager write fail".localized())
             }
         }
     }
@@ -351,7 +351,7 @@ public extension PTPOP where Base: FileManager {
                              readPath: String) -> (isSuccess: Bool, content: Any?, error: String) {
         guard judgeFileOrFolderExists(filePath: readPath),  let readHandler =  FileHandle(forReadingAtPath: readPath) else {
             // 不存在的文件路径
-            return (false, nil, "不存在的文件路径")
+            return (false, nil, "PT FileManager no document path".localized())
         }
         let data = readHandler.readDataToEndOfFile()
         // 1、文字，2、图片，3、数组，4、字典
@@ -364,12 +364,12 @@ public extension PTPOP where Base: FileManager {
             return (true, image, "")
         case .ArrayType:
             guard let readString = String(data: data, encoding: String.Encoding.utf8) else {
-                return (false, nil, "读取内容失败")
+                return (false, nil, "PT FileManager read fail".localized())
             }
             return (true, readString.jsonStringToArray(), "")
         case .DictionaryType:
             guard let readString = String(data: data, encoding: String.Encoding.utf8) else {
-                return (false, nil, "读取内容失败")
+                return (false, nil, "PT FileManager read fail".localized())
             }
             return (true, readString.jsonStringToDic, "")
         }
@@ -397,28 +397,28 @@ public extension PTPOP where Base: FileManager {
                          isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
         // 1、先判断被拷贝路径是否存在
         guard judgeFileOrFolderExists(filePath: fromeFilePath) else {
-            return (false, "被拷贝的(文件夹/文件)路径不存在")
+            return (false, "PT FileManager copy no path".localized())
         }
         // 2、判断拷贝后的文件路径的前一个文件夹路径是否存在，不存在就进行创建
         let toFileFolderPath = directoryAtPath(path: toFilePath)
         if !judgeFileOrFolderExists(filePath: toFileFolderPath), type == .file ? !createFile(filePath: toFilePath).isSuccess : !createFolder(folderPath: toFileFolderPath).isSuccess {
-            return (false, "拷贝后路径前一个文件夹不存在")
+            return (false, "PT FileManager copy no forward path".localized())
         }
         // 3、如果被拷贝的(文件夹/文件)已存在，先删除，否则拷贝不了
         if isOverwrite, judgeFileOrFolderExists(filePath: toFilePath) {
             do {
                 try fileManager.removeItem(atPath: toFilePath)
             } catch _ {
-                return (false, "拷贝失败")
+                return (false, "PT FileManager copy fail".localized())
             }
         }
         // 4、拷贝(文件夹/文件)
         do {
             try fileManager.copyItem(atPath: fromeFilePath, toPath: toFilePath)
         } catch _ {
-            return (false, "拷贝失败")
+            return (false, "PT FileManager copy fail".localized())
         }
-        return (true, "success")
+        return (true, "PT FileManager copy success".localized())
     }
     
     //MARK: 移动(文件夹/文件)的内容 到另外一个(文件夹/文件)，新的(文件夹/文件)如果存在就先删除再 移动
@@ -433,28 +433,28 @@ public extension PTPOP where Base: FileManager {
                          isOverwrite: Bool = true) -> (isSuccess: Bool, error: String) {
         // 1、先判断被拷贝路径是否存在
         guard judgeFileOrFolderExists(filePath: fromeFilePath) else {
-            return (false, "被移动的(文件夹/文件)路径不存在")
+            return (false, "PT FileManager move no path".localized())
         }
         // 2、判断拷贝后的文件路径的前一个文件夹路径是否存在，不存在就进行创建
         let toFileFolderPath = directoryAtPath(path: toFilePath)
         if !judgeFileOrFolderExists(filePath: toFileFolderPath), type == .file ? !createFile(filePath: toFilePath).isSuccess : !createFolder(folderPath: toFileFolderPath).isSuccess {
-            return (false, "移动后路径前一个文件夹不存在")
+            return (false, "PT FileManager move no forward path".localized())
         }
         // 3、如果被移动的(文件夹/文件)已存在，先删除，否则拷贝不了
         if isOverwrite, judgeFileOrFolderExists(filePath: toFilePath) {
             do {
                 try fileManager.removeItem(atPath: toFilePath)
             } catch _ {
-                return (false, "移动失败")
+                return (false, "PT FileManager move fail".localized())
             }
         }
         // 4、移动(文件夹/文件)
         do {
             try fileManager.moveItem(atPath: fromeFilePath, toPath: toFilePath)
         } catch _ {
-            return (false, "移动失败")
+            return (false, "PT FileManager move fail".localized())
         }
-        return (true, "success")
+        return (true, "PT FileManager move success".localized())
     }
     
     //MARK: 判断 (文件夹/文件) 是否存在
