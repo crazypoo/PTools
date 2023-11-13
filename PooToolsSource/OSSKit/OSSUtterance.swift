@@ -66,7 +66,7 @@ public class OSSUtterance: AVSpeechUtterance {
 
     public override init() {
         super.init(string: "ERROR")
-        debugLog(object: self, message: "ERROR: You must use the `init(string:)` or `init(attributedString:` methods.")
+        PTNSLogConsole("ERROR: You must use the `init(string:)` or `init(attributedString:` methods.")
         speechString = "ERROR"
         attributedSpeechString = NSAttributedString(string: "ERROR")
         commonInit()

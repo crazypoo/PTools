@@ -60,7 +60,7 @@ open class PTDevMaskView: PTBaseMaskView {
     private lazy var eyeTrackingLabel:UILabel = {
         let view = UILabel()
         view.textColor = .randomColor
-        view.text = "眼球追踪开关"
+        view.text = "PT Debug eye switch".localized()
         return view
     }()
     
@@ -84,7 +84,7 @@ open class PTDevMaskView: PTBaseMaskView {
     private lazy var eyeTrackingLabelFocus:UILabel = {
         let view = UILabel()
         view.textColor = .randomColor
-        view.text = "眼球追踪是否同步点击事件"
+        view.text = "PT Debug eys track".localized()
         return view
     }()
 #endif

@@ -78,11 +78,9 @@
 		550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */; };
 		550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */; };
 		550CE4B22AF233F50052539D /* OSSVoice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AE2AF233F40052539D /* OSSVoice.swift */; };
-		550CE4B32AF233F50052539D /* OSSSpeechUtility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */; };
 		550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4B02AF233F50052539D /* OSSUtterance.swift */; };
 		550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4B12AF233F50052539D /* OSSSpeech.swift */; };
 		550CE4B72AF234E10052539D /* OSSKitImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 550CE4B62AF234E10052539D /* OSSKitImages.xcassets */; };
-		550CE4B92AF235020052539D /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 550CE4B82AF235020052539D /* Localizable.strings */; };
 		550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */; };
 		550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */; };
 		550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE4C22AF295B10052539D /* PTSpeechViewController.swift */; };
@@ -476,11 +474,9 @@
 		550CE4A92AF1894A0052539D /* PTFuncNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncNameViewController.swift; sourceTree = "<group>"; };
 		550CE4AB2AF1B3D60052539D /* PTFuncDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFuncDetailViewController.swift; sourceTree = "<group>"; };
 		550CE4AE2AF233F40052539D /* OSSVoice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSVoice.swift; sourceTree = "<group>"; };
-		550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSSpeechUtility.swift; sourceTree = "<group>"; };
 		550CE4B02AF233F50052539D /* OSSUtterance.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSUtterance.swift; sourceTree = "<group>"; };
 		550CE4B12AF233F50052539D /* OSSSpeech.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OSSSpeech.swift; sourceTree = "<group>"; };
 		550CE4B62AF234E10052539D /* OSSKitImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = OSSKitImages.xcassets; sourceTree = "<group>"; };
-		550CE4B82AF235020052539D /* Localizable.strings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		550CE4BC2AF23DC40052539D /* PTSoundVisualizerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSoundVisualizerView.swift; sourceTree = "<group>"; };
 		550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTVoiceActionView.swift; sourceTree = "<group>"; };
 		550CE4C22AF295B10052539D /* PTSpeechViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeechViewController.swift; sourceTree = "<group>"; };
@@ -1299,9 +1295,7 @@
 		550CE4AD2AF233B60052539D /* OSSKit */ = {
 			isa = PBXGroup;
 			children = (
-				550CE4B82AF235020052539D /* Localizable.strings */,
 				550CE4B12AF233F50052539D /* OSSSpeech.swift */,
-				550CE4AF2AF233F50052539D /* OSSSpeechUtility.swift */,
 				550CE4B02AF233F50052539D /* OSSUtterance.swift */,
 				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
 				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
@@ -2180,7 +2174,6 @@
 				55102AAF2AFFAB5900E9529D /* icon_permission_health.png in Resources */,
 				55102AB02AFFAB5900E9529D /* icon_permission_tracking.png in Resources */,
 				55102ABA2AFFAB5900E9529D /* icon_permission_contact.png in Resources */,
-				550CE4B92AF235020052539D /* Localizable.strings in Resources */,
 				55102AB92AFFAB5900E9529D /* icon_permission_camera.png in Resources */,
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
 				55102AB22AFFAB5900E9529D /* icon_permission_siri.png in Resources */,
@@ -2626,7 +2619,6 @@
 				5585F70B2AD2B5B400F878B4 /* PTVideoEditorVideoTimeLineView.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
-				550CE4B32AF233F50052539D /* OSSSpeechUtility.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
 				5585F6D52AD29B4700F878B4 /* CALayer+VideoEditorEX.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,

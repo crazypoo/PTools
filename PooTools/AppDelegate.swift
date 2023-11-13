@@ -125,8 +125,12 @@ class AppDelegate: PTAppWindowsDelegate {
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
                 
-//        let error = NSError(domain: NSStringFromClass(type(of: self)), code: 100, userInfo: [NSLocalizedDescriptionKey: "4444444444444444"])
-//        PTNSLogConsole(">>>>>>>>>>>>>>\(error.localizedDescription)")
+        XMNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { state in
+            
+        }
+        
+        
+        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
 
         return true
     }

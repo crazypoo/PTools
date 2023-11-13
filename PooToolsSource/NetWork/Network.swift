@@ -17,17 +17,45 @@ public let NetWorkNoError = NSError(domain: "PT Network no network".localized(),
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
 public let NetWorkModelExplainError = NSError(domain: "PT Network model fail".localized(), code: 99999999999)
 
-public enum NetWorkStatus: String {
-    case unknown      = "未知网络"
-    case notReachable = "网络无连接"
-    case wwan         = "2,3,4G,5G网络"
-    case wifi          = "wifi网络"
+public let AppTestMode = "PT App network environment test".localized()
+public let AppCustomMode = "PT App network environment custom".localized()
+public let AppDisMode = "PT App network environment distribution".localized()
+
+public enum NetWorkStatus: Int {
+    case unknown
+    case notReachable
+    case wwan
+    case wifi
+    
+    static func valueName(type:NetWorkStatus) -> String {
+        switch type {
+        case .unknown:
+            "PT App network status unknow".localized()
+        case .notReachable:
+            "PT App network status disconnect".localized()
+        case .wwan:
+            "2,3,4G,5G"
+        case .wifi:
+            "WIFI"
+        }
+    }
 }
 
-public enum NetWorkEnvironment: String {
-    case Development  = "开发环境"
-    case Test         = "测试环境"
-    case Distribution = "生产环境"
+public enum NetWorkEnvironment: Int {
+    case Development
+    case Test
+    case Distribution
+    
+    static func valueName(type:NetWorkEnvironment) -> String {
+        switch type {
+        case .Development:
+            "PT App network environment custom".localized()
+        case .Test:
+            "PT App network environment test".localized()
+        case .Distribution:
+            "PT App network environment distribution".localized()
+        }
+    }
 }
 
 public typealias ReslutClosure = (_ result: ResponseModel?,_ error: AFError?) -> Void
@@ -77,14 +105,15 @@ public class XMNetWorkStatus {
             } else {
                 weakSelf.currentNetWorkStatus = .notReachable
             }
-            netWork(weakSelf.currentNetWorkStatus.rawValue, weakSelf.currentEnvironment.rawValue,status)
+            
+            netWork(NetWorkStatus.valueName(type: weakSelf.currentNetWorkStatus), NetWorkEnvironment.valueName(type: weakSelf.currentEnvironment),status)
         })
     }
     
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
-        detectNetWork { (status, environment,statusType)  in
-            PTNSLogConsole("当前网络环境为-> \(status) 当前运行环境为-> \(environment)")
+        detectNetWork { (status, environment,statusType)  in            
+            PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment))
             if handle != nil {
                 handle!(statusType)
             }

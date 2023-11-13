@@ -19,11 +19,11 @@ public class PTDebugViewController: PTBaseViewController {
         var modeName = ""
         switch PTBaseURLMode {
         case .Development:
-            modeName = "自定义环境"
+            modeName = AppCustomMode
         case .Test:
-            modeName = "测试环境"
+            modeName = AppTestMode
         case .Distribution:
-            modeName = "生产环境"
+            modeName = AppDisMode
         }
         
         let cell_mode = PTFusionCellModel()
@@ -94,7 +94,7 @@ public class PTDebugViewController: PTBaseViewController {
         view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             if itemRow.title == .ipMode {
-                UIAlertController.baseActionSheet(title: "选择APP请求环境", cancelButtonName: "PT Button cancel".localized(),titles: ["生产环境","测试","自定义"], otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "PT Debug network select".localized(), cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index in
                     switch index {
                     case PTActionSheetView.DestructiveButtonTag:
                         break
@@ -106,11 +106,11 @@ public class PTDebugViewController: PTBaseViewController {
                         var modeName = ""
                         switch PTBaseURLMode {
                         case .Development:
-                            modeName = "自定义环境"
+                            modeName = AppCustomMode
                         case .Test:
-                            modeName = "测试环境"
+                            modeName = AppTestMode
                         case .Distribution:
-                            modeName = "生产环境"
+                            modeName = AppDisMode
                         }
 
                         self.settingCellModels[0].content = modeName
@@ -129,7 +129,7 @@ public class PTDebugViewController: PTBaseViewController {
                         current = url_debug
                     }
                     
-                    UIAlertController.base_textfield_alertVC(title:"输入服务器地址",okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["请输入服务器地址"], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
+                    UIAlertController.base_textfield_alertVC(title:"PT Debug network input title".localized(),okBtn: "PT Button comfirm".localized(), cancelBtn: "PT Button cancel".localized(), showIn: self, placeHolders: ["PT Debug network input placeholder".localized()], textFieldTexts: [current], keyboardType: [.default],textFieldDelegate: self) { result in
                         let newURL = result.values.first
                         PTCoreUserDefultsWrapper.AppRequestUrl = newURL!
                         
@@ -200,7 +200,7 @@ extension PTDebugViewController:UITextFieldDelegate {
 }
 
 fileprivate extension String {
-    static let ipMode = "选择服务器地址(默认是正式环境)"
-    static let addressInput = "自定义地址"
-    static let DebugMode = "DebugMode"
+    static let ipMode = "\("PT Debug network input title".localized())\("PT Debug mode select".localized())"
+    static let addressInput = "PT Debug mode custom address".localized()
+    static let DebugMode = "PT Debug mode".localized()
 }

@@ -13,26 +13,26 @@ import Kingfisher
 public typealias FlexDevTask = (Bool) -> Void
 
 fileprivate extension String {
-    static let openAll = "全部开启"
-    static let closeAll = "全部关闭"
-    static let closeTouches = "关闭检测界面点击特效"
-    static let openTouches = "开启检测界面点击特效"
-    static let closeTouchesHits = "关闭界面点击检测"
-    static let openTouchesHits = "开启界面点击检测"
+    static let openAll = "Open all"
+    static let closeAll = "Close all"
+    static let closeTouches = "Close touch bubble"
+    static let openTouches = "Open touch bubble"
+    static let closeTouchesHits = "Close touch"
+    static let openTouchesHits = "Open touch"
     static let flex = "FLEX"
     static let log = "LOG"
     static let fps = "FPS"
     static let memory = "Memory"
-    static let colorCheck = "颜色检查"
-    static let ruler = "卡尺"
-    static let debugController = "调试功能界面"
-    static let inAppViewsCheck = "界面图层展示"
+    static let colorCheck = "Color check"
+    static let ruler = "Ruler"
+    static let debugController = "Debug controller"
+    static let inAppViewsCheck = "Views check"
     static let hyperioniOS = "HyperioniOS"
     static let devMask = "DEVMask"
     static let devMaskEvent = "DevMaskEvent"
     static let userDefults = "UserDefults"
-    static let appDocument = "App文件夹"
-    static let netPit = "网络拦截"
+    static let appDocument = "App Document"
+    static let netPit = "Net pit"
 }
 
 @objcMembers
