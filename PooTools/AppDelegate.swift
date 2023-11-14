@@ -77,8 +77,36 @@ class AppDelegate: PTAppWindowsDelegate {
         NFX.sharedInstance().start()
 #endif
         
-#if POOTOOLS_DEBUG
-        createDevFunction(flex: {
+//#if POOTOOLS_DEBUG
+//        createDevFunction(flex: {
+//#if canImport(FLEX)
+//            if FLEXManager.shared.isHidden {
+//                FLEXManager.shared.showExplorer()
+//            } else {
+//                FLEXManager.shared.hideExplorer()
+//            }
+//#endif
+//        },inApp:{
+//#if canImport(InAppViewDebugger)
+//            InAppViewDebugger.present()
+//#endif
+//        },Hyperion:{
+//#if canImport(HyperionCore)
+//            HyperionManager.sharedInstance().attach(to: self.window)
+//            HyperionManager.sharedInstance().togglePluginDrawer()
+//#endif
+//        },FoxNet:{
+//#if canImport(netfox)
+//            if NFX.sharedInstance().isStarted() {
+//                NFX.sharedInstance().show()
+//            }
+//#endif
+//        })
+//#endif
+        
+        let devFunction = PTDevFunction.share
+        devFunction.createLabBtn()
+        devFunction.flex = {
 #if canImport(FLEX)
             if FLEXManager.shared.isHidden {
                 FLEXManager.shared.showExplorer()
@@ -86,23 +114,42 @@ class AppDelegate: PTAppWindowsDelegate {
                 FLEXManager.shared.hideExplorer()
             }
 #endif
-        },inApp:{
+        }
+        devFunction.inApp = {
 #if canImport(InAppViewDebugger)
             InAppViewDebugger.present()
 #endif
-        },Hyperion:{
-#if canImport(HyperionCore)
-            HyperionManager.sharedInstance().attach(to: self.window)
-            HyperionManager.sharedInstance().togglePluginDrawer()
-#endif
-        },FoxNet:{
+        }
+        devFunction.HyperioniOS = {
+//#if canImport(HyperionCore)
+//            HyperionManager.sharedInstance().attach(to: AppWindows)
+//            HyperionManager.sharedInstance().togglePluginDrawer()
+//#endif
+        }
+        devFunction.TestHitShow = { show in
+            if self.window is TouchInspectorWindow {
+                (self.window as! TouchInspectorWindow).showHitTesting = show
+            }
+        }
+        devFunction.TestHitTouchesShow = { show in
+            if self.window is TouchInspectorWindow {
+                (self.window as! TouchInspectorWindow).showTouches = show
+            }
+        }
+        devFunction.FoxNet = {
 #if canImport(netfox)
             if NFX.sharedInstance().isStarted() {
                 NFX.sharedInstance().show()
             }
 #endif
-        })
-#endif
+        }
+        devFunction.goToAppDevVC = {
+            let vc = PTDebugViewController()
+            let nav = PTBaseNavControl(rootViewController: vc)
+            nav.modalPresentationStyle = .fullScreen
+            PTUtils.getCurrentVC().present(nav, animated: true)
+        }
+
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {
             let guideModel = PTGuidePageModel()
             guideModel.mainView = self.window!

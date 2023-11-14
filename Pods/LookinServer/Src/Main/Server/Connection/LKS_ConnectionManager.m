@@ -14,6 +14,7 @@
 #import "LookinConnectionResponseAttachment.h"
 #import "LKS_ExportManager.h"
 #import "LookinServerDefines.h"
+#import "LKS_TraceManager.h"
 
 NSString *const LKS_ConnectionDidEndNotificationName = @"LKS_ConnectionDidEndNotificationName";
 
@@ -53,6 +54,9 @@ NSString *const LKS_ConnectionDidEndNotificationName = @"LKS_ConnectionDidEndNot
         [[NSNotificationCenter defaultCenter] addObserverForName:@"Lookin_Export" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
             [[LKS_ExportManager sharedInstance] exportAndShare];
         }];
+        [[NSNotificationCenter defaultCenter] addObserverForName:@"Lookin_RelationSearch" object:nil queue:[NSOperationQueue mainQueue] usingBlock:^(NSNotification * _Nonnull note) {
+            [[LKS_TraceManager sharedInstance] addSearchTarger:note.object];
+        }];
         
         self.requestHandler = [LKS_RequestHandler new];
     }
@@ -64,10 +68,17 @@ NSString *const LKS_ConnectionDidEndNotificationName = @"LKS_ConnectionDidEndNot
 }
 
 - (void)_handleApplicationDidBecomeActive {
-//    NSLog(@"LookinServer(0.8.0) - UIApplicationDidBecomeActiveNotification");
     self.applicationIsActive = YES;
-    if (self.peerChannel_ && (self.peerChannel_.isConnected || self.peerChannel_.isListening)) {
-        return;
+    [self tryToListenPorts];
+}
+
+- (void)tryToListenPorts {
+    if (self.peerChannel_) {
+        // 除了 connected 和 listenin 状态之外，还可能是 close 状态。如果连接了 client 端，而 client 端又关闭了，那么这里的 channel 就会变成 close
+        if ([self.peerChannel_ isConnected] || [self.peerChannel_ isListening]) {
+//            NSLog(@"LookinServer - Abort connect trying. Already has active channel.");
+            return;
+        }
     }
     NSLog(@"LookinServer - Trying to connect ...");
     if ([self isiOSAppOnMac]) {
@@ -114,9 +125,8 @@ NSString *const LKS_ConnectionDidEndNotificationName = @"LKS_ConnectionDidEndNot
         } else {
             // 成功
             NSLog(@"LookinServer - Connected successfully on 127.0.0.1:%d", currentPort);
-        
-//            UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:@"%@", @(currentPort)] message:nil preferredStyle:UIAlertControllerStyleAlert];
-//            [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alert animated:YES completion:nil];
+            // 此时 peerChannel_ 状态为 listening
+            self.peerChannel_ = channel;
         }
     }];
 }
@@ -181,16 +191,21 @@ NSString *const LKS_ConnectionDidEndNotificationName = @"LKS_ConnectionDidEndNot
 
 /// 当连接过 Lookin 客户端，然后 Lookin 客户端又被关闭时，会走到这里
 - (void)ioFrameChannel:(Lookin_PTChannel*)channel didEndWithError:(NSError*)error {
+//    NSLog(@"LookinServer - didEndWithError:%@", channel);
     [[NSNotificationCenter defaultCenter] postNotificationName:LKS_ConnectionDidEndNotificationName object:self];
+    [self tryToListenPorts];
 }
 
+/// 当 Client 端链接成功时，该方法会被调用，然后 channel 的状态会变成 connected
 - (void)ioFrameChannel:(Lookin_PTChannel*)channel didAcceptConnection:(Lookin_PTChannel*)otherChannel fromAddress:(Lookin_PTAddress*)address {
-    if (self.peerChannel_) {
-        [self.peerChannel_ cancel];
-    }
-    
+//    NSLog(@"LookinServer - didAcceptConnection:%@, current:%@", otherChannel, self.peerChannel_);
+    Lookin_PTChannel *previousChannel = self.peerChannel_;
     self.peerChannel_ = otherChannel;
     self.peerChannel_.userInfo = address;
+    
+    if (previousChannel && previousChannel != self.peerChannel_) {
+        [previousChannel cancel];
+    }
 }
 
 #pragma mark - Handler

@@ -145,8 +145,8 @@ public class PTDevFunction: NSObject {
                         if title == .openAll {
                             self.isAllOpen = true
                             PTDevFunction.GobalDevFunction_open { show in
-                                if self.flexBool != nil {
-                                    self.flexBool!(show)
+                                if self.flex != nil {
+                                    self.flex!()
                                 }
                                 
                                 if self.inApp != nil {
@@ -168,8 +168,8 @@ public class PTDevFunction: NSObject {
                         } else if title == .closeAll {
                             self.isAllOpen = false
                             PTDevFunction.GobalDevFunction_close { show in
-                                if self.flexBool != nil {
-                                    self.flexBool!(show)
+                                if self.flex != nil {
+                                    self.flex!()
                                 }
                                 
                                 if self.inApp != nil {

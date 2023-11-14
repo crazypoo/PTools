@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 //MARK: 导入此模块须要引用camera的权限调用
 

@@ -21,7 +21,8 @@
 #import "LookinObject.h"
 #import "LookinAppInfo.h"
 #import "LKS_AttrGroupsMaker.h"
-#import "LKS_AttrModificationHandler.h"
+#import "LKS_InbuiltAttrModificationHandler.h"
+#import "LKS_CustomAttrModificationHandler.h"
 #import "LKS_AttrModificationPatchHandler.h"
 #import "LKS_HierarchyDetailsHandler.h"
 #import "LookinStaticAsyncUpdateTask.h"
@@ -39,7 +40,8 @@
         _validRequestTypes = [NSSet setWithObjects:@(LookinRequestTypePing),
                               @(LookinRequestTypeApp),
                               @(LookinRequestTypeHierarchy),
-                              @(LookinRequestTypeModification),
+                              @(LookinRequestTypeInbuiltAttrModification),
+                              @(LookinRequestTypeCustomAttrModification),
                               @(LookinRequestTypeAttrModificationPatch),
                               @(LookinRequestTypeHierarchyDetails),
                               @(LookinRequestTypeFetchObject),
@@ -86,13 +88,23 @@
         [[LKS_ConnectionManager sharedInstance] respond:responseAttachment requestType:requestType tag:tag];
         
     } else if (requestType == LookinRequestTypeHierarchy) {
+        // 从 LookinClient 1.0.4 开始有这个参数，之前是 nil
+        NSString *clientVersion = nil;
+        if ([object isKindOfClass:[NSDictionary class]]) {
+            NSDictionary<NSString *, id> *params = object;
+            NSString *version = params[@"clientVersion"];
+            if ([version isKindOfClass:[NSString class]]) {
+                clientVersion = version;
+            }
+        }
+        
         LookinConnectionResponseAttachment *responseAttachment = [LookinConnectionResponseAttachment new];
-        responseAttachment.data = [LookinHierarchyInfo staticInfo];
+        responseAttachment.data = [LookinHierarchyInfo staticInfoWithLookinVersion:clientVersion];
         [[LKS_ConnectionManager sharedInstance] respond:responseAttachment requestType:requestType tag:tag];
         
-    } else if (requestType == LookinRequestTypeModification) {
+    } else if (requestType == LookinRequestTypeInbuiltAttrModification) {
         // 请求修改某个属性
-        [LKS_AttrModificationHandler handleModification:object completion:^(LookinDisplayItemDetail *data, NSError *error) {
+        [LKS_InbuiltAttrModificationHandler handleModification:object completion:^(LookinDisplayItemDetail *data, NSError *error) {
             LookinConnectionResponseAttachment *attachment = [LookinConnectionResponseAttachment new];
             if (error) {
                 attachment.error = error;
@@ -102,10 +114,18 @@
             [[LKS_ConnectionManager sharedInstance] respond:attachment requestType:requestType tag:tag];
         }];
         
+    } else if (requestType == LookinRequestTypeCustomAttrModification) {
+        BOOL succ = [LKS_CustomAttrModificationHandler handleModification:object];
+        if (succ) {
+            [self _submitResponseWithData:nil requestType:requestType tag:tag];
+        } else {
+            [self _submitResponseWithError:LookinErr_Inner requestType:requestType tag:tag];
+        }
+        
     } else if (requestType == LookinRequestTypeAttrModificationPatch) {
         NSArray<LookinStaticAsyncUpdateTask *> *tasks = object;
         NSUInteger dataTotalCount = tasks.count;
-        [LKS_AttrModificationHandler handlePatchWithTasks:tasks block:^(LookinDisplayItemDetail *data) {
+        [LKS_InbuiltAttrModificationHandler handlePatchWithTasks:tasks block:^(LookinDisplayItemDetail *data) {
             LookinConnectionResponseAttachment *attrAttachment = [LookinConnectionResponseAttachment new];
             attrAttachment.data = data;
             attrAttachment.dataTotalCount = dataTotalCount;
