@@ -87,7 +87,7 @@ public extension String {
 
 
 // MARK: Language Setting Functions
-
+@objcMembers
 open class Localize: NSObject {
     
     /**

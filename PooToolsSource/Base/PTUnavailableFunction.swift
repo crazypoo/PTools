@@ -11,24 +11,24 @@ import AttributedString
 import SafeSFSymbols
 
 public class PTEmptyDataViewConfig : NSObject {
-    var mainTitleAtt:ASAttributedString? = """
+    public var mainTitleAtt:ASAttributedString? = """
             \(wrap: .embedding("""
             \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
             """))
             """
-    var secondaryEmptyAtt:ASAttributedString? = """
+    public var secondaryEmptyAtt:ASAttributedString? = """
             \(wrap: .embedding("""
             \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
             """))
             """
-    var buttonTitle:String? = "点我刷新"
-    var buttonFont:UIFont = .appfont(size: 18)
-    var buttonTextColor:UIColor = .systemBlue
-    var image:UIImage? = UIImage(.exclamationmark.triangle)
-    var backgroundColor:UIColor = .clear
-    var imageToTextPadding:CGFloat = 10
-    var textToSecondaryTextPadding:CGFloat = 5
-    var buttonToSecondaryButtonPadding:CGFloat = 15
+    public var buttonTitle:String? = "点我刷新"
+    public var buttonFont:UIFont = .appfont(size: 18)
+    public var buttonTextColor:UIColor = .systemBlue
+    public var image:UIImage? = UIImage(.exclamationmark.triangle)
+    public var backgroundColor:UIColor = .clear
+    public var imageToTextPadding:CGFloat = 10
+    public var textToSecondaryTextPadding:CGFloat = 5
+    public var buttonToSecondaryButtonPadding:CGFloat = 15
 }
 
 @available(iOS 17.0 , *)

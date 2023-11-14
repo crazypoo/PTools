@@ -288,6 +288,10 @@ public class PTCollectionView: UIView {
                         self.emptyTap!(sender)
                     }
                 }
+            } else {
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    self.showEmptyConfig()
+                }
             }
         }
 #else
@@ -299,11 +303,13 @@ public class PTCollectionView: UIView {
 #endif
         
         if #available(iOS 17.0, *) {
-            PTCollectionView.share.emptyTap = {
-                if self.emptyTap != nil {
-                    self.emptyTap!(nil)
+            if self.viewConfig.showEmptyAlert {
+                PTCollectionView.share.emptyTap = {
+                    if self.emptyTap != nil {
+                        self.emptyTap!(nil)
+                    }
+                    self.showEmptyLoading()
                 }
-                self.showEmptyLoading()
             }
         }
     }
@@ -477,7 +483,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
                 collectionWillDisplay!(collectionView,cell,itemSec,indexPath)
             }
         }
-    }    
+    }
     
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if collectionViewDidScrol != nil {

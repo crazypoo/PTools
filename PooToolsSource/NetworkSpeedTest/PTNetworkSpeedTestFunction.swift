@@ -8,18 +8,19 @@
 
 import UIKit
 
-public enum PTNetworkSpeedTestStateType {
+@objc public enum PTNetworkSpeedTestStateType:Int {
     case Download
     case Upload
     case Free
 }
 
-public enum PTNetworkSpeedTestType {
+@objc public enum PTNetworkSpeedTestType:Int {
     case Download
     case Upload
     case Latency
 }
 
+@objcMembers
 public class PTNetworkSpeedTestFunction: NSObject {
     public static let shared = PTNetworkSpeedTestFunction()
     

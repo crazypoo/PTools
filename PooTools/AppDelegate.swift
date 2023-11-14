@@ -45,7 +45,6 @@ class AppDelegate: PTAppWindowsDelegate {
 //                    developmentDevice: debugDevice,
 //                    config: buglyConfig)
         
-        PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         PTDarkModeOption.defaultDark()
         StatusBarManager.shared.style = PTDarkModeOption.isLight ? .darkContent : .lightContent
         
@@ -131,7 +130,7 @@ class AppDelegate: PTAppWindowsDelegate {
         
         
         PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
-
+                
         return true
     }
 }

@@ -26,7 +26,7 @@ public extension UISlider {
         block(sender)
     }
     
-    func setValue(_ value: Float,
+    @objc func setValue(_ value: Float,
                   animated: Bool = true,
                   duration: TimeInterval,
                   completion: PTActionTask? = nil) {

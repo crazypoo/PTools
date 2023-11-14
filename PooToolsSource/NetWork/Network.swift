@@ -76,6 +76,7 @@ public var PTBaseURLMode:NetWorkEnvironment {
 }
 
 // MARK: - 网络运行状态监听
+@objcMembers
 public class XMNetWorkStatus {
     
     public static let shared = XMNetWorkStatus()
@@ -313,6 +314,7 @@ public class Network: NSObject {
     class public func imageUpload(needGobal:Bool? = true,
                                   images:[UIImage]?,
                                   path:String? = "/api/project/ossImg",
+                                  method: HTTPMethod = .post,
                                   fileKey:[String]? = ["images"],
                                   parmas:[String:String]? = nil,
                                   header:HTTPHeaders? = nil,
@@ -374,7 +376,7 @@ public class Network: NSObject {
                         multipartFormData.append(Data(parmas![value]!.utf8), withName: value)
                     })
                 }
-            }, to: pathUrl,method: .post,headers: apiHeader).uploadProgress(closure: { progress in
+            }, to: pathUrl,method: method,headers: apiHeader).uploadProgress(closure: { progress in
                 PTGCDManager.gcdMain() {
                     if progressBlock != nil {
                         progressBlock!(progress)

@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 public class PTPermissionModel: NSObject {
     public var name:String!
     public var desc:String = ""
