@@ -131,6 +131,13 @@ open class PTBaseNavControl: UINavigationController {
         }
     }
 }
+
+extension PTBaseNavControl:UIGestureRecognizerDelegate {
+    open func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+        false
+    }
+}
+
 #endif
 
 extension PTBaseNavControl {

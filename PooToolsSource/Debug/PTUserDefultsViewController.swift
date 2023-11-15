@@ -214,7 +214,7 @@ extension PTUserDefultsEditViewController:PTRouterable {
     }
     
     public static func registerAction(info: [String : Any]) -> Any {
-        let vc = PTUserDefultsEditViewController()
+        let vc = PTUserDefultsEditViewController(viewModel: PTFusionCellModel())
         return vc
     }
 }
