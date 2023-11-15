@@ -50,44 +50,13 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #if POOTOOLS_DEBUG
     open func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil,Hyperion:PTActionTask? = nil,FoxNet:PTActionTask? = nil) {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
-            let devFunction = PTDevFunction.share
-            devFunction.createLabBtn()
-            devFunction.flex = {
-                if flex != nil {
-                    flex!()
-                }
-            }
-            devFunction.inApp = {
-                if inApp != nil {
-                    inApp!()
-                }
-            }
-            devFunction.HyperioniOS = {
-                if Hyperion != nil {
-                    Hyperion!()
-                }
-            }
-            devFunction.TestHitShow = { show in
-                if self.window is TouchInspectorWindow {
-                    (self.window as! TouchInspectorWindow).showHitTesting = show
-                }
-            }
-            devFunction.TestHitTouchesShow = { show in
-                if self.window is TouchInspectorWindow {
-                    (self.window as! TouchInspectorWindow).showTouches = show
-                }
-            }
-            devFunction.FoxNet = {
-                if FoxNet != nil {
-                    FoxNet!()
-                }
-            }
-            devFunction.goToAppDevVC = {
-                let vc = PTDebugViewController()
-                let nav = PTBaseNavControl(rootViewController: vc)
-                nav.modalPresentationStyle = .fullScreen
-                PTUtils.getCurrentVC().present(nav, animated: true)
-            }
+            
+            let lcm = LocalConsole.shared
+            lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
+            lcm.flex = flex
+            lcm.watchViews = inApp
+            lcm.HyperioniOS = Hyperion
+            lcm.FoxNet = FoxNet
         }
     }
 #endif

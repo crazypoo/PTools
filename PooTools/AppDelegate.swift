@@ -104,7 +104,7 @@ class AppDelegate: PTAppWindowsDelegate {
 //        })
 //#endif
         
-#if DEBUG
+//#if DEBUG
         let lcm = LocalConsole.shared
         lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
         lcm.flex = {
@@ -134,7 +134,7 @@ class AppDelegate: PTAppWindowsDelegate {
             InAppViewDebugger.present()
 #endif
         }
-        #endif
+//        #endif
 
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {
             let guideModel = PTGuidePageModel()
