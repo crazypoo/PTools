@@ -104,9 +104,10 @@ class AppDelegate: PTAppWindowsDelegate {
 //        })
 //#endif
         
-        let devFunction = PTDevFunction.share
-        devFunction.createLabBtn()
-        devFunction.flex = {
+#if DEBUG
+        let lcm = LocalConsole.shared
+        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
+        lcm.flex = {
 #if canImport(FLEX)
             if FLEXManager.shared.isHidden {
                 FLEXManager.shared.showExplorer()
@@ -115,40 +116,25 @@ class AppDelegate: PTAppWindowsDelegate {
             }
 #endif
         }
-        devFunction.inApp = {
-#if canImport(InAppViewDebugger)
-            InAppViewDebugger.present()
+        lcm.HyperioniOS = {
+#if canImport(HyperionCore)
+            HyperionManager.sharedInstance().attach(to: AppWindows)
+            HyperionManager.sharedInstance().togglePluginDrawer()
 #endif
         }
-        devFunction.HyperioniOS = {
-//#if canImport(HyperionCore)
-//            HyperionManager.sharedInstance().attach(to: AppWindows)
-//            HyperionManager.sharedInstance().togglePluginDrawer()
-//#endif
-        }
-        devFunction.TestHitShow = { show in
-            if self.window is TouchInspectorWindow {
-                (self.window as! TouchInspectorWindow).showHitTesting = show
-            }
-        }
-        devFunction.TestHitTouchesShow = { show in
-            if self.window is TouchInspectorWindow {
-                (self.window as! TouchInspectorWindow).showTouches = show
-            }
-        }
-        devFunction.FoxNet = {
+        lcm.FoxNet = {
 #if canImport(netfox)
             if NFX.sharedInstance().isStarted() {
                 NFX.sharedInstance().show()
             }
 #endif
         }
-        devFunction.goToAppDevVC = {
-            let vc = PTDebugViewController()
-            let nav = PTBaseNavControl(rootViewController: vc)
-            nav.modalPresentationStyle = .fullScreen
-            PTUtils.getCurrentVC().present(nav, animated: true)
+        lcm.watchViews = {
+#if canImport(InAppViewDebugger)
+            InAppViewDebugger.present()
+#endif
         }
+        #endif
 
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {
             let guideModel = PTGuidePageModel()
@@ -177,7 +163,8 @@ class AppDelegate: PTAppWindowsDelegate {
         
         
         PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
-                
+        PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
+
         return true
     }
 }

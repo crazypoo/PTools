@@ -24,20 +24,8 @@ public extension PTBaseViewController {
         if UIApplication.applicationEnvironment() != .appStore {
             let uidebug:Bool = PTCoreUserDefultsWrapper.AppDebugMode
             PTCoreUserDefultsWrapper.AppDebugMode = !PTCoreUserDefultsWrapper.AppDebugMode
-            if uidebug {
-                if PTDevFunction.share.mn_PFloatingButton != nil {
-                    PTDevFunction.share.lab_btn_release()
-                } else {
-                    PTDevFunction.GobalDevFunction_close { show in
-#if DEBUG
-                                self.showFlexFunction(show: showFlex)
-#endif
-                    }
-                }
-            } else {
-                let vc = PTDebugViewController.init(hideBaseNavBar: false)
-                PTUtils.getCurrentVC().navigationController?.pushViewController(vc, animated: true)
-            }
+            let console = LocalConsole.shared
+            console.isVisible = uidebug
         }
     }
 }

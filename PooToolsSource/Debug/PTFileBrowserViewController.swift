@@ -11,7 +11,7 @@ import SnapKit
 import MobileCoreServices
 import QuickLook
 
-class PTFileBrowserViewController: PTBaseViewController {
+public class PTFileBrowserViewController: PTBaseViewController {
 
     var showAction:Bool = false
     
@@ -174,12 +174,12 @@ class PTFileBrowserViewController: PTBaseViewController {
         return view
     }()
 
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
         let closeBtn = UIButton(type: .custom)
         closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-        closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
+        closeBtn.bounds = CGRectMake(0, 0, 34, 34)
         closeBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -312,11 +312,11 @@ class PTFileBrowserViewController: PTBaseViewController {
 }
 
 extension PTFileBrowserViewController: QLPreviewControllerDelegate, QLPreviewControllerDataSource {
-    func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
+    public func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
         1
     }
     
-    func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
+    public func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
         operateFilePath! as QLPreviewItem
     }
 }

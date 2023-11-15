@@ -67,26 +67,8 @@ public class PTDebugViewController: PTBaseViewController {
                 cell.switchValueChangeBlock = { title,sender in
                     let value = !PTCoreUserDefultsWrapper.AppDebugMode
                     PTCoreUserDefultsWrapper.AppDebugMode = value
-                    if value {
-                        if PTDevFunction.share.mn_PFloatingButton == nil {
-                            //开了
-                            PTDevFunction.share.createLabBtn()
-                            PTDevFunction.GobalDevFunction_open { showFlex in
-#if DEBUG
-                                self.showFlexFunction(show: showFlex)
-#endif
-                            }
-                        }
-                    } else {
-                        //关了
-                        PTDevFunction.share.mn_PFloatingButton?.removeFromSuperview()
-                        PTDevFunction.share.mn_PFloatingButton = nil
-                        PTDevFunction.GobalDevFunction_close { showFlex in
-#if DEBUG
-                                self.showFlexFunction(show: showFlex)
-#endif
-                        }
-                    }
+                    let console = LocalConsole.shared
+                    console.isVisible = value
                 }
             }
             return cell
