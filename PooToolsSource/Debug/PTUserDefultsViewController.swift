@@ -9,14 +9,11 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 class PTUserDefultsViewController: PTBaseViewController {
-
-#if POOTOOLS_NAVBARCONTROLLER
-    let haveZXbar:Bool = true
-#else
-    let haveZXbar:Bool = false
-#endif
     
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
@@ -56,62 +53,52 @@ class PTUserDefultsViewController: PTBaseViewController {
         let dic = UserDefaults.standard.dictionaryRepresentation()
         PTNSLogConsole(dic)
 
-        if haveZXbar {
-#if POOTOOLS_NAVBARCONTROLLER
-            
-            self.zx_navTitle = "UserDefults"
-            
-            let backBtn = UIButton(type: .custom)
-            backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.zx_navBar?.addSubview(backBtn)
-            backBtn.snp.makeConstraints { make in
-                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.height.equalTo(34)
-                make.bottom.equalToSuperview().inset(5)
-            }
-            backBtn.addActionHandlers { sender in
-                self.returnFrontVC()
-            }
-            
-            let cleanBtn = UIButton(type: .custom)
-            cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.zx_navBar?.addSubview(cleanBtn)
-            cleanBtn.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.height.equalTo(34)
-                make.bottom.equalToSuperview().inset(5)
-            }
-            cleanBtn.addActionHandlers { sender in
-                self.clearUserdefults()
-            }
-#endif
-        } else {
-            title = "UserDefults"
-            let backBtn = UIButton(type: .custom)
-            backBtn.frame = CGRectMake(0, 0, 34, 34)
-            backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
-            backBtn.addActionHandlers { sender in
-                self.returnFrontVC()
-            }
-            
-            let cleanBtn = UIButton(type: .custom)
-            cleanBtn.frame = CGRectMake(0, 0, 34, 34)
-            cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
-            cleanBtn.addActionHandlers { sender in
-                self.clearUserdefults()
-            }
+        let backBtn = UIButton(type: .custom)
+        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        backBtn.addActionHandlers { sender in
+            self.returnFrontVC()
         }
         
+        let cleanBtn = UIButton(type: .custom)
+        cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        cleanBtn.addActionHandlers { sender in
+            self.clearUserdefults()
+        }
+
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navTitle = "UserDefults"
+
+        self.zx_navBar?.addSubviews([backBtn,cleanBtn])
+        backBtn.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+        }
+        
+        cleanBtn.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
+        }
+#else
+        title = "UserDefults"
+
+        backBtn.bounds = CGRectMake(0, 0, 34, 34)
+        let rightBarItem = UIBarButtonItem(customView: backBtn)
+        navigationItem.leftBarButtonItem = rightBarItem
+        
+        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
+
+#endif
         view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            if self.haveZXbar {
-                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-            } else {
-                make.top.equalToSuperview()
-            }
+#if POOTOOLS_NAVBARCONTROLLER
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
+            make.top.equalToSuperview()
+#endif
         }
         
         showDetail()
@@ -253,3 +240,16 @@ class PTUserDefultsEditViewController:PTBaseViewController {
         }
     }
 }
+
+#if POOTOOLS_ROUTER
+extension PTUserDefultsViewController:PTRouterable {
+    public static var patternString: [String] {
+        ["scheme://route/userdefault"]
+    }
+    
+    public static func registerAction(info: [String : Any]) -> Any {
+        let vc = PTUserDefultsViewController()
+        return vc
+    }
+}
+#endif

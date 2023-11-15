@@ -8,7 +8,9 @@
 #if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
 
-open class PTAppDelegate: UIResponder,UIApplicationDelegate {}
+open class PTAppDelegate: UIResponder,UIApplicationDelegate {
+    open var window: UIWindow?
+}
 
 public extension PTAppDelegate {
     @objc class func appDelegate() -> PTAppDelegate? {

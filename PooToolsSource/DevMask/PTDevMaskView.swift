@@ -31,8 +31,6 @@ open class PTDevMaskView: PTBaseMaskView {
     
     private var viewConfig : PTDevMaskConfig = PTDevMaskConfig()
     
-    let bundlePath = Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: "PooTools", ofType: "bundle")!)
-
     private lazy var springMotionView: SpringMotionView = {
         let view = SpringMotionView()
         view.backgroundColor = self.viewConfig.motionColor

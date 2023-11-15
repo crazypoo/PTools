@@ -20,7 +20,6 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
     public var isFullScreen:Bool = false
     
-    open var window: UIWindow?
 #if POOTOOLS_DEBUG
 #endif
     open func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {

@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 import MobileCoreServices
 import QuickLook
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 public class PTFileBrowserViewController: PTBaseViewController {
 
@@ -179,17 +182,30 @@ public class PTFileBrowserViewController: PTBaseViewController {
 
         let closeBtn = UIButton(type: .custom)
         closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-        closeBtn.bounds = CGRectMake(0, 0, 34, 34)
         closeBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.addSubview(closeBtn)
+        closeBtn.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().inset(5)
+        }
+#else
+        closeBtn.bounds = CGRectMake(0, 0, 34, 34)
         let rightBarItem = UIBarButtonItem(customView: closeBtn)
         navigationItem.rightBarButtonItem = rightBarItem
+#endif
         
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
+#if POOTOOLS_NAVBARCONTROLLER
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
             make.top.equalToSuperview()
+#endif
         }
         loadData()
     }
@@ -320,3 +336,16 @@ extension PTFileBrowserViewController: QLPreviewControllerDelegate, QLPreviewCon
         operateFilePath! as QLPreviewItem
     }
 }
+
+#if POOTOOLS_ROUTER
+extension PTFileBrowserViewController:PTRouterable {
+    public static var patternString: [String] {
+        ["scheme://route/filedocument"]
+    }
+    
+    public static func registerAction(info: [String : Any]) -> Any {
+        let vc = PTUserDefultsViewController()
+        return vc
+    }
+}
+#endif

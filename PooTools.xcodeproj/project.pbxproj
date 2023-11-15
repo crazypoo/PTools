@@ -1422,8 +1422,8 @@
 		555E8FE628D01CF600AF5E63 /* LocalConsole */ = {
 			isa = PBXGroup;
 			children = (
-				556738032B040EB80058CEBA /* LocalConsole.swift */,
 				231D15B9272CDEE9003D6F62 /* GestureEndpointPredictor.swift */,
+				556738032B040EB80058CEBA /* LocalConsole.swift */,
 				231D15CB272CDEE9003D6F62 /* PTInvertedTextView.swift */,
 				55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */,
 				231D15B3272CDEE9003D6F62 /* ResizeController.swift */,

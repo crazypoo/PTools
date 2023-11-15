@@ -902,10 +902,14 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     func documentAction() {
+#if POOTOOLS_ROUTER
+        PTRouter.routeJump(vcName: NSStringFromClass(PTFileBrowserViewController.self), scheme: PTFileBrowserViewController.patternString.first!)
+#else
         let vc = PTFileBrowserViewController()
         let nav = PTBaseNavControl(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         self.consoleViewController.present(nav, animated: true)
+#endif
     }
     
     func rulerAction() {
@@ -937,10 +941,14 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     func userdefaultAction() {
+#if POOTOOLS_ROUTER
+        PTRouter.routeJump(vcName: NSStringFromClass(PTUserDefultsViewController.self), scheme: PTUserDefultsViewController.patternString.first!)
+#else
         let vc = PTUserDefultsViewController()
         let nav = PTBaseNavControl(rootViewController: vc)
         nav.modalPresentationStyle = .fullScreen
         self.consoleViewController.present(nav, animated: true)
+#endif
     }
     
     func resizeAction() {
