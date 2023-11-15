@@ -49,6 +49,8 @@ public struct PTCoreUserDefultsWrapper {
     ///App测试环境点击信息Hits(YES是)
     @PTUserDefault(withKey: TouchInspectorHitsDebug, defaultValue: true) public static var AppTouchInspectShowHits:Bool
     
+    @PTUserDefault(withKey: "LocalConsoleFontSize", defaultValue: 7.5) public static var LocalConsoleCurrentFontSize:CGFloat
+    @PTUserDefault(withKey: "LocalConsoleFontColor", defaultValue: "#FFFFFF") public static var LocalConsoleCurrentFontColor:String
     /**
         语言
      */

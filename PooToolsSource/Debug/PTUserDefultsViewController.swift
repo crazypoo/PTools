@@ -9,9 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
+import FloatingPanel
 
 class PTUserDefultsViewController: PTBaseViewController {
     
@@ -19,7 +17,7 @@ class PTUserDefultsViewController: PTBaseViewController {
         let config = PTCollectionViewConfig()
         config.viewType = .Normal
         config.itemOriginalX = 0
-        config.itemHeight = 44
+        config.itemHeight = 64
         config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         
         let view = PTCollectionView(viewConfig: config)
@@ -32,12 +30,15 @@ class PTUserDefultsViewController: PTBaseViewController {
             return cell
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            let itemRow = model.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-            let vc = PTUserDefultsEditViewController(viewModel: cellModel)
-            self.navigationController?.pushViewController(vc)
-            vc.doneBlock = {
-                self.showDetail()
+            self.dismiss(animated: true) {
+                let itemRow = model.rows[indexPath.row]
+                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+                let vc = PTUserDefultsEditViewController(viewModel: cellModel)
+                LocalConsole.shared.floatingAction(vc: vc)
+                vc.doneBlock = {
+                    let userdefault = PTUserDefultsViewController()
+                    LocalConsole.shared.floatingAction(vc: userdefault)
+                }
             }
         }
         return view
@@ -64,41 +65,22 @@ class PTUserDefultsViewController: PTBaseViewController {
         cleanBtn.addActionHandlers { sender in
             self.clearUserdefults()
         }
-
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navTitle = "UserDefults"
-
-        self.zx_navBar?.addSubviews([backBtn,cleanBtn])
+        
+        view.addSubviews([backBtn,cleanBtn,newCollectionView])
         backBtn.snp.makeConstraints { make in
-            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
+            make.size.equalTo(34)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.top.equalToSuperview().inset(21)
         }
         
         cleanBtn.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.top.size.equalTo(backBtn)
         }
-#else
-        title = "UserDefults"
-
-        backBtn.bounds = CGRectMake(0, 0, 34, 34)
-        let rightBarItem = UIBarButtonItem(customView: backBtn)
-        navigationItem.leftBarButtonItem = rightBarItem
         
-        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
-
-#endif
-        view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
-            make.top.equalToSuperview()
-#endif
+            make.top.equalTo(backBtn.snp.bottom).offset(5)
         }
         
         showDetail()
@@ -150,12 +132,6 @@ class PTUserDefultsEditViewController:PTBaseViewController {
     private var viewModel:PTFusionCellModel!
     
     var doneBlock:PTActionTask?
-    
-#if POOTOOLS_NAVBARCONTROLLER
-    let haveZXbar:Bool = true
-#else
-    let haveZXbar:Bool = false
-#endif
 
     lazy var keyLabel:UILabel = {
         let view = UILabel()
@@ -184,43 +160,22 @@ class PTUserDefultsEditViewController:PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        if haveZXbar {
-#if POOTOOLS_NAVBARCONTROLLER
-            
-            self.zx_navTitle = "EditUserDefults"
-                        
-            let cleanBtn = UIButton(type: .custom)
-            cleanBtn.setImage("⭕️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            self.zx_navBar?.addSubview(cleanBtn)
-            cleanBtn.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.height.equalTo(34)
-                make.bottom.equalToSuperview().inset(5)
-            }
-            cleanBtn.addActionHandlers { sender in
-                self.saveAction()
-            }
-#endif
-        } else {
-            title = "EditUserDefults"
-            
-            let cleanBtn = UIButton(type: .custom)
-            cleanBtn.frame = CGRectMake(0, 0, 34, 34)
-            cleanBtn.setImage("⭕️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
-            cleanBtn.addActionHandlers { sender in
-                self.saveAction()
-            }
+        let cleanBtn = UIButton(type: .custom)
+        cleanBtn.setImage("⭕️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        cleanBtn.addActionHandlers { sender in
+            self.saveAction()
         }
-        
-        view.addSubviews([keyLabel, textInputView])
+
+        view.addSubviews([cleanBtn,keyLabel, textInputView])
+        cleanBtn.snp.makeConstraints { make in
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(34)
+            make.top.equalToSuperview().inset(21)
+        }
+
         keyLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            if self.haveZXbar {
-                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-            } else {
-                make.top.equalToSuperview().inset(10)
-            }
+            make.top.equalTo(cleanBtn.snp.bottom).offset(10)
         }
         
         textInputView.snp.makeConstraints { make in
@@ -233,7 +188,7 @@ class PTUserDefultsEditViewController:PTBaseViewController {
     
     func saveAction() {
         UserDefaults.standard.setValue(textInputView.text, forKey: viewModel.name)
-        navigationController?.popViewController {
+        dismiss(animated: true) {
             if self.doneBlock != nil {
                 self.doneBlock!()
             }
@@ -252,4 +207,31 @@ extension PTUserDefultsViewController:PTRouterable {
         return vc
     }
 }
+
+extension PTUserDefultsEditViewController:PTRouterable {
+    public static var patternString: [String] {
+        ["scheme://route/userdefaultedit"]
+    }
+    
+    public static func registerAction(info: [String : Any]) -> Any {
+        let vc = PTUserDefultsEditViewController()
+        return vc
+    }
+}
 #endif
+
+extension PTUserDefultsViewController {
+    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
+        let layout = PTCustomControlHeightPanelLayout()
+        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
+        return layout
+    }
+}
+
+extension PTUserDefultsEditViewController {
+    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
+        let layout = PTCustomControlHeightPanelLayout()
+        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
+        return layout
+    }
+}

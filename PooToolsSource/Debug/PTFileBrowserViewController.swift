@@ -10,9 +10,7 @@ import UIKit
 import SnapKit
 import MobileCoreServices
 import QuickLook
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
+import FloatingPanel
 
 public class PTFileBrowserViewController: PTBaseViewController {
 
@@ -73,16 +71,6 @@ public class PTFileBrowserViewController: PTBaseViewController {
                             }
                             self.present(activityVC, animated: true, completion: nil)
                         case 1:
-                            let closeBtn = UIButton(type: .custom)
-                            closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-                            closeBtn.setTitleColor(.systemBlue, for: .normal)
-                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
-                            closeBtn.addActionHandlers { sender in
-                                self.returnFrontVC()
-                            }
-                            let rightBarItem = UIBarButtonItem(customView: closeBtn)
-                            self.navigationItem.rightBarButtonItem = rightBarItem
-
                             guard let filePath = self.operateFilePath else { return }
                             let manager = FileManager.default
                             //同名
@@ -94,15 +82,6 @@ public class PTFileBrowserViewController: PTBaseViewController {
                             }
                             self.loadData()
                         case 2:
-                            let closeBtn = UIButton(type: .custom)
-                            closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-                            closeBtn.setTitleColor(.systemBlue, for: .normal)
-                            closeBtn.bounds = CGRectMake(0, 0, closeBtn.sizeFor(height: 34).width, 34)
-                            closeBtn.addActionHandlers { sender in
-                                self.returnFrontVC()
-                            }
-                            let rightBarItem = UIBarButtonItem(customView: closeBtn)
-                            self.navigationItem.rightBarButtonItem = rightBarItem
 
                             guard let filePath = self.operateFilePath else { return }
                             let manager = FileManager.default
@@ -156,16 +135,6 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 self.extensionDirectoryPath = self.extensionDirectoryPath + "/" + cellModel.name
                 self.loadData()
             default:
-                
-                let backBtn = UIButton(type: .custom)
-                backBtn.setTitle("PT Nav back".localized(), for: .normal)
-                backBtn.setTitleColor(.systemBlue, for: .normal)
-                backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
-                backBtn.addActionHandlers { sender in
-                    self.returnFrontVC()
-                }
-                let rightBarItem = UIBarButtonItem(customView: backBtn)
-                self.navigationItem.leftBarButtonItem = rightBarItem
                 self.operateFilePath = self.currentDirectoryPath.appendingPathComponent(cellModel.name, isDirectory: false)
                 //preview
                 let previewVC = QLPreviewController()
@@ -176,56 +145,53 @@ public class PTFileBrowserViewController: PTBaseViewController {
         }
         return view
     }()
+    
+    lazy var closeBtn :UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.addActionHandlers { sender in
+            self.returnFrontVC()
+        }
+        return view
+    }()
+
+    lazy var back :UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage("◀️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.addActionHandlers { sender in
+            var array = self.extensionDirectoryPath.components(separatedBy: "/")
+            array.removeLast()
+            self.extensionDirectoryPath = array.joined(separator: "/")
+            self.loadData()
+        }
+        return view
+    }()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        let closeBtn = UIButton(type: .custom)
-        closeBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
-        closeBtn.addActionHandlers { sender in
-            self.returnFrontVC()
-        }
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubview(closeBtn)
+        view.addSubviews([closeBtn,newCollectionView])
         closeBtn.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.bottom.equalToSuperview().inset(5)
+            make.top.equalToSuperview().inset(21)
         }
-#else
-        closeBtn.bounds = CGRectMake(0, 0, 34, 34)
-        let rightBarItem = UIBarButtonItem(customView: closeBtn)
-        navigationItem.rightBarButtonItem = rightBarItem
-#endif
-        
-        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
-            make.top.equalToSuperview()
-#endif
+            make.top.equalTo(closeBtn.snp.bottom).offset(5)
         }
         loadData()
     }
     
     func loadData() {
         if extensionDirectoryPath.isEmpty {
-            navigationItem.leftBarButtonItem = nil
+            back.removeFromSuperview()
         } else {
-            let backBtn = UIButton(type: .custom)
-            backBtn.setTitle("PT Nav back".localized(), for: .normal)
-            backBtn.setTitleColor(.systemBlue, for: .normal)
-            backBtn.bounds = CGRectMake(0, 0, backBtn.sizeFor(height: 34).width, 34)
-            backBtn.addActionHandlers { sender in
-                var array = self.extensionDirectoryPath.components(separatedBy: "/")
-                array.removeLast()
-                self.extensionDirectoryPath = array.joined(separator: "/")
-                self.loadData()
+            self.view.addSubview(back)
+            back.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.size.equalTo(self.closeBtn)
             }
-            let leftBarItem = UIBarButtonItem(customView: backBtn)
-            navigationItem.leftBarButtonItem = leftBarItem
         }
         dataList.removeAll()
         let manager = FileManager.default
@@ -349,3 +315,11 @@ extension PTFileBrowserViewController:PTRouterable {
     }
 }
 #endif
+
+extension PTFileBrowserViewController {
+    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
+        let layout = PTCustomControlHeightPanelLayout()
+        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
+        return layout
+    }
+}

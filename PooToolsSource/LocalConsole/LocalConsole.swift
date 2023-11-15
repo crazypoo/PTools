@@ -11,11 +11,11 @@ import DeviceKit
 import SafeSFSymbols
 import SwifterSwift
 
-public let LocalConsoleFontBaseSize:CGFloat = 7.5
-public let LocalConsoleFontMin:CGFloat = 4
+public let LocalConsoleFontMin:CGFloat = 5
 public let LocalConsoleFontMax:CGFloat = 20
 
 @available(iOSApplicationExtension, unavailable)
+@objcMembers
 public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     
     public static let shared = LocalConsole()
@@ -26,15 +26,20 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
 
     private var maskView:PTDevMaskView?
 
-    /// Set the font size. The font can be set to a minimum value of 5.0 and a maximum value of 20.0. The default value is 8.
-    public var fontSize: CGFloat = LocalConsoleFontBaseSize {
-        didSet {
-            guard fontSize >= LocalConsoleFontMin else { fontSize = LocalConsoleFontMin; return }
-            guard fontSize <= LocalConsoleFontMax else { fontSize = LocalConsoleFontMax; return }
-            
-            setAttributedText(consoleTextView.text)
-        }
+    public func setAttFontSize(@PTClampedProperyWrapper(range:LocalConsoleFontMin...LocalConsoleFontMax) fontSizes:CGFloat) {
+        PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = fontSizes
+        fontSize = fontSizes
+        setAttributedText(consoleTextView.text)
     }
+    /// Set the font size. The font can be set to a minimum value of 5.0 and a maximum value of 20.0. The default value is 8.
+    var fontSize: CGFloat = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+    
+    public func setAttFontColor(color:UIColor) {
+        fontColor = color
+        setAttributedText(consoleTextView.text)
+    }
+    /// Set the font size. The font can be set to a minimum value of 5.0 and a maximum value of 20.0. The default value is 8.
+    var fontColor: UIColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
     
     var isConsoleConfigured = false
     
@@ -750,8 +755,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
             
             if !hasShortened && !isCharacterLimitWarningDisabled {
                 hasShortened = true
-                PTNSLogConsole("LocalConsole's content has exceeded 50,000 characters.\nTo maintain performance, LCManager cuts down the beginning of the printed content. To disable this behaviour, set LCManager.shared.isCharacterLimitDisabled to true.\nTo disable this warning, set LCManager.shared.isCharacterLimitWarningDisabled = true.")
-                
+                PTNSLogConsole("LocalConsole的内容已超过50000个字符。为了保持性能，LocalConsole减少了打印内容的开头部分。要禁用此行为，请将LocalConsole.shared.isCharacterLimitDisabled设置为true。要禁用此警告，请设置localconsole.share.ischaracterlimitwarningdisabled = true。")
             }
             
             let shortenedString = String(_currentText.suffix(50000))
@@ -764,11 +768,6 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     /// Clear text in the console view.
     public func clear() {
         currentText = ""
-    }
-    
-    /// Copy the console view text to the device's clipboard.
-    public func copy() {
-        UIPasteboard.general.string = consoleTextView.text
     }
     
     // MARK: - Private
@@ -902,14 +901,12 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     func documentAction() {
-#if POOTOOLS_ROUTER
-        PTRouter.routeJump(vcName: NSStringFromClass(PTFileBrowserViewController.self), scheme: PTFileBrowserViewController.patternString.first!)
-#else
         let vc = PTFileBrowserViewController()
-        let nav = PTBaseNavControl(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        self.consoleViewController.present(nav, animated: true)
-#endif
+        floatingAction(vc: vc)
+    }
+    
+    func floatingAction(vc:PTBaseViewController,fpcIsRemovalInteractionEnabled:Bool = true,fpcPanGestureRecognizer:Bool = true,floatingDismiss:PTActionTask? = nil) {
+        PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: AppWindows?.rootViewController as! PTBaseNavControl,currentViewController: AppWindows?.rootViewController,fpcIsRemovalInteractionEnabled: fpcIsRemovalInteractionEnabled,fpcPanGestureRecognizer:fpcPanGestureRecognizer,floatingDismiss:floatingDismiss)
     }
     
     func rulerAction() {
@@ -941,14 +938,8 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     func userdefaultAction() {
-#if POOTOOLS_ROUTER
-        PTRouter.routeJump(vcName: NSStringFromClass(PTUserDefultsViewController.self), scheme: PTUserDefultsViewController.patternString.first!)
-#else
         let vc = PTUserDefultsViewController()
-        let nav = PTBaseNavControl(rootViewController: vc)
-        nav.modalPresentationStyle = .fullScreen
-        self.consoleViewController.present(nav, animated: true)
-#endif
+        floatingAction(vc: vc)
     }
     
     func resizeAction() {
@@ -1133,7 +1124,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
         
         let attributes: [NSAttributedString.Key: Any] = [
             .paragraphStyle: paragraphStyle,
-            .foregroundColor: UIColor.white,
+            .foregroundColor: fontColor,
             .font: UIFont.systemFont(ofSize: fontSize, weight: .semibold, design: .monospaced)
         ]
         
@@ -1281,7 +1272,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
                                 alertController.setValue(attributedMessage, forKey: "attributedMessage")
                                 
                                 alertController.addAction(UIAlertAction(title: "Copy Value", style: .default, handler: { _ in
-                                    UIPasteboard.general.string = "\(value)"
+                                    "\(value)".copyToPasteboard()
                                 }))
                                 alertController.addAction(UIAlertAction(title: "Clear Value", style: .destructive, handler: { _ in
                                     UserDefaults.standard.removeObject(forKey: key)
@@ -1318,36 +1309,6 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
         } else {
             let userDefaults = UIAction(title: .userDefaults,image: UIImage(.doc.badgeGearshape)) { _ in
                 self.userdefaultAction()
-//                if let window = UIApplication.shared.windows.first {
-//                    if let rootViewController = window.rootViewController {
-//                        if let navigationController = rootViewController as? UINavigationController {
-//                            // 如果根视图控制器是 UINavigationController
-//                            if navigationController.viewControllers.count >= 2 {
-//                                let secondViewController = navigationController.viewControllers[1]
-//                                // 使用 secondViewController
-//                                let vc = PTUserDefultsViewController()
-//                                let nav = PTBaseNavControl(rootViewController: vc)
-//                                nav.modalPresentationStyle = .fullScreen
-//                                PTUtils.getCurrentVC().present(nav, animated: true)
-//
-//                            } else {
-//                                // 如果堆栈中的视图控制器少于两个
-//                                // 处理逻辑
-//                                let vc = PTUserDefultsViewController()
-//                                let nav = PTBaseNavControl(rootViewController: vc)
-//                                nav.modalPresentationStyle = .fullScreen
-//                                navigationController.present(nav, animated: true)
-//                            }
-//                        } else {
-//                            // 如果根视图控制器不是 UINavigationController
-//                            // 处理逻辑
-//                            let vc = PTUserDefultsViewController()
-//                            let nav = PTBaseNavControl(rootViewController: vc)
-//                            nav.modalPresentationStyle = .fullScreen
-//                            rootViewController.present(nav, animated: true)
-//                        }
-//                    }
-//                }
             }
             debugActions.append(userDefaults)
         }

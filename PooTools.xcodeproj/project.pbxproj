@@ -163,6 +163,7 @@
 		555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE228D01BC200AF5E63 /* Utilities.swift */; };
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		556738042B040EB80058CEBA /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556738032B040EB80058CEBA /* LocalConsole.swift */; };
+		5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */; };
 		5571F60C2AFD21BA00DB4420 /* PTAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F60B2AFD21BA00DB4420 /* PTAppDelegate.swift */; };
@@ -578,6 +579,7 @@
 		555E8FE228D01BC200AF5E63 /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		556738032B040EB80058CEBA /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
+		5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevColorPickerViewController.swift; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppUserdefault.swift; sourceTree = "<group>"; };
 		5571F60B2AFD21BA00DB4420 /* PTAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDelegate.swift; sourceTree = "<group>"; };
@@ -1256,6 +1258,7 @@
 				55E3BBC02ABE0F8E00858348 /* PTFileModel.swift */,
 				55E3BBC22ABE189E00858348 /* PTFileBrowserViewController.swift */,
 				55E3BBC42ABE193200858348 /* PTFileBrowser.swift */,
+				5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */,
 			);
 			path = Debug;
 			sourceTree = "<group>";
@@ -2523,6 +2526,7 @@
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
 				231D1678272CDEEA003D6F62 /* PCleanCache.swift in Sources */,
 				5517EC0829AF16D100C68FF4 /* PTImageBlackToTransparent.swift in Sources */,
+				5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */,
 				5585F6F72AD2AE9C00F878B4 /* PTVideoEditorCroppingPresetCell.swift in Sources */,
 				55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */,
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
