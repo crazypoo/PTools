@@ -35,6 +35,10 @@ public extension Bundle {
         return filePath
     }
     
+    class func podCoreBundle() -> Bundle {
+        return Bundle.init(path: Bundle.main.path(forResource: CorePodBundleName, ofType: "bundle")!)!
+    }
+    
     class func appScheme()->[String] {
         let bundleURL = Bundle.main.bundleURL
         let plistPath = bundleURL.appendingPathComponent("Info.plist")

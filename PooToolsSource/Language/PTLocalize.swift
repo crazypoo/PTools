@@ -53,7 +53,7 @@ public extension String {
      - Returns: The localized string.
      */
     func localized() -> String {
-        return localized(using: nil, in: .main)
+        return localized(using: nil, in: Bundle.podCoreBundle())
     }
 
     /**
