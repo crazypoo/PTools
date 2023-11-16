@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.16.13",
+  "version": "3.16.15",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.16.13"
+    "tag": "3.16.15"
   },
   "license": {
     "type": "MIT",
@@ -890,6 +890,12 @@
 
         ],
         "PooTools/NetWork": [
+
+        ],
+        "PooTools/FloatingPanel": [
+
+        ],
+        "PooTools/ColorPicker": [
 
         ]
       },

@@ -216,11 +216,16 @@ public class PTScanQRController: PTBaseViewController {
         view.backgroundColor = .black
         
         var views = [UIView]()
-        if device.hasTorch {
-            views = [backBtn, photosButton, flashButton]
-        } else {
+        if Gobal_device_isSimulator {
             views = [backBtn, photosButton]
+        } else {
+            if device.hasTorch {
+                views = [backBtn, photosButton, flashButton]
+            } else {
+                views = [backBtn, photosButton]
+            }
         }
+        
         
         view.addSubviews(views)
         backBtn.snp.makeConstraints { make in
@@ -235,11 +240,13 @@ public class PTScanQRController: PTBaseViewController {
             make.width.height.equalTo(self.backBtn)
         }
         
-        if device.hasTorch {
-            flashButton.snp.makeConstraints { make in
-                make.width.height.equalTo(self.backBtn)
-                make.centerX.equalToSuperview()
-                make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + CGFloat.ScaleW(w: 10))
+        if !Gobal_device_isSimulator {
+            if device.hasTorch {
+                flashButton.snp.makeConstraints { make in
+                    make.width.height.equalTo(self.backBtn)
+                    make.centerX.equalToSuperview()
+                    make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + CGFloat.ScaleW(w: 10))
+                }
             }
         }
         
