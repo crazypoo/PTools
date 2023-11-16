@@ -9,6 +9,7 @@
 import UIKit
 import FloatingPanel
 
+@objcMembers
 public class PTFloatingPanelFuction: NSObject {
     
     //MARK: 初始化創建FloatPanel

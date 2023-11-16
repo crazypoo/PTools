@@ -81,7 +81,7 @@ class PTCheckUpdateModel:PTBaseModel {
 public class PTCheckUpdateFunction: NSObject {
     public static let share = PTCheckUpdateFunction()
     
-    public enum PTUpdateAlertType {
+    public enum PTUpdateAlertType:Int {
         case System
         case User
     }
@@ -105,13 +105,13 @@ public class PTCheckUpdateFunction: NSObject {
         return false
     }
     
-    public func checkTheVersionWithappid(appid:String,
+    public func checkTheVersionWithappid(appid:String = PTAppBaseConfig.share.appID,
                                          test:Bool,
                                          url:URL?,
                                          version:String?,
                                          note:String?,
                                          force:Bool,
-                                         alertType:PTUpdateAlertType? = .System) {
+                                         alertType:PTUpdateAlertType = .System) {
         if test {
             var okBtns = [String]()
             if force {
@@ -188,8 +188,6 @@ public class PTCheckUpdateFunction: NSObject {
                                         PTGCDManager.gcdMain() {
                                             self.alert_updateTips(oldVersion: version!, newVersion: versionStr, description: (versionModel.releaseNotes), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
                                         }
-                                    default:
-                                        break
                                     }
                                 }
                             }

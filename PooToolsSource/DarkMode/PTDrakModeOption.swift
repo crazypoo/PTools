@@ -13,6 +13,7 @@ extension PTDarkModeOption: PTThemeable {
     public func apply() {}
 }
 
+@objcMembers
 public class PTDarkModeOption {
     /// 智能换肤的时间区间的key
     private static let PTSmartPeelingTimeIntervalKey = "PTSmartPeelingTimeIntervalKey"

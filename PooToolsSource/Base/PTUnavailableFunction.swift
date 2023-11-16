@@ -10,6 +10,7 @@ import UIKit
 import AttributedString
 import SafeSFSymbols
 
+@objcMembers
 public class PTEmptyDataViewConfig : NSObject {
     public var mainTitleAtt:ASAttributedString? = """
             \(wrap: .embedding("""
@@ -21,7 +22,7 @@ public class PTEmptyDataViewConfig : NSObject {
             \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
             """))
             """
-    public var buttonTitle:String? = "点我刷新"
+    public var buttonTitle:String = "点我刷新"
     public var buttonFont:UIFont = .appfont(size: 18)
     public var buttonTextColor:UIColor = .systemBlue
     public var image:UIImage? = UIImage(.exclamationmark.triangle)
@@ -32,14 +33,15 @@ public class PTEmptyDataViewConfig : NSObject {
 }
 
 @available(iOS 17.0 , *)
+@objcMembers
 public class PTUnavailableFunction: NSObject {
-    static let share = PTUnavailableFunction()
+    public static let share = PTUnavailableFunction()
     public var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
     public var emptyTap:PTActionTask?
         
     lazy var emptyButtonConfig:UIButton.Configuration = {
         var plainConfig = UIButton.Configuration.plain()
-        plainConfig.title = emptyViewConfig.buttonTitle!
+        plainConfig.title = emptyViewConfig.buttonTitle
         plainConfig.titleTextAttributesTransformer = .init({ container in
             container.merging(AttributeContainer.font(self.emptyViewConfig.buttonFont).foregroundColor(self.emptyViewConfig.buttonTextColor))
         })
@@ -62,7 +64,7 @@ public class PTUnavailableFunction: NSObject {
         if emptyViewConfig.image != nil {
             configs.image = emptyViewConfig.image!
         }
-        if !(emptyViewConfig.buttonTitle ?? "").stringIsEmpty() {
+        if !emptyViewConfig.buttonTitle.stringIsEmpty() {
             configs.button = self.emptyButtonConfig
         }
         configs.buttonProperties.primaryAction = UIAction { sender in

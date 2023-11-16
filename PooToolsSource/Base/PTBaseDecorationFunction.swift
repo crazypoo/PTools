@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 open class PTBaseDecorationView: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -19,6 +20,7 @@ open class PTBaseDecorationView: UICollectionReusableView {
     }
 }
 
+@objcMembers
 open class PTBaseDecorationView_Corner: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)

@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 open class PTBaseCollectionReusableView: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)

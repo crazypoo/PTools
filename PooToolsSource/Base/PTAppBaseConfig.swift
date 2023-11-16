@@ -68,4 +68,7 @@ public class PTAppBaseConfig: NSObject {
         return [KingfisherOptionsInfoItem.cacheOriginalImage]
 #endif
     }
+    
+    //MARK: 在AppStore上用来检测更新的AppID
+    public var appID:String = ""
 }

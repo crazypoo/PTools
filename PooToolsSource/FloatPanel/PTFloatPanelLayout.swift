@@ -9,6 +9,7 @@
 import UIKit
 import FloatingPanel
 
+@objcMembers
 open class PTFloatPanelLayout: NSObject,FloatingPanelLayout {
     
     public override init() {
@@ -34,6 +35,7 @@ open class PTFloatPanelLayout: NSObject,FloatingPanelLayout {
     }
 }
 
+@objcMembers
 open class PTCustomControlHeightPanelLayout: NSObject, FloatingPanelLayout {
     
     public override init() {

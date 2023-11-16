@@ -10,6 +10,7 @@ import UIKit
 import Kingfisher
 import SwifterSwift
 
+@objcMembers
 public class PTLoadImageFunction: NSObject {
 
     public class func loadImage(contentData:Any,

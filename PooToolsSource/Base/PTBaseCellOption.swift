@@ -11,6 +11,7 @@ import UIKit
 import SwipeCellKit
 #endif
 
+@objcMembers
 open class PTBaseNormalCell: UICollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)
@@ -38,6 +39,7 @@ open class PTBaseNormalCell: UICollectionViewCell {
 }
 
 #if POOTOOLS_SWIPECELL
+@objcMembers
 open class PTBaseSwipeCell: SwipeCollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)

@@ -10,7 +10,7 @@ import SnapKit
 
 /// 高斯模糊
 @objcMembers
-public class SSBlurView {
+public class SSBlurView:NSObject {
     
     private var superview: UIView
     private var blur: UIVisualEffectView?

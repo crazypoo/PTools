@@ -12,6 +12,7 @@ import ZXNavigationBar
 #endif
 
 #if POOTOOLS_NAVBARCONTROLLER
+@objcMembers
 open class PTBaseNavControl: ZXNavigationBarNavigationController {
         
     open override func setViewControllers(_ viewControllers: [UIViewController], animated: Bool) {
@@ -109,6 +110,7 @@ extension PTBaseNavControl: UIGestureRecognizerDelegate,UINavigationControllerDe
 }
 
 #else
+@objcMembers
 open class PTBaseNavControl: UINavigationController {
     
     open override func viewWillAppear(_ animated: Bool) {

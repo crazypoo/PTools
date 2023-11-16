@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 public class PTUrlChange: NSObject {
     public class func unicodeURLChange_chinese(url:String)->String {
         url.addingPercentEncoding(withAllowedCharacters: Foundation.CharacterSet.lowercaseLetters)!

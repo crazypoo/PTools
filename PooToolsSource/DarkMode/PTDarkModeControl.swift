@@ -230,6 +230,7 @@ extension PTDarkModeControl: PTThemeable {
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
             self.changeStatusBar(type: type)
             self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+            self.showDetail()
 #if POOTOOLS_NAVBARCONTROLLER
 #else
             PTBaseNavControl.GobalNavControl(nav: self.navigationController!)

@@ -9,13 +9,14 @@
 import UIKit
 import AttributedString
 
-public enum PTFusionShowAccessoryType:Int {
+@objc public enum PTFusionShowAccessoryType:Int {
     case Switch
     case DisclosureIndicator
     case More
     case NoneAccessoryView
 }
 
+@objcMembers
 open class PTFusionCellModel: NSObject {
     ///图片名
     open var leftImage:Any?

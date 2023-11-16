@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import FluentDarkModeKit
 
 @objc public enum ColorDistanceType:Int {
     case CIE76
@@ -16,6 +17,9 @@ import UIKit
 
 public extension UIColor {
         
+    @objc class func lightDarkColor(light:UIColor,dark:UIColor) -> UIColor {
+        UIColor(.dm, light: light, dark: dark)
+    }
     /**
         Make color lighter.
      

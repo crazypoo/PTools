@@ -53,7 +53,7 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
         view.text = "PT Theme mt".localized()
         view.textAlignment = .left
         view.font = .appfont(size: 16)
-        view.textColor = .black
+        view.textColor = PTAppBaseConfig.share.viewDefaultTextColor
         return view
     }()
     

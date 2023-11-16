@@ -10,6 +10,7 @@ import UIKit
 import EventKit
 import SwiftDate
 
+@objcMembers
 public class PTEventOnCalendar: NSObject {
     //MARK: 把数据插入到日历作提醒
     ///把数据插入到日历作提醒

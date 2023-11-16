@@ -10,8 +10,9 @@ import UIKit
 import SnapKit
 import AttributedString
 
+@objcMembers
 public class PTFusionHeader: PTBaseCollectionReusableView {
-    static let ID = "PTFusionHeader"
+    public static let ID = "PTFusionHeader"
     
     open var switchValueChangeBlock:PTCellSwitchBlock?
     open var moreActionBlock:PTSectionMoreBlock?
@@ -56,8 +57,9 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     }    
 }
 
+@objcMembers
 public class PTVersionFooter: PTBaseCollectionReusableView {
-    static let ID = "PTVersionFooter"
+    public static let ID = "PTVersionFooter"
     
     lazy var verionLabel:UILabel = {
         let view = UILabel()

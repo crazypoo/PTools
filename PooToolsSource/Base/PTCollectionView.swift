@@ -17,7 +17,7 @@ import LXFProtocolTool
 #endif
 
 //MARK: CollectionView展示的样式类型
-public enum PTCollectionViewType {
+@objc public enum PTCollectionViewType:Int {
     case Normal
     case Gird
     case WaterFall
@@ -25,7 +25,7 @@ public enum PTCollectionViewType {
 }
 
 //MARK: Collection展示的Section底部样式类型
-public enum PTCollectionViewDecorationItemsType {
+@objc public enum PTCollectionViewDecorationItemsType:Int {
     case Corner
     case NoCorner
     case NoItems
@@ -65,6 +65,7 @@ public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_
 public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
 //MARK: Collection展示的基本配置参数设置
+@objcMembers
 public class PTCollectionViewConfig:NSObject {
     public var showsVerticalScrollIndicator:Bool = true
     public var showsHorizontalScrollIndicator:Bool = true
@@ -110,6 +111,7 @@ public class PTCollectionViewConfig:NSObject {
 }
 
 //MARK: 界面展示
+@objcMembers
 public class PTCollectionView: UIView {
     
     let decorationViewOfKindCorner = "background"

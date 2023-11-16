@@ -10,6 +10,7 @@ import UIKit
 import Accelerate
 import AVFoundation
 import Photos
+import FluentDarkModeKit
 
 extension UIImage : PTProtocolCompatible {}
 
@@ -29,6 +30,10 @@ public extension UIImage {
         self.init(cgImage: aCgImage)
     }
     
+    @objc class func lightDarkImage(light:UIImage,dark:UIImage) -> UIImage {
+        UIImage(.dm, light: light, dark: dark)
+    }
+
     static func system(_ name: String) -> UIImage {
         return UIImage.init(systemName: name) ?? UIImage()
     }
