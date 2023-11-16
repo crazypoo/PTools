@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.16.18'
+    s.version     = '3.16.19'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -123,6 +123,7 @@ Pod::Spec.new do |s|
     s.subspec 'Calendar' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/CalendarPermission'
+        subspec.dependency 'PooTools/RemindersPermission'
         subspec.frameworks = 'EventKit'
         subspec.source_files = 'PooToolsSource/Calendar/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
