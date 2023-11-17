@@ -8,6 +8,7 @@
 
 import UIKit
 import KakaJSON
+import HandyJSON
 
 public class ResponseModel:PTBaseModel {
     public var status: Int = 0
@@ -22,5 +23,29 @@ public class ResponseModel:PTBaseModel {
         get {
             status == 200
         }
+    }
+}
+
+public class PTIPInfoModel :PTBaseModel {
+    var lon: CGFloat = 0.0
+    var zip: String!
+    var query: String!
+    var asBaseic: String!
+    var isp: String!
+    var countryCode: String!
+    var lat: CGFloat = 0.0
+    var city: String!
+    var region: String!
+    var timezone: String!
+    var org: String!
+    var country: String!
+    var status: String!
+    var regionName: String!
+    
+    required public init() {}
+
+    public override func mapping(mapper: HelpingMapper) {
+        mapper <<<
+            self.asBaseic <-- "as"
     }
 }

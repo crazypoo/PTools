@@ -17,6 +17,7 @@ public let NetWorkNoError = NSError(domain: "PT Network no network".localized(),
 public let NetWorkJsonExplainError = NSError(domain: "PT Network json fail".localized(), code: 99999999998)
 public let NetWorkModelExplainError = NSError(domain: "PT Network model fail".localized(), code: 99999999999)
 public let NetWorkDownloadError = NSError(domain: "PT Network download fail".localized(), code: 99999999997)
+public let NetWorkCheckIPError = NSError(domain: "IP address error", code: 99999999995)
 
 public let AppTestMode = "PT App network environment test".localized()
 public let AppCustomMode = "PT App network environment custom".localized()
@@ -194,6 +195,53 @@ public class Network: NSObject {
         }
     }
     
+    class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel {
+                
+        return try await withCheckedThrowingContinuation { continuation in
+            if !ipAddress.isIP() {
+                continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
+            }
+            
+            let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
+            // 判断网络是否可用
+            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
+                if !reachabilityManager.isReachable {
+                    continuation.resume(throwing:  AFError.createURLRequestFailed(error: NetWorkCheckIPError))
+                }
+            }
+            
+            var apiHeader = HTTPHeaders.init([:])
+            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+            apiHeader["Accept"] = "application/json"
+            
+            let postString = "GET请求"
+            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
+
+            Network.manager.request(urlStr1, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
+                switch data.result {
+                case .success(_):
+                    let json = JSON(data.value ?? "")
+                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
+                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
+                        return
+                    }
+                    
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
+                    
+                    guard let responseModel = jsonStr.kj.model(PTIPInfoModel.self) else {
+                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
+                        return
+                    }
+                    continuation.resume(returning: responseModel)
+                case .failure(let error):
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+
+    }
+    
     //JSONEncoding  JSON参数
     //URLEncoding    URL参数
     /// 项目总接口
@@ -215,54 +263,54 @@ public class Network: NSObject {
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool? = false) async throws -> ResponseModel {
-        
-        let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
-        if !urlStr1.isURL() {
-            throw AFError.invalidURL(url: "https://www.qq.com")
-        }
-        
-        // 判断网络是否可用
-        if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
-            if !reachabilityManager.isReachable {
-                throw AFError.createURLRequestFailed(error: NetWorkNoError)
-            }
-        }
-        
-        var apiHeader = HTTPHeaders()
-        let token = Network.share.userToken
-        if !token.stringIsEmpty() && header == nil {
-            apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        } else if token.stringIsEmpty() && header != nil {
-            apiHeader = header!
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        } else if !token.stringIsEmpty() && header != nil {
-            apiHeader = header!
-            apiHeader["token"] = token
-            if jsonRequest! {
-                apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-                apiHeader["Accept"] = "application/json"
-            }
-        }
-        
-        var postString = ""
-        switch method {
-        case .post:
-            postString = "POST请求"
-        case .get:
-            postString = "GET请求"
-        default:
-            postString = "其他"
-        }
-        PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
-        
+                
         return try await withCheckedThrowingContinuation { continuation in
+            let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
+            if !urlStr1.isURL() {
+                continuation.resume(throwing: AFError.invalidURL(url: "https://www.qq.com"))
+            }
+            
+            // 判断网络是否可用
+            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
+                if !reachabilityManager.isReachable {
+                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
+                }
+            }
+            
+            var apiHeader = HTTPHeaders()
+            let token = Network.share.userToken
+            if !token.stringIsEmpty() && header == nil {
+                apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
+                if jsonRequest! {
+                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                    apiHeader["Accept"] = "application/json"
+                }
+            } else if token.stringIsEmpty() && header != nil {
+                apiHeader = header!
+                if jsonRequest! {
+                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                    apiHeader["Accept"] = "application/json"
+                }
+            } else if !token.stringIsEmpty() && header != nil {
+                apiHeader = header!
+                apiHeader["token"] = token
+                if jsonRequest! {
+                    apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+                    apiHeader["Accept"] = "application/json"
+                }
+            }
+            
+            var postString = ""
+            switch method {
+            case .post:
+                postString = "POST请求"
+            case .get:
+                postString = "GET请求"
+            default:
+                postString = "其他"
+            }
+            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
+
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success(_):

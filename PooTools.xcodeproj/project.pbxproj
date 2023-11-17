@@ -1314,8 +1314,6 @@
 			children = (
 				550CE4B12AF233F50052539D /* OSSSpeech.swift */,
 				550CE4B02AF233F50052539D /* OSSUtterance.swift */,
-				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
-				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
 			);
 			path = OSSKit;
 			sourceTree = "<group>";
@@ -1323,6 +1321,7 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
 				55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */,
 				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
 				55102ADF2AFFD3C100E9529D /* llplaceholder.png */,
@@ -1821,6 +1820,7 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */,
 				558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */,

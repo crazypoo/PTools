@@ -276,7 +276,7 @@ public enum OSSVoiceEnum: String, CaseIterable {
         if let mainBundleImage = UIImage(named: rawValue, in: Bundle.main, compatibleWith: nil) {
             return mainBundleImage
         }
-        return Bundle.podBundleImage(bundleName: "OSSKitResources", imageName: rawValue)
+        return Bundle.podBundleImage(bundleName: "PooToolsResource", imageName: rawValue)
     }
 #elseif canImport(AppKit)
 	public var flag: NSImage? {

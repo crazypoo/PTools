@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.16.15",
+  "version": "3.16.19",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.16.15"
+    "tag": "3.16.19"
   },
   "license": {
     "type": "MIT",
@@ -268,6 +268,9 @@
 
         ],
         "PooTools/CalendarPermission": [
+
+        ],
+        "PooTools/RemindersPermission": [
 
         ]
       },

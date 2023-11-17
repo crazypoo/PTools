@@ -77,33 +77,6 @@ class AppDelegate: PTAppWindowsDelegate {
         NFX.sharedInstance().start()
 #endif
         
-//#if POOTOOLS_DEBUG
-//        createDevFunction(flex: {
-//#if canImport(FLEX)
-//            if FLEXManager.shared.isHidden {
-//                FLEXManager.shared.showExplorer()
-//            } else {
-//                FLEXManager.shared.hideExplorer()
-//            }
-//#endif
-//        },inApp:{
-//#if canImport(InAppViewDebugger)
-//            InAppViewDebugger.present()
-//#endif
-//        },Hyperion:{
-//#if canImport(HyperionCore)
-//            HyperionManager.sharedInstance().attach(to: self.window)
-//            HyperionManager.sharedInstance().togglePluginDrawer()
-//#endif
-//        },FoxNet:{
-//#if canImport(netfox)
-//            if NFX.sharedInstance().isStarted() {
-//                NFX.sharedInstance().show()
-//            }
-//#endif
-//        })
-//#endif
-        
 //#if DEBUG
         let lcm = LocalConsole.shared
         lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
@@ -165,6 +138,17 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
         PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
 
+//        Task.init {
+//            do {
+//                let mopdel = try await Network.requestIPInfo(ipAddress: "124.127.104.130")
+//                PTNSLogConsole("\(String(describing: mopdel.asBaseic))")
+//            } catch {
+//                PTNSLogConsole("\(error.localizedDescription)")
+//            }
+//        }
+        
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(String(describing: OSSVoiceEnum.ChineseSimplified.flag))")
+        
         return true
     }
 }
