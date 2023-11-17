@@ -19,39 +19,12 @@ import UIKit
 @objcMembers
 public class PTPhoneNetWorkInfo:NSObject {
     
-    static let NodataError = NSError(domain: "Data error", code: 0)
-    static let AddressError = NSError(domain: "Data cant change to string error", code: 1)
-
     public struct NetworkInterfaceInfo {
         let name: String
         let ip: String
         let netmask: String
     }
-    
-    class open func getPublicIdAddress(outSide:String? = "https://api.ipify.org") async throws -> String {
-        try! await withUnsafeThrowingContinuation { continuation in
-            let url = URL(string: outSide!)
-            let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-                guard error == nil else {
-                    continuation.resume(throwing: error!)
-                    return
-                }
-                
-                guard let data = data else {
-                    continuation.resume(throwing:PTPhoneNetWorkInfo.NodataError)
-                    return
-                }
-                
-                if let ipAddress = String(data: data, encoding: .utf8) {
-                    continuation.resume(returning: ipAddress)
-                } else {
-                    continuation.resume(throwing:PTPhoneNetWorkInfo.AddressError)
-                }
-            }
-            task.resume()
-        }
-    }
-    
+        
     class open func ipv4String()->String {
         for info in PTPhoneNetWorkInfo.enumerate() {
             if info.name == "en0" {

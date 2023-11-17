@@ -47,6 +47,7 @@ public extension String {
     static let menu = "Menu"
     static let loading = "Loading"
     static let permission = "Permission"
+    static let tipkit = "TipKit"
 
     static let route = "路由"
     
@@ -239,7 +240,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let permission = self.rowBaseModel(name: .permission)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission]
+        let tipkit = self.rowBaseModel(name: .tipkit)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -562,6 +565,14 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .darkMode {
                 let vc = PTDarkModeControl()
                 self.navigationController?.pushViewController(vc)
+            } else if itemRow.title == .tipkit {
+                if #available(iOS 17.0, *) {
+                    let vc = PTTipsDemoController()
+                    self.navigationController?.pushViewController(vc)
+//                    let cell = collectionViews.cellForItem(at: indexPath)
+//                    let tips = PTTip.sharet
+//                    tips.showTip(sender: cell!, content: self)
+                }
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

@@ -335,6 +335,7 @@
 		55E51758292C9DB200BFF122 /* PTDataEncryption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E51757292C9DB200BFF122 /* PTDataEncryption.swift */; };
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
+		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -754,6 +755,7 @@
 		55E51759292CB87500BFF122 /* CryptoSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CryptoSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DB128ED63F9004CF2C1 /* PTSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSignView.swift; sourceTree = "<group>"; };
+		55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsDemoController.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -2076,6 +2078,7 @@
 				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
+				55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2392,6 +2395,7 @@
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
 				5589FF43299F314900519383 /* AnyClass+PTEX.swift in Sources */,
 				231D1680272CDEEA003D6F62 /* PTInvertedTextView.swift in Sources */,
+				55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */,
 				55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */,
 				55C9046E2A3052BC00B7E83D /* PTViewRulerPlugin.swift in Sources */,
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,

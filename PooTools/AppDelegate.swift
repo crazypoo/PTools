@@ -24,11 +24,21 @@ import HyperionCore
 import netfox
 #endif
 //import Bugly
+import TipKit
 
 @main
 class AppDelegate: PTAppWindowsDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        if #available(iOS 17.0, *) {
+            try? Tips.configure([
+                // 显示频率
+                .displayFrequency(.hourly),
+                // 数据存储位置
+                .datastoreLocation(.applicationDefault)
+            ])
+        }
         // Override point for customization after application launch.
 //        var debugDevice = false
 //        let buglyConfig = BuglyConfig()
@@ -138,16 +148,17 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
         PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
 
-//        Task.init {
-//            do {
+        Task.init {
+            do {
 //                let mopdel = try await Network.requestIPInfo(ipAddress: "124.127.104.130")
-//                PTNSLogConsole("\(String(describing: mopdel.asBaseic))")
-//            } catch {
-//                PTNSLogConsole("\(error.localizedDescription)")
-//            }
-//        }
+                let mopdel = try await Network.getIpAddress()
+                PTNSLogConsole("\(mopdel)")
+            } catch {
+                PTNSLogConsole("\(error.localizedDescription)")
+            }
+        }
         
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(String(describing: OSSVoiceEnum.ChineseSimplified.flag))")
+//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(String(describing: OSSVoiceEnum.ChineseSimplified.flag))")
         
         return true
     }

@@ -28,6 +28,14 @@ open class PTBaseModel: HandyJSON,Convertible {
         //
         //        mapper <<<
         //            color <-- HexColorTransform()
+        //
+        //        mapper <<<
+        //        self.X_value_name <-- old_value_name
+        /**
+                            排除某些参数
+         */
+        //        mapper >>> self.x_value
+
     }
     
     // 实现kj_modelKey方法

@@ -14,7 +14,7 @@ import TipKit
 struct SearchTip: Tip {
     // 标题
     var title: Text {
-        Text("搜索提示")
+        Text(self.tipTitles)
     }
 
     // 消息
@@ -26,6 +26,8 @@ struct SearchTip: Tip {
     var asset: Image? {
         Image(systemName: "globe")
     }
+    
+    var tipTitles:String
 
     // 按钮
     var actions: [Action] {
@@ -33,7 +35,9 @@ struct SearchTip: Tip {
             Action(id: "id_more", title: "更多") {
                 print("点击更多")
             },
-            Action(id: "id_dismiss", title: "关闭"),
+            Action(id: "id_dismiss", title: "关闭") {
+                self.invalidate(reason: .tipClosed)
+            }
             // Action(id: "id_dismiss", title: "关闭", disabled: true)
         ]
     }
@@ -46,8 +50,12 @@ struct SearchTip: Tip {
     static let appOpenedCount = Event(id: "appOpenedCount")
     var rules: [Rule] {
         [
+            //                // 在一周内事件次数 < 3
+            //                $0.donations.donatedWithin(.week).count < 3
+            //                // 在三天内事件次数 > 3
+            //                $0.donations.donatedWithin(.days(3)).count > 3
             #Rule(Self.$showTip) { $0 == true }, // showTip为true
-            #Rule(Self.appOpenedCount) { $0.donations.count >= 3 } // 打开超过3次
+            #Rule(Self.appOpenedCount) { $0.donations.count >= 1 } // 打开超过3次
         ]
     }
 
@@ -55,7 +63,7 @@ struct SearchTip: Tip {
     var options: [TipOption] {
         [
             Tip.IgnoresDisplayFrequency(true), // 忽略显示频率限制即立即显示
-            Tip.MaxDisplayCount(3) // 最大显示次数
+//            Tip.MaxDisplayCount(10) // 最大显示次数
         ]
     }
 }
@@ -107,7 +115,7 @@ class PTTip: NSObject {
     }()
 
     // Tip
-    var searchTip = SearchTip()
+    var searchTip = SearchTip(tipTitles: "1")
     var operationTip = OperationTip()
     var searchTipObservationTask: Task<Void, Never>?
     var operationTipObservationTask: Task<Void, Never>?
@@ -125,7 +133,7 @@ class PTTip: NSObject {
                 }
             }
         }
-//        // 显隐TipUIView
+        // 显隐TipUIView
         operationTipObservationTask = operationTipObservationTask ?? Task { @MainActor in
             for await shouldDisplay in operationTip.shouldDisplayUpdates {
                 if shouldDisplay {

@@ -195,6 +195,38 @@ public class Network: NSObject {
         }
     }
     
+    class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
+                
+        return try await withCheckedThrowingContinuation { continuation in
+                    
+            // 判断网络是否可用
+            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
+                if !reachabilityManager.isReachable {
+                    continuation.resume(throwing:  AFError.createURLRequestFailed(error: NetWorkCheckIPError))
+                }
+            }
+            
+            var apiHeader = HTTPHeaders.init([:])
+            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+            apiHeader["Accept"] = "application/json"
+            
+            let postString = "GET请求"
+            PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
+
+            Network.manager.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
+                switch data.result {
+                case .success(_):
+                    let ipString = String(data: data.data!, encoding: .utf8)
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(ipString ?? "")🌐")
+                    continuation.resume(returning: ipString ?? "")
+                case .failure(let error):
+                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel {
                 
         return try await withCheckedThrowingContinuation { continuation in
@@ -228,7 +260,7 @@ public class Network: NSObject {
                     
                     PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
                     
-                    guard let responseModel = jsonStr.kj.model(PTIPInfoModel.self) else {
+                    guard let responseModel = PTIPInfoModel.deserialize(from: jsonStr) else {
                         continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
                         return
                     }
@@ -239,7 +271,6 @@ public class Network: NSObject {
                 }
             }
         }
-
     }
     
     //JSONEncoding  JSON参数
