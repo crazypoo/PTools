@@ -112,6 +112,18 @@ class AppDelegate: PTAppWindowsDelegate {
             InAppViewDebugger.present()
 #endif
         }
+        lcm.closeAllOutsideFunction = {
+#if canImport(netfox)
+            if NFX.sharedInstance().isStarted() {
+                NFX.sharedInstance().hide()
+            }
+#endif
+#if canImport(FLEX)
+            if !FLEXManager.shared.isHidden {
+                FLEXManager.shared.hideExplorer()
+            }
+#endif
+        }
 //        #endif
 
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {

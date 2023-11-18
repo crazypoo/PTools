@@ -23,6 +23,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     public var HyperioniOS:PTActionTask?
     public var flex:PTActionTask?
     public var watchViews:PTActionTask?
+    public var closeAllOutsideFunction:PTActionTask?
 
     private var maskView:PTDevMaskView?
 
@@ -611,6 +612,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
                 
                 UIViewPropertyAnimator(duration: 0.3, dampingRatio: 1) { [self] in
                     consoleView.alpha = 0
+                    self.closeAllFunction()
                 }.startAnimation()
             }
         }
@@ -840,6 +842,22 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     var timerInvalidationCounter = 0
+    
+    func closeAllFunction() {
+        self.debugBordersEnabled = false
+        PTViewRulerPlugin.share.hide()
+        PTColorPickPlugin.share.close()
+        PTMemory.share.stopMonitoring()
+        PCheckAppStatus.shared.close()
+        ResizeController.shared.isActive = false
+        PTCoreUserDefultsWrapper.AppDebbugMark = false
+        self.maskView?.removeFromSuperview()
+        self.maskView = nil
+        
+        if self.closeAllOutsideFunction != nil {
+            self.closeAllOutsideFunction!()
+        }
+    }
 
     func debugControllerAction() {
         let vc = PTDebugViewController()
