@@ -176,6 +176,8 @@ pod 'PooTools/VideoEditor', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/SecuritySuite', :git => 'https://github.com/crazypoo/PTools.git'
 ### SF
 pod 'PooTools/SF', :git => 'https://github.com/crazypoo/PTools.git'
+### iOS17Tips
+pod 'PooTools/iOS17Tips', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

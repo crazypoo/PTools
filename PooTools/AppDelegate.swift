@@ -32,12 +32,7 @@ class AppDelegate: PTAppWindowsDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
         if #available(iOS 17.0, *) {
-            try? Tips.configure([
-                // 显示频率
-                .displayFrequency(.hourly),
-                // 数据存储位置
-                .datastoreLocation(.applicationDefault)
-            ])
+            PTTip.shared.appdelegateTipSet()
         }
         // Override point for customization after application launch.
 //        var debugDevice = false

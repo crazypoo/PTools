@@ -934,6 +934,7 @@
 				55B4FA232AE1016A006D35F3 /* HealthPermission */,
 				557FC36A2966A2BC00991C36 /* ImagePicker */,
 				231D1537272CDEE9003D6F62 /* Input */,
+				55E96E2F2B08896E00AB8ADE /* iOS17Tips */,
 				231D15A1272CDEE9003D6F62 /* Json */,
 				55D59C5428F2980000B4FF76 /* Keyboard */,
 				231D15DF272CDEE9003D6F62 /* KeyChain */,
@@ -1976,6 +1977,14 @@
 			path = Ping;
 			sourceTree = "<group>";
 		};
+		55E96E2F2B08896E00AB8ADE /* iOS17Tips */ = {
+			isa = PBXGroup;
+			children = (
+				552893122AE65125009135F9 /* PTTip.swift */,
+			);
+			path = iOS17Tips;
+			sourceTree = "<group>";
+		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2074,7 +2083,6 @@
 				550CE4C22AF295B10052539D /* PTSpeechViewController.swift */,
 				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 				552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */,
-				552893122AE65125009135F9 /* PTTip.swift */,
 				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
