@@ -48,6 +48,7 @@ public extension String {
     static let loading = "Loading"
     static let permission = "Permission"
     static let tipkit = "TipKit"
+    static let document = "UIDocument"
 
     static let route = "路由"
     
@@ -242,7 +243,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let tipkit = self.rowBaseModel(name: .tipkit)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit]
+        let document = self.rowBaseModel(name: .document)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -569,9 +572,11 @@ class PTFuncNameViewController: PTBaseViewController {
                 if #available(iOS 17.0, *) {
                     let vc = PTTipsDemoController()
                     self.navigationController?.pushViewController(vc)
-//                    let cell = collectionViews.cellForItem(at: indexPath)
-//                    let tips = PTTip.sharet
-//                    tips.showTip(sender: cell!, content: self)
+                }
+            } else if itemRow.title == .document {
+                if #available(iOS 17.0, *) {
+                    let vc = PTDocumentViewController()
+                    self.navigationController?.pushViewController(vc)
                 }
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)

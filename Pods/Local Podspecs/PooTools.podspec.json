@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.16.20",
+  "version": "3.17.0",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.16.20"
+    "tag": "3.17.0"
   },
   "license": {
     "type": "MIT",
@@ -1322,6 +1322,18 @@
       }
     },
     {
+      "name": "iOS17Tips",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/iOS17Tips/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_iOS17TIPS POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "InputAll",
       "dependencies": {
         "PooTools/Core": [
@@ -1514,6 +1526,9 @@
 
         ],
         "PooTools/OSSKitSpeech": [
+
+        ],
+        "PooTools/iOS17Tips": [
 
         ]
       },

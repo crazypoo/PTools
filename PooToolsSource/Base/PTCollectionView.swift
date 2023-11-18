@@ -409,6 +409,10 @@ public class PTCollectionView: UIView {
         if viewConfig.showEmptyAlert && mSections.count == 0 {
             PTCollectionView.share.emptyViewConfig = self.viewConfig.emptyViewConfig
             PTCollectionView.share.showEmptyView(showIn: self)
+        } else {
+            PTCollectionView.share.hideUnavailableView(task: {
+                
+            }, showIn: self)
         }
     }
     

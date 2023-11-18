@@ -8,16 +8,23 @@
 
 import UIKit
 import MobileCoreServices
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 public class PTFileBrowser: NSObject {
     
     public static let shared = PTFileBrowser()
     public var rootDirectoryPath = FileManager.pt.getFileDirectory(type: .Directory)
     
-    lazy var navigationController: UINavigationController = {
+    lazy var navigationController: PTBaseNavControl = {
         let rootViewController = PTFileBrowserViewController()
         let navigation = PTBaseNavControl(rootViewController: rootViewController)
-        navigation.navigationBar.barTintColor = UIColor.white
+#if POOTOOLS_NAVBARCONTROLLER
+        rootViewController.zx_navTitleColor = .black
+#else
+        navigation.navigationBar.barTintColor = .black
+#endif
         return navigation
     }()
 }

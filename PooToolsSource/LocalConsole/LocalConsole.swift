@@ -417,6 +417,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
 
                 titles.append(.systemReport)
                 titles.append(.displayReport)
+                titles.append(.debugController)
                 titles.append(.terminateApp)
                 titles.append(.respring)
                 UIAlertController.base_alertVC(title:.debug,okBtns: titles, moreBtn:  { index, title in
@@ -462,6 +463,8 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
                         self.terminateApplicationAction()
                     } else if title == .respring {
                         self.respringAction()
+                    } else if title == .debugController {
+                        self.debugControllerAction()
                     }
                 })
             }
@@ -555,10 +558,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     func snapToCachedEndpoint() {
-        let cachedConsolePosition = CGPoint(
-            x: UserDefaults.standard.object(forKey: "LocalConsole.X") as? CGFloat ?? possibleEndpoints.first!.x,
-            y: UserDefaults.standard.object(forKey: "LocalConsole.Y") as? CGFloat ?? possibleEndpoints.first!.y
-        )
+        let cachedConsolePosition = CGPoint(x: UserDefaults.standard.object(forKey: "LocalConsole.X") as? CGFloat ?? possibleEndpoints.first!.x, y: UserDefaults.standard.object(forKey: "LocalConsole.Y") as? CGFloat ?? possibleEndpoints.first!.y)
         
         consoleView.center = cachedConsolePosition // Update console center so possibleEndpoints are calculated correctly.
         consoleView.center = nearestTargetTo(cachedConsolePosition, possibleTargets: possibleEndpoints)
@@ -569,7 +569,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     public var isVisible = false {
         didSet {
             guard oldValue != isVisible else { return }
-            
+            PTCoreUserDefultsWrapper.AppDebugMode = isVisible
             if isVisible {
                 if self.maskView == nil {
                     PTCoreUserDefultsWrapper.AppDebbugMark = true
@@ -840,6 +840,11 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
     
     var timerInvalidationCounter = 0
+
+    func debugControllerAction() {
+        let vc = PTDebugViewController()
+        floatingAction(vc: vc)
+    }
     
     func copyTextAction() {
         self.consoleTextView.text.copyToPasteboard()
@@ -1429,8 +1434,12 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
             self.respringAction()
         }
         
+        let debugController = UIAction(title: .debugController,image: UIImage(.pencil),attributes: .destructive) { _ in
+            self.debugControllerAction()
+        }
+        
         debugActions.append(contentsOf: [fps,memory,colorCheck,ruler,document,viewFrames, systemReport, displayReport,Flex,HyperioniOS,FoxNet,InApp])
-        let destructActions = [terminateApplication , respring]
+        let destructActions = [debugController,terminateApplication , respring]
         
         let debugMenu = UIMenu(
             title: .debug, image: UIImage(.ant),
@@ -1989,4 +1998,5 @@ extension String {
     static let terminateApp = "Terminate App"
     static let respring = "Respring"
     static let debug = "Debug"
+    static let debugController = "Debug Input Controller"
 }

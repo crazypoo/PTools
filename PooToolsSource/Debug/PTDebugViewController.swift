@@ -120,7 +120,7 @@ public class PTDebugViewController: PTBaseViewController {
                         cell.cellModel = self.settingCellModels[1]
                     }
                 default:
-                    UIViewController.gobal_drop(title: "仅在自定义模式中输入")
+                    UIViewController.gobal_drop(title: "Input with custom mode")
                 }
             }
         }

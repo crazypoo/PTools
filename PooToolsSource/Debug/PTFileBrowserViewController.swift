@@ -11,6 +11,7 @@ import SnapKit
 import MobileCoreServices
 import QuickLook
 import FloatingPanel
+import AttributedString
 
 public class PTFileBrowserViewController: PTBaseViewController {
 
@@ -35,6 +36,18 @@ public class PTFileBrowserViewController: PTBaseViewController {
         config.itemOriginalX = 0
         config.itemHeight = 64
         config.sectionEdges = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
+        config.showEmptyAlert = true
+                
+        var emptyConfig = PTEmptyDataViewConfig()
+        emptyConfig.buttonTitle = ""
+        emptyConfig.mainTitleAtt = """
+                \(wrap: .embedding("""
+                \("No file",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
+                """))
+                """
+        emptyConfig.secondaryEmptyAtt = nil
+        
+        config.emptyViewConfig = emptyConfig
         
         let view = PTCollectionView(viewConfig: config)
         view.cellInCollection = { collection,itemSection,indexPath in
@@ -247,10 +260,12 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 let row = PTRows.init(title: value.name,cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: fusionModel)
                 rows.append(row)
             }
-            let section = PTSection.init(rows: rows)
-            mSections.append(section)
             
-            self.newCollectionView.layoutIfNeeded()
+            if rows.count > 0 {
+                let section = PTSection.init(rows: rows)
+                mSections.append(section)
+            }
+            
             self.newCollectionView.showCollectionDetail(collectionData: mSections)
         }
     }
@@ -260,7 +275,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
         case .unknown:
             return "📄".emojiToImage(emojiFont: .appfont(size: 24))
         case .folder:
-            return "📑".emojiToImage(emojiFont: .appfont(size: 24))
+            return "📁".emojiToImage(emojiFont: .appfont(size: 24))
         case .image:
             return "🖼️".emojiToImage(emojiFont: .appfont(size: 24))
         case .video:
