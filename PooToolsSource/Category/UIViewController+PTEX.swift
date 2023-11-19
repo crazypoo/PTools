@@ -397,23 +397,19 @@ public extension UIViewController {
     func pt_present(_ vc:UIViewController,animated:Bool? = true,completion:(()->Void)? = nil) {
 
 #if POOTOOLS_DEBUG
-        let share = LocalConsole.shared
-        if share.isVisible {
-            vc.modalPresentationStyle = .formSheet
-            self.present(vc, animated: animated!, completion:completion)
-
-            SwizzleTool().swizzleDidAddSubview {
-                // Configure console window.
-                PTUtils.fetchWindow()?.bringSubviewToFront(share.consoleViewController.view)
+        self.present(vc, animated: animated) {
+            if completion != nil {
+                completion!()
             }
-
+            let share = LocalConsole.shared
+            if share.isVisiable {
+                SwizzleTool().swizzleDidAddSubview {
+                    // Configure console window.
+                    PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
+                }
+            }
         }
 #else
-        if UIApplication.applicationEnvironment() != .appStore || UIApplication.applicationEnvironment() != .testFlight {
-            if PTCoreUserDefultsWrapper.AppDebugMode {
-                vc.modalPresentationStyle = .formSheet
-            }
-        }
         self.present(vc, animated: animated!, completion:completion)
 #endif
     }

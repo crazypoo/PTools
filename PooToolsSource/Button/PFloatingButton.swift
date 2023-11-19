@@ -102,6 +102,8 @@ open class PFloatingButton: UIButton {
     ///是否跟蹤按鈕
     public var isTraceEnabled : Bool = false
     
+    public var dragEnd:PTActionTask?
+    
     private var singleTapCanceled : Bool = false
     private var skipTapEventOnce : Bool = false
     private var isDragging : Bool = false
@@ -228,6 +230,10 @@ open class PFloatingButton: UIButton {
         }
         
         isDragging = false
+        
+        if dragEnd != nil {
+            dragEnd!()
+        }
     }
 
     public override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {

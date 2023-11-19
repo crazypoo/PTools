@@ -83,47 +83,48 @@ class AppDelegate: PTAppWindowsDelegate {
 #endif
         
 //#if DEBUG
-        let lcm = LocalConsole.shared
-        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
-        lcm.flex = {
-#if canImport(FLEX)
-            if FLEXManager.shared.isHidden {
-                FLEXManager.shared.showExplorer()
-            } else {
-                FLEXManager.shared.hideExplorer()
-            }
-#endif
-        }
-        lcm.HyperioniOS = {
-#if canImport(HyperionCore)
-            HyperionManager.sharedInstance().attach(to: AppWindows)
-            HyperionManager.sharedInstance().togglePluginDrawer()
-#endif
-        }
-        lcm.FoxNet = {
-#if canImport(netfox)
-            if NFX.sharedInstance().isStarted() {
-                NFX.sharedInstance().show()
-            }
-#endif
-        }
-        lcm.watchViews = {
-#if canImport(InAppViewDebugger)
-            InAppViewDebugger.present()
-#endif
-        }
-        lcm.closeAllOutsideFunction = {
-#if canImport(netfox)
-            if NFX.sharedInstance().isStarted() {
-                NFX.sharedInstance().hide()
-            }
-#endif
-#if canImport(FLEX)
-            if !FLEXManager.shared.isHidden {
-                FLEXManager.shared.hideExplorer()
-            }
-#endif
-        }
+        let _ = LocalConsole.shared
+//        if !lcm.terminal?.systemIsVisible
+//        lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
+//        lcm.flex = {
+//#if canImport(FLEX)
+//            if FLEXManager.shared.isHidden {
+//                FLEXManager.shared.showExplorer()
+//            } else {
+//                FLEXManager.shared.hideExplorer()
+//            }
+//#endif
+//        }
+//        lcm.HyperioniOS = {
+//#if canImport(HyperionCore)
+//            HyperionManager.sharedInstance().attach(to: AppWindows)
+//            HyperionManager.sharedInstance().togglePluginDrawer()
+//#endif
+//        }
+//        lcm.FoxNet = {
+//#if canImport(netfox)
+//            if NFX.sharedInstance().isStarted() {
+//                NFX.sharedInstance().show()
+//            }
+//#endif
+//        }
+//        lcm.watchViews = {
+//#if canImport(InAppViewDebugger)
+//            InAppViewDebugger.present()
+//#endif
+//        }
+//        lcm.closeAllOutsideFunction = {
+//#if canImport(netfox)
+//            if NFX.sharedInstance().isStarted() {
+//                NFX.sharedInstance().hide()
+//            }
+//#endif
+//#if canImport(FLEX)
+//            if !FLEXManager.shared.isHidden {
+//                FLEXManager.shared.hideExplorer()
+//            }
+//#endif
+//        }
 //        #endif
 
         PTLaunchAdMonitor.showAt(path: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg", onView: self.window!, timeInterval: 10, param: ["123":"https://www.qq.com"], year: "2023", skipFont: .appfont(size: 14), comName: "1111", comNameFont: .appfont(size: 10)) {

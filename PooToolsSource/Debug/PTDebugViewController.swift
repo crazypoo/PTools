@@ -72,7 +72,7 @@ public class PTDebugViewController: PTBaseViewController {
                     let value = !PTCoreUserDefultsWrapper.AppDebugMode
                     PTCoreUserDefultsWrapper.AppDebugMode = value
                     let console = LocalConsole.shared
-                    console.isVisible = value
+                    console.isVisiable = value
                 }
             }
             return cell

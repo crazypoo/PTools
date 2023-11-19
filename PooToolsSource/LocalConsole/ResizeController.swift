@@ -8,10 +8,8 @@
 import UIKit
 import SwifterSwift
 import SnapKit
-import SafeSFSymbols
 
 typealias LocalConsoleTextColorTask = ((_ color:UIColor)->Void)
-
 
 @available(iOSApplicationExtension, unavailable)
 class ResizeController {
@@ -20,19 +18,17 @@ class ResizeController {
     
     lazy var platterView = PlatterView(frame: .zero)
     
-    var consoleCenterPoint: CGPoint {
-        let containerViewSize = LocalConsole.shared.consoleViewController.view.frame.size
+    lazy var consoleCenterPoint = CGPoint(x: (UIScreen.main.nativeBounds.width / 2).rounded() / UIScreen.main.scale,
+                                          y: (UIScreen.main.nativeBounds.height / 2).rounded() / UIScreen.main.scale
+                                            + (UIScreen.hasRoundedCorners ? 0 : 24))
         
-        return CGPoint(x: (containerViewSize.width * UIScreen.main.scale / 2).rounded() / UIScreen.main.scale, y: (containerViewSize.height * UIScreen.main.scale / 2).rounded() / UIScreen.main.scale + (UIScreen.hasRoundedCorners ? 0 : 24))
-    }
-    
     lazy var consoleOutlineView: UIView = {
         
-        let consoleViewReference = LocalConsole.shared.consoleView
+        let consoleViewReference = LocalConsole.shared.terminal!
         
         let view = UIView()
         view.layer.borderWidth = 2
-        view.layer.borderColor = UIColor.systemGreen.resolvedColor(with: UITraitCollection(userInterfaceStyle: .light)).cgColor
+        view.layer.borderColor = UIColor.randomColor.cgColor
         view.layer.cornerRadius = consoleViewReference.layer.cornerRadius + 6
         view.layer.cornerCurve = .continuous
         view.alpha = 0
@@ -54,7 +50,7 @@ class ResizeController {
     
     lazy var bottomGrabber: UIView = {
         let view = UIView()
-        LocalConsole.shared.consoleViewController.view.addSubview(view)
+        AppWindows!.addSubview(view)
         
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -65,7 +61,7 @@ class ResizeController {
         ])
         
         bottomGrabberPillView.frame = CGRect(x: 58 - 18, y: 25, width: 36, height: 5)
-        bottomGrabberPillView.backgroundColor = UIColor.label
+        bottomGrabberPillView.backgroundColor = .randomColor
         bottomGrabberPillView.alpha = 0.3
         bottomGrabberPillView.layer.cornerRadius = 2.5
         bottomGrabberPillView.layer.cornerCurve = .continuous
@@ -84,7 +80,7 @@ class ResizeController {
     
     lazy var rightGrabber: UIView = {
         let view = UIView()
-        LocalConsole.shared.consoleViewController.view.addSubview(view)
+        AppWindows!.addSubview(view)
         
         view.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
@@ -95,7 +91,7 @@ class ResizeController {
         ])
         
         rightGrabberPillView.frame = CGRect(x: 25, y: 58 - 18, width: 5, height: 36)
-        rightGrabberPillView.backgroundColor = UIColor.label
+        rightGrabberPillView.backgroundColor = .randomColor
         rightGrabberPillView.alpha = 0.3
         rightGrabberPillView.layer.cornerRadius = 2.5
         rightGrabberPillView.layer.cornerCurve = .continuous
@@ -109,58 +105,53 @@ class ResizeController {
         
         return view
     }()
-    
+        
     var isActive: Bool = false {
         didSet {
             guard isActive != oldValue else { return }
             
             // Initialize views outside of animation.
-            platterView.FontSizeBlock = { size in
-                LocalConsole.shared.setAttFontSize(fontSizes: size)
-            }
-            platterView.FontSColorBlock = { color in
-                LocalConsole.shared.setAttFontColor(color: color)
-            }
-
+            _ = platterView
             _ = consoleOutlineView
             _ = bottomGrabber
             _ = rightGrabber
             
             // Ensure initial autolayout is performed unanimated.
-            LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
             
-            if #available(iOS 15, *) {
-                FrameRateRequest.shared.perform(duration: 1.5)
+            AppWindows!.bringSubviewToFront(LocalConsole.shared.terminal!)
+            
+            LocalConsole.shared.terminal!.menuButton.isHidden = isActive
+            
+            platterView.fontText.text = String.init(format: "%f", LocalConsole.shared.terminal!.fontSize)
+            platterView.FontSizeBlock = { (fontSize) in
+                LocalConsole.shared.setAttFontSize(fontSizes: fontSize)
             }
-            
+            platterView.FontSColorBlock = { color in
+                LocalConsole.shared.setAttFontColor(color: color)
+            }
+
+
             if isActive {
                 
                 UIViewPropertyAnimator(duration: 0.75, dampingRatio: 1) {
                     
-                    let textView = LocalConsole.shared.consoleTextView
+                    let textView = LocalConsole.shared.terminal!.systemText
                     
-                    textView.contentOffset.y = textView.contentSize.height - textView.bounds.size.height
+                    textView!.contentOffset.y = textView!.contentSize.height - textView!.bounds.size.height
                 }.startAnimation()
                 
                 
-                if LocalConsole.shared.consoleView.traitCollection.userInterfaceStyle == .light {
-                    LocalConsole.shared.consoleView.layer.shadowOpacity = 0.25
+                if LocalConsole.shared.terminal!.traitCollection.userInterfaceStyle == .light {
+                    LocalConsole.shared.terminal!.layer.shadowOpacity = 0.25
                 }
-                
                 // Ensure background color animates in right the first time.
-                LocalConsole.shared.consoleViewController.view.backgroundColor = .clear
+                AppWindows!.backgroundColor = .clear
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
-                    LocalConsole.shared.consoleView.center = self.consoleCenterPoint
+                    LocalConsole.shared.terminal!.center = self.consoleCenterPoint
                     
                     // Update grabbers (layout constraints)
-                    LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
-                    
-                    LocalConsole.shared.menuButton.alpha = 0
-                    
-                    LocalConsole.shared.consoleViewController.view.backgroundColor = UIColor(dynamicProvider: { traitCollection in
-                        UIColor(white: 0, alpha: traitCollection.userInterfaceStyle == .light ? 0.1 : 0.3)
-                    })
+                    AppWindows!.backgroundColor = .randomColor
                 }.startAnimation()
                 
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -177,25 +168,18 @@ class ResizeController {
                     bottomGrabber.transform = .identity
                     rightGrabber.transform = .identity
                 }.startAnimation(afterDelay: 0.3)
-                
-                LocalConsole.shared.panRecognizer.isEnabled = false
-                LocalConsole.shared.longPressRecognizer.isEnabled = false
-                
+                                
                 // Activate full screen button.
                 consoleOutlineView.isUserInteractionEnabled = true
             } else {
                 
-                LocalConsole.shared.consoleView.layer.shadowOpacity = 0.5
+                LocalConsole.shared.terminal!.layer.shadowOpacity = 0.5
                 
                 UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
                     LocalConsole.shared.snapToCachedEndpoint()
-                    
+                    LocalConsole.shared.terminal!.layoutIfNeeded()
                     // Update grabbers (layout constraints)
-                    LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
-                    
-                    LocalConsole.shared.menuButton.alpha = 1
-                    
-                    LocalConsole.shared.consoleViewController.view.backgroundColor = .clear
+                    AppWindows!.backgroundColor = .clear
                 }.startAnimation()
                 
                 UIViewPropertyAnimator(duration: 0.2, dampingRatio: 1) { [self] in
@@ -204,10 +188,7 @@ class ResizeController {
                     bottomGrabber.alpha = 0
                     rightGrabber.alpha = 0
                 }.startAnimation()
-                
-                LocalConsole.shared.panRecognizer.isEnabled = true
-                LocalConsole.shared.longPressRecognizer.isEnabled = true
-                
+                                
                 // Deactivate full screen button.
                 consoleOutlineView.isUserInteractionEnabled = false
             }
@@ -216,10 +197,8 @@ class ResizeController {
     
     var initialHeight = CGFloat.zero
     
-    static let kMinConsoleHeight: CGFloat = 108
+    static let kMinConsoleHeight: CGFloat = systemLog_base_height
     static let kMaxConsoleHeight: CGFloat = 346
-    
-    var verticalPanner_frameRateRequestID: UUID?
     
     @objc func verticalPanner(recognizer: UIPanGestureRecognizer) {
         
@@ -230,11 +209,6 @@ class ResizeController {
         
         switch recognizer.state {
         case .began:
-            if #available(iOS 15, *) {
-                verticalPanner_frameRateRequestID = UUID()
-                FrameRateRequest.shared.activate(id: verticalPanner_frameRateRequestID!)
-            }
-            
             initialHeight = LocalConsole.shared.consoleSize.height
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -261,33 +235,23 @@ class ResizeController {
                 }
             }()
             
-            LocalConsole.shared.lumaHeightAnchor.constant = resolvedHeight
             LocalConsole.shared.consoleSize.height = resolvedHeight
-            LocalConsole.shared.consoleView.center.y = consoleCenterPoint.y
-            
+            LocalConsole.shared.terminal!.center.y = consoleCenterPoint.y
+
         case .ended, .cancelled:
-           
-            if #available(iOS 15, *), let id = verticalPanner_frameRateRequestID {
-                verticalPanner_frameRateRequestID = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    FrameRateRequest.shared.deactivate(id: id)
-                }
-            }
-            
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
                 if LocalConsole.shared.consoleSize.height > maxHeight {
                     LocalConsole.shared.consoleSize.height = maxHeight
-                    LocalConsole.shared.lumaHeightAnchor.constant = maxHeight
                 }
                 if LocalConsole.shared.consoleSize.height < minHeight {
                     LocalConsole.shared.consoleSize.height = minHeight
-                    LocalConsole.shared.lumaHeightAnchor.constant = minHeight
                 }
                 
-                LocalConsole.shared.consoleView.center.y = self.consoleCenterPoint.y
+                LocalConsole.shared.terminal!.center.y = self.consoleCenterPoint.y
                 
                 // Animate autolayout updates.
-                LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
+                LocalConsole.shared.terminal!.layoutIfNeeded()
+                AppWindows!.layoutIfNeeded()
             }.startAnimation()
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -300,10 +264,8 @@ class ResizeController {
     
     var initialWidth = CGFloat.zero
     
-    static let kMinConsoleWidth: CGFloat = 112
-    static let kMaxConsoleWidth: CGFloat = [UIScreen.portraitSize.width, UIScreen.portraitSize.height].min()! - 56
-    
-    var horizontalPanner_frameRateRequestID: UUID?
+    static let kMinConsoleWidth: CGFloat = systemLog_base_width
+    static let kMaxConsoleWidth: CGFloat = CGFloat.kSCREEN_WIDTH - 56
     
     @objc func horizontalPanner(recognizer: UIPanGestureRecognizer) {
         
@@ -314,11 +276,6 @@ class ResizeController {
         
         switch recognizer.state {
         case .began:
-            if #available(iOS 15, *) {
-                horizontalPanner_frameRateRequestID = UUID()
-                FrameRateRequest.shared.activate(id: horizontalPanner_frameRateRequestID!)
-            }
-            
             initialWidth = LocalConsole.shared.consoleSize.width
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -346,16 +303,9 @@ class ResizeController {
             }()
             
             LocalConsole.shared.consoleSize.width = resolvedWidth
-            LocalConsole.shared.consoleView.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
-            
+            LocalConsole.shared.terminal!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+
         case .ended, .cancelled:
-            
-            if #available(iOS 15, *), let id = horizontalPanner_frameRateRequestID {
-                horizontalPanner_frameRateRequestID = nil
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                    FrameRateRequest.shared.deactivate(id: id)
-                }
-            }
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 0.7) {
                 if LocalConsole.shared.consoleSize.width > maxWidth {
@@ -365,10 +315,11 @@ class ResizeController {
                     LocalConsole.shared.consoleSize.width = minWidth
                 }
                 
-                LocalConsole.shared.consoleView.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
+                LocalConsole.shared.terminal!.center.x = (UIScreen.main.nativeBounds.width * 1/2).rounded() / UIScreen.main.scale
                 
                 // Animate autolayout updates.
-                LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
+                LocalConsole.shared.terminal!.layoutIfNeeded()
+                AppWindows!.layoutIfNeeded()
             }.startAnimation()
             
             UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
@@ -381,20 +332,172 @@ class ResizeController {
 }
 
 @available(iOSApplicationExtension, unavailable)
-class PlatterView: UIView {
+class PlatterView: UIView,UITextFieldDelegate {
+    
     var FontSizeBlock:((_ text:CGFloat)->Void)?
     var FontSColorBlock:LocalConsoleTextColorTask?
 
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        self.frame.size = UIScreen.portraitSize
+        // Make sure bottom doesn't show on upwards pan.
+        self.frame.size.height += 50
+        self.frame.origin = possibleEndpoints[1]
+        autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
+        layer.shadowRadius = 10
+        layer.shadowOpacity = 0.125
+        layer.shadowOffset = CGSize(width: 0, height: 0)
+        
+        layer.borderColor = UIColor.randomColor.cgColor
+        layer.borderWidth = 1 / UIScreen.main.scale
+        layer.cornerRadius = 30
+        layer.cornerCurve = .continuous
+
+        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
+        blurView.layer.cornerRadius = 30
+        blurView.layer.cornerCurve = .continuous
+        blurView.clipsToBounds = true
+        
+        blurView.frame = bounds
+        
+        addSubview(blurView)
+
+        backgroundColor = .randomColor
+        AppWindows!.addSubview(self)
+        
+        _ = backgroundButton
+        
+        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(platterPanner(recognizer:)))
+        panRecognizer.maximumNumberOfTouches = 1
+        addGestureRecognizer(panRecognizer)
+        
+        let grabber = UIView()
+        grabber.frame.size = CGSize(width: 36, height: 5)
+        grabber.frame.origin.y = 10
+        grabber.center.x = bounds.width / 2
+        grabber.backgroundColor = .randomColor
+        grabber.alpha = 0.1
+        grabber.layer.cornerRadius = 2.5
+        grabber.layer.cornerCurve = .continuous
+        addSubview(grabber)
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "RPT Console title".localized()
+        titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
+        titleLabel.sizeToFit()
+        titleLabel.center.x = bounds.width / 2
+        titleLabel.frame.origin.y = 28
+        titleLabel.roundOriginToPixel()
+        addSubview(titleLabel)
+        
+        let subtitleLabel = UILabel()
+        subtitleLabel.text = "PT Console subtitle".localized()
+        subtitleLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        subtitleLabel.sizeToFit()
+        subtitleLabel.alpha = 0.5
+        subtitleLabel.center.x = bounds.width / 2
+        subtitleLabel.frame.origin.y = titleLabel.frame.maxY + 8
+        subtitleLabel.roundOriginToPixel()
+        addSubview(subtitleLabel)
+        
+        addSubviews([resetButton,doneButton,fontSizeTitle,fontText,colorButton])
+        resetButton.center = CGPoint(x: UIScreen.portraitSize.width / 2 - 74,
+                                     y: UIScreen.portraitSize.height - possibleEndpoints[0].y * 2)
+        resetButton.roundOriginToPixel()
+        
+        doneButton.center = CGPoint(x: UIScreen.portraitSize.width / 2 + 74,
+                                    y: UIScreen.portraitSize.height - possibleEndpoints[0].y * 2)
+        doneButton.roundOriginToPixel()
+        
+        fontSizeTitle.text = "PT Console font".localized()
+        fontSizeTitle.snp.makeConstraints { make in
+            make.left.equalTo(resetButton.snp.left)
+            make.bottom.equalTo(doneButton.snp.top).offset(-30)
+        }
+        
+        fontText.snp.makeConstraints { make in
+            make.left.equalTo(fontSizeTitle.snp.right)
+            make.right.equalTo(doneButton.snp.right)
+            make.centerY.equalTo(fontSizeTitle)
+        }
+        
+        colorButton.snp.makeConstraints { make in
+            make.bottom.equalTo(fontSizeTitle.snp.top).offset(-15)
+            make.height.width.equalTo(doneButton)
+            make.centerX.equalToSuperview()
+        }
+
+        if #available(iOS 17.0, *) {
+            registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (self: Self, previousTraitCollection: UITraitCollection) in
+                self.layer.borderColor = UIColor.randomColor.cgColor
+            }
+        }
+    }
+    
     lazy var backgroundButton: UIButton = {
-        let view = UIButton(type: .custom)
-        view.addActionHandlers() { sender in
+        let backgroundButton = UIButton.init(type: .custom)
+        backgroundButton.addActionHandlers { sender in
             ResizeController.shared.isActive = false
             self.dismiss()
         }
-        view.frame.size = CGSize(width: self.frame.size.width, height: possibleEndpoints[0].y + 30)
-        LocalConsole.shared.consoleViewController.view.addSubview(view)
-        LocalConsole.shared.consoleViewController.view.sendSubviewToBack(view)
-        return view
+        backgroundButton.frame.size = CGSize(width: self.frame.size.width, height: possibleEndpoints[0].y + 30)
+        AppWindows!.addSubview(backgroundButton)
+        AppWindows!.sendSubviewToBack(backgroundButton)
+        return backgroundButton
+    }()
+    
+    lazy var doneButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = UIColor.systemBlue.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
+        button.setImage("✅".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
+        button.frame.size = CGSize(width: 116, height: 52)
+        button.layer.cornerRadius = 20
+        button.layer.cornerCurve = .continuous
+
+        button.addActionHandlers { sender in
+            self.fontText.resignFirstResponder()
+            ResizeController.shared.isActive = false
+            self.dismiss()
+        }
+
+        return button
+    }()
+    
+    lazy var resetButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.backgroundColor = UIColor(dynamicProvider: { traitCollection in
+            if traitCollection.userInterfaceStyle == .dark {
+                return UIColor(white: 1, alpha: 0.125)
+            } else {
+                return UIColor(white: 0, alpha: 0.1)
+            }
+        })
+
+        button.setImage("🔄".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
+        button.frame.size = CGSize(width: 116, height: 52)
+        button.layer.cornerRadius = 20
+        button.layer.cornerCurve = .continuous
+
+        button.addActionHandlers { sender in
+            self.fontText.resignFirstResponder()
+            // Resolves a text view frame animation bug that occurs when *decreasing* text view width.
+            if LocalConsole.shared.consoleSize.width > systemLog_base_width {
+                LocalConsole.shared.terminal!.systemText!.frame.size.width = systemLog_base_width - borderLine * 4
+            }
+            
+            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
+                LocalConsole.shared.consoleSize = CGSize.init(width: systemLog_base_width, height: systemLog_base_height)
+                LocalConsole.shared.terminal!.center = ResizeController.shared.consoleCenterPoint
+                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize = 7.5
+                LocalConsole.shared.terminal!.fontSize = PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize
+                PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor = "#FFFFFF"
+                LocalConsole.shared.terminal!.fontColor = UIColor(hexString: PTCoreUserDefultsWrapper.LocalConsoleCurrentFontColor)!
+                AppWindows!.layoutIfNeeded()
+            }.startAnimation()
+        }
+        return button
     }()
     
     lazy var fontSizeTitle : UILabel = {
@@ -406,7 +509,6 @@ class PlatterView: UIView {
         label.sizeToFit()
         label.font = .systemFont(ofSize: 15)
         label.textAlignment = .left
-        label.text = "PT Console font".localized()
         return label
     }()
     
@@ -414,67 +516,9 @@ class PlatterView: UIView {
         let slider = UITextField()
         slider.placeholder = "Min:\(LocalConsoleFontMin),Max:\(LocalConsoleFontMax)"
         slider.keyboardType = .decimalPad
-        slider.text = "\(PTCoreUserDefultsWrapper.LocalConsoleCurrentFontSize)"
         slider.delegate = self
         slider.viewCorner(radius: 5,borderWidth: 1, borderColor: .randomColor)
         return slider
-    }()
-    
-    lazy var doneButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.systemBlue.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
-        button.setImage("✅".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
-        button.layer.cornerRadius = 20
-        button.layer.cornerCurve = .continuous
-        button.addActionHandlers() { sender in
-            ResizeController.shared.isActive = false
-            self.dismiss()
-        }
-        
-        button.addActions(highlightAction: UIAction(handler: { _ in
-            UIViewPropertyAnimator(duration: 0.25, dampingRatio: 1) {
-                button.alpha = 0.6
-            }.startAnimation()
-        }), unhighlightAction: UIAction(handler: { _ in
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-                button.alpha = 1
-            }.startAnimation()
-        }))
-        
-        return button
-    }()
-    
-    lazy var resetButton: UIButton = {
-        let button = UIButton(type: .custom)
-        button.backgroundColor = UIColor.systemRed.resolvedColor(with: UITraitCollection(userInterfaceStyle: .dark))
-        button.setImage("🔄".emojiToImage(emojiFont: .appfont(size: 17)), for: .normal)
-        button.layer.cornerRadius = 20
-        button.layer.cornerCurve = .continuous
-        button.addActionHandlers() { sender in
-            // Resolves a text view frame animation bug that occurs when *decreasing* text view width.
-            if LocalConsole.shared.consoleSize.width > LocalConsole.shared.defaultConsoleSize.width {
-                LocalConsole.shared.consoleTextView.frame.size.width = LocalConsole.shared.defaultConsoleSize.width - 4
-            }
-            
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-                LocalConsole.shared.consoleSize = LocalConsole.shared.defaultConsoleSize
-                LocalConsole.shared.lumaHeightAnchor.constant = LocalConsole.shared.defaultConsoleSize.height
-                LocalConsole.shared.consoleView.center = ResizeController.shared.consoleCenterPoint
-                LocalConsole.shared.consoleViewController.view.layoutIfNeeded()
-            }.startAnimation()
-        }
-        
-        button.addActions(highlightAction: UIAction(handler: { _ in
-            UIViewPropertyAnimator(duration: 0.25, dampingRatio: 1) {
-                button.alpha = 0.6
-            }.startAnimation()
-        }), unhighlightAction: UIAction(handler: { _ in
-            UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) {
-                button.alpha = 1
-            }.startAnimation()
-        }))
-        
-        return button
     }()
     
     lazy var colorButton:UIButton = {
@@ -495,7 +539,9 @@ class PlatterView: UIView {
                     
                     // 呈现颜色选择器
                     colorPicker.modalPresentationStyle = .formSheet
-                    PTUtils.getCurrentVC().present(colorPicker, animated: true)
+                    PTUtils.getCurrentVC().present(colorPicker, animated: true) {
+                        AppWindows?.bringSubviewToFront(LocalConsole.shared.terminal!)
+                    }
                 }
             } else {
                 ResizeController.shared.isActive = false
@@ -509,100 +555,8 @@ class PlatterView: UIView {
         return view
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        
-        layer.shadowRadius = 10
-        layer.shadowOpacity = 0.125
-        layer.shadowOffset = CGSize(width: 0, height: 0)
-        
-        layer.borderColor = dynamicBorderColor.cgColor
-        layer.borderWidth = 1 / UIScreen.main.scale
-        layer.cornerRadius = 30
-        layer.cornerCurve = .continuous
-        
-        let blurView = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
-        
-        blurView.layer.cornerRadius = 30
-        blurView.layer.cornerCurve = .continuous
-        blurView.clipsToBounds = true
-        
-        blurView.frame = bounds
-        blurView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        
-        addSubview(blurView)
-        
-        LocalConsole.shared.consoleViewController.view.addSubview(self)
-        LocalConsole.shared.consoleViewController.view.sendSubviewToBack(self)
-        
-        _ = backgroundButton
-        
-        let panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(platterPanner(recognizer:)))
-        panRecognizer.maximumNumberOfTouches = 1
-        addGestureRecognizer(panRecognizer)
-        
-        let grabber = UIView()
-        grabber.frame.size = CGSize(width: 36, height: 5)
-        grabber.frame.origin.y = 10
-        grabber.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-        grabber.backgroundColor = .label
-        grabber.alpha = 0.1
-        grabber.layer.cornerRadius = 2.5
-        grabber.layer.cornerCurve = .continuous
-        addSubview(grabber)
-        
-        let titleLabel = UILabel()
-        titleLabel.text = "PT Console title".localized()
-        titleLabel.font = .systemFont(ofSize: 30, weight: .bold)
-        titleLabel.sizeToFit()
-        titleLabel.frame.origin.y = 28
-        titleLabel.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-        addSubview(titleLabel)
-        
-        let subtitleLabel = UILabel()
-        subtitleLabel.text = "PT Console subtitle".localized()
-        subtitleLabel.font = .systemFont(ofSize: 17, weight: .medium)
-        subtitleLabel.sizeToFit()
-        subtitleLabel.alpha = 0.5
-        subtitleLabel.frame.origin.y = titleLabel.frame.maxY + 8
-        subtitleLabel.autoresizingMask = [.flexibleLeftMargin, .flexibleRightMargin]
-        addSubview(subtitleLabel)
-        
-        addSubviews([resetButton,doneButton,fontSizeTitle,fontText,colorButton])
-        resetButton.snp.makeConstraints { make in
-            make.width.equalTo((CGFloat.kSCREEN_WIDTH / 2) - 75)
-            make.height.equalTo(52)
-            make.bottom.equalToSuperview().inset(self.possibleEndpoints[0].y * 2)
-            make.right.equalTo(self.snp.centerX).offset(-12.5)
-        }
-        
-        doneButton.snp.makeConstraints { make in
-            make.width.bottom.height.equalTo(resetButton)
-            make.left.equalTo(self.snp.centerX).offset(12.5)
-        }
-        
-        fontSizeTitle.snp.makeConstraints { make in
-            make.left.equalTo(resetButton)
-            make.height.equalTo(34)
-            make.width.equalTo(self.fontSizeTitle.sizeFor(height: 34))
-            make.bottom.equalTo(resetButton.snp.top).offset(-15)
-        }
-        
-        fontText.snp.makeConstraints { make in
-            make.left.equalTo(fontSizeTitle.snp.right).offset(5)
-            make.height.bottom.equalTo(fontSizeTitle)
-            make.right.equalTo(doneButton)
-        }
-        
-        colorButton.snp.makeConstraints { make in
-            make.bottom.equalTo(fontSizeTitle.snp.top).offset(-15)
-            make.height.width.equalTo(doneButton)
-            make.centerX.equalToSuperview()
-        }
-    }
-        
     func configureFrame() {
-        self.frame.size = LocalConsole.shared.consoleViewController.view.frame.size
+        self.frame.size = PTUtils.getCurrentVC().view.frame.size
         // Make sure bottom doesn't show on upwards pan.
         self.frame.size.height += 50
         self.frame.origin = possibleEndpoints[1]
@@ -612,7 +566,7 @@ class PlatterView: UIView {
     func reveal() {
         
         configureFrame()
-        
+
         UIViewPropertyAnimator(duration: 0.6, dampingRatio: 1) {
             self.frame.origin = self.possibleEndpoints[0]
         }.startAnimation()
@@ -637,25 +591,16 @@ class PlatterView: UIView {
         backgroundButton.isHidden = true
     }
     
-    let dynamicBorderColor = UIColor(dynamicProvider: { traitCollection in
-        if traitCollection.userInterfaceStyle == .dark {
-            return UIColor(white: 1, alpha: 0.075)
-        } else {
-            return UIColor(white: 0, alpha: 0.125)
-        }
-    })
-    
+    @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
-        layer.borderColor = dynamicBorderColor.cgColor
+        layer.borderColor = UIColor.randomColor.cgColor
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var possibleEndpoints: [CGPoint] {
-        return [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: LocalConsole.shared.consoleViewController.view.frame.size.height + 5)]
-    }
+    lazy var possibleEndpoints = [CGPoint(x: 0, y: (UIScreen.hasRoundedCorners ? 44 : -8) + 63), CGPoint(x: 0, y: UIScreen.portraitSize.height + 5)]
     
     var initialPlatterOriginY = CGFloat.zero
     
@@ -674,9 +619,9 @@ class PlatterView: UIView {
                 if initialEstimate >= possibleEndpoints[0].y {
                     
                     // Stick buttons to bottom.
-                    [doneButton, resetButton,
+                    [fontText,doneButton, resetButton,
                      ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                     LocalConsole.shared.consoleView
+                     LocalConsole.shared.terminal!
                     ].forEach {
                         $0.transform = .identity
                     }
@@ -692,7 +637,7 @@ class PlatterView: UIView {
                     
                     ResizeController.shared.bottomGrabber.transform = .init(translationX: 0, y: -excess / 2.5)
                     ResizeController.shared.rightGrabber.transform = .init(translationX: 0, y: -excess / 2)
-                    LocalConsole.shared.consoleView.transform = .init(translationX: 0, y: -excess / 2)
+                    LocalConsole.shared.terminal!.transform = .init(translationX: 0, y: -excess / 2)
                     
                     return possibleEndpoints[0].y - excess
                 }
@@ -710,58 +655,51 @@ class PlatterView: UIView {
             
             // After the PiP is thrown, determine the best corner and re-target it there.
             let decelerationRate = UIScrollView.DecelerationRate.normal.rawValue
-            
+
             let projectedPosition = CGPoint(
                 x: 0,
                 y: frame.origin.y + project(initialVelocity: velocity.y, decelerationRate: decelerationRate)
             )
-            
+
             let nearestTargetPosition = nearestTargetTo(projectedPosition, possibleTargets: possibleEndpoints)
-            
+
             let relativeInitialVelocity = CGVector(
                 dx: 0,
                 dy: frame.origin.y >= possibleEndpoints[0].y
                     ? relativeVelocity(forVelocity: velocity.y, from: frame.origin.y, to: nearestTargetPosition.y)
                     : 0
             )
-            
+
             let timingParameters = UISpringTimingParameters(damping: 1, response: 0.4, initialVelocity: relativeInitialVelocity)
             let positionAnimator = UIViewPropertyAnimator(duration: 0, timingParameters: timingParameters)
             positionAnimator.addAnimations { [self] in
                 frame.origin = nearestTargetPosition
-                
-                [doneButton, resetButton,
+
+                [fontText,doneButton, resetButton,
                  ResizeController.shared.bottomGrabber, ResizeController.shared.rightGrabber,
-                 LocalConsole.shared.consoleView
+                 LocalConsole.shared.terminal!
                 ].forEach {
                     $0.transform = .identity
                 }
             }
-            
+            positionAnimator.startAnimation()
+
             if nearestTargetPosition == possibleEndpoints[1] {
                 ResizeController.shared.isActive = false
                 backgroundButton.isHidden = true
-                
-                positionAnimator.addCompletion { _ in
-                    self.isHidden = true
-                }
             } else {
                 ResizeController.shared.isActive = true
             }
             
-            positionAnimator.startAnimation()
-            
         default: break
         }
     }
-}
-
-extension PlatterView:UITextFieldDelegate {
+    
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
         if FontSizeBlock != nil {
             if !(textField.text ?? "").stringIsEmpty() {
                 if (textField.text?.cgFloat())! < LocalConsoleFontMin {
-                    textField.text = "\(LocalConsoleFontMax)"
+                    textField.text = "\(LocalConsoleFontMin)"
                     FontSizeBlock!(LocalConsoleFontMin)
                 } else if (textField.text?.cgFloat())! > LocalConsoleFontMax {
                     textField.text = "\(LocalConsoleFontMax)"

@@ -206,8 +206,8 @@ extension PTBaseViewController {
         SwizzleTool().swizzleDidAddSubview {
             // Configure console window.
             let lcm = LocalConsole.shared
-            if lcm.isVisible {
-                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.consoleViewController.view)
+            if lcm.isVisiable {
+                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
             }
         }
     }

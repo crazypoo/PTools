@@ -23,7 +23,7 @@ public extension PTBaseViewController {
                                    with event: UIEvent?) {
         if UIApplication.applicationEnvironment() != .appStore {
             let console = LocalConsole.shared
-            console.isVisible = !console.isVisible
+            console.isVisiable = !console.isVisiable
         }
     }
 }
