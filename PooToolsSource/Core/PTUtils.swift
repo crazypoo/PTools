@@ -468,18 +468,22 @@ public class PTUtils: NSObject {
         return rangeArray
     }
     
-    class open func pt_pushViewController(_ vc:UIViewController) {
+    class open func pt_pushViewController(_ vc:UIViewController,completion:PTActionTask? = nil) {
 #if POOTOOLS_DEBUG
         let share = LocalConsole.shared
-        if share.isVisible {
+        if share.isVisiable {
             let nav = PTBaseNavControl(rootViewController: vc)
             nav.modalPresentationStyle = .formSheet
-            PTUtils.getCurrentVC().present(nav, animated: true, completion:nil)
+            PTUtils.getCurrentVC().present(nav, animated: true, completion: {
+                if completion != nil {
+                    completion!()
+                }
+                SwizzleTool().swizzleDidAddSubview {
+                    // Configure console window.
+                    PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
+                }
+            })
 
-            SwizzleTool().swizzleDidAddSubview {
-                // Configure console window.
-                PTUtils.fetchWindow()?.bringSubviewToFront(share.consoleViewController.view)
-            }
         } else {
             PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
         }

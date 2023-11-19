@@ -59,7 +59,7 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
             // Configure console window.
             let lcm = LocalConsole.shared
             if lcm.isVisiable {
-                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.consoleViewController.view)
+                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
             }
         }
 #endif
