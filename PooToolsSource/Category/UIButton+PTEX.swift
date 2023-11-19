@@ -141,3 +141,20 @@ public extension UIButton {
         }
     }
 }
+
+/// Custom button that pauses console window swizzling to allow the console menu's presenting view controller to remain the top view controller.
+public class ConsoleMenuButton: UIButton {
+}
+
+@available(iOS 14.0, *)
+extension ConsoleMenuButton {
+    public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willDisplayMenuFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        super.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: animator)
+        SwizzleTool.pauseDidAddSubviewSwizzledClosure = true
+    }
+    
+    public override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
+        
+        SwizzleTool.pauseDidAddSubviewSwizzledClosure = false
+    }
+}

@@ -380,7 +380,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 let browser = PTMediaBrowserController()
                 browser.viewConfig = mediaConfig
                 browser.modalPresentationStyle = .fullScreen
-                self.present(browser, animated: true)
+                self.pt_present(browser)
             } else if itemRow.title == .phoneCall {
                 PTPhoneBlock.callPhoneNumber(phoneNumber: "13800138000", call: { duration in
                 }, cancel: {
@@ -412,7 +412,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 let controller = ImagePickerController(options: options, delegate: self)
                 controller.trackDelegate = self
                 controller.modalPresentationStyle = .fullScreen
-                self.present(controller, animated: true, completion: nil)
+                self.pt_present(controller, animated: true, completion: nil)
             } else if itemRow.title == .sign {
                 let signConfig = PTSignatureConfig()
                 
@@ -556,7 +556,7 @@ class PTFuncNameViewController: PTBaseViewController {
 
                 let permissionVC = PTPermissionViewController(datas: [locationAlways,locationWhen,camera,mic,photo])
                 permissionVC.modalPresentationStyle = .fullScreen
-                self.present(permissionVC, animated: true)
+                self.pt_present(permissionVC, animated: true)
                 permissionVC.viewDismissBlock = {
                 }
 
@@ -650,7 +650,7 @@ class PTFuncNameViewController: PTBaseViewController {
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
                 let infoVc = PTSwiftViewController()
-                self.navigationController?.pushViewController(infoVc)
+                PTUtils.pt_pushViewController(infoVc)
             }
         }
         

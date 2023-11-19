@@ -61,7 +61,6 @@ public class PTMediaBrowserController: PTBaseViewController {
     
     fileprivate lazy var bottomControl:PTMediaBrowserBottom = {
         let view = PTMediaBrowserBottom(viewConfig: self.viewConfig)
-        view.isUserInteractionEnabled = true
         switch self.viewConfig.actionType {
         case .Empty:
             view.moreActionButton.isHidden = true
@@ -70,51 +69,6 @@ public class PTMediaBrowserController: PTBaseViewController {
             view.moreActionButton.setImage(self.viewConfig.moreActionImage, for: .normal)
             view.moreActionButton.isHidden = false
             view.moreActionButton.isUserInteractionEnabled = true
-            view.moreActionButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
-                    switch self.viewConfig.actionType {
-                    case .Save:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 1)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .Delete:
-                        switch index {
-                        case 0:
-                            self.deleteImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 1)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .All:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        case 1:
-                            self.deleteImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 2)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .DIY:
-                        if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index)
-                        }
-                        self.viewMoreActionDismiss()
-                    default:
-                        break
-                    }
-                })
-            }
         }
         view.pageControlView.addPageControlHandlers { sender in
             let cellModel = self.viewConfig.mediaData[sender.currentPage]
@@ -252,6 +206,8 @@ public class PTMediaBrowserController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
+        SwizzleTool().swizzleContextMenuReverseOrder()
+
         if viewConfig.dynamicBackground {
             view.backgroundColor = viewConfig.viewerContentBackgroundColor
         } else {
@@ -284,6 +240,58 @@ public class PTMediaBrowserController: PTBaseViewController {
             make.height.equalTo(CGFloat.kTabbarHeight_Total)
         }
         
+        //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
+        if #available(iOS 14.0, *) {
+            bottomControl.moreActionButton.showsMenuAsPrimaryAction = true
+            bottomControl.moreActionButton.menu = makeMenu()
+        } else {
+            bottomControl.moreActionButton.addActionHandlers { sender in
+                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
+                    switch self.viewConfig.actionType {
+                    case .Save:
+                        switch index {
+                        case 0:
+                            self.saveImage()
+                        default:
+                            if self.viewMoreActionBlock != nil {
+                                self.viewMoreActionBlock!(index - 1)
+                            }
+                            self.viewMoreActionDismiss()
+                        }
+                    case .Delete:
+                        switch index {
+                        case 0:
+                            self.deleteImage()
+                        default:
+                            if self.viewMoreActionBlock != nil {
+                                self.viewMoreActionBlock!(index - 1)
+                            }
+                            self.viewMoreActionDismiss()
+                        }
+                    case .All:
+                        switch index {
+                        case 0:
+                            self.saveImage()
+                        case 1:
+                            self.deleteImage()
+                        default:
+                            if self.viewMoreActionBlock != nil {
+                                self.viewMoreActionBlock!(index - 2)
+                            }
+                            self.viewMoreActionDismiss()
+                        }
+                    case .DIY:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index)
+                        }
+                        self.viewMoreActionDismiss()
+                    default:
+                        break
+                    }
+                })
+            }
+        }
+        
         PTGCDManager.gcdAfter(time: 0.35) {
             var loadSome = 0
             if self.viewConfig.defultIndex > self.viewConfig.mediaData.count {
@@ -294,7 +302,7 @@ public class PTMediaBrowserController: PTBaseViewController {
 
             let cellModel = self.viewConfig.mediaData[loadSome]
             self.updateBottom(models: cellModel)
-        }
+        }        
     }
     
     func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
@@ -386,6 +394,67 @@ public class PTMediaBrowserController: PTBaseViewController {
         bottomControl.titleLabel.isHidden = navControl.isHidden
         bottomControl.backgroundColor = navControl.isHidden ? .clear : MediaBrowserToolBarColor
     }
+    
+    @available(iOS 14.0, *)
+    func makeMenu() -> UIMenu {
+        
+        self.bottomControl.moreActionButton.isSelected = false
+        
+        var debugActions: [UIMenuElement] = []
+        self.actionSheetTitle.enumerated().forEach { index,value in
+            let menuActions = UIAction(title: value) { _ in
+                switch self.viewConfig.actionType {
+                case .Save:
+                    switch index {
+                    case 0:
+                        self.saveImage()
+                    default:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index - 1)
+                        }
+                        self.viewMoreActionDismiss()
+                    }
+                case .Delete:
+                    switch index {
+                    case 0:
+                        self.deleteImage()
+                    default:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index - 1)
+                        }
+                        self.viewMoreActionDismiss()
+                    }
+                case .All:
+                    switch index {
+                    case 0:
+                        self.saveImage()
+                    case 1:
+                        self.deleteImage()
+                    default:
+                        if self.viewMoreActionBlock != nil {
+                            self.viewMoreActionBlock!(index - 2)
+                        }
+                        self.viewMoreActionDismiss()
+                    }
+                case .DIY:
+                    if self.viewMoreActionBlock != nil {
+                        self.viewMoreActionBlock!(index)
+                    }
+                    self.viewMoreActionDismiss()
+                default:
+                    break
+                }
+            }
+            debugActions.append(menuActions)
+        }
+        
+        var menuContent: [UIMenuElement] = []
+                
+        menuContent.append(contentsOf: debugActions)
+        
+        return UIMenu(title: "", children: menuContent)
+    }
+
 }
 
 fileprivate extension PTMediaBrowserController {

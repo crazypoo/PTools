@@ -379,11 +379,3 @@ extension PTFileBrowserViewController:PTRouterable {
     }
 }
 #endif
-
-extension PTFileBrowserViewController {
-    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTCustomControlHeightPanelLayout()
-        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
-        return layout
-    }
-}

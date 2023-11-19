@@ -9,6 +9,7 @@
 import UIKit
 import AVFoundation
 import SwiftDate
+import SwifterSwift
 
 /*
  ░░░░░░░░░▄░░░░░░░░░░░░░░▄░░░░
@@ -228,7 +229,7 @@ public class PTUtils: NSObject {
                 currentVC.presentedViewController?.dismiss(animated: false, completion: nil)
             }
             
-            currentVC.present(vc, animated: true, completion: nil)
+            currentVC.pt_present(vc, animated: true, completion: nil)
         }
     }
     
@@ -259,6 +260,23 @@ public class PTUtils: NSObject {
 #if DEBUG
             assertionFailure("传入对象必须是导航控制器")
 #endif
+        }
+    }
+    
+    // Configure console window.
+    public class func fetchWindow() -> UIWindow? {
+        if #available(iOS 15.0, *) {
+            let windowScene = UIApplication.shared
+                .connectedScenes
+                .filter { $0.activationState == .foregroundActive }
+                .first
+            
+            if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
+                return keyWindow
+            }
+            return nil
+        } else {
+            return UIApplication.shared.windows.first
         }
     }
     
@@ -448,12 +466,84 @@ public class PTUtils: NSObject {
             }
         }
         return rangeArray
-    }            
+    }   
+    
+    class open func pt_pushViewController(_ vc:UIViewController) {
+#if POOTOOLS_DEBUG
+        if let window = PTUtils.fetchWindow()?.rootViewController as? PTBaseNavControl {
+            let lcm = LocalConsole.shared
+            lcm.isVisible = false
+            lcm.isConsoleConfigured = false
+            PTGCDManager.gcdAfter(time: 0.4) {
+                window.viewControllers.first?.navigationController?.pushViewController(vc,completion: {
+                    lcm.isVisible = true
+                })
+            }
+        } else if let window = PTUtils.fetchWindow()?.rootViewController as? UINavigationController {
+            let lcm = LocalConsole.shared
+            lcm.isVisible = false
+            lcm.isConsoleConfigured = false
+            PTGCDManager.gcdAfter(time: 0.4) {
+                window.viewControllers.first?.navigationController?.pushViewController(vc,completion: {
+                    lcm.isVisible = true
+                })
+            }
+        }
+#else
+        PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
+#endif
+    }
 }
 
 //MARK: OC-FUNCTION
 public extension PTUtils {
     class func oc_isiPhoneSeries()->Bool {
         isIPhoneXSeries()
+    }
+}
+
+public class SwizzleTool: NSObject {
+    
+    /// Ensure context menus always show in a non reversed order.
+    public func swizzleContextMenuReverseOrder() {
+        guard let originalMethod = class_getInstanceMethod(NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View").self, NSSelectorFromString("reverses" + "Action" + "Order")),
+              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_reverses_Action_Order))
+        else { Swift.print("Swizzle Error Occurred"); return }
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+    }
+
+    @objc public func swizzled_reverses_Action_Order() -> Bool {
+        if let menu = self.value(forKey: "displayed" + "Menu") as? UIMenu,
+           menu.title == "Debug" || menu.title == "User" + "Defaults" {
+            return false
+        }
+        
+        if let orig = self.value(forKey: "_" + "reverses" + "Action" + "Order") as? Bool {
+            return orig
+        }
+        
+        return false
+    }
+    
+    public static var swizzledDidAddSubviewClosure: (() -> Void)?
+    public static var pauseDidAddSubviewSwizzledClosure: Bool = false
+    
+    public func swizzleDidAddSubview(_ closure: @escaping () -> Void) {
+        guard let originalMethod = class_getInstanceMethod(UIWindow.self, #selector(UIWindow.didAddSubview(_:))),
+              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_did_add_subview(_:)))
+        else { Swift.print("Swizzle Error Occurred"); return }
+        
+        method_exchangeImplementations(originalMethod, swizzledMethod)
+        
+        Self.swizzledDidAddSubviewClosure = closure
+    }
+
+    @objc public func swizzled_did_add_subview(_ subview: UIView) {
+        guard !Self.pauseDidAddSubviewSwizzledClosure else { return }
+        
+        if let closure = Self.swizzledDidAddSubviewClosure {
+            closure()
+        }
     }
 }

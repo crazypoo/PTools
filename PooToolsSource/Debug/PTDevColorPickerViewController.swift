@@ -87,14 +87,6 @@ class PTDevColorPickerViewController: PTBaseViewController {
     }
 }
 
-extension PTDevColorPickerViewController {
-    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTCustomControlHeightPanelLayout()
-        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
-        return layout
-    }
-}
-
 extension PTDevColorPickerViewController:ChromaColorPickerDelegate {
     func colorPickerHandleDidChange(_ colorPicker: ChromaColorPicker, handle: ChromaColorHandle, to color: UIColor) {
         if self.colorSelectedTask != nil {

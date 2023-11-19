@@ -237,7 +237,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 let controller = ImagePickerController(options: options, delegate: self)
                 controller.trackDelegate = self
                 controller.modalPresentationStyle = .fullScreen
-                self.present(controller, animated: true, completion: nil)
+                self.pt_present(controller, animated: true, completion: nil)
             }
         case String.twitterLabel:
             let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"
@@ -526,13 +526,13 @@ extension PTFuncDetailViewController {
     }
 }
 
-extension PTFuncDetailViewController {
-    override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTCustomControlHeightPanelLayout()
-        layout.viewHeight = CGFloat.kSCREEN_HEIGHT / 2
-        return layout
-    }
-}
+//extension PTFuncDetailViewController {
+//    override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
+//        let layout = PTCustomControlHeightPanelLayout()
+//        layout.viewHeight = CGFloat.kSCREEN_HEIGHT / 2
+//        return layout
+//    }
+//}
 
 extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     func webUploader(_ uploader: GCDWebUploader, didUploadFileAtPath path: String) {

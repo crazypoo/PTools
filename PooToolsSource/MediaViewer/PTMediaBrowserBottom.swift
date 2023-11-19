@@ -25,8 +25,8 @@ class PTMediaBrowserBottom: UIView {
         return view
     }()
     
-    lazy var moreActionButton:UIButton = {
-        let view = UIButton.init(type: .custom)
+    lazy var moreActionButton:ConsoleMenuButton = {
+        let view = ConsoleMenuButton()
         view.imageView?.contentMode = .scaleAspectFit
         return view
     }()
@@ -75,8 +75,10 @@ class PTMediaBrowserBottom: UIView {
                 make.right.equalTo(self.moreActionButton.snp.left).offset(-10)
             }
         }
+                
+        // Ensure console view always stays above other views.
     }
-    
+        
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

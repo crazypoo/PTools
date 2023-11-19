@@ -362,7 +362,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
         circle.addSubview(ellipsisImage)
         
         menuButton.tintColor = UIColor(white: 1, alpha: 0.8)
-        //TODO: 添加Action
+        
         if #available(iOS 14.0, *) {
             menuButton.menu = makeMenu()
             menuButton.showsMenuAsPrimaryAction = true
@@ -496,25 +496,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
                 consoleTextView.layer.removeAllAnimations()
             }
         }
-        
-        // Configure console window.
-        func fetchWindow() -> UIWindow? {
-            if #available(iOS 15.0, *) {
-                let windowScene = UIApplication.shared
-                    .connectedScenes
-                    .filter { $0.activationState == .foregroundActive }
-                    .first
                 
-                if let windowScene = windowScene as? UIWindowScene, let keyWindow = windowScene.keyWindow {
-                    return keyWindow
-                }
-                return nil
-            } else {
-                return UIApplication.shared.windows.first
-            }
-            
-        }
-        
         func addConsoleToWindow(window: UIWindow) {
             
             window.addSubview(consoleViewController.view)
@@ -544,7 +526,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
                 
                 guard !windowFound else { return }
                 
-                if let window = fetchWindow() {
+                if let window = PTUtils.fetchWindow() {
                     windowFound = true
                     addConsoleToWindow(window: window)
                 }
@@ -861,7 +843,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
 
     func debugControllerAction() {
         let vc = PTDebugViewController()
-        floatingAction(vc: vc)
+        present(content: vc)
     }
     
     func copyTextAction() {
@@ -925,13 +907,14 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     
     func documentAction() {
         let vc = PTFileBrowserViewController()
-        floatingAction(vc: vc)
+        present(content: vc)
     }
     
-    func floatingAction(vc:PTBaseViewController,fpcIsRemovalInteractionEnabled:Bool = true,fpcPanGestureRecognizer:Bool = true,floatingDismiss:PTActionTask? = nil) {
-        PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: AppWindows?.rootViewController as! PTBaseNavControl,currentViewController: AppWindows?.rootViewController,fpcIsRemovalInteractionEnabled: fpcIsRemovalInteractionEnabled,fpcPanGestureRecognizer:fpcPanGestureRecognizer,floatingDismiss:floatingDismiss)
+    func present(content:PTBaseViewController) {
+        let nav = PTBaseNavControl(rootViewController: content)
+        PTUtils.getCurrentVC().pt_present(nav)
     }
-    
+        
     func rulerAction() {
         if PTViewRulerPlugin.share.showed {
             PTViewRulerPlugin.share.hide()
@@ -962,7 +945,7 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     
     func userdefaultAction() {
         let vc = PTUserDefultsViewController()
-        floatingAction(vc: vc)
+        present(content: vc)
     }
     
     func resizeAction() {
@@ -1660,24 +1643,6 @@ public class LocalConsole: NSObject, UIGestureRecognizerDelegate {
     }
 }
 
-/// Custom button that pauses console window swizzling to allow the console menu's presenting view controller to remain the top view controller.
-class ConsoleMenuButton: UIButton {
-}
-
-@available(iOS 14.0, *)
-extension ConsoleMenuButton {
-    override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willDisplayMenuFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
-        super.contextMenuInteraction(interaction, willDisplayMenuFor: configuration, animator: animator)
-        
-        SwizzleTool.pauseDidAddSubviewSwizzledClosure = true
-    }
-    
-    override func contextMenuInteraction(_ interaction: UIContextMenuInteraction, willEndFor configuration: UIContextMenuConfiguration, animator: UIContextMenuInteractionAnimating?) {
-        
-        SwizzleTool.pauseDidAddSubviewSwizzledClosure = false
-    }
-}
-
 // Custom view that is passes touches .
 class PassthroughView: UIView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -1697,52 +1662,6 @@ public class UITapStartEndGestureRecognizer: UITapGestureRecognizer {
     }
     override public func touchesEnded(_ touches: Set<UITouch>, with: UIEvent) {
         self.state = .ended
-    }
-}
-
-class SwizzleTool: NSObject {
-    
-    /// Ensure context menus always show in a non reversed order.
-    func swizzleContextMenuReverseOrder() {
-        guard let originalMethod = class_getInstanceMethod(NSClassFromString("_" + "UI" + "Context" + "Menu" + "List" + "View").self, NSSelectorFromString("reverses" + "Action" + "Order")),
-              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_reverses_Action_Order))
-        else { Swift.print("Swizzle Error Occurred"); return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-    }
-
-    @objc func swizzled_reverses_Action_Order() -> Bool {
-        if let menu = self.value(forKey: "displayed" + "Menu") as? UIMenu,
-           menu.title == "Debug" || menu.title == "User" + "Defaults" {
-            return false
-        }
-        
-        if let orig = self.value(forKey: "_" + "reverses" + "Action" + "Order") as? Bool {
-            return orig
-        }
-        
-        return false
-    }
-    
-    static var swizzledDidAddSubviewClosure: (() -> Void)?
-    static var pauseDidAddSubviewSwizzledClosure: Bool = false
-    
-    func swizzleDidAddSubview(_ closure: @escaping () -> Void) {
-        guard let originalMethod = class_getInstanceMethod(UIWindow.self, #selector(UIWindow.didAddSubview(_:))),
-              let swizzledMethod = class_getInstanceMethod(SwizzleTool.self, #selector(swizzled_did_add_subview(_:)))
-        else { Swift.print("Swizzle Error Occurred"); return }
-        
-        method_exchangeImplementations(originalMethod, swizzledMethod)
-        
-        Self.swizzledDidAddSubviewClosure = closure
-    }
-
-    @objc func swizzled_did_add_subview(_ subview: UIView) {
-        guard !Self.pauseDidAddSubviewSwizzledClosure else { return }
-        
-        if let closure = Self.swizzledDidAddSubviewClosure {
-            closure()
-        }
     }
 }
 

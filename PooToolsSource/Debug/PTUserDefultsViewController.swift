@@ -37,10 +37,10 @@ class PTUserDefultsViewController: PTBaseViewController {
                 let itemRow = model.rows[indexPath.row]
                 let cellModel = (itemRow.dataModel as! PTFusionCellModel)
                 let vc = PTUserDefultsEditViewController(viewModel: cellModel)
-                LocalConsole.shared.floatingAction(vc: vc)
+                LocalConsole.shared.present(content: vc)
                 vc.doneBlock = {
                     let userdefault = PTUserDefultsViewController()
-                    LocalConsole.shared.floatingAction(vc: userdefault)
+                    LocalConsole.shared.present(content: userdefault)
                 }
             }
         }
@@ -276,19 +276,3 @@ extension PTUserDefultsEditViewController:PTRouterable {
     }
 }
 #endif
-
-extension PTUserDefultsViewController {
-    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTCustomControlHeightPanelLayout()
-        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
-        return layout
-    }
-}
-
-extension PTUserDefultsEditViewController {
-    public override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-        let layout = PTCustomControlHeightPanelLayout()
-        layout.viewHeight = (CGFloat.kSCREEN_HEIGHT - CGFloat.statusBarHeight())
-        return layout
-    }
-}

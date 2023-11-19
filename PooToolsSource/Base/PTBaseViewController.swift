@@ -16,7 +16,7 @@ import AttributedString
 import Photos
 import SnapKit
 import SafeSFSymbols
-
+import FloatingPanel
 #if POOTOOLS_LISTEMPTYDATA
 import LXFProtocolTool
 #endif
@@ -75,6 +75,7 @@ extension PTBaseViewController {
         static var screenShotActionCallBack = 991
         static var screenShotAlertCallBack = 990
         static var screenShotOnlyGetImageCallBack = 989
+        static var floatingScreenSpace = 988
     }
     
     //MARK: 是否隱藏StatusBar
@@ -201,6 +202,13 @@ extension PTBaseViewController {
             self.dismiss(animated: true, completion: completion)
         } else {
             self.navigationController?.popViewController(animated: true, completion)
+        }
+        SwizzleTool().swizzleDidAddSubview {
+            // Configure console window.
+            let lcm = LocalConsole.shared
+            if lcm.isVisible {
+                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.consoleViewController.view)
+            }
         }
     }
     

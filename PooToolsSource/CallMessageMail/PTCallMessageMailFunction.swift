@@ -40,7 +40,7 @@ public class PTCallMessageMailFunction: NSObject {
         vc.recipients = users
         vc.messageComposeDelegate = PTCallMessageMailFunction.share
         vc.modalPresentationStyle = .fullScreen
-        PTUtils.getCurrentVC().present(vc, animated: true)
+        PTUtils.getCurrentVC().pt_present(vc, animated: true)
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     

@@ -393,6 +393,30 @@ public extension UIViewController {
     func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    func pt_present(_ vc:UIViewController,animated:Bool? = true,completion:(()->Void)? = nil) {
+
+#if POOTOOLS_DEBUG
+        let share = LocalConsole.shared
+        if share.isVisible {
+            vc.modalPresentationStyle = .formSheet
+            self.present(vc, animated: animated!, completion:completion)
+
+            SwizzleTool().swizzleDidAddSubview {
+                // Configure console window.
+                PTUtils.fetchWindow()?.bringSubviewToFront(share.consoleViewController.view)
+            }
+
+        }
+#else
+        if UIApplication.applicationEnvironment() != .appStore || UIApplication.applicationEnvironment() != .testFlight {
+            if PTCoreUserDefultsWrapper.AppDebugMode {
+                vc.modalPresentationStyle = .formSheet
+            }
+        }
+        self.present(vc, animated: animated!, completion:completion)
+#endif
+    }
 }
 
 extension UIViewController:UIPopoverPresentationControllerDelegate {

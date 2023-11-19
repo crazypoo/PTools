@@ -283,7 +283,7 @@ public class PTScanQRController: PTBaseViewController {
                 imagePicker.sourceType = .photoLibrary
                 imagePicker.delegate = self
                 imagePicker.modalPresentationStyle = .fullScreen
-                self.present(imagePicker, animated: true)
+                self.pt_present(imagePicker, animated: true)
             }
         }
     }

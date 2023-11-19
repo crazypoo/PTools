@@ -501,8 +501,7 @@ class PlatterView: UIView {
                 ResizeController.shared.isActive = false
                 self.dismiss() {
                     let colorPicker = PTDevColorPickerViewController()
-                    LocalConsole.shared.floatingAction(vc: colorPicker,fpcIsRemovalInteractionEnabled: true,fpcPanGestureRecognizer: false) {
-                    }
+                    LocalConsole.shared.present(content: colorPicker)
                     colorPicker.colorSelectedTask = self.FontSColorBlock
                 }
             }

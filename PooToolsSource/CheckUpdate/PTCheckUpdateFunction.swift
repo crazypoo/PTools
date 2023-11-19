@@ -220,7 +220,7 @@ public class PTCheckUpdateFunction: NSObject {
         if tipContentView != nil {
             tipContentView!(tipsControl.contentView)
         }
-        PTUtils.getCurrentVC().present(tipsControl, animated: true, completion: nil)
+        PTUtils.getCurrentVC().pt_present(tipsControl, animated: true, completion: nil)
     }
     
     //MARK: 初始化UpdateTips

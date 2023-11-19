@@ -54,6 +54,13 @@ open class PTBaseNavControl: ZXNavigationBarNavigationController {
             }
         }
         super.present(viewControllerToPresent, animated: flag, completion: completion)
+        SwizzleTool().swizzleDidAddSubview {
+            // Configure console window.
+            let lcm = LocalConsole.shared
+            if lcm.isVisible {
+                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.consoleViewController.view)
+            }
+        }
     }
     
     @objc func back() {
