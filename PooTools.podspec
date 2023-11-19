@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.17.2'
+    s.version     = '3.17.3'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -14,7 +14,7 @@ Pod::Spec.new do |s|
     s.subspec "Core" do |subspec|
         subspec.resource_bundles = {
             'PooToolsResource' => ['PooToolsSource/Resource/**/*'],
-            'PooToolsResource' => ['PooToolsSource/Resource/*.xcassets'],
+#            'PooToolsResource' => ['PooToolsSource/Resource/*.xcassets'],
         }
         subspec.dependency 'SwiftDate'
         subspec.dependency 'WZLBadge'

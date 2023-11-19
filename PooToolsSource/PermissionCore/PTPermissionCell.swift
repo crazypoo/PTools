@@ -143,7 +143,7 @@ class PTPermissionCell: PTBaseNormalCell {
     }
     
     func setButtonStatus() {
-        var permissionName = PTPermissionText.permission_name(for: cellModel!.type)
+        let permissionName = PTPermissionText.permission_name(for: cellModel!.type)
         switch cellModel!.type {
         case .tracking:
             cellIcon.image = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_permission_tracking")

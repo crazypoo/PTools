@@ -244,7 +244,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 }
             } else {
 #if POOTOOLS_NAVBARCONTROLLER
-                self.zx_navBar.addSubview(back)
+                self.zx_navBar?.addSubview(back)
                 back.snp.makeConstraints { make in
                     make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                     make.top.size.equalTo(self.closeBtn)
