@@ -14,7 +14,6 @@ Pod::Spec.new do |s|
     s.subspec "Core" do |subspec|
         subspec.resource_bundles = {
             'PooToolsResource' => ['PooToolsSource/Resource/**/*'],
-#            'PooToolsResource' => ['PooToolsSource/Resource/*.xcassets'],
         }
         subspec.dependency 'SwiftDate'
         subspec.dependency 'WZLBadge'

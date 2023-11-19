@@ -466,28 +466,22 @@ public class PTUtils: NSObject {
             }
         }
         return rangeArray
-    }   
+    }
     
     class open func pt_pushViewController(_ vc:UIViewController) {
 #if POOTOOLS_DEBUG
-        if let window = PTUtils.fetchWindow()?.rootViewController as? PTBaseNavControl {
-            let lcm = LocalConsole.shared
-            lcm.isVisible = false
-            lcm.isConsoleConfigured = false
-            PTGCDManager.gcdAfter(time: 0.4) {
-                window.viewControllers.first?.navigationController?.pushViewController(vc,completion: {
-                    lcm.isVisible = true
-                })
+        let share = LocalConsole.shared
+        if share.isVisible {
+            let nav = PTBaseNavControl(rootViewController: vc)
+            nav.modalPresentationStyle = .formSheet
+            PTUtils.getCurrentVC().present(nav, animated: true, completion:nil)
+
+            SwizzleTool().swizzleDidAddSubview {
+                // Configure console window.
+                PTUtils.fetchWindow()?.bringSubviewToFront(share.consoleViewController.view)
             }
-        } else if let window = PTUtils.fetchWindow()?.rootViewController as? UINavigationController {
-            let lcm = LocalConsole.shared
-            lcm.isVisible = false
-            lcm.isConsoleConfigured = false
-            PTGCDManager.gcdAfter(time: 0.4) {
-                window.viewControllers.first?.navigationController?.pushViewController(vc,completion: {
-                    lcm.isVisible = true
-                })
-            }
+        } else {
+            PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
         }
 #else
         PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
