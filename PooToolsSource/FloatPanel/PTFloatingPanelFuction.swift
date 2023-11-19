@@ -34,7 +34,7 @@ public class PTFloatingPanelFuction: NSObject {
                                   fpcContentInsetAdjustmentBehavior:FloatingPanelController.ContentInsetAdjustmentBehavior = .never,
                                   fpcIsRemovalInteractionEnabled:Bool = true,
                                   fpcPanGestureRecognizer:Bool = true,
-                                  fpcSurfaceShadowSize:CGSize = CGSize(width: 0, height: 16),
+                                  fpcSurfaceShadowSize:CGSize = PTAppBaseConfig.share.fpcSurfaceShadowBaseSize,
                                   fpcSurfaceShadowColor:UIColor = .black,
                                   fpcSurfaceAppearanceRadius:CGFloat = 8,
                                   fpcSurfaceBackgroundColor:UIColor = .white,

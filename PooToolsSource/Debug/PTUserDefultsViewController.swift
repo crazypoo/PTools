@@ -10,6 +10,9 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import FloatingPanel
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 class PTUserDefultsViewController: PTBaseViewController {
     
@@ -66,21 +69,51 @@ class PTUserDefultsViewController: PTBaseViewController {
             self.clearUserdefults()
         }
         
-        view.addSubviews([backBtn,cleanBtn,newCollectionView])
+        if self.parent is FloatingPanelController {
+            view.addSubviews([backBtn,cleanBtn])
+            backBtn.snp.makeConstraints { make in
+                make.size.equalTo(34)
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
+            }
+            
+            cleanBtn.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.size.equalTo(backBtn)
+            }
+        } else {
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.addSubviews([backBtn,cleanBtn])
         backBtn.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(21)
         }
-        
+            
         cleanBtn.snp.makeConstraints { make in
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.size.equalTo(backBtn)
         }
+#else
+        backBtn.frame = CGRectMake(0, 0, 34, 34)
+        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cleanBtn)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: backBtn)
+#endif
+        }
         
+        self.view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(backBtn.snp.bottom).offset(5)
+            if self.parent is FloatingPanelController {
+                make.top.equalTo(backBtn.snp.bottom).offset(5)
+            } else {
+#if POOTOOLS_NAVBARCONTROLLER
+                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
+                make.top.equalToSuperview()
+#endif
+            }
         }
         
         showDetail()
@@ -166,16 +199,40 @@ class PTUserDefultsEditViewController:PTBaseViewController {
             self.saveAction()
         }
 
-        view.addSubviews([cleanBtn,keyLabel, textInputView])
+        if self.parent is FloatingPanelController {
+            self.view.addSubview(cleanBtn)
+            cleanBtn.snp.makeConstraints { make in
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.height.equalTo(34)
+                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
+            }
+        } else {
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.addSubview(cleanBtn)
         cleanBtn.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(34)
-            make.top.equalToSuperview().inset(21)
+            make.bottom.equalToSuperview().inset(5)
         }
+#else
+        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
+#endif
+        }
+
+        view.addSubviews([keyLabel, textInputView])
 
         keyLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalTo(cleanBtn.snp.bottom).offset(10)
+            if self.parent is FloatingPanelController {
+                make.top.equalTo(cleanBtn.snp.bottom).offset(10)
+            } else {
+#if POOTOOLS_NAVBARCONTROLLER
+                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
+#else
+                make.top.equalToSuperview().inset(10)
+#endif
+            }
         }
         
         textInputView.snp.makeConstraints { make in

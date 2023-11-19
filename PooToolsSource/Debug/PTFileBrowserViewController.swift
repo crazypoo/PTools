@@ -12,6 +12,10 @@ import MobileCoreServices
 import QuickLook
 import FloatingPanel
 import AttributedString
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
+import SwifterSwift
 
 public class PTFileBrowserViewController: PTBaseViewController {
 
@@ -183,27 +187,72 @@ public class PTFileBrowserViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        view.addSubviews([closeBtn,newCollectionView])
+        if self.parent is FloatingPanelController {
+            self.view.addSubview(closeBtn)
+            closeBtn.snp.makeConstraints { make in
+                make.size.equalTo(34)
+                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
+            }
+        } else {
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.addSubview(closeBtn)
         closeBtn.snp.makeConstraints { make in
-            make.size.equalTo(34)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.top.equalToSuperview().inset(21)
+            make.size.equalTo(34)
+            make.bottom.equalToSuperview().inset(5)
         }
+#else
+        closeBtn.frame = CGRectMake(0, 0, 34, 34)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: closeBtn)
+#endif
+        }
+        
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalTo(closeBtn.snp.bottom).offset(5)
+            if self.parent is FloatingPanelController {
+                make.top.equalTo(closeBtn.snp.bottom).offset(5)
+            } else {
+#if POOTOOLS_NAVBARCONTROLLER
+                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+#else
+                make.top.equalToSuperview()
+#endif
+            }
         }
         loadData()
     }
     
     func loadData() {
         if extensionDirectoryPath.isEmpty {
-            back.removeFromSuperview()
+            if self.parent is FloatingPanelController {
+                back.removeFromSuperview()
+            } else {
+#if POOTOOLS_NAVBARCONTROLLER
+                back.removeFromSuperview()
+#else
+            navigationItem.leftBarButtonItem = nil
+#endif
+            }
         } else {
-            self.view.addSubview(back)
-            back.snp.makeConstraints { make in
-                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.top.size.equalTo(self.closeBtn)
+            if self.parent is FloatingPanelController {
+                self.view.addSubview(back)
+                back.snp.makeConstraints { make in
+                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                    make.top.size.equalTo(self.closeBtn)
+                }
+            } else {
+#if POOTOOLS_NAVBARCONTROLLER
+                self.zx_navBar.addSubview(back)
+                back.snp.makeConstraints { make in
+                    make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                    make.top.size.equalTo(self.closeBtn)
+                }
+#else
+            back.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: back)
+#endif
             }
         }
         dataList.removeAll()

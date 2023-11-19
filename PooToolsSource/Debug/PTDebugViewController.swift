@@ -9,6 +9,10 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
+import FloatingPanel
 
 public class PTDebugViewController: PTBaseViewController {
     
@@ -129,12 +133,21 @@ public class PTDebugViewController: PTBaseViewController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         let backBtn = UIButton(type: .custom)
         backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
         backBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
+        
+        if self.parent is FloatingPanelController {
+            self.view.addSubview(backBtn)
+            backBtn.snp.makeConstraints { make in
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.height.equalTo(34)
+                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
+            }
+        } else {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubview(backBtn)
         backBtn.snp.makeConstraints { make in
@@ -146,15 +159,20 @@ public class PTDebugViewController: PTBaseViewController {
         backBtn.frame = CGRectMake(0, 0, 34, 34)
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backBtn)
 #endif
+        }
 
         view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
+            if self.parent is FloatingPanelController {
+                make.top.equalTo(backBtn.snp.bottom).offset(5)
+            } else {
 #if POOTOOLS_NAVBARCONTROLLER
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
 #else
             make.top.equalToSuperview()
 #endif
+            }
         }
         showDetail()
     }

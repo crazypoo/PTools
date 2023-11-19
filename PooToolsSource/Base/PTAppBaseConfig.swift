@@ -71,4 +71,7 @@ public class PTAppBaseConfig: NSObject {
     
     //MARK: 在AppStore上用来检测更新的AppID
     public var appID:String = ""
+    
+    //MARK: FloatingPanelViewController顶部站位大小
+    public var fpcSurfaceShadowBaseSize:CGSize = CGSize(width: 0, height: 16)
 }
