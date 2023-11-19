@@ -51,7 +51,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
             
             let lcm = LocalConsole.shared
-            lcm.isVisible = PTCoreUserDefultsWrapper.AppDebugMode
+            lcm.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
             lcm.flex = flex
             lcm.watchViews = inApp
             lcm.HyperioniOS = Hyperion

@@ -397,7 +397,7 @@ public extension UIViewController {
     func pt_present(_ vc:UIViewController,animated:Bool? = true,completion:(()->Void)? = nil) {
 
 #if POOTOOLS_DEBUG
-        self.present(vc, animated: animated) {
+        self.present(vc, animated: animated!) {
             if completion != nil {
                 completion!()
             }
