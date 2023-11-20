@@ -33,13 +33,12 @@ public extension UIAlertController {
     ///   - title: 標題
     ///   - subTitle: 子標題
     ///   - cancelButtonName: 取消按鈕
-    ///   - destructiveButtonName: 擴展按鈕
+    ///   - destructiveButtons: 擴展按鈕(s)
     ///   - titles: 其他標題
     ///   - destructiveBlock: 擴展回調
     ///   - cancelBlock: 取消回調
     ///   - otherBlock: 其他回調
-    ///   - tapBackgroundBlock:
-    ///   - tapBackgroundBlock:
+    ///   - tapBackgroundBlock: 点击背景消失回调
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
                                      cancelButtonName:String? = "PT Button cancel".localized(),
@@ -50,12 +49,29 @@ public extension UIAlertController {
                                      cancelBlock: PTActionSheetHandler? = nil,
                                      otherBlock: @escaping PTActionSheetIndexHandler,
                                      tapBackgroundBlock: PTActionSheetHandler? = nil) {
-        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButtonStrings: destructiveButtons,otherButtonTitles: titles,dismissWithTapBG:canTapBackground)
+        
+        let titleItem = PTActionSheetTitleItem(title: title,subTitle: subTitle!)
+        let cancelItem = PTActionSheetItem(title: cancelButtonName!)
+
+        var destructiveItems = [PTActionSheetItem]()
+        destructiveButtons.enumerated().forEach { index,value in
+            let item = PTActionSheetItem(title: value)
+            item.titleColor = .systemRed
+            destructiveItems.append(item)
+        }
+        
+        var contentItems = [PTActionSheetItem]()
+        titles.enumerated().forEach { index,value in
+            let item = PTActionSheetItem(title: value)
+            contentItems.append(item)
+        }
+        
+        let actionSheet = PTActionSheetView(titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock
-        actionSheet.show()
         actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
+        actionSheet.show()
     }
     
     //MARK: ALERT真正基类

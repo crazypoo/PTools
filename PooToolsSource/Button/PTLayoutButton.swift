@@ -139,6 +139,15 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
+    public var configBackgroundHightlightColor: UIColor = .clear {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                backgroundColor = configBackgroundHightlightColor
+            }
+        }
+    }
     public var buttonSizeStyle: PTLayoutButtonSizeStyle = .none {
         didSet {
             if #available(iOS 15.0, *) {
@@ -623,7 +632,7 @@ public class PTLayoutButton: UIButton {
     @available(iOS 15.0,*)
     private var layoutConfig: UIButton.Configuration {
         var btnconfig:UIButton.Configuration
-        if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear {
+        if configBackgroundSelectedColor != .clear || configBackgroundColor != .clear || configBackgroundHightlightColor != .clear {
             btnconfig = UIButton.Configuration.filled()
         } else {
             btnconfig = UIButton.Configuration.plain()
@@ -740,7 +749,7 @@ public class PTLayoutButton: UIButton {
                 btnconfig.activityIndicatorColorTransformer = .init { _ in
                     self.activityColor
                 }
-
+                btnconfig.baseBackgroundColor = self.configBackgroundHightlightColor
                 sender.configuration = btnconfig
             case .selected:
                 btnconfig.showsActivityIndicator = false

@@ -482,7 +482,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 })
             } else if itemRow.title == .alert {
-                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet"], otherBlock: { sheet,index,title in
+                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet","CustomActionSheet"], otherBlock: { sheet,index,title in
                     switch index {
                     case 0:
                         PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
@@ -505,6 +505,19 @@ class PTFuncNameViewController: PTBaseViewController {
                             
                         },otherBlock: { sheet,index,title in
                         })
+                    case 4:
+                        let title = PTActionSheetTitleItem(title: "Title", subTitle: "SubTitle")
+                        
+                        let cancelItem = PTActionSheetItem(title: "取消",image: UIImage(named: "DemoImage"),itemAlignment:.leading,itemLayout: .leftImageRightTitle)
+
+                        let deItem = PTActionSheetItem(title: "其他",titleColor:.systemRed,image: "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif",itemAlignment:.trailing,itemLayout: .leftTitleRightImage)
+
+                        let content1 = PTActionSheetItem(title: "1",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.left,itemLayout: .leftTitleRightImage)
+                        let content2 = PTActionSheetItem(title: "2",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.right,itemLayout: .leftTitleRightImage)
+                        let content3 = PTActionSheetItem(title: "3",image: "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg",itemAlignment:.fill,itemLayout: .leftTitleRightImage)
+
+                        let customActionSheet = PTActionSheetView(titleItem:title,cancelItem: cancelItem,destructiveItems: [deItem],contentItems: [content1,content2,content3])
+                        customActionSheet.show()
                     default:
                         break
                     }
