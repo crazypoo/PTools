@@ -11,7 +11,6 @@ import pop
 import SnapKit
 import AttributedString
 
-
 public class PTActionCell:UIView {
         
     private lazy var blur:SSBlurView = {
@@ -63,11 +62,11 @@ public class PTActionCell:UIView {
 
 @objcMembers
 public class PTActionSheetView: UIView {
-    public static let CancelButtonTag = 99999
-    public static let DestructiveButtonTag = 99998
     
     public var actionSheetSelectBlock:PTActionSheetIndexHandler?
     public var actionSheetTapDismissBlock:PTActionSheetHandler?
+    public var actionSheetDestructiveSelectBlock:PTActionSheetIndexHandler?
+    public var actionSheetCancelSelectBlock:PTActionSheetHandler?
     
     private let kRowLineHeight:CGFloat = 0.5
     private let kRowHeight:CGFloat = 54
@@ -78,7 +77,11 @@ public class PTActionSheetView: UIView {
     private var actionSheetTitle:String = ""
     private var actionSheetMessage:String = ""
     private var cancelButtonTitle:String = ""
-    private var destructiveButtonTitle:String = ""
+    private var destructiveButtons:[String] = [String]() {
+        didSet {
+            self.setDestructiveCount(counts: self.destructiveButtons.count)
+        }
+    }
     private var otherTitles:[String] = [String]()
     private var viewFont:UIFont = .systemFont(ofSize: 20)
     private var decisionFont:UIFont = .boldSystemFont(ofSize: 20)
@@ -114,28 +117,30 @@ public class PTActionSheetView: UIView {
         view.cellButton.setTitleColor(titleTitleColor, for: .normal)
         return view
     }()
-    
-    private lazy var destructiveButton : PTActionCell = {
-        let view = PTActionCell()
-        view.cellButton.addActionHandlers(handler: { (sender) in
-            self.didSelection(sender: sender)
-        })
-        view.cellButton.tag = PTActionSheetView.DestructiveButtonTag
-        view.cellButton.setTitle(destructiveButtonTitle, for: .normal)
-        view.cellButton.titleLabel!.font = decisionFont
-        view.cellButton.setTitleColor(destructiveTitleColor, for: .normal)
-        return view
-    }()
-    
+        
     private lazy var cancelBtn : PTActionCell = {
         let view = PTActionCell()
         view.cellButton.addActionHandlers(handler: { (sender) in
-            self.didSelection(sender: sender)
+            self.dismiss() {
+                if self.actionSheetCancelSelectBlock != nil {
+                    self.actionSheetCancelSelectBlock!(self)
+                }
+            }
         })
-        view.cellButton.tag = PTActionSheetView.CancelButtonTag
         view.cellButton.setTitle(cancelButtonTitle, for: .normal)
         view.cellButton.titleLabel!.font = decisionFont
         view.cellButton.setTitleColor(cancelTitleColor, for: .normal)
+        view.cellButton.setBackgroundImage(heightlightColor.createImageWithColor(), for: .highlighted)
+        return view
+    }()
+    
+    private func setDestructiveCount(@PTClampedProperyWrapper(range:0...5) counts:Int = 0) {
+        self.destructiveCount = counts
+    }
+    private var destructiveCount:Int = 0
+    private lazy var destructiveView : UIView = {
+        let view = UIView()
+        view.backgroundColor = .clear
         return view
     }()
     
@@ -145,7 +150,7 @@ public class PTActionSheetView: UIView {
     ///   - title: 標題
     ///   - subTitle: 副標題
     ///   - cancelButton: 取消按鈕
-    ///   - destructiveButton: 額外按鈕
+    ///   - destructiveButtonStrings: 額外按鈕(s)
     ///   - otherButtonTitles: 其他按鈕
     ///   - buttonFont: 按鈕字體
     ///   - comfirFont: 確認按鈕字體
@@ -157,23 +162,9 @@ public class PTActionSheetView: UIView {
     ///   - selectedColor: 選中的動畫顏色
     ///   - corner: 邊框角弧度
     ///   - dismissWithTapBG: 是否支持點擊背景消失Alert
-    public init(title:String? = "",
-                subTitle:String? = "",
-                cancelButton:String? = "PT Button cancel".localized(),
-                destructiveButton:String? = "",
-                otherButtonTitles:[String]? = [String](),
-                buttonFont:UIFont? = .systemFont(ofSize: 20),
-                comfirFont:UIFont? = .boldSystemFont(ofSize: 20),
-                titleCellFont:UIFont? = .systemFont(ofSize: 16),
-                normalCellTitleColor:UIColor? = UIColor.systemBlue,
-                destructiveCellTitleColor:UIColor? = UIColor.systemBlue,
-                cancelCellTitleColor:UIColor? = UIColor.systemBlue,
-                titleCellTitleColor:UIColor? = UIColor.systemGray,
-                selectedColor:UIColor? = UIColor.lightGray,
-    @PTClampedProperyWrapper(range:0...15) corner:CGFloat = 15,
-                dismissWithTapBG:Bool = true) {
+    public init(title:String? = "", subTitle:String? = "", cancelButton:String? = "PT Button cancel".localized(), destructiveButtonStrings:[String] = [String](), otherButtonTitles:[String]? = [String](), buttonFont:UIFont? = .systemFont(ofSize: 20), comfirFont:UIFont? = .boldSystemFont(ofSize: 20), titleCellFont:UIFont? = .systemFont(ofSize: 16), normalCellTitleColor:UIColor? = UIColor.systemBlue, destructiveCellTitleColor:UIColor? = UIColor.red, cancelCellTitleColor:UIColor? = UIColor.systemBlue, titleCellTitleColor:UIColor? = UIColor.systemGray, selectedColor:UIColor? = UIColor.lightGray, @PTClampedProperyWrapper(range:0...15) corner:CGFloat = 15, dismissWithTapBG:Bool = true) {
         super.init(frame: .zero)
-        createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButton: destructiveButton!, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)
+        createData(title: title!, subTitle: subTitle!, cancelButton: cancelButton!, destructiveButtonStrings: destructiveButtonStrings, otherButtonTitles: otherButtonTitles!, buttonFont: buttonFont!, comfirFont: comfirFont!, titleCellFont: titleCellFont!, normalCellTitleColor: normalCellTitleColor!, destructiveCellTitleColor: destructiveCellTitleColor!, cancelCellTitleColor: cancelCellTitleColor!, titleCellTitleColor: titleCellTitleColor!, selectedColor: selectedColor!, corner: (corner > (kRowHeight / 2)) ? (kRowHeight / 2) : corner, dismissWithTapBG: dismissWithTapBG)
         createView()
     }
     
@@ -184,7 +175,7 @@ public class PTActionSheetView: UIView {
     func createData(title:String? = "",
                     subTitle:String? = "",
                     cancelButton:String? = "PT Button cancel".localized(),
-                    destructiveButton:String? = "",
+                    destructiveButtonStrings:[String] = [String](),
                     otherButtonTitles:[String]? = [String](),
                     buttonFont:UIFont? = .systemFont(ofSize: 20),
                     comfirFont:UIFont? = .boldSystemFont(ofSize: 20),
@@ -199,7 +190,7 @@ public class PTActionSheetView: UIView {
         actionSheetTitle = title!
         actionSheetMessage = subTitle!
         cancelButtonTitle = cancelButton!
-        destructiveButtonTitle = destructiveButton!
+        destructiveButtons = destructiveButtonStrings
         otherTitles = otherButtonTitles!
         viewFont = buttonFont!
         normalTitleColor = normalCellTitleColor!
@@ -251,24 +242,20 @@ public class PTActionSheetView: UIView {
             titleLbale.cellButton.setAttributedTitle(total!.value, for: .normal)
             actionSheetView.addSubview(titleLbale)
         }
-        
-        let highlightedImage = heightlightColor.createImageWithColor()
-        
-        if !destructiveButtonTitle.stringIsEmpty() {
-            destructiveButton.cellButton.setBackgroundImage(highlightedImage, for: .highlighted)
-            actionSheetView.addSubview(destructiveButton)
+                
+        if destructiveCount != 0 {
+            actionSheetView.addSubview(destructiveView)
         }
         
-        cancelBtn.cellButton.setBackgroundImage(highlightedImage, for: .highlighted)
         actionSheetView.addSubview(cancelBtn)
     }
     
     func destlineH()->CGFloat {
-        destructiveButtonTitle.stringIsEmpty() ? 0 : kRowLineHeight
+        destructiveCount != 0 ? kRowLineHeight : 0
     }
     
     func destRowH()->CGFloat {
-        destructiveButtonTitle.stringIsEmpty() ? 0 : kRowHeight
+        destructiveCount != 0 ? kRowHeight * CGFloat(destructiveCount) + CGFloat(destructiveCount - 1) * (kSeparatorHeight / 2) : 0
     }
     
     func titleHeight()->CGFloat {
@@ -336,20 +323,67 @@ public class PTActionSheetView: UIView {
             make.height.equalTo(self.actionSheetHeight(orientation: device.orientation))
         }
         
+        cancelBtn.snp.makeConstraints { make in
+            make.left.right.bottom.equalToSuperview()
+            make.height.equalTo(kRowHeight)
+        }
+        
+        if destructiveCount != 0 {
+            destructiveView.snp.makeConstraints { make in
+                make.left.right.equalToSuperview()
+                make.bottom.equalTo(cancelBtn.snp.top).offset(-(kSeparatorHeight / 2))
+                make.height.equalTo(CGFloat(self.destructiveCount) * kRowHeight + CGFloat(self.destructiveCount - 1) * (kSeparatorHeight / 2))
+            }
+            
+            for i in 0..<destructiveCount {
+                let destructiveString = destructiveButtons[i]
+                let view = PTActionCell()
+                view.cellButton.titleLabel!.font = decisionFont
+                view.cellButton.setTitleColor(destructiveTitleColor, for: .normal)
+                view.cellButton.setTitle(destructiveString, for: .normal)
+                view.cellButton.setBackgroundImage(heightlightColor.createImageWithColor(), for: .highlighted)
+                view.cellButton.addActionHandlers() { sender in
+                    self.dismiss {
+                        if self.actionSheetDestructiveSelectBlock != nil {
+                            self.actionSheetDestructiveSelectBlock!(self,i,destructiveString)
+                        }
+                    }
+                }
+                destructiveView.addSubview(view)
+                view.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.height.equalTo(kRowHeight)
+                    make.top.equalTo(kRowHeight * CGFloat(i) + (kSeparatorHeight / 2) * CGFloat(i))
+                }
+                
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    view.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: .allCorners)
+                }
+            }
+        }
+
         if !actionSheetTitle.stringIsEmpty() || !actionSheetMessage.stringIsEmpty() {
             titleLbale.snp.makeConstraints { make in
                 make.left.right.top.equalToSuperview()
                 make.height.equalTo(self.titleHeight())
             }
             
-            let actionSheetScrollBottom = destructiveButtonTitle.stringIsEmpty() ? (kRowHeight + kSeparatorHeight + kRowLineHeight) : ((kRowHeight*2) + kSeparatorHeight * 1.5 + kRowLineHeight)
-            actionSheetScroll.snp.makeConstraints { make in
-                make.left.right.equalToSuperview()
-                make.top.equalTo(titleLbale.snp.bottom).offset(kRowLineHeight)
-                make.height.equalTo(self.scrollHieght(orientation: device.orientation))
-                make.bottom.equalToSuperview().inset(actionSheetScrollBottom)
+            if destructiveCount != 0 {
+                actionSheetScroll.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalTo(titleLbale.snp.bottom).offset(kRowLineHeight)
+                    make.height.equalTo(self.scrollHieght(orientation: device.orientation))
+                    make.bottom.equalTo(destructiveView.snp.top).offset(-(kSeparatorHeight + kRowLineHeight))
+                }
+            } else {
+                actionSheetScroll.snp.makeConstraints { make in
+                    make.left.right.equalToSuperview()
+                    make.top.equalTo(titleLbale.snp.bottom).offset(kRowLineHeight)
+                    make.height.equalTo(self.scrollHieght(orientation: device.orientation))
+                    make.bottom.equalToSuperview().inset((kRowHeight + kSeparatorHeight + kRowLineHeight))
+                }
             }
-            
+
             PTGCDManager.gcdAfter(time: 0.1) {
                 if self.otherTitles.count == 0 {
                     self.titleLbale.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: [.allCorners])
@@ -358,18 +392,25 @@ public class PTActionSheetView: UIView {
                 }
             }
         } else {
-            let actionSheetScrollBottom = destructiveButtonTitle.stringIsEmpty() ? (kRowHeight + kSeparatorHeight + kRowLineHeight) : ((kRowHeight*2) + kSeparatorHeight * 1.5 + kRowLineHeight)
-            actionSheetScroll.snp.makeConstraints { make in
-                make.left.right.top.equalToSuperview()
-                make.height.equalTo(self.scrollHieght(orientation: device.orientation))
-                make.bottom.equalToSuperview().inset(actionSheetScrollBottom)
+            if destructiveCount != 0 {
+                actionSheetScroll.snp.makeConstraints { make in
+                    make.left.right.top.equalToSuperview()
+                    make.height.equalTo(self.scrollHieght(orientation: device.orientation))
+                    make.bottom.equalTo(destructiveView.snp.top).offset(-(kSeparatorHeight + kRowLineHeight))
+                }
+            } else {
+                actionSheetScroll.snp.makeConstraints { make in
+                    make.left.right.top.equalToSuperview()
+                    make.height.equalTo(self.scrollHieght(orientation: device.orientation))
+                    make.bottom.equalToSuperview().inset((kRowHeight + kSeparatorHeight + kRowLineHeight))
+                }
             }
         }
         
         let contentW : CGFloat = CGFloat.kSCREEN_WIDTH - LeftAndRightviewSpace * 2
         actionSheetScroll.contentSize = CGSize.init(width: contentW, height: scrollContentHeight())
         actionSheetScroll.showsVerticalScrollIndicator = false
-        actionSheetScroll.isScrollEnabled = (actionSheetRealHeight() >= CGFloat.kSCREEN_HEIGHT) ? true : false
+        actionSheetScroll.isScrollEnabled = scrollContentHeight() > self.scrollHieght(orientation: device.orientation) ? true : false
         
         let highlightedImage = heightlightColor.createImageWithColor()
         
@@ -386,13 +427,16 @@ public class PTActionSheetView: UIView {
                 }
                 
                 let btn = PTActionCell()
-                btn.cellButton.tag = index + 100
                 btn.cellButton.titleLabel?.font = viewFont
                 btn.cellButton.setTitleColor(normalTitleColor, for: .normal)
                 btn.cellButton.setTitle(value, for: .normal)
                 btn.cellButton.setBackgroundImage(highlightedImage, for: .highlighted)
                 btn.cellButton.addActionHandlers { sender in
-                    self.didSelection(sender: sender)
+                    self.dismiss {
+                        if self.actionSheetSelectBlock != nil {
+                            self.actionSheetSelectBlock!(self,index,value)
+                        }
+                    }
                 }
                 actionSheetScroll.addSubview(btn)
                 
@@ -421,24 +465,7 @@ public class PTActionSheetView: UIView {
                 }
             })
         }
-        
-        if !destructiveButtonTitle.stringIsEmpty() {
-            destructiveButton.snp.makeConstraints { make in
-                make.left.right.equalToSuperview()
-                make.bottom.equalToSuperview().inset(kRowHeight + kSeparatorHeight / 2)
-                make.height.equalTo(kRowHeight)
-            }
-            
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.destructiveButton.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: .allCorners)
-            }
-        }
-        
-        cancelBtn.snp.makeConstraints { make in
-            make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(kRowHeight)
-        }
-        
+                        
         PTGCDManager.gcdAfter(time: 0.1) {
             self.cancelBtn.viewCornerRectCorner(cornerRadii: self.cornerRadii, corner: .allCorners)
         }
@@ -472,21 +499,5 @@ public class PTActionSheetView: UIView {
     
     public func show() {
         PTAnimationFunction.animationIn(animationView: actionSheetView, animationType: .Bottom, transformValue: actionSheetRealHeight())
-    }
-    
-    func didSelection(sender:UIButton) {
-        if actionSheetSelectBlock != nil {
-            var index = 0
-            if sender == cancelBtn.cellButton {
-                index = PTActionSheetView.CancelButtonTag
-            } else if sender == destructiveButton.cellButton {
-                index = PTActionSheetView.DestructiveButtonTag
-            } else {
-                index = sender.tag - 100
-            }
-            dismiss {
-                self.actionSheetSelectBlock!(self,index)
-            }
-        }
-    }
+    }    
 }

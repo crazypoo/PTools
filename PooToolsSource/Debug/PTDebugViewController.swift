@@ -80,29 +80,22 @@ public class PTDebugViewController: PTBaseViewController {
         view.collectionDidSelect = { collection,model,indexPath in
             let itemRow = model.rows[indexPath.row]
             if itemRow.title == .ipMode {
-                UIAlertController.baseActionSheet(title: "PT Debug network select".localized(), cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index in
-                    switch index {
-                    case PTActionSheetView.DestructiveButtonTag:
-                        break
-                    case PTActionSheetView.CancelButtonTag:
-                        break
-                    default:
-                        PTCoreUserDefultsWrapper.AppServiceIdentifier = "\(index + 1)"
+                UIAlertController.baseActionSheet(title: "PT Debug network select".localized(), cancelButtonName: "PT Button cancel".localized(),titles: [AppDisMode,AppTestMode,AppCustomMode], otherBlock: { sheet,index,string in
+                    PTCoreUserDefultsWrapper.AppServiceIdentifier = "\(index + 1)"
 
-                        var modeName = ""
-                        switch PTBaseURLMode {
-                        case .Development:
-                            modeName = AppCustomMode
-                        case .Test:
-                            modeName = AppTestMode
-                        case .Distribution:
-                            modeName = AppDisMode
-                        }
-
-                        self.settingCellModels[0].content = modeName
-                        let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
-                        cell.cellModel = self.settingCellModels[0]
+                    var modeName = ""
+                    switch PTBaseURLMode {
+                    case .Development:
+                        modeName = AppCustomMode
+                    case .Test:
+                        modeName = AppTestMode
+                    case .Distribution:
+                        modeName = AppDisMode
                     }
+
+                    self.settingCellModels[0].content = modeName
+                    let cell = collection.cellForItem(at: indexPath) as! PTFusionCell
+                    cell.cellModel = self.settingCellModels[0]
                 })
             } else if itemRow.title == .addressInput {
                 switch PTBaseURLMode {

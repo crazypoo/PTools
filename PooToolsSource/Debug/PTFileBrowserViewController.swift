@@ -75,7 +75,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 if self.showAction {
                     UIAlertController.baseActionSheet(title: "PT Media option".localized(), titles: actionSheetDatas, cancelBlock: { sheet in
                         self.showAction = false
-                    },otherBlock: { sheet,index in
+                    },otherBlock: { sheet,index,title in
                         self.showAction = false
                         switch index {
                         case 0:

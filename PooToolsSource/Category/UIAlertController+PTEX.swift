@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 public typealias PTActionSheetHandler = (_ sheet:PTActionSheetView) -> Void
-public typealias PTActionSheetIndexHandler = (_ sheet:PTActionSheetView, _ index:Int)->Void
+public typealias PTActionSheetIndexHandler = (_ sheet:PTActionSheetView, _ index:Int,_ title:String)->Void
 
 public extension UIAlertController {
     //MARK: 單按鈕Alert
@@ -43,24 +43,17 @@ public extension UIAlertController {
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
                                      cancelButtonName:String? = "PT Button cancel".localized(),
-                                     destructiveButtonName:String? = "",
+                                     destructiveButtons:[String] = [String](),
                                      titles:[String],
                                      canTapBackground:Bool = true,
-                                     destructiveBlock:PTActionSheetHandler? = nil,
+                                     destructiveBlock:PTActionSheetIndexHandler? = nil,
                                      cancelBlock: PTActionSheetHandler? = nil,
                                      otherBlock: @escaping PTActionSheetIndexHandler,
                                      tapBackgroundBlock: PTActionSheetHandler? = nil) {
-        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButton: destructiveButtonName!,otherButtonTitles: titles,dismissWithTapBG:canTapBackground)
-        actionSheet.actionSheetSelectBlock = { (sheet,index) in
-            switch index {
-            case PTActionSheetView.DestructiveButtonTag:
-                destructiveBlock?(sheet)
-            case PTActionSheetView.CancelButtonTag:
-                cancelBlock?(sheet)
-            default:
-                otherBlock(sheet,index)
-            }
-        }
+        let actionSheet = PTActionSheetView(title: title,subTitle: subTitle,cancelButton: cancelButtonName,destructiveButtonStrings: destructiveButtons,otherButtonTitles: titles,dismissWithTapBG:canTapBackground)
+        actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
+        actionSheet.actionSheetCancelSelectBlock = cancelBlock
+        actionSheet.actionSheetSelectBlock = otherBlock
         actionSheet.show()
         actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
     }

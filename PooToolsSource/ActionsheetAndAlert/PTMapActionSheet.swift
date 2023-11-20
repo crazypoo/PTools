@@ -55,7 +55,7 @@ open class PTMapActionSheet: NSObject {
             navAppName.append(.QQMap)
         }
         
-        UIAlertController.baseActionSheet(title: "PT Select nav".localized(),destructiveButtonName:"Apple Map", titles: navAppName) { sheet in
+        UIAlertController.baseActionSheet(title: "PT Select nav".localized(),destructiveButtons:["Apple Map"], titles: navAppName) { sheet,index,title  in
             let currentLocation = MKMapItem.forCurrentLocation()
             let toLocation = MKMapItem.init(placemark: MKPlacemark.init(coordinate: locations))
             MKMapItem.openMaps(with: [currentLocation,toLocation], launchOptions: [MKLaunchOptionsDirectionsModeKey:MKLaunchOptionsDirectionsModeDriving,MKLaunchOptionsShowsTrafficKey:1])
@@ -64,7 +64,7 @@ open class PTMapActionSheet: NSObject {
             if dismissTask != nil {
                 dismissTask!()
             }
-        } otherBlock: { sheet, index in
+        } otherBlock: { sheet, index,title in
             var urlString :NSString = ""
             if navAppName[index] == .BaiduMap {
                 urlString = NSString.init(format: "baidumap://map/direction?origin={{我的位置}}&destination=latlng:%f,%f|name=目的地&mode=driving&coord_type=gcj02", locations.latitude,locations.longitude).addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)! as NSString

@@ -461,7 +461,7 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .checkUpdate {
                 PTCheckUpdateFunction.share.checkTheVersionWithappid(appid: "6446323709", test: false, url: URL(string: shareURLString), version: "1.0.0", note: "123", force: false,alertType: .User)
             } else if itemRow.title == .route {
-                UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "Route", titles: ["普通","帶數據","Handler"], otherBlock: { sheet,index,title in
                     switch index {
                     case 0:
                         PTRouter.routeJump(vcName: NSStringFromClass(PTRouteViewController.self), scheme: PTRouteViewController.patternString.first!)
@@ -482,7 +482,7 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 })
             } else if itemRow.title == .alert {
-                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert], otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "AlertTips", titles: ["low","hight",String.feedbackAlert,"ActionSheet"], otherBlock: { sheet,index,title in
                     switch index {
                     case 0:
                         PTAlertTipControl.present(title:"Job Done!",subtitle: "WOW",icon:.Done,style: .Normal)
@@ -500,13 +500,18 @@ class PTFuncNameViewController: PTBaseViewController {
                                 })
                             }
                         }
+                    case 3:
+                        UIAlertController.baseActionSheet(title: "Title",subTitle: "SubTitle",cancelButtonName: "Cancel",destructiveButtons: ["Destructive"], titles: ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"], destructiveBlock: { sheet, index, title in
+                            
+                        },otherBlock: { sheet,index,title in
+                        })
                     default:
                         break
                     }
                 })
 
             } else if itemRow.title == .loading {
-                UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"], otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "Loading", titles: ["LoadingHub","CycleLoading"], otherBlock: { sheet,index,title in
                     switch index {
                     case 0:
                         let hud = PTHudView()
@@ -561,7 +566,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
 
             } else if itemRow.title == .language {
-                UIAlertController.baseActionSheet(title: .language,subTitle: self.currentSelectedLanguage, titles: LanguageKey.allNames, otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: .language,subTitle: self.currentSelectedLanguage, titles: LanguageKey.allNames, otherBlock: { sheet,index,title in
                     self.currentSelectedLanguage = LanguageKey.allValues[index].desc
                     PTLanguage.share.language = LanguageKey.allValues[index].rawValue
                 })                

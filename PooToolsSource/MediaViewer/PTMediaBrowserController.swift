@@ -246,7 +246,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             bottomControl.moreActionButton.menu = makeMenu()
         } else {
             bottomControl.moreActionButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index in
+                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
                     switch self.viewConfig.actionType {
                     case .Save:
                         switch index {
