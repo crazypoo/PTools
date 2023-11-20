@@ -106,6 +106,7 @@ public class LocalConsole: NSObject {
                 animation.duration = 0.6
                 terminal!.layer.add(animation, forKey: animation.keyPath)
                 terminal!.layer.shadowOpacity = 0.5
+                maskOpenFunction()
             } else {
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                     terminal!.transform = .init(scaleX: 0.9, y: 0.9)
@@ -131,7 +132,7 @@ public class LocalConsole: NSObject {
     }
     
     var terminal:PTTerminal?
-    private var maskView:PTDevMaskView?
+    var maskView:PTDevMaskView?
 
     var currentText: String = "" {
         didSet {
@@ -140,6 +141,8 @@ public class LocalConsole: NSObject {
             }
         }
     }
+    
+    lazy var feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
     
     private var debugBordersEnabled = false {
         didSet {
@@ -180,6 +183,7 @@ public class LocalConsole: NSObject {
 
         if isVisiable {
             createSystemLogView()
+            maskOpenFunction()
         } else {
             cleanSystemLogView()
         }
@@ -188,7 +192,6 @@ public class LocalConsole: NSObject {
     public func cleanSystemLogView() {
         terminal?.removeFromSuperview()
         terminal = nil
-        terminal?.systemIsVisible = false
         closeAllFunction()
     }
     
@@ -199,7 +202,9 @@ public class LocalConsole: NSObject {
         
         terminal!.systemText?.text = currentText
         terminal!.setAttributedText(currentText)
-        terminal!.systemText!.contentOffset.y = terminal!.systemText!.contentSize.height
+        PTGCDManager.gcdAfter(time: 0.2) {
+            self.terminal!.systemText!.contentOffset.y = self.terminal!.systemText!.contentSize.height
+        }
     }
         
     var temporaryKeyboardHeightValueTracker: CGFloat?
@@ -263,11 +268,9 @@ public class LocalConsole: NSObject {
                 // Left edge hiding endpoints.
                 if !isLandscapeLeftNotchedPhone {
                     if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28,
-                                                 y: endpoints[0].y))
+                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[0].y))
                     } else {
-                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28,
-                                                 y: endpoints[1].y))
+                        endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
                     }
                 }
             } else if terminal!.frame.maxX >= screenSize.width {
@@ -278,11 +281,9 @@ public class LocalConsole: NSObject {
                 // Right edge hiding endpoints.
                 if !isLandscapeRightNotchedPhone {
                     if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28,
-                                                 y: endpoints[0].y))
+                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[0].y))
                     } else {
-                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28,
-                                                 y: endpoints[1].y))
+                        endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[1].y))
                     }
                 }
             }
@@ -300,21 +301,17 @@ public class LocalConsole: NSObject {
                 
                 // Left edge hiding endpoints.
                 if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28,
-                                             y: endpoints[0].y))
+                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[0].y))
                 } else {
-                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28,
-                                             y: endpoints[1].y))
+                    endpoints.append(CGPoint(x: -consoleSize.width / 2 + 28, y: endpoints[1].y))
                 }
             } else if terminal!.frame.maxX >= screenSize.width {
                 
                 // Right edge hiding endpoints.
                 if terminal!.center.y < (screenSize.height - (temporaryKeyboardHeightValueTracker ?? 0)) / 2 {
-                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28,
-                                             y: endpoints[0].y))
+                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[0].y))
                 } else {
-                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28,
-                                             y: endpoints[1].y))
+                    endpoints.append(CGPoint(x: screenSize.width + consoleSize.width / 2 - 28, y: endpoints[1].y))
                 }
             }
             
@@ -374,6 +371,32 @@ public class LocalConsole: NSObject {
                 UserDefaults.standard.set(nearestTargetPosition.y, forKey: "LocalConsole.Y")
             }
             terminal!.menuButton.addActionHandlers { sender in
+                self.feedbackGenerator.impactOccurred(intensity: 1)
+
+//                let cellInCollectionViewRect = sender.convert(sender.frame, to: sender)
+//                PTNSLogConsole("1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellInCollectionViewRect)")
+//                let cellRectInWindow = sender.convert(cellInCollectionViewRect, to: AppWindows)
+//                PTNSLogConsole("2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellRectInWindow)")
+//                
+////                SwizzleTool().swizzleContextMenuReverseOrder()
+//
+//                let newBen = ConsoleMenuButton()
+//                newBen.frame = cellInCollectionViewRect
+//                newBen.backgroundColor = .randomColor
+//                newBen.tag = 100
+//                PTUtils.getCurrentVC().view.addSubview(newBen)
+//                if #available(iOS 14.0, *) {
+//                    newBen.showsMenuAsPrimaryAction = true
+//                    newBen.menu = self.makeMenu()
+//                    PTGCDManager.gcdAfter(time: 1) {
+//                        PTGCDManager.gcdMain {
+//                            PTNSLogConsole("1312312312312312312323")
+//                            let button:ConsoleMenuButton = PTUtils.getCurrentVC().view.viewWithTag(100)! as! ConsoleMenuButton
+//                            button.sendActions(for: .primaryActionTriggered)
+//                        }
+//                    }
+//                }
+                
                 var memoryString = ""
                 if PTMemory.share.closed {
                     memoryString = .showMemoryCheck
@@ -1146,7 +1169,6 @@ public class LocalConsole: NSObject {
 public class PTTerminal:PFloatingButton {
     public var systemText : PTInvertedTextView?
     public lazy var menuButton = ConsoleMenuButton()
-    public var systemIsVisible : Bool? = false
 
     override init(view:Any,frame:CGRect) {
         super.init(view: view, frame: frame)
@@ -1199,8 +1221,6 @@ public class PTTerminal:PFloatingButton {
         menuButton.viewCorner(radius: diameter / 2)
         
         menuButton.tintColor = UIColor(white: 1, alpha: 0.75)
-        systemIsVisible = true
-
     }
         
     public override func layoutIfNeeded() {
@@ -1243,5 +1263,14 @@ extension String {
 extension UIDevice {
     var hasNotch: Bool {
         return UIApplication.shared.windows[0].safeAreaInsets.bottom > 0
+    }
+}
+
+@available(iOS 14.0, *)
+extension LocalConsole : UIContextMenuInteractionDelegate {
+    public func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { [self] _ in
+            return makeMenu() // 返回你之前创建的菜单
+        }
     }
 }

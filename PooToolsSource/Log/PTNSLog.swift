@@ -100,8 +100,8 @@ public func PTNSLog(_ msg: Any...,
     default:
         print(prefix)
 #if POOTOOLS_DEBUG
-        if PTLocalConsoleFunction.share.localconsole.isVisible {
-            PTLocalConsoleFunction.share.localconsole.print(prefix)
+        if LocalConsole.shared.isVisiable {
+            LocalConsole.shared.print(prefix)
         }
 #endif
     }
@@ -138,8 +138,8 @@ public func PTPrintPointer<T>(ptr: UnsafePointer<T>) {
     case .debug,.testFlight:
         print("内存地址：\(ptr)) --------------")
 #if POOTOOLS_DEBUG
-        if PTLocalConsoleFunction.share.localconsole.isVisible {
-            PTLocalConsoleFunction.share.localconsole.print("内存地址：\(ptr)) --------------")
+        if LocalConsole.shared.isVisiable {
+            LocalConsole.shared.print("内存地址：\(ptr)) --------------")
         }
 #endif
     default:break

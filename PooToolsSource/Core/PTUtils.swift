@@ -480,6 +480,9 @@ public class PTUtils: NSObject {
                 }
                 SwizzleTool().swizzleDidAddSubview {
                     // Configure console window.
+                    if share.maskView != nil {
+                        PTUtils.fetchWindow()!.bringSubviewToFront(share.maskView!)
+                    }
                     PTUtils.fetchWindow()?.bringSubviewToFront(share.terminal!)
                 }
             })
