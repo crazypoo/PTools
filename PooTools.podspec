@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.18.0'
+    s.version     = '3.19.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -669,6 +669,8 @@ Pod::Spec.new do |s|
     s.subspec 'SVG' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PocketSVG'
+        subspec.dependency 'Protobuf', '= 3.22.1'
+        subspec.dependency 'SVGAPlayer'
         subspec.source_files = 'PooToolsSource/KingfisherSVG/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SVG POOTOOLS_COCOAPODS"

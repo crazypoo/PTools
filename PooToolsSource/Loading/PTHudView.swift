@@ -157,8 +157,8 @@ public class PTLoadingHud:UIView {
             context?.setStrokeColor(red: finalColor.rgbaValueModel().redFloat, green: finalColor.rgbaValueModel().greenFloat, blue: finalColor.rgbaValueModel().blueFloat, alpha: finalColor.rgbaValueModel().alphaFloat)
         }
         
-        let deltaLength = sin(length / 360 * (Double.pi / 2)) * 360
-        let startAngle = degressToRadian(angle: -deltaLength)
+        let deltaLength = sin(Double(length) / 360 * (Double.pi / 2)) * 360
+        let startAngle = degressToRadian(angle: CGFloat(-deltaLength))
         context?.addArc(center: circleCenter, radius: circleRadius, startAngle: startAngle, endAngle: 0, clockwise: false)
         
         context?.strokePath()

@@ -19,6 +19,7 @@ import SwifterSwift
 import AVFoundation
 import Foundation
 import SwiftDate
+import CryptoKit
 
 extension String:PTProtocolCompatible {}
 
@@ -353,15 +354,21 @@ public extension String {
         return String(data: data, encoding: .utf8)
     }
          
-    @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這是因為MD5算法已被證明是不安全的，不應在安全上下文中使用,所以在iOS13之後用sha256算法比較合適")
+//    @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這是因為MD5算法已被證明是不安全的，不應在安全上下文中使用,所以在iOS13之後用sha256算法比較合適")
     var md5:String {
-        let data = Data(self.utf8)
-        let hash = data.withUnsafeBytes { (bytes:UnsafeRawBufferPointer) -> [UInt8] in
-            var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
-            CC_MD5(bytes.baseAddress,CC_LONG(data.count),&hash)
-            return hash
+        if #available(iOS 13.0, *) {
+            let data = Data(self.utf8)
+            let hashed = Insecure.MD5.hash(data: data)
+            return hashed.map { String(format: "%02hhx", $0) }.joined()
+        } else {
+            let data = Data(self.utf8)
+            let hash = data.withUnsafeBytes { (bytes:UnsafeRawBufferPointer) -> [UInt8] in
+                var hash = [UInt8](repeating: 0, count: Int(CC_MD5_DIGEST_LENGTH))
+                CC_MD5(bytes.baseAddress,CC_LONG(data.count),&hash)
+                return hash
+            }
+            return hash.map { String(format: "%02x", $0)}.joined()
         }
-        return hash.map { String(format: "%02x", $0)}.joined()
     }
     
     /*

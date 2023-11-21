@@ -500,7 +500,7 @@ public class PTUtils: NSObject {
 public extension PTUtils {
     class func oc_isiPhoneSeries()->Bool {
         isIPhoneXSeries()
-    }
+    }    
 }
 
 public class SwizzleTool: NSObject {

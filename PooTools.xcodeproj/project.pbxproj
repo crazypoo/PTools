@@ -257,6 +257,10 @@
 		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
 		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
 		55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70929B10B8900DCA096 /* MethodSwizzle.m */; };
+		55B159592B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */; };
+		55B1595C2B0CAB9500A64741 /* SVGAPlayerEdition.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */; };
+		55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */; };
+		55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
@@ -677,6 +681,16 @@
 		55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		55A5D70829B10B8900DCA096 /* MethodSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		55A5D70929B10B8900DCA096 /* MethodSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
+		55B159572B0CAB0300A64741 /* SVGAVideoEntity+PTEX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SVGAVideoEntity+PTEX.h"; sourceTree = "<group>"; };
+		55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SVGAVideoEntity+PTEX.m"; sourceTree = "<group>"; };
+		55B1595A2B0CAB9500A64741 /* SVGAPlayerEdition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVGAPlayerEdition.h; sourceTree = "<group>"; };
+		55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SVGAPlayerEdition.m; sourceTree = "<group>"; };
+		55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGAPlayerSwiftEdition.swift; sourceTree = "<group>"; };
+		55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSVGAViewController.swift; sourceTree = "<group>"; };
+		55B1596C2B0CEED100A64741 /* Rose.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rose.svga; sourceTree = "<group>"; };
+		55B1596D2B0CEED100A64741 /* Rocket.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rocket.svga; sourceTree = "<group>"; };
+		55B1596E2B0CEED200A64741 /* Goddess.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Goddess.svga; sourceTree = "<group>"; };
+		55B1596F2B0CEED200A64741 /* heartbeat.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = heartbeat.svga; sourceTree = "<group>"; };
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
@@ -1366,6 +1380,11 @@
 			isa = PBXGroup;
 			children = (
 				5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */,
+				55B159572B0CAB0300A64741 /* SVGAVideoEntity+PTEX.h */,
+				55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */,
+				55B1595A2B0CAB9500A64741 /* SVGAPlayerEdition.h */,
+				55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */,
+				55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */,
 			);
 			path = KingfisherSVG;
 			sourceTree = "<group>";
@@ -2068,6 +2087,10 @@
 		6003F593195388D20070C39A /* Example for PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				55B1596E2B0CEED200A64741 /* Goddess.svga */,
+				55B1596F2B0CEED200A64741 /* heartbeat.svga */,
+				55B1596D2B0CEED100A64741 /* Rocket.svga */,
+				55B1596C2B0CEED100A64741 /* Rose.svga */,
 				555818A82AF8DE8F0051C0AA /* Settings.bundle */,
 				550CE4A72AF17C090052539D /* AppDelegate.swift */,
 				6003F5A8195388D20070C39A /* Images.xcassets */,
@@ -2086,6 +2109,7 @@
 				55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */,
 				552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */,
 				550CE4BD2AF23DC50052539D /* PTVoiceActionView.swift */,
+				55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
 				55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */,
@@ -2390,6 +2414,7 @@
 				5585F7072AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
+				55B1595C2B0CAB9500A64741 /* SVGAPlayerEdition.m in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
@@ -2586,6 +2611,7 @@
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
+				55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,
 				552893172AE78F79009135F9 /* PTMediaBrowserCell.swift in Sources */,
@@ -2602,6 +2628,7 @@
 				554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */,
 				55D59C7428F5565B00B4FF76 /* PTAppBaseConfig.swift in Sources */,
 				5585F70F2AD2B6B300F878B4 /* PTVideoEditorVideoTimeLineGenerator.swift in Sources */,
+				55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */,
 				55D59C7028F54EFA00B4FF76 /* PTBaseCellOption.swift in Sources */,
 				555818B82AFA4E750051C0AA /* PTProgressBar.swift in Sources */,
 				231D1687272CDEEA003D6F62 /* UIButton+PTEX.swift in Sources */,
@@ -2630,6 +2657,7 @@
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
 				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
+				55B159592B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				5585F6EF2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift in Sources */,
 				5585F6FD2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift in Sources */,

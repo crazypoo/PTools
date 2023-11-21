@@ -49,6 +49,7 @@ public extension String {
     static let permission = "Permission"
     static let tipkit = "TipKit"
     static let document = "UIDocument"
+    static let svga = "SVGA"
 
     static let route = "路由"
     
@@ -245,7 +246,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let document = self.rowBaseModel(name: .document)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document]
+        let svga = self.rowBaseModel(name: .svga)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -596,6 +599,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     let vc = PTDocumentViewController()
                     self.navigationController?.pushViewController(vc)
                 }
+            } else if itemRow.title == .svga {
+                let vc = PTSVGAViewController()
+                self.navigationController?.pushViewController(vc)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

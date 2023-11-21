@@ -11,6 +11,8 @@
 #endif
 
 #import "PTEditMenuInteractionDummy.h"
+#import "SVGAPlayerEdition.h"
+#import "SVGAVideoEntity+PTEX.h"
 
 FOUNDATION_EXPORT double PooToolsVersionNumber;
 FOUNDATION_EXPORT const unsigned char PooToolsVersionString[];
