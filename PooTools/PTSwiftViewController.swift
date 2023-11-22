@@ -71,177 +71,7 @@ class PTSwiftViewController: PTBaseViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    func cellModels() -> [[PTFusionCellModel]] {
-        
-        let disclosureIndicatorImageName = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
-        let nameFont:UIFont = .appfont(size: 16,bold: true)
-
-        let onlyLeft = PTFusionCellModel()
-        onlyLeft.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft.accessoryType = .NoneAccessoryView
-        onlyLeft.nameColor = .black
-        onlyLeft.cellFont = nameFont
-        
-        let onlyLeftRight = PTFusionCellModel()
-        onlyLeftRight.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight.accessoryType = .NoneAccessoryView
-        onlyLeftRight.nameColor = .black
-        onlyLeftRight.cellFont = nameFont
-
-        let onlyLeft_a = PTFusionCellModel()
-        onlyLeft_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft_a.accessoryType = .DisclosureIndicator
-        onlyLeft_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeft_a.nameColor = .black
-        onlyLeft_a.cellFont = nameFont
-
-        let onlyRight_a = PTFusionCellModel()
-        onlyRight_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight_a.accessoryType = .DisclosureIndicator
-        onlyRight_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight_a.nameColor = .black
-        onlyRight_a.cellFont = nameFont
-
-        let onlyRight = PTFusionCellModel()
-        onlyRight.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight.accessoryType = .NoneAccessoryView
-        onlyRight.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight.nameColor = .black
-        onlyRight.cellFont = nameFont
-
-        let onlyLeftRight_a = PTFusionCellModel()
-        onlyLeftRight_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_a.accessoryType = .DisclosureIndicator
-        onlyLeftRight_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeftRight_a.nameColor = .black
-        onlyLeftRight_a.cellFont = nameFont
-
-        let onlyLeftRight_n_a = PTFusionCellModel()
-        onlyLeftRight_n_a.name = "左标题"
-        onlyLeftRight_n_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_n_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_n_a.accessoryType = .DisclosureIndicator
-        onlyLeftRight_n_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeftRight_n_a.nameColor = .black
-        onlyLeftRight_n_a.cellFont = nameFont
-
-        let onlyLeftRight_nc_a = PTFusionCellModel()
-        onlyLeftRight_nc_a.name = "左标题"
-        onlyLeftRight_nc_a.content = "右标题"
-        onlyLeftRight_nc_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_nc_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_nc_a.accessoryType = .DisclosureIndicator
-        onlyLeftRight_nc_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeftRight_nc_a.nameColor = .black
-        onlyLeftRight_nc_a.cellFont = nameFont
-
-        let onlyLeftRight_nd_a = PTFusionCellModel()
-        onlyLeftRight_nd_a.name = "左标题"
-        onlyLeftRight_nd_a.desc = "底部标题"
-        onlyLeftRight_nd_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_nd_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_nd_a.accessoryType = .DisclosureIndicator
-        onlyLeftRight_nd_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeftRight_nd_a.nameColor = .black
-        onlyLeftRight_nd_a.cellFont = nameFont
-
-        let onlyLeftRight_c_a = PTFusionCellModel()
-        onlyLeftRight_c_a.content = "右边标题"
-        onlyLeftRight_c_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_c_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeftRight_c_a.accessoryType = .DisclosureIndicator
-        onlyLeftRight_c_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyLeftRight_c_a.nameColor = .black
-        onlyLeftRight_c_a.cellFont = nameFont
-
-        let onlyRight_n_a = PTFusionCellModel()
-        onlyRight_n_a.name = "左标题"
-        onlyRight_n_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight_n_a.accessoryType = .DisclosureIndicator
-        onlyRight_n_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight_n_a.nameColor = .black
-        onlyRight_n_a.cellFont = nameFont
-
-        let onlyRight_nc_a = PTFusionCellModel()
-        onlyRight_nc_a.name = "左标题"
-        onlyRight_nc_a.content = "右标题"
-        onlyRight_nc_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight_nc_a.accessoryType = .DisclosureIndicator
-        onlyRight_nc_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight_nc_a.nameColor = .black
-        onlyRight_nc_a.cellFont = nameFont
-
-        let onlyRight_nd_a = PTFusionCellModel()
-        onlyRight_nd_a.name = "左标题"
-        onlyRight_nd_a.desc = "底部标题"
-        onlyRight_nd_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight_nd_a.accessoryType = .DisclosureIndicator
-        onlyRight_nd_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight_nd_a.nameColor = .black
-        onlyRight_nd_a.cellFont = nameFont
-
-        let onlyRight_c_a = PTFusionCellModel()
-        onlyRight_c_a.content = "右边标题"
-        onlyRight_c_a.contentIcon = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyRight_c_a.accessoryType = .DisclosureIndicator
-        onlyRight_c_a.disclosureIndicatorImage = disclosureIndicatorImageName
-        onlyRight_c_a.nameColor = .black
-        onlyRight_c_a.cellFont = nameFont
-
-        let only_n_a = PTFusionCellModel()
-        only_n_a.name = "左标题"
-        only_n_a.nameColor = .black
-        only_n_a.cellFont = nameFont
-
-        let only_nc_a = PTFusionCellModel()
-        only_nc_a.name = "左标题"
-        only_nc_a.content = "右标题"
-        only_nc_a.nameColor = .black
-        only_nc_a.cellFont = nameFont
-
-        let only_nd_a = PTFusionCellModel()
-        only_nd_a.name = "左标题"
-        only_nd_a.desc = "底部标题"
-        only_nd_a.nameColor = .black
-        only_nd_a.cellFont = nameFont
-
-        let only_c_a = PTFusionCellModel()
-        only_c_a.content = "右边标题"
-        only_c_a.nameColor = .black
-        only_c_a.cellFont = nameFont
-
-        let onlyLeft_n_a = PTFusionCellModel()
-        onlyLeft_n_a.name = "左标题"
-        onlyLeft_n_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft_n_a.nameColor = .black
-        onlyLeft_n_a.cellFont = nameFont
-
-        let onlyLeft_nc_a = PTFusionCellModel()
-        onlyLeft_nc_a.name = "左标题"
-        onlyLeft_nc_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft_nc_a.content = "右标题"
-        onlyLeft_nc_a.nameColor = .black
-        onlyLeft_nc_a.cellFont = nameFont
-
-        let onlyLeft_nd_a = PTFusionCellModel()
-        onlyLeft_nd_a.name = "左标题"
-        onlyLeft_nd_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft_nd_a.desc = "底部标题"
-        onlyLeft_nd_a.nameColor = .black
-        onlyLeft_nd_a.cellFont = nameFont
-
-        let onlyLeft_c_a = PTFusionCellModel()
-        onlyLeft_c_a.content = "右边标题"
-        onlyLeft_c_a.leftImage = "🧐".emojiToImage(emojiFont: .appfont(size: 24))
-        onlyLeft_c_a.nameColor = .black
-        onlyLeft_c_a.cellFont = nameFont
-
-        return [[onlyLeft,onlyLeftRight,onlyLeft_a,onlyRight_a,onlyRight],[onlyLeftRight_n_a,onlyLeftRight_nc_a,onlyLeftRight_nd_a,onlyLeftRight_c_a,onlyRight_n_a,onlyRight_nc_a,onlyRight_nd_a,onlyRight_c_a],[only_n_a,only_nc_a,only_nd_a,only_c_a],[onlyLeft_n_a,onlyLeft_nc_a,onlyLeft_nd_a,onlyLeft_c_a]]
-    }
-        
+            
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
     }
@@ -251,24 +81,33 @@ class PTSwiftViewController: PTBaseViewController {
 
         PTNSLogConsole(self)
 
-        let layoutBtn = PTLayoutButton()
-        layoutBtn.layoutStyle = .leftImageRightTitle
-        layoutBtn.setTitle("123", for: .normal)
-        layoutBtn.midSpacing = 0
-        layoutBtn.imageSize = CGSizeMake(100, 100)
+//        let layoutBtn = PTLayoutButton()
+//        layoutBtn.layoutStyle = .leftImageRightTitle
+//        layoutBtn.setTitle("123", for: .normal)
+//        layoutBtn.midSpacing = 0
+//        layoutBtn.imageSize = CGSizeMake(100, 100)
+//        
+//        layoutBtn.backgroundColor = .systemBlue
+//        view.addSubview(layoutBtn)
+//        layoutBtn.snp.makeConstraints { make in
+//            make.width.height.equalTo(100)
+//            make.centerX.centerY.equalToSuperview()
+//        }
+//        
+//        PTGCDManager.gcdMain {
+//            layoutBtn.layerProgress(value: 0.5,borderWidth: 4)
+//        }
+//        
+//        layoutBtn.addActionHandlers { sender in
+//        }
         
-        layoutBtn.backgroundColor = .systemBlue
-        view.addSubview(layoutBtn)
-        layoutBtn.snp.makeConstraints { make in
-            make.width.height.equalTo(100)
-            make.centerX.centerY.equalToSuperview()
-        }
-        
-        PTGCDManager.gcdMain {
-            layoutBtn.layerProgress(value: 0.5,borderWidth: 4)
-        }
-        
-        layoutBtn.addActionHandlers { sender in
+        cycleView.titles = ["1","2","3","4","5","6"]
+        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
+        self.view.addSubview(cycleView)
+        cycleView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.height.equalTo(150)
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
                 
         self.screenShotHandle = { image in
@@ -292,7 +131,7 @@ extension PTSwiftViewController:PTRouterable {
     }
 }
 
-@available(iOS 17, *)
-#Preview {
-    PTSwiftViewController()
-}
+//@available(iOS 17, *)
+//#Preview {
+//    PTSwiftViewController()
+//}

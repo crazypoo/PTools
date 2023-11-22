@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class LLCycleScrollViewCell: UICollectionViewCell {
     
@@ -118,7 +119,16 @@ class LLCycleScrollViewCell: UICollectionViewCell {
         super.layoutSubviews()
         
         imageView.frame = bounds
-        titleBackView.frame = CGRect.init(x: 0, y: ll_h - titleLabelHeight, width: ll_w, height: titleLabelHeight)
-        titleLabel.frame = CGRect.init(x: titleLabelLeading, y: 0, width: ll_w - titleLabelLeading - 5, height: titleLabelHeight)
+        titleBackView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.bottom.equalToSuperview()
+            make.height.equalTo(self.titleLabelHeight)
+        }
+        titleLabel.snp.makeConstraints { make in
+            make.height.equalTo(self.titleLabelHeight)
+            make.width.equalTo(self.pt.jx_width - self.titleLabelLeading - 5)
+            make.left.equalToSuperview().inset(self.titleLabelLeading)
+            make.top.equalToSuperview()
+        }
     }
 }

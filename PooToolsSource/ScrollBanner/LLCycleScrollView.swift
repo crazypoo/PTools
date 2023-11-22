@@ -626,17 +626,32 @@ extension LLCycleScrollView {
             // Page Frame
             if self.customPageControlStyle == .none || self.customPageControlStyle == .system || self.customPageControlStyle == .image {
                 if self.pageControlPosition == .center {
-                    self.pageControl?.frame = CGRect.init(x: 0, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
-                }else{
+                    self.pageControl?.snp.makeConstraints { make in
+                        make.left.right.equalToSuperview()
+                        make.height.equalTo(10)
+                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                    }
+                } else {
                     let pointSize = self.pageControl?.size(forNumberOfPages: self.imagePaths.count)
                     if self.pageControlPosition == .left {
-                        self.pageControl?.frame = CGRect.init(x: -(UIScreen.main.bounds.width - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
-                    }else{
-                        self.pageControl?.frame = CGRect.init(x: (UIScreen.main.bounds.width - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5, y: self.ll_h-self.pageControlBottom, width: UIScreen.main.bounds.width, height: 10)
+                        self.pageControl?.snp.makeConstraints { make in
+                            make.height.equalTo(10)
+                            make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+                            make.left.equalToSuperview().inset(-(CGFloat.kSCREEN_WIDTH - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5)
+                            make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                        }
+                    } else {
+                        self.pageControl?.snp.makeConstraints { make in
+                            make.height.equalTo(10)
+                            make.width.equalTo(CGFloat.kSCREEN_WIDTH)
+                            make.left.equalToSuperview().inset((CGFloat.kSCREEN_WIDTH - (pointSize?.width)! - self.pageControlLeadingOrTrialingContact) * 0.5)
+                            make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                        }
+
                     }
                 }
-            }else{
-                var y = self.ll_h-self.pageControlBottom
+            } else {
+                var y = self.pt.jx_height-self.pageControlBottom
                 
                 // pill
                 if self.customPageControlStyle == .pill {
@@ -724,7 +739,7 @@ extension LLCycleScrollView {
     ///
     /// - Returns: 下标-Index
     func currentIndex() -> NSInteger {
-        if collectionView.ll_w == 0 || collectionView.ll_h == 0 {
+        if collectionView.pt.jx_width == 0 || collectionView.pt.jx_height == 0 {
             return 0
         }
         var index = 0

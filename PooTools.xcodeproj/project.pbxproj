@@ -341,6 +341,7 @@
 		55E80DA728ED4AA1004CF2C1 /* PTEasySignatureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */; };
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
 		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
+		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -366,7 +367,6 @@
 		9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */; };
 		9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */; };
 		9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */; };
-		9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */; };
 		9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */; };
 		9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */; };
 		9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */; };
@@ -772,6 +772,7 @@
 		55E80DA628ED4AA1004CF2C1 /* PTEasySignatureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEasySignatureView.swift; sourceTree = "<group>"; };
 		55E80DB128ED63F9004CF2C1 /* PTSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSignView.swift; sourceTree = "<group>"; };
 		55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsDemoController.swift; sourceTree = "<group>"; };
+		55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_placeholder.png; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -807,7 +808,6 @@
 		9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollView.swift; sourceTree = "<group>"; };
 		9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLImagePageControl.swift; sourceTree = "<group>"; };
 		9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLSnakePageControl.swift; sourceTree = "<group>"; };
-		9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLViewExtensions.swift; sourceTree = "<group>"; };
 		9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLFilledPageControl.swift; sourceTree = "<group>"; };
 		9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollViewCell.swift; sourceTree = "<group>"; };
 		9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLPillPageControl.swift; sourceTree = "<group>"; };
@@ -1340,6 +1340,7 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */,
 				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
 				55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */,
 				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
@@ -1981,7 +1982,6 @@
 				9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */,
 				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
 				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
-				9A14E98228616B4000D7E8EF /* LLViewExtensions.swift */,
 			);
 			path = ScrollBanner;
 			sourceTree = "<group>";
@@ -2235,6 +2235,7 @@
 				55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				55102AAF2AFFAB5900E9529D /* icon_permission_health.png in Resources */,
+				55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */,
 				55102AB02AFFAB5900E9529D /* icon_permission_tracking.png in Resources */,
 				55102ABA2AFFAB5900E9529D /* icon_permission_contact.png in Resources */,
 				55102AB92AFFAB5900E9529D /* icon_permission_camera.png in Resources */,
@@ -2368,7 +2369,6 @@
 				550CE4A82AF17C090052539D /* AppDelegate.swift in Sources */,
 				55B4FA1F2AE0FFAE006D35F3 /* PTPermissionReminders.swift in Sources */,
 				558D5EE72AAF52E300C02042 /* PTRouterPattern.swift in Sources */,
-				9A14E98928616B4100D7E8EF /* LLViewExtensions.swift in Sources */,
 				9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */,
 				555818D22AFA7FD40051C0AA /* CGRect+PTEX.swift in Sources */,
 				5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */,
