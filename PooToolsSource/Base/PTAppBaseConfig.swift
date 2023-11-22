@@ -17,6 +17,8 @@ public class PTAppBaseConfig: NSObject {
     //MARK: App的全局加載圖片的底圖
     ///App的全局加載圖片的底圖
     public var defaultPlaceholderImage:UIImage = UIImage()
+    ///没有获取到图片
+    public var defaultEmptyImage:UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_placeholder")
     //MARK: App的全局邊距
     ///App的全局邊距
     public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)

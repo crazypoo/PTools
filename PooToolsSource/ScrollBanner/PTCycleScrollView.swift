@@ -43,7 +43,7 @@ public class PTCycleScrollView: UIView {
     // MARK: DataSource
     
     /// 图片地址
-    open var imagePaths: Array<String> = [] {
+    open var imagePaths: Array<Any> = [] {
         didSet {
             self.setTotalItemsMinItems(count:imagePaths.count)
             if imagePaths.count > 1 {
@@ -178,7 +178,7 @@ public class PTCycleScrollView: UIView {
     // MARK: 箭头标签
     
     /// Icon - [LeftIcon, RightIcon]
-    open var arrowLRIcon: [UIImage]?
+    open var arrowLRIcon: [Any]?
     
     /// Icon Frame - [LeftIconFrame, RightIconFrame]
     open var arrowLRFrame: [CGRect]?
@@ -191,7 +191,7 @@ public class PTCycleScrollView: UIView {
             setupPageControl()
         }
     }
-    // 选中颜色
+    /// 选中颜色
     open var pageControlCurrentPageColor: UIColor = UIColor.white {
         didSet {
             setupPageControl()
@@ -272,6 +272,7 @@ public class PTCycleScrollView: UIView {
     /// 开启/关闭URL特殊字符处理
     open var isAddingPercentEncodingForURLString: Bool = false
     
+    open var iCloudDocument:String = ""
     
     // MARK: - Private
     
@@ -316,6 +317,8 @@ public class PTCycleScrollView: UIView {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
         cConfig.collectionViewBehavior = .paging
+        cConfig.showsVerticalScrollIndicator = false
+        cConfig.showsHorizontalScrollIndicator = false
 
         let view = PTCollectionView(viewConfig: cConfig)
         view.customerLayout = { sectionModel in
@@ -384,16 +387,7 @@ public class PTCycleScrollView: UIView {
                     let itemIndex = self.pageControlIndexWithCurrentCellIndex(index: indexPath.item)
                     let imagePath = self.imagePaths[itemIndex]
                     
-                    // 根据imagePath，来判断是网络图片还是本地图
-                    PTLoadImageFunction.loadImage(contentData: imagePath) { images, image in
-                        if (images?.count ?? 0) > 1 {
-                            cell.imageView.image = UIImage.animatedImage(with: images!, duration: 2)
-                        } else if (images?.count ?? 0) == 1 {
-                            cell.imageView.image = image
-                        } else {
-                            cell.imageView.image = self.coverViewImage
-                        }
-                    }
+                    cell.imageView.loadImage(contentData: imagePath,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
                     
                     // 对冲数据判断
                     if itemIndex <= self.titles.count-1 {
@@ -492,7 +486,7 @@ extension PTCycleScrollView {
     ///   - titles: Title Array
     ///   - didSelectItemAtIndex: Closure
     /// - Returns: PTCycleScrollView
-    public class func cycleScrollViewCreate(imageURLPaths: Array<String>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
+    public class func cycleScrollViewCreate(imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
         let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
         // Nil
         cycleScrollView.imagePaths = []
@@ -548,7 +542,7 @@ extension PTCycleScrollView {
     ///   - didSelectItemAtIndex: Closure
     ///   - arrowLRFrame:
     /// - Returns: PTCycleScrollView
-    public class func cycleScrollViewWithArrow(arrowLRImages: [UIImage], arrowLRFrame: [CGRect]? = nil, imageURLPaths: Array<String>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
+    public class func cycleScrollViewWithArrow(arrowLRImages: [Any], arrowLRFrame: [CGRect]? = nil, imageURLPaths: Array<Any>? = [], titles:Array<String>? = [], didSelectItemAtIndex: PTCycleIndexClosure? = nil) -> PTCycleScrollView {
         let cycleScrollView: PTCycleScrollView = PTCycleScrollView()
         // Nil
         cycleScrollView.imagePaths = []
@@ -620,7 +614,7 @@ extension PTCycleScrollView {
             leftImageView.contentMode = .left
             leftImageView.tag = 0
             leftImageView.isUserInteractionEnabled = true
-            leftImageView.image = ali.first!
+            leftImageView.loadImage(contentData: ali.first!,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
             leftImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
             self.addSubview(leftImageView)
             
@@ -628,7 +622,7 @@ extension PTCycleScrollView {
             rightImageView.contentMode = .right
             rightImageView.tag = 1
             rightImageView.isUserInteractionEnabled = true
-            rightImageView.image = ali.last!
+            rightImageView.loadImage(contentData: ali.last!,iCloudDocumentName: self.iCloudDocument,emptyImage: self.coverViewImage)
             rightImageView.addGestureRecognizer(UITapGestureRecognizer.init(target: self, action: #selector(self.scrollByDirection(_:))))
             self.addSubview(rightImageView)
         }

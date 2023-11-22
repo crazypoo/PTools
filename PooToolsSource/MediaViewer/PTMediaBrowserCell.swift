@@ -212,18 +212,16 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         imageView.addGestureRecognizers([singleTap,doubleTap])
 
         PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName) { receivedSize, totalSize in
-            loading.progress = CGFloat(receivedSize / totalSize)
+            PTGCDManager.gcdMain() {
+                loading.progress = CGFloat(receivedSize / totalSize)
+            }
         } taskHandle: { images,image in
             if (images?.count ?? 0) > 1 {
                 self.currentCellType = .GIF
                 self.gifImage = image
-                self.imageView.animationImages = images
-                self.imageView.animationDuration = 2
-                self.imageView.startAnimating()
+                self.imageView.image = UIImage.animatedImage(with: images!, duration: 2)
                 if self.viewConfig.dynamicBackground {
-                    self.backgroundImageView.animationImages = images
-                    self.imageView.animationDuration = 2
-                    self.imageView.startAnimating()
+                    self.backgroundImageView.image = UIImage.animatedImage(with: images!, duration: 2)
                 }
 
                 self.adjustFrame()

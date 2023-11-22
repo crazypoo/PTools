@@ -134,7 +134,8 @@ class AppDelegate: PTAppWindowsDelegate {
             guideModel.tapHidden = true
             guideModel.forwardImage = "DemoImage"
             guideModel.backImage = "DemoImage"
-            guideModel.pageControl = true
+            guideModel.pageControlTintColor = .gray
+            guideModel.pageControl = .pageControl(type: .system)
             guideModel.skipShow = true
             
             let guideHud = PTGuidePageHUD(viewModel: guideModel)

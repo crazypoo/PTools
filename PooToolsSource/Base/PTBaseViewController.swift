@@ -554,13 +554,7 @@ fileprivate class PTBaseScreenShotAlert:UIView {
         view.normalTitleFont = .appfont(size: 13)
         view.normalTitle = title
         view.normalTitleColor = .white
-        PTLoadImageFunction.loadImage(contentData: image) { images, image in
-            if (images?.count ?? 0) > 1 {
-                view.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-            } else if images?.count == 1 {
-                view.normalImage = image
-            }
-        }
+        view.layoutLoadImage(contentData: image)
         return view
     }
 }

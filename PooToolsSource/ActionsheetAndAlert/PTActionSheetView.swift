@@ -230,14 +230,7 @@ public class PTActionSheetView: UIView {
             }
             view.cellButton.imageSize = itemSize
             view.cellButton.midSpacing = cancelSheetItem.contentImageSpace
-            
-            PTLoadImageFunction.loadImage(contentData: cancelSheetItem.image as Any, iCloudDocumentName: cancelSheetItem.iCloudDocumentName) { images, image in
-                if (images?.count ?? 0) > 1 {
-                    view.cellButton.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-                } else if images?.count == 1 {
-                    view.cellButton.normalImage = image
-                }
-            }
+            view.cellButton.layoutLoadImage(contentData: cancelSheetItem.image as Any,iCloudDocumentName: cancelSheetItem.iCloudDocumentName)
         }
         return view
     }()
@@ -439,14 +432,7 @@ public class PTActionSheetView: UIView {
                     }
                     view.cellButton.imageSize = itemSize
                     view.cellButton.midSpacing = destructiveItem.contentImageSpace
-
-                    PTLoadImageFunction.loadImage(contentData: destructiveItem.image as Any, iCloudDocumentName: destructiveItem.iCloudDocumentName) { images, image in
-                        if (images?.count ?? 0) > 1 {
-                            view.cellButton.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-                        } else if images?.count == 1 {
-                            view.cellButton.normalImage = image
-                        }
-                    }
+                    view.cellButton.layoutLoadImage(contentData: destructiveItem.image as Any,iCloudDocumentName: destructiveItem.iCloudDocumentName)
                 }
                 view.cellButton.addActionHandlers() { sender in
                     self.dismiss {
@@ -566,14 +552,7 @@ public class PTActionSheetView: UIView {
                     }
                     btn.cellButton.imageSize = itemSize
                     btn.cellButton.midSpacing = value.contentImageSpace
-
-                    PTLoadImageFunction.loadImage(contentData: value.image as Any, iCloudDocumentName: value.iCloudDocumentName) { images, image in
-                        if (images?.count ?? 0) > 1 {
-                            btn.cellButton.normalImage = UIImage.animatedImage(with: images!, duration: 2)
-                        } else if images?.count == 1 {
-                            btn.cellButton.normalImage = image
-                        }
-                    }
+                    btn.cellButton.layoutLoadImage(contentData: value.image as Any,iCloudDocumentName: value.iCloudDocumentName)
                 }
                 btn.cellButton.addActionHandlers { sender in
                     self.dismiss {

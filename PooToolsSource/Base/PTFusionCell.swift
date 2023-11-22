@@ -84,15 +84,7 @@ public class PTFusionCellContent:UIView {
             valueSwitch.removeFromSuperview()
             sectionMore.removeFromSuperview()
 
-            PTLoadImageFunction.loadImage(contentData: cellModel!.disclosureIndicatorImage as Any,iCloudDocumentName: cellModel?.iCloudDocument) { images, image in
-                if (images?.count ?? 0) > 1 {
-                    self.accessV.animationImages = images
-                    self.accessV.startAnimating()
-                } else if (images?.count ?? 0) == 1 {
-                    self.accessV.image = image
-                }
-            }
-                        
+            self.accessV.loadImage(contentData: cellModel!.disclosureIndicatorImage as Any,iCloudDocumentName: cellModel!.iCloudDocument)
             addSubview(accessV)
             accessV.snp.makeConstraints { make in
                 make.width.height.equalTo(14)
@@ -504,16 +496,7 @@ public class PTFusionCellContent:UIView {
                 make.width.equalTo(self.cellIcon.snp.height)
             }
             
-            PTLoadImageFunction.loadImage(contentData: cellModel!.leftImage as Any,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
-                if (images?.count ?? 0) > 1 {
-                    self.cellIcon.animationImages = images
-                    self.cellIcon.startAnimating()
-                } else if (images?.count ?? 0) == 1 {
-                    self.cellIcon.image = image
-                } else {
-                    self.cellIcon.image = nil
-                }
-            }
+            self.cellIcon.loadImage(contentData: cellModel!.leftImage as Any,iCloudDocumentName: cellModel!.iCloudDocument)
         default:
             cellIcon.removeFromSuperview()
         }
@@ -535,15 +518,7 @@ public class PTFusionCellContent:UIView {
                 .More(type: .BothImage),
                 .More(type: .RightImageContent):
             
-            PTLoadImageFunction.loadImage(contentData: cellModel!.contentIcon as Any,iCloudDocumentName: cellModel!.iCloudDocument) { images, image in
-                if (images?.count ?? 0) > 1 {
-                    self.cellContentIcon.animationImages = images
-                    self.cellContentIcon.startAnimating()
-                } else if (images?.count ?? 0) == 1 {
-                    self.cellContentIcon.image = image
-                }
-            }
-            
+            self.cellContentIcon.loadImage(contentData: cellModel!.contentIcon as Any,iCloudDocumentName: cellModel!.iCloudDocument)            
             addSubview(cellContentIcon)
             cellContentIcon.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(self.cellModel!.imageTopOffset)

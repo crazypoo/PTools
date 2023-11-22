@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.20.0'
+    s.version     = '3.21.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -177,6 +177,7 @@ Pod::Spec.new do |s|
         
     s.subspec 'Guide' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PageControl'
         subspec.source_files = 'PooToolsSource/Guide/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_GUIDE POOTOOLS_COCOAPODS"

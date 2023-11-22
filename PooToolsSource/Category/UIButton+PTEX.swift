@@ -140,6 +140,88 @@ public extension UIButton {
             }
         }
     }
+    
+    func loadImage(contentData:Any,
+                   iCloudDocumentName:String = "",
+                   borderWidth:CGFloat = 1.5,
+                   borderColor:UIColor = UIColor.purple,
+                   showValueLabel:Bool = false,
+                   valueLabelFont:UIFont = .appfont(size: 16,bold: true),
+                   valueLabelColor:UIColor = .white,
+                   uniCount:Int = 0,
+                   emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                   controlState:UIControl.State = .normal) {
+        if contentData is UIImage {
+            let image = (contentData as! UIImage)
+            self.setImage(image, for: controlState)
+        } else if contentData is String {
+            let dataUrlString = contentData as! String
+            if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
+                let image = UIImage(contentsOfFile: dataUrlString)!
+                self.setImage(image, for: controlState)
+            } else if dataUrlString.isURL() {
+                if dataUrlString.contains("file://") {
+                    if iCloudDocumentName.stringIsEmpty() {
+                        let image = UIImage(contentsOfFile: dataUrlString)!
+                        self.setImage(image, for: controlState)
+                    } else {
+                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
+                            let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
+                            if let imageData = try? Data(contentsOf: imageURL) {
+                                let image = UIImage(data: imageData)!
+                                self.setImage(image, for: controlState)
+                            }
+                        } else {
+                            let image = UIImage(contentsOfFile: dataUrlString)!
+                            self.setImage(image, for: controlState)
+                        }
+                    }
+                } else {
+                    ImageDownloader.default.downloadImage(with: URL(string: dataUrlString)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
+                        PTGCDManager.gcdMain {
+                            self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                        }
+                    }) { result in
+                        switch result {
+                        case .success(let value):
+                            if value.originalData.detectImageType() == .GIF {
+                                let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                let frameCount = CGImageSourceGetCount(source!)
+                                var frames = [UIImage]()
+                                for i in 0...frameCount {
+                                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                    let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                    frames.append(imageName)
+                                }
+                                self.setImage(UIImage.animatedImage(with: frames, duration: 2), for: controlState)
+                            } else {
+                                self.setImage(value.image, for: controlState)
+                            }
+                        case .failure(let error):
+                            PTNSLogConsole(error)
+                            self.setImage(emptyImage, for: controlState)
+                        }
+                    }
+                }
+            } else if dataUrlString.isSingleEmoji {
+                let emojiImage = dataUrlString.emojiToImage()
+                self.setImage(emojiImage, for: controlState)
+            } else {
+                if let image = UIImage(named: dataUrlString) {
+                    self.setImage(image, for: controlState)
+                } else if let systemImage = UIImage(systemName: dataUrlString) {
+                    self.setImage(systemImage, for: controlState)
+                } else {
+                    self.setImage(emptyImage, for: controlState)
+                }
+            }
+        } else if contentData is Data {
+            let dataImage = UIImage(data: contentData as! Data)!
+            self.setImage(dataImage, for: controlState)
+        } else {
+            self.setImage(emptyImage, for: controlState)
+        }
+    }
 }
 
 /// Custom button that pauses console window swizzling to allow the console menu's presenting view controller to remain the top view controller.

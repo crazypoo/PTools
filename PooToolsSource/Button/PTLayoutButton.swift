@@ -6,8 +6,9 @@
 //  Copyright © 2019 kooun. All rights reserved.
 //
 
-import AttributedString
 import UIKit
+import AttributedString
+import Kingfisher
 
 @objc public enum PTLayoutButtonStyle: Int {
     case leftImageRightTitle // 系统默认
@@ -844,6 +845,244 @@ public class PTLayoutButton: UIButton {
             """))
             """
             setAttributedTitle(att.value, for: state)
+        }
+    }
+}
+
+extension PTLayoutButton {
+    @objc func layoutLoadImage(contentData:Any,
+                         iCloudDocumentName:String = "",
+                         borderWidth:CGFloat = 1.5,
+                         borderColor:UIColor = UIColor.purple,
+                         showValueLabel:Bool = false,
+                         valueLabelFont:UIFont = .appfont(size: 16,bold: true),
+                         valueLabelColor:UIColor = .white,
+                         uniCount:Int = 0,
+                         emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
+                         controlState:UIControl.State = .normal) {
+        if contentData is UIImage {
+            let image = (contentData as! UIImage)
+            switch controlState {
+            case .normal:
+                self.normalImage = image
+            case .selected:
+                self.selectedImage = image
+            case .highlighted:
+                self.hightlightImage = image
+            case .disabled:
+                self.disabledImage = image
+            default:
+                break
+            }
+        } else if contentData is String {
+            let dataUrlString = contentData as! String
+            if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
+                let image = UIImage(contentsOfFile: dataUrlString)!
+                switch controlState {
+                case .normal:
+                    self.normalImage = image
+                case .selected:
+                    self.selectedImage = image
+                case .highlighted:
+                    self.hightlightImage = image
+                case .disabled:
+                    self.disabledImage = image
+                default:
+                    break
+                }
+            } else if dataUrlString.isURL() {
+                if dataUrlString.contains("file://") {
+                    if iCloudDocumentName.stringIsEmpty() {
+                        let image = UIImage(contentsOfFile: dataUrlString)!
+                        switch controlState {
+                        case .normal:
+                            self.normalImage = image
+                        case .selected:
+                            self.selectedImage = image
+                        case .highlighted:
+                            self.hightlightImage = image
+                        case .disabled:
+                            self.disabledImage = image
+                        default:
+                            break
+                        }
+                    } else {
+                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
+                            let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
+                            if let imageData = try? Data(contentsOf: imageURL) {
+                                let image = UIImage(data: imageData)!
+                                switch controlState {
+                                case .normal:
+                                    self.normalImage = image
+                                case .selected:
+                                    self.selectedImage = image
+                                case .highlighted:
+                                    self.hightlightImage = image
+                                case .disabled:
+                                    self.disabledImage = image
+                                default:
+                                    break
+                                }
+                            }
+                        } else {
+                            let image = UIImage(contentsOfFile: dataUrlString)!
+                            switch controlState {
+                            case .normal:
+                                self.normalImage = image
+                            case .selected:
+                                self.selectedImage = image
+                            case .highlighted:
+                                self.hightlightImage = image
+                            case .disabled:
+                                self.disabledImage = image
+                            default:
+                                break
+                            }
+                        }
+                    }
+                } else {
+                    ImageDownloader.default.downloadImage(with: URL(string: dataUrlString)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
+                        PTGCDManager.gcdMain {
+                            self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
+                        }
+                    }) { result in
+                        switch result {
+                        case .success(let value):
+                            if value.originalData.detectImageType() == .GIF {
+                                let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                let frameCount = CGImageSourceGetCount(source!)
+                                var frames = [UIImage]()
+                                for i in 0...frameCount {
+                                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                    let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                    frames.append(imageName)
+                                }
+                                switch controlState {
+                                case .normal:
+                                    self.normalImage = UIImage.animatedImage(with: frames, duration: 2)
+                                case .selected:
+                                    self.selectedImage = UIImage.animatedImage(with: frames, duration: 2)
+                                case .highlighted:
+                                    self.hightlightImage = UIImage.animatedImage(with: frames, duration: 2)
+                                case .disabled:
+                                    self.disabledImage = UIImage.animatedImage(with: frames, duration: 2)
+                                default:
+                                    break
+                                }
+                            } else {
+                                switch controlState {
+                                case .normal:
+                                    self.normalImage = value.image
+                                case .selected:
+                                    self.selectedImage = value.image
+                                case .highlighted:
+                                    self.hightlightImage = value.image
+                                case .disabled:
+                                    self.disabledImage = value.image
+                                default:
+                                    break
+                                }
+                            }
+                        case .failure(let error):
+                            PTNSLogConsole(error)
+                            switch controlState {
+                            case .normal:
+                                self.normalImage = emptyImage
+                            case .selected:
+                                self.selectedImage = emptyImage
+                            case .highlighted:
+                                self.hightlightImage = emptyImage
+                            case .disabled:
+                                self.disabledImage = emptyImage
+                            default:
+                                break
+                            }
+                        }
+                    }
+                }
+            } else if dataUrlString.isSingleEmoji {
+                let emojiImage = dataUrlString.emojiToImage()
+                switch controlState {
+                case .normal:
+                    self.normalImage = emojiImage
+                case .selected:
+                    self.selectedImage = emojiImage
+                case .highlighted:
+                    self.hightlightImage = emojiImage
+                case .disabled:
+                    self.disabledImage = emojiImage
+                default:
+                    break
+                }
+            } else {
+                if let image = UIImage(named: dataUrlString) {
+                    switch controlState {
+                    case .normal:
+                        self.normalImage = image
+                    case .selected:
+                        self.selectedImage = image
+                    case .highlighted:
+                        self.hightlightImage = image
+                    case .disabled:
+                        self.disabledImage = image
+                    default:
+                        break
+                    }
+                } else if let systemImage = UIImage(systemName: dataUrlString) {
+                    switch controlState {
+                    case .normal:
+                        self.normalImage = systemImage
+                    case .selected:
+                        self.selectedImage = systemImage
+                    case .highlighted:
+                        self.hightlightImage = systemImage
+                    case .disabled:
+                        self.disabledImage = systemImage
+                    default:
+                        break
+                    }
+                } else {
+                    switch controlState {
+                    case .normal:
+                        self.normalImage = emptyImage
+                    case .selected:
+                        self.selectedImage = emptyImage
+                    case .highlighted:
+                        self.hightlightImage = emptyImage
+                    case .disabled:
+                        self.disabledImage = emptyImage
+                    default:
+                        break
+                    }
+                }
+            }
+        } else if contentData is Data {
+            let dataImage = UIImage(data: contentData as! Data)!
+            switch controlState {
+            case .normal:
+                self.normalImage = dataImage
+            case .selected:
+                self.selectedImage = dataImage
+            case .highlighted:
+                self.hightlightImage = dataImage
+            case .disabled:
+                self.disabledImage = dataImage
+            default:
+                break
+            }
+        } else {
+            switch controlState {
+            case .normal:
+                self.normalImage = emptyImage
+            case .selected:
+                self.selectedImage = emptyImage
+            case .highlighted:
+                self.hightlightImage = emptyImage
+            case .disabled:
+                self.disabledImage = emptyImage
+            default:
+                break
+            }
         }
     }
 }

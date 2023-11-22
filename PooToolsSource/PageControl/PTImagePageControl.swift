@@ -12,8 +12,9 @@ import Foundation
 @objcMembers
 open class PTImagePageControl: UIPageControl {
 
-    open var dotInActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
-    open var dotActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    open var dotInActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    open var dotActiveImage: Any = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    open var iCloudDocument:String = ""
     
     override open var numberOfPages: Int {
         didSet {
@@ -33,9 +34,11 @@ open class PTImagePageControl: UIPageControl {
             var imageView = imageView(forSubview: view)
             if imageView == nil {
                 if i == 0 {
-                    imageView = UIImageView(image: dotInActiveImage)
+                    imageView = UIImageView()
+                    setImageViewImage(imageContent: dotInActiveImage, imageView: imageView!)
                 } else {
-                    imageView = UIImageView(image: dotActiveImage)
+                    imageView = UIImageView()
+                    setImageViewImage(imageContent: dotActiveImage, imageView: imageView!)
                 }
                 imageView!.center = view.center
                 imageView?.frame = CGRect.init(x: view.frame.origin.x, y: view.frame.origin.y+2, width: 8, height: 8)
@@ -44,9 +47,9 @@ open class PTImagePageControl: UIPageControl {
             }
             
             if i == currentPage {
-                imageView!.image = dotInActiveImage
+                setImageViewImage(imageContent: dotInActiveImage, imageView: imageView!)
             } else {
-                imageView!.image = dotActiveImage
+                setImageViewImage(imageContent: dotActiveImage, imageView: imageView!)
             }
             i += 1
         }
@@ -65,6 +68,10 @@ open class PTImagePageControl: UIPageControl {
             }
         }
         return dot
+    }
+    
+    fileprivate func setImageViewImage(imageContent:Any,imageView:UIImageView) {
+        imageView.loadImage(contentData: imageContent,iCloudDocumentName: iCloudDocument)
     }
 }
 

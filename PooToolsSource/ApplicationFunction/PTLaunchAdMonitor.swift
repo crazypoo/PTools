@@ -94,11 +94,18 @@ public class PTLaunchAdMonitor: NSObject {
                 make.edges.equalToSuperview()
             }
         } else if onView is UIWindow {
-            (onView as! UIWindow).addSubview(v)
-            (onView as! UIWindow).bringSubviewToFront(v)
+            let windows = (onView as! UIWindow)
+            windows.addSubview(v)
+            windows.bringSubviewToFront(v)
             v.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
+#if POOTOOLS_DEBUG
+            let share = LocalConsole.shared
+            if share.isVisiable {
+                windows.bringSubviewToFront(share.terminal!)
+            }
+#endif
         }
         
         f.size.height -= 50
