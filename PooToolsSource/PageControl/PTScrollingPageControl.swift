@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 public class PTScrollingPageControl: UIView {
     // MARK: - PageControl
     
@@ -24,7 +25,6 @@ public class PTScrollingPageControl: UIView {
     open var currentPage: Int {
         return Int(round(progress))
     }
-    
     
     // MARK: - Appearance
     
@@ -181,7 +181,6 @@ public class PTScrollingPageControl: UIView {
         layer.backgroundColor = color
         return layer
     }
-    
     
     // MARK: - Layout
     

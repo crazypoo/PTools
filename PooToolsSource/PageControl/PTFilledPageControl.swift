@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 open class PTFilledPageControl: UIView {
     
     // MARK: - PageControl    

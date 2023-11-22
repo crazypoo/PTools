@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 open class PTSnakePageControl: UIView {
     
     // MARK: - PageControl
@@ -24,7 +25,6 @@ open class PTSnakePageControl: UIView {
     open var currentPage: Int {
         Int(round(progress))
     }
-    
     
     // MARK: - Appearance
     
@@ -128,7 +128,6 @@ open class PTSnakePageControl: UIView {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
-                height: indicatorDiameter)
+        CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding, height: indicatorDiameter)
     }
 }

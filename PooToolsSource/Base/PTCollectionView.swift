@@ -64,6 +64,12 @@ public typealias PTCellDidSelectedHandler = (_ collectionView:UICollectionView,_
 ///  - Return: 事件
 public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cell:UICollectionViewCell,_ sectionModel:PTSection,_ indexPath:IndexPath) -> Void
 
+///CollectionView的Scroll回调
+/// - Parameters:
+///   - collectionView: collectionView
+///  - Return: 事件
+public typealias PTCollectionViewScrollHandler = (_ collectionView:UICollectionView) -> Void
+
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
 public class PTCollectionViewConfig:NSObject {
@@ -247,8 +253,14 @@ public class PTCollectionView: UIView {
     public var collectionWillDisplay:PTCellDisplayHandler?
     ///item消失事件
     public var collectionDidEndDisplay:PTCellDisplayHandler?
+    
+    //MARK: UIScrollView call back
     ///UICollectionView的Scroll事件
-    public var collectionViewDidScrol:((UICollectionView)->Void)?
+    public var collectionViewDidScroll:PTCollectionViewScrollHandler?
+    public var collectionWillBeginDragging:PTCollectionViewScrollHandler?
+    public var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
+    public var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
+    public var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
 
     ///头部刷新事件
     public var headerRefreshTask:((UIRefreshControl)->Void)?
@@ -270,6 +282,12 @@ public class PTCollectionView: UIView {
     ///当空数据View展示的时候,点击回调
     public var emptyTap:((UIView?)->Void)?
     
+    public var contentCollectionView:UICollectionView {
+        get {
+            collectionView
+        }
+    }
+        
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
     //MARK: 界面展示
@@ -424,7 +442,7 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     public func showEmptyLoading() {
         PTCollectionView.share.showEmptyLoadingView(showIn: self)
-    }
+    }    
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
@@ -490,10 +508,25 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
             }
         }
     }
-    
+}
+
+extension PTCollectionView:UIScrollViewDelegate {
+
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        if collectionViewDidScrol != nil {
-            collectionViewDidScrol!(self.collectionView)
+        if collectionViewDidScroll != nil {
+            collectionViewDidScroll!(scrollView as! UICollectionView)
+        }
+    }
+    
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if collectionWillBeginDragging != nil {
+            collectionViewDidScroll!(scrollView as! UICollectionView)
+        }
+    }
+    
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        if collectionDidEndDragging != nil {
+            collectionDidEndDragging!(scrollView as! UICollectionView,decelerate)
         }
     }
     
@@ -501,6 +534,15 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
     }
     
     public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        if collectionDidEndDecelerating != nil {
+            collectionDidEndDecelerating!(scrollView as! UICollectionView)
+        }
+    }
+    
+    public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        if collectionDidEndScrollingAnimation != nil {
+            collectionDidEndScrollingAnimation!(scrollView as! UICollectionView)
+        }
     }
 }
 

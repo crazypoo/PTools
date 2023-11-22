@@ -8,6 +8,7 @@
 
 import UIKit
 
+@objcMembers
 open class PTPillPageControl: UIView {
     
     // MARK: - PageControl
@@ -25,7 +26,6 @@ open class PTPillPageControl: UIView {
     open var currentPage: Int {
         Int(round(progress))
     }
-    
     
     // MARK: - Appearance
     
@@ -121,8 +121,7 @@ open class PTPillPageControl: UIView {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        CGSize(width: CGFloat(inactiveLayers.count) * pillSize.width + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
-                height: pillSize.height)
+        CGSize(width: CGFloat(inactiveLayers.count) * pillSize.width + CGFloat(inactiveLayers.count - 1) * indicatorPadding, height: pillSize.height)
     }
 }
 

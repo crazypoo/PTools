@@ -9,9 +9,9 @@
 import UIKit
 import Foundation
 
+@objcMembers
 open class PTImagePageControl: UIPageControl {
 
-    
     open var dotInActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
     open var dotActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     

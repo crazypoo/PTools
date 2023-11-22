@@ -31,8 +31,7 @@ class PTSwiftViewController: PTBaseViewController {
 
     lazy var cycleView: PTCycleScrollView = {
         
-        let banner = PTCycleScrollView.cycleScrollViewCreate()
-//        banner.delegate = self
+        let banner = PTCycleScrollView.cycleScrollViewWithArrow(arrowLRImages: ["🖼️".emojiToImage(emojiFont: .appfont(size: 20)),"▶️".emojiToImage(emojiFont: .appfont(size: 20))])
         // 滚动间隔时间(默认为2秒)
         banner.autoScrollTimeInterval = 3.0
         // 等待数据状态显示的占位图
@@ -52,6 +51,7 @@ class PTSwiftViewController: PTBaseViewController {
         banner.customPageControlIndicatorPadding = 5.0
         // 设置PageControl的位置 (.left, .right 默认为.center)
         banner.pageControlPosition = .right
+        banner.scrollDirection = .vertical
         // 圆角
         banner.backgroundColor = .clear
         return banner
@@ -101,15 +101,16 @@ class PTSwiftViewController: PTBaseViewController {
 //        layoutBtn.addActionHandlers { sender in
 //        }
         
-        cycleView.titles = ["1","2","3"/*,"4","5","6"*/]
-        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png"/*,"DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"*/]
         self.view.addSubview(cycleView)
         cycleView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(150)
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
         }
-                
+             
+        cycleView.titles = ["1","2","3"/*,"4","5","6"*/]
+        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png"/*,"DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"*/]
+
         self.screenShotHandle = { image in
         }
     }    

@@ -167,7 +167,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
         }
         
-        collectionView.collectionViewDidScrol = { collectionViewScrol in
+        collectionView.collectionViewDidScroll = { collectionViewScrol in
             let cellModel = self.viewConfig.mediaData[self.bottomControl.pageControlView.currentPage]
             let currentCell = collectionView.visibleCells().first as! PTMediaBrowserCell
             if abs(collectionViewScrol.contentOffset.y) > 0 {

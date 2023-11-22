@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import SwifterSwift
 
 class PTCycleScrollViewCell: PTBaseNormalCell {
     static let ID = "PTCycleScrollViewCell"
@@ -55,7 +56,6 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         }
     }
     
-    
     // 标题背景色
     var titleBackViewBackgroundColor: UIColor = UIColor.black.withAlphaComponent(0.3) {
         didSet {
@@ -63,72 +63,66 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         }
     }
     
-    var titleBackView: UIView!
-    
     // 标题Label高度
     var titleLabelHeight: CGFloat! = 56 {
         didSet {
             layoutSubviews()
         }
     }
-    
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-        setupImageView()
-        setupLabelBackView()
-        setupTitleLabel()
-    }
+
+    lazy var titleBackView: UIView = {
+        let view = UIView()
+        view.backgroundColor = titleBackViewBackgroundColor
+        view.isHidden = true
+        return view
+    }()
     
     // 图片
-    var imageView: UIImageView!
-    fileprivate var titleLabel: UILabel!
-    
+    lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        // 默认模式
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
+        return view
+    }()
+    fileprivate lazy var titleLabel: UILabel = {
+        let view = UILabel.init()
+        view.isHidden = true
+        view.textColor = titleLabelTextColor
+        view.numberOfLines = titleLines
+        view.font = titleFont
+        view.backgroundColor = UIColor.clear
+        return view
+    }()
+        
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        contentView.addSubviews([imageView,titleBackView])
+        titleBackView.addSubview(titleLabel)
+    }
+        
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // Setup ImageView
-    fileprivate func setupImageView() {
-        imageView = UIImageView.init()
-        // 默认模式
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        contentView.addSubview(imageView)
-    }
-    
-    // Setup Label BackView
-    fileprivate func setupLabelBackView() {
-        titleBackView = UIView.init()
-        titleBackView.backgroundColor = titleBackViewBackgroundColor
-        titleBackView.isHidden = true
-        contentView.addSubview(titleBackView)
-    }
-    
-    // Setup Title
-    fileprivate func setupTitleLabel() {
-        titleLabel = UILabel.init()
-        titleLabel.isHidden = true
-        titleLabel.textColor = titleLabelTextColor
-        titleLabel.numberOfLines = titleLines
-        titleLabel.font = titleFont
-        titleLabel.backgroundColor = UIColor.clear
-        titleBackView.addSubview(titleLabel)
-    }
-    
+            
     // MARK: layoutSubviews
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        imageView.frame = bounds
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
         titleBackView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.bottom.equalToSuperview()
             make.height.equalTo(self.titleLabelHeight)
         }
+        
         titleLabel.snp.makeConstraints { make in
             make.height.equalTo(self.titleLabelHeight)
-            make.width.equalTo(self.pt.jx_width - self.titleLabelLeading - 5)
-            make.left.equalToSuperview().inset(self.titleLabelLeading)
+            make.left.right.equalToSuperview().inset(self.titleLabelLeading)
             make.top.equalToSuperview()
         }
     }
