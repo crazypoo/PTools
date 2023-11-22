@@ -17,12 +17,41 @@ let MediaBrowserToolBarColor = UIColor.init(red: 0.1, green: 0.1, blue: 0.1, alp
 
 class PTMediaBrowserBottom: UIView {
     
-    lazy var pageControlView:UIPageControl = {
-        let view = UIPageControl()
-        view.backgroundColor = .clear
-        view.pageIndicatorTintColor = .lightGray
-        view.currentPageIndicatorTintColor = .white
-        return view
+    lazy var pageControlView:UIView = {
+        switch viewConfig.pageControlOption {
+        case .system:
+            let view = UIPageControl()
+            view.pageIndicatorTintColor = .lightGray
+            view.currentPageIndicatorTintColor = .white
+            return view
+        case .fill:
+            let view = PTFilledPageControl()
+            view.tintColor = .lightGray
+            view.indicatorPadding = 8
+            view.indicatorRadius = 4
+            return view
+        case .pill:
+            let view = PTPillPageControl()
+            view.indicatorPadding = 8
+            view.activeTint = .lightGray
+            view.inactiveTint = .white
+            return view
+        case .snake:
+            let view = PTSnakePageControl()
+            view.activeTint = .lightGray
+            view.indicatorPadding = 8
+            view.indicatorRadius = 4
+            view.inactiveTint = .white
+            return view
+        case .image:
+            let view = PTImagePageControl()
+            return view
+        case .scrolling:
+            let view = PTScrollingPageControl()
+            view.activeTint = .lightGray
+            view.inactiveTint = .white
+            return view
+        }
     }()
     
     lazy var moreActionButton:ConsoleMenuButton = {

@@ -30,7 +30,6 @@ class PTSwiftViewController: PTBaseViewController {
     fileprivate var cancellables = Set<AnyCancellable>()
 
     lazy var cycleView: PTCycleScrollView = {
-        
         let banner = PTCycleScrollView.cycleScrollViewWithArrow(arrowLRImages: ["🖼️".emojiToImage(emojiFont: .appfont(size: 20)),"▶️".emojiToImage(emojiFont: .appfont(size: 20))])
         // 滚动间隔时间(默认为2秒)
         banner.autoScrollTimeInterval = 3.0
@@ -51,7 +50,7 @@ class PTSwiftViewController: PTBaseViewController {
         banner.customPageControlIndicatorPadding = 5.0
         // 设置PageControl的位置 (.left, .right 默认为.center)
         banner.pageControlPosition = .right
-        banner.scrollDirection = .vertical
+        banner.scrollDirection = .horizontal
         // 圆角
         banner.backgroundColor = .clear
         return banner

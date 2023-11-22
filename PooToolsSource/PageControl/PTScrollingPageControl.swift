@@ -126,8 +126,7 @@ public class PTScrollingPageControl: UIView {
             "frame": NSNull(),
             "position": NSNull()]
         return layer
-        }()
-    
+    }()
     
     // MARK: - Init
     
@@ -238,19 +237,21 @@ public class PTScrollingPageControl: UIView {
     override open func layoutSubviews() {
         super.layoutSubviews()
         // layout containers
-        inactiveLayersContainer.frame = self.bounds
-        inactiveLayerMask.frame = self.bounds
-        activeLayersContainer.frame = self.bounds
-        activeLayerMask.frame = self.bounds
-        // layout indicators
-        if let layers = inactiveLayersContainer.sublayers {
-            layoutPageIndicators(layers, container: inactiveLayersContainer)
+        PTGCDManager.gcdAfter(time: 0.1) {
+            self.inactiveLayersContainer.frame = self.bounds
+            self.inactiveLayerMask.frame = self.bounds
+            self.activeLayersContainer.frame = self.bounds
+            self.activeLayerMask.frame = self.bounds
+            // layout indicators
+            if let layers = self.inactiveLayersContainer.sublayers {
+                self.layoutPageIndicators(layers, container: self.inactiveLayersContainer)
+            }
+            if let layers = self.activeLayersContainer.sublayers {
+                self.layoutPageIndicators(layers, container: self.activeLayersContainer)
+            }
+            // update ring
+            self.center(self.ringLayer)
+            self.layoutFor(self.progress)
         }
-        if let layers = activeLayersContainer.sublayers {
-            layoutPageIndicators(layers, container: activeLayersContainer)
-        }
-        // update ring
-        center(ringLayer)
-        layoutFor(progress)
     }
 }

@@ -56,4 +56,15 @@ public class PTMediaBrowserConfig: NSObject {
     public var dynamicBackground:Bool = false
     ///更多文字设置
     public var showMore:String = "...\("PT More".localized())"
+    
+    public var pageControlOption:PTMediaPageControlOption = .scrolling
+
+    public enum PTMediaPageControlOption:Int {
+        case system
+        case fill
+        case pill
+        case snake
+        case image
+        case scrolling
+    }
 }
