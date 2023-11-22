@@ -342,6 +342,7 @@
 		55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E80DB128ED63F9004CF2C1 /* PTSignView.swift */; };
 		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
+		55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -364,12 +365,12 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */; };
-		9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */; };
-		9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */; };
-		9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */; };
-		9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */; };
-		9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */; };
-		9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */; };
+		9A14E98628616B4000D7E8EF /* PTCycleScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E97F28616B4000D7E8EF /* PTCycleScrollView.swift */; };
+		9A14E98728616B4000D7E8EF /* PTImagePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */; };
+		9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */; };
+		9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */; };
+		9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */; };
+		9A14E98C28616B4100D7E8EF /* PTPillPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */; };
 		9A14E9992861B9D700D7E8EF /* Int+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */; };
 		9A14E99B2861BB3100D7E8EF /* Float+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */; };
 		9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */; };
@@ -773,6 +774,7 @@
 		55E80DB128ED63F9004CF2C1 /* PTSignView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSignView.swift; sourceTree = "<group>"; };
 		55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsDemoController.swift; sourceTree = "<group>"; };
 		55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_placeholder.png; sourceTree = "<group>"; };
+		55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScrollingPageControl.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -805,12 +807,12 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PooTools_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		9A14E97D2861680D00D7E8EF /* UICollectionView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+PTEX.swift"; sourceTree = "<group>"; };
-		9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollView.swift; sourceTree = "<group>"; };
-		9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLImagePageControl.swift; sourceTree = "<group>"; };
-		9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLSnakePageControl.swift; sourceTree = "<group>"; };
-		9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLFilledPageControl.swift; sourceTree = "<group>"; };
-		9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLCycleScrollViewCell.swift; sourceTree = "<group>"; };
-		9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LLPillPageControl.swift; sourceTree = "<group>"; };
+		9A14E97F28616B4000D7E8EF /* PTCycleScrollView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCycleScrollView.swift; sourceTree = "<group>"; };
+		9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTImagePageControl.swift; sourceTree = "<group>"; };
+		9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTSnakePageControl.swift; sourceTree = "<group>"; };
+		9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFilledPageControl.swift; sourceTree = "<group>"; };
+		9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTCycleScrollViewCell.swift; sourceTree = "<group>"; };
+		9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPillPageControl.swift; sourceTree = "<group>"; };
 		9A14E9982861B9D700D7E8EF /* Int+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+PTEX.swift"; sourceTree = "<group>"; };
 		9A14E99A2861BB3100D7E8EF /* Float+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Float+PTEX.swift"; sourceTree = "<group>"; };
 		9A14E99C2861BC8E00D7E8EF /* PTLanguage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLanguage.swift; sourceTree = "<group>"; };
@@ -913,6 +915,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55E96E342B0DE79A00AB8ADE /* PageControl */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1976,12 +1979,8 @@
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
 			isa = PBXGroup;
 			children = (
-				9A14E97F28616B4000D7E8EF /* LLCycleScrollView.swift */,
-				9A14E98428616B4000D7E8EF /* LLCycleScrollViewCell.swift */,
-				9A14E98328616B4000D7E8EF /* LLFilledPageControl.swift */,
-				9A14E98028616B4000D7E8EF /* LLImagePageControl.swift */,
-				9A14E98528616B4000D7E8EF /* LLPillPageControl.swift */,
-				9A14E98128616B4000D7E8EF /* LLSnakePageControl.swift */,
+				9A14E97F28616B4000D7E8EF /* PTCycleScrollView.swift */,
+				9A14E98428616B4000D7E8EF /* PTCycleScrollViewCell.swift */,
 			);
 			path = ScrollBanner;
 			sourceTree = "<group>";
@@ -2004,6 +2003,18 @@
 				552893122AE65125009135F9 /* PTTip.swift */,
 			);
 			path = iOS17Tips;
+			sourceTree = "<group>";
+		};
+		55E96E342B0DE79A00AB8ADE /* PageControl */ = {
+			isa = PBXGroup;
+			children = (
+				9A14E98328616B4000D7E8EF /* PTFilledPageControl.swift */,
+				9A14E98028616B4000D7E8EF /* PTImagePageControl.swift */,
+				9A14E98528616B4000D7E8EF /* PTPillPageControl.swift */,
+				9A14E98128616B4000D7E8EF /* PTSnakePageControl.swift */,
+				55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */,
+			);
+			path = PageControl;
 			sourceTree = "<group>";
 		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
@@ -2331,6 +2342,7 @@
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
+				55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */,
 				55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */,
 				5585F7192AD2BC7D00F878B4 /* PTVideoEditorTimeLineViewController.swift in Sources */,
 				55D59C6E28F54D9500B4FF76 /* PTFusionCellModel.swift in Sources */,
@@ -2421,11 +2433,11 @@
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
-				9A14E98A28616B4100D7E8EF /* LLFilledPageControl.swift in Sources */,
+				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
 				55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
-				9A14E98728616B4000D7E8EF /* LLImagePageControl.swift in Sources */,
+				9A14E98728616B4000D7E8EF /* PTImagePageControl.swift in Sources */,
 				55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */,
 				555818D62AFA81980051C0AA /* Locale+PTEX.swift in Sources */,
 				5585F6DD2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift in Sources */,
@@ -2464,7 +2476,7 @@
 				5585F6E92AD29FC100F878B4 /* PTVideoEditorFullscreenVideoPlayerController.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
-				9A14E98828616B4100D7E8EF /* LLSnakePageControl.swift in Sources */,
+				9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */,
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
@@ -2556,7 +2568,7 @@
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
 				555818C02AFA63FB0051C0AA /* View+PTEX.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
-				9A14E98628616B4000D7E8EF /* LLCycleScrollView.swift in Sources */,
+				9A14E98628616B4000D7E8EF /* PTCycleScrollView.swift in Sources */,
 				55B4FA1C2AE0FEB6006D35F3 /* PTPermissionTracking.swift in Sources */,
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
@@ -2574,7 +2586,7 @@
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
 				5585F6CF2AD299B700F878B4 /* PTVideoEditResult.swift in Sources */,
-				9A14E98B28616B4100D7E8EF /* LLCycleScrollViewCell.swift in Sources */,
+				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
 				5571F6152AFD304800DB4420 /* PTLocale.swift in Sources */,
 				5507026428F6A0CB00C48239 /* PTMainSegmentModel.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
@@ -2622,7 +2634,7 @@
 				5571F60C2AFD21BA00DB4420 /* PTAppDelegate.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
 				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,
-				9A14E98C28616B4100D7E8EF /* LLPillPageControl.swift in Sources */,
+				9A14E98C28616B4100D7E8EF /* PTPillPageControl.swift in Sources */,
 				5507026328F6A0CB00C48239 /* PTMainSegmentCell.swift in Sources */,
 				55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */,
 				554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */,

@@ -29,9 +29,9 @@ class PTSwiftViewController: PTBaseViewController {
     private var videoEdit: PTVideoEdit?
     fileprivate var cancellables = Set<AnyCancellable>()
 
-    lazy var cycleView: LLCycleScrollView = {
+    lazy var cycleView: PTCycleScrollView = {
         
-        let banner = LLCycleScrollView.llCycleScrollViewWithFrame(.zero)
+        let banner = PTCycleScrollView.cycleScrollViewCreate()
 //        banner.delegate = self
         // 滚动间隔时间(默认为2秒)
         banner.autoScrollTimeInterval = 3.0
@@ -40,10 +40,10 @@ class PTSwiftViewController: PTBaseViewController {
         // 如果没有数据的时候，使用的封面图
         banner.coverImage = PTAppBaseConfig.share.defaultPlaceholderImage
         // 设置图片显示方式=UIImageView的ContentMode
-        banner.imageViewContentMode = .scaleAspectFill
+        banner.imageViewContentMode = .scaleAspectFit
         banner.viewCorner(radius: 10)
         // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
-        banner.customPageControlStyle = .pill
+        banner.customPageControlStyle = .snake
         // 非.system的状态下，设置PageControl的tintColor
         banner.customPageControlInActiveTintColor = UIColor.lightGray
         // 设置.system系统的UIPageControl当前显示的颜色
@@ -51,7 +51,7 @@ class PTSwiftViewController: PTBaseViewController {
         // 非.system的状态下，设置PageControl的间距(默认为8.0)
         banner.customPageControlIndicatorPadding = 5.0
         // 设置PageControl的位置 (.left, .right 默认为.center)
-        banner.pageControlPosition = .center
+        banner.pageControlPosition = .right
         // 圆角
         banner.backgroundColor = .clear
         return banner
@@ -101,8 +101,8 @@ class PTSwiftViewController: PTBaseViewController {
 //        layoutBtn.addActionHandlers { sender in
 //        }
         
-        cycleView.titles = ["1","2","3","4","5","6"]
-        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png","DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"]
+        cycleView.titles = ["1","2","3"/*,"4","5","6"*/]
+        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png"/*,"DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"*/]
         self.view.addSubview(cycleView)
         cycleView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)

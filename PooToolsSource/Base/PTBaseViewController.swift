@@ -16,7 +16,6 @@ import AttributedString
 import Photos
 import SnapKit
 import SafeSFSymbols
-import FloatingPanel
 #if POOTOOLS_LISTEMPTYDATA
 import LXFProtocolTool
 #endif
@@ -203,6 +202,7 @@ extension PTBaseViewController {
         } else {
             self.navigationController?.popViewController(animated: true, completion)
         }
+#if POOTOOLS_DEBUG
         SwizzleTool().swizzleDidAddSubview {
             // Configure console window.
             let lcm = LocalConsole.shared
@@ -213,6 +213,7 @@ extension PTBaseViewController {
                 PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
             }
         }
+#endif
     }
     
     //MARK: 截图反馈注册

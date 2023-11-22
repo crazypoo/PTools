@@ -272,6 +272,7 @@ PODS:
     - PooTools/NetWork
     - PooTools/NotificationBanner
     - PooTools/OSSKitSpeech
+    - PooTools/PageControl
     - PooTools/PagingControl
     - PooTools/PhoneInfo
     - PooTools/Picker
@@ -354,6 +355,8 @@ PODS:
   - PooTools/OSSKitSpeech (3.19.1):
     - PooTools/Core
     - PooTools/SpeechRecognizerPermission
+  - PooTools/PageControl (3.19.1):
+    - PooTools/Core
   - PooTools/PagingControl (3.19.1):
     - JXPagingView/Paging
     - JXSegmentedView
@@ -382,6 +385,7 @@ PODS:
     - PooTools/ImagePicker
   - PooTools/ScrollBanner (3.19.1):
     - PooTools/Core
+    - PooTools/PageControl
   - PooTools/ScrollRefresh (3.19.1):
     - MJRefresh
     - PooTools/Core
@@ -660,7 +664,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: f3980e01b84615524dd496adee6a1b5ced87d3f4
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: e2d603b82258a0a37533a2fac1c41420997b149b
+  PooTools: 3b53e368324ad3b555f9b5a66310ecfc768d2603
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5

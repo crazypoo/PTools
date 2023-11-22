@@ -520,9 +520,24 @@
       }
     },
     {
+      "name": "PageControl",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/PageControl/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PAGECONTROL POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "ScrollBanner",
       "dependencies": {
         "PooTools/Core": [
+
+        ],
+        "PooTools/PageControl": [
 
         ]
       },
@@ -1406,6 +1421,9 @@
 
         ],
         "PooTools/Rotation": [
+
+        ],
+        "PooTools/PageControl": [
 
         ],
         "PooTools/ScrollBanner": [

@@ -73,6 +73,8 @@ pod 'PooTools/PhoneInfo', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/RateView', :git => 'https://github.com/crazypoo/PTools.git'
 ### 屏幕旋转
 pod 'PooTools/Rotation', :git => 'https://github.com/crazypoo/PTools.git'
+### PageControl
+pod 'PooTools/PageControl', :git => 'https://github.com/crazypoo/PTools.git'
 ### Banner
 pod 'PooTools/ScrollBanner', :git => 'https://github.com/crazypoo/PTools.git'
 ### SearchBar

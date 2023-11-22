@@ -75,14 +75,17 @@ public class PTLoadImageFunction: NSObject {
             } else {
                 if let image = UIImage(named: dataUrlString) {
                     taskHandle([image],image)
-                } else {
-                    let systemImage = UIImage(systemName: dataUrlString)!
+                } else if let systemImage = UIImage(systemName: dataUrlString) {
                     taskHandle([systemImage],systemImage)
+                } else {
+                    taskHandle(nil,nil)
                 }
             }
         } else if contentData is Data {
             let dataImage = UIImage(data: contentData as! Data)!
             taskHandle([dataImage],dataImage)
+        } else {
+            taskHandle(nil,nil)
         }
     }
 }

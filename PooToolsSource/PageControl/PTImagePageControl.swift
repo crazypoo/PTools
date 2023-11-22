@@ -1,15 +1,15 @@
 //
-//  LLImagePageControl.swift
-//  LLCycleScrollView
+//  PTImagePageControl.swift
+//  PooTools_Example
 //
-//  Created by LvJianfeng on 2017/11/17.
-//  Copyright © 2017年 LvJianfeng. All rights reserved.
+//  Created by 邓杰豪 on 22/11/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
 //
 
 import UIKit
 import Foundation
 
-open class LLImagePageControl: UIPageControl {
+open class PTImagePageControl: UIPageControl {
 
     
     open var dotInActiveImage: UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")

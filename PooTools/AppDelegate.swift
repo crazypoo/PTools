@@ -166,9 +166,13 @@ class AppDelegate: PTAppWindowsDelegate {
             }
         }
         
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(String(describing: OSSVoiceEnum.ChineseSimplified.flag))")
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(self.minCount(counts:0))")
         
         return true
+    }
+    
+    func minCount(@PTClampedProperyWrapper(range:1...10) counts:Int) ->Int {
+        return counts
     }
 }
 

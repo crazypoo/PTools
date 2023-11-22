@@ -1,19 +1,16 @@
 //
-//  LLFilledPageControl.swift
-//  LL 使用备注
-//  https://github.com/popwarsweet/PageControls
+//  PTFilledPageControl.swift
+//  PooTools_Example
 //
-//  Created by Kyle Zaragoza on 8/6/16.
-//  Copyright © 2016 Kyle Zaragoza. All rights reserved.
+//  Created by 邓杰豪 on 22/11/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
 //
 
 import UIKit
 
-open class LLFilledPageControl: UIView {
+open class PTFilledPageControl: UIView {
     
-    // MARK: - PageControl
-    
-    
+    // MARK: - PageControl    
     open var pageCount: Int = 0 {
         didSet {
             updateNumberOfPages(pageCount)
@@ -116,7 +113,7 @@ open class LLFilledPageControl: UIView {
         // adjust masks
         for (idx, layer) in inactiveLayers.enumerated() {
             let maskLayer = CAShapeLayer()
-            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+            maskLayer.fillRule = .evenOdd
             
             let boundsPath = UIBezierPath(rect: layer.bounds)
             let circlePath: UIBezierPath
@@ -141,10 +138,6 @@ open class LLFilledPageControl: UIView {
             layer.frame = layerFrame
             layerFrame.origin.x += layerDiameter + indicatorPadding
         }
-        // 布局
-        let oldFrame = frame
-        let width = CGFloat(inactiveLayers.count) * layerDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding
-        frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
     }
     
     override open var intrinsicContentSize: CGSize {

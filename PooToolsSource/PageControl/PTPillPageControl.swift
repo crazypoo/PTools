@@ -1,15 +1,14 @@
 //
-//  LLSnakePageControl.swift
-//  LL 使用备注
-//  https://github.com/popwarsweet/PageControls
+//  PTPillPageControl.swift
+//  PooTools_Example
 //
-//  Created by Kyle Zaragoza on 8/5/16.
-//  Copyright © 2016 Kyle Zaragoza. All rights reserved.
+//  Created by 邓杰豪 on 22/11/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
 //
 
 import UIKit
 
-open class LLSnakePageControl: UIView {
+open class PTPillPageControl: UIView {
     
     // MARK: - PageControl
     
@@ -30,6 +29,11 @@ open class LLSnakePageControl: UIView {
     
     // MARK: - Appearance
     
+    open var pillSize: CGSize = CGSize(width: 20, height: 2.5) {
+        didSet {
+            
+        }
+    }
     open var activeTint: UIColor = UIColor.white {
         didSet {
             activeLayer.backgroundColor = activeTint.cgColor
@@ -40,40 +44,31 @@ open class LLSnakePageControl: UIView {
             inactiveLayers.forEach { $0.backgroundColor = inactiveTint.cgColor }
         }
     }
-    open var indicatorPadding: CGFloat = 10 {
-        didSet {
-            layoutInactivePageIndicators(inactiveLayers)
-        }
-    }
-    open var indicatorRadius: CGFloat = 5 {
+    open var indicatorPadding: CGFloat = 7 {
         didSet {
             layoutInactivePageIndicators(inactiveLayers)
         }
     }
     
-    fileprivate var indicatorDiameter: CGFloat {
-        indicatorRadius * 2
-    }
     fileprivate var inactiveLayers = [CALayer]()
+    
     fileprivate lazy var activeLayer: CALayer = { [unowned self] in
         let layer = CALayer()
-        layer.frame = CGRect(origin: CGPoint.zero,
-                             size: CGSize(width: indicatorDiameter, height: indicatorDiameter))
+        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: pillSize.width, height: pillSize.height))
         layer.backgroundColor = activeTint.cgColor
-        layer.cornerRadius = indicatorRadius
+        layer.cornerRadius = pillSize.height/2
         layer.actions = [
             "bounds": NSNull(),
             "frame": NSNull(),
             "position": NSNull()]
         return layer
-        }()
+    }()
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
         pageCount = 0
         progress = 0
-        indicatorPadding = 8
-        indicatorRadius = 4
+        indicatorPadding = 7
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -108,27 +103,17 @@ open class LLSnakePageControl: UIView {
     fileprivate func layoutActivePageIndicator(_ progress: CGFloat) {
         // ignore if progress is outside of page indicators' bounds
         guard progress >= 0 && progress <= CGFloat(pageCount - 1) else { return }
-        let denormalizedProgress = progress * (indicatorDiameter + indicatorPadding)
-        let distanceFromPage = abs(round(progress) - progress)
-        var newFrame = activeLayer.frame
-        let widthMultiplier = (1 + distanceFromPage*2)
-        newFrame.origin.x = denormalizedProgress
-        newFrame.size.width = newFrame.height * widthMultiplier
-        activeLayer.frame = newFrame
+        let denormalizedProgress = progress * (pillSize.width + indicatorPadding)
+        activeLayer.frame.origin.x = denormalizedProgress
     }
     
     fileprivate func layoutInactivePageIndicators(_ layers: [CALayer]) {
-        let layerDiameter = indicatorRadius * 2
-        var layerFrame = CGRect(x: 0, y: 0, width: layerDiameter, height: layerDiameter)
+        var layerFrame = CGRect(origin: CGPoint.zero, size: pillSize)
         layers.forEach { layer in
-            layer.cornerRadius = indicatorRadius
+            layer.cornerRadius = layerFrame.size.height / 2
             layer.frame = layerFrame
-            layerFrame.origin.x += layerDiameter + indicatorPadding
+            layerFrame.origin.x += layerFrame.width + indicatorPadding
         }
-        // 布局
-        let oldFrame = frame
-        let width = CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding
-        frame = CGRect.init(x: UIScreen.main.bounds.width / 2 - width / 2, y: oldFrame.origin.y, width: width, height: oldFrame.size.height)
     }
     
     override open var intrinsicContentSize: CGSize {
@@ -136,7 +121,8 @@ open class LLSnakePageControl: UIView {
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {
-        CGSize(width: CGFloat(inactiveLayers.count) * indicatorDiameter + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
-                height: indicatorDiameter)
+        CGSize(width: CGFloat(inactiveLayers.count) * pillSize.width + CGFloat(inactiveLayers.count - 1) * indicatorPadding,
+                height: pillSize.height)
     }
 }
+

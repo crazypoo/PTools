@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.19.1'
+    s.version     = '3.19.2'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -282,8 +282,17 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'PageControl' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/PageControl/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PAGECONTROL POOTOOLS_COCOAPODS"
+        }
+    end
+
     s.subspec 'ScrollBanner' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/PageControl'
         subspec.source_files = 'PooToolsSource/ScrollBanner/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SCROLLBANNER POOTOOLS_COCOAPODS"
@@ -816,6 +825,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/PhoneInfo'
         subspec.dependency 'PooTools/RateView'
         subspec.dependency 'PooTools/Rotation'
+        subspec.dependency 'PooTools/PageControl'
         subspec.dependency 'PooTools/ScrollBanner'
         subspec.dependency 'PooTools/SearchBar'
         subspec.dependency 'PooTools/Segmented'

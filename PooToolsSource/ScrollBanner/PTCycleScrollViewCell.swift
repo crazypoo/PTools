@@ -9,7 +9,8 @@
 import UIKit
 import SnapKit
 
-class LLCycleScrollViewCell: UICollectionViewCell {
+class PTCycleScrollViewCell: PTBaseNormalCell {
+    static let ID = "PTCycleScrollViewCell"
     
     // 标题
     var title: String = "" {
@@ -19,7 +20,7 @@ class LLCycleScrollViewCell: UICollectionViewCell {
             if title.count > 0 {
                 titleBackView.isHidden = false
                 titleLabel.isHidden = false
-            }else{
+            } else {
                 titleBackView.isHidden = true
                 titleLabel.isHidden = true
             }
