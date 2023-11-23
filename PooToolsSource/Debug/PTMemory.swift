@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 
 open class PTMemory: NSObject {
-    static let share = PTMemory()
+    public static let share = PTMemory()
     
     public var closed:Bool = true
 

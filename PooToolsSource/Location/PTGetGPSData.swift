@@ -11,7 +11,7 @@ import CoreLocation
 
 @objcMembers
 public class PTGetGPSData: NSObject {
-    static let share = PTGetGPSData()
+    public static let share = PTGetGPSData()
     public var errorBlock:PTActionTask?
     public var selectCurrentBlock:PTActionTask?
     public var selectNewBlock:PTActionTask?

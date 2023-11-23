@@ -21,7 +21,7 @@ public extension CGFloat {
 }
 
 open class PTColorPickPlugin : NSObject {
-    static let share = PTColorPickPlugin()
+    public static let share = PTColorPickPlugin()
     
     public var showed:Bool = false
     

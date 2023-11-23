@@ -12,7 +12,7 @@ import AttributedString
 import SwifterSwift
 
 open class PTViewRulerPlugin: NSObject {
-    static let share = PTViewRulerPlugin.init()
+    public static let share = PTViewRulerPlugin.init()
     
     fileprivate lazy var rulerView:PTRulerInfoView = {
         let view = PTRulerInfoView()

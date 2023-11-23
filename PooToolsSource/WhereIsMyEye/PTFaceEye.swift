@@ -12,7 +12,7 @@ import UIKit
 @objcMembers
 public class PTFaceEye: NSObject {
     ///初始化单例
-    static let share = PTFaceEye()
+    public static let share = PTFaceEye()
     
     ///EyeTracking在屏幕展示的位置回调
     public var eyeLookAt:((_ point:CGPoint)->Void)?

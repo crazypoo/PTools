@@ -32,7 +32,7 @@ public class PTContractSubModel:NSObject {
 @objcMembers
 public class PTContract: NSObject {
 
-    static let share = PTContract()
+    public static let share = PTContract()
     
     func getContractData(handle: @escaping (_ model:PTContractIndexModel?)->Void) {
         PTGCDManager.gcdGobal(qosCls: .background) {

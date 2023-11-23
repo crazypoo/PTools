@@ -12,8 +12,8 @@ import VisionKit
 
 @available(iOS 14.0,*)
 public class PTVision: NSObject {
-    static let share = PTVision()
-    
+    public static let share = PTVision()
+
     //MARK: OCR查找文字方法(UIImage)
     ///OCR查找文字方法(UIImage)
     /// - Parameters:
