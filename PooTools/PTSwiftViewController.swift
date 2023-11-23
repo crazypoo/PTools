@@ -30,7 +30,8 @@ class PTSwiftViewController: PTBaseViewController {
     fileprivate var cancellables = Set<AnyCancellable>()
 
     lazy var cycleView: PTCycleScrollView = {
-        let banner = PTCycleScrollView.cycleScrollViewWithArrow(arrowLRImages: ["🖼️".emojiToImage(emojiFont: .appfont(size: 20)),"▶️".emojiToImage(emojiFont: .appfont(size: 20))])
+        let banner = PTCycleScrollView.cycleScrollViewCreate()
+//        let banner = PTCycleScrollView.cycleScrollViewWithArrow(arrowLRImages: ["🖼️".emojiToImage(emojiFont: .appfont(size: 20)),"▶️".emojiToImage(emojiFont: .appfont(size: 20))])
         // 滚动间隔时间(默认为2秒)
         banner.autoScrollTimeInterval = 3.0
         // 等待数据状态显示的占位图
@@ -41,7 +42,7 @@ class PTSwiftViewController: PTBaseViewController {
         banner.imageViewContentMode = .scaleAspectFit
         banner.viewCorner(radius: 10)
         // 设置当前PageControl的样式 (.none, .system, .fill, .pill, .snake)
-        banner.customPageControlStyle = .snake
+        banner.customPageControlStyle = .scrolling
         // 非.system的状态下，设置PageControl的tintColor
         banner.customPageControlInActiveTintColor = UIColor.lightGray
         // 设置.system系统的UIPageControl当前显示的颜色
@@ -49,7 +50,7 @@ class PTSwiftViewController: PTBaseViewController {
         // 非.system的状态下，设置PageControl的间距(默认为8.0)
         banner.customPageControlIndicatorPadding = 5.0
         // 设置PageControl的位置 (.left, .right 默认为.center)
-        banner.pageControlPosition = .right
+        banner.pageControlPosition = .left
         banner.scrollDirection = .horizontal
         // 圆角
         banner.backgroundColor = .clear

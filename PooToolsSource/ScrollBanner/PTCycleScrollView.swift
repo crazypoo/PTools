@@ -268,19 +268,13 @@ public class PTCycleScrollView: UIView {
             setNeedsDisplay()
         }
     }
-    
-    /// 开启/关闭URL特殊字符处理
-    open var isAddingPercentEncodingForURLString: Bool = false
-    
+        
     open var iCloudDocument:String = ""
     
     // MARK: - Private
     
     /// 注意： 由于属性较多，所以请使用style对应的属性，如果没有标明则通用
     /// PageControl
-    fileprivate var pageControl: UIPageControl?
-
-    /// Custom PageControl
     fileprivate var customPageControl: UIView?
 
     /// 总数量
@@ -316,7 +310,7 @@ public class PTCycleScrollView: UIView {
         
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
-        cConfig.collectionViewBehavior = .paging
+        cConfig.collectionViewBehavior = .groupPaging
         cConfig.showsVerticalScrollIndicator = false
         cConfig.showsHorizontalScrollIndicator = false
 
@@ -325,20 +319,19 @@ public class PTCycleScrollView: UIView {
             switch self.scrollDirection {
             case .horizontal:
                 var bannerGroupSize : NSCollectionLayoutSize
-                var customers = [NSCollectionLayoutGroupCustomItem]()
+                var customers = [NSCollectionLayoutItem]()
                 var groupW:CGFloat = 0
                 let screenW:CGFloat = self.frame.size.width
                 var cellHeight:CGFloat = self.frame.size.height
                 sectionModel.rows.enumerated().forEach { (index,model) in
-                    let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: CGFloat(index) * screenW, y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
-                    customers.append(customItem)
+                    let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(screenW), heightDimension: .absolute(cellHeight))
+                    let item = NSCollectionLayoutItem(layoutSize: itemSize)
+                    customers.append(item)
                     groupW += screenW
                 }
                 bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
-                return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-                    customers
-                })
-            case .vertical:
+                return NSCollectionLayoutGroup.horizontal(layoutSize: bannerGroupSize, subitems: customers)
+            default:
                 var bannerGroupSize : NSCollectionLayoutSize
                 var customers = [NSCollectionLayoutGroupCustomItem]()
                 var groupH:CGFloat = 0
@@ -353,8 +346,6 @@ public class PTCycleScrollView: UIView {
                 return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
                     customers
                 })
-            default:
-                return NSCollectionLayoutGroup.init(layoutSize: NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(0), heightDimension: NSCollectionLayoutDimension.absolute(0)))
             }
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
@@ -397,6 +388,61 @@ public class PTCycleScrollView: UIView {
                     }
                 }
             }
+            
+            switch self.scrollDirection {
+            case .horizontal:
+                var pointStart = CGPointZero
+                let currentX = self.collectionView.contentCollectionView.contentOffset.x
+                let panGes = UIPanGestureRecognizer() { sender in
+                    let obj = sender as! UIPanGestureRecognizer
+                    let point = obj.location(in: self)
+                    switch obj.state {
+                    case .possible:
+                        break
+                    case .began:
+                        pointStart = obj.location(in: self)
+                        PTNSLogConsole("我要开始列")
+                        if self.autoScroll {
+                            self.invalidateTimer()
+                        }
+                    case .changed:
+                        if self.autoScroll {
+                            self.invalidateTimer()
+                        }
+                        PTNSLogConsole("我要变化了")
+                        let collectionX = currentX + (pointStart.x - point.x)
+                        PTNSLogConsole("current:\(point)\nstartPoint:\(pointStart)\ncollectionX:\(collectionX)")
+
+                        self.collectionView.contentCollectionView.contentOffset = CGPointMake(collectionX, self.collectionView.contentCollectionView.contentOffset.y)
+                    case .ended:
+                        if self.autoScroll {
+                            self.setupTimer()
+                        }
+                        
+                        if pointStart.x < point.x {
+                            var index = self.currentIndex() - 1
+                            if index <= 0 {
+                                index = 0
+                            }
+                            self.collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: index, section: 0), at: self.position, animated: true)
+                            self.setProgressIndex(index: CGFloat(index))
+                        } else {
+                            var index = self.currentIndex() + 1
+                            if index >= (self.imagePaths.count - 1) {
+                                index = (self.imagePaths.count - 1)
+                            }
+                            self.collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: index, section: 0), at: self.position, animated: true)
+                            
+                            self.setProgressIndex(index: CGFloat(self.pageControlIndexWithCurrentCellIndex(index: index)))
+                        }
+                    default:
+                        break
+                    }
+                }
+                cell.addGestureRecognizer(panGes)
+            default:
+                break
+            }
             return cell
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
@@ -406,17 +452,17 @@ public class PTCycleScrollView: UIView {
         }
         view.collectionViewDidScroll = { collection in
             if self.imagePaths.count == 0 { return }
-            self.calcScrollViewToScroll(collection)
             
+            let index: NSInteger = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first ?? UICollectionViewCell())?.row ?? 0
+
+            self.setProgressIndex(index: CGFloat(index))
+
             if self.scrollViewDidScrollClosure != nil {
                 var offSet: CGFloat = 0
-                var index: NSInteger = 1
                 switch self.scrollDirection {
                 case .horizontal:
-                    index = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first!)!.row
                     offSet = self.collectionView.contentCollectionView.contentOffset.x -  self.frame.size.width * CGFloat(index)
                 case .vertical:
-                    index = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first!)!.row
                     offSet = self.collectionView.contentCollectionView.contentOffset.y - self.frame.size.height * CGFloat(index)
                 default:
                     break
@@ -425,10 +471,15 @@ public class PTCycleScrollView: UIView {
                 let currentIndex = self.pageControlIndexWithCurrentCellIndex(index: NSInteger(index))
                 self.scrollViewDidScrollClosure!(currentIndex,offSet)
             }
+            
+            if self.autoScroll {
+                self.setupTimer()
+            }
         }
         
         view.collectionWillBeginDragging = { collection in
             self.cycleScrollViewScrollToIndex()
+
             if self.autoScroll {
                 self.invalidateTimer()
             }
@@ -632,10 +683,6 @@ extension PTCycleScrollView {
     func setupPageControl() {
         
         // 重新添加
-        if pageControl != nil {
-            pageControl?.removeFromSuperview()
-        }
-        
         if customPageControl != nil {
             customPageControl?.removeFromSuperview()
         }
@@ -646,67 +693,62 @@ extension PTCycleScrollView {
         
         switch customPageControlStyle {
         case .none:
-            pageControl = UIPageControl.init()
-            pageControl?.numberOfPages = imagePaths.count
-            addSubview(pageControl!)
-            pageControl?.isHidden = true
+            customPageControl = UIView()
+            addSubview(customPageControl!)
+            customPageControl?.isHidden = true
         case .system:
-            pageControl = UIPageControl.init()
-            pageControl?.pageIndicatorTintColor = pageControlTintColor
-            pageControl?.currentPageIndicatorTintColor = pageControlCurrentPageColor
-            pageControl?.numberOfPages = imagePaths.count
-            addSubview(pageControl!)
-            pageControl?.isHidden = false
+            customPageControl = UIPageControl()
+            (customPageControl as! UIPageControl).pageIndicatorTintColor = pageControlTintColor
+            (customPageControl as! UIPageControl).currentPageIndicatorTintColor = pageControlCurrentPageColor
+            (customPageControl as! UIPageControl).numberOfPages = imagePaths.count
+            addSubview(customPageControl!)
+            customPageControl?.isHidden = false
         case .fill:
-            customPageControl = PTFilledPageControl.init(frame: CGRect.zero)
+            customPageControl = PTFilledPageControl()
             customPageControl?.tintColor = customPageControlTintColor
             (customPageControl as! PTFilledPageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! PTFilledPageControl).indicatorRadius = fillPageControlIndicatorRadius
             (customPageControl as! PTFilledPageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
-            pageControl?.isHidden = false
+            customPageControl?.isHidden = false
         case .pill:
-            customPageControl = PTPillPageControl.init(frame: CGRect.zero)
+            customPageControl = PTPillPageControl()
             (customPageControl as! PTPillPageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! PTPillPageControl).activeTint = customPageControlTintColor
             (customPageControl as! PTPillPageControl).inactiveTint = customPageControlInActiveTintColor
             (customPageControl as! PTPillPageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
-            pageControl?.isHidden = false
+            customPageControl?.isHidden = false
         case .snake:
-            customPageControl = PTSnakePageControl.init(frame: CGRect.zero)
+            customPageControl = PTSnakePageControl()
             (customPageControl as! PTSnakePageControl).activeTint = customPageControlTintColor
             (customPageControl as! PTSnakePageControl).indicatorPadding = customPageControlIndicatorPadding
             (customPageControl as! PTSnakePageControl).indicatorRadius = fillPageControlIndicatorRadius
             (customPageControl as! PTSnakePageControl).inactiveTint = customPageControlInActiveTintColor
             (customPageControl as! PTSnakePageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
-            pageControl?.isHidden = false
+            customPageControl?.isHidden = false
         case .image:
-            pageControl = PTImagePageControl()
-            pageControl?.pageIndicatorTintColor = UIColor.clear
-            pageControl?.currentPageIndicatorTintColor = UIColor.clear
+            customPageControl = PTImagePageControl()
+            (customPageControl as! PTImagePageControl).pageIndicatorTintColor = UIColor.clear
+            (customPageControl as! PTImagePageControl).currentPageIndicatorTintColor = UIColor.clear
             
             if let activeImage = pageControlActiveImage {
-                (pageControl as? PTImagePageControl)?.dotActiveImage = activeImage
+                (customPageControl as! PTImagePageControl).dotActiveImage = activeImage
             }
             if let inActiveImage = pageControlInActiveImage {
-                (pageControl as? PTImagePageControl)?.dotInActiveImage = inActiveImage
+                (customPageControl as! PTImagePageControl).dotInActiveImage = inActiveImage
             }
             
-            pageControl?.numberOfPages = imagePaths.count
-            addSubview(pageControl!)
-            pageControl?.isHidden = false
+            (customPageControl as! PTImagePageControl).numberOfPages = imagePaths.count
+            addSubview(customPageControl!)
+            customPageControl?.isHidden = false
         case .scrolling:
             customPageControl = PTScrollingPageControl()
-                        
             (customPageControl as? PTScrollingPageControl)?.pageCount = imagePaths.count
-
             addSubview(customPageControl!)
             customPageControl?.isHidden = false
         }
-        
-        calcScrollViewToScroll(collectionView.contentCollectionView)
     }
 }
 
@@ -741,39 +783,32 @@ extension PTCycleScrollView {
             self.cellHeight = self.collectionView.frame.height
             
             // 计算最大扩展区大小
-            if self.scrollDirection == .horizontal {
+            switch self.scrollDirection {
+            case .horizontal:
                 self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.width
-            } else {
+            default:
                 self.maxSwipeSize = CGFloat(self.imagePaths.count) * self.collectionView.frame.height
             }
             
             // Page Frame
             switch self.customPageControlStyle {
             case .none,.system,.image:
-                let pointSize = self.pageControl?.size(forNumberOfPages: self.imagePaths.count)
-                switch self.pageControlPosition {
-                case .center:
-                    self.pageControl?.snp.makeConstraints { make in
+                let pointSize = (self.customPageControl as? UIPageControl)?.size(forNumberOfPages: self.imagePaths.count)
+                (self.customPageControl as? UIPageControl)?.snp.makeConstraints { make in
+                    make.height.equalTo(10)
+                    make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                    switch self.pageControlPosition {
+                    case .center:
                         make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.height.equalTo(10)
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    }
-                case .left:
-                    self.pageControl?.snp.makeConstraints { make in
-                        make.height.equalTo(10)
+                    case .left:
                         make.width.equalTo(pointSize?.width ?? 0)
                         make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    }
-                case .right:
-                    self.pageControl?.snp.makeConstraints { make in
-                        make.height.equalTo(10)
+                    case .right:
                         make.width.equalTo(pointSize?.width ?? 0)
                         make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                    default:
+                        break
                     }
-                default:
-                    break
                 }
             default:
                 var heights:CGFloat = 10
@@ -785,25 +820,16 @@ extension PTCycleScrollView {
                     heights = 10
                 }
                 
-                switch self.pageControlPosition {
-                case .left:
-                    self.customPageControl?.snp.makeConstraints { make in
-                        make.height.equalTo(heights)
+                self.customPageControl?.snp.makeConstraints { make in
+                    make.height.equalTo(heights)
+                    make.bottom.equalToSuperview().inset(self.pageControlBottom)
+                    switch self.pageControlPosition {
+                    case .left:
                         make.left.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    }
-                case.right:
-                    self.customPageControl?.snp.makeConstraints { make in
-                        make.height.equalTo(heights)
+                    case.right:
                         make.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
-                    }
-                default:
-                    self.customPageControl?.snp.makeConstraints { make in
-                        make.height.equalTo(heights)
-                        make.centerX.equalToSuperview()
+                    default:
                         make.left.right.equalToSuperview().inset((self.pageControlLeadingOrTrialingContact * 0.5))
-                        make.bottom.equalToSuperview().inset(self.pageControlBottom)
                     }
                 }
             }
@@ -896,7 +922,7 @@ extension PTCycleScrollView {
         case .scrolling:
             (customPageControl as? PTScrollingPageControl)?.progress = index
         case .none,.system,.image:
-            pageControl?.currentPage = Int(index)
+            (customPageControl as? UIPageControl)?.currentPage = Int(index)
         default:
             break
         }
@@ -908,7 +934,7 @@ extension PTCycleScrollView {
         if collectionView.pt.jx_width == 0 || collectionView.pt.jx_height == 0 {
             return 0
         }
-        let index = collectionView.contentCollectionView.indexPath(for: collectionView.contentCollectionView.visibleCells.first!)!.row
+        let index = collectionView.contentCollectionView.indexPath(for: collectionView.contentCollectionView.visibleCells.first ?? UICollectionViewCell())?.row ?? 0
         return index
     }
     
@@ -939,69 +965,6 @@ extension PTCycleScrollView {
         let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
         if scrollToClosure != nil {
             scrollToClosure!(indexOnPageControl)
-        }
-    }
-    
-    fileprivate func calcScrollViewToScroll(_ scrollView: UIScrollView) {
-        let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
-        switch customPageControlStyle {
-        case .none,.system,.image:
-            pageControl?.currentPage = indexOnPageControl
-        default:
-            var progress: CGFloat = 999
-            // Direction
-            switch scrollDirection {
-            case .horizontal:
-                var currentOffsetX = scrollView.contentOffset.x - (CGFloat(totalItemsCount) * scrollView.frame.size.width) / 2
-                if currentOffsetX < 0 {
-                    if currentOffsetX >= -scrollView.frame.size.width{
-                        currentOffsetX = CGFloat(indexOnPageControl) * scrollView.frame.size.width
-                    } else if currentOffsetX <= -maxSwipeSize{
-                        collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
-                    } else {
-                        currentOffsetX = maxSwipeSize + currentOffsetX
-                    }
-                }
-                if currentOffsetX >= CGFloat(imagePaths.count) * scrollView.frame.size.width && infiniteLoop{
-                    collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
-                }
-                progress = currentOffsetX / scrollView.frame.size.width
-            case .vertical:
-                var currentOffsetY = scrollView.contentOffset.y - (CGFloat(totalItemsCount) * scrollView.frame.size.height) / 2
-                if currentOffsetY < 0 {
-                    if currentOffsetY >= -scrollView.frame.size.height{
-                        currentOffsetY = CGFloat(indexOnPageControl) * scrollView.frame.size.height
-                    } else if currentOffsetY <= -maxSwipeSize{
-                        collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
-                    } else {
-                        currentOffsetY = maxSwipeSize + currentOffsetY
-                    }
-                }
-                if currentOffsetY >= CGFloat(imagePaths.count) * scrollView.frame.size.height && infiniteLoop{
-                    collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(totalItemsCount/2), section: 0), at: position, animated: false)
-                }
-                progress = currentOffsetY / scrollView.frame.size.height
-            default:
-                break
-            }
-            
-            if progress == 999 {
-                progress = CGFloat(indexOnPageControl)
-            }
-            
-            // progress
-            switch customPageControlStyle {
-            case .fill:
-                (customPageControl as? PTFilledPageControl)?.progress = progress
-            case .pill:
-                (customPageControl as? PTPillPageControl)?.progress = progress
-            case .snake:
-                (customPageControl as? PTSnakePageControl)?.progress = progress
-            case .scrolling:
-                (customPageControl as? PTScrollingPageControl)?.progress = progress
-            default:
-                break
-            }
         }
     }
 }

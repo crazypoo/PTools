@@ -83,6 +83,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         // 默认模式
         view.contentMode = .scaleAspectFill
         view.clipsToBounds = true
+        view.isUserInteractionEnabled = false
         return view
     }()
     fileprivate lazy var titleLabel: UILabel = {
@@ -92,6 +93,7 @@ class PTCycleScrollViewCell: PTBaseNormalCell {
         view.numberOfLines = titleLines
         view.font = titleFont
         view.backgroundColor = UIColor.clear
+        view.isUserInteractionEnabled = false
         return view
     }()
         

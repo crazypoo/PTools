@@ -155,7 +155,7 @@ public class PTCollectionView: UIView {
                 group = customerLayout!(sectionModel!)
             }
         } else {
-            let bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(0), heightDimension: NSCollectionLayoutDimension.absolute(0))
+            let bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(1), heightDimension: NSCollectionLayoutDimension.absolute(1))
             group = NSCollectionLayoutGroup.init(layoutSize: bannerGroupSize)
         }
         
@@ -207,8 +207,9 @@ public class PTCollectionView: UIView {
     fileprivate lazy var collectionView : UICollectionView = {
         let view = UICollectionView.init(frame: .zero, collectionViewLayout: self.comboLayout())
         view.backgroundColor = .clear
-        view.delegate = self
         view.dataSource = self
+        view.delegate = self
+        view.isUserInteractionEnabled = true
         view.showsVerticalScrollIndicator = self.viewConfig.showsVerticalScrollIndicator
         view.showsHorizontalScrollIndicator = self.viewConfig.showsHorizontalScrollIndicator
         if self.viewConfig.topRefresh {
@@ -442,11 +443,11 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     public func showEmptyLoading() {
         PTCollectionView.share.showEmptyLoadingView(showIn: self)
-    }    
+    }        
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
-extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
+extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
 
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         mSections.count
@@ -508,10 +509,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource {
             }
         }
     }
-}
-
-extension PTCollectionView:UIScrollViewDelegate {
-
+    
     public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if collectionViewDidScroll != nil {
             collectionViewDidScroll!(scrollView as! UICollectionView)
