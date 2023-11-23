@@ -648,6 +648,8 @@ extension PTCycleScrollView {
         case .none:
             pageControl = UIPageControl.init()
             pageControl?.numberOfPages = imagePaths.count
+            addSubview(pageControl!)
+            pageControl?.isHidden = true
         case .system:
             pageControl = UIPageControl.init()
             pageControl?.pageIndicatorTintColor = pageControlTintColor
@@ -662,6 +664,7 @@ extension PTCycleScrollView {
             (customPageControl as! PTFilledPageControl).indicatorRadius = fillPageControlIndicatorRadius
             (customPageControl as! PTFilledPageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
+            pageControl?.isHidden = false
         case .pill:
             customPageControl = PTPillPageControl.init(frame: CGRect.zero)
             (customPageControl as! PTPillPageControl).indicatorPadding = customPageControlIndicatorPadding
@@ -669,6 +672,7 @@ extension PTCycleScrollView {
             (customPageControl as! PTPillPageControl).inactiveTint = customPageControlInActiveTintColor
             (customPageControl as! PTPillPageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
+            pageControl?.isHidden = false
         case .snake:
             customPageControl = PTSnakePageControl.init(frame: CGRect.zero)
             (customPageControl as! PTSnakePageControl).activeTint = customPageControlTintColor
@@ -677,6 +681,7 @@ extension PTCycleScrollView {
             (customPageControl as! PTSnakePageControl).inactiveTint = customPageControlInActiveTintColor
             (customPageControl as! PTSnakePageControl).pageCount = imagePaths.count
             addSubview(customPageControl!)
+            pageControl?.isHidden = false
         case .image:
             pageControl = PTImagePageControl()
             pageControl?.pageIndicatorTintColor = UIColor.clear
@@ -871,10 +876,30 @@ extension PTCycleScrollView {
         if targetIndex >= totalItemsCount {
             if infiniteLoop {
                 collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: Int(0), section: 0), at: position, animated: true)
+                setProgressIndex(index: 0)
             }
             return
         }
         collectionView.contentCollectionView.scrollToItem(at: IndexPath.init(item: targetIndex, section: 0), at: position, animated: true)
+        
+        setProgressIndex(index: CGFloat(targetIndex))
+    }
+    
+    func setProgressIndex(index:CGFloat) {
+        switch customPageControlStyle {
+        case .fill:
+            (customPageControl as? PTFilledPageControl)?.progress = index
+        case .pill:
+            (customPageControl as? PTPillPageControl)?.progress = index
+        case .snake:
+            (customPageControl as? PTSnakePageControl)?.progress = index
+        case .scrolling:
+            (customPageControl as? PTScrollingPageControl)?.progress = index
+        case .none,.system,.image:
+            pageControl?.currentPage = Int(index)
+        default:
+            break
+        }
     }
     
     /// 当前位置
@@ -919,7 +944,6 @@ extension PTCycleScrollView {
     
     fileprivate func calcScrollViewToScroll(_ scrollView: UIScrollView) {
         let indexOnPageControl = pageControlIndexWithCurrentCellIndex(index: currentIndex())
-        
         switch customPageControlStyle {
         case .none,.system,.image:
             pageControl?.currentPage = indexOnPageControl
