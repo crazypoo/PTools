@@ -54,6 +54,118 @@ extension String {
     static let debugController = "Debug Input Controller"
 }
 
+extension UIImage {
+    static func resizeImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.arrow.upBackwardAndArrowDownForward)
+        } else {
+            return UIImage(.arrow)
+        }
+    }
+    static let shareImage = UIImage(.square.andArrowUp)
+    static let copyImage = UIImage(.doc.onDocFill)
+    static func clearImage()->UIImage {
+        if #available(iOS 15.0, *) {
+            return UIImage(.delete.backward)
+        } else {
+            return UIImage(.delete)
+        }
+    }
+    static func userDefaultsImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.doc.badgeGearshape)
+        } else {
+            return UIImage(.doc.onDoc)
+        }
+    }
+    static func fpsImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.cursorarrow.motionlines)
+        } else {
+            return UIImage(.desktopcomputer)
+        }
+    }
+    static func memoryImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.memorychip)
+        } else {
+            return UIImage(.heart.fill)
+        }
+    }
+    static func colorImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.paintpalette)
+        } else {
+            return UIImage(.paintbrush)
+        }
+    }
+    static func rulerImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.ruler)
+        } else {
+            return UIImage(.f.cursive)
+        }
+    }
+    static let docImage = UIImage(.doc)
+    static let dev3thPartyImage = UIImage(.plus.magnifyingglass)
+    static func maskImage()->UIImage {
+        if #available(iOS 15.0, *) {
+            return UIImage(.theatermasks)
+        } else {
+            return UIImage(.bookmark)
+        }
+    }
+    static let maskBubbleImage = UIImage(systemName: "bubble.right")
+    static func viewFrameImage()->UIImage {
+        if #available(iOS 15.0, *) {
+            return UIImage(.square.insetFilled)
+        } else {
+            return UIImage(systemName: "rectangle.3.offgrid")!
+        }
+    }
+    static func cpuImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.cpu)
+        } else {
+            return UIImage(.heart.circle)
+        }
+    }
+    static func displayImage()->UIImage {
+        let deviceSymbol: String = {
+            
+            let hasHomeButton = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat == 0
+            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                if hasHomeButton {
+                    return "ipad.homebutton"
+                } else {
+                    return "ipad"
+                }
+            } else if UIDevice.current.userInterfaceIdiom == .phone {
+                if hasHomeButton {
+                    return "iphone.homebutton"
+                } else {
+                    return "iphone"
+                }
+            } else {
+                return "rectangle"
+            }
+        }()
+        
+        return UIImage(systemName: deviceSymbol)!
+    }
+    static let debugControllerImage = UIImage(.pencil)
+    static let terminateAppImage = UIImage(.xmark)
+    static func respringImage()->UIImage {
+        if #available(iOS 14.0, *) {
+            return UIImage(.arrowtriangle.backward)
+        } else {
+            return UIImage(.arrowtriangle)
+        }
+    }
+    static let debugImage = UIImage(.ant)
+}
+
 class ConsoleWindow: UIWindow {
     
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
@@ -372,31 +484,46 @@ public class LocalConsole: NSObject {
             }
             terminal!.menuButton.addActionHandlers { sender in
                 self.feedbackGenerator.impactOccurred(intensity: 1)
-
-//                let cellInCollectionViewRect = sender.convert(sender.frame, to: sender)
-//                PTNSLogConsole("1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellInCollectionViewRect)")
-//                let cellRectInWindow = sender.convert(cellInCollectionViewRect, to: AppWindows)
-//                PTNSLogConsole("2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellRectInWindow)")
-//                
-////                SwizzleTool().swizzleContextMenuReverseOrder()
-//
-//                let newBen = ConsoleMenuButton()
-//                newBen.frame = cellInCollectionViewRect
-//                newBen.backgroundColor = .randomColor
-//                newBen.tag = 100
-//                PTUtils.getCurrentVC().view.addSubview(newBen)
-//                if #available(iOS 14.0, *) {
-//                    newBen.showsMenuAsPrimaryAction = true
-//                    newBen.menu = self.makeMenu()
-//                    PTGCDManager.gcdAfter(time: 1) {
-//                        PTGCDManager.gcdMain {
-//                            PTNSLogConsole("1312312312312312312323")
-//                            let button:ConsoleMenuButton = PTUtils.getCurrentVC().view.viewWithTag(100)! as! ConsoleMenuButton
-//                            button.sendActions(for: .primaryActionTriggered)
-//                        }
-//                    }
-//                }
                 
+                //                let cellInCollectionViewRect = sender.convert(sender.frame, to: sender)
+                //                PTNSLogConsole("1>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellInCollectionViewRect)")
+                //                let cellRectInWindow = sender.convert(cellInCollectionViewRect, to: AppWindows)
+                //                PTNSLogConsole("2>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(cellRectInWindow)")
+                //
+                ////                SwizzleTool().swizzleContextMenuReverseOrder()
+                //
+                //                let newBen = ConsoleMenuButton()
+                //                newBen.frame = cellInCollectionViewRect
+                //                newBen.backgroundColor = .randomColor
+                //                newBen.tag = 100
+                //                PTUtils.getCurrentVC().view.addSubview(newBen)
+                //                if #available(iOS 14.0, *) {
+                //                    newBen.showsMenuAsPrimaryAction = true
+                //                    newBen.menu = self.makeMenu()
+                //                    PTGCDManager.gcdAfter(time: 1) {
+                //                        PTGCDManager.gcdMain {
+                //                            PTNSLogConsole("1312312312312312312323")
+                //                            let button:ConsoleMenuButton = PTUtils.getCurrentVC().view.viewWithTag(100)! as! ConsoleMenuButton
+                //                            button.sendActions(for: .primaryActionTriggered)
+                //                        }
+                //                    }
+                //                }
+            
+                /*
+                        Title
+                 */
+                let actionTitle = PTActionSheetTitleItem(title: .debug,image: UIImage.debugImage)
+                        
+                /*
+                        Destructives
+                 */
+                let destructives_debugController = PTActionSheetItem(title: .debugController,titleColor: .systemRed,image: UIImage.debugControllerImage,itemAlignment: .left)
+                let destructives_terminateApp = PTActionSheetItem(title: .terminateApp,titleColor: .systemRed,image: UIImage.terminateAppImage,itemAlignment: .left)
+                let destructives_respring = PTActionSheetItem(title: .respring,titleColor: .systemRed,image: UIImage.respringImage(),itemAlignment: .left)
+                
+                /*
+                        Content
+                 */
                 var memoryString = ""
                 if PTMemory.share.closed {
                     memoryString = .showMemoryCheck
@@ -417,8 +544,23 @@ public class LocalConsole: NSObject {
                 } else {
                     rulerString = .showRulerCheck
                 }
-                
-                var titles = [.resizeConsole,.shareText,.copyText,.clearConsole,.userDefaults,.fps,memoryString,colorString,rulerString,.appDocument,.flex,.hyperioniOS,.foxNet,.inApp]
+                let content_resize = PTActionSheetItem(title: .resizeConsole,image: UIImage.resizeImage(),itemAlignment: .left)
+                let content_share = PTActionSheetItem(title: .shareText,image: UIImage.shareImage,itemAlignment: .left)
+                let content_copy = PTActionSheetItem(title: .copyText,image: UIImage.copyImage,itemAlignment: .left)
+                let content_clearConsole = PTActionSheetItem(title: .clearConsole,image: UIImage.clearImage(),itemAlignment: .left)
+                let content_userDefaults = PTActionSheetItem(title: .userDefaults,image: UIImage.userDefaultsImage(),itemAlignment: .left)
+                let content_fps = PTActionSheetItem(title: .fps,image: UIImage.fpsImage(),itemAlignment: .left)
+                let content_memory = PTActionSheetItem(title: memoryString,image: UIImage.memoryImage(),itemAlignment: .left)
+                let content_color = PTActionSheetItem(title: colorString,image: UIImage.colorImage(),itemAlignment: .left)
+                let content_ruler = PTActionSheetItem(title: rulerString,image: UIImage.rulerImage(),itemAlignment: .left)
+                let content_appDocument = PTActionSheetItem(title: .appDocument,image: UIImage.docImage,itemAlignment: .left)
+                let content_flex = PTActionSheetItem(title: .flex,image: UIImage.dev3thPartyImage,itemAlignment: .left)
+                let content_hyperioniOS = PTActionSheetItem(title: .hyperioniOS,image: UIImage.dev3thPartyImage,itemAlignment: .left)
+                let content_foxnet = PTActionSheetItem(title: .foxNet,image: UIImage.dev3thPartyImage,itemAlignment: .left)
+                let content_inapp = PTActionSheetItem(title: .inApp, image: UIImage.dev3thPartyImage,itemAlignment: .left)
+
+                var contentItems = [content_resize,content_share,content_copy,content_clearConsole,content_userDefaults,content_fps,content_memory,content_color,content_ruler,content_appDocument,content_flex,content_hyperioniOS,content_foxnet,content_inapp]
+
                 var devMaskString = ""
                 var devMaskBubbleString = ""
                 if self.maskView != nil {
@@ -429,11 +571,15 @@ public class LocalConsole: NSObject {
                     } else {
                         devMaskBubbleString = .devMaskBubbleOpen
                     }
-                    titles.append(devMaskString)
-                    titles.append(devMaskBubbleString)
+                    let content_devMaskString = PTActionSheetItem(title: devMaskString,image: UIImage.maskImage(),itemAlignment: .left)
+                    let content_devMaskBubbleString = PTActionSheetItem(title: devMaskBubbleString,image:  UIImage.maskBubbleImage,itemAlignment: .left)
+
+                    contentItems.append(content_devMaskString)
+                    contentItems.append(content_devMaskBubbleString)
                 } else {
                     devMaskString = .devMaskOpen
-                    titles.append(devMaskString)
+                    let content_devMaskString = PTActionSheetItem(title: devMaskString,image: UIImage.maskImage(),itemAlignment: .left)
+                    contentItems.append(content_devMaskString)
                 }
                 
                 var viewFrameString = ""
@@ -442,14 +588,22 @@ public class LocalConsole: NSObject {
                 } else {
                     viewFrameString = .showViewFrames
                 }
-                titles.append(viewFrameString)
+                let content_viewFrameString = PTActionSheetItem(title: viewFrameString,image: UIImage.viewFrameImage(),itemAlignment: .left)
+                contentItems.append(content_viewFrameString)
+                let content_systemReport = PTActionSheetItem(title: .systemReport,image: UIImage.cpuImage(),itemAlignment: .left)
+                contentItems.append(content_systemReport)
+                let content_displayReport = PTActionSheetItem(title: .displayReport,image: UIImage.displayImage(),itemAlignment: .left)
+                contentItems.append(content_displayReport)
 
-                titles.append(.systemReport)
-                titles.append(.displayReport)
-                titles.append(.debugController)
-                titles.append(.terminateApp)
-                titles.append(.respring)
-                UIAlertController.base_alertVC(title:.debug,okBtns: titles,cancelBtn: "PT Button cancel".localized(), moreBtn:  { index, title in
+                UIAlertController.baseCustomActionSheet(titleItem: actionTitle,destructiveItems: [destructives_debugController,destructives_terminateApp,destructives_respring], contentItems: contentItems) { sheet, index, title in
+                    if title == .terminateApp {
+                        self.terminateApplicationAction()
+                    } else if title == .respring {
+                        self.respringAction()
+                    } else if title == .debugController {
+                        self.debugControllerAction()
+                    }
+                } otherBlock: { sheet, index, title in
                     if title == .shareText {
                         self.shareAction()
                     } else if title == .copyText {
@@ -488,14 +642,8 @@ public class LocalConsole: NSObject {
                         self.systemReport()
                     } else if title == .displayReport {
                         self.displayReport()
-                    } else if title == .terminateApp {
-                        self.terminateApplicationAction()
-                    } else if title == .respring {
-                        self.respringAction()
-                    } else if title == .debugController {
-                        self.debugControllerAction()
                     }
-                })
+                }
             }
         }
     }
@@ -544,17 +692,17 @@ public class LocalConsole: NSObject {
         let share: UIAction = {
             // Something here causes a crash < iOS 15. Fall back to copy text for iOS 15 and below.
             if #available(iOS 16, *) {
-                return UIAction(title: .shareText, image: UIImage(.square.andArrowUp)) { _ in
+                return UIAction(title: .shareText, image: UIImage.shareImage) { _ in
                     self.shareAction()
                 }
             } else {
-                return UIAction(title: .copyText, image: UIImage(.doc.onDoc)) { _ in
+                return UIAction(title: .copyText, image: UIImage.copyImage) { _ in
                     self.copyTextAction()
                 }
             }
         }()
         
-        let resize = UIAction(title: .resizeConsole, image: UIImage(.arrow.upBackwardAndArrowDownForward)) { _ in
+        let resize = UIAction(title: .resizeConsole, image: UIImage.resizeImage()) { _ in
             self.resizeAction()
         }
         
@@ -566,16 +714,13 @@ public class LocalConsole: NSObject {
             }
         }
         
-        let clear = UIAction(title: .clearConsole, image: UIImage(systemName: "delete.backward"), attributes: .destructive) { _ in
+        let clear = UIAction(title: .clearConsole, image: UIImage.clearImage(), attributes: .destructive) { _ in
             self.clear()
         }
-        
-        var frameSymbol = "rectangle.3.offgrid"
-        
+                
         var debugActions: [UIMenuElement] = []
         
         if #available(iOS 15, *) {
-            frameSymbol = "square.inset.filled"
             
             let deferredUserDefaultsList = UIDeferredMenuElement.uncached { completion in
                 var actions: [UIAction] = []
@@ -601,9 +746,7 @@ public class LocalConsole: NSObject {
                 }()
                 
                 if keys.isEmpty {
-                    actions.append(
-                        UIAction(title: "No Entries", attributes: .disabled, handler: { _ in })
-                    )
+                    actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
                 } else {
                     for key in keys.sorted(by: { $0.lowercased() < $1.lowercased() }) {
                         
@@ -615,9 +758,7 @@ public class LocalConsole: NSObject {
                         
                         if let value = UserDefaults.standard.value(forKey: key) {
                             let action = UIAction(title: key, image: nil) { _ in
-                                let alertController = UIAlertController(title: key,
-                                                                        message: nil,
-                                                                        preferredStyle: .alert)
+                                let alertController = UIAlertController(title: key, message: nil, preferredStyle: .alert)
                                 
                                 let headerParagraphStyle = NSMutableParagraphStyle()
                                 headerParagraphStyle.paragraphSpacing = 6
@@ -663,8 +804,7 @@ public class LocalConsole: NSObject {
                                 alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
                                 }))
                                 
-                                PTUtils.getCurrentVC().present(alertController,
-                                                            animated: true)
+                                PTUtils.getCurrentVC().present(alertController,animated: true)
                             }
                             action.subtitle = "\(value)"
                             actions.append(action)
@@ -673,62 +813,59 @@ public class LocalConsole: NSObject {
                     
                     
                     actions.append(
-                        UIAction(title: "Clear Defaults",
-                                 image: UIImage(.trash), attributes: .destructive, handler: { _ in
-                                     keys.forEach {
-                                         UserDefaults.standard.removeObject(forKey: $0)
-                                     }
-                                 })
+                        UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive, handler: { _ in
+                            keys.forEach {
+                                UserDefaults.standard.removeObject(forKey: $0)
+                            }
+                        })
                     )
                 }
-                
-                
                 completion(actions)
             }
             
-            let userDefaults = UIMenu(title: .userDefaults, image: UIImage(.doc.badgeGearshape), children: [deferredUserDefaultsList])
+            let userDefaults = UIMenu(title: .userDefaults, image: UIImage.userDefaultsImage(), children: [deferredUserDefaultsList])
             
             debugActions.append(userDefaults)
         } else {
-            let userDefaults = UIAction(title: .userDefaults,image: UIImage(.doc.badgeGearshape)) { _ in
+            let userDefaults = UIAction(title: .userDefaults,image: UIImage.userDefaultsImage()) { _ in
                 self.userdefaultAction()
             }
             debugActions.append(userDefaults)
         }
         
-        let fps = UIAction(title: .fps,image: UIImage(.cursorarrow.motionlines)) { _ in
+        let fps = UIAction(title: .fps,image: UIImage.fpsImage()) { _ in
             self.fpsFunction()
         }
         
-        let memory = UIAction(title: PTMemory.share.closed ? .showMemoryCheck : .hideMemoryCheck,image: UIImage(.memorychip)) { _ in
+        let memory = UIAction(title: PTMemory.share.closed ? .showMemoryCheck : .hideMemoryCheck,image: UIImage.memoryImage()) { _ in
             self.memoryFunction()
         }
         
-        let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck,image: UIImage(.paintpalette)) { _ in
+        let colorCheck = UIAction(title: PTColorPickPlugin.share.showed ? .hideColorCheck : .showColorCheck,image: UIImage.colorImage()) { _ in
             self.colorAction()
         }
 
-        let ruler = UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck,image: UIImage(.ruler)) { _ in
+        let ruler = UIAction(title: PTViewRulerPlugin.share.showed ? .hideRulerCheck : .showRulerCheck,image: UIImage.rulerImage()) { _ in
             self.rulerAction()
         }
         
-        let document = UIAction(title: .appDocument,image: UIImage(.doc)) { _ in
+        let document = UIAction(title: .appDocument,image: UIImage.docImage) { _ in
             self.documentAction()
         }
         
-        let Flex = UIAction(title: .flex,image: UIImage(.plus.magnifyingglass)) { _ in
+        let Flex = UIAction(title: .flex,image: UIImage.dev3thPartyImage) { _ in
             self.flexAction()
         }
         
-        let HyperioniOS = UIAction(title: .hyperioniOS,image: UIImage(.plus.magnifyingglass)) { _ in
+        let HyperioniOS = UIAction(title: .hyperioniOS,image: UIImage.dev3thPartyImage) { _ in
             self.hyperioniOSAction()
         }
             
-        let FoxNet = UIAction(title: .foxNet,image: UIImage(.plus.magnifyingglass)) { _ in
+        let FoxNet = UIAction(title: .foxNet,image: UIImage.dev3thPartyImage) { _ in
             self.foxNetAction()
         }
         
-        let InApp = UIAction(title: .inApp,image: UIImage(.plus.magnifyingglass)) { _ in
+        let InApp = UIAction(title: .inApp,image: UIImage.dev3thPartyImage) { _ in
             self.watchViewsAction()
         }
         
@@ -737,13 +874,13 @@ public class LocalConsole: NSObject {
             let deferredMaskList = UIDeferredMenuElement.uncached { completion in
                 var actions: [UIAction] = []
                       
-                let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen,image: UIImage(.theatermasks)) { _ in
+                let maskOpen = UIAction(title: self.maskView != nil ? .devMaskClose : .devMaskOpen,image: UIImage.maskImage()) { _ in
                     self.maskOpenFunction()
                 }
                 actions.append(maskOpen)
                 
                 if self.maskView != nil {
-                    let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen,image: UIImage(systemName: "bubble.right")) { _ in
+                    let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen,image: UIImage.maskBubbleImage) { _ in
                         self.maskOpenBubbleFunction()
                     }
                     actions.append(maskTouchBubble)
@@ -753,66 +890,45 @@ public class LocalConsole: NSObject {
             }
 
             
-            let masks = UIMenu(title: "Dev Mask", image: UIImage(.theatermasks), children: [deferredMaskList])
+            let masks = UIMenu(title: "Dev Mask", image: UIImage.maskImage(), children: [deferredMaskList])
             debugActions.append(masks)
         } else {
-            let maskOpen = UIAction(title: self.maskView != nil  ? .devMaskClose : .devMaskOpen,image: UIImage(SafeSFSymbol.Person.circle.fill)) { _ in
+            let maskOpen = UIAction(title: self.maskView != nil  ? .devMaskClose : .devMaskOpen,image: UIImage.maskImage()) { _ in
                 self.maskOpenFunction()
             }
             debugActions.append(maskOpen)
 
             if self.maskView != nil {
-                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen,image: UIImage(systemName: "bubble.right")) { _ in
+                let maskTouchBubble = UIAction(title: PTCoreUserDefultsWrapper.AppDebbugTouchBubble ? .devMaskBubbleClose : .devMaskBubbleOpen,image: UIImage.maskBubbleImage) { _ in
                     self.maskOpenBubbleFunction()
                 }
                 debugActions.append(maskTouchBubble)
             }
         }
 
-        let viewFrames = UIAction(title: debugBordersEnabled ? .hideViewFrames : .showViewFrames,image: UIImage(systemName: frameSymbol)) { _ in
+        let viewFrames = UIAction(title: debugBordersEnabled ? .hideViewFrames : .showViewFrames,image: UIImage.viewFrameImage()) { _ in
             self.viewFramesAction()
             self.terminal!.menuButton.menu = self.makeMenu()
         }
         
-        let systemReport = UIAction(title: .systemReport, image: UIImage(.cpu)) { _ in
+        let systemReport = UIAction(title: .systemReport, image: UIImage.cpuImage()) { _ in
             self.systemReport()
         }
         
         // Show the right glyph for the current device being used.
-        let deviceSymbol: String = {
-            
-            let hasHomeButton = UIScreen.main.value(forKey: "_displ" + "ayCorn" + "erRa" + "dius") as! CGFloat == 0
-            
-            if UIDevice.current.userInterfaceIdiom == .pad {
-                if hasHomeButton {
-                    return "ipad.homebutton"
-                } else {
-                    return "ipad"
-                }
-            } else if UIDevice.current.userInterfaceIdiom == .phone {
-                if hasHomeButton {
-                    return "iphone.homebutton"
-                } else {
-                    return "iphone"
-                }
-            } else {
-                return "rectangle"
-            }
-        }()
-        
-        let displayReport = UIAction(title: .displayReport, image: UIImage(systemName: deviceSymbol)) { _ in
+        let displayReport = UIAction(title: .displayReport, image: UIImage.displayImage()) { _ in
             self.displayReport()
         }
         
-        let terminateApplication = UIAction(title: .terminateApp, image: UIImage(.xmark), attributes: .destructive) { _ in
+        let terminateApplication = UIAction(title: .terminateApp, image: UIImage.terminateAppImage, attributes: .destructive) { _ in
             self.terminateApplicationAction()
         }
         
-        let respring = UIAction(title: .respring, image: UIImage(.arrowtriangle.backward), attributes: .destructive) { _ in
+        let respring = UIAction(title: .respring, image: UIImage.respringImage(), attributes: .destructive) { _ in
             self.respringAction()
         }
         
-        let debugController = UIAction(title: .debugController,image: UIImage(.pencil),attributes: .destructive) { _ in
+        let debugController = UIAction(title: .debugController,image: UIImage.debugControllerImage,attributes: .destructive) { _ in
             self.debugControllerAction()
         }
         
@@ -820,7 +936,7 @@ public class LocalConsole: NSObject {
         let destructActions = [debugController,terminateApplication , respring]
         
         let debugMenu = UIMenu(
-            title: .debug, image: UIImage(.ant),
+            title: .debug, image: UIImage.debugImage,
             children: [
                 UIMenu(title: "", options: .displayInline, children: debugActions),
                 UIMenu(title: "", options: .displayInline, children: destructActions),

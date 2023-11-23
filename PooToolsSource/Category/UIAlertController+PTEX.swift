@@ -66,7 +66,26 @@ public extension UIAlertController {
             contentItems.append(item)
         }
         
-        let actionSheet = PTActionSheetView(titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+        let viewConfig = PTActionSheetViewConfig(dismissWithTapBG: canTapBackground)
+        
+        let actionSheet = PTActionSheetView(viewConfig: viewConfig,titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
+        actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
+        actionSheet.actionSheetCancelSelectBlock = cancelBlock
+        actionSheet.actionSheetSelectBlock = otherBlock
+        actionSheet.actionSheetTapDismissBlock = tapBackgroundBlock
+        actionSheet.show()
+    }
+    
+    @objc class func baseCustomActionSheet(viewConfig:PTActionSheetViewConfig = PTActionSheetViewConfig(),titleItem:PTActionSheetTitleItem,
+                                           cancelItem:PTActionSheetItem = PTActionSheetItem(title: "PT Button cancel".localized()),
+                                           destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
+                                           contentItems:[PTActionSheetItem],
+                                           destructiveBlock:PTActionSheetIndexHandler? = nil,
+                                           cancelBlock: PTActionSheetHandler? = nil,
+                                           otherBlock: @escaping PTActionSheetIndexHandler,
+                                           tapBackgroundBlock: PTActionSheetHandler? = nil) {
+                        
+        let actionSheet = PTActionSheetView(viewConfig: viewConfig,titleItem: titleItem,cancelItem: cancelItem,destructiveItems: destructiveItems,contentItems: contentItems)
         actionSheet.actionSheetDestructiveSelectBlock = destructiveBlock
         actionSheet.actionSheetCancelSelectBlock = cancelBlock
         actionSheet.actionSheetSelectBlock = otherBlock

@@ -111,15 +111,30 @@ public class PTActionSheetTitleItem:NSObject {
     public var subTitle:String = ""
     public var titleFont:UIFont? = .systemFont(ofSize: 16)
     public var titleColor:UIColor? = UIColor.systemGray
-    
+    public var image:Any?
+    public var imageSize:CGSize = CGSizeMake(34, 34)
+    public var iCloudDocumentName:String = ""
+    public var itemLayout:PTSheetButtonStyle? = .leftImageRightTitle
+    public var contentImageSpace:CGFloat = 15
+
     public init(title: String = "",
                 subTitle: String = "",
                 titleFont: UIFont? = .systemFont(ofSize: 16),
-                titleColor: UIColor? = .systemGray) {
+                titleColor: UIColor? = .systemGray,
+                image: Any? = nil,
+                imageSize:CGSize = CGSizeMake(34, 34),
+                iCloudDocumentName:String = "",
+                itemLayout:PTSheetButtonStyle? = .leftImageRightTitle,
+                contentImageSpace:CGFloat = 15) {
         self.title = title
         self.subTitle = subTitle
         self.titleFont = titleFont
         self.titleColor = titleColor
+        self.image = image
+        self.imageSize = imageSize
+        self.itemLayout = itemLayout
+        self.iCloudDocumentName = iCloudDocumentName
+        self.contentImageSpace = contentImageSpace
     }
 }
 
@@ -184,6 +199,25 @@ public class PTActionSheetView: UIView {
         view.cellButton.normalTitleColor = actionSheetTitleViewItem!.titleColor!
         view.cellButton.normalSubTitleFont = actionSheetTitleViewItem!.titleFont!
         view.cellButton.normalSubTitleColor = actionSheetTitleViewItem!.titleColor!
+        if actionSheetTitleViewItem!.image != nil {
+            switch actionSheetTitleViewItem!.itemLayout! {
+            case .leftImageRightTitle:
+                view.cellButton.layoutStyle = .leftImageRightTitle
+            case .leftTitleRightImage:
+                view.cellButton.layoutStyle = .leftTitleRightImage
+            }
+            
+            var itemSize = CGSizeZero
+            if actionSheetTitleViewItem!.imageSize.height >= (titleHeight() - 20) {
+                itemSize = CGSizeMake(actionSheetTitleViewItem!.imageSize.width, (titleHeight() - 20))
+            } else {
+                itemSize = actionSheetTitleViewItem!.imageSize
+            }
+            view.cellButton.imageSize = itemSize
+            view.cellButton.midSpacing = actionSheetTitleViewItem!.contentImageSpace
+            view.cellButton.layoutLoadImage(contentData: actionSheetTitleViewItem!.image as Any,iCloudDocumentName: actionSheetTitleViewItem!.iCloudDocumentName)
+        }
+
         return view
     }()
     private lazy var cancelBtn : PTActionCell = {

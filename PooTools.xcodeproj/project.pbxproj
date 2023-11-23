@@ -915,7 +915,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55E96E342B0DE79A00AB8ADE /* PageControl */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -976,6 +975,7 @@
 				551FDB4D2AD9393B001045F9 /* NetworkSpeedTest */,
 				55B4FA022AE0F04A006D35F3 /* NotificationPermission */,
 				550CE4AD2AF233B60052539D /* OSSKit */,
+				55E96E342B0DE79A00AB8ADE /* PageControl */,
 				55B4F9FD2AE0EE14006D35F3 /* PermissionCore */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,

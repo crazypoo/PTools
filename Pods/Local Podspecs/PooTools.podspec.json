@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.20.0",
+  "version": "3.21.1",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.20.0"
+    "tag": "3.21.1"
   },
   "license": {
     "type": "MIT",
@@ -355,6 +355,9 @@
       "dependencies": {
         "PooTools/Core": [
 
+        ],
+        "PooTools/PageControl": [
+
         ]
       },
       "source_files": "PooToolsSource/Guide/*.{h,m,swift}",
@@ -457,6 +460,9 @@
 
         ],
         "PooTools/NetWork": [
+
+        ],
+        "PooTools/PageControl": [
 
         ]
       },
