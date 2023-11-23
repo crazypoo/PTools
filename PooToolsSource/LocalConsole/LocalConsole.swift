@@ -243,8 +243,15 @@ public class LocalConsole: NSObject {
         terminal!.setAttributedText(currentText)
     }
     
-    var terminal:PTTerminal?
-    var maskView:PTDevMaskView?
+    public var terminal:PTTerminal?
+    public var maskView:PTDevMaskView?
+
+    fileprivate let userdefaultShares = PTUserDefaultKeysAndValues.shares
+    public var showAllUserDefaultsKeys = false {
+        didSet {
+            userdefaultShares.showAllUserDefaultsKeys = showAllUserDefaultsKeys
+        }
+    }
 
     var currentText: String = "" {
         didSet {
@@ -685,8 +692,6 @@ public class LocalConsole: NSObject {
         }
     }
     
-    public var showAllUserDefaultsKeys = false
-
     @available(iOS 14.0, *)
     func makeMenu() -> UIMenu {
         let share: UIAction = {
@@ -725,97 +730,33 @@ public class LocalConsole: NSObject {
             let deferredUserDefaultsList = UIDeferredMenuElement.uncached { completion in
                 var actions: [UIAction] = []
                 
-                let keys: [String] = {
-                    
-                    if self.showAllUserDefaultsKeys {
-                        return UserDefaults.standard.dictionaryRepresentation().map { $0.key }
-                    }
-                    
-                    // Show keys the developer has added to the app (+ LocalConsole keys), excluding all of Apple's keys.
-                    if let bundle: String = Bundle.main.bundleIdentifier {
-                        let preferencePath: String = NSHomeDirectory() + "/Library/Preferences/\(bundle).plist"
-                        
-                        let _keys = NSDictionary(contentsOfFile: preferencePath)?.allKeys as! [String]
-                        
-                        return _keys.filter {
-                            !$0.contains("LocalConsole.")
-                        }
-                    }
-                    
-                    return []
-                }()
-                
-                if keys.isEmpty {
+                if self.userdefaultShares.keyAndValues().count == 0 {
                     actions.append(UIAction(title: "No Entries", attributes: .disabled, handler: { _ in }))
                 } else {
-                    for key in keys.sorted(by: { $0.lowercased() < $1.lowercased() }) {
-                        
-                        // Old LocalConsole Key Cleanup
-                        guard !key.contains("LocalConsole_") else {
-                            UserDefaults.standard.removeObject(forKey: key)
-                            continue
+                    self.userdefaultShares.keyAndValues().enumerated().forEach { index,value in
+                        let action = UIAction(title: value.keys.first!, image: nil) { _ in
+                            
+                            UIAlertController.base_alertVC(title:"Key\n" + value.keys.first!,msg: "\nValue\n" + "\(value.values.first!)",okBtns: ["Copy Value","Clear Value","Edit value"],cancelBtn: "Cancel", moreBtn:  { index, title in
+                                if title == "Copy Value" {
+                                    "\(value.values.first!)".copyToPasteboard()
+                                } else if title == "Clear Value" {
+                                    UserDefaults.standard.removeObject(forKey: value.keys.first!)
+                                } else if title == "Edit value" {
+                                    UIAlertController.base_textfield_alertVC(title:"Edit\n" + value.keys.first!,okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [value.keys.first!], textFieldTexts: ["\(value.values.first!)"], keyboardType: [.default], textFieldDelegate: self) { result in
+                                        let newValue = result.values.first
+                                        UserDefaults.standard.setValue(newValue, forKey: value.keys.first!)
+                                    }
+                                }
+                            })
                         }
-                        
-                        if let value = UserDefaults.standard.value(forKey: key) {
-                            let action = UIAction(title: key, image: nil) { _ in
-                                let alertController = UIAlertController(title: key, message: nil, preferredStyle: .alert)
-                                
-                                let headerParagraphStyle = NSMutableParagraphStyle()
-                                headerParagraphStyle.paragraphSpacing = 6
-                                let contentParagraphStyle = NSMutableParagraphStyle()
-                                
-                                let attributes: [NSAttributedString.Key: Any] = [
-                                    .paragraphStyle: contentParagraphStyle,
-                                    .foregroundColor: UIColor.label,
-                                    .font: UIFont.systemFont(ofSize: 13, weight: .semibold, design: .monospaced)
-                                ]
-                                
-                                let attributedTitle: NSMutableAttributedString = {
-                                    
-                                    let attributedString = NSMutableAttributedString(string: "Key\n" + key, attributes: attributes)
-                                    attributedString.addAttributes(
-                                        [NSAttributedString.Key.foregroundColor : UIColor.label.withAlphaComponent(0.5),
-                                         NSAttributedString.Key.paragraphStyle : headerParagraphStyle],
-                                        range: NSRange(location: 0, length: 3))
-                                    
-                                    return attributedString
-                                }()
-                                
-                                let attributedMessage: NSMutableAttributedString = {
-                                    
-                                    let attributedString = NSMutableAttributedString(string: "\nValue\n" + "\(value)", attributes: attributes)
-                                    attributedString.addAttributes(
-                                        [NSAttributedString.Key.foregroundColor : UIColor.label.withAlphaComponent(0.5),
-                                         NSAttributedString.Key.paragraphStyle : headerParagraphStyle],
-                                        range: NSRange(location: 0, length: 7))
-                                    
-                                    return attributedString
-                                }()
-                                
-                                alertController.setValue(attributedTitle, forKey: "attributedTitle")
-                                alertController.setValue(attributedMessage, forKey: "attributedMessage")
-                                
-                                alertController.addAction(UIAlertAction(title: "Copy Value", style: .default, handler: { _ in
-                                    "\(value)".copyToPasteboard()
-                                }))
-                                alertController.addAction(UIAlertAction(title: "Clear Value", style: .destructive, handler: { _ in
-                                    UserDefaults.standard.removeObject(forKey: key)
-                                }))
-                                alertController.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
-                                }))
-                                
-                                PTUtils.getCurrentVC().present(alertController,animated: true)
-                            }
-                            action.subtitle = "\(value)"
-                            actions.append(action)
-                        }
+                        action.subtitle = "\(value.values.first!)"
+                        actions.append(action)
                     }
-                    
                     
                     actions.append(
                         UIAction(title: "Clear Defaults", image: UIImage(.trash), attributes: .destructive, handler: { _ in
-                            keys.forEach {
-                                UserDefaults.standard.removeObject(forKey: $0)
+                            self.userdefaultShares.keyAndValues().enumerated().forEach { index,value in
+                                UserDefaults.standard.removeObject(forKey: value.keys.first!)
                             }
                         })
                     )
@@ -1123,6 +1064,7 @@ public class LocalConsole: NSObject {
     
     func userdefaultAction() {
         let vc = PTUserDefultsViewController()
+        vc.showAllUserDefaultsKeys = showAllUserDefaultsKeys
         present(content: vc)
     }
     
@@ -1390,3 +1332,5 @@ extension LocalConsole : UIContextMenuInteractionDelegate {
         }
     }
 }
+
+extension LocalConsole:UITextFieldDelegate {}

@@ -154,21 +154,27 @@ class AppDelegate: PTAppWindowsDelegate {
         }
         
         
-        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
-        PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
+//        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
+//        PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
 
-        Task.init {
-            do {
-//                let mopdel = try await Network.requestIPInfo(ipAddress: "124.127.104.130")
-                let mopdel = try await Network.getIpAddress()
-                PTNSLogConsole("\(mopdel)")
-            } catch {
-                PTNSLogConsole("\(error.localizedDescription)")
-            }
+//        Task.init {
+//            do {
+//                let mopdel = try await Network.getIpAddress()
+//                PTNSLogConsole("\(mopdel)")
+//            } catch {
+//                PTNSLogConsole("\(error.localizedDescription)")
+//            }
+//        }
+        
+//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(self.minCount(counts:0))")
+        
+        let userdefault = PTUserDefaultKeysAndValues.shares
+        userdefault.showAllUserDefaultsKeys = true
+        userdefault.keyAndValues().enumerated().forEach { index,value in
+            PTNSLogConsole("key:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: value.keys.first))")
+            PTNSLogConsole("value:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: value.values.first))")
         }
-        
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(self.minCount(counts:0))")
-        
+//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(userdefault.keyAndValues())")
         return true
     }
     

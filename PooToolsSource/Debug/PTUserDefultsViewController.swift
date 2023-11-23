@@ -16,6 +16,14 @@ import ZXNavigationBar
 
 class PTUserDefultsViewController: PTBaseViewController {
     
+    fileprivate let userdefaultShares = PTUserDefaultKeysAndValues.shares
+    
+    var showAllUserDefaultsKeys:Bool! = false {
+        didSet {
+            userdefaultShares.showAllUserDefaultsKeys = showAllUserDefaultsKeys
+        }
+    }
+    
     lazy var newCollectionView:PTCollectionView = {
         let config = PTCollectionViewConfig()
         config.viewType = .Normal
@@ -33,15 +41,12 @@ class PTUserDefultsViewController: PTBaseViewController {
             return cell
         }
         view.collectionDidSelect = { collection,model,indexPath in
-            self.dismiss(animated: true) {
-                let itemRow = model.rows[indexPath.row]
-                let cellModel = (itemRow.dataModel as! PTFusionCellModel)
-                let vc = PTUserDefultsEditViewController(viewModel: cellModel)
-                LocalConsole.shared.present(content: vc)
-                vc.doneBlock = {
-                    let userdefault = PTUserDefultsViewController()
-                    LocalConsole.shared.present(content: userdefault)
-                }
+            let itemRow = model.rows[indexPath.row]
+            let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+            UIAlertController.base_textfield_alertVC(title:"Edit\n" + cellModel.name,okBtn: "⭕️", cancelBtn: "Cancel", placeHolders: [cellModel.name], textFieldTexts: [cellModel.desc], keyboardType: [.default], textFieldDelegate: self) { result in
+                let newValue = result.values.first
+                UserDefaults.standard.setValue(newValue, forKey: cellModel.name)
+                self.showDetail()
             }
         }
         return view
@@ -123,11 +128,10 @@ class PTUserDefultsViewController: PTBaseViewController {
         var mSections = [PTSection]()
 
         var userdefultArrs = [PTFusionCellModel]()
-        let dic = UserDefaults.standard.dictionaryRepresentation()
-        dic.enumerated().forEach { index,value in
+        userdefaultShares.keyAndValues().enumerated().forEach { index,value in
             let model = PTFusionCellModel()
-            model.name = value.key
-            model.desc = String(format: "%@", value.value as! CVarArg)
+            model.name = value.keys.first!
+            model.desc = String(format: "%@", value.values.first as! CVarArg)
             model.haveLine = true
             model.haveTopLine = false
             model.accessoryType = .DisclosureIndicator
@@ -143,7 +147,6 @@ class PTUserDefultsViewController: PTBaseViewController {
         let cellSection = PTSection.init(rows: rows)
         mSections.append(cellSection)
         
-        newCollectionView.layoutIfNeeded()
         newCollectionView.showCollectionDetail(collectionData: mSections)
     }
     
@@ -160,98 +163,7 @@ class PTUserDefultsViewController: PTBaseViewController {
     }
 }
 
-class PTUserDefultsEditViewController:PTBaseViewController {
-    
-    private var viewModel:PTFusionCellModel!
-    
-    var doneBlock:PTActionTask?
-
-    lazy var keyLabel:UILabel = {
-        let view = UILabel()
-        view.numberOfLines = 0
-        view.font = .appfont(size: 17)
-        view.textColor = .black
-        view.text = self.viewModel.name
-        return view
-    }()
-    
-    lazy var textInputView:UITextView = {
-        let view = UITextView()
-        view.text = self.viewModel.desc
-        return view
-    }()
-    
-    init(viewModel: PTFusionCellModel!) {
-        super.init(nibName: nil, bundle: nil)
-        self.viewModel = viewModel
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let cleanBtn = UIButton(type: .custom)
-        cleanBtn.setImage("⭕️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
-        cleanBtn.addActionHandlers { sender in
-            self.saveAction()
-        }
-
-        if self.parent is FloatingPanelController {
-            self.view.addSubview(cleanBtn)
-            cleanBtn.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-                make.height.equalTo(34)
-                make.top.equalToSuperview().inset(PTAppBaseConfig.share.fpcSurfaceShadowBaseSize.height + 5)
-            }
-        } else {
-#if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubview(cleanBtn)
-        cleanBtn.snp.makeConstraints { make in
-            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(34)
-            make.bottom.equalToSuperview().inset(5)
-        }
-#else
-        cleanBtn.frame = CGRectMake(0, 0, 34, 34)
-        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: cleanBtn)
-#endif
-        }
-
-        view.addSubviews([keyLabel, textInputView])
-
-        keyLabel.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            if self.parent is FloatingPanelController {
-                make.top.equalTo(cleanBtn.snp.bottom).offset(10)
-            } else {
-#if POOTOOLS_NAVBARCONTROLLER
-                make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-#else
-                make.top.equalToSuperview().inset(10)
-#endif
-            }
-        }
-        
-        textInputView.snp.makeConstraints { make in
-            make.left.right.equalTo(self.keyLabel)
-            make.top.equalTo(self.keyLabel.snp.bottom).offset(10)
-            make.bottom.equalTo(self.view.snp.centerY)
-        }
-        textInputView.pt_placeholder = "value"
-    }
-    
-    func saveAction() {
-        UserDefaults.standard.setValue(textInputView.text, forKey: viewModel.name)
-        dismiss(animated: true) {
-            if self.doneBlock != nil {
-                self.doneBlock!()
-            }
-        }
-    }
-}
+extension PTUserDefultsViewController:UITextFieldDelegate {}
 
 #if POOTOOLS_ROUTER
 extension PTUserDefultsViewController:PTRouterable {
@@ -261,17 +173,6 @@ extension PTUserDefultsViewController:PTRouterable {
     
     public static func registerAction(info: [String : Any]) -> Any {
         let vc = PTUserDefultsViewController()
-        return vc
-    }
-}
-
-extension PTUserDefultsEditViewController:PTRouterable {
-    public static var patternString: [String] {
-        ["scheme://route/userdefaultedit"]
-    }
-    
-    public static func registerAction(info: [String : Any]) -> Any {
-        let vc = PTUserDefultsEditViewController(viewModel: PTFusionCellModel())
         return vc
     }
 }

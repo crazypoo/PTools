@@ -16,6 +16,7 @@ import AttributedString
 import ZXNavigationBar
 #endif
 import SwifterSwift
+import DeviceKit
 
 public class PTFileBrowserViewController: PTBaseViewController {
 
@@ -80,8 +81,8 @@ public class PTFileBrowserViewController: PTBaseViewController {
                         switch index {
                         case 0:
                             guard let filePath = self.operateFilePath else { return }
-                            let activityVC = UIActivityViewController(activityItems: [filePath], applicationActivities: nil)
-                            if UIDevice.current.model == "iPad" {
+                            let activityVC = PTActivityViewController(activityItems: [filePath])
+                            if Gobal_device_info.isPad {
                                 activityVC.modalPresentationStyle = UIModalPresentationStyle.popover
                                 activityVC.popoverPresentationController?.sourceView = self.view
                                 activityVC.popoverPresentationController?.sourceRect = CGRect(x: 10, y: CGFloat.kSCREEN_HEIGHT - 300, width: CGFloat.kSCREEN_WIDTH - 20, height: 300)
@@ -89,35 +90,32 @@ public class PTFileBrowserViewController: PTBaseViewController {
                             self.present(activityVC, animated: true, completion: nil)
                         case 1:
                             guard let filePath = self.operateFilePath else { return }
-                            let manager = FileManager.default
-                            //同名
+                            
                             let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-                            do {
-                                try manager.copyItem(at: filePath, to: currentPath)
-                            } catch {
-                                PTNSLogConsole(error)
-                            }
-                            self.loadData()
-                        case 2:
 
-                            guard let filePath = self.operateFilePath else { return }
-                            let manager = FileManager.default
-                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
-                            do {
-                                try manager.moveItem(at: filePath, to: currentPath)
-                            } catch {
-                                PTNSLogConsole(error)
+                            let result = FileManager.pt.copyFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
+                            if result.isSuccess {
+                                self.loadData()
+                            } else {
+                                PTNSLogConsole(result.error)
                             }
-                            self.loadData()
+                        case 2:
+                            guard let filePath = self.operateFilePath else { return }
+                            let currentPath = self.currentDirectoryPath.appendingPathComponent(filePath.lastPathComponent, isDirectory: false)
+                            let result = FileManager.pt.moveFile(type: .file, fromeFilePath: filePath.description, toFilePath: currentPath.description)
+                            if result.isSuccess {
+                                self.loadData()
+                            } else {
+                                PTNSLogConsole(result.error)
+                            }
                         case 3:
                             guard let filePath = self.operateFilePath else { return }
-                            let manager = FileManager.default
-                            do {
-                                try manager.removeItem(at: filePath)
-                            } catch {
-                                PTNSLogConsole(error)
+                            let result = FileManager.pt.removefile(filePath: filePath.description)
+                            if result.isSuccess {
+                                self.loadData()
+                            } else {
+                                PTNSLogConsole(result.error)
                             }
-                            self.loadData()
                         default:
                             guard let filePath = self.operateFilePath else { return }
                             var hashValue = ""
@@ -256,9 +254,9 @@ public class PTFileBrowserViewController: PTBaseViewController {
             }
         }
         dataList.removeAll()
-        let manager = FileManager.default
+                
         let fileDirectoryPth = currentDirectoryPath
-        if manager.fileExists(atPath: fileDirectoryPth.path), let subPath = try? manager.contentsOfDirectory(atPath: fileDirectoryPth.path) {
+        if FileManager.pt.judgeFileOrFolderExists(filePath: fileDirectoryPth.path),let subPath = FileManager.pt.shallowSearchAllFiles(folderPath: fileDirectoryPth.path) {
             for fileName in subPath {
                 let filePath = fileDirectoryPth.path.appending("/\(fileName)")
                 //对象
@@ -266,9 +264,11 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 fileModel.name = fileName
                 //属性
                 var isDirectory: ObjCBool = false
-                if manager.fileExists(atPath: filePath, isDirectory: &isDirectory) {
+                                
+                if FileManager.default.fileExists(atPath: filePath, isDirectory: &isDirectory) {
                     fileModel.fileType = PTFileBrowser.shared.getFileType(filePath: URL(fileURLWithPath: filePath))
-                    if let fileAttributes = try? manager.attributesOfItem(atPath: filePath) {
+                    
+                    if let fileAttributes = FileManager.pt.fileAttributes(path: filePath) {
                         fileModel.modificationDate = fileAttributes[FileAttributeKey.modificationDate] as? Date ?? Date()
                         if isDirectory.boolValue {
                             fileModel.size = Double(FileManager.pt.fileOrDirectorySingleSize(filePath: filePath))
@@ -280,7 +280,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
                 }
             }
         }
-        
+                        
         PTGCDManager.gcdAfter(time: 0.5) {
             var mSections = [PTSection]()
             
