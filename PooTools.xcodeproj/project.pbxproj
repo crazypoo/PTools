@@ -348,6 +348,9 @@
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
+		55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D1D2B10FD5500391136 /* PTPulseDetector.swift */; };
+		55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D1F2B10FDE200391136 /* PTFiter.swift */; };
+		55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
 		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
@@ -782,6 +785,9 @@
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
+		55ED0D1D2B10FD5500391136 /* PTPulseDetector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPulseDetector.swift; sourceTree = "<group>"; };
+		55ED0D1F2B10FDE200391136 /* PTFiter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFiter.swift; sourceTree = "<group>"; };
+		55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateViewController.swift; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
 		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
@@ -2137,8 +2143,11 @@
 				55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */,
 				6003F594195388D20070C39A /* Supporting Files */,
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
+				55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */,
 				55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */,
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
+				55ED0D1D2B10FD5500391136 /* PTPulseDetector.swift */,
+				55ED0D1F2B10FDE200391136 /* PTFiter.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2444,6 +2453,7 @@
 				55B1595C2B0CAB9500A64741 /* SVGAPlayerEdition.m in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
+				55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */,
 				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,
@@ -2465,6 +2475,7 @@
 				231D1671272CDEEA003D6F62 /* PTPurchaseCarAnimationTool.swift in Sources */,
 				55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */,
 				55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */,
+				55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
@@ -2677,6 +2688,7 @@
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				5585F6FF2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
+				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
