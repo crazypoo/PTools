@@ -292,6 +292,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         
         let config = PTCollectionViewConfig()
         config.viewType = .Custom
+        config.showsVerticalScrollIndicator = false
+        config.showsHorizontalScrollIndicator = false
 
         let view = PTCollectionView(viewConfig: config)
         view.customerLayout = { sectionModel in
