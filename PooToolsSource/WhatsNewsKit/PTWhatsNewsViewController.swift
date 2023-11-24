@@ -282,7 +282,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         return view
     }()
     
-    let contentViewSpace = PTAppBaseConfig.share.defaultViewSpace * 10
+    let contentViewSpace = CGFloat.ScaleW(w: 10) * 10
     
     fileprivate lazy var collectionView:PTCollectionView = {
         

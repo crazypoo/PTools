@@ -919,7 +919,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1012,6 +1011,7 @@
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
 				5517CAC429F5530500E33ACE /* Vision */,
+				557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */,
 				55024DDB29F282F600244E44 /* WhereIsMyEye */,
 			);
 			path = PooToolsSource;

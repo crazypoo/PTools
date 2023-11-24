@@ -401,7 +401,6 @@ public class PTCycleScrollView: UIView {
                         break
                     case .began:
                         pointStart = obj.location(in: self)
-                        PTNSLogConsole("我要开始列")
                         if self.autoScroll {
                             self.invalidateTimer()
                         }
@@ -409,9 +408,7 @@ public class PTCycleScrollView: UIView {
                         if self.autoScroll {
                             self.invalidateTimer()
                         }
-                        PTNSLogConsole("我要变化了")
                         let collectionX = currentX + (pointStart.x - point.x)
-                        PTNSLogConsole("current:\(point)\nstartPoint:\(pointStart)\ncollectionX:\(collectionX)")
 
                         self.collectionView.contentCollectionView.contentOffset = CGPointMake(collectionX, self.collectionView.contentCollectionView.contentOffset.y)
                     case .ended:
