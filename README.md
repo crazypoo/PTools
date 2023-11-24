@@ -180,6 +180,8 @@ pod 'PooTools/SecuritySuite', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/SF', :git => 'https://github.com/crazypoo/PTools.git'
 ### iOS17Tips
 pod 'PooTools/iOS17Tips', :git => 'https://github.com/crazypoo/PTools.git'
+### WhatsNewsKit
+pod 'PooTools/WhatsNewsKit', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 

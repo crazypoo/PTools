@@ -178,6 +178,7 @@
 		5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */; };
 		5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */; };
 		5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */; };
+		557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557D8C002B100F6700F0D9DD /* PTWhatsNewsViewController.swift */; };
 		557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36B2966A2E500991C36 /* PTImagePicker.swift */; };
 		557FC36E2966A45000991C36 /* PTImagePickerObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557FC36D2966A45000991C36 /* PTImagePickerObject.swift */; };
 		5581E8562AB9046800491065 /* Timer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5581E8552AB9046800491065 /* Timer+PTEX.swift */; };
@@ -602,6 +603,7 @@
 		5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWaterWaveView.swift; sourceTree = "<group>"; };
 		5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCoinAnimation.swift; sourceTree = "<group>"; };
 		5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGetGPSData.swift; sourceTree = "<group>"; };
+		557D8C002B100F6700F0D9DD /* PTWhatsNewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWhatsNewsViewController.swift; sourceTree = "<group>"; };
 		557FC36B2966A2E500991C36 /* PTImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePicker.swift; sourceTree = "<group>"; };
 		557FC36D2966A45000991C36 /* PTImagePickerObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImagePickerObject.swift; sourceTree = "<group>"; };
 		5581E8552AB9046800491065 /* Timer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Timer+PTEX.swift"; sourceTree = "<group>"; };
@@ -917,6 +919,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1491,6 +1494,14 @@
 				5578EE5B29ADD10E00F3E0AC /* PTGetGPSData.swift */,
 			);
 			path = Location;
+			sourceTree = "<group>";
+		};
+		557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */ = {
+			isa = PBXGroup;
+			children = (
+				557D8C002B100F6700F0D9DD /* PTWhatsNewsViewController.swift */,
+			);
+			path = WhatsNewsKit;
 			sourceTree = "<group>";
 		};
 		557FC36A2966A2BC00991C36 /* ImagePicker */ = {
@@ -2398,6 +2409,7 @@
 				55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */,
 				555818CA2AFA7CBA0051C0AA /* UISegmentedControl+PTEX.swift in Sources */,
 				55B4FA2B2AE108FE006D35F3 /* PTPermissionContacts.swift in Sources */,
+				557D8C012B100F6700F0D9DD /* PTWhatsNewsViewController.swift in Sources */,
 				55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */,
 				231D1684272CDEEA003D6F62 /* UIView+PTEX.swift in Sources */,
 				550CE4A42AF12F8B0052539D /* PTActiveBuilder.swift in Sources */,

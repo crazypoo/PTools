@@ -71,4 +71,9 @@ public struct PTCoreUserDefultsWrapper {
     //MARK: App权限检测
     ///权限检测
     @PTUserDefault(withKey: "AppFirstPermission", defaultValue: false) public static var AppFirstPermissionShowed:Bool
+    
+    //MARK: PTWhatsNews记录版本
+    ///PTWhatsNews记录版本
+    @PTUserDefault(withKey: "PTWhatNewsLatestAppVersionPresented", defaultValue: "") public static var PTWhatNewsLatestAppVersionPresented:String
+    
 }
