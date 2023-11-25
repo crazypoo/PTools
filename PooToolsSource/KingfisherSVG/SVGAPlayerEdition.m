@@ -13,6 +13,7 @@
 #import <SVGAPlayer/SVGAAudioLayer.h>
 #import <SVGAPlayer/SVGAAudioEntity.h>
 #import <pthread.h>
+#import "SVGAVideoEntity+PTEX.h"
 
 #ifdef DEBUG
 static NSString *globalStaticString = nil;

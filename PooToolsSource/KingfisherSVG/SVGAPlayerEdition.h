@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "SVGAVideoEntity+PTEX.h"
+#import <SVGAPlayer/SVGAVideoEntity.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
