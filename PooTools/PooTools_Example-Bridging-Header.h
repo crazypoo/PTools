@@ -4,3 +4,4 @@
 
 #import "PTEditMenuInteractionDummy.h"
 #import "SVGAPlayerEdition.h"
+#import "SVGAVideoEntity+PTEX.h"
