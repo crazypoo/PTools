@@ -8,15 +8,15 @@
 
 import UIKit
 
-let MAX_PERIOD = 1.5
-let MIN_PERIOD = 0.1
-let MAX_PERIODS_TO_STORE: Int = 20
-let AVERAGE_SIZE: Int = 20
-let INVALID_PULSE_PERIOD: Float = -1
+public let MAX_PERIOD = 1.5
+public let MIN_PERIOD = 0.1
+public let MAX_PERIODS_TO_STORE: Int = 20
+public let AVERAGE_SIZE: Int = 20
+public let INVALID_PULSE_PERIOD: Float = -1
 
-class PTPulseDetector: NSObject {
-    private var upVals = [Float](repeating: 0, count: AVERAGE_SIZE)
-    private var downVals = [Float](repeating: 0, count: AVERAGE_SIZE)
+public class PTPulseDetector: NSObject {
+    private var upVals = [Double](repeating: 0, count: AVERAGE_SIZE)
+    private var downVals = [Double](repeating: 0, count: AVERAGE_SIZE)
     private var upValIndex: Int = 0
     private var downValIndex: Int = 0
     
@@ -32,7 +32,13 @@ class PTPulseDetector: NSObject {
     
     private var wasDown: Bool = false
     
-    func addNewValue(_ newVal: Float, atTime time: Double) -> Float {
+    public override init() {
+        super.init()
+        // set everything to invalid
+        reset()
+    }
+
+    public func addNewValue(_ newVal: Double, atTime time: Double) -> Float {
         if newVal > 0 {
             upVals[upValIndex] = newVal
             upValIndex += 1
@@ -48,15 +54,15 @@ class PTPulseDetector: NSObject {
             }
         }
         
-        var count: Float = 0
-        var total: Float = 0
+        var count: Double = 0
+        var total: Double = 0
         for i in 0..<AVERAGE_SIZE {
             if upVals[i] != 0 {
                 count += 1
                 total += upVals[i]
             }
         }
-        let averageUp: Float = total / count
+        let averageUp: Double = total / count
         
         count = 0
         total = 0
@@ -66,7 +72,7 @@ class PTPulseDetector: NSObject {
                 total += downVals[i]
             }
         }
-        let averageDown: Float = total / count
+        let averageDown: Double = total / count
         
         if newVal < -0.5 * averageDown {
             wasDown = true
@@ -93,7 +99,7 @@ class PTPulseDetector: NSObject {
         return 0
     }
     
-    func getAverage() -> Float {
+    public func getAverage() -> Float {
         let time = CACurrentMediaTime()
         var total: Double = 0
         var count: Double = 0
@@ -109,9 +115,9 @@ class PTPulseDetector: NSObject {
         return INVALID_PULSE_PERIOD
     }
     
-    func reset() {
-        upVals = [Float](repeating: 0, count: AVERAGE_SIZE)
-        downVals = [Float](repeating: 0, count: AVERAGE_SIZE)
+    public func reset() {
+        upVals = [Double](repeating: 0, count: AVERAGE_SIZE)
+        downVals = [Double](repeating: 0, count: AVERAGE_SIZE)
         upValIndex = 0
         downValIndex = 0
         

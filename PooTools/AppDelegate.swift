@@ -153,28 +153,9 @@ class AppDelegate: PTAppWindowsDelegate {
             
         }
         
-        
-//        PTNSLogConsole(">>>>>>>>>>>>>>\(String(describing: OSSVoiceEnum.French.flag))")
-//        PTNSLogConsole(">>>>>>>>>>>>>>\(PTUtils.getCurrentVC())")
-
-//        Task.init {
-//            do {
-//                let mopdel = try await Network.getIpAddress()
-//                PTNSLogConsole("\(mopdel)")
-//            } catch {
-//                PTNSLogConsole("\(error.localizedDescription)")
-//            }
-//        }
-        
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>,,,,,\(self.minCount(counts:0))")
-        
-        let userdefault = PTUserDefaultKeysAndValues.shares
-        userdefault.showAllUserDefaultsKeys = true
-        userdefault.keyAndValues().enumerated().forEach { index,value in
-            PTNSLogConsole("key:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: value.keys.first))")
-            PTNSLogConsole("value:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: value.values.first))")
-        }
-//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(userdefault.keyAndValues())")
+//        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")
+        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.resourcePath
+        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: url))")
         return true
     }
     

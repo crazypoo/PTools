@@ -243,6 +243,11 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     public var privacyTapHandler:PTActionTask?
     public var iKnowTapHandler:PTActionTask?
 
+    public func setContentLRSpace(@PTClampedProperyWrapper(range:0...CGFloat.ScaleW(w: 10) * 10) values:CGFloat = CGFloat.ScaleW(w: 100)) {
+        self.contentViewSpace = values
+    }
+    private var contentViewSpace = CGFloat.ScaleW(w: 10) * 10
+
     fileprivate lazy var titleLabel:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
@@ -281,9 +286,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         }
         return view
     }()
-    
-    let contentViewSpace = CGFloat.ScaleW(w: 10) * 10
-    
+        
     fileprivate lazy var collectionView:PTCollectionView = {
         
         let viewWidth = CGFloat.kSCREEN_WIDTH - contentViewSpace

@@ -47,11 +47,18 @@
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>New item</key>
+			<string></string>
+		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>相机使用</string>
 	<key>NSContactsUsageDescription</key>
 	<string>獲取通訊錄</string>
+	<key>NSDocumentsFolderUsageDescription</key>
+	<string>文件使用</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>定位</string>
 	<key>NSLocationAlwaysUsageDescription</key>

@@ -114,7 +114,7 @@ private extension PTSVGAViewController {
     }
 }
 
-// MARK: - <SVGAExPlayerDelegate>
+// MARK: - <SVGAPlayerSwiftEditionDelegate>
 extension PTSVGAViewController: SVGAPlayerSwiftEditionDelegate {
     /// 状态发生改变【状态更新】
     func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
@@ -364,19 +364,11 @@ private extension PTSVGAViewController {
     
     func setupDownloader() {
         SVGAPlayerSwiftEdition.downloader = { svgaSource, success, failure in
-            guard let url = URL(string: svgaSource) else {
-                failure(NSError(domain: "SVGAParsePlayer", code: -1, userInfo: [NSLocalizedDescriptionKey: "路径错误"]))
-                return
-            }
-            
-            Task {
-                do {
-                    let (data, _) = try await URLSession.shared.data(from: url)
-                    await MainActor.run { success(data) }
-                } catch {
-                    await MainActor.run { failure(error) }
-                }
-            }
+            let _ = PTFileDownloadApi.init(fileUrl: svgaSource, saveFilePath: FileManager.pt.CachesDirectory() + "\(svgaSource.lastPathComponent)", progress: nil, success: { result in
+                success(result.value!)
+            }, fail: { error in
+                failure(error!)
+            })
         }
     }
     
