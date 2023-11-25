@@ -517,6 +517,17 @@ public class PTFileDownloadApi: NSObject {
     
     private var queue:DispatchQueue = DispatchQueue.main
   
+    class open func fileDownLoad(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?) async throws -> Data {
+        
+        await withUnsafeContinuation { continuation in
+            let _ = PTFileDownloadApi(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: queue, progress: progress, success: { result in
+                continuation.resume(returning: result.value!)
+            }, fail: { error in
+                continuation.resume(throwing: NSError(domain: error.debugDescription, code: 999) as! Never)
+            })
+        }
+    }
+    
     // 默认主线程
     public convenience init(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?,success:FileDownloadSuccess?, fail:FileDownloadFail?) {
         

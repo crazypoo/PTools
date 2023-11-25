@@ -90,6 +90,12 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
 @objcMembers
 public class PTHeartRateViewController: PTBaseViewController {
 
+    public var svgaIsMute:Bool = true {
+        didSet {
+            self.player.isMute = svgaIsMute
+        }
+    }
+    
     lazy var previewLayerShadowView : UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -137,11 +143,9 @@ public class PTHeartRateViewController: PTBaseViewController {
         view.contentMode = .scaleAspectFit
         view.isAnimated = true
         view.exDelegate = self
-        view.isMute = true
         return view
     }()
 
-    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         initCaptureSession()
