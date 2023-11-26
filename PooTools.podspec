@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.23.7'
+    s.version     = '3.23.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -874,7 +874,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Stepper'
         subspec.dependency 'PooTools/Location'
         subspec.dependency 'PooTools/ScrollRefresh'
-        subspec.dependency 'PooTools/SVG'
+#        subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/FloatPanel'
         subspec.dependency 'PooTools/ListEmptyData'
