@@ -83,7 +83,7 @@ public final class RSA: DERCodable {
   ///   - n: The RSA Modulus
   ///   - e: The RSA Public Exponent
   ///   - d: The RSA Private Exponent (or nil if unknown, e.g. if only public key is known)
-  public convenience init(n: Array<UInt8>, e: Array<UInt8>, d: Array<UInt8>? = nil) {
+  public convenience init(n: [UInt8], e: [UInt8], d: [UInt8]? = nil) {
     if let d = d {
       self.init(n: BigUInteger(Data(n)), e: BigUInteger(Data(e)), d: BigUInteger(Data(d)))
     } else {
@@ -165,7 +165,7 @@ extension RSA {
   ///   publicExponent    INTEGER,  -- e
   /// }
   /// ```
-  internal convenience init(publicDER der: Array<UInt8>) throws {
+  internal convenience init(publicDER der: [UInt8]) throws {
     let asn = try ASN1.Decoder.decode(data: Data(der))
 
     // Enforce the above ASN Structure
@@ -198,7 +198,7 @@ extension RSA {
   ///   coefficient       INTEGER,  -- (inverse of q) mod p
   /// }
   /// ```
-  internal convenience init(privateDER der: Array<UInt8>) throws {
+  internal convenience init(privateDER der: [UInt8]) throws {
     let asn = try ASN1.Decoder.decode(data: Data(der))
 
     // Enforce the above ASN Structure (do we need to extract and verify the eponents and coefficients?)
@@ -281,7 +281,7 @@ extension RSA {
   ///   publicExponent    INTEGER   -- e
   /// }
   /// ```
-  func publicKeyDER() throws -> Array<UInt8> {
+  func publicKeyDER() throws -> [UInt8] {
     let mod = self.n.serialize()
     let pubKeyAsnNode: ASN1.Node =
       .sequence(nodes: [
@@ -311,7 +311,7 @@ extension RSA {
   ///   coefficient       INTEGER,  -- (inverse of q) mod p
   /// }
   /// ```
-  func privateKeyDER() throws -> Array<UInt8> {
+  func privateKeyDER() throws -> [UInt8] {
     // Make sure we have a private key
     guard let d = d else { throw RSA.Error.noPrivateKey }
     // Make sure we have access to our primes

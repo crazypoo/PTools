@@ -19,30 +19,30 @@ protocol SnapshotViewControllerDelegate: AnyObject {
 final class SnapshotViewController: UIViewController, SnapshotViewDelegate, SnapshotViewControllerDelegate {
     private let snapshot: Snapshot
     private let configuration: SnapshotViewConfiguration
-    
+
     private var snapshotView: SnapshotView?
     weak var delegate: SnapshotViewControllerDelegate?
-    
+
     init(snapshot: Snapshot, configuration: SnapshotViewConfiguration = SnapshotViewConfiguration()) {
         self.snapshot = snapshot
         self.configuration = configuration
-        
+
         super.init(nibName: nil, bundle: nil)
-        
+
         navigationItem.title = snapshot.element.label.name
     }
-    
+
     required init?(coder aDecoder: NSCoder) {
         return nil
     }
-    
+
     override func loadView() {
         let snapshotView = SnapshotView(snapshot: snapshot, configuration: configuration)
         snapshotView.delegate = self
         self.snapshotView = snapshotView
         self.view = snapshotView
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if isMovingFromParent {
@@ -50,9 +50,9 @@ final class SnapshotViewController: UIViewController, SnapshotViewDelegate, Snap
             delegate?.snapshotViewControllerWillNavigateBackToPreviousSnapshot(self)
         }
     }
-    
+
     // MARK: API
-    
+
     func select(snapshot: Snapshot) {
         let topViewController = topSnapshotViewController()
         if topViewController == self {
@@ -61,7 +61,7 @@ final class SnapshotViewController: UIViewController, SnapshotViewDelegate, Snap
             topViewController.select(snapshot: snapshot)
         }
     }
-    
+
     func deselect(snapshot: Snapshot) {
         let topViewController = topSnapshotViewController()
         if topViewController == self {
@@ -70,17 +70,17 @@ final class SnapshotViewController: UIViewController, SnapshotViewDelegate, Snap
             topViewController.deselect(snapshot: snapshot)
         }
     }
-    
+
     func focus(snapshot: Snapshot) {
         focus(snapshot: snapshot, callDelegate: false)
     }
-    
+
     // MARK: SnapshotViewDelegate
-    
+
     func snapshotView(_ snapshotView: SnapshotView, didSelectSnapshot snapshot: Snapshot) {
         delegate?.snapshotViewController(self, didSelectSnapshot: snapshot)
     }
-    
+
     func snapshotView(_ snapshotView: SnapshotView, didDeselectSnapshot snapshot: Snapshot) {
         delegate?.snapshotViewController(self, didDeselectSnapshot: snapshot)
     }
@@ -91,31 +91,31 @@ final class SnapshotViewController: UIViewController, SnapshotViewDelegate, Snap
         }
         present(actionSheet, animated: true, completion: nil)
     }
-    
+
     func snapshotView(_ snapshotView: SnapshotView, showAlertController alertController: UIAlertController) {
         present(alertController, animated: true, completion: nil)
     }
 
     // MARK: SnapshotViewControllerDelegate
-    
+
     func snapshotViewController(_ viewController: SnapshotViewController, didSelectSnapshot snapshot: Snapshot) {
         delegate?.snapshotViewController(self, didSelectSnapshot: snapshot)
     }
-    
+
     func snapshotViewController(_ viewController: SnapshotViewController, didDeselectSnapshot snapshot: Snapshot) {
         delegate?.snapshotViewController(self, didDeselectSnapshot: snapshot)
     }
-    
+
     func snapshotViewController(_ viewController: SnapshotViewController, didFocusOnSnapshot snapshot: Snapshot) {
         delegate?.snapshotViewController(self, didFocusOnSnapshot: snapshot)
     }
-    
+
     func snapshotViewControllerWillNavigateBackToPreviousSnapshot(_ viewController: SnapshotViewController) {
         delegate?.snapshotViewControllerWillNavigateBackToPreviousSnapshot(self)
     }
-    
+
     // MARK: Private
-    
+
     private func focus(snapshot: Snapshot, callDelegate: Bool) {
         let topViewController = topSnapshotViewController()
         if topViewController == self {
@@ -130,7 +130,7 @@ final class SnapshotViewController: UIViewController, SnapshotViewDelegate, Snap
             topViewController.focus(snapshot: snapshot)
         }
     }
-    
+
     private func topSnapshotViewController() -> SnapshotViewController {
         if let snapshotViewController = navigationController?.topViewController as? SnapshotViewController {
             return snapshotViewController

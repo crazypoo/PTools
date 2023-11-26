@@ -10,9 +10,9 @@ class MaskView: UIView {
     }
 
     var shapeLayer: CAShapeLayer {
-        //swiftlint:disable force_cast
+        // swiftlint:disable force_cast
         return layer as! CAShapeLayer
-        //swiftlint:enable force_cast
+        // swiftlint:enable force_cast
     }
 
 }

@@ -1,4 +1,4 @@
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 //
 // This source file is part of the DeviceKit open source project
 //
@@ -7,7 +7,7 @@
 // License: https://github.com/dennisweissmann/DeviceKit/blob/master/LICENSE
 // Contributors: https://github.com/dennisweissmann/DeviceKit#contributors
 //
-//===----------------------------------------------------------------------===//
+// ===----------------------------------------------------------------------===//
 
 #if os(watchOS)
 import WatchKit
@@ -1830,7 +1830,7 @@ extension Device {
 
   /// The volume’s available capacity in bytes for storing nonessential resources.
   @available(iOS 11.0, *)
-  public static var volumeAvailableCapacityForOpportunisticUsage: Int64? { //swiftlint:disable:this identifier_name
+  public static var volumeAvailableCapacityForOpportunisticUsage: Int64? { // swiftlint:disable:this identifier_name
     return (try? rootURL.resourceValues(forKeys: [.volumeAvailableCapacityForOpportunisticUsageKey]))?.volumeAvailableCapacityForOpportunisticUsage
   }
 

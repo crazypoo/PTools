@@ -9,27 +9,16 @@
 import UIKit
 
 public extension SnapshotTransformViewOptions {
-    
+
     struct PiecePosition {
-        
+
         // MARK: Properties
-        
+
         let index: Int
         let row: Int
         let column: Int
         let rowCount: Int
         let columnCount: Int
-        
-        
-        // MARK: Lifecycle
-        
-        internal init(index: Int, row: Int, column: Int, rowCount: Int, columnCount: Int) {
-            self.index = index
-            self.row = row
-            self.column = column
-            self.rowCount = rowCount
-            self.columnCount = columnCount
-        }
     }
-    
+
 }

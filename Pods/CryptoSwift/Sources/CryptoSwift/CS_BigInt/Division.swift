@@ -6,7 +6,7 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-//MARK: Full-width multiplication and division
+// MARK: Full-width multiplication and division
 
 // TODO: Return to `where Magnitude == Self` when SR-13491 is resolved
 extension FixedWidthInteger {
@@ -71,7 +71,7 @@ extension FixedWidthInteger {
             let r2 = r + vn1
             if r2.high != 0 { return q - 1 }
             if (q - 1).high == 0 && p - vn0 <= r2.upshifted + u.low { return q - 1 }
-            //assert((r + 2 * vn1).high != 0 || p - 2 * vn0 <= (r + 2 * vn1).upshifted + u.low)
+            // assert((r + 2 * vn1).high != 0 || p - 2 * vn0 <= (r + 2 * vn1).upshifted + u.low)
             return q - 2
         }
         /// Divide 3 half-digits by 2 half-digits to get a half-digit quotient and a full-digit remainder.
@@ -119,8 +119,7 @@ extension FixedWidthInteger {
             let (s, o) = x.0.addingReportingOverflow(x.1)
             if o { return q }
             r = s
-        }
-        else {
+        } else {
             (q, r) = y.0.fastDividingFullWidth((x.0, (x.1 as! Magnitude)))
         }
         // Now refine q by considering x.2 and y.1.
@@ -140,7 +139,7 @@ extension FixedWidthInteger {
 }
 
 extension CS.BigUInt {
-    //MARK: Division
+    // MARK: Division
 
     /// Divide this integer by the word `y`, leaving the quotient in its place and returning the remainder.
     ///
@@ -149,7 +148,7 @@ extension CS.BigUInt {
     internal mutating func divide(byWord y: Word) -> Word {
         precondition(y > 0)
         if y == 1 { return 0 }
-        
+
         var remainder: Word = 0
         for i in (0 ..< count).reversed() {
             let u = self[i]
@@ -163,7 +162,7 @@ extension CS.BigUInt {
     /// - Requires: y > 0
     /// - Returns: (quotient, remainder) where quotient = floor(x/y), remainder = x - quotient * y
     /// - Complexity: O(x.count)
-    internal func quotientAndRemainder(dividingByWord y: Word) -> (quotient:  CS.BigUInt, remainder: Word) {
+    internal func quotientAndRemainder(dividingByWord y: Word) -> (quotient: CS.BigUInt, remainder: Word) {
         var div = self
         let mod = div.divide(byWord: y)
         return (div, mod)
@@ -221,7 +220,7 @@ extension CS.BigUInt {
         let dc = y.count
         let d1 = y[dc - 1]
         let d0 = y[dc - 2]
-        var product:  CS.BigUInt = 0
+        var product: CS.BigUInt = 0
         for j in (dc ... x.count).reversed() {
             // Approximate dividing the top dc+1 words of `remainder` using the topmost 3/2 words.
             let r2 = x[j]
@@ -238,8 +237,7 @@ extension CS.BigUInt {
             if product <= x.extract(j - dc ..< j + 1) {
                 x.subtract(product, shiftedBy: j - dc)
                 quotient[j - dc] = q
-            }
-            else {
+            } else {
                 // This case is extremely rare -- it has a probability of 1/2^(Word.bitWidth - 1).
                 x.add(y, shiftedBy: j - dc)
                 x.subtract(product, shiftedBy: j - dc)
@@ -253,7 +251,7 @@ extension CS.BigUInt {
     }
 
     /// Divide `x` by `y`, putting the remainder in `x`.
-    mutating func formRemainder(dividingBy y:  CS.BigUInt, normalizedBy shift: Int) {
+    mutating func formRemainder(dividingBy y: CS.BigUInt, normalizedBy shift: Int) {
         precondition(!y.isZero)
         assert(y.leadingZeroBitCount == 0)
         if y.count == 1 {
@@ -266,7 +264,7 @@ extension CS.BigUInt {
             let dc = y.count
             let d1 = y[dc - 1]
             let d0 = y[dc - 2]
-            var product:  CS.BigUInt = 0
+            var product: CS.BigUInt = 0
             for j in (dc ... self.count).reversed() {
                 let r2 = self[j]
                 let r1 = self[j - 1]
@@ -276,8 +274,7 @@ extension CS.BigUInt {
                 product.multiply(byWord: q)
                 if product <= self.extract(j - dc ..< j + 1) {
                     self.subtract(product, shiftedBy: j - dc)
-                }
-                else {
+                } else {
                     self.add(y, shiftedBy: j - dc)
                     self.subtract(product, shiftedBy: j - dc)
                 }
@@ -286,13 +283,12 @@ extension CS.BigUInt {
         self >>= shift
     }
 
-
     /// Divide this integer by `y` and return the resulting quotient and remainder.
     ///
     /// - Requires: `y > 0`
     /// - Returns: `(quotient, remainder)` where `quotient = floor(self/y)`, `remainder = self - quotient * y`
     /// - Complexity: O(count^2)
-    public func quotientAndRemainder(dividingBy y:  CS.BigUInt) -> (quotient:  CS.BigUInt, remainder:  CS.BigUInt) {
+    public func quotientAndRemainder(dividingBy y: CS.BigUInt) -> (quotient: CS.BigUInt, remainder: CS.BigUInt) {
         var x = self
         var y = y
          CS.BigUInt.divide(&x, by: &y)
@@ -319,7 +315,7 @@ extension CS.BigUInt {
     /// Divide `x` by `y` and store the quotient in `x`.
     ///
     /// - Note: Use `divided(by:)` if you also need the remainder.
-    public static func /=(x: inout  CS.BigUInt, y:  CS.BigUInt) {
+    public static func /=(x: inout  CS.BigUInt, y: CS.BigUInt) {
         var y = y
          CS.BigUInt.divide(&x, by: &y)
     }

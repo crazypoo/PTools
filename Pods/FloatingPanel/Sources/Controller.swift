@@ -150,8 +150,8 @@ open class FloatingPanelController: UIViewController {
 
     /// The delegate of a panel controller object.
     @objc
-    public weak var delegate: FloatingPanelControllerDelegate?{
-        didSet{
+    public weak var delegate: FloatingPanelControllerDelegate? {
+        didSet {
             didUpdateDelegate()
         }
     }
@@ -304,13 +304,13 @@ open class FloatingPanelController: UIViewController {
         floatingPanel = Core(self, layout: initialLayout, behavior: initialBehavior)
     }
 
-    private func didUpdateDelegate(){
+    private func didUpdateDelegate() {
         if let layout = delegate?.floatingPanel?(self, layoutFor: traitCollection) {
             _layout = layout
         }
     }
 
-    // MARK:- Overrides
+    // MARK: - Overrides
 
     /// Creates the view that the controller manages.
     open override func loadView() {
@@ -381,7 +381,7 @@ open class FloatingPanelController: UIViewController {
         safeAreaInsetsObservation = nil
     }
 
-    // MARK:- Child view controller to consult
+    // MARK: - Child view controller to consult
     open override var childForStatusBarStyle: UIViewController? {
         return contentViewController
     }
@@ -398,7 +398,7 @@ open class FloatingPanelController: UIViewController {
         return contentViewController
     }
 
-    // MARK:- Privates
+    // MARK: - Privates
 
     private func shouldUpdateLayout(from previous: UITraitCollection, to new: UITraitCollection) -> Bool {
         return previous.horizontalSizeClass != new.horizontalSizeClass
@@ -539,7 +539,7 @@ open class FloatingPanelController: UIViewController {
             self.view.topAnchor.constraint(equalTo: parent.view.topAnchor, constant: 0.0),
             self.view.leftAnchor.constraint(equalTo: parent.view.leftAnchor, constant: 0.0),
             self.view.rightAnchor.constraint(equalTo: parent.view.rightAnchor, constant: 0.0),
-            self.view.bottomAnchor.constraint(equalTo: parent.view.bottomAnchor, constant: 0.0),
+            self.view.bottomAnchor.constraint(equalTo: parent.view.bottomAnchor, constant: 0.0)
             ])
 
         show(animated: animated) { [weak self] in
@@ -732,7 +732,7 @@ private var originalDismissImp: IMP?
 private typealias DismissFunction = @convention(c) (AnyObject, Selector, Bool, (() -> Void)?) -> Void
 extension FloatingPanelController {
     private static let dismissSwizzling: Void = {
-        let aClass: AnyClass! = UIViewController.self //object_getClass(vc)
+        let aClass: AnyClass! = UIViewController.self // object_getClass(vc)
         if let originalMethod = class_getInstanceMethod(aClass, #selector(dismiss(animated:completion:))),
            let swizzledImp = class_getMethodImplementation(aClass, #selector(__swizzled_dismiss(animated:completion:))) {
            originalDismissImp = method_setImplementation(originalMethod, swizzledImp)

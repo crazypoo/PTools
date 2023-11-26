@@ -202,11 +202,11 @@ public extension TimePeriodProtocol {
 	/// - Parameter period: The time period to compare to self
 	/// - Returns: The relationship between self and the given time period
 	func relation(to period: TimePeriodProtocol) -> TimePeriodRelation {
-		//Make sure that all start and end points exist for comparison
+		// Make sure that all start and end points exist for comparison
 		guard hasFiniteRange, period.hasFiniteRange else { return .none }
-		//Make sure time periods are of positive durations
+		// Make sure time periods are of positive durations
 		guard start! < end! && period.start! < period.end! else { return .none }
-		//Make comparisons
+		// Make comparisons
 		if period.start! < start! {
 			return .after
 		} else if period.end! == start! {

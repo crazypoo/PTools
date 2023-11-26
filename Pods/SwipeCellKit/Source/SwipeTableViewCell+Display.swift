@@ -13,7 +13,7 @@ extension SwipeTableViewCell {
         set { setSwipeOffset(newValue, animated: false) }
         get { return frame.midX - bounds.midX }
     }
-    
+
     /**
      Hides the swipe actions and returns the cell to center.
      
@@ -24,7 +24,7 @@ extension SwipeTableViewCell {
     public func hideSwipe(animated: Bool, completion: ((Bool) -> Void)? = nil) {
         swipeController.hideSwipe(animated: animated, completion: completion)
     }
-    
+
     /**
      Shows the swipe actions for the specified orientation.
      
@@ -39,7 +39,7 @@ extension SwipeTableViewCell {
                        animated: animated,
                        completion: completion)
     }
-    
+
     /** 
      The point at which the origin of the cell is offset from the non-swiped origin.
  

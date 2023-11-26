@@ -26,13 +26,13 @@ typealias Key = SecureBytes
 ///  Keeps bytes in memory. Because this is class, bytes are not copied
 ///  and memory area is locked as long as referenced, then unlocked on deinit
 final class SecureBytes {
-  private let bytes: Array<UInt8>
+  private let bytes: [UInt8]
   let count: Int
 
-  init(bytes: Array<UInt8>) {
+  init(bytes: [UInt8]) {
     self.bytes = bytes
     self.count = bytes.count
-    self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
+    self.bytes.withUnsafeBufferPointer { (pointer) in
       #if os(Windows)
         VirtualLock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)
@@ -44,7 +44,7 @@ final class SecureBytes {
   }
 
   deinit {
-    self.bytes.withUnsafeBufferPointer { (pointer) -> Void in
+    self.bytes.withUnsafeBufferPointer { (pointer) in
       #if os(Windows)
         VirtualUnlock(UnsafeMutableRawPointer(mutating: pointer.baseAddress), SIZE_T(pointer.count))
       #elseif os(WASI)

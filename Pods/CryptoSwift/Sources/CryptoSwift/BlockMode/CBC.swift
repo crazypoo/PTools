@@ -23,12 +23,12 @@ public struct CBC: BlockMode {
   }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .paddingRequired]
-  
-  private let iv: Array<UInt8>
+
+  private let iv: [UInt8]
 
   public let customBlockSize: Int? = nil
 
-  public init(iv: Array<UInt8>) {
+  public init(iv: [UInt8]) {
     self.iv = iv
   }
 
@@ -56,7 +56,7 @@ struct CBCModeWorker: BlockModeWorker {
   }
 
   @inlinable
-  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8] {
     guard let ciphertext = cipherOperation(xor(prev ?? iv, plaintext)) else {
       return Array(plaintext)
     }
@@ -65,11 +65,11 @@ struct CBCModeWorker: BlockModeWorker {
   }
 
   @inlinable
-  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8] {
     guard let plaintext = cipherOperation(ciphertext) else {
       return Array(ciphertext)
     }
-    let result: Array<UInt8> = xor(prev ?? self.iv, plaintext)
+    let result: [UInt8] = xor(prev ?? self.iv, plaintext)
     self.prev = ciphertext
     return result
   }

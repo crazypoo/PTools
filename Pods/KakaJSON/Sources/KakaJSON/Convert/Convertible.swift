@@ -22,7 +22,7 @@ public typealias JSONPropertyKey = String
 /// please let struct or class conform to `Convertible`
 public protocol Convertible {
     init()
-    
+
     /// Get a key from propertyName when converting JSON to model
     ///
     /// Only call once for every property in every type
@@ -31,7 +31,7 @@ public protocol Convertible {
     ///
     /// - Returns: Return a key to get jsonValue for the property
     func kj_modelKey(from property: Property) -> ModelPropertyKey
-    
+
     /// Get a model modelValue from jsonValue when converting JSON to model
     ///
     /// - Parameters:
@@ -43,7 +43,7 @@ public protocol Convertible {
     /// return `JSONValue` indicates do nothing
     func kj_modelValue(from jsonValue: Any?,
                        _ property: Property) -> Any?
-    
+
     /// model type for Any、AnyObject、Convertible...
     ///
     /// - Parameters:
@@ -51,19 +51,19 @@ public protocol Convertible {
     ///     - property: A property of model
     func kj_modelType(from jsonValue: Any?,
                       _ property: Property) -> Convertible.Type?
-    
+
     /// call when will begin to convert from JSON to model
     ///
     /// - Parameters:
     ///     - json: A json will be converted to model
     mutating func kj_willConvertToModel(from json: [String: Any])
-    
+
     /// call when did finish converting from JSON to model
     ///
     /// - Parameters:
     ///     - json: A json did be converted to model
     mutating func kj_didConvertToModel(from json: [String: Any])
-    
+
     /// Get a key from propertyName when converting from model to JSON
     ///
     /// Only call once for every property in every type
@@ -71,7 +71,7 @@ public protocol Convertible {
     /// - Parameters:
     ///     - property: A property of model
     func kj_JSONKey(from property: Property) -> JSONPropertyKey
-    
+
     /// Get a JSONValue from modelValue when converting from JSON to model
     ///
     /// - Parameters:
@@ -82,10 +82,10 @@ public protocol Convertible {
     /// return `modelValue` indicates do nothing
     func kj_JSONValue(from modelValue: Any?,
                       _ property: Property) -> Any?
-    
+
     /// call when will begin to convert from model to JSON
     func kj_willConvertToJSON()
-    
+
     /// call when did finish converting from model to JSON
     ///
     /// - Parameters:
@@ -106,7 +106,7 @@ public extension Convertible {
                       _ property: Property) -> Convertible.Type? { return nil }
     func kj_willConvertToModel(from json: [String: Any]) {}
     func kj_didConvertToModel(from json: [String: Any]) {}
-    
+
     func kj_JSONKey(from property: Property) -> JSONPropertyKey {
         return ConvertibleConfig.JSONKey(from: property, Self.self)
     }
@@ -128,7 +128,7 @@ public extension Convertible {
         get { return ConvertibleKJ(self) }
         set {}
     }
-    
+
     /// mutable version of kj
     var kj_m: ConvertibleKJ_M<Self> {
         mutating get { return ConvertibleKJ_M(&self) }
@@ -141,37 +141,37 @@ public struct ConvertibleKJ_M<T: Convertible> {
     init(_ basePtr: UnsafeMutablePointer<T>) {
         self.basePtr = basePtr
     }
-    
+
     /// JSONData -> Model
     public func convert(from jsonData: Data) {
         basePtr.pointee.kj_convert(from: jsonData)
     }
-    
+
     /// JSONData -> Model
     public func convert(from jsonData: NSData) {
         basePtr.pointee.kj_convert(from: jsonData as Data)
     }
-    
+
     /// JSONString -> Model
     public func convert(from jsonString: String) {
         basePtr.pointee.kj_convert(from: jsonString)
     }
-    
+
     /// JSONString -> Model
     public func convert(from jsonString: NSString) {
         basePtr.pointee.kj_convert(from: jsonString as String)
     }
-    
+
     /// JSONObject -> Model
     public func convert(from json: [String: Any]) {
         basePtr.pointee.kj_convert(from: json)
     }
-    
+
     /// JSONObject -> Model
     public func convert(from json: [NSString: Any]) {
         basePtr.pointee.kj_convert(from: json as [String: Any])
     }
-    
+
     /// JSONObject -> Model 
     public func convert(from json: NSDictionary) {
         basePtr.pointee.kj_convert(from: json as! [String: Any])
@@ -183,12 +183,12 @@ public struct ConvertibleKJ<T: Convertible> {
     init(_ base: T) {
         self.base = base
     }
-    
+
     /// Model -> JSONObject
     public func JSONObject() -> [String: Any] {
         return base.kj_JSONObject()
     }
-    
+
     /// Model -> JSONString
     public func JSONString(prettyPrinted: Bool = false) -> String {
         return base.kj_JSONString(prettyPrinted: prettyPrinted)
@@ -213,7 +213,7 @@ extension Convertible {
         }
         Logger.error("Failed to get JSON from JSONData.")
     }
-    
+
     mutating func kj_convert(from jsonString: String) {
         if let json = JSONSerialization.kj_JSON(jsonString, [String: Any].self) {
             kj_convert(from: json)
@@ -221,7 +221,7 @@ extension Convertible {
         }
         Logger.error("Failed to get JSON from JSONString.")
     }
-    
+
     mutating func kj_convert(from json: [String: Any]) {
         guard let mt = Metadata.type(self) as? ModelType else {
             Logger.warnning("Not a class or struct instance.")
@@ -231,30 +231,30 @@ extension Convertible {
             Logger.warnning("Don't have any property.")
             return
         }
-        
+
         // get data address
         let model = _ptr()
-        
+
         kj_willConvertToModel(from: json)
-        
+
         // enumerate properties
         for property in properties {
             // key filter
             let key = mt.modelKey(from: property.name,
                                   kj_modelKey(from: property))
-            
+
             // value filter
             guard let newValue = kj_modelValue(
                 from: json.kj_value(for: key),
                 property)~! else { continue }
-            
+
             let propertyType = property.dataType
             // if they are the same type, set value directly
             if Swift.type(of: newValue) == propertyType {
                 property.set(newValue, for: model)
                 continue
             }
-            
+
             // Model Type have priority
             // it can return subclass object to match superclass type
             if let modelType = kj_modelType(from: newValue, property),
@@ -262,7 +262,7 @@ extension Convertible {
                 property.set(value, for: model)
                 continue
             }
-            
+
             // try to convert newValue to propertyType
             guard let value = Values.value(newValue,
                                            propertyType,
@@ -270,13 +270,13 @@ extension Convertible {
                 property.set(newValue, for: model)
                 continue
             }
-            
+
             property.set(value, for: model)
         }
-        
+
         kj_didConvertToModel(from: json)
     }
-    
+
     private mutating
     func _modelTypeValue(_ jsonValue: Any,
                          _ modelType: Convertible.Type,
@@ -291,7 +291,7 @@ extension Convertible {
                     : models
             }
         }
-        
+
         if let json = jsonValue as? [String: Any] {
             if let jsonDict = jsonValue as? [String: [String: Any]?] {
                 var modelDict = [String: Any]()
@@ -300,7 +300,7 @@ extension Convertible {
                     modelDict[k] = m
                 }
                 guard modelDict.count > 0 else { return jsonValue }
-                
+
                 return propertyType is NSMutableDictionary.Type
                     ? NSMutableDictionary(dictionary: modelDict)
                     : modelDict
@@ -324,35 +324,35 @@ extension Convertible {
             Logger.warnning("Don't have any property.")
             return json
         }
-        
+
         kj_willConvertToJSON()
-        
+
         // as AnyObject is important! for class if xx is protocol type
         // var model = xx as AnyObject
         var model = self
-        
+
         // get data address
         let ptr = model._ptr()
-        
+
         // get JSON from model
         for property in properties {
             // value filter
             guard let value = kj_JSONValue(
                 from: property.get(from: ptr)~!,
                 property)~! else { continue }
-            
+
             guard let v = Values.JSONValue(value) else { continue }
-            
+
             // key filter
             json[mt.JSONKey(from: property.name,
                             kj_JSONKey(from: property))] = v
         }
-        
+
         kj_didConvertToJSON(json: json)
-        
+
         return json
     }
-    
+
     func kj_JSONString(prettyPrinted: Bool = false) -> String {
         if let str = JSONSerialization.kj_string(kj_JSONObject() as Any,
                                                  prettyPrinted: prettyPrinted) {

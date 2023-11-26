@@ -197,7 +197,7 @@ final class BarDashboardViewController: UIViewController, LifetimeTrackerViewabl
             dragOffset = offsetForCloseJumpBack
         }
 
-        UIView.animateKeyframes(withDuration: Constants.Layout.animationDuration, delay: 0, options: [.beginFromCurrentState, .calculationModeCubicPaced] , animations: {
+        UIView.animateKeyframes(withDuration: Constants.Layout.animationDuration, delay: 0, options: [.beginFromCurrentState, .calculationModeCubicPaced], animations: {
             self.relayout()
         }, completion: nil)
     }

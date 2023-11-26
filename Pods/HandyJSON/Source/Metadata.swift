@@ -44,7 +44,7 @@ struct _class_ro_t {
 }
 
 // MARK: MetadataType
-protocol MetadataType : PointerType {
+protocol MetadataType: PointerType {
     static var kind: Metadata.Kind? { get }
 }
 
@@ -63,7 +63,7 @@ extension MetadataType {
 }
 
 // MARK: Metadata
-struct Metadata : MetadataType {
+struct Metadata: MetadataType {
     var pointer: UnsafePointer<Int>
 
     init(type: Any.Type) {
@@ -125,7 +125,7 @@ extension Metadata {
 
 // MARK: Metadata + Class
 extension Metadata {
-    struct Class : ContextDescriptorType {
+    struct Class: ContextDescriptorType {
 
         static let kind: Kind? = .class
         var pointer: UnsafePointer<_Metadata._Class>
@@ -189,7 +189,7 @@ extension Metadata {
                     var name: String?
                     var type: Any.Type?
                 }
-                
+
                 for i in 0..<self.numberOfFields {
                     let name = fieldRecords[i].fieldName
                     if let cMangledTypeName = fieldRecords[i].mangledTypeName,
@@ -257,7 +257,7 @@ extension _Metadata {
 
 // MARK: Metadata + Struct
 extension Metadata {
-    struct Struct : ContextDescriptorType {
+    struct Struct: ContextDescriptorType {
         static let kind: Kind? = .struct
         var pointer: UnsafePointer<_Metadata._Struct>
         var contextDescriptorOffsetLocation: Int {

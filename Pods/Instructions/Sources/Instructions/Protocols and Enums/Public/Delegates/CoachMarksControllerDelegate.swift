@@ -34,7 +34,7 @@ public protocol CoachMarksControllerDelegate: AnyObject {
 
     func shouldHandleOverlayTap(in coachMarksController: CoachMarksController,
                                 at index: Int) -> Bool
-    
+
     func coachMarksController(_ coachMarksController: CoachMarksController,
                               didTapCoachMarkAt index: Int)
 }

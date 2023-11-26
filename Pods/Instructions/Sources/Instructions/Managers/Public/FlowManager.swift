@@ -10,7 +10,7 @@ public class FlowManager {
 
     /// The index (in `coachMarks`) of the coach mark being currently displayed.
     private(set) public var currentIndex = -1
-    
+
     /// Sometimes, the chain of coach mark display can be paused
     /// to let animations be performed. `true` to pause the execution,
     /// `false` otherwise.
@@ -71,7 +71,7 @@ public class FlowManager {
         currentIndex = -1
         isPaused = false
         canShowCoachMark = true
-        //disableFlow will be set by startFlow, to enable quick stop.
+        // disableFlow will be set by startFlow, to enable quick stop.
     }
 
     /// Stop displaying the coach marks and perform some cleanup.
@@ -85,12 +85,12 @@ public class FlowManager {
                            shouldCallDelegate: Bool = true, completion: (() -> Void)? = nil) {
         reset()
 
-        let animationBlock = { () -> Void in
+        let animationBlock = { () in
             self.coachMarksViewController.skipView?.asView?.alpha = 0.0
             self.coachMarksViewController.currentCoachMarkView?.alpha = 0.0
         }
 
-        let completionBlock = { [weak self] (finished: Bool) -> Void in
+        let completionBlock = { [weak self] (_: Bool) in
             guard let strongSelf = self else { return }
             strongSelf.coachMarksViewController.detachFromWindow()
             if shouldCallDelegate { strongSelf.delegate?.didEndShowingBySkipping(skipped) }

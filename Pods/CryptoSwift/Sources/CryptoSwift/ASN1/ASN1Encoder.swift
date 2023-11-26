@@ -38,7 +38,7 @@ extension ASN1 {
         case .objectIdentifier(let oid):
           return IDENTIFIERS.OBJECTID.bytes + self.asn1LengthPrefixed(oid.bytes)
         case .sequence(let nodes):
-          return IDENTIFIERS.SEQUENCE.bytes + self.asn1LengthPrefixed( nodes.reduce(into: Array<UInt8>(), { partialResult, node in
+          return IDENTIFIERS.SEQUENCE.bytes + self.asn1LengthPrefixed( nodes.reduce(into: [UInt8](), { partialResult, node in
             partialResult += encode(node)
           }))
       }
@@ -50,7 +50,7 @@ extension ASN1 {
     /// - Returns: The ASN.1 length Prefix for this chuck of data (excluding the passed in data)
     private static func asn1LengthPrefix(_ bytes: [UInt8]) -> [UInt8] {
       if bytes.count >= 0x80 {
-        var lengthAsBytes = withUnsafeBytes(of: bytes.count.bigEndian, Array<UInt8>.init)
+        var lengthAsBytes = withUnsafeBytes(of: bytes.count.bigEndian, [UInt8].init)
         while lengthAsBytes.first == 0 { lengthAsBytes.removeFirst() }
         return [0x80 + UInt8(lengthAsBytes.count)] + lengthAsBytes
       } else {

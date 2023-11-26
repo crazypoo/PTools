@@ -24,7 +24,7 @@ class SkipViewDisplayManager {
         if duration == 0 {
             skipView.asView?.alpha = 0.0
         } else {
-            UIView.animate(withDuration: duration) { () -> Void in
+            UIView.animate(withDuration: duration) { () in
                 skipView.asView?.alpha = 0.0
             }
         }
@@ -50,7 +50,7 @@ class SkipViewDisplayManager {
         if duration == 0 {
             skipView.asView?.alpha = 1.0
         } else {
-            UIView.animate(withDuration: duration) { () -> Void in
+            UIView.animate(withDuration: duration) { () in
                 skipView.asView?.alpha = 1.0
             }
         }

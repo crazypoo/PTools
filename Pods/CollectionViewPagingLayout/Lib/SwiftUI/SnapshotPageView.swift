@@ -15,7 +15,6 @@ public struct SnapshotPageView<ValueType: Identifiable, PageContent: View>: UIVi
 
     public var builder: Builder
 
-
     // MARK: Lifecycle
 
     public init(
@@ -27,7 +26,6 @@ public struct SnapshotPageView<ValueType: Identifiable, PageContent: View>: UIVi
         builder.modifierData.snapshotOptions = .init()
     }
 }
-
 
 public extension SnapshotPageView {
     func options(_ options: SnapshotTransformViewOptions) -> Self {

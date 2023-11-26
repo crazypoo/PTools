@@ -22,7 +22,6 @@ public class PagingCollectionViewControllerBuilder<ValueType: Identifiable, Page
 
     weak var viewController: ViewController?
 
-
     // MARK: Lifecycle
 
     public init(
@@ -45,9 +44,8 @@ public class PagingCollectionViewControllerBuilder<ValueType: Identifiable, Page
         self.selection = selection
     }
 
-
     // MARK: Public functions
-    
+
     func make() -> ViewController {
         let viewController = ViewController()
         viewController.pageViewBuilder = pageViewBuilder
@@ -65,7 +63,6 @@ public class PagingCollectionViewControllerBuilder<ValueType: Identifiable, Page
         viewController.update(list: data, currentIndex: selectedIndex)
         setupOnCurrentPageChanged(viewController)
     }
-
 
     // MARK: Private functions
 

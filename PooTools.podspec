@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.23.10'
+    s.version     = '3.23.11'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -799,9 +799,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/SpeechRecognizerPermission'
         subspec.frameworks = 'Speech'
         subspec.source_files = 'PooToolsSource/OSSKit/*.{h,m,swift}'
-#        subspec.resource_bundles = {
-#            'OSSKitResources' => ['PooToolsSource/OSSKit/*.xcassets'],
-#        }
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_OSSKITSPEECH POOTOOLS_COCOAPODS"
         }

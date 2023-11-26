@@ -18,7 +18,7 @@
 //  Created by zhouzhuo on 07/01/2017.
 //
 
-protocol PointerType : Equatable {
+protocol PointerType: Equatable {
     associatedtype Pointee
     var pointer: UnsafePointer<Pointee> { get set }
 }

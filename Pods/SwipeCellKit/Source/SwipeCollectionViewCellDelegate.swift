@@ -23,7 +23,7 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - returns: An array of `SwipeAction` objects representing the actions for the item. Each action you provide is used to create a button that the user can tap.  Returning `nil` will prevent swiping for the supplied orientation.
      */
     func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]?
-    
+
     /**
      Asks the delegate for the display options to be used while presenting the action buttons.
      
@@ -38,7 +38,7 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - note: If not implemented, a default `SwipeOptions` instance is used.
      */
     func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions
-    
+
     /**
      Tells the delegate that the collection view is about to go into editing mode.
      
@@ -49,7 +49,7 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - parameter orientation: The side of the item.
      */
     func collectionView(_ collectionView: UICollectionView, willBeginEditingItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation)
-    
+
     /**
      Tells the delegate that the collection view has left editing mode.
      
@@ -60,7 +60,7 @@ public protocol SwipeCollectionViewCellDelegate: class {
      - parameter orientation: The side of the item.
      */
     func collectionView(_ collectionView: UICollectionView, didEndEditingItemAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation)
-    
+
     /**
      Asks the delegate for visibile rectangle of the collection view, which is used to ensure swipe actions are vertically centered within the visible portion of the item.
      
@@ -80,11 +80,11 @@ public extension SwipeCollectionViewCellDelegate {
     func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
         return SwipeOptions()
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, willBeginEditingItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) {}
-    
+
     func collectionView(_ collectionView: UICollectionView, didEndEditingItemAt indexPath: IndexPath?, for orientation: SwipeActionsOrientation) {}
-    
+
     func visibleRect(for collectionView: UICollectionView) -> CGRect? {
         return nil
     }

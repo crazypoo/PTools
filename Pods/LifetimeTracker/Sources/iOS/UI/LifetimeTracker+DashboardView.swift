@@ -15,7 +15,7 @@ fileprivate extension String {
     typealias AttributedStringKey = String
     static let foregroundColorAttributeName = NSForegroundColorAttributeName
     #endif
-    
+
     func attributed(_ attributes: [AttributedStringKey: Any] = [:]) -> NSAttributedString {
         return NSAttributedString(string: self, attributes: attributes)
     }
@@ -80,9 +80,9 @@ typealias GroupModel = (color: UIColor, title: String, groupName: String, groupC
     }()
 
     public var style: Style = .bar
-    
+
     public var visibility: Visibility = .visibleWithIssuesDetected
-    
+
     convenience public init(visibility: Visibility, style: Style = .bar) {
         self.init()
         self.visibility = visibility
@@ -98,7 +98,7 @@ typealias GroupModel = (color: UIColor, title: String, groupName: String, groupC
             self.lifetimeTrackerView.update(with: vm)
         }
     }
-    
+
     private func summary(from trackedGroups: [String: LifetimeTracker.EntriesGroup]) -> NSAttributedString {
         let groupNames = trackedGroups.keys.sorted(by: >)
         let leakyGroupSummaries = groupNames.filter { groupName in
@@ -108,18 +108,18 @@ typealias GroupModel = (color: UIColor, title: String, groupName: String, groupC
                 let maxCountString = group.maxCount == Int.max ? "macCount.notSpecified".lt_localized : "\(group.maxCount)"
                 return "\(group.name ?? "dashboard.sectionHeader.title.noGroup".lt_localized) (\(group.count)/\(maxCountString))"
             }.joined(separator: ", ")
-        
+
         if leakyGroupSummaries.isEmpty {
             return "dashboard.header.issue.description.noIssues".lt_localized.attributed([
                 String.foregroundColorAttributeName: UIColor.green
                 ])
         }
-        
+
         return ("\("dashboard.header.issue.description.leakDetected".lt_localized): ").attributed([
             String.foregroundColorAttributeName: UIColor.red
             ]) + leakyGroupSummaries.attributed()
     }
-    
+
     private func entries(from trackedGroups: [String: LifetimeTracker.EntriesGroup]) -> (groups: [GroupModel], leaksCount: Int) {
         var leaksCount = 0
         var sections = [GroupModel]()
@@ -130,7 +130,7 @@ typealias GroupModel = (color: UIColor, title: String, groupName: String, groupC
             .sorted { (lhs: (key: String, value: LifetimeTracker.EntriesGroup), rhs: (key: String, value: LifetimeTracker.EntriesGroup)) -> Bool in
                 return (lhs.value.maxCount - lhs.value.count) < (rhs.value.maxCount - rhs.value.count)
             }
-            .forEach { (groupName: String, group: LifetimeTracker.EntriesGroup) in
+            .forEach { (_: String, group: LifetimeTracker.EntriesGroup) in
                 var groupColor: UIColor
                 switch group.lifetimeState {
                 case .valid: groupColor = .green
@@ -160,7 +160,7 @@ typealias GroupModel = (color: UIColor, title: String, groupName: String, groupC
         }
         return (groups: sections, leaksCount: leaksCount)
     }
-    
+
     func hasIssuesToDisplay(from trackedGroups: [String: LifetimeTracker.EntriesGroup]) -> Bool {
         let aDetectedIssue = trackedGroups.keys.first { trackedGroups[$0]?.lifetimeState == .leaky }
         return aDetectedIssue != nil

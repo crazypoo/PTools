@@ -9,24 +9,23 @@
 import UIKit
 
 public class BlurEffectView: UIVisualEffectView {
-    
+
     // MARK: Parameters
-    
+
     private var animator: UIViewPropertyAnimator?
     private var radius: CGFloat?
-    
-    
+
     // MARK: Lifecycle
-    
+
     deinit {
         animator?.stopAnimation(true)
     }
-    
+
     public override func removeFromSuperview() {
         super.removeFromSuperview()
         animator?.stopAnimation(true)
     }
-    
+
     public override func layoutSubviews() {
         super.layoutSubviews()
         if animator?.state != .active {
@@ -37,10 +36,9 @@ public class BlurEffectView: UIVisualEffectView {
             }
         }
     }
-    
-    
+
     // MARK: Public functions
-    
+
     /// Create blur effect with custom radius
     ///
     /// - Parameters:
@@ -55,7 +53,7 @@ public class BlurEffectView: UIVisualEffectView {
             animator?.state != .active ||
             animator?.fractionComplete == 1 ||
             animator?.fractionComplete == 0 {
-            
+
             animator?.stopAnimation(true)
             self.effect = nil
             animator = UIViewPropertyAnimator(duration: 1, curve: .linear) { [unowned self] in self.effect = effect }
@@ -63,5 +61,5 @@ public class BlurEffectView: UIVisualEffectView {
         self.radius = radius
         animator?.fractionComplete = radius
     }
-    
+
 }

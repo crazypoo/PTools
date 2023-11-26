@@ -29,7 +29,7 @@ public struct ECB: BlockMode {
 }
 
 struct ECBModeWorker: BlockModeWorker {
-  typealias Element = Array<UInt8>
+  typealias Element = [UInt8]
   let cipherOperation: CipherOperationOnBlock
   let blockSize: Int
   let additionalBufferSize: Int = 0
@@ -40,14 +40,14 @@ struct ECBModeWorker: BlockModeWorker {
   }
 
   @inlinable
-  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8] {
     guard let ciphertext = cipherOperation(plaintext) else {
       return Array(plaintext)
     }
     return ciphertext
   }
 
-  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8] {
     self.encrypt(block: ciphertext)
   }
 }

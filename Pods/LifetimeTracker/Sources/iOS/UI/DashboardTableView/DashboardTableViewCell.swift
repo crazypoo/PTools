@@ -8,22 +8,22 @@
 import UIKit
 
 class DashboardTableViewCell: UITableViewCell {
-    
+
     @IBOutlet private weak var groupIndicatorView: UIView!
     @IBOutlet private weak var classIndicatorView: UIView!
     @IBOutlet private weak var descriptionLabel: UILabel!
-    
+
     class var nib: UINib {
         return UINib(nibName: String(describing: self), bundle: .resolvedBundle)
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         groupIndicatorView.backgroundColor = .clear
         classIndicatorView.backgroundColor = .clear
         descriptionLabel.text = nil
     }
-    
+
     func setup(groupColor: UIColor, classColor: UIColor, description: String) {
         groupIndicatorView.backgroundColor = groupColor
         classIndicatorView.backgroundColor = classColor

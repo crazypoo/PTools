@@ -9,7 +9,7 @@
 import UIKit
 
 extension UIView {
-    
+
     @discardableResult
     public func fill(with view: UIView, edges: UIEdgeInsets = .zero) -> [NSLayoutConstraint] {
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -23,7 +23,7 @@ extension UIView {
         addConstraints(constraints)
         return constraints
     }
-    
+
     public func center(to view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
         superview?.addConstraints([
@@ -31,7 +31,7 @@ extension UIView {
             NSLayoutConstraint(item: view, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0)
         ])
     }
-    
+
     public func equalSize(to view: UIView) {
         view.translatesAutoresizingMaskIntoConstraints = false
         superview?.addConstraints([

@@ -114,8 +114,7 @@ open class NotificationBannerQueue: NSObject {
             }
 
             callback(false)
-        }
-        else {
+        } else {
             callback(true)
             return
         }
@@ -141,4 +140,3 @@ open class NotificationBannerQueue: NSObject {
     }
 
 }
-

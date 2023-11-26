@@ -71,7 +71,7 @@ public enum DateComparisonType {
 	case isToday
 	case isTomorrow
 	case isYesterday
-	case isSameDay(_ : DateRepresentable)
+	case isSameDay(_: DateRepresentable)
 
 	// Weeks
 	case isThisWeek

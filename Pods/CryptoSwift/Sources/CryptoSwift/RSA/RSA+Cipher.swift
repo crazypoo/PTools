@@ -20,12 +20,12 @@ import Foundation
 extension RSA: Cipher {
 
   @inlinable
-  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-    return try self.encrypt(Array<UInt8>(bytes), variant: .pksc1v15)
+  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
+    return try self.encrypt([UInt8](bytes), variant: .pksc1v15)
   }
 
   @inlinable
-  public func encrypt(_ bytes: Array<UInt8>, variant: RSAEncryptionVariant) throws -> Array<UInt8> {
+  public func encrypt(_ bytes: [UInt8], variant: RSAEncryptionVariant) throws -> [UInt8] {
     // Prepare the data for the specified variant
     let preparedData = try variant.prepare(bytes, blockSize: self.keySizeBytes)
 
@@ -34,18 +34,18 @@ extension RSA: Cipher {
   }
 
   @inlinable
-  internal func encryptPreparedBytes(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  internal func encryptPreparedBytes(_ bytes: [UInt8]) throws -> [UInt8] {
     // Calculate encrypted data
     return BigUInteger(Data(bytes)).power(self.e, modulus: self.n).serialize().bytes
   }
 
   @inlinable
-  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
-    return try self.decrypt(Array<UInt8>(bytes), variant: .pksc1v15)
+  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
+    return try self.decrypt([UInt8](bytes), variant: .pksc1v15)
   }
 
   @inlinable
-  public func decrypt(_ bytes: Array<UInt8>, variant: RSAEncryptionVariant) throws -> Array<UInt8> {
+  public func decrypt(_ bytes: [UInt8], variant: RSAEncryptionVariant) throws -> [UInt8] {
     // Decrypt the data
     let decrypted = try self.decryptPreparedBytes(bytes)
 
@@ -54,7 +54,7 @@ extension RSA: Cipher {
   }
 
   @inlinable
-  internal func decryptPreparedBytes(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  internal func decryptPreparedBytes(_ bytes: [UInt8]) throws -> [UInt8] {
     // Check for Private Exponent presence
     guard let d = d else { throw RSA.Error.noPrivateKey }
 
@@ -82,7 +82,7 @@ extension RSA {
     case pksc1v15
 
     @inlinable
-    internal func prepare(_ bytes: Array<UInt8>, blockSize: Int) throws -> Array<UInt8> {
+    internal func prepare(_ bytes: [UInt8], blockSize: Int) throws -> [UInt8] {
       switch self {
         case .unsafe:
           return bytes
@@ -101,18 +101,18 @@ extension RSA {
     }
 
     @inlinable
-    internal func formatEncryptedBytes(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+    internal func formatEncryptedBytes(_ bytes: [UInt8], blockSize: Int) -> [UInt8] {
       switch self {
         case .unsafe:
           return bytes
         case .raw, .pksc1v15:
           // Format the encrypted bytes before returning
-          return Array<UInt8>(repeating: 0x00, count: blockSize - bytes.count) + bytes
+          return [UInt8](repeating: 0x00, count: blockSize - bytes.count) + bytes
       }
     }
 
     @inlinable
-    internal func removePadding(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+    internal func removePadding(_ bytes: [UInt8], blockSize: Int) -> [UInt8] {
       switch self {
         case .unsafe:
           return bytes

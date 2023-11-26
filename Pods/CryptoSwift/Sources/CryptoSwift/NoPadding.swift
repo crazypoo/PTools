@@ -14,14 +14,12 @@
 //
 
 struct NoPadding: PaddingProtocol {
-  init() {
-  }
 
-  func add(to data: Array<UInt8>, blockSize _: Int) -> Array<UInt8> {
+  func add(to data: [UInt8], blockSize _: Int) -> [UInt8] {
     data
   }
 
-  func remove(from data: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from data: [UInt8], blockSize _: Int?) -> [UInt8] {
     data
   }
 }

@@ -20,7 +20,7 @@ public func write(_ value: Any,
 public func write(_ value: Any,
                   to URL: URL,
                   atomically: Bool = true,
-                  encoding: String.Encoding = .utf8) -> String?  {
+                  encoding: String.Encoding = .utf8) -> String? {
     if URL.isFileURL {
         let dir = (URL.path as NSString).deletingLastPathComponent
         let mgr = FileManager.default
@@ -49,7 +49,7 @@ public func read<T>(_ type: T.Type,
                     from URL: URL,
                     encoding: String.Encoding = .utf8) -> T? {
     guard let data = try? Data(contentsOf: URL) else { return nil }
-    
+
     var value = JSONSerialization.kj_JSON(data, Any.self)
     if value == nil {
         value = String(data: data, encoding: encoding)

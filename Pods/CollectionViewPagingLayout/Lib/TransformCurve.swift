@@ -15,7 +15,6 @@ public enum TransformCurve {
     case easeOut
 }
 
-
 public extension TransformCurve {
 
     /// Converting linear progress to curve progress
@@ -38,5 +37,5 @@ public extension TransformCurve {
             return value
         }
     }
-    
+
 }

@@ -18,7 +18,7 @@ import Foundation
 // MARK: Signatures & Verification
 
 extension RSA: Signature {
-  public func sign(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+  public func sign(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
     try self.sign(Array(bytes), variant: .message_pkcs1v15_SHA256)
   }
 
@@ -27,7 +27,7 @@ extension RSA: Signature {
   ///   - bytes: The data to be signed
   ///   - variant: The variant to use (`digest` variants expect a pre-hashed digest matching that of the specified hash function, `message` variants will hash the data using the specified hash function before signing it)
   /// - Returns: The signature of the data
-  public func sign(_ bytes: Array<UInt8>, variant: SignatureVariant) throws -> Array<UInt8> {
+  public func sign(_ bytes: [UInt8], variant: SignatureVariant) throws -> [UInt8] {
     // Check for Private Exponent presence
     guard let d = d else { throw RSA.Error.noPrivateKey }
 
@@ -52,7 +52,7 @@ extension RSA: Signature {
   /// - Returns: `True` when the signature is valid for the expected data, `False` otherwise.
   ///
   /// [IETF Verification Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-8.2.2)
-  public func verify(signature: Array<UInt8>, for bytes: Array<UInt8>, variant: SignatureVariant) throws -> Bool {
+  public func verify(signature: [UInt8], for bytes: [UInt8], variant: SignatureVariant) throws -> Bool {
     /// Step 1: Ensure the signature is the same length as the key's modulus
     guard signature.count == self.keySizeBytes else { throw Error.invalidSignatureLength }
 
@@ -72,7 +72,7 @@ extension RSA: Signature {
   /// Hashes and Encodes a message for signing and verifying
   ///
   /// - Note: [EMSA-PKCS1-v1_5](https://datatracker.ietf.org/doc/html/rfc8017#section-9.2)
-  fileprivate static func hashedAndEncoded(_ bytes: [UInt8], variant: SignatureVariant, keySizeInBytes: Int) throws -> Array<UInt8> {
+  fileprivate static func hashedAndEncoded(_ bytes: [UInt8], variant: SignatureVariant, keySizeInBytes: Int) throws -> [UInt8] {
     /// 1.  Apply the hash function to the message M to produce a hash
     let hashedMessage = variant.calculateHash(bytes)
 
@@ -140,21 +140,21 @@ extension RSA {
     /// This variant expects that the data to be signed is a valid SHA512-256 Hash Digest
     case digest_pkcs1v15_SHA512_256
 
-    internal var identifier: Array<UInt8> {
+    internal var identifier: [UInt8] {
       switch self {
         case .raw, .digest_pkcs1v15_RAW: return []
-        case .message_pkcs1v15_MD5, .digest_pkcs1v15_MD5: return Array<UInt8>(arrayLiteral: 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x05)
-        case .message_pkcs1v15_SHA1, .digest_pkcs1v15_SHA1: return Array<UInt8>(arrayLiteral: 0x2b, 0x0e, 0x03, 0x02, 0x1a)
-        case .message_pkcs1v15_SHA256, .digest_pkcs1v15_SHA256: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01)
-        case .message_pkcs1v15_SHA384, .digest_pkcs1v15_SHA384: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02)
-        case .message_pkcs1v15_SHA512, .digest_pkcs1v15_SHA512: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03)
-        case .message_pkcs1v15_SHA224, .digest_pkcs1v15_SHA224: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04)
-        case .message_pkcs1v15_SHA512_224, .digest_pkcs1v15_SHA512_224: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x05)
-        case .message_pkcs1v15_SHA512_256, .digest_pkcs1v15_SHA512_256: return Array<UInt8>(arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x06)
+        case .message_pkcs1v15_MD5, .digest_pkcs1v15_MD5: return [UInt8](arrayLiteral: 0x2a, 0x86, 0x48, 0x86, 0xf7, 0x0d, 0x02, 0x05)
+        case .message_pkcs1v15_SHA1, .digest_pkcs1v15_SHA1: return [UInt8](arrayLiteral: 0x2b, 0x0e, 0x03, 0x02, 0x1a)
+        case .message_pkcs1v15_SHA256, .digest_pkcs1v15_SHA256: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x01)
+        case .message_pkcs1v15_SHA384, .digest_pkcs1v15_SHA384: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x02)
+        case .message_pkcs1v15_SHA512, .digest_pkcs1v15_SHA512: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x03)
+        case .message_pkcs1v15_SHA224, .digest_pkcs1v15_SHA224: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x04)
+        case .message_pkcs1v15_SHA512_224, .digest_pkcs1v15_SHA512_224: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x05)
+        case .message_pkcs1v15_SHA512_256, .digest_pkcs1v15_SHA512_256: return [UInt8](arrayLiteral: 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, 0x06)
       }
     }
 
-    internal func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    internal func calculateHash(_ bytes: [UInt8]) -> [UInt8] {
       switch self {
         case .message_pkcs1v15_MD5:
           return Digest.md5(bytes)
@@ -186,7 +186,7 @@ extension RSA {
       }
     }
 
-    internal func enforceLength(_ bytes: Array<UInt8>, keySizeInBytes: Int) -> Bool {
+    internal func enforceLength(_ bytes: [UInt8], keySizeInBytes: Int) -> Bool {
       switch self {
         case .raw, .digest_pkcs1v15_RAW:
           return bytes.count <= keySizeInBytes
@@ -218,7 +218,7 @@ extension RSA {
       }
     }
 
-    internal func encode(_ bytes: Array<UInt8>) -> Array<UInt8> {
+    internal func encode(_ bytes: [UInt8]) -> [UInt8] {
       switch self {
         case .raw, .digest_pkcs1v15_RAW:
           return bytes
@@ -237,7 +237,7 @@ extension RSA {
     }
 
     /// Right now the only Padding Scheme supported is [EMCS-PKCS1v15](https://www.rfc-editor.org/rfc/rfc8017#section-9.2) (others include [EMSA-PSS](https://www.rfc-editor.org/rfc/rfc8017#section-9.1))
-    internal func pad(bytes: Array<UInt8>, to blockSize: Int) -> Array<UInt8> {
+    internal func pad(bytes: [UInt8], to blockSize: Int) -> [UInt8] {
       switch self {
         case .raw:
           return bytes
@@ -251,11 +251,11 @@ extension RSA {
     ///   - bytes: The signed bytes
     ///   - blockSize: The block size to pad until
     /// - Returns: A zero padded (prepended) bytes array of length blockSize
-    internal func formatSignedBytes(_ bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+    internal func formatSignedBytes(_ bytes: [UInt8], blockSize: Int) -> [UInt8] {
       switch self {
         default:
           // Format the encrypted bytes before returning
-          return Array<UInt8>(repeating: 0x00, count: blockSize - bytes.count) + bytes
+          return [UInt8](repeating: 0x00, count: blockSize - bytes.count) + bytes
       }
     }
   }

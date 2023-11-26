@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum FieldDescriptorKind : UInt16 {
+enum FieldDescriptorKind: UInt16 {
     // Swift nominal types.
     case Struct = 0
     case Class

@@ -15,7 +15,7 @@ import UIKit
     @objc public class func present() {
         presentForWindow(UIApplication.shared.keyWindow)
     }
-    
+
     /// Takes a snapshot of the specified window and presents the debugger view controller
     /// from the root view controller.
     ///
@@ -31,7 +31,7 @@ import UIKit
         let snapshot = Snapshot(element: ViewElement(view: window))
         presentWithSnapshot(snapshot, rootViewController: window.rootViewController, configuration: configuration, completion: completion)
     }
-    
+
     /// Takes a snapshot of the specified view and presents the debugger view controller
     /// from the nearest ancestor view controller.
     ///
@@ -47,7 +47,7 @@ import UIKit
         let snapshot = Snapshot(element: ViewElement(view: view))
         presentWithSnapshot(snapshot, rootViewController: getNearestAncestorViewController(responder: view), configuration: configuration, completion: completion)
     }
-    
+
     /// Takes a snapshot of the view of the specified view controller and presents
     /// the debugger view controller.
     ///
@@ -63,7 +63,7 @@ import UIKit
         let snapshot = Snapshot(element: ViewElement(view: view))
         presentWithSnapshot(snapshot, rootViewController: viewController, configuration: configuration, completion: completion)
     }
-    
+
     /// Presents a view debugger for the a snapshot as a modal view controller on
     /// top of the specified root view controller.
     ///
@@ -82,7 +82,7 @@ import UIKit
         let navigationController = UINavigationController(rootViewController: debuggerViewController)
         topViewController(rootViewController: rootViewController)?.present(navigationController, animated: true, completion: completion)
     }
-    
+
     @available(*, unavailable)
     override init() {
         fatalError()

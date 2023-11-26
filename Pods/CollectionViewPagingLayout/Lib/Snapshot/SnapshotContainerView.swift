@@ -9,19 +9,18 @@
 import UIKit
 
 public class SnapshotContainerView: UIView {
-    
+
     // MARK: Properties
-    
+
     public let snapshots: [UIView]
     public let identifier: String
     public let snapshotSize: CGSize
     public let pieceSizeRatio: CGSize
-    
+
     private weak var targetView: UIView?
-    
-    
+
     // MARK: Lifecycle
-    
+
     public init?(targetView: UIView, pieceSizeRatio: CGSize, identifier: String) {
         var snapshots: [UIView] = []
         self.pieceSizeRatio = pieceSizeRatio
@@ -42,7 +41,7 @@ public class SnapshotContainerView: UIView {
             if y >= targetView.frame.height {
                 break
             }
-            
+
             let frame = CGRect(x: x, y: y, width: min(width, targetView.frame.width - x), height: min(height, targetView.frame.height - y))
             if let view = targetView.resizableSnapshotView(from: frame, afterScreenUpdates: true, withCapInsets: .zero) {
                 view.frame = frame
@@ -53,7 +52,7 @@ public class SnapshotContainerView: UIView {
                 x = 0
                 y += height
             }
-            
+
         }
         if snapshots.isEmpty {
             return nil
@@ -67,9 +66,9 @@ public class SnapshotContainerView: UIView {
             self.addSubview($0)
         }
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) is not supported")
     }
-    
+
 }

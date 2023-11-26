@@ -25,7 +25,6 @@ public class PagingCollectionViewController<ValueType: Identifiable, PageContent
     private var list: [ValueType] = []
     private let layout = CollectionViewPagingLayout()
 
-
     // MARK: UIViewController
 
     public override func viewDidLoad() {
@@ -33,7 +32,6 @@ public class PagingCollectionViewController<ValueType: Identifiable, PageContent
         view.backgroundColor = .clear
         setupCollectionView()
     }
-
 
     // MARK: Public functions
 
@@ -51,12 +49,11 @@ public class PagingCollectionViewController<ValueType: Identifiable, PageContent
         onCurrentPageChanged?(currentPage)
     }
 
-
     // MARK: Internal functions
 
     func update(list: [ValueType], currentIndex: Int?) {
         var needsUpdate = false
-        
+
         if let self = self as? PagingCollectionViewControllerEquatableList {
             needsUpdate = !self.isListSame(as: list)
         } else {
@@ -90,9 +87,8 @@ public class PagingCollectionViewController<ValueType: Identifiable, PageContent
         }
     }
 
-
     // MARK: Private functions
-    
+
     private func setupCollectionView() {
         collectionView = UICollectionView(
             frame: view.frame,
@@ -144,7 +140,6 @@ public class PagingCollectionViewController<ValueType: Identifiable, PageContent
         }
     }
 
-
 }
 
 private protocol PagingCollectionViewControllerEquatableList {
@@ -166,7 +161,6 @@ private extension UICollectionView {
         (dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? T)!
     }
 }
-
 
 private extension UICollectionViewCell {
     static var reuseIdentifier: String {

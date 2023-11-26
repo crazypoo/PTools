@@ -43,7 +43,7 @@ public final class Scrypt {
   ///   - N: determines extra memory used
   ///   - r: determines a block size
   ///   - p: determines parallelicity degree
-  public init(password: Array<UInt8>, salt: Array<UInt8>, dkLen: Int, N: Int, r: Int, p: Int) throws {
+  public init(password: [UInt8], salt: [UInt8], dkLen: Int, N: Int, r: Int, p: Int) throws {
     precondition(dkLen > 0)
     precondition(N > 0)
     precondition(r > 0)
@@ -102,7 +102,7 @@ public final class Scrypt {
     return try PKCS5.PBKDF2(password: Array(self.password), salt: block, iterations: 1, keyLength: self.dkLen, variant: .sha2(.sha256)).calculate()
   }
 
-  public func callAsFunction() throws -> Array<UInt8> {
+  public func callAsFunction() throws -> [UInt8] {
     try calculate()
   }
 

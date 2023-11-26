@@ -38,5 +38,3 @@ struct ReflectionHelper {
         }
     }
 }
-
-

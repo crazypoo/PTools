@@ -29,11 +29,11 @@ public final class Poly1305: Authenticator {
   private let key: SecureBytes
 
   /// - parameter key: 32-byte key
-  public init(key: Array<UInt8>) {
+  public init(key: [UInt8]) {
     self.key = SecureBytes(bytes: key)
   }
 
-  private func squeeze(h: inout Array<UInt32>) {
+  private func squeeze(h: inout [UInt32]) {
     assert(h.count == 17)
     var u: UInt32 = 0
     for j in 0..<16 {
@@ -56,7 +56,7 @@ public final class Poly1305: Authenticator {
     h[16] = u
   }
 
-  private func add(h: inout Array<UInt32>, c: Array<UInt32>) {
+  private func add(h: inout [UInt32], c: [UInt32]) {
     assert(h.count == 17 && c.count == 17)
 
     var u: UInt32 = 0
@@ -67,8 +67,8 @@ public final class Poly1305: Authenticator {
     }
   }
 
-  private func mulmod(h: inout Array<UInt32>, r: Array<UInt32>) {
-    var hr = Array<UInt32>(repeating: 0, count: 17)
+  private func mulmod(h: inout [UInt32], r: [UInt32]) {
+    var hr = [UInt32](repeating: 0, count: 17)
     var u: UInt32 = 0
     for i in 0..<17 {
       u = 0
@@ -84,7 +84,7 @@ public final class Poly1305: Authenticator {
     self.squeeze(h: &h)
   }
 
-  private func freeze(h: inout Array<UInt32>) {
+  private func freeze(h: inout [UInt32]) {
     let horig = h
     self.add(h: &h, c: [5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 252])
     let negative = UInt32(bitPattern: -Int32(h[16] >> 7))
@@ -94,11 +94,11 @@ public final class Poly1305: Authenticator {
   }
 
   /// the key is partitioned into two parts, called "r" and "s"
-  fileprivate func onetimeauth(message input: Array<UInt8>, key k: Array<UInt8>) -> Array<UInt8> {
+  fileprivate func onetimeauth(message input: [UInt8], key k: [UInt8]) -> [UInt8] {
     // clamp
-    var r = Array<UInt32>(repeating: 0, count: 17)
-    var h = Array<UInt32>(repeating: 0, count: 17)
-    var c = Array<UInt32>(repeating: 0, count: 17)
+    var r = [UInt32](repeating: 0, count: 17)
+    var h = [UInt32](repeating: 0, count: 17)
+    var c = [UInt32](repeating: 0, count: 17)
 
     r[0] = UInt32(k[0])
     r[1] = UInt32(k[1])
@@ -159,7 +159,7 @@ public final class Poly1305: Authenticator {
 
    - returns: 16-byte tag that authenticates the message
    */
-  public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  public func authenticate(_ bytes: [UInt8]) throws -> [UInt8] {
     self.onetimeauth(message: bytes, key: Array(self.key))
   }
 }

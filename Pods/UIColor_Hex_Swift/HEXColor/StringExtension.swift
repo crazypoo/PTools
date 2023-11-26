@@ -8,7 +8,6 @@
 
 import Foundation
 
-
 extension String {
     /**
      Convert argb string to rgba string.
@@ -17,7 +16,7 @@ extension String {
         guard self.hasPrefix("#") else {
             return nil
         }
-        
+
         let hexString: String = String(self[self.index(self.startIndex, offsetBy: 1)...])
         switch hexString.count {
         case 4:

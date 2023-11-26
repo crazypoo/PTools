@@ -72,7 +72,7 @@ public extension FloatingPanelLayoutAnchor {
                 return [edgeAnchor.constraint(equalTo: layoutGuide.topAnchor, constant: inset)]
             }
             let offsetAnchor = layoutGuide.topAnchor.anchorWithOffset(to: edgeAnchor)
-            return [offsetAnchor.constraint(equalTo:layoutGuide.heightAnchor, multiplier: inset)]
+            return [offsetAnchor.constraint(equalTo: layoutGuide.heightAnchor, multiplier: inset)]
         case .bottom:
             if isAbsolute {
                 return [layoutGuide.bottomAnchor.constraint(equalTo: edgeAnchor, constant: inset)]

@@ -9,7 +9,7 @@
 import UIKit
 
 extension CGFloat {
-    
+
     public func interpolate(in inputRange: Range = .init(0, 1), out outputRange: Range = .init(0, 1)) -> CGFloat {
         var current = self
         if current > inputRange.upper {

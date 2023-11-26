@@ -23,7 +23,7 @@ public protocol SwipeExpanding {
      */
 
     func animationTimingParameters(buttons: [UIButton], expanding: Bool) -> SwipeExpansionAnimationTimingParameters
-    
+
     /**
      Tells your object when the expansion state is changing.
      
@@ -40,16 +40,16 @@ public protocol SwipeExpanding {
  Specifies timing information for the overall expansion animation.
  */
 public struct SwipeExpansionAnimationTimingParameters {
-    
+
     /// Returns a `SwipeExpansionAnimationTimingParameters` instance with default animation parameters.
     public static var `default`: SwipeExpansionAnimationTimingParameters { return SwipeExpansionAnimationTimingParameters() }
-    
+
     /// The duration of the expansion animation.
     public var duration: Double
-    
+
     /// The delay before starting the expansion animation.
     public var delay: Double
-    
+
     /**
      Contructs a new `SwipeExpansionAnimationTimingParameters` instance.
      
@@ -72,16 +72,16 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
 
     /// Returns a `ScaleAndAlphaExpansion` instance with default expansion options.
     public static var `default`: ScaleAndAlphaExpansion { return ScaleAndAlphaExpansion() }
-    
+
     /// The duration of the animation.
     public let duration: Double
-    
+
     /// The scale factor used during animation.
     public let scale: CGFloat
-    
+
     /// The inter-button delay between animations.
     public let interButtonDelay: Double
-    
+
     /**
      Contructs a new `ScaleAndAlphaExpansion` instance.
      
@@ -105,11 +105,11 @@ public struct ScaleAndAlphaExpansion: SwipeExpanding {
         timingParameters.delay = expanding ? interButtonDelay : 0
         return timingParameters
     }
-    
+
     /// :nodoc:
     public func actionButton(_ button: UIButton, didChange expanding: Bool, otherActionButtons: [UIButton]) {
         let buttons = expanding ? otherActionButtons : otherActionButtons.reversed()
-        
+
         buttons.enumerated().forEach { index, button in
             UIView.animate(withDuration: duration, delay: interButtonDelay * Double(expanding ? index : index + 1), options: [], animations: {
                 button.transform = expanding ? .init(scaleX: self.scale, y: self.scale) : .identity

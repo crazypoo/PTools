@@ -24,7 +24,7 @@ public extension KJ where Base: ExpressibleByStringLiteral {
                 upper = true
                 continue
             }
-            
+
             if upper, newStr.count > 0 {
                 newStr += c.uppercased()
             } else {
@@ -34,7 +34,7 @@ public extension KJ where Base: ExpressibleByStringLiteral {
         }
         return newStr
     }
-    
+
     /// from camel-cased to underline-cased
     ///
     /// e.g. from `myTestName` to `my_test_name`
@@ -51,23 +51,23 @@ public extension KJ where Base: ExpressibleByStringLiteral {
         }
         return newStr
     }
-    
+
     /// JSONObject -> Model
     func model<M: Convertible>(_ type: M.Type) -> M? {
         return model(type: type) as? M
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible? {
         guard let string = base as? String else { return nil }
         return string.kj_fastModel(type)
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray<M: Convertible>(_ type: M.Type) -> [M] {
         return modelArray(type: type) as! [M]
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray(type: Convertible.Type) -> [Convertible] {
         guard let string = base as? String else { return [] }

@@ -31,7 +31,7 @@ public extension UIColor {
 }
 
 public class JXSegmentedViewTool {
-    public static func interpolate<T: SignedNumeric & Comparable>(from: T, to:  T, percent:  T) ->  T {
+    public static func interpolate<T: SignedNumeric & Comparable>(from: T, to: T, percent: T) -> T {
         let percent = max(0, min(1, percent))
         return from + (to - from) * percent
     }
@@ -61,14 +61,14 @@ public class JXSegmentedViewTool {
 
 extension JXSegmentedViewTool {
     public static func interpolateThemeColor(from: UIColor, to: UIColor, percent: CGFloat) -> UIColor {
-        
+
         if #available(iOS 13.0, *) {
             return UIColor { (traitCollection) -> UIColor in
                 let resolvedFrom = from.resolvedColor(with: traitCollection)
                 let resolvedTo = to.resolvedColor(with: traitCollection)
                 return interpolateColor(from: resolvedFrom, to: resolvedTo, percent: percent)
             }
-            
+
         } else {
             return interpolateColor(from: from, to: to, percent: percent)
         }

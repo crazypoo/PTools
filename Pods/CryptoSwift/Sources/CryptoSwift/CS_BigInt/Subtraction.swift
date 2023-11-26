@@ -7,7 +7,7 @@
 //
 
 extension CS.BigUInt {
-    //MARK: Subtraction
+    // MARK: Subtraction
 
     /// Subtract `word` from this integer in place, returning a flag indicating if the operation
     /// caused an arithmetic overflow. `word` is shifted `shift` words to the left before being subtracted.
@@ -78,8 +78,7 @@ extension CS.BigUInt {
                 let (d2, c2) = d.subtractingReportingOverflow(1)
                 self[ai] = d2
                 carry = c || c2
-            }
-            else {
+            } else {
                 self[ai] = d
                 carry = c
             }
@@ -98,7 +97,7 @@ extension CS.BigUInt {
         let overflow = result.subtractReportingOverflow(other, shiftedBy: shift)
         return (result, overflow)
     }
-    
+
     /// Subtracts `other` from `self`, returning the result and a flag indicating arithmetic overflow.
     ///
     /// - Note: When the operation overflows, then `partialValue` is the twos' complement of the absolute value of the difference.
@@ -106,7 +105,7 @@ extension CS.BigUInt {
     public func subtractingReportingOverflow(_ other: CS.BigUInt) -> (partialValue: CS.BigUInt, overflow: Bool) {
         return self.subtractingReportingOverflow(other, shiftedBy: 0)
     }
-    
+
     /// Subtract `other` from this integer in place.
     /// `other` is shifted `shift` digits to the left before being subtracted.
     ///

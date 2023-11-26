@@ -12,15 +12,15 @@ extension TypeProxy {
     static func `is`(_ value: Any) -> Bool {
         return value is Self
     }
-    
+
     static func `is`(_ type: Any.Type) -> Bool {
         return type is Self.Type
     }
-    
+
     static func `as`(_ value: Any) -> Self? {
         return value as? Self
     }
-    
+
     static func `as`(_ type: Any.Type) -> Self.Type? {
         return type as? Self.Type
     }

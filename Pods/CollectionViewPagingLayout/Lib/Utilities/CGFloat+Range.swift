@@ -9,16 +9,16 @@
 import UIKit
 
 extension CGFloat {
-    
+
     public struct Range {
-        
+
         let lower: CGFloat
         let upper: CGFloat
-        
+
         public init(_ lower: CGFloat, _ upper: CGFloat) {
             self.lower = lower
             self.upper = upper
         }
     }
-    
+
 }

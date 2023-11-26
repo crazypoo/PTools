@@ -30,29 +30,29 @@ public class ConvertibleConfig {
         init(jsonKey: @escaping JSONKeyConfig) { self.jsonKey = jsonKey }
         init(jsonValue: @escaping JSONValueConfig) { self.jsonValue = jsonValue }
     }
-    
+
     private static let global = Item()
     private static var items: [TypeKey: Item] = [:]
-    
+
     /// get global config for modelKey
     public static func modelKey(from property: Property) -> ModelPropertyKey {
         guard let fn = global.modelKey else { return property.name }
         return fn(property)
     }
-    
+
     /// get model's config for modelKey
     public static func modelKey(from property: Property,
                                 _ model: Convertible) -> ModelPropertyKey {
         return modelKey(from: property, type(of: model))
     }
-    
+
     /// get type's config for modelKey
     public static func modelKey(from property: Property,
                                 _ type: Convertible.Type) -> ModelPropertyKey {
         if let fn = items[typeKey(type)]?.modelKey {
             return fn(property)
         }
-        
+
         let mt = Metadata.type(type)
         if var classMt = mt as? ClassType {
             while let superMt = classMt.super {
@@ -62,27 +62,27 @@ public class ConvertibleConfig {
                 classMt = superMt
             }
         }
-        
+
         guard let fn = global.modelKey else {
             return property.name
         }
         return fn(property)
     }
-    
+
     /// get global config for modelValue
     public static func modelValue(from jsonValue: Any?,
                                   _ property: Property) -> Any? {
         guard let fn = global.modelValue else { return jsonValue }
         return fn(jsonValue, property)
     }
-    
+
     /// get model's config for modelValue
     public static func modelValue(from jsonValue: Any?,
                                   _ property: Property,
                                   _ model: Convertible) -> Any? {
         return modelValue(from: jsonValue, property, type(of: model))
     }
-    
+
     /// get type's config for modelValue
     public static func modelValue(from jsonValue: Any?,
                                   _ property: Property,
@@ -91,7 +91,7 @@ public class ConvertibleConfig {
         if let fn = items[key]?.modelValue {
             return fn(jsonValue, property)
         }
-        
+
         let mt = Metadata.type(type)
         if var classMt = mt as? ClassType {
             while let superMt = classMt.super {
@@ -102,7 +102,7 @@ public class ConvertibleConfig {
                 classMt = superMt
             }
         }
-        
+
         guard let fn = global.modelValue else {
             items[key]?.modelValue = { v, _ in v }
             return jsonValue
@@ -110,26 +110,26 @@ public class ConvertibleConfig {
         items[key]?.modelValue = fn
         return fn(jsonValue, property)
     }
-    
+
     /// get global config for JSONKey
     public static func JSONKey(from property: Property) -> JSONPropertyKey {
         guard let fn = global.jsonKey else { return property.name }
         return fn(property)
     }
-    
+
     /// get model's config for JSONKey
     public static func JSONKey(from property: Property,
                                _ model: Convertible) -> JSONPropertyKey {
         return JSONKey(from: property, type(of: model))
     }
-    
+
     /// get type's config for JSONKey
     public static func JSONKey(from property: Property,
                                _ type: Convertible.Type) -> JSONPropertyKey {
         if let fn = items[typeKey(type)]?.jsonKey {
             return fn(property)
         }
-        
+
         let mt = Metadata.type(type)
         if var classMt = mt as? ClassType {
             while let superMt = classMt.super {
@@ -139,27 +139,27 @@ public class ConvertibleConfig {
                 classMt = superMt
             }
         }
-        
+
         guard let fn = global.jsonKey else {
             return property.name
         }
         return fn(property)
     }
-    
+
     /// get global config for JSONValue
     public static func JSONValue(from modelValue: Any?,
                                  _ property: Property) -> Any? {
         guard let fn = global.modelValue else { return modelValue }
         return fn(modelValue, property)
     }
-    
+
     /// get model's config for JSONValue
     public static func JSONValue(from modelValue: Any?,
                                  _ property: Property,
                                  _ model: Convertible) -> Any? {
         return JSONValue(from: modelValue, property, type(of: model))
     }
-    
+
     /// get type's config for JSONValue
     public static func JSONValue(from modelValue: Any?,
                                  _ property: Property,
@@ -168,7 +168,7 @@ public class ConvertibleConfig {
         if let fn = items[key]?.jsonValue {
             return fn(modelValue, property)
         }
-        
+
         let mt = Metadata.type(type)
         if var classMt = mt as? ClassType {
             while let superMt = classMt.super {
@@ -179,7 +179,7 @@ public class ConvertibleConfig {
                 classMt = superMt
             }
         }
-        
+
         guard let fn = global.modelValue else {
             items[key]?.jsonValue = { v, _ in v}
             return modelValue
@@ -187,13 +187,13 @@ public class ConvertibleConfig {
         items[key]?.jsonValue = fn
         return fn(modelValue, property)
     }
-    
+
     /// set type's config for modelKey
     public static func setModelKey(for type: Convertible.Type,
                                    _ modelKey: @escaping ModelKeyConfig) {
         setModelKey(for: [type], modelKey)
     }
-    
+
     /// set types's config for modelKey
     public static func setModelKey(for types: [Convertible.Type] = [],
                                    _ modelKey: @escaping ModelKeyConfig) {
@@ -201,7 +201,7 @@ public class ConvertibleConfig {
             global.modelKey = modelKey
             return
         }
-        
+
         types.forEach {
             let key = typeKey($0)
             if let item = items[key] {
@@ -211,13 +211,13 @@ public class ConvertibleConfig {
             items[key] = Item(modelKey: modelKey)
         }
     }
-    
+
     /// set type's config for modelValue
     public static func setModelValue(for type: Convertible.Type,
                                      modelValue: @escaping ModelValueConfig) {
         setModelValue(for: [type], modelValue: modelValue)
     }
-    
+
     /// set types's config for modelValue
     public static func setModelValue(for types: [Convertible.Type] = [],
                                      modelValue: @escaping ModelValueConfig) {
@@ -225,7 +225,7 @@ public class ConvertibleConfig {
             global.modelValue = modelValue
             return
         }
-        
+
         types.forEach {
             let key = typeKey($0)
             if let item = items[key] {
@@ -235,13 +235,13 @@ public class ConvertibleConfig {
             items[key] = Item(modelValue: modelValue)
         }
     }
-    
+
     /// set type's config for jsonKey
     public static func setJSONKey(for type: Convertible.Type,
                                   jsonKey: @escaping JSONKeyConfig) {
         setJSONKey(for: [type], jsonKey: jsonKey)
     }
-    
+
     /// set types's config for jsonKey
     public static func setJSONKey(for types: [Convertible.Type] = [],
                                   jsonKey: @escaping JSONKeyConfig) {
@@ -249,7 +249,7 @@ public class ConvertibleConfig {
             global.jsonKey = jsonKey
             return
         }
-        
+
         types.forEach {
             let key = typeKey($0)
             if let item = items[key] {
@@ -259,13 +259,13 @@ public class ConvertibleConfig {
             items[key] = Item(jsonKey: jsonKey)
         }
     }
-    
+
     /// set type's config for jsonValue
     public static func setJSONValue(for type: Convertible.Type,
                                     jsonValue: @escaping JSONValueConfig) {
         setJSONValue(for: [type], jsonValue: jsonValue)
     }
-    
+
     /// set types's config for jsonValue
     public static func setJSONValue(for types: [Convertible.Type] = [],
                                     jsonValue: @escaping JSONValueConfig) {
@@ -273,7 +273,7 @@ public class ConvertibleConfig {
             global.jsonValue = jsonValue
             return
         }
-        
+
         types.forEach {
             let key = typeKey($0)
             if let item = items[key] {

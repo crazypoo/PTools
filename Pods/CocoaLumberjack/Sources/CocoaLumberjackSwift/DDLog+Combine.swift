@@ -26,8 +26,7 @@ import CocoaLumberjackSwiftSupport
 extension DDLog {
     // MARK: - Subscription
     private final class Subscription<S: Subscriber>: NSObject, DDLogger, Combine.Subscription
-    where S.Input == DDLogMessage
-    { // swiftlint:disable:this opening_brace
+    where S.Input == DDLogMessage { // swiftlint:disable:this opening_brace
         private var subscriber: S?
         private weak var log: DDLog?
 
@@ -84,8 +83,7 @@ extension DDLog {
         }
 
         public func receive<S>(subscriber: S)
-        where S: Subscriber, S.Failure == Failure, S.Input == Output
-        { // swiftlint:disable:this opening_brace
+        where S: Subscriber, S.Failure == Failure, S.Input == Output { // swiftlint:disable:this opening_brace
             let subscription = Subscription(log: log, with: logLevel, subscriber: subscriber)
             subscriber.receive(subscription: subscription)
         }

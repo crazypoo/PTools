@@ -7,7 +7,7 @@
 //
 
 extension CS.BigUInt: Hashable {
-    //MARK: Hashing
+    // MARK: Hashing
 
     /// Append this `BigUInt` to the specified hasher.
     public func hash(into hasher: inout Hasher) {

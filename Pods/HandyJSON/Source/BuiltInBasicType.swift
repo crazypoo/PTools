@@ -44,7 +44,7 @@ extension IntegerPropertyProtocol {
             return nil
         }
     }
-    
+
     func _plainValue() -> Any? {
         return self
     }
@@ -113,7 +113,7 @@ extension FloatPropertyProtocol {
 extension Float: FloatPropertyProtocol {}
 extension Double: FloatPropertyProtocol {}
 
-fileprivate let formatter: NumberFormatter = {
+private let formatter: NumberFormatter = {
     let formatter = NumberFormatter()
     formatter.usesGroupingSeparator = false
     formatter.numberStyle = .decimal
@@ -163,7 +163,7 @@ extension Optional: _BuiltInBasicType {
     }
 
     func _getWrappedValue() -> Any? {
-        return self.map( { (wrapped) -> Any in
+        return self.map({ (wrapped) -> Any in
             return wrapped as Any
         })
     }
@@ -276,4 +276,3 @@ extension Dictionary: _BuiltInBasicType {
         return result
     }
 }
-

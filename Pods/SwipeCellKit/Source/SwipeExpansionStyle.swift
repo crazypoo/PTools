@@ -8,12 +8,12 @@
 import UIKit
 
 /// Describes the expansion style.  Expansion is the behavior when the cell is swiped past a defined threshold.
-public struct SwipeExpansionStyle {    
+public struct SwipeExpansionStyle {
     /// The default action performs a selection-type behavior. The cell bounces back to its unopened state upon selection and the row remains in the table/collection view.
     public static var selection: SwipeExpansionStyle { return SwipeExpansionStyle(target: .percentage(0.5),
                                                                                   elasticOverscroll: true,
                                                                                   completionAnimation: .bounce) }
-    
+
     /// The default action performs a destructive behavior. The cell is removed from the table/collection view in an animated fashion.
     public static var destructive: SwipeExpansionStyle { return .destructive(automaticallyDelete: true, timing: .with) }
 
@@ -44,26 +44,26 @@ public struct SwipeExpansionStyle {
 
     /// The relative target expansion threshold. Expansion will occur at the specified value.
     public let target: Target
-    
+
     /// Additional triggers to useful for determining if expansion should occur.
     public let additionalTriggers: [Trigger]
-    
+
     /// Specifies if buttons should expand to fully fill overscroll, or expand at a percentage relative to the overscroll.
     public let elasticOverscroll: Bool
-    
+
     /// Specifies the expansion animation completion style.
     public let completionAnimation: CompletionAnimation
-    
+
     /// Specifies the minimum amount of overscroll required if the configured target is less than the fully exposed action view.
     public var minimumTargetOverscroll: CGFloat = 20
-    
+
     /// The amount of elasticity applied when dragging past the expansion target.
     ///
     /// - note: Default value is 0.2. Valid range is from 0.0 for no movement past the expansion target, to 1.0 for unrestricted movement with dragging.
     public var targetOverscrollElasticity: CGFloat = 0.2
-    
+
     var minimumExpansionTranslation: CGFloat = 8.0
-    
+
     /**
      Contructs a new `SwipeExpansionStyle` instance.
      
@@ -83,18 +83,18 @@ public struct SwipeExpansionStyle {
         self.elasticOverscroll = elasticOverscroll
         self.completionAnimation = completionAnimation
     }
-    
+
     func shouldExpand(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, within frame: CGRect? = nil) -> Bool {
         guard let actionsView = view.actionsView, let gestureView = gesture.view else { return false }
         guard abs(gesture.translation(in: gestureView).x) > minimumExpansionTranslation else { return false }
-    
+
         let xDelta = floor(abs(frame?.minX ?? view.frame.minX))
         if xDelta <= actionsView.preferredWidth {
             return false
         } else if xDelta > targetOffset(for: view) {
             return true
         }
-        
+
         // Use the frame instead of superview as Swipeable may not be full width of superview
         let referenceFrame: CGRect = frame != nil ? view.frame : superview.bounds
         for trigger in additionalTriggers {
@@ -102,27 +102,27 @@ public struct SwipeExpansionStyle {
                 return true
             }
         }
-        
+
         return false
     }
-    
+
     func targetOffset(for view: Swipeable) -> CGFloat {
         return target.offset(for: view, minimumOverscroll: minimumTargetOverscroll)
     }
 }
 
-extension SwipeExpansionStyle {    
+extension SwipeExpansionStyle {
     /// Describes the relative target expansion threshold. Expansion will occur at the specified value.
     public enum Target {
         /// The target is specified by a percentage.
         case percentage(CGFloat)
-        
+
         /// The target is specified by a edge inset.
         case edgeInset(CGFloat)
-        
+
         func offset(for view: Swipeable, minimumOverscroll: CGFloat) -> CGFloat {
             guard let actionsView = view.actionsView else { return .greatestFiniteMagnitude }
-            
+
             let offset: CGFloat = {
                 switch self {
                 case .percentage(let value):
@@ -131,22 +131,22 @@ extension SwipeExpansionStyle {
                     return view.frame.width - value
                 }
             }()
-            
+
             return max(actionsView.preferredWidth + minimumOverscroll, offset)
         }
     }
-    
+
     /// Describes additional triggers to useful for determining if expansion should occur.
     public enum Trigger {
         /// The trigger is specified by a touch occuring past the supplied percentage in the superview.
         case touchThreshold(CGFloat)
-        
+
         /// The trigger is specified by the distance in points past the fully exposed action view.
         case overscroll(CGFloat)
-        
+
         func isTriggered(view: Swipeable, gesture: UIPanGestureRecognizer, in superview: UIView, referenceFrame: CGRect) -> Bool {
             guard let actionsView = view.actionsView else { return false }
-            
+
             switch self {
             case .touchThreshold(let value):
                 let location = gesture.location(in: superview).x - referenceFrame.origin.x
@@ -157,27 +157,27 @@ extension SwipeExpansionStyle {
             }
         }
     }
-    
+
     /// Describes the expansion animation completion style.
     public enum CompletionAnimation {
         /// The expansion will completely fill the item.
         case fill(FillOptions)
-        
+
         /// The expansion will bounce back from the trigger point and hide the action view, resetting the item.
         case bounce
     }
-    
+
     /// Specifies the options for the fill completion animation.
     public struct FillOptions {
         /// Describes when the action handler will be invoked with respect to the fill animation.
         public enum HandlerInvocationTiming {
             /// The action handler is invoked with the fill animation.
             case with
-            
+
             /// The action handler is invoked after the fill animation completes.
             case after
         }
-        
+
         /**
          Returns a `FillOptions` instance with automatic fulfillemnt.
          
@@ -190,7 +190,7 @@ extension SwipeExpansionStyle {
         public static func automatic(_ style: ExpansionFulfillmentStyle, timing: HandlerInvocationTiming) -> FillOptions {
             return FillOptions(autoFulFillmentStyle: style, timing: timing)
         }
-        
+
         /**
          Returns a `FillOptions` instance with manual fulfillemnt.
          
@@ -201,10 +201,10 @@ extension SwipeExpansionStyle {
         public static func manual(timing: HandlerInvocationTiming) -> FillOptions {
             return FillOptions(autoFulFillmentStyle: nil, timing: timing)
         }
-        
+
         /// The fulfillment style describing how expansion should be resolved once the action has been fulfilled.
         public let autoFulFillmentStyle: ExpansionFulfillmentStyle?
-        
+
         /// The timing which specifies when the action handler will be invoked with respect to the fill animation.
         public let timing: HandlerInvocationTiming
     }

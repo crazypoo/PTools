@@ -21,10 +21,10 @@ public protocol CipherModeWorker {
   var additionalBufferSize: Int { get }
 
   @inlinable
-  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8>
+  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8]
 
   @inlinable
-  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8>
+  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8]
 }
 
 /// Block workers use `BlockEncryptor`

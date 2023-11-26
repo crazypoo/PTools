@@ -6,7 +6,7 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-//MARK: CS.BigInt
+// MARK: CS.BigInt
 
 extension CS {
 

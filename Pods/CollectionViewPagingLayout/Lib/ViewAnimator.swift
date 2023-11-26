@@ -17,13 +17,11 @@ public protocol ViewAnimator {
     @discardableResult func animate(animations: @escaping (_ progress: Double, _ finished: Bool) -> Void) -> ViewAnimatorCancelable?
 }
 
-
 public protocol ViewAnimatorCancelable {
 
     /// Cancel the animation with changing progress
     func cancel()
 }
-
 
 /// Default implementation for `ViewAnimator`
 public class DefaultViewAnimator: ViewAnimator {

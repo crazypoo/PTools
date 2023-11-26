@@ -81,7 +81,7 @@ open class StatusBarNotificationBanner: BaseNotificationBanner {
     public init(customView: UIView) {
         super.init(style: .customView)
         self.customView = customView
-        
+
         contentView.addSubview(customView)
         customView.snp.makeConstraints { make in
             make.edges.equalTo(contentView)
@@ -97,19 +97,19 @@ open class StatusBarNotificationBanner: BaseNotificationBanner {
 }
 
 public extension StatusBarNotificationBanner {
-    
+
     func applyStyling(
         titleColor: UIColor? = nil,
         titleTextAlign: NSTextAlignment? = nil
     ) {
-        
+
         if let titleColor = titleColor {
             titleLabel!.textColor = titleColor
         }
-        
+
         if let titleTextAlign = titleTextAlign {
             titleLabel!.textAlignment = titleTextAlign
         }
     }
-    
+
 }

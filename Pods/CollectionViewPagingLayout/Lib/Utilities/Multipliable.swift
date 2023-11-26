@@ -28,7 +28,6 @@ public protocol SummableToSelf {
 
 extension CGFloat: MultipliableToCGFloat, MultipliableToSelf, SummableToCGFloat, SummableToSelf {}
 
-
 extension CGPoint: MultipliableToCGFloat, MultipliableToSelf {
     public static func * (rhs: CGFloat, lhs: CGPoint) -> CGPoint {
         lhs * rhs
@@ -52,7 +51,6 @@ extension CGPoint: SummableToCGFloat, SummableToSelf {
         CGPoint(x: rhs.x + lhs.x, y: rhs.y + lhs.y)
     }
 }
-
 
 extension CGSize: MultipliableToCGFloat, MultipliableToSelf {
     public static func * (rhs: CGFloat, lhs: CGSize) -> CGSize {

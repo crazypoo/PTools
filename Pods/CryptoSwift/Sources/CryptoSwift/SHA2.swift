@@ -29,19 +29,19 @@ public final class SHA2: DigestType {
   @usableFromInline
   let digestLength: Int
 
-  private let k: Array<UInt64>
+  private let k: [UInt64]
 
   @usableFromInline
-  var accumulated = Array<UInt8>()
+  var accumulated = [UInt8]()
 
   @usableFromInline
   var processedBytesTotalCount: Int = 0
 
   @usableFromInline
-  var accumulatedHash32 = Array<UInt32>()
+  var accumulatedHash32 = [UInt32]()
 
   @usableFromInline
-  var accumulatedHash64 = Array<UInt64>()
+  var accumulatedHash64 = [UInt64]()
 
   @frozen
   public enum Variant: RawRepresentable {
@@ -90,7 +90,7 @@ public final class SHA2: DigestType {
     }
 
     @usableFromInline
-    var h: Array<UInt64> {
+    var h: [UInt64] {
       switch self {
         case .sha224:
           return [0xc1059ed8, 0x367cd507, 0x3070dd17, 0xf70e5939, 0xffc00b31, 0x68581511, 0x64f98fa7, 0xbefa4fa4]
@@ -161,7 +161,7 @@ public final class SHA2: DigestType {
   }
 
   @inlinable
-  public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+  public func calculate(for bytes: [UInt8]) -> [UInt8] {
     do {
       return try update(withBytes: bytes.slice, isLast: true)
     } catch {
@@ -169,12 +169,12 @@ public final class SHA2: DigestType {
     }
   }
 
-  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+  public func callAsFunction(_ bytes: [UInt8]) -> [UInt8] {
     calculate(for: bytes)
   }
 
   @usableFromInline
-  func process64(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt64>) {
+  func process64(block chunk: ArraySlice<UInt8>, currentHash hh: inout [UInt64]) {
     // break chunk into sixteen 64-bit words M[j], 0 ≤ j ≤ 15, big-endian
     // Extend the sixteen 64-bit words into eighty 64-bit words:
     let M = UnsafeMutablePointer<UInt64>.allocate(capacity: self.k.count)
@@ -235,7 +235,7 @@ public final class SHA2: DigestType {
 
   // mutating currentHash in place is way faster than returning new result
   @usableFromInline
-  func process32(block chunk: ArraySlice<UInt8>, currentHash hh: inout Array<UInt32>) {
+  func process32(block chunk: ArraySlice<UInt8>, currentHash hh: inout [UInt32]) {
     // break chunk into sixteen 32-bit words M[j], 0 ≤ j ≤ 15, big-endian
     // Extend the sixteen 32-bit words into sixty-four 32-bit words:
     let M = UnsafeMutablePointer<UInt32>.allocate(capacity: self.k.count)
@@ -299,7 +299,7 @@ public final class SHA2: DigestType {
 extension SHA2: Updatable {
 
   @inlinable
-  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> [UInt8] {
     self.accumulated += bytes
 
     if isLast {
@@ -329,7 +329,7 @@ extension SHA2: Updatable {
     self.processedBytesTotalCount += processedBytes
 
     // output current hash
-    var result = Array<UInt8>(repeating: 0, count: variant.digestLength)
+    var result = [UInt8](repeating: 0, count: variant.digestLength)
     switch self.variant {
       case .sha224, .sha256:
         var pos = 0

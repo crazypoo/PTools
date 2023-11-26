@@ -9,7 +9,7 @@
 import UIKit
 
 public protocol CollectionViewPagingLayoutDelegate: AnyObject {
-    
+
     /// Calls when the current page changes
     ///
     /// - Parameter layout: a reference to the layout class
@@ -17,14 +17,12 @@ public protocol CollectionViewPagingLayoutDelegate: AnyObject {
     func onCurrentPageChanged(layout: CollectionViewPagingLayout, currentPage: Int)
 }
 
-
 public extension CollectionViewPagingLayoutDelegate {
     func onCurrentPageChanged(layout: CollectionViewPagingLayout, currentPage: Int) {}
 }
 
-
 public class CollectionViewPagingLayout: UICollectionViewLayout {
-    
+
     // MARK: Properties
 
     /// Number of visible items at the same time
@@ -47,9 +45,9 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
     public var defaultAnimator: ViewAnimator?
 
     public private(set) var isAnimating: Bool = false
-    
+
     public weak var delegate: CollectionViewPagingLayoutDelegate?
-    
+
     override public var collectionViewContentSize: CGSize {
         getContentSize()
     }
@@ -62,16 +60,16 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
             delegate?.onCurrentPageChanged(layout: self, currentPage: currentPage)
         }
     }
-    
+
     private var currentScrollOffset: CGFloat {
         let visibleRect = self.visibleRect
         return scrollDirection == .horizontal ? (visibleRect.minX / max(visibleRect.width, 1)) : (visibleRect.minY / max(visibleRect.height, 1))
     }
-    
+
     private var visibleRect: CGRect {
         collectionView.map { CGRect(origin: $0.contentOffset, size: $0.bounds.size) } ?? .zero
     }
-    
+
     private var numberOfItems: Int {
         guard let numberOfSections = collectionView?.numberOfSections, numberOfSections > 0 else {
             return 0
@@ -80,7 +78,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
         .compactMap { collectionView?.numberOfItems(inSection: $0) }
         .reduce(0, +)
     }
-    
+
     private var currentPageCache: Int?
     private var attributesCache: [(page: Int, attributes: UICollectionViewLayoutAttributes)]?
     private var boundsObservation: NSKeyValueObservation?
@@ -89,9 +87,8 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
     private var originalIsUserInteractionEnabled: Bool?
     private var contentOffsetObservation: NSKeyValueObservation?
 
-
     // MARK: Public functions
-    
+
     public func setCurrentPage(_ page: Int,
                                animated: Bool = true,
                                animator: ViewAnimator? = nil,
@@ -104,13 +101,13 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
                                completion: (() -> Void)? = nil) {
         safelySetCurrentPage(page, animated: animated, animator: defaultAnimator, completion: completion)
     }
-    
+
     public func goToNextPage(animated: Bool = true,
                              animator: ViewAnimator? = nil,
                              completion: (() -> Void)? = nil) {
         setCurrentPage(currentPage + 1, animated: animated, animator: animator, completion: completion)
     }
-    
+
     public func goToPreviousPage(animated: Bool = true,
                                  animator: ViewAnimator? = nil,
                                  completion: (() -> Void)? = nil) {
@@ -135,10 +132,9 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
             })
         }
     }
-    
-    
+
     // MARK: UICollectionViewLayout
-    
+
     override public func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
         if newBounds.size != visibleRect.size {
             currentPageCache = currentPage
@@ -165,7 +161,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
         let endIndexOutOfBounds = max(0, initialEndIndex - numberOfItems)
         let startIndex = max(0, initialStartIndex - endIndexOutOfBounds)
         let endIndex = min(numberOfItems, initialEndIndex + startIndexOutOfBounds)
-        
+
         var attributesArray: [(page: Int, attributes: UICollectionViewLayoutAttributes)] = []
         var section = 0
         var numberOfItemsInSection = collectionView?.numberOfItems(inSection: section) ?? 0
@@ -178,19 +174,19 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
                 numberOfItemsInSection = collectionView?.numberOfItems(inSection: section) ?? 0
                 item = index - numberOfItemsInPrevSections
             }
-            
+
             let cellAttributes = UICollectionViewLayoutAttributes(forCellWith: IndexPath(item: item, section: section))
             let pageIndex = CGFloat(index)
             let progress = pageIndex - currentScrollOffset
             var zIndex = Int(-abs(round(progress)))
-            
+
             let cell = collectionView?.cellForItem(at: cellAttributes.indexPath)
-            
+
             if let cell = cell as? TransformableView {
                 cell.transform(progress: progress)
                 zIndex = cell.zPosition(progress: progress)
             }
-            
+
             if cell == nil || cell is TransformableView {
                 cellAttributes.frame = visibleRect
                 if cell == nil, transparentAttributeWhenCellNotLoaded {
@@ -215,7 +211,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
         addBoundsObserverIfNeeded()
         return attributesArray.map(\.attributes)
     }
-    
+
     override public func invalidateLayout() {
         super.invalidateLayout()
         if let page = currentPageCache {
@@ -225,10 +221,9 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
             updateCurrentPageIfNeeded()
         }
     }
-    
-    
+
     // MARK: Private functions
-    
+
     private func updateCurrentPageIfNeeded() {
         var currentPage: Int = 0
         if let collectionView = collectionView {
@@ -245,7 +240,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
             self.currentPage = currentPage
         }
     }
-    
+
     private func getContentSize() -> CGSize {
         var safeAreaLeftRight: CGFloat = 0
         var safeAreaTopBottom: CGFloat = 0
@@ -259,7 +254,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
              return CGSize(width: visibleRect.width - safeAreaLeftRight, height: CGFloat(numberOfItems) * visibleRect.height)
         }
     }
-    
+
     private func safelySetCurrentPage(_ page: Int, animated: Bool, animator: ViewAnimator?, completion: (() -> Void)? = nil) {
         if isAnimating {
             currentViewAnimatorCancelable?.cancel()
@@ -296,7 +291,7 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
             }
             collectionView?.setContentOffset(contentOffset, animated: animated)
         }
-        
+
         // this is necessary when we want to set the current page without animation
         if !animated, page != currentPage {
             invalidateLayoutInBatchUpdate()
@@ -325,7 +320,6 @@ public class CollectionViewPagingLayout: UICollectionViewLayout {
         }
     }
 }
-
 
 extension CollectionViewPagingLayout {
     private func addBoundsObserverIfNeeded() {

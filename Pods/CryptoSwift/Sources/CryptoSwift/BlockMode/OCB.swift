@@ -33,8 +33,8 @@ public final class OCB: BlockMode {
     case fail
   }
 
-  private let N: Array<UInt8>
-  private let additionalAuthenticatedData: Array<UInt8>?
+  private let N: [UInt8]
+  private let additionalAuthenticatedData: [UInt8]?
   private let mode: Mode
   public let customBlockSize: Int? = nil
 
@@ -46,10 +46,10 @@ public final class OCB: BlockMode {
   // `authenticationTag` nil for encryption, known tag for decryption
   /// For encryption, the value is set at the end of the encryption.
   /// For decryption, this is a known Tag to validate against.
-  public var authenticationTag: Array<UInt8>?
+  public var authenticationTag: [UInt8]?
 
   // encrypt
-  public init(nonce N: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, tagLength: Int = 16, mode: Mode = .detached) {
+  public init(nonce N: [UInt8], additionalAuthenticatedData: [UInt8]? = nil, tagLength: Int = 16, mode: Mode = .detached) {
     self.N = N
     self.additionalAuthenticatedData = additionalAuthenticatedData
     self.mode = mode
@@ -58,7 +58,7 @@ public final class OCB: BlockMode {
 
   // decrypt
   @inlinable
-  public convenience init(nonce N: Array<UInt8>, authenticationTag: Array<UInt8>, additionalAuthenticatedData: Array<UInt8>? = nil, mode: Mode = .detached) {
+  public convenience init(nonce N: [UInt8], authenticationTag: [UInt8], additionalAuthenticatedData: [UInt8]? = nil, mode: Mode = .detached) {
     self.init(nonce: N, additionalAuthenticatedData: additionalAuthenticatedData, tagLength: authenticationTag.count, mode: mode)
     self.authenticationTag = authenticationTag
   }
@@ -95,24 +95,24 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
   // Additional authenticated data
   private let aad: ArraySlice<UInt8>?
   // Known Tag used to validate during decryption
-  private var expectedTag: Array<UInt8>?
+  private var expectedTag: [UInt8]?
 
   /*
    * KEY-DEPENDENT
    */
   // NOTE: elements are lazily calculated
-  private var l = [Array<UInt8>]()
-  private var lAsterisk: Array<UInt8>
-  private var lDollar: Array<UInt8>
+  private var l = [[UInt8]]()
+  private var lAsterisk: [UInt8]
+  private var lDollar: [UInt8]
 
   /*
    * PER-ENCRYPTION/DECRYPTION
    */
   private var mainBlockCount: UInt64
-  private var offsetMain: Array<UInt8>
-  private var checksum: Array<UInt8>
+  private var offsetMain: [UInt8]
+  private var checksum: [UInt8]
 
-  init(N: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: Array<UInt8>? = nil, tagLength: Int, mode: OCB.Mode, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) {
+  init(N: ArraySlice<UInt8>, aad: ArraySlice<UInt8>? = nil, expectedTag: [UInt8]? = nil, tagLength: Int, mode: OCB.Mode, cipherOperation: @escaping CipherOperationOnBlock, encryptionOperation: @escaping CipherOperationOnBlock) {
 
     self.cipherOperation = cipherOperation
     self.hashOperation = encryptionOperation
@@ -131,7 +131,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
      * KEY-DEPENDENT INITIALIZATION
      */
 
-    let zeros = Array<UInt8>(repeating: 0, count: self.blockSize)
+    let zeros = [UInt8](repeating: 0, count: self.blockSize)
     self.lAsterisk = self.hashOperation(zeros.slice)! /// L_* = ENCIPHER(K, zeros(128))
     self.lDollar = double(self.lAsterisk) /// L_$ = double(L_*)
     self.l.append(double(self.lDollar)) /// L_0 = double(L_$)
@@ -141,7 +141,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
      */
 
     /// Nonce = num2str(TAGLEN mod 128,7) || zeros(120-bitlen(N)) || 1 || N
-    var nonce = Array<UInt8>(repeating: 0, count: blockSize)
+    var nonce = [UInt8](repeating: 0, count: blockSize)
     nonce[(nonce.count - N.count)...] = N
     nonce[0] = UInt8(tagLength) << 4
     nonce[blockSize - 1 - N.count] |= 1
@@ -157,7 +157,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     let Stretch = Ktop + xor(Ktop[0..<8], Ktop[1..<9])
 
     /// Offset_0 = Stretch[1+bottom..128+bottom]
-    var offsetMAIN_0 = Array<UInt8>(repeating: 0, count: blockSize)
+    var offsetMAIN_0 = [UInt8](repeating: 0, count: blockSize)
     let bits = bottom % 8
     let bytes = Int(bottom / 8)
     if bits == 0 {
@@ -171,19 +171,19 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     }
 
     self.mainBlockCount = 0
-    self.offsetMain = Array<UInt8>(offsetMAIN_0.slice)
-    self.checksum = Array<UInt8>(repeating: 0, count: self.blockSize) /// Checksum_0 = zeros(128)
+    self.offsetMain = [UInt8](offsetMAIN_0.slice)
+    self.checksum = [UInt8](repeating: 0, count: self.blockSize) /// Checksum_0 = zeros(128)
   }
 
   /// L_i = double(L_{i-1}) for every integer i > 0
-  func getLSub(_ n: Int) -> Array<UInt8> {
+  func getLSub(_ n: Int) -> [UInt8] {
     while n >= self.l.count {
       self.l.append(double(self.l.last!))
     }
     return self.l[n]
   }
 
-  func computeTag() -> Array<UInt8> {
+  func computeTag() -> [UInt8] {
 
     let sum = self.hashAAD()
 
@@ -191,14 +191,14 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     return xor(self.hashOperation(xor(xor(self.checksum, self.offsetMain).slice, self.lDollar))!, sum)
   }
 
-  func hashAAD() -> Array<UInt8> {
-    var sum = Array<UInt8>(repeating: 0, count: blockSize)
+  func hashAAD() -> [UInt8] {
+    var sum = [UInt8](repeating: 0, count: blockSize)
 
     guard let aad = self.aad else {
       return sum
     }
 
-    var offset = Array<UInt8>(repeating: 0, count: blockSize)
+    var offset = [UInt8](repeating: 0, count: blockSize)
     var blockCount: UInt64 = 1
     for aadBlock in aad.batched(by: self.blockSize) {
 
@@ -216,7 +216,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
           offset = xor(offset, self.lAsterisk)
 
           /// CipherInput = (A_* || 1 || zeros(127-bitlen(A_*))) xor Offset_*
-          let cipherInput: Array<UInt8> = xor(extend(aadBlock, size: blockSize), offset)
+          let cipherInput: [UInt8] = xor(extend(aadBlock, size: blockSize), offset)
 
           /// Sum = Sum_m xor ENCIPHER(K, CipherInput)
           sum = xor(sum, self.hashOperation(cipherInput.slice)!)
@@ -228,7 +228,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     return sum
   }
 
-  func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+  func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8] {
 
     if plaintext.count == self.blockSize {
       return self.processBlock(block: plaintext, forEncryption: true)
@@ -251,7 +251,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     }
   }
 
-  func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+  func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8] {
 
     if ciphertext.count == self.blockSize {
       return self.processBlock(block: ciphertext, forEncryption: false)
@@ -265,7 +265,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     plaintext
   }
 
-  private func processBlock(block: ArraySlice<UInt8>, forEncryption: Bool) -> Array<UInt8> {
+  private func processBlock(block: ArraySlice<UInt8>, forEncryption: Bool) -> [UInt8] {
 
     /*
      * OCB-ENCRYPT/OCB-DECRYPT: Process any whole blocks
@@ -278,7 +278,7 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
 
     /// C_i = Offset_i xor ENCIPHER(K, P_i xor Offset_i)
     /// P_i = Offset_i xor DECIPHER(K, C_i xor Offset_i)
-    var mainBlock = Array<UInt8>(block)
+    var mainBlock = [UInt8](block)
     mainBlock = xor(mainBlock, offsetMain)
     mainBlock = self.cipherOperation(mainBlock.slice)!
     mainBlock = xor(mainBlock, self.offsetMain)
@@ -293,9 +293,9 @@ final class OCBModeWorker: BlockModeWorker, FinalizingEncryptModeWorker, Finaliz
     return mainBlock
   }
 
-  private func processFinalBlock(block: ArraySlice<UInt8>, forEncryption: Bool) -> Array<UInt8> {
+  private func processFinalBlock(block: ArraySlice<UInt8>, forEncryption: Bool) -> [UInt8] {
 
-    let out: Array<UInt8>
+    let out: [UInt8]
 
     if block.isEmpty {
       /// C_* = <empty string>
@@ -366,7 +366,7 @@ private func ntz(_ x: UInt64) -> Int {
   return n
 }
 
-private func double(_ block: Array<UInt8>) -> Array<UInt8> {
+private func double(_ block: [UInt8]) -> [UInt8] {
   var ( carry, result) = shiftLeft(block)
 
   /*
@@ -377,8 +377,8 @@ private func double(_ block: Array<UInt8>) -> Array<UInt8> {
   return result
 }
 
-private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>) {
-  var output = Array<UInt8>(repeating: 0, count: block.count)
+private func shiftLeft(_ block: [UInt8]) -> (UInt8, Array<UInt8>) {
+  var output = [UInt8](repeating: 0, count: block.count)
 
   var bit: UInt8 = 0
 
@@ -390,8 +390,8 @@ private func shiftLeft(_ block: Array<UInt8>) -> (UInt8, Array<UInt8>) {
   return (bit, output)
 }
 
-private func extend(_ block: ArraySlice<UInt8>, size: Int) -> Array<UInt8> {
-  var output = Array<UInt8>(repeating: 0, count: size)
+private func extend(_ block: ArraySlice<UInt8>, size: Int) -> [UInt8] {
+  var output = [UInt8](repeating: 0, count: size)
   output[0..<block.count] = block
   output[block.count] |= 0x80
   return output

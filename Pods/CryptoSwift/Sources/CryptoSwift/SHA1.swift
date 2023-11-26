@@ -25,7 +25,7 @@ public final class SHA1: DigestType {
   static let hashInitialValue: ContiguousArray<UInt32> = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0]
 
   @usableFromInline
-  var accumulated = Array<UInt8>()
+  var accumulated = [UInt8]()
 
   @usableFromInline
   var processedBytesTotalCount: Int = 0
@@ -37,7 +37,7 @@ public final class SHA1: DigestType {
   }
 
   @inlinable
-  public func calculate(for bytes: Array<UInt8>) -> Array<UInt8> {
+  public func calculate(for bytes: [UInt8]) -> [UInt8] {
     do {
       return try update(withBytes: bytes.slice, isLast: true)
     } catch {
@@ -45,7 +45,7 @@ public final class SHA1: DigestType {
     }
   }
 
-  public func callAsFunction(_ bytes: Array<UInt8>) -> Array<UInt8> {
+  public func callAsFunction(_ bytes: [UInt8]) -> [UInt8] {
     calculate(for: bytes)
   }
 
@@ -116,7 +116,7 @@ public final class SHA1: DigestType {
 
 extension SHA1: Updatable {
   @discardableResult @inlinable
-  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> [UInt8] {
     self.accumulated += bytes
 
     if isLast {
@@ -141,7 +141,7 @@ extension SHA1: Updatable {
     self.processedBytesTotalCount += processedBytes
 
     // output current hash
-    var result = Array<UInt8>(repeating: 0, count: SHA1.digestLength)
+    var result = [UInt8](repeating: 0, count: SHA1.digestLength)
     var pos = 0
     for idx in 0..<self.accumulatedHash.count {
       let h = self.accumulatedHash[idx]

@@ -9,16 +9,16 @@
 struct EnumDescriptor: NominalDescriptor {
     /// Flags describing the context, including its kind and format version
     let flags: ContextDescriptorFlags
-    
+
     /// The parent context, or null if this is a top-level context.
     let parent: RelativeContextPointer
-    
+
     /// The name of the type
     var name: RelativeDirectPointer<CChar>
-    
+
     /// A pointer to the metadata access function for this type
     let accessFunctionPtr: RelativeDirectPointer<MetadataResponse>
-    
+
     /// A pointer to the field descriptor for the type, if any
     var fields: RelativeDirectPointer<FieldDescriptor>
 
@@ -27,8 +27,8 @@ struct EnumDescriptor: NominalDescriptor {
 
     /// The number of empty cases in the enum
     let numEmptyCases: UInt32
-    
+
     let fieldOffsetVectorOffset: FieldOffsetPointer<Int32>
-    
+
     let genericContextHeader: TargetTypeGenericContextDescriptorHeader
 }

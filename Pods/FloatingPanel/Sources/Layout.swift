@@ -31,11 +31,11 @@ open class FloatingPanelBottomLayout: NSObject, FloatingPanelLayout {
         return .half
     }
 
-    open var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring]  {
+    open var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring] {
         return [
             .full: FloatingPanelLayoutAnchor(absoluteInset: 18.0, edge: .top, referenceGuide: .safeArea),
             .half: FloatingPanelLayoutAnchor(fractionalInset: 0.5, edge: .bottom, referenceGuide: .safeArea),
-            .tip: FloatingPanelLayoutAnchor(absoluteInset: 69.0, edge: .bottom, referenceGuide: .safeArea),
+            .tip: FloatingPanelLayoutAnchor(absoluteInset: 69.0, edge: .bottom, referenceGuide: .safeArea)
         ]
     }
 
@@ -46,7 +46,7 @@ open class FloatingPanelBottomLayout: NSObject, FloatingPanelLayout {
     open func prepareLayout(surfaceView: UIView, in view: UIView) -> [NSLayoutConstraint] {
         return [
             surfaceView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0.0),
-            surfaceView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0),
+            surfaceView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0.0)
         ]
     }
 
@@ -436,20 +436,20 @@ class LayoutAdapter {
             case .top, .bottom:
                 surfaceConstraints = [
                     surfaceView.leftAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.leftAnchor, constant: 0.0),
-                    surfaceView.rightAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.rightAnchor, constant: 0.0),
+                    surfaceView.rightAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.rightAnchor, constant: 0.0)
                 ]
             case .left, .right:
                 surfaceConstraints = [
                     surfaceView.topAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.topAnchor, constant: 0.0),
-                    surfaceView.bottomAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.bottomAnchor, constant: 0.0),
+                    surfaceView.bottomAnchor.constraint(equalTo: vc.view.safeAreaLayoutGuide.bottomAnchor, constant: 0.0)
                 ]
             }
         }
         let backdropConstraints = [
             backdropView.topAnchor.constraint(equalTo: vc.view.topAnchor, constant: 0.0),
-            backdropView.leftAnchor.constraint(equalTo: vc.view.leftAnchor,constant: 0.0),
+            backdropView.leftAnchor.constraint(equalTo: vc.view.leftAnchor, constant: 0.0),
             backdropView.rightAnchor.constraint(equalTo: vc.view.rightAnchor, constant: 0.0),
-            backdropView.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor, constant: 0.0),
+            backdropView.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor, constant: 0.0)
             ]
 
         fixedConstraints = surfaceConstraints + backdropConstraints
@@ -485,7 +485,7 @@ class LayoutAdapter {
         for state in layout.anchors.keys {
             stateConstraints[state] = layout.anchors[state]?
                 .layoutConstraints(vc, for: position)
-                .map{ $0.identifier = "FloatingPanel-\(state)-constraint"; return $0 }
+                .map { $0.identifier = "FloatingPanel-\(state)-constraint"; return $0 }
         }
         let hiddenAnchor = layout.anchors[.hidden] ?? self.hiddenAnchor
         offConstraints = hiddenAnchor.layoutConstraints(vc, for: position)
@@ -661,7 +661,7 @@ class LayoutAdapter {
     // The method is separated from prepareLayout(to:) for the rotation support
     // It must be called in FloatingPanelController.traitCollectionDidChange(_:)
     func updateStaticConstraint() {
-        NSLayoutConstraint.deactivate([staticConstraint, contentBoundingConstraint].compactMap{ $0 })
+        NSLayoutConstraint.deactivate([staticConstraint, contentBoundingConstraint].compactMap { $0 })
         staticConstraint = nil
         contentBoundingConstraint = nil
 
@@ -717,7 +717,7 @@ class LayoutAdapter {
             staticConstraint?.identifier = "FloatingPanel-static-width"
         }
 
-        NSLayoutConstraint.activate([staticConstraint, contentBoundingConstraint].compactMap{ $0 })
+        NSLayoutConstraint.activate([staticConstraint, contentBoundingConstraint].compactMap { $0 })
 
         surfaceView.containerOverflow = position.mainDimension(vc.view.bounds.size)
     }

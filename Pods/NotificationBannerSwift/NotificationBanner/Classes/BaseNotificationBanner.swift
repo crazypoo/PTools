@@ -124,7 +124,7 @@ open class BaseNotificationBanner: UIView {
 
     /// Whether or not the notification banner is currently being displayed
     public var isDisplaying: Bool = false
-    
+
     /// Whether or not to post the default accessibility notification.
     public var shouldPostAccessibilityNotification: Bool = true
 
@@ -171,7 +171,7 @@ open class BaseNotificationBanner: UIView {
     private(set) var bannerPosition: BannerPosition = .top
 
     /// The notification banner sides edges insets from superview. If presented - spacerView color will be transparent
-    internal var bannerEdgeInsets: UIEdgeInsets? = nil {
+    internal var bannerEdgeInsets: UIEdgeInsets? {
         didSet {
             if bannerEdgeInsets != nil {
                 spacerView.backgroundColor = .clear
@@ -288,7 +288,7 @@ open class BaseNotificationBanner: UIView {
 
     private func finishBannerYOffset() -> CGFloat {
         let bannerIndex = (bannerQueue.banners.firstIndex(of: self) ?? bannerQueue.banners.filter { $0.isDisplaying }.count)
-        
+
         return bannerQueue.banners.prefix(bannerIndex).reduce(0) { $0
             + $1.bannerHeight
             - (bannerPosition == .top ? spacerViewHeight() : 0) // notch spacer height for top position only
@@ -297,7 +297,7 @@ open class BaseNotificationBanner: UIView {
             // this calculations are made only for banners except first one, for first banner it'll be 0
         }
     }
-    
+
     internal func updateBannerPositionFrames() {
         guard let window = appWindow else { return }
         bannerPositionFrame = BannerPositionFrame(
@@ -373,7 +373,7 @@ open class BaseNotificationBanner: UIView {
             name: UIDevice.orientationDidChangeNotification,
             object: nil
         )
-        
+
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(onOrientationChanged),
@@ -389,7 +389,7 @@ open class BaseNotificationBanner: UIView {
             )
         } else {
             guard bannerPositionFrame != nil else {
-                remove();
+                remove()
                 return
             }
 
@@ -414,9 +414,9 @@ open class BaseNotificationBanner: UIView {
                 object: self,
                 userInfo: notificationUserInfo
             )
-            
+
             delegate?.notificationBannerWillAppear(self)
-            
+
             if self.shouldPostAccessibilityNotification {
                 postAccessibilityNotification()
             }
@@ -436,14 +436,14 @@ open class BaseNotificationBanner: UIView {
                 animations: {
                     BannerHapticGenerator.generate(self.haptic)
                     self.frame = self.bannerPositionFrame.endFrame
-            }) { (completed) in
+            }) { (_) in
 
                 NotificationCenter.default.post(
                     name: BaseNotificationBanner.BannerDidAppear,
                     object: self,
                     userInfo: self.notificationUserInfo
                 )
-                
+
                 self.delegate?.notificationBannerDidAppear(self)
 
                 /* We don't want to add the selector if another banner was queued in front of it
@@ -500,11 +500,11 @@ open class BaseNotificationBanner: UIView {
                 selector: #selector(dismiss),
                 object: nil
              )
-            
+
              self.perform(#selector(dismiss), with: nil, afterDelay: self.duration)
         }
     }
-    
+
     /**
         The height adjustment needed in order for the banner to look properly displayed.
      */
@@ -512,7 +512,7 @@ open class BaseNotificationBanner: UIView {
         if NotificationBannerUtilities.hasDynamicIsland() {
             return 16.0
         }
-        
+
         // iOS 13 does not allow covering the status bar on non-notch iPhones
         // The banner needs to be moved further down under the status bar in this case
         guard #available(iOS 13.0, *), !NotificationBannerUtilities.isNotchFeaturedIPhone() else {
@@ -535,13 +535,13 @@ open class BaseNotificationBanner: UIView {
     @objc private dynamic func onOrientationChanged() {
         guard let window = appWindow,
               currentDeviceOrientationIsSupportedByApp() else { return }
-        
+
         updateSpacerViewHeight()
 
         let edgeInsets = bannerEdgeInsets ?? .zero
 
         let newY = (bannerPosition == .top) ? (frame.origin.y) : (window.height - bannerHeight + edgeInsets.top - edgeInsets.bottom)
-        
+
         frame = CGRect(
             x: frame.origin.x,
             y: newY,
@@ -562,7 +562,7 @@ open class BaseNotificationBanner: UIView {
     /**
      Dismisses the NotificationBanner and shows the next one if there is one to show on the queue
      */
-    @objc public func dismiss(forced: Bool = false) {
+    public func dismiss(forced: Bool = false) {
 
         guard isDisplaying else {
             return
@@ -579,7 +579,7 @@ open class BaseNotificationBanner: UIView {
             object: self,
             userInfo: notificationUserInfo
         )
-        
+
         delegate?.notificationBannerWillDisappear(self)
 
         isDisplaying = false
@@ -592,7 +592,7 @@ open class BaseNotificationBanner: UIView {
             withDuration: forced ? animationDuration / 2 : animationDuration,
             animations: {
                 self.frame = self.bannerPositionFrame.startFrame
-        }) { (completed) in
+        }) { (_) in
             self.bannerQueue.activeAnimation = false
 
             self.removeFromSuperview()
@@ -602,7 +602,7 @@ open class BaseNotificationBanner: UIView {
                 object: self,
                 userInfo: self.notificationUserInfo
             )
-            
+
             self.delegate?.notificationBannerDidDisappear(self)
 
             self.bannerQueue.showNext(callback: { (isEmpty) in
@@ -647,7 +647,6 @@ open class BaseNotificationBanner: UIView {
         onSwipeUp?()
     }
 
-
     /**
         Determines wether or not the status bar should be shown when displaying
         a banner underneath the navigation bar
@@ -655,21 +654,21 @@ open class BaseNotificationBanner: UIView {
     private func statusBarShouldBeShown() -> Bool {
 
         for banner in bannerQueue.banners {
-            if (banner.parentViewController == nil && banner.bannerPosition == .top) {
+            if banner.parentViewController == nil && banner.bannerPosition == .top {
                 return false
             }
         }
 
         return true
     }
-    
+
     /**
         Determines wether or not the current orientation that the device is in
         is supported by the current application.
      */
     private func currentDeviceOrientationIsSupportedByApp() -> Bool {
         let supportedOrientations = UIApplication.shared.supportedInterfaceOrientations(for: appWindow)
-        
+
         switch UIDevice.current.orientation {
         case .portrait:
             return supportedOrientations.contains(.portrait)
@@ -705,7 +704,7 @@ open class BaseNotificationBanner: UIView {
             && UIApplication.shared.statusBarOrientation.isPortrait
             && (self.parentViewController?.navigationController?.isNavigationBarHidden ?? true)
     }
-    
+
     internal func shouldAdjustForNotchFeaturedIphone() -> Bool {
         return NotificationBannerUtilities.isNotchFeaturedIPhone()
             && UIApplication.shared.statusBarOrientation.isPortrait
@@ -718,12 +717,11 @@ open class BaseNotificationBanner: UIView {
         (titleLabel as? MarqueeLabel)?.speed = .duration(CGFloat(duration <= 3 ? 0.5 : duration - 3))
     }
 
-
     /**
      Posts a `UIAccessibility` notification when a notification appears.
      */
     private func postAccessibilityNotification() {
-        var bannerAccessibilityLabel: String? = nil
+        var bannerAccessibilityLabel: String?
         switch self {
         case let banner as NotificationBanner:
             if let title = banner.titleLabel?.text, let subtitle = banner.subtitleLabel?.text {
@@ -745,4 +743,3 @@ open class BaseNotificationBanner: UIView {
         UIAccessibility.post(notification: .screenChanged, argument: self)
     }
 }
-

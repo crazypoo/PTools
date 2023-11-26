@@ -10,7 +10,7 @@
 import UIKit
 
 public extension String {
-    
+
     /// Calculates the height a label will need in order to display the String for the given width and font.
     ///
     /// - Parameters:

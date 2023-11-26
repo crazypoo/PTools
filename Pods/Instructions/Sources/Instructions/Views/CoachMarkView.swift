@@ -70,7 +70,7 @@ class CoachMarkView: UIView {
 
     // MARK: - Internal Method
 
-    //TODO: Better documentation
+    // TODO: Better documentation
     /// Change the arrow horizontal position to the given position.
     /// `position` is relative to:
     /// - `.Leading`: `offset` is relative to the leading edge of the overlay;

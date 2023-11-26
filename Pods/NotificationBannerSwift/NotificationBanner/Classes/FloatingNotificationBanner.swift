@@ -20,7 +20,7 @@ import UIKit
 import SnapKit
 
 open class FloatingNotificationBanner: GrowingNotificationBanner {
-    
+
     public init(
         title: String? = nil,
         subtitle: String? = nil,
@@ -46,46 +46,46 @@ open class FloatingNotificationBanner: GrowingNotificationBanner {
             colors: colors,
             iconPosition: iconPosition
         )
-        
+
         if let titleFont = titleFont {
             self.titleFont = titleFont
             titleLabel!.font = titleFont
         }
-        
+
         if let titleColor = titleColor {
             titleLabel!.textColor = titleColor
         }
-        
+
         if let titleTextAlign = titleTextAlign {
             titleLabel!.textAlignment = titleTextAlign
         }
-        
+
         if let subtitleFont = subtitleFont {
             self.subtitleFont = subtitleFont
             subtitleLabel!.font = subtitleFont
         }
-        
+
         if let subtitleColor = subtitleColor {
             subtitleLabel!.textColor = subtitleColor
         }
-        
+
         if let subtitleTextAlign = subtitleTextAlign {
             subtitleLabel!.textAlignment = subtitleTextAlign
         }
     }
-    
+
     public init(customView: UIView) {
         super.init(style: .customView)
         self.customView = customView
-        
+
         contentView.addSubview(customView)
         customView.snp.makeConstraints { (make) in
             make.edges.equalTo(contentView)
         }
-        
+
         spacerView.backgroundColor = customView.backgroundColor
     }
-    
+
     /**
      Convenience function to display banner with non .zero default edge insets
      */
@@ -105,12 +105,12 @@ open class FloatingNotificationBanner: GrowingNotificationBanner {
     ) {
 
         self.bannerEdgeInsets = edgeInsets
-        
+
         if let cornerRadius = cornerRadius {
             contentView.layer.cornerRadius = cornerRadius
             contentView.subviews.last?.layer.cornerRadius = cornerRadius
         }
-        
+
         if style == .customView, let customView = contentView.subviews.last {
            customView.backgroundColor = customView.backgroundColor?.withAlphaComponent(transparency)
         }
@@ -121,7 +121,7 @@ open class FloatingNotificationBanner: GrowingNotificationBanner {
             queue: queue,
             on: viewController
         )
-        
+
         applyShadow(
             withColor: shadowColor,
             opacity: shadowOpacity,
@@ -130,17 +130,17 @@ open class FloatingNotificationBanner: GrowingNotificationBanner {
             offset: shadowOffset,
             edgeInsets: shadowEdgeInsets
         )
-        
+
     }
-    
+
     required public init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
 }
 
 private extension FloatingNotificationBanner {
-    
+
     /**
      Add shadow for notification with specified parameters.
      */
@@ -159,7 +159,7 @@ private extension FloatingNotificationBanner {
         contentView.layer.shadowOpacity = Float(opacity)
         contentView.layer.shadowRadius = blurRadius
         contentView.layer.shadowOffset = CGSize(width: offset.horizontal, height: offset.vertical)
-        
+
         if let edgeInsets = edgeInsets {
             var shadowRect = CGRect(origin: .zero, size: bannerPositionFrame.startFrame.size)
             shadowRect.size.height -= (spacerViewHeight() - spacerViewDefaultOffset) // to proper handle spacer height affects
@@ -169,9 +169,9 @@ private extension FloatingNotificationBanner {
             shadowRect.size.height -= (edgeInsets.top + edgeInsets.bottom)
             contentView.layer.shadowPath = UIBezierPath(roundedRect: shadowRect, cornerRadius: cornerRadius).cgPath
         }
-        
+
         contentView.layer.rasterizationScale = UIScreen.main.scale
         contentView.layer.shouldRasterize = true
     }
-    
+
 }

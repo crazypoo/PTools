@@ -18,7 +18,7 @@ public extension KJ where Base: ExpressibleByArrayLiteral & Sequence {
     func enumArray<M: ConvertibleEnum>(_ type: M.Type) -> [M] {
         return enumArray(type: type) as! [M]
     }
-    
+
     /// JSONObjectArray -> EnumArray
     func enumArray(type: ConvertibleEnum.Type) -> [ConvertibleEnum] {
         guard let _ = Metadata.type(type) as? EnumType else { return [] }
@@ -27,12 +27,12 @@ public extension KJ where Base: ExpressibleByArrayLiteral & Sequence {
             return type.kj_convert(from: vv as Any)
         }
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray<M: Convertible>(_ type: M.Type) -> [M] {
         return modelArray(type: type) as! [M]
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray(type: Convertible.Type) -> [Convertible] {
         guard let mt = Metadata.type(type) as? ModelType,
@@ -47,19 +47,19 @@ public extension KJ where Base: ExpressibleByArrayLiteral & Sequence {
             }
         }
     }
-    
+
     /// ModelArray -> JSONObjectArray
     func JSONObjectArray() -> [[String: Any]] {
         return base.compactMap {
             ($0~! as? Convertible)?.kj_JSONObject()
         }
     }
-    
+
     /// Array -> JSONArray
     func JSONArray() -> [Any] {
         return Values.JSONValue(base) as! [Any]
     }
-    
+
     /// Array -> JSONString
     func JSONString(prettyPrinted: Bool = false) -> String {
         if let str = JSONSerialization.kj_string(JSONArray(),

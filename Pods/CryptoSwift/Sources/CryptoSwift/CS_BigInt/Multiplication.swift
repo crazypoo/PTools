@@ -8,7 +8,7 @@
 
 extension CS.BigUInt {
 
-    //MARK: Multiplication
+    // MARK: Multiplication
 
     /// Multiply this big integer by a single word, and store the result in place of the original big integer.
     ///
@@ -61,8 +61,7 @@ extension CS.BigUInt {
                 let (sum2, so2) = sum1.addingReportingOverflow(1)
                 self[ai] = sum2
                 addCarry = so1 || so2
-            }
-            else {
+            } else {
                 self[ai] = sum1
                 addCarry = so1
             }
@@ -112,8 +111,7 @@ extension CS.BigUInt {
             var r = xl * y
             r.add(xh * y, shiftedBy: x.middleIndex)
             return r
-        }
-        else if xc < yc {
+        } else if xc < yc {
             let (yh, yl) = y.split
             var r = yl * x
             r.add(yh * x, shiftedBy: y.middleIndex)
@@ -141,8 +139,7 @@ extension CS.BigUInt {
         r.add(high, shiftedBy: shift)
         if xp == yp {
             r.subtract(m, shiftedBy: shift)
-        }
-        else {
+        } else {
             r.add(m, shiftedBy: shift)
         }
         return r

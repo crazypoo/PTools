@@ -46,7 +46,7 @@ extension AnyExtensions {
 }
 
 func extensions(of type: Any.Type) -> AnyExtensions.Type {
-    struct Extensions : AnyExtensions {}
+    struct Extensions: AnyExtensions {}
     var extensions: AnyExtensions.Type = Extensions.self
     withUnsafePointer(to: &extensions) { pointer in
         UnsafeMutableRawPointer(mutating: pointer).assumingMemoryBound(to: Any.Type.self).pointee = type
@@ -55,7 +55,7 @@ func extensions(of type: Any.Type) -> AnyExtensions.Type {
 }
 
 func extensions(of value: Any) -> AnyExtensions {
-    struct Extensions : AnyExtensions {}
+    struct Extensions: AnyExtensions {}
     var extensions: AnyExtensions = Extensions()
     withUnsafePointer(to: &extensions) { pointer in
         UnsafeMutableRawPointer(mutating: pointer).assumingMemoryBound(to: Any.self).pointee = value

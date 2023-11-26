@@ -28,11 +28,11 @@ let pseudoPrimes: [CS.BigUInt] = [
     /* 29 */ 3_825_123_056_546_413_051,
     /* 31 */ 3_825_123_056_546_413_051,
     /* 37 */ "318665857834031151167461",
-    /* 41 */ "3317044064679887385961981",
+    /* 41 */ "3317044064679887385961981"
 ]
 
 extension CS.BigUInt {
-    //MARK: Primality Testing
+    // MARK: Primality Testing
 
     /// Returns true iff this integer passes the [strong probable prime test][sppt] for the specified base.
     ///
@@ -122,7 +122,7 @@ extension CS.BigUInt {
 }
 
 extension CS.BigInt {
-    //MARK: Primality Testing
+    // MARK: Primality Testing
 
     /// Returns true iff this integer passes the [strong probable prime test][sppt] for the specified base.
     ///

@@ -656,7 +656,7 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
         backdropView.alpha = getBackdropAlpha(at: cur, with: value(of: translation))
 
-        guard (pre != cur) else { return }
+        guard pre != cur else { return }
 
         if let vc = ownerVC {
             vc.delegate?.floatingPanelDidMove?(vc)
@@ -1149,9 +1149,8 @@ class Core: NSObject, UIGestureRecognizerDelegate {
 
     func isScrollable(state: FloatingPanelState) -> Bool {
         guard let scrollView = scrollView else { return false }
-        if let fpc = ownerVC, 
-            let scrollable = fpc.delegate?.floatingPanel?(fpc, shouldAllowToScroll: scrollView, in: state)
-        {
+        if let fpc = ownerVC,
+            let scrollable = fpc.delegate?.floatingPanel?(fpc, shouldAllowToScroll: scrollView, in: state) {
             return scrollable
         }
         return state == layoutAdapter.mostExpandedState
@@ -1289,13 +1288,13 @@ private class NumericSpringAnimator: NSObject {
     private class UnfairLock {
         var unfairLock = os_unfair_lock()
         func lock() {
-            os_unfair_lock_lock(&unfairLock);
+            os_unfair_lock_lock(&unfairLock)
         }
         func tryLock() -> Bool {
-            return os_unfair_lock_trylock(&unfairLock);
+            return os_unfair_lock_trylock(&unfairLock)
         }
         func unlock() {
-            os_unfair_lock_unlock(&unfairLock);
+            os_unfair_lock_unlock(&unfairLock)
         }
     }
 
@@ -1337,7 +1336,7 @@ private class NumericSpringAnimator: NSObject {
     }
 
     @discardableResult
-    func startAnimation() -> Bool{
+    func startAnimation() -> Bool {
         lock.lock()
         defer { lock.unlock() }
 

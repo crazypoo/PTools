@@ -35,19 +35,19 @@ public final class Rabbit: BlockCipher {
   private let key: Key
 
   /// IV (optional)
-  private let iv: Array<UInt8>?
+  private let iv: [UInt8]?
 
   /// State variables
-  private var x = Array<UInt32>(repeating: 0, count: 8)
+  private var x = [UInt32](repeating: 0, count: 8)
 
   /// Counter variables
-  private var c = Array<UInt32>(repeating: 0, count: 8)
+  private var c = [UInt32](repeating: 0, count: 8)
 
   /// Counter carry
   private var p7: UInt32 = 0
 
   /// 'a' constants
-  private var a: Array<UInt32> = [
+  private var a: [UInt32] = [
     0x4d34d34d,
     0xd34d34d3,
     0x34d34d34,
@@ -60,11 +60,11 @@ public final class Rabbit: BlockCipher {
 
   // MARK: - Initializers
 
-  public convenience init(key: Array<UInt8>) throws {
+  public convenience init(key: [UInt8]) throws {
     try self.init(key: key, iv: nil)
   }
 
-  public init(key: Array<UInt8>, iv: Array<UInt8>?) throws {
+  public init(key: [UInt8], iv: [UInt8]?) throws {
     self.key = Key(bytes: key)
     self.iv = iv
 
@@ -79,7 +79,7 @@ public final class Rabbit: BlockCipher {
     self.p7 = 0
 
     // Key divided into 8 subkeys
-    let k = Array<UInt32>(unsafeUninitializedCapacity: 8) { buf, count in
+    let k = [UInt32](unsafeUninitializedCapacity: 8) { buf, count in
       for j in 0..<8 {
         buf[j] = UInt32(self.key[Rabbit.blockSize - (2 * j + 1)]) | (UInt32(self.key[Rabbit.blockSize - (2 * j + 2)]) << 8)
       }
@@ -113,7 +113,7 @@ public final class Rabbit: BlockCipher {
     }
   }
 
-  private func setupIV(_ iv: Array<UInt8>) {
+  private func setupIV(_ iv: [UInt8]) {
     // 63...56 55...48 47...40 39...32 31...24 23...16 15...8 7...0 IV bits
     //    0       1       2       3       4       5       6     7   IV bytes in array
     let iv0 = UInt32(bytes: [iv[4], iv[5], iv[6], iv[7]])
@@ -149,7 +149,7 @@ public final class Rabbit: BlockCipher {
     self.p7 = carry // save last carry bit
 
     // Iteration of the system
-    self.x = Array<UInt32>(unsafeUninitializedCapacity: 8) { newX, count in
+    self.x = [UInt32](unsafeUninitializedCapacity: 8) { newX, count in
       newX[0] = self.g(0) &+ rotateLeft(self.g(7), by: 16) &+ rotateLeft(self.g(6), by: 16)
       newX[1] = self.g(1) &+ rotateLeft(self.g(0), by: 8) &+ self.g(7)
       newX[2] = self.g(2) &+ rotateLeft(self.g(1), by: 16) &+ rotateLeft(self.g(0), by: 16)
@@ -168,10 +168,10 @@ public final class Rabbit: BlockCipher {
     return UInt32(truncatingIfNeeded: square ^ (square >> 32))
   }
 
-  fileprivate func nextOutput() -> Array<UInt8> {
+  fileprivate func nextOutput() -> [UInt8] {
     self.nextState()
 
-    var output16 = Array<UInt16>(repeating: 0, count: Rabbit.blockSize / 2)
+    var output16 = [UInt16](repeating: 0, count: Rabbit.blockSize / 2)
     output16[7] = UInt16(truncatingIfNeeded: self.x[0]) ^ UInt16(truncatingIfNeeded: self.x[5] >> 16)
     output16[6] = UInt16(truncatingIfNeeded: self.x[0] >> 16) ^ UInt16(truncatingIfNeeded: self.x[3])
     output16[5] = UInt16(truncatingIfNeeded: self.x[2]) ^ UInt16(truncatingIfNeeded: self.x[7] >> 16)
@@ -181,7 +181,7 @@ public final class Rabbit: BlockCipher {
     output16[1] = UInt16(truncatingIfNeeded: self.x[6]) ^ UInt16(truncatingIfNeeded: self.x[3] >> 16)
     output16[0] = UInt16(truncatingIfNeeded: self.x[6] >> 16) ^ UInt16(truncatingIfNeeded: self.x[1])
 
-    var output8 = Array<UInt8>(repeating: 0, count: Rabbit.blockSize)
+    var output8 = [UInt8](repeating: 0, count: Rabbit.blockSize)
     for j in 0..<output16.count {
       output8[j * 2] = UInt8(truncatingIfNeeded: output16[j] >> 8)
       output8[j * 2 + 1] = UInt8(truncatingIfNeeded: output16[j])
@@ -193,10 +193,10 @@ public final class Rabbit: BlockCipher {
 // MARK: Cipher
 
 extension Rabbit: Cipher {
-  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
     self.setup()
 
-    return Array<UInt8>(unsafeUninitializedCapacity: bytes.count) { result, count in
+    return [UInt8](unsafeUninitializedCapacity: bytes.count) { result, count in
       var output = self.nextOutput()
       var byteIdx = 0
       var outputIdx = 0
@@ -215,7 +215,7 @@ extension Rabbit: Cipher {
     }
   }
 
-  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
     try self.encrypt(bytes)
   }
 }

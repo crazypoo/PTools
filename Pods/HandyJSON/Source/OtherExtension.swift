@@ -25,9 +25,9 @@ protocol UTF8Initializable {
     init?(validatingUTF8: UnsafePointer<CChar>)
 }
 
-extension String : UTF8Initializable {}
+extension String: UTF8Initializable {}
 
-extension Array where Element : UTF8Initializable {
+extension Array where Element: UTF8Initializable {
 
     init(utf8Strings: UnsafePointer<CChar>) {
         var strings = [Element]()
@@ -59,12 +59,12 @@ extension UnsafePointer {
     }
 }
 
-func relativePointer<T, U, V>(base: UnsafePointer<T>, offset: U) -> UnsafePointer<V> where U : FixedWidthInteger {
+func relativePointer<T, U, V>(base: UnsafePointer<T>, offset: U) -> UnsafePointer<V> where U: FixedWidthInteger {
     return UnsafeRawPointer(base).advanced(by: Int(integer: offset)).assumingMemoryBound(to: V.self)
 }
 
 extension Int {
-    fileprivate init<T : FixedWidthInteger>(integer: T) {
+    fileprivate init<T: FixedWidthInteger>(integer: T) {
         switch integer {
         case let value as Int: self = value
         case let value as Int32: self = Int(value)

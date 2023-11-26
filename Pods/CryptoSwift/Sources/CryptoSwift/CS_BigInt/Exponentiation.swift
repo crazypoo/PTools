@@ -7,7 +7,7 @@
 //
 
 extension CS.BigUInt {
-    //MARK: Exponentiation
+    // MARK: Exponentiation
 
     /// Returns this integer raised to the power `exponent`.
     ///

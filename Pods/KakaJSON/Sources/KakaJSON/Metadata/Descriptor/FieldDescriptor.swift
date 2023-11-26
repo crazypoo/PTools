@@ -15,7 +15,7 @@ struct FieldRecord {
     var isVar: Bool { return (flags & 0x2) == 0x2 }
     mutating func fieldName() -> String { return String(cString: _fieldName.advanced()) }
     mutating func mangledTypeName() -> String { return String(cString: _mangledTypeName.advanced()) }
-    
+
     mutating func type(_ genericContext: UnsafeRawPointer?,
                        _ genericArguments: UnsafeRawPointer?) -> Any.Type {
         let name = _mangledTypeName.advanced()
@@ -26,7 +26,7 @@ struct FieldRecord {
                     genericArguments
                 )!
     }
-    
+
     func nameLength(_ begin: UnsafeRawPointer) -> UInt {
         var end = begin
         let size = MemoryLayout<Int>.size
@@ -47,9 +47,9 @@ struct FieldRecord {
 struct FieldDescriptor {
     let mangledTypeName: RelativeDirectPointer<CChar>
     let superclass: RelativeDirectPointer<CChar>
-    let _kind : UInt16
-    let fieldRecordSize : UInt16
-    let numFields : UInt32
+    let _kind: UInt16
+    let fieldRecordSize: UInt16
+    let numFields: UInt32
     var fieldRecords: FieldList<FieldRecord>
     var kind: FieldDescriptorKind { return FieldDescriptorKind(rawValue: _kind)! }
 }

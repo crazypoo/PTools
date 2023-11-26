@@ -31,19 +31,16 @@
 /// [EMSA-PKCS1v1_5 IETF Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-9.2)
 struct EMSAPKCS1v15Padding: PaddingProtocol {
 
-  init() {
-  }
-
   @inlinable
-  func add(to bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+  func add(to bytes: [UInt8], blockSize: Int) -> [UInt8] {
     var r = blockSize - ((bytes.count + 3) % blockSize)
     if r <= 0 { r = blockSize - 3 }
 
-    return [0x00, 0x01] + Array<UInt8>(repeating: 0xFF, count: r) + [0x00] + bytes
+    return [0x00, 0x01] + [UInt8](repeating: 0xFF, count: r) + [0x00] + bytes
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from bytes: [UInt8], blockSize _: Int?) -> [UInt8] {
     assert(!bytes.isEmpty, "Need bytes to remove padding")
 
     assert(bytes.prefix(2) == [0x00, 0x01], "Invalid padding prefix")
@@ -70,11 +67,8 @@ struct EMSAPKCS1v15Padding: PaddingProtocol {
 /// [EME-PKCS1v1_5 IETF Spec](https://datatracker.ietf.org/doc/html/rfc8017#section-7.2.1)
 struct EMEPKCS1v15Padding: PaddingProtocol {
 
-  init() {
-  }
-
   @inlinable
-  func add(to bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+  func add(to bytes: [UInt8], blockSize: Int) -> [UInt8] {
     var r = blockSize - ((bytes.count + 3) % blockSize)
     if r <= 0 { r = blockSize - 3 }
 
@@ -82,7 +76,7 @@ struct EMEPKCS1v15Padding: PaddingProtocol {
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize _: Int?) -> Array<UInt8> {
+  func remove(from bytes: [UInt8], blockSize _: Int?) -> [UInt8] {
     assert(!bytes.isEmpty, "Need bytes to remove padding")
 
     assert(bytes.prefix(2) == [0x00, 0x02], "Invalid padding prefix")

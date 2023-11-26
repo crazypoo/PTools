@@ -21,23 +21,23 @@ public class CMAC: Authenticator {
   internal let key: SecureBytes
 
   internal static let BlockSize: Int = 16
-  internal static let Zero: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
-  private static let Rb: Array<UInt8> = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87]
+  internal static let Zero: [UInt8] = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00]
+  private static let Rb: [UInt8] = [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x87]
 
-  public init(key: Array<UInt8>) throws {
+  public init(key: [UInt8]) throws {
     self.key = SecureBytes(bytes: key)
   }
 
   // MARK: Authenticator
 
   // AES-CMAC
-  public func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  public func authenticate(_ bytes: [UInt8]) throws -> [UInt8] {
     let cipher = try AES(key: Array(key), blockMode: CBC(iv: CMAC.Zero), padding: .noPadding)
     return try self.authenticate(bytes, cipher: cipher)
   }
 
   // CMAC using a Cipher
-  public func authenticate(_ bytes: Array<UInt8>, cipher: Cipher) throws -> Array<UInt8> {
+  public func authenticate(_ bytes: [UInt8], cipher: Cipher) throws -> [UInt8] {
     let l = try cipher.encrypt(CMAC.Zero)
     var subKey1 = self.leftShiftOneBit(l)
     if (l[0] & 0x80) != 0 {
@@ -68,8 +68,8 @@ public class CMAC: Authenticator {
       lastBlock = xor(lastBlock, subKey2)
     }
 
-    var x = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
-    var y = Array<UInt8>(repeating: 0x00, count: CMAC.BlockSize)
+    var x = [UInt8](repeating: 0x00, count: CMAC.BlockSize)
+    var y = [UInt8](repeating: 0x00, count: CMAC.BlockSize)
     for block in blocks {
       y = xor(block, x)
       x = try cipher.encrypt(y)
@@ -91,8 +91,8 @@ public class CMAC: Authenticator {
    - bytes: byte array
    - returns: bit shifted bit string split again in array of bytes
    */
-  private func leftShiftOneBit(_ bytes: Array<UInt8>) -> Array<UInt8> {
-    var shifted = Array<UInt8>(repeating: 0x00, count: bytes.count)
+  private func leftShiftOneBit(_ bytes: [UInt8]) -> [UInt8] {
+    var shifted = [UInt8](repeating: 0x00, count: bytes.count)
     let last = bytes.count - 1
     for index in 0..<last {
       shifted[index] = bytes[index] << 1

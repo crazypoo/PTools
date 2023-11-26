@@ -19,11 +19,9 @@ import Foundation
 /// Read the [Wikipedia](https://en.wikipedia.org/wiki/Padding_(cryptography)#ISO_10126)
 /// and [Crypto-IT](http://www.crypto-it.net/eng/theory/padding.html) articles for more info.
 struct ISO10126Padding: PaddingProtocol {
-  init() {
-  }
 
   @inlinable
-  func add(to bytes: Array<UInt8>, blockSize: Int) -> Array<UInt8> {
+  func add(to bytes: [UInt8], blockSize: Int) -> [UInt8] {
     let padding = UInt8(blockSize - (bytes.count % blockSize))
     var withPadding = bytes
     if padding > 0 {
@@ -33,7 +31,7 @@ struct ISO10126Padding: PaddingProtocol {
   }
 
   @inlinable
-  func remove(from bytes: Array<UInt8>, blockSize: Int?) -> Array<UInt8> {
+  func remove(from bytes: [UInt8], blockSize: Int?) -> [UInt8] {
     guard !bytes.isEmpty, let lastByte = bytes.last else {
       return bytes
     }

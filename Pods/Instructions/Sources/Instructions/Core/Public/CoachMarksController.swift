@@ -146,7 +146,6 @@ public extension CoachMarksController {
         delegate?.coachMarksController(self,
                                        configureOrnamentsOfOverlay: overlay.overlayView.ornaments)
 
-
         // This tells the window to lay out the basic ornaments immediately. While this isn't
         // strictly needed, it ensures the window has its bounds set when starting the flow.
         //

@@ -6,7 +6,7 @@
 //  Copyright © 2016-2017 Károly Lőrentey.
 //
 
-//MARK: Square Root
+// MARK: Square Root
 
 extension CS.BigUInt {
     /// Returns the integer square root of a big integer; i.e., the largest integer whose square isn't greater than `value`.

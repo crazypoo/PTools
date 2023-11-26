@@ -8,15 +8,15 @@
 
 extension CS.BigUInt {
 
-    //MARK: Shift Operators
-    
+    // MARK: Shift Operators
+
     internal func shiftedLeft(by amount: Word) -> CS.BigUInt {
         guard amount > 0 else { return self }
-        
+
         let ext = Int(amount / Word(Word.bitWidth)) // External shift amount (new words)
         let up = Word(amount % Word(Word.bitWidth)) // Internal shift amount (subword shift)
         let down = Word(Word.bitWidth) - up
-        
+
         var result = CS.BigUInt()
         if up > 0 {
             var i = 0
@@ -27,22 +27,21 @@ extension CS.BigUInt {
                 lowbits = word >> down
                 i += 1
             }
-        }
-        else {
+        } else {
             for i in 0 ..< self.count {
                 result[i + ext] = self[i]
             }
         }
         return result
     }
-    
+
     internal mutating func shiftLeft(by amount: Word) {
         guard amount > 0 else { return }
-        
+
         let ext = Int(amount / Word(Word.bitWidth)) // External shift amount (new words)
         let up = Word(amount % Word(Word.bitWidth)) // Internal shift amount (subword shift)
         let down = Word(Word.bitWidth) - up
-        
+
         if up > 0 {
             var i = 0
             var lowbits: Word = 0
@@ -57,15 +56,15 @@ extension CS.BigUInt {
             self.shiftLeft(byWords: ext)
         }
     }
-    
+
     internal func shiftedRight(by amount: Word) -> CS.BigUInt {
         guard amount > 0 else { return self }
         guard amount < self.bitWidth else { return 0 }
-        
+
         let ext = Int(amount / Word(Word.bitWidth)) // External shift amount (new words)
         let down = Word(amount % Word(Word.bitWidth)) // Internal shift amount (subword shift)
         let up = Word(Word.bitWidth) - down
-        
+
         var result = CS.BigUInt()
         if down > 0 {
             var highbits: Word = 0
@@ -74,8 +73,7 @@ extension CS.BigUInt {
                 result[i - ext] = highbits | word >> down
                 highbits = word << up
             }
-        }
-        else {
+        } else {
             for i in (ext ..< self.count).reversed() {
                 result[i - ext] = self[i]
             }
@@ -86,11 +84,11 @@ extension CS.BigUInt {
     internal mutating func shiftRight(by amount: Word) {
         guard amount > 0 else { return }
         guard amount < self.bitWidth else { self.clear(); return }
-        
+
         let ext = Int(amount / Word(Word.bitWidth)) // External shift amount (new words)
         let down = Word(amount % Word(Word.bitWidth)) // Internal shift amount (subword shift)
         let up = Word(Word.bitWidth) - down
-        
+
         if ext > 0 {
             self.shiftRight(byWords: ext)
         }
@@ -105,19 +103,17 @@ extension CS.BigUInt {
             }
         }
     }
-    
+
     public static func >>=<Other: BinaryInteger>(lhs: inout CS.BigUInt, rhs: Other) {
         if rhs < (0 as Other) {
             lhs <<= (0 - rhs)
-        }
-        else if rhs >= lhs.bitWidth {
+        } else if rhs >= lhs.bitWidth {
             lhs.clear()
-        }
-        else {
+        } else {
             lhs.shiftRight(by: UInt(rhs))
         }
     }
-    
+
     public static func <<=<Other: BinaryInteger>(lhs: inout CS.BigUInt, rhs: Other) {
         if rhs < (0 as Other) {
             lhs >>= (0 - rhs)
@@ -148,63 +144,61 @@ extension CS.BigInt {
     func shiftedLeft(by amount: Word) -> CS.BigInt {
         return CS.BigInt(sign: self.sign, magnitude: self.magnitude.shiftedLeft(by: amount))
     }
-    
+
     mutating func shiftLeft(by amount: Word) {
         self.magnitude.shiftLeft(by: amount)
     }
-    
+
     func shiftedRight(by amount: Word) -> CS.BigInt {
         let m = self.magnitude.shiftedRight(by: amount)
         return CS.BigInt(sign: self.sign, magnitude: self.sign == .minus && m.isZero ? 1 : m)
     }
-    
+
     mutating func shiftRight(by amount: Word) {
         magnitude.shiftRight(by: amount)
         if sign == .minus, magnitude.isZero {
             magnitude.load(1)
         }
     }
-    
+
     public static func &<<(left: CS.BigInt, right: CS.BigInt) -> CS.BigInt {
         return left.shiftedLeft(by: right.words[0])
     }
-    
+
     public static func &<<=(left: inout CS.BigInt, right: CS.BigInt) {
         left.shiftLeft(by: right.words[0])
     }
-    
+
     public static func &>>(left: CS.BigInt, right: CS.BigInt) -> CS.BigInt {
         return left.shiftedRight(by: right.words[0])
     }
-    
+
     public static func &>>=(left: inout CS.BigInt, right: CS.BigInt) {
         left.shiftRight(by: right.words[0])
     }
-    
+
     public static func <<<Other: BinaryInteger>(lhs: CS.BigInt, rhs: Other) -> CS.BigInt {
         guard rhs >= (0 as Other) else { return lhs >> (0 - rhs) }
         return lhs.shiftedLeft(by: Word(rhs))
     }
-    
+
     public static func <<=<Other: BinaryInteger>(lhs: inout CS.BigInt, rhs: Other) {
         if rhs < (0 as Other) {
             lhs >>= (0 - rhs)
-        }
-        else {
+        } else {
             lhs.shiftLeft(by: Word(rhs))
         }
     }
-    
+
     public static func >><Other: BinaryInteger>(lhs: CS.BigInt, rhs: Other) -> CS.BigInt {
         guard rhs >= (0 as Other) else { return lhs << (0 - rhs) }
         return lhs.shiftedRight(by: Word(rhs))
     }
-    
+
     public static func >>=<Other: BinaryInteger>(lhs: inout CS.BigInt, rhs: Other) {
         if rhs < (0 as Other) {
             lhs <<= (0 - rhs)
-        }
-        else {
+        } else {
             lhs.shiftRight(by: Word(rhs))
         }
     }

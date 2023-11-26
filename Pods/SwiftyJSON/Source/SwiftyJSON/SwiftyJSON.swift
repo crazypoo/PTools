@@ -252,7 +252,7 @@ public struct JSON {
     }
 
     /// The static null JSON
-    @available(*, unavailable, renamed:"null")
+    @available(*, unavailable, renamed: "null")
     public static var nullJSON: JSON { return null }
     public static var null: JSON { return JSON(NSNull()) }
 }
@@ -452,7 +452,7 @@ extension JSON {
         set {
             switch path.count {
             case 0: return
-            case 1: self[sub:path[0]].object = newValue.object
+            case 1: self[sub: path[0]].object = newValue.object
             default:
                 var aPath = path
                 aPath.remove(at: 0)
@@ -674,17 +674,17 @@ extension JSON: Swift.CustomStringConvertible, Swift.CustomDebugStringConvertibl
 
 extension JSON {
 
-    //Optional [JSON]
+    // Optional [JSON]
     public var array: [JSON]? {
         return type == .array ? rawArray.map { JSON($0) } : nil
     }
 
-    //Non-optional [JSON]
+    // Non-optional [JSON]
     public var arrayValue: [JSON] {
         return self.array ?? []
     }
 
-    //Optional [Any]
+    // Optional [Any]
     public var arrayObject: [Any]? {
         get {
             switch type {
@@ -702,7 +702,7 @@ extension JSON {
 
 extension JSON {
 
-    //Optional [String : JSON]
+    // Optional [String : JSON]
     public var dictionary: [String: JSON]? {
         if type == .dictionary {
             var d = [String: JSON](minimumCapacity: rawDictionary.count)
@@ -715,12 +715,12 @@ extension JSON {
         }
     }
 
-    //Non-optional [String : JSON]
+    // Non-optional [String : JSON]
     public var dictionaryValue: [String: JSON] {
         return dictionary ?? [:]
     }
 
-    //Optional [String : Any]
+    // Optional [String : Any]
 
     public var dictionaryObject: [String: Any]? {
         get {
@@ -739,7 +739,7 @@ extension JSON {
 
 extension JSON { // : Swift.Bool
 
-    //Optional bool
+    // Optional bool
     public var bool: Bool? {
         get {
             switch type {
@@ -752,7 +752,7 @@ extension JSON { // : Swift.Bool
         }
     }
 
-    //Non-optional bool
+    // Non-optional bool
     public var boolValue: Bool {
         get {
             switch type {
@@ -772,7 +772,7 @@ extension JSON { // : Swift.Bool
 
 extension JSON {
 
-    //Optional string
+    // Optional string
     public var string: String? {
         get {
             switch type {
@@ -785,7 +785,7 @@ extension JSON {
         }
     }
 
-    //Non-optional string
+    // Non-optional string
     public var stringValue: String {
         get {
             switch type {
@@ -805,7 +805,7 @@ extension JSON {
 
 extension JSON {
 
-    //Optional number
+    // Optional number
     public var number: NSNumber? {
         get {
             switch type {
@@ -819,7 +819,7 @@ extension JSON {
         }
     }
 
-    //Non-optional number
+    // Non-optional number
     public var numberValue: NSNumber {
         get {
             switch type {
@@ -864,7 +864,7 @@ extension JSON {
 
 extension JSON {
 
-    //Optional URL
+    // Optional URL
     public var url: URL? {
         get {
             switch type {

@@ -13,8 +13,7 @@ extension CS.BigUInt {
             var it = source.words.makeIterator()
             self.init(low: it.next() ?? 0, high: it.next() ?? 0)
             precondition(it.next() == nil, "Length of BinaryInteger.words is greater than its bitWidth")
-        }
-        else {
+        } else {
             self.init(words: source.words)
         }
     }
@@ -31,8 +30,7 @@ extension CS.BigUInt {
     public init<T: BinaryInteger>(clamping source: T) {
         if source <= (0 as T) {
             self.init()
-        }
-        else {
+        } else {
             self.init(words: source.words)
         }
     }
@@ -49,26 +47,25 @@ extension CS.BigInt {
         self.sign = .plus
     }
 
-    public init<T>(_ source: T) where T : BinaryInteger {
+    public init<T>(_ source: T) where T: BinaryInteger {
         if source >= (0 as T) {
             self.init(sign: .plus, magnitude: CS.BigUInt(source))
-        }
-        else {
+        } else {
             var words = Array(source.words)
             words.twosComplement()
             self.init(sign: .minus, magnitude: CS.BigUInt(words: words))
         }
     }
 
-    public init?<T>(exactly source: T) where T : BinaryInteger {
+    public init?<T>(exactly source: T) where T: BinaryInteger {
         self.init(source)
     }
 
-    public init<T>(clamping source: T) where T : BinaryInteger {
+    public init<T>(clamping source: T) where T: BinaryInteger {
         self.init(source)
     }
 
-    public init<T>(truncatingIfNeeded source: T) where T : BinaryInteger {
+    public init<T>(truncatingIfNeeded source: T) where T: BinaryInteger {
         self.init(source)
     }
 }
@@ -86,4 +83,3 @@ extension CS.BigInt: ExpressibleByIntegerLiteral {
         self.init(value)
     }
 }
-

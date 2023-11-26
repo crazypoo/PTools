@@ -14,7 +14,7 @@
 //
 
 public final class CBCMAC: CMAC {
-  public override func authenticate(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  public override func authenticate(_ bytes: [UInt8]) throws -> [UInt8] {
     var inBytes = bytes
     bitPadding(to: &inBytes, blockSize: CMAC.BlockSize)
     let blocks = inBytes.batched(by: CMAC.BlockSize)

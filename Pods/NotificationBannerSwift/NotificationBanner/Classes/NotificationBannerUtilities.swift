@@ -31,7 +31,7 @@ class NotificationBannerUtilities: NSObject {
             return false
         }
     }
-    
+
     class func hasDynamicIsland() -> Bool {
         if #available(iOS 11, *) {
             if UIApplication.shared.keyWindow?.safeAreaInsets.top ?? 0.0 > 50.0 {
@@ -43,5 +43,5 @@ class NotificationBannerUtilities: NSObject {
             return false
         }
     }
-    
+
 }

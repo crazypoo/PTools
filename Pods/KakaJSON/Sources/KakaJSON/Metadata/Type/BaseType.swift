@@ -13,15 +13,15 @@ public class BaseType: Type, CustomStringConvertible {
     public let kind: Kind
     public private(set) var module: String = ""
     public private(set) var isSystemModule: Bool = false
-    
+
     required init(name: String, type: Any.Type, kind: Kind) {
         self.name = name
         self.type = type
         self.kind = kind
-        
+
         build()
     }
-    
+
     func build() {
         switch kind {
         case .optional, .struct, .class, .existential,
@@ -31,10 +31,10 @@ public class BaseType: Type, CustomStringConvertible {
             module = String(name[name.startIndex..<end])
         default: break
         }
-        
+
         isSystemModule = module == "Swift" || module == "__C" || module.isEmpty
     }
-    
+
     public var description: String {
         return "\(name) { kind = \(kind), module = \(module) }"
     }

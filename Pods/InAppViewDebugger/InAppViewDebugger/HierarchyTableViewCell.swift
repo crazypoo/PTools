@@ -24,28 +24,28 @@ final class HierarchyTableViewCell: UITableViewCell {
         stackView.addArrangedSubview(frameLabel)
         return stackView
     }()
-    
+
     let lineView: ParallelLineView = {
         let lineView = ParallelLineView()
         lineView.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         lineView.translatesAutoresizingMaskIntoConstraints = false
         return lineView
     }()
-    
+
     let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .body)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     let frameLabel: UILabel = {
         let label = UILabel()
         label.font = .preferredFont(forTextStyle: .caption1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     private lazy var subtreeButton: UIButton = { [unowned self] in
         let button = UIButton(type: .custom)
         let color = UIColor(white: 0.2, alpha: 1.0)
@@ -59,7 +59,7 @@ final class HierarchyTableViewCell: UITableViewCell {
         button.layer.borderWidth = 1.0
         button.layer.borderColor = color.cgColor
         button.layer.masksToBounds = true
-        
+
         let imageTextSpacing: CGFloat = 4.0
         let imageTextInset = imageTextSpacing / 2.0
         button.imageEdgeInsets = UIEdgeInsets(top: 1.0, left: imageTextInset, bottom: 0, right: -imageTextInset)
@@ -67,37 +67,37 @@ final class HierarchyTableViewCell: UITableViewCell {
         button.contentEdgeInsets = UIEdgeInsets(top: 4.0, left:
             4.0 + imageTextInset, bottom: 4.0, right: 4.0 + imageTextInset)
         button.semanticContentAttribute = .forceRightToLeft
-        
+
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        
+
         button.addTarget(self, action: #selector(didTapSubtree(sender:)), for: .touchUpInside)
-        
+
         return button
     }()
-    
+
     // Used to hide/unhide the subtree button.
     private var subtreeLabelWidthConstraint: NSLayoutConstraint?
-    
+
     var showSubtreeButton = false {
         didSet {
             subtreeLabelWidthConstraint?.isActive = !showSubtreeButton
         }
     }
-    
+
     var indexPath: IndexPath?
-    
+
     weak var delegate: HierarchyTableViewCellDelegate?
-    
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+
         selectedBackgroundView = {
             let backgroundView = UIView()
             backgroundView.backgroundColor = UIColor(white: 0.9, alpha: 1.0)
             return backgroundView
         }()
-        
+
         contentView.addSubview(lineView)
         contentView.addSubview(labelStackView)
         contentView.addSubview(subtreeButton)
@@ -111,10 +111,10 @@ final class HierarchyTableViewCell: UITableViewCell {
             labelStackView.centerYAnchor.constraint(equalTo: marginsGuide.centerYAnchor),
             subtreeButton.leadingAnchor.constraint(equalTo: labelStackView.trailingAnchor, constant: 5.0),
             subtreeButton.centerYAnchor.constraint(equalTo: marginsGuide.centerYAnchor),
-            subtreeButton.trailingAnchor.constraint(equalTo: marginsGuide.trailingAnchor),
+            subtreeButton.trailingAnchor.constraint(equalTo: marginsGuide.trailingAnchor)
         ])
         subtreeLabelWidthConstraint = subtreeButton.widthAnchor.constraint(equalToConstant: 0.0)
-        
+
         let longPressGestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPress(sender:)))
         contentView.addGestureRecognizer(longPressGestureRecognizer)
     }
@@ -122,13 +122,13 @@ final class HierarchyTableViewCell: UITableViewCell {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: Actions
-    
+
     @objc private func didTapSubtree(sender: UIButton) {
         delegate?.hierarchyTableViewCellDidTapSubtree(cell: self)
     }
-    
+
     @objc private func handleLongPress(sender: UILongPressGestureRecognizer) {
         guard sender.state == .began else {
             return

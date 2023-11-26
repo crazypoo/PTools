@@ -39,7 +39,7 @@ public extension PKCS5 {
       }
 
       @usableFromInline
-      func calculateHash(_ bytes: Array<UInt8>) -> Array<UInt8> {
+      func calculateHash(_ bytes: [UInt8]) -> [UInt8] {
         switch self {
           case .sha1:
             return Digest.sha1(bytes)
@@ -59,14 +59,14 @@ public extension PKCS5 {
     let keyLength: Int
 
     @usableFromInline
-    let t1: Array<UInt8>
+    let t1: [UInt8]
 
     /// - parameters:
     ///   - salt: salt, an eight-bytes
     ///   - variant: hash variant
     ///   - iterations: iteration count, a positive integer
     ///   - keyLength: intended length of derived key
-    public init(password: Array<UInt8>, salt: Array<UInt8>, variant: Variant = .sha1, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ ) throws {
+    public init(password: [UInt8], salt: [UInt8], variant: Variant = .sha1, iterations: Int = 4096 /* c */, keyLength: Int? = nil /* dkLen */ ) throws {
       precondition(iterations > 0)
       precondition(salt.count == 8)
 
@@ -86,7 +86,7 @@ public extension PKCS5 {
 
     /// Apply the underlying hash function Hash for c iterations
     @inlinable
-    public func calculate() -> Array<UInt8> {
+    public func calculate() -> [UInt8] {
       var t = self.t1
       for _ in 2...self.iterations {
         t = self.variant.calculateHash(t)
@@ -94,7 +94,7 @@ public extension PKCS5 {
       return Array(t[0..<self.keyLength])
     }
 
-    public func callAsFunction() -> Array<UInt8> {
+    public func callAsFunction() -> [UInt8] {
       calculate()
     }
   }

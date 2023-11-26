@@ -8,7 +8,7 @@
 
 extension CS.BigUInt {
 
-    //MARK: String Conversion
+    // MARK: String Conversion
 
     /// Calculates the number of numerals in a given radix that fit inside a single `Word`.
     ///
@@ -19,7 +19,7 @@ extension CS.BigUInt {
         var overflow = false
         var count = 0
         while !overflow {
-            let (high,low) = power.multipliedFullWidth(by: Word(radix))
+            let (high, low) = power.multipliedFullWidth(by: Word(radix))
             if high > 0 {
               overflow = true
             }
@@ -65,8 +65,7 @@ extension CS.BigUInt {
 
         if power == 0 {
             self.init(words: words)
-        }
-        else {
+        } else {
             self.init()
             for d in words.reversed() {
                 self.multiply(byWord: power)
@@ -91,12 +90,10 @@ extension CS.BigInt {
             sign = .minus
             let text = text.dropFirst()
             magnitude = CS.BigUInt(text, radix: radix)
-        }
-        else if text.first == "+" {
+        } else if text.first == "+" {
             let text = text.dropFirst()
             magnitude = CS.BigUInt(text, radix: radix)
-        }
-        else {
+        } else {
             magnitude = CS.BigUInt(text, radix: radix)
         }
         guard let m = magnitude else { return nil }
@@ -127,8 +124,7 @@ extension String {
         var parts: [String]
         if power == 0 {
             parts = v.words.map { String($0, radix: radix, uppercase: uppercase) }
-        }
-        else {
+        } else {
             parts = []
             var rest = v
             while !rest.isZero {

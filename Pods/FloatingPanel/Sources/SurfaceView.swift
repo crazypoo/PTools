@@ -248,10 +248,10 @@ public class SurfaceView: UIView {
             containerViewTopConstraint,
             containerViewLeftConstraint,
             containerViewBottomConstraint,
-            containerViewRightConstraint,
+            containerViewRightConstraint
         ].map {
             $0.identifier = "FloatingPanel-surface-container"
-            return $0;
+            return $0
         })
 
         addSubview(grabberHandle)
@@ -260,10 +260,10 @@ public class SurfaceView: UIView {
             grabberHandleEdgePaddingConstraint,
             grabberHandleCenterConstraint,
             grabberHandleWidthConstraint,
-            grabberHandleHeightConstraint,
+            grabberHandleHeightConstraint
         ].map {
             $0.identifier = "FloatingPanel-surface-grabber"
-            return $0;
+            return $0
         })
 
         shadowLayers = appearance.shadows.map { _ in CALayer() }
@@ -422,7 +422,7 @@ public class SurfaceView: UIView {
             topConstraint,
             leftConstraint,
             rightConstraint,
-            bottomConstraint,
+            bottomConstraint
         ].map {
             switch mode {
             case .static:

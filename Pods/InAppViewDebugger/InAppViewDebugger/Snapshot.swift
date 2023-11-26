@@ -13,25 +13,25 @@ import CoreGraphics
 @objc(IAVDSnapshot) public final class Snapshot: NSObject {
     /// Unique identifier for the snapshot.
     @objc public let identifier = UUID().uuidString
-    
+
     /// Identifying information for the element, like its name and classification.
     @objc public let label: ElementLabel
-    
+
     /// The frame of the element in its parent's coordinate space.
     @objc public let frame: CGRect
-    
+
     /// Whether the element is hidden from view or not.
     @objc public let isHidden: Bool
-    
+
     /// A snapshot image of the element in its current state.
     @objc public let snapshotImage: CGImage?
-    
+
     /// The child snapshots of the snapshot (one per child element).
     @objc public let children: [Snapshot]
-    
+
     /// The element used to create the snapshot.
     @objc public let element: Element
-    
+
     /// Constructs a new `Snapshot`
     ///
     /// - Parameter element: The element to construct the snapshot from. The

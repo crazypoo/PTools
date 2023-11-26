@@ -37,14 +37,14 @@ final class StreamEncryptor: Cryptor, Updatable {
   // MARK: Updatable
 
   @inlinable
-  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> Array<UInt8> {
+  public func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool) throws -> [UInt8] {
     var accumulated = Array(bytes)
     if isLast {
       // CTR doesn't need padding. Really. Add padding to the last block if really want. but... don't.
       accumulated = self.padding.add(to: accumulated, blockSize: self.blockSize - self.lastBlockRemainder)
     }
 
-    var encrypted = Array<UInt8>(reserveCapacity: bytes.count)
+    var encrypted = [UInt8](reserveCapacity: bytes.count)
     for chunk in accumulated.batched(by: self.blockSize) {
       encrypted += self.worker.encrypt(block: chunk)
     }

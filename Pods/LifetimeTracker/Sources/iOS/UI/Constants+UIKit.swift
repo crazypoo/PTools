@@ -9,10 +9,10 @@
 import UIKit
 
 extension Constants {
-    
+
     struct Layout {
         static let animationDuration: TimeInterval = 0.3
-        
+
         struct Dashboard {
             static let headerHeight: CGFloat = 44.0
             static let cellHeight: CGFloat = 44
@@ -20,21 +20,21 @@ extension Constants {
             static let sectionHeaderHeight: CGFloat = 30
         }
     }
-    
+
     enum Segue {
         case embedDashboardTableView
-        
+
         var identifier: String {
             switch self {
             case .embedDashboardTableView: return "embedDashboardTableViewController"
             }
         }
     }
-    
+
     enum Storyboard {
         case circularDashboard
         case barDashboard
-        
+
         var name: String {
             switch self {
             case .circularDashboard: return "CircularDashboard"

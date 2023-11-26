@@ -74,7 +74,7 @@ func xor<T, V>(_ left: T, _ right: V) -> ArraySlice<UInt8> where T: RandomAccess
 }
 
 @inlinable
-func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, V.Element == UInt8, V.Index == Int {
+func xor<T, V>(_ left: T, _ right: V) -> [UInt8] where T: RandomAccessCollection, V: RandomAccessCollection, T.Element == UInt8, T.Index == Int, V.Element == UInt8, V.Index == Int {
   let length = Swift.min(left.count, right.count)
 
   let buf = UnsafeMutablePointer<UInt8>.allocate(capacity: length)
@@ -101,7 +101,7 @@ func xor<T, V>(_ left: T, _ right: V) -> Array<UInt8> where T: RandomAccessColle
  - allowance: Excluded trailing number of bytes.
  */
 @inline(__always) @inlinable
-func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0) {
+func bitPadding(to data: inout [UInt8], blockSize: Int, allowance: Int = 0) {
   let msgLength = data.count
   // Step 1. Append Padding Bits
   // append one bit (UInt8 with one bit) to message
@@ -110,8 +110,8 @@ func bitPadding(to data: inout Array<UInt8>, blockSize: Int, allowance: Int = 0)
   // Step 2. append "0" bit until message length in bits ≡ 448 (mod 512)
   let max = blockSize - allowance // 448, 986
   if msgLength % blockSize < max { // 448
-    data += Array<UInt8>(repeating: 0, count: max - 1 - (msgLength % blockSize))
+    data += [UInt8](repeating: 0, count: max - 1 - (msgLength % blockSize))
   } else {
-    data += Array<UInt8>(repeating: 0, count: blockSize + max - 1 - (msgLength % blockSize))
+    data += [UInt8](repeating: 0, count: blockSize + max - 1 - (msgLength % blockSize))
   }
 }

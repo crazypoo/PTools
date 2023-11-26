@@ -23,4 +23,4 @@ extension NominalLayout {
     var genericTypeOffset: Int { return 2 }
 }
 
-protocol ModelLayout: NominalLayout where DescriptorType: ModelDescriptor  {}
+protocol ModelLayout: NominalLayout where DescriptorType: ModelDescriptor {}

@@ -13,7 +13,7 @@ struct FieldList<Item> {
             ($0 + index).kj_raw ~> Item.self
         }
     }
-    
+
     mutating func item(_ index: Int) -> Item {
         return withUnsafeMutablePointer(to: &self) {
             $0[index].item

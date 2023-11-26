@@ -404,7 +404,7 @@ public class SimplePing {
 			 * put it into the packet as a 16-bit unit. */
 			let checksumBig = SimplePing.packetChecksum(packetData: packet)
             packet[ICMPHeader.checksumDelta...].withUnsafeMutableBytes { (bytes: UnsafeMutableRawBufferPointer) in
-                if var curPos = bytes.baseAddress?.assumingMemoryBound(to: UInt16.self) {
+                if let curPos = bytes.baseAddress?.assumingMemoryBound(to: UInt16.self) {
                     curPos.pointee = checksumBig
                 }
             }

@@ -83,7 +83,7 @@ public enum DateToStringStyles {
                 $0.timeStyle = timeStyle
             }).string(from: date.date)
 		case .relative(let style, let unitStyle):
-            return date.toRelative(since: DateInRegion(),  dateTimeStyle: style, unitsStyle: unitStyle)
+            return date.toRelative(since: DateInRegion(), dateTimeStyle: style, unitsStyle: unitStyle)
 		}
 	}
 

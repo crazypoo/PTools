@@ -203,7 +203,7 @@ open class TimePeriodCollection: TimePeriodGroup {
 	}
 
 	private func updateExtremes(period: TimePeriodProtocol) {
-		//Check incoming period against previous start and end date
+		// Check incoming period against previous start and end date
 		guard count != 1 else {
 			start = period.start
 			end = period.end

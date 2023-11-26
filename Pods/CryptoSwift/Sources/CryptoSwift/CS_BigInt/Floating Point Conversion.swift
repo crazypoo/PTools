@@ -26,7 +26,7 @@ extension CS.BigUInt {
 
 extension CS.BigInt {
     public init?<T: BinaryFloatingPoint>(exactly source: T) {
-        switch source.sign{
+        switch source.sign {
         case .plus:
             guard let magnitude = CS.BigUInt(exactly: source) else { return nil }
             self = CS.BigInt(sign: .plus, magnitude: magnitude)
@@ -55,8 +55,7 @@ extension BinaryFloatingPoint where RawExponent: FixedWidthInteger, RawSignifica
             if significand.trailingZeroBitCount >= Self.significandBitCount {
                 exponent += 1
             }
-        }
-        else {
+        } else {
             significand >>= 1
         }
         let bias = 1 << (Self.exponentBitCount - 1) - 1

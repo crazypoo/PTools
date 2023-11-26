@@ -10,12 +10,12 @@ import Foundation
 import UIKit
 
 public protocol TransformableView {
-    
+
     /// The view for detecting gestures
     ///
     /// If you want to handle it manually return `nil`
     var selectableView: UIView? { get }
-    
+
     /// Sends a float value based on the position of the view (cell)
     /// if the view is in the center of CollectionView it sends 0
     /// the value could be negative or positive and that represents the distance to the center of your CollectionView.
@@ -24,7 +24,7 @@ public protocol TransformableView {
     ///
     /// - Parameter progress: the interpolated progress for the cell view
     func transform(progress: CGFloat)
-    
+
     /// Optional function for providing the Z index(position) of the cell view
     /// As defined as an extension the default value of zIndex is Int(-abs(round(progress)))
     ///
@@ -33,25 +33,22 @@ public protocol TransformableView {
     func zPosition(progress: CGFloat) -> Int
 }
 
-
 public extension TransformableView {
-    
+
     /// Defining the default value of zIndex
     func zPosition(progress: CGFloat) -> Int {
         Int(-abs(round(progress)))
     }
 }
 
-
 public extension TransformableView where Self: UICollectionViewCell {
-    
+
     /// Default `selectableView` for `UICollectionViewCell` is the first subview of
     /// `contentView` or the content view itself if there is no subview
     var selectableView: UIView? {
         contentView.subviews.first ?? contentView
     }
 }
-
 
 public extension UICollectionViewCell {
     /// This method transfers the event to `selectableView`

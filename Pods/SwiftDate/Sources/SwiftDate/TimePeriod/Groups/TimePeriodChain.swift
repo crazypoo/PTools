@@ -33,7 +33,7 @@ open class TimePeriodChain: TimePeriodGroup {
 		let newPeriod = TimePeriod(start: beginning!, duration: period.duration)
 		periods.append(newPeriod)
 
-		//Update updateExtremes
+		// Update updateExtremes
 		if periods.count == 1 {
 			start = period.start
 			end = period.end
@@ -55,7 +55,7 @@ open class TimePeriodChain: TimePeriodGroup {
 			let newPeriod = TimePeriod(start: beginning!, duration: period.duration)
 			periods.append(newPeriod)
 
-			//Update updateExtremes
+			// Update updateExtremes
 			if periods.count == 1 {
 				start = period.start
 				end = period.end
@@ -71,19 +71,19 @@ open class TimePeriodChain: TimePeriodGroup {
 	///   - period: The period to insert
 	///   - index: Index to insert period at
 	public func insert(_ period: TimePeriodProtocol, at index: Int) {
-		//Check for special zero case which takes the beginning date
+		// Check for special zero case which takes the beginning date
 		if index == 0 && period.start != nil && period.end != nil {
-			//Insert new period
+			// Insert new period
 			periods.insert(period, at: index)
 		} else if period.start != nil && period.end != nil {
-			//Insert new period
+			// Insert new period
 			periods.insert(period, at: index)
 		} else {
 			print("All TimePeriods in a TimePeriodChain must contain a defined start and end date")
 			return
 		}
 
-		//Shift all periods after inserted period
+		// Shift all periods after inserted period
 		for i in 0..<periods.count {
 			if i > index && i > 0 {
 				let currentPeriod = TimePeriod(start: period.start, end: period.end)
@@ -99,13 +99,13 @@ open class TimePeriodChain: TimePeriodGroup {
 	///
 	/// - Parameter index: The index in the collection to remove
 	public func remove(at index: Int) {
-		//Retrieve duration of period to be removed
+		// Retrieve duration of period to be removed
 		let duration = periods[index].duration
 
-		//Remove period
+		// Remove period
 		periods.remove(at: index)
 
-		//Shift all periods after inserted period
+		// Shift all periods after inserted period
 		for i in index..<periods.count {
 			periods[i].shift(by: -duration)
 		}

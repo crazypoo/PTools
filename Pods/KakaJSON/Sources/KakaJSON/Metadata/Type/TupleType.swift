@@ -9,12 +9,12 @@
 public class TupleType: BaseType, LayoutType {
     private(set) var layout: UnsafeMutablePointer<TupleLayout>!
     public private(set) var properties: [Property]!
-    
+
     override func build() {
         super.build()
-        
+
         layout = builtLayout()
-        
+
         let elementsCount = layout.pointee.numElements
         guard elementsCount > 0 else { return }
         var names: [String]
@@ -28,7 +28,7 @@ public class TupleType: BaseType, LayoutType {
             return Property(name: names[$0], type: element.type, isVar: true, offset: element.offset, ownerType: type)
         }
     }
-    
+
     override public var description: String {
         return "\(name) { kind = \(kind), properties = \(properties ?? []) }"
     }

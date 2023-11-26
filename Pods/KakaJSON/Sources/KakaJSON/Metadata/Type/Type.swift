@@ -7,7 +7,7 @@
 //
 
 // MARK: - Type
-public protocol Type : AnyObject {
+public protocol Type: AnyObject {
     var name: String { get }
     var type: Any.Type { get }
     var kind: Kind { get }
@@ -36,18 +36,18 @@ extension NominalType where Self: LayoutType, InnerLayout: NominalLayout {
     func genenicTypesPtr() -> UnsafeMutablePointer<FieldList<Any.Type>> {
         // get the offset
         let offset = layout.pointee.genericTypeOffset * MemoryLayout<UnsafeRawPointer>.size
-        
+
         // pointer to generic types
         return ((type ~>> UnsafeMutableRawPointer.self) + offset) ~> FieldList<Any.Type>.self
     }
-    
+
     func builtGenericTypes() -> [Any.Type]? {
         // generic judge
         let description = layout.pointee.description
         if !description.pointee.isGeneric { return nil }
         let typesCount = description.pointee.genericTypesCount
         if typesCount <= 0 { return nil }
-        
+
         // pointer to generic types
         if layout.pointee.genericTypeOffset == GenenicTypeOffset.wrong { return nil }
         let ptr = genenicTypesPtr()

@@ -41,7 +41,7 @@ open class JXSegmentedNumberDataSource: JXSegmentedTitleDataSource {
         itemModel.number = numbers[index]
         if numberStringFormatterClosure != nil {
             itemModel.numberString = numberStringFormatterClosure!(itemModel.number)
-        }else {
+        } else {
             itemModel.numberString = "\(itemModel.number)"
         }
         itemModel.numberTextColor = numberTextColor
@@ -52,7 +52,7 @@ open class JXSegmentedNumberDataSource: JXSegmentedTitleDataSource {
         itemModel.numberFont = numberFont
     }
 
-    //MARK: - JXSegmentedViewDataSource
+    // MARK: - JXSegmentedViewDataSource
     open override func registerCellClass(in segmentedView: JXSegmentedView) {
         segmentedView.collectionView.register(JXSegmentedNumberCell.self, forCellWithReuseIdentifier: "cell")
     }

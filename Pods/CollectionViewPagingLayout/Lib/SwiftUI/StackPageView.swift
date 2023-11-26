@@ -15,7 +15,6 @@ public struct StackPageView<ValueType: Identifiable, PageContent: View>: UIViewC
 
     public var builder: Builder
 
-
     // MARK: Lifecycle
 
     public init(
@@ -27,7 +26,6 @@ public struct StackPageView<ValueType: Identifiable, PageContent: View>: UIViewC
         builder.modifierData.stackOptions = .init()
     }
 }
-
 
 public extension StackPageView {
     func options(_ options: StackTransformViewOptions) -> Self {

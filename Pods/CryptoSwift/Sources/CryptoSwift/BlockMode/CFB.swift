@@ -21,18 +21,18 @@ public struct CFB: BlockMode {
     /// Invalid IV
     case invalidInitializationVector
   }
-    
+
   public enum SegmentSize: Int {
     case cfb8 = 1 // Encrypt byte per byte
     case cfb128 = 16 // Encrypt 16 bytes per 16 bytes (default)
   }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
-  private let iv: Array<UInt8>
+  private let iv: [UInt8]
   private let segmentSize: SegmentSize
   public let customBlockSize: Int?
 
-  public init(iv: Array<UInt8>, segmentSize: SegmentSize = .cfb128) {
+  public init(iv: [UInt8], segmentSize: SegmentSize = .cfb128) {
     self.iv = iv
     self.segmentSize = segmentSize
     self.customBlockSize = segmentSize.rawValue
@@ -63,7 +63,7 @@ struct CFBModeWorker: BlockModeWorker {
   }
 
   @inlinable
-  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8] {
     switch segmentSize {
     case .cfb128:
       guard let ciphertext = cipherOperation(prev ?? iv) else {
@@ -82,13 +82,13 @@ struct CFBModeWorker: BlockModeWorker {
   }
 
   @inlinable
-  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8] {
     switch segmentSize {
     case .cfb128:
       guard let plaintext = cipherOperation(prev ?? iv) else {
         return Array(ciphertext)
       }
-      let result: Array<UInt8> = xor(plaintext, ciphertext)
+      let result: [UInt8] = xor(plaintext, ciphertext)
       prev = ciphertext
       return result
     case .cfb8:

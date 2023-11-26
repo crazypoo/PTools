@@ -14,7 +14,6 @@ public struct TransformPageView<ValueType: Identifiable, PageContent: View>: UIV
 
     public var builder: Builder
 
-
     // MARK: Lifecycle
 
     public init(

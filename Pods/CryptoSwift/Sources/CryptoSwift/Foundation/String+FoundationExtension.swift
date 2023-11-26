@@ -31,7 +31,7 @@ extension String {
     throw CipherError.decrypt
   }
 
-  public func decryptBase64(cipher: Cipher) throws -> Array<UInt8> {
+  public func decryptBase64(cipher: Cipher) throws -> [UInt8] {
     guard let decodedData = Data(base64Encoded: self, options: []) else {
       throw CipherError.decrypt
     }

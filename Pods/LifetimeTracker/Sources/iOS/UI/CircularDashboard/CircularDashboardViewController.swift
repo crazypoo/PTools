@@ -216,10 +216,10 @@ class CircularDashboardViewController: UIViewController, LifetimeTrackerViewable
         popoverWindow.isHidden = false
         view.window?.alpha = state == .closed ? 0 : 1
 
-        UIView.animateKeyframes(withDuration: Constants.Layout.animationDuration, delay: 0, options: [.beginFromCurrentState, .calculationModeCubicPaced] , animations: {
+        UIView.animateKeyframes(withDuration: Constants.Layout.animationDuration, delay: 0, options: [.beginFromCurrentState, .calculationModeCubicPaced], animations: {
             self.popoverWindow.frame = state == .open ? openedFrame : closedFrame
             self.view.window?.alpha = state == .open ? 0 : 1
-        }, completion: { (finished: Bool) in
+        }, completion: { (_: Bool) in
             self.popoverWindow.isHidden = state == .closed
         })
     }

@@ -85,10 +85,10 @@ public struct DDLogMessageFormat: ExpressibleByStringInterpolation {
     struct Storage {
 #if swift(>=5.6)
         @usableFromInline
-        typealias Args = Array<any CVarArg>
+        typealias Args = [any CVarArg]
 #else
         @usableFromInline
-        typealias Args = Array<CVarArg>
+        typealias Args = [CVarArg]
 #endif
         @usableFromInline
         let requiresArgumentParsing: Bool

@@ -14,10 +14,9 @@ public protocol TransformPageViewProtocol {
     associatedtype PageContent: View
 
     typealias Builder = PagingCollectionViewControllerBuilder<ValueType, PageContent>
-    
+
     var builder: Builder { get }
 }
-
 
 public extension TransformPageViewProtocol {
     func numberOfVisibleItems(_ count: Int) -> Self {
@@ -94,7 +93,6 @@ public extension TransformPageViewProtocol {
         return self
     }
 }
-
 
 public extension TransformPageViewProtocol where Self: UIViewControllerRepresentable {
      func makeUIViewController(context: UIViewControllerRepresentableContext<Self>) -> Builder.ViewController {

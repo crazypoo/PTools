@@ -18,7 +18,7 @@
 //  Created by zhouzhuo on 07/01/2017.
 //
 
-protocol ContextDescriptorType : MetadataType {
+protocol ContextDescriptorType: MetadataType {
     var contextDescriptorOffsetLocation: Int { get }
 }
 

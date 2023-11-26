@@ -25,7 +25,7 @@ public enum BannerPosition: Int {
 }
 
 class BannerPositionFrame {
-    
+
     private(set) var startFrame: CGRect = .zero
     private(set) var endFrame: CGRect = .zero
 
@@ -45,7 +45,7 @@ class BannerPositionFrame {
             maxY: maxY,
             edgeInsets: edgeInsets
         )
-        
+
         self.endFrame = endFrame(
             for: bannerPosition,
             bannerWidth: bannerWidth,
@@ -55,7 +55,7 @@ class BannerPositionFrame {
             edgeInsets: edgeInsets
         )
     }
-    
+
     /**
         Returns the start frame for the notification banner based on the given banner position
         - parameter bannerPosition: The position the notification banners should slide in from
@@ -72,9 +72,9 @@ class BannerPositionFrame {
         maxY: CGFloat,
         edgeInsets: UIEdgeInsets?
     ) -> CGRect {
-        
+
         let edgeInsets = edgeInsets ?? .zero
-        
+
         switch bannerPosition {
         case .bottom:
             return CGRect(
@@ -93,7 +93,7 @@ class BannerPositionFrame {
 
         }
     }
-    
+
     /**
      Returns the end frame for the notification banner based on the given banner position
      - parameter bannerPosition: The position the notification banners should slide in from
@@ -111,7 +111,7 @@ class BannerPositionFrame {
         finishYOffset: CGFloat = 0,
         edgeInsets: UIEdgeInsets?
     ) -> CGRect {
-        
+
         let edgeInsets = edgeInsets ?? .zero
 
         switch bannerPosition {

@@ -11,15 +11,15 @@ import UIKit
 
 protocol Swipeable {
     var state: SwipeState { get set }
-    
+
     var actionsView: SwipeActionsView? { get set }
-    
+
     var frame: CGRect { get }
-    
+
     var scrollView: UIScrollView? { get }
-    
+
     var indexPath: IndexPath? { get }
-    
+
     var panGestureRecognizer: UIGestureRecognizer { get }
 }
 
@@ -32,10 +32,10 @@ enum SwipeState: Int {
     case right
     case dragging
     case animatingToCenter
-    
+
     init(orientation: SwipeActionsOrientation) {
         self = orientation == .left ? .left : .right
     }
-    
+
     var isActive: Bool { return self != .center }
 }

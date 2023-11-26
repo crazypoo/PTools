@@ -146,4 +146,3 @@ class ModalDismissTransition: NSObject, UIViewControllerAnimatedTransitioning {
         self.interruptibleAnimator(using: transitionContext).startAnimation()
     }
 }
-

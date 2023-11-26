@@ -16,7 +16,7 @@ public extension KJ where Base == Data {
     func model<M: Convertible>(_ type: M.Type) -> M? {
         return model(type: type) as? M
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible? {
         if let json = JSONSerialization.kj_JSON(base, [String: Any].self) {
@@ -25,12 +25,12 @@ public extension KJ where Base == Data {
         Logger.error("Failed to get JSON from JSONData.")
         return nil
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray<M: Convertible>(_ type: M.Type) -> [M] {
         return modelArray(type: type) as! [M]
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray(type: Convertible.Type) -> [Convertible] {
         if let json = JSONSerialization.kj_JSON(base, [Any].self) {
@@ -46,17 +46,17 @@ public extension KJ where Base: NSData {
     func model<M: Convertible>(_ type: M.Type) -> M? {
         return (base as Data).kj.model(type)
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible? {
         return (base as Data).kj.model(type: type)
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray<M: Convertible>(_ type: M.Type) -> [M] {
         return (base as Data).kj.modelArray(type)
     }
-    
+
     /// JSONObjectArray -> ModelArray
     func modelArray(type: Convertible.Type) -> [Convertible] {
         return (base as Data).kj.modelArray(type: type)

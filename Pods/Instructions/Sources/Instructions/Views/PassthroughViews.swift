@@ -23,7 +23,7 @@ class InstructionsWindow: UIWindow {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let hitView = super.hitTest(point, with: event)
 
-        if let hitView = hitView, (hitView == self || insertedViewsToIgnore.contains(hitView)) {
+        if let hitView = hitView, hitView == self || insertedViewsToIgnore.contains(hitView) {
             return nil
         }
 

@@ -15,7 +15,6 @@ public struct ScalePageView<ValueType: Identifiable, PageContent: View>: UIViewC
 
     public var builder: Builder
 
-
     // MARK: Lifecycle
 
     public init(
@@ -27,7 +26,6 @@ public struct ScalePageView<ValueType: Identifiable, PageContent: View>: UIViewC
         builder.modifierData.scaleOptions = .init()
     }
 }
-
 
 public extension ScalePageView {
     func options(_ options: ScaleTransformViewOptions) -> Self {

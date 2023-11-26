@@ -25,12 +25,12 @@ public protocol Signature: AnyObject {
   ///
   /// - parameter bytes: Plaintext data to be signed
   /// - returns: The signed data
-  func sign(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8>
+  func sign(_ bytes: ArraySlice<UInt8>) throws -> [UInt8]
   /// Sign the given bytes at once
   ///
   /// - parameter bytes: Plaintext data to be signed
   /// - returns: The signed data
-  func sign(_ bytes: Array<UInt8>) throws -> Array<UInt8>
+  func sign(_ bytes: [UInt8]) throws -> [UInt8]
 
   /// Verify the given bytes against the expected data
   ///
@@ -43,7 +43,7 @@ public protocol Signature: AnyObject {
   /// - parameter signature: Signature data
   /// - parameter expectedData: The original data that you expected to be signed
   /// - returns: `True` when the signature is valid for the expected data, `False` otherwise.
-  func verify(signature: Array<UInt8>, for expectedData: Array<UInt8>) throws -> Bool
+  func verify(signature: [UInt8], for expectedData: [UInt8]) throws -> Bool
 }
 
 extension Signature {
@@ -51,7 +51,7 @@ extension Signature {
   ///
   /// - parameter bytes: Plaintext data to be signed
   /// - returns: The signed data
-  public func sign(_ bytes: Array<UInt8>) throws -> Array<UInt8> {
+  public func sign(_ bytes: [UInt8]) throws -> [UInt8] {
     try self.sign(bytes.slice)
   }
 
@@ -60,7 +60,7 @@ extension Signature {
   /// - parameter signature: Signature data
   /// - parameter expectedData: The original data that you expected to be signed
   /// - returns: `True` when the signature is valid for the expected data, `False` otherwise.
-  public func verify(signature: Array<UInt8>, for expectedData: Array<UInt8>) throws -> Bool {
+  public func verify(signature: [UInt8], for expectedData: [UInt8]) throws -> Bool {
     try self.verify(signature: signature.slice, for: expectedData.slice)
   }
 }

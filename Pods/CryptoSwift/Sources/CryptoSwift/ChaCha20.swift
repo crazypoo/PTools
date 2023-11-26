@@ -26,13 +26,13 @@ public final class ChaCha20: BlockCipher {
   public let keySize: Int
 
   fileprivate let key: Key
-  fileprivate var counter: Array<UInt8>
+  fileprivate var counter: [UInt8]
 
-  public convenience init(key: Array<UInt8>, iv nonce: Array<UInt8>) throws {
+  public convenience init(key: [UInt8], iv nonce: [UInt8]) throws {
     try self.init(key: key, iv: nonce, blockCounter: 0)
   }
 
-  init(key: Array<UInt8>, iv nonce: Array<UInt8>, blockCounter: UInt32 = 0) throws {
+  init(key: [UInt8], iv nonce: [UInt8], blockCounter: UInt32 = 0) throws {
     precondition(nonce.count == 12 || nonce.count == 8)
 
     if key.count != 32 {
@@ -52,7 +52,7 @@ public final class ChaCha20: BlockCipher {
   }
 
   /// https://tools.ietf.org/html/rfc7539#section-2.3.
-  fileprivate func core(block: inout Array<UInt8>, counter: Array<UInt8>, key: Array<UInt8>) {
+  fileprivate func core(block: inout [UInt8], counter: [UInt8], key: [UInt8]) {
     precondition(block.count == ChaCha20.blockSize)
     precondition(counter.count == 16)
     precondition(key.count == 32)
@@ -212,13 +212,13 @@ public final class ChaCha20: BlockCipher {
   }
 
   // XORKeyStream
-  func process(bytes: ArraySlice<UInt8>, counter: inout Array<UInt8>, key: Array<UInt8>) -> Array<UInt8> {
+  func process(bytes: ArraySlice<UInt8>, counter: inout [UInt8], key: [UInt8]) -> [UInt8] {
     precondition(counter.count == 16)
     precondition(key.count == 32)
 
-    var block = Array<UInt8>(repeating: 0, count: ChaCha20.blockSize)
+    var block = [UInt8](repeating: 0, count: ChaCha20.blockSize)
     var bytesSlice = bytes
-    var out = Array<UInt8>(reserveCapacity: bytesSlice.count)
+    var out = [UInt8](reserveCapacity: bytesSlice.count)
 
     while bytesSlice.count >= ChaCha20.blockSize {
       self.core(block: &block, counter: counter, key: key)
@@ -247,11 +247,11 @@ public final class ChaCha20: BlockCipher {
 // MARK: Cipher
 
 extension ChaCha20: Cipher {
-  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+  public func encrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
     self.process(bytes: bytes, counter: &self.counter, key: Array(self.key))
   }
 
-  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> Array<UInt8> {
+  public func decrypt(_ bytes: ArraySlice<UInt8>) throws -> [UInt8] {
     try self.encrypt(bytes)
   }
 }
@@ -260,17 +260,17 @@ extension ChaCha20: Cipher {
 
 extension ChaCha20 {
   public struct ChaChaEncryptor: Cryptor, Updatable {
-    private var accumulated = Array<UInt8>()
+    private var accumulated = [UInt8]()
     private let chacha: ChaCha20
 
     init(chacha: ChaCha20) {
       self.chacha = chacha
     }
 
-    public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> Array<UInt8> {
+    public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = false) throws -> [UInt8] {
       self.accumulated += bytes
 
-      var encrypted = Array<UInt8>()
+      var encrypted = [UInt8]()
       encrypted.reserveCapacity(self.accumulated.count)
       for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
         if isLast || self.accumulated.count >= ChaCha20.blockSize {
@@ -291,7 +291,7 @@ extension ChaCha20 {
 
 extension ChaCha20 {
   public struct ChaChaDecryptor: Cryptor, Updatable {
-    private var accumulated = Array<UInt8>()
+    private var accumulated = [UInt8]()
 
     private var offset: Int = 0
     private var offsetToRemove: Int = 0
@@ -301,17 +301,17 @@ extension ChaCha20 {
       self.chacha = chacha
     }
 
-    public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = true) throws -> Array<UInt8> {
+    public mutating func update(withBytes bytes: ArraySlice<UInt8>, isLast: Bool = true) throws -> [UInt8] {
       // prepend "offset" number of bytes at the beginning
       if self.offset > 0 {
-        self.accumulated += Array<UInt8>(repeating: 0, count: self.offset) + bytes
+        self.accumulated += [UInt8](repeating: 0, count: self.offset) + bytes
         self.offsetToRemove = self.offset
         self.offset = 0
       } else {
         self.accumulated += bytes
       }
 
-      var plaintext = Array<UInt8>()
+      var plaintext = [UInt8]()
       plaintext.reserveCapacity(self.accumulated.count)
       for chunk in self.accumulated.batched(by: ChaCha20.blockSize) {
         if isLast || self.accumulated.count >= ChaCha20.blockSize {
@@ -339,7 +339,7 @@ extension ChaCha20 {
 // MARK: Cryptors
 
 extension ChaCha20: Cryptors {
-  //TODO: Use BlockEncryptor/BlockDecryptor
+  // TODO: Use BlockEncryptor/BlockDecryptor
 
   public func makeEncryptor() -> Cryptor & Updatable {
     ChaCha20.ChaChaEncryptor(chacha: self)

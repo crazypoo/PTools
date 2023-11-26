@@ -110,7 +110,7 @@ public class ISOParser: StringToDateTransformable {
 		var year: Int = 0
 
 		/// Parsed month or week number
-		var month_or_week:	Int = 0
+		var month_or_week: 	Int = 0
 
 		/// Parsed day value
 		var day: Int = 0
@@ -125,7 +125,7 @@ public class ISOParser: StringToDateTransformable {
 		var seconds: TimeInterval = 0.0
 
 		/// Parsed nanoseconds value
-		var nanoseconds:	TimeInterval = 0.0
+		var nanoseconds: 	TimeInterval = 0.0
 
 		/// Parsed weekday number (1=monday, 7=sunday)
 		/// If `nil` source string has not specs about weekday.
@@ -165,10 +165,10 @@ public class ISOParser: StringToDateTransformable {
 
 	/// Number of hyphens characters found before any value
 	/// Consequential "-" are used to define implicit values in dates.
-	private var hyphens:	Int = 0
+	private var hyphens: 	Int = 0
 
 	/// Private date components used for default values
-	private var now_cmps:	DateComponents
+	private var now_cmps: 	DateComponents
 
 	/// Configuration used for parser
 	private var options: ISOParser.Options
@@ -259,8 +259,8 @@ public class ISOParser: StringToDateTransformable {
 				case 5:		try parse_digits_5(num_digits, &segment)
 				case 1:		try parse_digits_1(num_digits, &segment)
 				case 2:		try parse_digits_2(num_digits, &segment)
-				case 7:		try parse_digits_7(num_digits, &segment) //YYYY DDD (ordinal date)
-				case 3:		try parse_digits_3(num_digits, &segment) //--DDD (ordinal date, implicit year)
+				case 7:		try parse_digits_7(num_digits, &segment) // YYYY DDD (ordinal date)
+				case 3:		try parse_digits_3(num_digits, &segment) // --DDD (ordinal date, implicit year)
 				default:	throw ISO8601ParserError.invalid
 				}
 			} else {
@@ -290,17 +290,17 @@ public class ISOParser: StringToDateTransformable {
 				next()
 
 				if time_sep == "," || time_sep == "." {
-					//We can't do fractional minutes when '.' is the segment separator.
-					//Only allow whole minutes and whole seconds.
+					// We can't do fractional minutes when '.' is the segment separator.
+					// Only allow whole minutes and whole seconds.
 					date.minute = TimeInterval(try read_int(2).value)
 					if current() == time_sep {
 						next()
 						date.seconds = TimeInterval(try read_int(2).value)
 					}
 				} else {
-					//Allow a fractional minute.
-					//If we don't get a fraction, look for a seconds segment.
-					//Otherwise, the fraction of a minute is the seconds.
+					// Allow a fractional minute.
+					// If we don't get a fraction, look for a seconds segment.
+					// Otherwise, the fraction of a minute is the seconds.
 					date.minute = try read_double().value
 
 					if current() != ":" {
@@ -344,7 +344,7 @@ public class ISOParser: StringToDateTransformable {
 					let is_negative = current() == "-"
 					next()
 					if current()?.isDigit ?? false == true {
-						//Read hour offset.
+						// Read hour offset.
 						date.tz_hour = try read_int(2).value
 						if is_negative == true { date.tz_hour = -date.tz_hour }
 
@@ -380,8 +380,8 @@ public class ISOParser: StringToDateTransformable {
 		case .monthAndDate:
 			date_components!.month = date.month_or_week
 		case .week:
-			//Adapted from <http://personal.ecu.edu/mccartyr/ISOwdALG.txt>.
-			//This works by converting the week date into an ordinal date, then letting the next case handle it.
+			// Adapted from <http://personal.ecu.edu/mccartyr/ISOwdALG.txt>.
+			// This works by converting the week date into an ordinal date, then letting the next case handle it.
 			let prevYear = date.year - 1
 			let YY = prevYear % 100
 			let prevC = prevYear - YY
@@ -393,18 +393,18 @@ public class ISOParser: StringToDateTransformable {
 			day += (date.day - 1) + (7 * (date.month_or_week - 2))
 
 			if let weekday = date.weekday {
-				//date_components!.weekday = weekday
+				// date_components!.weekday = weekday
 				date_components!.day = day + weekday
 			} else {
 				date_components!.day = day
 			}
-		case .dateOnly: //An "ordinal date".
+		case .dateOnly: // An "ordinal date".
 			break
 
 		}
 
-		//cfg.calendar.timeZone = date.timezone ?? TimeZone(identifier: "UTC")!
-		//parsedDate = cfg.calendar.date(from: date_components!)
+		// cfg.calendar.timeZone = date.timezone ?? TimeZone(identifier: "UTC")!
+		// parsedDate = cfg.calendar.date(from: date_components!)
 
 		let tz = date.timezone ?? TimeZone(identifier: "UTC")!
 		parsedTimeZone = tz
@@ -415,7 +415,7 @@ public class ISOParser: StringToDateTransformable {
 	}
 
 	private func parse_digits_3(_ num_digits: Int, _ segment: inout Int) throws {
-		//Technically, the standard only allows one hyphen. But it says that two hyphens is the logical implementation, and one was dropped for brevity. So I have chosen to allow the missing hyphen.
+		// Technically, the standard only allows one hyphen. But it says that two hyphens is the logical implementation, and one was dropped for brevity. So I have chosen to allow the missing hyphen.
 		if hyphens < 1 || (hyphens > 2 && options.strict == false) {
 			throw ISO8601ParserError.invalid
 		}
@@ -556,9 +556,9 @@ public class ISOParser: StringToDateTransformable {
 
 		switch hyphens {
 		case 0:		try parse_hyphens_0(num_digits, &segment)
-		case 1:		try parse_hyphens_1(num_digits, &segment) //-YY; -YY-MM (implicit century)
-		case 2:		try parse_hyphens_2(num_digits, &segment) //--MM; --MM-DD
-		case 3:		try parse_hyphens_3(num_digits, &segment) //---DD
+		case 1:		try parse_hyphens_1(num_digits, &segment) // -YY; -YY-MM (implicit century)
+		case 2:		try parse_hyphens_2(num_digits, &segment) // --MM; --MM-DD
+		case 3:		try parse_hyphens_3(num_digits, &segment) // ---DD
 		default:	throw ISO8601ParserError.invalid
 		}
 	}
@@ -733,7 +733,7 @@ public class ISOParser: StringToDateTransformable {
 	private func parseWeekAndDay() throws {
 		next()
 		if current()?.isDigit ?? false == false {
-			//Not really a week-based date; just a year followed by '-W'.
+			// Not really a week-based date; just a year followed by '-W'.
 			guard options.strict == false else {
 				throw ISO8601ParserError.invalid
 			}

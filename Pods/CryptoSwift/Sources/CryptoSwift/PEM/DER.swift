@@ -23,12 +23,12 @@ internal protocol DERDecodable {
   /// Attempts to instantiate an instance of your Public Key when given a DER representation of your Public Key
   ///
   /// - Parameter publicDER: The ASN.1 DER representation of your Public Key
-  init(publicDER: Array<UInt8>) throws
+  init(publicDER: [UInt8]) throws
 
   /// Attempts to instantiate an instance of your Private Key when given a DER representation of your Private Key
   ///
   /// - Parameter privateDER: The ASN.1 DER representation of your Private Key
-  init(privateDER: Array<UInt8>) throws
+  init(privateDER: [UInt8]) throws
 
   /// Attempts to instantiate a Key when given the ASN1 DER encoded external representation of the Key
   ///
@@ -40,10 +40,10 @@ internal protocol DERDecodable {
 /// Conform to this protocol if your type can be described in an ASN1 DER representation
 internal protocol DEREncodable {
   /// Returns the DER encoded representation of the Public Key
-  func publicKeyDER() throws -> Array<UInt8>
+  func publicKeyDER() throws -> [UInt8]
 
   /// Returns the DER encoded representation of the Private Key
-  func privateKeyDER() throws -> Array<UInt8>
+  func privateKeyDER() throws -> [UInt8]
 
   /// A semantically similar function that mimics the `SecKeyCopyExternalRepresentation` function from Apple's `Security` framework
   /// - Note: If called on a Private Key, this method will return the Private Keys DER Representation. Likewise, if called on a Public Key, this method will return the Public Keys DER Representation

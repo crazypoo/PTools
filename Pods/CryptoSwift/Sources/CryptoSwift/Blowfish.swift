@@ -38,16 +38,16 @@ public final class Blowfish {
   private var encryptWorker: CipherModeWorker!
 
   private let N = 16 // rounds
-  private var P: Array<UInt32>
-  private var S: Array<Array<UInt32>>
-  private let origP: Array<UInt32> = [
+  private var P: [UInt32]
+  private var S: [[UInt32]]
+  private let origP: [UInt32] = [
     0x243f6a88, 0x85a308d3, 0x13198a2e, 0x03707344, 0xa4093822,
     0x299f31d0, 0x082efa98, 0xec4e6c89, 0x452821e6, 0x38d01377,
     0xbe5466cf, 0x34e90c6c, 0xc0ac29b7, 0xc97c50dd, 0x3f84d5b5,
     0xb5470917, 0x9216d5d9, 0x8979fb1b
   ]
 
-  private let origS: Array<Array<UInt32>> = [
+  private let origS: [[UInt32]] = [
     [
       0xd1310ba6, 0x98dfb5ac, 0x2ffd72db, 0xd01adfb7,
       0xb8e1afed, 0x6a267e96, 0xba7c9045, 0xf12c7f99,
@@ -314,7 +314,7 @@ public final class Blowfish {
     ]
   ]
 
-  public init(key: Array<UInt8>, blockMode: BlockMode = CBC(iv: Array<UInt8>(repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
+  public init(key: [UInt8], blockMode: BlockMode = CBC(iv: [UInt8](repeating: 0, count: Blowfish.blockSize)), padding: Padding) throws {
     precondition(key.count >= 5 && key.count <= 56)
 
     self.blockMode = blockMode
@@ -329,11 +329,11 @@ public final class Blowfish {
   }
 
   private func setupBlockModeWorkers() throws {
-    let decryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> Array<UInt8>? in
+    let decryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> [UInt8]? in
       self?.decrypt(block: block)
     }
 
-    let encryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> Array<UInt8>? in
+    let encryptBlock = { [weak self] (block: ArraySlice<UInt8>) -> [UInt8]? in
       self?.encrypt(block: block)
     }
 
@@ -352,7 +352,7 @@ public final class Blowfish {
     // todo expand key
   }
 
-  private func expandKey(key: Array<UInt8>) {
+  private func expandKey(key: [UInt8]) {
     var j = 0
     for i in 0..<(self.N + 2) {
       var data: UInt32 = 0x0
@@ -384,8 +384,8 @@ public final class Blowfish {
     }
   }
 
-  private func encrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
-    var result = Array<UInt8>()
+  private func encrypt(block: ArraySlice<UInt8>) -> [UInt8]? {
+    var result = [UInt8]()
 
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
@@ -413,8 +413,8 @@ public final class Blowfish {
     return result
   }
 
-  private func decrypt(block: ArraySlice<UInt8>) -> Array<UInt8>? {
-    var result = Array<UInt8>()
+  private func decrypt(block: ArraySlice<UInt8>) -> [UInt8]? {
+    var result = [UInt8]()
 
     var l = UInt32(bytes: block[block.startIndex..<block.startIndex.advanced(by: 4)])
     var r = UInt32(bytes: block[block.startIndex.advanced(by: 4)..<block.startIndex.advanced(by: 8)])
@@ -505,10 +505,10 @@ extension Blowfish: Cipher {
   ///
   /// - Parameter bytes: Plaintext data
   /// - Returns: Encrypted data
-  public func encrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
+  public func encrypt<C: Collection>(_ bytes: C) throws -> [UInt8] where C.Element == UInt8, C.Index == Int {
     let bytes = self.padding.add(to: Array(bytes), blockSize: Blowfish.blockSize) // FIXME: Array(bytes) copies
 
-    var out = Array<UInt8>()
+    var out = [UInt8]()
     out.reserveCapacity(bytes.count)
 
     for chunk in bytes.batched(by: Blowfish.blockSize) {
@@ -526,12 +526,12 @@ extension Blowfish: Cipher {
   ///
   /// - Parameter bytes: Ciphertext data
   /// - Returns: Plaintext data
-  public func decrypt<C: Collection>(_ bytes: C) throws -> Array<UInt8> where C.Element == UInt8, C.Index == Int {
+  public func decrypt<C: Collection>(_ bytes: C) throws -> [UInt8] where C.Element == UInt8, C.Index == Int {
     if self.blockMode.options.contains(.paddingRequired) && (bytes.count % Blowfish.blockSize != 0) {
       throw Error.dataPaddingRequired
     }
 
-    var out = Array<UInt8>()
+    var out = [UInt8]()
     out.reserveCapacity(bytes.count)
 
     for chunk in Array(bytes).batched(by: Blowfish.blockSize) {

@@ -9,11 +9,11 @@
 import UIKit
 
 public extension SnapshotTransformViewOptions {
-    
+
     enum PiecesValue<Type: MultipliableToCGFloat & MultipliableToSelf & SummableToCGFloat & SummableToSelf> {
 
         // MARK: Cases
-        
+
         case columnBased(Type, reversed: Bool = false)
         case rowBased(Type, reversed: Bool = false)
         case columnOddEven(Type, Type, increasing: Bool = false)
@@ -25,10 +25,9 @@ public extension SnapshotTransformViewOptions {
         case columnBasedCustom([Type])
         case `static`(Type)
         case aggregated([PiecesValue<Type>], (Type, Type) -> Type)
-        
-        
+
         // MARK: Public functions
-        
+
         func getRatio(position: PiecePosition) -> Type {
             switch self {
             case .columnBased(let ratio, let reversed):
@@ -61,10 +60,9 @@ public extension SnapshotTransformViewOptions {
                 return result.dropFirst().reduce(result.first!, nextPartialResult)
             }
         }
-        
-        
+
         // MARK: Private functions
-        
+
         private func getRowColumnBased(ratio: Type, count: Int, current: Int, reversed: Bool) -> Type {
             if reversed {
                 return ratio * CGFloat(count - current - 1)
@@ -72,7 +70,7 @@ public extension SnapshotTransformViewOptions {
                 return ratio * CGFloat(current)
             }
         }
-        
+
         private func getRowColumnBasedMirror(ratio: Type, count: Int, current: Int, reversed: Bool) -> Type {
             let middle = Int(count / 2)
             if count % 2 == 1, current == middle {
@@ -96,6 +94,6 @@ public extension SnapshotTransformViewOptions {
             }
             return ratio * floatIndex * (current >= middle ? 1 : -1)
         }
-        
+
     }
 }

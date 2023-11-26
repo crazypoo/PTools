@@ -13,7 +13,7 @@ final class SwipeFeedback {
         case medium
         case heavy
     }
-    
+
     @available(iOS 10.0.1, *)
     private var feedbackGenerator: UIImpactFeedbackGenerator? {
         get {
@@ -23,9 +23,9 @@ final class SwipeFeedback {
             _feedbackGenerator = newValue
         }
     }
-    
+
     private var _feedbackGenerator: Any?
-    
+
     init(style: Style) {
         if #available(iOS 10.0.1, *) {
             switch style {
@@ -40,17 +40,16 @@ final class SwipeFeedback {
             _feedbackGenerator = nil
         }
     }
-    
+
     func prepare() {
         if #available(iOS 10.0.1, *) {
             feedbackGenerator?.prepare()
         }
     }
-    
+
     func impactOccurred() {
         if #available(iOS 10.0.1, *) {
             feedbackGenerator?.impactOccurred()
         }
     }
 }
-

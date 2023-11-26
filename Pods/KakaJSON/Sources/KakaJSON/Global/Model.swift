@@ -138,4 +138,3 @@ public func modelArray(from jsonData: NSData,
                        type: Convertible.Type) -> [Convertible] {
     return jsonData.kj.modelArray(type: type)
 }
-

@@ -24,7 +24,7 @@ func topViewController(rootViewController: UIViewController?) -> UIViewControlle
     guard let presentedViewController = rootViewController.presentedViewController else {
         return rootViewController
     }
-    
+
     if let navigationController = presentedViewController as? UINavigationController {
         return topViewController(rootViewController: navigationController.viewControllers.last)
     } else if let tabBarController = presentedViewController as? UITabBarController {

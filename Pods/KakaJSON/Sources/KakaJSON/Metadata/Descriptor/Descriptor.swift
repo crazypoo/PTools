@@ -14,22 +14,22 @@ protocol Descriptor {}
 protocol NominalDescriptor: Descriptor {
     /// Flags describing the context, including its kind and format version
     var flags: ContextDescriptorFlags { get }
-    
+
     /// The parent context, or null if this is a top-level context.
     var parent: RelativeContextPointer { get }
-    
+
     /// The name of the type
     var name: RelativeDirectPointer<CChar> { get set }
-    
+
     /// A pointer to the metadata access function for this type
     var accessFunctionPtr: RelativeDirectPointer<MetadataResponse> { get }
-    
+
     /// A pointer to the field descriptor for the type, if any
     var fields: RelativeDirectPointer<FieldDescriptor> { get set }
-    
+
     associatedtype OffsetType: BinaryInteger
     var fieldOffsetVectorOffset: FieldOffsetPointer<OffsetType> { get }
-    
+
     /// generic info
     var genericContextHeader: TargetTypeGenericContextDescriptorHeader { get }
 }
@@ -63,7 +63,7 @@ struct RelativeContextPointer {
 
 struct RelativeDirectPointer <Pointee> {
     var relativeOffset: Int32
-    
+
     mutating func advanced() -> UnsafeMutablePointer<Pointee> {
         let offset = relativeOffset
         return withUnsafeMutablePointer(to: &self) {

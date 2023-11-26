@@ -16,7 +16,7 @@
 extension Array {
   @inlinable
   init(reserveCapacity: Int) {
-    self = Array<Element>()
+    self = [Element]()
     self.reserveCapacity(reserveCapacity)
   }
 
@@ -24,7 +24,7 @@ extension Array {
   var slice: ArraySlice<Element> {
     self[self.startIndex ..< self.endIndex]
   }
-  
+
   @inlinable
   subscript (safe index: Index) -> Element? {
     return indices.contains(index) ? self[index] : nil
@@ -84,8 +84,8 @@ extension Array where Element == UInt8 {
 extension Array where Element == UInt8 {
   /// split in chunks with given chunk size
   @available(*, deprecated)
-  public func chunks(size chunksize: Int) -> Array<Array<Element>> {
-    var words = Array<Array<Element>>()
+  public func chunks(size chunksize: Int) -> [[Element]] {
+    var words = [[Element]]()
     words.reserveCapacity(count / chunksize)
     for idx in stride(from: chunksize, through: count, by: chunksize) {
       words.append(Array(self[idx - chunksize ..< idx])) // slow for large table

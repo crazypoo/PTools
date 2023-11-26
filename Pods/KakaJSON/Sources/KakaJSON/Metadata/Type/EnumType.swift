@@ -10,13 +10,13 @@ public class EnumType: BaseType, NominalType, LayoutType {
     private(set) var layout: UnsafeMutablePointer<EnumLayout>!
     public private(set) var genericTypes: [Any.Type]?
     public private(set) var cases: [String]?
-    
+
     override func build() {
         super.build()
-        
+
         layout = builtLayout()
         genericTypes = builtGenericTypes()
-        
+
         let description = layout.pointee.description
         let count = Int(description.pointee.numEmptyCases)
         guard count > 0 else { return }
@@ -26,7 +26,7 @@ public class EnumType: BaseType, NominalType, LayoutType {
             return recordPtr.pointee.fieldName()
         }
     }
-    
+
     override public var description: String {
         return "\(name) { kind = \(kind), genericTypes = \(genericTypes ?? []), cases = \(cases ?? []) }"
     }

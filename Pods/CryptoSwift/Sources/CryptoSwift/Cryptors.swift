@@ -31,14 +31,14 @@ public protocol Cryptors: AnyObject {
   func makeDecryptor() throws -> Cryptor & Updatable
 
   /// Generate array of random bytes. Helper function.
-  static func randomIV(_ blockSize: Int) -> Array<UInt8>
+  static func randomIV(_ blockSize: Int) -> [UInt8]
 }
 
 extension Cryptors {
   /// Generate array of random values.
   /// Convenience helper that uses `Swift.RandomNumberGenerator`.
   /// - Parameter count: Length of array
-  public static func randomIV(_ count: Int) -> Array<UInt8> {
+  public static func randomIV(_ count: Int) -> [UInt8] {
     (0..<count).map({ _ in UInt8.random(in: 0...UInt8.max) })
   }
 }

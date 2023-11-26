@@ -18,7 +18,7 @@ public extension KJGeneric where Base == [String: T] {
     func model<M: Convertible>(_ type: M.Type) -> M {
         return model(type: type) as! M
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible {
         return base.kj_fastModel(type)
@@ -30,7 +30,7 @@ public extension KJGeneric where Base == [NSString: T] {
     func model<M: Convertible>(_ type: M.Type) -> M {
         return (base as [String: Any]).kj.model(type)
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible {
         return (base as [String: Any]).kj.model(type: type)
@@ -42,7 +42,7 @@ public extension KJ where Base: NSDictionary {
     func model<M: Convertible>(_ type: M.Type) -> M? {
         return (base as? [String: Any])?.kj.model(type)
     }
-    
+
     /// JSONObject -> Model
     func model(type: Convertible.Type) -> Convertible? {
         return (base as? [String: Any])?.kj.model(type: type)
@@ -60,12 +60,12 @@ extension Dictionary where Key == String {
         model.kj_convert(from: self)
         return model
     }
-    
+
     func kj_value(for modelPropertyKey: ModelPropertyKey) -> Any? {
         if let key = modelPropertyKey as? String {
             return _value(stringKey: key)
         }
-        
+
         let keyArray = modelPropertyKey as! [String]
         for key in keyArray {
             if let value = _value(stringKey: key) {
@@ -74,7 +74,7 @@ extension Dictionary where Key == String {
         }
         return nil
     }
-    
+
     private func _value(stringKey: String) -> Any? {
         if let value = self[stringKey] {
             return value

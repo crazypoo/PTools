@@ -47,7 +47,7 @@ public protocol FloatingPanelBehavior {
     /// This method allows a panel to activate the rubber band effect to a given edge of the surface view. By default, the effect is disabled.
     @objc optional
     func allowsRubberBanding(for edge: UIRectEdge) -> Bool
-    
+
     /// Returns the velocity threshold for the default interactive removal gesture.
     ///
     /// In case ``FloatingPanel/FloatingPanelControllerDelegate/floatingPanel(_:shouldRemoveAt:with:)`` is implemented, this value will not be used. The default value of ``FloatingPanelDefaultBehavior`` is 5.5
@@ -80,7 +80,7 @@ open class FloatingPanelDefaultBehavior: FloatingPanelBehavior {
     open func allowsRubberBanding(for edge: UIRectEdge) -> Bool {
         return false
     }
-    
+
     open var removalInteractionVelocityThreshold: CGFloat = 5.5
 }
 
@@ -104,13 +104,13 @@ class BehaviorAdapter {
     var momentumProjectionRate: CGFloat {
         behavior.momentumProjectionRate ?? FloatingPanelDefaultBehavior().momentumProjectionRate
     }
-    
+
     var removalInteractionVelocityThreshold: CGFloat {
         behavior.removalInteractionVelocityThreshold ?? FloatingPanelDefaultBehavior().removalInteractionVelocityThreshold
     }
 
     func redirectionalProgress(from: FloatingPanelState, to: FloatingPanelState) -> CGFloat {
-        behavior.redirectionalProgress?(vc, from: from, to: to) ?? FloatingPanelDefaultBehavior().redirectionalProgress(vc,from: from, to: to)
+        behavior.redirectionalProgress?(vc, from: from, to: to) ?? FloatingPanelDefaultBehavior().redirectionalProgress(vc, from: from, to: to)
     }
 
     func shouldProjectMomentum(to: FloatingPanelState) -> Bool {

@@ -14,6 +14,7 @@
 #import <SVGAPlayer/SVGAAudioEntity.h>
 #import <pthread.h>
 #import "SVGAVideoEntity+PTEX.h"
+#import "PooTools-Swift.h"
 
 #ifdef DEBUG
 static NSString *globalStaticString = nil;
@@ -31,14 +32,6 @@ NSDateFormatter *getDateFormatter_(void) {
 #else
 #define PTNSLog(format, ...)
 #endif
-
-static inline void _jp_dispatch_sync_on_main_queue(void (^block)(void)) {
-    if (pthread_main_np()) {
-        block();
-    } else {
-        dispatch_sync(dispatch_get_main_queue(), block);
-    }
-}
 
 @interface _JPProxy : NSProxy
 @property (nonatomic, weak, readonly) id target;
@@ -215,7 +208,7 @@ static inline void _jp_dispatch_sync_on_main_queue(void (^block)(void)) {
     if (_isReversing == isReversing) return;
     _isReversing = isReversing;
     
-    _jp_dispatch_sync_on_main_queue(^{
+    [PTGCDManager gcdMainWithBlock:^{
         if (self.isAnimating || self.drawLayer == nil) return;
         if (self->_isReversing && self->_currentFrame == self->_startFrame) {
             self->_currentFrame = self->_endFrame;
@@ -224,7 +217,7 @@ static inline void _jp_dispatch_sync_on_main_queue(void (^block)(void)) {
             self->_currentFrame = self->_startFrame;
             [self __updateLayers];
         }
-    });
+    }];
 }
 
 - (void)setVideoItem:(SVGAVideoEntity *)videoItem {
@@ -500,7 +493,7 @@ static inline void _jp_dispatch_sync_on_main_queue(void (^block)(void)) {
 
 /// 绘制图层（如需）
 - (void)__drawLayersIfNeeded:(BOOL)isNeedUpdate {
-    _jp_dispatch_sync_on_main_queue(^{
+    [PTGCDManager gcdMainWithBlock:^{
         if (self.videoItem == nil || self.superview == nil) {
             [self __clearLayers];
             return;
@@ -512,7 +505,7 @@ static inline void _jp_dispatch_sync_on_main_queue(void (^block)(void)) {
         } else if (isNeedUpdate) {
             [self __updateLayers];
         }
-    });
+    }];
 }
 
 /// 绘制图层

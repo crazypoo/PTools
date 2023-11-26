@@ -22,11 +22,11 @@ public struct CTR: StreamMode {
   }
 
   public let options: BlockModeOption = [.initializationVectorRequired, .useEncryptToDecrypt]
-  private let iv: Array<UInt8>
+  private let iv: [UInt8]
   private let counter: Int
   public let customBlockSize: Int? = nil
 
-  public init(iv: Array<UInt8>, counter: Int = 0) {
+  public init(iv: [UInt8], counter: Int = 0) {
     self.iv = iv
     self.counter = counter
   }
@@ -46,15 +46,15 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
   typealias Counter = CTRCounter
 
   final class CTRCounter {
-    private let constPrefix: Array<UInt8>
+    private let constPrefix: [UInt8]
     private var value: UInt64
-    //TODO: make it an updatable value, computing is too slow
-    var bytes: Array<UInt8> {
+    // TODO: make it an updatable value, computing is too slow
+    var bytes: [UInt8] {
       self.constPrefix + self.value.bytes()
     }
 
     @inlinable
-    init(_ initialValue: Array<UInt8>) {
+    init(_ initialValue: [UInt8]) {
       let halfIndex = initialValue.startIndex.advanced(by: initialValue.count / 2)
       self.constPrefix = Array(initialValue[initialValue.startIndex..<halfIndex])
 
@@ -62,7 +62,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
       value = UInt64(bytes: suffixBytes)
     }
 
-    convenience init(nonce: Array<UInt8>, startAt index: Int) {
+    convenience init(nonce: [UInt8], startAt index: Int) {
       self.init(buildCounterValue(nonce, counter: UInt64(index)))
     }
 
@@ -73,14 +73,14 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
 
   let cipherOperation: CipherOperationOnBlock
   let additionalBufferSize: Int = 0
-  let iv: Array<UInt8>
+  let iv: [UInt8]
   var counter: CTRCounter
 
   private let blockSize: Int
 
   // The same keystream is used for the block length plaintext
   // As new data is added, keystream suffix is used to xor operation.
-  private var keystream: Array<UInt8>
+  private var keystream: [UInt8]
   private var keystreamPosIdx = 0
 
   init(blockSize: Int, iv: ArraySlice<UInt8>, counter: Int, cipherOperation: @escaping CipherOperationOnBlock) {
@@ -103,8 +103,8 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
 
   // plaintext is at most blockSize long
   @inlinable
-  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> Array<UInt8> {
-    var result = Array<UInt8>(reserveCapacity: plaintext.count)
+  mutating func encrypt(block plaintext: ArraySlice<UInt8>) -> [UInt8] {
+    var result = [UInt8](reserveCapacity: plaintext.count)
 
     var processed = 0
     while processed < plaintext.count {
@@ -115,7 +115,7 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
         self.keystreamPosIdx = 0
       }
 
-      let xored: Array<UInt8> = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
+      let xored: [UInt8] = xor(plaintext[plaintext.startIndex.advanced(by: processed)...], keystream[keystreamPosIdx...])
       keystreamPosIdx += xored.count
       processed += xored.count
       result += xored
@@ -124,12 +124,12 @@ struct CTRModeWorker: StreamModeWorker, SeekableModeWorker, CounterModeWorker {
     return result
   }
 
-  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> Array<UInt8> {
+  mutating func decrypt(block ciphertext: ArraySlice<UInt8>) -> [UInt8] {
     self.encrypt(block: ciphertext)
   }
 }
 
-private func buildCounterValue(_ iv: Array<UInt8>, counter: UInt64) -> Array<UInt8> {
+private func buildCounterValue(_ iv: [UInt8], counter: UInt64) -> [UInt8] {
   let noncePartLen = iv.count / 2
   let noncePrefix = iv[iv.startIndex..<iv.startIndex.advanced(by: noncePartLen)]
   let nonceSuffix = iv[iv.startIndex.advanced(by: noncePartLen)..<iv.startIndex.advanced(by: iv.count)]

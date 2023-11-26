@@ -15,7 +15,7 @@ public class ModelType: BaseType {
     private var modelKeys: [String: ModelPropertyKey] = [:]
     private var jsonKeysLock = DispatchSemaphore(value: 1)
     private var jsonKeys: [String: String] = [:]
-    
+
     func modelKey(from propertyName: String,
                   _ createdKey: @autoclosure () -> ModelPropertyKey) -> ModelPropertyKey {
         modelKeysLock.wait()
@@ -35,16 +35,16 @@ public class ModelType: BaseType {
                 resultKey = arrayKey
             }
         }
-        modelKeys[propertyName] = resultKey;
+        modelKeys[propertyName] = resultKey
         return resultKey
     }
-    
+
     func JSONKey(from propertyName: String,
                  _ createdKey: @autoclosure () -> String) -> String {
         jsonKeysLock.wait()
         defer { jsonKeysLock.signal() }
         if let key = jsonKeys[propertyName] { return key }
-        
+
         let resultKey = createdKey()
         jsonKeys[propertyName] = resultKey
         return resultKey

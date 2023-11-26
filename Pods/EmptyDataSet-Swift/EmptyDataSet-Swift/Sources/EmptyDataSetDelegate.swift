@@ -9,19 +9,18 @@
 import Foundation
 import UIKit
 
-
 /// The object that acts as the delegate of the empty datasets.
 /// @discussion The delegate can adopt the DZNEmptyDataSetDelegate protocol. The delegate is not retained. All delegate methods are optional.
 ///
 /// @discussion All delegate methods are optional. Use this delegate for receiving action callbacks.
 public protocol EmptyDataSetDelegate {
-    
+
     /// Asks the delegate to know if the empty dataset should fade in when displayed. Default is true.
     ///
     /// - Parameter scrollView: A scrollView subclass object informing the delegate.
     /// - Returns: true if the empty dataset should fade in.
     func emptyDataSetShouldFadeIn(_ scrollView: UIScrollView) -> Bool
-    
+
     /// Asks the delegate to know if the empty dataset should still be displayed when the amount of items is more than 0. Default is false.
     ///
     /// - Parameter scrollView:  A scrollView subclass object informing the delegate.
@@ -91,53 +90,53 @@ public protocol EmptyDataSetDelegate {
 }
 
 public extension EmptyDataSetDelegate {
-    
+
     func emptyDataSetShouldFadeIn(_ scrollView: UIScrollView) -> Bool {
         return true
     }
-    
+
     func emptyDataSetShouldBeForcedToDisplay(_ scrollView: UIScrollView) -> Bool {
         return false
     }
-    
+
     func emptyDataSetShouldDisplay(_ scrollView: UIScrollView) -> Bool {
         return true
     }
-    
+
     func emptyDataSetShouldAllowTouch(_ scrollView: UIScrollView) -> Bool {
         return true
     }
-    
+
     func emptyDataSetShouldAllowScroll(_ scrollView: UIScrollView) -> Bool {
         return false
     }
-    
+
     func emptyDataSetShouldAnimateImageView(_ scrollView: UIScrollView) -> Bool {
         return true
     }
-    
+
     func emptyDataSet(_ scrollView: UIScrollView, didTapView view: UIView) {
-        
+
     }
-    
+
     func emptyDataSet(_ scrollView: UIScrollView, didTapButton button: UIButton) {
-        
+
     }
-    
+
     func emptyDataSetWillAppear(_ scrollView: UIScrollView) {
-        
+
     }
-    
+
     func emptyDataSetDidAppear(_ scrollView: UIScrollView) {
-        
+
     }
-    
+
     func emptyDataSetWillDisappear(_ scrollView: UIScrollView) {
-        
+
     }
-    
+
     func emptyDataSetDidDisappear(_ scrollView: UIScrollView) {
-        
+
     }
-    
+
 }

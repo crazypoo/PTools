@@ -15,6 +15,12 @@ import Dispatch
 import NotificationBannerSwift
 #endif
 
+@objc public enum PTSheetPresentType:Int {
+    case large
+    case medium
+    case custom
+}
+
 // MARK: - 状态栏扩展
 public extension UIViewController {
     
@@ -415,6 +421,33 @@ public extension UIViewController {
 #else
         self.present(vc, animated: animated!, completion:completion)
 #endif
+    }
+    
+    @available(iOS 15.0,*)
+    func sheetPresent(modalViewController:UIViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,completion:PTActionTask?) {
+        if let sheet = modalViewController.sheetPresentationController {
+            // 支持的自定义显示大小
+            switch type {
+            case .large:
+                sheet.detents = [.large()]
+                sheet.prefersGrabberVisible = true
+            case .medium:
+                sheet.detents = [.medium()]
+                sheet.prefersGrabberVisible = true
+            case .custom:
+                if #available(iOS 16.0, *) {
+                    let small = UISheetPresentationController.Detent.Identifier("small")
+                    sheet.detents = [
+                        .custom(identifier: small) { context in
+                            scale * context.maximumDetentValue
+                        }
+                    ]
+                    sheet.largestUndimmedDetentIdentifier = small
+                    sheet.prefersGrabberVisible = true
+                }
+            }
+        }
+        present(modalViewController, animated: true,completion: completion)
     }
 }
 
