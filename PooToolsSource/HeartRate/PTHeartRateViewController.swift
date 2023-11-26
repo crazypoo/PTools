@@ -192,7 +192,6 @@ public class PTHeartRateViewController: PTBaseViewController {
         
         PTGCDManager.gcdAfter(time: 0.1) {
             self.initVideoCapture()
-            self.player.play()
         }
     }
     
