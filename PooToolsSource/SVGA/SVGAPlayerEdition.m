@@ -14,7 +14,7 @@
 #import <SVGAPlayer/SVGAAudioEntity.h>
 #import <pthread.h>
 #import "SVGAVideoEntity+PTEX.h"
-#import "PooTools-Swift.h"
+#import <PooTools/PooTools-Swift.h>
 
 #ifdef DEBUG
 static NSString *globalStaticString = nil;
