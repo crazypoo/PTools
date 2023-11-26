@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.23.6'
+    s.version     = '3.23.7'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -892,7 +892,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/OSSKitSpeech'
         subspec.dependency 'PooTools/iOS17Tips'
         subspec.dependency 'PooTools/WhatsNewsKit'
-        subspec.dependency 'PooTools/HeartRate'
+#        subspec.dependency 'PooTools/HeartRate'
         
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
