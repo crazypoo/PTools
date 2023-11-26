@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.23.8'
+    s.version     = '3.23.9'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -689,6 +689,16 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'SVGA' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'Protobuf', '= 3.22.1'
+        subspec.dependency 'SVGAPlayer'
+        subspec.source_files = 'PooToolsSource/SVGA/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_SVGA POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'Share' do |subspec|
         subspec.dependency 'PooTools/CustomerLabel'
         subspec.source_files = 'PooToolsSource/Share/*.{h,m,swift}'
@@ -815,7 +825,7 @@ Pod::Spec.new do |s|
     
     s.subspec 'HeartRate' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/SVG'
+        subspec.dependency 'PooTools/SVGA'
         subspec.dependency 'PooTools/NetWork'
         subspec.dependency 'PooTools/CameraPermission'
         subspec.source_files = 'PooToolsSource/HeartRate/*.{h,m,swift}'
@@ -874,7 +884,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/Stepper'
         subspec.dependency 'PooTools/Location'
         subspec.dependency 'PooTools/ScrollRefresh'
-#        subspec.dependency 'PooTools/SVG'
+        subspec.dependency 'PooTools/SVG'
         subspec.dependency 'PooTools/Share'
         subspec.dependency 'PooTools/FloatPanel'
         subspec.dependency 'PooTools/ListEmptyData'
@@ -892,8 +902,9 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/OSSKitSpeech'
         subspec.dependency 'PooTools/iOS17Tips'
         subspec.dependency 'PooTools/WhatsNewsKit'
-#        subspec.dependency 'PooTools/HeartRate'
-        
+        subspec.dependency 'PooTools/HeartRate'
+        subspec.dependency 'PooTools/SVGA'
+
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_INPUTALL POOTOOLS_COCOAPODS"
         }

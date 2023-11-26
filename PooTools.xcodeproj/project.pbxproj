@@ -1018,6 +1018,7 @@
 				55C742582AD7BE2F007FC330 /* SpeedPanel */,
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				5589FF4B29A8527D00519383 /* Stepper */,
+				55ED0D332B12F37000391136 /* SVGA */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
@@ -1402,11 +1403,6 @@
 			isa = PBXGroup;
 			children = (
 				5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */,
-				55ED0D2D2B12D67100391136 /* SVGAPlayerEdition.h */,
-				55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */,
-				55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */,
-				55ED0D302B12D9D300391136 /* SVGAVideoEntity+PTEX.h */,
-				55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */,
 			);
 			path = KingfisherSVG;
 			sourceTree = "<group>";
@@ -2052,6 +2048,18 @@
 				55ED0D1F2B10FDE200391136 /* PTFiter.swift */,
 			);
 			path = HeartRate;
+			sourceTree = "<group>";
+		};
+		55ED0D332B12F37000391136 /* SVGA */ = {
+			isa = PBXGroup;
+			children = (
+				55ED0D2D2B12D67100391136 /* SVGAPlayerEdition.h */,
+				55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */,
+				55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */,
+				55ED0D302B12D9D300391136 /* SVGAVideoEntity+PTEX.h */,
+				55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */,
+			);
+			path = SVGA;
 			sourceTree = "<group>";
 		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
