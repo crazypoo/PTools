@@ -10,6 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import CryptoKit
+import SVGAPlayer
 
 var cacheDirPath: String {
     NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, .userDomainMask, true).first ?? ""
@@ -180,7 +181,7 @@ extension PTSVGAViewController: SVGAPlayerSwiftEditionDelegate {
                       svga source: String,
                       animationPlaying currentFrame: Int) {
         guard player.isPlaying else { return }
-        progressView.progress = player.progress
+        progressView.progress = Float(player.progress)
     }
     
     /// SVGA动画完成一次播放【正在播放】

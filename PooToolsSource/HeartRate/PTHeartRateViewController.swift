@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import SwifterSwift
 import SnapKit
+import SVGAPlayer
 
 public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)

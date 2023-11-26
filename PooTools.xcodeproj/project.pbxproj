@@ -259,8 +259,6 @@
 		55A5D70429B09BF900DCA096 /* NSDecimalNumberHandler+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */; };
 		55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */; };
 		55A5D70A29B10B8900DCA096 /* MethodSwizzle.m in Sources */ = {isa = PBXBuildFile; fileRef = 55A5D70929B10B8900DCA096 /* MethodSwizzle.m */; };
-		55B159592B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */; };
-		55B1595C2B0CAB9500A64741 /* SVGAPlayerEdition.m in Sources */ = {isa = PBXBuildFile; fileRef = 55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */; };
 		55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */; };
 		55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
@@ -353,6 +351,8 @@
 		55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */; };
 		55ED0D242B11834E00391136 /* AVCaptureDevice+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */; };
 		55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D252B1183E200391136 /* PTHeartRateManager.swift */; };
+		55ED0D2F2B12D67200391136 /* SVGAPlayerEdition.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */; };
+		55ED0D322B12D9D300391136 /* SVGAVideoEntity+PTEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
 		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
@@ -691,10 +691,6 @@
 		55A5D70729B1081300DCA096 /* PooTools_Example-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "PooTools_Example-Bridging-Header.h"; sourceTree = "<group>"; };
 		55A5D70829B10B8900DCA096 /* MethodSwizzle.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MethodSwizzle.h; sourceTree = "<group>"; };
 		55A5D70929B10B8900DCA096 /* MethodSwizzle.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MethodSwizzle.m; sourceTree = "<group>"; };
-		55B159572B0CAB0300A64741 /* SVGAVideoEntity+PTEX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SVGAVideoEntity+PTEX.h"; sourceTree = "<group>"; };
-		55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "SVGAVideoEntity+PTEX.m"; sourceTree = "<group>"; };
-		55B1595A2B0CAB9500A64741 /* SVGAPlayerEdition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SVGAPlayerEdition.h; sourceTree = "<group>"; };
-		55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SVGAPlayerEdition.m; sourceTree = "<group>"; };
 		55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGAPlayerSwiftEdition.swift; sourceTree = "<group>"; };
 		55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSVGAViewController.swift; sourceTree = "<group>"; };
 		55B1596C2B0CEED100A64741 /* Rose.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rose.svga; sourceTree = "<group>"; };
@@ -792,6 +788,10 @@
 		55ED0D212B10FF2D00391136 /* PTHeartRateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateViewController.swift; sourceTree = "<group>"; };
 		55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVCaptureDevice+PTEX.swift"; sourceTree = "<group>"; };
 		55ED0D252B1183E200391136 /* PTHeartRateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeartRateManager.swift; sourceTree = "<group>"; };
+		55ED0D2D2B12D67100391136 /* SVGAPlayerEdition.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SVGAPlayerEdition.h; sourceTree = "<group>"; };
+		55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGAPlayerEdition.m; sourceTree = "<group>"; };
+		55ED0D302B12D9D300391136 /* SVGAVideoEntity+PTEX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVGAVideoEntity+PTEX.h"; sourceTree = "<group>"; };
+		55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SVGAVideoEntity+PTEX.m"; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
 		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
@@ -1402,11 +1402,11 @@
 			isa = PBXGroup;
 			children = (
 				5516CCBD29E8545900614980 /* Kingfisher+SVG.swift */,
-				55B159572B0CAB0300A64741 /* SVGAVideoEntity+PTEX.h */,
-				55B159582B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m */,
-				55B1595A2B0CAB9500A64741 /* SVGAPlayerEdition.h */,
-				55B1595B2B0CAB9500A64741 /* SVGAPlayerEdition.m */,
+				55ED0D2D2B12D67100391136 /* SVGAPlayerEdition.h */,
+				55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */,
 				55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */,
+				55ED0D302B12D9D300391136 /* SVGAVideoEntity+PTEX.h */,
+				55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */,
 			);
 			path = KingfisherSVG;
 			sourceTree = "<group>";
@@ -2464,7 +2464,6 @@
 				5585F7072AD2B40300F878B4 /* PTVideoEditorHandleLayer.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
-				55B1595C2B0CAB9500A64741 /* SVGAPlayerEdition.m in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */,
@@ -2492,6 +2491,7 @@
 				55ED0D222B10FF2D00391136 /* PTHeartRateViewController.swift in Sources */,
 				55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */,
 				55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */,
+				55ED0D322B12D9D300391136 /* SVGAVideoEntity+PTEX.m in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
@@ -2600,6 +2600,7 @@
 				55102A892AFF575900E9529D /* PTUnavailableFunction.swift in Sources */,
 				558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */,
 				558D5EE92AAF532B00C02042 /* PTRouterRequest.swift in Sources */,
+				55ED0D2F2B12D67200391136 /* SVGAPlayerEdition.m in Sources */,
 				550CE4C32AF295B10052539D /* PTSpeechViewController.swift in Sources */,
 				55FA6CB12B02354800BC464B /* PTDarkSmartFooter.swift in Sources */,
 				5528931B2AE7E8F9009135F9 /* PTMediaBrowserBottom.swift in Sources */,
@@ -2713,7 +2714,6 @@
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
 				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
-				55B159592B0CAB0300A64741 /* SVGAVideoEntity+PTEX.m in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				5585F6EF2AD2A26600F878B4 /* PTVideoEditorVideoPlayerViewFactory.swift in Sources */,
 				5585F6FD2AD2B15600F878B4 /* PTVideoEditorVideoControlCellViewModel.swift in Sources */,
