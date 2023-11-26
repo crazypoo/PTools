@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 import SwifterSwift
 import SnapKit
-import SVGAPlayer
+import Lottie
 
 public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
@@ -91,12 +91,6 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
 @objcMembers
 public class PTHeartRateViewController: PTBaseViewController {
 
-    public var svgaIsMute:Bool = true {
-        didSet {
-            self.player.isMute = svgaIsMute
-        }
-    }
-    
     lazy var previewLayerShadowView : UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -139,11 +133,12 @@ public class PTHeartRateViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var player : SVGAPlayerSwiftEdition = {
-        let view = SVGAPlayerSwiftEdition()
+    lazy var player : LottieAnimationView = {
+        let view = LottieAnimationView.init(dotLottieUrl: URL(string: "https://lottie.host/80012aeb-ac39-44e4-8ae0-20b9ba56f1bf/73xBogjj9i.lottie")!)
+        view.frame = CGRectMake(0, 0, 88, 88)
         view.contentMode = .scaleAspectFit
-        view.isAnimated = true
-        view.exDelegate = self
+        view.loopMode = .loop
+        view.animationSpeed = 1
         return view
     }()
 
@@ -197,11 +192,8 @@ public class PTHeartRateViewController: PTBaseViewController {
         
         PTGCDManager.gcdAfter(time: 0.1) {
             self.initVideoCapture()
+            self.player.play()
         }
-        
-        setupLoader()
-        setupDownloader()
-        setupCacheKeyGenerator()
     }
     
     private func initVideoCapture() {
@@ -306,15 +298,13 @@ extension PTHeartRateViewController {
             if validFrameCounter > 60 {
                 let _ = self.pulseDetector.addNewValue(filtered, atTime: CACurrentMediaTime())
             }
-            PTNSLogConsole("我在了")
             if self.svgaIsPlaying {
                 return
             } else {
                 self.svgaIsPlaying = true
-                self.player.play("https://public.ch.files.1drv.com/y4mQbrpflOUYev_mJ-phJV5xd_TRumdYFfyuvnnF1yzGT2Glaoj3eVrbFRIpwDCNIINHlOk0CL32gqjbn60VSL-x8ZadxJyW8oYw1i7v5Wzcxj1eIf-XdQ7x3gUOBC9zobtLqsbsH4mvzC9onR-bfdCdxytUmVkQWGZHrEbCbEuXoAGcpRVrUCCtRMfYBKujcYoRn_uVO7C6fevUr_yztKDUvQHlCqOBGugM6m-SI57FcI?AVOverride=1")
+                self.player.play()
             }
         } else {
-            PTNSLogConsole("我要离开了")
             validFrameCounter = 0
             measurementStartedFlag = false
             pulseDetector.reset()
@@ -324,126 +314,5 @@ extension PTHeartRateViewController {
                 self.svgaIsPlaying = false
             }
         }
-    }
-}
-
-// MARK: - <SVGAPlayerSwiftEditionDelegate>
-extension PTHeartRateViewController: SVGAPlayerSwiftEditionDelegate {
-    /// 状态发生改变【状态更新】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      statusDidChanged status: SVGAPlayerSwiftEditionStatus,
-                      oldStatus: SVGAPlayerSwiftEditionStatus) {
-        switch status {
-        case .loading:
-            PTNSLogConsole("Loading")
-        default:
-            PTNSLogConsole("Done")
-        }
-    }
-    
-    /// SVGA未知来源【无法播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      unknownSvga source: String) {
-        PTNSLogConsole("SVGA未知来源")
-    }
-    
-    /// SVGA资源加载失败【无法播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      dataLoadFailed error: Error) {
-        PTNSLogConsole(error.localizedDescription)
-    }
-    
-    /// 加载的SVGA资源解析失败【无法播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      dataParseFailed error: Error) {
-        PTNSLogConsole(error.localizedDescription)
-    }
-    
-    /// 本地SVGA资源解析失败【无法播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      assetParseFailed error: Error) {
-        PTNSLogConsole(error.localizedDescription)
-    }
-    
-    /// SVGA资源无效【无法播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      entity: SVGAVideoEntity,
-                      invalid error: SVGAVideoEntityError) {
-        let status: String
-        switch error {
-        case .zeroVideoSize: status = "SVGA资源有问题：videoSize是0！"
-        case .zeroFPS: status = "SVGA资源有问题：FPS是0！"
-        case .zeroFrames: status = "SVGA资源有问题：frames是0！"
-        default: return
-        }
-        PTNSLogConsole(status)
-    }
-    
-    /// SVGA动画执行回调【正在播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      animationPlaying currentFrame: Int) {
-        guard player.isPlaying else { return }
-    }
-    
-    /// SVGA动画完成一次播放【正在播放】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition, svga source: String, animationDidFinishedOnce loopCount: Int) {
-        PTNSLogConsole("完成第\(loopCount)次")
-    }
-    
-    /// SVGA动画播放失败的回调【播放失败】
-    public func svgaPlayerSwiftEdition(_ player: SVGAPlayerSwiftEdition,
-                      svga source: String,
-                      animationPlayFailed error: SVGAPlayerPlayEditionError) {
-        let status: String
-        switch error {
-        case .nullEntity: status = "SVGA资源是空的，无法播放"
-        case .nullSuperview: status = "父视图是空的，无法播放"
-        case .onlyOnePlayableFrame: status = "只有一帧可播放帧，无法形成动画"
-        default: return
-        }
-        PTNSLogConsole(status)
-    }
-}
-
-// MARK: - Setup SVGA Loader & Downloader & CacheKeyGenerator
-private extension PTHeartRateViewController {
-    func setupLoader() {
-        SVGAPlayerSwiftEdition.loader = { svgaSource, success, failure, forwardDownload, forwardLoadAsset in
-            guard FileManager.default.fileExists(atPath: svgaSource) else {
-                if svgaSource.hasPrefix("http://") || svgaSource.hasPrefix("https://") {
-                    forwardDownload(svgaSource)
-                } else {
-                    forwardLoadAsset(svgaSource)
-                }
-                return
-            }
-            
-            PTNSLogConsole("加载磁盘的SVGA - \(svgaSource)")
-            do {
-                let data = try Data(contentsOf: URL(fileURLWithPath: svgaSource))
-                success(data)
-            } catch {
-                failure(error)
-            }
-        }
-    }
-    
-    func setupDownloader() {
-        SVGAPlayerSwiftEdition.downloader = { svgaSource, success, failure in
-            let _ = PTFileDownloadApi.init(fileUrl: svgaSource, saveFilePath: FileManager.pt.CachesDirectory() + "/heartrate.svga", progress: nil, success: { result in
-                success(result.value!)
-            }, fail: { error in
-                failure(error!)
-            })
-        }
-    }
-    
-    func setupCacheKeyGenerator() {
-        SVGAPlayerSwiftEdition.cacheKeyGenerator = { $0.md5 }
     }
 }

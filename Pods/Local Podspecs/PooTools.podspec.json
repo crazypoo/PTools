@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.23.5",
+  "version": "3.23.9",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.23.5"
+    "tag": "3.23.9"
   },
   "license": {
     "type": "MIT",
@@ -1201,6 +1201,24 @@
       }
     },
     {
+      "name": "SVGA",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "Protobuf": [
+          "= 3.22.1"
+        ],
+        "SVGAPlayer": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/SVGA/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_SVGA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
       "name": "Share",
       "dependencies": {
         "PooTools/CustomerLabel": [
@@ -1381,10 +1399,7 @@
         "PooTools/Core": [
 
         ],
-        "PooTools/SVG": [
-
-        ],
-        "PooTools/NetWork": [
+        "lottie-ios": [
 
         ],
         "PooTools/CameraPermission": [
