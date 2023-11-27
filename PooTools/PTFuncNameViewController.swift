@@ -13,6 +13,9 @@ import DeviceKit
 import AnyImageKit
 import Photos
 import Combine
+#if POOTOOLS_SWIPECELL
+import SwipeCellKit
+#endif
 
 public extension String {
     static let localNetWork = "局域网传送"
@@ -50,6 +53,7 @@ public extension String {
     static let tipkit = "TipKit"
     static let document = "UIDocument"
     static let svga = "SVGA"
+    static let swipe = "Swipe"
 
     static let route = "路由"
     
@@ -248,12 +252,24 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let svga = self.rowBaseModel(name: .svga)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga]
+        let swipe = self.rowBaseModel(name: .swipe)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
+#if POOTOOLS_SWIPECELL
+            if value.name == .swipe {
+                let row = PTRows(title:value.name,cls:PTFusionSwipeCell.self,ID: PTFusionSwipeCell.ID,dataModel: value)
+                uikitRows.append(row)
+            } else {
+                let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
+                uikitRows.append(row)
+            }
+#else
             let row = PTRows(title:value.name,cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: value)
             uikitRows.append(row)
+#endif
         }
         
         let sectionModel_uikit = PTFusionCellModel()
@@ -344,6 +360,33 @@ class PTFuncNameViewController: PTBaseViewController {
         aaaaaaa.cellInCollection = { collectionView ,dataModel,indexPath in
             let itemRow = dataModel.rows[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)
+#if POOTOOLS_SWIPECELL
+            if itemRow.ID == PTFusionCell.ID {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.cellModel = cellModel
+                cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
+                
+                if dataModel.rows.count == 1 {
+                    cell.hideTopLine = true
+                } else {
+                    cell.hideTopLine = indexPath.row == 0 ? true : false
+                }
+                cell.hideBottomLine = (dataModel.rows.count - 1) == indexPath.row ? true : false
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionSwipeCell
+                cell.cellModel = cellModel
+                cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
+                
+                if dataModel.rows.count == 1 {
+                    cell.hideTopLine = true
+                } else {
+                    cell.hideTopLine = indexPath.row == 0 ? true : false
+                }
+                cell.hideBottomLine = (dataModel.rows.count - 1) == indexPath.row ? true : false
+                return cell
+            }
+#else
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
             cell.cellModel = cellModel
             cell.contentView.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
@@ -355,7 +398,37 @@ class PTFuncNameViewController: PTBaseViewController {
             }
             cell.hideBottomLine = (dataModel.rows.count - 1) == indexPath.row ? true : false
             return cell
+#endif
         }
+#if POOTOOLS_SWIPECELL
+        aaaaaaa.indexPathSwipe = { indxPath in
+            return true
+        }
+        aaaaaaa.indexPathSwipeRight = { indxPath in
+            return true
+        }
+        aaaaaaa.swipeLeftHandler = { collection,sectionModel,indexPath in
+            let delete = aaaaaaa.swipe_cell_configure_action(title: "22222", with: .edit,buttonDisplayMode: .imageOnly/*,buttonStyle: .backgroundColor*/) { action, indexPaths in
+                
+            }
+            
+            let edit = aaaaaaa.swipe_cell_configure_action(title: "333333", with: .trash,buttonDisplayMode: .titleOnly/*,buttonStyle: .backgroundColor*/) { action, indexPaths in
+                
+            }
+
+            let oooo = aaaaaaa.swipe_cell_configure_action(title: "1111111", with: .custom,buttonDisplayMode: .titleAndImage,customImage: "DemoImage",customColor: .purple) { action, indexPaths in
+                
+            }
+
+            return [edit,delete,oooo]
+        }
+        aaaaaaa.swipeRightHandler = { collection,sectionModel,indexPath in
+            let delete = aaaaaaa.swipe_cell_configure_action(title: "2222", with: .read,buttonDisplayMode: .titleAndImage) { action, indexPaths in
+                
+            }
+            return [delete]
+        }
+#endif
         aaaaaaa.collectionDidSelect = { collectionViews,sModel,indexPath in
             let itemRow = sModel.rows[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)

@@ -328,6 +328,7 @@
 		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
 		55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */; };
 		55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */; };
+		55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE65672B1450A000B436A8 /* SwipeCellOption.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB62ABDFF1C00858348 /* ICMP.swift */; };
 		55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB72ABDFF1C00858348 /* IPv4.swift */; };
@@ -764,6 +765,7 @@
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
 		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
 		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
+		55DE65672B1450A000B436A8 /* SwipeCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellOption.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E3BBB62ABDFF1C00858348 /* ICMP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICMP.swift; sourceTree = "<group>"; };
 		55E3BBB72ABDFF1C00858348 /* IPv4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IPv4.swift; sourceTree = "<group>"; };
@@ -1019,6 +1021,7 @@
 				55D59C5C28F3E7A200B4FF76 /* StatusBar */,
 				5589FF4B29A8527D00519383 /* Stepper */,
 				55ED0D332B12F37000391136 /* SVGA */,
+				55DE65662B14505300B436A8 /* SwipeCell */,
 				555E8FDF28D01B6C00AF5E63 /* TouchInspector */,
 				55B4FA1A2AE0FE9F006D35F3 /* TrackingPermission */,
 				5585F6C72AD298C800F878B4 /* VideoEditor */,
@@ -1998,6 +2001,14 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
+		55DE65662B14505300B436A8 /* SwipeCell */ = {
+			isa = PBXGroup;
+			children = (
+				55DE65672B1450A000B436A8 /* SwipeCellOption.swift */,
+			);
+			path = SwipeCell;
+			sourceTree = "<group>";
+		};
 		55E0558D28EA8AA10097F3ED /* ScrollBanner */ = {
 			isa = PBXGroup;
 			children = (
@@ -2672,6 +2683,7 @@
 				5585F7152AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
+				55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
 				55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,

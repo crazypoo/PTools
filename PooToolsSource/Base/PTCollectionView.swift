@@ -16,6 +16,10 @@ import MJRefresh
 import LXFProtocolTool
 #endif
 
+#if POOTOOLS_SWIPECELL
+import SwipeCellKit
+#endif
+
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType:Int {
     case Normal
@@ -70,6 +74,18 @@ public typealias PTCellDisplayHandler = (_ collectionView:UICollectionView,_ cel
 ///  - Return: 事件
 public typealias PTCollectionViewScrollHandler = (_ collectionView:UICollectionView) -> Void
 
+#if POOTOOLS_SWIPECELL
+///CollectionView的Swipe回调
+/// - Parameters:
+///   - collectionView: collectionView
+///   - sectionModel: Section的model
+///   - indexPath: 坐标
+///  - Return: 事件
+public typealias PTCollectionViewSwipeHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> [SwipeAction]
+#endif
+
+public typealias PTCollectionViewCanSwipeHandler = (_ indexPath:IndexPath) -> Bool
+
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
 public class PTCollectionViewConfig:NSObject {
@@ -114,6 +130,11 @@ public class PTCollectionViewConfig:NSObject {
     public var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
     ///是否开启自定义Header和Footer
     public var customReuseViews:Bool = false
+    
+#if POOTOOLS_SWIPECELL
+    ///设置Swipe的样式
+    public var swipeButtonStyle:ButtonStyle = .circular
+#endif
 }
 
 //MARK: 界面展示
@@ -129,14 +150,14 @@ public class PTCollectionView: UIView {
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
-            self.generateSection(section: section)
+            self.generateSection(section: section,environment:environment)
         }
         layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: decorationViewOfKindCorner)
         layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: decorationViewOfKindNormal)
         return layout
     }
     
-    fileprivate func generateSection(section:NSInteger)->NSCollectionLayoutSection {
+    fileprivate func generateSection(section:NSInteger,environment:NSCollectionLayoutEnvironment)->NSCollectionLayoutSection {
         
         var group : NSCollectionLayoutGroup
         let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = viewConfig.collectionViewBehavior
@@ -160,6 +181,7 @@ public class PTCollectionView: UIView {
         }
         
         let sectionInsets = viewConfig.sectionEdges
+        
         let laySection = NSCollectionLayoutSection(group: group)
         laySection.orthogonalScrollingBehavior = behavior
         laySection.contentInsets = sectionInsets
@@ -288,7 +310,21 @@ public class PTCollectionView: UIView {
             collectionView
         }
     }
-        
+    
+    //MARK: Swipe handler(Cell须要引用SwipeCellKit)
+#if POOTOOLS_SWIPECELL
+    ///设置IndexPath是否开启向左swipe
+    public var indexPathSwipe:PTCollectionViewCanSwipeHandler?
+    ///设置IndexPath是否开启向右swipe
+    public var indexPathSwipeRight:PTCollectionViewCanSwipeHandler?
+    ///设置向左滑动作
+    public var swipeLeftHandler:PTCollectionViewSwipeHandler?
+    ///设置向右滑动作
+    public var swipeRightHandler:PTCollectionViewSwipeHandler?
+    ///设置滑动content的间隔
+    public var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
+#endif
+    
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
     //MARK: 界面展示
@@ -479,7 +515,27 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            return cellInCollection?(collectionView,itemSec,indexPath) ?? UICollectionViewCell()
+            
+            let cell = cellInCollection?(collectionView,itemSec,indexPath) ?? UICollectionViewCell()
+#if POOTOOLS_SWIPECELL
+            if let swipeCell = cell as? SwipeCollectionViewCell {
+                if indexPathSwipe != nil {
+                    let swipe = indexPathSwipe!(indexPath)
+                    if swipe {
+                        swipeCell.delegate = self
+                    } else {
+                        swipeCell.delegate = nil
+                    }
+                } else {
+                    swipeCell.delegate = nil
+                }
+                return swipeCell
+            } else {
+                return cell
+            }
+#else
+            return cell
+#endif
         } else {
             return UICollectionViewCell()
         }
@@ -577,6 +633,129 @@ extension PTCollectionView:LXFEmptyDataSetable {
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
         self.viewConfig.emptyViewConfig.secondaryEmptyAtt?.value
+    }
+}
+#endif
+
+#if POOTOOLS_SWIPECELL
+extension PTCollectionView:SwipeCollectionViewCellDelegate {
+    
+    func swipe_cell_configure_action(swipeType:SwipeActionStyle = .destructive,
+                                     title:String,
+                                     titleFont:UIFont = UIFont.appfont(size: 13),
+                                     with descriptor: ActionDescriptor,
+                                     buttonDisplayMode: ButtonDisplayMode? = .imageOnly,
+                                     customImage:Any? = nil,
+                                     customColor:UIColor? = .clear,
+                                     handler: ((SwipeAction, IndexPath) -> Void)?) -> SwipeAction {
+        var titleAction:String? = ""
+        switch buttonDisplayMode {
+        case .imageOnly:
+            titleAction = nil
+        case .titleAndImage:
+            titleAction = title
+        case .titleOnly:
+            titleAction = title
+        default:break
+        }
+        let action = SwipeAction(style: swipeType, title: titleAction, handler: handler)
+        
+        let cellHeight = viewConfig.itemHeight == 0 ? PTAppBaseConfig.share.baseCellHeight : viewConfig.itemHeight
+        
+        var actionImage:UIImage?
+        switch buttonDisplayMode {
+        case .imageOnly,.titleAndImage:
+            switch descriptor {
+            case .custom:
+                if customImage == nil {
+                    actionImage = nil
+                } else {
+                    PTLoadImageFunction.loadImage(contentData: customImage as Any) { images, image in
+                        if (images?.count ?? 0 ) > 1 {
+                            actionImage = UIImage.animatedImage(with: images!, duration: 2)
+                        } else if (images?.count ?? 0 ) == 1 {
+                            actionImage = image
+                        } else {
+                            actionImage = PTAppBaseConfig.share.defaultEmptyImage
+                        }
+                    }
+                    
+                    var circularIconSize:CGSize = .zero
+                    switch buttonDisplayMode {
+                    case .imageOnly:
+                        circularIconSize = CGSize(width: cellHeight - 10, height: cellHeight - 10)
+                    default:
+                        circularIconSize = CGSize(width: cellHeight - 30, height: cellHeight - 30)
+                    }
+                    actionImage = actionImage!.transformImage(size: circularIconSize)
+                }
+            default:
+                actionImage = descriptor.image(forStyle: viewConfig.swipeButtonStyle, displayMode: buttonDisplayMode!,cellHeight: cellHeight)
+            }
+        default:break
+        }
+        
+        switch buttonDisplayMode {
+        case .imageOnly:
+            action.image = actionImage
+        case .titleAndImage:
+            action.image = actionImage
+            action.font = titleFont
+        case .titleOnly:
+            action.font = titleFont
+        default:break
+        }
+        action.hidesWhenSelected = true
+        
+        switch viewConfig.swipeButtonStyle {
+        case .backgroundColor:
+            action.backgroundColor = descriptor.color(forStyle: viewConfig.swipeButtonStyle,customColor: customColor)
+        case .circular:
+            action.backgroundColor = .clear
+            action.textColor = descriptor.color(forStyle: viewConfig.swipeButtonStyle,customColor: customColor)
+            action.transitionDelegate = ScaleTransition.default
+        }
+        return action
+   }
+   
+    public func collectionView(_ collectionView: UICollectionView, editActionsOptionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> SwipeOptions {
+        var options = SwipeOptions()
+        options.expansionStyle = orientation == .left ? .selection : .destructive(automaticallyDelete: false)
+        options.transitionStyle = .border
+
+        if swipeContentSpaceHandler != nil {
+            options.buttonSpacing = swipeContentSpaceHandler!(collectionView,orientation,indexPath)
+        } else {
+            options.buttonSpacing = 0
+        }
+        return options
+   }
+   
+    public func collectionView(_ collectionView: UICollectionView, editActionsForItemAt indexPath: IndexPath, for orientation: SwipeActionsOrientation) -> [SwipeAction]? {
+        if orientation == .right {
+
+            if swipeLeftHandler != nil {
+                let itemSec = mSections[indexPath.section]
+                return swipeLeftHandler!(collectionView,itemSec,indexPath)
+            }
+            
+            return []
+        } else {
+            if indexPathSwipeRight != nil {
+                let swipeRight = indexPathSwipeRight!(indexPath)
+                if swipeRight {
+                    if swipeRightHandler != nil {
+                        let itemSec = mSections[indexPath.section]
+                        return swipeRightHandler!(collectionView,itemSec,indexPath)
+                    }
+                    return []
+                } else {
+                    return []
+                }
+            } else {
+                return []
+            }
+        }
     }
 }
 #endif
