@@ -9,13 +9,14 @@
 import UIKit
 import JXSegmentedView
 
+@objcMembers
 public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
     ///MARK:这里要先加载数据
-    public var dataSourceData = [PTSegmentControlBaseModel?]()
-    public var change:PTSegmentControlModelType? = .ImageTitle(type: .Normal)
-    public var titleNormalColor:UIColor = .black
-    public var titleSelectedColor:UIColor = .black
-    public var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
+    open var dataSourceData = [PTSegmentControlBaseModel?]()
+    open var change:PTSegmentControlModelType? = .ImageTitle(type: .Normal)
+    open var titleNormalColor:UIColor = .black
+    open var titleSelectedColor:UIColor = .black
+    open var itemWidths: CGFloat = CGFloat.kSCREEN_WIDTH / 4
     private var cell_width_array = [CGFloat]()
     private var cell_width_array_sub = [CGFloat]()
     
@@ -93,5 +94,4 @@ public class PTMainSegmentDataSource: JXSegmentedBaseDataSource {
         myCurrentSelectedItemModel.subTitleCurrentBGColor = myCurrentSelectedItemModel.subTitleNormalBGColor
         myWilltSelectedItemModel.subTitleCurrentBGColor = myWilltSelectedItemModel.subTitleSelectedBGColor
     }
-
 }

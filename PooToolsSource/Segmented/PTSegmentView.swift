@@ -22,56 +22,56 @@ import WZLBadge
 @objcMembers
 public class PTSegmentConfig: NSObject {
     ///选中字体
-    public var selectedFont:UIFont = .systemFont(ofSize: 16)
+    open var selectedFont:UIFont = .systemFont(ofSize: 16)
     ///未选中字体
-    public var normalFont:UIFont = .boldSystemFont(ofSize: 14)
+    open var normalFont:UIFont = .boldSystemFont(ofSize: 14)
     ///显示类型
-    public var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
+    open var showType:PTSegmentSelectedType = PTSegmentSelectedType(rawValue: 0)!
     ///选中颜色
-    public var selectedColor:UIColor = .red
+    open var selectedColor:UIColor = .red
     ///普通颜色
-    public var normalColor:UIColor = .black
+    open var normalColor:UIColor = .black
     
-    public var normalColor_BG:UIColor = .clear
+    open var normalColor_BG:UIColor = .clear
     ///选中颜色(背景)
-    public var selectedColor_BG:UIColor = .systemBlue
+    open var selectedColor_BG:UIColor = .systemBlue
     ///底线height
-    public var underHight:CGFloat = 3
+    open var underHight:CGFloat = 3
     ///默认选中第X
-    public var normalSelecdIndex:Int = 0
+    open var normalSelecdIndex:Int = 0
     ///子界面到他的父界面的左右距离总和
-    public var subViewInContentSpace:CGFloat = 20
+    open var subViewInContentSpace:CGFloat = 20
     ///设置底线角
-    public var underlineRadius:Bool = true
+    open var underlineRadius:Bool = true
     ///文字图片位置
-    public var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
+    open var imagePosition:PTLayoutButtonStyle = PTLayoutButtonStyle(rawValue: 0)!
     ///文字图片间距
-    public var imageTitleSpace:CGFloat = 5
+    open var imageTitleSpace:CGFloat = 5
     ///留给展示dog/或者underline的空间
-    public var bottomSquare:CGFloat = 5
+    open var bottomSquare:CGFloat = 5
     ///是否左对齐
-    public var leftEdges:Bool = false
+    open var leftEdges:Bool = false
     ///每个item的间隙
-    public var itemSpace:CGFloat = 0
+    open var itemSpace:CGFloat = 0
     ///初始x(左对齐生效)
-    public var originalX:CGFloat = 0
+    open var originalX:CGFloat = 0
 }
 
 @objcMembers
 public class PTSegmentModel:NSObject {
     ///标题
-    public var titles:String = ""
+    open var titles:String = ""
     ///图片
-    public var imageURL:Any?
+    open var imageURL:Any?
     ///图片
-    public var imagePlaceHolder:String = ""
+    open var imagePlaceHolder:String = ""
     ///选中图片
-    public var selectedImageURL:Any?
+    open var selectedImageURL:Any?
     ///iCloud文件夹名称
-    public var iCloudDocument:String = ""
+    open var iCloudDocument:String = ""
 }
 
-public enum PTSegmentButtonShowType:Int {
+@objc public enum PTSegmentButtonShowType:Int {
     case OnlyTitle
     case OnlyImage
     case TitleImage
@@ -222,7 +222,7 @@ public class PTSegmentSubView:UIView {
 public class PTSegmentView: UIView {
         
     ///数据
-    public var viewDatas = [PTSegmentModel]()
+    open var viewDatas = [PTSegmentModel]()
     
     public enum PooSegmentBadgePosition {
         case TopLeft
@@ -236,7 +236,7 @@ public class PTSegmentView: UIView {
     }
     
     ///选中某个index
-    public var selectedIndex:Int? {
+    open var selectedIndex:Int? {
         didSet {
             setSelectItem(indexs: selectedIndex!)
         }

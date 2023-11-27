@@ -18,11 +18,11 @@ public var webRouterUrl = "scheme://webview/home"
 
 open class PTAppWindowsDelegate: PTAppDelegate {
     
-    public var isFullScreen:Bool = false
+    open var isFullScreen:Bool = false
     
 #if POOTOOLS_DEBUG
 #endif
-    open func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
+    public func makeKeyAndVisible(createViewControllerHandler: () -> UIViewController, tint: UIColor) {
 #if POOTOOLS_DEBUG
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
             window = TouchInspectorWindow(frame: UIScreen.main.bounds)
@@ -40,14 +40,14 @@ open class PTAppWindowsDelegate: PTAppDelegate {
         window?.makeKeyAndVisible()
     }
 
-    open func makeKeyAndVisible(viewController: UIViewController, tint: UIColor) {
+    public func makeKeyAndVisible(viewController: UIViewController, tint: UIColor) {
         makeKeyAndVisible(createViewControllerHandler: {
             viewController
         }, tint: tint)
     }
     
 #if POOTOOLS_DEBUG
-    open func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil,Hyperion:PTActionTask? = nil,FoxNet:PTActionTask? = nil) {
+    public func createDevFunction(flex:PTActionTask? = nil,inApp:PTActionTask? = nil,Hyperion:PTActionTask? = nil,FoxNet:PTActionTask? = nil) {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
             
             let lcm = LocalConsole.shared
@@ -61,13 +61,13 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 #endif
     
 #if POOTOOLS_ROTATION
-    open func registerRotation() {
+    public func registerRotation() {
         PTRotationManager.share.interfaceOrientationMask = .portrait
     }
 #endif
     
 #if POOTOOLS_ROUTER
-    open func registerRouter(PrifxArray:[String]? = [".Jax"]) {
+    public func registerRouter(PrifxArray:[String]? = [".Jax"]) {
         PTRouter.lazyRegisterRouterHandle { url ,userInfo in
             PTRouter.injectRouterServiceConfig(webRouterUrl, serivceHost)
             return PTRouterManager.addGloableRouter(PrifxArray!, url, userInfo)
@@ -79,7 +79,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     }
 #endif
 
-    open func createSettingBundle() {
+    public func createSettingBundle() {
         if UIApplication.shared.inferredEnvironment != .appStore && UIApplication.shared.inferredEnvironment != .testFlight {
 #if POOTOOLS_DEBUG
             PTDebugFunction.registerDefaultsFromSettingsBundle()
@@ -102,7 +102,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 
 //MARK: 全局参数
 extension PTAppWindowsDelegate {
-    public override class func appDelegate() -> PTAppWindowsDelegate? {
+    open override class func appDelegate() -> PTAppWindowsDelegate? {
         UIApplication.shared.delegate as? PTAppWindowsDelegate
     }
 }

@@ -12,10 +12,10 @@ import CoreLocation
 @objcMembers
 public class PTGetGPSData: NSObject {
     public static let share = PTGetGPSData()
-    public var errorBlock:PTActionTask?
-    public var selectCurrentBlock:PTActionTask?
-    public var selectNewBlock:PTActionTask?
-    public var showChangeAlert:Bool = false
+    open var errorBlock:PTActionTask?
+    open var selectCurrentBlock:PTActionTask?
+    open var selectNewBlock:PTActionTask?
+    open var showChangeAlert:Bool = false
     
     var locationManager = CLLocationManager()
     var lat:Double = 0

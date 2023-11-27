@@ -17,14 +17,14 @@ public class PTCheckFWords: NSObject {
     public static let share = PTCheckFWords()
     
     fileprivate var root:NSMutableDictionary = NSMutableDictionary()
-    public var isFilterClose:Bool = false
+    open var isFilterClose:Bool = false
     
     public override init() {
         super.init()
         initFilter()
     }
     
-    func initFilter(filePath:String = Bundle.podBundleResource(bundleName: "PooToolsCheckDirtyWordResource", sourceName: "minganci", type: "txt")!) {
+    public func initFilter(filePath:String = Bundle.podBundleResource(bundleName: "PooToolsCheckDirtyWordResource", sourceName: "minganci", type: "txt")!) {
         
         var dataFile:NSString?
         do {

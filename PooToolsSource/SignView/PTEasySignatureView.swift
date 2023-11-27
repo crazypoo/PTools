@@ -11,27 +11,28 @@ import SnapKit
 import SwifterSwift
 import AttributedString
 
+@objcMembers
 public class PTSignatureConfig:NSObject {
-    public var lineWidth:CGFloat = 1
-    public var signNavTitleFont:UIFont = UIFont.appfont(size: 12,bold: true)
-    public var signNavTitleColor:UIColor = UIColor.randomColor
-    public var signNavDescFont:UIFont = UIFont.appfont(size: 10)
-    public var signNavDescColor:UIColor = UIColor.randomColor
-    public var signContentTitleFont:UIFont = UIFont.appfont(size: 15,bold: true)
-    public var signContentTitleColor:UIColor = UIColor.randomColor
-    public var signContentDescFont:UIFont = UIFont.appfont(size: 13)
-    public var signContentDescColor:UIColor = UIColor.randomColor
-    public var infoTitle:String = "PT Sign placeholder".localized()
-    public var infoDesc:String = "PT Sign font".localized()
-    public var clearName:String = "PT Button delete".localized()
-    public var clearFont:UIFont = .appfont(size: 14)
-    public var clearTextColor:UIColor = .randomColor
-    public var saveName:String = "PT Button save".localized()
-    public var saveFont:UIFont = .appfont(size: 14)
-    public var saveTextColor:UIColor = .randomColor
-    public var navBarColor:UIColor = .randomColor
-    public var signViewBackground:UIColor = .randomColor
-    public var waterMarkMessage:String = ""
+    open var lineWidth:CGFloat = 1
+    open var signNavTitleFont:UIFont = UIFont.appfont(size: 12,bold: true)
+    open var signNavTitleColor:UIColor = UIColor.randomColor
+    open var signNavDescFont:UIFont = UIFont.appfont(size: 10)
+    open var signNavDescColor:UIColor = UIColor.randomColor
+    open var signContentTitleFont:UIFont = UIFont.appfont(size: 15,bold: true)
+    open var signContentTitleColor:UIColor = UIColor.randomColor
+    open var signContentDescFont:UIFont = UIFont.appfont(size: 13)
+    open var signContentDescColor:UIColor = UIColor.randomColor
+    open var infoTitle:String = "PT Sign placeholder".localized()
+    open var infoDesc:String = "PT Sign font".localized()
+    open var clearName:String = "PT Button delete".localized()
+    open var clearFont:UIFont = .appfont(size: 14)
+    open var clearTextColor:UIColor = .randomColor
+    open var saveName:String = "PT Button save".localized()
+    open var saveFont:UIFont = .appfont(size: 14)
+    open var saveTextColor:UIColor = .randomColor
+    open var navBarColor:UIColor = .randomColor
+    open var signViewBackground:UIColor = .randomColor
+    open var waterMarkMessage:String = ""
 }
 
 public typealias OnSignatureWriteAction = (_ have:Bool) -> Void

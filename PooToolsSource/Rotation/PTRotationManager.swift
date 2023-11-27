@@ -22,8 +22,8 @@ public class PTRotationManager: NSObject {
      * @attention 不支持iPad
      */
     
-    public var interfaceOrientationMask: UIInterfaceOrientationMask = .portrait
-    public var orientation: UIDeviceOrientation = .portrait
+    open var interfaceOrientationMask: UIInterfaceOrientationMask = .portrait
+    open var orientation: UIDeviceOrientation = .portrait
     
     public func setOrientation(orientation:UIDeviceOrientation) {
         if self.orientation == orientation {

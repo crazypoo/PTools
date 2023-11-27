@@ -19,26 +19,26 @@ public class PTScanBarInfo:NSObject {
 @objcMembers
 public class PTScanQRConfig:NSObject {
     ///返回按鈕圖片
-    public var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var backImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///獲取相冊圖片
-    public var photoImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var photoImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///電筒圖片
-    public var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
-    public var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var flashImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var flashImageSelected:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///掃描線圖片
-    public var scanLineImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var scanLineImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///點擊二維碼圖片
-    public var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var qrCodeImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     ///條形碼提示
-    public var barCodeTips:String = "PT Scan code".localized()
+    open var barCodeTips:String = "PT Scan code".localized()
     ///取消按鈕名字
-    public var cancelButtonName:String = "PT Button cancel".localized()
+    open var cancelButtonName:String = "PT Button cancel".localized()
     ///掃描二維碼後提示
-    public var scanedTips:String = "PT Scan tap".localized()
+    open var scanedTips:String = "PT Scan tap".localized()
     ///是否可以掃二維碼
-    public var canScanQR:Bool = true
+    open var canScanQR:Bool = true
     ///是否自动返回
-    public var autoReturn:Bool = true
+    open var autoReturn:Bool = true
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String) -> Void
@@ -48,7 +48,7 @@ public class PTScanQRController: PTBaseViewController {
 
     //MARK: 掃描回調
     ///掃描回調
-    public var resultBlock:PTQRCodeResultBlock?
+    open var resultBlock:PTQRCodeResultBlock?
     
     let scanningLineX:CGFloat = 0.5 * (1 - 0.9) * CGFloat.kSCREEN_WIDTH
     let scanningLineY:CGFloat = 0.25 * CGFloat.kSCREEN_HEIGHT
@@ -593,6 +593,4 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
     }
 }
 
-extension PTScanQRController:AVCaptureVideoDataOutputSampleBufferDelegate {
-    
-}
+extension PTScanQRController:AVCaptureVideoDataOutputSampleBufferDelegate {}

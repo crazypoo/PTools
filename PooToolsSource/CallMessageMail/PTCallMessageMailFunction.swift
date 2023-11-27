@@ -25,14 +25,14 @@ public class PTCallMessageMailFunction: NSObject {
         return webView
     }()
     
-    open class func telpromptByWebView(phone:String) {
+    public class func telpromptByWebView(phone:String) {
         PTCallMessageMailFunction.share.webView.navigationDelegate = PTCallMessageMailFunction.share
         
         let urlPhoneString = "tel://\(phone)"
         PTCallMessageMailFunction.share.webView.load(URLRequest.init(url: URL(string: urlPhoneString)!))
     }
     
-    open class func sendMessage(content:String,
+    public class func sendMessage(content:String,
                                 users:[String],
                                 resultBlock:MessageResultBlock?) {
         let vc = MFMessageComposeViewController()
@@ -44,7 +44,7 @@ public class PTCallMessageMailFunction: NSObject {
         PTCallMessageMailFunction.share.messageResultBlock = resultBlock
     }
     
-    open class func sendMail(title:String,
+    public class func sendMail(title:String,
                              content:String,
                              recipients:[String]?,
                              ccRecipients:[String]?,

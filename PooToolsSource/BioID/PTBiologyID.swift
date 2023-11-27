@@ -38,8 +38,8 @@ public class PTBiologyID: NSObject {
     
     private var security = LAContext()
     
-    public var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
-    public var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
+    open var biologyStatusBlock:((_ status:PTBiologyStatus)->Void)?
+    open var biologyVerifyStatusBlock:((_ status:PTBiologyVerifyStatus)->Void)?
     
     private override init() {
         super.init()

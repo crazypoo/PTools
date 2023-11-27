@@ -27,7 +27,7 @@ fileprivate extension UIView {
 @objcMembers
 public class PTFusionCellContent:UIView {
     public static let ContentIconHeight:CGFloat = CGFloat.ScaleW(w: 64)
-    public var switchValueChangeBlock:PTCellSwitchBlock?
+    open var switchValueChangeBlock:PTCellSwitchBlock?
 
     enum PTFusionContentCellType {
         case Name

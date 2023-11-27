@@ -21,6 +21,16 @@ public class PTVision: NSObject {
     ///   - revision: Vision版本(VNRecognizeTextRequestRevision2 iOS14,VNRecognizeTextRequestRevision3 iOS16)
     ///   - recognitionLanguages: 識別語言(默認中,英,西)
     ///   - resultBlock: 回调
+    public static func findText(withImage image:UIImage,
+                                revision:Int = VNRecognizeTextRequestRevision2,
+                                recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> (String,[VNRecognizedTextObservation]) {
+        await withUnsafeContinuation { continuation in
+            PTVision.share.findText(withImage: image,revision: revision) { resultText, textObservations in
+                continuation.resume(returning: (resultText,textObservations))
+            }
+        }
+    }
+    
     public func findText(withImage image:UIImage,
                          revision:Int = VNRecognizeTextRequestRevision2,
                          recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"],
@@ -75,6 +85,16 @@ public class PTVision: NSObject {
     ///   - imageView: 图片
     ///   - revision: Vision版本(VNRecognizeTextRequestRevision2 iOS14,VNRecognizeTextRequestRevision3 iOS16)
     ///   - resultBlock: 回调
+    public static func findText(withImageView image:UIImageView,
+                                revision:Int = VNRecognizeTextRequestRevision2,
+                                recognitionLanguages:[String] = ["zh-cn","zh-Hant","zh-Hans","en","es"]) async throws -> String {
+        await withUnsafeContinuation { continuation in
+            PTVision.share.findText(withImageView: image,revision: revision) { resultText in
+                continuation.resume(returning: resultText)
+            }
+        }
+    }
+    
     public func findText(withImageView imageView:UIImageView,
                          revision:Int = VNRecognizeTextRequestRevision2,
                          resultBlock:((_ resultText:String)->Void)?) {

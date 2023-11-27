@@ -14,16 +14,16 @@ public class StatusBarState: NSObject {
     
     public static let defaultKey: String = "StatusBarState.default.root.key"
     
-    var isHidden: Bool = false
-    var style: UIStatusBarStyle = .default
-    var animation: UIStatusBarAnimation = .fade
-    var key: String = defaultKey
+    open var isHidden: Bool = false
+    open var style: UIStatusBarStyle = .default
+    open var animation: UIStatusBarAnimation = .fade
+    open var key: String = defaultKey
     // 子节点数组
-    var subStates: [StatusBarState] = []
+    open var subStates: [StatusBarState] = []
     // 父节点, 为 nil 说明是根节点
-    weak var superState: StatusBarState?
+    open weak var superState: StatusBarState?
     // 下一个路径节点，为 nil 说明是叶子节点
-    weak var nextState: StatusBarState?
+    open weak var nextState: StatusBarState?
     
     public override var description: String {
         "{ key=\(key) selected=\(String(describing: nextState?.key)) }"
@@ -47,19 +47,19 @@ public class StatusBarManager {
     fileprivate var currentState: StatusBarState!
     
     /// 以下3个计算属性都是取当前状态显示以及更新当前状态
-    public var isHidden: Bool {
+    open var isHidden: Bool {
         get {
             currentState.isHidden
         }
         set { setState(for: currentState.key, isHidden: newValue) }
     }
-    public var style: UIStatusBarStyle {
+    open var style: UIStatusBarStyle {
         get {
             currentState.style
         }
         set { setState(for: currentState.key, style: newValue) }
     }
-    public var animation: UIStatusBarAnimation {
+    open var animation: UIStatusBarAnimation {
         get {
             currentState.animation
         }

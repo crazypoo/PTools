@@ -89,51 +89,51 @@ public typealias PTCollectionViewCanSwipeHandler = (_ indexPath:IndexPath) -> Bo
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
 public class PTCollectionViewConfig:NSObject {
-    public var showsVerticalScrollIndicator:Bool = true
-    public var showsHorizontalScrollIndicator:Bool = true
+    open var showsVerticalScrollIndicator:Bool = true
+    open var showsHorizontalScrollIndicator:Bool = true
     ///CollectionView展示的样式类型
-    public var viewType:PTCollectionViewType = .Normal
+    open var viewType:PTCollectionViewType = .Normal
     ///每行多少个(仅在瀑布流和Gird样式中使用)
-    public var rowCount:Int = 3
+    open var rowCount:Int = 3
     ///item高度
-    public var itemHeight:CGFloat = PTAppBaseConfig.share.baseCellHeight
+    open var itemHeight:CGFloat = PTAppBaseConfig.share.baseCellHeight
     ///item起始坐标X
-    public var itemOriginalX:CGFloat = 0
+    open var itemOriginalX:CGFloat = 0
     ///item的展示距离顶部和底部的高度
-    public var contentTopAndBottom:CGFloat = 0
+    open var contentTopAndBottom:CGFloat = 0
     ///每个item的间隔(左右)
-    public var cellLeadingSpace:CGFloat = 0
+    open var cellLeadingSpace:CGFloat = 0
     ///每个item的间隔(上下)
-    public var cellTrailingSpace:CGFloat = 0
+    open var cellTrailingSpace:CGFloat = 0
     ///是否开启头部刷新
-    public var topRefresh:Bool = false
+    open var topRefresh:Bool = false
 #if POOTOOLS_SCROLLREFRESH
     ///是否开启底部刷新
-    public var footerRefresh:Bool = false
+    open var footerRefresh:Bool = false
 #endif
     ///section偏移
-    public var sectionEdges:NSDirectionalEdgeInsets = .zero
+    open var sectionEdges:NSDirectionalEdgeInsets = .zero
     ///头部长度偏移
-    public var headerWidthOffset:CGFloat = 0
+    open var headerWidthOffset:CGFloat = 0
     ///底部长度偏移
-    public var footerWidthOffset:CGFloat = 0
+    open var footerWidthOffset:CGFloat = 0
     
     ///是否开启空数据展示
-    public var showEmptyAlert:Bool = false
+    open var showEmptyAlert:Bool = false
     ///空数据展示参数设置
-    public var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
+    open var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
     ///Collection展示的Section底部样式类型
-    public var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
+    open var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
-    public var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
+    open var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
     ///Collection展示的Section底部样式偏移
-    public var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
+    open var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
     ///是否开启自定义Header和Footer
-    public var customReuseViews:Bool = false
+    open var customReuseViews:Bool = false
     
 #if POOTOOLS_SWIPECELL
     ///设置Swipe的样式
-    public var swipeButtonStyle:ButtonStyle = .circular
+    open var swipeButtonStyle:ButtonStyle = .circular
 #endif
 }
 
@@ -263,47 +263,47 @@ public class PTCollectionView: UIView {
     
     //MARK: Cell datasource handler
     ///头部设置
-    public var headerInCollection:PTReusableViewHandler?
+    open var headerInCollection:PTReusableViewHandler?
     ///底部设置
-    public var footerInCollection:PTReusableViewHandler?
+    open var footerInCollection:PTReusableViewHandler?
     ///item设置
-    public var cellInCollection:PTCellInCollectionHandler?
+    open var cellInCollection:PTCellInCollectionHandler?
     
     //MARK: Cell delegate handler
     ///item点击事件
-    public var collectionDidSelect:PTCellDidSelectedHandler?
+    open var collectionDidSelect:PTCellDidSelectedHandler?
     ///item将要展示事件
-    public var collectionWillDisplay:PTCellDisplayHandler?
+    open var collectionWillDisplay:PTCellDisplayHandler?
     ///item消失事件
-    public var collectionDidEndDisplay:PTCellDisplayHandler?
+    open var collectionDidEndDisplay:PTCellDisplayHandler?
     
     //MARK: UIScrollView call back
     ///UICollectionView的Scroll事件
-    public var collectionViewDidScroll:PTCollectionViewScrollHandler?
-    public var collectionWillBeginDragging:PTCollectionViewScrollHandler?
-    public var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
-    public var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
-    public var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
+    open var collectionViewDidScroll:PTCollectionViewScrollHandler?
+    open var collectionWillBeginDragging:PTCollectionViewScrollHandler?
+    open var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
+    open var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
+    open var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
 
     ///头部刷新事件
-    public var headerRefreshTask:((UIRefreshControl)->Void)?
+    open var headerRefreshTask:((UIRefreshControl)->Void)?
     ///底部刷新事件
-    public var footRefreshTask:PTActionTask?
+    open var footRefreshTask:PTActionTask?
     
     //MARK: Cell layout (仅仅限于在瀑布流或者自定义的情况下使用)
     ///瀑布流item高度设置
-    public var waterFallLayout:((Int, AnyObject) -> CGFloat)?
+    open var waterFallLayout:((Int, AnyObject) -> CGFloat)?
     
     ///自定义情况下调用该设置
     ///其中Config中只会生效headerWidthOffset和footerWidthOffset唯一配置,其他位移配置和item高度不会生效
-    public var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
+    open var customerLayout:((PTSection) -> NSCollectionLayoutGroup)?
     
     ///自定义情况下调用该设置
     ///这个是用来设置Header跟Footer的
-    public var customerReuseViews:((PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
+    open var customerReuseViews:((PTSection) -> [NSCollectionLayoutBoundarySupplementaryItem])?
 
     ///当空数据View展示的时候,点击回调
-    public var emptyTap:((UIView?)->Void)?
+    open var emptyTap:((UIView?)->Void)?
     
     public var contentCollectionView:UICollectionView {
         get {
@@ -314,15 +314,15 @@ public class PTCollectionView: UIView {
     //MARK: Swipe handler(Cell须要引用SwipeCellKit)
 #if POOTOOLS_SWIPECELL
     ///设置IndexPath是否开启向左swipe
-    public var indexPathSwipe:PTCollectionViewCanSwipeHandler?
+    open var indexPathSwipe:PTCollectionViewCanSwipeHandler?
     ///设置IndexPath是否开启向右swipe
-    public var indexPathSwipeRight:PTCollectionViewCanSwipeHandler?
+    open var indexPathSwipeRight:PTCollectionViewCanSwipeHandler?
     ///设置向左滑动作
-    public var swipeLeftHandler:PTCollectionViewSwipeHandler?
+    open var swipeLeftHandler:PTCollectionViewSwipeHandler?
     ///设置向右滑动作
-    public var swipeRightHandler:PTCollectionViewSwipeHandler?
+    open var swipeRightHandler:PTCollectionViewSwipeHandler?
     ///设置滑动content的间隔
-    public var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
+    open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
     fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()

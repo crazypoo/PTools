@@ -50,24 +50,24 @@ public class PTWaterWaveView: UIView {
     private var startColor:UIColor = .randomColor
     private var endColor:UIColor = .randomColor
     
-    public var waveWidth:CGFloat = 0
-    public var waveheight:CGFloat = 10
+    open var waveWidth:CGFloat = 0
+    open var waveheight:CGFloat = 10
     //MARK: 波浪的顏色
     ///波浪的顏色
-    public var waveColor:UIColor = .white
+    open var waveColor:UIColor = .white
     //MARK: 速度
     ///速度
-    public var waveSpeed:CGFloat = 2.5
+    open var waveSpeed:CGFloat = 2.5
     //MARK: 波浪的X軸移位
     ///波浪的X軸移位
-    public var waveOffsetX:CGFloat = 0
-    public var wavePointY:CGFloat = 208
+    open var waveOffsetX:CGFloat = 0
+    open var wavePointY:CGFloat = 208
     //MARK: 振幅
     ///振幅
-    public var waveAmplitude:CGFloat = 10
+    open var waveAmplitude:CGFloat = 10
     //MARK: 週期
     ///週期
-    public var waveCycle:CGFloat = 0
+    open var waveCycle:CGFloat = 0
 
     public init(startColor:UIColor,
                 endColor:UIColor) {

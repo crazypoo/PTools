@@ -9,7 +9,7 @@
 import UIKit
 
 public class IndicatorView: UIView {
-    var color = UIColor.clear {
+    open var color = UIColor.clear {
         didSet { setNeedsDisplay() }
     }
     

@@ -12,37 +12,37 @@ import UIKit
 public class PTSearchBar: UISearchBar {
     //MARK: 輸入框Placeholder
     ///輸入框Placeholder
-    public var searchPlaceholder : String? = "PT Input text".localized()
+    open var searchPlaceholder : String? = "PT Input text".localized()
     //MARK: 輸入框Placeholder字體
     ///輸入框Placeholder字體
-    public var searchPlaceholderFont : UIFont? = .systemFont(ofSize: 16)
+    open var searchPlaceholderFont : UIFont? = .systemFont(ofSize: 16)
     //MARK: 輸入框邊框顏色
     ///輸入框邊框顏色
-    public var searchBarTextFieldBorderColor : UIColor? = UIColor.random
+    open var searchBarTextFieldBorderColor : UIColor? = UIColor.random
     //MARK: 輸入框放大鏡位置的圖片
     ///輸入框放大鏡位置的圖片
-    public var searchBarImage : UIImage? = UIColor.clear.createImageWithColor()
+    open var searchBarImage : UIImage? = UIColor.clear.createImageWithColor()
     //MARK: 輸入框光標顏色
     ///輸入框光標顏色
-    public var cursorColor : UIColor? = .lightGray
+    open var cursorColor : UIColor? = .lightGray
     //MARK: 輸入框Placeholder字體顏色
     ///輸入框Placeholder字體顏色
-    public var searchPlaceholderColor : UIColor? = UIColor.random
+    open var searchPlaceholderColor : UIColor? = UIColor.random
     //MARK: 輸入框字體顏色
     ///輸入框字體顏色
-    public var searchTextColor : UIColor? = UIColor.random
+    open var searchTextColor : UIColor? = UIColor.random
     //MARK: 輸入框外邊框顏色
     ///輸入框外邊框顏色
-    public var searchBarOutViewColor : UIColor? = UIColor.random
+    open var searchBarOutViewColor : UIColor? = UIColor.random
     //MARK: 輸入框角弧度
     ///輸入框角弧度
-    public var searchBarTextFieldCornerRadius : NSDecimalNumber?  = 5
+    open var searchBarTextFieldCornerRadius : NSDecimalNumber?  = 5
     //MARK: 輸入框邊框粗度
     ///輸入框邊框粗度
-    public var searchBarTextFieldBorderWidth : NSDecimalNumber? = 0.5
+    open var searchBarTextFieldBorderWidth : NSDecimalNumber? = 0.5
     //MARK: 輸入框底部顏色
     ///輸入框底部顏色
-    public var searchTextFieldBackgroundColor : UIColor? = UIColor.random
+    open var searchTextFieldBackgroundColor : UIColor? = UIColor.random
 
     public override func layoutSubviews() {
         super.layoutSubviews()

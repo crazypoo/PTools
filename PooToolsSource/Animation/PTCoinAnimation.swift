@@ -13,9 +13,9 @@ import SnapKit
 @objcMembers
 public class PTCoinAnimation: UIView {
 
-    public var animationBlock:AnimationFinishBlock?
+    open var animationBlock:AnimationFinishBlock?
     
-    public var iconImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
+    open var iconImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
     lazy var emitterLayer = CAEmitterLayer()
     
     public lazy var showLabel:UILabel = {

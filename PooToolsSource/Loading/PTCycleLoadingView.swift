@@ -11,9 +11,9 @@ import UIKit
 @objcMembers
 public class PTCycleLoadingView: UIView {
 
-    public var lineWidth:CGFloat! = 1
-    public var lineColor:UIColor! = .lightGray
-    public var isAnimation:Bool! = false
+    open var lineWidth:CGFloat! = 1
+    open var lineColor:UIColor! = .lightGray
+    open var isAnimation:Bool! = false
 
     fileprivate var anglePer:CGFloat? = 0 {
         didSet {

@@ -8,15 +8,15 @@
 
 import UIKit
 
-@objc enum PTKeyboardType:Int {
+@objc public enum PTKeyboardType:Int {
     case Normal
     case Call
     case Point
     case InputID
 }
 
-typealias PTNumberKeyBoardBackSpace = (_ keyboard:PTNumberKeyBoard)->Void
-typealias PTNumberKeyBoardReturnSTH = (_ keyboard:PTNumberKeyBoard,_ result:String)->Void
+public typealias PTNumberKeyBoardBackSpace = (_ keyboard:PTNumberKeyBoard)->Void
+public typealias PTNumberKeyBoardReturnSTH = (_ keyboard:PTNumberKeyBoard,_ result:String)->Void
 
 extension PTNumberKeyBoard {
     static func createKeyboard(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) -> Self {
@@ -42,7 +42,7 @@ public class PTNumberKeyBoard: UIView {
         }
     }
                 
-    init(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) {
+    public init(type:PTKeyboardType,backSpace:@escaping PTNumberKeyBoardBackSpace,returnSTH:@escaping PTNumberKeyBoardReturnSTH) {
         super.init(frame: .zero)
         
         bounds = CGRect.init(x: 0, y: 0, width: CGFloat.kSCREEN_WIDTH, height: PTNumberKeyBoard.kKeyBoardH + (CGFloat.kTabbarSaveAreaHeight))

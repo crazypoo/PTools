@@ -17,7 +17,7 @@ public typealias PTActiveStringBoolCallBack = (String) -> Bool
 
 public class PTActiveLabel: UILabel {
     
-    public var didSelectedHandle: PTActiveDidSelectedHandle?
+    open var didSelectedHandle: PTActiveDidSelectedHandle?
     
     open var enabledTypes: [PTActiveType] = [.mention, .hashtag, .url]
     

@@ -47,11 +47,11 @@ public enum PTCountingLabelType {
 @objcMembers
 public class PTCountingLabel: UILabel {
 
-    public var countingType:PTCountingLabelType = .Linear
-    public var attributedFormatBlock:PTCountingLabelAttributedFormatBlock?
-    public var formatBlock:PTCountingLabelFormatBlock?
-    public var showCompletionBlock:PTActionTask?
-    public var format:String = "%f" {
+    open var countingType:PTCountingLabelType = .Linear
+    open var attributedFormatBlock:PTCountingLabelAttributedFormatBlock?
+    open var formatBlock:PTCountingLabelFormatBlock?
+    open var showCompletionBlock:PTActionTask?
+    open var format:String = "%f" {
         didSet {
             textValue(value: currentValue())
         }
@@ -59,7 +59,7 @@ public class PTCountingLabel: UILabel {
     
     //MARK: 如果浮点数需要千分位分隔符,须使用@"###,##0.00"进行控制样式
     ///如果浮点数需要千分位分隔符,须使用@"###,##0.00"进行控制样式
-    public var positiveFormat:String = ""
+    open var positiveFormat:String = ""
     var progress:TimeInterval = 0
     var totalTime:TimeInterval = 0
     var lastUpdate:TimeInterval = 0

@@ -20,24 +20,24 @@ let numberOfVisibleLines = 2
 public class PTMediaBrowserController: PTBaseViewController {
 
     ///界面消失后回调
-    public var viewDismissBlock:PTActionTask?
+    open var viewDismissBlock:PTActionTask?
 
     ///界面配置
-    public var viewConfig:PTMediaBrowserConfig! {
+    open var viewConfig:PTMediaBrowserConfig! {
         didSet {
             showCollectionViewData()
         }
     }
     
     ///更多按钮操作
-    public var viewMoreActionBlock:PTViewerIndexBlock?
+    open var viewMoreActionBlock:PTViewerIndexBlock?
     ///保存回调
-    public var viewSaveImageBlock:PTViewerSaveBlock?
+    open var viewSaveImageBlock:PTViewerSaveBlock?
     ///删除回调
-    public var viewDeleteImageBlock:PTViewerIndexBlock?
+    open var viewDeleteImageBlock:PTViewerIndexBlock?
     
     ///查看到哪儿
-    public var browserCurrentDataBlock:((Int)->Void)?
+    open var browserCurrentDataBlock:((Int)->Void)?
 
     fileprivate var firstLoad:Bool = false
     fileprivate var hideToolBar:Bool = false

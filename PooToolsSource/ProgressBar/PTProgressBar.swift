@@ -8,19 +8,20 @@
 
 import UIKit
 
-public enum PTProgressBarShowType {
+@objc public enum PTProgressBarShowType:Int {
     case Vertical
     case Horizontal
 }
 
-public enum PTProgressBarAnimationType {
+@objc public enum PTProgressBarAnimationType:Int {
     case Normal
     case Reverse
 }
 
+@objcMembers
 public class PTProgressBar: UIView {
     
-    public var barColor:UIColor = UIColor.systemBlue {
+    open var barColor:UIColor = UIColor.systemBlue {
         didSet {
             progressView.backgroundColor = barColor
         }
@@ -35,7 +36,7 @@ public class PTProgressBar: UIView {
         return view
     }()
     
-    init(showType:PTProgressBarShowType) {
+    public init(showType:PTProgressBarShowType) {
         super.init(frame: .zero)
         self.showType = showType
         

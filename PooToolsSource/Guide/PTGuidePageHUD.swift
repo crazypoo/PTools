@@ -18,41 +18,41 @@ import Kingfisher
 @objcMembers
 public class PTGuidePageModel: NSObject {
     ///是否显示开始体验
-    public var tapHidden:Bool = false
+    open var tapHidden:Bool = false
     ///图片s
-    public var imageArrays:[Any] = []
+    open var imageArrays:[Any] = []
     ///展示在X
-    public var mainView:UIView = UIView()
+    open var mainView:UIView = UIView()
     ///是否显示Pagecontrol
-    public var pageControl:PTGuidePageControlSelection = .pageControl(type: .system)
+    open var pageControl:PTGuidePageControlSelection = .pageControl(type: .system)
     ///是否显示跳过按钮
-    public var skipShow:Bool = false
+    open var skipShow:Bool = false
     ///上一张按钮图片
-    public var forwardImage:Any?
+    open var forwardImage:Any?
     ///下一张按钮图片
-    public var backImage:Any?
+    open var backImage:Any?
     ///开始体验按钮背景
-    public var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
+    open var startBackgroundImage:UIImage = UIColor.randomColor.createImageWithColor()
     ///开始体验按钮字体颜色
-    public var startTextColor:UIColor = UIColor.randomColor
+    open var startTextColor:UIColor = UIColor.randomColor
     ///iCloud文件夹名字
-    public var iCloudDocumentName:String = ""
+    open var iCloudDocumentName:String = ""
         /// 未选中颜色
-    public var pageControlTintColor: UIColor = UIColor.lightGray
+    open var pageControlTintColor: UIColor = UIColor.lightGray
     /// 选中颜色
-    public var pageControlCurrentPageColor: UIColor = UIColor.white
+    open var pageControlCurrentPageColor: UIColor = UIColor.white
     ///  圆角(.fill,.snake)
-    public var fillPageControlIndicatorRadius: CGFloat = 4
+    open var fillPageControlIndicatorRadius: CGFloat = 4
     /// 选中颜色(.pill,.snake)
-    public var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
+    open var customPageControlInActiveTintColor: UIColor = UIColor(white: 1, alpha: 0.3)
     /// 普通图片(.system)
-    public var pageControlActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
+    open var pageControlActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotActive")
     /// 选中图片(.system)
-    public var pageControlInActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
+    open var pageControlInActiveImage: Any? = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "lldotInActive")
     /// 自定义Pagecontrol普通颜色
-    public var customPageControlTintColor: UIColor = UIColor.white
+    open var customPageControlTintColor: UIColor = UIColor.white
     /// 自定义Pagecontrol点阵边距
-    public var customPageControlIndicatorPadding: CGFloat = 8
+    open var customPageControlIndicatorPadding: CGFloat = 8
 
     public enum PTGuidePageControlSelection {
         case none
@@ -76,9 +76,9 @@ public class PTGuidePageHUD: UIView {
     fileprivate var slideIntoNumber : Int = 0
     fileprivate var player = AVPlayerViewController()
     
-    public var slideInto : Bool? = false
-    public var animationTime : CGFloat = 3.0
-    public var adHadRemove:PTActionTask?
+    open var slideInto : Bool? = false
+    open var animationTime : CGFloat = 3.0
+    open var adHadRemove:PTActionTask?
     
     let StartString = "PT Guide start".localized()
     

@@ -97,7 +97,7 @@ import SwifterSwift
 public class PTUtils: NSObject {
         
     public static let share = PTUtils()
-    public var timer:DispatchSourceTimer?
+    open var timer:DispatchSourceTimer?
     
     @available(iOS, introduced: 2.0, deprecated: 13.0, message: "這個方法在iOS13之後不能使用了")
     public class func showNetworkActivityIndicator(_ show:Bool) {

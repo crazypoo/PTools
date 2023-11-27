@@ -18,8 +18,8 @@ public class PTSignView: UIView {
     
     var viewConfig:PTSignatureConfig!
     
-    public var doneBlock:SignImageBlock?
-    public var dismissBlock:PTActionTask?
+    open var doneBlock:SignImageBlock?
+    open var dismissBlock:PTActionTask?
 
     lazy var devMaskView:UIView = {
         let view = UIView()

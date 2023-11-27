@@ -30,10 +30,10 @@ public class PTSlider: UISlider {
             layoutSubviews()
         }
     }
-    public var titleStyle:PTSliderTitleShowType = .Top
-    public var titleColor:UIColor = .systemBlue
-    public var titleFont:UIFont = .appfont(size: 14)
-    public var titleValueUnit:String = ""
+    open var titleStyle:PTSliderTitleShowType = .Top
+    open var titleColor:UIColor = .systemBlue
+    open var titleFont:UIFont = .appfont(size: 14)
+    open var titleValueUnit:String = ""
     
     fileprivate var lastBounds:CGRect? = .zero
     fileprivate lazy var sliderValueLabel:UILabel = {

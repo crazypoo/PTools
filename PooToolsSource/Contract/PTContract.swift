@@ -11,22 +11,22 @@ import Contacts
 
 @objcMembers
 public class PTContractIndexModel:NSObject {
-    var indexStrings:[String] = [String]()
-    var contractModel:[PTContractModel] = [PTContractModel]()
+    open var indexStrings:[String] = [String]()
+    open var contractModel:[PTContractModel] = [PTContractModel]()
 }
 
 @objcMembers
 public class PTContractModel:NSObject {
-    var key:String = ""
-    var contractModel:[PTContractSubModel] = [PTContractSubModel]()
+    open var key:String = ""
+    open var contractModel:[PTContractSubModel] = [PTContractSubModel]()
 }
 
 @objcMembers
 public class PTContractSubModel:NSObject {
-    var givenName:String = ""
-    var familyName:String = ""
-    var phonenumbers:[String] = []
-    var image:UIImage?
+    open var givenName:String = ""
+    open var familyName:String = ""
+    open var phonenumbers:[String] = []
+    open var image:UIImage?
 }
 
 @objcMembers
@@ -34,7 +34,19 @@ public class PTContract: NSObject {
 
     public static let share = PTContract()
     
-    func getContractData(handle: @escaping (_ model:PTContractIndexModel?)->Void) {
+    public static func getContractData() async throws -> PTContractIndexModel {
+        await withUnsafeContinuation { continuation in
+            PTContract.share.getContractData { model in
+                if model != nil {
+                    continuation.resume(returning: model!)
+                } else {
+                    continuation.resume(throwing: NSError(domain: "Model nil", code: 0) as! Never)
+                }
+            }
+        }
+    }
+    
+    public func getContractData(handle: @escaping (_ model:PTContractIndexModel?)->Void) {
         PTGCDManager.gcdGobal(qosCls: .background) {
             let store = CNContactStore()
             store.requestAccess(for: .contacts) { granted, error in

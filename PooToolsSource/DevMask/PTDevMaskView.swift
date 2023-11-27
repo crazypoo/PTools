@@ -12,18 +12,18 @@ import SwifterSwift
 import DeviceKit
 
 @objcMembers
-open class PTDevMaskConfig:NSObject {
-    public var isMask:Bool = false
-    public var maskString:String = "PT Debug mode".localized()
-    public var maskFont:UIFont = .appfont(size: 100,bold: true)
-    public var motionColor:UIColor = .randomColor
-    public var showTouch:Bool = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
+public class PTDevMaskConfig:NSObject {
+    open var isMask:Bool = false
+    open var maskString:String = "PT Debug mode".localized()
+    open var maskFont:UIFont = .appfont(size: 100,bold: true)
+    open var motionColor:UIColor = .randomColor
+    open var showTouch:Bool = PTCoreUserDefultsWrapper.AppDebbugTouchBubble
 }
 
 @objcMembers
-open class PTDevMaskView: PTBaseMaskView {
+public class PTDevMaskView: PTBaseMaskView {
 
-    public var showTouch:Bool? {
+    open var showTouch:Bool? {
         didSet {
             viewConfig.showTouch = showTouch!
         }

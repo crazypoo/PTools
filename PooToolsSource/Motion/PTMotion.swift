@@ -15,14 +15,14 @@ public typealias PTMotionBlock = (_ step:Int,_ speed:String,_ status:String) -> 
 public class PTMotion: NSObject {
     public static let share = PTMotion()
     
-    public var motionBlock:PTMotionBlock?
+    open var motionBlock:PTMotionBlock?
     
     fileprivate var operationQueue:OperationQueue = OperationQueue()
     fileprivate var pedometer : CMPedometer = CMPedometer()
     fileprivate var stepCount : Int = 0
     fileprivate var activityManager : CMMotionActivityManager = CMMotionActivityManager()
 
-    func startMotion() {
+    public func startMotion() {
         if !CMPedometer.isStepCountingAvailable() || !CMMotionActivityManager.isActivityAvailable() {
             let msg = "哎喲，不能運行哦,僅支持M7以上處理器, 所以暫時只能在iPhone5s以上玩哦."
             UIAlertController.base_alertVC(msg:msg,showIn: PTUtils.getCurrentVC(), moreBtn: nil)
@@ -49,7 +49,7 @@ public class PTMotion: NSObject {
         }
     }
     
-    func statusForActivity(activity:CMMotionActivity) ->String {
+    public func statusForActivity(activity:CMMotionActivity) ->String {
         var status :NSMutableString = "".nsString.mutableCopy() as! NSMutableString
         if activity.stationary {
             status = status.appending("not Moving") as! NSMutableString
@@ -83,7 +83,7 @@ public class PTMotion: NSObject {
         return status.description
     }
     
-    func activityConfidenceString(confidence:CMMotionActivityConfidence)->String {
+    public func activityConfidenceString(confidence:CMMotionActivityConfidence)->String {
         switch confidence {
         case .low:
             return "Low"

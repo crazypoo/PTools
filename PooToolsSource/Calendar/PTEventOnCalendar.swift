@@ -24,7 +24,7 @@ public class PTEventOnCalendar: NSObject {
     ///   - eventType: 提醒类型
     ///   - remindTime: 大于0是开始后提醒,小于0就开始时间前提醒
     ///   - handle: 成功回调
-    open class func createEvent(startDate:DateInRegion,
+    public class func createEvent(startDate:DateInRegion,
                                 endDate:DateInRegion,
                                 eventTitle:String,
                                 location:String,
@@ -40,7 +40,7 @@ public class PTEventOnCalendar: NSObject {
         }
     }
     
-    open class func createEvent(startDate:DateInRegion,
+    public class func createEvent(startDate:DateInRegion,
                                 endDate:DateInRegion,
                                 eventTitle:String,
                                 location:String,

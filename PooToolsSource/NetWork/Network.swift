@@ -29,7 +29,7 @@ public enum NetWorkStatus: Int {
     case wwan
     case wifi
     
-    static func valueName(type:NetWorkStatus) -> String {
+    public static func valueName(type:NetWorkStatus) -> String {
         switch type {
         case .unknown:
             "PT App network status unknow".localized()
@@ -48,7 +48,7 @@ public enum NetWorkEnvironment: Int {
     case Test
     case Distribution
     
-    static func valueName(type:NetWorkEnvironment) -> String {
+    public static func valueName(type:NetWorkEnvironment) -> String {
         switch type {
         case .Development:
             "PT App network environment custom".localized()
@@ -156,20 +156,20 @@ public class Network: NSObject {
     static public let share = Network()
             
     ///网络请求时间
-    public var netRequsetTime:TimeInterval = 20
-    public var serverAddress:String = ""
-    public var serverAddress_dev:String = ""
-    public var userToken:String = ""
+    open var netRequsetTime:TimeInterval = 20
+    open var serverAddress:String = ""
+    open var serverAddress_dev:String = ""
+    open var userToken:String = ""
 
-    public var fileUrl:String = ""
-    public var saveFilePath:String = "" // 文件下载保存的路径
-    public var cancelledData : Data?//用于停止下载时,保存已下载的部分
-    public var downloadRequest:DownloadRequest? //下载请求对象
-    public var destination:DownloadRequest.Destination!//下载文件的保存路径
+    open var fileUrl:String = ""
+    open var saveFilePath:String = "" // 文件下载保存的路径
+    open var cancelledData : Data?//用于停止下载时,保存已下载的部分
+    open var downloadRequest:DownloadRequest? //下载请求对象
+    open var destination:DownloadRequest.Destination!//下载文件的保存路径
     
-    public var progress:FileDownloadProgress?
-    public var success:FileDownloadSuccess?
-    public var fail:FileDownloadFail?
+    open var progress:FileDownloadProgress?
+    open var success:FileDownloadSuccess?
+    open var fail:FileDownloadFail?
     
     private var queue:DispatchQueue = DispatchQueue.main
 

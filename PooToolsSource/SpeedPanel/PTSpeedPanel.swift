@@ -12,23 +12,24 @@ public typealias PTPanelDetailTask = (_ speed:CGFloat)->Void
 
 public class PTSpeedPanelConfig:NSObject {
     // 最大速度
-    public var maxValue:CGFloat = 100
+    open var maxValue:CGFloat = 100
     // 刻度线数量
-    public var numberOfTicks = 8
+    open var numberOfTicks = 8
     // 刻度颜色
-    public var ticksColor:UIColor = .white
+    open var ticksColor:UIColor = .white
     // 刻度颜色
-    public var ticksLableFont:UIFont = .appfont(size: 16)
+    open var ticksLableFont:UIFont = .appfont(size: 16)
     // 刻度颜色
-    public var ticksLableColor:UIColor = .white
+    open var ticksLableColor:UIColor = .white
     // 进度颜色
-    public var progressColor:UIColor = .randomColor
+    open var progressColor:UIColor = .randomColor
     // 进度底部颜色
-    public var progressBackgroundColor:UIColor = .lightGray
+    open var progressBackgroundColor:UIColor = .lightGray
 }
 
+@objcMembers
 public class PTSpeedPanel: UIView {
-    public var callBack:PTPanelDetailTask? = nil
+    open var callBack:PTPanelDetailTask? = nil
 
     fileprivate var viewConfig : PTSpeedPanelConfig!
     

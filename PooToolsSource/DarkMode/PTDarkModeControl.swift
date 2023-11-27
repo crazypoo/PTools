@@ -18,7 +18,7 @@ public class PTDarkModeControl: PTBaseViewController {
 
     private var darkTime: String = PTDarkModeOption.smartPeelingTimeIntervalValue
     
-    public var themeSetBlock: PTActionTask?
+    open var themeSetBlock: PTActionTask?
 
     lazy var darkModeControlArr : [[PTFusionCellModel]] = {
         let smart = PTFusionCellModel()

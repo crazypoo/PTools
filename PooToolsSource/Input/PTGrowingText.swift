@@ -16,7 +16,7 @@ public typealias GrowingTextChangeTextRange = (_ views:PTGrowingTextView,_ range
 @objcMembers
 open class PTGrowingTextView: UITextView {
     
-    public var growingTextDidChangeHeight:GrowingTextDidChangeHeight?
+    open var growingTextDidChangeHeight:GrowingTextDidChangeHeight?
 
     override open var text: String! {
         didSet { setNeedsDisplay() }

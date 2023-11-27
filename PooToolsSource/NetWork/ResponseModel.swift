@@ -27,20 +27,20 @@ public class ResponseModel:PTBaseModel {
 }
 
 public class PTIPInfoModel :PTBaseModel {
-    var lon: CGFloat = 0.0
-    var zip: String!
-    var query: String!
-    var asBaseic: String!
-    var isp: String!
-    var countryCode: String!
-    var lat: CGFloat = 0.0
-    var city: String!
-    var region: String!
-    var timezone: String!
-    var org: String!
-    var country: String!
-    var status: String!
-    var regionName: String!
+    public var lon: CGFloat = 0.0
+    public var zip: String!
+    public var query: String!
+    public var asBaseic: String!
+    public var isp: String!
+    public var countryCode: String!
+    public var lat: CGFloat = 0.0
+    public var city: String!
+    public var region: String!
+    public var timezone: String!
+    public var org: String!
+    public var country: String!
+    public var status: String!
+    public var regionName: String!
     
     required public init() {}
 

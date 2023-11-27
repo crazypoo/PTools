@@ -54,55 +54,55 @@ open class PFloatingButton: UIButton {
     }
     //MARK: 長按結束後回調
     ///長按結束後回調
-    public var longPressEndedBlock:((_ button:PFloatingButton)->Void)?
+    open var longPressEndedBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 點擊回調
     ///點擊回調
-    public var tapBlock:((_ button:PFloatingButton)->Void)?
+    open var tapBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 雙擊回調
     ///雙擊回調
-    public var doubleTapBlock:((_ button:PFloatingButton)->Void)?
+    open var doubleTapBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 浮動Content回調
     ///浮動Content回調
-    public var layerConfigBlock:((_ button:PFloatingButton)->Void)?
+    open var layerConfigBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 拖動回調
     ///拖動回調
-    public var draggingBlock:((_ button:PFloatingButton)->Void)?
+    open var draggingBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 拖動結束回調
     ///拖動結束回調
-    public var dragEndedBlock:((_ button:PFloatingButton)->Void)?
+    open var dragEndedBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 自動歸邊結束回調
     ///自動歸邊結束回調
-    public var autoDockEndedBlock:((_ button:PFloatingButton)->Void)?
+    open var autoDockEndedBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 取消拖動回調
     ///取消拖動回調
-    public var dragCancelledBlock:((_ button:PFloatingButton)->Void)?
+    open var dragCancelledBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 自動歸邊回調
     ///自動歸邊回調
-    public var autoDockingBlock:((_ button:PFloatingButton)->Void)?
+    open var autoDockingBlock:((_ button:PFloatingButton)->Void)?
     //MARK: 將要移除回調
     ///將要移除回調
-    public var willBeRemovedBlock:((_ button:PFloatingButton)->Void)?
+    open var willBeRemovedBlock:((_ button:PFloatingButton)->Void)?
     
     //MARK: 是否支持拖動
     ///是否支持拖動
-    public var draggable : Bool = true
+    open var draggable : Bool = true
     //MARK: 是否支持自動歸邊
     ///是否支持自動歸邊
-    public var autoDocking : Bool = false
+    open var autoDocking : Bool = false
     //MARK: 是否支持超邊拖動
     ///是否支持超邊拖動
-    public var dragOutOfBoundsEnabled : Bool = false
+    open var dragOutOfBoundsEnabled : Bool = false
     //MARK: 邊界
     ///邊界
-    public var dockPoint : CGPoint = PFloatingButton.RC_POINT_NULL
+    open var dockPoint : CGPoint = PFloatingButton.RC_POINT_NULL
     //MARK: 最小距離
     ///最小距離
-    public var limitedDistance : CGFloat = -1.0
+    open var limitedDistance : CGFloat = -1.0
     //MARK: 是否跟蹤按鈕
     ///是否跟蹤按鈕
-    public var isTraceEnabled : Bool = false
+    open var isTraceEnabled : Bool = false
     
-    public var dragEnd:PTActionTask?
+    open var dragEnd:PTActionTask?
     
     private var singleTapCanceled : Bool = false
     private var skipTapEventOnce : Bool = false

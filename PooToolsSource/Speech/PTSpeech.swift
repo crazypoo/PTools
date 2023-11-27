@@ -13,17 +13,18 @@ import AVFoundation
 public typealias ErrorBlock = (_ error:NSError) -> Void
 public typealias FinishBlock = (_ text:String) -> Void
 
-public enum PTSpeechErrorType:Int {
+@objc public enum PTSpeechErrorType:Int {
     case UnsupportedLocale
     case RecognitionDenied
     case IsBusy
 }
 
+@objcMembers
 public class PTSpeech: NSObject {
     public static let share = PTSpeech()
     
-    public var errorBlock:ErrorBlock?
-    public var finishBlock:FinishBlock?
+    open var errorBlock:ErrorBlock?
+    open var finishBlock:FinishBlock?
     
     lazy var recognizer:SFSpeechRecognizer? = {
         let re = SFSpeechRecognizer(locale: Locale.current)

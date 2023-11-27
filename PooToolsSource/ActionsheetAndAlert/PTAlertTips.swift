@@ -104,11 +104,7 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
     private lazy var backgroundView: UIVisualEffectView = {
         let result: UIVisualEffectView
         #if !os(tvOS)
-        if #available(iOS 13.0, *) {
-            result = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
-        } else {
-            result = UIVisualEffectView(effect: UIBlurEffect(style: .light))
-        }
+        result = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
         #else
         result = UIVisualEffectView(effect: UIBlurEffect(style: .light))
         #endif

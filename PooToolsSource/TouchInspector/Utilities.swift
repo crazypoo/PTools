@@ -10,10 +10,7 @@ import UIKit
 
 extension CGPoint {
     var shortDescription: String {
-        String(describing: CGPoint(
-            x: round(x * 100) / 100.0,
-            y: round(y * 100) / 100.0
-        ))
+        String(describing: CGPoint( x: round(x * 100) / 100.0, y: round(y * 100) / 100.0))
     }
 }
 
@@ -24,6 +21,5 @@ func animateBlock(_ block: @escaping PTActionTask, completion: PTActionTask? = n
     } completion: { _ in
         completion?()
     }
-
 }
 

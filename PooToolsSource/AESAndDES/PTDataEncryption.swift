@@ -40,9 +40,13 @@ public class PTDataEncryption {
                                      key:String,
                                      iv:String) async throws -> String {
         /* Encrypt Data */
-        let aes = try AES(key: key,iv: iv).encrypt(data.bytes)
-        let encryptedData = Data(aes)
-        return encryptedData.base64EncodedString()
+        let aes = try? AES(key: key,iv: iv).encrypt(data.bytes)
+        if aes != nil {
+            let encryptedData = Data(aes!)
+            return encryptedData.base64EncodedString()
+        } else {
+            throw NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil)
+        }
     }
     
     //MARK: AES解密
@@ -56,8 +60,12 @@ public class PTDataEncryption {
                                   key:String,
                                   iv:String) async throws -> Data {
         /* Decrypt Data */
-        let aes = try AES(key: key,iv: iv).decrypt(data.bytes)
-        return Data(aes)
+        let aes = try? AES(key: key,iv: iv).decrypt(data.bytes)
+        if aes != nil {
+            return Data(aes!)
+        } else {
+            throw NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil)
+        }
     }
     
     //MARK: AES加密(ECB)
@@ -69,9 +77,13 @@ public class PTDataEncryption {
     public static func aesECBEncryption(data:Data,
                                         key:String) async throws -> String {
         /* Encrypt Data */
-        let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).encrypt(data.bytes)
-        let encryptedData = Data(aes)
-        return encryptedData.base64EncodedString()
+        let aes = try? AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).encrypt(data.bytes)
+        if aes != nil {
+            let encryptedData = Data(aes!)
+            return encryptedData.base64EncodedString()
+        } else {
+            throw NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil)
+        }
     }
     
     //MARK: AES解密(ECB)
@@ -83,8 +95,13 @@ public class PTDataEncryption {
     public static func aesECBDecrypt(data:Data,
                                      key:String) async throws -> Data {
         /* Decrypt Data */
-        let aes = try AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).decrypt(data.bytes)
-        return Data(aes)
+        let aes = try? AES(key: key.bytes, blockMode: ECB(),padding: .pkcs7).decrypt(data.bytes)
+        if aes != nil {
+            return Data(aes!)
+        } else {
+            throw NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil)
+        }
+
     }
     
     //MARK: Des加密
@@ -146,8 +163,10 @@ public class PTDataEncryption {
 
             if operation == kCCEncrypt {
                 data = data!.base64EncodedData()
+                continuation.resume(returning: String(data: data!, encoding: .utf8)!)
+            } else {
+                continuation.resume(throwing: NSError(domain: "PT Crypt change error".localized(), code: 1, userInfo: nil) as Error)
             }
-            continuation.resume(returning: String(data: data!, encoding: .utf8)!)
         }
     }
 }

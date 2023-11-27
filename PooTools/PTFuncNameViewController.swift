@@ -746,39 +746,14 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
-                
-//                if PTWhatsNews.shouldPresent(with: .debug) {
-//                    let item1 = PTWhatsNewsItem()
-//                    item1.subTitle = "比如说.................................................................................................................4"
-//                    
-//                    let item2 = PTWhatsNewsItem()
-//                    item2.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
-//                    item2.title = "好好吃"
-//                    item2.subTitle = "public static let appVersion = Bundle.main.infoDictionary?[\"CFBundleShortVersionString\"] as? String"
-//                    
-//                    let item3 = PTWhatsNewsItem()
-//                    item3.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
-//                    item3.title = "2"
-//                    item3.subTitle = "1"
-//                    
-//                    let item4 = PTWhatsNewsItem()
-//                    item4.title = "2"
-//                    item4.subTitle = "1"
-//
-//                    let item5 = PTWhatsNewsItem()
-//                    item5.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
-//                    item5.title = "11111111"
-//                    
-//                    let iKnowItem = PTWhatsNewsIKnowItem()
-//                    iKnowItem.privacy = "Privacy"
-//                    iKnowItem.privacyURL = "https://www.qq.com"
-//                    
-//                    let view = PTWhatsNewsViewController(titleItem: PTWhatsNewsTitleItem(),iKnowItem: iKnowItem,newsItem: [item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2])
-//                    view.whatsNewsShow()
-//                }
-//                
                 let infoVc = PTSwiftViewController()
-                PTUtils.pt_pushViewController(infoVc)
+                if #available(iOS 15.0, *) {
+                    self.sheetPresent(modalViewController: infoVc, type: .custom, scale: 0.4) {
+                        
+                    }
+                } else {
+                    PTUtils.pt_pushViewController(infoVc)
+                }
             }
         }
         
@@ -818,6 +793,36 @@ class PTFuncNameViewController: PTBaseViewController {
         var json:[String:String]?
         json = ["A":"1"]
         PTNSLogConsole(">>>>>>>>>>>>>>>>>\(String(describing: json))")        
+        
+        if PTWhatsNews.shouldPresent(with: .debug) {
+            let item1 = PTWhatsNewsItem()
+            item1.subTitle = "比如说.................................................................................................................4"
+            
+            let item2 = PTWhatsNewsItem()
+            item2.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
+            item2.title = "好好吃"
+            item2.subTitle = "public static let appVersion = Bundle.main.infoDictionary?[\"CFBundleShortVersionString\"] as? String"
+            
+            let item3 = PTWhatsNewsItem()
+            item3.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
+            item3.title = "2"
+            item3.subTitle = "1"
+            
+            let item4 = PTWhatsNewsItem()
+            item4.title = "2"
+            item4.subTitle = "1"
+
+            let item5 = PTWhatsNewsItem()
+            item5.newsImage = "🥹".emojiToImage(emojiFont: .appfont(size: 34))
+            item5.title = "11111111"
+            
+            let iKnowItem = PTWhatsNewsIKnowItem()
+            iKnowItem.privacy = "Privacy"
+            iKnowItem.privacyURL = "https://www.qq.com"
+            
+            let view = PTWhatsNewsViewController(titleItem: PTWhatsNewsTitleItem(),iKnowItem: iKnowItem,newsItem: [item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2])
+            view.whatsNewsShow()
+        }
     }
     
     func flashAd(notifi:Notification) {

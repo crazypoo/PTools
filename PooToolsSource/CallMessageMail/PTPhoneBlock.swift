@@ -17,9 +17,9 @@ class PTPhoneBlock: NSObject {
     
     private var callStartTime:Date?
     
-    public var callBlock:CallBlock?
-    public var cancelBlock:PTActionTask?
-    public var canCall:CanCall?
+    open var callBlock:CallBlock?
+    open var cancelBlock:PTActionTask?
+    open var canCall:CanCall?
 
     public class func callPhoneNumber(phoneNumber:String,call:@escaping CallBlock,cancel:@escaping PTActionTask,canCall:@escaping CanCall) {
         var canCallSomeOne:Bool? = false

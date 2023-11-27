@@ -52,14 +52,14 @@ struct PTPingItem {
 }
 
 open class PTPingTool: NSObject {
-    public var timeout: PTPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
-    public var debugLog = true                                  //是否开启日志输出
-    public var stopWhenError = false                            //遇到错误停止ping
-    public private(set) var isPing = false
-    public var isRunning: Bool = false
-    public var showNetworkActivityIndicator: NetworkActivityIndicatorStatus = .none              //是否在状态栏显示
+    open var timeout: PTPingTimeInterval = .millisecond(1000)  //自定义超时时间，默认1000毫秒，设置为0则一直等待
+    open var debugLog = true                                  //是否开启日志输出
+    open var stopWhenError = false                            //遇到错误停止ping
+    open private(set) var isPing = false
+    open var isRunning: Bool = false
+    open var showNetworkActivityIndicator: NetworkActivityIndicatorStatus = .none              //是否在状态栏显示
     
-    public var hostName: String? {
+    open var hostName: String? {
         get {
             pinger.hostName
         }

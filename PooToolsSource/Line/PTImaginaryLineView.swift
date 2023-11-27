@@ -18,10 +18,10 @@ public class PTImaginaryLineView: UIView {
     
     //MARK: 虛線顏色
     ///虛線顏色
-    public var lineColor:UIColor? = .lightGray
+    open var lineColor:UIColor? = .lightGray
     //MARK: 虛線方向
     ///虛線方向
-    public var lineType:PTImaginaryLineType? = .Hor
+    open var lineType:PTImaginaryLineType? = .Hor
     
     public override init(frame: CGRect) {
         super.init(frame: frame)

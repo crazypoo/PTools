@@ -11,33 +11,33 @@ import AttributedString
 import SafeSFSymbols
 
 @objcMembers
-public class PTEmptyDataViewConfig : NSObject {
-    public var mainTitleAtt:ASAttributedString? = """
+open class PTEmptyDataViewConfig : NSObject {
+    open var mainTitleAtt:ASAttributedString? = """
             \(wrap: .embedding("""
             \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
             """))
             """
-    public var secondaryEmptyAtt:ASAttributedString? = """
+    open var secondaryEmptyAtt:ASAttributedString? = """
             \(wrap: .embedding("""
             \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
             """))
             """
-    public var buttonTitle:String = "点我刷新"
-    public var buttonFont:UIFont = .appfont(size: 18)
-    public var buttonTextColor:UIColor = .systemBlue
-    public var image:UIImage? = UIImage(.exclamationmark.triangle)
-    public var backgroundColor:UIColor = .clear
-    public var imageToTextPadding:CGFloat = 10
-    public var textToSecondaryTextPadding:CGFloat = 5
-    public var buttonToSecondaryButtonPadding:CGFloat = 15
+    open var buttonTitle:String = "点我刷新"
+    open var buttonFont:UIFont = .appfont(size: 18)
+    open var buttonTextColor:UIColor = .systemBlue
+    open var image:UIImage? = UIImage(.exclamationmark.triangle)
+    open var backgroundColor:UIColor = .clear
+    open var imageToTextPadding:CGFloat = 10
+    open var textToSecondaryTextPadding:CGFloat = 5
+    open var buttonToSecondaryButtonPadding:CGFloat = 15
 }
 
 @available(iOS 17.0 , *)
 @objcMembers
 public class PTUnavailableFunction: NSObject {
     public static let share = PTUnavailableFunction()
-    public var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
-    public var emptyTap:PTActionTask?
+    open var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
+    open var emptyTap:PTActionTask?
         
     lazy var emptyButtonConfig:UIButton.Configuration = {
         var plainConfig = UIButton.Configuration.plain()

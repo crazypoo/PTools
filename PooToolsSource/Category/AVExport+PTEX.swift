@@ -24,6 +24,18 @@ public extension PTPOP where Base: AVAssetExportSession {
                                    outputPath: String,
                                    outputFileType: AVFileType = .mp4,
                                    shouldOptimizeForNetworkUse: Bool = true,
+                                   exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality) async throws -> (AVAssetExportSession, Float64, String, String) {
+        await withCheckedContinuation { continuation in
+            AVAssetExportSession.pt.assetExportSession(inputPath: inputPath, outputPath: outputPath,outputFileType: outputFileType,shouldOptimizeForNetworkUse: shouldOptimizeForNetworkUse,exportPresetMediumQuality: exportPresetMediumQuality) { session, float64, outputFullFilePath, outputFilePath in
+                continuation.resume(returning: (session, float64, outputFullFilePath, outputFilePath))
+            }
+        }
+    }
+    
+    static func assetExportSession(inputPath: String,
+                                   outputPath: String,
+                                   outputFileType: AVFileType = .mp4,
+                                   shouldOptimizeForNetworkUse: Bool = true,
                                    exportPresetMediumQuality: String = AVAssetExportPresetMediumQuality,
                                    completionHandler handler: @escaping (AVAssetExportSession, Float64, String, String) -> Void) {
         // 1、先检查是否存在输入是视频路径

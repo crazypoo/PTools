@@ -14,36 +14,32 @@ import Kingfisher
 
 @objcMembers
 public class PCleanCache: NSObject {
-    static let fileManager = FileManager.default
-    static let cachePath = NSSearchPathForDirectoriesInDomains(FileManager.SearchPathDirectory.cachesDirectory, FileManager.SearchPathDomainMask.userDomainMask, true).last
-    
     //MARK: 獲取緩存容量
     ///獲取緩存容量
     /// - Returns: 容量字符串
     class public func getCacheSize()->String {
-#if DEBUG
+#if POOTOOLS_DEBUG
         var isDirectory:ObjCBool = false
-        let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
+        let isExist = FileManager.pt.fileManager.fileExists(atPath: FileManager.pt.CachesDirectory(), isDirectory: &isDirectory)
         if !isExist || !isDirectory.boolValue {
             let exception = NSException.init(name: NSExceptionName(rawValue: "PT Clean cache title".localized()), reason: "PT Clean cache check".localized(), userInfo: nil)
             exception.raise()
         }
 #endif
-        
-        let subpathArray = PCleanCache.fileManager.subpaths(atPath: PCleanCache.cachePath!)
+        let subpathArray = FileManager.pt.fileManager.subpaths(atPath: FileManager.pt.CachesDirectory())
         var filePath = ""
         var totalSize : Float = 0
         
         for subpath in subpathArray! {
-            filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
+            filePath = FileManager.pt.CachesDirectory().appendingPathComponent(subpath)
             var isDirectory:ObjCBool = false
-            let isExist = PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!, isDirectory: &isDirectory)
+            let isExist = FileManager.pt.fileManager.fileExists(atPath: FileManager.pt.CachesDirectory(), isDirectory: &isDirectory)
             if !isExist || isDirectory.boolValue || filePath.contains(".DS") {
                 continue
             }
             
             do {
-                let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: filePath)
+                let fileAttributes = try FileManager.pt.fileManager.attributesOfItem(atPath: filePath)
                 let fileSize = fileAttributes[FileAttributeKey.size]
                 totalSize += fileSize as! Float
             } catch {
@@ -65,11 +61,11 @@ public class PCleanCache: NSObject {
         var totalSizeString = ""
         
         if totalSize > (1000 * 1000) {
-            totalSizeString = String.init(format: "%.1fM", totalSize/1000/1000)
+            totalSizeString = String.init(format: "%.2fM", totalSize/1000/1000)
         } else if totalSize > 1000 {
-            totalSizeString = String.init(format: "%.1fKB", totalSize/1000)
+            totalSizeString = String.init(format: "%.2fKB", totalSize/1000)
         } else {
-            totalSizeString = String.init(format: "%.1fB", totalSize)
+            totalSizeString = String.init(format: "%.2fB", totalSize)
         }
         return totalSizeString
     }
@@ -82,19 +78,19 @@ public class PCleanCache: NSObject {
         var flag = false
         
         do {
-            let subpathArray = try PCleanCache.fileManager.contentsOfDirectory(atPath: PCleanCache.cachePath!)
+            let subpathArray = try FileManager.pt.fileManager.contentsOfDirectory(atPath: FileManager.pt.CachesDirectory())
             if subpathArray.count == 0 {
                 return false
             }
             
             for subpath in subpathArray {
-                filePath = PCleanCache.cachePath!.appendingPathComponent(subpath)
-                if PCleanCache.fileManager.fileExists(atPath: PCleanCache.cachePath!) {
-                    do {
-                        try PCleanCache.fileManager.removeItem(atPath: filePath)
+                filePath = FileManager.pt.CachesDirectory().appendingPathComponent(subpath)
+                if FileManager.pt.judgeFileOrFolderExists(filePath: FileManager.pt.CachesDirectory()) {
+                    let removeResult = FileManager.pt.removefile(filePath: filePath)
+                    if removeResult.isSuccess {
                         flag = true
-                    } catch {
-                        PTNSLogConsole(error.localizedDescription)
+                    } else {
+                        PTNSLogConsole(removeResult.error)
                     }
                 }
             }
@@ -126,9 +122,9 @@ public class PCleanCache: NSObject {
     ///   - path: 文件路徑
     /// - Returns: 文件Size大小
     class public func fileSizeAtPath(path:String)->Float {
-        if PCleanCache.fileManager.fileExists(atPath: path) {
+        if FileManager.pt.judgeFileOrFolderExists(filePath: path) {
             do {
-                let fileAttributes = try PCleanCache.fileManager.attributesOfItem(atPath: path)
+                let fileAttributes = try FileManager.pt.fileManager.attributesOfItem(atPath: path)
                 return fileAttributes[FileAttributeKey.size] as! Float
             } catch {
                 PTNSLogConsole(error.localizedDescription)
@@ -144,11 +140,11 @@ public class PCleanCache: NSObject {
     ///   - path: 文件夾路徑
     /// - Returns: 文件夾Size大小
     class public func folderSizeAtPath(path:String)->Float {
-        if !PCleanCache.fileManager.fileExists(atPath: path) {
+        if !FileManager.pt.judgeFileOrFolderExists(filePath: path) {
             return 0
         }
         
-        let childFilesEnumerator = PCleanCache.fileManager.subpaths(atPath: path)
+        let childFilesEnumerator = FileManager.pt.fileManager.subpaths(atPath: path)
         var fileName = ""
         var folderSize = 0
         childFilesEnumerator?.enumerated().forEach({ (index,value) in
@@ -167,12 +163,11 @@ public class PCleanCache: NSObject {
     ///   - path: 文件夾路徑
     /// - Returns: 是否完成
     class public func cleanDocumentAtPath(path:String)->Bool {
-        let enumerator = PCleanCache.fileManager.enumerator(atPath: path)
+        let enumerator = FileManager.pt.fileManager.enumerator(atPath: path)
         enumerator?.enumerated().forEach({ index,value in
-            do {
-                try PCleanCache.fileManager.removeItem(atPath: path.appendingPathComponent(value as! String))
-            } catch {
-                PTNSLogConsole(error.localizedDescription)
+            let removeResult = FileManager.pt.removefolder(folderPath: path.appendingPathComponent(value as! String))
+            if !removeResult.isSuccess {
+                PTNSLogConsole(removeResult.error)
             }
         })
         

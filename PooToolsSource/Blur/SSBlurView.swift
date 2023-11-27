@@ -18,13 +18,13 @@ public class SSBlurView:NSObject {
     private (set) var blurContentView: UIView?
     private (set) var vibrancyContentView: UIView?
     
-    public var animationDuration: TimeInterval = 0.1
+    open var animationDuration: TimeInterval = 0.1
     
     /**
      * Blur style. After it is changed all subviews on
      * blurContentView & vibrancyContentView will be deleted.
      */
-    public var style: UIBlurEffect.Style = .light {
+    open var style: UIBlurEffect.Style = .light {
         didSet {
             guard oldValue != style,
                   !editing else { return }
@@ -34,7 +34,7 @@ public class SSBlurView:NSObject {
     /**
      * Alpha component of view. It can be changed freely.
      */
-    public var alpha: CGFloat = 0 {
+    open var alpha: CGFloat = 0 {
         didSet {
             guard !editing else { return }
             if blur == nil {

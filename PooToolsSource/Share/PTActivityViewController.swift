@@ -51,12 +51,12 @@ open class PTShareItem: NSObject,UIActivityItemSource {
 
 public class PTShareCustomActivity: UIActivity {
     //用于保存传递过来的要分享的数据
-    public var text:String!
-    public var url:URL!
-    public var image:UIImage!
+    open var text:String!
+    open var url:URL!
+    open var image:UIImage!
      
-    public var customActivityTitle:String!
-    public var customActivityImage:UIImage!
+    open var customActivityTitle:String!
+    open var customActivityImage:UIImage!
 
     //显示在分享框里的名称
     public override var activityTitle: String?  {
@@ -146,7 +146,6 @@ open class PTActivityViewController:UIActivityViewController {
         label.urlMaximumLength = 31
         label.customize { label in
             label.attributedText = self.contentAtt
-//            label.text = self.contentAtt.string
             label.font = previewFont
             label.numberOfLines = previewNumberOfLines
             label.lineSpacing = 2
@@ -181,37 +180,37 @@ open class PTActivityViewController:UIActivityViewController {
     private let activityItems: [Any]
     
     /// 渐入动画时间
-    public var fadeInDuration: TimeInterval = 0.3
+    open var fadeInDuration: TimeInterval = 0.3
     
     /// 渐出动画时间
-    public var fadeOutDuration: TimeInterval = 0.3
+    open var fadeOutDuration: TimeInterval = 0.3
     
     /// 内容Content默认圆角
-    public var previewCornerRadius: CGFloat = 12
+    open var previewCornerRadius: CGFloat = 12
     
     /// 内容图片圆角
-    public var previewImageCornerRadius: CGFloat = 3
+    open var previewImageCornerRadius: CGFloat = 3
     
     /// 内容图片大小
-    public var previewImageSideLength: CGFloat = 80
+    open var previewImageSideLength: CGFloat = 80
     
     /// 内容间隔
-    public var previewPadding: CGFloat = 12
+    open var previewPadding: CGFloat = 12
     
     /// 内容行数
-    public var previewNumberOfLines: Int = 5
+    open var previewNumberOfLines: Int = 5
     
     /// URL的颜色
-    public var previewLinkColor: UIColor = UIColor(red: 0, green: 0.47, blue: 1, alpha: 1)
+    open var previewLinkColor: UIColor = UIColor(red: 0, green: 0.47, blue: 1, alpha: 1)
     
     /// 字体的颜色
-    public var previewFont: UIFont = .appfont(size: 16,bold:true)
+    open var previewFont: UIFont = .appfont(size: 16,bold:true)
     
     /// Content的间隔(top)
-    public var previewTopMargin: CGFloat = 8
+    open var previewTopMargin: CGFloat = 8
     
     /// Content的间隔(bottom)
-    public var previewBottomMargin: CGFloat = 8
+    open var previewBottomMargin: CGFloat = 8
         
     private var haveImage:Bool = false
     private lazy var fullContentHeight:CGFloat = {

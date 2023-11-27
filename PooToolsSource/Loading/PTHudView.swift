@@ -19,7 +19,7 @@ let rotateIteration:CGFloat = 4
 let conterViewSize:CGFloat = 100
 let loadingHudSpace:CGFloat = 5
 
-enum PTHudStatus:Int {
+@objc public enum PTHudStatus:Int {
     case Decrease
     case Increase
     case Waiting
@@ -27,16 +27,16 @@ enum PTHudStatus:Int {
 
 @objcMembers
 public class PTHudConfig:NSObject {
-    public var lineWidth:CGFloat = 2
-    public var length:CGFloat = maxLength
-    public var hudColors:[UIColor] = [UIColor(hexString: "#F05783")!,UIColor(hexString: "#FCB644")!,UIColor(hexString: "#88BD33")!,UIColor(hexString: "#E5512D")!,UIColor(hexString: "#3ABCAB")!]
-    public var masked:Bool = true
-    public var backgroundColor:UIColor = .clear
+    open var lineWidth:CGFloat = 2
+    open var length:CGFloat = maxLength
+    open var hudColors:[UIColor] = [UIColor(hexString: "#F05783")!,UIColor(hexString: "#FCB644")!,UIColor(hexString: "#88BD33")!,UIColor(hexString: "#E5512D")!,UIColor(hexString: "#3ABCAB")!]
+    open var masked:Bool = true
+    open var backgroundColor:UIColor = .clear
 }
 
 @objcMembers
 public class PTHudView: UIView {
-    public var hudConfig:PTHudConfig = PTHudConfig()
+    open var hudConfig:PTHudConfig = PTHudConfig()
     
     lazy var centerView:UIView = {
         let view = UIView()
@@ -116,18 +116,19 @@ public class PTHudView: UIView {
     }
 }
 
+@objcMembers
 public class PTLoadingHud:UIView {
-    var hudConfig:PTHudConfig = PTHudConfig()
-    var length:CGFloat = maxLength
-    var gradualColor:UIColor = .randomColor
-    var finalColor:UIColor = .randomColor
-    var prevColor:UIColor = .randomColor
-    var rotateAngle:NSInteger = NSInteger(arc4random()%360)
-    var colorIndex:NSInteger = 0
-    var waitingFrameCount:NSInteger = 0
-    var status:PTHudStatus = .Decrease
-    var circleCenter:CGPoint = .zero
-    var circleRadius:CGFloat = 0
+    open var hudConfig:PTHudConfig = PTHudConfig()
+    open var length:CGFloat = maxLength
+    open var gradualColor:UIColor = .randomColor
+    open var finalColor:UIColor = .randomColor
+    open var prevColor:UIColor = .randomColor
+    open var rotateAngle:NSInteger = NSInteger(arc4random()%360)
+    open var colorIndex:NSInteger = 0
+    open var waitingFrameCount:NSInteger = 0
+    open var status:PTHudStatus = .Decrease
+    open var circleCenter:CGPoint = .zero
+    open var circleRadius:CGFloat = 0
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

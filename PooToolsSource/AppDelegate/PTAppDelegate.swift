@@ -12,8 +12,8 @@ open class PTAppDelegate: UIResponder,UIApplicationDelegate {
     open var window: UIWindow?
 }
 
-public extension PTAppDelegate {
-    @objc class func appDelegate() -> PTAppDelegate? {
+extension PTAppDelegate {
+    @objc class open func appDelegate() -> PTAppDelegate? {
         UIApplication.shared.delegate as? PTAppDelegate
     }
 }

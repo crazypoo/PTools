@@ -24,53 +24,53 @@ public class PTStepper: UIView {
 
     //MARK: 輸入提示回調
     ///輸入提示回調yes:大於最大值,no小於最小值
-    public var alertBlock:PTStepperErrorAlert?
+    open var alertBlock:PTStepperErrorAlert?
     //MARK: 輸入回調
     ///輸入回調
-    public var valueBlock:PTStepperValue?
+    open var valueBlock:PTStepperValue?
     //MARK: 支持晃動(默認開)
     ///支持晃動(默認開)
-    public var isShake:Bool = true
+    open var isShake:Bool = true
     //MARK: 數值增減基數(倍數增減)默認1的倍數增減
     ///數值增減基數(倍數增減)默認1的倍數增減
-    public var multipleNum:Int = 1
+    open var multipleNum:Int = 1
     //MARK: 初始顯示值,默認0
     ///初始顯示值,默認0
-    public var baseNum:String = "0" {
+    open var baseNum:String = "0" {
         didSet {
             numberText.text = baseNum
         }
     }
     //MARK: 最小值
     ///最小值
-    public var minNum:Int = 0
+    open var minNum:Int = 0
     //MARK: 最大值
     ///最大值
-    public var maxNum:Int = 99999
+    open var maxNum:Int = 99999
     //MARK: 數字框是否支持手動輸入(默認開)
     ///數字框是否支持手動輸入(默認開)
-    public var canText:Bool = true {
+    open var canText:Bool = true {
         didSet {
             numberText.isUserInteractionEnabled = canText
         }
     }
     //MARK: 是否顯示邊框(默認開)
     ///是否顯示邊框(默認開)
-    public var hideBorder:Bool = true {
+    open var hideBorder:Bool = true {
         didSet {
             setupViews()
         }
     }
     //MARK: 邊框顏色
     ///邊框顏色
-    public var stepperBorderColor:UIColor = .lightGray {
+    open var stepperBorderColor:UIColor = .lightGray {
         didSet {
             setupViews()
         }
     }
     //MARK: 按鈕顏色
     ///按鈕顏色
-    public var buttonBackgroundColor:UIColor = .clear {
+    open var buttonBackgroundColor:UIColor = .clear {
         didSet {
             addButton.backgroundColor = buttonBackgroundColor
             reduceButton.backgroundColor = buttonBackgroundColor
@@ -78,28 +78,28 @@ public class PTStepper: UIView {
     }
     //MARK: 輸入框字體顏色
     ///輸入框字體顏色
-    public var numberTextColor:UIColor = .black {
+    open var numberTextColor:UIColor = .black {
         didSet {
             numberText.textColor = numberTextColor
         }
     }
     //MARK: 輸入框字體
     ///輸入框字體
-    public var numberTextFont:UIFont = .appfont(size: 13) {
+    open var numberTextFont:UIFont = .appfont(size: 13) {
         didSet {
             numberText.font = numberTextFont
         }
     }
     //MARK: 加號圖片
     ///加號圖片
-    public var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
+    open var addImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
         didSet {
             addButton.setImage(addImage, for: .normal)
         }
     }
     //MARK: 減號圖片
     ///減號圖片
-    public var reduceImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
+    open var reduceImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44)) {
         didSet {
             reduceButton.setImage(reduceImage, for: .normal)
         }

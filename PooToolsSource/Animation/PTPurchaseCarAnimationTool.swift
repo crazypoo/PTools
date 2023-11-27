@@ -12,8 +12,8 @@ public typealias AnimationFinishBlock = (_ finish:Bool) -> Void
 
 public class PTPurchaseCarAnimationTool: NSObject {
     public static let shared = PTPurchaseCarAnimationTool.init()
-    public var block:AnimationFinishBlock?
-    public var layer:CALayer?
+    open var block:AnimationFinishBlock?
+    open var layer:CALayer?
     
     public func startAnimationand(view:UIView,
                                   rect:CGRect,

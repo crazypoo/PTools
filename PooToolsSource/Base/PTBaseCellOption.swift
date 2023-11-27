@@ -21,19 +21,19 @@ open class PTBaseNormalCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class func cellSize() -> CGSize {
+    open class func cellSize() -> CGSize {
         CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String {
+    open class func cellIdentifier() -> String {
         "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber {
+    open class func cellSizeByClass() -> NSNumber {
         NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue {
+    open class func cellSizeValue() -> NSValue {
         NSValue(cgSize: cellSize())
     }
 }
@@ -49,19 +49,19 @@ open class PTBaseSwipeCell: SwipeCollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    class func cellSize() -> CGSize {
+    open class func cellSize() -> CGSize {
         CGSize(width: 1, height: 1)
     }
     
-    class func cellIdentifier() -> String {
+    open class func cellIdentifier() -> String {
         "\(type(of: self))"
     }
     
-    class func cellSizeByClass() -> NSNumber {
+    open class func cellSizeByClass() -> NSNumber {
         NSNumber(value: true)
     }
     
-    class func cellSizeValue() -> NSValue {
+    open class func cellSizeValue() -> NSValue {
         NSValue(cgSize: cellSize())
     }
 }

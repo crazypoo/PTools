@@ -20,7 +20,7 @@ public class PTCodeView: UIView {
     private var changeString = ""
     var timerCode:DispatchSourceTimer!
 
-    public var codeBlock:((_ codeView:PTCodeView, _ code:String)->Void)?
+    open var codeBlock:((_ codeView:PTCodeView, _ code:String)->Void)?
 
     private var dismiss : Bool? = false
     

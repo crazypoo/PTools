@@ -11,21 +11,21 @@ import SnapKit
 
 @objcMembers
 public class PTTextCustomRightViewConfig:NSObject {
-    var size:CGSize = .zero
-    var image:Any?
-    var rightSpace:CGFloat = 5
+    open var size:CGSize = .zero
+    open var image:Any?
+    open var rightSpace:CGFloat = 5
 }
 
 @objcMembers
 public class PTTextField: UITextField {
     
-    public var leftSpace:CGFloat? {
+    open var leftSpace:CGFloat? {
         didSet {
             layoutSubviews()
         }
     }
     
-    public var rightTapBlock:PTActionTask?
+    open var rightTapBlock:PTActionTask?
     
     public var rightConfig:PTTextCustomRightViewConfig? {
         didSet {
@@ -45,25 +45,8 @@ public class PTTextField: UITextField {
                     
                     self.customRight.frame = CGRect(x: 0, y: (self.frame.size.height - viewSize.height) / 2, width: viewSize.width, height: viewSize.height)
                     
-                    if self.rightConfig!.image is String {
-                        let link = self.rightConfig!.image as! String
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: link) {
-                            self.customRight.setImage(UIImage(contentsOfFile: link), for: .normal)
-                        } else {
-                            if link.isURL() {
-                                self.customRight.pt_SDWebImage(imageString: link)
-                            } else if link.isSingleEmoji {
-                                self.customRight.setImage(link.emojiToImage(), for: .normal)
-                            } else {
-                                self.customRight.setImage(UIImage(named: link), for: .normal)
-                            }
-                        }
-                    } else if self.rightConfig!.image is UIImage {
-                        self.customRight.setImage((self.rightConfig!.image as! UIImage), for: .normal)
-                    } else if self.rightConfig!.image is Data {
-                        self.customRight.setImage(UIImage(data: (self.rightConfig!.image as! Data)), for: .normal)
-                    }
-
+                    self.customRight.loadImage(contentData: self.rightConfig!.image as Any)
+                    
                     let rightViewContainer = UIView(frame: CGRect(x: 0, y: 0, width: viewSize.width + self.rightConfig!.rightSpace, height: self.frame.size.height))
                     rightViewContainer.addSubview(self.customRight)
 

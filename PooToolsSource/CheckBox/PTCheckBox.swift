@@ -31,24 +31,24 @@ public enum PTCheckBoxBorderStyle:Int {
 @objcMembers
 public class PTCheckBox: UIControl {
     
-    public var valueChanged:PTCheckboxValueChangedBlock?
+    open var valueChanged:PTCheckboxValueChangedBlock?
     
-    public var checkmarkStyle:PTCheckBoxStyle = .Square
-    public var borderStyle:PTCheckBoxBorderStyle = .Square
-    public var boxBorderWidth:CGFloat = 2
-    public var checkmarkSize:CGFloat = 0.5
-    public var checkboxBackgroundColor:UIColor = .clear
-    public var increasedTouchRadius:CGFloat = 5
-    public var isChecked:Bool = true {
+    open var checkmarkStyle:PTCheckBoxStyle = .Square
+    open var borderStyle:PTCheckBoxBorderStyle = .Square
+    open var boxBorderWidth:CGFloat = 2
+    open var checkmarkSize:CGFloat = 0.5
+    open var checkboxBackgroundColor:UIColor = .clear
+    open var increasedTouchRadius:CGFloat = 5
+    open var isChecked:Bool = true {
         didSet{
             self.setNeedsDisplay()
         }
     }
-    public var useHapticFeedback:Bool = true
-    public lazy var uncheckedBorderColor:UIColor = tintColor
-    public lazy var checkedBorderColor:UIColor = tintColor
-    public lazy var checkmarkColor:UIColor = tintColor
-    public lazy var feedbackGenerator:UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
+    open var useHapticFeedback:Bool = true
+    open lazy var uncheckedBorderColor:UIColor = tintColor
+    open lazy var checkedBorderColor:UIColor = tintColor
+    open lazy var checkmarkColor:UIColor = tintColor
+    open lazy var feedbackGenerator:UIImpactFeedbackGenerator = UIImpactFeedbackGenerator(style: .light)
 
     public override init(frame: CGRect) {
         super.init(frame: frame)

@@ -18,7 +18,7 @@ let PTRateForegroundViewTags = 7654
 @objcMembers
 public class PTRateConfig: NSObject {
     ///默认得分范围0~1默认1
-    public var scorePercent : CGFloat = 1 {
+    open var scorePercent : CGFloat = 1 {
         didSet {
             if scorePercent > 1 {
                 scorePercent = 1
@@ -28,24 +28,24 @@ public class PTRateConfig: NSObject {
         }
     }
     ///展示的数量,默认5个
-    public var numberOfStar : Int = 5
+    open var numberOfStar : Int = 5
     ///已经选择的图片
-    public var fImage:UIImage = "🌟".emojiToImage(emojiFont: .appfont(size: 24))
+    open var fImage:UIImage = "🌟".emojiToImage(emojiFont: .appfont(size: 24))
     ///未选择的图片
-    public var bImage:UIImage = "⭐️".emojiToImage(emojiFont: .appfont(size: 24))
+    open var bImage:UIImage = "⭐️".emojiToImage(emojiFont: .appfont(size: 24))
     ///是否可以点击
-    public var canTap:Bool = false
+    open var canTap:Bool = false
     ///是否有动画
-    public var hadAnimation:Bool = false
+    open var hadAnimation:Bool = false
     ///是否显示全星
-    public var allowIncompleteStar:Bool = false
+    open var allowIncompleteStar:Bool = false
 }
 
 @objcMembers
 public class PTRateView: UIView {
-    public var rateBlock:PTRateScoreBlock?
+    open var rateBlock:PTRateScoreBlock?
     
-    public var viewConfig:PTRateConfig? {
+    open var viewConfig:PTRateConfig? {
         didSet {
             scorePercent = viewConfig!.scorePercent
             removeSubviews()

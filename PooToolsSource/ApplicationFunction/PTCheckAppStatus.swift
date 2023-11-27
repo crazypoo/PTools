@@ -15,10 +15,10 @@ import UIKit
 public class PCheckAppStatus: NSObject {
     public static let shared = PCheckAppStatus.init()
     
-    public var fpsHandle:((_ fps:NSInteger)->Void)?
-    public var closed:Bool = true
+    open var fpsHandle:((_ fps:NSInteger)->Void)?
+    open var closed:Bool = true
     
-    public var avatar : PFloatingButton?
+    open var avatar : PFloatingButton?
     private var displayLink : CADisplayLink?
     private var lastTime:TimeInterval? = 0
     private var count:NSInteger? = 0

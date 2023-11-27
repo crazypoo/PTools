@@ -11,7 +11,7 @@ import UIKit
 @objcMembers
 open class PTBaseMaskView: UIView {
 
-    public var isMask : Bool = false
+    open var isMask : Bool = false
         
     public override func hitTest(_ point: CGPoint,
                                  with event: UIEvent?) -> UIView? {

@@ -16,50 +16,50 @@ public class PTAppBaseConfig: NSObject {
     
     //MARK: App的全局加載圖片的底圖
     ///App的全局加載圖片的底圖
-    public var defaultPlaceholderImage:UIImage = UIImage()
+    open var defaultPlaceholderImage:UIImage = UIImage()
     ///没有获取到图片
-    public var defaultEmptyImage:UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_placeholder")
+    open var defaultEmptyImage:UIImage = Bundle.podBundleImage(bundleName: CorePodBundleName, imageName: "icon_placeholder")
     //MARK: App的全局邊距
     ///App的全局邊距
-    public var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
+    open var defaultViewSpace:CGFloat = CGFloat.ScaleW(w: 10)
     
     //MARK: App的全局背景顏色
     ///App的全局背景顏色
-    public var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
-    public var viewDefaultTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+    open var viewControllerBaseBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
+    open var viewDefaultTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
 
     //MARK: App全局的导航栏返回按钮
     ///App全局的导航栏返回按钮
-    public var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
-    public var navTitleFont:UIFont = .appfont(size: 24)
-    public var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
-    public var hidesBarsOnSwipe:Bool = false
+    open var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
+    open var navTitleFont:UIFont = .appfont(size: 24)
+    open var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+    open var hidesBarsOnSwipe:Bool = false
     
     //MARK: 权限请求配置
-    public var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
-    public var permissionTitleColor:UIColor = .black
-    public var permissionSubtitleFont:UIFont = .appfont(size: 14)
-    public var permissionSubtitleColor:UIColor = .black
-    public var permissionDeniedColor:UIColor = .red
-    public var permissionNotSupportColor:UIColor = .lightGray
-    public var permissionAuthorizedButtonFont:UIFont = .appfont(size: 14)
-    public var permissionCellTitleFont:UIFont = .appfont(size: 14)
-    public var permissionCellTitleTextColor:UIColor = .black
-    public var permissionCellSubtitleFont:UIFont = .appfont(size: 12)
-    public var permissionCellSubtitleTextColor:UIColor = .black
+    open var permissionTitleFont:UIFont = .appfont(size: 16,bold:true)
+    open var permissionTitleColor:UIColor = .black
+    open var permissionSubtitleFont:UIFont = .appfont(size: 14)
+    open var permissionSubtitleColor:UIColor = .black
+    open var permissionDeniedColor:UIColor = .red
+    open var permissionNotSupportColor:UIColor = .lightGray
+    open var permissionAuthorizedButtonFont:UIFont = .appfont(size: 14)
+    open var permissionCellTitleFont:UIFont = .appfont(size: 14)
+    open var permissionCellTitleTextColor:UIColor = .black
+    open var permissionCellSubtitleFont:UIFont = .appfont(size: 12)
+    open var permissionCellSubtitleTextColor:UIColor = .black
     
     //MARK: Collection
-    public var decorationBackgroundColor:UIColor = UIColor.white
-    public var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
-    public var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
-    public var baseCellBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .Black25PercentColor)
+    open var decorationBackgroundColor:UIColor = UIColor.white
+    open var decorationBackgroundCornerRadius:CGFloat = CGFloat.ScaleW(w: 10)
+    open var baseCellHeight:CGFloat = CGFloat.ScaleW(w: 54)
+    open var baseCellBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .Black25PercentColor)
     //MARK: ScreenShot
-    public var screenShotShare:Any = UIImage(.square.andPencil) as Any
-    public var screenShotFeedback:Any = UIImage(.square.andArrowUp) as Any
+    open var screenShotShare:Any = UIImage(.square.andPencil) as Any
+    open var screenShotFeedback:Any = UIImage(.square.andArrowUp) as Any
 
     //MARK: App的隐私连接
-    public var privacyURL:String = "https://www.qq.com"
-    public var privacyNameFont:UIFont = .appfont(size: 13)
+    open var privacyURL:String = "https://www.qq.com"
+    open var privacyNameFont:UIFont = .appfont(size: 13)
 
     //MARK: SDWebImage的加载失误图片方式(全局控制)
     ///SDWebImage的加载失误图片方式(全局控制)
@@ -72,8 +72,8 @@ public class PTAppBaseConfig: NSObject {
     }
     
     //MARK: 在AppStore上用来检测更新的AppID
-    public var appID:String = ""
+    open var appID:String = ""
     
     //MARK: FloatingPanelViewController顶部站位大小
-    public var fpcSurfaceShadowBaseSize:CGSize = CGSize(width: 0, height: 16)
+    open var fpcSurfaceShadowBaseSize:CGSize = CGSize(width: 0, height: 16)
 }
