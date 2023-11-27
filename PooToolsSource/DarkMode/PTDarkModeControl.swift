@@ -174,10 +174,10 @@ public class PTDarkModeControl: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitle = "PT Theme title".localized()
 #else
-        self.title = "PT Theme title".localized()
+        title = "PT Theme title".localized()
 #endif
         // Do any additional setup after loading the view.
-        self.view.addSubviews([newCollectionView])
+        view.addSubviews([newCollectionView])
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
 #if POOTOOLS_NAVBARCONTROLLER
@@ -186,13 +186,13 @@ public class PTDarkModeControl: PTBaseViewController {
             make.top.equalToSuperview()
 #endif
         }
-        self.apply()
+        apply()
     }
     
     func showDetail() {
         mSections.removeAll()
 
-        self.darkModeControlArr.enumerated().forEach { (index,value) in
+        darkModeControlArr.enumerated().forEach { (index,value) in
             var rows = [PTRows]()
             value.enumerated().forEach { subIndex,subValue in
                 let row = PTRows(cls:PTFusionCell.self,ID: PTFusionCell.ID,dataModel: subValue)
@@ -225,7 +225,7 @@ public class PTDarkModeControl: PTBaseViewController {
 
 extension PTDarkModeControl: PTThemeable {
     public func apply() {
-        self.showDetail()
+        showDetail()
         PTGCDManager.gcdMain {
             let type:VCStatusBarChangeStatusType = PTDarkModeOption.isLight ? .Light : .Dark
             self.changeStatusBar(type: type)

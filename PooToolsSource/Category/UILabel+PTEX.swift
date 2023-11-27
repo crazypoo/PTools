@@ -99,7 +99,9 @@ public extension UILabel {
     ///計算文字的Size
     /// - Parameters:
     ///   - lineSpacing: 行距
-    ///   - size: size
+    ///   - height:
+    ///   - width:
+    ///   - height:
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,

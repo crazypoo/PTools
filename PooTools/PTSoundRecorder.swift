@@ -50,8 +50,8 @@ class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
     }
 
     func stop() {
-        if self.audioRecorder != nil {
-            self.audioRecorder!.stop()
+        if audioRecorder != nil {
+            audioRecorder!.stop()
         }
         stopTimer()
     }
@@ -60,7 +60,7 @@ class PTSoundRecorder: NSObject,AVAudioRecorderDelegate {
         let interval:Double = 0.05
 //        let bufferLength = AVAudioFrameCount(interval * (audioRecorder.settings[AVSampleRateKey] as! Double))
         
-        self.audioRecorder?.record(forDuration: interval)
+        audioRecorder?.record(forDuration: interval)
         
         levelTimer = Timer(timeInterval: interval, repeats: true, block: { [weak self] _ in
             self?.audioRecorder?.updateMeters()

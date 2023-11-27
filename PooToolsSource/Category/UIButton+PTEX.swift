@@ -38,7 +38,7 @@ public extension UIButton {
     }
     
     @objc func removeTargerAndAction() {
-        self.removeTarget(nil, action: nil, for: .allEvents)
+        removeTarget(nil, action: nil, for: .allEvents)
     }
     
     @objc func pt_SDWebImage(imageString:String) {
@@ -85,7 +85,9 @@ public extension UIButton {
     ///計算文字的Size
     /// - Parameters:
     ///   - lineSpacing: 行距
-    ///   - size: size
+    ///   - height:
+    ///   - width:
+    ///   - height:
     /// - Returns: Size
     @objc func sizeFor(lineSpacing:NSNumber? = nil,
                        height:CGFloat = CGFloat.greatestFiniteMagnitude,
@@ -153,27 +155,27 @@ public extension UIButton {
                    controlState:UIControl.State = .normal) {
         if contentData is UIImage {
             let image = (contentData as! UIImage)
-            self.setImage(image, for: controlState)
+            setImage(image, for: controlState)
         } else if contentData is String {
             let dataUrlString = contentData as! String
             if FileManager.pt.judgeFileOrFolderExists(filePath: dataUrlString) {
                 let image = UIImage(contentsOfFile: dataUrlString)!
-                self.setImage(image, for: controlState)
+                setImage(image, for: controlState)
             } else if dataUrlString.isURL() {
                 if dataUrlString.contains("file://") {
                     if iCloudDocumentName.stringIsEmpty() {
                         let image = UIImage(contentsOfFile: dataUrlString)!
-                        self.setImage(image, for: controlState)
+                        setImage(image, for: controlState)
                     } else {
                         if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
                             let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
                             if let imageData = try? Data(contentsOf: imageURL) {
                                 let image = UIImage(data: imageData)!
-                                self.setImage(image, for: controlState)
+                                setImage(image, for: controlState)
                             }
                         } else {
                             let image = UIImage(contentsOfFile: dataUrlString)!
-                            self.setImage(image, for: controlState)
+                            setImage(image, for: controlState)
                         }
                     }
                 } else {
@@ -205,21 +207,21 @@ public extension UIButton {
                 }
             } else if dataUrlString.isSingleEmoji {
                 let emojiImage = dataUrlString.emojiToImage()
-                self.setImage(emojiImage, for: controlState)
+                setImage(emojiImage, for: controlState)
             } else {
                 if let image = UIImage(named: dataUrlString) {
-                    self.setImage(image, for: controlState)
+                    setImage(image, for: controlState)
                 } else if let systemImage = UIImage(systemName: dataUrlString) {
-                    self.setImage(systemImage, for: controlState)
+                    setImage(systemImage, for: controlState)
                 } else {
-                    self.setImage(emptyImage, for: controlState)
+                    setImage(emptyImage, for: controlState)
                 }
             }
         } else if contentData is Data {
             let dataImage = UIImage(data: contentData as! Data)!
-            self.setImage(dataImage, for: controlState)
+            setImage(dataImage, for: controlState)
         } else {
-            self.setImage(emptyImage, for: controlState)
+            setImage(emptyImage, for: controlState)
         }
     }
 }

@@ -18,13 +18,13 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     open var moreActionBlock:PTSectionMoreBlock?
     open var switchValue:Bool? {
         didSet {
-            dataContent.valueSwitch.isOn = self.switchValue!
+            dataContent.valueSwitch.isOn = switchValue!
         }
     }
     
     open var sectionModel:PTFusionCellModel? {
         didSet {
-            self.dataContent.cellModel = self.sectionModel
+            dataContent.cellModel = sectionModel
         }
     }
     

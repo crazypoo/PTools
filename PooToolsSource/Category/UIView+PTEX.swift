@@ -451,7 +451,7 @@ public extension UIView {
      */
     var masksToBounds: Bool {
         get {
-            return layer.masksToBounds
+            layer.masksToBounds
         }
         set {
             layer.masksToBounds = newValue
@@ -505,7 +505,7 @@ public extension UIView {
      */
     var customBorderWidth: CGFloat {
         get {
-            return layer.borderWidth
+            layer.borderWidth
         }
         set {
             layer.borderWidth = newValue

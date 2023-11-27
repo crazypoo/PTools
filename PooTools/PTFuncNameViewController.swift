@@ -70,7 +70,7 @@ class PTFuncNameViewController: PTBaseViewController {
         case Spanish = "es"
         
         static var allValues : [LanguageKey] {
-            return [.ChineseHans, .ChineseHK, .English,.Spanish]
+            [.ChineseHans, .ChineseHK, .English, .Spanish]
         }
         
         var desc:String {
@@ -88,7 +88,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         static var allNames : [String] {
             var values = [String]()
-            self.allValues.enumerated().forEach { index,value in
+            allValues.enumerated().forEach { index,value in
                 values.append(value.desc)
             }
             return values
@@ -546,7 +546,7 @@ class PTFuncNameViewController: PTBaseViewController {
                         }
                         cycle.startAnimation()
                         PTGCDManager.gcdAfter(time: 5) {
-                            cycle.stopAnimation() {
+                            cycle.stopAnimation {
                                 cycle.removeFromSuperview()
                             }
                         }
@@ -643,9 +643,9 @@ class PTFuncNameViewController: PTBaseViewController {
 
         // Do any additional setup after loading the view.
                 
-        self.registerScreenShotService()
+        registerScreenShotService()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(self.flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flashAd(notifi:)), name: NSNotification.Name.init(PLaunchAdDetailDisplayNotification), object: nil)
         
         let more = UIButton(type: .custom)
         more.setTitleColor(.random, for: .normal)
@@ -659,7 +659,7 @@ class PTFuncNameViewController: PTBaseViewController {
             make.bottom.equalToSuperview().inset(5)
         }
 #else
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
 #endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         
@@ -704,7 +704,7 @@ class PTFuncNameViewController: PTBaseViewController {
 //                    view.whatsNewsShow()
 //                }
 //                
-                let infoVc = PTHeartRateViewController()
+                let infoVc = PTSwiftViewController()
                 PTUtils.pt_pushViewController(infoVc)
             }
         }
@@ -713,7 +713,7 @@ class PTFuncNameViewController: PTBaseViewController {
             self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
         
-        self.view.addSubview(collectionView)
+        view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
 #if POOTOOLS_NAVBARCONTROLLER
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
@@ -724,11 +724,11 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         
         if #unavailable(iOS 17.0) {
-            self.showCollectionViewData()
+            showCollectionViewData()
         } else {
             if vcEmpty {
-                self.emptyDataViewConfig = PTEmptyDataViewConfig()
-                self.showEmptyView {
+                emptyDataViewConfig = PTEmptyDataViewConfig()
+                showEmptyView {
                     self.emptyReload()
                 }
                 
@@ -738,7 +738,7 @@ class PTFuncNameViewController: PTBaseViewController {
             }
         }
         
-        self.inputValueSample(value: 15)
+        inputValueSample(value: 15)
         
         
         @PTLockAtomic
@@ -761,7 +761,7 @@ class PTFuncNameViewController: PTBaseViewController {
     
     @available(iOS 17, *)
     func emptyReload() {
-        self.emptyViewLoading()
+        emptyViewLoading()
         PTGCDManager.gcdAfter(time: 2) {
             self.hideEmptyView {
                 self.showCollectionViewData()

@@ -38,14 +38,14 @@ public extension CGSize {
     var minDimension: CGFloat { min(width, height) }
     
     func resize(newWidth: CGFloat) -> CGSize {
-        let scaleFactor = newWidth / self.width
-        let newHeight = self.height * scaleFactor
+        let scaleFactor = newWidth / width
+        let newHeight = height * scaleFactor
         return CGSize(width: newWidth, height: newHeight)
     }
     
     func resize(newHeight: CGFloat) -> CGSize {
-        let scaleFactor = newHeight / self.height
-        let newWidth = self.width * scaleFactor
+        let scaleFactor = newHeight / height
+        let newWidth = width * scaleFactor
         return CGSize(width: newWidth, height: newHeight)
     }
 

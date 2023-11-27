@@ -60,22 +60,22 @@ public class PTShareCustomActivity: UIActivity {
 
     //显示在分享框里的名称
     public override var activityTitle: String?  {
-        return self.customActivityTitle
+        customActivityTitle
     }
      
     //分享框的图片
     public override var activityImage: UIImage? {
-        return self.customActivityImage
+        customActivityImage
     }
      
     //分享类型，在UIActivityViewController.completionHandler回调里可以用于判断，一般取当前类名
     public override var activityType: UIActivity.ActivityType? {
-        return UIActivity.ActivityType(rawValue: PTShareCustomActivity.self.description())
+        UIActivity.ActivityType(rawValue: PTShareCustomActivity.self.description())
     }
      
     //按钮类型（分享按钮：在第一行，彩色，动作按钮：在第二行，黑白）
     public override class var activityCategory: UIActivity.Category {
-        return .share
+        .share
     }
      
     //是否显示分享按钮，这里一般根据用户是否授权,或分享内容是否正确等来决定是否要隐藏分享按钮
@@ -119,7 +119,7 @@ public class PTShareCustomActivity: UIActivity {
      
     //分享时调用
     public override var activityViewController: UIViewController? {
-        return nil
+        nil
     }
      
     //完成分享后调用
@@ -244,19 +244,19 @@ open class PTActivityViewController:UIActivityViewController {
         return attributedString
     }()
     
-    @objc public convenience init(activityItems: [Any]) {
+    public convenience init(activityItems: [Any]) {
         self.init(activityItems: activityItems, applicationActivities: nil)
     }
     
-    @objc public convenience init(text: String, activities: [UIActivity]? = nil) {
+    public convenience init(text: String, activities: [UIActivity]? = nil) {
         self.init(activityItems: [text], applicationActivities: activities)
     }
     
-    @objc public convenience init(image: UIImage, activities: [UIActivity]? = nil) {
+    public convenience init(image: UIImage, activities: [UIActivity]? = nil) {
         self.init(activityItems: [image], applicationActivities: activities)
     }
     
-    @objc public convenience init(url: URL, activities: [UIActivity]? = nil) {
+    public convenience init(url: URL, activities: [UIActivity]? = nil) {
         self.init(activityItems: [url], applicationActivities: activities)
     }
     
@@ -265,17 +265,17 @@ open class PTActivityViewController:UIActivityViewController {
     /// - Parameters:
     ///   - activityItems: 可以是文本,图片data,其他文件....... Sample:["123",someImage.pngData()]
     ///   - applicationActivities:
-    @objc public override init(activityItems: [Any], applicationActivities: [UIActivity]?) {
+    public override init(activityItems: [Any], applicationActivities: [UIActivity]?) {
         self.activityItems = activityItems
         
         super.init(activityItems: activityItems, applicationActivities: applicationActivities)
     }
     
-    @objc open override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
     }
             
-    @objc open override func viewDidAppear(_ animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
                 
         UIView.animate(withDuration: fadeInDuration) {
@@ -295,7 +295,7 @@ open class PTActivityViewController:UIActivityViewController {
         }
     }
     
-    @objc open override func viewWillDisappear(_ animated: Bool) {
+    open override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
         UIView.animate(withDuration: fadeOutDuration, animations: {
@@ -305,11 +305,11 @@ open class PTActivityViewController:UIActivityViewController {
         }
     }
     
-    @objc open override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         if let previewImage = activityItems.first(where: { $0 is UIImage }) as? UIImage {
-            self.haveImage = true
+            haveImage = true
             preview.contentView.addSubviews([previewImageView,previewLabel])
             previewImageView.image = previewImage
             previewImageView.snp.makeConstraints { make in
@@ -326,7 +326,7 @@ open class PTActivityViewController:UIActivityViewController {
             }
 
         } else {
-            self.haveImage = false
+            haveImage = false
             
             preview.contentView.addSubviews([previewLabel])
             previewLabel.snp.makeConstraints { make in
@@ -336,7 +336,7 @@ open class PTActivityViewController:UIActivityViewController {
             }
         }
         
-        let swipeGesture = UISwipeGestureRecognizer() { sender in
+        let swipeGesture = UISwipeGestureRecognizer { sender in
             self.dismiss(animated: true, completion: nil)
         }
         swipeGesture.direction = .down
@@ -352,11 +352,11 @@ open class PTActivityViewController:UIActivityViewController {
         }
     }
         
-    @objc public func presentActionSheet(_ vc: UIViewController, from view: UIView) {
+    public func presentActionSheet(_ vc: UIViewController, from view: UIView) {
         if UIDevice.current.userInterfaceIdiom == .pad {
-            self.popoverPresentationController?.sourceView = view
-            self.popoverPresentationController?.sourceRect = view.bounds
-            self.popoverPresentationController?.permittedArrowDirections = [.right, .left]
+            popoverPresentationController?.sourceView = view
+            popoverPresentationController?.sourceRect = view.bounds
+            popoverPresentationController?.permittedArrowDirections = [.right, .left]
         }
         vc.present(self, animated: true, completion: nil)
     }
@@ -372,6 +372,6 @@ open class PTActivityViewController:UIActivityViewController {
     }
     
     func numberOfLines(_ string: String) -> Int {
-        return string.numberOfLines(font: previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
+        string.numberOfLines(font: previewFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
    }
 }

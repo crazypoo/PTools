@@ -160,7 +160,7 @@ class AppDelegate: PTAppWindowsDelegate {
     }
     
     func minCount(@PTClampedProperyWrapper(range:1...10) counts:Int) ->Int {
-        return counts
+        counts
     }
 }
 

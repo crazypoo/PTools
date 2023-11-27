@@ -24,8 +24,8 @@ public extension NSObject {
         free(ivars)
     }
     
-    var className: String { 
-        return String(describing: type(of: self))
+    var className: String {
+        String(describing: type(of: self))
     }
     
     //MARK: 檢測Obj是否為空

@@ -22,7 +22,7 @@ extension PTCopying {
         Make copy of object.
      */
     public func copyObject() -> Self {
-        return Self.init(instance: self)
+        Self.init(instance: self)
     }
 }
 
@@ -32,6 +32,8 @@ extension Array where Element: PTCopying {
         Make copy of array objects.
      */
     public func copy() -> [Element] {
-        return self.map { $0.copyObject() }
+        self.map {
+            $0.copyObject()
+        }
     }
 }

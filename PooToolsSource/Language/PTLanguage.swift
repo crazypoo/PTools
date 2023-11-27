@@ -44,7 +44,7 @@ public class PTLanguage: NSObject {
     
     public var language: String {
         get {
-            return PTCoreUserDefultsWrapper.AppLanguage
+            PTCoreUserDefultsWrapper.AppLanguage
         } set {
             // 保存当前的语言
             PTCoreUserDefultsWrapper.AppLanguage = newValue

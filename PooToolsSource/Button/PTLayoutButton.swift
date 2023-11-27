@@ -237,7 +237,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalTitle
         } set {
-            if self.selectedTitle != newValue {
+            if selectedTitle != newValue {
                 self.selectedTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -251,7 +251,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalTitle
         } set {
-            if self.hightlightTitle != newValue {
+            if hightlightTitle != newValue {
                 self.hightlightTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -265,7 +265,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalTitle
         } set {
-            if self.disabledTitle != newValue {
+            if disabledTitle != newValue {
                 self.disabledTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -375,7 +375,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitle!
         } set {
-            if self.selectedSubTitle != newValue {
+            if selectedSubTitle != newValue {
                 self.selectedSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -389,7 +389,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitle!
         } set {
-            if self.hightlightSubTitle != newValue {
+            if hightlightSubTitle != newValue {
                 self.hightlightSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -403,7 +403,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitle!
         } set {
-            if self.disabledSubTitle != newValue {
+            if disabledSubTitle != newValue {
                 self.disabledSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -427,7 +427,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitleColor
         } set {
-            if self.selectedSubTitleColor != newValue {
+            if selectedSubTitleColor != newValue {
                 self.selectedSubTitleColor = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -441,7 +441,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitleColor
         } set {
-            if self.hightlightSubTitleColor != newValue {
+            if hightlightSubTitleColor != newValue {
                 self.hightlightSubTitleColor = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -474,7 +474,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitleFont
         } set {
-            if self.selectedSubTitleFont != newValue {
+            if selectedSubTitleFont != newValue {
                 self.selectedSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -488,7 +488,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitleFont
         } set {
-            if self.hightlightSubTitleFont != newValue {
+            if hightlightSubTitleFont != newValue {
                 self.hightlightSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -502,7 +502,7 @@ public class PTLayoutButton: UIButton {
         get {
             normalSubTitleFont
         } set {
-            if self.disabledSubTitleFont != newValue {
+            if disabledSubTitleFont != newValue {
                 self.disabledSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
@@ -526,7 +526,7 @@ public class PTLayoutButton: UIButton {
     override public init(frame: CGRect) {
         super.init(frame: frame)
         if #available(iOS 15.0, *) {
-            self.configuration = layoutConfig
+            configuration = layoutConfig
         }
     }
 
@@ -850,7 +850,7 @@ public class PTLayoutButton: UIButton {
 }
 
 extension PTLayoutButton {
-    @objc func layoutLoadImage(contentData:Any,
+    func layoutLoadImage(contentData:Any,
                          iCloudDocumentName:String = "",
                          borderWidth:CGFloat = 1.5,
                          borderColor:UIColor = UIColor.purple,
@@ -864,13 +864,13 @@ extension PTLayoutButton {
             let image = (contentData as! UIImage)
             switch controlState {
             case .normal:
-                self.normalImage = image
+                normalImage = image
             case .selected:
-                self.selectedImage = image
+                selectedImage = image
             case .highlighted:
-                self.hightlightImage = image
+                hightlightImage = image
             case .disabled:
-                self.disabledImage = image
+                disabledImage = image
             default:
                 break
             }
@@ -880,13 +880,13 @@ extension PTLayoutButton {
                 let image = UIImage(contentsOfFile: dataUrlString)!
                 switch controlState {
                 case .normal:
-                    self.normalImage = image
+                    normalImage = image
                 case .selected:
-                    self.selectedImage = image
+                    selectedImage = image
                 case .highlighted:
-                    self.hightlightImage = image
+                    hightlightImage = image
                 case .disabled:
-                    self.disabledImage = image
+                    disabledImage = image
                 default:
                     break
                 }
@@ -896,13 +896,13 @@ extension PTLayoutButton {
                         let image = UIImage(contentsOfFile: dataUrlString)!
                         switch controlState {
                         case .normal:
-                            self.normalImage = image
+                            normalImage = image
                         case .selected:
-                            self.selectedImage = image
+                            selectedImage = image
                         case .highlighted:
-                            self.hightlightImage = image
+                            hightlightImage = image
                         case .disabled:
-                            self.disabledImage = image
+                            disabledImage = image
                         default:
                             break
                         }
@@ -913,13 +913,13 @@ extension PTLayoutButton {
                                 let image = UIImage(data: imageData)!
                                 switch controlState {
                                 case .normal:
-                                    self.normalImage = image
+                                    normalImage = image
                                 case .selected:
-                                    self.selectedImage = image
+                                    selectedImage = image
                                 case .highlighted:
-                                    self.hightlightImage = image
+                                    hightlightImage = image
                                 case .disabled:
-                                    self.disabledImage = image
+                                    disabledImage = image
                                 default:
                                     break
                                 }
@@ -928,13 +928,13 @@ extension PTLayoutButton {
                             let image = UIImage(contentsOfFile: dataUrlString)!
                             switch controlState {
                             case .normal:
-                                self.normalImage = image
+                                normalImage = image
                             case .selected:
-                                self.selectedImage = image
+                                selectedImage = image
                             case .highlighted:
-                                self.hightlightImage = image
+                                hightlightImage = image
                             case .disabled:
-                                self.disabledImage = image
+                                disabledImage = image
                             default:
                                 break
                             }
@@ -1004,13 +1004,13 @@ extension PTLayoutButton {
                 let emojiImage = dataUrlString.emojiToImage()
                 switch controlState {
                 case .normal:
-                    self.normalImage = emojiImage
+                    normalImage = emojiImage
                 case .selected:
-                    self.selectedImage = emojiImage
+                    selectedImage = emojiImage
                 case .highlighted:
-                    self.hightlightImage = emojiImage
+                    hightlightImage = emojiImage
                 case .disabled:
-                    self.disabledImage = emojiImage
+                    disabledImage = emojiImage
                 default:
                     break
                 }
@@ -1018,39 +1018,39 @@ extension PTLayoutButton {
                 if let image = UIImage(named: dataUrlString) {
                     switch controlState {
                     case .normal:
-                        self.normalImage = image
+                        normalImage = image
                     case .selected:
-                        self.selectedImage = image
+                        selectedImage = image
                     case .highlighted:
-                        self.hightlightImage = image
+                        hightlightImage = image
                     case .disabled:
-                        self.disabledImage = image
+                        disabledImage = image
                     default:
                         break
                     }
                 } else if let systemImage = UIImage(systemName: dataUrlString) {
                     switch controlState {
                     case .normal:
-                        self.normalImage = systemImage
+                        normalImage = systemImage
                     case .selected:
-                        self.selectedImage = systemImage
+                        selectedImage = systemImage
                     case .highlighted:
-                        self.hightlightImage = systemImage
+                        hightlightImage = systemImage
                     case .disabled:
-                        self.disabledImage = systemImage
+                        disabledImage = systemImage
                     default:
                         break
                     }
                 } else {
                     switch controlState {
                     case .normal:
-                        self.normalImage = emptyImage
+                        normalImage = emptyImage
                     case .selected:
-                        self.selectedImage = emptyImage
+                        selectedImage = emptyImage
                     case .highlighted:
-                        self.hightlightImage = emptyImage
+                        hightlightImage = emptyImage
                     case .disabled:
-                        self.disabledImage = emptyImage
+                        disabledImage = emptyImage
                     default:
                         break
                     }
@@ -1060,26 +1060,26 @@ extension PTLayoutButton {
             let dataImage = UIImage(data: contentData as! Data)!
             switch controlState {
             case .normal:
-                self.normalImage = dataImage
+                normalImage = dataImage
             case .selected:
-                self.selectedImage = dataImage
+                selectedImage = dataImage
             case .highlighted:
-                self.hightlightImage = dataImage
+                hightlightImage = dataImage
             case .disabled:
-                self.disabledImage = dataImage
+                disabledImage = dataImage
             default:
                 break
             }
         } else {
             switch controlState {
             case .normal:
-                self.normalImage = emptyImage
+                normalImage = emptyImage
             case .selected:
-                self.selectedImage = emptyImage
+                selectedImage = emptyImage
             case .highlighted:
-                self.hightlightImage = emptyImage
+                hightlightImage = emptyImage
             case .disabled:
-                self.disabledImage = emptyImage
+                disabledImage = emptyImage
             default:
                 break
             }

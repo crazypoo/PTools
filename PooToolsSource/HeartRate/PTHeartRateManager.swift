@@ -30,7 +30,7 @@ public enum CameraType: Int {
     }
 }
 
-public typealias ImageBufferHandler = ((_ imageBuffer: CMSampleBuffer) -> ())
+public typealias ImageBufferHandler = (_ imageBuffer: CMSampleBuffer) -> ()
 
 public class PTHeartRateManager: NSObject {
     private let captureSession = AVCaptureSession()
@@ -92,7 +92,7 @@ public class PTHeartRateManager: NSObject {
     
     public func startCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole(#function + "\(self.classForCoder)/")
+        PTNSLogConsole(#function + "\(classForCoder)/")
 #endif
         if captureSession.isRunning {
 #if POOTOOLS_DEBUG
@@ -105,7 +105,7 @@ public class PTHeartRateManager: NSObject {
     
     public func stopCapture() {
 #if POOTOOLS_DEBUG
-        PTNSLogConsole("\(self.classForCoder)/")
+        PTNSLogConsole("\(classForCoder)/")
 #endif
         if !captureSession.isRunning {
 #if POOTOOLS_DEBUG

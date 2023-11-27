@@ -47,7 +47,7 @@ public class PTProgressBar: UIView {
     }
     
     fileprivate func setProgressFrame() {
-        switch self.showType {
+        switch showType {
         case .Vertical:
             progressView.frame.size.height = 0
             progressView.frame.size.width = frame.size.width
@@ -125,11 +125,11 @@ public class PTProgressBar: UIView {
     }
     
     public func getProgress() ->CGFloat {
-        switch self.showType {
+        switch showType {
         case .Vertical:
-            return (progressView.frame.size.height / self.frame.size.height)
+            return (progressView.frame.size.height / frame.size.height)
         case .Horizontal:
-            return (progressView.frame.size.width / self.frame.size.width)
+            return (progressView.frame.size.width / frame.size.width)
         default:
             return 0
         }

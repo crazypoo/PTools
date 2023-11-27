@@ -281,7 +281,7 @@ fileprivate class PTRulerInfoView:UIView {
         self.leftLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) / 2, imageView.frame.origin.y + imageView.frame.size.height / 2 - leftLabel.frame.size.height, leftLabel.frame.size.width, leftLabel.frame.size.height)
         self.topLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - topLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) / 2, topLabel.frame.size.width, topLabel.frame.size.height)
         self.rightLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) + (self.frame.size.width - (imageView.frame.origin.x + imageView.frame.size.width / 2)) / 2, (imageView.frame.origin.y + imageView.frame.size.height / 2) - rightLabel.frame.size.height, rightLabel.frame.size.width, rightLabel.frame.size.height)
-        self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (self.frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
+        self.bottomLabel.frame = CGRectMake((imageView.frame.origin.x + imageView.frame.size.width / 2) - bottomLabel.frame.size.width, (imageView.frame.origin.y + imageView.frame.size.height / 2) + (frame.size.height - (imageView.frame.origin.y + imageView.frame.size.height / 2)) / 2, bottomLabel.frame.size.width, bottomLabel.frame.size.height)
         
         infoWindow.visualController.infoLabel.text = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
         infoWindow.isHidden = false
@@ -292,7 +292,7 @@ fileprivate class PTRulerInfoView:UIView {
     }
     
     func configInfoLabelText() {
-        let stringInfo = String(format: "PT Ruler".localized(), self.topLabel.text ?? "0",self.leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
+        let stringInfo = String(format: "PT Ruler".localized(), topLabel.text ?? "0", leftLabel.text ?? "0", bottomLabel.text ?? "0", rightLabel.text ?? "0")
         infoWindow.visualController.infoLabel.text = stringInfo
     }
     

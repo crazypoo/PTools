@@ -24,10 +24,10 @@ public extension UICollectionView {
     }
 
     func isValidIndexPath(_ indexPath: IndexPath) -> Bool {
-        return indexPath.section >= 0 &&
-        indexPath.item >= 0 &&
-        indexPath.section < numberOfSections &&
-        indexPath.item < numberOfItems(inSection: indexPath.section)
+        indexPath.section >= 0 &&
+                indexPath.item >= 0 &&
+                indexPath.section < numberOfSections &&
+                indexPath.item < numberOfItems(inSection: indexPath.section)
     }
     
     //MARK: 重载Layout

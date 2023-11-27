@@ -60,7 +60,7 @@ class PTSVGAViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.view.backgroundColor = .black
+        view.backgroundColor = .black
         
         setupOperationBar()
         setupPlayer()
@@ -365,11 +365,12 @@ private extension PTSVGAViewController {
     
     func setupDownloader() {
         SVGAPlayerSwiftEdition.downloader = { svgaSource, success, failure in
-            let _ = PTFileDownloadApi.init(fileUrl: svgaSource, saveFilePath: FileManager.pt.CachesDirectory() + "\(svgaSource.lastPathComponent)", progress: nil, success: { result in
-                success(result.value!)
-            }, fail: { error in
+            let download = Network()
+            download.createDownload(fileUrl: svgaSource, saveFilePath: FileManager.pt.CachesDirectory() + "\(svgaSource.lastPathComponent)", progress: nil) { reponse in
+                success(reponse.value!)
+            } fail: { error in
                 failure(error!)
-            })
+            }
         }
     }
     

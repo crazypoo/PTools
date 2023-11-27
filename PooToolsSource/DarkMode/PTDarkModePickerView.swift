@@ -11,7 +11,7 @@ import SwifterSwift
 
 class PTDarkModePickerView: UIView {
     /// 确定时间段的返回
-    var sureClosure: ((String, String)->Void)
+    var sureClosure: (String, String)->Void
     /// 开始时间
     private var startTime = "21:00"
     /// 结束时间
@@ -90,7 +90,7 @@ class PTDarkModePickerView: UIView {
     init(startTime: String, endTime: String, complete: @escaping (String, String)->Void) {
         self.startTime = startTime
         self.endTime = endTime
-        self.sureClosure = complete
+        sureClosure = complete
         super.init(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
         initUI()
         commonUI()
@@ -99,13 +99,13 @@ class PTDarkModePickerView: UIView {
     
     /// 创建控件
     private func initUI() {
-        self.backgroundColor = UIColor.black.withAlphaComponent(0.48)
+        backgroundColor = UIColor.black.withAlphaComponent(0.48)
         // 添加一个点击收回手势
         let tap = UITapGestureRecognizer { sender in
             self.dismissView()
         }
-        self.addGestureRecognizer(tap)
-        self.addSubview(bgView)
+        addGestureRecognizer(tap)
+        addSubview(bgView)
         bgView.addSubviews([cancelButton,sureButton,leftTimePickerView,rightTimePickerView,middeleLabel,topLineView])
         bgView.viewCornerRectCorner(cornerRadii: 10,corner: [.topLeft,.topRight])
         
@@ -139,7 +139,7 @@ class PTDarkModePickerView: UIView {
     // MARK: 确定
     @objc func sureButtonClick() {
         sureClosure(startTime, endTime)
-        self.dismissView()
+        dismissView()
     }
     
     required init?(coder: NSCoder) {
@@ -149,15 +149,15 @@ class PTDarkModePickerView: UIView {
 
 extension PTDarkModePickerView: UIPickerViewDelegate, UIPickerViewDataSource {
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return 1
+        1
     }
     
     func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return timeDataArray.count
+        timeDataArray.count
     }
     
     func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 47
+        47
     }
     
     func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {

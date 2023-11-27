@@ -22,7 +22,7 @@ class PTTestHeader: PTBaseCollectionReusableView {
     
     var sectionModel:PTSection? {
         didSet {
-            self.headerTitle.text = sectionModel?.headerTitle
+            headerTitle.text = sectionModel?.headerTitle
         }
     }
     
@@ -55,7 +55,7 @@ class PTTestFooter: PTBaseCollectionReusableView {
     
     var sectionModel:PTSection? {
         didSet {
-            self.headerTitle.text = sectionModel?.headerTitle
+            headerTitle.text = sectionModel?.headerTitle
         }
     }
     

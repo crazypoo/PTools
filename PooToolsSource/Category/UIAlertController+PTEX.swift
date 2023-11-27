@@ -35,10 +35,12 @@ public extension UIAlertController {
     ///   - cancelButtonName: 取消按鈕
     ///   - destructiveButtons: 擴展按鈕(s)
     ///   - titles: 其他標題
+    ///   - canTapBackground:
     ///   - destructiveBlock: 擴展回調
     ///   - cancelBlock: 取消回調
     ///   - otherBlock: 其他回調
     ///   - tapBackgroundBlock: 点击背景消失回调
+    ///   - canTapBackground:
     @objc class func baseActionSheet(title:String,
                                      subTitle:String? = "",
                                      cancelButtonName:String? = "PT Button cancel".localized(),

@@ -36,11 +36,11 @@ public extension Bundle {
     }
     
     class func podCoreBundle() -> Bundle? {
-        return Bundle.podBundle(bundleName: CorePodBundleName)
+        Bundle.podBundle(bundleName: CorePodBundleName)
     }
     
     class func podBundle(bundleName:String) -> Bundle? {
-        return Bundle.init(path: Bundle.main.path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
+        Bundle.init(path: Bundle.main.path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
     }
     
     class func appScheme()->[String] {

@@ -79,27 +79,27 @@ extension PTBaseViewController {
     
     //MARK: 是否隱藏StatusBar
     ///是否隱藏StatusBar
-    @objc open override var prefersStatusBarHidden:Bool {
+    open override var prefersStatusBarHidden:Bool {
         StatusBarManager.shared.isHidden
     }
     
     //MARK: 設置StatusBar樣式
     ///設置StatusBar樣式
-    @objc open override var preferredStatusBarStyle: UIStatusBarStyle {
+    open override var preferredStatusBarStyle: UIStatusBarStyle {
         StatusBarManager.shared.style
     }
     
     //MARK: 設置StatusBar動畫
     ///設置StatusBar動畫
-    @objc open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
+    open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation {
         StatusBarManager.shared.animation
     }
     
-    @objc open override func viewWillAppear(_ animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
 #if POOTOOLS_NAVBARCONTROLLER
-        if self.presentationController != nil {
+        if presentationController != nil {
             self.zx_leftClickedBlock { itenBtn in
                 self.viewDismiss()
             }
@@ -107,18 +107,18 @@ extension PTBaseViewController {
 #endif
     }
     
-    @objc override open func viewWillDisappear(_ animated: Bool) {
+    override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
     }
     
-    @objc override open func viewDidDisappear(_ animated: Bool) {
+    override open func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
     }
     
     //MARK: 是否隱藏NavBar
     ///是否隱藏NavBar
-    @objc public convenience init(hideBaseNavBar: Bool) {
+    public convenience init(hideBaseNavBar: Bool) {
         self.init()
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_hideBaseNavBar = hideBaseNavBar
@@ -127,15 +127,15 @@ extension PTBaseViewController {
 #endif
     }
         
-    @objc open override func viewDidLoad() {
+    open override func viewDidLoad() {
         super.viewDidLoad()
         
         UIScrollView.appearance().contentInsetAdjustmentBehavior = .never
         // Do any additional setup after loading the view.
-        self.edgesForExtendedLayout = []
-        self.definesPresentationContext = true
+        edgesForExtendedLayout = []
+        definesPresentationContext = true
         
-        self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
+        view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
         
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
@@ -154,7 +154,7 @@ extension PTBaseViewController {
     
     //MARK: 動態更換StatusBar
     ///動態更換StatusBar
-    @objc open func changeStatusBar(type:VCStatusBarChangeStatusType) {
+    open func changeStatusBar(type:VCStatusBarChangeStatusType) {
         switch type {
         case .Auto:
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
@@ -168,7 +168,7 @@ extension PTBaseViewController {
         }
     }
     
-    @objc open func switchOrientation(isFullScreen:Bool) {
+    open func switchOrientation(isFullScreen:Bool) {
         
         PTAppWindowsDelegate.appDelegate()?.isFullScreen = isFullScreen
                 
@@ -188,7 +188,7 @@ extension PTBaseViewController {
     }
     
     @available(iOS, introduced: 8.0, deprecated: 17.0,message: "17後不再支持了")
-    @objc open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             StatusBarManager.shared.style = UITraitCollection.current.userInterfaceStyle == .dark ? .lightContent : .darkContent
@@ -196,11 +196,11 @@ extension PTBaseViewController {
         }
     }
     
-    @objc public func returnFrontVC(completion:PTActionTask? = nil) {
-        if self.presentingViewController != nil {
-            self.dismiss(animated: true, completion: completion)
+    public func returnFrontVC(completion:PTActionTask? = nil) {
+        if presentingViewController != nil {
+            dismiss(animated: true, completion: completion)
         } else {
-            self.navigationController?.popViewController(animated: true, completion)
+            navigationController?.popViewController(animated: true, completion)
         }
 #if POOTOOLS_DEBUG
         SwizzleTool().swizzleDidAddSubview {
@@ -218,7 +218,7 @@ extension PTBaseViewController {
     
     //MARK: 截图反馈注册
     ///截图反馈注册
-    @objc public func registerScreenShotService() {
+    public func registerScreenShotService() {
         PHPhotoLibrary.shared().register(self)
     }
 }

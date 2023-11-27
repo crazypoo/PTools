@@ -93,8 +93,8 @@ public extension UINavigationBar {
      */
     @available(iOS 13.0, tvOS 13.0, *)
     func setAppearance(_ value: NavigationBarAppearance) {
-        self.standardAppearance = value.standardAppearance
-        self.scrollEdgeAppearance = value.scrollEdgeAppearance
+        standardAppearance = value.standardAppearance
+        scrollEdgeAppearance = value.scrollEdgeAppearance
     }
     
     /**

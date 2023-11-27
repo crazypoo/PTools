@@ -20,7 +20,7 @@ public class TouchInspectorWindow: UIWindow {
      */
     public var showTouches: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShow {
         didSet {
-            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = self.showTouches
+            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showTouches
             hideOverlaysIfNeeded()
         }
     }
@@ -30,7 +30,7 @@ public class TouchInspectorWindow: UIWindow {
      */
     public var showHitTesting: Bool = PTCoreUserDefultsWrapper.AppTouchInspectShowHits {
         didSet {
-            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = self.showHitTesting
+            PTCoreUserDefultsWrapper.AppTouchInspectShowHits = showHitTesting
             hideOverlaysIfNeeded()
         }
     }

@@ -24,15 +24,15 @@ public extension CGPoint {
     }
 
     func distance(from point: CGPoint) -> CGFloat {
-        return CGPoint.distance(from: self, to: point)
+        CGPoint.distance(from: self, to: point)
     }
     
     static func distance(from point1: CGPoint, to point2: CGPoint) -> CGFloat {
-        return sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2))
+        sqrt(pow(point2.x - point1.x, 2) + pow(point2.y - point1.y, 2))
     }
     
     static func * (point: CGPoint, scalar: CGFloat) -> CGPoint {
-        return CGPoint(x: point.x * scalar, y: point.y * scalar)
+        CGPoint(x: point.x * scalar, y: point.y * scalar)
     }
 
     static func *= (point: inout CGPoint, scalar: CGFloat) {
@@ -40,7 +40,7 @@ public extension CGPoint {
     }
 
     static func * (scalar: CGFloat, point: CGPoint) -> CGPoint {
-        return CGPoint(x: point.x * scalar, y: point.y * scalar)
+        CGPoint(x: point.x * scalar, y: point.y * scalar)
     }
     
     static func + (left: CGPoint, right: CGPoint) -> CGPoint {

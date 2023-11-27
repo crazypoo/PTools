@@ -102,17 +102,17 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
     fileprivate var presentDismissScale: CGFloat = 0.8
     
     private lazy var backgroundView: UIVisualEffectView = {
-        let view: UIVisualEffectView = {
-            #if !os(tvOS)
-            if #available(iOS 13.0, *) {
-                return UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
-            } else {
-                return UIVisualEffectView(effect: UIBlurEffect(style: .light))
-            }
-            #else
-            return UIVisualEffectView(effect: UIBlurEffect(style: .light))
-            #endif
-        }()
+        let result: UIVisualEffectView
+        #if !os(tvOS)
+        if #available(iOS 13.0, *) {
+            result = UIVisualEffectView(effect: UIBlurEffect(style: .systemThickMaterial))
+        } else {
+            result = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        }
+        #else
+        result = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        #endif
+        let view: UIVisualEffectView = result
         view.isUserInteractionEnabled = false
         return view
     }()
@@ -170,13 +170,13 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
         backgroundColor = .clear
         addSubview(backgroundView)
         
-        if let titleLabel = self.titleLabel {
+        if let titleLabel = titleLabel {
             addSubview(titleLabel)
         }
-        if let subtitleLabel = self.subtitleLabel {
+        if let subtitleLabel = subtitleLabel {
             addSubview(subtitleLabel)
         }
-        if let iconView = self.iconView {
+        if let iconView = iconView {
             addSubview(iconView)
         }
         
@@ -201,14 +201,14 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
     }
     
     open func present(on view: UIView, completion: PTActionTask? = nil) {
-        self.viewForPresent = view
+        viewForPresent = view
         viewForPresent?.addSubview(self)
         guard let viewForPresent = viewForPresent else { return }
         
         alpha = 0
         sizeToFit()
         center = .init(x: viewForPresent.frame.midX, y: viewForPresent.frame.midY)
-        transform = transform.scaledBy(x: self.presentDismissScale, y: self.presentDismissScale)
+        transform = transform.scaledBy(x: presentDismissScale, y: presentDismissScale)
         
         if dismissByTap {
             let tapGesterRecognizer = UITapGestureRecognizer { sender in
@@ -256,34 +256,34 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
     public override func layoutSubviews() {
         super.layoutSubviews()
         
-        guard self.transform == .identity else { return }
-        backgroundView.frame = self.bounds
+        guard transform == .identity else { return }
+        backgroundView.frame = bounds
         
-        if let iconView = self.iconView {
+        if let iconView = iconView {
             iconView.frame = .init(origin: .init(x: 0, y: layoutMargins.top), size: layout.iconSize)
             iconView.center.x = bounds.midX
         }
-        if let titleLabel = self.titleLabel {
+        if let titleLabel = titleLabel {
             titleLabel.layoutDynamicHeight(
                 x: layoutMargins.left,
                 y: iconView == nil ? layoutMargins.top : (iconView?.frame.maxY ?? 0) + layout.spaceBetweenIconAndTitle,
                 width: frame.width - layoutMargins.left - layoutMargins.right)
         }
-        if let subtitleLabel = self.subtitleLabel {
-            let yPosition: CGFloat = {
-                if let titleLabel = self.titleLabel {
-                    return titleLabel.frame.maxY + 4
-                } else {
-                    return layoutMargins.top
-                }
-            }()
+        if let subtitleLabel = subtitleLabel {
+            let result: CGFloat
+            if let titleLabel1 = self.titleLabel {
+                result = titleLabel1.frame.maxY + 4
+            } else {
+                result = layoutMargins.top
+            }
+            let yPosition: CGFloat = result
             subtitleLabel.layoutDynamicHeight(x: layoutMargins.left, y: yPosition, width: frame.width - layoutMargins.left - layoutMargins.right)
         }
     }
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         let width: CGFloat = 250
-        self.frame = .init(x: frame.origin.x, y: frame.origin.y, width: width, height: frame.height)
+        frame = .init(x: frame.origin.x, y: frame.origin.y, width: width, height: frame.height)
         layoutSubviews()
         let height = subtitleLabel?.frame.maxY ?? titleLabel?.frame.maxY ?? iconView?.frame.maxY ?? .zero
         return .init(width: width, height: height + layoutMargins.bottom)
@@ -386,7 +386,9 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
             }
         }
         
-        private static var defaultHorizontalInset: CGFloat { return 16 }
+        private static var defaultHorizontalInset: CGFloat {
+            16
+        }
     }
 }
 
@@ -443,7 +445,7 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
             label.attributedText = NSAttributedString(string: title, attributes: [.paragraphStyle: style])
             titleLabel = label
         } else {
-            self.titleLabel = nil
+            titleLabel = nil
         }
         
         if let subtitle = subtitle {
@@ -456,19 +458,19 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
             label.attributedText = NSAttributedString(string: subtitle, attributes: [.paragraphStyle: style])
             subtitleLabel = label
         } else {
-            self.subtitleLabel = nil
+            subtitleLabel = nil
         }
         
         if let icon = icon {
             let view = icon.createView(lineThick: 3)
-            self.iconView = view
+            iconView = view
         } else {
-            self.iconView = nil
+            iconView = nil
         }
         
-        self.titleLabel?.textColor = Self.defaultContentColor
-        self.subtitleLabel?.textColor = Self.defaultContentColor
-        self.iconView?.tintColor = Self.defaultContentColor
+        titleLabel?.textColor = Self.defaultContentColor
+        subtitleLabel?.textColor = Self.defaultContentColor
+        iconView?.tintColor = Self.defaultContentColor
         
         super.init(frame: .zero)
         
@@ -478,14 +480,14 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
         backgroundColor = .clear
         addSubview(backgroundView)
         
-        if let titleLabel = self.titleLabel {
+        if let titleLabel = titleLabel {
             addSubview(titleLabel)
         }
-        if let subtitleLabel = self.subtitleLabel {
+        if let subtitleLabel = subtitleLabel {
             addSubview(subtitleLabel)
         }
         
-        if let iconView = self.iconView {
+        if let iconView = iconView {
             addSubview(iconView)
         }
         
@@ -514,7 +516,7 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
     }
     
     open func present(on view: UIView, completion: PTActionTask? = nil) {
-        self.viewForPresent = view
+        viewForPresent = view
         viewForPresent?.addSubview(self)
         guard let viewForPresent = viewForPresent else { return }
         
@@ -527,7 +529,7 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
         frame.origin.y = viewForPresent.frame.height - viewForPresent.safeAreaInsets.bottom - frame.height - 64
         #endif
         
-        transform = transform.scaledBy(x: self.presentDismissScale, y: self.presentDismissScale)
+        transform = transform.scaledBy(x: presentDismissScale, y: presentDismissScale)
         
         if dismissByTap {
             let tapGesterRecognizer = UITapGestureRecognizer { sender in
@@ -572,25 +574,23 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        guard self.transform == .identity else { return }
-        backgroundView.frame = self.bounds
+        guard transform == .identity else { return }
+        backgroundView.frame = bounds
         layout(maxWidth: frame.width)
     }
     
     public override func sizeThatFits(_ size: CGSize) -> CGSize {
         layout(maxWidth: nil)
-        
+
         let maxX = subviews.sorted(by: { $0.frame.maxX > $1.frame.maxX }).first?.frame.maxX ?? .zero
         let currentNeedWidth = maxX + layoutMargins.right
-        
         let maxWidth = {
-            if let viewForPresent = self.viewForPresent {
-                return min(viewForPresent.frame.width * 0.8, 270)
-            } else {
-                return 270
-            }
+                    if let viewForPresent = self.viewForPresent {
+                        return min(viewForPresent.frame.width * 0.8, 270)
+                    } else {
+                        return 270
+                    }
         }()
-        
         let usingWidth = min(currentNeedWidth, maxWidth)
         layout(maxWidth: usingWidth)
         let height = subtitleLabel?.frame.maxY ?? titleLabel?.frame.maxY ?? .zero
@@ -602,7 +602,7 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
         let spaceBetweenLabelAndIcon: CGFloat = 12
         let spaceBetweenTitleAndSubtitle: CGFloat = 4
         
-        if let iconView = self.iconView {
+        if let iconView = iconView {
             iconView.frame = .init(x: layoutMargins.left, y: .zero, width: 20, height: 20)
             let xPosition = iconView.frame.maxX + spaceBetweenLabelAndIcon
             if let maxWidth = maxWidth {

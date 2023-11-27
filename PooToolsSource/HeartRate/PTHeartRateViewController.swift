@@ -199,7 +199,7 @@ public class PTHeartRateViewController: PTBaseViewController {
         let specs = VideoSpec(fps: 30, size: CGSize(width: 300, height: 300))
         heartRateManager = PTHeartRateManager(cameraType: .back, preferredSpec: specs, previewContainer: previewLayer.layer)
         heartRateManager.imageBufferHandler = { [unowned self] (imageBuffer) in
-            self.handle(buffer: imageBuffer)
+            handle(buffer: imageBuffer)
         }
     }
     
@@ -295,19 +295,19 @@ extension PTHeartRateViewController {
             inputs.append(hsv.0)
             let filtered = fiter.processValue(Double(hsv.0))
             if validFrameCounter > 60 {
-                let _ = self.pulseDetector.addNewValue(filtered, atTime: CACurrentMediaTime())
+                let _ = pulseDetector.addNewValue(filtered, atTime: CACurrentMediaTime())
             }
-            if self.svgaIsPlaying {
+            if svgaIsPlaying {
                 return
             } else {
-                self.svgaIsPlaying = true
-                self.player.play()
+                svgaIsPlaying = true
+                player.play()
             }
         } else {
             validFrameCounter = 0
             measurementStartedFlag = false
             pulseDetector.reset()
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.validFrames.text = "请将手指放在闪光灯在位置"
                 self.player.stop()
                 self.svgaIsPlaying = false

@@ -138,7 +138,7 @@ public extension Array {
      - parameter chunkSize: 分多少组
      */
     func chunked(by chunkSize: Int) -> [[Element]] {
-        return stride(from: 0, to: self.count, by: chunkSize).map {
+        stride(from: 0, to: self.count, by: chunkSize).map {
             Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
         }
     }

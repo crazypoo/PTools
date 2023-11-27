@@ -395,7 +395,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         if viewConfig.mediaData.count > 1 {
             bottomControl.pageControlView.isHidden = false
-            switch self.viewConfig.pageControlOption {
+            switch viewConfig.pageControlOption {
             case .system:
                 (bottomControl.pageControlView as! UIPageControl).currentPage = 0
                 (bottomControl.pageControlView as! UIPageControl).numberOfPages = viewConfig.mediaData.count
@@ -467,10 +467,10 @@ public class PTMediaBrowserController: PTBaseViewController {
     @available(iOS 14.0, *)
     func makeMenu() -> UIMenu {
         
-        self.bottomControl.moreActionButton.isSelected = false
+        bottomControl.moreActionButton.isSelected = false
         
         var debugActions: [UIMenuElement] = []
-        self.actionSheetTitle.enumerated().forEach { index,value in
+        actionSheetTitle.enumerated().forEach { index,value in
             let menuActions = UIAction(title: value) { _ in
                 switch self.viewConfig.actionType {
                 case .Save:
@@ -530,7 +530,7 @@ fileprivate extension PTMediaBrowserController {
     func saveImage() {
         
         var currentPageControlValue = 0
-        switch self.viewConfig.pageControlOption {
+        switch viewConfig.pageControlOption {
         case .system:
             currentPageControlValue = (bottomControl.pageControlView as! UIPageControl).currentPage
         case .fill:
@@ -568,15 +568,15 @@ fileprivate extension PTMediaBrowserController {
         
         let documentDirectory = FileManager.pt.DocumnetsDirectory()
         let fullPath = documentDirectory + "/\(String.currentDate(dateFormatterString: "yyyy-MM-dd_HH:mm:ss")).mp4"
-        _ = PTFileDownloadApi(fileUrl: url, saveFilePath: fullPath) { bytesRead, totalBytesRead, progress in
+        let download = Network()
+        download.createDownload(fileUrl: url, saveFilePath: fullPath, progress: { bytesRead, totalBytesRead, progress in
             PTGCDManager.gcdMain {
                 loadingView.progress = progress
             }
-        } success: { reponse in
+        }) { reponse in
             loadingView.removeFromSuperview()
             self.saveVideo(videoPath: fullPath)
-        } fail: { error in
-        }
+        } fail: { error in }
     }
     
     func saveVideo(videoPath:String) {
@@ -617,7 +617,7 @@ fileprivate extension PTMediaBrowserController {
             viewMoreActionDismiss()
         } else {
             var currentPageControlValue = 0
-            switch self.viewConfig.pageControlOption {
+            switch viewConfig.pageControlOption {
             case .system:
                 currentPageControlValue = (bottomControl.pageControlView as! UIPageControl).currentPage
             case .fill:
@@ -800,10 +800,10 @@ fileprivate extension PTMediaBrowserController {
     }
     
      func numberOfLines(_ string: String) -> Int {
-         return string.numberOfLines(font: viewConfig.viewerFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
+         string.numberOfLines(font: viewConfig.viewerFont, labelShowWidth: labelContentWidth(), lineSpacing: 2)
     }
     
     func truncatedText(fullText:String) -> String {
-        return fullText.truncatedText(maxLineNumber: numberOfVisibleLines, font: viewConfig.viewerFont, labelShowWidth: labelContentWidth())
+        fullText.truncatedText(maxLineNumber: numberOfVisibleLines, font: viewConfig.viewerFont, labelShowWidth: labelContentWidth())
     }
 }

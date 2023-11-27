@@ -270,12 +270,12 @@ public class OSSSpeech: NSObject {
     }
 
     private static let sharedInstance: OSSSpeech = {
-        return OSSSpeech()
+        OSSSpeech()
     }()
 
     /// A singleton object to ensure conformity accross the application it is used in.
     public class var shared: OSSSpeech {
-        return sharedInstance
+        sharedInstance
     }
 
     // MARK: - Public Methods
@@ -412,7 +412,7 @@ public class OSSSpeech: NSObject {
         #if !os(macOS)
         if requested {
             if audioSession.recordPermission != .granted {
-                self.requestMicPermission()
+                requestMicPermission()
                 return
             }
         }
@@ -582,7 +582,7 @@ public class OSSSpeech: NSObject {
             delegate?.didFailToProcessRequest(withError: OSSSpeechKitErrorType.invalidSpeechRequest.error)
         }
         
-        if self.saveRecord {
+        if saveRecord {
             readyToRecord()
         }
     }
@@ -602,7 +602,7 @@ public class OSSSpeech: NSObject {
         ]
         
         do {
-            audioRecorder = try AVAudioRecorder(url: self.audioFileURL!, settings: audioSettings)
+            audioRecorder = try AVAudioRecorder(url: audioFileURL!, settings: audioSettings)
             audioRecorder?.isMeteringEnabled = true
             audioRecorder?.delegate = self
             audioRecorder?.prepareToRecord()

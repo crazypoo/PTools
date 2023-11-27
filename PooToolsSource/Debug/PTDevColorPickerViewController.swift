@@ -31,8 +31,8 @@ class PTDevColorPickerViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.parent is FloatingPanelController {
-            self.view.addSubview(closeBtn)
+        if parent is FloatingPanelController {
+            view.addSubview(closeBtn)
             closeBtn.snp.makeConstraints { make in
                 make.size.equalTo(34)
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -89,8 +89,8 @@ class PTDevColorPickerViewController: PTBaseViewController {
 
 extension PTDevColorPickerViewController:ChromaColorPickerDelegate {
     func colorPickerHandleDidChange(_ colorPicker: ChromaColorPicker, handle: ChromaColorHandle, to color: UIColor) {
-        if self.colorSelectedTask != nil {
-            self.colorSelectedTask!(color)
+        if colorSelectedTask != nil {
+            colorSelectedTask!(color)
         }
     }
 }

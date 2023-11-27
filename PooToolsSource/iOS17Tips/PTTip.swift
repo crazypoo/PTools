@@ -15,12 +15,12 @@ import SnapKit
 struct TestTip: Tip {
     // 标题
     var title: Text {
-        Text(self.tipTitles)
+        Text(tipTitles)
     }
 
     // 消息
     var message: Text? {
-        Text(self.messageTitles)
+        Text(messageTitles)
     }
 
     // 图片
@@ -29,7 +29,7 @@ struct TestTip: Tip {
     }
     
     var id: String {
-        self.newId
+        newId
     }
     
     public var newId: String
@@ -111,7 +111,7 @@ public class PTTip: NSObject {
         ])
     }
     
-    func showTip(tips:(any Tip) = TestTip(newId: "normal", tipTitles: "1",messageTitles: "2"),
+    func showTip(tips: any Tip = TestTip(newId: "normal", tipTitles: "1",messageTitles: "2"),
                  sender:UIView,
                  content:PTBaseViewController,
                  customHandler:PTActionTask? = nil,
@@ -136,11 +136,11 @@ public class PTTip: NSObject {
         }
     }
     
-    func showTipsInView(tips:(any Tip) = Test1Tip(),
+    func showTipsInView(tips: any Tip = Test1Tip(),
                         arrowEdge: Edge? = nil,
                         tipUISet:((TipUIView)->Void)? = nil,
                         content:PTBaseViewController,
-                        closure:@escaping ((_ make: ConstraintMaker) -> Void),
+                        closure: @escaping (_ make: ConstraintMaker) -> Void,
                         customHandler:PTActionTask? = nil,
                         actionHandler:((Tip.Action)->Void)? = nil) {
         let tipUIView = TipUIView(tips, arrowEdge: arrowEdge) { actions in

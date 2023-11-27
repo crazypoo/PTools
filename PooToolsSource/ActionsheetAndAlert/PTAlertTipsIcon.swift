@@ -111,7 +111,7 @@ public class PTAlertTipsError:UIView,PTAlertTipsAnimation {
         animatableLayer.lineCap = .round
         animatableLayer.lineJoin = .round
         animatableLayer.strokeEnd = 0
-        self.layer.addSublayer(animatableLayer)
+        layer.addSublayer(animatableLayer)
         
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = 0.22
@@ -138,7 +138,7 @@ public class PTAlertTipsError:UIView,PTAlertTipsAnimation {
         animatableLayer.lineCap = .round
         animatableLayer.lineJoin = .round
         animatableLayer.strokeEnd = 0
-        self.layer.addSublayer(animatableLayer)
+        layer.addSublayer(animatableLayer)
         
         let animation = CABasicAnimation(keyPath: "strokeEnd")
         animation.duration = 0.22
@@ -155,7 +155,7 @@ public class PTAlertTipsHeart: UIView {
         
     init() {
         super.init(frame: .zero)
-        self.backgroundColor = .clear
+        backgroundColor = .clear
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -164,7 +164,7 @@ public class PTAlertTipsHeart: UIView {
     
     public override func draw(_ rect: CGRect) {
         super.draw(rect)
-        HeartDraw.draw(frame: rect, resizing: .aspectFit, fillColor: self.tintColor)
+        HeartDraw.draw(frame: rect, resizing: .aspectFit, fillColor: tintColor)
     }
     
     class HeartDraw: NSObject {
@@ -238,9 +238,9 @@ public class PTAlertTipsSpinner: UIView {
     let activityIndicatorView: UIActivityIndicatorView
     
     init(style: UIActivityIndicatorView.Style) {
-        self.activityIndicatorView = UIActivityIndicatorView(style: style)
+        activityIndicatorView = UIActivityIndicatorView(style: style)
         super.init(frame: .zero)
-        self.backgroundColor = .clear
+        backgroundColor = .clear
         addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
     }

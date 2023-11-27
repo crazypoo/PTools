@@ -14,12 +14,12 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.text = newValue?.localized()
             }
         }
         get {
-            return self.text
+            text
         }
     }
 }
@@ -29,12 +29,12 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.setTitle(newValue?.localized(), for: .normal)
             }
         }
         get {
-            return self.titleLabel?.text
+            titleLabel?.text
         }
     }
 }
@@ -45,12 +45,12 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.text = newValue?.localized()
             }
         }
         get {
-            return self.text
+            text
         }
     }
 }
@@ -60,12 +60,12 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.placeholder = newValue?.localized()
             }
         }
         get {
-            return self.placeholder
+            placeholder
         }
     }
 }
@@ -75,12 +75,12 @@ import UIKit
     @IBInspectable var localizeKey: String? {
         set {
             // set new value from dictionary
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 self.title = newValue?.localized()
             }
         }
         get {
-            return self.title
+            title
         }
     }
 }

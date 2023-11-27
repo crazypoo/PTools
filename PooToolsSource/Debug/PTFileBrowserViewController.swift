@@ -185,8 +185,8 @@ public class PTFileBrowserViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
 
-        if self.parent is FloatingPanelController {
-            self.view.addSubview(closeBtn)
+        if parent is FloatingPanelController {
+            view.addSubview(closeBtn)
             closeBtn.snp.makeConstraints { make in
                 make.size.equalTo(34)
                 make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -224,7 +224,7 @@ public class PTFileBrowserViewController: PTBaseViewController {
     
     func loadData() {
         if extensionDirectoryPath.isEmpty {
-            if self.parent is FloatingPanelController {
+            if parent is FloatingPanelController {
                 back.removeFromSuperview()
             } else {
 #if POOTOOLS_NAVBARCONTROLLER
@@ -234,8 +234,8 @@ public class PTFileBrowserViewController: PTBaseViewController {
 #endif
             }
         } else {
-            if self.parent is FloatingPanelController {
-                self.view.addSubview(back)
+            if parent is FloatingPanelController {
+                view.addSubview(back)
                 back.snp.makeConstraints { make in
                     make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                     make.top.size.equalTo(self.closeBtn)

@@ -73,7 +73,7 @@ import UIKit
     /// 当操作我们要包裹的属性时  其具体set get方法实际上走的都是wrappedValue 的set get 方法。
     public var wrappedValue: T {
         get {
-            return UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
+            UserDefaults.standard.object(forKey: key) as? T ?? defaultValue
         }
         set {
             UserDefaults.standard.set(newValue, forKey: key)

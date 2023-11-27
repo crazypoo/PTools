@@ -186,9 +186,9 @@ class PTUpdateTipsViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.view.backgroundColor = .clear
+        view.backgroundColor = .clear
         // Do any additional setup after loading the view.
-        self.view.addSubview(whiteView)
+        view.addSubview(whiteView)
         whiteView.snp.makeConstraints { (make) in
             make.center.equalTo(view)
             make.size.equalTo(CGSize(width: 335, height: 278))

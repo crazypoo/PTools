@@ -133,8 +133,8 @@ public class PTDebugViewController: PTBaseViewController {
             self.returnFrontVC()
         }
         
-        if self.parent is FloatingPanelController {
-            self.view.addSubview(backBtn)
+        if parent is FloatingPanelController {
+            view.addSubview(backBtn)
             backBtn.snp.makeConstraints { make in
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
                 make.height.equalTo(34)

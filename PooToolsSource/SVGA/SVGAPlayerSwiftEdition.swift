@@ -338,21 +338,25 @@ private extension SVGAPlayerSwiftEdition {
     }
     
     func _getLoadSuccess(_ svgaSource: String, _ asyncTag: UUID, _ isAutoPlay: Bool) -> LoadSuccess {
-        return { [weak self] data in
-            guard let self, self._asyncTag == asyncTag else { return }
+        { [weak self] data in
+            guard let self, self._asyncTag == asyncTag else {
+                return
+            }
             let newTag = UUID()
             self._asyncTag = newTag
-            
+
             PTNSLogConsole("外部加载SVGA - 成功 \(svgaSource)")
             self._parseFromData(data, svgaSource, newTag, isAutoPlay)
         }
     }
     
     func _getLoadFailure(_ svgaSource: String, _ asyncTag: UUID, _ isAutoPlay: Bool) -> LoadFailure {
-        return { [weak self] error in
-            guard let self, self._asyncTag == asyncTag else { return }
+        { [weak self] error in
+            guard let self, self._asyncTag == asyncTag else {
+                return
+            }
             self._asyncTag = nil
-            
+
             PTNSLogConsole("外部加载SVGA - 失败 \(svgaSource)")
             self._cleanAll()
             self._failedCallback(.dataLoadFailed(svgaSource, error))
@@ -576,7 +580,7 @@ extension SVGAPlayerSwiftEdition: SVGAPlayerEditionDelegate {
     }
     
     public func svgaPlayerEdition(_ player: SVGAPlayerEdition, animationDidFinishedAll loopCount: Int) {
-        let svgaSource = self.svgaSource
+        let svgaSource = svgaSource
         PTNSLogConsole("全部播完了：\(svgaSource) - \(loopCount)")
         _hideIfNeeded { [weak self] in
             guard let self else { return }

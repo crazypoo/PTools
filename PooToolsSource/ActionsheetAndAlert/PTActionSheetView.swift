@@ -138,7 +138,7 @@ public class PTActionSheetTitleItem:NSObject {
     }
 }
 
-@objc public class PTActionSheetViewConfig:NSObject {
+public class PTActionSheetViewConfig:NSObject {
     fileprivate var lineHeight:CGFloat = 0
     fileprivate var rowHeight:CGFloat = 0
     fileprivate var separatorHeight:CGFloat = 0
@@ -175,7 +175,7 @@ public class PTActionSheetView: UIView {
     private var cancelSheetItem:PTActionSheetItem!
     private var destructiveSheetItems:[PTActionSheetItem] = [PTActionSheetItem]() {
         didSet {
-            self.setDestructiveCount(counts: self.destructiveSheetItems.count)
+            setDestructiveCount(counts: destructiveSheetItems.count)
         }
     }
     private var contentSheetItems:[PTActionSheetItem] = [PTActionSheetItem]()
@@ -223,7 +223,7 @@ public class PTActionSheetView: UIView {
     private lazy var cancelBtn : PTActionCell = {
         let view = PTActionCell()
         view.cellButton.addActionHandlers(handler: { (sender) in
-            self.dismiss() {
+            self.dismiss {
                 if self.actionSheetCancelSelectBlock != nil {
                     self.actionSheetCancelSelectBlock!(self)
                 }
@@ -269,7 +269,7 @@ public class PTActionSheetView: UIView {
         return view
     }()
     private func setDestructiveCount(@PTClampedProperyWrapper(range:0...5) counts:Int = 0) {
-        self.destructiveCount = counts
+        destructiveCount = counts
     }
     private var destructiveCount:Int = 0
     private lazy var destructiveView : UIView = {
@@ -294,12 +294,12 @@ public class PTActionSheetView: UIView {
                 destructiveItems:[PTActionSheetItem] = [PTActionSheetItem](),
                 contentItems:[PTActionSheetItem]? = [PTActionSheetItem]()) {
         super.init(frame: .zero)
-        self.sheetConfig = viewConfig
+        sheetConfig = viewConfig
         createData(titleItem: titleItem,
                    cancelItem: cancelItem,
                    destructiveItems: destructiveItems,
                    contentItems: contentItems!,
-                   corner: self.sheetConfig.cornerRadii)
+                   corner: sheetConfig.cornerRadii)
         createView()
     }
     
@@ -342,11 +342,11 @@ public class PTActionSheetView: UIView {
     }
     
     func destlineH()->CGFloat {
-        destructiveCount != 0 ? self.sheetConfig.lineHeight : 0
+        destructiveCount != 0 ? sheetConfig.lineHeight : 0
     }
     
     func destRowH()->CGFloat {
-        destructiveCount != 0 ? self.sheetConfig.rowHeight * CGFloat(destructiveCount) + CGFloat(destructiveCount - 1) * (self.sheetConfig.separatorHeight / 2) : 0
+        destructiveCount != 0 ? sheetConfig.rowHeight * CGFloat(destructiveCount) + CGFloat(destructiveCount - 1) * (sheetConfig.separatorHeight / 2) : 0
     }
     
     func titleHeight()->CGFloat {
@@ -355,11 +355,11 @@ public class PTActionSheetView: UIView {
         var subTitleH:CGFloat = 0
         if actionSheetTitleViewItem != nil {
             if !actionSheetTitleViewItem!.title.stringIsEmpty() {
-                titleH = UIView.sizeFor(string: actionSheetTitleViewItem!.title, font: actionSheetTitleViewItem!.titleFont!, width: CGFloat.kSCREEN_WIDTH - self.sheetConfig.viewSpace * 2).height
+                titleH = UIView.sizeFor(string: actionSheetTitleViewItem!.title, font: actionSheetTitleViewItem!.titleFont!, width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2).height
             }
             
             if !actionSheetTitleViewItem!.subTitle.stringIsEmpty() {
-                subTitleH = UIView.sizeFor(string: actionSheetTitleViewItem!.subTitle, font: actionSheetTitleViewItem!.titleFont!, width: CGFloat.kSCREEN_WIDTH - self.sheetConfig.viewSpace * 2).height
+                subTitleH = UIView.sizeFor(string: actionSheetTitleViewItem!.subTitle, font: actionSheetTitleViewItem!.titleFont!, width: CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2).height
             }
         }
                 
@@ -468,7 +468,7 @@ public class PTActionSheetView: UIView {
                     view.cellButton.midSpacing = destructiveItem.contentImageSpace
                     view.cellButton.layoutLoadImage(contentData: destructiveItem.image as Any,iCloudDocumentName: destructiveItem.iCloudDocumentName)
                 }
-                view.cellButton.addActionHandlers() { sender in
+                view.cellButton.addActionHandlers { sender in
                     self.dismiss {
                         if self.actionSheetDestructiveSelectBlock != nil {
                             self.actionSheetDestructiveSelectBlock!(self,i,destructiveItem.title)
@@ -536,7 +536,7 @@ public class PTActionSheetView: UIView {
         let contentW : CGFloat = CGFloat.kSCREEN_WIDTH - sheetConfig.viewSpace * 2
         actionSheetScroll.contentSize = CGSize.init(width: contentW, height: scrollContentHeight())
         actionSheetScroll.showsVerticalScrollIndicator = false
-        actionSheetScroll.isScrollEnabled = scrollContentHeight() > self.scrollHieght(orientation: device.orientation) ? true : false
+        actionSheetScroll.isScrollEnabled = scrollContentHeight() > scrollHieght(orientation: device.orientation) ? true : false
                 
         if contentSheetItems.count > 0 {
             contentSheetItems.enumerated().forEach({ (index,value) in

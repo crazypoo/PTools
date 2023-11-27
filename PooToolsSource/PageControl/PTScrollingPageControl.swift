@@ -23,20 +23,20 @@ public class PTScrollingPageControl: UIView {
         }
     }
     open var currentPage: Int {
-        return Int(round(progress))
+        Int(round(progress))
     }
     
     // MARK: - Appearance
     
     open var activeTint: UIColor = UIColor.white {
         didSet {
-            ringLayer.borderColor = self.activeTint.cgColor
-            activeLayersContainer.sublayers?.forEach() { $0.backgroundColor = activeTint.cgColor }
+            ringLayer.borderColor = activeTint.cgColor
+            activeLayersContainer.sublayers?.forEach { $0.backgroundColor = activeTint.cgColor }
         }
     }
     open var inactiveTint: UIColor = UIColor(white: 1, alpha: 0.3) {
         didSet {
-            inactiveLayersContainer.sublayers?.forEach() { $0.backgroundColor = inactiveTint.cgColor }
+            inactiveLayersContainer.sublayers?.forEach { $0.backgroundColor = inactiveTint.cgColor }
         }
     }
     open var indicatorPadding: CGFloat = 10 {
@@ -52,7 +52,7 @@ public class PTScrollingPageControl: UIView {
     open var ringRadius: CGFloat = 10 {
         didSet {
             // resize view to fit ring
-            self.sizeToFit()
+            sizeToFit()
             // adjust size
             ringLayer.cornerRadius = ringRadius
             ringLayer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
@@ -72,10 +72,10 @@ public class PTScrollingPageControl: UIView {
     }
     
     fileprivate var indicatorDiameter: CGFloat {
-        return indicatorRadius * 2
+        indicatorRadius * 2
     }
     fileprivate var ringDiameter: CGFloat {
-        return ringRadius * 2
+        ringRadius * 2
     }
     fileprivate var inactiveLayersContainer: CALayer = {
         let layer = CALayer()
@@ -97,10 +97,10 @@ public class PTScrollingPageControl: UIView {
     }()
     fileprivate lazy var ringLayer: CALayer = { [unowned self] in
         let layer = CALayer()
-        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.ringDiameter, height: self.ringDiameter))
+        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
         layer.backgroundColor = UIColor.clear.cgColor
-        layer.cornerRadius = self.ringRadius
-        layer.borderColor = self.activeTint.cgColor
+        layer.cornerRadius = ringRadius
+        layer.borderColor = activeTint.cgColor
         layer.borderWidth = 1
         layer.actions = [
             "bounds": NSNull(),
@@ -111,7 +111,7 @@ public class PTScrollingPageControl: UIView {
     fileprivate lazy var inactiveLayerMask: CAShapeLayer = { [unowned self] in
         let layer = CAShapeLayer()
         layer.fillRule = .evenOdd
-        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.ringDiameter, height: self.ringDiameter))
+        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
         layer.actions = [
             "bounds": NSNull(),
             "frame": NSNull(),
@@ -120,7 +120,7 @@ public class PTScrollingPageControl: UIView {
     }()
     fileprivate lazy var activeLayerMask: CAShapeLayer = { [unowned self] in
         let layer = CAShapeLayer()
-        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: self.ringDiameter, height: self.ringDiameter))
+        layer.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: ringDiameter, height: ringDiameter))
         layer.actions = [
             "bounds": NSNull(),
             "frame": NSNull(),
@@ -131,9 +131,9 @@ public class PTScrollingPageControl: UIView {
     // MARK: - Init
     
     fileprivate func addRequiredLayers() {
-        self.layer.addSublayer(inactiveLayersContainer)
-        self.layer.addSublayer(activeLayersContainer)
-        self.layer.addSublayer(ringLayer)
+        layer.addSublayer(inactiveLayersContainer)
+        layer.addSublayer(activeLayersContainer)
+        layer.addSublayer(ringLayer)
         inactiveLayersContainer.mask = inactiveLayerMask
         activeLayersContainer.mask = activeLayerMask
     }
@@ -154,25 +154,25 @@ public class PTScrollingPageControl: UIView {
         // no need to update
         guard count != inactiveLayersContainer.sublayers?.count else { return }
         // reset current layout
-        inactiveLayersContainer.sublayers?.forEach() { $0.removeFromSuperlayer() }
-        activeLayersContainer.sublayers?.forEach() { $0.removeFromSuperlayer() }
+        inactiveLayersContainer.sublayers?.forEach { $0.removeFromSuperlayer() }
+        activeLayersContainer.sublayers?.forEach { $0.removeFromSuperlayer() }
         // add layers for new page count
         var inactivePageIndicatorLayers = [CALayer]()
         var activePageIndicatorLayers = [CALayer]()
         for _ in 0..<count {
             // add inactve layers
-            let inactiveLayer = pageIndicatorLayer(self.inactiveTint.cgColor)
+            let inactiveLayer = pageIndicatorLayer(inactiveTint.cgColor)
             inactiveLayersContainer.addSublayer(inactiveLayer)
             inactivePageIndicatorLayers.append(inactiveLayer)
             // add actve layers
-            let activeLayer = pageIndicatorLayer(self.activeTint.cgColor)
+            let activeLayer = pageIndicatorLayer(activeTint.cgColor)
             activeLayersContainer.addSublayer(activeLayer)
             activePageIndicatorLayers.append(activeLayer)
         }
         layoutPageIndicators(inactivePageIndicatorLayers, container: inactiveLayersContainer)
         layoutPageIndicators(activePageIndicatorLayers, container: activeLayersContainer)
         center(ringLayer)
-        self.invalidateIntrinsicContentSize()
+        invalidateIntrinsicContentSize()
     }
     
     fileprivate func pageIndicatorLayer(_ color: CGColor) -> CALayer {
@@ -200,7 +200,7 @@ public class PTScrollingPageControl: UIView {
         // ignore if progress is outside of page indicators' bounds
         guard progress >= 0 && progress <= CGFloat(pageCount - 1) else { return }
         let offsetFromCenter = progress * (indicatorDiameter + indicatorPadding)
-        let containerOffset = self.bounds.size.width/2 - indicatorRadius - offsetFromCenter
+        let containerOffset = bounds.size.width/2 - indicatorRadius - offsetFromCenter
         inactiveLayersContainer.frame.origin.x = containerOffset
         activeLayersContainer.frame.origin.x = containerOffset
         inactiveLayerMask.path = maskPath(inactiveLayerMask.bounds.size, progress: progress, inverted: true)
@@ -208,15 +208,15 @@ public class PTScrollingPageControl: UIView {
     }
     
     fileprivate func center(_ layer: CALayer) {
-        let frame = CGRect( x: (self.bounds.width - layer.bounds.width)/2, y: (self.bounds.height - layer.bounds.height)/2, width: layer.bounds.width, height: layer.bounds.width)
+        let frame = CGRect( x: (bounds.width - layer.bounds.width)/2, y: (bounds.height - layer.bounds.height)/2, width: layer.bounds.width, height: layer.bounds.width)
         layer.frame = frame
     }
     
     fileprivate func layoutPageIndicators(_ layers: [CALayer], container: CALayer) {
         let layerDiameter = indicatorRadius * 2
         var layerFrame = CGRect( x: 0, y: (ringDiameter - indicatorDiameter)/2, width: layerDiameter, height: layerDiameter)
-        layers.forEach() { layer in
-            layer.cornerRadius = self.indicatorRadius
+        layers.forEach { layer in
+            layer.cornerRadius = indicatorRadius
             layer.frame = layerFrame
             layerFrame.origin.x += layerDiameter + indicatorPadding
         }
@@ -225,7 +225,7 @@ public class PTScrollingPageControl: UIView {
     }
     
     override open var intrinsicContentSize: CGSize {
-        return sizeThatFits(CGSize.zero)
+        sizeThatFits(CGSize.zero)
     }
     
     override open func sizeThatFits(_ size: CGSize) -> CGSize {

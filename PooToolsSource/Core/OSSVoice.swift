@@ -159,7 +159,7 @@ public enum OSSVoiceEnum: String, CaseIterable {
 
     /// Provides the Enum key itself as a String
     public var title: String {
-        return String(describing: self)
+        String(describing: self)
     }
 
     /// Demo message is for returning a string in the language that will be read while also providing the name of the voice that Apple have provided.
@@ -308,7 +308,7 @@ public class OSSVoice: AVSpeechSynthesisVoice {
     /// You have access to set the voice quality or use the default which is set to .default
     override public var quality: AVSpeechSynthesisVoiceQuality {
         get {
-            return voiceQuality
+            voiceQuality
         }
         set {
             voiceQuality = newValue
@@ -318,7 +318,7 @@ public class OSSVoice: AVSpeechSynthesisVoice {
     /// Language offers a get and set. The default value is United States English.
     override public var language: String {
         get {
-            return voiceLanguage
+            voiceLanguage
         }
         set {
             voiceLanguage = newValue

@@ -31,13 +31,13 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
     
     var currentMode:DarkMode? {
         didSet {
-            switch self.currentMode {
+            switch currentMode {
             case .light:
-                self.whiteButton.isSelected = true
-                self.blackButton.isSelected = false
+                whiteButton.isSelected = true
+                blackButton.isSelected = false
             default:
-                self.whiteButton.isSelected = false
-                self.blackButton.isSelected = true
+                whiteButton.isSelected = false
+                blackButton.isSelected = true
             }
         }
     }
@@ -128,8 +128,8 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
                 
         let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
 
-        self.addSubviews([self.contentView])
-        self.contentView.snp.makeConstraints { make in
+        addSubviews([contentView])
+        contentView.snp.makeConstraints { make in
             make.bottom.equalToSuperview()
             make.width.equalTo(screenW - PTAppBaseConfig.share.defaultViewSpace * 2)
             make.centerX.equalToSuperview()
@@ -139,28 +139,28 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
             self.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
         }
         
-        self.contentView.addSubviews([self.titlaLabel,self.whiteImageView,self.blackImageView,self.whiteButton,self.blackButton])
-        self.titlaLabel.snp.makeConstraints { make in
+        contentView.addSubviews([titlaLabel, whiteImageView, blackImageView, whiteButton, blackButton])
+        titlaLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(10)
         }
-        self.whiteImageView.snp.makeConstraints { make in
+        whiteImageView.snp.makeConstraints { make in
             make.width.equalTo(80)
             make.height.equalTo(150)
             make.top.equalTo(self.titlaLabel.snp.bottom).offset(10)
             make.right.equalTo(self.contentView.snp.centerX).offset(-20)
         }
-        self.blackImageView.snp.makeConstraints { make in
+        blackImageView.snp.makeConstraints { make in
             make.top.width.height.equalTo(self.whiteImageView)
             make.left.equalTo(self.contentView.snp.centerX).offset(20)
         }
         
-        self.whiteButton.snp.makeConstraints { make in
+        whiteButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.whiteImageView)
             make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
         }
         
-        self.blackButton.snp.makeConstraints { make in
+        blackButton.snp.makeConstraints { make in
             make.centerX.equalTo(self.blackImageView)
             make.top.equalTo(self.whiteImageView.snp.bottom).offset(10)
         }
@@ -188,11 +188,11 @@ class PTDarkModeHeader: PTBaseCollectionReusableView {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         if PTDarkModeOption.isFollowSystem {
             if UITraitCollection.current.userInterfaceStyle == .light {
-                self.whiteButton.isSelected = true
-                self.blackButton.isSelected = false
+                whiteButton.isSelected = true
+                blackButton.isSelected = false
             } else {
-                self.whiteButton.isSelected = false
-                self.blackButton.isSelected = true
+                whiteButton.isSelected = false
+                blackButton.isSelected = true
             }
         }
     }

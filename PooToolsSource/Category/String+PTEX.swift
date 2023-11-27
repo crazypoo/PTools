@@ -98,35 +98,43 @@ public extension String {
     /**
         Wrapper of emtry string "".
      */
-    static var empty: String { return "" }
+    static var empty: String {
+        ""
+    }
     
     /**
         Wrapper of space string " ".
      */
-    static var space: String { return " " }
+    static var space: String {
+        " "
+    }
     
     /**
         Wrapper of dot string ".".
      */
-    static var dot: String { return "." }
+    static var dot: String {
+        "."
+    }
     
     /**
         Wrapper of new line string "\n".
      */
-    static var newline: String { return "\n" }
+    static var newline: String {
+        "\n"
+    }
 
     /**
         Get words in string.
      */
     var words: [String] {
-        return components(separatedBy: .punctuationCharacters).joined().components(separatedBy: .whitespaces)
+        components(separatedBy: .punctuationCharacters).joined().components(separatedBy: .whitespaces)
     }
         
     /**
         Removed whitespaces and new lines.
      */
     var trimString: String {
-        self.trimmingCharacters(in: .whitespacesAndNewlines)
+        trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
     /**
@@ -662,7 +670,7 @@ public extension String {
                        lineSpacing:NSNumber? = nil) -> String {
        var truncatedText = self
 
-        guard self.numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > maxLineNumber else {
+        guard numberOfLines(font: font, labelShowWidth: labelShowWidth, lineSpacing: lineSpacing) > maxLineNumber else {
          return self
        }
 
@@ -690,13 +698,13 @@ public extension String {
 
     //MARK: 用于类似推文的操作
     func trim(to maximumCharacters: Int) -> String {
-        return "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."
+        "\(self[..<index(startIndex, offsetBy: maximumCharacters)])" + "..."
     }
     
     //MARK: 强制第一个大写
     ///强制第一个大写
     func uppercasedFirstLetter() -> String {
-        let lowercaseSctring = self.lowercased()
+        let lowercaseSctring = lowercased()
         return lowercaseSctring.prefix(1).uppercased() + lowercaseSctring.dropFirst()
     }
     
@@ -704,7 +712,7 @@ public extension String {
         Uppercase first letter for current object.
      */
     mutating func uppercaseFirstLetter() {
-        self = self.uppercasedFirstLetter()
+        self = uppercasedFirstLetter()
     }
     
     /**
@@ -713,13 +721,13 @@ public extension String {
      - parameter suffix: String which need remove.
      */
     mutating func removeSuffix(_ suffix: String) {
-        if self.hasSuffix(suffix) {
+        if hasSuffix(suffix) {
             self = String(dropLast(suffix.count))
         }
     }
 
     func removedSuffix(_ suffix: String) -> String {
-        if self.hasSuffix(suffix) {
+        if hasSuffix(suffix) {
             return String(dropLast(suffix.count))
         } else {
             return self
@@ -732,13 +740,13 @@ public extension String {
      - parameter prefix: String which need remove.
      */
     mutating func removePrefix(_ prefix: String) {
-        if self.hasPrefix(prefix) {
+        if hasPrefix(prefix) {
             self = String(dropFirst(prefix.count))
         }
     }
 
     func removedPrefix(_ prefix: String) -> String {
-        if self.hasPrefix(prefix) {
+        if hasPrefix(prefix) {
             return String(dropFirst(prefix.count))
         } else {
             return self
@@ -758,7 +766,7 @@ public extension String {
     ///替换
     func replace(_ replacingString: String,
                  with newString: String) -> String {
-        return self.replacingOccurrences(of: replacingString, with: newString)
+        self.replacingOccurrences(of: replacingString, with: newString)
     }
 }
 
@@ -874,7 +882,7 @@ public extension String {
         Check if string has useful content exclude spaces and new lines.
      */
     var isEmptyContent: Bool {
-        let filtered = self.components(separatedBy: .whitespacesAndNewlines).joined()
+        let filtered = components(separatedBy: .whitespacesAndNewlines).joined()
         return filtered == ""
     }
     
@@ -2007,7 +2015,7 @@ public extension String {
      - returns: The localized string.
      */
     func localized(in bundle: Bundle?) -> String {
-        return localized(using: nil, in: bundle)
+        localized(using: nil, in: bundle)
     }
     
     /**
@@ -2021,7 +2029,7 @@ public extension String {
      - returns: The formatted localized string with arguments.
      */
     func localizedFormat(arguments: CVarArg..., in bundle: Bundle?) -> String {
-        return String(format: localized(in: bundle), arguments: arguments)
+        String(format: localized(in: bundle), arguments: arguments)
     }
     
     /**
@@ -2035,7 +2043,7 @@ public extension String {
      - returns: Pluralized localized string.
      */
     func localizedPlural(argument: CVarArg, in bundle: Bundle?) -> String {
-        return NSString.localizedStringWithFormat(localized(in: bundle) as NSString, argument) as String
+        NSString.localizedStringWithFormat(localized(in: bundle) as NSString, argument) as String
     }
 
     //MARK: bundle & tableName friendly extension
@@ -2076,7 +2084,7 @@ public extension String {
      - returns: The formatted localized string with arguments.
      */
     func localizedFormat(arguments: CVarArg..., using tableName: String?, in bundle: Bundle?) -> String {
-        return String(format: localized(using: tableName, in: bundle), arguments: arguments)
+        String(format: localized(using: tableName, in: bundle), arguments: arguments)
     }
     
     /**
@@ -2093,7 +2101,7 @@ public extension String {
      - returns: Pluralized localized string.
      */
     func localizedPlural(argument: CVarArg, using tableName: String?, in bundle: Bundle?) -> String {
-        return NSString.localizedStringWithFormat(localized(using: tableName, in: bundle) as NSString, argument) as String
+        NSString.localizedStringWithFormat(localized(using: tableName, in: bundle) as NSString, argument) as String
     }
 
     //MARK: tableName friendly extension
@@ -2106,7 +2114,7 @@ public extension String {
      - returns: The localized string.
      */
     func localized(using tableName: String?) -> String {
-        return localized(using: tableName, in: .main)
+        localized(using: tableName, in: .main)
     }
     
     /**
@@ -2120,7 +2128,7 @@ public extension String {
      - returns: The formatted localized string with arguments.
      */
     func localizedFormat(arguments: CVarArg..., using tableName: String?) -> String {
-        return String(format: localized(using: tableName), arguments: arguments)
+        String(format: localized(using: tableName), arguments: arguments)
     }
     
     /**
@@ -2134,6 +2142,6 @@ public extension String {
      - returns: Pluralized localized string.
      */
     func localizedPlural(argument: CVarArg, using tableName: String?) -> String {
-        return NSString.localizedStringWithFormat(localized(using: tableName) as NSString, argument) as String
+        NSString.localizedStringWithFormat(localized(using: tableName) as NSString, argument) as String
     }
 }

@@ -101,19 +101,19 @@ class PTSwiftViewController: PTBaseViewController {
 //        layoutBtn.addActionHandlers { sender in
 //        }
         
-        self.view.addSubview(cycleView)
-        cycleView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.height.equalTo(150)
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-        }
-             
-        cycleView.titles = ["1","2","3"/*,"4","5","6"*/]
-        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png"/*,"DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"*/]
+//        self.view.addSubview(cycleView)
+//        cycleView.snp.makeConstraints { make in
+//            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+//            make.height.equalTo(150)
+//            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+//        }
+//             
+//        cycleView.titles = ["1","2","3"/*,"4","5","6"*/]
+//        cycleView.imagePaths = ["DemoImage.png"/*,"http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"*/,"image_aircondition_gray.png"/*,"DemoImage.png","DemoImage.png","DemoImage.png","http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"*/]
 
-        self.screenShotHandle = { image in
+        screenShotHandle = { image in
         }
-    }    
+    }
 }
 
 extension PTSwiftViewController:PTRouterable {

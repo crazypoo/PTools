@@ -337,9 +337,9 @@ public class PTGuidePageHUD: UIView {
                 nextButton.isUserInteractionEnabled = false
             }
             
-            self.nextButton.loadImage(contentData: viewModel.backImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
+            nextButton.loadImage(contentData: viewModel.backImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
             
-            self.forwardButton.loadImage(contentData: viewModel.forwardImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
+            forwardButton.loadImage(contentData: viewModel.forwardImage as Any,iCloudDocumentName: viewModel.iCloudDocumentName)
         } else {
             nextButton.isHidden = true
             nextButton.isUserInteractionEnabled = false
@@ -442,17 +442,17 @@ public class PTGuidePageHUD: UIView {
         case .pageControl(let type):
             switch type {
             case .system:
-                (self.imagePageControl as! UIPageControl).currentPage = page
+                (imagePageControl as! UIPageControl).currentPage = page
             case .fill:
-                (self.imagePageControl as! PTFilledPageControl).progress = CGFloat(page)
+                (imagePageControl as! PTFilledPageControl).progress = CGFloat(page)
             case .pill:
-                (self.imagePageControl as! PTPillPageControl).progress = CGFloat(page)
+                (imagePageControl as! PTPillPageControl).progress = CGFloat(page)
             case .snake:
-                (self.imagePageControl as! PTSnakePageControl).progress = CGFloat(page)
+                (imagePageControl as! PTSnakePageControl).progress = CGFloat(page)
             case .image:
-                (self.imagePageControl as! PTImagePageControl).currentPage = page
+                (imagePageControl as! PTImagePageControl).currentPage = page
             case .scrolling:
-                (self.imagePageControl as! PTScrollingPageControl).progress = CGFloat(page)
+                (imagePageControl as! PTScrollingPageControl).progress = CGFloat(page)
             }
         }
         if page >= 1 {

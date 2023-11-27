@@ -24,7 +24,7 @@ open class PTWindowSceneDelegate: UIResponder,UIWindowSceneDelegate {
 
     open func makeKeyAndVisible(in scene: UIWindowScene, viewController: UIViewController, tint: UIColor) {
         makeKeyAndVisible(in: scene, createViewControllerHandler: {
-            return viewController
+            viewController
         }, tint: tint)
     }
 }

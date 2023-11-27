@@ -80,33 +80,33 @@ class PTDarkSmartFooter: PTBaseCollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubview(self.footerContent)
-        self.footerContent.snp.makeConstraints { make in
+        addSubview(footerContent)
+        footerContent.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.bottom.equalToSuperview()
         }
         
-        self.footerContent.addSubviews([self.descLabel,self.themeName,self.themeNight,self.themeTime,self.themeTimeButton])
-        self.descLabel.snp.makeConstraints { make in
+        footerContent.addSubviews([descLabel, themeName, themeNight, themeTime, themeTimeButton])
+        descLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }
         
-        self.themeName.snp.makeConstraints { make in
+        themeName.snp.makeConstraints { make in
             make.left.equalTo(self.descLabel)
             make.top.equalTo(self.descLabel.snp.bottom).offset(10)
             make.height.equalTo(44)
         }
-        self.themeNight.snp.makeConstraints { make in
+        themeNight.snp.makeConstraints { make in
             make.right.equalTo(self.descLabel)
             make.top.bottom.equalTo(self.themeName)
         }
-        self.themeTime.snp.makeConstraints { make in
+        themeTime.snp.makeConstraints { make in
             make.top.equalTo(self.themeName.snp.bottom)
             make.left.equalTo(self.descLabel)
             make.height.equalTo(self.themeName)
         }
-        self.themeTimeButton.snp.makeConstraints { make in
+        themeTimeButton.snp.makeConstraints { make in
             make.right.equalTo(self.descLabel)
             make.centerY.equalTo(self.themeTime)
             make.width.equalTo(imageSize.width + imageContentSpace + UIView.sizeFor(string: PTDarkModeOption.smartPeelingTimeIntervalValue, font: imageContentFont,height: 44).width + 5)

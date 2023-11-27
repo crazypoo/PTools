@@ -35,7 +35,7 @@ public extension UIImage {
     }
 
     static func system(_ name: String) -> UIImage {
-        return UIImage.init(systemName: name) ?? UIImage()
+        UIImage.init(systemName: name) ?? UIImage()
     }
     
     static func system(_ name: String, pointSize: CGFloat, weight: UIImage.SymbolWeight) -> UIImage {
@@ -57,21 +57,21 @@ public extension UIImage {
     }
     
     func compressedData(quality: CGFloat) -> Data? {
-        return jpegData(compressionQuality: quality)
+        jpegData(compressionQuality: quality)
     }
     
     // MARK: - Appearance
     
     var alwaysTemplate: UIImage {
-        return withRenderingMode(.alwaysTemplate)
+        withRenderingMode(.alwaysTemplate)
     }
     
     var alwaysOriginal: UIImage {
-        return withRenderingMode(.alwaysOriginal)
+        withRenderingMode(.alwaysOriginal)
     }
     
     func alwaysOriginal(with color: UIColor) -> UIImage {
-        return withTintColor(color, renderingMode: .alwaysOriginal)
+        withTintColor(color, renderingMode: .alwaysOriginal)
     }
     
     #if canImport(CoreImage)
@@ -92,7 +92,7 @@ public extension UIImage {
     }
     
     fileprivate func resize(targetSize: CGSize) -> UIImage {
-        return UIGraphicsImageRenderer(size:targetSize).image { _ in
+        UIGraphicsImageRenderer(size: targetSize).image { _ in
             self.draw(in: CGRect(origin: .zero, size: targetSize))
         }
     }

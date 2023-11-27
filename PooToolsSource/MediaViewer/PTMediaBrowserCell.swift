@@ -212,7 +212,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         imageView.addGestureRecognizers([singleTap,doubleTap])
 
         PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName) { receivedSize, totalSize in
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 loading.progress = CGFloat(receivedSize / totalSize)
             }
         } taskHandle: { images,image in

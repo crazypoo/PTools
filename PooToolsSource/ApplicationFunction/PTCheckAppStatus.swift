@@ -77,7 +77,7 @@ public class PCheckAppStatus: NSObject {
         
         let text = String.init(format: "FPS:%02.0f", round(fps))
         fpsLabel.text = text
-        self.avatar!.frame = CGRect(x: avatar!.frame.origin.x, y: avatar!.frame.origin.y, width: fpsLabel.sizeFor(height: 30).width + 20, height: avatar!.frame.size.height)
+        avatar!.frame = CGRect(x: avatar!.frame.origin.x, y: avatar!.frame.origin.y, width: fpsLabel.sizeFor(height: 30).width + 20, height: avatar!.frame.size.height)
         
         if fpsHandle != nil {
             fpsHandle!(NSInteger(round(fps)))

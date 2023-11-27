@@ -26,7 +26,7 @@ public extension UIColor {
      - parameter amount: Amount for lighter. Use 0...1.
      */
     func lighter(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> UIColor {
-        return mixWithColor(UIColor.white, amount: amount)
+        mixWithColor(UIColor.white, amount: amount)
     }
     
     /**
@@ -35,7 +35,7 @@ public extension UIColor {
      - parameter amount: Amount for darker. Use 0...1.
      */
     func darker(@PTClampedProperyWrapper(range:0...1) amount: CGFloat) -> UIColor {
-        return mixWithColor(UIColor.black, amount: amount)
+        mixWithColor(UIColor.black, amount: amount)
     }
     
     /**
@@ -55,7 +55,7 @@ public extension UIColor {
         var b2     : CGFloat = 0
         var alpha2 : CGFloat = 0
         
-        self.getRed (&r1, green: &g1, blue: &b1, alpha: &alpha1)
+        getRed (&r1, green: &g1, blue: &b1, alpha: &alpha1)
         color.getRed(&r2, green: &g2, blue: &b2, alpha: &alpha2)
         return UIColor(
             red: r1 * (1.0 - amount) + r2 * amount,
@@ -125,7 +125,7 @@ public extension UIColor {
      Also color depended of background, so it reason why it requerid.
      */
     var secondary: UIColor {
-        return self.withAlphaComponent(0.06)
+        withAlphaComponent(0.06)
         
         // Old version for fill color
         /*
@@ -172,7 +172,7 @@ public extension UIColor {
      */
     @available(iOS 13.0, *)
     static var systemDownedGroupedBackground: UIColor {
-        return UIColor.init(dynamicProvider: { trait in
+        UIColor.init(dynamicProvider: { trait in
             if trait.userInterfaceStyle == .light {
                 return UIColor.systemGroupedBackground.mixWithColor(.darkGray, amount: 0.09).mixWithColor(UIColor.systemBlue, amount: 0.01)
             } else {

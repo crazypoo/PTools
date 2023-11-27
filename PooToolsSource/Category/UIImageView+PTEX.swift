@@ -97,21 +97,21 @@ public extension UIImageView {
                 }
             } else if dataUrlString.isSingleEmoji {
                 let emojiImage = dataUrlString.emojiToImage()
-                self.image = emojiImage
+                image = emojiImage
             } else {
                 if let image = UIImage(named: dataUrlString) {
                     self.image = image
                 } else if let systemImage = UIImage(systemName: dataUrlString) {
-                    self.image = systemImage
+                    image = systemImage
                 } else {
-                    self.image = emptyImage
+                    image = emptyImage
                 }
             }
         } else if contentData is Data {
             let dataImage = UIImage(data: contentData as! Data)!
-            self.image = dataImage
+            image = dataImage
         } else {
-            self.image = emptyImage
+            image = emptyImage
         }
     }
 }

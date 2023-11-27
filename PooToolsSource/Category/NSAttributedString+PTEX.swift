@@ -12,7 +12,7 @@ public extension NSAttributedString {
     @objc func sizeOfAttributedString(width:CGFloat = CGFloat.greatestFiniteMagnitude,
                                 height:CGFloat = CGFloat.greatestFiniteMagnitude,
                                 options:NSStringDrawingOptions = [.usesLineFragmentOrigin, .usesFontLeading]) -> CGSize {
-        let attributedStringSize = self.boundingRect(with: CGSizeMake(width, height), options: options, context: nil)
+        let attributedStringSize = boundingRect(with: CGSizeMake(width, height), options: options, context: nil)
         return attributedStringSize.size
     }
 }

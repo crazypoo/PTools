@@ -22,16 +22,17 @@ Swift 1.x friendly localization syntax, replaces NSLocalizedString
 - Returns: The localized string.
 */
 public func Localized(_ string: String) -> String {
-    return string.localized()
+    string.localized()
 }
 
 /**
  Swift 1.x friendly localization syntax with format arguments, replaces String(format:NSLocalizedString)
  - Parameter string: Key to be localized.
+ - Parameter arguments:
  - Returns: The formatted localized string with arguments.
  */
 public func Localized(_ string: String, arguments: CVarArg...) -> String {
-    return String(format: string.localized(), arguments: arguments)
+    String(format: string.localized(), arguments: arguments)
 }
 
 /**
@@ -43,7 +44,7 @@ public func Localized(_ string: String, arguments: CVarArg...) -> String {
  - returns: Pluralized localized string.
  */
 public func LocalizedPlural(_ string: String, argument: CVarArg) -> String {
-    return string.localizedPlural(argument)
+    string.localizedPlural(argument)
 }
 
 
@@ -53,7 +54,7 @@ public extension String {
      - Returns: The localized string.
      */
     func localized() -> String {
-        return localized(using: nil, in: Bundle.podCoreBundle())
+        localized(using: nil, in: Bundle.podCoreBundle())
     }
 
     /**
@@ -61,7 +62,7 @@ public extension String {
      - Returns: The formatted localized string with arguments.
      */
     func localizedFormat(_ arguments: CVarArg...) -> String {
-        return String(format: localized(), arguments: arguments)
+        String(format: localized(), arguments: arguments)
     }
     
     /**
@@ -72,7 +73,7 @@ public extension String {
      - returns: Pluralized localized string.
      */
     func localizedPlural(_ argument: CVarArg) -> String {
-        return NSString.localizedStringWithFormat(localized() as NSString, argument) as String
+        NSString.localizedStringWithFormat(localized() as NSString, argument) as String
     }
 
     /**
@@ -80,7 +81,7 @@ public extension String {
      - Returns: The localized string.
     */
     func commented(_ argument: String) -> String {
-        return self
+        self
     }
 }
 
@@ -108,7 +109,7 @@ open class Localize: NSObject {
      - Returns: The current language. String.
      */
     open class func currentLanguage() -> String {
-        return PTCoreUserDefultsWrapper.AppLanguage
+        PTCoreUserDefultsWrapper.AppLanguage
     }
     
     /**
@@ -132,7 +133,7 @@ open class Localize: NSObject {
         guard let preferredLanguage = Bundle.main.preferredLocalizations.first else {
             return PTDefaultLanguage
         }
-        let availableLanguages: [String] = self.availableLanguages()
+        let availableLanguages: [String] = availableLanguages()
         if (availableLanguages.contains(preferredLanguage)) {
             defaultLanguage = preferredLanguage
         }
@@ -146,7 +147,7 @@ open class Localize: NSObject {
      Resets the current language to the default
      */
     open class func resetCurrentLanguageToDefault() {
-        setCurrentLanguage(self.defaultLanguage())
+        setCurrentLanguage(defaultLanguage())
     }
     
     /**

@@ -355,7 +355,7 @@ public class PTCollectionView: UIView {
         mSections = collectionData
         
         collectionView.pt_register(by: mSections)
-        self.collectionView.reloadData {
+        collectionView.reloadData {
             if #available(iOS 17.0, *) {
                 self.showEmptyConfig()
             }
@@ -426,7 +426,7 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     private func showEmptyConfig() {
         if viewConfig.showEmptyAlert && mSections.count == 0 {
-            PTCollectionView.share.emptyViewConfig = self.viewConfig.emptyViewConfig
+            PTCollectionView.share.emptyViewConfig = viewConfig.emptyViewConfig
             PTCollectionView.share.showEmptyView(showIn: self)
         } else {
             PTCollectionView.share.hideUnavailableView(task: {

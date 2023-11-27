@@ -105,15 +105,15 @@ public class PTUnavailableFunction: NSObject {
     }
     
     public func hideUnavailableView(task:PTActionTask?,showIn:UIView) {
-        self.unavailableView.removeFromSuperview()
-        self.unavailableLoadingView.removeFromSuperview()
+        unavailableView.removeFromSuperview()
+        unavailableLoadingView.removeFromSuperview()
         if task != nil {
             task!()
         }
     }
     
     public func showEmptyView(viewController:PTBaseViewController) {
-        viewController.contentUnavailableConfiguration = self.emptyConfig
+        viewController.contentUnavailableConfiguration = emptyConfig
     }
     
     public func showEmptyLoadingView(viewController:PTBaseViewController) {

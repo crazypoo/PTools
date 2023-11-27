@@ -40,7 +40,7 @@ public class OSSUtterance: AVSpeechUtterance {
     /// Default value in an empty string.
     override public var speechString: String {
         get {
-            return stringToSpeak
+            stringToSpeak
         }
         set {
             stringToSpeak = newValue
@@ -54,7 +54,7 @@ public class OSSUtterance: AVSpeechUtterance {
     /// Default value in an empty string.
     override public var attributedSpeechString: NSAttributedString {
         get {
-            return attributedStringToSpeak
+            attributedStringToSpeak
         }
         set {
             stringToSpeak = newValue.string

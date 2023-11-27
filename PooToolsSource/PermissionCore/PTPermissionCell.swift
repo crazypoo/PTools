@@ -23,7 +23,7 @@ class PTPermissionCell: PTBaseNormalCell {
     
     var cellModel:PTPermissionModel? {
         didSet {
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 switch self.cellModel!.type {
                 case .tracking:
     #if POOTOOLS_PERMISSION_TRACKING

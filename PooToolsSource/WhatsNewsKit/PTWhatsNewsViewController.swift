@@ -207,27 +207,27 @@ fileprivate class PTWhatsNewsCell:PTBaseNormalCell {
         if cellModel != nil {
             if cellModel!.newsImage != nil {
                 imageView.isHidden = false
-                self.imageView.snp.makeConstraints { make in
+                imageView.snp.makeConstraints { make in
                     make.left.equalToSuperview()
                     make.top.equalToSuperview().inset(7.5)
                     make.height.equalTo(49)
                 }
                 
-                self.titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.makeConstraints { make in
                     make.left.equalTo(self.imageView.snp.right).offset(10)
                     make.top.bottom.equalToSuperview().inset(7.5)
                     make.right.equalToSuperview()
                 }
             } else {
                 imageView.isHidden = true
-                self.imageView.snp.makeConstraints { make in
+                imageView.snp.makeConstraints { make in
                     make.left.equalToSuperview()
                     make.top.equalToSuperview().inset(7.5)
                     make.height.equalTo(49)
                     make.width.equalTo(0)
                 }
                 
-                self.titleLabel.snp.makeConstraints { make in
+                titleLabel.snp.makeConstraints { make in
                     make.left.equalTo(self.imageView.snp.right)
                     make.top.bottom.equalToSuperview().inset(7.5)
                     make.right.equalToSuperview()
@@ -244,7 +244,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     public var iKnowTapHandler:PTActionTask?
 
     public func setContentLRSpace(@PTClampedProperyWrapper(range:0...CGFloat.ScaleW(w: 10) * 10) values:CGFloat = CGFloat.ScaleW(w: 100)) {
-        self.contentViewSpace = values
+        contentViewSpace = values
     }
     private var contentViewSpace = CGFloat.ScaleW(w: 10) * 10
 
@@ -258,8 +258,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         let view = PTLayoutButton()
         view.cornerStyle = .small
         view.cornerRadius = 10
-        view.addActionHandlers() { sender in
-            self.returnFrontVC() {
+        view.addActionHandlers { sender in
+            self.returnFrontVC {
                 if self.iKnowTapHandler != nil {
                     self.iKnowTapHandler!()
                 }
@@ -273,7 +273,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         view.titleLabel?.font = iKnowItems.privacyFont
         view.setTitleColor(iKnowItems.privacyColor, for: .normal)
         view.setTitle(iKnowItems.privacy, for: .normal)
-        view.addActionHandlers() { sender in
+        view.addActionHandlers { sender in
             if !self.iKnowItems.privacyURL.stringIsEmpty() {
                 if self.iKnowItems.privacyURL.isURL() {
                     PTAppStoreFunction.jumpLink(url: URL(string: self.iKnowItems.privacyURL)!)
@@ -431,7 +431,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
     }
     
     public func whatsNewsShow() {
-        self.modalPresentationStyle = .formSheet
+        modalPresentationStyle = .formSheet
         PTUtils.getCurrentVC().present(self, animated: true)
     }
 }

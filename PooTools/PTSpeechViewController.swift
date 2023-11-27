@@ -47,14 +47,14 @@ class PTSpeechViewController: PTBaseViewController {
         
         let voiceButton = UIButton(type: .custom)
         voiceButton.backgroundColor = .random
-        self.view.addSubview(voiceButton)
+        view.addSubview(voiceButton)
         voiceButton.snp.makeConstraints { make in
             make.size.equalTo(100)
             make.centerX.centerY.equalToSuperview()
         }
-        voiceButton.addTarget(self, action: #selector(self.recordButtonPressed), for: .touchDown)
-        voiceButton.addTarget(self, action: #selector(self.recordButtonReleased), for: .touchUpInside)
-        voiceButton.addTarget(self, action: #selector(self.recordButtonReleased), for: .touchUpOutside)
+        voiceButton.addTarget(self, action: #selector(recordButtonPressed), for: .touchDown)
+        voiceButton.addTarget(self, action: #selector(recordButtonReleased), for: .touchUpInside)
+        voiceButton.addTarget(self, action: #selector(recordButtonReleased), for: .touchUpOutside)
 
         let longPressRecognizer = UILongPressGestureRecognizer { senders in
             if self.avCaptureDeviceAuthorize(avMediaType: .audio) {
@@ -197,24 +197,24 @@ class PTSpeechViewController: PTBaseViewController {
 //MARK: OSSSpeechDelegate
 extension PTSpeechViewController:OSSSpeechDelegate {
     //MARK: 语音发送操作
-    @objc func recordButtonPressed() {
-        if self.avCaptureDeviceAuthorize(avMediaType: .audio) {
+    func recordButtonPressed() {
+        if avCaptureDeviceAuthorize(avMediaType: .audio) {
             soundVisualizerMaskView.visualizerView.start()
-            self.soundRecorder.start()
+            soundRecorder.start()
 
             // 開始錄音
-            self.isRecording = true
+            isRecording = true
             PTNSLogConsole("開始錄音")
         }
     }
     
-    @objc func recordButtonReleased() {
-        if self.avCaptureDeviceAuthorize(avMediaType: .audio) {
+    func recordButtonReleased() {
+        if avCaptureDeviceAuthorize(avMediaType: .audio) {
             // 停止錄音
-            self.isRecording = false
+            isRecording = false
             PTNSLogConsole("停止錄音")
-            self.speechKit.endVoiceRecording()
-            self.soundRecorder.stop()
+            speechKit.endVoiceRecording()
+            soundRecorder.stop()
             soundVisualizerMaskView.visualizerView.stop()
             soundVisualizerMaskView.alpha = 0
         }
@@ -242,7 +242,7 @@ extension PTSpeechViewController:OSSSpeechDelegate {
     
     func didCompleteTranslation(withText text: String) {
         PTNSLogConsole("Listening>>>>>>>>>>>>>\(text)")
-        if self.translateToText {
+        if translateToText {
             soundVisualizerMaskView.translateLabel.text = text
             soundVisualizerMaskView.translateLabel.isHidden = false
             var textHeight = soundVisualizerMaskView.translateLabel.sizeFor(width: CGFloat.kSCREEN_WIDTH - 40).height + 10

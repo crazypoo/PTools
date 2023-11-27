@@ -45,7 +45,7 @@ public class PTCycleScrollView: UIView {
     /// 图片地址
     open var imagePaths: Array<Any> = [] {
         didSet {
-            self.setTotalItemsMinItems(count:imagePaths.count)
+            setTotalItemsMinItems(count:imagePaths.count)
             if imagePaths.count > 1 {
                 collectionView.contentCollectionView.isScrollEnabled = true
                 if autoScroll {
@@ -280,7 +280,7 @@ public class PTCycleScrollView: UIView {
     /// 总数量
     fileprivate var totalItemsCount: NSInteger! = 1
     func setTotalItemsMinItems(@PTClampedProperyWrapper(range:1...(.max)) count:NSInteger) {
-        self.totalItemsCount = count
+        totalItemsCount = count
     }
     
     /// 最大伸展空间(防止出现问题，可外部设置)
@@ -393,7 +393,7 @@ public class PTCycleScrollView: UIView {
             case .horizontal:
                 var pointStart = CGPointZero
                 let currentX = self.collectionView.contentCollectionView.contentOffset.x
-                let panGes = UIPanGestureRecognizer() { sender in
+                let panGes = UIPanGestureRecognizer { sender in
                     let obj = sender as! UIPanGestureRecognizer
                     let point = obj.location(in: self)
                     switch obj.state {
@@ -831,7 +831,7 @@ extension PTCycleScrollView {
                 }
             }
             
-            self.collectionViewSetData() { collection in
+            self.collectionViewSetData { collection in
                 PTGCDManager.gcdAfter(time: 0.5, block: {
                     let index = self.collectionView.contentCollectionView.indexPath(for: self.collectionView.contentCollectionView.visibleCells.first!)!.row
                     if index == 0 && self.imagePaths.count > 0 {
@@ -887,7 +887,7 @@ extension PTCycleScrollView {
 // MARK: Events
 extension PTCycleScrollView {
     /// 自动轮播
-    @objc func automaticScroll() {
+    func automaticScroll() {
         if imagePaths.count == 0 { return }
         let targetIndex = currentIndex() + 1
         scollToIndex(targetIndex: targetIndex)
@@ -944,7 +944,7 @@ extension PTCycleScrollView {
     
     /// 滚动上一个/下一个
     /// - Parameter gestureRecognizer: 手势
-    @objc open func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
+    open func scrollByDirection(_ gestureRecognizer: UITapGestureRecognizer) {
         if let index = gestureRecognizer.view?.tag {
             if autoScroll {
                 invalidateTimer()

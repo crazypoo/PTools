@@ -27,8 +27,8 @@ class PTDarkFollowSystemFooter: PTBaseCollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        self.addSubview(self.descLabel)
-        self.descLabel.snp.makeConstraints { make in
+        addSubview(descLabel)
+        descLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(10 + PTAppBaseConfig.share.defaultViewSpace)
             make.top.equalToSuperview().inset(10)
         }

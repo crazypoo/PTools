@@ -34,7 +34,7 @@ public class PTCycleLoadingView: UIView {
     
     public func startAnimation() {
         if isAnimation {
-            stopAnimation() {
+            stopAnimation {
                 self.layer.removeAllAnimations()
             }
         }

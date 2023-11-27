@@ -91,9 +91,9 @@ public class PTRateView: UIView {
             addGestureRecognizer(tapGes)
         }
         
-        self.scorePercent = self.viewConfig!.scorePercent
+        scorePercent = self.viewConfig!.scorePercent
         
-        self.initView()
+        initView()
     }
     
     func initView() {

@@ -47,13 +47,13 @@ class PTFuncDetailViewController: PTBaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.webServer?.stop()
+        webServer?.stop()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        switch self.typeString {
+        switch typeString {
         case String.localNetWork:
             PTGCDManager.gcdAfter(time: 1) {
                 var uploadInfoString = ""
@@ -97,14 +97,14 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
         case String.dymanicCode:
             let codeView = PTCodeView(numberOfCodes: 4, numberOfLines: 3, changeTimes: 3)
-            self.view.addSubview(codeView)
+            view.addSubview(codeView)
             codeView.snp.makeConstraints { make in
                 make.size.equalTo(150)
                 make.centerX.centerY.equalToSuperview()
             }
         case String.slider:
             let slider = PTSlider(showTitle: true, titleIsValue: false)
-            self.view.addSubview(slider)
+            view.addSubview(slider)
             slider.snp.makeConstraints { make in
                 make.width.equalTo(100)
                 make.height.equalTo(80)
@@ -121,7 +121,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             rate.rateBlock = { score in
                 PTNSLogConsole(score)
             }
-            self.view.addSubview(rate)
+            view.addSubview(rate)
             rate.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(100)
@@ -155,7 +155,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             let segView = PTSegmentView(config: config)
             segView.backgroundColor = .random
             segView.viewDatas = [model1,model2,model3,model4]
-            self.view.addSubview(segView)
+            view.addSubview(segView)
             segView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(44)
@@ -170,7 +170,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             countLabel.textAlignment = .center
             countLabel.font = .appfont(size: 30)
             countLabel.textColor = .black
-            self.view.addSubview(countLabel)
+            view.addSubview(countLabel)
             countLabel.format = "%.2f"
             countLabel.countFrom(starValue: 99999999.99, toValue: 0, duration: 1)
             countLabel.snp.makeConstraints { make in
@@ -200,7 +200,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             PTGCDManager.gcdAfter(time: 2) {
                 throughLabel.setStrikeThroughEnabled(value: true)
             }
-            self.view.addSubview(throughLabel)
+            view.addSubview(throughLabel)
             throughLabel.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(16)
                 make.left.right.equalToSuperview()
@@ -209,7 +209,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             
             let setBtn = UIButton(type: .custom)
             setBtn.backgroundColor = .random
-            self.view.addSubview(setBtn)
+            view.addSubview(setBtn)
             setBtn.snp.makeConstraints { make in
                 make.size.equalTo(64)
                 make.top.equalTo(throughLabel.snp.bottom).offset(10)
@@ -334,7 +334,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.width.height.equalTo(100)
                 make.centerX.centerY.equalToSuperview()
             }
-            switch self.typeString {
+            switch typeString {
             case String.movieCutOutput:
                 PTGCDManager.gcdAfter(time: 1) {
                     var value:CGFloat = 0
@@ -369,7 +369,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             let verProgress = PTProgressBar(showType: .Vertical)
             let horProgress = PTProgressBar(showType: .Horizontal)
 
-            self.view.addSubviews([verProgress,horProgress])
+            view.addSubviews([verProgress,horProgress])
             verProgress.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(20)
                 make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
@@ -384,7 +384,7 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.height.equalTo(22)
             }
             
-            PTGCDManager.gcdMain() {
+            PTGCDManager.gcdMain {
                 verProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 horProgress.viewCorner(radius: 11, borderWidth: 1, borderColor: .lightGray)
                 
@@ -419,7 +419,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             contentLabel.text = "潮州周杰伦是GAY"
             contentLabel.numberOfLines = 0
             contentLabel.textAlignment = .center
-            self.view.addSubviews([returnButton,contentLabel,switchDES,switchAESECB,switchAESCBC])
+            view.addSubviews([returnButton,contentLabel,switchDES,switchAESECB,switchAESCBC])
             returnButton.snp.makeConstraints { make in
                 make.size.equalTo(34)
                 make.top.equalToSuperview().inset(20)

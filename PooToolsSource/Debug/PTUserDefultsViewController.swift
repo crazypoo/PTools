@@ -74,7 +74,7 @@ class PTUserDefultsViewController: PTBaseViewController {
             self.clearUserdefults()
         }
         
-        if self.parent is FloatingPanelController {
+        if parent is FloatingPanelController {
             view.addSubviews([backBtn,cleanBtn])
             backBtn.snp.makeConstraints { make in
                 make.size.equalTo(34)
@@ -107,7 +107,7 @@ class PTUserDefultsViewController: PTBaseViewController {
 #endif
         }
         
-        self.view.addSubview(newCollectionView)
+        view.addSubview(newCollectionView)
         newCollectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
             if self.parent is FloatingPanelController {

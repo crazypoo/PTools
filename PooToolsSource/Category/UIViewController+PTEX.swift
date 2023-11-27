@@ -28,15 +28,15 @@ public extension UIViewController {
         Indicate if controller is loaded and presented.
      */
     var isVisible: Bool {
-        return isViewLoaded && view.window != nil
+        isViewLoaded && view.window != nil
     }
         
     var systemSafeAreaInsets: UIEdgeInsets {
-        return UIEdgeInsets(
-            top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
-            left: view.safeAreaInsets.left - additionalSafeAreaInsets.left,
-            bottom: view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom,
-            right: view.safeAreaInsets.right - additionalSafeAreaInsets.right
+        UIEdgeInsets(
+                top: view.safeAreaInsets.top - additionalSafeAreaInsets.top,
+                left: view.safeAreaInsets.left - additionalSafeAreaInsets.left,
+                bottom: view.safeAreaInsets.bottom - additionalSafeAreaInsets.bottom,
+                right: view.safeAreaInsets.right - additionalSafeAreaInsets.right
         )
     }
     
@@ -374,8 +374,10 @@ public extension UIViewController {
     @available(iOS 14, *)
     @available(iOSApplicationExtension, unavailable)
     func closeBarButtonItem(sceneName: String? = nil) -> UIBarButtonItem {
-        return UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
-            guard let self = self else { return }
+        UIBarButtonItem.init(systemItem: .close, primaryAction: .init(handler: { [weak self] (action) in
+            guard let self = self else {
+                return
+            }
             if let name = sceneName {
                 self.destruct(scene: name)
             } else {
@@ -403,7 +405,7 @@ public extension UIViewController {
     func pt_present(_ vc:UIViewController,animated:Bool? = true,completion:(()->Void)? = nil) {
 
 #if POOTOOLS_DEBUG
-        self.present(vc, animated: animated!) {
+        present(vc, animated: animated!) {
             if completion != nil {
                 completion!()
             }
@@ -419,7 +421,7 @@ public extension UIViewController {
             }
         }
 #else
-        self.present(vc, animated: animated!, completion:completion)
+        present(vc, animated: animated!, completion:completion)
 #endif
     }
     

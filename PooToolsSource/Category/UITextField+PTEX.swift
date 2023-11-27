@@ -43,7 +43,7 @@ public extension UITextField {
     }
     
     func removeTargetsAndActions() {
-        self.removeTarget(nil, action: nil, for: .allEvents)
+        removeTarget(nil, action: nil, for: .allEvents)
     }
 }
 

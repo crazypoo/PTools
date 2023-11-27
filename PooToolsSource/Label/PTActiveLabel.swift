@@ -8,7 +8,7 @@
 
 import UIKit
 
-public typealias PTConfigureLinkAttribute = (PTActiveType, [NSAttributedString.Key : Any], Bool) -> ([NSAttributedString.Key : Any])
+public typealias PTConfigureLinkAttribute = (PTActiveType, [NSAttributedString.Key : Any], Bool) -> [NSAttributedString.Key : Any]
 typealias PTElementTuple = (range: NSRange, element: PTActiveElement, type: PTActiveType)
 public typealias PTActiveDidSelectedHandle = (String,PTActiveType) -> ()
 public typealias PTActiveStringHandle = (String) -> ()
@@ -220,7 +220,7 @@ public class PTActiveLabel: UILabel {
             return .zero
         }
 
-        textContainer.size = CGSize(width: self.preferredMaxLayoutWidth, height: CGFloat.greatestFiniteMagnitude)
+        textContainer.size = CGSize(width: preferredMaxLayoutWidth, height: CGFloat.greatestFiniteMagnitude)
         let size = layoutManager.usedRect(for: textContainer)
         return CGSize(width: ceil(size.width), height: ceil(size.height))
     }
@@ -416,7 +416,7 @@ public class PTActiveLabel: UILabel {
         paragraphStyle.lineBreakMode = NSLineBreakMode.byWordWrapping
         paragraphStyle.alignment = textAlignment
         paragraphStyle.lineSpacing = lineSpacing
-        paragraphStyle.minimumLineHeight = minimumLineHeight > 0 ? minimumLineHeight: self.font.pointSize * 1.14
+        paragraphStyle.minimumLineHeight = minimumLineHeight > 0 ? minimumLineHeight: font.pointSize * 1.14
         attributes[NSAttributedString.Key.paragraphStyle] = paragraphStyle
         mutAttrString.setAttributes(attributes, range: range)
         
@@ -561,14 +561,14 @@ public class PTActiveLabel: UILabel {
 extension PTActiveLabel: UIGestureRecognizerDelegate {
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRequireFailureOf otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
     
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldBeRequiredToFailBy otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
 }

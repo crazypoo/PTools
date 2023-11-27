@@ -224,7 +224,7 @@ public class PTPermissionViewController: PTBaseViewController {
     
     func showRequestFunction() {
         permissions.enumerated().forEach({ index,value in
-            self.permissionRequest(showTracking: false,type: value.type)
+            permissionRequest(showTracking: false,type: value.type)
         })
     }
     

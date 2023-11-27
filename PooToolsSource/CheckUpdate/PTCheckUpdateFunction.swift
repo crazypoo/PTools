@@ -185,7 +185,7 @@ public class PTCheckUpdateFunction: NSObject {
                                             }
                                         })
                                     case .User:
-                                        PTGCDManager.gcdMain() {
+                                        PTGCDManager.gcdMain {
                                             self.alert_updateTips(oldVersion: version!, newVersion: versionStr, description: (versionModel.releaseNotes), downloadUrl: URL(string: PTAppStoreFunction.appStoreURL(appid: appid))!)
                                         }
                                     }
@@ -241,7 +241,7 @@ public class PTCheckUpdateFunction: NSObject {
                                 showError isShowError:Bool = true,
                                 forcedUpgrade isForcedUpgrade:Bool = false) {
         let cancelTitle:String = isForcedUpgrade ? "" : "PT Cancel upgrade".localized()
-        self.alert_Tips(tipsTitle: "PT Found new version".localized(),cancelTitle: cancelTitle,cancelBlock: {
+        alert_Tips(tipsTitle: "PT Found new version".localized(),cancelTitle: cancelTitle,cancelBlock: {
             if test {
                 if isShowError {
                     PTCoreUserDefultsWrapper.AppNoMoreShowUpdate = true

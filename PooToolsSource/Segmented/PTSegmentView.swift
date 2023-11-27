@@ -202,9 +202,9 @@ public class PTSegmentSubView:UIView {
     }
     
     func setBtnImage(subViewModels:PTSegmentModel,placeHolderImage:UIImage) {
-        self.imageBtn.layoutLoadImage(contentData: subViewModels.imageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage)
+        imageBtn.layoutLoadImage(contentData: subViewModels.imageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage)
         
-        self.imageBtn.layoutLoadImage(contentData: subViewModels.selectedImageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage,controlState: .selected)
+        imageBtn.layoutLoadImage(contentData: subViewModels.selectedImageURL as Any,iCloudDocumentName: subViewModels.iCloudDocument,emptyImage: placeHolderImage,controlState: .selected)
     }
     
     public override func layoutSubviews() {

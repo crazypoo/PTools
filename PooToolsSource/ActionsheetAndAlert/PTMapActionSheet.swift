@@ -27,6 +27,7 @@ open class PTMapActionSheet: NSObject {
     ///   - currentAppScheme: 当前App的Scheme
     ///   - currentAppName: 当前App的名字
     ///   - qqKey: 腾讯地图的Key
+    ///   - formLocation:
     ///   - location: 跳转坐标
     ///   - dismissTask: 关闭回调
     open class func mapNavAlert(currentAppScheme:String,

@@ -63,6 +63,9 @@ public enum NetWorkEnvironment: Int {
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
 public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
+public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
+public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>)->()
+public typealias FileDownloadFail = (_ error:Error?)->()
 
 public var PTBaseURLMode:NetWorkEnvironment {
     guard let sliderValue = PTCoreUserDefultsWrapper.AppServiceIdentifier else { return .Distribution }
@@ -158,6 +161,18 @@ public class Network: NSObject {
     public var serverAddress_dev:String = ""
     public var userToken:String = ""
 
+    public var fileUrl:String = ""
+    public var saveFilePath:String = "" // 文件下载保存的路径
+    public var cancelledData : Data?//用于停止下载时,保存已下载的部分
+    public var downloadRequest:DownloadRequest? //下载请求对象
+    public var destination:DownloadRequest.Destination!//下载文件的保存路径
+    
+    public var progress:FileDownloadProgress?
+    public var success:FileDownloadSuccess?
+    public var fail:FileDownloadFail?
+    
+    private var queue:DispatchQueue = DispatchQueue.main
+
     /// manager
     private static var manager: Session = {
         let configuration = URLSessionConfiguration.default
@@ -196,20 +211,20 @@ public class Network: NSObject {
     }
     
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
-                
-        return try await withCheckedThrowingContinuation { continuation in
-                    
+
+        try await withCheckedThrowingContinuation { continuation in
+
             // 判断网络是否可用
             if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
                 if !reachabilityManager.isReachable {
-                    continuation.resume(throwing:  AFError.createURLRequestFailed(error: NetWorkCheckIPError))
+                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkCheckIPError))
                 }
             }
-            
+
             var apiHeader = HTTPHeaders.init([:])
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
-            
+
             let postString = "GET请求"
             PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
 
@@ -220,7 +235,7 @@ public class Network: NSObject {
                     PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(ipString ?? "")🌐")
                     continuation.resume(returning: ipString ?? "")
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
                     continuation.resume(throwing: error)
                 }
             }
@@ -228,24 +243,24 @@ public class Network: NSObject {
     }
 
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel {
-                
-        return try await withCheckedThrowingContinuation { continuation in
+
+        try await withCheckedThrowingContinuation { continuation in
             if !ipAddress.isIP() {
                 continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
             }
-            
+
             let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
             // 判断网络是否可用
             if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
                 if !reachabilityManager.isReachable {
-                    continuation.resume(throwing:  AFError.createURLRequestFailed(error: NetWorkCheckIPError))
+                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkCheckIPError))
                 }
             }
-            
+
             var apiHeader = HTTPHeaders.init([:])
             apiHeader["Content-Type"] = "application/json;charset=UTF-8"
             apiHeader["Accept"] = "application/json"
-            
+
             let postString = "GET请求"
             PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
 
@@ -257,16 +272,16 @@ public class Network: NSObject {
                         continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
                         return
                     }
-                    
+
                     PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
-                    
+
                     guard let responseModel = PTIPInfoModel.deserialize(from: jsonStr) else {
                         continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
                         return
                     }
                     continuation.resume(returning: responseModel)
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
                     continuation.resume(throwing: error)
                 }
             }
@@ -294,24 +309,24 @@ public class Network: NSObject {
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
                                  jsonRequest:Bool? = false) async throws -> ResponseModel {
-                
-        return try await withCheckedThrowingContinuation { continuation in
+
+        try await withCheckedThrowingContinuation { continuation in
             let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
             if !urlStr1.isURL() {
                 continuation.resume(throwing: AFError.invalidURL(url: "https://www.qq.com"))
             }
-            
+
             // 判断网络是否可用
             if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
                 if !reachabilityManager.isReachable {
                     continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
                 }
             }
-            
+
             var apiHeader = HTTPHeaders()
             let token = Network.share.userToken
             if !token.stringIsEmpty() && header == nil {
-                apiHeader = HTTPHeaders.init(["token":token,"device":"iOS"])
+                apiHeader = HTTPHeaders.init(["token": token, "device": "iOS"])
                 if jsonRequest! {
                     apiHeader["Content-Type"] = "application/json;charset=UTF-8"
                     apiHeader["Accept"] = "application/json"
@@ -330,7 +345,7 @@ public class Network: NSObject {
                     apiHeader["Accept"] = "application/json"
                 }
             }
-            
+
             var postString = ""
             switch method {
             case .post:
@@ -350,27 +365,31 @@ public class Network: NSObject {
                         continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
                         return
                     }
-                    
+
                     PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
-                    
+
                     guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
                         continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
                         return
                     }
                     responseModel.originalString = jsonStr
-                                        
-                    guard let modelType1 = modelType else { continuation.resume(returning: responseModel); return }
-                    if responseModel.data is [String : Any] {
-                        guard let reslut = responseModel.data as? [String : Any] else { continuation.resume(returning: responseModel); return }
+
+                    guard let modelType1 = modelType else {
+                        continuation.resume(returning: responseModel); return
+                    }
+                    if responseModel.data is [String: Any] {
+                        guard let reslut = responseModel.data as? [String: Any] else {
+                            continuation.resume(returning: responseModel); return
+                        }
                         responseModel.data = reslut.kj.model(type: modelType1)
                     } else if responseModel.data is Array<Any> {
                         responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
                     } else {
-                        responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+                        responseModel.customerModel = responseModel.originalString.kj.model(type: modelType1)
                     }
                     continuation.resume(returning: responseModel)
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌",error: true)
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
                     continuation.resume(throwing: error)
                 }
             }
@@ -382,6 +401,7 @@ public class Network: NSObject {
     ///   - needGobal:是否使用全局URL
     ///   - images: 图片集合
     ///   - path:路徑
+    ///   - method:
     ///   - fileKey:fileKey
     ///   - parmas:數據
     ///   - header:頭部
@@ -456,7 +476,7 @@ public class Network: NSObject {
                     })
                 }
             }, to: pathUrl,method: method,headers: apiHeader).uploadProgress(closure: { progress in
-                PTGCDManager.gcdMain() {
+                PTGCDManager.gcdMain {
                     if progressBlock != nil {
                         progressBlock!(progress)
                     }
@@ -496,48 +516,35 @@ public class Network: NSObject {
             }
         }
     }
-}
-
-@objcMembers
-public class PTFileDownloadApi: NSObject {
     
-    public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
-    public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>)->()
-    public typealias FileDownloadFail = (_ error:Error?)->()
-    
-    public var fileUrl:String = ""
-    public var saveFilePath:String = "" // 文件下载保存的路径
-    public var cancelledData : Data?//用于停止下载时,保存已下载的部分
-    public var downloadRequest:DownloadRequest? //下载请求对象
-    public var destination:DownloadRequest.Destination!//下载文件的保存路径
-    
-    public var progress:FileDownloadProgress?
-    public var success:FileDownloadSuccess?
-    public var fail:FileDownloadFail?
-    
-    private var queue:DispatchQueue = DispatchQueue.main
-  
     class open func fileDownLoad(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?) async throws -> Data {
         
         await withUnsafeContinuation { continuation in
-            let _ = PTFileDownloadApi(fileUrl: fileUrl, saveFilePath: saveFilePath, queue: queue, progress: progress, success: { result in
-                continuation.resume(returning: result.value!)
-            }, fail: { error in
-                continuation.resume(throwing: NSError(domain: error.debugDescription, code: 999) as! Never)
-            })
+            let download = Network()
+            download.createDownload(fileUrl: fileUrl, saveFilePath: saveFilePath,queue: queue, progress: progress) { reponse in
+                continuation.resume(returning: reponse.value!)
+            } fail: { error in
+                continuation.resume(throwing: error as! Never/*NSError(domain: error.debugDescription, code: 999) as! Never*/)
+            }
         }
     }
-    
+
     // 默认主线程
-    public convenience init(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?,success:FileDownloadSuccess?, fail:FileDownloadFail?) {
+    public func createDownload(fileUrl:String,saveFilePath:String,queue:DispatchQueue? = DispatchQueue.main,progress:FileDownloadProgress?,success:FileDownloadSuccess?, fail:FileDownloadFail?) {
         
-        self.init()
         self.fileUrl = fileUrl
         self.saveFilePath = saveFilePath
         self.success = success
         self.progress = progress
         self.fail = fail
         
+        if !fileUrl.isURL() {
+            if self.fail != nil {
+                self.fail?(AFError.invalidURL(url: "https://www.qq.com"))
+            }
+            return
+        }
+
         if queue != nil {
             self.queue = queue!
         }
@@ -612,3 +619,4 @@ public class PTFileDownloadApi: NSObject {
         }
     }
 }
+

@@ -46,6 +46,6 @@ public class PTIPInfoModel :PTBaseModel {
 
     public override func mapping(mapper: HelpingMapper) {
         mapper <<<
-            self.asBaseic <-- "as"
+            asBaseic <-- "as"
     }
 }

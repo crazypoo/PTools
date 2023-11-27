@@ -58,7 +58,7 @@ class PTTipsDemoController: PTBaseViewController {
         }
     }
 
-    @objc func showTip() {
+    func showTip() {
         TestTip.showTip = true
     }
 }

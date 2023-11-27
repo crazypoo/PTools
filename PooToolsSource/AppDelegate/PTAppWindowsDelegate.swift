@@ -42,7 +42,7 @@ open class PTAppWindowsDelegate: PTAppDelegate {
 
     open func makeKeyAndVisible(viewController: UIViewController, tint: UIColor) {
         makeKeyAndVisible(createViewControllerHandler: {
-            return viewController
+            viewController
         }, tint: tint)
     }
     
