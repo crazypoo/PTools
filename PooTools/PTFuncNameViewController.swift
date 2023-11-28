@@ -746,14 +746,8 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
-                let infoVc = PTSwiftViewController()
-                if #available(iOS 15.0, *) {
-                    self.sheetPresent(modalViewController: infoVc, type: .custom, scale: 0.4) {
-                        
-                    }
-                } else {
-                    PTUtils.pt_pushViewController(infoVc)
-                }
+                let vc = PTFloatingBaseViewController()
+                self.present(vc, animated: true)
             }
         }
         

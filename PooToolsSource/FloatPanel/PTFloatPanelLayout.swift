@@ -62,3 +62,31 @@ open class PTCustomControlHeightPanelLayout: NSObject, FloatingPanelLayout {
         0.45
     }
 }
+
+@objcMembers
+open class PTCustomControlScalePanelLayout: NSObject, FloatingPanelLayout {
+    
+    public override init() {
+        super.init()
+    }
+    
+    public var viewHeight:CGFloat = 18
+    
+    open var initialState: FloatingPanelState {
+        .full
+    }
+
+    open var anchors: [FloatingPanelState: FloatingPanelLayoutAnchoring]  {
+        [
+            .full: FloatingPanelLayoutAnchor(absoluteInset: CGFloat.kSCREEN_HEIGHT - viewHeight, edge: .top, referenceGuide: .superview)
+        ]
+    }
+
+    open var position: FloatingPanelPosition {
+        .bottom
+    }
+
+    open func backdropAlpha(for state: FloatingPanelState) -> CGFloat {
+        0.45
+    }
+}

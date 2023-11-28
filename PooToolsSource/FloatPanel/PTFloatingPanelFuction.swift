@@ -74,5 +74,5 @@ public class PTFloatingPanelFuction: NSObject {
         fpc.surfaceView.appearance = appearance
         fpc.delegate = vc
         currentViewController!.present(fpc, animated: true)
-    }
+    }    
 }

@@ -245,6 +245,7 @@
 		558D5EF92AAF5B8800C02042 /* PTKeyedDecoding+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */; };
 		558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */ = {isa = PBXBuildFile; fileRef = 558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */; };
 		558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */; };
+		558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
@@ -676,6 +677,7 @@
 		558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PTKeyedDecoding+PTEX.swift"; sourceTree = "<group>"; };
 		558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = fix_UIKeyboardTaskQueue.S; sourceTree = "<group>"; };
 		558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fix_UIKeyboardTaskQueue.m; sourceTree = "<group>"; };
+		558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingBaseViewController.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
@@ -1283,6 +1285,7 @@
 				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
 				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
 				55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */,
+				558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */,
 			);
 			path = FloatPanel;
 			sourceTree = "<group>";
@@ -2723,6 +2726,7 @@
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				5585F6FF2AD2B19000F878B4 /* PTVideoEditorVideoControl.swift in Sources */,
+				558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
 				55ED0D202B10FDE200391136 /* PTFiter.swift in Sources */,
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,

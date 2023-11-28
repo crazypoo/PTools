@@ -446,11 +446,35 @@ public extension UIViewController {
                     ]
                     sheet.largestUndimmedDetentIdentifier = small
                     sheet.prefersGrabberVisible = true
+                } else {
+                    sheet.detents = [.large()]
+                    sheet.prefersGrabberVisible = true
                 }
             }
         }
         present(modalViewController, animated: true,completion: completion)
     }
+    
+#if POOTOOLS_FLOATINGPANEL
+    func sheetPresent_floating(modalViewController:PTFloatingBaseViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController,completion:PTActionTask?,dismissCompletion:PTActionTask?) {
+        if #available(iOS 15.0, *) {
+            modalViewController.dismissCompletion = dismissCompletion
+            sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
+        } else {
+            switch type {
+            case .large:
+                modalViewController.viewScale = 0.9
+            case .medium:
+                modalViewController.viewScale = 0.5
+            case .custom:
+                modalViewController.viewScale = scale
+            }
+            modalViewController.completion = completion
+            PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
+        }
+    }
+
+#endif
 }
 
 extension UIViewController:UIPopoverPresentationControllerDelegate {
