@@ -90,4 +90,8 @@ public extension PTPOP where Base == CGFloat {
         let value = NSDecimalNumberHandler.pt.rounding(value: base,scale: scale)
         return "\(value.floatValue)".cgFloat() ?? 0
     }
+    
+    var toPi: CGFloat {
+        return base / 180 * .pi
+    }
 }

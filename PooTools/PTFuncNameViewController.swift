@@ -746,8 +746,11 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
-                let vc = PTFloatingBaseViewController()
-                self.present(vc, animated: true)
+//                let vc = PTFloatingBaseViewController()
+//                self.present(vc, animated: true)
+                
+                let vc = PTMediaLibViewController()
+                vc.meidaLibShow(panGesDelegate: self)
             }
         }
         

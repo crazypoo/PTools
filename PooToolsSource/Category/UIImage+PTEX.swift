@@ -13,6 +13,7 @@ import Photos
 import FluentDarkModeKit
 
 extension UIImage : PTProtocolCompatible {}
+extension CIImage : PTProtocolCompatible {}
 
 public extension UIImage {
     
@@ -616,8 +617,7 @@ public enum CompressionMode {
 }
 
 //MARK: UIImage 压缩相关
-public extension PTPOP where Base: UIImage {
-    
+public extension PTPOP where Base: UIImage {        
     //MARK: 压缩图片
     ///压缩图片
     /// - Parameters:
@@ -741,5 +741,15 @@ public extension PTPOP where Base: UIImage {
             UIImage(cgImage: $0)
         }
         return resizedImage
+    }
+}
+
+public extension PTPOP where Base:CIImage {
+    func toUIImage() -> UIImage? {
+        let context = CIContext()
+        guard let cgImage = context.createCGImage(base, from: base.extent) else {
+            return nil
+        }
+        return UIImage(cgImage: cgImage)
     }
 }

@@ -473,7 +473,6 @@ public extension UIViewController {
             PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
         }
     }
-
 #endif
 }
 

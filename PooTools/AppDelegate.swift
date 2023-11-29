@@ -154,8 +154,6 @@ class AppDelegate: PTAppWindowsDelegate {
         }
         
 //        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")
-        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.resourcePath
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>\(String(describing: url))")
         return true
     }
     

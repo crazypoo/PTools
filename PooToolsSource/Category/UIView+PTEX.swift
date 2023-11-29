@@ -98,7 +98,11 @@ public extension PTPOP where Base:UIView {
 public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 
 public extension UIView {
-                
+              
+    static func isRTL() -> Bool {
+        return UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
+    }
+    
     private struct AssociatedKeys {
         static var layoutSubviewsCallback = 998
         static var layoutShapeLayerCallback = 996
