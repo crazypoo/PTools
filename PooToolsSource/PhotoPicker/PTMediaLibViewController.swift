@@ -201,6 +201,17 @@ public class PTMediaLibView:UIView {
                 } else {
                     PTAlertTipControl.present(title:"Opps!",subtitle: "无法拍照", icon:.Error,style: .Normal)
                 }
+            } else {
+                let config = PTMediaLibConfig.share
+                if config.maxSelectCount == 1 {
+                    let cellModel = (itemRow.dataModel as! PTMediaModel)
+                    self.selectedModel.append(cellModel)
+                    config.didSelectAsset?(cellModel.asset)
+                    self.requestSelectPhoto(viewController:PTUtils.getCurrentVC())
+                    if let vc = self.parentViewController as? PTMediaLibViewController {
+                        self.selectImageBlock = vc.selectImageBlock
+                    }
+                }
             }
         }
         return view
@@ -609,7 +620,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         }
     }
         
-    public func meidaLibShow(panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController) {
+    public func mediaLibShow(panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = nil) {
 #if POOTOOLS_FLOATINGPANEL
         if panGesDelegate != nil {
             PTUtils.getCurrentVC().sheetPresent_floating(modalViewController: self, type: .large, scale: 1,panGesDelegate:panGesDelegate) {
