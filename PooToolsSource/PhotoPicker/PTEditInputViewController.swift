@@ -1101,7 +1101,7 @@ extension PTEditInputViewController: UITextViewDelegate {
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
+        if text == String.newline {
             doneBtnClick()
             return false
         }

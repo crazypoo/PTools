@@ -20,6 +20,8 @@ public class PTMediaLibView:UIView {
     ///  - params2: index for asset
     public var selectImageRequestErrorBlock: (([PHAsset], [Int]) -> Void)?
 
+    public var updateTitle:PTActionTask?
+    
     private lazy var fetchImageQueue = OperationQueue()
 
     private var isSelectOriginal = false
@@ -47,6 +49,9 @@ public class PTMediaLibView:UIView {
     var currentAlbum:PTMediaLibListModel? {
         didSet {
             if currentAlbum != nil {
+                if updateTitle != nil {
+                    updateTitle!()
+                }
                 let config = PTMediaLibConfig.share
                 totalModels.removeAll()
                 var rows = [PTRows]()
@@ -175,7 +180,7 @@ public class PTMediaLibView:UIView {
                 let config = PTMediaLibConfig.share
 
                 if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    PTAlertTipControl.present(title:"Opps!",subtitle: "相机无法工作", icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
                 } else if PTMediaLibManager.hasCameraAuthority() {
                     let picker = UIImagePickerController()
                     picker.delegate = self
@@ -199,7 +204,7 @@ public class PTMediaLibView:UIView {
                     picker.videoMaximumDuration = TimeInterval(config.cameraConfiguration.maxRecordDuration)
                     PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
                 } else {
-                    PTAlertTipControl.present(title:"Opps!",subtitle: "无法拍照", icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
                 }
             } else {
                 let config = PTMediaLibConfig.share
@@ -358,15 +363,15 @@ public class PTMediaLibView:UIView {
             let videoCount = selectedModel.filter { $0.type == .video }.count
             
             if videoCount > config.maxVideoSelectCount {
-                PTAlertTipControl.present(title: "Opps!",subtitle:"视频选择数量大于\(config.maxVideoSelectCount)",icon:.Error,style:.Normal)
+                PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video select more than max".localized(), "\(config.maxVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
             } else if videoCount < config.minVideoSelectCount {
-                PTAlertTipControl.present(title: "Opps!",subtitle:"视频选择数量小于\(config.minVideoSelectCount)",icon:.Error,style:.Normal)
+                PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video select less than min".localized(), "\(config.minVideoSelectCount)"),icon:.Error,style:.Normal)
                 return
             }
         }
         
-        PTAlertTipControl.present(title: "",subtitle:"处理中请稍候",icon:.Heart,style:.Normal)
+        PTAlertTipControl.present(title: "",subtitle:"PT Alert Doning".localized(),icon:.Heart,style:.Normal)
         
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         
@@ -431,23 +436,23 @@ public class PTMediaLibView:UIView {
     
     private func save(image: UIImage?, videoUrl: URL?) {
         if let image = image {
-            PTAlertTipControl.present(title:"",subtitle: "处理中,请稍候", icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
             PTMediaLibManager.saveImageToAlbum(image: image) { [weak self] suc, asset in
                 if suc, let asset = asset {
                     let model = PTMediaModel(asset: asset)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:"Opps!",subtitle: "保存图片失败", icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(), icon:.Error,style: .Normal)
                 }
             }
         } else if let videoUrl = videoUrl {
-            PTAlertTipControl.present(title:"",subtitle: "处理中,请稍候", icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(), icon:.Heart,style: .Normal)
             PTMediaLibManager.saveVideoToAlbum(url: videoUrl) { [weak self] suc, asset in
                 if suc, let at = asset {
                     let model = PTMediaModel(asset: at)
                     self?.handleDataArray(newModel: model)
                 } else {
-                    PTAlertTipControl.present(title:"Opps!",subtitle: "保存视频失败", icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save video error".localized(), icon:.Error,style: .Normal)
                 }
             }
         }
@@ -535,7 +540,6 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         view.layoutStyle = .leftTitleRightImage
         view.imageSize = CGSize(width: 10, height: 10)
         view.normalImage = "🔽".emojiToImage(emojiFont: .appfont(size: 10))
-        view.normalTitle = "全部照片"
         view.normalTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.normalSubTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
         view.hightlightTitleColor = PTAppBaseConfig.share.viewDefaultTextColor
@@ -575,10 +579,13 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         view.selectedCount = { index in
             if index > 0 {
                 self.selectLibButton.normalSubTitleFont = .appfont(size: 12)
-                self.selectLibButton.normalSubTitle = "选择了\(index)张"
+                self.selectLibButton.normalSubTitle = String(format: "PT Photo picker selected count".localized(), "\(index)")
             } else {
                 self.selectLibButton.normalSubTitle = ""
             }
+        }
+        view.updateTitle = {
+            self.selectLibButton.normalTitle = self.mediaListView.currentAlbum!.title
         }
         return view
     }()

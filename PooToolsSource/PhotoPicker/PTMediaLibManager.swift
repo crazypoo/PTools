@@ -78,7 +78,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     
     if currentSelectCount >= config.maxSelectCount {
         if showAlert {
-            PTAlertTipControl.present(title: "Opps!",subtitle:"选择数量大于\(config.maxSelectCount)",icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker select cout more than".localized(), "\(config.maxSelectCount)"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -95,14 +95,14 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     
     if model.second > config.maxSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: "Opps!",subtitle:"视频时间大于\(config.maxSelectVideoDuration)",icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video time more than".localized(), "\(config.maxSelectVideoDuration)"),icon:.Error,style:.Normal)
         }
         return false
     }
     
     if model.second < config.minSelectVideoDuration {
         if showAlert {
-            PTAlertTipControl.present(title: "Opps!",subtitle:"视频时间小于\(config.minSelectVideoDuration)",icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video time less than".localized(), "\(config.minSelectVideoDuration)"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -115,7 +115,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size > config.maxSelectVideoDataSize {
         if showAlert {
             let value = Int(round(config.maxSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: "Opps!",subtitle:"视频大小大于\(String(value))",icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video size more than".localized(), "\(String(value))"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -123,7 +123,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     if size < config.minSelectVideoDataSize {
         if showAlert {
             let value = Int(round(config.minSelectVideoDataSize / 1024))
-            PTAlertTipControl.present(title: "Opps!",subtitle:"视频大小小于\(String(value))",icon:.Error,style:.Normal)
+            PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker video size less than".localized(), "\(String(value))"),icon:.Error,style:.Normal)
         }
         return false
     }
@@ -143,7 +143,7 @@ func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, complet
     var requestAssetID: PHImageRequestID?
         
     let timer = Timer.scheduledTimer(timeInterval: Network.share.netRequsetTime, repeats: false) { timer in
-        PTAlertTipControl.present(title: "Opps!",subtitle:"获取超时",icon:.Error,style:.Normal)
+        PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:"PT Photo picker time out".localized(),icon:.Error,style:.Normal)
 
         if let requestAssetID = requestAssetID {
             PHImageManager.default().cancelImageRequest(requestAssetID)

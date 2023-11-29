@@ -303,7 +303,7 @@ public class PTEditImageViewController: PTBaseViewController {
                 return
             }
             
-            PTAlertTipControl.present(title:"处理中请稍候",icon:.Heart,style: .Normal)
+            PTAlertTipControl.present(title:"PT Alert Doning".localized(),icon:.Heart,style: .Normal)
             PTGCDManager.gcdMain {
                 resImage = self.buildImage()
                 resImage = resImage!.pt.clipImage(
@@ -659,18 +659,22 @@ public class PTEditImageViewController: PTBaseViewController {
             make.height.equalTo(54)
         }
         
+        let deleteInfo = "PT Photo picker drop delete".localized()
+        let stringFont:UIFont = .appfont(size: 12)
+        let ashBinViewHeight:CGFloat = 88
+        let stringW = UIView.sizeFor(string: deleteInfo, font: stringFont,height: ashBinViewHeight).width + 20
         ashbinView.snp.makeConstraints { make in
-            make.width.equalTo(100)
-            make.height.equalTo(88)
+            make.width.equalTo(stringW)
+            make.height.equalTo(ashBinViewHeight)
             make.centerX.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total + 100)
         }
         
         let asbinTipLabel = UILabel()
-        asbinTipLabel.font = .appfont(size: 12)
+        asbinTipLabel.font = stringFont
         asbinTipLabel.textAlignment = .center
         asbinTipLabel.textColor = .white
-        asbinTipLabel.text = "拖到此删除"
+        asbinTipLabel.text = deleteInfo
         asbinTipLabel.numberOfLines = 2
         asbinTipLabel.lineBreakMode = .byCharWrapping
 
@@ -1392,12 +1396,8 @@ extension PTEditImageViewController {
                 case .brightness:
                     model.contentIcon = UIImage(.light.min)
                     model.disclosureIndicatorImage = UIImage(.light.max)
-                    model.name = "亮度"
+                    model.name = "PT Photo picker brightness".localized()
                 case .saturation:
-                    model.contentIcon = UIImage(.circle)
-                    model.disclosureIndicatorImage = UIImage(.circle.fill)
-                    model.name = "对比度"
-                default:
                     if #available(iOS 14, *) {
                         model.contentIcon = UIImage(.drop)
                         model.disclosureIndicatorImage = UIImage(.drop.fill)
@@ -1405,7 +1405,11 @@ extension PTEditImageViewController {
                         model.contentIcon = UIImage(systemName: "drop.triangle")
                         model.disclosureIndicatorImage = UIImage(systemName: "drop.triangle.fill")
                     }
-                    model.name = "饱和度"
+                    model.name = "PT Photo picker saturation".localized()
+                default:
+                    model.contentIcon = UIImage(.circle)
+                    model.disclosureIndicatorImage = UIImage(.circle.fill)
+                    model.name = "PT Photo picker contrast".localized()
                 }
                 
                 let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: model)
