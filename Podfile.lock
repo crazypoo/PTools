@@ -44,9 +44,9 @@ PODS:
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.1)
   - netfox (1.21.0)
-  - PooTools/CameraPermission (3.24.4):
+  - PooTools/CameraPermission (3.24.5):
     - PooTools/Core
-  - PooTools/Core (3.24.4):
+  - PooTools/Core (3.24.5):
     - AttributedString
     - CocoaLumberjack/Swift
     - DeviceKit
@@ -63,10 +63,10 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YYText
-  - PooTools/NavBarController (3.24.4):
+  - PooTools/NavBarController (3.24.5):
     - PooTools/Core
     - ZXNavigationBar
-  - PooTools/NetWork (3.24.4):
+  - PooTools/NetWork (3.24.5):
     - Alamofire
     - HandyJSON
     - KakaJSON
@@ -74,11 +74,14 @@ PODS:
     - MJExtension
     - PooTools/Core
     - SwiftyJSON
-  - PooTools/PhotoPicker (3.24.4):
+  - PooTools/PhotoPicker (3.24.5):
     - PooTools/CameraPermission
     - PooTools/Core
     - PooTools/NavBarController
     - PooTools/NetWork
+    - PooTools/VideoEditor
+  - PooTools/VideoEditor (3.24.5):
+    - PooTools/Core
   - pop (1.0.12)
   - RSSwizzle (0.1.0)
   - SafeSFSymbols (2.0.0)
@@ -190,7 +193,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PooTools:
-    :commit: a573a70b2a3667daf0dc2e4c0c182b6bfc3c47d4
+    :commit: a4b7792c80009ee5cab16c1cabf7a5d8174b60d2
     :git: https://github.com/crazypoo/PTools.git
 
 SPEC CHECKSUMS:
@@ -216,7 +219,7 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   netfox: 9d5cc727fe7576c4c7688a2504618a156b7d44b7
-  PooTools: a25fd6ef4c0d2565b9e1ed8179e70dca2ffd57bd
+  PooTools: 822b518890faf62ace0f649549000e39e89d2cb9
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   RSSwizzle: d561958f595028bfcef98c7d55c318b3878a61c6
   SafeSFSymbols: c57c8752149b2ddc0213d3d519a3a31a8bd76340
