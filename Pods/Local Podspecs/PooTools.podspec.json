@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.24.5",
+  "version": "3.24.6",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.24.5"
+    "tag": "3.24.6"
   },
   "license": {
     "type": "MIT",
@@ -1428,6 +1428,9 @@
 
         ],
         "PooTools/VideoEditor": [
+
+        ],
+        "PooTools/FloatingPanel": [
 
         ]
       },

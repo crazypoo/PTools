@@ -22,6 +22,7 @@ PODS:
     - Masonry
   - FDFullscreenPopGesture (1.1)
   - FLEX (5.22.10)
+  - FloatingPanel (2.8.1)
   - FluentDarkModeKit (1.0.4)
   - HandyJSON (5.0.2)
   - HyperioniOS/AttributesInspector (1.2.0):
@@ -44,9 +45,9 @@ PODS:
   - MBProgressHUD (1.2.0)
   - MJExtension (3.4.1)
   - netfox (1.21.0)
-  - PooTools/CameraPermission (3.24.5):
+  - PooTools/CameraPermission (3.24.6):
     - PooTools/Core
-  - PooTools/Core (3.24.5):
+  - PooTools/Core (3.24.6):
     - AttributedString
     - CocoaLumberjack/Swift
     - DeviceKit
@@ -63,10 +64,13 @@ PODS:
     - "UIViewController+Swizzled"
     - WZLBadge
     - YYText
-  - PooTools/NavBarController (3.24.5):
+  - PooTools/FloatingPanel (3.24.6):
+    - FloatingPanel
+    - PooTools/Core
+  - PooTools/NavBarController (3.24.6):
     - PooTools/Core
     - ZXNavigationBar
-  - PooTools/NetWork (3.24.5):
+  - PooTools/NetWork (3.24.6):
     - Alamofire
     - HandyJSON
     - KakaJSON
@@ -74,13 +78,14 @@ PODS:
     - MJExtension
     - PooTools/Core
     - SwiftyJSON
-  - PooTools/PhotoPicker (3.24.5):
+  - PooTools/PhotoPicker (3.24.6):
     - PooTools/CameraPermission
     - PooTools/Core
+    - PooTools/FloatingPanel
     - PooTools/NavBarController
     - PooTools/NetWork
     - PooTools/VideoEditor
-  - PooTools/VideoEditor (3.24.5):
+  - PooTools/VideoEditor (3.24.6):
     - PooTools/Core
   - pop (1.0.12)
   - RSSwizzle (0.1.0)
@@ -144,6 +149,7 @@ DEPENDENCIES:
   - LifetimeTracker
   - LookinServer
   - netfox
+  - PooTools/NavBarController (from `https://github.com/crazypoo/PTools.git`)
   - PooTools/PhotoPicker (from `https://github.com/crazypoo/PTools.git`)
   - SwiftLint
   - Swinject
@@ -158,6 +164,7 @@ SPEC REPOS:
     - DiDiPrism_Ability
     - FDFullscreenPopGesture
     - FLEX
+    - FloatingPanel
     - FluentDarkModeKit
     - HandyJSON
     - HyperioniOS
@@ -193,7 +200,7 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   PooTools:
-    :commit: a4b7792c80009ee5cab16c1cabf7a5d8174b60d2
+    :commit: aa73bfbaa3f788684dd9655b1b8547079ef4211f
     :git: https://github.com/crazypoo/PTools.git
 
 SPEC CHECKSUMS:
@@ -205,6 +212,7 @@ SPEC CHECKSUMS:
   DiDiPrism_Ability: f715b861b9bb009ba86fc9a849b8a0486ae3924f
   FDFullscreenPopGesture: a8a620179e3d9c40e8e00256dcee1c1a27c6d0f0
   FLEX: f21ee4f498eed3f8a1eded66b21939fd3b7a22ce
+  FloatingPanel: 0c32d8c97e52cf6913833af573506f5d86451465
   FluentDarkModeKit: b6317653a00329564582884772ec57c4eaad1a1f
   HandyJSON: 9e4e236f5d2dbefad5155a77417bbea438201c03
   HyperioniOS: 4412ec61a390caadffcaaf3364733b06e103cf63
@@ -219,7 +227,7 @@ SPEC CHECKSUMS:
   MBProgressHUD: 3ee5efcc380f6a79a7cc9b363dd669c5e1ae7406
   MJExtension: 21c5f6f8c4d5d8844b7ae8fbae08fed0b501f961
   netfox: 9d5cc727fe7576c4c7688a2504618a156b7d44b7
-  PooTools: 822b518890faf62ace0f649549000e39e89d2cb9
+  PooTools: 1a71205ba71081613a77c4429f46847df78b5817
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   RSSwizzle: d561958f595028bfcef98c7d55c318b3878a61c6
   SafeSFSymbols: c57c8752149b2ddc0213d3d519a3a31a8bd76340
@@ -235,6 +243,6 @@ SPEC CHECKSUMS:
   YYText: 5c461d709e24d55a182d1441c41dc639a18a4849
   ZXNavigationBar: a8ceb13fe37f9ca894cf6ae22d805cbdbb9ad6b1
 
-PODFILE CHECKSUM: 9368d361d8ff010a1276f710a3faa467742823fd
+PODFILE CHECKSUM: 44238ee5fcd506f03e1f64239d943ea7af219b50
 
 COCOAPODS: 1.14.3

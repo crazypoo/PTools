@@ -58,7 +58,7 @@ class PTWeakProxy: NSObject {
     }
 }
 
-class PTCutViewController: UIViewController {
+class PTCutViewController: PTBaseViewController {
     static let cutRatioHeight: CGFloat = 108
     
     private static let clipRatioItemSize = CGSize(width: 60, height: 70)
@@ -1024,7 +1024,7 @@ class PTCutViewController: UIViewController {
     }
 }
 
-extension PTCutViewController: UIGestureRecognizerDelegate {
+extension PTCutViewController {
     func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
         guard gestureRecognizer == gridPanGes else {
             return true

@@ -38,6 +38,7 @@ target 'PooTools_Example' do
 #https://github.com/helele90/APPAnalyze
 
 pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/NavBarController', :git => 'https://github.com/crazypoo/PTools.git'
   #权限询问
 #  pod 'PooTools', :subspecs => ['InputAll','NotificationPermission', 'LocationPermission', 'CameraPermission', 'CalendarPermission','MotionPermission','TrackingPermission','RemindersPermission','FaceIDPermission','HealthPermission','SpeechRecognizerPermission','ContactsPermission','MicPermission','MeidaPermission','BluetoothPermission','SiriPermission'], :path => 'PooTools.podspec'
   
