@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.24.7'
+    s.version     = '3.24.8'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -913,6 +913,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/iOS17Tips'
         subspec.dependency 'PooTools/WhatsNewsKit'
         subspec.dependency 'PooTools/HeartRate'
+        subspec.dependency 'PooTools/PhotoPicker'
 #        subspec.dependency 'PooTools/SVGA'
 
         subspec.pod_target_xcconfig = {

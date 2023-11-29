@@ -239,9 +239,11 @@ class PTMediaLibCell: PTBaseNormalCell {
             if self?.cellModel.isSelected == true {
 //                self?.progressView.isHidden = false
 //                self?.progressView.progress = max(0.1, progress)
-                self?.imageView.alpha = 0.5
-                if progress >= 1 {
-                    self?.resetProgressViewStatus()
+                PTGCDManager.gcdMain {
+                    self?.imageView.alpha = 0.5
+                    if progress >= 1 {
+                        self?.resetProgressViewStatus()
+                    }
                 }
             } else {
                 self?.cancelFetchBigImage()
@@ -480,7 +482,7 @@ class PTFilterImageCell: PTBaseNormalCell {
     
     lazy var imageView: UIImageView = {
         let view = UIImageView()
-        view.contentMode = .scaleAspectFill
+        view.contentMode = .scaleAspectFit
         view.clipsToBounds = true
         return view
     }()
@@ -496,6 +498,7 @@ class PTFilterImageCell: PTBaseNormalCell {
         
         nameLabel.snp.makeConstraints { make in
             make.bottom.left.right.equalToSuperview()
+            make.top.equalTo(self.imageView.snp.bottom)
         }
     }
     

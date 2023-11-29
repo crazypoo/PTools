@@ -7,9 +7,7 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
-#endif
 import SnapKit
 import Photos
 import SwifterSwift
@@ -75,6 +73,7 @@ public extension PTImageClipRatio {
 
 public class PTEditImageViewController: PTBaseViewController {
 
+    let adjustCollectionViewHeight : CGFloat = 64
     private var animate = false
     public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)?
 
@@ -250,8 +249,8 @@ public class PTEditImageViewController: PTBaseViewController {
             var bannerGroupSize : NSCollectionLayoutSize
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
-            let screenW:CGFloat = 88
-            let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
+            let screenW:CGFloat = 54
+            let cellHeight:CGFloat = self.adjustCollectionViewHeight
             sectionModel.rows.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
@@ -634,10 +633,6 @@ public class PTEditImageViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-#else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
-#endif
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -672,32 +667,34 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
-#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navLineViewBackgroundColor = .clear
         self.zx_navBarBackgroundColor = .clear
-        self.zx_navBar?.addSubview(dismissButton)
+        self.zx_navBar?.addSubviews([dismissButton,undoButton,redoButton,doneButton])
         dismissButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-#else
-        dismissButton.frame = CGRectMake(0, 0, 34, 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
         
-        undoButton.frame = CGRectMake(0, 0, 34, 34)
-        redoButton.frame = CGRectMake(0, 0, 34, 34)
-        doneButton.frame = CGRectMake(0, 0, 34, 34)
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: undoButton),UIBarButtonItem(customView: redoButton)]
-#endif
+        doneButton.snp.makeConstraints { make in
+            make.size.bottom.equalTo(dismissButton)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+        
+        undoButton.snp.makeConstraints { make in
+            make.size.bottom.equalTo(dismissButton)
+            make.right.equalTo(self.doneButton.snp.left).offset(-10)
+        }
+        
+        redoButton.snp.makeConstraints { make in
+            make.size.bottom.equalTo(dismissButton)
+            make.right.equalTo(self.undoButton.snp.left).offset(-10)
+        }
         
         view.addSubviews([mainScrollView,toolCollectionView,ashbinView])
         mainScrollView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
-            make.top.equalToSuperview().inset(-CGFloat.kNavBarHeight_Total)
-#endif
+            make.top.equalToSuperview()
         }
         mainScrollView.addSubviews([containerView])
         containerView.addSubviews([imageView,drawingImageView,eraserCircleView,stickersContainer])
@@ -1089,7 +1086,7 @@ public class PTEditImageViewController: PTBaseViewController {
             adjustCollectionView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.bottom.equalTo(self.toolCollectionView.snp.top)
-                make.height.equalTo(PTCutViewController.cutRatioHeight)
+                make.height.equalTo(self.adjustCollectionViewHeight)
             }
 
             switch PTMediaLibUIConfig.share.adjustSliderType {
@@ -1189,7 +1186,7 @@ public class PTEditImageViewController: PTBaseViewController {
 //           imageRatio < 1 {
 //            let cameraRatio: CGFloat = 16 / 9
 //            let layerH = min(view.zl.width * cameraRatio, view.zl.height)
-//            
+//
 //            if isSmallScreen() {
 //                y = deviceIsFringeScreen() ? min(94, view.zl.height - layerH) : 0
 //            } else {
@@ -1569,7 +1566,7 @@ extension PTEditImageViewController {
 //            } else {
 //                return true
 //            }
-//        } else 
+//        } else
         if gestureRecognizer is UIPanGestureRecognizer {
             guard let selectedTool = selectedTool else {
                 return false

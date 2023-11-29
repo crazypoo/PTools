@@ -182,6 +182,11 @@ public class PTMediaLibView:UIView {
                     let row = PTRows(cls:PTMediaLibCell.self,ID: PTMediaLibCell.ID,dataModel: value)
                     rows.append(row)
                 }
+                
+                if self.showCameraCell {
+                    let row = PTRows(cls:PTFusionCell.self,ID: PTFusionCell.ID)
+                    rows.insert(row, at: 0)
+                }
                 let section = PTSection(rows: rows)
                 self.collectionView.showCollectionDetail(collectionData: [section])
             }
@@ -203,88 +208,92 @@ public class PTMediaLibView:UIView {
             let config = PTMediaLibConfig.share
 
             let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = (itemRow.dataModel as! PTMediaModel)
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibCell
-            cell.cellModel = cellModel
-            cell.selectedBlock = { [weak self] isSelected in
-                guard let `self` = self else { return }
+            if itemRow.ID == PTMediaLibCell.ID {
+                let cellModel = (itemRow.dataModel as! PTMediaModel)
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTMediaLibCell
+                cell.cellModel = cellModel
+                cell.selectedBlock = { [weak self] isSelected in
+                    guard let `self` = self else { return }
 
-                if !cellModel.isSelected {
-                    guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                    downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                        if !self.shouldDirectEdit(cellModel) {
-                            cellModel.isSelected = true
-                            self.selectedModel.append(cellModel)
-                            isSelected(true)
-                            config.didSelectAsset?(cellModel.asset)
-                            self.refreshCellIndex()
+                    if !cellModel.isSelected {
+                        guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
+                        downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                            if !self.shouldDirectEdit(cellModel) {
+                                cellModel.isSelected = true
+                                self.selectedModel.append(cellModel)
+                                isSelected(true)
+                                config.didSelectAsset?(cellModel.asset)
+                                self.refreshCellIndex()
+                            }
                         }
+                    } else {
+                        cellModel.isSelected = false
+                        self.selectedModel.removeAll(where: { $0 == cellModel })
+                        isSelected(false)
+                        config.didDeselectAsset?(cellModel.asset)
+                        self.refreshCellIndex()
                     }
-                } else {
-                    cellModel.isSelected = false
-                    self.selectedModel.removeAll(where: { $0 == cellModel })
-                    isSelected(false)
-                    config.didDeselectAsset?(cellModel.asset)
-                    self.refreshCellIndex()
                 }
-            }
-            
-            if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
-                self.setCellIndex(cell, index: index + 1)
-            } else {
-                cell.selectButton.normalTitle = ""
-            }
-            
-            self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
+                
+                if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
+                    self.setCellIndex(cell, index: index + 1)
+                } else {
+                    cell.selectButton.normalTitle = ""
+                }
+                
+                self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
 
-            cell.editButton.addActionHandlers { sender in
-                switch cellModel.type {
-                case .video:
-                    let _ = PTMeidaLibManager.fetchAVAsset(forVideo: cellModel.asset) { avAsset, parma in
-                        if avAsset != nil {
-                            let controller = PTVideoEditorVideoEditorViewController(asset: avAsset!, videoEdit: self.videoEdit)
-                            controller.onEditCompleted
-                                .sink {  editedPlayerItem, videoEdit in
-                                    self.videoEdit = videoEdit
-                                    
-                                    for (index, selM) in self.selectedModel.enumerated() {
-                                        if cellModel == selM {
-                                            selM.avEditorOutputItem = editedPlayerItem
-                                            self.selectedModel[index] = selM
-                                            self.requestSelectPhoto()
-                                            break
+                cell.editButton.addActionHandlers { sender in
+                    switch cellModel.type {
+                    case .video:
+                        let _ = PTMeidaLibManager.fetchAVAsset(forVideo: cellModel.asset) { avAsset, parma in
+                            if avAsset != nil {
+                                let controller = PTVideoEditorVideoEditorViewController(asset: avAsset!, videoEdit: self.videoEdit)
+                                controller.onEditCompleted
+                                    .sink {  editedPlayerItem, videoEdit in
+                                        self.videoEdit = videoEdit
+                                        
+                                        for (index, selM) in self.selectedModel.enumerated() {
+                                            if cellModel == selM {
+                                                selM.avEditorOutputItem = editedPlayerItem
+                                                self.selectedModel[index] = selM
+                                                self.requestSelectPhoto()
+                                                break
+                                            }
                                         }
                                     }
-                                }
-                                .store(in: &self.cancellables)
-                            let nav = PTBaseNavControl(rootViewController: controller)
-                            nav.modalPresentationStyle = .fullScreen
-                            PTUtils.getCurrentVC().present(nav, animated: true)
-                        }
-                    }
-                default:
-                    
-                    PTMeidaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
-                        if !isDegraded {
-                            if let image = image {
-                                let vc = PTEditImageViewController(readyEditImage: image)
-                                vc.editFinishBlock = { ei ,editImageModel in
-                                    cellModel.isSelected = true
-                                    cellModel.editImage = ei
-                                    cellModel.editImageModel = editImageModel
-                                    PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
-                                    self.requestSelectPhoto()
-                                }
-                                let nav = PTBaseNavControl(rootViewController: vc)
+                                    .store(in: &self.cancellables)
+                                let nav = PTBaseNavControl(rootViewController: controller)
                                 nav.modalPresentationStyle = .fullScreen
                                 PTUtils.getCurrentVC().present(nav, animated: true)
                             }
                         }
+                    default:
+                        PTMeidaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
+                            if !isDegraded {
+                                if let image = image {
+                                    let vc = PTEditImageViewController(readyEditImage: image)
+                                    vc.editFinishBlock = { ei ,editImageModel in
+                                        cellModel.isSelected = true
+                                        cellModel.editImage = ei
+                                        cellModel.editImageModel = editImageModel
+                                        PTMediaLibConfig.share.didSelectAsset?(cellModel.asset)
+                                        self.requestSelectPhoto()
+                                    }
+                                    let nav = PTBaseNavControl(rootViewController: vc)
+                                    nav.modalPresentationStyle = .fullScreen
+                                    PTUtils.getCurrentVC().present(nav, animated: true)
+                                }
+                            }
+                        }
                     }
                 }
+                return cell
+            } else {
+                let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFusionCell
+                cell.contentView.backgroundColor = .random
+                return cell
             }
-            
-            return cell
         }
         return view
     }()
@@ -318,14 +327,14 @@ public class PTMediaLibView:UIView {
     private func refreshCellIndex() {
 //        let config = ZLPhotoConfiguration.default()
 //        let uiConfig = ZLPhotoUIConfiguration.default()
-//        
+//
 //        let cameraIsEnable = arrSelectedModels.count < config.maxSelectCount
 //        cameraBtn.alpha = cameraIsEnable ? 1 : 0.3
 //        cameraBtn.isEnabled = cameraIsEnable
-//        
+//
 //        let showIndex = config.showSelectedIndex
 //        let showMask = uiConfig.showSelectedMask || uiConfig.showInvalidMask
-//        
+//
 //        guard showIndex || showMask else {
 //            return
 //        }
@@ -449,7 +458,7 @@ public class PTMediaLibView:UIView {
         return flag && (canEditImage || canEditVideo)
     }
 
-    private func requestSelectPhoto(viewController: UIViewController? = nil) {
+    public func requestSelectPhoto(viewController: UIViewController? = nil) {
         guard !selectedModel.isEmpty else {
             selectImageBlock?([], isSelectOriginal)
             viewController?.dismiss(animated: true, completion: nil)
@@ -472,20 +481,6 @@ public class PTMediaLibView:UIView {
         
         PTAlertTipControl.present(title: "",subtitle:"处理中请稍候",icon:.Heart,style:.Normal)
         
-        var timeout = false
-
-        var counts:Int = 0
-        Timer.scheduledTimer(timeInterval: 1, repeats: true) { timer in
-            counts += 1
-            if counts >= Int(Network.share.netRequsetTime) {
-                timeout = true
-                PTAlertTipControl.present(title: "Opps!",subtitle:"获取超时",icon:.Error,style:.Normal)
-
-                self.fetchImageQueue.cancelAllOperations()
-
-                timer.invalidate()
-            }
-        }
                 
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         
@@ -519,7 +514,6 @@ public class PTMediaLibView:UIView {
         
         for (i, m) in selectedModel.enumerated() {
             let operation = PTFetchImageOperation(model: m, isOriginal: isOriginal) { image, asset in
-                guard !timeout else { return }
                 
                 sucCount += 1
                 
@@ -530,6 +524,7 @@ public class PTMediaLibView:UIView {
                         image: image,
                         isEdited: isEdited,
                         editModel: isEdited ? m.editImageModel : nil,
+                        avEditorOutputItem: m.avEditorOutputItem,
                         index: i
                     )
                     results[i] = model
@@ -542,8 +537,7 @@ public class PTMediaLibView:UIView {
                 
                 guard sucCount >= totalCount else { return }
                 
-                callback(results.compactMap { $0 },errorAssets,errorIndexs
-                )
+                callback(results.compactMap { $0 },errorAssets,errorIndexs)
             }
             fetchImageQueue.addOperation(operation)
         }
@@ -560,6 +554,8 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
 }
 
 public class PTMediaLibViewController: PTFloatingBaseViewController {
+
+    public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
 
     private lazy var fakeNav:UIView = {
         let view = UIView()
@@ -579,12 +575,8 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
         view.addActionHandlers { sender in
-//            self.returnFrontVC()
-            
-            self.mediaListView.selectImageBlock = { results,isOriginal in
-                PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>\(results),\(isOriginal)")
-            }
-            PTNSLogConsole("\(String(describing: self.mediaListView.selectedModel.first!.avEditorOutputItem))")
+            self.mediaListView.requestSelectPhoto(viewController: self)
+            self.mediaListView.selectImageBlock = self.selectImageBlock
         }
         return view
     }()

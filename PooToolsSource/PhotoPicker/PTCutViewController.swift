@@ -7,9 +7,7 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
-#endif
 import SnapKit
 import SwifterSwift
 
@@ -274,10 +272,6 @@ class PTCutViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-#if POOTOOLS_NAVBARCONTROLLER
-#else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
-#endif
     }
 
     init(image: UIImage, status: PTClipStatus) {
@@ -318,7 +312,7 @@ class PTCutViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navLineViewBackgroundColor = .clear
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
         cancelBtn.snp.makeConstraints { make in
@@ -331,12 +325,6 @@ class PTCutViewController: PTBaseViewController {
             make.size.bottom.equalTo(self.cancelBtn)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-#else
-        cancelBtn.frame = CGRectMake(0, 0, 34, 34)
-        doneBtn.frame = CGRectMake(0, 0, 34, 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
-#endif
 
         setupUI()
         generateThumbnailImage()
@@ -408,11 +396,7 @@ class PTCutViewController: PTBaseViewController {
         view.addSubviews([mainScrollView,shadowView,overlayView,bottomToolView,ratioCollectionView])
         mainScrollView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-#if POOTOOLS_NAVBARCONTROLLER
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
-#else
             make.top.equalToSuperview()
-#endif
         }
         shadowView.snp.makeConstraints { make in
             make.edges.equalTo(self.mainScrollView)

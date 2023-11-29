@@ -1476,20 +1476,20 @@
 		552F078A2B15C26B00CB47CD /* PhotoPicker */ = {
 			isa = PBXGroup;
 			children = (
-				552F078B2B15C2A800CB47CD /* PTMediaLibManager.swift */,
-				552F078D2B15C47300CB47CD /* PTMediaLibListModel.swift */,
-				552F07912B15C8A400CB47CD /* PTMediaLibConfig.swift */,
-				552F07952B15D19500CB47CD /* PTMediaLibViewController.swift */,
-				552F07972B15DD1400CB47CD /* PTMediaLibCell.swift */,
-				552F07992B161F4100CB47CD /* PTMediaLibAlbumListViewController.swift */,
-				552F079B2B165A1C00CB47CD /* PTEditImageViewController.swift */,
-				552F079D2B16781900CB47CD /* PTPaths.swift */,
-				552F07A12B1696C900CB47CD /* PTCutViewController.swift */,
-				552F07A32B169E2B00CB47CD /* PTTransitioningAnimation.swift */,
-				552F07A52B16B2C200CB47CD /* PTEditInputViewController.swift */,
-				550BAD492B16D74E0006C4AB /* PTFilter.swift */,
 				550BAD4B2B16E87F0006C4AB /* PTAdjustSliderView.swift */,
+				552F07A12B1696C900CB47CD /* PTCutViewController.swift */,
+				552F079B2B165A1C00CB47CD /* PTEditImageViewController.swift */,
+				552F07A52B16B2C200CB47CD /* PTEditInputViewController.swift */,
 				550BAD4D2B1707770006C4AB /* PTFetchImageOperation.swift */,
+				550BAD492B16D74E0006C4AB /* PTFilter.swift */,
+				552F07992B161F4100CB47CD /* PTMediaLibAlbumListViewController.swift */,
+				552F07972B15DD1400CB47CD /* PTMediaLibCell.swift */,
+				552F07912B15C8A400CB47CD /* PTMediaLibConfig.swift */,
+				552F078D2B15C47300CB47CD /* PTMediaLibListModel.swift */,
+				552F078B2B15C2A800CB47CD /* PTMediaLibManager.swift */,
+				552F07952B15D19500CB47CD /* PTMediaLibViewController.swift */,
+				552F079D2B16781900CB47CD /* PTPaths.swift */,
+				552F07A32B169E2B00CB47CD /* PTTransitioningAnimation.swift */,
 			);
 			path = PhotoPicker;
 			sourceTree = "<group>";
