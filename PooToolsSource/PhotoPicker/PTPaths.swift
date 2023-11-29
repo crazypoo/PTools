@@ -133,7 +133,7 @@ public class PTMosaicPath: NSObject {
     
     var linePoints: [CGPoint] = []
     
-    init(pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
+    public init(pathWidth: CGFloat, ratio: CGFloat, startPoint: CGPoint) {
         path = UIBezierPath()
         path.lineWidth = pathWidth
         path.lineCapStyle = .round

@@ -12,9 +12,6 @@ import AVFoundation
 import Accelerate
 import MobileCoreServices
 
-extension UIImage : PTProtocolCompatible {}
-extension CIImage : PTProtocolCompatible {}
-
 let PTMaxImageWidth: CGFloat = 500
 
 /// Adjust slider type

@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.24.3",
+  "version": "3.24.4",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.24.3"
+    "tag": "3.24.4"
   },
   "license": {
     "type": "MIT",
@@ -1410,6 +1410,27 @@
       "source_files": "PooToolsSource/HeartRate/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_HEARTRATE POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "PhotoPicker",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PooTools/CameraPermission": [
+
+        ],
+        "PooTools/NetWork": [
+
+        ],
+        "PooTools/NavBarController": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/PhotoPicker/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"
       }
     },
     {

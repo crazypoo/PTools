@@ -2302,7 +2302,7 @@
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
 				E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */,
-				559C1C91293AE247002874BA /* ShellScript */,
+				559C1C91293AE247002874BA /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -2392,7 +2392,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		559C1C91293AE247002874BA /* ShellScript */ = {
+		559C1C91293AE247002874BA /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 12;
 			files = (
@@ -2402,6 +2402,7 @@
 			inputPaths = (
 				"$(SRCROOT)/SwiftLint/swiftlint",
 			);
+			name = "Run Script";
 			outputFileListPaths = (
 			);
 			outputPaths = (

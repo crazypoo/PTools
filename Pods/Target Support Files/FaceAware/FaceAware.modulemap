@@ -1,6 +1,0 @@
-framework module FaceAware {
-  umbrella header "FaceAware-umbrella.h"
-
-  export *
-  module * { export * }
-}
