@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import SnapKit
 import SwifterSwift
 import SafeSFSymbols
@@ -52,28 +54,24 @@ class PTImageStickerView: PTBaseStickerView {
         )
     }
     
-    init(
-        id: String = UUID().uuidString,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat = 1,
+    init(id: String = UUID().uuidString,
+         image: UIImage,
+         originScale: CGFloat,
+         originAngle: CGFloat,
+         originFrame: CGRect,
+         gesScale: CGFloat = 1,
         gesRotation: CGFloat = 0,
-        totalTranslationPoint: CGPoint = .zero,
-        showBorder: Bool = true
-    ) {
+         totalTranslationPoint: CGPoint = .zero,
+         showBorder: Bool = true) {
         self.image = image
-        super.init(
-            id: id,
-            originScale: originScale,
-            originAngle: originAngle,
-            originFrame: originFrame,
-            gesScale: gesScale,
-            gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint,
-            showBorder: showBorder
-        )
+        super.init(id: id,
+                   originScale: originScale,
+                   originAngle: originAngle,
+                   originFrame: originFrame,
+                   gesScale: gesScale,
+                   gesRotation: gesRotation,
+                   totalTranslationPoint: totalTranslationPoint,
+                   showBorder: showBorder)
         
         borderView.addSubview(imageView)
     }
@@ -106,7 +104,6 @@ class PTImageStickerView: PTBaseStickerView {
         return size
     }
 }
-
 
 protocol PTStickerViewDelegate: NSObject {
     /// Called when scale or rotate or move.
@@ -738,6 +735,15 @@ class PTEditInputViewController: PTBaseViewController {
                 colorPicker.modalPresentationStyle = .fullScreen
                 self.present(colorPicker, animated: true) {
                 }
+            } else {
+                let vc = PTMediaColorSelectViewController(currentColor: self.currentColor)
+                vc.colorSelectedTask = { color in
+                    self.currentColor = color
+                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true) {
+                }
             }
         }
         return view
@@ -788,6 +794,7 @@ class PTEditInputViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
         cancelBtn.snp.makeConstraints { make in
@@ -800,7 +807,13 @@ class PTEditInputViewController: PTBaseViewController {
             make.size.bottom.equalTo(self.cancelBtn)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-
+#else
+        cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+#endif
+        
         setupUI()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIApplication.keyboardWillShowNotification, object: nil)
@@ -1110,14 +1123,12 @@ extension PTEditInputViewController: NSLayoutManagerDelegate {
 @available(iOS 14.0, *)
 extension PTEditInputViewController: UIColorPickerViewControllerDelegate {
     func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-//        // 用户完成选择后执行的操作
         viewController.dismiss(animated: true) {
             self.currentColor = viewController.selectedColor
         }
     }
     
     func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-//        // 当用户选择颜色时执行的操作
     }
 }
 

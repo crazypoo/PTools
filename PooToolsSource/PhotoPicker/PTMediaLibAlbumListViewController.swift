@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import SnapKit
 import Photos
 import SwifterSwift
@@ -72,19 +74,24 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubview(dismissButton)
         dismissButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-
+        
+#else
+        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+#endif
         PHPhotoLibrary.shared().register(self)
         
         view.addSubviews([collectionView])
         collectionView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+            make.top.equalToSuperview()
         }
         
         if self.selectedAlbum.models.isEmpty {
@@ -96,7 +103,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     func loadAlbumList() {
         
-        PTMeidaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo) { models in
+        PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo) { models in
             self.albumList.removeAll()
             self.albumList.append(contentsOf: models)
             

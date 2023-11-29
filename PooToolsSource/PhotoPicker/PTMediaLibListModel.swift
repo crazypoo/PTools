@@ -49,7 +49,7 @@ public class PTMediaLibListModel: NSObject {
     }
     
     public func refetchPhotos() {
-        let models = PTMeidaLibManager.fetchPhoto(
+        let models = PTMediaLibManager.fetchPhoto(
             in: result,
             ascending: PTMediaLibUIConfig.share.sortAscending,
             allowSelectImage: PTMediaLibConfig.share.allowSelectImage,
@@ -91,7 +91,7 @@ public class PTMediaModel:NSObject {
             return pri_dataSize
         }
         
-        let size = PTMeidaLibManager.fetchAssetSize(for: asset)
+        let size = PTMediaLibManager.fetchAssetSize(for: asset)
         pri_dataSize = size
         
         return size

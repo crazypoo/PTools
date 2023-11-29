@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import SnapKit
 import Photos
 import SwifterSwift
@@ -15,15 +17,15 @@ import SafeSFSymbols
 
 public class PTEditImageViewController: PTBaseViewController {
 
+    public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)?
+    public var mosaicLineWidth: CGFloat = 25
+    public var drawLineWidth: CGFloat = 6
+
     let adjustCollectionViewHeight : CGFloat = 64
     private var animate = false
-    public var editFinishBlock: ((UIImage, PTEditModel?) -> Void)?
-
     private var thumbnailFilterImages: [UIImage] = []
-
     // Show text and image stickers.
     private lazy var stickersContainer = UIView()
-    public var mosaicLineWidth: CGFloat = 25
     private var isScrolling = false
     private var shouldLayout = true
     private var hasAdjustedImage = false
@@ -32,21 +34,18 @@ public class PTEditImageViewController: PTBaseViewController {
     private var selectedTool: PTMediaEditConfig.EditTool?
     private var tools: [PTMediaEditConfig.EditTool]!
     private var adjustTools: [PTMediaEditConfig.AdjustTool]!
-
     private var currentClipStatus: PTClipStatus!
     private var preClipStatus: PTClipStatus!
     private var currentAdjustStatus: PTAdjustStatus!
     private var preAdjustStatus: PTAdjustStatus!
     private var preStickerState: PTBaseStickertState?
     private var currentFilter: PTFilter!
-    // 选择滤镜后对原图添加滤镜后的图片
     private var filterImages: [String: UIImage] = [:]
     private var editImageWithoutAdjust: UIImage!
     private var editImageAdjustRef: UIImage?
     private var selectedAdjustTool: PTMediaEditConfig.AdjustTool?
 
     var toolsModel:[PTFusionCellModel]! {
-        
         var cellModels = [PTFusionCellModel]()
         tools.enumerated().forEach { index,value in
             switch value {
@@ -102,7 +101,6 @@ public class PTEditImageViewController: PTBaseViewController {
         config.itemHeight = 54
 
         let view = PTCollectionView(viewConfig: config)
-//        view.backgroundColor = self.imageMostColor
         view.cellInCollection = { collection,sectionModel,indexPath in
             let config = PTMediaLibConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
@@ -255,6 +253,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
+        view.isEnabled = !editorManager.actions.isEmpty
         return view
     }()
     
@@ -265,6 +264,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
+        view.isEnabled = editorManager.actions.count != editorManager.redoActions.count
         return view
     }()
     
@@ -336,11 +336,10 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
     
     private var editImage: UIImage!
-
     private var originalImage: UIImage!
     /// 是否允许交换图片宽高
     private var shouldSwapSize: Bool {
-        (currentClipStatus.angle / 180 * .pi).truncatingRemainder(dividingBy: .pi) != 0
+        currentClipStatus.angle.pt.toPi.truncatingRemainder(dividingBy: .pi) != 0
     }
     var imageSize: CGSize {
         if shouldSwapSize {
@@ -395,7 +394,6 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
     
     static let maxDrawLineImageWidth: CGFloat = 600
-    @objc public var drawLineWidth: CGFloat = 6
     private lazy var drawColor:UIColor = .systemRed
     private var defaultDrawPathWidth: CGFloat = 0
     private lazy var drawColorButton:UIButton = {
@@ -420,6 +418,15 @@ public class PTEditImageViewController: PTBaseViewController {
                 colorPicker.modalPresentationStyle = .fullScreen
                 self.present(colorPicker, animated: true) {
                 }
+            } else {
+                let vc = PTMediaColorSelectViewController(currentColor: self.drawColor)
+                vc.colorSelectedTask = { color in
+                    self.drawColor = color
+                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true) {
+                }
             }
         }
         return view
@@ -438,7 +445,6 @@ public class PTEditImageViewController: PTBaseViewController {
         return imageView
     }()
     private var editorManager: PTMediaEditManager!
-
     private lazy var panGes: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer { sender in
             let pan = sender as! UIPanGestureRecognizer
@@ -451,7 +457,7 @@ public class PTEditImageViewController: PTBaseViewController {
             if self.selectedTool == .draw {
                 let point = pan.location(in: self.drawingImageView)
                 if pan.state == .began {
-    //                setToolView(show: false)
+                    self.viewToolsBar(show: false)
                     
                     let originalRatio = min(self.mainScrollView.frame.width / self.originalImage.size.width, self.mainScrollView.frame.height / self.originalImage.size.height)
                     let ratio = min(
@@ -479,8 +485,8 @@ public class PTEditImageViewController: PTBaseViewController {
                     path!.addLine(to: point)
                     self.drawLine()
                 } else if pan.state == .cancelled || pan.state == .ended {
-    //                setToolView(show: true, delay: 0.5)
-                    
+                    self.viewToolsBar(show: true)
+
                     if let path = self.drawPaths.last {
                         self.editorManager.storeAction(.draw(path))
                     }
@@ -488,8 +494,8 @@ public class PTEditImageViewController: PTBaseViewController {
             } else if self.selectedTool == .mosaic {
                 let point = pan.location(in: self.imageView)
                 if pan.state == .began {
-//                    setToolView(show: false)
-                    
+                    self.viewToolsBar(show: false)
+
                     var actualSize = self.currentClipStatus.editRect.size
                     if self.shouldSwapSize {
                         swap(&actualSize.width, &actualSize.height)
@@ -510,7 +516,7 @@ public class PTEditImageViewController: PTBaseViewController {
                     path?.addLine(to: point)
                     self.mosaicImageLayerMaskLayer?.path = path?.path.cgPath
                 } else if pan.state == .cancelled || pan.state == .ended {
-//                    setToolView(show: true, delay: 0.5)
+                    self.viewToolsBar(show: true)
                     if let path = self.mosaicPaths.last {
                         self.editorManager.storeAction(.mosaic(path))
                     }
@@ -525,13 +531,13 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
     
     var imageMostColor : UIColor!
-    
     // 处理好的马赛克图片
     private var mosaicImage: UIImage?
     // 显示马赛克图片的layer
     private var mosaicImageLayer: CALayer?
     // 显示马赛克图片的layer的mask
     private var mosaicImageLayerMaskLayer: CAShapeLayer?
+    private var impactFeedback: UIImpactFeedbackGenerator?
 
     public lazy var ashbinView: UIView = {
         let view = UIView()
@@ -541,7 +547,7 @@ public class PTEditImageViewController: PTBaseViewController {
         view.isHidden = true
         return view
     }()
-    @objc public lazy var ashbinImgView = UIImageView(image: UIImage(.trash), highlightedImage: UIImage(.trash.fill))
+    public lazy var ashbinImgView = UIImageView(image: UIImage(.trash), highlightedImage: UIImage(.trash.fill))
 
     init(readyEditImage: UIImage) {
         super.init(nibName: nil, bundle: nil)
@@ -554,9 +560,6 @@ public class PTEditImageViewController: PTBaseViewController {
         originalImage = readyEditImage.pt.fixOrientation()
         editImage = originalImage
         editImageWithoutAdjust = originalImage
-//        PTGCDManager.gcdMain {
-//            self.imageMostColor = self.originalImage.imageMostColor().inverseColor()
-//        }
         
         currentClipStatus = PTClipStatus(editRect: CGRect(origin: .zero, size: readyEditImage.size))
         preClipStatus = currentClipStatus
@@ -609,6 +612,7 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewDidLoad()
 
         view.backgroundColor = .black
+#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navLineViewBackgroundColor = .clear
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([dismissButton,undoButton,redoButton,doneButton])
@@ -632,6 +636,14 @@ public class PTEditImageViewController: PTBaseViewController {
             make.size.bottom.equalTo(dismissButton)
             make.right.equalTo(self.undoButton.snp.left).offset(-10)
         }
+#else
+        dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        undoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        redoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: redoButton),UIBarButtonItem(customView: undoButton)]
+#endif
         
         view.addSubviews([mainScrollView,toolCollectionView,ashbinView])
         mainScrollView.snp.makeConstraints { make in
@@ -678,6 +690,10 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         if !mosaicPaths.isEmpty {
             generateNewMosaicImage()
+        }
+        
+        if tools.contains(.draw) {
+            impactFeedback = UIImpactFeedbackGenerator(style: .light)
         }
         
         if tools.contains(.mosaic) {
@@ -729,28 +745,134 @@ public class PTEditImageViewController: PTBaseViewController {
             generateFilterImages()
         }
         
+        let tapGes = UITapGestureRecognizer { sender in
+            if self.toolCollectionView.alpha == 1 {
+                self.viewToolsBar(show: false)
+            } else {
+                self.viewToolsBar(show: true)
+            }
+        }
+        tapGes.delegate = self
+        view.addGestureRecognizer(tapGes)
+        
         createToolsBar()
         view.addGestureRecognizer(panGes)
         mainScrollView.panGestureRecognizer.require(toFail: panGes)
     }
-    
-    private func generateFilterImages() {
-        let size: CGSize
-        let ratio = (originalImage.size.width / originalImage.size.height)
-        let fixLength: CGFloat = 200
-        if ratio >= 1 {
-            size = CGSize(width: fixLength * ratio, height: fixLength)
-        } else {
-            size = CGSize(width: fixLength, height: fixLength / ratio)
-        }
-        let thumbnailImage = originalImage.pt.resize_vI(size) ?? originalImage
+                
+    private func resetContainerViewFrame() {
+        mainScrollView.setZoomScale(1, animated: true)
+        imageView.image = editImage
+        let editRect = currentClipStatus.editRect
+        let editSize = editRect.size
+        let scrollViewSize = mainScrollView.frame.size
+        let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)
+        let w = ratio * editSize.width * mainScrollView.zoomScale
+        let h = ratio * editSize.height * mainScrollView.zoomScale
         
-        PTGCDManager.gcdGobal {
-            let filters = PTMediaEditConfig.share.filters
-            self.thumbnailFilterImages = filters.map { ($0.applier?(thumbnailImage!) ?? thumbnailImage)! }
+        let y: CGFloat = max(0, (scrollViewSize.height - h) / 2)
+        containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: y, width: w, height: h)
+        mainScrollView.contentSize = containerView.frame.size
+        if currentClipStatus.ratio?.isCircle == true {
+            let mask = CAShapeLayer()
+            let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            mask.path = path.cgPath
+            containerView.layer.mask = mask
+        } else {
+            containerView.layer.mask = nil
         }
+        let scaleImageOrigin = CGPoint(x: -editRect.origin.x * ratio, y: -editRect.origin.y * ratio)
+        let scaleImageSize = CGSize(width: imageSize.width * ratio, height: imageSize.height * ratio)
+        imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
+        drawingImageView.frame = imageView.frame
+        mosaicImageLayer?.frame = imageView.bounds
+        mosaicImageLayerMaskLayer?.frame = imageView.bounds
+        stickersContainer.frame = imageView.frame
+        // 针对于长图的优化
+        if (editRect.height / editRect.width) > (view.frame.height / view.frame.width * 1.1) {
+            let widthScale = view.frame.width / w
+            mainScrollView.maximumZoomScale = widthScale
+            mainScrollView.zoomScale = widthScale
+            mainScrollView.contentOffset = .zero
+        } else if editRect.width / editRect.height > 1 {
+            mainScrollView.maximumZoomScale = max(3, view.frame.height / h)
+        }
+        originalFrame = view.convert(containerView.frame, from: mainScrollView)
+        isScrolling = false
     }
 
+    func createToolsBar() {
+        var rows = [PTRows]()
+        toolsModel.enumerated().forEach { index,value in
+            let row = PTRows(cls:PTEditToolsCell.self,ID: PTEditToolsCell.ID,dataModel: value)
+            rows.append(row)
+        }
+        
+        let section = PTSection(rows: rows)
+        toolCollectionView.showCollectionDetail(collectionData: [section])
+    }
+    
+    func viewToolsBar(show:Bool) {
+        toolCollectionView.layer.removeAllAnimations()
+#if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navBar?.layer.removeAllAnimations()
+#else
+        self.navigationController?.navigationBar.layer.removeAllAnimations()
+#endif
+        if show {
+            UIView.animate(withDuration: 0.25) {
+                self.toolCollectionView.alpha = 1
+#if POOTOOLS_NAVBARCONTROLLER
+                self.zx_navBar?.alpha = 1
+#else
+                self.navigationController?.navigationBar.alpha = 1
+#endif
+            }
+        } else {
+            UIView.animate(withDuration: 0.25) {
+                self.toolCollectionView.alpha = 0
+#if POOTOOLS_NAVBARCONTROLLER
+                self.zx_navBar?.alpha = 0
+#else
+                self.navigationController?.navigationBar.alpha = 0
+#endif
+            }
+        }
+    }
+        
+    private func rotationImageView() {
+        let transform = CGAffineTransform(rotationAngle: (currentClipStatus.angle / 180 * .pi))
+        imageView.transform = transform
+        drawingImageView.transform = transform
+    }
+    
+    private func buildImage() -> UIImage {
+        let image = UIGraphicsImageRenderer.pt.renderImage(size: editImage.size) { format in
+            format.scale = self.editImage.scale
+        } imageActions: { context in
+            editImage.draw(at: .zero)
+            drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
+            
+            if !stickersContainer.subviews.isEmpty {
+                let scale = imageSize.width / stickersContainer.frame.width
+                stickersContainer.subviews.forEach { view in
+                    (view as? PTStickerViewAdditional)?.resetState()
+                }
+                context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
+                stickersContainer.layer.render(in: context)
+                context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
+            }
+        }
+        
+        guard let cgi = image.cgImage else {
+            return editImage
+        }
+        return UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
+    }
+}
+
+//MARK: About draw
+extension PTEditImageViewController {
     private func showHandDrawAction() {
         
         let isSelected = selectedTool != .draw
@@ -789,7 +911,204 @@ public class PTEditImageViewController: PTBaseViewController {
             drawBar.removeFromSuperview()
         }
     }
-    
+            
+    private func mosaicAction() {
+        let isSelected = selectedTool != .mosaic
+        if isSelected {
+            selectedTool = .mosaic
+        } else {
+            selectedTool = nil
+        }
+        
+        generateNewMosaicLayerIfAdjust()
+        showHandDrawBar(show: false)
+        showFilter(show: false)
+        showAdjust(show:false)
+    }
+        
+    private func generateNewMosaicImageLayer() {
+        mosaicImage = editImage.pt.mosaicImage()
+        
+        mosaicImageLayer?.removeFromSuperlayer()
+        
+        mosaicImageLayer = CALayer()
+        mosaicImageLayer?.frame = imageView.bounds
+        mosaicImageLayer?.contents = mosaicImage?.cgImage
+        imageView.layer.insertSublayer(mosaicImageLayer!, below: mosaicImageLayerMaskLayer)
+        
+        mosaicImageLayer?.mask = mosaicImageLayerMaskLayer
+    }
+
+    private func drawLine() {
+        let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
+        let ratio = min(
+            mainScrollView.frame.width / currentClipStatus.editRect.width,
+            mainScrollView.frame.height / currentClipStatus.editRect.height
+        )
+        let scale = ratio / originalRatio
+        // 缩放到最初的size
+        var size = drawingImageView.frame.size
+        size.width /= scale
+        size.height /= scale
+        if shouldSwapSize {
+            swap(&size.width, &size.height)
+        }
+        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
+        if editImage.size.width / editImage.size.height > 1 {
+            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
+        }
+        size.width *= toImageScale
+        size.height *= toImageScale
+        
+        
+        drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { context in
+            context.setAllowsAntialiasing(true)
+            context.setShouldAntialias(true)
+            for path in self.drawPaths {
+                path.drawPath()
+            }
+        }
+    }
+
+    private func eraserAction(_ pan: UIPanGestureRecognizer) {
+        // 相对于drawingImageView的point
+        let point = pan.location(in: drawingImageView)
+        let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
+        let ratio = min(
+            mainScrollView.frame.width / currentClipStatus.editRect.width,
+            mainScrollView.frame.height / currentClipStatus.editRect.height
+        )
+        let scale = ratio / originalRatio
+        // 缩放到最初的size
+        var size = drawingImageView.frame.size
+        size.width /= scale
+        size.height /= scale
+        if shouldSwapSize {
+            swap(&size.width, &size.height)
+        }
+        
+        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
+        if editImage.size.width / editImage.size.height > 1 {
+            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
+        }
+        
+        let pointScale = ratio / originalRatio / toImageScale
+        // 转换为drawPath的point
+        let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
+        if pan.state == .began {
+            eraserCircleView.isHidden = false
+            impactFeedback?.prepare()
+        }
+        
+        if pan.state == .began || pan.state == .changed {
+            var transform: CGAffineTransform = .identity
+            
+            let angle = ((Int(currentClipStatus.angle) % 360) + 360) % 360
+            let drawingImageViewSize = drawingImageView.frame.size
+            if angle == 90 {
+                transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width)
+            } else if angle == 180 {
+                transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height)
+            } else if angle == 270 {
+                transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
+            }
+            transform = transform.concatenating(drawingImageView.transform)
+            eraserCircleView.center = point.applying(transform)
+            
+            var needDraw = false
+            for path in drawPaths {
+                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
+                    path.willDelete = true
+                    deleteDrawPaths.append(path)
+                    needDraw = true
+                    impactFeedback?.impactOccurred()
+                }
+            }
+            if needDraw {
+                drawLine()
+            }
+        } else {
+            eraserCircleView.isHidden = true
+            if !deleteDrawPaths.isEmpty {
+                editorManager.storeAction(.eraser(deleteDrawPaths))
+                drawPaths.removeAll { deleteDrawPaths.contains($0) }
+                deleteDrawPaths.removeAll()
+                drawLine()
+            }
+        }
+    }
+
+    /// 传入inputImage 和 inputMosaicImage则代表仅想要获取新生成的mosaic图片
+    @discardableResult
+    private func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
+        let renderRect = CGRect(origin: .zero, size: originalImage.size)
+        
+        var midImage = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
+            format.scale = self.originalImage.scale
+        } imageActions: { context in
+            if inputImage != nil {
+                inputImage?.draw(in: renderRect)
+            } else {
+                var drawImage: UIImage?
+                if tools.contains(.filter), let image = filterImages[currentFilter.name] {
+                    drawImage = image
+                } else {
+                    drawImage = originalImage
+                }
+                
+                if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
+                    drawImage = drawImage?.pt.adjust(
+                        brightness: currentAdjustStatus.brightness,
+                        contrast: currentAdjustStatus.contrast,
+                        saturation: currentAdjustStatus.saturation
+                    )
+                }
+                
+                drawImage?.draw(in: renderRect)
+            }
+            
+            mosaicPaths.forEach { path in
+                context.move(to: path.startPoint)
+                path.linePoints.forEach { point in
+                    context.addLine(to: point)
+                }
+                context.setLineWidth(path.path.lineWidth / path.ratio)
+                context.setLineCap(.round)
+                context.setLineJoin(.round)
+                context.setBlendMode(.clear)
+                context.strokePath()
+            }
+        }
+        
+        guard let midCgImage = midImage.cgImage else { return nil }
+        midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
+        
+        let temp = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
+            format.scale = self.originalImage.scale
+        } imageActions: { _ in
+            // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
+            originalImage.draw(in: renderRect)
+            (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
+            midImage.draw(in: renderRect)
+        }
+        
+        guard let cgi = temp.cgImage else { return nil }
+        let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
+        
+        if inputImage != nil {
+            return image
+        }
+        
+        editImage = image
+        imageView.image = image
+        mosaicImageLayerMaskLayer?.path = nil
+        
+        return image
+    }
+}
+
+//MARK: Cut
+extension PTEditImageViewController {
     func showClipAction() {
         
         preClipStatus = currentClipStatus
@@ -822,7 +1141,34 @@ public class PTEditImageViewController: PTBaseViewController {
         showFilter(show: false)
         showAdjust(show:false)
     }
-    
+
+    private func clipImage(status: PTClipStatus) {
+        let oldAngle = currentClipStatus.angle
+        if oldAngle != status.angle {
+            currentClipStatus.angle = status.angle
+            rotationImageView()
+        }
+        
+        currentClipStatus.editRect = status.editRect
+        currentClipStatus.ratio = status.ratio
+        resetContainerViewFrame()
+    }
+
+    func finishClipDismissAnimate() {
+        mainScrollView.alpha = 1
+        UIView.animate(withDuration: 0.1) {
+            self.toolCollectionView.alpha = 1
+#if POOTOOLS_NAVBARCONTROLLER
+                self.zx_navBar?.alpha = 1
+#else
+                self.navigationController?.navigationBar.alpha = 1
+#endif
+        }
+    }
+}
+
+//MARK: TextInput
+extension PTEditImageViewController {
     func showTextAction() {
         showInputTextVC(font:PTMediaEditConfig.share.textStickerDefaultFont) { [weak self] text, textColor, font, image, style in
             guard !text.isEmpty, let image = image else { return }
@@ -896,48 +1242,26 @@ public class PTEditImageViewController: PTBaseViewController {
         let originFrame = CGRect(x: r.minX + (r.width - size.width) / 2, y: r.minY + (r.height - size.height) / 2, width: size.width, height: size.height)
         return originFrame
     }
-    
-    private func mosaicAction() {
-        let isSelected = selectedTool != .mosaic
-        if isSelected {
-            selectedTool = .mosaic
-        } else {
-            selectedTool = nil
-        }
-        
-        generateNewMosaicLayerIfAdjust()
-        showHandDrawBar(show: false)
-        showFilter(show: false)
-        showAdjust(show:false)
-    }
-    
-    private func generateNewMosaicLayerIfAdjust() {
-        defer {
-            hasAdjustedImage = false
-        }
-        
-        guard hasAdjustedImage else { return }
-        
-        generateNewMosaicImageLayer()
-        
-        if !mosaicPaths.isEmpty {
-            generateNewMosaicImage()
-        }
-    }
-    
-    private func generateNewMosaicImageLayer() {
-        mosaicImage = editImage.pt.mosaicImage()
-        
-        mosaicImageLayer?.removeFromSuperlayer()
-        
-        mosaicImageLayer = CALayer()
-        mosaicImageLayer?.frame = imageView.bounds
-        mosaicImageLayer?.contents = mosaicImage?.cgImage
-        imageView.layer.insertSublayer(mosaicImageLayer!, below: mosaicImageLayerMaskLayer)
-        
-        mosaicImageLayer?.mask = mosaicImageLayerMaskLayer
-    }
 
+    private func removeSticker(id: String?) {
+        guard let id else { return }
+        
+        for sticker in stickersContainer.subviews.reversed() {
+            guard let stickerID = (sticker as? PTBaseStickerView)?.id,
+                  stickerID == id else {
+                continue
+            }
+            
+            (sticker as? PTBaseStickerView)?.moveToAshbin()
+            
+            break
+        }
+    }
+}
+
+//MARK: Filter
+extension PTEditImageViewController {
+    
     private func filterAction() {
         let isSelected = selectedTool != .filter
         if isSelected {
@@ -953,7 +1277,6 @@ public class PTEditImageViewController: PTBaseViewController {
 
     func showFilter(show:Bool) {
         if show {
-            
             view.addSubview(filterCollectionView)
             filterCollectionView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -1006,7 +1329,27 @@ public class PTEditImageViewController: PTBaseViewController {
             imageView.image = editImage
         }
     }
-    
+
+    private func generateFilterImages() {
+        let size: CGSize
+        let ratio = (originalImage.size.width / originalImage.size.height)
+        let fixLength: CGFloat = 200
+        if ratio >= 1 {
+            size = CGSize(width: fixLength * ratio, height: fixLength)
+        } else {
+            size = CGSize(width: fixLength, height: fixLength / ratio)
+        }
+        let thumbnailImage = originalImage.pt.resize_vI(size) ?? originalImage
+        
+        PTGCDManager.gcdGobal {
+            let filters = PTMediaEditConfig.share.filters
+            self.thumbnailFilterImages = filters.map { ($0.applier?(thumbnailImage!) ?? thumbnailImage)! }
+        }
+    }
+}
+
+//MARK: Adjust
+extension PTEditImageViewController {
     func adjustActions() {
         let isSelected = selectedTool != .adjust
         if isSelected {
@@ -1110,258 +1453,19 @@ public class PTEditImageViewController: PTBaseViewController {
     private func generateAdjustImageRef() {
         editImageAdjustRef = generateNewMosaicImage(inputImage: editImageWithoutAdjust, inputMosaicImage: editImageWithoutAdjust.pt.mosaicImage())
     }
-        
-    private func resetContainerViewFrame() {
-        mainScrollView.setZoomScale(1, animated: true)
-        imageView.image = editImage
-        let editRect = currentClipStatus.editRect
-        let editSize = editRect.size
-        let scrollViewSize = mainScrollView.frame.size
-        let ratio = min(scrollViewSize.width / editSize.width, scrollViewSize.height / editSize.height)
-        let w = ratio * editSize.width * mainScrollView.zoomScale
-        let h = ratio * editSize.height * mainScrollView.zoomScale
-        
-//        let imageRatio = originalImage.size.width / originalImage.size.height
-        let y: CGFloat
-//        if isFirstSetContainerFrame,
-//           presentingViewController is ZLCustomCamera,
-//           imageRatio < 1 {
-//            let cameraRatio: CGFloat = 16 / 9
-//            let layerH = min(view.zl.width * cameraRatio, view.zl.height)
-//
-//            if isSmallScreen() {
-//                y = deviceIsFringeScreen() ? min(94, view.zl.height - layerH) : 0
-//            } else {
-//                y = 0
-//            }
-//        } else {
-            y = max(0, (scrollViewSize.height - h) / 2)
-//        }
-//        isFirstSetContainerFrame = false
-        containerView.frame = CGRect(x: max(0, (scrollViewSize.width - w) / 2), y: y, width: w, height: h)
-        mainScrollView.contentSize = containerView.frame.size
-        if currentClipStatus.ratio?.isCircle == true {
-            let mask = CAShapeLayer()
-            let path = UIBezierPath(arcCenter: CGPoint(x: w / 2, y: h / 2), radius: w / 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            mask.path = path.cgPath
-            containerView.layer.mask = mask
-        } else {
-            containerView.layer.mask = nil
-        }
-        let scaleImageOrigin = CGPoint(x: -editRect.origin.x * ratio, y: -editRect.origin.y * ratio)
-        let scaleImageSize = CGSize(width: imageSize.width * ratio, height: imageSize.height * ratio)
-        imageView.frame = CGRect(origin: scaleImageOrigin, size: scaleImageSize)
-        drawingImageView.frame = imageView.frame
-        mosaicImageLayer?.frame = imageView.bounds
-        mosaicImageLayerMaskLayer?.frame = imageView.bounds
-        stickersContainer.frame = imageView.frame
-        // 针对于长图的优化
-        if (editRect.height / editRect.width) > (view.frame.height / view.frame.width * 1.1) {
-            let widthScale = view.frame.width / w
-            mainScrollView.maximumZoomScale = widthScale
-            mainScrollView.zoomScale = widthScale
-            mainScrollView.contentOffset = .zero
-        } else if editRect.width / editRect.height > 1 {
-            mainScrollView.maximumZoomScale = max(3, view.frame.height / h)
-        }
-        originalFrame = view.convert(containerView.frame, from: mainScrollView)
-        isScrolling = false
-    }
-
-    func createToolsBar() {
-        var rows = [PTRows]()
-        toolsModel.enumerated().forEach { index,value in
-            let row = PTRows(cls:PTEditToolsCell.self,ID: PTEditToolsCell.ID,dataModel: value)
-            rows.append(row)
-        }
-        
-        let section = PTSection(rows: rows)
-        toolCollectionView.showCollectionDetail(collectionData: [section])
-    }
     
-    private func drawLine() {
-        let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
-        let ratio = min(
-            mainScrollView.frame.width / currentClipStatus.editRect.width,
-            mainScrollView.frame.height / currentClipStatus.editRect.height
-        )
-        let scale = ratio / originalRatio
-        // 缩放到最初的size
-        var size = drawingImageView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if shouldSwapSize {
-            swap(&size.width, &size.height)
-        }
-        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
-        if editImage.size.width / editImage.size.height > 1 {
-            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
-        }
-        size.width *= toImageScale
-        size.height *= toImageScale
-        
-        
-        drawingImageView.image = UIGraphicsImageRenderer.pt.renderImage(size: size) { context in
-            context.setAllowsAntialiasing(true)
-            context.setShouldAntialias(true)
-            for path in self.drawPaths {
-                path.drawPath()
-            }
-        }
-    }
-
-    private func eraserAction(_ pan: UIPanGestureRecognizer) {
-        // 相对于drawingImageView的point
-        let point = pan.location(in: drawingImageView)
-        let originalRatio = min(mainScrollView.frame.width / originalImage.size.width, mainScrollView.frame.height / originalImage.size.height)
-        let ratio = min(
-            mainScrollView.frame.width / currentClipStatus.editRect.width,
-            mainScrollView.frame.height / currentClipStatus.editRect.height
-        )
-        let scale = ratio / originalRatio
-        // 缩放到最初的size
-        var size = drawingImageView.frame.size
-        size.width /= scale
-        size.height /= scale
-        if shouldSwapSize {
-            swap(&size.width, &size.height)
+    private func generateNewMosaicLayerIfAdjust() {
+        defer {
+            hasAdjustedImage = false
         }
         
-        var toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.width
-        if editImage.size.width / editImage.size.height > 1 {
-            toImageScale = PTEditImageViewController.maxDrawLineImageWidth / size.height
+        guard hasAdjustedImage else { return }
+        
+        generateNewMosaicImageLayer()
+        
+        if !mosaicPaths.isEmpty {
+            generateNewMosaicImage()
         }
-        
-        let pointScale = ratio / originalRatio / toImageScale
-        // 转换为drawPath的point
-        let drawPoint = CGPoint(x: point.x / pointScale, y: point.y / pointScale)
-        if pan.state == .began {
-            eraserCircleView.isHidden = false
-//            impactFeedback?.prepare()
-        }
-        
-        if pan.state == .began || pan.state == .changed {
-            var transform: CGAffineTransform = .identity
-            
-            let angle = ((Int(currentClipStatus.angle) % 360) + 360) % 360
-            let drawingImageViewSize = drawingImageView.frame.size
-            if angle == 90 {
-                transform = transform.translatedBy(x: 0, y: -drawingImageViewSize.width)
-            } else if angle == 180 {
-                transform = transform.translatedBy(x: -drawingImageViewSize.width, y: -drawingImageViewSize.height)
-            } else if angle == 270 {
-                transform = transform.translatedBy(x: -drawingImageViewSize.height, y: 0)
-            }
-            transform = transform.concatenating(drawingImageView.transform)
-            eraserCircleView.center = point.applying(transform)
-            
-            var needDraw = false
-            for path in drawPaths {
-                if path.path.contains(drawPoint), !deleteDrawPaths.contains(path) {
-                    path.willDelete = true
-                    deleteDrawPaths.append(path)
-                    needDraw = true
-//                    impactFeedback?.impactOccurred()
-                }
-            }
-            if needDraw {
-                drawLine()
-            }
-        } else {
-            eraserCircleView.isHidden = true
-            if !deleteDrawPaths.isEmpty {
-                editorManager.storeAction(.eraser(deleteDrawPaths))
-                drawPaths.removeAll { deleteDrawPaths.contains($0) }
-                deleteDrawPaths.removeAll()
-                drawLine()
-            }
-        }
-    }
-
-    private func clipImage(status: PTClipStatus) {
-        let oldAngle = currentClipStatus.angle
-        if oldAngle != status.angle {
-            currentClipStatus.angle = status.angle
-            rotationImageView()
-        }
-        
-        currentClipStatus.editRect = status.editRect
-        currentClipStatus.ratio = status.ratio
-        resetContainerViewFrame()
-    }
-    
-    private func rotationImageView() {
-        let transform = CGAffineTransform(rotationAngle: (currentClipStatus.angle / 180 * .pi))
-        imageView.transform = transform
-        drawingImageView.transform = transform
-    }
-    
-    /// 传入inputImage 和 inputMosaicImage则代表仅想要获取新生成的mosaic图片
-    @discardableResult
-    private func generateNewMosaicImage(inputImage: UIImage? = nil, inputMosaicImage: UIImage? = nil) -> UIImage? {
-        let renderRect = CGRect(origin: .zero, size: originalImage.size)
-        
-        var midImage = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-            format.scale = self.originalImage.scale
-        } imageActions: { context in
-            if inputImage != nil {
-                inputImage?.draw(in: renderRect)
-            } else {
-                var drawImage: UIImage?
-                if tools.contains(.filter), let image = filterImages[currentFilter.name] {
-                    drawImage = image
-                } else {
-                    drawImage = originalImage
-                }
-                
-                if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
-                    drawImage = drawImage?.pt.adjust(
-                        brightness: currentAdjustStatus.brightness,
-                        contrast: currentAdjustStatus.contrast,
-                        saturation: currentAdjustStatus.saturation
-                    )
-                }
-                
-                drawImage?.draw(in: renderRect)
-            }
-            
-            mosaicPaths.forEach { path in
-                context.move(to: path.startPoint)
-                path.linePoints.forEach { point in
-                    context.addLine(to: point)
-                }
-                context.setLineWidth(path.path.lineWidth / path.ratio)
-                context.setLineCap(.round)
-                context.setLineJoin(.round)
-                context.setBlendMode(.clear)
-                context.strokePath()
-            }
-        }
-        
-        guard let midCgImage = midImage.cgImage else { return nil }
-        midImage = UIImage(cgImage: midCgImage, scale: editImage.scale, orientation: .up)
-        
-        let temp = UIGraphicsImageRenderer.pt.renderImage(size: originalImage.size) { format in
-            format.scale = self.originalImage.scale
-        } imageActions: { _ in
-            // 由于生成的mosaic图片可能在边缘区域出现空白部分，导致合成后会有黑边，所以在最下面先画一张原图
-            originalImage.draw(in: renderRect)
-            (inputMosaicImage ?? mosaicImage)?.draw(in: renderRect)
-            midImage.draw(in: renderRect)
-        }
-        
-        guard let cgi = temp.cgImage else { return nil }
-        let image = UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
-        
-        if inputImage != nil {
-            return image
-        }
-        
-        editImage = image
-        imageView.image = image
-        mosaicImageLayerMaskLayer?.path = nil
-        
-        return image
     }
 
     private func adjustStatusChanged() {
@@ -1386,51 +1490,6 @@ public class PTEditImageViewController: PTBaseViewController {
             adjustSlider.value = currentAdjustStatus.contrast
         case .saturation:
             adjustSlider.value = currentAdjustStatus.saturation
-        }
-    }
-
-    private func buildImage() -> UIImage {
-        let image = UIGraphicsImageRenderer.pt.renderImage(size: editImage.size) { format in
-            format.scale = self.editImage.scale
-        } imageActions: { context in
-            editImage.draw(at: .zero)
-            drawingImageView.image?.draw(in: CGRect(origin: .zero, size: originalImage.size))
-            
-            if !stickersContainer.subviews.isEmpty {
-                let scale = imageSize.width / stickersContainer.frame.width
-                stickersContainer.subviews.forEach { view in
-                    (view as? PTStickerViewAdditional)?.resetState()
-                }
-                context.concatenate(CGAffineTransform(scaleX: scale, y: scale))
-                stickersContainer.layer.render(in: context)
-                context.concatenate(CGAffineTransform(scaleX: 1 / scale, y: 1 / scale))
-            }
-        }
-        
-        guard let cgi = image.cgImage else {
-            return editImage
-        }
-        return UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
-    }
-    
-    func finishClipDismissAnimate() {
-        mainScrollView.alpha = 1
-        UIView.animate(withDuration: 0.1) {
-        }
-    }
-    
-    private func removeSticker(id: String?) {
-        guard let id else { return }
-        
-        for sticker in stickersContainer.subviews.reversed() {
-            guard let stickerID = (sticker as? PTBaseStickerView)?.id,
-                  stickerID == id else {
-                continue
-            }
-            
-            (sticker as? PTBaseStickerView)?.moveToAshbin()
-            
-            break
         }
     }
 }
@@ -1484,32 +1543,34 @@ extension PTEditImageViewController:UIScrollViewDelegate {
 @available(iOS 14.0, *)
 extension PTEditImageViewController: UIColorPickerViewControllerDelegate {
     public func colorPickerViewControllerDidFinish(_ viewController: UIColorPickerViewController) {
-//        // 用户完成选择后执行的操作
         viewController.dismiss(animated: true) {
-            self.drawColor = viewController.selectedColor
+            PTGCDManager.gcdMain {
+                self.drawColor = viewController.selectedColor
+            }
         }
     }
     
     public func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
-//        // 当用户选择颜色时执行的操作
     }
 }
 
 // MARK: UIGestureRecognizerDelegate
 extension PTEditImageViewController {
     public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-//        guard imageStickerContainerIsHidden else {
-//            return false
-//        }
-//        if gestureRecognizer is UITapGestureRecognizer {
-//            if bottomShadowView.alpha == 1 {
-//                let p = gestureRecognizer.location(in: view)
-//                return !bottomShadowView.frame.contains(p)
-//            } else {
-//                return true
-//            }
-//        } else
-        if gestureRecognizer is UIPanGestureRecognizer {
+        if gestureRecognizer is UITapGestureRecognizer {
+            if toolCollectionView.alpha == 1 {
+                let p = gestureRecognizer.location(in: view)
+                return !toolCollectionView.frame.contains(p)
+            } else if filterCollectionView.alpha == 1 {
+                let p = gestureRecognizer.location(in: view)
+                return !filterCollectionView.frame.contains(p)
+            } else if adjustCollectionView.alpha == 1 {
+                let p = gestureRecognizer.location(in: view)
+                return !adjustCollectionView.frame.contains(p)
+            } else {
+                return true
+            }
+        } else if gestureRecognizer is UIPanGestureRecognizer {
             guard let selectedTool = selectedTool else {
                 return false
             }
@@ -1677,7 +1738,7 @@ extension PTEditImageViewController: PTStickerViewDelegate {
     func stickerBeginOperation(_ sticker: PTBaseStickerView) {
         preStickerState = sticker.state
         
-//        setToolView(show: false)
+        viewToolsBar(show: false)
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = false
         var frame = ashbinView.frame
@@ -1721,7 +1782,7 @@ extension PTEditImageViewController: PTStickerViewDelegate {
     }
     
     func stickerEndOperation(_ sticker: PTBaseStickerView, panGes: UIPanGestureRecognizer) {
-//        setToolView(show: true)
+        viewToolsBar(show: true)
         ashbinView.layer.removeAllAnimations()
         ashbinView.isHidden = true
         

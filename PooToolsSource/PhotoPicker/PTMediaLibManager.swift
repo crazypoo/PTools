@@ -1,5 +1,5 @@
 //
-//  PTMeidaLibManager.swift
+//  PTMediaLibManager.swift
 //  PooTools_Example
 //
 //  Created by 邓杰豪 on 28/11/23.
@@ -142,29 +142,58 @@ func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, complet
 
     var requestAssetID: PHImageRequestID?
         
-    var counts:Int = 0
-    Timer.scheduledTimer(timeInterval: 1, repeats: true) { timer in
-        counts += 1
-        if counts >= Int(Network.share.netRequsetTime) {
-            PTAlertTipControl.present(title: "Opps!",subtitle:"获取超时",icon:.Error,style:.Normal)
+    let timer = Timer.scheduledTimer(timeInterval: Network.share.netRequsetTime, repeats: false) { timer in
+        PTAlertTipControl.present(title: "Opps!",subtitle:"获取超时",icon:.Error,style:.Normal)
 
-            if let requestAssetID = requestAssetID {
-                PHImageManager.default().cancelImageRequest(requestAssetID)
-            }
-            
-            timer.invalidate()
+        if let requestAssetID = requestAssetID {
+            PHImageManager.default().cancelImageRequest(requestAssetID)
         }
+        
+        timer.invalidate()
     }
     
-    requestAssetID = PTMeidaLibManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
-        
+    requestAssetID = PTMediaLibManager.fetchVideo(for: model.asset, completion: { _, _, isDegraded in
+        timer.invalidate()
         if !isDegraded {
             completion()
         }
     })
 }
 
-public class PTMeidaLibManager:NSObject {
+public class PTMediaLibManager:NSObject {
+    class func hasCameraAuthority() -> Bool {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .restricted || status == .denied {
+            return false
+        }
+        return true
+    }
+    
+    /// Save video to album.
+    public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
+        let status = PHPhotoLibrary.authorizationStatus()
+        
+        if status == .denied || status == .restricted {
+            completion?(false, nil)
+            return
+        }
+        
+        var placeholderAsset: PHObjectPlaceholder?
+        PHPhotoLibrary.shared().performChanges({
+            let newAssetRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: url)
+            placeholderAsset = newAssetRequest?.placeholderForCreatedAsset
+        }) { suc, _ in
+            PTGCDManager.gcdMain {
+                if suc {
+                    let asset = self.getAsset(from: placeholderAsset?.localIdentifier)
+                    completion?(suc, asset)
+                } else {
+                    completion?(false, nil)
+                }
+            }
+        }
+    }
+
     /// Save image to album.
     public class func saveImageToAlbum(image: UIImage, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()
@@ -244,7 +273,6 @@ public class PTMeidaLibManager:NSObject {
         return fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
 
-
     /// Fetch asset data.
     @discardableResult
     public class func fetchOriginalImageData(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (Data, [AnyHashable: Any]?, Bool) -> Void) -> PHImageRequestID {
@@ -260,8 +288,8 @@ public class PTMeidaLibManager:NSObject {
                 progress?(CGFloat(pro), error, stop, info)
             }
         }
-        
-        return PHImageManager.default().requestImageData(for: asset, options: option) { data, _, _, info in
+                
+        return PHImageManager.default().requestImageDataAndOrientation(for: asset, options: option) { data, _, _, info in
             let cancel = info?[PHImageCancelledKey] as? Bool ?? false
             let isDegraded = (info?[PHImageResultIsDegradedKey] as? Bool ?? false)
             if !cancel, let data = data {

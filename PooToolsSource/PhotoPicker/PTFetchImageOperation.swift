@@ -84,7 +84,7 @@ class PTFetchImageOperation: Operation {
         // 存在编辑的图片
         if let editImage = model.editImage {
             if PTMediaLibConfig.share.saveNewImageAfterEdit {
-                PTMeidaLibManager.saveImageToAlbum(image: editImage) { [weak self] _, asset in
+                PTMediaLibManager.saveImageToAlbum(image: editImage) { [weak self] _, asset in
                     self?.completion(editImage, asset)
                     self?.fetchFinish()
                 }
@@ -98,7 +98,7 @@ class PTFetchImageOperation: Operation {
         }
         
         if PTMediaLibConfig.share.allowSelectGif, model.type == .gif {
-            requestImageID = PTMeidaLibManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
+            requestImageID = PTMediaLibManager.fetchOriginalImageData(for: model.asset) { [weak self] data, _, isDegraded in
                 if !isDegraded {
                     let image = UIImage.pt.animateGifImage(data: data)
                     self?.completion(image, nil)
@@ -109,7 +109,7 @@ class PTFetchImageOperation: Operation {
         }
         
         if isOriginal {
-            requestImageID = PTMeidaLibManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
+            requestImageID = PTMediaLibManager.fetchOriginalImage(for: model.asset, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
                     PTNSLogConsole("---- 原图加载完成 \(String(describing: self?.isCancelled))")
                     self?.completion(image?.pt.fixOrientation(), nil)
@@ -117,7 +117,7 @@ class PTFetchImageOperation: Operation {
                 }
             }
         } else {
-            requestImageID = PTMeidaLibManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
+            requestImageID = PTMediaLibManager.fetchImage(for: model.asset, size: model.previewSize, progress: progress) { [weak self] image, isDegraded in
                 if !isDegraded {
                     PTNSLogConsole("---- 加载完成 isCancelled: \(String(describing: self?.isCancelled))")
                     self?.completion(self?.scaleImage(image?.pt.fixOrientation()), nil)

@@ -35,6 +35,32 @@ public class PTMediaLibConfig:NSObject {
     
     public typealias KBUnit = CGFloat
     
+    /// The theme color of framework.
+    /// 框架主题色
+    public var themeColor: UIColor = .purple
+
+    /// The normal color of adjust slider.
+    /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景色
+    public var adjustSliderNormalColor: UIColor = .white
+    private var pri_adjustSliderTintColor: UIColor?
+    /// The tint color of adjust slider.
+    /// 编辑图片，调整饱和度、对比度、亮度时，右侧slider背景高亮色
+    public var adjustSliderTintColor: UIColor {
+        get {
+            pri_adjustSliderTintColor ?? themeColor
+        }
+        set {
+            pri_adjustSliderTintColor = newValue
+        }
+    }
+    
+    public var selectedBorderColor:UIColor = UIColor.purple
+    /// Whether to callback directly after taking a photo. Defaults to false.
+    public var callbackDirectlyAfterTakingPhoto = false
+
+    /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
+    public var sortAscending = true
+
     /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
     public var maxFrameCountForGIF = 50
 
@@ -71,7 +97,7 @@ public class PTMediaLibConfig:NSObject {
     ///允许选择视频
     open var allowSelectVideo = true
     
-    public var maxPreviewCount = 20
+    public var maxPreviewCount = 9
     public var allowMixSelect = true
     private var pri_maxSelectCount = 9
     /// Anything superior than 1 will enable the multiple selection feature. Defaults to 9.
@@ -168,6 +194,16 @@ public class PTMediaLibUIConfig:NSObject {
 //MARK: Edit config
 public class PTMediaEditConfig:NSObject {
     public static let share = PTMediaEditConfig()
+
+    /// Give an impact feedback when the adjust slider value is zero. Defaults to true.
+    public var impactFeedbackWhenAdjustSliderValueIsZero = true
+    @discardableResult
+    func impactFeedbackStyle(_ style: UIImpactFeedbackGenerator.FeedbackStyle) -> PTMediaEditConfig {
+        impactFeedbackStyle = style
+        return self
+    }
+    /// Impact feedback style. Defaults to .medium
+    public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
 
     private var pri_filters: [PTFilter] = PTFilter.all
     /// Filters for image editor.

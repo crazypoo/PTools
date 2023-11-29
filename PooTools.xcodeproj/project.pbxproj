@@ -128,6 +128,7 @@
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
+		55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
 		554929EE28F9089D00C82ABF /* PTPermissionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */; };
 		554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */; };
@@ -575,6 +576,7 @@
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
+		55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaColorSelectViewController.swift; sourceTree = "<group>"; };
 		554929E928F9089D00C82ABF /* PTPermissionModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionModel.swift; sourceTree = "<group>"; };
 		554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionViewController.swift; sourceTree = "<group>"; };
 		554929EB28F9089D00C82ABF /* PTPermissionHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionHeader.swift; sourceTree = "<group>"; };
@@ -965,7 +967,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				552F078A2B15C26B00CB47CD /* PhotoPicker */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1031,6 +1032,7 @@
 				55B4F9FD2AE0EE14006D35F3 /* PermissionCore */,
 				231D158B272CDEE9003D6F62 /* PhoneInfo */,
 				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,
+				552F078A2B15C26B00CB47CD /* PhotoPicker */,
 				55E3BBB52ABDFF0C00858348 /* Ping */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				555818B62AFA48E70051C0AA /* ProgressBar */,
@@ -1490,6 +1492,7 @@
 				55BCB9632B1731C20016A4C2 /* PTFilter.swift */,
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
+				55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */,
 			);
 			path = PhotoPicker;
 			sourceTree = "<group>";
@@ -2549,6 +2552,7 @@
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				5585F6D12AD299D500F878B4 /* PTVideoExporter.swift in Sources */,
 				55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */,
+				55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */,
 				5528931F2AE88378009135F9 /* PTMediaBrowserLoadingView.swift in Sources */,
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5585F6F52AD2AD3100F878B4 /* PTVideoEditorTimeLineGenerator.swift in Sources */,

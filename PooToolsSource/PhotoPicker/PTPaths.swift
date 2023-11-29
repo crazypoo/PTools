@@ -64,7 +64,6 @@ public class PTDrawPath: NSObject {
         path.removeAllPoints()
         bgPath.removeAllPoints()
         
-        // https://blog.csdn.net/ChasingDreamsCoder/article/details/53015694
         path.move(to: divRatio(points[0]))
         path.addLine(to: divRatio(points[1]))
         

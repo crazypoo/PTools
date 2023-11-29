@@ -749,8 +749,8 @@ class PTFuncNameViewController: PTBaseViewController {
 //                let vc = PTFloatingBaseViewController()
 //                self.present(vc, animated: true)
                 
-//                let vc = PTMediaLibViewController()
-//                vc.meidaLibShow(panGesDelegate: self)
+                let vc = PTMediaLibViewController()
+                vc.meidaLibShow(panGesDelegate: self)
             }
         }
         

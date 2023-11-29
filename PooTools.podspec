@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.24.9'
+    s.version     = '3.25.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -838,6 +838,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/NavBarController'
         subspec.dependency 'PooTools/VideoEditor'
         subspec.dependency 'PooTools/FloatingPanel'
+        subspec.dependency 'ChromaColorPicker'
         subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"

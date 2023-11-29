@@ -7,7 +7,9 @@
 //
 
 import UIKit
+#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
+#endif
 import SnapKit
 import SwifterSwift
 
@@ -281,6 +283,7 @@ class PTCutViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navLineViewBackgroundColor = .clear
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
@@ -294,7 +297,12 @@ class PTCutViewController: PTBaseViewController {
             make.size.bottom.equalTo(self.cancelBtn)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-
+#else
+        cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+#endif
         setupUI()
         generateThumbnailImage()
     }
@@ -414,11 +422,11 @@ class PTCutViewController: PTBaseViewController {
         
         
         showCutRatio { collectionView in
-//            if self.clipRatios.count > 1, let index = self.clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
-//                PTGCDManager.gcdAfter(time: 1) {
-//                    collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
-//                }
-//            }
+            if self.clipRatios.count > 1, let index = self.clipRatios.firstIndex(where: { $0 == self.selectedRatio }) {
+                PTGCDManager.gcdAfter(time: 1) {
+                    collectionView.scrollToItem(at: IndexPath(row: index, section: 0), at: .centeredHorizontally, animated: false)
+                }
+            }
         }
     }
     
@@ -537,24 +545,20 @@ class PTCutViewController: PTBaseViewController {
         let originX = ceil(maxClipFrame.minX)
         let diffX = frame.minX - originX
         frame.origin.x = max(frame.minX, originX)
-//        frame.origin.x = floor(max(frame.minX, originX))
         if diffX < -CGFloat.ulpOfOne {
             frame.size.width += diffX
         }
         let originY = ceil(maxClipFrame.minY)
         let diffY = frame.minY - originY
         frame.origin.y = max(frame.minY, originY)
-//        frame.origin.y = floor(max(frame.minY, originY))
         if diffY < -CGFloat.ulpOfOne {
             frame.size.height += diffY
         }
         let maxW = maxClipFrame.width + maxClipFrame.minX - frame.minX
         frame.size.width = max(minClipSize.width, min(frame.width, maxW))
-//        frame.size.width = floor(max(self.minClipSize.width, min(frame.width, maxW)))
         
         let maxH = maxClipFrame.height + maxClipFrame.minY - frame.minY
         frame.size.height = max(minClipSize.height, min(frame.height, maxH))
-//        frame.size.height = floor(max(self.minClipSize.height, min(frame.height, maxH)))
         
         clipBoxFrame = frame
         shadowView.clearRect = frame
@@ -564,11 +568,6 @@ class PTCutViewController: PTBaseViewController {
         
         let scale = max(frame.height / editImage.size.height, frame.width / editImage.size.width)
         mainScrollView.minimumZoomScale = scale
-        
-//        var size = self.mainScrollView.contentSize
-//        size.width = floor(size.width)
-//        size.height = floor(size.height)
-//        self.mainScrollView.contentSize = size
         
         mainScrollView.zoomScale = mainScrollView.zoomScale
     }
@@ -595,14 +594,8 @@ class PTCutViewController: PTBaseViewController {
         let image = clipImage()
         dismissAnimateFromRect = clipBoxFrame
         dismissAnimateImage = image.clipImage
-//        if presentingViewController is ZLCustomCamera {
-//            dismiss(animated: animate) {
-//                self.clipDoneBlock?(self.angle, image.editRect, self.selectedRatio)
-//            }
-//        } else {
-            clipDoneBlock?(angle, image.editRect, selectedRatio)
-            dismiss(animated: animate, completion: nil)
-//        }
+        clipDoneBlock?(angle, image.editRect, selectedRatio)
+        dismiss(animated: animate, completion: nil)
     }
     
     @objc private func rotateBtnClick() {
@@ -633,7 +626,6 @@ class PTCutViewController: PTBaseViewController {
             // 将rect进行旋转，转换到相对于旋转后的edit image的rect
             editRect = CGRect(x: rect.minY, y: editImage.size.height - rect.minX - rect.width, width: rect.height, height: rect.width)
             // 向右旋转可用下面这行代码
-//            editRect = CGRect(x: editImage.size.width - rect.maxY, y: rect.minX, width: rect.height, height: rect.width)
         } else {
             // 其他比例的裁剪框，旋转后都重置edit rect
             
@@ -767,17 +759,10 @@ class PTCutViewController: PTBaseViewController {
             }
         case .topLeft:
             if ratio != 0 {
-//                if abs(diffX / ratio) >= abs(diffY) {
                 frame.origin.x = originFrame.minX + diffX
                 frame.size.width = originFrame.width - diffX
                 frame.origin.y = originFrame.minY + diffX / ratio
                 frame.size.height = originFrame.height - diffX / ratio
-//                } else {
-//                    frame.origin.y = originFrame.minY + diffY
-//                    frame.size.height = originFrame.height - diffY
-//                    frame.origin.x = originFrame.minX + diffY * ratio
-//                    frame.size.width = originFrame.width - diffY * ratio
-//                }
             } else {
                 frame.origin.x = originFrame.minX + diffX
                 frame.size.width = originFrame.width - diffX
@@ -786,15 +771,9 @@ class PTCutViewController: PTBaseViewController {
             }
         case .topRight:
             if ratio != 0 {
-//                if abs(diffX / ratio) >= abs(diffY) {
                 frame.size.width = originFrame.width + diffX
                 frame.origin.y = originFrame.minY - diffX / ratio
                 frame.size.height = originFrame.height + diffX / ratio
-//                } else {
-//                    frame.origin.y = originFrame.minY + diffY
-//                    frame.size.height = originFrame.height - diffY
-//                    frame.size.width = originFrame.width - diffY * ratio
-//                }
             } else {
                 frame.size.width = originFrame.width + diffX
                 frame.origin.y = originFrame.minY + diffY
@@ -802,15 +781,9 @@ class PTCutViewController: PTBaseViewController {
             }
         case .bottomLeft:
             if ratio != 0 {
-//                if abs(diffX / ratio) >= abs(diffY) {
                 frame.origin.x = originFrame.minX + diffX
                 frame.size.width = originFrame.width - diffX
                 frame.size.height = originFrame.height - diffX / ratio
-//                } else {
-//                    frame.origin.x = originFrame.minX - diffY * ratio
-//                    frame.size.width = originFrame.width + diffY * ratio
-//                    frame.size.height = originFrame.height + diffY
-//                }
             } else {
                 frame.origin.x = originFrame.minX + diffX
                 frame.size.width = originFrame.width - diffX
@@ -818,13 +791,8 @@ class PTCutViewController: PTBaseViewController {
             }
         case .bottomRight:
             if ratio != 0 {
-//                if abs(diffX / ratio) >= abs(diffY) {
                 frame.size.width = originFrame.width + diffX
                 frame.size.height = originFrame.height + diffX / ratio
-//                } else {
-//                    frame.size.width += diffY * ratio
-//                    frame.size.height += diffY
-//                }
             } else {
                 frame.size.width = originFrame.width + diffX
                 frame.size.height = originFrame.height + diffY

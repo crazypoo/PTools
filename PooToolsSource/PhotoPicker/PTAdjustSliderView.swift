@@ -37,7 +37,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var shadowView: UIView = {
         let view = UIView()
-        view.backgroundColor = .purple
+        view.backgroundColor = PTMediaLibConfig.share.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
         view.layer.shadowOffset = .zero
@@ -48,7 +48,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var whiteView: UIView = {
         let view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = PTMediaLibConfig.share.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.masksToBounds = true
         return view
@@ -56,7 +56,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var tintView: UIView = {
         let view = UIView()
-        view.backgroundColor = .purple
+        view.backgroundColor = PTMediaLibConfig.share.adjustSliderTintColor
         return view
     }()
     
@@ -85,10 +85,10 @@ class PTAdjustSliderView: UIView {
         super.init(frame: frame)
         setupUI()
         
-//        let editConfig = ZLPhotoConfiguration.default().editImageConfiguration
-//        if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
-//            impactFeedback = UIImpactFeedbackGenerator(style: editConfig.impactFeedbackStyle)
-//        }
+        let editConfig = PTMediaEditConfig.share
+        if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
+            impactFeedback = UIImpactFeedbackGenerator(style: editConfig.impactFeedbackStyle)
+        }
         
         addGestureRecognizer(pan)
     }

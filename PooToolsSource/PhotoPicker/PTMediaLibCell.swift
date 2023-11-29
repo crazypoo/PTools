@@ -222,7 +222,7 @@ class PTMediaLibCell: PTBaseNormalCell {
         
         imageIdentifier = cellModel.ident
         imageView.image = nil
-        smallImageRequestID = PTMeidaLibManager.fetchImage(for: cellModel.asset, size: size, completion: { [weak self] image, isDegraded in
+        smallImageRequestID = PTMediaLibManager.fetchImage(for: cellModel.asset, size: size, completion: { [weak self] image, isDegraded in
             if self?.imageIdentifier == self?.cellModel.ident {
                 self?.imageView.image = image
             }
@@ -234,8 +234,7 @@ class PTMediaLibCell: PTBaseNormalCell {
     
     private func fetchBigImage() {
         cancelFetchBigImage()
-        
-        bigImageReqeustID = PTMeidaLibManager.fetchOriginalImageData(for: cellModel.asset, progress: { [weak self] progress, _, _, _ in
+        bigImageReqeustID = PTMediaLibManager.fetchOriginalImageData(for: cellModel.asset, progress: { [weak self] progress, _, _, _ in
             if self?.cellModel.isSelected == true {
 //                self?.progressView.isHidden = false
 //                self?.progressView.progress = max(0.1, progress)
@@ -285,7 +284,7 @@ class PTMediaLibAlbumCell: PTBaseNormalCell {
             imageIdentifier = albumModel.headImageAsset?.localIdentifier
             if let asset = albumModel.headImageAsset {
                 let w = bounds.height * 2.5
-                PTMeidaLibManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] image, _ in
+                PTMediaLibManager.fetchImage(for: asset, size: CGSize(width: w, height: w)) { [weak self] image, _ in
                     if self?.imageIdentifier == self?.albumModel.headImageAsset?.localIdentifier {
                         self?.imageView.image = image ?? PTAppBaseConfig.share.defaultEmptyImage
                     }
@@ -508,3 +507,31 @@ class PTFilterImageCell: PTBaseNormalCell {
     }
 }
 
+//MARK: Camera Cell
+class PTCameraCell: PTBaseNormalCell {
+    static let ID = "PTFilterImageCell"
+    
+    lazy var imageView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        view.clipsToBounds = true
+        view.image = "📸".emojiToImage(emojiFont: .appfont(size: 24))
+        return view
+    }()
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        contentView.backgroundColor = .white
+        contentView.addSubviews([imageView])
+        imageView.snp.makeConstraints { make in
+            make.centerX.centerY.equalToSuperview()
+            make.size.equalTo(44)
+        }
+    }
+    
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
