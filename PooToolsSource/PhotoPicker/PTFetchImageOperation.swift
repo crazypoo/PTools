@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import PooTools
 import Photos
 import Kingfisher
 

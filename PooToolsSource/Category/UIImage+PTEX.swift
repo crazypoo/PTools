@@ -744,7 +744,7 @@ public extension PTPOP where Base: UIImage {
     }
 }
 
-public extension PTPOP where Base:CIImage {
+public extension PTPOP where Base: CIImage {
     func toUIImage() -> UIImage? {
         let context = CIContext()
         guard let cgImage = context.createCGImage(base, from: base.extent) else {

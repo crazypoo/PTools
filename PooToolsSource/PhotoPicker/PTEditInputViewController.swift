@@ -7,83 +7,10 @@
 //
 
 import UIKit
-#if POOTOOLS_NAVBARCONTROLLER
 import ZXNavigationBar
-#endif
 import SnapKit
 import SwifterSwift
 import SafeSFSymbols
-
-public class PTBaseStickertState: NSObject {
-    let id: String
-    let image: UIImage
-    let originScale: CGFloat
-    let originAngle: CGFloat
-    let originFrame: CGRect
-    let gesScale: CGFloat
-    let gesRotation: CGFloat
-    let totalTranslationPoint: CGPoint
-    
-    init(
-        id: String,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
-        self.id = id
-        self.image = image
-        self.originScale = originScale
-        self.originAngle = originAngle
-        self.originFrame = originFrame
-        self.gesScale = gesScale
-        self.gesRotation = gesRotation
-        self.totalTranslationPoint = totalTranslationPoint
-        super.init()
-    }
-}
-
-public class PTImageStickerState: PTBaseStickertState { }
-
-public class PTTextStickerState: PTBaseStickertState {
-    let text: String
-    let textColor: UIColor
-    let font: UIFont?
-    let style: PTInputTextStyle
-    
-    init(
-        id: String,
-        text: String,
-        textColor: UIColor,
-        font: UIFont?,
-        style: PTInputTextStyle,
-        image: UIImage,
-        originScale: CGFloat,
-        originAngle: CGFloat,
-        originFrame: CGRect,
-        gesScale: CGFloat,
-        gesRotation: CGFloat,
-        totalTranslationPoint: CGPoint
-    ) {
-        self.text = text
-        self.textColor = textColor
-        self.font = font
-        self.style = style
-        super.init(
-            id: id,
-            image: image,
-            originScale: originScale,
-            originAngle: originAngle,
-            originFrame: originFrame,
-            gesScale: gesScale,
-            gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
-        )
-    }
-}
 
 class PTImageStickerView: PTBaseStickerView {
     private let image: UIImage
@@ -836,10 +763,6 @@ class PTEditInputViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         textView.becomeFirstResponder()
-#if POOTOOLS_NAVBARCONTROLLER
-#else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
-#endif
     }
 
     init(image: UIImage?, text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal) {
@@ -865,7 +788,6 @@ class PTEditInputViewController: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-#if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBarBackgroundColor = .clear
         self.zx_navBar?.addSubviews([cancelBtn,doneBtn])
         cancelBtn.snp.makeConstraints { make in
@@ -878,12 +800,6 @@ class PTEditInputViewController: PTBaseViewController {
             make.size.bottom.equalTo(self.cancelBtn)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
-#else
-        cancelBtn.frame = CGRectMake(0, 0, 34, 34)
-        doneBtn.frame = CGRectMake(0, 0, 34, 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
-#endif
 
         setupUI()
         
@@ -913,11 +829,7 @@ class PTEditInputViewController: PTBaseViewController {
         textView.snp.makeConstraints { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(200)
-#if POOTOOLS_NAVBARCONTROLLER
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-#else
-            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
-#endif
         }
         
         toolView.snp.makeConstraints { make in
