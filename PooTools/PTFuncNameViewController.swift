@@ -10,7 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import DeviceKit
-import AnyImageKit
 import Photos
 import Combine
 #if POOTOOLS_SWIPECELL
@@ -921,18 +920,7 @@ class PTFuncNameViewController: PTBaseViewController {
 }
 
 // MARK: - ImagePickerControllerDelegate
-extension PTFuncNameViewController: ImagePickerControllerDelegate {
-    
-    // 获取PHAsset并转换为AVAsset的方法
-    func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
-        let options = PHVideoRequestOptions()
-        options.version = .original
-
-        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, _ in
-            completion(avAsset)
-        }
-    }
-        
+extension PTFuncNameViewController {
     func saveVideoToCache(playerItem: AVPlayerItem,result:((_ finish:Bool)->Void)? = nil) {
         let videoAsset = playerItem.asset
         let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
@@ -981,53 +969,14 @@ extension PTFuncNameViewController: ImagePickerControllerDelegate {
         }
     }
 
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        PTNSLogConsole(result.assets.first!.image)
-        
-        picker.dismiss(animated: true, completion: nil)
+    // 获取PHAsset并转换为AVAsset的方法
+    func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.version = .original
 
-        convertPHAssetToAVAsset(phAsset: result.assets.first!.phAsset) { avAsset in
-            if let avAsset = avAsset {
-                PTGCDManager.gcdMain {
-                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-                    controller.onEditCompleted
-                        .sink {  editedPlayerItem, videoEdit in
-                            self.videoEdit = videoEdit
-                            
-                            self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
-                                if finish {
-                                    UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
-                                        PTNSLogConsole(images as Any)
-                                    }
-                                }
-                            }
-                        }
-                        .store(in: &self.cancellables)
-                    controller.modalPresentationStyle = .fullScreen
-                    let nav = PTBaseNavControl(rootViewController: controller)
-                    self.navigationController?.present(nav, animated: true)
-                }
-            } else {
-                UIViewController.gobal_drop(title: "获取失败,请重试")
-            }
+        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, _ in
+            completion(avAsset)
         }
-    }
-}
-
-// MARK: - ImageKitDataTrackDelegate
-extension PTFuncNameViewController: ImageKitDataTrackDelegate {
-    
-    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
-        switch state {
-        case .enter:
-            PTNSLogConsole("[Data Track] ENTER Page: \(page.rawValue)")
-        case .leave:
-            PTNSLogConsole("[Data Track] LEAVE Page: \(page.rawValue)")
-        }
-    }
-    
-    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
-        PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
     }
 }
 

@@ -273,42 +273,56 @@ public class PTMediaEditConfig:NSObject {
     /// Minimum zoom scale, allowing the user to make the edited photo smaller, so it does not overlap top and bottom tools menu. Defaults to 1.0
     public var minimumZoomScale = 1.0
     
-    @objc enum AdjustTool: Int, CaseIterable {
-        case brightness
-        case contrast
-        case saturation
-        
-        var key: String {
-            switch self {
-            case .brightness:
-                return kCIInputBrightnessKey
-            case .contrast:
-                return kCIInputContrastKey
-            case .saturation:
-                return kCIInputSaturationKey
+    private var pri_adjust_tools: [PTHarBethFilter.FiltersTool] = [.brightness,.contrast,.saturation]
+    public var adjust_tools: [PTHarBethFilter.FiltersTool] {
+        get {
+            if pri_adjust_tools.isEmpty {
+                return [.brightness,.contrast,.saturation]
+            } else {
+                return pri_adjust_tools
             }
         }
-        
-        func filterValue(_ value: Float) -> Float {
-            switch self {
-            case .brightness:
-                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
-                return value / 3
-            case .contrast:
-                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
-                let v: Float
-                if value < 0 {
-                    v = 1 + value * (1 / 2)
-                } else {
-                    v = 1 + value * (3 / 2)
-                }
-                return v
-            case .saturation:
-                // 饱和度范围0---2，默认1
-                return value + 1
-            }
+        set {
+            pri_adjust_tools = newValue
         }
     }
+    
+//    @objc enum AdjustTool: Int, CaseIterable {
+//        case brightness
+//        case contrast
+//        case saturation
+//        
+//        var key: String {
+//            switch self {
+//            case .brightness:
+//                return kCIInputBrightnessKey
+//            case .contrast:
+//                return kCIInputContrastKey
+//            case .saturation:
+//                return kCIInputSaturationKey
+//            }
+//        }
+//        
+//        func filterValue(_ value: Float) -> Float {
+//            switch self {
+//            case .brightness:
+//                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
+//                return value / 3
+//            case .contrast:
+//                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
+//                let v: Float
+//                if value < 0 {
+//                    v = 1 + value * (1 / 2)
+//                } else {
+//                    v = 1 + value * (3 / 2)
+//                }
+//                return v
+//            case .saturation:
+//                // 饱和度范围0---2，默认1
+//                return value + 1
+//            }
+//        }
+//    }
 }
 
 @objcMembers
@@ -963,24 +977,5 @@ public extension PTPOP where Base: UIImage {
                 num2 = rest
             }
         }
-    }
-
-    /// 调整图片亮度、对比度、饱和度
-    /// - Parameters:
-    ///   - brightness: value in [-1, 1]
-    ///   - contrast: value in [-1, 1]
-    ///   - saturation: value in [-1, 1]
-    func adjust(brightness: Float, contrast: Float, saturation: Float) -> UIImage? {
-        guard let ciImage = toCIImage() else {
-            return base
-        }
-        
-        let filter = CIFilter(name: "CIColorControls")
-        filter?.setValue(ciImage, forKey: kCIInputImageKey)
-        filter?.setValue(PTMediaEditConfig.AdjustTool.brightness.filterValue(brightness), forKey: PTMediaEditConfig.AdjustTool.brightness.key)
-        filter?.setValue(PTMediaEditConfig.AdjustTool.contrast.filterValue(contrast), forKey: PTMediaEditConfig.AdjustTool.contrast.key)
-        filter?.setValue(PTMediaEditConfig.AdjustTool.saturation.filterValue(saturation), forKey: PTMediaEditConfig.AdjustTool.saturation.key)
-        let outputCIImage = filter?.outputImage
-        return outputCIImage?.pt.toUIImage()
     }
 }

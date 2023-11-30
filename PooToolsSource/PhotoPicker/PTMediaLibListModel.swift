@@ -284,12 +284,12 @@ public struct PTClipStatus {
 }
 
 public struct PTAdjustStatus {
-    var brightness: Float = 0
+    var brightness: Float = 1
     var contrast: Float = 0
     var saturation: Float = 0
     
     var allValueIsZero: Bool {
-        brightness == 0 && contrast == 0 && saturation == 0
+        brightness == 1 && contrast == 0 && saturation == 0
     }
 }
 

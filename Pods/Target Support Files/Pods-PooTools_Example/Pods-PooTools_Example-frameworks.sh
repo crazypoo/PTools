@@ -178,7 +178,6 @@ code_sign_if_enabled() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AMKLaunchTimeProfiler/AMKLaunchTimeProfiler.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/AnyImageKit/AnyImageKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Appz/Appz.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Aspects/Aspects.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AttributedString/AttributedString.framework"
@@ -256,7 +255,6 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "${BUILT_PRODUCTS_DIR}/AMKLaunchTimeProfiler/AMKLaunchTimeProfiler.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework"
-  install_framework "${BUILT_PRODUCTS_DIR}/AnyImageKit/AnyImageKit.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Appz/Appz.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/Aspects/Aspects.framework"
   install_framework "${BUILT_PRODUCTS_DIR}/AttributedString/AttributedString.framework"

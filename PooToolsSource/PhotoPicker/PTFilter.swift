@@ -7,8 +7,82 @@
 //
 
 import UIKit
+import Harbeth
 
 public typealias PTFilterApplierType = (_ image: UIImage) -> UIImage
+
+public typealias maxminTuple = (current: Float, min: Float, max: Float)?
+public typealias FilterCallback = (_ value: Float) -> C7FilterProtocol
+public typealias FilterResult = (filter: C7FilterProtocol, maxminValue: maxminTuple, callback: FilterCallback?)
+
+public class PTHarBethFilter:NSObject {
+    
+    public static let share = PTHarBethFilter()
+    
+    public var tools:[PTHarBethFilter.FiltersTool] = PTHarBethFilter.FiltersTool.allCases
+    
+    public func getFilterResults() -> [FilterResult] {
+        var ssss = [FilterResult]()
+        tools.enumerated().forEach { index,value in
+            ssss.append(value.getFilterResult())
+        }
+        return ssss
+    }
+    
+    @objc public enum FiltersTool: Int, CaseIterable {
+        case brightness
+        case contrast
+        case saturation
+        
+        func getFilterResult() -> FilterResult {
+            switch self {
+            case .brightness:
+                var filter = C7Luminance()
+                filter.luminance = 1
+                return (filter, (0, -1, 1), {
+                    filter.luminance = $0
+                    return filter
+                })
+            case .contrast:
+                var filter = C7Contrast()
+                filter.contrast = 1
+                return (filter, (1, 0, 4), {
+                    filter.contrast = $0
+                    return filter
+                })
+            case .saturation:
+                var filter = C7Saturation()
+                filter.saturation = 1
+                return (filter, (1, 0, 2), {
+                    filter.saturation = $0
+                    return filter
+                })
+            }
+        }
+        
+        func filterValue(_ value: Float) -> Float {
+            switch self {
+            case .brightness:
+                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
+                return value
+            case .contrast:
+                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
+                let v: Float
+                if value < 0 {
+                    v = 1 + value * (1 / 2)
+                } else {
+                    v = 1 + value * (3 / 2)
+                }
+                return v
+            case .saturation:
+                // 饱和度范围0---2，默认1
+                return value + 1
+            default:
+                return 0
+            }
+        }
+    }
+}
 
 @objc public enum PTFilterType: Int {
     case normal

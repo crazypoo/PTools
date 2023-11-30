@@ -11,7 +11,6 @@ import FloatingPanel
 import GCDWebServer
 import Alamofire
 import SnapKit
-import AnyImageKit
 import Photos
 import Vision
 import VisionKit
@@ -230,14 +229,14 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.centerY.equalToSuperview()
             }
             view.addActionHandlers { sender in
-                var options = PickerOptionsInfo()
-                options.selectLimit = 1
-                options.selectOptions = .photo
-                
-                let controller = ImagePickerController(options: options, delegate: self)
-                controller.trackDelegate = self
-                controller.modalPresentationStyle = .fullScreen
-                self.pt_present(controller, animated: true, completion: nil)
+//                var options = PickerOptionsInfo()
+//                options.selectLimit = 1
+//                options.selectOptions = .photo
+//                
+//                let controller = ImagePickerController(options: options, delegate: self)
+//                controller.trackDelegate = self
+//                controller.modalPresentationStyle = .fullScreen
+//                self.pt_present(controller, animated: true, completion: nil)
             }
         case String.twitterLabel:
             let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"
@@ -564,50 +563,34 @@ extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     }
 }
 
-// MARK: - ImagePickerControllerDelegate
-extension PTFuncDetailViewController: ImagePickerControllerDelegate {
-    
-    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-        PTNSLogConsole(result.assets.first!.image)
-        
-        picker.dismiss(animated: true, completion: nil)
+//// MARK: - ImagePickerControllerDelegate
+//extension PTFuncDetailViewController: ImagePickerControllerDelegate {
+//    
+//    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
+//        PTNSLogConsole(result.assets.first!.image)
+//        
+//        picker.dismiss(animated: true, completion: nil)
+//
+//        result.assets.first!.phAsset.loadImage { result in
+//            switch result {
+//            case .success(let success):
+//                
+//                if #available(iOS 14.0, *) {
+//                    let vision = PTVision.share
+//                    
+//                    var visionVersion:Int = VNRecognizeTextRequestRevision2
+//                    if #available(iOS 16.0, *) {
+//                        visionVersion = VNRecognizeTextRequestRevision3
+//                    }
+//                    
+//                    vision.findText(withImage: success,revision: visionVersion) { resultText, textObservations in
+//                        UIViewController.gobal_drop(title: resultText)
+//                    }
+//                }
+//            case .failure(let failure):
+//                PTNSLogConsole(failure)
+//            }
+//        }
+//    }
+//}
 
-        result.assets.first!.phAsset.loadImage { result in
-            switch result {
-            case .success(let success):
-                
-                if #available(iOS 14.0, *) {
-                    let vision = PTVision.share
-                    
-                    var visionVersion:Int = VNRecognizeTextRequestRevision2
-                    if #available(iOS 16.0, *) {
-                        visionVersion = VNRecognizeTextRequestRevision3
-                    }
-                    
-                    vision.findText(withImage: success,revision: visionVersion) { resultText, textObservations in
-                        UIViewController.gobal_drop(title: resultText)
-                    }
-                }
-            case .failure(let failure):
-                PTNSLogConsole(failure)
-            }
-        }
-    }
-}
-
-// MARK: - ImageKitDataTrackDelegate
-extension PTFuncDetailViewController: ImageKitDataTrackDelegate {
-    
-    func dataTrack(page: AnyImagePage, state: AnyImagePageState) {
-        switch state {
-        case .enter:
-            PTNSLogConsole("[Data Track] ENTER Page: \(page.rawValue)")
-        case .leave:
-            PTNSLogConsole("[Data Track] LEAVE Page: \(page.rawValue)")
-        }
-    }
-    
-    func dataTrack(event: AnyImageEvent, userInfo: [AnyImageEventUserInfoKey: Any]) {
-        PTNSLogConsole("[Data Track] EVENT: \(event.rawValue), userInfo: \(userInfo)")
-    }
-}

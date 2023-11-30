@@ -14,6 +14,7 @@ import SnapKit
 import Photos
 import SwifterSwift
 import SafeSFSymbols
+import Harbeth
 
 public class PTEditImageViewController: PTBaseViewController {
 
@@ -21,7 +22,7 @@ public class PTEditImageViewController: PTBaseViewController {
     public var mosaicLineWidth: CGFloat = 25
     public var drawLineWidth: CGFloat = 6
 
-    let adjustCollectionViewHeight : CGFloat = 64
+    let adjustCollectionViewHeight : CGFloat = 74
     private var animate = false
     private var thumbnailFilterImages: [UIImage] = []
     // Show text and image stickers.
@@ -33,7 +34,7 @@ public class PTEditImageViewController: PTBaseViewController {
     private var isFirstSetContainerFrame = true
     private var selectedTool: PTMediaEditConfig.EditTool?
     private var tools: [PTMediaEditConfig.EditTool]!
-    private var adjustTools: [PTMediaEditConfig.AdjustTool]!
+    private var adjustTools: [PTHarBethFilter.FiltersTool]!
     private var currentClipStatus: PTClipStatus!
     private var preClipStatus: PTClipStatus!
     private var currentAdjustStatus: PTAdjustStatus!
@@ -43,7 +44,7 @@ public class PTEditImageViewController: PTBaseViewController {
     private var filterImages: [String: UIImage] = [:]
     private var editImageWithoutAdjust: UIImage!
     private var editImageAdjustRef: UIImage?
-    private var selectedAdjustTool: PTMediaEditConfig.AdjustTool?
+    private var selectedAdjustTool: PTHarBethFilter.FiltersTool?
 
     var toolsModel:[PTFusionCellModel]! {
         var cellModels = [PTFusionCellModel]()
@@ -205,7 +206,7 @@ public class PTEditImageViewController: PTBaseViewController {
             let config = PTMediaLibConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! PTFusionCellModel
-            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
+            let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTAdjustToolCell
             cell.nameLabel.text = cellTools.name
             
             let tool = self.adjustTools[indexPath.row]
@@ -565,7 +566,7 @@ public class PTEditImageViewController: PTBaseViewController {
         preAdjustStatus = currentAdjustStatus
         editorManager = PTMediaEditManager(actions: [])
         currentFilter = .normal
-        adjustTools = PTMediaEditConfig.AdjustTool.allCases
+        adjustTools = PTMediaEditConfig.share.adjust_tools
         tools = PTMediaEditConfig.share.tools
         editorManager.delegate = self
     }
@@ -747,11 +748,7 @@ public class PTEditImageViewController: PTBaseViewController {
                 self.hasAdjustedImage = true
             }
 
-            editImage = editImage.pt.adjust(
-                brightness: currentAdjustStatus.brightness,
-                contrast: currentAdjustStatus.contrast,
-                saturation: currentAdjustStatus.saturation
-            ) ?? editImage
+            editImage = adjustFilterValueSet(filterImage: editImage) ?? editImage
         }
 
         rotationImageView()
@@ -759,16 +756,16 @@ public class PTEditImageViewController: PTBaseViewController {
             generateFilterImages()
         }
         
-        let tapGes = UITapGestureRecognizer { sender in
-            if self.toolCollectionView.alpha == 1 {
-                self.viewToolsBar(show: false)
-            } else {
-                self.viewToolsBar(show: true)
-            }
-        }
-        tapGes.delegate = self
-        view.addGestureRecognizer(tapGes)
-        
+//        let tapGes = UITapGestureRecognizer { sender in
+//            if self.toolCollectionView.alpha == 1 {
+//                self.viewToolsBar(show: false)
+//            } else {
+//                self.viewToolsBar(show: true)
+//            }
+//        }
+//        tapGes.delegate = self
+//        view.addGestureRecognizer(tapGes)
+//        
         createToolsBar()
         view.addGestureRecognizer(panGes)
         mainScrollView.panGestureRecognizer.require(toFail: panGes)
@@ -1071,11 +1068,7 @@ extension PTEditImageViewController {
                 }
                 
                 if tools.contains(.adjust), !currentAdjustStatus.allValueIsZero {
-                    drawImage = drawImage?.pt.adjust(
-                        brightness: currentAdjustStatus.brightness,
-                        contrast: currentAdjustStatus.contrast,
-                        saturation: currentAdjustStatus.saturation
-                    )
+                    drawImage = adjustFilterValueSet(filterImage: drawImage) ?? drawImage
                 }
                 
                 drawImage?.draw(in: renderRect)
@@ -1317,7 +1310,7 @@ extension PTEditImageViewController {
                 return image
             }
             
-            return image.pt.adjust( brightness: currentAdjustStatus.brightness, contrast: currentAdjustStatus.contrast, saturation: currentAdjustStatus.saturation) ?? image
+            return adjustFilterValueSet(filterImage: image) ?? image
         }
         
         currentFilter = filter
@@ -1422,7 +1415,7 @@ extension PTEditImageViewController {
                     model.name = "PT Photo picker contrast".localized()
                 }
                 
-                let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: model)
+                let row = PTRows(cls: PTAdjustToolCell.self,ID:PTAdjustToolCell.ID,dataModel: model)
                 rows.append(row)
             }
             
@@ -1482,20 +1475,35 @@ extension PTEditImageViewController {
         }
     }
 
-    private func adjustStatusChanged() {
-        let resultImage = editImageAdjustRef?.pt.adjust(
-            brightness: currentAdjustStatus.brightness,
-            contrast: currentAdjustStatus.contrast,
-            saturation: currentAdjustStatus.saturation
-        )
+    fileprivate func adjustFilterValueSet(filterImage:UIImage?) -> UIImage? {
+        var filters = [C7FilterProtocol]()
+        let filterManager = PTHarBethFilter.share
+        filterManager.tools = PTMediaEditConfig.share.adjust_tools
+        filterManager.getFilterResults().enumerated().forEach { index,value in
+            if value.filter is C7Luminance {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.brightness.filterValue(currentAdjustStatus.brightness))
+                filters.append(filter)
+            } else if value.filter is C7Contrast {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.contrast.filterValue(currentAdjustStatus.contrast))
+                filters.append(filter)
+            } else if value.filter is C7Saturation {
+                let filter = value.callback!(PTHarBethFilter.FiltersTool.saturation.filterValue(currentAdjustStatus.saturation))
+                filters.append(filter)
+            }
+        }
         
-        guard let resultImage else { return }
-        
-        editImage = resultImage
-        imageView.image = editImage
+        let dest = BoxxIO(element: filterImage, filters: filters)
+        return try? dest.output()
     }
     
-    private func changeAdjustTool(_ tool: PTMediaEditConfig.AdjustTool) {
+    private func adjustStatusChanged() {
+        if let image = adjustFilterValueSet(filterImage: editImageAdjustRef) {
+            self.editImage = image
+            self.imageView.image = self.editImage
+        }
+    }
+    
+    private func changeAdjustTool(_ tool: PTHarBethFilter.FiltersTool) {
         selectedAdjustTool = tool
         switch tool {
         case .brightness:
@@ -1718,7 +1726,7 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
     }
     
     private func undoOrRedoAdjust(_ status: PTAdjustStatus) {
-        var adjustTool: PTMediaEditConfig.AdjustTool?
+        var adjustTool: PTHarBethFilter.FiltersTool?
         
         if currentAdjustStatus.brightness != status.brightness {
             adjustTool = .brightness
