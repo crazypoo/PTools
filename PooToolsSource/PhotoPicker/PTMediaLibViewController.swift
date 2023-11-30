@@ -226,7 +226,8 @@ public class PTMediaLibView:UIView {
         }
         self.currentAlbum = currentModels
         markSelected(source: &self.totalModels, selected: &self.selectedModel)
-        PTGCDManager.gcdAfter(time: 0.35) {
+
+        PTGCDManager.gcdAfter(time: 0.15) {
             self.collectionView.contentCollectionView.scrollToBottom()
         }
     }

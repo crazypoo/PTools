@@ -648,6 +648,7 @@ Pod::Spec.new do |s|
     s.subspec 'HarbethKit' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'Harbeth'
+        subspec.source_files = 'PooToolsSource/C7Collector/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HARBETHKIT POOTOOLS_COCOAPODS"
         }

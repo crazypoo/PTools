@@ -372,6 +372,9 @@
 		55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D252B1183E200391136 /* PTHeartRateManager.swift */; };
 		55ED0D2F2B12D67200391136 /* SVGAPlayerEdition.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */; };
 		55ED0D322B12D9D300391136 /* SVGAVideoEntity+PTEX.m in Sources */ = {isa = PBXBuildFile; fileRef = 55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */; };
+		55F162E42B18E36200320925 /* C7Collector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E32B18E36200320925 /* C7Collector.swift */; };
+		55F162E62B18E3C200320925 /* C7CollectorVideo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E52B18E3C200320925 /* C7CollectorVideo.swift */; };
+		55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F162E72B18E3F300320925 /* C7CollectorCamera.swift */; };
 		55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C632298B77360052A58C /* PTBankCardSearch.swift */; };
 		55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */; };
 		55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */; };
@@ -830,6 +833,9 @@
 		55ED0D2E2B12D67100391136 /* SVGAPlayerEdition.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SVGAPlayerEdition.m; sourceTree = "<group>"; };
 		55ED0D302B12D9D300391136 /* SVGAVideoEntity+PTEX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SVGAVideoEntity+PTEX.h"; sourceTree = "<group>"; };
 		55ED0D312B12D9D300391136 /* SVGAVideoEntity+PTEX.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SVGAVideoEntity+PTEX.m"; sourceTree = "<group>"; };
+		55F162E32B18E36200320925 /* C7Collector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7Collector.swift; sourceTree = "<group>"; };
+		55F162E52B18E3C200320925 /* C7CollectorVideo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorVideo.swift; sourceTree = "<group>"; };
+		55F162E72B18E3F300320925 /* C7CollectorCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CollectorCamera.swift; sourceTree = "<group>"; };
 		55F6C632298B77360052A58C /* PTBankCardSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTBankCardSearch.swift; sourceTree = "<group>"; };
 		55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSDate+PTEX.swift"; sourceTree = "<group>"; };
 		55F6C636298CF9960052A58C /* UIAlertController+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+PTEX.swift"; sourceTree = "<group>"; };
@@ -967,6 +973,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55F162E22B18E32300320925 /* C7Collector */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -2135,6 +2142,16 @@
 			path = SVGA;
 			sourceTree = "<group>";
 		};
+		55F162E22B18E32300320925 /* C7Collector */ = {
+			isa = PBXGroup;
+			children = (
+				55F162E32B18E36200320925 /* C7Collector.swift */,
+				55F162E52B18E3C200320925 /* C7CollectorVideo.swift */,
+				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
+			);
+			path = C7Collector;
+			sourceTree = "<group>";
+		};
 		55F7A73729D5949900CF6272 /* ScrollRefresh */ = {
 			isa = PBXGroup;
 			children = (
@@ -2458,6 +2475,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				552893232AE885A8009135F9 /* PTMediaBrowserModel.swift in Sources */,
+				55F162E82B18E3F300320925 /* C7CollectorCamera.swift in Sources */,
 				550CE4AC2AF1B3D60052539D /* PTFuncDetailViewController.swift in Sources */,
 				552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */,
 				55A5D6FA29B08D7200DCA096 /* Bool+PTEX.swift in Sources */,
@@ -2658,6 +2676,7 @@
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
 				550CE4B22AF233F50052539D /* OSSVoice.swift in Sources */,
 				552893152AE78D49009135F9 /* PTMediaBrowserController.swift in Sources */,
+				55F162E62B18E3C200320925 /* C7CollectorVideo.swift in Sources */,
 				55D59C5828F2C8ED00B4FF76 /* PTHudView.swift in Sources */,
 				5585F7172AD2BAD100F878B4 /* PTVideoEditorVideoEditorViewController.swift in Sources */,
 				5585F6D32AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift in Sources */,
@@ -2711,6 +2730,7 @@
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
 				553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */,
 				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
+				55F162E42B18E36200320925 /* C7Collector.swift in Sources */,
 				551FDB4F2AD9395D001045F9 /* PTNetworkSpeedTestFunction.swift in Sources */,
 				231D166A272CDEEA003D6F62 /* PTLabel.swift in Sources */,
 				231D1675272CDEEA003D6F62 /* PTCodeView.swift in Sources */,
