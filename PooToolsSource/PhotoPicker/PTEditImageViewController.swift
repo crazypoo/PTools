@@ -40,7 +40,7 @@ public class PTEditImageViewController: PTBaseViewController {
     private var currentAdjustStatus: PTAdjustStatus!
     private var preAdjustStatus: PTAdjustStatus!
     private var preStickerState: PTBaseStickertState?
-    private var currentFilter: PTFilter!
+    private var currentFilter: PTHarBethFilter!
     private var filterImages: [String: UIImage] = [:]
     private var editImageWithoutAdjust: UIImage!
     private var editImageAdjustRef: UIImage?
@@ -283,7 +283,7 @@ public class PTEditImageViewController: PTBaseViewController {
                self.currentClipStatus.angle == 0,
                self.mosaicPaths.isEmpty,
                stickerStates.isEmpty,
-               self.currentFilter.applier == nil,
+//               self.currentFilter.applier == nil,
                self.currentAdjustStatus.allValueIsZero {
                 hasEdit = false
             }
@@ -565,7 +565,7 @@ public class PTEditImageViewController: PTBaseViewController {
         currentAdjustStatus = PTAdjustStatus()
         preAdjustStatus = currentAdjustStatus
         editorManager = PTMediaEditManager(actions: [])
-        currentFilter = .normal
+        currentFilter = .cigaussian
         adjustTools = PTMediaEditConfig.share.adjust_tools
         tools = PTMediaEditConfig.share.tools
         editorManager.delegate = self
@@ -1304,7 +1304,7 @@ extension PTEditImageViewController {
         }
     }
     
-    private func changeFilter(_ filter: PTFilter) {
+    private func changeFilter(_ filter: PTHarBethFilter) {
         func adjustImage(_ image: UIImage) -> UIImage {
             guard tools.contains(.adjust), !currentAdjustStatus.allValueIsZero else {
                 return image
@@ -1318,8 +1318,9 @@ extension PTEditImageViewController {
             editImage = adjustImage(image)
             editImageWithoutAdjust = image
         } else {
-            let image = currentFilter.applier?(originalImage) ?? originalImage
-            editImage = adjustImage(image!)
+            
+            let image = currentFilter.getCurrentFilterImage(image: originalImage)//currentFilter.applier?(originalImage) ?? originalImage
+            editImage = adjustImage(image)
             editImageWithoutAdjust = image
             filterImages[currentFilter.name] = image
         }
@@ -1349,8 +1350,11 @@ extension PTEditImageViewController {
         let thumbnailImage = originalImage.pt.resize_vI(size) ?? originalImage
         
         PTGCDManager.gcdGobal {
-            let filters = PTMediaEditConfig.share.filters
-            self.thumbnailFilterImages = filters.map { ($0.applier?(thumbnailImage!) ?? thumbnailImage)! }
+            let filters = PTMediaEditConfig.share.filters            
+            filters.enumerated().forEach { index,value in
+                PTHarBethFilter.share.texureSize = thumbnailImage!.size
+                self.thumbnailFilterImages.append(value.getCurrentFilterImage(image: thumbnailImage))
+            }
         }
     }
 }
@@ -1452,6 +1456,8 @@ extension PTEditImageViewController {
             }
             
             currentAdjustStatus.saturation = value
+        default:
+            break
         }
         
         adjustStatusChanged()
@@ -1512,6 +1518,8 @@ extension PTEditImageViewController {
             adjustSlider.value = currentAdjustStatus.contrast
         case .saturation:
             adjustSlider.value = currentAdjustStatus.saturation
+        default:
+            break
         }
     }
 }
@@ -1709,7 +1717,7 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
         }
     }
     
-    private func undoOrRedoFilter(_ filter: PTFilter?) {
+    private func undoOrRedoFilter(_ filter: PTHarBethFilter?) {
         guard let filter else { return }
         changeFilter(filter)
         

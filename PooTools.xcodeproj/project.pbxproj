@@ -293,7 +293,7 @@
 		55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
 		55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */; };
 		55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */; };
-		55BCB9662B1731C20016A4C2 /* PTFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9632B1731C20016A4C2 /* PTFilter.swift */; };
+		55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */; };
 		55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9642B1731C20016A4C2 /* PTPaths.swift */; };
 		55BCB9732B1732030016A4C2 /* PTAdjustSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */; };
 		55BCB9742B1732030016A4C2 /* PTMediaLibCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */; };
@@ -748,7 +748,7 @@
 		55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
 		55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
 		55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTransitioningAnimation.swift; sourceTree = "<group>"; };
-		55BCB9632B1731C20016A4C2 /* PTFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTFilter.swift; sourceTree = "<group>"; };
+		55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTHarBethFilter.swift; sourceTree = "<group>"; };
 		55BCB9642B1731C20016A4C2 /* PTPaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPaths.swift; sourceTree = "<group>"; };
 		55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTAdjustSliderView.swift; sourceTree = "<group>"; };
 		55BCB9692B1732030016A4C2 /* PTMediaLibCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTMediaLibCell.swift; sourceTree = "<group>"; };
@@ -1489,7 +1489,7 @@
 				55BCB96E2B1732030016A4C2 /* PTMediaLibConfig.swift */,
 				55BCB96D2B1732030016A4C2 /* PTMediaLibListModel.swift */,
 				55BCB9722B1732030016A4C2 /* PTMediaLibManager.swift */,
-				55BCB9632B1731C20016A4C2 /* PTFilter.swift */,
+				55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */,
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */,
@@ -2589,7 +2589,7 @@
 				5585F6DF2AD29D0A00F878B4 /* PTVideoEditorProgressView.swift in Sources */,
 				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				5585F70D2AD2B61000F878B4 /* PTVideoEditorTrimVideoControlViewController.swift in Sources */,
-				55BCB9662B1731C20016A4C2 /* PTFilter.swift in Sources */,
+				55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */,
 				231D1688272CDEEA003D6F62 /* PTNumberKeyBoard.swift in Sources */,
 				55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */,
 				5585F6D72AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift in Sources */,

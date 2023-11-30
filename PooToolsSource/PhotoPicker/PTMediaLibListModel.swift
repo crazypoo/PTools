@@ -216,7 +216,7 @@ public class PTEditModel:NSObject {
     
     public let adjustStatus: PTAdjustStatus
     
-    public let selectFilter: PTFilter?
+    public let selectFilter: PTHarBethFilter?
     
     public let stickers: [PTBaseStickertState]
     
@@ -227,7 +227,7 @@ public class PTEditModel:NSObject {
         mosaicPaths: [PTMosaicPath],
         clipStatus: PTClipStatus,
         adjustStatus: PTAdjustStatus,
-        selectFilter: PTFilter,
+        selectFilter: PTHarBethFilter,
         stickers: [PTBaseStickertState],
         actions: [PTMediaEditorAction]
     ) {

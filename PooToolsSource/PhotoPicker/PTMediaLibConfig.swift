@@ -204,21 +204,7 @@ public class PTMediaEditConfig:NSObject {
     }
     /// Impact feedback style. Defaults to .medium
     public var impactFeedbackStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
-
-    private var pri_filters: [PTFilter] = PTFilter.all
-    /// Filters for image editor.
-    public var filters: [PTFilter] {
-        get {
-            if pri_filters.isEmpty {
-                return PTFilter.all
-            } else {
-                return pri_filters
-            }
-        }
-        set {
-            pri_filters = newValue
-        }
-    }
+    
     /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
     public var textStickerDefaultTextColor = UIColor.white
 
@@ -287,42 +273,20 @@ public class PTMediaEditConfig:NSObject {
         }
     }
     
-//    @objc enum AdjustTool: Int, CaseIterable {
-//        case brightness
-//        case contrast
-//        case saturation
-//        
-//        var key: String {
-//            switch self {
-//            case .brightness:
-//                return kCIInputBrightnessKey
-//            case .contrast:
-//                return kCIInputContrastKey
-//            case .saturation:
-//                return kCIInputSaturationKey
-//            }
-//        }
-//        
-//        func filterValue(_ value: Float) -> Float {
-//            switch self {
-//            case .brightness:
-//                // 亮度范围-1---1，默认0，这里除以3，取 -0.33---0.33
-//                return value / 3
-//            case .contrast:
-//                // 对比度范围0---4，默认1，这里计算下取0.5---2.5
-//                let v: Float
-//                if value < 0 {
-//                    v = 1 + value * (1 / 2)
-//                } else {
-//                    v = 1 + value * (3 / 2)
-//                }
-//                return v
-//            case .saturation:
-//                // 饱和度范围0---2，默认1
-//                return value + 1
-//            }
-//        }
-//    }
+    private var pri_filters: [PTHarBethFilter] = [.cigaussian,.hueBlend,.alphaBlend,.luminosityBlend,.zoomBlur,.vignette,.pixellated,.crosshatch,.polkadot,.posterize,.monochrome,.voronoioverlay,.monochromedilation,.motionblur,.meanblur,.gaussianblur,.bilateralblur,.mpsgaussian,.colormatrix4x4,.convolution3x3,.sharpen3x3,.sepia,.granularity,.comicstrip,.oilpainting,.sketch]
+    /// Filters for image editor.
+    public var filters: [PTHarBethFilter] {
+        get {
+            if pri_filters.isEmpty {
+                return [.cigaussian]
+            } else {
+                return pri_filters
+            }
+        }
+        set {
+            pri_filters = newValue
+        }
+    }
 }
 
 @objcMembers
