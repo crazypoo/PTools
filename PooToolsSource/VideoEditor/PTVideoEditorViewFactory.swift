@@ -25,7 +25,7 @@ final class PTVideoEditorVideoViewFactory: PTVideoEditorViewFactoryProtocol {
     
     func makeVideoPlayerController() -> PTVideoEditorVideoPlayerController {
         var theme = PTVideoEditorVideoPlayerController.Theme()
-        theme.backgroundStyle = .plain(.white)
+        theme.backgroundStyle = .plain(.background)
         return PTVideoEditorVideoPlayerController(capabilities: .none, theme: theme)
     }
 

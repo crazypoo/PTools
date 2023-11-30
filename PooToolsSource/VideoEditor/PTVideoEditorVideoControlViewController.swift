@@ -33,7 +33,7 @@ class PTVideoEditorVideoControlViewController: PTBaseViewController {
         let view = PTLayoutButton()
         view.layoutStyle = .leftImageRightTitle
         view.midSpacing = 10
-        view.normalTitleColor = .black
+        view.normalTitleColor = .foreground
         view.normalTitleFont = .appfont(size: 12)
         view.imageSize = CGSizeMake(20, 20)
         view.isUserInteractionEnabled = false
@@ -105,7 +105,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 extension PTVideoEditorVideoControlViewController {
     func configure(with viewModel: PTVideoEditorVideoControlViewModel) {
         titleStack.normalTitle = viewModel.title
-        titleStack.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal)
+        titleStack.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(.foreground)
 
         currentVideoControlViewController?.remove()
 
@@ -133,7 +133,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
     func setupView() {
         view.addSubviews([borderTop,titleStack,dismissButton])
 
-        view.backgroundColor = .white
+        view.backgroundColor = .background
     }
 
     func setupConstraints() {
@@ -185,9 +185,7 @@ fileprivate extension PTVideoEditorVideoControlViewController {
 
     func makeDismissButton() -> UIButton {
         let button = UIButton()
-        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:"Check")
-        button.setImage(image, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
+        button.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
         button.addActionHandlers { sender in
             self.cancel()
         }

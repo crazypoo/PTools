@@ -145,7 +145,7 @@ fileprivate extension PTVideoEditorTimeLineViewController {
 
     func makeCarretLayer() -> CALayer {
         let layer = CALayer()
-        layer.backgroundColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1).cgColor
+        layer.backgroundColor = UIColor.foreground.cgColor
         layer.cornerRadius = 1.0
         return layer
     }

@@ -105,7 +105,7 @@ fileprivate extension PTVideoEditorTrimVideoControlViewController {
     }
 
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
 
         view.addSubview(trimmingControlView)
     }

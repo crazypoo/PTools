@@ -115,10 +115,10 @@ public extension UIAlertController {
     ///   - moreBtn: 更多按鈕點擊回調
     ///   - msgFont:
     class func base_alertVC(title:String? = "",
-                            titleColor:UIColor? = UIColor.black,
+                            titleColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                             titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                             msg:String? = "",
-                            msgColor:UIColor? = UIColor.black,
+                            msgColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                             msgFont:UIFont? = UIFont.systemFont(ofSize: 15),
                             okBtns:[String]? = [String](),
                             cancelBtn:String? = "",
@@ -220,12 +220,12 @@ public extension UIAlertController {
     ///   - cancel: 取消回調
     ///   - doneBtn: 更多按鈕點擊回調
     class func base_textfield_alertVC(title:String? = "",
-                                      titleColor:UIColor? = UIColor.black,
+                                      titleColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                                       titleFont:UIFont? = UIFont.systemFont(ofSize: 15),
                                       okBtn:String,
                                       cancelBtn:String,
                                       showIn:UIViewController? = PTUtils.getCurrentVC(),
-                                      cancelBtnColor:UIColor? = .black,
+                                      cancelBtnColor:UIColor? = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white),
                                       doneBtnColor:UIColor? = .systemBlue,
                                       placeHolders:[String],
                                       textFieldTexts:[String],

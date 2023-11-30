@@ -85,7 +85,7 @@ fileprivate extension PTVideoEditorVideoControlListController {
     }
 
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
         
         view.addSubview(collectionView)
     }

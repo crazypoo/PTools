@@ -132,7 +132,7 @@ fileprivate extension PTVideoEditorVideoPlayerController {
     }
 
     func setupView() {
-        view.backgroundColor = .black
+        view.backgroundColor = .background
 
         switch theme.backgroundStyle {
         case .plain(let color):
@@ -170,6 +170,7 @@ fileprivate extension PTVideoEditorVideoPlayerController {
     func makePlayerView() -> PTVideoEditorPlayerView {
         let view = PTVideoEditorPlayerView()
         view.player = store.player
+        view.backgroundColor = .background
         return view
     }
 
@@ -183,6 +184,7 @@ fileprivate extension PTVideoEditorVideoPlayerController {
         let view = PTVideoEditorPlayerView()
         view.playerLayer.videoGravity = .resizeAspectFill
         view.player = store.player
+        view.backgroundColor = .background
         return view
     }
 
@@ -230,8 +232,8 @@ public extension PTVideoEditorVideoPlayerController {
 
         public init() {}
 
-        public var backgroundStyle: Style = .plain(.black)
-        public var controlsTintColor: UIColor = .white
+        public var backgroundStyle: Style = .plain(.background)
+        public var controlsTintColor: UIColor = .foreground
     }
 
 }

@@ -76,7 +76,7 @@ fileprivate extension PTVideoEditorCropVideoControlViewController {
     }
 
     func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .background
 
         view.addSubview(collectionView)
     }

@@ -18,7 +18,7 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
         view.layoutStyle = .upImageDownTitle
         view.midSpacing = 10
         view.imageSize = CGSizeMake(30, 30)
-        view.normalTitleColor = .black
+        view.normalTitleColor = .foreground
         view.normalTitleFont = .appfont(size: 12)
         view.isUserInteractionEnabled = false
         return view
@@ -43,11 +43,10 @@ final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
 }
 
 // MARK: Bindings
-
 extension PTVideoEditorVideoControlCell {
     func configure(with viewModel: PTVideoEditorVideoControlCellViewModel) {
         buttonView.normalTitle = viewModel.name
-        buttonView.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.imageName).withRenderingMode(.alwaysOriginal)
+        buttonView.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.imageName).withRenderingMode(.alwaysOriginal).withTintColor(.foreground)
 
         self.viewModel = viewModel
     }

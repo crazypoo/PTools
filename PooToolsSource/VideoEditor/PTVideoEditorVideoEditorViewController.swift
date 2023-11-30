@@ -285,9 +285,8 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func makeSaveButtonItem() -> UIButton {
-        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:"Check")
         let buttonItem = UIButton(type: .custom)
-        buttonItem.setImage(image, for: .normal)
+        buttonItem.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
         buttonItem.addActionHandlers { sender in
             self.save()
         }
@@ -295,8 +294,8 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 
     func makeDismissButtonItem() -> UIButton {
-        let imageName = isModal ? "Close" : "Back"
-        let image = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:imageName)
+        let imageName = isModal ? "❌" : "◀️"
+        let image = imageName.emojiToImage(emojiFont: .appfont(size: 18))
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
@@ -315,7 +314,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
         button.addActionHandlers { sender in
             self.playButtonTapped()
         }
-        button.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
+        button.tintColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
         button.imageEdgeInsets = .init(top: 13, left: 15, bottom: 13, right: 15)
         return button
     }
@@ -364,7 +363,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
             self.fullscreenButtonTapped()
         }
         button.setImage(image, for: .normal)
-        button.tintColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1)
+        button.tintColor = .foreground
         button.imageEdgeInsets = .init(top: 14, left: 13, bottom: 14, right: 13)
         return button
     }
@@ -458,7 +457,6 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 }
 
 // MARK: Actions
-
 fileprivate extension PTVideoEditorVideoEditorViewController {
     func fullscreenButtonTapped() {
         videoPlayerController.enterFullscreen()

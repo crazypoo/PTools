@@ -21,9 +21,9 @@ class PTVideoEditorSlider: UIControl {
         static let trackerHorizontalMargin: CGFloat = 1.0
         static let indicatorHeight: CGFloat = 4.0
 
-        static let backgroundColor: CGColor = #colorLiteral(red: 0.9490196078, green: 0.9568627451, blue: 0.9647058824, alpha: 1).cgColor
+        static let backgroundColor: CGColor = UIColor.background.cgColor
         static let trackOutterCircleBackgroundColor = #colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 1).cgColor
-        static let trackerInnerCircleBackgroundColor = #colorLiteral(red: 0.1137254902, green: 0.1137254902, blue: 0.1215686275, alpha: 1).cgColor
+        static let trackerInnerCircleBackgroundColor = UIColor.foreground.cgColor
         static let indicatorsBackgroundColor = #colorLiteral(red: 0.8470588235, green: 0.8470588235, blue: 0.8470588235, alpha: 1).cgColor
 
         static let currentValueFont: UIFont = .systemFont(ofSize: 15.0, weight: .medium)
