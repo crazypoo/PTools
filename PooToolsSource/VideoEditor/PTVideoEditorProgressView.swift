@@ -111,7 +111,7 @@ fileprivate extension PTVideoEditorProgressView {
         let layer = CALayer()
         let side = Constants.CircleLayer.width
         layer.frame = CGRect(x: 0 - side / 2,y: (bounds.height - side) / 2,width: side,height: side)
-        layer.backgroundColor = theme.controlsTintColor.cgColor
+        layer.backgroundColor = theme.controlsTintColor_only_white.cgColor
         layer.cornerRadius = side / 2
         return layer
     }
@@ -120,7 +120,7 @@ fileprivate extension PTVideoEditorProgressView {
         let layer = CALayer()
         let height = Constants.CircleLayer.width / 2
         layer.frame = CGRect(x: 0,y: (bounds.height - height) / 2,width: 0,height: height)
-        layer.backgroundColor = theme.controlsTintColor.cgColor
+        layer.backgroundColor = theme.controlsTintColor_only_white.cgColor
         layer.cornerRadius = height / 2
         return layer
     }
@@ -129,7 +129,7 @@ fileprivate extension PTVideoEditorProgressView {
         let layer = CALayer()
         let height = Constants.CircleLayer.width / 2
         layer.frame = CGRect(x: 0,y: (bounds.height - height) / 2,width: bounds.width - 2,height: height)
-        layer.backgroundColor = theme.controlsTintColor.withAlphaComponent(0.3).cgColor
+        layer.backgroundColor = theme.controlsTintColor_only_white.withAlphaComponent(0.3).cgColor
         layer.cornerRadius = height / 2
         return layer
     }

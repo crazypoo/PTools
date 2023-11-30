@@ -155,7 +155,7 @@ fileprivate extension PTVideoEditorControlsView {
             self.playButtonTapped()
         }
         button.imageEdgeInsets = UIEdgeInsets(top: 15, left: 16, bottom: 15, right: 16)
-        button.tintColor = theme.controlsTintColor
+        button.tintColor = theme.controlsTintColor_only_white
         return button
     }
 
@@ -167,7 +167,7 @@ fileprivate extension PTVideoEditorControlsView {
             self.fullscreenButtonTapped()
         }
         button.setImage(image, for: .normal)
-        button.tintColor = theme.controlsTintColor
+        button.tintColor = theme.controlsTintColor_only_white
         return button
     }
 
@@ -180,7 +180,7 @@ fileprivate extension PTVideoEditorControlsView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13.0)
         label.text = "0:00"
-        label.textColor = theme.controlsTintColor
+        label.textColor = theme.controlsTintColor_only_white
         return label
     }
 
@@ -188,7 +188,7 @@ fileprivate extension PTVideoEditorControlsView {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13.0)
         label.text = "0:00"
-        label.textColor = theme.controlsTintColor
+        label.textColor = theme.controlsTintColor_only_white
         return label
     }
 }

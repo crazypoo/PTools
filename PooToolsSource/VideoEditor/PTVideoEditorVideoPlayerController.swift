@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 import Combine
 import SnapKit
+import Harbeth
 
 public final class PTVideoEditorVideoPlayerController: PTBaseViewController {
 
@@ -31,7 +32,15 @@ public final class PTVideoEditorVideoPlayerController: PTBaseViewController {
     public var player: AVPlayer {
         store.player
     }
-
+    
+    var c7Player:C7CollectorVideo!
+    lazy var originImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.backgroundColor = .background
+        return imageView
+    }()
     // MARK: Private Properties
 
     private lazy var playerView: PTVideoEditorPlayerView = makePlayerView()
@@ -78,7 +87,11 @@ public final class PTVideoEditorVideoPlayerController: PTBaseViewController {
 public extension PTVideoEditorVideoPlayerController {
     func load(item: AVPlayerItem, 
               autoPlay: Bool = false) {
+        UIImage.pt.getVideoFirstImage(asset: item.asset) { image in
+            self.originImageView.image = image
+        }
         store.load(item)
+        c7Player.setupPlayer(store.player)
 
         if autoPlay {
             play()
@@ -86,11 +99,13 @@ public extension PTVideoEditorVideoPlayerController {
     }
 
     func play() {
-        store.play()
+        c7Player.play()
+//        store.play()
     }
 
     func pause() {
-        store.pause()
+//        store.pause()
+        c7Player.pause()
     }
 
     func seek(toFraction fraction: Double) {
@@ -99,7 +114,7 @@ public extension PTVideoEditorVideoPlayerController {
     }
 
     func enterFullscreen() {
-        let originalFrame = playerView.superview?.convert(playerView.frame, to: nil)
+        let originalFrame = originImageView.superview?.convert(originImageView.frame, to: nil)
         let controller = viewFactory.makeFullscreenVideoPlayerController(
             store: store,
             capabilities: .all,
@@ -141,8 +156,8 @@ fileprivate extension PTVideoEditorVideoPlayerController {
             view.addSubview(backgroundView)
             view.addSubview(blurredView)
         }
-
-        view.addSubview(playerView)
+        c7Player = C7CollectorVideo(player: playerView.player!, delegate: self)
+        view.addSubview(originImageView)
 
         add(controlsViewController)
     }
@@ -157,7 +172,7 @@ fileprivate extension PTVideoEditorVideoPlayerController {
             }
         }
 
-        playerView.snp.makeConstraints { make in
+        originImageView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
@@ -206,6 +221,17 @@ extension PTVideoEditorVideoPlayerController: PTVideoEditorControlsViewControlle
     }
 }
 
+extension PTVideoEditorVideoPlayerController: C7CollectorImageDelegate {
+    public func preview(_ collector: C7Collector, fliter image: C7Image) {
+        self.originImageView.image = image
+//        // Simulated dynamic effect.
+//        if let filter = self.tuple?.callback?(self.nextTime) {
+//            self.video.filters = [filter]
+//        }
+    }
+}
+
+
 // MARK: Inner Types
 public extension PTVideoEditorVideoPlayerController {
 
@@ -234,6 +260,7 @@ public extension PTVideoEditorVideoPlayerController {
 
         public var backgroundStyle: Style = .plain(.background)
         public var controlsTintColor: UIColor = .foreground
+        public var controlsTintColor_only_white: UIColor = .border
     }
 
 }

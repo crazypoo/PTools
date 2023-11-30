@@ -488,6 +488,43 @@ public extension PTPOP where Base: UIImage {
         }
     }
     
+    //MARK: 获取视频的第一帧
+    ///获取视频的第一帧
+    /// - Parameters:
+    ///   - asset: AVAsset
+    ///   - maximumSize: 图片的最大尺寸
+    ///   - closure:
+    /// - Returns: 视频的第一帧
+    static func getVideoFirstImage(asset: AVAsset,
+                                   maximumSize: CGSize = CGSize(width: 1000, height: 1000),
+                                   closure: @escaping (UIImage?) -> Void) {
+        PTGCDManager.gcdGobalNormal {
+            let generator = AVAssetImageGenerator(asset: asset)
+            generator.appliesPreferredTrackTransform = true
+            generator.maximumSize = maximumSize
+            var cgImage: CGImage? = nil
+            let time = CMTimeMake(value: 0, timescale: 600)
+            var actualTime : CMTime = CMTimeMake(value: 0, timescale: 0)
+            do {
+                try cgImage = generator.copyCGImage(at: time, actualTime: &actualTime)
+            } catch {
+                PTGCDManager.gcdMain {
+                    closure(nil)
+                }
+                return
+            }
+            guard let image = cgImage else {
+                PTGCDManager.gcdMain {
+                    closure(nil)
+                }
+                return
+            }
+            PTGCDManager.gcdMain {
+                closure(UIImage(cgImage: image))
+            }
+        }
+    }
+    
     //MARK: 设置图片透明度
     ///设置图片透明度
     /// - Parameters:
