@@ -41,14 +41,14 @@ public class PTScanQRConfig:NSObject {
     open var autoReturn:Bool = true
 }
 
-public typealias PTQRCodeResultBlock = (_ result:String) -> Void
+public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Void
 
 @objcMembers
 public class PTScanQRController: PTBaseViewController {
 
     //MARK: 掃描回調
     ///掃描回調
-    open var resultBlock:PTQRCodeResultBlock?
+    public var resultBlock:PTQRCodeResultBlock?
     
     let scanningLineX:CGFloat = 0.5 * (1 - 0.9) * CGFloat.kSCREEN_WIDTH
     let scanningLineY:CGFloat = 0.25 * CGFloat.kSCREEN_HEIGHT
@@ -192,10 +192,14 @@ public class PTScanQRController: PTBaseViewController {
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
+        
+        self.navigationController?.view.backgroundColor = .clear
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: false)
+        self.navigationController?.view.backgroundColor = .clear
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -266,12 +270,10 @@ public class PTScanQRController: PTBaseViewController {
             if #available(iOS 14.0, *) {
                 Task {
                     do {
-                        let object:PTAlbumObject = try await PTImagePicker.openAlbum()
-                        await MainActor.run{
-                            if let imageData = object.imageData,let image = UIImage(data: imageData) {
-                                self.findQR(inImage: image)
-                            } else {
-                                PTNSLogConsole("獲取圖片出現錯誤")
+                        let object:UIImage = try await PTImagePicker.openAlbum()
+                        await MainActor.run {
+                            PTGCDManager.gcdMain {
+                                self.findQR(inImage: object)
                             }
                         }
                     } catch let pickerError as PTImagePicker.PickerError {
@@ -279,29 +281,37 @@ public class PTScanQRController: PTBaseViewController {
                     }
                 }
             } else {
-                let imagePicker = UIImagePickerController()
-                imagePicker.sourceType = .photoLibrary
-                imagePicker.delegate = self
-                imagePicker.modalPresentationStyle = .fullScreen
-                self.pt_present(imagePicker, animated: true)
+                let config = PTMediaLibConfig.share
+                config.allowSelectImage = true
+                config.allowSelectVideo = false
+                config.allowSelectGif = true
+                config.maxSelectCount = 1
+                config.maxVideoSelectCount = 1
+                
+                let vc = PTMediaLibViewController()
+                vc.mediaLibShow()
+                vc.selectImageBlock = { item,isOriginal in
+                    if let img = item.first?.image {
+                        PTGCDManager.gcdMain {
+                            self.findQR(inImage: img)
+                        }
+                    }
+                }
             }
         }
     }
     
     //MARK: 點擊相冊按鈕動作
     func photosAction() {
-        let status = PHPhotoLibrary.authorizationStatus()
-        if status == .notDetermined {
-            PHPhotoLibrary.requestAuthorization { blockStatus in
-                if blockStatus == .authorized {
-                    PTGCDManager.gcdMain {
-                        self.enterPhotos()
-                    }
-                }
+        
+        switch PTPermission.photoLibrary.status {
+        case .notDetermined:
+            PTPermission.photoLibrary.request {
+                self.photosAction()
             }
-        } else if status == .authorized {
+        case .authorized:
             enterPhotos()
-        }  else {
+        default:
             UIAlertController.base_alertVC(title:String.PhotoAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.photoLibrary),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
                 PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
             })
@@ -310,32 +320,29 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 檢測相機模塊
     func startScanAction(handle: @escaping PTActionTask) {
+        
         let device = AVCaptureDevice.default(for: .video)
         if device != nil {
-            let authStatus = AVCaptureDevice.authorizationStatus(for: .video)
-            
-            if authStatus == .authorized {
+            switch PTPermission.camera.status {
+            case .authorized:
                 handle()
-            } else if authStatus == .notDetermined {
-                AVCaptureDevice.requestAccess(for: .video) { granted in
-                    if granted {
-                        PTGCDManager.gcdMain {
-                            handle()
-                        }
-                    } else {
-                        self.processResult(result: "PT Setting reject camera".localized())
+            case .notDetermined:
+                PTPermission.camera.request {
+                    switch PTPermission.camera.status {
+                    case .authorized:
+                        handle()
+                    default:
+                        self.processResult(result: "",error: NSError(domain: "PT Setting reject camera".localized(), code: 501))
                     }
                 }
-            } else if authStatus == .restricted {
+            case .denied:
                 UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
                     PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
-            } else if authStatus == .denied {
-                UIAlertController.base_alertVC(title:String.CameraAuthorizationFail,msg:  String.authorizationSet(type: PTPermission.Kind.camera),okBtns: ["PT Setting".localized()],cancelBtn: "PT Button cancel".localized(),moreBtn: { index, title in
-                    PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
-                })
-            } else {
-                processResult(result: "PT Setting camera no".localized())
+            case .notSupported:
+                self.processResult(result: "",error: NSError(domain: "PT Setting camera no".localized(), code: 502))
+            default:
+                break
             }
         }
     }
@@ -435,40 +442,39 @@ public class PTScanQRController: PTBaseViewController {
     }
     
     //MARK: 獲取二維碼數據後處理回調
-    func processResult(result:String) {
+    func processResult(result:String,error:NSError?) {
         PTNSLogConsole(result)
         if resultBlock != nil {
-            resultBlock!(result)
+            resultBlock!(result,error)
         }
         
         if viewConfig.autoReturn {
-            returnFrontVC()
-            navigationController?.setNavigationBarHidden(false, animated: false)
+            PTGCDManager.gcdMain {
+                self.returnFrontVC()
+                self.navigationController?.setNavigationBarHidden(false, animated: false)
+            }
         }
     }
     
     //MARK: 根據UIImage來查找QR code
     func findQR(inImage image:UIImage) {
-        let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
-        let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
-        if features!.count == 0 {
-            processResult(result: "PT Scan no code".localized())
-        } else {
-            let feature:CIQRCodeFeature = features![0] as! CIQRCodeFeature
-            let resultString = feature.messageString
-            processResult(result: resultString!)
+        PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(),icon: .Heart,style: .Normal)
+        PTGCDManager.gcdMain {
+            self.session.stopRunning()
+            self.timer.invalidate()
         }
-    }
-}
-
-extension PTScanQRController:UIImagePickerControllerDelegate,UINavigationControllerDelegate {
-    public func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        returnFrontVC()
-    }
-    
-    public func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        let image:UIImage = info[UIImagePickerController.InfoKey.originalImage] as! UIImage
-        findQR(inImage: image)
+        PTGCDManager.gcdBackground {
+            let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
+            let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
+            if features!.count == 0 {
+                self.processResult(result:"" ,error: NSError(domain: "PT Scan no code".localized(), code: 500))
+            } else {
+                let feature:CIQRCodeFeature = features![0] as! CIQRCodeFeature
+                let resultString = feature.messageString
+                self.processResult(result: resultString!,error: nil)
+            }
+        }
+        
     }
 }
 
@@ -521,7 +527,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         btn.backgroundColor = UIColor.colorBase(R: 54/255, G: 85/255, B: 230/255, A: 1)
         btn.addActionHandlers { sender in
             let barinfo = self.layerArr[sender.tag]
-            self.processResult(result: barinfo.codeString)
+            self.processResult(result: barinfo.codeString,error: nil)
         }
         
         if icon {
@@ -587,7 +593,7 @@ extension PTScanQRController:AVCaptureMetadataOutputObjectsDelegate {
         if metadataObjects.count == 1 {
             PTGCDManager.gcdAfter(time: 0.8) {
                 let barInfo = self.layerArr[1]
-                self.processResult(result: barInfo.codeString)
+                self.processResult(result: barInfo.codeString,error: nil)
             }
         }
     }

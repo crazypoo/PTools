@@ -54,6 +54,7 @@ public extension String {
     static let document = "UIDocument"
     static let svga = "SVGA"
     static let swipe = "Swipe"
+    static let scanQR = "ScanQRCode"
 
     static let route = "路由"
     
@@ -254,7 +255,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let swipe = self.rowBaseModel(name: .swipe)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe]
+        let scanQR = self.rowBaseModel(name: .scanQR)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -481,14 +484,65 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
                 touchID.biologyStart(alertTitle: "Test")
             } else if itemRow.title == .videoEditor {
-                var options = PickerOptionsInfo()
-                options.selectLimit = 1
-                options.selectOptions = .video
                 
-                let controller = ImagePickerController(options: options, delegate: self)
-                controller.trackDelegate = self
-                controller.modalPresentationStyle = .fullScreen
-                self.pt_present(controller, animated: true, completion: nil)
+                let pickerConfig = PTMediaLibConfig.share
+                pickerConfig.allowSelectImage = false
+                pickerConfig.allowSelectVideo = true
+                pickerConfig.allowSelectGif = false
+                pickerConfig.maxVideoSelectCount = 1
+                
+                let vc = PTMediaLibViewController()
+                vc.mediaLibShow()
+                vc.selectImageBlock = { result, isOriginal in
+                    PTNSLogConsole("圖片選擇後:>>>>>>>>>>>>>\(result)")
+                    if result.first!.avEditorOutputItem != nil {
+                        PTGCDManager.gcdMain {
+                            let controller = PTVideoEditorVideoEditorViewController(asset: result.first!.avEditorOutputItem!.asset, videoEdit: self.videoEdit)
+                            controller.onEditCompleted
+                                .sink {  editedPlayerItem, videoEdit in
+                                    self.videoEdit = videoEdit
+                                    
+                                    self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
+                                        if finish {
+                                            UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
+                                                PTNSLogConsole(images as Any)
+                                            }
+                                        }
+                                    }
+                                }
+                                .store(in: &self.cancellables)
+                            controller.modalPresentationStyle = .fullScreen
+                            let nav = PTBaseNavControl(rootViewController: controller)
+                            self.navigationController?.present(nav, animated: true)
+                        }
+                    } else {
+                        self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
+                            if let avAsset = avAsset {
+                                PTGCDManager.gcdMain {
+                                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+                                    controller.onEditCompleted
+                                        .sink {  editedPlayerItem, videoEdit in
+                                            self.videoEdit = videoEdit
+                                            
+                                            self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
+                                                if finish {
+                                                    UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
+                                                        PTNSLogConsole(images as Any)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        .store(in: &self.cancellables)
+                                    controller.modalPresentationStyle = .fullScreen
+                                    let nav = PTBaseNavControl(rootViewController: controller)
+                                    self.navigationController?.present(nav, animated: true)
+                                }
+                            } else {
+                                UIViewController.gobal_drop(title: "获取失败,请重试")
+                            }
+                        }
+                    }
+                }
             } else if itemRow.title == .sign {
                 let signConfig = PTSignatureConfig()
                 
@@ -675,7 +729,13 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .svga {
                 let vc = PTSVGAViewController()
                 self.navigationController?.pushViewController(vc)
-            } else {
+            } else if itemRow.title == .scanQR {
+                let vc = PTScanQRController(viewConfig: PTScanQRConfig())
+                vc.resultBlock = { result,error in
+                    PTNSLogConsole("\(result)")
+                }
+                self.navigationController?.pushViewController(vc)
+            }else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
             }
@@ -749,8 +809,15 @@ class PTFuncNameViewController: PTBaseViewController {
 //                let vc = PTFloatingBaseViewController()
 //                self.present(vc, animated: true)
                 
+                let config = PTMediaLibConfig.share
+                config.maxSelectCount = 2
+                config.maxVideoSelectCount = 2
+                config.maxPreviewCount = 99999
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
+                vc.selectImageBlock = { result,isOriginal in
+                    PTNSLogConsole("<<<<<<<<<<<<<<<<<<<<<<<<<<\(result)")
+                }
             }
         }
         

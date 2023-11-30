@@ -205,3 +205,4 @@
 "PT Photo picker video size less than" = "El tamaño del vídeo es inferior a %@ MB";
 "PT Photo picker video size more than" = "El tamaño del vídeo es mayor que %@ MB";
 "PT Photo picker time out" = "Consigue el tiempo de espera";
+"PT Photo picker error" = "Hay un error al obtener la imagen";

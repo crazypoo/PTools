@@ -108,7 +108,7 @@ pod 'PooTools/SwipeCell', :git => 'https://github.com/crazypoo/PTools.git'
 ### PagingControl
 pod 'PooTools/PagingControl', :git => 'https://github.com/crazypoo/PTools.git'
 ### 图片选择器
-pod 'PooTools/ImagePicker', :git => 'https://github.com/crazypoo/PTools.git'
+pod 'PooTools/PhotoPicker', :git => 'https://github.com/crazypoo/PTools.git'
 ### Picker
 pod 'PooTools/Picker', :git => 'https://github.com/crazypoo/PTools.git'
 ### 功能介绍

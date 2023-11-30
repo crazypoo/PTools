@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.25.2'
+    s.version     = '3.25.3'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -437,19 +437,10 @@ Pod::Spec.new do |s|
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FLOATINGPANEL POOTOOLS_COCOAPODS"
         }
     end
-    
-    s.subspec 'ImagePicker' do |subspec|
-        subspec.dependency 'PooTools/Core'
-        subspec.dependency 'AnyImageKit'
-        subspec.source_files = 'PooToolsSource/ImagePicker/*.{h,m,swift}'
-        subspec.pod_target_xcconfig = {
-            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_IMAGEPICKER POOTOOLS_COCOAPODS"
-        }
-    end
-    
+        
     s.subspec 'ScanQRCode' do |subspec|
         subspec.dependency 'PooTools/Core'
-        subspec.dependency 'PooTools/ImagePicker'
+        subspec.dependency 'PooTools/PhotoPicker'
         subspec.dependency 'PooTools/CameraPermission'
         subspec.source_files = 'PooToolsSource/QRCodeScan/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
@@ -839,7 +830,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/VideoEditor'
         subspec.dependency 'PooTools/FloatingPanel'
         subspec.dependency 'ChromaColorPicker'
-        subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}'
+        subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}','PooToolsSource/ImagePicker/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"
         }
@@ -883,7 +874,6 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/ImageColors'
         subspec.dependency 'PooTools/FocusFaceImageView'
         subspec.dependency 'PooTools/PagingControl'
-        subspec.dependency 'PooTools/ImagePicker'
         subspec.dependency 'PooTools/Picker'
         subspec.dependency 'PooTools/Instructions'
         subspec.dependency 'PooTools/Appz'

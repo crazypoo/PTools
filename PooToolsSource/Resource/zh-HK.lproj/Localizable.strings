@@ -205,3 +205,4 @@
 "PT Photo picker video size less than" = "視頻大小小於%@MB";
 "PT Photo picker video size more than" = "視頻大小大於%@MB";
 "PT Photo picker time out" = "獲取超時";
+"PT Photo picker error" = "獲取圖片出現錯誤";

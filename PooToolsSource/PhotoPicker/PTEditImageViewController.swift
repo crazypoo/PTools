@@ -253,7 +253,6 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
-        view.isEnabled = !editorManager.actions.isEmpty
         return view
     }()
     
@@ -264,7 +263,6 @@ public class PTEditImageViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
-        view.isEnabled = editorManager.actions.count != editorManager.redoActions.count
         return view
     }()
     
@@ -578,6 +576,10 @@ public class PTEditImageViewController: PTBaseViewController {
 
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+#endif
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -595,6 +597,11 @@ public class PTEditImageViewController: PTBaseViewController {
         
         let width = drawLineWidth / mainScrollView.zoomScale * toImageScale
         defaultDrawPathWidth = width
+        
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+#endif
     }
     
     public override func viewDidLayoutSubviews() {
@@ -645,6 +652,9 @@ public class PTEditImageViewController: PTBaseViewController {
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: redoButton),UIBarButtonItem(customView: undoButton)]
 #endif
         
+        redoButton.isEnabled = (editorManager.actions.count != editorManager.redoActions.count)
+        undoButton.isEnabled = !(editorManager.actions.count > 0)
+
         view.addSubviews([mainScrollView,toolCollectionView,ashbinView])
         mainScrollView.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()

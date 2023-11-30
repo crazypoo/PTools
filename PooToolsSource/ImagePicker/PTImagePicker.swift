@@ -206,7 +206,7 @@ extension PTImagePicker{
         try await PTImagePicker.Controller<PTAlbumObject>.openAlbum(.All)
     }
     
-    /// Photograph -> 圖片
+    /// Photograph -> 相机
     public static func photograph() async throws -> UIImage {
         try await PTImagePicker.Controller<UIImage>.photograph()
     }

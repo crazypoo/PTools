@@ -253,17 +253,14 @@ public extension UIViewController {
     //MARK: 相册权限
     /// 相册权限
     func photoAuthorize() -> Bool {
-        let status = PHPhotoLibrary.authorizationStatus()
-        switch status {
+        
+        switch PTPermission.photoLibrary.status {
         case .authorized:
             return true
         case .notDetermined:
-            // 请求授权
-            PHPhotoLibrary.requestAuthorization({ (status) in
-                PTGCDManager.gcdMain {
-                    _ = self.photoAuthorize()
-                }
-            })
+            PTPermission.photoLibrary.request {
+                _ = self.photoAuthorize()
+            }
             return false
         default:
             PTGCDManager.gcdMain {

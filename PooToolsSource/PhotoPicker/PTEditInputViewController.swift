@@ -768,6 +768,11 @@ class PTEditInputViewController: PTBaseViewController {
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+#endif
+
         textView.becomeFirstResponder()
     }
 
