@@ -369,6 +369,10 @@ extension PTFileBrowserViewController: QLPreviewControllerDelegate, QLPreviewCon
 
 #if POOTOOLS_ROUTER
 extension PTFileBrowserViewController:PTRouterable {
+    public static var priority: UInt {
+        PTRouterDefaultPriority
+    }
+
     public static var patternString: [String] {
         ["scheme://route/filedocument"]
     }

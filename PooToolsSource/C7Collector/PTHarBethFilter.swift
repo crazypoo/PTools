@@ -13,7 +13,7 @@ public typealias PTFilterApplierType = (_ image: UIImage) -> UIImage
 
 public typealias maxminTuple = (current: Float, min: Float, max: Float)?
 public typealias FilterCallback = (_ value: Float) -> C7FilterProtocol
-public typealias FilterResult = (filter: C7FilterProtocol, maxminValue: maxminTuple, callback: FilterCallback?)
+public typealias FilterResult = (filter: C7FilterProtocol?, maxminValue: maxminTuple, callback: FilterCallback?)
 
 public class PTHarBethFilter:NSObject {
     
@@ -48,7 +48,7 @@ public class PTHarBethFilter:NSObject {
     }
 
     public func getCurrentFilterImage(image:UIImage?) -> UIImage {
-        let dest = BoxxIO(element: image, filter: self.type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter)
+        let dest = BoxxIO(element: image, filter: self.type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
         return (try? dest.output() ?? image!)!
     }
     
@@ -61,6 +61,7 @@ public class PTHarBethFilter:NSObject {
     }
     
     @objc public enum FiltersTool: Int, CaseIterable {
+        case none
         case brightness
         case contrast
         case saturation
@@ -90,6 +91,7 @@ public class PTHarBethFilter:NSObject {
         case comicstrip
         case oilpainting
         case sketch
+        case storyboard
 
         func getFilterResult(texture:MTLTexture?) -> FilterResult {
             switch self {
@@ -267,6 +269,14 @@ public class PTHarBethFilter:NSObject {
                 var filter = C7Sketch()
                 filter.edgeStrength = 0.3
                 return (filter, nil, nil)
+            case .storyboard:
+                var filter = C7Storyboard()
+                return (filter, (2, 1, 10), {
+                    filter.ranks = Int(ceil($0))
+                    return filter
+                })
+            case .none:
+                return (nil, nil, nil)
             }
         }
         
@@ -321,4 +331,6 @@ public extension PTHarBethFilter {
     @objc static let comicstrip = PTHarBethFilter(name: "连环画", type: .comicstrip)
     @objc static let oilpainting = PTHarBethFilter(name: "油画", type: .oilpainting)
     @objc static let sketch = PTHarBethFilter(name: "扫描", type: .sketch)
+    @objc static let storyboard = PTHarBethFilter(name: "分镜", type: .storyboard)
+    @objc static let none = PTHarBethFilter(name: "原相机", type: .none)
 }

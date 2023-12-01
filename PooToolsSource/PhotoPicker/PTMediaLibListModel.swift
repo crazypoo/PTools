@@ -114,7 +114,7 @@ public class PTMediaModel:NSObject {
         }
     }
     
-    public var second: PTMediaLibConfig.Second {
+    public var second: PTCameraFilterConfig.Second {
         guard type == .video else {
             return 0
         }

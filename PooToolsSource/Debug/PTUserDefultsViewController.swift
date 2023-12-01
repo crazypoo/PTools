@@ -167,6 +167,10 @@ extension PTUserDefultsViewController:UITextFieldDelegate {}
 
 #if POOTOOLS_ROUTER
 extension PTUserDefultsViewController:PTRouterable {
+    public static var priority: UInt {
+        PTRouterDefaultPriority
+    }
+
     public static var patternString: [String] {
         ["scheme://route/userdefault"]
     }

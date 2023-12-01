@@ -184,7 +184,7 @@ public class PTMediaLibView:UIView {
                     picker.allowsEditing = false
                     picker.videoQuality = .typeHigh
                     picker.sourceType = .camera
-                    picker.cameraDevice = config.cameraConfiguration.devicePosition.cameraDevice
+                    picker.cameraDevice = PTCameraFilterConfig.share.devicePosition.cameraDevice
                     if config.cameraConfiguration.showFlashSwitch {
                         picker.cameraFlashMode = .auto
                     } else {
@@ -196,9 +196,9 @@ public class PTMediaLibView:UIView {
                     }
                     if config.cameraConfiguration.allowRecordVideo {
                         mediaTypes.append("public.movie")
-                    }
+                    }                    
                     picker.mediaTypes = mediaTypes
-                    picker.videoMaximumDuration = TimeInterval(config.cameraConfiguration.maxRecordDuration)
+                    picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
                     PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
                 } else {
                     PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)

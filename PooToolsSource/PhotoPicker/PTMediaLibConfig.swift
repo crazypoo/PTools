@@ -30,9 +30,7 @@ let PTMaxImageWidth: CGFloat = 500
 
 public class PTMediaLibConfig:NSObject {
     public static let share = PTMediaLibConfig()
-    
-    public typealias Second = Int
-    
+        
     public typealias KBUnit = CGFloat
     
     /// The theme color of framework.
@@ -145,9 +143,9 @@ public class PTMediaLibConfig:NSObject {
     public var didSelectAsset: ((PHAsset) -> Void)?
 
     /// Allow to choose the maximum duration of the video. Defaults to 120.
-    public var maxSelectVideoDuration: PTMediaLibConfig.Second = 120
+    public var maxSelectVideoDuration: PTCameraFilterConfig.Second = 120
     /// Allow to choose the minimum duration of the video. Defaults to 0.
-    public var minSelectVideoDuration: PTMediaLibConfig.Second = 0
+    public var minSelectVideoDuration: PTCameraFilterConfig.Second = 0
     /// Allow to choose the maximum data size of the video. Defaults to infinite.
     public var maxSelectVideoDataSize: PTMediaLibConfig.KBUnit = .greatestFiniteMagnitude
     
@@ -312,165 +310,19 @@ public class PTCameraConfig: NSObject {
             pri_allowRecordVideo = newValue
         }
     }
-    
-    private var pri_minRecordDuration: PTMediaLibConfig.Second = 0
-    /// Minimum recording duration. Defaults to 0.
-    public var minRecordDuration: PTMediaLibConfig.Second {
-        get {
-            pri_minRecordDuration
-        }
-        set {
-            pri_minRecordDuration = max(0, newValue)
-        }
-    }
-    
-    private var pri_maxRecordDuration: PTMediaLibConfig.Second = 20
-    /// Maximum recording duration. Defaults to 20, minimum is 1.
-    public var maxRecordDuration: PTMediaLibConfig.Second {
-        get {
-            pri_maxRecordDuration
-        }
-        set {
-            pri_maxRecordDuration = max(1, newValue)
-        }
-    }
-    
+        
     /// Video resolution. Defaults to hd1920x1080.
-    public var sessionPreset: PTCameraConfig.CaptureSessionPreset = .hd1920x1080
-    
-    /// Camera focus mode. Defaults to continuousAutoFocus
-    public var focusMode: PTCameraConfig.FocusMode = .continuousAutoFocus
-    
-    /// Camera exposure mode. Defaults to continuousAutoExposure
-    public var exposureMode: PTCameraConfig.ExposureMode = .continuousAutoExposure
-    
+    public var sessionPreset: PTCameraFilterConfig.CaptureSessionPreset = .hd1920x1080
+
+        
     /// Camera flahs switch. Defaults to true.
     public var showFlashSwitch = true
     
     /// Whether to support switch camera. Defaults to true.
     public var allowSwitchCamera = true
-    
-    /// Video export format for recording video and editing video. Defaults to mov.
-    public var videoExportType: PTCameraConfig.VideoExportType = .mov
-    
-    /// The default camera position after entering the camera. Defaults to back.
-    public var devicePosition: PTCameraConfig.DevicePosition = .back
-    
-    private var pri_videoCodecType: Any?
-    /// The codecs for video capture. Defaults to .h264
-    @available(iOS 11.0, *)
-    public var videoCodecType: AVVideoCodecType {
-        get {
-            (pri_videoCodecType as? AVVideoCodecType) ?? .h264
-        }
-        set {
-            pri_videoCodecType = newValue
-        }
-    }
 }
 
 public extension PTCameraConfig {
-    @objc enum CaptureSessionPreset: Int {
-        var avSessionPreset: AVCaptureSession.Preset {
-            switch self {
-            case .cif352x288:
-                return .cif352x288
-            case .vga640x480:
-                return .vga640x480
-            case .hd1280x720:
-                return .hd1280x720
-            case .hd1920x1080:
-                return .hd1920x1080
-            case .hd4K3840x2160:
-                return .hd4K3840x2160
-            case .photo:
-                return .photo
-            }
-        }
-        
-        case cif352x288
-        case vga640x480
-        case hd1280x720
-        case hd1920x1080
-        case hd4K3840x2160
-        case photo
-    }
-    
-    @objc enum FocusMode: Int {
-        var avFocusMode: AVCaptureDevice.FocusMode {
-            switch self {
-            case .autoFocus:
-                return .autoFocus
-            case .continuousAutoFocus:
-                return .continuousAutoFocus
-            }
-        }
-        
-        case autoFocus
-        case continuousAutoFocus
-    }
-    
-    @objc enum ExposureMode: Int {
-        var avFocusMode: AVCaptureDevice.ExposureMode {
-            switch self {
-            case .autoExpose:
-                return .autoExpose
-            case .continuousAutoExposure:
-                return .continuousAutoExposure
-            }
-        }
-        
-        case autoExpose
-        case continuousAutoExposure
-    }
-    
-    @objc enum VideoExportType: Int {
-        var format: String {
-            switch self {
-            case .mov:
-                return "mov"
-            case .mp4:
-                return "mp4"
-            }
-        }
-        
-        var avFileType: AVFileType {
-            switch self {
-            case .mov:
-                return .mov
-            case .mp4:
-                return .mp4
-            }
-        }
-        
-        case mov
-        case mp4
-    }
-    
-    @objc enum DevicePosition: Int {
-        case back
-        case front
-        
-        /// For custom camera
-        var avDevicePosition: AVCaptureDevice.Position {
-            switch self {
-            case .back:
-                return .back
-            case .front:
-                return .front
-            }
-        }
-        
-        /// For system camera
-        var cameraDevice: UIImagePickerController.CameraDevice {
-            switch self {
-            case .back:
-                return .rear
-            case .front:
-                return .front
-            }
-        }
-    }
 }
 
 // MARK: chaining
@@ -487,37 +339,13 @@ public extension PTCameraConfig {
         allowRecordVideo = value
         return self
     }
-    
+        
     @discardableResult
-    func minRecordDuration(_ duration: PTMediaLibConfig.Second) -> PTCameraConfig {
-        minRecordDuration = duration
-        return self
-    }
-    
-    @discardableResult
-    func maxRecordDuration(_ duration: PTMediaLibConfig.Second) -> PTCameraConfig {
-        maxRecordDuration = duration
-        return self
-    }
-    
-    @discardableResult
-    func sessionPreset(_ sessionPreset: PTCameraConfig.CaptureSessionPreset) -> PTCameraConfig {
+    func sessionPreset(_ sessionPreset: PTCameraFilterConfig.CaptureSessionPreset) -> PTCameraConfig {
         self.sessionPreset = sessionPreset
         return self
     }
-    
-    @discardableResult
-    func focusMode(_ mode: PTCameraConfig.FocusMode) -> PTCameraConfig {
-        focusMode = mode
-        return self
-    }
-    
-    @discardableResult
-    func exposureMode(_ mode: PTCameraConfig.ExposureMode) -> PTCameraConfig {
-        exposureMode = mode
-        return self
-    }
-    
+        
     @discardableResult
     func showFlashSwitch(_ value: Bool) -> PTCameraConfig {
         showFlashSwitch = value
@@ -527,25 +355,6 @@ public extension PTCameraConfig {
     @discardableResult
     func allowSwitchCamera(_ value: Bool) -> PTCameraConfig {
         allowSwitchCamera = value
-        return self
-    }
-    
-    @discardableResult
-    func videoExportType(_ type: PTCameraConfig.VideoExportType) -> PTCameraConfig {
-        videoExportType = type
-        return self
-    }
-    
-    @discardableResult
-    func devicePosition(_ position: PTCameraConfig.DevicePosition) -> PTCameraConfig {
-        devicePosition = position
-        return self
-    }
-    
-    @available(iOS 11.0, *)
-    @discardableResult
-    func videoCodecType(_ type: AVVideoCodecType) -> PTCameraConfig {
-        videoCodecType = type
         return self
     }
 }
