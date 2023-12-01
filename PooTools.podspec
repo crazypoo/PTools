@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.25.5'
+    s.version     = '3.25.6'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -744,6 +744,7 @@ Pod::Spec.new do |s|
 
     s.subspec 'VideoEditor' do |subspec|
         subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/HarbethKit'
         subspec.source_files = 'PooToolsSource/VideoEditor/*.{h,m,swift}'
         subspec.resource_bundles = {
             'PTVideoEditorResources' => ['PooToolsSource/VideoEditor/*.xcassets']

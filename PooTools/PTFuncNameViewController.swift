@@ -54,6 +54,7 @@ public extension String {
     static let svga = "SVGA"
     static let swipe = "Swipe"
     static let scanQR = "ScanQRCode"
+    static let filtercamera = "FilterCamera"
 
     static let route = "路由"
     
@@ -256,7 +257,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let scanQR = self.rowBaseModel(name: .scanQR)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR]
+        let filtercamera = self.rowBaseModel(name: .filtercamera)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR,filtercamera]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -734,7 +737,10 @@ class PTFuncNameViewController: PTBaseViewController {
                     PTNSLogConsole("\(result)")
                 }
                 self.navigationController?.pushViewController(vc)
-            }else {
+            } else if itemRow.title == .filtercamera {
+                let vc = PTFilterCameraViewController()
+                self.navigationController?.pushViewController(vc)
+            } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)
             }

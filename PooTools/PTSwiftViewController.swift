@@ -116,6 +116,10 @@ class PTSwiftViewController: PTBaseViewController {
 }
 
 extension PTSwiftViewController:PTRouterable {
+    static var priority: UInt {
+        PTRouterDefaultPriority
+    }
+    
     static var patternString: [String] {
         ["scheme://router/demo"]
     }

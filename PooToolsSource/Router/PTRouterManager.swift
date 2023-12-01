@@ -10,7 +10,10 @@ import Foundation
 import UIKit
 
 /// 对于KVO监听，动态创建子类，需要特殊处理
-public let NSKVONotifyingPrefix = "NSKVONotifying_"
+public let NSKVONotifyingPrefix = "KVONotifying_"
+
+/// 神策动态类
+public let kSADelegateClassSensorsSuffix = "_CN.SENSORSDATA"
 
 public class PTRouterManager: NSObject {
     
@@ -37,15 +40,128 @@ public class PTRouterManager: NSObject {
 extension PTRouterManager {
     
     /// 类名和枚举值的映射表
-    static var pagePathMap: Dictionary = [String: String]()
     static var apiArray = [String]()
     static var classMapArray = [String]()
-    static var mapJOSN: Array = [[String: String]]()
+    static var registerRouterList: Array = [[String: String]]()
     
     // MARK: - 自动注册路由
-    public class func registerRouterMap(_ registerClassPrifxArray: [String], _ urlPath: String, _ userInfo: [String: Any]) -> Any? {
-        
+    public class func registerRouterMap(_ registerClassPrifxArray: [String],
+                                        _ urlPath: String,
+                                        _ userInfo: [String: Any]) -> Any? {
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
+        if registerRouterList.isEmpty {
+            registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+        }
+        for item in registerRouterList {
+            var priority: UInt32 = 0
+            if let number = UInt32(item[PTRouterPriority] ?? "0") {
+                priority = number
+            }
+            PTRouter.addRouterItem(item[PTRouterPath] ?? "", priority: priority, classString: item[PTRouterClassName] ?? "")
+        }
+        let endRegisterTime = CFAbsoluteTimeGetCurrent()
+        PTRouter.shareInstance.logcat?("注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
+        PTRouter.routerLoadStatus(true)
+#if DEBUG
+        routerForceRecheck(registerClassPrifxArray)
+#endif
+        return PTRouter.openURL(urlPath, userInfo: userInfo)
+    }
+    
+    // MARK: - 客户端强制校验，是否匹配
+    public static func routerForceRecheck(_ registerClassPrifxArray: [String]) {
+        PTRouterManager.runtimeRouterList(registerClassPrifxArray)
+        let paths = registerRouterList.compactMap { $0[PTRouterPath] }
+        let patternArray = Set(paths)
+        let apiPathArray = Set(apiArray)
+        let diffArray = patternArray.symmetricDifference(apiPathArray)
+        debugPrint("URL差集：\(diffArray)")
+        debugPrint("registerRouterList：\(registerRouterList)")
+        assert(diffArray.count == 0, "URL 拼写错误，请确认差集中的url是否匹配")
+        
+        let classNames = registerRouterList.compactMap { $0[PTRouterClassName] }
+        let patternValueArray = Set(classNames)
+        let classPathArray = Set(classMapArray)
+        let diffClassesArray = patternValueArray.symmetricDifference(classPathArray)
+        debugPrint("classes差集：\(diffClassesArray)")
+        assert(diffClassesArray.count == 0, "classes 拼写错误，请确认差集中的class是否匹配")
+    }
+    
+    class func runtimeRouterList(_ registerClassPrifxArray: [String]) {
+        
+        let expectedClassCount = objc_getClassList(nil, 0)
+        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
+        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
+        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
+        
+        for i in 0 ..< actualClassCount {
+            
+            let currentClass: AnyClass = allClasses[Int(i)]
+            let fullClassName: String = NSStringFromClass(currentClass.self)
+            
+            for value in registerClassPrifxArray {
+                if (fullClassName.containsSubString(substring: value))  {
+                    if let clss = currentClass as? CustomRouterInfo.Type {
+                        apiArray.append(clss.patternString)
+                        classMapArray.append(clss.routerClass)
+                    }
+                }
+            }
+        }
+    }
+
+    public class func loadRouterClass(_ registerClassPrifxArray: [String],
+                                      useCache: Bool = false) {
+        
+        if PTRouterDebugTool.checkTracing() || !useCache {
+            registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+        } else {
+            let cachePath = fetchCurrentVersionRouterCachePath()
+            let fileExists = FileManager.pt.judgeFileOrFolderExists(filePath: cachePath)
+            var cacheData: Array = [[String: String]]()
+            if fileExists {
+                cacheData = loadArrayDictFromJSON(path: cachePath)
+            }
+            
+            if useCache && fileExists && !cacheData.isEmpty {
+                registerRouterList = cacheData
+            } else {
+                registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+            }
+        }
+    }
+
+    public static func fetchCurrentVersionRouterCachePath() -> String {
+        let appVersion = (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String) ?? ""
+        // 获得沙盒的根路径
+        let home = NSHomeDirectory() as NSString
+        // 获得Documents路径，使用NSString对象的appendingPathComponent()方法拼接路径
+        let plistPath = home.appendingPathComponent("Documents") as NSString
+        // 输出plist文件到指定的路径
+        let resultJSONPath = "\(plistPath)/\(appVersion)_routerMap.json"
+        PTRouter.shareInstance.logcat?("路由缓存文件地址：\(resultJSONPath)", .logNormal, "")
+        return resultJSONPath
+    }
+    
+    static func loadArrayDictFromJSON(path: String) -> [[String: String]] {
+        let url = URL(fileURLWithPath: path)
+
+        do {
+            let jsonData = try Data(contentsOf: url)
+            if let arrayDict = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: String]] {
+                return arrayDict
+            }
+        } catch {
+            return [[String: String]]()
+        }
+        return [[String: String]]()
+    }
+
+
+    // MARK: - 提前获取工程中符合路由注册条件的类
+    public class func fetchRouterRegisterClass(_ registerClassPrifxArray: [String],
+                                               _ localCache: Bool = false) -> [[String: String]] {
+        var registerRouterList: Array = [[String: String]]()
         
         let expectedClassCount = objc_getClassList(nil, 0)
         let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
@@ -64,7 +180,6 @@ extension PTRouterManager {
                        (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil), let cls =  currentClass as? UIViewController.Type {
                         resultXLClass.append(cls)
                     }
-                    
 #if DEBUG
                     if let clss = currentClass as? CustomRouterInfo.Type {
                         apiArray.append(clss.patternString)
@@ -82,31 +197,25 @@ extension PTRouterManager {
                 
                 for s in 0 ..< cls.patternString.count {
                     
-                    if fullName.hasPrefix(NSKVONotifyingPrefix) {
+                    if fullName.contains(kSADelegateClassSensorsSuffix)  {
+                        break
+                    }
+                    
+                    if fullName.contains(NSKVONotifyingPrefix) {
                         let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
                         let subString = fullName[range]
-                        pagePathMap[cls.patternString[s]] = "\(subString)"
-                        PTRouter.addRouterItem(cls.patternString[s], classString: "\(subString)")
-                        mapJOSN.append(["path": cls.patternString[s], "class": "\(subString)"])
+                        registerRouterList.append([PTRouterPath: cls.patternString[s], PTRouterClassName: "\(subString)", PTRouterPriority: "\(cls.priority)"])
                     } else {
-                        pagePathMap[cls.patternString[s]] = fullName
-                        PTRouter.addRouterItem(cls.patternString[s], classString: fullName)
-                        mapJOSN.append(["path": cls.patternString[s], "class": fullName])
+                        registerRouterList.append([PTRouterPath: cls.patternString[s], PTRouterClassName: fullName, PTRouterPriority: "\(cls.priority)"])
                     }
                 }
             }
         }
         
-        let endRegisterTime = CFAbsoluteTimeGetCurrent()
-        PTRouter.shareInstance.logcat?("注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
-        PTRouter.routerLoadStatus(true)
-#if DEBUG
-        PTNSLogConsole(mapJOSN)
-        writeRouterMapToFile(mapArray: mapJOSN)
-        routerForceRecheck()
-#endif
-        return PTRouter.openURL(urlPath, userInfo: userInfo)
+        writeRouterMapToFile(mapArray: registerRouterList)
+        return registerRouterList
     }
+
     
     // MARK: - 自动注册服务
     public class func registerServices() {
@@ -185,43 +294,20 @@ extension PTRouterManager {
         }
         PTRouter.shareInstance.reloadRouterMap = resultInfo
     }
-    
-    // MARK: - 客户端强制校验，是否匹配
-    public static func routerForceRecheck() {
-        let patternArray = Set(pagePathMap.keys)
-        let apiPathArray = Set(apiArray)
-        let diffArray = patternArray.symmetricDifference(apiPathArray)
-        PTNSLogConsole("URL差集：\(diffArray)", error: true)
-        PTNSLogConsole("pagePathMap：\(pagePathMap)", error: true)
-        assert(diffArray.count == 0, "URL 拼写错误，请确认差集中的url是否匹配")
         
-        let patternValueArray = Set(pagePathMap.values)
-        let classPathArray = Set(classMapArray)
-        let diffClassesArray = patternValueArray.symmetricDifference(classPathArray)
-        PTNSLogConsole("classes差集：\(diffClassesArray)", error: true)
-        assert(diffClassesArray.count == 0, "classes 拼写错误，请确认差集中的class是否匹配")
-    }
-    
     // MARK: - 路由映射文件导出
     public static func writeRouterMapToFile(mapArray: [[String: String]]) {
-        PTNSLogConsole(mapJOSN)
-        let array: NSArray = mapJOSN as NSArray
-        
-        // 获得沙盒的根路径
-        let home = NSHomeDirectory() as NSString
-        // 获得Documents路径，使用NSString对象的appendingPathComponent()方法拼接路径
-        let plistPath = home.appendingPathComponent("Documents") as NSString
         // 输出plist文件到指定的路径
-        let resultPath = "\(plistPath)/routerMap.plist"
-        let resultJSONPath = "\(plistPath)/routerMap.json"
+        let resultJSONPath = fetchCurrentVersionRouterCachePath()
+        var jsonData: Data
+        do {
+            jsonData = try JSONSerialization.data(withJSONObject: mapArray, options: [])
+        } catch {
+            print("Error converting array to JSON: \(error)")
+            return
+        }
         
-        PTNSLogConsole("routerMapPlist文件地址：\(resultPath)", error: true)
-        PTNSLogConsole("routerMapJSON文件地址：\(resultJSONPath)", error: true)
-        array.write(toFile: resultPath, atomically: true)
-        
-        let data = try! JSONSerialization.data(withJSONObject: mapJOSN,
-                                               options: JSONSerialization.WritingOptions.prettyPrinted)
         let url = URL(fileURLWithPath: resultJSONPath)
-        try! data.write(to: url, options: .atomic)
+        try! jsonData.write(to: url, options: .atomic)
     }
 }

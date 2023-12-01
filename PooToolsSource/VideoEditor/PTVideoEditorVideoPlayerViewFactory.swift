@@ -14,7 +14,9 @@ protocol PTVideoEditorVideoPlayerViewFactoryProtocol {
     func makeFullscreenVideoPlayerController(store: PTVideoEditorVideoPlayerStore,
                                              capabilities: PTVideoEditorVideoPlayerController.Capabilities,
                                              theme: PTVideoEditorVideoPlayerController.Theme,
-                                             originalFrame: CGRect?) -> PTVideoEditorFullscreenVideoPlayerController
+                                             originalFrame: CGRect?,
+                                             c7Player:C7CollectorVideo,
+                                             c7Image:UIImageView) -> PTVideoEditorFullscreenVideoPlayerController
 
     func makeControlsViewController(store: PTVideoEditorVideoPlayerStore,
                                     capabilities: PTVideoEditorVideoPlayerController.Capabilities,
@@ -29,12 +31,16 @@ final class PTVideoEditorVideoPlayerViewFactory: PTVideoEditorVideoPlayerViewFac
     func makeFullscreenVideoPlayerController(store: PTVideoEditorVideoPlayerStore,
                                              capabilities: PTVideoEditorVideoPlayerController.Capabilities,
                                              theme: PTVideoEditorVideoPlayerController.Theme,
-                                             originalFrame: CGRect?) -> PTVideoEditorFullscreenVideoPlayerController {
+                                             originalFrame: CGRect?,
+                                             c7Player:C7CollectorVideo,
+                                             c7Image:UIImageView) -> PTVideoEditorFullscreenVideoPlayerController {
         PTVideoEditorFullscreenVideoPlayerController(store: store,
                                                      viewFactory: self,
                                                      capabilities: capabilities,
                                                      theme: theme,
-                                                     originalFrame: originalFrame)
+                                                     originalFrame: originalFrame,
+                                                     c7Player:c7Player,
+                                                     c7Image:c7Image)
     }
 
     func makeControlsViewController(store: PTVideoEditorVideoPlayerStore,

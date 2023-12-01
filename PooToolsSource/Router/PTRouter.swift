@@ -55,6 +55,14 @@ public let PTRouterIvar1Key = "ivar1"
 public let PTRouterIvar2Key = "ivar2"
 // 返回值类型
 public let PTRouterFunctionResultKey = "resultType"
+// 路由Path常量Key
+public let PTRouterPath = "path"
+// 路由class常量Key
+public let PTRouterClassName = "class"
+//路由priority常量Key
+public let PTRouterPriority = "priority"
+//路由优先级默认值
+public let PTRouterDefaultPriority: UInt = 1000
 
 public typealias ComplateHandler = (([String: Any]?, Any?) -> Void)?
 
@@ -306,16 +314,16 @@ public extension PTRouter {
     /// - Parameters:
     ///   - patternString: register urlstring
     ///   - classString: the class which match the className need inherit the protocol of PTRouterable
-    class func addRouterItem(_ patternString: String, classString: String) {
+    class func addRouterItem(_ patternString: String, priority: uint = 0, classString: String) {
         let clz: AnyClass? = classString.trimmingCharacters(in: CharacterSet.whitespaces).matchClass()
         if let routerable = clz as? PTRouterable.Type {
-            self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), handle: routerable.registerAction)
+            self.addRouterItem(patternString.trimmingCharacters(in: CharacterSet.whitespaces), priority: priority, handle: routerable.registerAction)
         } else {
-            shareInstance.logcat?(patternString, .logError, "\(classString) register router error， please implementation the PTRouterable Protocol")
-            assert(clz as? PTRouterable.Type != nil, "register router error， please implementation the PTRouterable Protocol")
+            shareInstance.logcat?(patternString, .logError, "\(classString) register router error， please implementation the TheRouterable Protocol")
+            assert(clz as? PTRouterable.Type != nil, "register router error， please implementation the TheRouterable Protocol")
         }
     }
-    
+
     /// addRouterItem
     ///
     /// - Parameters:

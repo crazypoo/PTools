@@ -31,18 +31,24 @@ final class PTVideoEditorFullscreenVideoPlayerController: PTBaseViewController {
     private var capabilities: PTVideoEditorVideoPlayerController.Capabilities!
     private let theme: PTVideoEditorVideoPlayerController.Theme
 
+    var c7Player:C7CollectorVideo!
+    var originImageView: UIImageView!
     // MARK: Init
 
     init(store: PTVideoEditorVideoPlayerStore,
          viewFactory: PTVideoEditorVideoPlayerViewFactoryProtocol,
          capabilities: PTVideoEditorVideoPlayerController.Capabilities,
          theme: PTVideoEditorVideoPlayerController.Theme,
-         originalFrame: CGRect?) {
+         originalFrame: CGRect?,
+         c7Player:C7CollectorVideo,
+         c7Image:UIImageView) {
         self.store = store
         self.viewFactory = viewFactory
         self.originalFrame = originalFrame
         self.theme = theme
         self.capabilities = capabilities
+        self.c7Player = c7Player
+        self.originImageView = c7Image
 
         super.init(nibName: nil, bundle: nil)
 

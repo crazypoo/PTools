@@ -38,6 +38,10 @@ class PTRouteViewController: PTBaseViewController {
 }
 
 extension PTRouteViewController:PTRouterable {
+    static var priority: UInt {
+        PTRouterDefaultPriority
+    }
+    
     static var patternString: [String] {
         ["scheme://route/route"]
     }

@@ -489,3 +489,21 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 }
 
+extension PTVideoEditorVideoEditorViewController:PTRouterable {
+    public static var priority: UInt {
+        PTRouterDefaultPriority
+    }
+    
+    public static var patternString: [String] {
+        ["scheme://route/videoeditor"]
+    }
+    
+    public static func registerAction(info: [String : Any]) -> Any {
+        let infos = info["asset"] as! AVAsset
+        let c7Image = info["playerImage"] as! UIImageView
+        let vc = PTVideoEditorVideoEditorViewController(asset: infos)
+        vc.videoPlayerController.originImageView = c7Image
+        return vc
+    }
+}
+

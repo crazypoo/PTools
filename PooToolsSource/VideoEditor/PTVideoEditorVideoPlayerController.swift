@@ -119,7 +119,9 @@ public extension PTVideoEditorVideoPlayerController {
             store: store,
             capabilities: .all,
             theme: theme,
-            originalFrame: originalFrame
+            originalFrame: originalFrame,
+            c7Player:c7Player,
+            c7Image: originImageView
         )
         present(controller, animated: false)
     }
@@ -156,9 +158,10 @@ fileprivate extension PTVideoEditorVideoPlayerController {
             view.addSubview(backgroundView)
             view.addSubview(blurredView)
         }
+        
         c7Player = C7CollectorVideo(player: playerView.player!, delegate: self)
         view.addSubview(originImageView)
-
+        
         add(controlsViewController)
     }
 
@@ -180,6 +183,9 @@ fileprivate extension PTVideoEditorVideoPlayerController {
         controlsViewController.view.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
+        
+//        PTHarBethFilter.share.texureSize = originImageView.frame.size
+//        c7Player.filters = [PTHarBethFilter.crosshatch.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter]
     }
 
     func makePlayerView() -> PTVideoEditorPlayerView {
@@ -225,8 +231,9 @@ extension PTVideoEditorVideoPlayerController: C7CollectorImageDelegate {
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
         self.originImageView.image = image
 //        // Simulated dynamic effect.
-//        if let filter = self.tuple?.callback?(self.nextTime) {
-//            self.video.filters = [filter]
+//        let filter = [PTHarBethFilter.crosshatch.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter]
+//        self.c7Player.filters = filter
+//        if let filter = [PTMediaEditConfig.share.filters.first!.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter] {
 //        }
     }
 }
