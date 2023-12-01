@@ -17,11 +17,13 @@ import SwifterSwift
 
 public class PTFilterCameraViewController: PTBaseViewController {
 
+    
+    public var onlyCamera:Bool = true
+    
     private lazy var cameraConfig = PTCameraFilterConfig.share
     /// 是否正在调整焦距
     private var isAdjustingFocusPoint = false
     private var dragStart = false
-
     static let largeCircleRadius: CGFloat = 80
     static let borderLayerWidth: CGFloat = 1.8
     static let smallCircleRadius: CGFloat = 65
@@ -37,6 +39,8 @@ public class PTFilterCameraViewController: PTBaseViewController {
     ///是否打開手電筒
     private var torchOn:Bool = false
 
+    var takePhotoView:PTTakePictureReviewer?
+    
     lazy var originImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -335,13 +339,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             return
         }
         camera.startRunning()
-        
-//        PTGCDManager.gcdAfter(time: 5) {
-//            let vvvvvv = UIButton(type: .custom)
-//            vvvvvv.isSelected = true
-//            self.camera.takePicture(flashBtn: vvvvvv)
-//        }
-        
+                
         PTGCDManager.gcdAfter(time: 1, block: {
             self.generateFilterImages()
         })
@@ -405,6 +403,14 @@ public class PTFilterCameraViewController: PTBaseViewController {
         var takePictureTap: UITapGestureRecognizer?
         if cameraConfig.allowTakePhoto {
             takePictureTap = UITapGestureRecognizer { sender in
+                if self.onlyCamera {
+                    if self.takePhotoView != nil {
+                        self.takePhotoView?.dismissAlert()
+                        self.takePhotoView?.dismissTask = {
+                            self.takePhotoView = nil
+                        }
+                    }
+                }
                 self.showFilterView(show: false)
                 self.camera.takePicture(flashBtn: self.flashButton)
             }
@@ -559,15 +565,52 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
     }
     
     public func takePhoto(_ collector: C7Collector, fliter image: C7Image) {
-        //TODO: 拍照了之后
-        let imagev = UIImageView(image: image)
-        imagev.contentMode = .scaleAspectFill
-        AppWindows?.addSubview(imagev)
-        imagev.snp.makeConstraints { make in
-            make.size.equalTo(100)
-            make.centerX.centerY.equalToSuperview()
+        if self.onlyCamera {
+            takePhotoView = PTTakePictureReviewer(screenShotImage: image)
+            takePhotoView?.actionHandle = { type,image in
+                let vc = PTEditImageViewController(readyEditImage: image)
+                vc.editFinishBlock = { ei ,editImageModel in
+                    PTMediaLibManager.saveImageToAlbum(image: ei) { finish, asset in
+                        if !finish {
+                            PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                        }
+                    }
+                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.view.backgroundColor = .black
+                nav.modalPresentationStyle = .fullScreen
+                PTUtils.getCurrentVC().present(nav, animated: true)
+            }
+            takePhotoView?.reviewHandle = {
+                let browserModel = PTMediaBrowserModel()
+                browserModel.imageURL = image
+                
+                let browserConfig = PTMediaBrowserConfig()
+                browserConfig.mediaData = [browserModel]
+                
+                let review = PTMediaBrowserController()
+                review.viewConfig = browserConfig
+                review.modalPresentationStyle = .fullScreen
+                self.pt_present(review)
+            }
+            takePhotoView?.dismissTask = {
+                self.takePhotoView = nil
+            }
+            PTMediaLibManager.saveImageToAlbum(image: image) { finish, asset in
+                if !finish {
+                    PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                }
+            }
+            
+            PTGCDManager.gcdAfter(time: 3) {
+                self.takePhotoView?.dismissAlert()
+            }
+        } else {
+            //TODO: 这里根据相册须要处理
         }
+        
         self.camera.startRunning()
+        self.camera.isTakingPicture = false
         self.originImageView.contentMode = .scaleAspectFit
     }
 }

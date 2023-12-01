@@ -283,7 +283,6 @@ public class PTEditImageViewController: PTBaseViewController {
                self.currentClipStatus.angle == 0,
                self.mosaicPaths.isEmpty,
                stickerStates.isEmpty,
-//               self.currentFilter.applier == nil,
                self.currentAdjustStatus.allValueIsZero {
                 hasEdit = false
             }

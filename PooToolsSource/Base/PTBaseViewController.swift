@@ -26,6 +26,7 @@ public typealias PTScreenShotOnlyGetImageHandle = (UIImage?) -> Void
 public enum PTScreenShotActionType {
     case Share
     case Feedback
+    case Edit
 }
 
 @objc public enum VCStatusBarChangeStatusType : Int {

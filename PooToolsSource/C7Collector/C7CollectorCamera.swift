@@ -29,7 +29,7 @@ public final class C7CollectorCamera: C7Collector {
     public var recordLongGes: UILongPressGestureRecognizer?
 
     /// 是否正在拍照
-    private var isTakingPicture = false
+    public var isTakingPicture = false
     private var recordUrls: [URL] = []
     private var recordDurations: [Double] = []
 
@@ -233,6 +233,7 @@ public final class C7CollectorCamera: C7Collector {
         
         guard captureSession.outputs.contains(videoOutput) else {
             //MARK: 相机不能用
+            PTNSLogConsole("相机不能用")
             //            showAlertAndDismissAfterDoneAction(message: localLanguageTextValue(.cameraUnavailable), type: .camera)
             return
         }

@@ -845,6 +845,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/CameraPermission'
         subspec.dependency 'PooTools/MicPermission'
         subspec.dependency 'PooTools/HarbethKit'
+        subspec.dependency 'PooTools/MediaViewer'
         subspec.source_files = 'PooToolsSource/FilterCamera/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
