@@ -106,7 +106,7 @@ class PTPermissionCell: PTBaseNormalCell {
                     self.cellStatus = .notSupported
     #endif
                 case .contacts:
-    #if POOTOOLS_PERMISSION_MIC
+    #if POOTOOLS_PERMISSION_CONTACTS
                     self.cellStatus = PTPermission.contacts.status
     #else
                     self.cellStatus = .notSupported
