@@ -272,6 +272,7 @@
 		55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */; };
 		55B13D582B1AEF3F00C67EDA /* PTEditToolsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */; };
 		55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */; };
+		55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */; };
 		55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */; };
 		55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
@@ -742,6 +743,7 @@
 		55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaEditManager.swift; sourceTree = "<group>"; };
 		55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditToolsCell.swift; sourceTree = "<group>"; };
 		55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAdjustToolCell.swift; sourceTree = "<group>"; };
+		55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CameraConfig.swift; sourceTree = "<group>"; };
 		55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGAPlayerSwiftEdition.swift; sourceTree = "<group>"; };
 		55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSVGAViewController.swift; sourceTree = "<group>"; };
 		55B1596C2B0CEED100A64741 /* Rose.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rose.svga; sourceTree = "<group>"; };
@@ -2201,6 +2203,7 @@
 				55F162E32B18E36200320925 /* C7Collector.swift */,
 				55F162E52B18E3C200320925 /* C7CollectorVideo.swift */,
 				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
+				55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */,
 			);
 			path = C7Collector;
 			sourceTree = "<group>";
@@ -2898,6 +2901,7 @@
 				5585F7112AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift in Sources */,
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
 				55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */,
+				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,

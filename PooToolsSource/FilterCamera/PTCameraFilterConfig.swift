@@ -199,40 +199,6 @@ public class PTCameraFilterConfig: NSObject {
         return self
     }
 
-
-    /// The default camera position after entering the camera. Defaults to back.
-    public var devicePosition: PTCameraFilterConfig.DevicePosition = .back
-    @objc public enum DevicePosition: Int {
-        case back
-        case front
-        
-        /// For custom camera
-        var avDevicePosition: AVCaptureDevice.Position {
-            switch self {
-            case .back:
-                return .back
-            case .front:
-                return .front
-            }
-        }
-        
-        /// For system camera
-        var cameraDevice: UIImagePickerController.CameraDevice {
-            switch self {
-            case .back:
-                return .rear
-            case .front:
-                return .front
-            }
-        }
-    }
-    
-    @discardableResult
-    func devicePosition(_ position: PTCameraFilterConfig.DevicePosition) -> PTCameraFilterConfig {
-        devicePosition = position
-        return self
-    }
-
     ///转换摄像头
     open var focusImage:UIImage = UIColor.randomColor.createImageWithColor().transformImage(size: CGSize(width: 44, height: 44))
 

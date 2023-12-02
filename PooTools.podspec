@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.25.12'
+    s.version     = '3.25.13'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -648,6 +648,8 @@ Pod::Spec.new do |s|
     s.subspec 'HarbethKit' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'Harbeth'
+        subspec.dependency 'PooTools/CameraPermission'
+#        subspec.dependency 'PooTools/MicPermission'
         subspec.source_files = 'PooToolsSource/C7Collector/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_HARBETHKIT POOTOOLS_COCOAPODS"
