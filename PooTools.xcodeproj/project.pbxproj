@@ -273,6 +273,7 @@
 		55B13D582B1AEF3F00C67EDA /* PTEditToolsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */; };
 		55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */; };
 		55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */; };
+		55B13D5E2B1AFA8100C67EDA /* PTWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */; };
 		55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */; };
 		55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
@@ -744,6 +745,7 @@
 		55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditToolsCell.swift; sourceTree = "<group>"; };
 		55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAdjustToolCell.swift; sourceTree = "<group>"; };
 		55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = C7CameraConfig.swift; sourceTree = "<group>"; };
+		55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTWeakProxy.swift; sourceTree = "<group>"; };
 		55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SVGAPlayerSwiftEdition.swift; sourceTree = "<group>"; };
 		55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSVGAViewController.swift; sourceTree = "<group>"; };
 		55B1596C2B0CEED100A64741 /* Rose.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rose.svga; sourceTree = "<group>"; };
@@ -1528,7 +1530,6 @@
 				55BCB96E2B1732030016A4C2 /* PTMediaLibConfig.swift */,
 				55BCB96D2B1732030016A4C2 /* PTMediaLibListModel.swift */,
 				55BCB9722B1732030016A4C2 /* PTMediaLibManager.swift */,
-				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 			);
 			path = PhotoPicker;
 			sourceTree = "<group>";
@@ -1718,6 +1719,7 @@
 		55B13D482B1AE72600C67EDA /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
+				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */,
 				55BCB9802B1733620016A4C2 /* PTCutViewController.swift */,
@@ -1734,6 +1736,7 @@
 				55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */,
 				55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */,
 				55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */,
+				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -2670,6 +2673,7 @@
 				55024DE529F2855300244E44 /* PTEyeTrackingDataManager.swift in Sources */,
 				55B13D4E2B1AEAF300C67EDA /* PTImageClipRatio.swift in Sources */,
 				55ED0D322B12D9D300391136 /* SVGAVideoEntity+PTEX.m in Sources */,
+				55B13D5E2B1AFA8100C67EDA /* PTWeakProxy.swift in Sources */,
 				559C1C95293CB789002874BA /* PTRotationManager.swift in Sources */,
 				231D1692272CDEEA003D6F62 /* Data+PTEX.swift in Sources */,
 				5516CCC129E8622400614980 /* UIRefreshControl+PTEX.swift in Sources */,
