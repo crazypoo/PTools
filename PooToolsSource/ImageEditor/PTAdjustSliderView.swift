@@ -8,6 +8,16 @@
 
 import UIKit
 
+public struct PTAdjustStatus {
+    var brightness: Float = 1
+    var contrast: Float = 0
+    var saturation: Float = 0
+    
+    var allValueIsZero: Bool {
+        brightness == 1 && contrast == 0 && saturation == 0
+    }
+}
+
 class PTAdjustSliderView: UIView {
 
     static let maximumValue: Float = 1
@@ -23,7 +33,7 @@ class PTAdjustSliderView: UIView {
         label.layer.shadowOffset = .zero
         label.layer.shadowOpacity = 1
         label.textColor = .white
-        label.textAlignment = PTMediaLibUIConfig.share.adjustSliderType == .vertical ? .right : .center
+        label.textAlignment = PTImageEditorConfig.share.adjustSliderType == .vertical ? .right : .center
         label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.6
         return label
@@ -37,7 +47,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var shadowView: UIView = {
         let view = UIView()
-        view.backgroundColor = PTMediaLibConfig.share.adjustSliderNormalColor
+        view.backgroundColor = PTImageEditorConfig.share.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.shadowColor = UIColor.black.withAlphaComponent(0.4).cgColor
         view.layer.shadowOffset = .zero
@@ -48,7 +58,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var whiteView: UIView = {
         let view = UIView()
-        view.backgroundColor = PTMediaLibConfig.share.adjustSliderNormalColor
+        view.backgroundColor = PTImageEditorConfig.share.adjustSliderNormalColor
         view.layer.cornerRadius = sliderWidth / 2
         view.layer.masksToBounds = true
         return view
@@ -56,7 +66,7 @@ class PTAdjustSliderView: UIView {
     
     lazy var tintView: UIView = {
         let view = UIView()
-        view.backgroundColor = PTMediaLibConfig.share.adjustSliderTintColor
+        view.backgroundColor = PTImageEditorConfig.share.adjustSliderTintColor
         return view
     }()
     
@@ -73,7 +83,7 @@ class PTAdjustSliderView: UIView {
         }
     }
     
-    private var isVertical = PTMediaLibUIConfig.share.adjustSliderType == .vertical
+    private var isVertical = PTImageEditorConfig.share.adjustSliderType == .vertical
     
     var beginAdjust: (() -> Void)?
     
@@ -85,7 +95,7 @@ class PTAdjustSliderView: UIView {
         super.init(frame: frame)
         setupUI()
         
-        let editConfig = PTMediaEditConfig.share
+        let editConfig = PTImageEditorConfig.share
         if editConfig.impactFeedbackWhenAdjustSliderValueIsZero {
             impactFeedback = UIImpactFeedbackGenerator(style: editConfig.impactFeedbackStyle)
         }
@@ -177,5 +187,4 @@ class PTAdjustSliderView: UIView {
             endAdjust?()
         }
     }
-
 }

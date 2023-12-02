@@ -32,8 +32,8 @@ public class PTEditImageViewController: PTBaseViewController {
     private var hasAdjustedImage = false
     var originalFrame: CGRect = .zero
     private var isFirstSetContainerFrame = true
-    private var selectedTool: PTMediaEditConfig.EditTool?
-    private var tools: [PTMediaEditConfig.EditTool]!
+    private var selectedTool: PTImageEditorConfig.EditTool?
+    private var tools: [PTImageEditorConfig.EditTool]!
     private var adjustTools: [PTHarBethFilter.FiltersTool]!
     private var currentClipStatus: PTClipStatus!
     private var preClipStatus: PTClipStatus!
@@ -103,7 +103,6 @@ public class PTEditImageViewController: PTBaseViewController {
 
         let view = PTCollectionView(viewConfig: config)
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = self.tools[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTFusionCellModel)
@@ -156,16 +155,16 @@ public class PTEditImageViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
+            let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! UIImage
-            let cellFilter = PTMediaEditConfig.share.filters[indexPath.row]
+            let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
             cell.imageView.image = cellTools
             cell.nameLabel.text = cellFilter.name
             
             if self.currentFilter == cellFilter {
-                cell.nameLabel.textColor = .purple
+                cell.nameLabel.textColor = config.themeColor
             } else {
                 cell.nameLabel.textColor = .lightGray
             }
@@ -173,7 +172,7 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
             
-            let filter = PTMediaEditConfig.share.filters[indexPath.row]
+            let filter = PTImageEditorConfig.share.filters[indexPath.row]
             self.editorManager.storeAction(.filter(oldFilter: self.currentFilter, newFilter: filter))
             self.changeFilter(filter)
             collection.reloadData()
@@ -203,7 +202,7 @@ public class PTEditImageViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
+            let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! PTFusionCellModel
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTAdjustToolCell
@@ -212,7 +211,7 @@ public class PTEditImageViewController: PTBaseViewController {
             let tool = self.adjustTools[indexPath.row]
             let isSelected = tool == self.selectedAdjustTool
             if isSelected {
-                cell.nameLabel.textColor = .purple
+                cell.nameLabel.textColor = config.themeColor
                 cell.imageView.loadImage(contentData: cellTools.disclosureIndicatorImage as Any)
             } else {
                 cell.nameLabel.textColor = .lightGray
@@ -327,7 +326,7 @@ public class PTEditImageViewController: PTBaseViewController {
     public lazy var mainScrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
-        view.minimumZoomScale = PTMediaEditConfig.share.minimumZoomScale
+        view.minimumZoomScale = PTImageEditorConfig.share.minimumZoomScale
         view.maximumZoomScale = 3
         view.delegate = self
         return view
@@ -565,8 +564,8 @@ public class PTEditImageViewController: PTBaseViewController {
         preAdjustStatus = currentAdjustStatus
         editorManager = PTMediaEditManager(actions: [])
         currentFilter = .cigaussian
-        adjustTools = PTMediaEditConfig.share.adjust_tools
-        tools = PTMediaEditConfig.share.tools
+        adjustTools = PTImageEditorConfig.share.adjust_tools
+        tools = PTImageEditorConfig.share.tools
         editorManager.delegate = self
     }
     
@@ -1176,7 +1175,7 @@ extension PTEditImageViewController {
 //MARK: TextInput
 extension PTEditImageViewController {
     func showTextAction() {
-        showInputTextVC(font:PTMediaEditConfig.share.textStickerDefaultFont) { [weak self] text, textColor, font, image, style in
+        showInputTextVC(font:PTImageEditorConfig.share.textStickerDefaultFont) { [weak self] text, textColor, font, image, style in
             guard !text.isEmpty, let image = image else { return }
             self?.addTextStickersView(text, textColor: textColor, font: font, image: image, style: style)
         }
@@ -1349,7 +1348,7 @@ extension PTEditImageViewController {
         let thumbnailImage = originalImage.pt.resize_vI(size) ?? originalImage
         
         PTGCDManager.gcdGobal {
-            let filters = PTMediaEditConfig.share.filters            
+            let filters = PTImageEditorConfig.share.filters
             filters.enumerated().forEach { index,value in
                 PTHarBethFilter.share.texureSize = thumbnailImage!.size
                 self.thumbnailFilterImages.append(value.getCurrentFilterImage(image: thumbnailImage))
@@ -1384,7 +1383,7 @@ extension PTEditImageViewController {
                 make.height.equalTo(self.adjustCollectionViewHeight)
             }
 
-            switch PTMediaLibUIConfig.share.adjustSliderType {
+            switch PTImageEditorConfig.share.adjustSliderType {
             case .vertical:
                 adjustSlider.frame = CGRect(x: view.pt.jx_width - 60, y: view.pt.jx_height / 2 - 100, width: 60, height: 200)
             case .horizontal:
@@ -1483,7 +1482,7 @@ extension PTEditImageViewController {
     fileprivate func adjustFilterValueSet(filterImage:UIImage?) -> UIImage? {
         var filters = [C7FilterProtocol]()
         let filterManager = PTHarBethFilter.share
-        filterManager.tools = PTMediaEditConfig.share.adjust_tools
+        filterManager.tools = PTImageEditorConfig.share.adjust_tools
         filterManager.getFilterResults().enumerated().forEach { index,value in
             if value.filter is C7Luminance {
                 let filter = value.callback!(PTHarBethFilter.FiltersTool.brightness.filterValue(currentAdjustStatus.brightness))
@@ -1720,7 +1719,7 @@ extension PTEditImageViewController: PTMediaEditorManagerDelegate {
         guard let filter else { return }
         changeFilter(filter)
         
-        let filters = PTMediaEditConfig.share.filters
+        let filters = PTImageEditorConfig.share.filters
         
         guard let index = filters.firstIndex(where: { $0.name == filter.name }) else {
             return

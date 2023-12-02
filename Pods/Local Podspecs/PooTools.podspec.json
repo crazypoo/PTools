@@ -1,6 +1,6 @@
 {
   "name": "PooTools",
-  "version": "3.25.8",
+  "version": "3.25.10",
   "authors": {
     "crazypoo": "273277355@qq.com"
   },
@@ -8,7 +8,7 @@
   "summary": "多年来积累的轮子",
   "source": {
     "git": "https://github.com/crazypoo/PTools.git",
-    "tag": "3.25.8"
+    "tag": "3.25.10"
   },
   "license": {
     "type": "MIT",
@@ -1430,6 +1430,9 @@
         ],
         "PooTools/FilterCamera": [
 
+        ],
+        "PooTools/ImageEditor": [
+
         ]
       },
       "source_files": [
@@ -1454,9 +1457,30 @@
         ],
         "PooTools/HarbethKit": [
 
+        ],
+        "PooTools/MediaViewer": [
+
+        ],
+        "PooTools/ImageEditor": [
+
         ]
       },
       "source_files": "PooToolsSource/FilterCamera/*.{h,m,swift}",
+      "pod_target_xcconfig": {
+        "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
+      }
+    },
+    {
+      "name": "ImageEditor",
+      "dependencies": {
+        "PooTools/Core": [
+
+        ],
+        "PooTools/HarbethKit": [
+
+        ]
+      },
+      "source_files": "PooToolsSource/ImageEditor/*.{h,m,swift}",
       "pod_target_xcconfig": {
         "SWIFT_ACTIVE_COMPILATION_CONDITIONS": "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
       }
@@ -1669,6 +1693,9 @@
 
         ],
         "PooTools/FilterCamera": [
+
+        ],
+        "PooTools/ImageEditor": [
 
         ]
       },

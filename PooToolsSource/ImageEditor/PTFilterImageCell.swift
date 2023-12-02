@@ -22,7 +22,6 @@ class PTFilterImageCell: PTBaseNormalCell {
         label.layer.shadowColor = UIColor.black.withAlphaComponent(0.3).cgColor
         label.layer.shadowOffset = .zero
         label.layer.shadowOpacity = 1
-//        label.adjustsFontSizeToFitWidth = true
         label.minimumScaleFactor = 0.5
         return label
     }()
@@ -31,7 +30,6 @@ class PTFilterImageCell: PTBaseNormalCell {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
         view.isUserInteractionEnabled = true
-//        view.clipsToBounds = true
         return view
     }()
     

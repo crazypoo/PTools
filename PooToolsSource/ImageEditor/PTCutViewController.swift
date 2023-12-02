@@ -158,7 +158,7 @@ class PTCutViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
+            let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellModel = (itemRow.dataModel as! PTImageClipRatio)
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTImageCutRatioCell
@@ -166,7 +166,7 @@ class PTCutViewController: PTBaseViewController {
             cell.configureCell(image: self.thumbnailImage ?? self.editImage, ratio: cellModel)
             
             if cellModel == self.selectedRatio {
-                cell.titleLabel.textColor = .purple
+                cell.titleLabel.textColor = config.themeColor
             } else {
                 cell.titleLabel.textColor = .lightGray
             }
@@ -247,7 +247,7 @@ class PTCutViewController: PTBaseViewController {
 
     init(image: UIImage, status: PTClipStatus) {
         originalImage = image
-        let configuration = PTMediaEditConfig.share
+        let configuration = PTImageEditorConfig.share
         clipRatios = configuration.clipRatios
         dimClippedAreaDuringAdjustments = configuration.dimClippedAreaDuringAdjustments
         editRect = status.editRect
@@ -267,7 +267,7 @@ class PTCutViewController: PTBaseViewController {
             selectedRatio = ratio
         } else {
             firstEnter = true
-            selectedRatio = PTMediaEditConfig.share.clipRatios.first!
+            selectedRatio = PTImageEditorConfig.share.clipRatios.first!
         }
         super.init(nibName: nil, bundle: nil)
         if firstEnter {

@@ -785,7 +785,7 @@ class PTEditInputViewController: PTBaseViewController {
         if let textColor = textColor {
             currentColor = textColor
         } else {
-            currentColor = PTMediaEditConfig.share.textStickerDefaultTextColor
+            currentColor = PTImageEditorConfig.share.textStickerDefaultTextColor
         }
         textStyle = style
         super.init(nibName: nil, bundle: nil)

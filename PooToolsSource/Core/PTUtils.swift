@@ -93,6 +93,16 @@ import SwifterSwift
     case HundredMillion
 }
 
+func deviceSafeAreaInsets() -> UIEdgeInsets {
+    var insets: UIEdgeInsets = .zero
+    
+    if #available(iOS 11, *) {
+        insets = AppWindows?.safeAreaInsets ?? .zero
+    }
+    
+    return insets
+}
+
 @objcMembers
 public class PTUtils: NSObject {
         

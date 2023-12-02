@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.25.8'
+    s.version     = '3.25.11'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -834,6 +834,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'ChromaColorPicker'
         subspec.dependency 'PooTools/FilterCamera'
+        subspec.dependency 'PooTools/ImageEditor'
         subspec.source_files = 'PooToolsSource/PhotoPicker/*.{h,m,swift}','PooToolsSource/ImagePicker/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_PHOTOPICKER POOTOOLS_COCOAPODS"
@@ -846,9 +847,19 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/MicPermission'
         subspec.dependency 'PooTools/HarbethKit'
         subspec.dependency 'PooTools/MediaViewer'
+        subspec.dependency 'PooTools/ImageEditor'
         subspec.source_files = 'PooToolsSource/FilterCamera/*.{h,m,swift}'
         subspec.pod_target_xcconfig = {
             "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_FILTERCAMERA POOTOOLS_COCOAPODS"
+        }
+    end
+    
+    s.subspec 'ImageEditor' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.dependency 'PooTools/HarbethKit'
+        subspec.source_files = 'PooToolsSource/ImageEditor/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_IMAGEEDITOR POOTOOLS_COCOAPODS"
         }
     end
     
@@ -922,6 +933,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/HeartRate'
         subspec.dependency 'PooTools/PhotoPicker'
         subspec.dependency 'PooTools/FilterCamera'
+        subspec.dependency 'PooTools/ImageEditor'
 #        subspec.dependency 'PooTools/SVGA'
 
         subspec.pod_target_xcconfig = {
