@@ -570,7 +570,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             takePhotoView?.actionHandle = { type,image in
                 let vc = PTEditImageViewController(readyEditImage: image)
                 vc.editFinishBlock = { ei ,editImageModel in
-                    PTMediaLibManager.saveImageToAlbum(image: ei) { finish, asset in
+                    PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
                         if !finish {
                             PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
                         }
@@ -596,7 +596,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             takePhotoView?.dismissTask = {
                 self.takePhotoView = nil
             }
-            PTMediaLibManager.saveImageToAlbum(image: image) { finish, asset in
+            PTMediaEditManager.saveImageToAlbum(image: image) { finish, asset in
                 if !finish {
                     PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
                 }

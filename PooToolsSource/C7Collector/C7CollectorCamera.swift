@@ -468,6 +468,20 @@ public final class C7CollectorCamera: C7Collector {
         }
     }
 
+    public func finishRecord() {
+        closeTorch()
+//        restartRecordAfterSwitchCamera = false
+//
+//        guard let movieFileOutput = movieFileOutput else {
+//            return
+//        }
+//
+//        guard movieFileOutput.isRecording else {
+//            return
+//        }
+//
+//        movieFileOutput.stopRecording()
+    }
 }
 
 extension C7CollectorCamera {
@@ -667,19 +681,5 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
 //        }
 //    }
 //    
-//    public func finishRecord() {
-//        closeTorch()
-//        restartRecordAfterSwitchCamera = false
-//
-//        guard let movieFileOutput = movieFileOutput else {
-//            return
-//        }
-//
-//        guard movieFileOutput.isRecording else {
-//            return
-//        }
-//
-//        movieFileOutput.stopRecording()
-//    }
 //}
 
