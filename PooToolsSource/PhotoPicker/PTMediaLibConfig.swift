@@ -38,9 +38,6 @@ public class PTMediaLibConfig:NSObject {
     /// Photo sorting method, the preview interface is not affected by this parameter. Defaults to true.
     public var sortAscending = true
 
-    /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
-    public var maxFrameCountForGIF = 50
-
     /// Allow select Gif, it only controls whether it is displayed in Gif form.
     /// If value is false, the Gif logo is not displayed. Defaults to true.
     public var allowSelectGif = true
@@ -192,7 +189,7 @@ public class PTCameraConfig: NSObject {
     }
         
     /// Video resolution. Defaults to hd1920x1080.
-    public var sessionPreset: PTCameraFilterConfig.CaptureSessionPreset = .hd1920x1080
+    public var sessionPreset: C7CameraConfig.CaptureSessionPreset = .hd1920x1080
 
         
     /// Camera flahs switch. Defaults to true.

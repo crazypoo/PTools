@@ -295,7 +295,7 @@ public extension PTPOP where Base: UIImage {
             return UIImage(data: data)
         }
         
-        let maxFrameCount = PTMediaLibConfig.share.maxFrameCountForGIF
+        let maxFrameCount = PTImageEditorConfig.share.maxFrameCountForGIF
         
         let ratio = CGFloat(max(frameCount, maxFrameCount)) / CGFloat(maxFrameCount)
         frameCount = min(frameCount, maxFrameCount)

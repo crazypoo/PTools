@@ -17,6 +17,9 @@ import UIKit
 public class PTImageEditorConfig: NSObject {
     static let share = PTImageEditorConfig()
     
+    /// The maximum number of frames for GIF images. To avoid crashes due to memory spikes caused by loading GIF images with too many frames, it is recommended that this value is not too large. Defaults to 50.
+    public var maxFrameCountForGIF = 50
+
     //MARK: Text Sticker
     /// The default text sticker color. If this color not in textStickerTextColors, will pick the first color in textStickerTextColors as the default.
     public var textStickerDefaultTextColor = UIColor.white
