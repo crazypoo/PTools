@@ -143,7 +143,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTMediaLibConfig.share
+            let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! UIImage
             let cellFilter = PTCameraFilterConfig.share.filters[indexPath.row]
@@ -152,7 +152,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             cell.nameLabel.text = cellFilter.name
             
             if self.currentFilter == cellFilter {
-                cell.nameLabel.textColor = .purple
+                cell.nameLabel.textColor = config.themeColor
             } else {
                 cell.nameLabel.textColor = .lightGray
             }
