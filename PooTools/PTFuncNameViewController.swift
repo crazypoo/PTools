@@ -55,6 +55,7 @@ public extension String {
     static let swipe = "Swipe"
     static let scanQR = "ScanQRCode"
     static let filtercamera = "FilterCamera"
+    static let editimage = "EditImage"
 
     static let route = "路由"
     
@@ -259,7 +260,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let filtercamera = self.rowBaseModel(name: .filtercamera)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR,filtercamera]
+        let editimage = self.rowBaseModel(name: .editimage)
+        
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR,filtercamera,editimage]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -740,6 +743,21 @@ class PTFuncNameViewController: PTBaseViewController {
             } else if itemRow.title == .filtercamera {
                 let vc = PTFilterCameraViewController()
                 self.navigationController?.pushViewController(vc)
+            } else if itemRow.title == .editimage {
+                let image = UIImage(named: "DemoImage")!
+                
+                let vc = PTEditImageViewController(readyEditImage: image)
+                vc.editFinishBlock = { ei ,editImageModel in
+                    PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+                        if !finish {
+                            PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                        }
+                    }
+                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.view.backgroundColor = .black
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

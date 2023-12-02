@@ -579,6 +579,7 @@ public class PTEditImageViewController: PTBaseViewController {
 #else
         PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
 #endif
+        self.changeStatusBar(type: .Dark)
     }
     
     public override func viewDidAppear(_ animated: Bool) {

@@ -226,10 +226,6 @@ public class PTMediaLibView:UIView {
         }
         self.currentAlbum = currentModels
         markSelected(source: &self.totalModels, selected: &self.selectedModel)
-
-        PTGCDManager.gcdAfter(time: 0.15) {
-            self.collectionView.contentCollectionView.scrollToBottom()
-        }
     }
         
     required init?(coder: NSCoder) {
@@ -573,9 +569,13 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         super.viewWillAppear(animated)
     }
 
+    public override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         view.addSubviews([fakeNav])
         fakeNav.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
@@ -584,28 +584,34 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
         }
         
         createNavSubs()
-
         let config = PTMediaLibConfig.share
         PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
             self.currentAlbum = model
             if self.currentAlbum.models.isEmpty {
                 PTGCDManager.gcdMain {
                     self.currentAlbum.refetchPhotos()
-                    self.view.addSubviews([self.mediaListView])
-                    self.mediaListView.snp.makeConstraints { make in
-                        make.left.right.bottom.equalToSuperview()
-                        make.top.equalTo(self.fakeNav.snp.bottom)
-                    }
+                    self.createList()
                     self.mediaListView.currentAlbum = self.currentAlbum
+                    PTGCDManager.gcdAfter(time: 0.15) {
+                        self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    }
                 }
             } else {
-                self.view.addSubviews([self.mediaListView])
-                self.mediaListView.snp.makeConstraints { make in
-                    make.left.right.bottom.equalToSuperview()
-                    make.top.equalTo(self.fakeNav.snp.bottom)
-                }
+                self.createList()
                 self.mediaListView.currentAlbum = self.currentAlbum
+                PTGCDManager.gcdAfter(time: 0.15) {
+                    self.mediaListView.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                }
             }
+        }
+    }
+    
+    func createList() {
+        self.view.addSubviews([self.mediaListView])
+        self.mediaListView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalTo(self.fakeNav.snp.bottom)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)
         }
     }
     
