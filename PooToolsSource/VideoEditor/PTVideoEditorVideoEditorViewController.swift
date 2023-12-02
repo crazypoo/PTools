@@ -489,6 +489,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
     }
 }
 
+#if POOTOOLS_ROUTER
 extension PTVideoEditorVideoEditorViewController:PTRouterable {
     public static var priority: UInt {
         PTRouterDefaultPriority
@@ -506,4 +507,5 @@ extension PTVideoEditorVideoEditorViewController:PTRouterable {
         return vc
     }
 }
+#endif
 

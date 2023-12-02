@@ -525,7 +525,7 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
 
             if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
                 self.stopRunning()
-                let image = UIImage(data: data)?.pt.fixOrientation()
+                let image = UIImage(data: data)?.c7.fixOrientation()
                 
                 var dest = BoxxIO(element: image, filters: self.filters)
                 dest.transmitOutputRealTimeCommit = true
