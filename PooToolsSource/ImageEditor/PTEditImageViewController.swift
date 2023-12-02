@@ -239,7 +239,7 @@ public class PTEditImageViewController: PTBaseViewController {
 
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -248,8 +248,8 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var undoButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("↩️".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
-        view.setImage("⇠".emojiToImage(emojiFont: .appfont(size: 18)), for: .disabled)
+        view.setImage("↩️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage("⇠".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray), for: .disabled)
         view.addActionHandlers { sender in
             self.editorManager.undoAction()
         }
@@ -258,8 +258,8 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var redoButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("↪️".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
-        view.setImage("⇢".emojiToImage(emojiFont: .appfont(size: 18)), for: .disabled)
+        view.setImage("↪️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.setImage("⇢".emojiToImage(emojiFont: .appfont(size: 20)).withTintColor(.lightGray), for: .disabled)
         view.addActionHandlers { sender in
             self.editorManager.redoAction()
         }
@@ -268,7 +268,7 @@ public class PTEditImageViewController: PTBaseViewController {
     
     private lazy var doneButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             var stickerStates: [PTBaseStickertState] = []
             for view in self.stickersContainer.subviews {

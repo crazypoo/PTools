@@ -23,7 +23,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }

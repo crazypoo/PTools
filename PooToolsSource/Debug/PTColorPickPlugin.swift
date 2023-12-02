@@ -186,7 +186,7 @@ fileprivate class PTColorPickInfoView : UIView {
     
     private lazy var closeBtn:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 14)), for: .normal)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             if self.closeBlock != nil {
                 self.closeBlock!(sender,self)

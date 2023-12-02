@@ -63,13 +63,13 @@ class PTUserDefultsViewController: PTBaseViewController {
         PTNSLogConsole(dic)
 
         let backBtn = UIButton(type: .custom)
-        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         backBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }
         
         let cleanBtn = UIButton(type: .custom)
-        cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        cleanBtn.setImage("🗑️".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         cleanBtn.addActionHandlers { sender in
             self.clearUserdefults()
         }

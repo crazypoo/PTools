@@ -12,6 +12,7 @@ import SnapKit
 import Photos
 import Combine
 import AVFoundation
+import SafeSFSymbols
 
 public class PTMediaLibView:UIView {
         
@@ -160,7 +161,10 @@ public class PTMediaLibView:UIView {
                 
                 if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
                     self.setCellIndex(cell, index: index + 1)
+                    cellModel.isSelected = true
+                    PTNSLogConsole("找到选中的\(indexPath.row)>>>>>>是否选中\(cellModel.isSelected)")
                 } else {
+                    cellModel.isSelected = false
                     cell.selectButton.normalTitle = ""
                 }
                 self.setCellMaskView(cell, isSelected: cellModel.isSelected, model: cellModel)
@@ -175,33 +179,58 @@ public class PTMediaLibView:UIView {
             let itemRow = sectionModel.rows[indexPath.row]
             if itemRow.ID == PTCameraCell.ID {
                 let config = PTMediaLibConfig.share
+                if config.useCustomCamera {
+                    
+                    let cameraConfig = PTCameraFilterConfig.share
+                    let pointFont = UIFont.appfont(size: 20)
 
-                if !UIImagePickerController.isSourceTypeAvailable(.camera) {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
-                } else if C7CameraConfig.hasCameraAuthority() {
-                    let picker = UIImagePickerController()
-                    picker.delegate = self
-                    picker.allowsEditing = false
-                    picker.videoQuality = .typeHigh
-                    picker.sourceType = .camera
-                    picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
-                    if config.cameraConfiguration.showFlashSwitch {
-                        picker.cameraFlashMode = .auto
+                    cameraConfig.backImage = "❌".emojiToImage(emojiFont: pointFont)
+                    cameraConfig.flashImage = UIImage(.flashlight.offFill).withTintColor(.white)
+                    cameraConfig.flashImageSelected = UIImage(.flashlight.onFill).withTintColor(.white)
+                    
+                    if #available(iOS 15.0, *) {
+                        cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
+                        cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
                     } else {
-                        picker.cameraFlashMode = .off
+                        cameraConfig.filtersImage = UIImage(.f.cursiveCircle)
+                        cameraConfig.filtersImageSelected = UIImage(.f.cursiveCircleFill)
                     }
-                    var mediaTypes:[String] = []
-                    if config.cameraConfiguration.allowTakePhoto {
-                        mediaTypes.append("public.image")
+
+                    let vc = PTFilterCameraViewController()
+                    vc.onlyCamera = false
+                    vc.modalPresentationStyle = .fullScreen
+                    vc.useThisImageHandler = { image in
+                        self.save(image: image, videoUrl: nil)
                     }
-                    if config.cameraConfiguration.allowRecordVideo {
-                        mediaTypes.append("public.movie")
-                    }                    
-                    picker.mediaTypes = mediaTypes
-                    picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
-                    PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
+                    PTUtils.getCurrentVC().showDetailViewController(vc, sender: nil)
                 } else {
-                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
+                    if !UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
+                    } else if C7CameraConfig.hasCameraAuthority() {
+                        let picker = UIImagePickerController()
+                        picker.delegate = self
+                        picker.allowsEditing = false
+                        picker.videoQuality = .typeHigh
+                        picker.sourceType = .camera
+                        picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
+                        if config.cameraConfiguration.showFlashSwitch {
+                            picker.cameraFlashMode = .auto
+                        } else {
+                            picker.cameraFlashMode = .off
+                        }
+                        var mediaTypes:[String] = []
+                        if config.cameraConfiguration.allowTakePhoto {
+                            mediaTypes.append("public.image")
+                        }
+                        if config.cameraConfiguration.allowRecordVideo {
+                            mediaTypes.append("public.movie")
+                        }
+                        picker.mediaTypes = mediaTypes
+                        picker.videoMaximumDuration = TimeInterval(PTCameraFilterConfig.share.maxRecordDuration)
+                        PTUtils.getCurrentVC().showDetailViewController(picker, sender: nil)
+                    } else {
+                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker can not take photo".localized(), icon:.Error,style: .Normal)
+                    }
                 }
             } else {
                 let config = PTMediaLibConfig.share
@@ -226,18 +255,21 @@ public class PTMediaLibView:UIView {
         }
         self.currentAlbum = currentModels
         markSelected(source: &self.totalModels, selected: &self.selectedModel)
+        
+        PHPhotoLibrary.shared().register(self)
     }
         
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func loadMedia() {
+    func loadMedia(addImage:Bool? = false) {
         PTGCDManager.gcdMain {
-            self.totalModels.removeAll()
             var rows = [PTRows]()
-
-            self.totalModels.append(contentsOf: self.currentAlbum!.models)
+            if !addImage! {
+                self.totalModels.removeAll()
+                self.totalModels.append(contentsOf: self.currentAlbum!.models)
+            }
             self.totalModels.enumerated().forEach { index,value in
                 let row = PTRows(cls:PTMediaLibCell.self,ID: PTMediaLibCell.ID,dataModel: value)
                 rows.append(row)
@@ -379,8 +411,22 @@ public class PTMediaLibView:UIView {
     }
     
     private func handleDataArray(newModel: PTMediaModel) {
-        totalModels.insert(newModel, at: 0)
+        
+        currentAlbum?.refreshResult()
+        
+        newModel.isSelected = true
+        let uiConfig = PTMediaLibUIConfig.share
         let config = PTMediaLibConfig.share
+        var insertIndex = 0
+        
+        if uiConfig.sortAscending {
+            insertIndex = totalModels.count
+            totalModels.append(newModel)
+        } else {
+            // 保存拍照的照片或者视频，说明肯定有camera cell
+            insertIndex = 1
+            totalModels.insert(newModel, at: 0)
+        }
         
         var canSelect = true
         // If mixed selection is not allowed, and the newModel type is video, it will not be selected.
@@ -391,30 +437,23 @@ public class PTMediaLibView:UIView {
         if config.maxSelectCount == 1, !config.showSelectBtnWhenSingleSelect {
             canSelect = false
         }
-        if canSelect, canAddModel(newModel, currentSelectCount: selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
+        
+        if canSelect, canAddModel(newModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
             if !shouldDirectEdit(newModel) {
-                newModel.isSelected = true
-                totalModels.append(newModel)
+                self.selectedModel.append(newModel)
                 config.didSelectAsset?(newModel.asset)
                 
-                if config.callbackDirectlyAfterTakingPhoto {
-                    if let vc = self.parentViewController as? PTMediaLibViewController {
-                        vc.requestSelectPhoto()
-                    }
-                    return
-                }
+//                if config.callbackDirectlyAfterTakingPhoto {
+//                    doneBtnClick()
+//                    return
+//                }
             }
         }
-        
-        loadMedia()
-    }
-}
 
-extension PTMediaLibView:PHPhotoLibraryChangeObserver {
-    public func photoLibraryDidChange(_ changeInstance: PHChange) {
-        PHPhotoLibrary.shared().unregisterChangeObserver(self)
-        PTGCDManager.gcdMain {
-            self.loadMedia()
+        PTGCDManager.gcdAfter(time: 0.15) {
+//            //TODO: 这里刷新应该没问题,但是等网络号的时候再看
+            self.loadMedia(addImage: true)
+//            self.collectionView.contentCollectionView.reload
         }
     }
 }
@@ -462,6 +501,39 @@ extension PTMediaLibView {
     }
 }
 
+extension PTMediaLibView:PHPhotoLibraryChangeObserver {
+    public func photoLibraryDidChange(_ changeInstance: PHChange) {
+        PHPhotoLibrary.shared().unregisterChangeObserver(self)
+        PTGCDManager.gcdMain {
+            let config = PTMediaLibConfig.share
+            PTMediaLibManager.getCameraRollAlbum(allowSelectImage: config.allowSelectImage, allowSelectVideo: config.allowSelectVideo) { model in
+                self.currentAlbum = model
+                if self.currentAlbum!.models.isEmpty {
+                    PTGCDManager.gcdMain {
+                        self.currentAlbum!.refetchPhotos()
+                        if let vc = self.parentViewController as? PTMediaLibViewController {
+                            vc.currentAlbum = self.currentAlbum!
+                        }
+                        self.currentAlbum = self.currentAlbum!
+                        PTGCDManager.gcdAfter(time: 0.15) {
+                            self.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                        }
+                    }
+                } else {
+                    self.currentAlbum = self.currentAlbum
+                    if let vc = self.parentViewController as? PTMediaLibViewController {
+                        vc.currentAlbum = self.currentAlbum!
+                    }
+                    PTGCDManager.gcdAfter(time: 0.15) {
+                        self.collectionView.contentCollectionView.scrollToBottom(animated: false)
+                    }
+                }
+            }
+        }
+    }
+}
+
+
 public class PTMediaLibViewController: PTFloatingBaseViewController {
 
     public var selectImageBlock: (([PTResultModel], Bool) -> Void)?
@@ -473,7 +545,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
 
     private lazy var fetchImageQueue = OperationQueue()
 
-    private var currentAlbum:PTMediaLibListModel!
+    var currentAlbum:PTMediaLibListModel!
     var totalModels = [PTMediaModel]()
     var selectedModel: [PTMediaModel] = []
 
@@ -485,7 +557,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
     
     private lazy var dismissButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             self.returnFrontVC()
         }
@@ -494,7 +566,7 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
     
     private lazy var submitButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         view.addActionHandlers { sender in
             self.requestSelectPhoto(viewController: self)
         }
@@ -749,5 +821,5 @@ extension PTMediaLibViewController {
             fetchImageQueue.addOperation(operation)
         }
     }
-
 }
+

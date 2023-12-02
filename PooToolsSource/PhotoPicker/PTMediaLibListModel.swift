@@ -82,7 +82,7 @@ public class PTMediaModel:NSObject {
     
     public var duration = ""
     
-    public var isSelected = false
+    open var isSelected = false
     
     private var pri_dataSize: PTMediaLibConfig.KBUnit?
     

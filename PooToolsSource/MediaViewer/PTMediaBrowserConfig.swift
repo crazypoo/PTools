@@ -43,9 +43,9 @@ public class PTMediaBrowserConfig: NSObject {
     ///操作方式
     public var actionType:PTViewerActionType = .All
     ///关闭页面按钮图片连接/名字
-    public var closeViewerImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 24))
+    public var closeViewerImage:UIImage = "❌".emojiToImage(emojiFont: .appfont(size: 20))
     ///更多操作按钮图片连接/名字
-    public var moreActionImage:UIImage = "🗃️".emojiToImage(emojiFont: .appfont(size: 24))
+    public var moreActionImage:UIImage = "🗃️".emojiToImage(emojiFont: .appfont(size: 20))
     ///播放按钮
     public var playButtonImage:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 44))
     ///更多功能扩展,如果选择全部,则默认保存0删除1........

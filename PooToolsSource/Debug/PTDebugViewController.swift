@@ -128,7 +128,7 @@ public class PTDebugViewController: PTBaseViewController {
         super.viewDidLoad()
         
         let backBtn = UIButton(type: .custom)
-        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 16)), for: .normal)
+        backBtn.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         backBtn.addActionHandlers { sender in
             self.returnFrontVC()
         }

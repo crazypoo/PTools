@@ -14,11 +14,12 @@ import ZXNavigationBar
 import AVFoundation
 import SnapKit
 import SwifterSwift
+import SafeSFSymbols
 
 public class PTFilterCameraViewController: PTBaseViewController {
 
-    
     public var onlyCamera:Bool = true
+    public var useThisImageHandler:((UIImage)->Void)?
     
     private lazy var cameraConfig = PTCameraFilterConfig.share
     /// 是否正在调整焦距
@@ -159,7 +160,6 @@ public class PTFilterCameraViewController: PTBaseViewController {
             return cell
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            
             let filters = PTCameraFilterConfig.share.filters[indexPath.row]
             if filters.type == .none {
                 self.camera.filters = []
@@ -189,7 +189,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     
     func showFilterView(show:Bool) {
         if show {
-            filterCollectionView.alpha = 1
+//            filterCollectionView.alpha = 1
             view.addSubviews([self.filterCollectionView])
             filterCollectionView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
@@ -207,7 +207,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             filterCollectionView.showCollectionDetail(collectionData: [section])
 
         } else {
-            filterCollectionView.alpha = 0
+//            filterCollectionView.alpha = 0
             filterCollectionView.removeFromSuperview()
         }
     }
@@ -319,6 +319,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         navigationController?.setNavigationBarHidden(true, animated: false)
         self.navigationController?.view.backgroundColor = .clear
 #endif
+        self.changeStatusBar(type: .Dark)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -607,6 +608,40 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             }
         } else {
             //TODO: 这里根据相册须要处理
+            self.camera.stopRunning()
+            
+            let reviewView = PTFlashImageReviewView(image: image)
+            AppWindows?.addSubview(reviewView)
+            reviewView.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
+            }
+            reviewView.backButton.addActionHandlers { sender in
+                reviewView.removeFromSuperview()
+                self.camera.startRunning()
+            }
+            reviewView.editButton.addActionHandlers { sender in
+                reviewView.removeFromSuperview()
+                let vc = PTEditImageViewController(readyEditImage: image)
+                vc.editFinishBlock = { ei ,editImageModel in
+                    self.dismiss(animated: true) {
+                        if self.useThisImageHandler != nil {
+                            self.useThisImageHandler!(ei)
+                        }
+                    }
+                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.view.backgroundColor = .black
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: true)
+            }
+            reviewView.justThisButton.addActionHandlers { sender in
+                reviewView.removeFromSuperview()
+                self.dismiss(animated: true) {
+                    if self.useThisImageHandler != nil {
+                        self.useThisImageHandler!(image)
+                    }
+                }
+            }
         }
         
         self.camera.startRunning()
@@ -617,14 +652,15 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
 
 extension PTFilterCameraViewController {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        let gesTuples: [(UIGestureRecognizer?, UIGestureRecognizer?)] = [(recordLongGes, cameraFocusPanGes), (recordLongGes, focusCursorTapGes), (cameraFocusPanGes, focusCursorTapGes)]
-        
-        let result = gesTuples.map { ges1, ges2 in
-            (ges1 == gestureRecognizer && ges2 == otherGestureRecognizer) ||
-                (ges2 == otherGestureRecognizer && ges1 == gestureRecognizer)
-        }.filter { $0 == true }
-        
-        return !result.isEmpty
+//        let gesTuples: [(UIGestureRecognizer?, UIGestureRecognizer?)] = [(recordLongGes, cameraFocusPanGes), (recordLongGes, focusCursorTapGes), (cameraFocusPanGes, focusCursorTapGes)]
+//        
+//        let result = gesTuples.map { ges1, ges2 in
+//            (ges1 == gestureRecognizer && ges2 == otherGestureRecognizer) ||
+//                (ges2 == otherGestureRecognizer && ges1 == gestureRecognizer)
+//        }.filter { $0 == true }
+//        PTNSLogConsole("1231231231")
+//        return !result.isEmpty
+        return true
     }
 }
 
@@ -637,5 +673,67 @@ extension PTFilterCameraViewController: CAAnimationDelegate {
         } else {
             camera.finishRecord()
         }
+    }
+}
+
+class PTFlashImageReviewView:UIView {
+    
+    lazy var imageView:UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFit
+        return view
+    }()
+    
+    lazy var backButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        return view
+    }()
+    
+    lazy var editButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage(UIImage(.pencil), for: .normal)
+        return view
+    }()
+    
+    lazy var justThisButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        return view
+    }()
+    
+    init(image:UIImage) {
+        super.init(frame: .zero)
+        
+        backgroundColor = .black
+        imageView.image = image
+        addSubviews([backButton,imageView,editButton,justThisButton])
+        
+        backButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.top.equalToSuperview().inset(CGFloat.statusBarHeight() + 5)
+        }
+        
+        imageView.snp.makeConstraints { make in
+            make.left.right.equalToSuperview()
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarHeight_Total)
+        }
+        
+        editButton.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + (CGFloat.kTabbarHeight - 34) / 2)
+            make.size.equalTo(34)
+        }
+        
+        justThisButton.snp.makeConstraints { make in
+            make.bottom.size.equalTo(self.editButton)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

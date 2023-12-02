@@ -70,7 +70,9 @@ public class PTMediaLibConfig:NSObject {
     open var allowSelectImage = true
     ///允许选择视频
     open var allowSelectVideo = true
-    
+    /// Whether to use custom camera. Defaults to true.
+    public var useCustomCamera = true
+
     public var maxPreviewCount = 9
     public var allowMixSelect = true
     private var pri_maxSelectCount = 9
