@@ -125,35 +125,6 @@ public class PTCameraFilterConfig: NSObject {
 
     /// Animation duration for select button. Defaults to 0.5.
     public var selectBtnAnimationDuration: CFTimeInterval = 0.5
-
-    /// Video resolution. Defaults to hd1920x1080.
-    public var sessionPreset: PTCameraFilterConfig.CaptureSessionPreset = .hd1920x1080
-
-    @objc public enum CaptureSessionPreset: Int {
-        var avSessionPreset: AVCaptureSession.Preset {
-            switch self {
-            case .cif352x288:
-                return .cif352x288
-            case .vga640x480:
-                return .vga640x480
-            case .hd1280x720:
-                return .hd1280x720
-            case .hd1920x1080:
-                return .hd1920x1080
-            case .hd4K3840x2160:
-                return .hd4K3840x2160
-            case .photo:
-                return .photo
-            }
-        }
-        
-        case cif352x288
-        case vga640x480
-        case hd1280x720
-        case hd1920x1080
-        case hd4K3840x2160
-        case photo
-    }
     
     /// Camera focus mode. Defaults to continuousAutoFocus
     public var focusMode: PTCameraFilterConfig.FocusMode = .continuousAutoFocus

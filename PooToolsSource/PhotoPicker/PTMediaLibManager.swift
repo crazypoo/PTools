@@ -150,15 +150,7 @@ func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, complet
     })
 }
 
-public class PTMediaLibManager:NSObject {
-    class func hasCameraAuthority() -> Bool {
-        let status = AVCaptureDevice.authorizationStatus(for: .video)
-        if status == .restricted || status == .denied {
-            return false
-        }
-        return true
-    }
-    
+public class PTMediaLibManager:NSObject {    
     /// Save video to album.
     public class func saveVideoToAlbum(url: URL, completion: ((Bool, PHAsset?) -> Void)?) {
         let status = PHPhotoLibrary.authorizationStatus()

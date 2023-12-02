@@ -178,7 +178,7 @@ public class PTMediaLibView:UIView {
 
                 if !UIImagePickerController.isSourceTypeAvailable(.camera) {
                     PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker bad".localized(), icon:.Error,style: .Normal)
-                } else if PTMediaLibManager.hasCameraAuthority() {
+                } else if C7CameraConfig.hasCameraAuthority() {
                     let picker = UIImagePickerController()
                     picker.delegate = self
                     picker.allowsEditing = false

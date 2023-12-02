@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 public class C7CameraConfig: NSObject {
     static let share = C7CameraConfig()
@@ -42,5 +43,41 @@ public class C7CameraConfig: NSObject {
         devicePosition = position
         return self
     }
+    
+    /// Video resolution. Defaults to hd1920x1080.
+    public var sessionPreset: C7CameraConfig.CaptureSessionPreset = .hd1920x1080
 
+    @objc public enum CaptureSessionPreset: Int {
+        var avSessionPreset: AVCaptureSession.Preset {
+            switch self {
+            case .cif352x288:
+                return .cif352x288
+            case .vga640x480:
+                return .vga640x480
+            case .hd1280x720:
+                return .hd1280x720
+            case .hd1920x1080:
+                return .hd1920x1080
+            case .hd4K3840x2160:
+                return .hd4K3840x2160
+            case .photo:
+                return .photo
+            }
+        }
+        
+        case cif352x288
+        case vga640x480
+        case hd1280x720
+        case hd1920x1080
+        case hd4K3840x2160
+        case photo
+    }
+
+    public class func hasCameraAuthority() -> Bool {
+        let status = AVCaptureDevice.authorizationStatus(for: .video)
+        if status == .restricted || status == .denied {
+            return false
+        }
+        return true
+    }
 }

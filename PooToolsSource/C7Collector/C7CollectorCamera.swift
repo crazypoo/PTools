@@ -227,7 +227,7 @@ public final class C7CollectorCamera: C7Collector {
     
     // 点击拍照
     public func takePicture(flashBtn:UIButton) {
-        guard PTMediaLibManager.hasCameraAuthority(), !isTakingPicture else {
+        guard C7CameraConfig.hasCameraAuthority(), !isTakingPicture else {
             return
         }
         
@@ -464,7 +464,7 @@ public final class C7CollectorCamera: C7Collector {
             device.videoZoomFactor = zoomFactor
             device.unlockForConfiguration()
         } catch {
-//            zl_debugPrint("调整焦距失败 \(error.localizedDescription)")
+            PTAlertTipControl.present(title:"Opps!",subtitle:"调整焦距失败 \(error.localizedDescription)",icon:.Error,style: .Normal)
         }
     }
 
