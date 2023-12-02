@@ -216,13 +216,7 @@ public extension PTCameraConfig {
         allowRecordVideo = value
         return self
     }
-        
-    @discardableResult
-    func sessionPreset(_ sessionPreset: PTCameraFilterConfig.CaptureSessionPreset) -> PTCameraConfig {
-        self.sessionPreset = sessionPreset
-        return self
-    }
-        
+                
     @discardableResult
     func showFlashSwitch(_ value: Bool) -> PTCameraConfig {
         showFlashSwitch = value

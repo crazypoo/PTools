@@ -44,6 +44,12 @@ public class C7CameraConfig: NSObject {
         return self
     }
     
+    @discardableResult
+    func sessionPreset(_ sessionPreset: C7CameraConfig.CaptureSessionPreset) -> C7CameraConfig {
+        self.sessionPreset = sessionPreset
+        return self
+    }
+
     /// Video resolution. Defaults to hd1920x1080.
     public var sessionPreset: C7CameraConfig.CaptureSessionPreset = .hd1920x1080
 

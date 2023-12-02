@@ -346,7 +346,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     }
     
     func setupUI() {
-        view.backgroundColor = UIColor.background
+        view.backgroundColor = UIColor.black
         view.addSubviews([originImageView,toolBar,flashButton/*,switchCameraButton*/,focusCursorView,backBtn,filtersButton])
         originImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()

@@ -101,7 +101,7 @@ public class PTMediaEditManager:NSObject {
         }
     }
     
-    private class func getAsset(from localIdentifier: String?) -> PHAsset? {
+    class func getAsset(from localIdentifier: String?) -> PHAsset? {
         guard let id = localIdentifier else {
             return nil
         }

@@ -184,7 +184,7 @@ public class PTMediaLibView:UIView {
                     picker.allowsEditing = false
                     picker.videoQuality = .typeHigh
                     picker.sourceType = .camera
-                    picker.cameraDevice = PTCameraFilterConfig.share.devicePosition.cameraDevice
+                    picker.cameraDevice = C7CameraConfig.share.devicePosition.cameraDevice
                     if config.cameraConfiguration.showFlashSwitch {
                         picker.cameraFlashMode = .auto
                     } else {
