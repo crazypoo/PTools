@@ -1719,24 +1719,24 @@
 		55B13D482B1AE72600C67EDA /* ImageEditor */ = {
 			isa = PBXGroup;
 			children = (
-				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
-				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55BCB9682B1732020016A4C2 /* PTAdjustSliderView.swift */,
+				55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */,
 				55BCB9802B1733620016A4C2 /* PTCutViewController.swift */,
 				55BCB9812B1733620016A4C2 /* PTEditImageViewController.swift */,
 				55BCB97E2B1733620016A4C2 /* PTEditInputViewController.swift */,
-				55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */,
-				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
-				55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */,
-				55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */,
+				55B13D532B1AEDE800C67EDA /* PTEditModel.swift */,
+				55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */,
+				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */,
 				55B13D4F2B1AEC6800C67EDA /* PTImageCutRatioCell.swift */,
-				55B13D512B1AED0E00C67EDA /* UIImage+PTEditEX.swift */,
-				55B13D532B1AEDE800C67EDA /* PTEditModel.swift */,
+				55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */,
+				55B13D492B1AE83200C67EDA /* PTImageEditorSticker.swift */,
+				55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */,
 				55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */,
-				55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */,
-				55B13D592B1AF03F00C67EDA /* PTAdjustToolCell.swift */,
+				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
+				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
+				55B13D512B1AED0E00C67EDA /* UIImage+PTEditEX.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -2202,11 +2202,11 @@
 		55F162E22B18E32300320925 /* C7Collector */ = {
 			isa = PBXGroup;
 			children = (
-				55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */,
-				55F162E32B18E36200320925 /* C7Collector.swift */,
-				55F162E52B18E3C200320925 /* C7CollectorVideo.swift */,
-				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
 				55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */,
+				55F162E32B18E36200320925 /* C7Collector.swift */,
+				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
+				55F162E52B18E3C200320925 /* C7CollectorVideo.swift */,
+				55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */,
 			);
 			path = C7Collector;
 			sourceTree = "<group>";
@@ -2214,9 +2214,9 @@
 		55F162FF2B1977C000320925 /* FilterCamera */ = {
 			isa = PBXGroup;
 			children = (
+				55F163042B19A47800320925 /* PTCameraAnimationUtils.swift */,
 				55F163022B197C2600320925 /* PTCameraFilterConfig.swift */,
 				55F162FD2B1977B500320925 /* PTFilterCameraViewController.swift */,
-				55F163042B19A47800320925 /* PTCameraAnimationUtils.swift */,
 				55F163082B1A29BE00320925 /* PTTakePictureReviewer.swift */,
 			);
 			path = FilterCamera;

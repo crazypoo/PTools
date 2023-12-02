@@ -546,7 +546,7 @@ public class PTEditImageViewController: PTBaseViewController {
     }()
     public lazy var ashbinImgView = UIImageView(image: UIImage(.trash), highlightedImage: UIImage(.trash.fill))
 
-    init(readyEditImage: UIImage) {
+    public init(readyEditImage: UIImage) {
         super.init(nibName: nil, bundle: nil)
         var readyEditImage = readyEditImage
         
