@@ -54,7 +54,7 @@ public class PTFusionHeader: PTBaseCollectionReusableView {
     
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }    
+    }
 }
 
 @objcMembers
@@ -67,7 +67,7 @@ public class PTVersionFooter: PTBaseCollectionReusableView {
         
         let att:ASAttributedString = """
         \(wrap: .embedding("""
-        \("\(kAppName! + " " + kAppVersion! + "(\(kAppBuildVersion!))")",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
+        \("\(kAppDisplayName! + " " + kAppVersion! + "(\(kAppBuildVersion!))")",.foreground(.lightGray),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)))
         \("PT Privacy".localized(),.foreground(.systemBlue),.font(PTAppBaseConfig.share.privacyNameFont),.paragraph(.alignment(.center)),.underline(.single,color: .systemBlue),.action {
                 let url = URL(string: PTAppBaseConfig.share.privacyURL)!
                 PTAppStoreFunction.jumpLink(url: url)

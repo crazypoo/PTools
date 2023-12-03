@@ -207,3 +207,5 @@
 "PT Photo picker time out" = "獲取超時";
 "PT Photo picker error" = "獲取圖片出現錯誤";
 "PT Camera focus error" = "調整焦距失敗";
+"PT HeartRate touch" = "請將手指放在閃光燈位置";
+"PT HeartRate loading" = "正在獲取,請耐心等待,請唔好將手指拎開!";

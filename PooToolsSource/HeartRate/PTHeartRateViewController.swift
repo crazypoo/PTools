@@ -11,6 +11,7 @@ import AVFoundation
 import SwifterSwift
 import SnapKit
 import Lottie
+import DeviceKit
 
 public typealias RGB = (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat)
 public typealias HSV = (hue: CGFloat, saturation: CGFloat, brightness: CGFloat, alpha: CGFloat)
@@ -146,7 +147,6 @@ public class PTHeartRateViewController: PTBaseViewController {
 
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        initCaptureSession()
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -192,8 +192,10 @@ public class PTHeartRateViewController: PTBaseViewController {
             make.top.equalTo(self.pulseRate.snp.bottom)
         }
         
-        PTGCDManager.gcdAfter(time: 0.1) {
-            self.initVideoCapture()
+        if !Gobal_device_info.isSimulator {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.initVideoCapture()
+            }
         }
     }
     
@@ -290,7 +292,7 @@ extension PTHeartRateViewController {
         let hsv = rgb2hsv((red: redmean, green: greenmean, blue: bluemean, alpha: 1.0))
         if (hsv.1 > 0.5 && hsv.2 > 0.5) {
             PTGCDManager.gcdMain {
-                self.validFrames.text = "正在获取,请耐心等待,请不要把手指移开！"
+                self.validFrames.text = "PT HeartRate loading".localized()
                 self.toggleTorch(status: true)
                 if !self.measurementStartedFlag {
                     self.startMeasurement()
@@ -314,7 +316,7 @@ extension PTHeartRateViewController {
             measurementStartedFlag = false
             pulseDetector.reset()
             PTGCDManager.gcdMain {
-                self.validFrames.text = "请将手指放在闪光灯在位置"
+                self.validFrames.text = "PT HeartRate touch".localized()
                 self.player.stop()
                 self.svgaIsPlaying = false
             }

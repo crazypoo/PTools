@@ -15,6 +15,7 @@ import AVFoundation
 import SnapKit
 import SwifterSwift
 import SafeSFSymbols
+import DeviceKit
 
 public class PTFilterCameraViewController: PTBaseViewController {
 
@@ -73,21 +74,23 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.setImage(cameraConfig.flashImage, for: .normal)
         view.setImage(cameraConfig.flashImageSelected, for: .selected)
         view.addActionHandlers { sender in
-            self.torchOn = !self.torchOn
-            if self.camera.deviceInput!.device.hasTorch {
-                do {
-                    try self.camera.deviceInput!.device.lockForConfiguration()
-                    
-                    if self.torchOn {
-                        self.camera.deviceInput!.device.torchMode = .on
-                        sender.isSelected = true
-                    } else {
-                        self.camera.deviceInput!.device.torchMode = .off
-                        sender.isSelected = false
+            if !Gobal_device_info.isSimulator {
+                self.torchOn = !self.torchOn
+                if self.camera.deviceInput!.device.hasTorch {
+                    do {
+                        try self.camera.deviceInput!.device.lockForConfiguration()
+                        
+                        if self.torchOn {
+                            self.camera.deviceInput!.device.torchMode = .on
+                            sender.isSelected = true
+                        } else {
+                            self.camera.deviceInput!.device.torchMode = .off
+                            sender.isSelected = false
+                        }
+                        self.camera.deviceInput!.device.unlockForConfiguration()
+                    } catch {
+                        PTNSLogConsole(error.localizedDescription)
                     }
-                    self.camera.deviceInput!.device.unlockForConfiguration()
-                } catch {
-                    PTNSLogConsole(error.localizedDescription)
                 }
             }
         }
@@ -339,11 +342,29 @@ public class PTFilterCameraViewController: PTBaseViewController {
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             return
         }
-        camera.startRunning()
                 
-        PTGCDManager.gcdAfter(time: 1, block: {
-            self.generateFilterImages()
-        })
+        if !Gobal_device_info.isSimulator {
+            switch PTPermission.camera.status {
+            case .notDetermined:
+                PTPermission.camera.request {
+                    switch PTPermission.camera.status {
+                    case .authorized:
+                        self.camera.startRunning()
+                    default:
+                        return
+                    }
+                }
+            case .authorized:
+                self.camera.startRunning()
+            default:
+                return
+            }
+            PTGCDManager.gcdAfter(time: 1, block: {
+                if self.camera.captureSession.isRunning,self.originImageView.image != nil {
+                    self.generateFilterImages()
+                }
+            })
+        }
     }
     
     func setupUI() {
@@ -436,12 +457,12 @@ public class PTFilterCameraViewController: PTBaseViewController {
 //            largeCircleView.addGestureRecognizer(longGes)
 //            takePictureTap?.require(toFail: longGes)
 //            recordLongGes = longGes
-//            
+//
 //            let panGes = UIPanGestureRecognizer { sender in
 //                let pan = sender as! UIPanGestureRecognizer
 //                let convertRect = self.toolBar.convert(self.largeCircleView.frame, to: self.view)
 //                let point = pan.location(in: self.view)
-//                
+//
 //                if pan.state == .began {
 //                    self.dragStart = true
 //                    self.camera.startRecord()
@@ -466,14 +487,14 @@ public class PTFilterCameraViewController: PTBaseViewController {
 //            panGes.maximumNumberOfTouches = 1
 //            largeCircleView.addGestureRecognizer(panGes)
 //            cameraFocusPanGes = panGes
-//            
+//
 //            camera.recordVideoPlayerLayer = AVPlayerLayer()
 //            camera.recordVideoPlayerLayer?.backgroundColor = UIColor.black.cgColor
 //            camera.recordVideoPlayerLayer?.videoGravity = .resizeAspect
 //            camera.recordVideoPlayerLayer?.isHidden = true
 //            camera.recordVideoPlayerLayer?.frame = self.view.frame
 //            view.layer.insertSublayer(camera.recordVideoPlayerLayer!, at: 0)
-//            
+//
 //            NotificationCenter.default.addObserver(self, selector: #selector(recordVideoPlayFinished), name: .AVPlayerItemDidPlayToEndTime, object: nil)
 //        }
 
@@ -653,7 +674,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
 extension PTFilterCameraViewController {
     public func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
 //        let gesTuples: [(UIGestureRecognizer?, UIGestureRecognizer?)] = [(recordLongGes, cameraFocusPanGes), (recordLongGes, focusCursorTapGes), (cameraFocusPanGes, focusCursorTapGes)]
-//        
+//
 //        let result = gesTuples.map { ges1, ges2 in
 //            (ges1 == gestureRecognizer && ges2 == otherGestureRecognizer) ||
 //                (ges2 == otherGestureRecognizer && ges1 == gestureRecognizer)

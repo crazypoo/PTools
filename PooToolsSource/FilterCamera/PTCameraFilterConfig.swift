@@ -30,8 +30,8 @@ extension NSError {
 
 public class PTCameraFilterConfig: NSObject {
     
-    static let share = PTCameraFilterConfig()
-    
+    public static let share = PTCameraFilterConfig()
+
     public typealias Second = Int
 
     private var pri_minRecordDuration: PTCameraFilterConfig.Second = 0

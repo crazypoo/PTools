@@ -207,3 +207,5 @@
 "PT Photo picker time out" = "Get the waiting time";
 "PT Photo picker error" = "There is an error when getting the image.";
 "PT Camera focus error" = "The focal length could not be adjusted";
+"PT HeartRate touch" = "Please put your finger in the position of the flash.";
+"PT HeartRate loading" = "I'm doing it. Please wait patiently. Please don't keep your fingers away!";

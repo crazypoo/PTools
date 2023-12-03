@@ -46,6 +46,8 @@ public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Voi
 @objcMembers
 public class PTScanQRController: PTBaseViewController {
 
+    public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
+
     //MARK: 掃描回調
     ///掃描回調
     public var resultBlock:PTQRCodeResultBlock?
@@ -204,7 +206,9 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        removeTimer()
+        sessionQueue.async {
+            self.removeTimer()
+        }
     }
         
     public override func viewDidLoad() {
@@ -402,7 +406,9 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 移除時間控制器
     func removeTimer() {
         timer.invalidate()
-        scanningLine.removeFromSuperview()
+        PTGCDManager.gcdMain {
+            self.scanningLine.removeFromSuperview()
+        }
         if session.isRunning {
             session.stopRunning()
         }
