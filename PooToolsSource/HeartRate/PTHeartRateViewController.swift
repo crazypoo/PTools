@@ -91,6 +91,8 @@ public func rgb2hsv(_ rgb: RGB) -> HSV {
 @objcMembers
 public class PTHeartRateViewController: PTBaseViewController {
 
+    public let sessionQueue = DispatchQueue(label: "camera.session.collector.metal")
+
     lazy var previewLayerShadowView : UIView = {
         let view = UIView()
         view.backgroundColor = .clear
@@ -204,13 +206,17 @@ public class PTHeartRateViewController: PTBaseViewController {
     }
     
     private func initCaptureSession() {
-        heartRateManager.startCapture()
+        sessionQueue.async {
+            self.heartRateManager.startCapture()
+        }
     }
 
     private func deinitCaptureSession() {
-        heartRateManager.stopCapture()
-        toggleTorch(status: false)
-        player.stop()
+        sessionQueue.async {
+            self.heartRateManager.stopCapture()
+            self.toggleTorch(status: false)
+            self.player.stop()
+        }
     }
 
     private func toggleTorch(status: Bool) {

@@ -232,6 +232,8 @@ extension PTDarkModeControl: PTThemeable {
             self.view.backgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
             self.showDetail()
 #if POOTOOLS_NAVBARCONTROLLER
+            self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
+            self.zx_navBarBackgroundColor = PTAppBaseConfig.share.viewControllerBaseBackgroundColor
 #else
             PTBaseNavControl.GobalNavControl(nav: self.navigationController!)
 #endif
