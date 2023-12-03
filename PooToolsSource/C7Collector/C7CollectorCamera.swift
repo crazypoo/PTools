@@ -464,7 +464,7 @@ public final class C7CollectorCamera: C7Collector {
             device.videoZoomFactor = zoomFactor
             device.unlockForConfiguration()
         } catch {
-            PTAlertTipControl.present(title:"Opps!",subtitle:"调整焦距失败 \(error.localizedDescription)",icon:.Error,style: .Normal)
+            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Camera focus error ".localized() + error.localizedDescription,icon:.Error,style: .Normal)
         }
     }
 

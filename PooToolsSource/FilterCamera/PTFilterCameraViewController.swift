@@ -573,7 +573,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
                 vc.editFinishBlock = { ei ,editImageModel in
                     PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
                         if !finish {
-                            PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                         }
                     }
                 }
@@ -599,7 +599,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             }
             PTMediaEditManager.saveImageToAlbum(image: image) { finish, asset in
                 if !finish {
-                    PTAlertTipControl.present(title:"Opps",subtitle: "保存图片失败",icon:.Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle: "PT Photo picker save image error".localized(),icon:.Error,style: .Normal)
                 }
             }
             

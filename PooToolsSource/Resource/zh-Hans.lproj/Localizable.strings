@@ -206,3 +206,4 @@
 "PT Photo picker video size more than" = "视频大小大于%@MB";
 "PT Photo picker time out" = "获取超时";
 "PT Photo picker error" = "获取图片出现错误";
+"PT Camera focus error" = "调整焦距失败";

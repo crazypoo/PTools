@@ -206,3 +206,4 @@
 "PT Photo picker video size more than" = "The size of the video is greater than %@ MB";
 "PT Photo picker time out" = "Get the waiting time";
 "PT Photo picker error" = "There is an error when getting the image.";
+"PT Camera focus error" = "The focal length could not be adjusted";

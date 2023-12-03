@@ -12,7 +12,10 @@
 
 ## About
 
-该框架集成了一个APP该有的开发框架,工具大部分工具都是高度自定义,有些工具是修改于一些老前辈不再维护的代码
+该框架集成了一个APP该有的开发框架,工具大部分工具都是高度自定义,一直在自嗨
+
+## Languages
+🇨🇳 Chinese, 🇭🇰/🇲🇴 Cantonese, 🇺🇸 English, 🇪🇸 Spanish.
 
 ## Attention
 
@@ -182,6 +185,10 @@ pod 'PooTools/SF', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/iOS17Tips', :git => 'https://github.com/crazypoo/PTools.git'
 ### WhatsNewsKit
 pod 'PooTools/WhatsNewsKit', :git => 'https://github.com/crazypoo/PTools.git'
+### FilterCamera
+pod 'PooTools/FilterCamera', :git => 'https://github.com/crazypoo/PTools.git'
+### ImageEditor
+pod 'PooTools/ImageEditor', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 
