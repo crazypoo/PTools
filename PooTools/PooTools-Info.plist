@@ -53,6 +53,8 @@
 			<string></string>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>apple music</string>
 	<key>NSCameraUsageDescription</key>
 	<string>相机使用</string>
 	<key>NSContactsUsageDescription</key>
@@ -95,5 +97,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>apple music</string>
 </dict>
 </plist>

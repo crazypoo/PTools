@@ -127,6 +127,13 @@
 		552F07A02B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */; };
 		552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57502ADB86A500E0EB7C /* PTCollectionView.swift */; };
 		552F57532ADBCAA700E0EB7C /* PTTestHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */; };
+		553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */; };
+		553038322B1CD85E0019A8E0 /* ASN1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382B2B1CD85D0019A8E0 /* ASN1.swift */; };
+		553038332B1CD85E0019A8E0 /* ECKeyData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */; };
+		553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */; };
+		553038352B1CD85E0019A8E0 /* P8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382E2B1CD85E0019A8E0 /* P8.swift */; };
+		553038362B1CD85E0019A8E0 /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382F2B1CD85E0019A8E0 /* JWT.swift */; };
+		553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
@@ -595,6 +602,13 @@
 		552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGraphicsImageRenderer+PTEX.swift"; sourceTree = "<group>"; };
 		552F57502ADB86A500E0EB7C /* PTCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCollectionView.swift; sourceTree = "<group>"; };
 		552F57522ADBCAA700E0EB7C /* PTTestHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestHeader.swift; sourceTree = "<group>"; };
+		5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CupertinoJWTError.swift; sourceTree = "<group>"; };
+		5530382B2B1CD85D0019A8E0 /* ASN1.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ASN1.swift; sourceTree = "<group>"; };
+		5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECKeyData.swift; sourceTree = "<group>"; };
+		5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
+		5530382E2B1CD85E0019A8E0 /* P8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P8.swift; sourceTree = "<group>"; };
+		5530382F2B1CD85E0019A8E0 /* JWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
+		553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPrivateKey.swift; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaColorSelectViewController.swift; sourceTree = "<group>"; };
@@ -1606,6 +1620,20 @@
 			path = Location;
 			sourceTree = "<group>";
 		};
+		557A29FC2B1CCD4800BBCDF7 /* JWT */ = {
+			isa = PBXGroup;
+			children = (
+				5530382B2B1CD85D0019A8E0 /* ASN1.swift */,
+				5530382A2B1CD85C0019A8E0 /* CupertinoJWTError.swift */,
+				5530382D2B1CD85D0019A8E0 /* Data+Extension.swift */,
+				5530382C2B1CD85D0019A8E0 /* ECKeyData.swift */,
+				553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */,
+				5530382F2B1CD85E0019A8E0 /* JWT.swift */,
+				5530382E2B1CD85E0019A8E0 /* P8.swift */,
+			);
+			path = JWT;
+			sourceTree = "<group>";
+		};
 		557D8BFF2B100F3A00F0D9DD /* WhatsNewsKit */ = {
 			isa = PBXGroup;
 			children = (
@@ -2303,6 +2331,7 @@
 		6003F593195388D20070C39A /* Example for PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				557A29FC2B1CCD4800BBCDF7 /* JWT */,
 				55B1596F2B0CEED200A64741 /* heartbeat.svga */,
 				55B1596E2B0CEED200A64741 /* Goddess.svga */,
 				55B1596D2B0CEED100A64741 /* Rocket.svga */,
@@ -2754,6 +2783,7 @@
 				55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */,
 				9AE4468A285862B0007DC2B5 /* Date+PTEX.swift in Sources */,
 				5571F6122AFD23B000DB4420 /* PTWindowSceneDelegate.swift in Sources */,
+				553038362B1CD85E0019A8E0 /* JWT.swift in Sources */,
 				9AE446882858627F007DC2B5 /* TimeInterval+PTEX.swift in Sources */,
 				558D5EE52AAF4F8E00C02042 /* PTRouterParser.swift in Sources */,
 				55E80DB228ED63F9004CF2C1 /* PTSignView.swift in Sources */,
@@ -2768,6 +2798,7 @@
 				5585F6F32AD2AAC200F878B4 /* PTVideoEditorLens.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
+				553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */,
 				550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */,
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
@@ -2825,6 +2856,7 @@
 				555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */,
 				231D1677272CDEEA003D6F62 /* PTSearchBar.swift in Sources */,
 				5507026728F6A2BB00C48239 /* PTSegmentControlBaseModel.swift in Sources */,
+				553038352B1CD85E0019A8E0 /* P8.swift in Sources */,
 				55F163032B197C2600320925 /* PTCameraFilterConfig.swift in Sources */,
 				5585F6CF2AD299B700F878B4 /* PTVideoEditResult.swift in Sources */,
 				9A14E98B28616B4100D7E8EF /* PTCycleScrollViewCell.swift in Sources */,
@@ -2861,6 +2893,7 @@
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				556738042B040EB80058CEBA /* LocalConsole.swift in Sources */,
+				553038332B1CD85E0019A8E0 /* ECKeyData.swift in Sources */,
 				5585F7152AD2B9C300F878B4 /* PTVideoEditorVideoEditorStore.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
@@ -2916,10 +2949,13 @@
 				5585F71B2AD2BE9400F878B4 /* PTVideoEditorViewFactory.swift in Sources */,
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
+				553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
+				553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */,
 				5571F6172AFD308300DB4420 /* PTCopying.swift in Sources */,
+				553038322B1CD85E0019A8E0 /* ASN1.swift in Sources */,
 				5585F6CB2AD2992C00F878B4 /* PTVideoEdit.swift in Sources */,
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
@@ -3086,7 +3122,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7s,
+					armv7,
+					x86_64,
+					arm64,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -3106,6 +3148,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-all_load",
@@ -3131,7 +3174,13 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
+				ARCHS = (
+					"$(ARCHS_STANDARD)",
+					armv7,
+					armv7s,
+					x86_64,
+					arm64,
+				);
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -3151,6 +3200,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-all_load",
