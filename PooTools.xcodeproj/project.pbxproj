@@ -67,6 +67,7 @@
 		5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026928F6A8F800C48239 /* PTHealthKit.swift */; };
 		5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026C28F6B35E00C48239 /* PTSpeech.swift */; };
 		5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507026E28F7A02300C48239 /* PTGrowingText.swift */; };
+		5507FF9E2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */; };
 		550AA1072A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */; };
 		550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE49D2AEC27410052539D /* PTAnimationFunction.swift */; };
 		550CE4A02AF0A60D0052539D /* PTUpdateTipsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */; };
@@ -532,6 +533,7 @@
 		5507026928F6A8F800C48239 /* PTHealthKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHealthKit.swift; sourceTree = "<group>"; };
 		5507026C28F6B35E00C48239 /* PTSpeech.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeech.swift; sourceTree = "<group>"; };
 		5507026E28F7A02300C48239 /* PTGrowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGrowingText.swift; sourceTree = "<group>"; };
+		5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PHPhotoLibrary+PTEX.swift"; sourceTree = "<group>"; };
 		550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIGestureRecognizer+PTEX.swift"; sourceTree = "<group>"; };
 		550CE49D2AEC27410052539D /* PTAnimationFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAnimationFunction.swift; sourceTree = "<group>"; };
 		550CE49F2AF0A60D0052539D /* PTUpdateTipsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUpdateTipsViewController.swift; sourceTree = "<group>"; };
@@ -1220,6 +1222,7 @@
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
 				552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */,
 				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
+				5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2743,6 +2746,7 @@
 				55B4FA222AE10094006D35F3 /* PTPermissionFaceID.swift in Sources */,
 				552893132AE65125009135F9 /* PTTip.swift in Sources */,
 				5507026D28F6B35E00C48239 /* PTSpeech.swift in Sources */,
+				5507FF9E2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift in Sources */,
 				555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */,
 				5585F6EB2AD2A07C00F878B4 /* PTVideoEditorControlsView.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
@@ -3200,7 +3204,7 @@
 				);
 				MARKETING_VERSION = 1.0.0;
 				MODULE_NAME = ExampleApp;
-				ONLY_ACTIVE_ARCH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-all_load",

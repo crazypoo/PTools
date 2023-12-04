@@ -105,7 +105,7 @@ class PTFuncNameViewController: PTBaseViewController {
     
     fileprivate lazy var outputURL :URL = {
         let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let outputURL = documentsDirectory.appendingPathComponent("output.mp4")
+        let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
         return outputURL
     }()
 
@@ -499,52 +499,34 @@ class PTFuncNameViewController: PTBaseViewController {
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow()
                 vc.selectImageBlock = { result, isOriginal in
-                    PTNSLogConsole("圖片選擇後:>>>>>>>>>>>>>\(result)")
-                    if result.first!.avEditorOutputItem != nil {
-                        PTGCDManager.gcdMain {
-                            let controller = PTVideoEditorVideoEditorViewController(asset: result.first!.avEditorOutputItem!.asset, videoEdit: self.videoEdit)
-                            controller.onEditCompleted
-                                .sink {  editedPlayerItem, videoEdit in
-                                    self.videoEdit = videoEdit
-                                    
-                                    self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
-                                        if finish {
-                                            UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
-                                                PTNSLogConsole(images as Any)
-                                            }
-                                        }
-                                    }
-                                }
-                                .store(in: &self.cancellables)
-                            controller.modalPresentationStyle = .fullScreen
-                            let nav = PTBaseNavControl(rootViewController: controller)
-                            self.navigationController?.present(nav, animated: true)
-                        }
-                    } else {
-                        self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
-                            if let avAsset = avAsset {
-                                PTGCDManager.gcdMain {
-                                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-                                    controller.onEditCompleted
-                                        .sink {  editedPlayerItem, videoEdit in
-                                            self.videoEdit = videoEdit
-                                            
-                                            self.saveVideoToCache(playerItem: editedPlayerItem) { finish in
-                                                if finish {
-                                                    UIImage.pt.getVideoFirstImage(videoUrl: self.outputURL.description) { images in
-                                                        PTNSLogConsole(images as Any)
-                                                    }
+                    PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
+                    self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
+                        if let avAsset = avAsset {
+                            PTGCDManager.gcdMain {
+                                let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+                                controller.onEditCompleted
+                                    .sink {  editedPlayerItem, videoEdit in
+                                        self.videoEdit = videoEdit
+                                        
+                                        AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
+                                            if status == .completed {
+                                                PTGCDManager.gcdMain {
+                                                    PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
+                                                }
+                                            } else if status == .failed {
+                                                PTGCDManager.gcdMain {
+                                                    PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
                                                 }
                                             }
                                         }
-                                        .store(in: &self.cancellables)
-                                    controller.modalPresentationStyle = .fullScreen
-                                    let nav = PTBaseNavControl(rootViewController: controller)
-                                    self.navigationController?.present(nav, animated: true)
-                                }
-                            } else {
-                                UIViewController.gobal_drop(title: "获取失败,请重试")
+                                    }
+                                    .store(in: &self.cancellables)
+                                controller.modalPresentationStyle = .fullScreen
+                                let nav = PTBaseNavControl(rootViewController: controller)
+                                self.navigationController?.present(nav, animated: true)
                             }
+                        } else {
+                            UIViewController.gobal_drop(title: "获取失败,请重试")
                         }
                     }
                 }
@@ -835,7 +817,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 let config = PTMediaLibConfig.share
                 config.maxSelectCount = 2
                 config.maxVideoSelectCount = 2
-                config.maxPreviewCount = 99999
+                config.allowEditImage = false
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
                 vc.selectImageBlock = { result,isOriginal in
@@ -945,35 +927,6 @@ class PTFuncNameViewController: PTBaseViewController {
 
 // MARK: - ImagePickerControllerDelegate
 extension PTFuncNameViewController {
-    func saveVideoToCache(playerItem: AVPlayerItem,result:((_ finish:Bool)->Void)? = nil) {
-        let videoAsset = playerItem.asset
-        let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
-        exportSession?.outputFileType = .mp4
-
-        guard let exportSession = exportSession else {
-            PTNSLogConsole("无法创建AVAssetExportSession")
-            return
-        }
-
-        exportSession.outputURL = outputURL
-        
-        exportSession.exportAsynchronously {
-            switch exportSession.status {
-            case .completed:
-                PTNSLogConsole("视频保存到本地成功")
-                if result != nil {
-                    result!(true)
-                }
-            case .failed:
-                PTNSLogConsole("视频导出失败：\(exportSession.error?.localizedDescription ?? "")")
-                if result != nil {
-                    result!(false)
-                }
-            default:
-                break
-            }
-        }
-    }
     
     func saveVideoToAlbum(result:((_ finish:Bool)->Void)? = nil) {
         PHPhotoLibrary.shared().performChanges({

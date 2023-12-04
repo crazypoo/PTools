@@ -11,6 +11,7 @@ import AVFoundation
 extension AVAssetExportSession: PTProtocolCompatible { }
 
 public extension PTPOP where Base: AVAssetExportSession {
+    
     // MARK: 本地视频压缩
     /// 本地视频压缩
     /// - Parameters:
@@ -67,6 +68,40 @@ public extension PTPOP where Base: AVAssetExportSession {
                     handler(exportSession, duration, FileManager.pt.fileOrDirectorySize(path: outputPath), outputPath)
                 } else {
                     handler(exportSession, duration, "", "")
+                }
+            }
+        }
+    }
+    
+    static func saveVideoToCache(fileURL:URL = PTUtils.outputURL(),playerItem: AVPlayerItem,result:@escaping ((AVAssetExportSession.Status,AVAssetExportSession?,URL?,NSError?)->Void)) {
+        let videoAsset = playerItem.asset
+        let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
+        exportSession?.outputFileType = .mp4
+
+        guard let exportSession = exportSession else {
+            result(.failed,nil,nil,NSError(domain: "Can not create AVAssetExportSession", code: 999))
+            return
+        }
+
+        exportSession.outputURL = fileURL
+        
+        exportSession.exportAsynchronously {
+            PTGCDManager.gcdMain {
+                switch exportSession.status {
+                case .completed:
+                    result(.completed,nil,fileURL,nil)
+                case .waiting:
+                    result(.waiting,exportSession,nil,nil)
+                case .exporting:
+                    result(.exporting,exportSession,nil,nil)
+                case .failed:
+                    result(.failed,exportSession,nil,NSError(domain: "Output error：\(exportSession.error?.localizedDescription ?? "")", code: 998))
+                case .cancelled:
+                    result(.cancelled,exportSession,nil,NSError(domain: "User cancel", code: 997))
+                case .unknown:
+                    result(.unknown,exportSession,nil,NSError(domain: "Unkonw error", code: 996))
+                @unknown default:
+                    result(.unknown,exportSession,nil,NSError(domain: "Unkonw error", code: 996))
                 }
             }
         }

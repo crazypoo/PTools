@@ -504,6 +504,16 @@ public class PTUtils: NSObject {
         PTUtils.getCurrentVC().navigationController?.pushViewController(vc)
 #endif
     }
+    
+    class public func outputURL()->URL {
+        let documentsDirectory = FileManager.pt.CachesDirectory()
+        let outputURL = documentsDirectory.appendingPathComponent("\(Date().getTimeStamp()).mp4")
+        if #available(iOS 16.0, *) {
+            return URL(filePath: outputURL)
+        } else {
+            return URL(fileURLWithPath: outputURL)
+        }
+    }
 }
 
 //MARK: OC-FUNCTION

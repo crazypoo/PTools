@@ -83,13 +83,13 @@ public class PTMediaLibView:UIView {
                     if !cellModel.isSelected {
                         guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
                         downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                            if !self.shouldDirectEdit(cellModel) {
-                                cellModel.isSelected = true
-                                self.selectedModel.append(cellModel)
-                                isSelected(true)
-                                config.didSelectAsset?(cellModel.asset)
-                                self.refreshCellIndex()
-                            }
+//                            if !self.shouldDirectEdit(cellModel) {
+//                            }
+                            cellModel.isSelected = true
+                            self.selectedModel.append(cellModel)
+                            isSelected(true)
+                            config.didSelectAsset?(cellModel.asset)
+                            self.refreshCellIndex()
                         }
                     } else {
                         cellModel.isSelected = false
@@ -331,9 +331,17 @@ public class PTMediaLibView:UIView {
         if isSelected {
             cell.coverView.backgroundColor = .DevMaskColor
             cell.coverView.isHidden = false
-            cell.editButton.isHidden = false
+//            cell.editButton.isHidden = false
             cell.layer.borderColor = config.selectedBorderColor.cgColor
             cell.layer.borderWidth = 4
+            
+            if model.type == .image {
+                cell.editButton.isHidden = !config.allowEditImage
+            }
+            
+            if model.type == .video {
+                cell.editButton.isHidden = !config.allowEditVideo
+            }
         } else {
             cell.editButton.isHidden = true
             let selCount = selectedModel.count
@@ -417,14 +425,14 @@ public class PTMediaLibView:UIView {
         newModel.isSelected = true
         let uiConfig = PTMediaLibUIConfig.share
         let config = PTMediaLibConfig.share
-        var insertIndex = 0
+//        var insertIndex = 0
         
         if uiConfig.sortAscending {
-            insertIndex = totalModels.count
+//            insertIndex = totalModels.count
             totalModels.append(newModel)
         } else {
             // 保存拍照的照片或者视频，说明肯定有camera cell
-            insertIndex = 1
+//            insertIndex = 1
             totalModels.insert(newModel, at: 0)
         }
         
@@ -439,15 +447,16 @@ public class PTMediaLibView:UIView {
         }
         
         if canSelect, canAddModel(newModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
-            if !shouldDirectEdit(newModel) {
-                self.selectedModel.append(newModel)
-                config.didSelectAsset?(newModel.asset)
+            self.selectedModel.append(newModel)
+            config.didSelectAsset?(newModel.asset)
+
+//            if !shouldDirectEdit(newModel) {
                 
 //                if config.callbackDirectlyAfterTakingPhoto {
 //                    doneBtnClick()
 //                    return
 //                }
-            }
+//            }
         }
 
         PTGCDManager.gcdAfter(time: 0.15) {
@@ -471,31 +480,15 @@ extension PTMediaLibView:UIImagePickerControllerDelegate, UINavigationController
 extension PTMediaLibView {
     
     func saveVideoToCache(fileURL:URL = PTMediaLibView.outputURL(),playerItem: AVPlayerItem,result:((_ fileURL:URL?,_ finish:Bool)->Void)? = nil) {
-        let videoAsset = playerItem.asset
-        let exportSession = AVAssetExportSession(asset: videoAsset, presetName: AVAssetExportPresetHighestQuality)
-        exportSession?.outputFileType = .mp4
-
-        guard let exportSession = exportSession else {
-            PTNSLogConsole("无法创建AVAssetExportSession")
-            return
-        }
-
-        exportSession.outputURL = fileURL
-        
-        exportSession.exportAsynchronously {
-            switch exportSession.status {
-            case .completed:
-                PTNSLogConsole("视频保存到本地成功")
+        AVAssetExportSession.pt.saveVideoToCache(fileURL: fileURL, playerItem: playerItem) { status, exportSession, fileUrl, error in
+            if status == .completed {
                 if result != nil {
-                    result!(fileURL,true)
+                    result!(fileUrl,true)
                 }
-            case .failed:
-                PTNSLogConsole("视频导出失败：\(exportSession.error?.localizedDescription ?? "")")
+            } else if status == .failed {
                 if result != nil {
                     result!(nil,false)
                 }
-            default:
-                break
             }
         }
     }

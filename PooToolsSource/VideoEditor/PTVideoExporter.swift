@@ -21,20 +21,16 @@ final class PTVideoEditorExporter: PTVideoEditorExporterProtocol {
                 to url: URL,
                 videoComposition: AVVideoComposition?) -> AnyPublisher<Void, Error> {
         Future { promise in
-            let exporter = AVAssetExportSession(asset: asset, presetName: AVAssetExportPresetHighestQuality)
-            exporter?.outputURL = url
-            exporter?.outputFileType = .mp4
-            exporter?.videoComposition = videoComposition
-
-            exporter?.exportAsynchronously(completionHandler: {
-                if let error = exporter?.error {
-                    promise(.failure(error))
+            
+            let avItem = AVPlayerItem(asset: asset)
+            AVAssetExportSession.pt.saveVideoToCache(fileURL: url, playerItem: avItem) { status, exportSession, fileUrl, error in
+                if status == .completed {
+                    promise(.success(()))
+                } else if status == .failed {
+                    promise(.failure(error!))
                     return
                 }
-
-                promise(.success(()))
-            })
+            }
         }.eraseToAnyPublisher()
-
     }
 }
