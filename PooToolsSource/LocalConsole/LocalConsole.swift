@@ -57,77 +57,77 @@ extension String {
 extension UIImage {
     static func resizeImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.arrow.upBackwardAndArrowDownForward)
+            return UIImage(.arrow.upBackwardAndArrowDownForward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.arrow)
+            return UIImage(.arrow).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static let shareImage = UIImage(.square.andArrowUp)
-    static let copyImage = UIImage(.doc.onDocFill)
+    static let shareImage = UIImage(.square.andArrowUp).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let copyImage = UIImage(.doc.onDocFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func clearImage()->UIImage {
         if #available(iOS 15.0, *) {
-            return UIImage(.delete.backward)
+            return UIImage(.delete.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.delete)
+            return UIImage(.delete).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func userDefaultsImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.doc.badgeGearshape)
+            return UIImage(.doc.badgeGearshape).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.doc.onDoc)
+            return UIImage(.doc.onDoc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func fpsImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.cursorarrow.motionlines)
+            return UIImage(.cursorarrow.motionlines).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.desktopcomputer)
+            return UIImage(.desktopcomputer).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func memoryImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.memorychip)
+            return UIImage(.memorychip).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.heart.fill)
+            return UIImage(.heart.fill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func colorImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.paintpalette)
+            return UIImage(.paintpalette).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.paintbrush)
+            return UIImage(.paintbrush).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func rulerImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.ruler)
+            return UIImage(.ruler).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.f.cursive)
+            return UIImage(.f.cursive).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static let docImage = UIImage(.doc)
-    static let dev3thPartyImage = UIImage(.plus.magnifyingglass)
+    static let docImage = UIImage(.doc).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let dev3thPartyImage = UIImage(.plus.magnifyingglass).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func maskImage()->UIImage {
         if #available(iOS 15.0, *) {
-            return UIImage(.theatermasks)
+            return UIImage(.theatermasks).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.bookmark)
+            return UIImage(.bookmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static let maskBubbleImage = UIImage(systemName: "bubble.right")
+    static let maskBubbleImage = UIImage(systemName: "bubble.right")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func viewFrameImage()->UIImage {
         if #available(iOS 15.0, *) {
-            return UIImage(.square.insetFilled)
+            return UIImage(.square.insetFilled).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(systemName: "rectangle.3.offgrid")!
+            return UIImage(systemName: "rectangle.3.offgrid")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func cpuImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.cpu)
+            return UIImage(.cpu).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.heart.circle)
+            return UIImage(.heart.circle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
     static func displayImage()->UIImage {
@@ -152,18 +152,18 @@ extension UIImage {
         }
         let deviceSymbol: String = result
 
-        return UIImage(systemName: deviceSymbol)!
+        return UIImage(systemName: deviceSymbol)!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     }
-    static let debugControllerImage = UIImage(.pencil)
-    static let terminateAppImage = UIImage(.xmark)
+    static let debugControllerImage = UIImage(.pencil).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+    static let terminateAppImage = UIImage(.xmark).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
     static func respringImage()->UIImage {
         if #available(iOS 14.0, *) {
-            return UIImage(.arrowtriangle.backward)
+            return UIImage(.arrowtriangle.backward).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         } else {
-            return UIImage(.arrowtriangle)
+            return UIImage(.arrowtriangle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
-    static let debugImage = UIImage(.ant)
+    static let debugImage = UIImage(.ant).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
 }
 
 class ConsoleWindow: UIWindow {

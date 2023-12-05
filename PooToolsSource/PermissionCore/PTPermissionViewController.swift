@@ -14,6 +14,7 @@ import SnapKit
 #if POOTOOLS_PERMISSION_HEALTH
 import HealthKit
 #endif
+import DeviceKit
 
 @objcMembers
 public class PTPermissionViewController: PTBaseViewController {
@@ -40,6 +41,17 @@ public class PTPermissionViewController: PTBaseViewController {
         cConfig.decorationItemsEdges = NSDirectionalEdgeInsets.init(top: 0, leading: PTAppBaseConfig.share.defaultViewSpace, bottom: 0, trailing: PTAppBaseConfig.share.defaultViewSpace)
         
         let view = PTCollectionView(viewConfig: cConfig)
+        
+        view.decorationViewReset = { collection,view,kind,indexPath,sectionModel in
+            if Gobal_device_info.isPad {
+                if kind == PTBaseDecorationView_Corner.ID {
+                    view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, CGFloat(self.permissions.count * 88) + PTPermissionHeader.cellHeight())
+                } else if kind == UICollectionView.elementKindSectionHeader {
+                    view.frame = CGRectMake(cConfig.decorationItemsEdges.leading, 0, self.view.frame.size.width - cConfig.decorationItemsEdges.leading - cConfig.decorationItemsEdges.trailing, PTPermissionHeader.cellHeight())
+                }
+            }
+        }
+        
         view.headerInCollection = { kind,collectionView,model,indexPath in
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: indexPath) as! PTPermissionHeader
             return header
@@ -359,5 +371,10 @@ public class PTPermissionViewController: PTBaseViewController {
             }
 #endif
         }
+    }
+    
+    func permissionShow(vc:UIViewController) {
+        modalPresentationStyle = .formSheet
+        vc.showDetailViewController(self, sender: nil)
     }
 }

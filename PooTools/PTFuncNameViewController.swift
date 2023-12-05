@@ -502,34 +502,38 @@ class PTFuncNameViewController: PTBaseViewController {
                 vc.mediaLibShow()
                 vc.selectImageBlock = { result, isOriginal in
                     PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
-                    self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
-                        if let avAsset = avAsset {
-                            PTGCDManager.gcdMain {
-                                let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-                                controller.onEditCompleted
-                                    .sink {  editedPlayerItem, videoEdit in
-                                        self.videoEdit = videoEdit
-                                        
-                                        AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
-                                            if status == .completed {
-                                                PTGCDManager.gcdMain {
-                                                    PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
-                                                }
-                                            } else if status == .failed {
-                                                PTGCDManager.gcdMain {
-                                                    PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
+                    if result.count > 1 {
+                        self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
+                            if let avAsset = avAsset {
+                                PTGCDManager.gcdMain {
+                                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+                                    controller.onEditCompleted
+                                        .sink {  editedPlayerItem, videoEdit in
+                                            self.videoEdit = videoEdit
+                                            
+                                            AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
+                                                if status == .completed {
+                                                    PTGCDManager.gcdMain {
+                                                        PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
+                                                    }
+                                                } else if status == .failed {
+                                                    PTGCDManager.gcdMain {
+                                                        PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
+                                                    }
                                                 }
                                             }
                                         }
-                                    }
-                                    .store(in: &self.cancellables)
-                                controller.modalPresentationStyle = .fullScreen
-                                let nav = PTBaseNavControl(rootViewController: controller)
-                                self.navigationController?.present(nav, animated: true)
+                                        .store(in: &self.cancellables)
+                                    controller.modalPresentationStyle = .fullScreen
+                                    let nav = PTBaseNavControl(rootViewController: controller)
+                                    self.navigationController?.present(nav, animated: true)
+                                }
+                            } else {
+                                UIViewController.gobal_drop(title: "获取失败,请重试")
                             }
-                        } else {
-                            UIViewController.gobal_drop(title: "获取失败,请重试")
                         }
+                    } else {
+                        PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
                     }
                 }
             } else if itemRow.title == .sign {
@@ -555,7 +559,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
             } else if itemRow.title == .rotation {
                 let r:Int = Int(arc4random_uniform(6))
-                PTRotationManager.share.setOrientation(orientation: UIDeviceOrientation.init(rawValue: r)!)
+                PTRotationManager.share.setOrientation(orientation: .landscapeLeft/*UIDeviceOrientation.init(rawValue: r)!*/)
             } else if itemRow.title == .osskit {
                 let vc = PTSpeechViewController()
                 self.navigationController?.pushViewController(vc)
@@ -692,8 +696,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 photo.desc = "我们需要访问你的相册和照片,来使用图片的编辑功能"
 
                 let permissionVC = PTPermissionViewController(datas: [locationAlways,locationWhen,camera,mic,photo])
-                permissionVC.modalPresentationStyle = .fullScreen
-                self.pt_present(permissionVC, animated: true)
+                permissionVC.permissionShow(vc: self)
                 permissionVC.viewDismissBlock = {
                 }
 
@@ -940,7 +943,7 @@ class PTFuncNameViewController: PTBaseViewController {
             iKnowItem.privacyURL = "https://www.qq.com"
             
             let view = PTWhatsNewsViewController(titleItem: PTWhatsNewsTitleItem(),iKnowItem: iKnowItem,newsItem: [item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2])
-            view.whatsNewsShow()
+            view.whatsNewsShow(vc: self)
         }
     }
     

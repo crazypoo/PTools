@@ -30,9 +30,17 @@ import SwipeCellKit
 
 //MARK: Collection展示的Section底部样式类型
 @objc public enum PTCollectionViewDecorationItemsType:Int {
-    case Corner
-    case NoCorner
     case NoItems
+    case Custom
+    case Normal
+    case Corner
+}
+
+@objc public class PTDecorationItemModel:NSObject {
+    ///Collection展示的Section底部Class
+    open var decorationClass:AnyClass!
+    ///Collection展示的Section底部ID
+    open var decorationID:String!
 }
 
 ///ReusableView回调
@@ -86,6 +94,10 @@ public typealias PTCollectionViewSwipeHandler = (_ collectionView:UICollectionVi
 
 public typealias PTCollectionViewCanSwipeHandler = (_ indexPath:IndexPath) -> Bool
 
+public typealias PTDecorationInCollectionHandler = (_ index:Int,_ sectionModel:PTSection) -> [NSCollectionLayoutDecorationItem]
+
+public typealias PTViewInDecorationResetHandler = (_ collectionView: UICollectionView, _ view: UICollectionReusableView, _ elementKind: String, _ indexPath: IndexPath,_ sectionModel: PTSection) -> Void
+
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
 public class PTCollectionViewConfig:NSObject {
@@ -126,6 +138,8 @@ public class PTCollectionViewConfig:NSObject {
     open var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
     open var decorationItemsEdges:NSDirectionalEdgeInsets = .zero
+    ///Collection展示的Section底部Model
+    open var decorationModel: [PTDecorationItemModel]?
     ///Collection展示的Section底部样式偏移
     open var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
     ///是否开启自定义Header和Footer
@@ -140,17 +154,24 @@ public class PTCollectionViewConfig:NSObject {
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
-    
-    let decorationViewOfKindCorner = "background"
-    let decorationViewOfKindNormal = "background_no"
-        
+            
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
             self.generateSection(section: section,environment:environment)
         }
-        layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: decorationViewOfKindCorner)
-        layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: decorationViewOfKindNormal)
+        
+        switch viewConfig.decorationItemsType {
+        case .Custom:
+            viewConfig.decorationModel?.enumerated().forEach({ index,value in
+                layout.register(value.decorationClass, forDecorationViewOfKind: value.decorationID)
+            })
+        case .Corner:
+            layout.register(PTBaseDecorationView_Corner.self, forDecorationViewOfKind: PTBaseDecorationView_Corner.ID)
+        case .Normal:
+            layout.register(PTBaseDecorationView.self, forDecorationViewOfKind: PTBaseDecorationView.ID)
+        default:break
+        }
         return layout
     }
     
@@ -202,24 +223,32 @@ public class PTCollectionView: UIView {
         }
         
         switch viewConfig.decorationItemsType {
-        case .Corner,.NoCorner:
-            var itemKind = ""
-            switch viewConfig.decorationItemsType {
-            case .Corner:
-                itemKind = decorationViewOfKindCorner
-            case .NoCorner:
-                itemKind = decorationViewOfKindNormal
-            default:
-                break
+        case .Custom:
+            if  mSections.count > 0 {
+                laySection.decorationItems = decorationInCollectionView(section,sectionModel!)
             }
-            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: itemKind)
+        case .Normal:
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView.ID)
             backItem.contentInsets = viewConfig.decorationItemsEdges
             laySection.decorationItems = [backItem]
-            
-            laySection.supplementariesFollowContentInsets = false
+            if #available(iOS 16.0, *) {
+                laySection.supplementaryContentInsetsReference = .automatic
+            } else {
+                laySection.supplementariesFollowContentInsets = true
+            }
+        case .Corner:
+            let backItem = NSCollectionLayoutDecorationItem.background(elementKind: PTBaseDecorationView_Corner.ID)
+            backItem.contentInsets = viewConfig.decorationItemsEdges
+            laySection.decorationItems = [backItem]
+            if #available(iOS 16.0, *) {
+                laySection.supplementaryContentInsetsReference = .automatic
+            } else {
+                laySection.supplementariesFollowContentInsets = true
+            }
         default:
             break
         }
+        
         return laySection
     }
     
@@ -301,6 +330,12 @@ public class PTCollectionView: UIView {
 
     ///当空数据View展示的时候,点击回调
     open var emptyTap:((UIView?)->Void)?
+    
+    ///CollectionView的DecorationItem囘調(自定義模式下使用)
+    open var decorationInCollectionView:PTDecorationInCollectionHandler!
+    
+    ///CollectionView的DecorationItem重新設置囘調(自定義模式下使用)
+    open var decorationViewReset:PTViewInDecorationResetHandler?
     
     public var contentCollectionView:UICollectionView {
         get {
@@ -561,6 +596,15 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
             let itemSec = mSections[indexPath.section]
             if collectionWillDisplay != nil {
                 collectionWillDisplay!(collectionView,cell,itemSec,indexPath)
+            }
+        }
+    }
+    
+    public func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        if mSections.count > 0 {
+            let itemSec = mSections[indexPath.section]
+            if decorationViewReset != nil {
+                decorationViewReset!(collectionView,view,elementKind,indexPath,itemSec)
             }
         }
     }

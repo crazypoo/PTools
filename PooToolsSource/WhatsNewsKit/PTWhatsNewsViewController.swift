@@ -289,7 +289,7 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         
     fileprivate lazy var collectionView:PTCollectionView = {
         
-        let viewWidth = CGFloat.kSCREEN_WIDTH - contentViewSpace
+        let viewWidth = self.view.frame.size.width - contentViewSpace
 
         var contentViewWidth = viewWidth
         
@@ -430,8 +430,8 @@ public class PTWhatsNewsViewController: PTBaseViewController {
         collectionView.showCollectionDetail(collectionData: [PTSection(rows: rows)])
     }
     
-    public func whatsNewsShow() {
+    public func whatsNewsShow(vc:UIViewController) {
         modalPresentationStyle = .formSheet
-        PTUtils.getCurrentVC().present(self, animated: true)
+        vc.present(self, animated: true)
     }
 }

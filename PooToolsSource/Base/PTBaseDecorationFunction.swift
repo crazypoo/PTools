@@ -10,6 +10,7 @@ import UIKit
 
 @objcMembers
 open class PTBaseDecorationView: UICollectionReusableView {
+    public static let ID = "PTBaseDecorationView"
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = PTAppBaseConfig.share.decorationBackgroundColor
@@ -22,6 +23,7 @@ open class PTBaseDecorationView: UICollectionReusableView {
 
 @objcMembers
 open class PTBaseDecorationView_Corner: UICollectionReusableView {
+    public static let ID = "PTBaseDecorationView_Corner"
     public override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = PTAppBaseConfig.share.decorationBackgroundColor
