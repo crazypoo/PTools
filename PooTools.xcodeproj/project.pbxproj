@@ -146,6 +146,7 @@
 		554CCBE128BC943700028597 /* PTRateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554CCBE028BC943700028597 /* PTRateView.swift */; };
 		554DE0F82AC8234000471FF3 /* PTEditMenuItemsInteraction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */; };
 		554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */; };
+		55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */; };
 		555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */; };
 		555818A72AF89A1A0051C0AA /* NSAttributedString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */; };
 		555818A92AF8DE8F0051C0AA /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 555818A82AF8DE8F0051C0AA /* Settings.bundle */; };
@@ -624,6 +625,7 @@
 		554DE0F72AC8234000471FF3 /* PTEditMenuItemsInteraction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditMenuItemsInteraction.swift; sourceTree = "<group>"; };
 		554DE0F92AC8243100471FF3 /* PTEditMenuInteractionDummy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PTEditMenuInteractionDummy.h; sourceTree = "<group>"; };
 		554DE0FA2AC8243100471FF3 /* PTEditMenuInteractionDummy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PTEditMenuInteractionDummy.m; sourceTree = "<group>"; };
+		55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPopoverMenuContent.swift; sourceTree = "<group>"; };
 		555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHeaderAndFooter.swift; sourceTree = "<group>"; };
 		555818A62AF89A1A0051C0AA /* NSAttributedString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSAttributedString+PTEX.swift"; sourceTree = "<group>"; };
 		555818A82AF8DE8F0051C0AA /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
@@ -1996,6 +1998,7 @@
 				555818B92AFA5AE40051C0AA /* PTAlertTipsIcon.swift */,
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
+				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -2916,6 +2919,7 @@
 				55E3BBC32ABE189E00858348 /* PTFileBrowserViewController.swift in Sources */,
 				5585F6E52AD29E4C00F878B4 /* PTVideoEditorVideoPlayerStore.swift in Sources */,
 				55D59C7A28F55F4300B4FF76 /* PTDevFunction.swift in Sources */,
+				55557F782B1EDFB900D50953 /* PTPopoverMenuContent.swift in Sources */,
 				5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */,
 				5585F7112AD2B78C00F878B4 /* PTVideoEditorVideoControlViewModel.swift in Sources */,
 				55BCB9842B1733620016A4C2 /* PTMediaLibAlbumListViewController.swift in Sources */,
@@ -3104,13 +3108,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 89C3C366EB034A16644AA2D5 /* Pods-PooTools_Example.debug.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7s,
-					armv7,
-					x86_64,
-					arm64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;
@@ -3156,13 +3154,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BFF923A6A4231C582DA255BA /* Pods-PooTools_Example.release.xcconfig */;
 			buildSettings = {
-				ARCHS = (
-					"$(ARCHS_STANDARD)",
-					armv7,
-					armv7s,
-					x86_64,
-					arm64,
-				);
+				ARCHS = "$(ARCHS_STANDARD)";
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = NO;
 				CLANG_ENABLE_MODULES = YES;

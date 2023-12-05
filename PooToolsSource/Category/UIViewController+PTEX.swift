@@ -195,6 +195,31 @@ public extension UIViewController {
         }
     }
     
+    @objc func listPopover(popoverConfig:PTPopoverConfig = PTPopoverConfig(),
+                           items:[PTPopoverItem],
+                           popoverWidth:CGFloat,
+                           sender:UIButton,
+                           arrowDirections:UIPopoverArrowDirection,
+                           selectedHandler:@escaping PTPopoverHandler) {
+        let popoverVC = PTPopoverMenuContent(config:popoverConfig,viewModel: items)
+        popoverVC.didSelectedHandler = selectedHandler
+        let popoverSize = CGSize(width: popoverWidth, height: CGFloat(items.count) * popoverConfig.rowHeight)
+        popoverVC.preferredContentSize = popoverSize
+        popoverVC.modalPresentationStyle = .popover
+        // 在需要显示的地方使用 popoverPresentationController 来 present
+        let presentationCtr = popoverVC.popoverPresentationController
+        presentationCtr?.sourceView = sender
+        presentationCtr?.sourceRect = sender.bounds
+        presentationCtr?.permittedArrowDirections = arrowDirections
+        presentationCtr?.delegate = self
+        presentationCtr?.backgroundColor = popoverConfig.backgroundColor
+        if (self.navigationController?.viewControllers.count ?? 0) > 0 {
+            self.navigationController?.present(popoverVC, animated: true)
+        } else {
+            self.present(popoverVC, animated: true)
+        }
+    }
+    
     /* .restricted     ---> 受限制，系统原因，无法访问
      * .notDetermined  ---> 系统还未知是否访问，第一次开启时
      * .authorized     ---> 允许、已授权
@@ -476,5 +501,13 @@ public extension UIViewController {
 extension UIViewController:UIPopoverPresentationControllerDelegate {
     public func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         .none
+    }
+}
+
+extension UIViewController {
+    public func popoverPresentationController(_ popoverPresentationController: UIPopoverPresentationController, willRepositionPopoverTo rect: UnsafeMutablePointer<CGRect>, in view: AutoreleasingUnsafeMutablePointer<UIView>) {
+        if let vc = PTUtils.getCurrentVC() as? PTPopoverMenuContent {
+            vc.arrowDirections = popoverPresentationController.arrowDirection
+        }
     }
 }
