@@ -70,7 +70,7 @@ public class C7Collector: NSObject, Cacheable {
     }
     
     open func setupInit() {
-        let _ = self.textureCache
+        let _ = textureCache
     }
 }
 

@@ -20,7 +20,7 @@ private indirect enum ASN1Element {
 
 extension ASN1 {
     public func toECKeyData() throws -> ECKeyData {
-        let (result, _) = self.toASN1Element()
+        let (result, _) = toASN1Element()
 
         guard case let ASN1Element.seq(elements: es) = result,
             case let ASN1Element.bytes(data: privateOctest) = es[2] else {
@@ -49,7 +49,7 @@ extension ASN1 {
 
     /// Convert an ASN.1 format EC signature returned by commoncrypto into a raw 64bit signature
     public func toRawSignature() throws -> Data {
-        let (result, _) = self.toASN1Element()
+        let (result, _) = toASN1Element()
 
         guard case let ASN1Element.seq(elements: es) = result,
             case let ASN1Element.bytes(data: sigR) = es[0],
@@ -82,9 +82,9 @@ extension ASN1 {
 
         switch self[0] {
         case 0x30: // sequence
-            let (length, lengthOfLength) = self.advanced(by: 1).readLength()
+            let (length, lengthOfLength) = advanced(by: 1).readLength()
             var result: [ASN1Element] = []
-            var subdata = self.advanced(by: 1 + lengthOfLength)
+            var subdata = advanced(by: 1 + lengthOfLength)
             var alreadyRead = 0
 
             while alreadyRead < length {
@@ -96,10 +96,10 @@ extension ASN1 {
             return (.seq(elements: result), 1 + lengthOfLength + length)
 
         case 0x02: // integer
-            let (length, lengthOfLength) = self.advanced(by: 1).readLength()
+            let (length, lengthOfLength) = advanced(by: 1).readLength()
             if (length < 8) {
                 var result: Int = 0
-                let subdata = self.advanced(by: 1 + lengthOfLength)
+                let subdata = advanced(by: 1 + lengthOfLength)
                 // ignore negative case
                 for i in 0..<length {
                     result = 256 * result + Int(subdata[i])
@@ -107,19 +107,19 @@ extension ASN1 {
                 return (.integer(int: result), 1 + lengthOfLength + length)
             }
             // number is too large to fit in Int; return the bytes
-            return (.bytes(data: self.subdata(in: (1 + lengthOfLength) ..< (1 + lengthOfLength + length))), 1 + lengthOfLength + length)
+            return (.bytes(data: subdata(in: (1 + lengthOfLength) ..< (1 + lengthOfLength + length))), 1 + lengthOfLength + length)
 
 
         case let s where (s & 0xe0) == 0xa0: // constructed
             let tag = Int(s & 0x1f)
-            let (length, lengthOfLength) = self.advanced(by: 1).readLength()
-            let subdata = self.advanced(by: 1 + lengthOfLength)
+            let (length, lengthOfLength) = advanced(by: 1).readLength()
+            let subdata = advanced(by: 1 + lengthOfLength)
             let (e, _) = subdata.toASN1Element()
             return (.constructed(tag: tag, elem: e), 1 + lengthOfLength + length)
 
         default: // octet string
-            let (length, lengthOfLength) = self.advanced(by: 1).readLength()
-            return (.bytes(data: self.subdata(in: (1 + lengthOfLength) ..< (1 + lengthOfLength + length))), 1 + lengthOfLength + length)
+            let (length, lengthOfLength) = advanced(by: 1).readLength()
+            return (.bytes(data: subdata(in: (1 + lengthOfLength) ..< (1 + lengthOfLength + length))), 1 + lengthOfLength + length)
         }
     }
 }

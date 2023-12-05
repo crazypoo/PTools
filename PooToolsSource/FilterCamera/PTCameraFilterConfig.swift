@@ -224,7 +224,7 @@ public class PTCameraFilterConfig: NSObject {
     }
     
     /// 没有针对不同分辨率视频做处理，仅用于处理相机拍照的视频
-    @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping ((URL?, Error?) -> Void)) {
+    @objc public class func mergeVideos(fileUrls: [URL], completion: @escaping (URL?, Error?) -> Void) {
         let composition = AVMutableComposition()
         let assets = fileUrls.map { AVURLAsset(url: $0) }
         

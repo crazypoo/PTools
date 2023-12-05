@@ -48,7 +48,7 @@ public class PTHarBethFilter:NSObject {
     }
 
     public func getCurrentFilterImage(image:UIImage?) -> UIImage {
-        let dest = BoxxIO(element: image, filter: self.type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
+        let dest = BoxxIO(element: image, filter: type.getFilterResult(texture:PTHarBethFilter.overTexture()).filter!)
         return (try? dest.output() ?? image!)!
     }
     

@@ -50,7 +50,7 @@ extension PTRouterManager {
                                         _ userInfo: [String: Any]) -> Any? {
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
         if registerRouterList.isEmpty {
-            registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+            registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
         }
         for item in registerRouterList {
             var priority: UInt32 = 0
@@ -114,7 +114,7 @@ extension PTRouterManager {
                                       useCache: Bool = false) {
         
         if PTRouterDebugTool.checkTracing() || !useCache {
-            registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+            registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
         } else {
             let cachePath = fetchCurrentVersionRouterCachePath()
             let fileExists = FileManager.pt.judgeFileOrFolderExists(filePath: cachePath)
@@ -126,7 +126,7 @@ extension PTRouterManager {
             if useCache && fileExists && !cacheData.isEmpty {
                 registerRouterList = cacheData
             } else {
-                registerRouterList = self.fetchRouterRegisterClass(registerClassPrifxArray)
+                registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
             }
         }
     }

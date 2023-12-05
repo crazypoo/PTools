@@ -195,13 +195,13 @@ public class PTScanQRController: PTBaseViewController {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
         
-        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.view.backgroundColor = .clear
     }
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.view.backgroundColor = .clear
     }
     
     public override func viewWillDisappear(_ animated: Bool) {
@@ -344,7 +344,7 @@ public class PTScanQRController: PTBaseViewController {
                     PTOpenSystemFunction.openSystemFunction(config:  PTOpenSystemConfig())
                 })
             case .notSupported:
-                self.processResult(result: "",error: NSError(domain: "PT Setting camera no".localized(), code: 502))
+                processResult(result: "",error: NSError(domain: "PT Setting camera no".localized(), code: 502))
             default:
                 break
             }

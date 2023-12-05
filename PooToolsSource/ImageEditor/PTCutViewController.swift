@@ -245,7 +245,7 @@ class PTCutViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
 #endif
     }
 
@@ -304,8 +304,8 @@ class PTCutViewController: PTBaseViewController {
 #else
         cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
 #endif
         setupUI()
         generateThumbnailImage()
@@ -968,7 +968,7 @@ extension PTCutViewController {
 
 extension PTCutViewController: UIScrollViewDelegate {
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return containerView
+        containerView
     }
     
     func scrollViewWillBeginZooming(_ scrollView: UIScrollView, with view: UIView?) {
@@ -1010,7 +1010,7 @@ extension PTCutViewController: UIScrollViewDelegate {
 
 extension PTCutViewController: UIViewControllerTransitioningDelegate {
     func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-        return PTTransitioningAnimation()
+        PTTransitioningAnimation()
     }
 }
 
@@ -1028,7 +1028,7 @@ class PTClipShadowView: UIView {
     }
     
     override class var layerClass: AnyClass {
-        return PTClipShadowViewLayer.self
+        PTClipShadowViewLayer.self
     }
     
     override func action(for layer: CALayer, forKey event: String) -> CAAction? {
@@ -1064,7 +1064,7 @@ class PTClipShadowViewLayer: CALayer {
     @NSManaged var clearRect: CGRect
     @NSManaged var isCircle: Bool
     override class func needsDisplay(forKey key: String) -> Bool {
-        return super.needsDisplay(forKey: key) || key == #keyPath(clearRect) || key == #keyPath(isCircle)
+        super.needsDisplay(forKey: key) || key == #keyPath(clearRect) || key == #keyPath(isCircle)
     }
 }
 

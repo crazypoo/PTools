@@ -65,6 +65,6 @@ extension C7CollectorVideo {
             return
         }
         let pixelBuffer = videoOutput.copyPixelBuffer(forItemTime: time, itemTimeForDisplay: nil)
-        self.processing(with: pixelBuffer)
+        processing(with: pixelBuffer)
     }
 }

@@ -45,7 +45,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             }
             preferredContentSize = newSize
             
-            self.collectionView.snp.makeConstraints { make in
+            collectionView.snp.makeConstraints { make in
                 if arrowDirections == .up {
                     make.left.right.bottom.equalToSuperview()
                     make.top.equalToSuperview().inset(16)
@@ -95,7 +95,7 @@ class PTPopoverMenuContent: PTBaseViewController {
     init(config:PTPopoverConfig,viewModel: [PTPopoverItem]) {
         super.init(nibName: nil, bundle: nil)
         self.viewModel = viewModel
-        self.viewConfig = config
+        viewConfig = config
     }
     
     required init?(coder: NSCoder) {
@@ -119,7 +119,7 @@ class PTPopoverMenuContent: PTBaseViewController {
         view.addSubviews([collectionView])
         
         var rows = [PTRows]()
-        self.viewModel.enumerated().forEach { index,value in
+        viewModel.enumerated().forEach { index,value in
             let cellModel = PTFusionCellModel()
             cellModel.name = value.name
             cellModel.leftImage = value.icon

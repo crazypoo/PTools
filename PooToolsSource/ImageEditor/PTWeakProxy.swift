@@ -17,15 +17,15 @@ class PTWeakProxy: NSObject {
     }
     
     class func proxy(withTarget target: NSObjectProtocol) -> PTWeakProxy {
-        return PTWeakProxy(target: target)
+        PTWeakProxy(target: target)
     }
     
     override func forwardingTarget(for aSelector: Selector!) -> Any? {
-        return target
+        target
     }
     
     override func responds(to aSelector: Selector!) -> Bool {
-        return target?.responds(to: aSelector) ?? false
+        target?.responds(to: aSelector) ?? false
     }
 }
 

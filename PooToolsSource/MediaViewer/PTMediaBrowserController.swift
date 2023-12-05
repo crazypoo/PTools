@@ -583,7 +583,7 @@ fileprivate extension PTMediaBrowserController {
         let url = NSURL.fileURL(withPath: videoPath)
         let compatible = UIVideoAtPathIsCompatibleWithSavedPhotosAlbum(url.path)
         if compatible {
-            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(save(image:didFinishSavingWithError:contextInfo:)), nil)
+            UISaveVideoAtPathToSavedPhotosAlbum(url.path, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
         } else {
             if viewSaveImageBlock != nil {
                 viewSaveImageBlock!(compatible)
@@ -592,7 +592,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func saveImageToPhotos(saveImage:UIImage) {
-        UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(save(image:didFinishSavingWithError:contextInfo:)), nil)
+        UIImageWriteToSavedPhotosAlbum(saveImage, self, #selector(self.save(image:didFinishSavingWithError:contextInfo:)), nil)
     }
     
     @objc func save(image:UIImage, didFinishSavingWithError:NSError?,contextInfo:AnyObject) {

@@ -143,10 +143,7 @@ public class PTCollectionView: UIView {
     
     let decorationViewOfKindCorner = "background"
     let decorationViewOfKindNormal = "background_no"
-    
-    @available(iOS 17.0, *)
-    private static let share = PTUnavailableFunction.share
-    
+        
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
@@ -354,6 +351,8 @@ public class PTCollectionView: UIView {
 #else
         PTGCDManager.gcdAfter(time: 0.1) {
             if #available(iOS 17.0, *) {
+                let share = PTUnavailableFunction.share
+                share.emptyViewConfig = self.viewConfig.emptyViewConfig
                 self.showEmptyConfig()
             }
         }
@@ -361,7 +360,7 @@ public class PTCollectionView: UIView {
         
         if #available(iOS 17.0, *) {
             if self.viewConfig.showEmptyAlert {
-                PTCollectionView.share.emptyTap = {
+                PTUnavailableFunction.share.emptyTap = {
                     if self.emptyTap != nil {
                         self.emptyTap!(nil)
                     }
@@ -461,25 +460,25 @@ public class PTCollectionView: UIView {
         
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        if viewConfig.showEmptyAlert && mSections.count == 0 {
-            PTCollectionView.share.emptyViewConfig = viewConfig.emptyViewConfig
-            PTCollectionView.share.showEmptyView(showIn: self)
+        if viewConfig.showEmptyAlert && mSections.first!.rows.count == 0 {
+            PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
+                PTUnavailableFunction.share.showEmptyView(showIn: self)
+            }
         } else {
-            PTCollectionView.share.hideUnavailableView(task: {
-                
-            }, showIn: self)
+            PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
+            }
         }
     }
     
     @available(iOS 17, *)
     public func hideEmptyLoading(task: PTActionTask?) {
-        PTCollectionView.share.hideUnavailableView(task: task,showIn: self)
+        PTUnavailableFunction.share.hideUnavailableView(showIn: self,task: task)
     }
     
     @available(iOS 17, *)
     public func showEmptyLoading() {
-        PTCollectionView.share.showEmptyLoadingView(showIn: self)
-    }        
+        PTUnavailableFunction.share.showEmptyLoadingView(showIn: self)
+    }
 }
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource

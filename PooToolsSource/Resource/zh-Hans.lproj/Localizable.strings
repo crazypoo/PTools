@@ -209,3 +209,5 @@
 "PT Camera focus error" = "调整焦距失败";
 "PT HeartRate touch" = "请将手指放在闪光灯在位置";
 "PT HeartRate loading" = "正在获取,请耐心等待,请不要把手指移开！";
+"PT Photo picker empty media" = "没有发现你的媒体内容";
+"PT Photo picker album list title" = "相册列表";

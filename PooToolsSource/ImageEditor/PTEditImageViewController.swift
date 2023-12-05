@@ -577,9 +577,9 @@ public class PTEditImageViewController: PTBaseViewController {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
 #endif
-        self.changeStatusBar(type: .Dark)
+        changeStatusBar(type: .Dark)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -600,7 +600,7 @@ public class PTEditImageViewController: PTBaseViewController {
         
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
 #endif
     }
     
@@ -648,8 +648,8 @@ public class PTEditImageViewController: PTBaseViewController {
         doneButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         undoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         redoButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
-        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: redoButton),UIBarButtonItem(customView: undoButton)]
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: doneButton),UIBarButtonItem(customView: redoButton),UIBarButtonItem(customView: undoButton)]
 #endif
         
         redoButton.isEnabled = (editorManager.actions.count != editorManager.redoActions.count)
@@ -827,7 +827,7 @@ public class PTEditImageViewController: PTBaseViewController {
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.layer.removeAllAnimations()
 #else
-        self.navigationController?.navigationBar.layer.removeAllAnimations()
+        navigationController?.navigationBar.layer.removeAllAnimations()
 #endif
         if show {
             UIView.animate(withDuration: 0.25) {
@@ -1186,7 +1186,7 @@ extension PTEditImageViewController {
         showAdjust(show:false)
     }
     
-    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal, completion: @escaping ((String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void)) {
+    private func showInputTextVC(_ text: String? = nil, textColor: UIColor? = nil, font: UIFont? = nil, style: PTInputTextStyle = .normal, completion: @escaping (String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void) {
         // Calculate image displayed frame on the screen.
         var r = mainScrollView.convert(view.frame, to: containerView)
         r.origin.x += mainScrollView.contentOffset.x / mainScrollView.zoomScale
@@ -1503,8 +1503,8 @@ extension PTEditImageViewController {
     
     private func adjustStatusChanged() {
         if let image = adjustFilterValueSet(filterImage: editImageAdjustRef) {
-            self.editImage = image
-            self.imageView.image = self.editImage
+            editImage = image
+            imageView.image = editImage
         }
     }
     
@@ -1526,7 +1526,7 @@ extension PTEditImageViewController {
 //MARK: UIScrollViewDelegate
 extension PTEditImageViewController:UIScrollViewDelegate {
     public func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return containerView
+        containerView
     }
     
     public func scrollViewDidZoom(_ scrollView: UIScrollView) {

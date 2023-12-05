@@ -313,6 +313,7 @@ public extension PTRouter {
     ///
     /// - Parameters:
     ///   - patternString: register urlstring
+    ///   - priority:
     ///   - classString: the class which match the className need inherit the protocol of PTRouterable
     class func addRouterItem(_ patternString: String, priority: uint = 0, classString: String) {
         let clz: AnyClass? = classString.trimmingCharacters(in: CharacterSet.whitespaces).matchClass()

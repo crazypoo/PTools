@@ -12,24 +12,16 @@ import SafeSFSymbols
 
 @objcMembers
 open class PTEmptyDataViewConfig : NSObject {
-    open var mainTitleAtt:ASAttributedString? = """
-            \(wrap: .embedding("""
-            \("主标题",.foreground(.random),.font(.appfont(size: 20)),.paragraph(.alignment(.center)))
-            """))
-            """
-    open var secondaryEmptyAtt:ASAttributedString? = """
-            \(wrap: .embedding("""
-            \("副标题",.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
-            """))
-            """
-    open var buttonTitle:String = "点我刷新"
-    open var buttonFont:UIFont = .appfont(size: 18)
-    open var buttonTextColor:UIColor = .systemBlue
-    open var image:UIImage? = UIImage(.exclamationmark.triangle)
-    open var backgroundColor:UIColor = .clear
-    open var imageToTextPadding:CGFloat = 10
-    open var textToSecondaryTextPadding:CGFloat = 5
-    open var buttonToSecondaryButtonPadding:CGFloat = 15
+    public var mainTitleAtt:ASAttributedString?
+    public var secondaryEmptyAtt:ASAttributedString?
+    public var buttonTitle:String = ""
+    public var buttonFont:UIFont = .appfont(size: 18)
+    public var buttonTextColor:UIColor = .systemBlue
+    public var image:UIImage? = UIImage(.exclamationmark.triangle)
+    public var backgroundColor:UIColor = .clear
+    public var imageToTextPadding:CGFloat = 10
+    public var textToSecondaryTextPadding:CGFloat = 5
+    public var buttonToSecondaryButtonPadding:CGFloat = 15
 }
 
 @available(iOS 17.0 , *)
@@ -48,42 +40,9 @@ public class PTUnavailableFunction: NSObject {
         return plainConfig
     }()
     
-    lazy var emptyConfig:UIContentUnavailableConfiguration = {
-        var configs = UIContentUnavailableConfiguration.empty()
-        configs.imageToTextPadding = emptyViewConfig.imageToTextPadding
-        configs.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
-        configs.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
-        if emptyViewConfig.mainTitleAtt != nil {
-            configs.attributedText = emptyViewConfig.mainTitleAtt!.value
-        }
-        
-        if emptyViewConfig.secondaryEmptyAtt != nil {
-            configs.secondaryAttributedText = emptyViewConfig.secondaryEmptyAtt!.value
-        }
-        
-        if emptyViewConfig.image != nil {
-            configs.image = emptyViewConfig.image!
-        }
-        if !emptyViewConfig.buttonTitle.stringIsEmpty() {
-            configs.button = self.emptyButtonConfig
-        }
-        configs.buttonProperties.primaryAction = UIAction { sender in
-            if self.emptyTap != nil {
-                self.emptyTap!()
-            }
-        }
-        var configBackground = UIBackgroundConfiguration.clear()
-        configBackground.backgroundColor = emptyViewConfig.backgroundColor
-        
-        configs.background = configBackground
-
-        return configs
-    }()
+    var emptyConfig:UIContentUnavailableConfiguration!
     
-    lazy var unavailableView:UIContentUnavailableView = {
-        let view = UIContentUnavailableView(configuration: self.emptyConfig)
-        return view
-    }()
+    var unavailableView:UIContentUnavailableView?
     
     lazy var unavailableLoadingView:UIContentUnavailableView = {
         let loadingConfig = UIContentUnavailableConfiguration.loading()
@@ -92,20 +51,52 @@ public class PTUnavailableFunction: NSObject {
     }()
     
     public func showEmptyView(showIn:UIView) {
-        unavailableView.frame = showIn.bounds
-        showIn.addSubview(unavailableView)
+        emptyConfig = UIContentUnavailableConfiguration.empty()
+        emptyConfig.imageToTextPadding = emptyViewConfig.imageToTextPadding
+        emptyConfig.textToButtonPadding = emptyViewConfig.textToSecondaryTextPadding
+        emptyConfig.buttonToSecondaryButtonPadding = emptyViewConfig.buttonToSecondaryButtonPadding
+        if emptyViewConfig.mainTitleAtt != nil {
+            emptyConfig.attributedText = emptyViewConfig.mainTitleAtt!.value
+        }
+        
+        if emptyViewConfig.secondaryEmptyAtt != nil {
+            emptyConfig.secondaryAttributedText = emptyViewConfig.secondaryEmptyAtt!.value
+        }
+        
+        if emptyViewConfig.image != nil {
+            emptyConfig.image = emptyViewConfig.image!
+        }
+        if !emptyViewConfig.buttonTitle.stringIsEmpty() {
+            emptyConfig.button = self.emptyButtonConfig
+        }
+        emptyConfig.buttonProperties.primaryAction = UIAction { sender in
+            if self.emptyTap != nil {
+                self.emptyTap!()
+            }
+        }
+        var configBackground = UIBackgroundConfiguration.clear()
+        configBackground.backgroundColor = emptyViewConfig.backgroundColor
+        emptyConfig.background = configBackground
+
+        unavailableView = UIContentUnavailableView(configuration: emptyConfig)
+        unavailableView?.frame = showIn.frame
+        showIn.addSubview(unavailableView!)
     }
     
     public func showEmptyLoadingView(showIn:UIView) {
         PTGCDManager.gcdMain {
-            self.unavailableView.removeFromSuperview()
+            self.unavailableView!.removeFromSuperview()
+            self.unavailableView = nil
             self.unavailableLoadingView.frame = showIn.bounds
             showIn.addSubview(self.unavailableLoadingView)
         }
     }
     
-    public func hideUnavailableView(task:PTActionTask?,showIn:UIView) {
-        unavailableView.removeFromSuperview()
+    public func hideUnavailableView(showIn:UIView,task:PTActionTask?) {
+        if unavailableView != nil {
+            unavailableView!.removeFromSuperview()
+            unavailableView = nil
+        }
         unavailableLoadingView.removeFromSuperview()
         if task != nil {
             task!()

@@ -41,8 +41,8 @@ public class PTMediaLibView:UIView {
     var totalModels:[PTMediaModel]! = [PTMediaModel]()
     var selectedModel: [PTMediaModel] = [] {
         didSet {
-            if self.selectedModelDidUpdate != nil {
-                self.selectedModelDidUpdate!()
+            if selectedModelDidUpdate != nil {
+                selectedModelDidUpdate!()
             }
         }
     }
@@ -62,7 +62,7 @@ public class PTMediaLibView:UIView {
         
         let config = PTCollectionViewConfig()
         config.viewType = .Gird
-        config.itemOriginalX = 0
+        config.itemOriginalX = 1
         config.cellLeadingSpace = 1
         config.cellTrailingSpace = 1
         config.rowCount = 3
@@ -253,8 +253,8 @@ public class PTMediaLibView:UIView {
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        self.currentAlbum = currentModels
-        markSelected(source: &self.totalModels, selected: &self.selectedModel)
+        currentAlbum = currentModels
+        markSelected(source: &totalModels, selected: &selectedModel)
         
         PHPhotoLibrary.shared().register(self)
     }
@@ -331,7 +331,6 @@ public class PTMediaLibView:UIView {
         if isSelected {
             cell.coverView.backgroundColor = .DevMaskColor
             cell.coverView.isHidden = false
-//            cell.editButton.isHidden = false
             cell.layer.borderColor = config.selectedBorderColor.cgColor
             cell.layer.borderWidth = 4
             
@@ -446,17 +445,10 @@ public class PTMediaLibView:UIView {
             canSelect = false
         }
         
-        if canSelect, canAddModel(newModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
-            self.selectedModel.append(newModel)
+        if canSelect, canAddModel(newModel, currentSelectCount: selectedModel.count, sender: PTUtils.getCurrentVC(), showAlert: false) {
+            selectedModel.append(newModel)
             config.didSelectAsset?(newModel.asset)
 
-//            if !shouldDirectEdit(newModel) {
-                
-//                if config.callbackDirectlyAfterTakingPhoto {
-//                    doneBtnClick()
-//                    return
-//                }
-//            }
         }
 
         PTGCDManager.gcdAfter(time: 0.15) {
@@ -525,7 +517,6 @@ extension PTMediaLibView:PHPhotoLibraryChangeObserver {
         }
     }
 }
-
 
 public class PTMediaLibViewController: PTFloatingBaseViewController {
 
@@ -672,8 +663,8 @@ public class PTMediaLibViewController: PTFloatingBaseViewController {
     }
     
     func createList() {
-        self.view.addSubviews([self.mediaListView])
-        self.mediaListView.snp.makeConstraints { make in
+        view.addSubviews([mediaListView])
+        mediaListView.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalTo(self.fakeNav.snp.bottom)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight)

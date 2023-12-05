@@ -13,7 +13,7 @@ public class PTMediaLibListModel: NSObject {
     public let title: String
     
     public var count: Int {
-        return result.count
+        result.count
     }
     
     public var result: PHFetchResult<PHAsset>
@@ -25,7 +25,7 @@ public class PTMediaLibListModel: NSObject {
     public let isCameraRoll: Bool
     
     public var headImageAsset: PHAsset? {
-        return result.lastObject
+        result.lastObject
     }
     
     public var models: [PTMediaModel] = []
@@ -66,9 +66,9 @@ public class PTMediaLibListModel: NSObject {
 
 extension PTMediaLibListModel {
     static func ==(lhs: PTMediaLibListModel, rhs: PTMediaLibListModel) -> Bool {
-        return lhs.title == rhs.title &&
-            lhs.count == rhs.count &&
-            lhs.headImageAsset?.localIdentifier == rhs.headImageAsset?.localIdentifier
+        lhs.title == rhs.title &&
+                lhs.count == rhs.count &&
+                lhs.headImageAsset?.localIdentifier == rhs.headImageAsset?.localIdentifier
     }
 }
 
@@ -122,7 +122,7 @@ public class PTMediaModel:NSObject {
     }
     
     public var whRatio: CGFloat {
-        return CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
+        CGFloat(asset.pixelWidth) / CGFloat(asset.pixelHeight)
     }
     
     public var previewSize: CGSize {
@@ -192,7 +192,7 @@ public class PTMediaModel:NSObject {
 
 public extension PTMediaModel {
     static func == (lhs: PTMediaModel, rhs: PTMediaModel) -> Bool {
-        return lhs.ident == rhs.ident
+        lhs.ident == rhs.ident
     }
 }
 
@@ -236,6 +236,6 @@ public class PTResultModel: NSObject {
 
 extension PTResultModel {
     static func ==(lhs: PTResultModel, rhs: PTResultModel) -> Bool {
-        return lhs.asset == rhs.asset
+        lhs.asset == rhs.asset
     }
 }

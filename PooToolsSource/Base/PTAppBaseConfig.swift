@@ -33,6 +33,7 @@ public class PTAppBaseConfig: NSObject {
     open var viewControllerBackItemImage:UIImage = UIImage(.chevron.left)
     open var navTitleFont:UIFont = .appfont(size: 24)
     open var navTitleTextColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
+    open var navBackgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: UIColor(hexString:"#eeeff4")!, darkColor: .black)
     open var hidesBarsOnSwipe:Bool = false
     
     //MARK: 权限请求配置

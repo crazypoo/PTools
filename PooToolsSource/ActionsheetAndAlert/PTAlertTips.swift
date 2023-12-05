@@ -267,7 +267,7 @@ public class PTAlertTipsLow: UIView,PTAlertTipsProtocol {
         }
         if let subtitleLabel = subtitleLabel {
             let result: CGFloat
-            if let titleLabel1 = self.titleLabel {
+            if let titleLabel1 = titleLabel {
                 result = titleLabel1.frame.maxY + 4
             } else {
                 result = layoutMargins.top
@@ -581,11 +581,11 @@ public class PTAlertTipsHight: UIView, PTAlertTipsProtocol {
         let maxX = subviews.sorted(by: { $0.frame.maxX > $1.frame.maxX }).first?.frame.maxX ?? .zero
         let currentNeedWidth = maxX + layoutMargins.right
         let maxWidth = {
-                    if let viewForPresent = self.viewForPresent {
-                        return min(viewForPresent.frame.width * 0.8, 270)
-                    } else {
-                        return 270
-                    }
+            if let viewForPresent = self.viewForPresent {
+                return min(viewForPresent.frame.width * 0.8, 270)
+            } else {
+                return 270
+            }
         }()
         let usingWidth = min(currentNeedWidth, maxWidth)
         layout(maxWidth: usingWidth)

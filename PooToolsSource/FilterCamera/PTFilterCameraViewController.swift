@@ -193,13 +193,13 @@ public class PTFilterCameraViewController: PTBaseViewController {
     func showFilterView(show:Bool) {
         if show {
 //            filterCollectionView.alpha = 1
-            view.addSubviews([self.filterCollectionView])
+            view.addSubviews([filterCollectionView])
             filterCollectionView.snp.makeConstraints { make in
                 make.left.right.equalToSuperview()
                 make.height.equalTo(PTFilterCameraViewController.filterCollectionHeight)
                 make.bottom.equalTo(self.toolBar.snp.top)
             }
-            view.bringSubviewToFront(self.filterCollectionView)
+            view.bringSubviewToFront(filterCollectionView)
             
             var rows = [PTRows]()
             thumbnailFilterImages.enumerated().forEach { index,value in
@@ -321,9 +321,9 @@ public class PTFilterCameraViewController: PTBaseViewController {
         self.zx_hideBaseNavBar = true
 #else
         navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.view.backgroundColor = .clear
 #endif
-        self.changeStatusBar(type: .Dark)
+        changeStatusBar(type: .Dark)
     }
     
     public override func viewDidAppear(_ animated: Bool) {
@@ -333,7 +333,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         self.zx_hideBaseNavBar = true
 #else
         navigationController?.setNavigationBarHidden(true, animated: false)
-        self.navigationController?.view.backgroundColor = .clear
+        navigationController?.view.backgroundColor = .clear
 #endif
     }
 
@@ -356,7 +356,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                     }
                 }
             case .authorized:
-                self.camera.startRunning()
+                camera.startRunning()
             default:
                 return
             }
@@ -533,7 +533,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
 
     private func focusCamera(mode: AVCaptureDevice.FocusMode, exposureMode: AVCaptureDevice.ExposureMode, point: CGPoint) {
         do {
-            guard let device = self.camera.deviceInput?.device else {
+            guard let device = camera.deviceInput?.device else {
                 return
             }
             
@@ -559,7 +559,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
     }
 
     private func getMaxZoomFactor() -> CGFloat {
-        guard let device = self.camera.deviceInput?.device else {
+        guard let device = camera.deviceInput?.device else {
             return 1
         }
         if #available(iOS 11.0, *) {
@@ -578,7 +578,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
 extension PTFilterCameraViewController: C7CollectorImageDelegate {
     
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
-        self.originImageView.image = image.pt.fixOrientation()
+        originImageView.image = image.pt.fixOrientation()
     }
     
     public func captureOutput(_ collector: C7Collector, pixelBuffer: CVPixelBuffer) {
@@ -588,7 +588,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
     }
     
     public func takePhoto(_ collector: C7Collector, fliter image: C7Image) {
-        if self.onlyCamera {
+        if onlyCamera {
             takePhotoView = PTTakePictureReviewer(screenShotImage: image)
             takePhotoView?.actionHandle = { type,image in
                 let vc = PTEditImageViewController(readyEditImage: image)
@@ -630,7 +630,7 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             }
         } else {
             //TODO: 这里根据相册须要处理
-            self.camera.stopRunning()
+            camera.stopRunning()
             
             let reviewView = PTFlashImageReviewView(image: image)
             AppWindows?.addSubview(reviewView)
@@ -666,9 +666,9 @@ extension PTFilterCameraViewController: C7CollectorImageDelegate {
             }
         }
         
-        self.camera.startRunning()
-        self.camera.isTakingPicture = false
-        self.originImageView.contentMode = .scaleAspectFit
+        camera.startRunning()
+        camera.isTakingPicture = false
+        originImageView.contentMode = .scaleAspectFit
     }
 }
 
@@ -682,7 +682,7 @@ extension PTFilterCameraViewController {
 //        }.filter { $0 == true }
 //        PTNSLogConsole("1231231231")
 //        return !result.isEmpty
-        return true
+        true
     }
 }
 

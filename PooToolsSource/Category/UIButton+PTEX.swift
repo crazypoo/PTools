@@ -42,7 +42,7 @@ public extension UIButton {
     }
     
     @objc func pt_SDWebImage(imageString:String) {
-        self.kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
+        kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
     func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,

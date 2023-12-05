@@ -22,7 +22,7 @@ public extension UIImageView {
     }
     
     func pt_SDWebImage(imageString:String) {
-        self.kf.setImage(with: URL.init(string: imageString),placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
+        kf.setImage(with: URL.init(string: imageString),placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
     func blur(withStyle style: UIBlurEffect.Style) {

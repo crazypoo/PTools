@@ -229,7 +229,7 @@ extension PTVideoEditorVideoPlayerController: PTVideoEditorControlsViewControlle
 
 extension PTVideoEditorVideoPlayerController: C7CollectorImageDelegate {
     public func preview(_ collector: C7Collector, fliter image: C7Image) {
-        self.originImageView.image = image
+        originImageView.image = image
 //        // Simulated dynamic effect.
 //        let filter = [PTHarBethFilter.crosshatch.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter]
 //        self.c7Player.filters = filter

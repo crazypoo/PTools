@@ -100,7 +100,7 @@ public typealias LayoutSubviewsCallback = (_ view:UIView) -> Void
 public extension UIView {
               
     static func isRTL() -> Bool {
-        return UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
+        UIView.userInterfaceLayoutDirection(for: UIView.appearance().semanticContentAttribute) == .rightToLeft
     }
     
     private struct AssociatedKeys {

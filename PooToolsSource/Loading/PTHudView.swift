@@ -166,7 +166,7 @@ public class PTLoadingHud:UIView {
         self.perform(#selector(refreshCricle), with: nil, afterDelay: 1 / framePerSecond)
     }
     
-    @objc func refreshCricle() {
+    func refreshCricle() {
         PTGCDManager.gcdMain {
             switch self.status {
             case .Decrease:

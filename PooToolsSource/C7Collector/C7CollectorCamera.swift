@@ -74,8 +74,8 @@ public final class C7CollectorCamera: C7Collector {
     }()
     
     deinit {
-        self.stopRunning()
-        self.videoOutput.setSampleBufferDelegate(nil, queue: nil)
+        stopRunning()
+        videoOutput.setSampleBufferDelegate(nil, queue: nil)
     }
     
     public override func setupInit() {
@@ -140,7 +140,7 @@ public final class C7CollectorCamera: C7Collector {
     }
     
     private func setupCaptureSession() {
-        guard let camera = self.getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
+        guard let camera = getCamera(position: cameraConfig.devicePosition.avDevicePosition) else { return }
         guard let input = try? AVCaptureDeviceInput(device: camera) else { return }
         captureSession.beginConfiguration()
         
@@ -154,8 +154,8 @@ public final class C7CollectorCamera: C7Collector {
 //        self.movieFileOutput = movieFileOutput
         
         // 添加视频输入
-        if let videoInput = self.deviceInput, self.captureSession.canAddInput(videoInput) {
-            self.captureSession.addInput(videoInput)
+        if let videoInput = deviceInput, captureSession.canAddInput(videoInput) {
+            captureSession.addInput(videoInput)
         }
         
         // 添加音频输入
@@ -166,14 +166,14 @@ public final class C7CollectorCamera: C7Collector {
         let imageOutput = AVCapturePhotoOutput()
         self.imageOutput = imageOutput
         // 将输出流添加到session
-        if self.captureSession.canAddOutput(imageOutput) {
-            self.captureSession.addOutput(imageOutput)
+        if captureSession.canAddOutput(imageOutput) {
+            captureSession.addOutput(imageOutput)
         }
 //        if self.captureSession.canAddOutput(movieFileOutput) {
 //            self.captureSession.addOutput(movieFileOutput)
 //        }
         
-        let _ = self.videoOutput
+        let _ = videoOutput
         captureSession.commitConfiguration()
         
         startRunning()
@@ -456,7 +456,7 @@ public final class C7CollectorCamera: C7Collector {
     }
     
     public func setVideoZoomFactor(_ zoomFactor: CGFloat) {
-        guard let device = self.deviceInput?.device else {
+        guard let device = deviceInput?.device else {
             return
         }
         do {
@@ -493,8 +493,8 @@ extension C7CollectorCamera {
     }
     
     public func stopRunning() {
-        if self.captureSession.isRunning {
-            self.captureSession.stopRunning()
+        if captureSession.isRunning {
+            captureSession.stopRunning()
         }
     }
 }
@@ -503,7 +503,7 @@ extension C7CollectorCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
     
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)
-        self.processing(with: pixelBuffer)
+        processing(with: pixelBuffer)
     }
 }
 

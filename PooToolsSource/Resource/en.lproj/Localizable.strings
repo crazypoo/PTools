@@ -209,3 +209,5 @@
 "PT Camera focus error" = "The focal length could not be adjusted";
 "PT HeartRate touch" = "Please put your finger in the position of the flash.";
 "PT HeartRate loading" = "I'm doing it. Please wait patiently. Please don't keep your fingers away!";
+"PT Photo picker empty media" = "I didn't find your multimedia content.";
+"PT Photo picker album list title" = "List of albums";

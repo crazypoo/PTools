@@ -13,6 +13,8 @@ import ZXNavigationBar
 import SnapKit
 import Photos
 import SwifterSwift
+import AttributedString
+import SafeSFSymbols
 
 class PTMediaLibAlbumListViewController: PTBaseViewController {
 
@@ -32,10 +34,27 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     private lazy var collectionView : PTCollectionView = {
         
+        let pickerConfig = PTMediaLibConfig.share
+        
+        let emptyConfig = PTEmptyDataViewConfig()
+        emptyConfig.image = UIImage(.exclamationmark.triangle)
+        emptyConfig.mainTitleAtt = """
+            \(wrap: .embedding("""
+            \("PT Alert Opps".localized(),.foreground(pickerConfig.themeColor),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+            """))
+            """
+        emptyConfig.secondaryEmptyAtt = """
+            \(wrap: .embedding("""
+            \("PT Photo picker empty media".localized(),.foreground(pickerConfig.themeColor),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+            """))
+            """
+        
         let config = PTCollectionViewConfig()
         config.viewType = .Normal
         config.itemOriginalX = 0
         config.itemHeight = 88
+        config.showEmptyAlert = true
+        config.emptyViewConfig = emptyConfig
 
         let view = PTCollectionView(viewConfig: config)
         view.cellInCollection = { collection,sectionModel,indexPath in
@@ -60,7 +79,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     }()
 
     init(albumList: PTMediaLibListModel) {
-        self.selectedAlbum = albumList
+        selectedAlbum = albumList
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -70,11 +89,19 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: PTAppBaseConfig.share.navBackgroundColor)
+#endif
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        
 #if POOTOOLS_NAVBARCONTROLLER
+        self.zx_navTitle = "PT Photo picker album list title".localized()
+        self.zx_navTitleColor = PTAppBaseConfig.share.navTitleTextColor
+        self.zx_navTitleFont = PTAppBaseConfig.share.navTitleFont
         self.zx_navBar?.addSubview(dismissButton)
         dismissButton.snp.makeConstraints { make in
             make.size.equalTo(34)
@@ -84,7 +111,9 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
         
 #else
         dismissButton.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButton)
+        
+        self.title = "PT Photo picker album list title".localized()
 #endif
         PHPhotoLibrary.shared().register(self)
         
@@ -94,8 +123,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             make.top.equalToSuperview()
         }
         
-        if self.selectedAlbum.models.isEmpty {
-            self.selectedAlbum.refetchPhotos()
+        if selectedAlbum.models.isEmpty {
+            selectedAlbum.refetchPhotos()
         }
         
         loadAlbumList()
@@ -104,8 +133,8 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
     func loadAlbumList() {
         
         PTMediaLibManager.getPhotoAlbumList(ascending: PTMediaLibUIConfig.share.sortAscending, allowSelectImage: PTMediaLibConfig.share.allowSelectImage, allowSelectVideo: PTMediaLibConfig.share.allowSelectVideo) { models in
-            self.albumList.removeAll()
-            self.albumList.append(contentsOf: models)
+            albumList.removeAll()
+            albumList.append(contentsOf: models)
             
             var rows = [PTRows]()
             models.enumerated().forEach { index,value in
@@ -114,7 +143,7 @@ class PTMediaLibAlbumListViewController: PTBaseViewController {
             }
             
             let section = PTSection(rows:rows)
-            self.collectionView.showCollectionDetail(collectionData: [section])
+            collectionView.showCollectionDetail(collectionData: [section])
         }
     }
 }

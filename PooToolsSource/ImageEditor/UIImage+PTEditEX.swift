@@ -285,47 +285,45 @@ public extension PTPOP where Base: UIImage {
             kCGImageSourceShouldCache as String: true,
             kCGImageSourceTypeIdentifierHint as String: kUTTypeGIF
         ]
-        
+
         guard let imageSource = CGImageSourceCreateWithData(data as CFData, info as CFDictionary) else {
             return UIImage(data: data)
         }
-        
+
         var frameCount = CGImageSourceGetCount(imageSource)
         guard frameCount > 1 else {
             return UIImage(data: data)
         }
-        
+
         let maxFrameCount = PTImageEditorConfig.share.maxFrameCountForGIF
-        
+
         let ratio = CGFloat(max(frameCount, maxFrameCount)) / CGFloat(maxFrameCount)
         frameCount = min(frameCount, maxFrameCount)
-        
+
         var images = [UIImage]()
         var frameDuration = [Int]()
-        
+
         for i in 0..<frameCount {
             let index = Int(floor(CGFloat(i) * ratio))
-            
+
             guard let imageRef = CGImageSourceCreateImageAtIndex(imageSource, index, info as CFDictionary) else {
                 return nil
             }
-            
+
             // Get current animated GIF frame duration
             let currFrameDuration = getFrameDuration(from: imageSource, at: index) * min(ratio, 3)
             // Second to ms
             frameDuration.append(Int(currFrameDuration * 1000))
-            
+
             images.append(UIImage(cgImage: imageRef, scale: 1, orientation: .up))
         }
-        
-        let duration: Int = {
-            var sum = 0
-            for val in frameDuration {
-                sum += val
-            }
-            return sum
-        }()
-        
+        var sum = 0
+        for val in frameDuration {
+            sum += val
+        }
+
+        let duration: Int = sum
+
         // 求出每一帧的最大公约数
         let gcd = gcdForArray(frameDuration)
         var frames = [UIImage]()
@@ -339,7 +337,7 @@ public extension PTPOP where Base: UIImage {
                 frames.append(frameImage)
             }
         }
-        
+
         return .animatedImage(with: frames, duration: TimeInterval(duration) / 1000)
     }
 

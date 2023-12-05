@@ -28,15 +28,15 @@ class PTImageStickerView: PTBaseStickerView {
     
     // Convert all states to model.
     override var state: PTImageStickerState {
-        return PTImageStickerState(
-            id: id,
-            image: image,
-            originScale: originScale,
-            originAngle: originAngle,
-            originFrame: originFrame,
-            gesScale: gesScale,
-            gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
+        PTImageStickerState(
+                id: id,
+                image: image,
+                originScale: originScale,
+                originAngle: originAngle,
+                originFrame: originFrame,
+                gesScale: gesScale,
+                gesRotation: gesRotation,
+                totalTranslationPoint: totalTranslationPoint
         )
     }
         
@@ -188,7 +188,7 @@ class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     }
     
     var borderView: UIView {
-        return self
+        self
     }
     
     weak var delegate: PTStickerViewDelegate?
@@ -430,7 +430,7 @@ class PTBaseStickerView: UIView, UIGestureRecognizerDelegate {
     // MARK: UIGestureRecognizerDelegate
 
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
-        return true
+        true
     }
 }
 
@@ -522,19 +522,19 @@ class PTTextStickerView: PTBaseStickerView {
 
     // Convert all states to model.
     override var state: PTTextStickerState {
-        return PTTextStickerState(
-            id: id,
-            text: text,
-            textColor: textColor,
-            font: font,
-            style: style,
-            image: image,
-            originScale: originScale,
-            originAngle: originAngle,
-            originFrame: originFrame,
-            gesScale: gesScale,
-            gesRotation: gesRotation,
-            totalTranslationPoint: totalTranslationPoint
+        PTTextStickerState(
+                id: id,
+                text: text,
+                textColor: textColor,
+                font: font,
+                style: style,
+                image: image,
+                originScale: originScale,
+                originAngle: originAngle,
+                originFrame: originFrame,
+                gesScale: gesScale,
+                gesRotation: gesRotation,
+                totalTranslationPoint: totalTranslationPoint
         )
     }
         
@@ -619,8 +619,8 @@ class PTTextStickerView: PTBaseStickerView {
         transform = transform.rotated(by: -originAngle.pt.toPi)
         
         // Recalculate current frame.
-        let center = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        var frame = self.frame
+        let center = CGPoint(x: frame.midX, y: frame.midY)
+        var frame = frame
         frame.origin.x = center.x - newSize.width / 2
         frame.origin.y = center.y - newSize.height / 2
         frame.size = newSize
@@ -759,18 +759,18 @@ class PTEditInputViewController: PTBaseViewController {
     var endInput: ((String, UIColor, UIFont, UIImage?, PTInputTextStyle) -> Void)?
     
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+        .portrait
     }
     
     override var prefersStatusBarHidden: Bool {
-        return true
+        true
     }
         
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
-        PTBaseNavControl.GobalNavControl(nav: self.navigationController!,navColor: .black)
+        PTBaseNavControl.GobalNavControl(nav: navigationController!,navColor: .black)
 #endif
 
         textView.becomeFirstResponder()
@@ -815,8 +815,8 @@ class PTEditInputViewController: PTBaseViewController {
 #else
         cancelBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
         doneBtn.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelBtn)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneBtn)
 #endif
         
         setupUI()

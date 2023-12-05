@@ -12,7 +12,7 @@ import Photos
 extension PHPhotoLibrary: PTProtocolCompatible { }
 public extension PTPOP where Base: PHPhotoLibrary {
 
-    static func saveVideoToAlbum(fileURL:URL,result:@escaping ((_ finish:Bool,_ error:NSError?)->Void)) {
+    static func saveVideoToAlbum(fileURL:URL,result: @escaping (_ finish:Bool, _ error:NSError?)->Void) {
         PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: fileURL)
         }) { success, error in

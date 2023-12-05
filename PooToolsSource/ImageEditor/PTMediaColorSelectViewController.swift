@@ -14,7 +14,7 @@ import SwifterSwift
 import ZXNavigationBar
 #endif
 
-typealias MediaPickerTextColorTask = ((_ color:UIColor)->Void)
+typealias MediaPickerTextColorTask = (_ color:UIColor)->Void
 
 class PTMediaColorSelectViewController: PTBaseViewController {
 
@@ -80,7 +80,7 @@ class PTMediaColorSelectViewController: PTBaseViewController {
             make.top.equalTo(colorPicker.snp.bottom).offset(10)
         }
         colorPicker.connect(brightnessSlider)
-        let terTextColor = self.currentColor
+        let terTextColor = currentColor
         colorPicker.addHandle(at: terTextColor)
     }
 }

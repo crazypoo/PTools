@@ -209,3 +209,5 @@
 "PT Camera focus error" = "No se pudo ajustar la distancia focal";
 "PT HeartRate touch" = "Por favor, ponga el dedo en la posición del flash.";
 "PT HeartRate loading" = "Lo estoy enciéndolo. Por favor, espera pacientemente. ¡Por favor, no alejes los dedos!";
+"PT Photo picker empty media" = "No encontré tu contenido multimedia.";
+"PT Photo picker album list title" = "Lista de álbumes";

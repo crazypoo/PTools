@@ -29,7 +29,7 @@ class PTFetchImageOperation: Operation {
     }
     
     override var isExecuting: Bool {
-        return pri_isExecuting
+        pri_isExecuting
     }
     
     private var pri_isFinished = false {
@@ -42,7 +42,7 @@ class PTFetchImageOperation: Operation {
     }
     
     override var isFinished: Bool {
-        return pri_isFinished
+        pri_isFinished
     }
     
     private var pri_isCancelled = false {
@@ -57,14 +57,14 @@ class PTFetchImageOperation: Operation {
     private var requestImageID = PHInvalidImageRequestID
     
     override var isCancelled: Bool {
-        return pri_isCancelled
+        pri_isCancelled
     }
     
     init(
         model: PTMediaModel,
         isOriginal: Bool,
         progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil,
-        completion: @escaping ((UIImage?, PHAsset?) -> Void)
+        completion: @escaping (UIImage?, PHAsset?) -> Void
     ) {
         self.model = model
         self.isOriginal = isOriginal

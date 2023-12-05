@@ -141,7 +141,7 @@ public class PTDarkModeControl: PTBaseViewController {
                 if cellModel.name == "PT Theme smart".localized() {
                     cell.switchValue = PTDarkModeOption.isSmartPeeling
                     PTGCDManager.gcdMain {
-                        cell.contentView.viewCornerRectCorner(cornerRadii: 0, corner: .allCorners)
+                        cell.contentView.viewCornerRectCorner(cornerRadii: 5, corner: [.topLeft,.topRight])
                     }
                 } else if cellModel.name == "PT Theme follow system".localized() {
                     cell.switchValue = PTDarkModeOption.isFollowSystem

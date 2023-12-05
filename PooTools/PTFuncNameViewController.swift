@@ -16,6 +16,7 @@ import Combine
 import SwipeCellKit
 #endif
 import SafeSFSymbols
+import AttributedString
 
 public extension String {
     static let localNetWork = "局域网传送"
@@ -411,10 +412,10 @@ class PTFuncNameViewController: PTBaseViewController {
         }
 #if POOTOOLS_SWIPECELL
         aaaaaaa.indexPathSwipe = { indxPath in
-            return true
+            true
         }
         aaaaaaa.indexPathSwipeRight = { indxPath in
-            return true
+            true
         }
         aaaaaaa.swipeLeftHandler = { collection,sectionModel,indexPath in
             let delete = aaaaaaa.swipe_cell_configure_action(title: "22222", with: .edit,buttonDisplayMode: .imageOnly/*,buttonStyle: .backgroundColor*/) { action, indexPaths in
@@ -806,14 +807,26 @@ class PTFuncNameViewController: PTBaseViewController {
         more.setTitleColor(.random, for: .normal)
         more.setTitle("More", for: .normal)
         more.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        
+        let popover = UIButton(type: .custom)
+        popover.setTitleColor(.random, for: .normal)
+        popover.setTitle("Popover", for: .normal)
+        popover.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
 #if POOTOOLS_NAVBARCONTROLLER
-        self.zx_navBar?.addSubviews([more])
+        self.zx_navBar?.addSubviews([more,popover])
         more.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             more.size.equalTo(more.bounds.size)
             make.bottom.equalToSuperview().inset(5)
         }
+        
+        popover.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            more.size.equalTo(more.bounds.size)
+            make.bottom.equalToSuperview().inset(5)
+        }
 #else
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: popover)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
 #endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
@@ -828,9 +841,6 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
-//                let vc = PTFloatingBaseViewController()
-//                self.present(vc, animated: true)
-                
                 let config = PTMediaLibConfig.share
                 config.maxSelectCount = 2
                 config.maxVideoSelectCount = 2
@@ -843,7 +853,7 @@ class PTFuncNameViewController: PTBaseViewController {
             }
         }
         
-        more.addActionHandlers { sender in
+        popover.addActionHandlers { sender in
             let items = PTPopoverItem()
             items.name = "123123123123"
             items.icon = "DemoImage"
@@ -851,8 +861,9 @@ class PTFuncNameViewController: PTBaseViewController {
             self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 100, sender: sender, arrowDirections: .any) { itemName, index in
                 PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
             }
-            
-//            self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
+        }
+        more.addActionHandlers { sender in
+            self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
         
         view.addSubview(collectionView)
@@ -869,7 +880,21 @@ class PTFuncNameViewController: PTBaseViewController {
             showCollectionViewData()
         } else {
             if vcEmpty {
-                emptyDataViewConfig = PTEmptyDataViewConfig()
+                let emptyConfig = PTEmptyDataViewConfig()
+                emptyConfig.buttonTitle = "點我刷新"
+                emptyConfig.image = UIImage(.exclamationmark.triangle)
+                emptyConfig.mainTitleAtt = """
+                    \(wrap: .embedding("""
+                    \("PT Alert Opps".localized(),.foreground(.random),.font(.appfont(size: 20,bold: true)),.paragraph(.alignment(.center)))
+                    """))
+                    """
+                emptyConfig.secondaryEmptyAtt = """
+                    \(wrap: .embedding("""
+                    \("PT Photo picker empty media".localized(),.foreground(.random),.font(.appfont(size: 18)),.paragraph(.alignment(.center)))
+                    """))
+                    """
+
+                emptyDataViewConfig = emptyConfig
                 showEmptyView {
                     self.emptyReload()
                 }

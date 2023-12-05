@@ -82,8 +82,9 @@ public class PTVision: NSObject {
     //MARK: OCR查找文字方法(UIImageView)
     ///OCR查找文字方法(UIImageView)
     /// - Parameters:
-    ///   - imageView: 图片
+    ///   - image: 图片
     ///   - revision: Vision版本(VNRecognizeTextRequestRevision2 iOS14,VNRecognizeTextRequestRevision3 iOS16)
+    ///   - recognitionLanguages: 支持語言
     ///   - resultBlock: 回调
     public static func findText(withImageView image:UIImageView,
                                 revision:Int = VNRecognizeTextRequestRevision2,

@@ -213,10 +213,10 @@ public extension UIViewController {
         presentationCtr?.permittedArrowDirections = arrowDirections
         presentationCtr?.delegate = self
         presentationCtr?.backgroundColor = popoverConfig.backgroundColor
-        if (self.navigationController?.viewControllers.count ?? 0) > 0 {
-            self.navigationController?.present(popoverVC, animated: true)
+        if (navigationController?.viewControllers.count ?? 0) > 0 {
+            navigationController?.present(popoverVC, animated: true)
         } else {
-            self.present(popoverVC, animated: true)
+            present(popoverVC, animated: true)
         }
     }
     

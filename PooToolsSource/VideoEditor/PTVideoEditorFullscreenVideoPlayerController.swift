@@ -48,7 +48,7 @@ final class PTVideoEditorFullscreenVideoPlayerController: PTBaseViewController {
         self.theme = theme
         self.capabilities = capabilities
         self.c7Player = c7Player
-        self.originImageView = c7Image
+        originImageView = c7Image
 
         super.init(nibName: nil, bundle: nil)
 

@@ -12,7 +12,7 @@ extension UIGraphicsImageRenderer: PTProtocolCompatible {}
 public extension PTPOP where Base: UIGraphicsImageRenderer {
     static func renderImage(size: CGSize,
                             formatConfig: ((UIGraphicsImageRendererFormat) -> Void)? = nil,
-                            imageActions: ((CGContext) -> Void)) -> UIImage {
+                            imageActions: (CGContext) -> Void) -> UIImage {
         let format: UIGraphicsImageRendererFormat
         if #available(iOS 11.0, *) {
             format = .preferred()

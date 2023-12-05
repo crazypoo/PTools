@@ -100,7 +100,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     return true
 }
 
-func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, completion: @escaping (() -> Void)) {
+func downloadAssetIfNeed(model: PTMediaModel, sender: UIViewController?, completion: @escaping () -> Void) {
     let config = PTMediaLibConfig.share
     guard model.type == .video,
           model.asset.pt.isInCloud,
@@ -157,7 +157,7 @@ public class PTMediaLibManager:NSObject {
 
     @discardableResult
     public class func fetchImage(for asset: PHAsset, size: CGSize, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
-        return fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
+        fetchImage(for: asset, size: size, resizeMode: .fast, progress: progress, completion: completion)
     }
     
     /// Fetch image for asset.
@@ -187,7 +187,7 @@ public class PTMediaLibManager:NSObject {
     
     @discardableResult
     public class func fetchOriginalImage(for asset: PHAsset, progress: ((CGFloat, Error?, UnsafeMutablePointer<ObjCBool>, [AnyHashable: Any]?) -> Void)? = nil, completion: @escaping (UIImage?, Bool) -> Void) -> PHImageRequestID {
-        return fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
+        fetchImage(for: asset, size: PHImageManagerMaximumSize, resizeMode: .fast, progress: progress, completion: completion)
     }
 
     /// Fetch asset data.
@@ -241,7 +241,7 @@ public class PTMediaLibManager:NSObject {
         return models
     }
     
-    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool,handler:@escaping ((PTMediaLibListModel)->Void)) {
+    class func getCameraRollAlbum(allowSelectImage: Bool, allowSelectVideo: Bool,handler: @escaping (PTMediaLibListModel)->Void) {
         PTGCDManager.gcdGobal {
             let option = PHFetchOptions()
             if !allowSelectImage {
@@ -258,7 +258,7 @@ public class PTMediaLibManager:NSObject {
                     stop.pointee = true
                     
                     let result = PHAsset.fetchAssets(in: collection, options: option)
-                    let albumModel = PTMediaLibListModel(title: self.getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
+                    let albumModel = PTMediaLibListModel(title: getCollectionTitle(collection), result: result, collection: collection, option: option, isCameraRoll: true)
                     PTGCDManager.gcdMain {
                         handler(albumModel)
                     }
@@ -298,7 +298,7 @@ public class PTMediaLibManager:NSObject {
                 if result.count == 0 {
                     return
                 }
-                let title = self.getCollectionTitle(collection)
+                let title = getCollectionTitle(collection)
                 
                 if collection.assetCollectionSubtype == .smartAlbumUserLibrary {
                     // Album of all photos.
