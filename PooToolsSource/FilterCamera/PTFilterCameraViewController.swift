@@ -199,6 +199,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
                 make.height.equalTo(PTFilterCameraViewController.filterCollectionHeight)
                 make.bottom.equalTo(self.toolBar.snp.top)
             }
+            view.bringSubviewToFront(self.filterCollectionView)
             
             var rows = [PTRows]()
             thumbnailFilterImages.enumerated().forEach { index,value in

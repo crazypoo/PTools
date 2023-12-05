@@ -1,6 +1,0 @@
-framework module ZXNavigationBar {
-  umbrella header "ZXNavigationBar-umbrella.h"
-
-  export *
-  module * { export * }
-}

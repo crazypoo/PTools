@@ -15,6 +15,7 @@ import Combine
 #if POOTOOLS_SWIPECELL
 import SwipeCellKit
 #endif
+import SafeSFSymbols
 
 public extension String {
     static let localNetWork = "局域网传送"
@@ -723,8 +724,24 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
                 self.navigationController?.pushViewController(vc)
             } else if itemRow.title == .filtercamera {
+                let cameraConfig = PTCameraFilterConfig.share
+                let pointFont = UIFont.appfont(size: 20)
+
+                cameraConfig.backImage = "❌".emojiToImage(emojiFont: pointFont)
+                cameraConfig.flashImage = UIImage(.flashlight.offFill).withTintColor(.white)
+                cameraConfig.flashImageSelected = UIImage(.flashlight.onFill).withTintColor(.white)
+                
+                if #available(iOS 15.0, *) {
+                    cameraConfig.filtersImageSelected = UIImage(.line._3HorizontalDecreaseCircleFill)
+                    cameraConfig.filtersImage = UIImage(.line._3HorizontalDecreaseCircle)
+                } else {
+                    cameraConfig.filtersImage = UIImage(.f.cursiveCircle)
+                    cameraConfig.filtersImageSelected = UIImage(.f.cursiveCircleFill)
+                }
+
                 let vc = PTFilterCameraViewController()
-                self.navigationController?.pushViewController(vc)
+                vc.modalPresentationStyle = .fullScreen
+                self.showDetailViewController(vc, sender: nil)
             } else if itemRow.title == .editimage {
                 let image = UIImage(named: "DemoImage")!
                 
@@ -739,7 +756,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 let nav = PTBaseNavControl(rootViewController: vc)
                 nav.view.backgroundColor = .black
                 nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: true)
+                self.showDetailViewController(nav, sender: nil)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

@@ -229,14 +229,28 @@ class PTFuncDetailViewController: PTBaseViewController {
                 make.centerX.centerY.equalToSuperview()
             }
             view.addActionHandlers { sender in
-//                var options = PickerOptionsInfo()
-//                options.selectLimit = 1
-//                options.selectOptions = .photo
-//                
-//                let controller = ImagePickerController(options: options, delegate: self)
-//                controller.trackDelegate = self
-//                controller.modalPresentationStyle = .fullScreen
-//                self.pt_present(controller, animated: true, completion: nil)
+                let pickerConfig = PTMediaLibConfig.share
+                pickerConfig.allowSelectImage = true
+                pickerConfig.allowSelectVideo = false
+                pickerConfig.allowSelectGif = false
+                pickerConfig.maxVideoSelectCount = 1
+                pickerConfig.maxSelectCount = 1
+                let vc = PTMediaLibViewController()
+                vc.mediaLibShow()
+                vc.selectImageBlock = { result, isOriginal in
+                    if #available(iOS 14.0, *) {
+                        let vision = PTVision.share
+                        
+                        var visionVersion:Int = VNRecognizeTextRequestRevision2
+                        if #available(iOS 16.0, *) {
+                            visionVersion = VNRecognizeTextRequestRevision3
+                        }
+                        
+                        vision.findText(withImage: result.first!.image,revision: visionVersion) { resultText, textObservations in
+                            UIViewController.gobal_drop(title: resultText)
+                        }
+                    }
+                }
             }
         case String.twitterLabel:
             let customType = PTActiveType.custom(pattern: "\\s克狗扑\\b") //Looks for "克狗扑"
@@ -537,14 +551,6 @@ extension PTFuncDetailViewController {
     }
 }
 
-//extension PTFuncDetailViewController {
-//    override func floatingPanel(_ fpc: FloatingPanelController, layoutFor newCollection: UITraitCollection) -> FloatingPanelLayout {
-//        let layout = PTCustomControlHeightPanelLayout()
-//        layout.viewHeight = CGFloat.kSCREEN_HEIGHT / 2
-//        return layout
-//    }
-//}
-
 extension PTFuncDetailViewController:GCDWebUploaderDelegate {
     func webUploader(_ uploader: GCDWebUploader, didUploadFileAtPath path: String) {
         PTNSLogConsole("[UPLOAD] \(path)")
@@ -562,35 +568,3 @@ extension PTFuncDetailViewController:GCDWebUploaderDelegate {
         PTNSLogConsole("[CREATE] \(path)")
     }
 }
-
-//// MARK: - ImagePickerControllerDelegate
-//extension PTFuncDetailViewController: ImagePickerControllerDelegate {
-//    
-//    func imagePicker(_ picker: ImagePickerController, didFinishPicking result: PickerResult) {
-//        PTNSLogConsole(result.assets.first!.image)
-//        
-//        picker.dismiss(animated: true, completion: nil)
-//
-//        result.assets.first!.phAsset.loadImage { result in
-//            switch result {
-//            case .success(let success):
-//                
-//                if #available(iOS 14.0, *) {
-//                    let vision = PTVision.share
-//                    
-//                    var visionVersion:Int = VNRecognizeTextRequestRevision2
-//                    if #available(iOS 16.0, *) {
-//                        visionVersion = VNRecognizeTextRequestRevision3
-//                    }
-//                    
-//                    vision.findText(withImage: success,revision: visionVersion) { resultText, textObservations in
-//                        UIViewController.gobal_drop(title: resultText)
-//                    }
-//                }
-//            case .failure(let failure):
-//                PTNSLogConsole(failure)
-//            }
-//        }
-//    }
-//}
-
