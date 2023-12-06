@@ -21,6 +21,8 @@ public class PTPopoverItem:NSObject {
 
 @objcMembers
 public class PTPopoverConfig:NSObject {
+    open var textFont:UIFont = .appfont(size: 16)
+    open var textColor:UIColor = PTAppBaseConfig.share.viewDefaultTextColor
     open var backgroundColor:UIColor = PTDarkModeOption.colorLightDark(lightColor: .white, darkColor: .black)
     open var rowHeight:CGFloat = 44
 }
@@ -61,7 +63,7 @@ class PTPopoverMenuContent: PTBaseViewController {
                 } else {
                     make.edges.equalToSuperview()
                 }
-            }            
+            }
         }
     }
     
@@ -123,6 +125,8 @@ class PTPopoverMenuContent: PTBaseViewController {
             let cellModel = PTFusionCellModel()
             cellModel.name = value.name
             cellModel.leftImage = value.icon
+            cellModel.nameColor = self.viewConfig.textColor
+            cellModel.cellFont = self.viewConfig.textFont
             
             let row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: cellModel)
             rows.append(row)

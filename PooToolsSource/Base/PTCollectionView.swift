@@ -133,7 +133,7 @@ public class PTCollectionViewConfig:NSObject {
     ///是否开启空数据展示
     open var showEmptyAlert:Bool = false
     ///空数据展示参数设置
-    open var emptyViewConfig:PTEmptyDataViewConfig = PTEmptyDataViewConfig()
+    open var emptyViewConfig:PTEmptyDataViewConfig!
     ///Collection展示的Section底部样式类型
     open var decorationItemsType:PTCollectionViewDecorationItemsType = .NoItems
     ///Collection展示的Section底部样式偏移
@@ -379,6 +379,8 @@ public class PTCollectionView: UIView {
                 }
             } else {
                 PTGCDManager.gcdAfter(time: 0.1) {
+                    let share = PTUnavailableFunction.share
+                    share.emptyViewConfig = self.viewConfig.emptyViewConfig
                     self.showEmptyConfig()
                 }
             }
@@ -495,7 +497,7 @@ public class PTCollectionView: UIView {
         
     @available(iOS 17, *)
     private func showEmptyConfig() {
-        if viewConfig.showEmptyAlert && mSections.first!.rows.count == 0 {
+        if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
             PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
                 PTUnavailableFunction.share.showEmptyView(showIn: self)
             }

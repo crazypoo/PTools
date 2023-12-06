@@ -351,13 +351,13 @@ open class PTActivityViewController:UIActivityViewController {
         }
     }
         
-    public func presentActionSheet(_ vc: UIViewController, from view: UIView) {
+    public func presentActionSheet(_ vc: UIViewController, from view: UIView,completion:PTActionTask? = nil) {
         if UIDevice.current.userInterfaceIdiom == .pad {
             popoverPresentationController?.sourceView = view
             popoverPresentationController?.sourceRect = view.bounds
             popoverPresentationController?.permittedArrowDirections = [.right, .left]
         }
-        vc.present(self, animated: true, completion: nil)
+        vc.present(self, animated: true, completion: completion)
     }
     
     func labelContentWidth() -> CGFloat {
