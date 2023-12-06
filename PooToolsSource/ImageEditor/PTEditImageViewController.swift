@@ -879,6 +879,12 @@ public class PTEditImageViewController: PTBaseViewController {
         }
         return UIImage(cgImage: cgi, scale: editImage.scale, orientation: .up)
     }
+    
+    public func editImageShow(vc:UIViewController) {
+        let nav = PTBaseNavControl(rootViewController: self)
+        nav.modalPresentationStyle = .fullScreen
+        vc.showDetailViewController(nav, sender: nil)
+    }
 }
 
 //MARK: About draw
