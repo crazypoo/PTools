@@ -329,6 +329,7 @@
 		55BD5B7E29C61F790023458A /* CGSize+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */; };
 		55BD5B8029C620150023458A /* PTBaseMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B7F29C620150023458A /* PTBaseMaskView.swift */; };
 		55BD5B8329C620C80023458A /* PTActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BD5B8229C620C80023458A /* PTActivityViewController.swift */; };
+		55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */; };
 		55C7425A2AD7BE4F007FC330 /* PTSpeedPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */; };
 		55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */; };
 		55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */; };
@@ -814,6 +815,7 @@
 		55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGSize+PTEX.swift"; sourceTree = "<group>"; };
 		55BD5B7F29C620150023458A /* PTBaseMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTBaseMaskView.swift; sourceTree = "<group>"; };
 		55BD5B8229C620C80023458A /* PTActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTActivityViewController.swift; sourceTree = "<group>"; };
+		55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDynamicNotificationView.swift; sourceTree = "<group>"; };
 		55C742592AD7BE4F007FC330 /* PTSpeedPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSpeedPanel.swift; sourceTree = "<group>"; };
 		55C7A2AF2926995900220926 /* PTPhoneNetWorkInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneNetWorkInfo.swift; sourceTree = "<group>"; };
 		55C8EB0B29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTRefreshAutoStateFooter.swift; sourceTree = "<group>"; };
@@ -1999,6 +2001,7 @@
 				555818BB2AFA5D2C0051C0AA /* PTAlertTips.swift */,
 				555818BD2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift */,
 				55557F772B1EDFB900D50953 /* PTPopoverMenuContent.swift */,
+				55C460962B20392C009B8480 /* PTDynamicNotificationView.swift */,
 			);
 			path = ActionsheetAndAlert;
 			sourceTree = "<group>";
@@ -2884,6 +2887,7 @@
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
 				55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
+				55C460972B20392C009B8480 /* PTDynamicNotificationView.swift in Sources */,
 				55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */,
 				9AE44686285861D6007DC2B5 /* UIViewController+PTEX.swift in Sources */,
 				55C9CBA128E8505E00DB6200 /* PTBaseModel.swift in Sources */,

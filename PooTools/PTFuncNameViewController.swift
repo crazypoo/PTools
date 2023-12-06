@@ -945,6 +945,17 @@ class PTFuncNameViewController: PTBaseViewController {
             let view = PTWhatsNewsViewController(titleItem: PTWhatsNewsTitleItem(),iKnowItem: iKnowItem,newsItem: [item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2,item2])
             view.whatsNewsShow(vc: self)
         }
+                
+        
+        PTGCDManager.gcdAfter(time: 5) {
+            let vvvvv = PTDynamicNotificationView(showTimes: 3, canTap: true) { view in
+                view.backgroundColor = .random
+            }
+            vvvvv.showNotification()
+            vvvvv.hideHandler = {
+                PTNSLogConsole("123123123123")
+            }
+        }
     }
     
     func flashAd(notifi:Notification) {
