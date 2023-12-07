@@ -371,10 +371,12 @@ public class PTCollectionView: UIView {
 #if POOTOOLS_LISTEMPTYDATA
         if self.viewConfig.showEmptyAlert {
             if #unavailable(iOS 17.0) {
-                self.showEmptyDataSet(currentScroller: collectionView)
-                self.lxf_tapEmptyView(collectionView) { sender in
-                    if self.emptyTap != nil {
-                        self.emptyTap!(sender)
+                if self.viewConfig.emptyViewConfig != nil {
+                    self.showEmptyDataSet(currentScroller: collectionView)
+                    self.lxf_tapEmptyView(collectionView) { sender in
+                        if self.emptyTap != nil {
+                            self.emptyTap!(sender)
+                        }
                     }
                 }
             } else {
@@ -663,8 +665,8 @@ extension PTCollectionView:LXFEmptyDataSetable {
         var font:UIFont = .appfont(size: 15)
         var textColor:UIColor = .black
 
-        let range = NSRange(location:0,length:self.viewConfig.emptyViewConfig.mainTitleAtt?.value.length ?? 0)
-        self.viewConfig.emptyViewConfig.mainTitleAtt?.value.enumerateAttributes(in: range, options: [], using: { att,range,_ in
+        let range = NSRange(location:0,length:self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.length ?? 0)
+        self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.enumerateAttributes(in: range, options: [], using: { att,range,_ in
             if let attFont = att[NSAttributedString.Key.font] as? UIFont {
                 font = attFont
             }
@@ -676,17 +678,17 @@ extension PTCollectionView:LXFEmptyDataSetable {
         
         self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
             [
-                .tipStr: self.viewConfig.emptyViewConfig.mainTitleAtt?.value.string as Any,
+                .tipStr: self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.string as Any,
                 .tipColor: textColor,
                 .tipFont:font,
                 .verticalOffset: 0,
-                .tipImage: self.viewConfig.emptyViewConfig.image as Any
+                .tipImage: self.viewConfig.emptyViewConfig?.image as Any
             ]
         }
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        self.viewConfig.emptyViewConfig.secondaryEmptyAtt?.value
+        self.viewConfig.emptyViewConfig?.secondaryEmptyAtt?.value
     }
 }
 #endif

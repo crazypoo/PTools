@@ -12,32 +12,32 @@ import SnapKit
 
 @available(iOS 17, *)
 // MARK: - 自定义Tip
-struct TestTip: Tip {
+public struct TestTip: Tip {
     // 标题
-    var title: Text {
+    public var title: Text {
         Text(tipTitles)
     }
 
     // 消息
-    var message: Text? {
+    public var message: Text? {
         Text(messageTitles)
     }
 
     // 图片
-    var asset: Image? {
+    public var asset: Image? {
         Image(systemName: "globe")
     }
     
-    var id: String {
+    public var id: String {
         newId
     }
     
     public var newId: String
-    var tipTitles:String
-    var messageTitles:String
+    public var tipTitles:String
+    public var messageTitles:String
 
     // 按钮
-    var actions: [Action] {
+    public var actions: [Action] {
         [
             Action(id: "id_more", title: "更多"),
             Action(id: "id_dismiss", title: "关闭")
@@ -47,10 +47,10 @@ struct TestTip: Tip {
     // 显示规则
     // 1. 基于参数规则
     @Parameter
-    static var showTip: Bool = false
+    public static var showTip: Bool = false
     // 2. 基于事件规则
-    static let appOpenedCount = Event(id: "appOpenedCount")
-    var rules: [Rule] {
+    public static let appOpenedCount = Event(id: "appOpenedCount")
+    public var rules: [Rule] {
         [
             //                // 在一周内事件次数 < 3
             //                $0.donations.donatedWithin(.week).count < 3
@@ -62,7 +62,7 @@ struct TestTip: Tip {
     }
 
     // 选项
-    var options: [TipOption] {
+    public var options: [TipOption] {
         [
             Tip.IgnoresDisplayFrequency(true), // 忽略显示频率限制即立即显示
 //            Tip.MaxDisplayCount(10) // 最大显示次数
@@ -72,8 +72,8 @@ struct TestTip: Tip {
 
 @available(iOS 17, *)
 // MARK: - 自定义Tip
-struct Test1Tip: Tip {
-    var title: Text {
+public struct Test1Tip: Tip {
+    public var title: Text {
         Text("操作提示")
             .foregroundStyle(.red)
             .font(.title2)
@@ -81,14 +81,14 @@ struct Test1Tip: Tip {
             .bold()
     }
 
-    var message: Text? {
+    public var message: Text? {
         Text("通过触摸屏幕显示TipKit")
             .foregroundStyle(.white)
             .font(.title3)
             .fontDesign(.monospaced)
     }
 
-    var asset: Image? {
+    public var asset: Image? {
         Image(systemName: "info.bubble")
     }
 }
@@ -102,7 +102,7 @@ public class PTTip: NSObject {
     /**
      这里只是一个常规使用在AppDelegate上的方法,如果自定义就自己在AppDelegate上编辑
      */
-    func appdelegateTipSet() {
+    public func appdelegateTipSet() {
         try? Tips.configure([
             // 显示频率
             .displayFrequency(.immediate),
@@ -111,11 +111,12 @@ public class PTTip: NSObject {
         ])
     }
     
-    func showTip(tips: any Tip = TestTip(newId: "normal", tipTitles: "1",messageTitles: "2"),
+    public func showTip(tips: any Tip,
                  sender:UIView,
                  content:PTBaseViewController,
                  customHandler:PTActionTask? = nil,
-                 actionHandler:((Tip.Action)->Void)? = nil) {
+                 actionHandler:((Tip.Action)->Void)? = nil,
+                        tipDismissHandler:PTActionTask? = nil) {
         if customHandler != nil {
             customHandler!()
         }
@@ -130,19 +131,20 @@ public class PTTip: NSObject {
                     })
                     content.present(tipUIPopoverViewController!, animated: true)
                 } else {
-                    tipUIPopoverViewController?.dismiss(animated: true, completion: nil)
+                    tipUIPopoverViewController?.dismiss(animated: true, completion: tipDismissHandler)
                 }
             }
         }
     }
     
-    func showTipsInView(tips: any Tip = Test1Tip(),
+    public func showTipsInView(tips: any Tip,
                         arrowEdge: Edge? = nil,
                         tipUISet:((TipUIView)->Void)? = nil,
                         content:PTBaseViewController,
                         closure: @escaping (_ make: ConstraintMaker) -> Void,
                         customHandler:PTActionTask? = nil,
-                        actionHandler:((Tip.Action)->Void)? = nil) {
+                        actionHandler:((Tip.Action)->Void)? = nil,
+                               tipDismissHandler:PTActionTask? = nil) {
         let tipUIView = TipUIView(tips, arrowEdge: arrowEdge) { actions in
             if actionHandler != nil {
                 actionHandler!(actions)
@@ -169,6 +171,9 @@ public class PTTip: NSObject {
                     tipUIView.snp.makeConstraints(closure)
                 } else {
                     tipUIView.removeFromSuperview()
+                    if tipDismissHandler != nil {
+                        tipDismissHandler!()
+                    }
                 }
             }
         }
