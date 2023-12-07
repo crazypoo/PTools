@@ -44,11 +44,7 @@ public class PTUnavailableFunction: NSObject {
     
     var unavailableView:UIContentUnavailableView?
     
-    lazy var unavailableLoadingView:UIContentUnavailableView = {
-        let loadingConfig = UIContentUnavailableConfiguration.loading()
-        let view = UIContentUnavailableView(configuration: loadingConfig)
-        return view
-    }()
+    var unavailableLoadingView:UIContentUnavailableView?
     
     public func showEmptyView(showIn:UIView) {
         emptyConfig = UIContentUnavailableConfiguration.empty()
@@ -87,8 +83,13 @@ public class PTUnavailableFunction: NSObject {
         PTGCDManager.gcdMain {
             self.unavailableView!.removeFromSuperview()
             self.unavailableView = nil
-            self.unavailableLoadingView.frame = showIn.bounds
-            showIn.addSubview(self.unavailableLoadingView)
+            
+            if self.unavailableLoadingView == nil {
+                let loadingConfig = UIContentUnavailableConfiguration.loading()
+                self.unavailableLoadingView = UIContentUnavailableView(configuration: loadingConfig)
+                self.unavailableLoadingView?.frame = showIn.frame
+                showIn.addSubview(self.unavailableLoadingView!)
+            }
         }
     }
     
@@ -97,7 +98,11 @@ public class PTUnavailableFunction: NSObject {
             unavailableView!.removeFromSuperview()
             unavailableView = nil
         }
-        unavailableLoadingView.removeFromSuperview()
+        
+        if self.unavailableLoadingView != nil {
+            self.unavailableLoadingView!.removeFromSuperview()
+            self.unavailableLoadingView = nil
+        }
         if task != nil {
             task!()
         }

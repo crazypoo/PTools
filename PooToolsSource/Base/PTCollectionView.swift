@@ -398,10 +398,15 @@ public class PTCollectionView: UIView {
         if #available(iOS 17.0, *) {
             if self.viewConfig.showEmptyAlert {
                 PTUnavailableFunction.share.emptyTap = {
-                    if self.emptyTap != nil {
-                        self.emptyTap!(nil)
+                    PTGCDManager.gcdMain {
+                        self.showEmptyLoading()
                     }
-                    self.showEmptyLoading()
+
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        if self.emptyTap != nil {
+                            self.emptyTap!(nil)
+                        }
+                    }
                 }
             }
         }
@@ -498,6 +503,7 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     private func showEmptyConfig() {
         if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
+            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>here1")
             PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
                 PTUnavailableFunction.share.showEmptyView(showIn: self)
             }
