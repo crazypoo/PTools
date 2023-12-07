@@ -1119,7 +1119,9 @@ class PTClipOverlayView: UIView {
         context?.setLineWidth(1)
         context?.beginPath()
         
-        let circleDiff: CGFloat = (3 - 2 * sqrt(2)) * (rect.width - 2 * PTClipOverlayView.cornerLineWidth) / 6
+        let sqrtValue = 2 * sqrt(2)
+        let lValue = 2 * PTClipOverlayView.cornerLineWidth
+        let circleDiff: CGFloat = (3 - sqrtValue) * (rect.width - lValue) / 6
         
         var dw: CGFloat = 3
         for i in 0..<4 {

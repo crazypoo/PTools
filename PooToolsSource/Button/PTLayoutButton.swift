@@ -238,7 +238,7 @@ public class PTLayoutButton: UIButton {
             normalTitle
         } set {
             if selectedTitle != newValue {
-                selectedTitle = newValue
+                self.selectedTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -252,7 +252,7 @@ public class PTLayoutButton: UIButton {
             normalTitle
         } set {
             if hightlightTitle != newValue {
-                hightlightTitle = newValue
+                self.hightlightTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -266,7 +266,7 @@ public class PTLayoutButton: UIButton {
             normalTitle
         } set {
             if disabledTitle != newValue {
-                disabledTitle = newValue
+                self.disabledTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -376,7 +376,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitle!
         } set {
             if selectedSubTitle != newValue {
-                selectedSubTitle = newValue
+                self.selectedSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -390,7 +390,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitle!
         } set {
             if hightlightSubTitle != newValue {
-                hightlightSubTitle = newValue
+                self.hightlightSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -404,7 +404,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitle!
         } set {
             if disabledSubTitle != newValue {
-                disabledSubTitle = newValue
+                self.disabledSubTitle = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -428,7 +428,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitleColor
         } set {
             if selectedSubTitleColor != newValue {
-                selectedSubTitleColor = newValue
+                self.selectedSubTitleColor = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -442,7 +442,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitleColor
         } set {
             if hightlightSubTitleColor != newValue {
-                hightlightSubTitleColor = newValue
+                self.hightlightSubTitleColor = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -475,7 +475,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitleFont
         } set {
             if selectedSubTitleFont != newValue {
-                selectedSubTitleFont = newValue
+                self.selectedSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -489,7 +489,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitleFont
         } set {
             if hightlightSubTitleFont != newValue {
-                hightlightSubTitleFont = newValue
+                self.hightlightSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {
@@ -503,7 +503,7 @@ public class PTLayoutButton: UIButton {
             normalSubTitleFont
         } set {
             if disabledSubTitleFont != newValue {
-                disabledSubTitleFont = newValue
+                self.disabledSubTitleFont = newValue
                 if #available(iOS 15.0, *) {
                     configuration = layoutConfig
                 } else {

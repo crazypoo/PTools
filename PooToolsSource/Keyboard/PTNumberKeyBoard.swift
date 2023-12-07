@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SnapKit
 
 @objc public enum PTKeyboardType:Int {
     case Normal
@@ -37,7 +38,7 @@ public class PTNumberKeyBoard: UIView {
             (bounds.size.width - CGFloat(PTNumberKeyBoard.kLineWidth * 2) - CGFloat(PTNumberKeyBoard.kButtonSpaceLeft * 4))/3
         } set {
             if kKeyW != newValue {
-                kKeyW = newValue
+                self.kKeyW = newValue
             }
         }
     }
@@ -131,9 +132,14 @@ public class PTNumberKeyBoard: UIView {
             for j in 0..<3 {
                 let button  = viewWithTag(j + 3 * i + 1)
                 button!.snp.makeConstraints { make in
+                    
+                    let hValue = PTNumberKeyBoard.kKeyH * CGFloat(i)
+                    let spaceValue = CGFloat(i) * PTNumberKeyBoard.kLineWidth
+                    let tValue = PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i + 1)
+                    
                     make.height.equalTo(PTNumberKeyBoard.kKeyH)
                     make.width.equalTo(self.kKeyW)
-                    make.top.equalToSuperview().inset(PTNumberKeyBoard.kKeyH * CGFloat(i) + CGFloat(i) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceTop * CGFloat(i + 1))
+                    make.top.equalToSuperview().inset(hValue + spaceValue + tValue)
                     make.left.equalTo(self.kKeyW * CGFloat(j) + CGFloat(j) * PTNumberKeyBoard.kLineWidth + PTNumberKeyBoard.kButtonSpaceLeft * CGFloat(j + 1))
                 }
             }

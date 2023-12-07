@@ -41,7 +41,7 @@ class PTTipsDemoController: PTBaseViewController {
             }
         })
         
-        shared.showTipsInView(content: self) { make in
+        shared.showTipsInView(tips:Test1Tip(),content: self) { make in
             make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.height.equalTo(100)
             make.centerY.equalToSuperview().inset(-100)
