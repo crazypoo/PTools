@@ -335,6 +335,7 @@ class PTFuncNameViewController: PTBaseViewController {
     }()
     
     lazy var collectionView : PTCollectionView = {
+                
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Normal
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
