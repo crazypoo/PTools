@@ -503,7 +503,6 @@ public class PTCollectionView: UIView {
     @available(iOS 17, *)
     private func showEmptyConfig() {
         if viewConfig.showEmptyAlert && (mSections.first?.rows.count ?? 0) == 0 {
-            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>here1")
             PTUnavailableFunction.share.hideUnavailableView(showIn: self) {
                 PTUnavailableFunction.share.showEmptyView(showIn: self)
             }
