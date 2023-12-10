@@ -285,6 +285,9 @@
 		55B13D5E2B1AFA8100C67EDA /* PTWeakProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */; };
 		55B159612B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159602B0CB38B00A64741 /* SVGAPlayerSwiftEdition.swift */; };
 		55B159632B0CD7CB00A64741 /* PTSVGAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B159622B0CD7CB00A64741 /* PTSVGAViewController.swift */; };
+		55B1F0A62B25821E00247ED1 /* PTPermissionSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A52B25821E00247ED1 /* PTPermissionSettingViewController.swift */; };
+		55B1F0A82B25878200247ED1 /* PTPermissionSettingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A72B25878200247ED1 /* PTPermissionSettingHeader.swift */; };
+		55B1F0AA2B25897B00247ED1 /* PTPermissionSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A92B25897B00247ED1 /* PTPermissionSettingCell.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
@@ -771,6 +774,9 @@
 		55B1596D2B0CEED100A64741 /* Rocket.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Rocket.svga; sourceTree = "<group>"; };
 		55B1596E2B0CEED200A64741 /* Goddess.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = Goddess.svga; sourceTree = "<group>"; };
 		55B1596F2B0CEED200A64741 /* heartbeat.svga */ = {isa = PBXFileReference; lastKnownFileType = file; path = heartbeat.svga; sourceTree = "<group>"; };
+		55B1F0A52B25821E00247ED1 /* PTPermissionSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingViewController.swift; sourceTree = "<group>"; };
+		55B1F0A72B25878200247ED1 /* PTPermissionSettingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingHeader.swift; sourceTree = "<group>"; };
+		55B1F0A92B25897B00247ED1 /* PTPermissionSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingCell.swift; sourceTree = "<group>"; };
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
@@ -1782,6 +1788,9 @@
 				554929E928F9089D00C82ABF /* PTPermissionModel.swift */,
 				55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */,
 				554929EA28F9089D00C82ABF /* PTPermissionViewController.swift */,
+				55B1F0A52B25821E00247ED1 /* PTPermissionSettingViewController.swift */,
+				55B1F0A72B25878200247ED1 /* PTPermissionSettingHeader.swift */,
+				55B1F0A92B25897B00247ED1 /* PTPermissionSettingCell.swift */,
 			);
 			path = PermissionCore;
 			sourceTree = "<group>";
@@ -2629,11 +2638,13 @@
 				55F162FC2B1963F700320925 /* PTRouterDebugTool.swift in Sources */,
 				550CE4A42AF12F8B0052539D /* PTActiveBuilder.swift in Sources */,
 				558D5EED2AAF548900C02042 /* PTRouterInterceptor.swift in Sources */,
+				55B1F0AA2B25897B00247ED1 /* PTPermissionSettingCell.swift in Sources */,
 				550CE4C52AF296CE0052539D /* PTSoundRecorder.swift in Sources */,
 				231D1683272CDEEA003D6F62 /* PSecurityStrategy.swift in Sources */,
 				558D5EF32AAF552F00C02042 /* PTRouter.swift in Sources */,
 				55C7A2B02926995900220926 /* PTPhoneNetWorkInfo.swift in Sources */,
 				5585F7052AD2B3AA00F878B4 /* PTVideoEditorSlider.swift in Sources */,
+				55B1F0A82B25878200247ED1 /* PTPermissionSettingHeader.swift in Sources */,
 				55024DE729F2855300244E44 /* PTEyeTrackingTestUtility.swift in Sources */,
 				55D59C6C28F538B600B4FF76 /* PTBaseViewController.swift in Sources */,
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
@@ -2896,6 +2907,7 @@
 				5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */,
 				5578ED8F29A9A3E400F3E0AC /* PTWaterWaveView.swift in Sources */,
 				5585F6E32AD29D8D00F878B4 /* PTVideoEditorPlayerView.swift in Sources */,
+				55B1F0A62B25821E00247ED1 /* PTPermissionSettingViewController.swift in Sources */,
 				5571F60C2AFD21BA00DB4420 /* PTAppDelegate.swift in Sources */,
 				5517CAC629F5532600E33ACE /* PTVision.swift in Sources */,
 				55B4FA282AE10303006D35F3 /* PTPermissionSpeech.swift in Sources */,

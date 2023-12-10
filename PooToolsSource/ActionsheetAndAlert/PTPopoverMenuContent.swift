@@ -127,7 +127,7 @@ class PTPopoverMenuContent: PTBaseViewController {
             cellModel.leftImage = value.icon
             cellModel.nameColor = self.viewConfig.textColor
             cellModel.cellFont = self.viewConfig.textFont
-            
+
             let row = PTRows(cls: PTFusionCell.self,ID: PTFusionCell.ID,dataModel: cellModel)
             rows.append(row)
         }

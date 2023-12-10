@@ -31,7 +31,31 @@ import Alamofire
 @main
 class AppDelegate: PTAppWindowsDelegate {
     
+    var permissionStatic = PTPermissionStatic.share
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        let locationAlways = PTPermissionModel()
+        locationAlways.type = .location(access: .always)
+        locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
+        
+        let locationWhen = PTPermissionModel()
+        locationWhen.type = .location(access: .whenInUse)
+        locationWhen.desc = "我们有需要的时候使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
+
+        let camera = PTPermissionModel()
+        camera.type = .camera
+        camera.desc = "我们需要使用你的照相机,来实现拍照后图片编辑功能"
+
+        let mic = PTPermissionModel()
+        mic.type = .microphone
+        mic.desc = "我们需要访问你的麦克风,来实现视频拍摄和编辑功能"
+
+        let photo = PTPermissionModel()
+        photo.type = .photoLibrary
+        photo.desc = "我们需要访问你的相册和照片,来使用图片的编辑功能"
+        
+        permissionStatic.permissionModels = [locationAlways,locationWhen,camera,mic,photo]
         
         if #available(iOS 17.0, *) {
             PTTip.shared.appdelegateTipSet()

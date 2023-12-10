@@ -211,3 +211,10 @@
 "PT HeartRate loading" = "正在獲取,請耐心等待,請唔好將手指拎開!";
 "PT Photo picker empty media" = "沒有發現你嘅媒體內容";
 "PT Photo picker album list title" = "相冊列表";
+"PT Permission authorized" = "已授權";
+"PT Permission rejected" = "已拒絕";
+"PT Permission Not determined" = "等待授權";
+"PT Permission Not support" = "不支持";
+"PT Permission Status title" = "狀態:";
+"PT Permission Go setting" = "去設置";
+"PT Permission Authorize title" = "授權";

@@ -51,6 +51,7 @@ public extension String {
     static let menu = "Menu"
     static let loading = "Loading"
     static let permission = "Permission"
+    static let permissionSetting = "Permission Setting"
     static let tipkit = "TipKit"
     static let document = "UIDocument"
     static let svga = "SVGA"
@@ -250,6 +251,8 @@ class PTFuncNameViewController: PTBaseViewController {
 
         let permission = self.rowBaseModel(name: .permission)
         
+        let permissionSetting = self.rowBaseModel(name: .permissionSetting)
+
         let tipkit = self.rowBaseModel(name: .tipkit)
         
         let document = self.rowBaseModel(name: .document)
@@ -264,7 +267,7 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let editimage = self.rowBaseModel(name: .editimage)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,tipkit,document,svga,swipe,scanQR,filtercamera,editimage]
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -676,31 +679,16 @@ class PTFuncNameViewController: PTBaseViewController {
                     }
                 })
             } else if itemRow.title == .permission {
-                let locationAlways = PTPermissionModel()
-                locationAlways.type = .location(access: .always)
-                locationAlways.desc = "我们有需要长时间使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
-                
-                let locationWhen = PTPermissionModel()
-                locationWhen.type = .location(access: .whenInUse)
-                locationWhen.desc = "我们有需要的时候使用你的定位信息,来在网络测速的时候在地图上大概显示你IP所属位置"
 
-                let camera = PTPermissionModel()
-                camera.type = .camera
-                camera.desc = "我们需要使用你的照相机,来实现拍照后图片编辑功能"
-
-                let mic = PTPermissionModel()
-                mic.type = .microphone
-                mic.desc = "我们需要访问你的麦克风,来实现视频拍摄和编辑功能"
-
-                let photo = PTPermissionModel()
-                photo.type = .photoLibrary
-                photo.desc = "我们需要访问你的相册和照片,来使用图片的编辑功能"
-
-                let permissionVC = PTPermissionViewController(datas: [locationAlways,locationWhen,camera,mic,photo])
+                let permissionVC = PTPermissionViewController()
                 permissionVC.permissionShow(vc: self)
                 permissionVC.viewDismissBlock = {
                 }
 
+            } else if itemRow.title == .permissionSetting {
+                
+                let permissionVC = PTPermissionSettingViewController()
+                permissionVC.permissionShow(vc: self)
             } else if itemRow.title == .language {
                 UIAlertController.baseActionSheet(title: .language,subTitle: self.currentSelectedLanguage, titles: LanguageKey.allNames, otherBlock: { sheet,index,title in
                     self.currentSelectedLanguage = LanguageKey.allValues[index].desc
@@ -871,9 +859,9 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.addActionHandlers { sender in
             let items = PTPopoverItem()
             items.name = "123123123123"
-            items.icon = "DemoImage"
+//            items.icon = "DemoImage"
             
-            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 100, sender: sender, arrowDirections: .any) { itemName, index in
+            self.listPopover(items: [items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items,items], popoverWidth: 300, sender: sender, arrowDirections: .any) { itemName, index in
                 PTNSLogConsole("?????????????>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(itemName)")
             }
         }

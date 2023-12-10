@@ -211,3 +211,10 @@
 "PT HeartRate loading" = "I'm doing it. Please wait patiently. Please don't keep your fingers away!";
 "PT Photo picker empty media" = "I didn't find your multimedia content.";
 "PT Photo picker album list title" = "List of albums";
+"PT Permission authorized" = "Authorized";
+"PT Permission rejected" = "Rejected";
+"PT Permission Not determined" = "Waiting for authorization";
+"PT Permission Not support" = "Not support";
+"PT Permission Status title" = "Status:";
+"PT Permission Go setting" = "Go to the settings";
+"PT Permission Authorize title" = "Authorize";

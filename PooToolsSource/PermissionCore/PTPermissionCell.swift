@@ -199,7 +199,7 @@ class PTPermissionCell: PTBaseNormalCell {
             authorizedButton.isSelected = true
         case .denied:
             authorizedButton.isSelected = true
-            authorizedButton.setTitle("已拒绝", for: .normal)
+            authorizedButton.setTitle("PT Permission rejected".localized(), for: .normal)
             authorizedButton.setTitleColor(PTAppBaseConfig.share.permissionDeniedColor, for: .normal)
         case .notDetermined:
             authorizedButton.isSelected = false
@@ -214,10 +214,10 @@ class PTPermissionCell: PTBaseNormalCell {
         let view = UIButton.init(type: .custom)
         view.titleLabel?.font = PTAppBaseConfig.share.permissionAuthorizedButtonFont
         view.setTitleColor(.systemBlue, for: .normal)
-        view.setTitle("询问授权", for: .normal)
+        view.setTitle("PT Permission Not determined".localized(), for: .normal)
         view.setTitleColor(.systemBlue, for: .selected)
-        view.setTitle("已授权", for: .selected)
-        view.setTitle("不支持", for: .disabled)
+        view.setTitle("PT Permission authorized".localized(), for: .selected)
+        view.setTitle("PT Permission Not support".localized(), for: .disabled)
         view.setTitleColor(PTAppBaseConfig.share.permissionNotSupportColor, for: .disabled)
         view.isUserInteractionEnabled = false
         return view
@@ -240,7 +240,7 @@ class PTPermissionCell: PTBaseNormalCell {
         authorizedButton.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(10)
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
-            make.width.equalTo(UIView.sizeFor(string: "询问授权", font: self.authorizedButton.titleLabel!.font!, height: 24).width + CGFloat.ScaleW(w: 10))
+            make.width.equalTo(UIView.sizeFor(string: "PT Permission Not support".localized(), font: self.authorizedButton.titleLabel!.font!, height: 24).width + CGFloat.ScaleW(w: 10))
         }
         
         cellIcon.snp.makeConstraints { make in

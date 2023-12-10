@@ -243,4 +243,11 @@ public class PTOpenSystemFunction: NSObject {
             PTAppStoreFunction.jumpLink(url: URL(string: uriString)!)
         }
     }
+    
+    public class func jumpCurrentAppSetting() {
+        if let bundleIdentifier = Bundle.main.bundleIdentifier,
+            let settingsURL = URL(string: UIApplication.openSettingsURLString + bundleIdentifier) {
+            PTAppStoreFunction.jumpLink(url: settingsURL)
+        }
+    }
 }

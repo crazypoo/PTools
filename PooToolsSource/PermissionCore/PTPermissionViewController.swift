@@ -17,9 +17,17 @@ import HealthKit
 import DeviceKit
 
 @objcMembers
+public class PTPermissionStatic:NSObject {
+    public static let share = PTPermissionStatic()
+    public var permissionModels:[PTPermissionModel] = [PTPermissionModel]()
+    public var permissionSettingFont:UIFont = .appfont(size: 16)
+}
+
+@objcMembers
 public class PTPermissionViewController: PTBaseViewController {
     
     fileprivate var permissions:[PTPermissionModel]!
+    fileprivate var permissionStatic = PTPermissionStatic.share
     
     public var viewDismissBlock:PTActionTask?
     
@@ -159,15 +167,6 @@ public class PTPermissionViewController: PTBaseViewController {
         return view
     }()
     
-    public init(datas:[PTPermissionModel]) {
-        super.init(nibName: nil, bundle: nil)
-        permissions = datas
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         PTCoreUserDefultsWrapper.AppFirstPermissionShowed = true
@@ -187,6 +186,8 @@ public class PTPermissionViewController: PTBaseViewController {
         self.zx_navBarBackgroundColorAlpha = 0
         self.zx_hideBaseNavBar = true
 #endif
+        
+        permissions = permissionStatic.permissionModels
         
         let closeButton = UIButton.init(type: .close)
         view?.addSubview(closeButton)
@@ -373,7 +374,7 @@ public class PTPermissionViewController: PTBaseViewController {
         }
     }
     
-    func permissionShow(vc:UIViewController) {
+    public func permissionShow(vc:UIViewController) {
         modalPresentationStyle = .formSheet
         vc.showDetailViewController(self, sender: nil)
     }

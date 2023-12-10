@@ -211,3 +211,10 @@
 "PT HeartRate loading" = "Lo estoy enciéndolo. Por favor, espera pacientemente. ¡Por favor, no alejes los dedos!";
 "PT Photo picker empty media" = "No encontré tu contenido multimedia.";
 "PT Photo picker album list title" = "Lista de álbumes";
+"PT Permission authorized" = "Autorizado";
+"PT Permission rejected" = "Rechazado";
+"PT Permission Not determined" = "Esperando autorización";
+"PT Permission Not support" = "No es compatible";
+"PT Permission Status title" = "Estado:";
+"PT Permission Go setting" = "Ir a la configuración";
+"PT Permission Authorize title" = "Autorizar";
