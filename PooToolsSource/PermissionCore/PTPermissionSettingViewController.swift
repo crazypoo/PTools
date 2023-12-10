@@ -88,7 +88,7 @@ public class PTPermissionSettingViewController: PTBaseViewController {
 
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitle = "PT Permission Authorize title".localized()
-        self.zx_navBar?.addSubviews([dismissButton,undoButton,redoButton,doneButton])
+        self.zx_navBar?.addSubviews([dismissButton])
         dismissButton.snp.makeConstraints { make in
             make.size.equalTo(34)
             make.bottom.equalToSuperview().inset(5)
