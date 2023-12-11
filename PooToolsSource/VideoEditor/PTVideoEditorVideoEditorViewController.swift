@@ -286,7 +286,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func makeSaveButtonItem() -> UIButton {
         let buttonItem = UIButton(type: .custom)
-        buttonItem.setImage("✅".emojiToImage(emojiFont: .appfont(size: 18)), for: .normal)
+        buttonItem.setImage("✅".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
         buttonItem.addActionHandlers { sender in
             self.save()
         }
@@ -295,7 +295,7 @@ fileprivate extension PTVideoEditorVideoEditorViewController {
 
     func makeDismissButtonItem() -> UIButton {
         let imageName = isModal ? "❌" : "◀️"
-        let image = imageName.emojiToImage(emojiFont: .appfont(size: 18))
+        let image = imageName.emojiToImage(emojiFont: .appfont(size: 20))
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in

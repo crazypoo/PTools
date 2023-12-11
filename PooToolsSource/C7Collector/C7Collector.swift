@@ -118,22 +118,18 @@ extension C7Collector {
     }
     
     func processingPhoto(with pixelBuffer: CVPixelBuffer?) {
-        PTNSLogConsole("3")
         guard let pixelBuffer = pixelBuffer else {
             return
         }
         delegate?.capturePhotoOutput?(self, pixelBuffer: pixelBuffer)
-        PTNSLogConsole("2")
 
         guard let texture = pixelBuffer.c7.toMTLTexture(textureCache: textureCache) else {
             return
         }
-        PTNSLogConsole("1")
 
         var dest = BoxxIO(element: texture, filters: filters)
         dest.transmitOutputRealTimeCommit = true
         dest.transmitOutput(success: { [weak self] desTexture in
-            PTNSLogConsole("0")
             guard let `self` = self else {
                 return
             }
@@ -141,7 +137,6 @@ extension C7Collector {
             guard var image = desTexture.c7.toImage() else {
                 return
             }
-            PTNSLogConsole("033")
 
             if self.autoCorrectDirection {
                 image = image.c7.fixOrientation()
@@ -151,5 +146,4 @@ extension C7Collector {
             }
         })
     }
-
 }

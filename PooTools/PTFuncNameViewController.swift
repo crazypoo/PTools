@@ -449,7 +449,7 @@ class PTFuncNameViewController: PTBaseViewController {
             if itemRow.title == .imageReview {
                 let model1 = PTMediaBrowserModel()
                 model1.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
-//                model1.imageInfo = "56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551312333444444"
+                model1.imageInfo = "56555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555555655555555555565555555555556555555555551312333444444"
                 
                 let model2 = PTMediaBrowserModel()
                 model2.imageURL = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
@@ -505,37 +505,41 @@ class PTFuncNameViewController: PTBaseViewController {
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow()
                 vc.selectImageBlock = { result, isOriginal in
+                    
                     PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
-                    if result.count > 1 {
-                        self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
-                            if let avAsset = avAsset {
-                                PTGCDManager.gcdMain {
-                                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-                                    controller.onEditCompleted
-                                        .sink {  editedPlayerItem, videoEdit in
-                                            self.videoEdit = videoEdit
-                                            
-                                            AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
-                                                if status == .completed {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
-                                                    }
-                                                } else if status == .failed {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        .store(in: &self.cancellables)
-                                    controller.modalPresentationStyle = .fullScreen
-                                    let nav = PTBaseNavControl(rootViewController: controller)
-                                    self.navigationController?.present(nav, animated: true)
-                                }
-                            } else {
-                                UIViewController.gobal_drop(title: "获取失败,请重试")
-                            }
-                        }
+                    if result.count > 0 {
+                        let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
+                        controller.videoEditorShow(vc: self)
+
+//                        self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
+//                            if let avAsset = avAsset {
+//                                PTGCDManager.gcdMain {
+//                                    let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+//                                    controller.onEditCompleted
+//                                        .sink {  editedPlayerItem, videoEdit in
+//                                            self.videoEdit = videoEdit
+//                                            
+//                                            AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
+//                                                if status == .completed {
+//                                                    PTGCDManager.gcdMain {
+//                                                        PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
+//                                                    }
+//                                                } else if status == .failed {
+//                                                    PTGCDManager.gcdMain {
+//                                                        PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
+//                                                    }
+//                                                }
+//                                            }
+//                                        }
+//                                        .store(in: &self.cancellables)
+//                                    controller.modalPresentationStyle = .fullScreen
+//                                    let nav = PTBaseNavControl(rootViewController: controller)
+//                                    self.navigationController?.present(nav, animated: true)
+//                                }
+//                            } else {
+//                                UIViewController.gobal_drop(title: "获取失败,请重试")
+//                            }
+//                        }
                     } else {
                         PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
                     }

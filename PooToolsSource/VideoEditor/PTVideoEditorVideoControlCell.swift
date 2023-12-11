@@ -12,6 +12,7 @@ import SwifterSwift
 
 final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
     // MARK: Private Properties
+    static let ID = "PTVideoEditorVideoControlCell"
     
     private lazy var buttonView : PTLayoutButton = {
         let view = PTLayoutButton()
