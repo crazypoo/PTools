@@ -13,7 +13,7 @@ import SnapKit
 import ZXNavigationBar
 #endif
 
-class PTVideoEditorSpeedVideoControlViewController: PTBaseViewController {
+class PTVideoEditorSpeedVideoControlViewController: PTFloatingBaseViewController {
 
     // MARK: Public Properties
 

@@ -10,7 +10,7 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-final class PTVideoEditorVideoControlCell: PTBaseNormalCell {
+class PTVideoEditorVideoControlCell: PTBaseNormalCell {
     // MARK: Private Properties
     static let ID = "PTVideoEditorVideoControlCell"
     

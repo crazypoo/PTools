@@ -477,12 +477,14 @@ public extension UIViewController {
         present(modalViewController, animated: true,completion: completion)
     }
     
-#if POOTOOLS_FLOATINGPANEL
     func sheetPresent_floating(modalViewController:PTFloatingBaseViewController,type:PTSheetPresentType,@PTClampedProperyWrapper(range:0.2...1) scale:CGFloat,panGesDelegate:(UIViewController & UIGestureRecognizerDelegate)? = PTUtils.getCurrentVC() as! PTBaseViewController,completion:PTActionTask?,dismissCompletion:PTActionTask?) {
-        if #available(iOS 15.0, *) {
-            modalViewController.dismissCompletion = dismissCompletion
-            sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
-        } else {
+        switch type {
+        case .custom:
+            if #available(iOS 16.0, *) {
+                modalViewController.dismissCompletion = dismissCompletion
+                sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
+            } else {
+#if POOTOOLS_FLOATINGPANEL
             switch type {
             case .large:
                 modalViewController.viewScale = 0.9
@@ -493,9 +495,32 @@ public extension UIViewController {
             }
             modalViewController.completion = completion
             PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
+#else
+            PTAlertTipControl.present(subtitle:"須要導入POOTOOLS_FLOATINGPANEL",icon:.Error,style: .Normal)
+#endif
+            }
+        default:
+            if #available(iOS 15.0, *) {
+                modalViewController.dismissCompletion = dismissCompletion
+                sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
+            } else {
+    #if POOTOOLS_FLOATINGPANEL
+                switch type {
+                case .large:
+                    modalViewController.viewScale = 0.9
+                case .medium:
+                    modalViewController.viewScale = 0.5
+                case .custom:
+                    modalViewController.viewScale = scale
+                }
+                modalViewController.completion = completion
+                PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
+    #else
+                PTAlertTipControl.present(subtitle:"須要導入POOTOOLS_FLOATINGPANEL",icon:.Error,style: .Normal)
+    #endif
+            }
         }
     }
-#endif
 }
 
 extension UIViewController:UIPopoverPresentationControllerDelegate {

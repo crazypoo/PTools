@@ -208,12 +208,12 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         return view
     }()
     
-    var bottomControlModels:[PTVideoEditorVideoControlCellViewModel] {
+    lazy var bottomControlModels:[PTVideoEditorVideoControlCellViewModel] = {
         let speedModel = PTVideoEditorVideoControlCellViewModel(videoControl: .speed)
         let trimModel = PTVideoEditorVideoControlCellViewModel(videoControl: .trim)
         let cropModel = PTVideoEditorVideoControlCellViewModel(videoControl: .crop)
         return [speedModel,trimModel,cropModel]
-    }
+    }()
     
     lazy var bottomControlCollection:PTCollectionView = {
         let collectionConfig = PTCollectionViewConfig()
@@ -236,7 +236,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
             var groupW:CGFloat = itemOriginalX
             sectionModel.rows.enumerated().forEach { (index,model) in
                 let cellHeight:CGFloat = cellHeight
-                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupW, y: groupH, width: cellWidth, height: cellHeight), zIndex: 1000+index)
+                let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupW, y: 0, width: cellWidth, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
                 groupW += cellWidth
                 if index == (self.bottomControlModels.count - 1) {
@@ -254,6 +254,32 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
             let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorVideoControlCell
             cell.configure(with: cellModel)
             return cell
+        }
+        view.collectionDidSelect = { collectionViews,sectionModel,indexPath in
+            let itemRow = sectionModel.rows[indexPath.row]
+            let cellModel = itemRow.dataModel as! PTVideoEditorVideoControlCellViewModel
+            switch cellModel.videoControl {
+            case .speed:
+                let vc = PTVideoEditorToolsSpeedControl(speed: 1)
+                vc.speedHandler = { value in
+                }
+                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
+                    
+                },dismissCompletion:{
+                    
+                })
+            case .trim:
+                let vc = PTVideoEditorToolsTrimControl(trimPositions: (0.0,1.0), asset: self.videoAVAsset)
+                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
+                    
+                },dismissCompletion:{
+                    
+                })
+                vc.trimPosotionsHandler = { value in
+                }
+            case .crop:
+                break
+            }
         }
         return view
     }()
@@ -436,7 +462,9 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         let sections = [PTSection(rows: rows)]
-        bottomControlCollection.showCollectionDetail(collectionData: sections)
+        bottomControlCollection.showCollectionDetail(collectionData: sections) { cView in
+            PTNSLogConsole("12312312312312312")
+        }
     }
     
     public func videoEditorShow(vc:UIViewController) {
