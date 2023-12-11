@@ -77,7 +77,7 @@ class PTMediaBrowserBottom: UIView {
 
         addSubviews([pageControlView, moreActionButton, titleLabel])
         pageControlView.snp.makeConstraints { make in
-            make.left.right.equalToSuperview()
+            make.left.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace)
             make.height.equalTo(PageControlHeight)
         }

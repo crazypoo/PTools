@@ -133,7 +133,12 @@ public class PTMediaBrowserController: PTBaseViewController {
         }
         
         collectionView.collectionDidEndDisplay = { collectionView,cell,sectionModel,indexPath in
-            let itemRow = sectionModel.rows[indexPath.row]
+            
+            let currentCell = collectionView.visibleCells.first as! PTMediaBrowserCell
+            let currentIndex = collectionView.indexPath(for: currentCell)!
+            
+            
+            let itemRow = sectionModel.rows[currentIndex.row]
             let cellModel = (itemRow.dataModel as! PTMediaBrowserModel)
             let endCell = cell as! PTMediaBrowserCell
             switch endCell.currentCellType {
@@ -143,28 +148,25 @@ public class PTMediaBrowserController: PTBaseViewController {
                 break
             }
             
-            var currentPageControlValue = 0
             switch self.viewConfig.pageControlOption {
             case .system:
-                currentPageControlValue = (self.bottomControl.pageControlView as! UIPageControl).currentPage
+                (self.bottomControl.pageControlView as! UIPageControl).currentPage = currentIndex.row
             case .fill:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTFilledPageControl).currentPage
+                (self.bottomControl.pageControlView as! PTFilledPageControl).progress = CGFloat(currentIndex.row)
             case .pill:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTPillPageControl).currentPage
+                (self.bottomControl.pageControlView as! PTPillPageControl).progress = CGFloat(currentIndex.row)
             case .snake:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTSnakePageControl).currentPage
+                (self.bottomControl.pageControlView as! PTSnakePageControl).progress = CGFloat(currentIndex.row)
             case .image:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTImagePageControl).currentPage
+                (self.bottomControl.pageControlView as! PTImagePageControl).currentPage = currentIndex.row
             case .scrolling:
-                currentPageControlValue = (self.bottomControl.pageControlView as! PTScrollingPageControl).currentPage
+                (self.bottomControl.pageControlView as! PTScrollingPageControl).progress = CGFloat(currentIndex.row)
             }
             
-            if currentPageControlValue == indexPath.row {
-                if !self.navControl.titleLabel.isHidden {
-                    self.navControl.titleLabel.text = "\(indexPath.row + 1)/\(self.viewConfig.mediaData.count)"
-                }
-                self.updateBottom(models: cellModel)
+            if !self.navControl.titleLabel.isHidden {
+                self.navControl.titleLabel.text = "\(currentIndex.row + 1)/\(self.viewConfig.mediaData.count)"
             }
+            self.updateBottom(models: cellModel)
         }
         
         collectionView.collectionWillDisplay = { collectionView,cell,sectionModel,indexPath in
@@ -288,7 +290,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         
         bottomControl.snp.makeConstraints { make in
             make.left.right.bottom.equalToSuperview()
-            make.height.equalTo(CGFloat.kTabbarHeight_Total)
+            make.height.equalTo(CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10)
         }
         
         //MARK: 我都唔知点嗨解,懒加载用唔到,系都要在外部调用,小喇叭
@@ -745,7 +747,7 @@ fileprivate extension PTMediaBrowserController {
             case .Empty:
                 bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlHeight + PageControlBottomSpace + 10
             default:
-                bottomH = CGFloat.kTabbarHeight_Total
+                bottomH = CGFloat.kTabbarSaveAreaHeight + PageControlBottomSpace + PageControlHeight + 10 + 34 + 10
             }
         } else {
             if numberOfLines(models.imageInfo) > numberOfVisibleLines {
