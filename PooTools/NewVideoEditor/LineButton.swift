@@ -21,7 +21,7 @@
 import UIKit
 
 // Called when the button's highlighted is false.
-protocol LineButtonDelegate: class {
+protocol LineButtonDelegate: AnyObject {
     func lineButtonUnHighlighted()
 }
 

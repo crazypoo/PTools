@@ -179,12 +179,12 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
             if sender.isSelected {
                 
                 if self.videoTime > self.currentPlayTime {
-                    let cmTime = CMTimeMakeWithSeconds(self.currentPlayTime, preferredTimescale: Int32(NSEC_PER_SEC))
+                    let cmTime = CMTimeMakeWithSeconds(self.currentPlayTime, preferredTimescale: Int32(NSEC_PER_MSEC))
                     self.avPlayer.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 } else {
                     self.avPlayer.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero)
                 }
-                let interval = CMTime(seconds: 0.001, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
+                let interval = CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
                 let timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { time in
                     // 在这里处理播放时间的更新
                     PTGCDManager.gcdMain {
@@ -426,10 +426,8 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
     
     var videoRect: CGRect {
         if self.degree == 0 || self.degree == 180 {
-            PTNSLogConsole("12312312312")
             return self.originImageView.frame
         } else if self.degree == 90 || self.degree == 270 {
-            PTNSLogConsole("33333333")
             return CGRect(x: self.originImageView.frame.origin.y, y: self.originImageView.frame.origin.x, width: self.originImageView.size.height, height: self.originImageView.size.width)
         } else {
             return .zero
@@ -466,10 +464,8 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                 path.append(UIBezierPath(rect: self.dimView.bounds))
                 self.dimView.mask(path.cgPath, duration: 0, animated: false)
                 self.dimView.isHidden = false
-                PTNSLogConsole("不隐藏")
             } else {
                 self.dimView.isHidden = true
-                PTNSLogConsole("隐藏")
             }
         }
     }
@@ -566,9 +562,11 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                 
                 let scale = self.imageContent.frame.size.height / imageSize.height
                 let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
-                self.originImageView.image = image
+                self.originImageView.image = image!.pt.fixOrientation()
                 self.originImageView.snp.makeConstraints { make in
-                    make.size.equalTo(showImageSize)
+//                    make.size.equalTo(showImageSize)
+                    make.left.right.lessThanOrEqualToSuperview()
+                    make.top.bottom.equalToSuperview()
                     make.centerX.centerY.equalToSuperview()
                 }
 //                self.currentClipStatus = PTClipStatus(editRect: CGRect(origin: .zero, size: image!.size))
@@ -578,7 +576,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
             self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
             self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
              
-            PTHarBethFilter.share.texureSize = self.originImageView.frame.size
+//            PTHarBethFilter.share.texureSize = self.originImageView.frame.size
 //            self.c7Player.filters = [PTHarBethFilter.crosshatch.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
                         
             PTGCDManager.gcdMain {

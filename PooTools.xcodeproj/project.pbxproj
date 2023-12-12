@@ -1759,21 +1759,6 @@
 				5585F6DA2AD29C2300F878B4 /* UIView+VideoEditorEX.swift */,
 				5585F6DC2AD29C4400F878B4 /* UIViewController+VideoEditorEX.swift */,
 				55F162E92B1951E500320925 /* PTVideoEditorConfig.swift */,
-				559C3D2E2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift */,
-				559C3D3F2B2732FB00EE46BC /* PTVideoEditorToolsSpeedControl.swift */,
-				559C3D412B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift */,
-				559C3D452B27571900EE46BC /* PTVideoEditorBaseFloatingViewController.swift */,
-				559C3D432B2750E200EE46BC /* PTVideoEditorToolsTrimmingControl.swift */,
-				559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */,
-				559C3D482B282F9E00EE46BC /* BezierPath+.swift */,
-				559C3D4C2B282F9E00EE46BC /* CropDimView.swift */,
-				559C3D4F2B282F9E00EE46BC /* CropPickerView.swift */,
-				559C3D4B2B282F9E00EE46BC /* CropResult.swift */,
-				559C3D4A2B282F9E00EE46BC /* CropView.swift */,
-				559C3D492B282F9E00EE46BC /* LineButton.swift */,
-				559C3D4D2B282F9E00EE46BC /* NSLayoutConstraint+.swift */,
-				559C3D472B282F9D00EE46BC /* UIImageView+.swift */,
-				559C3D4E2B282F9E00EE46BC /* UIView+.swift */,
 			);
 			path = VideoEditor;
 			sourceTree = "<group>";
@@ -1818,6 +1803,28 @@
 				55F162FB2B1963F700320925 /* PTRouterDebugTool.swift */,
 			);
 			path = Router;
+			sourceTree = "<group>";
+		};
+		559C3D632B28B0D100EE46BC /* NewVideoEditor */ = {
+			isa = PBXGroup;
+			children = (
+				559C3D2E2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift */,
+				559C3D3F2B2732FB00EE46BC /* PTVideoEditorToolsSpeedControl.swift */,
+				559C3D412B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift */,
+				559C3D452B27571900EE46BC /* PTVideoEditorBaseFloatingViewController.swift */,
+				559C3D432B2750E200EE46BC /* PTVideoEditorToolsTrimmingControl.swift */,
+				559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */,
+				559C3D482B282F9E00EE46BC /* BezierPath+.swift */,
+				559C3D4C2B282F9E00EE46BC /* CropDimView.swift */,
+				559C3D4F2B282F9E00EE46BC /* CropPickerView.swift */,
+				559C3D4B2B282F9E00EE46BC /* CropResult.swift */,
+				559C3D4A2B282F9E00EE46BC /* CropView.swift */,
+				559C3D492B282F9E00EE46BC /* LineButton.swift */,
+				559C3D4D2B282F9E00EE46BC /* NSLayoutConstraint+.swift */,
+				559C3D472B282F9D00EE46BC /* UIImageView+.swift */,
+				559C3D4E2B282F9E00EE46BC /* UIView+.swift */,
+			);
+			path = NewVideoEditor;
 			sourceTree = "<group>";
 		};
 		55B13D482B1AE72600C67EDA /* ImageEditor */ = {
@@ -2411,6 +2418,7 @@
 		6003F593195388D20070C39A /* Example for PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				559C3D632B28B0D100EE46BC /* NewVideoEditor */,
 				557A29FC2B1CCD4800BBCDF7 /* JWT */,
 				55B1596F2B0CEED200A64741 /* heartbeat.svga */,
 				55B1596E2B0CEED200A64741 /* Goddess.svga */,

@@ -108,10 +108,10 @@ extension C7Collector {
             guard var image = desTexture.c7.toImage() else {
                 return
             }
-            if self.autoCorrectDirection {
-                image = image.c7.fixOrientation()
-            }
             PTGCDManager.gcdMain {
+                if self.autoCorrectDirection {
+                    image = image.c7.fixOrientation()
+                }
                 self.delegate?.preview(self, fliter: image)
             }
         })
