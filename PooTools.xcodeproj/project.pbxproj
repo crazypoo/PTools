@@ -1708,13 +1708,6 @@
 		5585F6C72AD298C800F878B4 /* VideoEditor */ = {
 			isa = PBXGroup;
 			children = (
-				559C3D362B26C19700EE46BC /* CompositionInstruction.swift */,
-				559C3D332B26C19600EE46BC /* Compositor.swift */,
-				559C3D342B26C19600EE46BC /* Error.swift */,
-				559C3D312B26C19600EE46BC /* Exporter.swift */,
-				559C3D352B26C19600EE46BC /* MovieFileType.swift */,
-				559C3D372B26C19700EE46BC /* Options.swift */,
-				559C3D322B26C19600EE46BC /* Provider.swift */,
 				5585F6D22AD29AD800F878B4 /* AVPlayer+VideoEditorEX.swift */,
 				5585F6D42AD29B4700F878B4 /* CALayer+VideoEditorEX.swift */,
 				5585F6D62AD29B6800F878B4 /* DateComponentsFormatter+VideoEditorEX.swift */,
@@ -1808,6 +1801,13 @@
 		559C3D632B28B0D100EE46BC /* NewVideoEditor */ = {
 			isa = PBXGroup;
 			children = (
+				559C3D362B26C19700EE46BC /* CompositionInstruction.swift */,
+				559C3D332B26C19600EE46BC /* Compositor.swift */,
+				559C3D342B26C19600EE46BC /* Error.swift */,
+				559C3D312B26C19600EE46BC /* Exporter.swift */,
+				559C3D352B26C19600EE46BC /* MovieFileType.swift */,
+				559C3D372B26C19700EE46BC /* Options.swift */,
+				559C3D322B26C19600EE46BC /* Provider.swift */,
 				559C3D2E2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift */,
 				559C3D3F2B2732FB00EE46BC /* PTVideoEditorToolsSpeedControl.swift */,
 				559C3D412B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift */,
