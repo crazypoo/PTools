@@ -168,6 +168,8 @@ fileprivate extension PTVideoEditorVideoControlViewController {
             return speedVideoControlViewController
         case .trim:
             return trimVideoControlViewController
+        default:
+            return trimVideoControlViewController
         }
     }
 

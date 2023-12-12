@@ -12,4 +12,5 @@ enum PTVideoEditorVideoControl: CaseIterable {
     case speed
     case trim
     case crop
+    case rotate
 }

@@ -19,6 +19,8 @@ final class PTVideoEditorVideoControlViewModel {
             return "PT Video editor function trim".localized()
         case .crop:
             return "PT Video editor function crop".localized()
+        case .rotate:
+            return "PT Video editor function rotate".localized()
         }
     }
 
@@ -30,6 +32,8 @@ final class PTVideoEditorVideoControlViewModel {
             return "Trim"
         case .crop:
             return "Crop"
+        case .rotate:
+            return "Rotate"
         }
     }
 

@@ -17,6 +17,72 @@ import SafeSFSymbols
 import ZXNavigationBar
 #endif
 
+extension UIImage {
+    func rotate(radians: Float) -> UIImage? {
+        var newSize = CGRect(origin: .zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
+        newSize.width = floor(newSize.width)
+        newSize.height = floor(newSize.height)
+        UIGraphicsBeginImageContextWithOptions(newSize, false, self.scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.translateBy(x: newSize.width/2, y: newSize.height/2)
+        context?.rotate(by: CGFloat(radians))
+        self.draw(in: CGRect(x: -self.size.width/2, y: -self.size.height/2, width: self.size.width, height: self.size.height))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return newImage
+    }
+}
+
+class PTCropDimView: UIView {
+    private var path: CGPath?
+
+    init() {
+        super.init(frame: .zero)
+        self.isUserInteractionEnabled = false
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
+    func mask(_ path: CGPath, duration: TimeInterval, animated: Bool) {
+        self.path = path
+        if let mask = self.layer.mask as? CAShapeLayer {
+            mask.removeAllAnimations()
+            if animated {
+                let animation = CABasicAnimation(keyPath: "path")
+                animation.delegate = self
+                animation.fromValue = mask.path
+                animation.toValue = path
+                animation.byValue = path
+                animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeInEaseOut)
+                animation.isRemovedOnCompletion = false
+                animation.fillMode = .forwards
+                animation.duration = duration
+                mask.add(animation, forKey: "path")
+            } else {
+                mask.path = path
+            }
+        } else {
+            let maskLayer = CAShapeLayer()
+            maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
+            maskLayer.backgroundColor = UIColor.clear.cgColor
+            maskLayer.path = path
+            self.layer.mask = maskLayer
+        }
+    }
+}
+
+extension PTCropDimView:CAAnimationDelegate {
+    public func animationDidStop(_ anim: CAAnimation, finished flag: Bool) {
+        guard let path = self.path else { return }
+        if let mask = self.layer.mask as? CAShapeLayer {
+            mask.removeAllAnimations()
+            mask.path = path
+        }
+    }
+}
+
 @objcMembers
 class PTVideoEditorToolsViewController: PTBaseViewController {
 
@@ -25,6 +91,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         let buttonItem = UIButton(type: .custom)
         buttonItem.setImage(image, for: .normal)
         buttonItem.addActionHandlers { sender in
+            self.c7Player.pause()
             self.returnFrontVC()
         }
         return buttonItem
@@ -69,6 +136,12 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
     fileprivate var videoAsset:PHAsset!
     fileprivate var videoAVAsset:AVAsset!
     var c7Player:C7CollectorVideo!
+    
+    lazy var imageContent:UIView = {
+        let view = UIView()
+        return view
+    }()
+    
     lazy var originImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
@@ -111,7 +184,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                 } else {
                     self.avPlayer.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero)
                 }
-                let interval = CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+                let interval = CMTime(seconds: 0.001, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
                 let timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { time in
                     // 在这里处理播放时间的更新
                     PTGCDManager.gcdMain {
@@ -133,7 +206,6 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                 }
                 self.c7Player.play()
-
             } else {
                 self.c7Player.pause()
             }
@@ -169,6 +241,9 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
     var isSeeking: Bool = false {
         didSet {
             if isSeeking {
+                if self.playerButton.isSelected {
+                    self.playerButton.isSelected = false
+                }
                 self.c7Player.pause()
             }
         }
@@ -212,7 +287,8 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         let speedModel = PTVideoEditorVideoControlCellViewModel(videoControl: .speed)
         let trimModel = PTVideoEditorVideoControlCellViewModel(videoControl: .trim)
         let cropModel = PTVideoEditorVideoControlCellViewModel(videoControl: .crop)
-        return [speedModel,trimModel,cropModel]
+        let rotateModel = PTVideoEditorVideoControlCellViewModel(videoControl: .rotate)
+        return [speedModel,trimModel,cropModel,rotateModel]
     }()
     
     lazy var bottomControlCollection:PTCollectionView = {
@@ -278,12 +354,126 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                 vc.trimPosotionsHandler = { value in
                 }
             case .crop:
-                break
+                let currentTime = self.avPlayer.currentTime()
+                guard let asset = self.avPlayer.currentItem?.asset else { return }
+                let imageGenerator = AVAssetImageGenerator(asset: asset)
+                imageGenerator.appliesPreferredTrackTransform = true
+                guard let imageRef = try? imageGenerator.copyCGImage(at: currentTime, actualTime: nil) else { return }
+                guard let image = UIImage(cgImage: imageRef).rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
+                
+                let vc = PTVideoEditorToolsCropControl(image: image)
+                vc.cropImageHandler = { imageSize,cropFrame in
+                    let videoRect = self.videoRect
+                    let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
+                    let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
+                    let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
+                    let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
+                    let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
+                    self.dimFrame = dimFrame
+                }
+//                let vc = PTCutViewController(image: self.originImageView.image!, status: self.currentClipStatus)
+//                vc.clipDoneBlock = { angle, editRect, selectRatio in
+//                    switch angle {
+//                    case -90.0:
+//                        self.rotate = 3
+//                    case -180.0:
+//                        self.rotate = 2
+//                    case -270.0:
+//                        self.rotate = 1
+//                    default:
+//                        self.rotate = 0
+//                    }
+//                    var transform = CGAffineTransform.identity
+//                    let rotate = CGFloat(.pi / 2 * self.rotate)
+//                    transform = transform.rotated(by: rotate)
+//                    self.originImageView.transform = transform
+//                    PTNSLogConsole("\(angle)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(editRect),\(selectRatio)")
+//                }
+                let nav = PTBaseNavControl(rootViewController: vc)
+                nav.modalPresentationStyle = .fullScreen
+                self.present(nav, animated: false) {
+                }
+
+            case .rotate:
+                var transform = CGAffineTransform.identity
+                self.rotate += 1
+                if self.rotate == 4 {
+                    self.rotate = 0
+                    self.degree = 0
+                } else {
+                    let rotate = CGFloat(.pi / 2 * self.rotate)
+                    transform = transform.rotated(by: rotate)
+                    self.degree = rotate * 180 / CGFloat.pi
+                }
+                self.dimFrame = nil
+                self.originImageView.transform = transform
             }
         }
         return view
     }()
+    
+    //MARK: 旋轉
+    fileprivate var rotate:Double = 0
+    
+    //MARK: 裁剪
+//    private var currentClipStatus: PTClipStatus!
 
+    private let dimView: PTCropDimView = {
+        let dimView = PTCropDimView()
+        dimView.backgroundColor = UIColor(white: 0/255, alpha: 0.8)
+        return dimView
+    }()
+    
+    var videoRect: CGRect {
+        if self.degree == 0 || self.degree == 180 {
+            PTNSLogConsole("12312312312")
+            return self.originImageView.frame
+        } else if self.degree == 90 || self.degree == 270 {
+            PTNSLogConsole("33333333")
+            return CGRect(x: self.originImageView.frame.origin.y, y: self.originImageView.frame.origin.x, width: self.originImageView.size.height, height: self.originImageView.size.width)
+        } else {
+            return .zero
+        }
+    }
+    
+    var degree: CGFloat = 0 {
+        didSet {
+            let dimFrame = self.dimFrame
+            self.dimFrame = dimFrame
+        }
+    }
+
+    var dimFrame: CGRect? = nil {
+        didSet {
+            if let dimFrame = self.dimFrame {
+                var maskX: CGFloat = 0
+                var maskY: CGFloat = 0
+                var maskWidth: CGFloat = 0
+                var maskHeight: CGFloat = 0
+                if self.degree == 0 || self.degree == 180 {
+                    maskX = ((self.dimView.frame.width - self.originImageView.width) / 2) + dimFrame.origin.x
+                    maskY = ((self.dimView.frame.height - self.originImageView.height) / 2) + dimFrame.origin.y
+                    maskWidth = dimFrame.width
+                    maskHeight = dimFrame.height
+                } else if self.degree == 90 || self.degree == 270 {
+                    maskX = ((self.dimView.frame.width - self.originImageView.height) / 2) + dimFrame.origin.x
+                    maskY = ((self.dimView.frame.height - self.originImageView.width) / 2) + dimFrame.origin.y
+                    maskWidth = dimFrame.width
+                    maskHeight = dimFrame.height
+                }
+                let rect = CGRect(x: maskX, y: maskY, width: maskWidth, height: maskHeight)
+                let path = UIBezierPath(rect: rect)
+                path.append(UIBezierPath(rect: self.dimView.bounds))
+                self.dimView.mask(path.cgPath, duration: 0, animated: false)
+                self.dimView.isHidden = false
+                PTNSLogConsole("不隐藏")
+            } else {
+                self.dimView.isHidden = true
+                PTNSLogConsole("隐藏")
+            }
+        }
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
@@ -323,19 +513,27 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButtonItem)
 #endif
         
-        view.addSubviews([originImageView,playContent,bottomContent,timeLineContent])
-        originImageView.snp.makeConstraints { make in
+        view.addSubviews([imageContent,playContent,bottomContent,timeLineContent])
+        imageContent.snp.makeConstraints { make in
 #if POOTOOLS_NAVBARCONTROLLER
             make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
 #else
             make.top.equalToSuperview().inset(10)
 #endif
             make.left.right.equalToSuperview().inset(64)
-            make.height.equalTo(self.originImageView.snp.width)
+            make.height.equalTo(self.imageContent.snp.width)
         }
         
+        imageContent.addSubview(originImageView)
+                
+        originImageView.addSubview(dimView)
+        dimView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        dimFrame = nil
+        
         playContent.snp.makeConstraints { make in
-            make.top.equalTo(self.originImageView.snp.bottom).offset(7.5)
+            make.top.equalTo(self.imageContent.snp.bottom).offset(7.5)
             make.left.right.equalToSuperview()
             make.height.equalTo(44)
         }
@@ -363,8 +561,17 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         convertPHAssetToAVAsset(phAsset: videoAsset) { avAsset in
             self.videoAVAsset = avAsset
             
-            UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset) { image in
+            UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+                let imageSize = image!.size
+                
+                let scale = self.imageContent.frame.size.height / imageSize.height
+                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
                 self.originImageView.image = image
+                self.originImageView.snp.makeConstraints { make in
+                    make.size.equalTo(showImageSize)
+                    make.centerX.centerY.equalToSuperview()
+                }
+//                self.currentClipStatus = PTClipStatus(editRect: CGRect(origin: .zero, size: image!.size))
             }
             
             self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
@@ -463,7 +670,6 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         
         let sections = [PTSection(rows: rows)]
         bottomControlCollection.showCollectionDetail(collectionData: sections) { cView in
-            PTNSLogConsole("12312312312312312")
         }
     }
     

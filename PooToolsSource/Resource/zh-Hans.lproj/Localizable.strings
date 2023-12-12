@@ -112,8 +112,8 @@
 "PT Sign font" = "正楷,工整书写";
 "PT Video editor leave" = "离开后将不会保存";
 "PT Video editor function speed" = "速度";
-"PT Video editor function trim" = "裁剪";
-"PT Video editor function crop" = "风格";
+"PT Video editor function trim" = "时间线";
+"PT Video editor function crop" = "裁剪";
 "PT Video editor crop vertical" = "垂直";
 "PT Video editor crop standar" = "标准";
 "PT Video editor crop portrait" = "肖像";
@@ -218,3 +218,4 @@
 "PT Permission Status title" = "状态:";
 "PT Permission Go setting" = "去设置";
 "PT Permission Authorize title" = "授权";
+"PT Video editor function rotate" = "旋转";
