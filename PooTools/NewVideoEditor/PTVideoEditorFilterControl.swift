@@ -14,7 +14,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
 
     public var filterHandler:((PTHarBethFilter)->Void)!
     
-    private var currentFilter: PTHarBethFilter! = PTHarBethFilter(name: "", type: .none)
+    private var currentFilter: PTHarBethFilter! = PTHarBethFilter.none
     
     private var thumbnailFilterImages: [UIImage] = []
 
@@ -43,7 +43,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! UIImage
-            let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
+            let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
             let cell = collection.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTFilterImageCell
             cell.imageView.image = cellTools
             cell.nameLabel.text = cellFilter.name
@@ -56,7 +56,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             return cell
         }
         view.collectionDidSelect = { collection,sectionModel,indexPath in
-            let cellFilter = PTImageEditorConfig.share.filters[indexPath.row]
+            let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
             self.returnFrontVC() {
                 self.filterHandler(cellFilter)
             }
@@ -70,7 +70,6 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         self.currentImage = currentImage
         self.currentFilter = currentFilter
         super.init(viewControl: viewControl)
-        generateFilterImages()
     }
     
     required public init?(coder: NSCoder) {
@@ -87,7 +86,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             make.top.equalTo(self.titleStack.snp.bottom).offset(5)
         }
         
-        PTGCDManager.gcdAfter(time: 0.35) {
+        generateFilterImages {
             var rows = [PTRows]()
             self.thumbnailFilterImages.enumerated().forEach { index,value in
                 let row = PTRows(cls: PTFilterImageCell.self,ID:PTFilterImageCell.ID,dataModel: value)
@@ -99,7 +98,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
     }
     
-    private func generateFilterImages() {
+    private func generateFilterImages(finish:@escaping PTActionTask) {
         let image = currentImage.image!
         let size: CGSize
         let ratio = (image.size.width / image.size.height)
@@ -111,15 +110,16 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
         }
         let thumbnailImage = image.pt.resize_vI(size) ?? PTAppBaseConfig.share.defaultEmptyImage
         
-        PTGCDManager.gcdGobal {
-            let filters = PTVideoEditorConfig.share.filters
-            filters.enumerated().forEach { index,value in
-                if value.type == .none {
-                    self.thumbnailFilterImages.append(PTAppBaseConfig.share.defaultEmptyImage)
-                } else {
-                    PTHarBethFilter.share.texureSize = thumbnailImage.size
-                    self.thumbnailFilterImages.append(value.getCurrentFilterImage(image: thumbnailImage))
-                }
+        PTVideoEditorConfig.share.filters.enumerated().forEach { index,value in
+            switch value.type {
+            case .none:
+                self.thumbnailFilterImages.insert(PTAppBaseConfig.share.defaultEmptyImage, at: 0)
+            default:
+                PTHarBethFilter.share.texureSize = thumbnailImage.size
+                self.thumbnailFilterImages.append(value.getCurrentFilterImage(image: thumbnailImage))
+            }
+            if index == (PTVideoEditorConfig.share.filters.count - 1) {
+                finish()
             }
         }
     }

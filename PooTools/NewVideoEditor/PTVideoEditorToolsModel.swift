@@ -17,6 +17,7 @@ public enum PTVideoEditorVideoToolsType: CaseIterable {
     case mute
     case presets
     case filter
+    case rewrite
 }
 
 final public class PTVideoEditorToolsModel {
@@ -38,6 +39,8 @@ final public class PTVideoEditorToolsModel {
             return "PT Video editor function export preset".localized()
         case .filter:
             return "PT Video editor function filter".localized()
+        case .rewrite:
+            return "PT Video editor function rewrite".localized()
         }
     }
 
@@ -69,6 +72,8 @@ final public class PTVideoEditorToolsModel {
             } else {
                 return UIImage(systemName: "option")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
             }
+        case .rewrite:
+            return UIImage(.repeat).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         }
     }
 

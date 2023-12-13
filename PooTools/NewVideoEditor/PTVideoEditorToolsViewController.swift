@@ -116,13 +116,45 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                         }, complete: { res in
                             switch res {
                             case .success(let outputURL):
-                                
+                                if self.rewrite {
+                                    PHPhotoLibrary.shared().performChanges({
+                                        // 保存编辑后的视频到用户相册
+                                        if let changeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL) {
+                                            let assetPlaceholder = changeRequest.placeholderForCreatedAsset
+
+                                            // 获取原视频所在的相册
+                                            let fetchOptions = PHFetchOptions()
+                                            fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+                                            let assets = PHAsset.fetchAssets(withLocalIdentifiers: [self.videoAsset.localIdentifier], options: fetchOptions)
+                                            
+                                            if let asset = assets.firstObject {
+                                                let assetCollectionList = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
+                                                if let assetCollection = assetCollectionList.firstObject {
+                                                    // 从相册中移除原视频
+                                                    let assetToDelete = [asset] as NSArray
+                                                    let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection)
+                                                    albumChangeRequest?.removeAssets(assetToDelete)
+                                                }
+                                            }
+                                        }
+                                    }) { success, error in
+                                        if success {
+                                            PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
+                                        } else {
+                                            PTAlertTipControl.present(title:"",subtitle:"保存失敗",icon:.Done,style: .Normal)
+                                        }
+                                        FileManager.pt.removefile(filePath: outputURL.description)
+                                    }
+                                } else {
+                                    
+                                }
                                 PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
                                     if error == nil,finish {
                                         PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon: .Done,style: .Normal)
                                     } else {
                                         PTAlertTipControl.present(title:"",subtitle:error!.localizedDescription,icon: .Error,style: .Normal)
                                     }
+                                    FileManager.pt.removefile(filePath: outputURL.description)
                                 }
     //                            let asset = AVURLAsset(url: outputURL, options: [
     //                                AVURLAssetPreferPreciseDurationAndTimingKey: true
@@ -139,32 +171,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     }
                 }
             }
-            
-//            self.getURLForPHAsset(asset: self.videoAsset) { url in
-//                if url != nil {
-//                    let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
-//                    exporter.export(options: [
-//                        .OptimizeForNetworkUse: true,
-//                    ], filtering: { buffer in
-//                        let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
-//                        return try? dest.output()
-//                    }, complete: { res in
-//                        switch res {
-//                        case .success(let outputURL):
-//                            let asset = AVURLAsset(url: outputURL, options: [
-//                                AVURLAssetPreferPreciseDurationAndTimingKey: true
-//                            ])
-//                            let playerItem = AVPlayerItem(asset: asset)
-//                            PTNSLogConsole("输出:\(playerItem)")
-//                            PTAlertTipControl.present(title:"",subtitle:outputURL.description,icon: .Done,style: .Normal)
-//                        case .failure(let error):
-//                            PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
-//                        }
-//                    })
-//                } else {
-//                    PTAlertTipControl.present(title:"",subtitle:"空视频地址",icon: .Error,style: .Normal)
-//                }
-//            }
         }
         return buttonItem
     }()
@@ -463,12 +469,18 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 vc.filterHandler = { filter in
                     self.currentFilter = filter
                     self.c7Player.filters = [self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
+                    
+                    self.reloadAsset()
                 }
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
                     
                 })
+            case .rewrite:
+                let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
+                cell.buttonView.isSelected.toggle()
+                self.rewrite.toggle()
             }
         }
         return view
@@ -546,6 +558,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     
     //MARK: 输出清晰度
     fileprivate var presets:String = ""
+    
+    //MARK: 覆蓋源文件
+    fileprivate var rewrite:Bool = false
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)

@@ -20,7 +20,7 @@ public class PTVideoEditorConfig: NSObject {
     public var filters: [PTHarBethFilter] {
         get {
             if pri_filters.isEmpty {
-                return [.cigaussian]
+                return [.none,.cigaussian,.hueBlend,.alphaBlend,.luminosityBlend,.zoomBlur,.vignette,.pixellated,.crosshatch,.polkadot,.posterize,.monochrome,.voronoioverlay,.monochromedilation,.motionblur,.meanblur,.gaussianblur,.bilateralblur,.mpsgaussian,.colormatrix4x4,.convolution3x3,.sharpen3x3,.sepia,.granularity,.comicstrip,.oilpainting,.sketch]
             } else {
                 return pri_filters
             }

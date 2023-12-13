@@ -52,10 +52,13 @@ extension PTVideoEditorToolsCell {
     func configure(with viewModel: PTVideoEditorToolsModel) {
         buttonView.normalTitle = viewModel.title
         buttonView.selectedTitle = viewModel.title
-        buttonView.normalImage = viewModel.titleImage// Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .darkText, darkColor: .white))
-        if viewModel.videoControl == .mute {
-            //speaker.zzz selected
-            buttonView.selectedImage = UIImage(.speaker.zzz).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))// Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTVideoEditorConfig.share.themeColor)
+        buttonView.normalImage = viewModel.titleImage
+        switch viewModel.videoControl {
+        case .mute:
+            buttonView.selectedImage = UIImage(.speaker.zzz).withTintColor(PTVideoEditorConfig.share.themeColor)
+        case .rewrite:
+            buttonView.selectedImage = UIImage(.repeat).withTintColor(PTVideoEditorConfig.share.themeColor)
+        default:break
         }
         self.viewModel = viewModel
     }
