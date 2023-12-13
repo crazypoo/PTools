@@ -444,6 +444,7 @@
 		55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */; };
 		55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */; };
 		55FA6CBF2B02860D00BC464B /* icon_cycle_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */; };
+		55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -962,6 +963,7 @@
 		55FA6CB62B0236AC00BC464B /* PTDarkModePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTDarkModePickerView.swift; sourceTree = "<group>"; };
 		55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_selected@3x.png"; sourceTree = "<group>"; };
 		55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_cycle_unselected@3x.png"; sourceTree = "<group>"; };
+		55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorFilterControl.swift; sourceTree = "<group>"; };
 		6003F58A195388D20070C39A /* PooTools_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PooTools_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -1827,6 +1829,7 @@
 				556CA4B72B29500600A5B189 /* Provider.swift */,
 				559C3D452B27571900EE46BC /* PTVideoEditorBaseFloatingViewController.swift */,
 				559C3D5B2B28300B00EE46BC /* PTVideoEditorToolsCropControl.swift */,
+				55FF406B2B299F0000CD3906 /* PTVideoEditorFilterControl.swift */,
 				556CA4AF2B29114E00A5B189 /* PTVideoEditorToolsSlider.swift */,
 				559C3D3F2B2732FB00EE46BC /* PTVideoEditorToolsSpeedControl.swift */,
 				559C3D412B2745CD00EE46BC /* PTVideoEditorToolsTrimControl.swift */,
@@ -2984,6 +2987,7 @@
 				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,
 				558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */,
+				55FF406C2B299F0000CD3906 /* PTVideoEditorFilterControl.swift in Sources */,
 				555818CC2AFA7D270051C0AA /* UITabBarController+PTEX.swift in Sources */,
 				55102AD92AFFD04300E9529D /* IBDesignable+PTEX.swift in Sources */,
 				231D1674272CDEEA003D6F62 /* PTCustomAlertView.swift in Sources */,

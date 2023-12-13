@@ -104,29 +104,39 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.addActionHandlers { sender in
             self.c7Player.pause()
             
-            self.setOutPut { url, error in
-                if url != nil {
-                    let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
-                    exporter.export(options: [
-                        .OptimizeForNetworkUse: true,
-                    ], filtering: { buffer in
-                        let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
-                        return try? dest.output()
-                    }, complete: { res in
-                        switch res {
-                        case .success(let outputURL):
-                            let asset = AVURLAsset(url: outputURL, options: [
-                                AVURLAssetPreferPreciseDurationAndTimingKey: true
-                            ])
-                            let playerItem = AVPlayerItem(asset: asset)
-                            PTNSLogConsole("输出:\(playerItem)")
-                            PTAlertTipControl.present(title:"",subtitle:outputURL.description,icon: .Done,style: .Normal)
-                        case .failure(let error):
-                            PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
-                        }
-                    })
-                } else {
-                    PTAlertTipControl.present(title:"",subtitle:error!.localizedDescription,icon: .Error,style: .Normal)
+            PTGCDManager.gcdMain {
+                self.setOutPut { url, error in
+                    if url != nil {
+                        let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
+                        exporter.export(options: [
+                            .OptimizeForNetworkUse: true,
+                        ], filtering: { buffer in
+                            let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
+                            return try? dest.output()
+                        }, complete: { res in
+                            switch res {
+                            case .success(let outputURL):
+                                
+                                PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
+                                    if error == nil,finish {
+                                        PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon: .Done,style: .Normal)
+                                    } else {
+                                        PTAlertTipControl.present(title:"",subtitle:error!.localizedDescription,icon: .Error,style: .Normal)
+                                    }
+                                }
+    //                            let asset = AVURLAsset(url: outputURL, options: [
+    //                                AVURLAssetPreferPreciseDurationAndTimingKey: true
+    //                            ])
+    //                            let playerItem = AVPlayerItem(asset: asset)
+    //                            PTNSLogConsole("输出:\(playerItem)")
+    //                            PTAlertTipControl.present(title:"",subtitle:outputURL.description,icon: .Done,style: .Normal)
+                            case .failure(let error):
+                                PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                            }
+                        })
+                    } else {
+                        PTAlertTipControl.present(title:"",subtitle:error!.localizedDescription,icon: .Error,style: .Normal)
+                    }
                 }
             }
             
@@ -321,13 +331,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     }()
     
     lazy var bottomControlModels:[PTVideoEditorToolsModel] = {
+        let filterModel = PTVideoEditorToolsModel(videoControl: .filter)
         let speedModel = PTVideoEditorToolsModel(videoControl: .speed)
         let trimModel = PTVideoEditorToolsModel(videoControl: .trim)
         let cropModel = PTVideoEditorToolsModel(videoControl: .crop)
         let rotateModel = PTVideoEditorToolsModel(videoControl: .rotate)
         let muteModel = PTVideoEditorToolsModel(videoControl: .mute)
         let presetsModel = PTVideoEditorToolsModel(videoControl: .presets)
-        return [speedModel,trimModel,cropModel,rotateModel,muteModel,presetsModel]
+        return [filterModel,speedModel,trimModel,cropModel,rotateModel,muteModel,presetsModel]
     }()
     
     lazy var bottomControlCollection:PTCollectionView = {
@@ -372,12 +383,13 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         view.collectionDidSelect = { collectionViews,sectionModel,indexPath in
             self.c7Player.pause()
+            self.playerButton.isSelected = false
             
             let itemRow = sectionModel.rows[indexPath.row]
             let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
             switch cellModel.videoControl {
             case .speed:
-                let vc = PTVideoEditorToolsSpeedControl(speed: self.speed)
+                let vc = PTVideoEditorToolsSpeedControl(speed: self.speed,typeModel: cellModel)
                 vc.speedHandler = { value in
                     self.speed = value
                 }
@@ -386,7 +398,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 },dismissCompletion:{
                 })
             case .trim:
-                let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset)
+                let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
@@ -438,6 +450,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 UIAlertController.baseActionSheet(title: "选择清晰度", titles: presets) { sheet, index, title in
                     self.presets = title
                 }
+            case .filter:
+                let vc = PTVideoEditorFilterControl(currentImage: self.originImageView, currentFilter: self.currentFilter, viewControl: cellModel)
+                vc.filterHandler = { filter in
+                    self.currentFilter = filter
+                    self.c7Player.filters = [self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
+                }
+                self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
+                    
+                },dismissCompletion:{
+                    
+                })
             }
         }
         return view
@@ -460,6 +483,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         dimView.backgroundColor = UIColor(white: 0/255, alpha: 0.8)
         return dimView
     }()
+    
+    //MARK: Filter
+    private var currentFilter: PTHarBethFilter! = PTHarBethFilter.none
     
     var videoRect: CGRect {
         if self.degree == 0 || self.degree == 180 {
@@ -601,17 +627,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             self.videoAVAsset = avAsset
             
             UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
-//                let imageSize = image!.size
-//                
-//                let scale = self.imageContent.frame.size.height / imageSize.height
-//                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+                let imageSize = image!.size
+
+                let scale = self.imageContent.frame.size.height / imageSize.height
+                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
                 self.originImageView.image = image
                 self.originImageView.snp.makeConstraints { make in
-                    make.left.right.lessThanOrEqualToSuperview()
+                    make.width.equalTo(showImageSize.width)
+                    make.centerX.equalToSuperview()
                     make.top.bottom.equalToSuperview()
                     make.centerX.centerY.equalToSuperview()
                 }
-//                self.currentClipStatus = PTClipStatus(editRect: CGRect(origin: .zero, size: image!.size))
             }
             
             self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
@@ -736,7 +762,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
         let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
         videoConverter.convert(options,progress: { progress in
-            PTAlertTipControl.present(title:"",subtitle: "\(String(describing: progress))",icon:.Heart,style: .SupportVisionOS)
+            PTGCDManager.gcdMain {
+                PTAlertTipControl.present(title:"",subtitle: "\(String(describing: progress))",icon:.Heart,style: .SupportVisionOS)
+            }
         },completion: completion)
     }
     

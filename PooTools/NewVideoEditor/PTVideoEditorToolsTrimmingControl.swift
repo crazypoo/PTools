@@ -66,7 +66,6 @@ class PTVideoEditorToolsTrimmingControl: UIControl {
         self.trimPositions = trimPositions
         internalLeftTrimValue = CGFloat(trimPositions.0)
         internalRightTrimValue = CGFloat(trimPositions.1)
-        
         super.init(frame: .zero)
     }
 

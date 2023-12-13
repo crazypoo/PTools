@@ -10,9 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 import AVFoundation
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
 
@@ -25,10 +22,10 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
     var asset: AVAsset!
     fileprivate var trimPositions: (Double, Double)!
 
-    init(trimPositions: (Double, Double), asset: AVAsset) {
+    init(trimPositions: (Double, Double), asset: AVAsset,typeModel:PTVideoEditorToolsModel) {
         self.trimPositions = trimPositions
         self.asset = asset
-        super.init(nibName: nil, bundle: nil)
+        super.init(viewControl: typeModel)
     }
     
     required init?(coder: NSCoder) {

@@ -21,6 +21,30 @@ open class PTVideoEditorBaseFloatingViewController: PTFloatingBaseViewController
         return view
     }()
 
+    lazy var titleStack:PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.layoutStyle = .leftImageRightTitle
+        view.midSpacing = 10
+        view.normalTitleColor = .foreground
+        view.normalTitleFont = .appfont(size: 12)
+        view.imageSize = CGSizeMake(20, 20)
+        view.isUserInteractionEnabled = false
+        view.normalTitle = viewControl.title
+        view.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewControl.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .darkText, darkColor: .white))
+        return view
+    }()
+
+    fileprivate var viewControl:PTVideoEditorToolsModel!
+    
+    init(viewControl:PTVideoEditorToolsModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.viewControl = viewControl
+    }
+    
+    required public init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
@@ -34,7 +58,14 @@ open class PTVideoEditorBaseFloatingViewController: PTFloatingBaseViewController
         super.viewDidLoad()
 
         view.backgroundColor = PTAppBaseConfig.share.baseCellBackgroundColor
-        view.addSubviews([doneButton])
+        view.addSubviews([titleStack,doneButton])
+        
+        titleStack.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(16)
+            make.height.equalTo(34)
+            make.width.equalTo(100)
+            make.centerX.equalToSuperview()
+        }
         
         doneButton.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)

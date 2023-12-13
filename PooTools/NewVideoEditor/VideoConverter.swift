@@ -162,12 +162,24 @@ open class VideoConverter {
 
     // Convert
     open func convert(_ option: ConverterOption? = nil, temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
-        
-        convert(option) { ac, avc in
-            let temporaryFileName = temporaryFileName ?? "TrimmedMovie.mp4"
-            let url = URL(fileURLWithPath: "\(NSTemporaryDirectory())\(temporaryFileName)")
-            try? FileManager.default.removeItem(at: url)
 
+        Task.init {
+            do {
+                let convert = try await self.convert(option)
+                self.convert(ac: convert.0, avc: convert.1,progress: progress, completion: completion)
+            } catch {
+                completion(nil,(error.localizedDescription as! Error))
+            }
+        }
+    }
+    
+    func convert(ac:AVMutableComposition,avc:AVMutableVideoComposition,temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
+        let temporaryFileName = temporaryFileName ?? "TrimmedMovie.mp4"
+        let filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
+        let url = URL(fileURLWithPath: filePath)
+        
+        let result = FileManager.pt.removefile(filePath: filePath)
+        if result.isSuccess {
             self.progressCallback = progress
             // progress timer
             PTGCDManager.gcdMain {
@@ -184,15 +196,16 @@ open class VideoConverter {
                     }
                 }
             }
-            // quality
+            
             let presetName = option?.quality ?? AVAssetExportPresetHighestQuality
             self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
             self.assetExportsSession?.outputFileType = AVFileType.mp4
             self.assetExportsSession?.shouldOptimizeForNetworkUse = true
             self.assetExportsSession?.videoComposition = avc
             self.assetExportsSession?.outputURL = url
-
-            self.assetExportsSession?.exportAsynchronously(completionHandler: {
+            
+            //        PTNSLogConsole("\(ac)\n\(avc)")
+            self.assetExportsSession?.exportAsynchronously {
                 self.timer?.invalidate()
                 self.timer = nil
                 PTGCDManager.gcdMain {
@@ -205,8 +218,11 @@ open class VideoConverter {
                     }
                     self.restore()
                 }
-            })
+            }
+        } else {
+            PTAlertTipControl.present(title:"",subtitle:result.error,icon:.Error,style: .Normal)
         }
+
     }
 
     // Video Size

@@ -9,9 +9,6 @@
 import UIKit
 import SnapKit
 import SwifterSwift
-#if POOTOOLS_NAVBARCONTROLLER
-import ZXNavigationBar
-#endif
 
 class PTVideoEditorToolsSpeedControl: PTVideoEditorBaseFloatingViewController {
 
@@ -30,11 +27,10 @@ class PTVideoEditorToolsSpeedControl: PTVideoEditorBaseFloatingViewController {
     }()
     
     // MARK: Init
-
-    init(speed: Double) {
+    
+    init(speed: Double,typeModel:PTVideoEditorToolsModel) {
         self.speed = speed
-        
-        super.init(nibName: nil, bundle: nil)
+        super.init(viewControl: typeModel)
     }
 
     required init?(coder: NSCoder) {

@@ -15,7 +15,7 @@ public class PTVideoEditorConfig: NSObject {
     
     public var themeColor:UIColor = UIColor.purple
     
-    private var pri_filters: [PTHarBethFilter] = [.cigaussian,.hueBlend,.alphaBlend,.luminosityBlend,.zoomBlur,.vignette,.pixellated,.crosshatch,.polkadot,.posterize,.monochrome,.voronoioverlay,.monochromedilation,.motionblur,.meanblur,.gaussianblur,.bilateralblur,.mpsgaussian,.colormatrix4x4,.convolution3x3,.sharpen3x3,.sepia,.granularity,.comicstrip,.oilpainting,.sketch]
+    private var pri_filters: [PTHarBethFilter] = [.none,.cigaussian,.hueBlend,.alphaBlend,.luminosityBlend,.zoomBlur,.vignette,.pixellated,.crosshatch,.polkadot,.posterize,.monochrome,.voronoioverlay,.monochromedilation,.motionblur,.meanblur,.gaussianblur,.bilateralblur,.mpsgaussian,.colormatrix4x4,.convolution3x3,.sharpen3x3,.sepia,.granularity,.comicstrip,.oilpainting,.sketch]
     /// Filters for image editor.
     public var filters: [PTHarBethFilter] {
         get {

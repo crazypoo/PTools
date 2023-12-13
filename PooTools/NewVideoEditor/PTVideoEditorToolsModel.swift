@@ -8,16 +8,17 @@
 
 import UIKit
 
-enum PTVideoEditorVideoToolsType: CaseIterable {
+public enum PTVideoEditorVideoToolsType: CaseIterable {
     case speed
     case trim
     case crop
     case rotate
     case mute
     case presets
+    case filter
 }
 
-final class PTVideoEditorToolsModel {
+final public class PTVideoEditorToolsModel {
     let videoControl: PTVideoEditorVideoToolsType
     
     var title: String {
@@ -34,6 +35,8 @@ final class PTVideoEditorToolsModel {
             return "PT Video editor function mute".localized()
         case .presets:
             return "PT Video editor function export preset".localized()
+        case .filter:
+            return "PT Video editor function filter".localized()
         }
     }
 
@@ -50,6 +53,8 @@ final class PTVideoEditorToolsModel {
         case .mute:
             return "Rotate"
         case .presets:
+            return "Rotate"
+        case .filter:
             return "Rotate"
         }
     }
