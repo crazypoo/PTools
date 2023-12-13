@@ -9,6 +9,7 @@
 import UIKit
 import SnapKit
 import SwifterSwift
+import SafeSFSymbols
 
 class PTVideoEditorToolsCell: PTBaseNormalCell {
     // MARK: Private Properties
@@ -51,8 +52,11 @@ extension PTVideoEditorToolsCell {
     func configure(with viewModel: PTVideoEditorToolsModel) {
         buttonView.normalTitle = viewModel.title
         buttonView.selectedTitle = viewModel.title
-        buttonView.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .darkText, darkColor: .white))
-        buttonView.selectedImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTVideoEditorConfig.share.themeColor)
+        buttonView.normalImage = viewModel.titleImage// Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .darkText, darkColor: .white))
+        if viewModel.videoControl == .mute {
+            //speaker.zzz selected
+            buttonView.selectedImage = UIImage(.speaker.zzz).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))// Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewModel.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTVideoEditorConfig.share.themeColor)
+        }
         self.viewModel = viewModel
     }
 }

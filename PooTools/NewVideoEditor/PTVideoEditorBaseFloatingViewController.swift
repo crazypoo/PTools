@@ -30,7 +30,7 @@ open class PTVideoEditorBaseFloatingViewController: PTFloatingBaseViewController
         view.imageSize = CGSizeMake(20, 20)
         view.isUserInteractionEnabled = false
         view.normalTitle = viewControl.title
-        view.normalImage = Bundle.podBundleImage(bundleName:PTVideoEditorPodBundleName,imageName:viewControl.titleImageName).withRenderingMode(.alwaysOriginal).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .darkText, darkColor: .white))
+        view.normalImage = viewControl.titleImage
         return view
     }()
 

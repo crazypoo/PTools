@@ -184,6 +184,14 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return imageView
     }()
     
+    lazy var originFilterImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.contentMode = .scaleAspectFit
+        imageView.isHidden = true
+        return imageView
+    }()
+
+    
     fileprivate var avPlayer : AVPlayer!
     fileprivate var avPlayerItem : AVPlayerItem!
     var assetAspectRatio: CGFloat {
@@ -451,7 +459,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.presets = title
                 }
             case .filter:
-                let vc = PTVideoEditorFilterControl(currentImage: self.originImageView, currentFilter: self.currentFilter, viewControl: cellModel)
+                let vc = PTVideoEditorFilterControl(currentImage: self.originFilterImageView, currentFilter: self.currentFilter, viewControl: cellModel)
                 vc.filterHandler = { filter in
                     self.currentFilter = filter
                     self.c7Player.filters = [self.currentFilter.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
@@ -589,13 +597,17 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             make.height.equalTo(self.imageContent.snp.width)
         }
         
-        imageContent.addSubview(originImageView)
+        imageContent.addSubviews([originImageView,originFilterImageView])
                 
         originImageView.addSubview(dimView)
         dimView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
         dimFrame = nil
+        
+        originFilterImageView.snp.makeConstraints { make in
+            make.edges.equalTo(self.originImageView)
+        }
         
         playContent.snp.makeConstraints { make in
             make.top.equalTo(self.imageContent.snp.bottom).offset(7.5)
@@ -631,6 +643,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
                 let scale = self.imageContent.frame.size.height / imageSize.height
                 let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+                self.originFilterImageView.image = image
                 self.originImageView.image = image
                 self.originImageView.snp.makeConstraints { make in
                     make.width.equalTo(showImageSize.width)

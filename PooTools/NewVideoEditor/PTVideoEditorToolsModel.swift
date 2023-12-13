@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafeSFSymbols
 
 public enum PTVideoEditorVideoToolsType: CaseIterable {
     case speed
@@ -40,22 +41,34 @@ final public class PTVideoEditorToolsModel {
         }
     }
 
-    var titleImageName: String {
+    var titleImage: UIImage {
         switch videoControl {
         case .speed:
-            return "Speed"
+            if #available(iOS 16.0, *) {
+                return UIImage(systemName: "figure.walk.motion")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            } else {
+                return UIImage(.bolt.horizontalCircle).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            }
         case .trim:
-            return "Trim"
+            if #available(iOS 14.0, *) {
+                return UIImage(.timeline.selection).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            } else {
+                return UIImage(.timer).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            }
         case .crop:
-            return "Crop"
+            return UIImage(.crop).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         case .rotate:
-            return "Rotate"
+            return UIImage(.rotate.right).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         case .mute:
-            return "Rotate"
+            return UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         case .presets:
-            return "Rotate"
+            return UIImage(.tv).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         case .filter:
-            return "Rotate"
+            if #available(iOS 14.0, *) {
+                return UIImage(.camera.filters).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            } else {
+                return UIImage(systemName: "option")!.withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+            }
         }
     }
 
