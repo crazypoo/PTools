@@ -21,12 +21,11 @@ class PTVideoEditorToolsSpeedControl: PTVideoEditorBaseFloatingViewController {
 
     // MARK: Private Properties
 
-    private lazy var slider: PTVideoEditorSlider = {
-        let slider = PTVideoEditorSlider()
+    private lazy var slider: PTVideoEditorToolsSlider = {
+        let slider = PTVideoEditorToolsSlider()
         slider.value = speed
         slider.range = .stepped(values: [0.25, 0.5, 0.75, 1.0, 2.0, 5.0, 10.0])
         slider.isContinuous = false
-
         return slider
     }()
     
@@ -55,9 +54,8 @@ class PTVideoEditorToolsSpeedControl: PTVideoEditorBaseFloatingViewController {
         }
         
         doneButton.addActionHandlers { sender in
-            self.returnFrontVC {
-                self.speedHandler(self.slider.value)
-            }
+            self.speedHandler(self.slider.value)
+            self.returnFrontVC()
         }
     }
 }

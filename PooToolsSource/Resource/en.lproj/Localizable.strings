@@ -219,3 +219,5 @@
 "PT Permission Go setting" = "Go to the settings";
 "PT Permission Authorize title" = "Authorize";
 "PT Video editor function rotate" = "Rotate";
+"PT Video editor function mute" = "Mute";
+"PT Video editor function export preset" = "Export type";

@@ -10,8 +10,6 @@ import UIKit
 import SnapKit
 import SwifterSwift
 
-let PTVideoEditorPodBundleName = "PTVideoEditorResources"
-
 final class PTVideoEditorControlsView: UIView {
 
     // MARK: Public Properties

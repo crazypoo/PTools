@@ -84,7 +84,7 @@ extension PTCropDimView:CAAnimationDelegate {
 }
 
 @objcMembers
-class PTVideoEditorToolsViewController: PTBaseViewController {
+public class PTVideoEditorToolsViewController: PTBaseViewController {
 
     lazy var dismissButtonItem:UIButton = {
         let image = "❌".emojiToImage(emojiFont: .appfont(size: 20))
@@ -104,7 +104,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         buttonItem.addActionHandlers { sender in
             self.c7Player.pause()
             
-            self.getURLForPHAsset(asset: self.videoAsset) { url in
+            self.setOutPut { url, error in
                 if url != nil {
                     let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
                     exporter.export(options: [
@@ -126,9 +126,35 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                         }
                     })
                 } else {
-                    PTAlertTipControl.present(title:"",subtitle:"空视频地址",icon: .Error,style: .Normal)
+                    PTAlertTipControl.present(title:"",subtitle:error!.localizedDescription,icon: .Error,style: .Normal)
                 }
             }
+            
+//            self.getURLForPHAsset(asset: self.videoAsset) { url in
+//                if url != nil {
+//                    let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
+//                    exporter.export(options: [
+//                        .OptimizeForNetworkUse: true,
+//                    ], filtering: { buffer in
+//                        let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
+//                        return try? dest.output()
+//                    }, complete: { res in
+//                        switch res {
+//                        case .success(let outputURL):
+//                            let asset = AVURLAsset(url: outputURL, options: [
+//                                AVURLAssetPreferPreciseDurationAndTimingKey: true
+//                            ])
+//                            let playerItem = AVPlayerItem(asset: asset)
+//                            PTNSLogConsole("输出:\(playerItem)")
+//                            PTAlertTipControl.present(title:"",subtitle:outputURL.description,icon: .Done,style: .Normal)
+//                        case .failure(let error):
+//                            PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+//                        }
+//                    })
+//                } else {
+//                    PTAlertTipControl.present(title:"",subtitle:"空视频地址",icon: .Error,style: .Normal)
+//                }
+//            }
         }
         return buttonItem
     }()
@@ -177,14 +203,17 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
             if sender.isSelected {
-                
-                if self.videoTime > self.currentPlayTime {
+                if self.currentPlayTime != 0  {
                     let cmTime = CMTimeMakeWithSeconds(self.currentPlayTime, preferredTimescale: Int32(NSEC_PER_MSEC))
                     self.avPlayer.seek(to: cmTime, toleranceBefore: .zero, toleranceAfter: .zero)
                 } else {
-                    self.avPlayer.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero)
+                    let startTimeSecond = self.videoTime * self.trimPositions.0
+                    let endTimeSecond = self.videoTime * self.trimPositions.1
+                    let startTime = CMTimeMakeWithSeconds(startTimeSecond, preferredTimescale: Int32(NSEC_PER_MSEC))
+                    let endTime = CMTimeMakeWithSeconds(endTimeSecond, preferredTimescale: Int32(NSEC_PER_MSEC))
+                    self.avPlayer.seek(to: startTime)
                 }
-                let interval = CMTime(seconds: 1, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
+                let interval = CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))
                 let timeObserverToken = self.avPlayer.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { time in
                     // 在这里处理播放时间的更新
                     PTGCDManager.gcdMain {
@@ -196,12 +225,13 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                         
                         self.updateScrollViewContentOffset(fractionCompleted: (self.currentPlayTime / self.videoTime))
                         
-                        if self.currentPlayTime >= CMTimeGetSeconds(CMTime(seconds: self.videoTime, preferredTimescale: CMTimeScale(NSEC_PER_SEC))) {
+                        let endTimeSecond = self.videoTime * self.trimPositions.1
+                        if self.currentPlayTime >= CMTimeGetSeconds(CMTime(seconds: endTimeSecond, preferredTimescale: CMTimeScale(NSEC_PER_MSEC))) {
                             self.c7Player.pause()
+                            self.currentPlayTime = self.videoTime * self.trimPositions.0
                             sender.isSelected = false
                             self.currentTimeLabel.text = "0:00"
-                            
-                            self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                            self.updateScrollViewContentOffset(fractionCompleted: self.trimPositions.0)
                         }
                     }
                 }
@@ -238,6 +268,13 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
     }()
     
     //MARK: 時間線
+    var trimPositions: (Double, Double) = (0.0,1.0) {
+        didSet {
+            self.setVideoAsset()
+            self.reloadAsset()
+        }
+    }
+    
     var isSeeking: Bool = false {
         didSet {
             if isSeeking {
@@ -283,12 +320,14 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         return view
     }()
     
-    lazy var bottomControlModels:[PTVideoEditorVideoControlCellViewModel] = {
-        let speedModel = PTVideoEditorVideoControlCellViewModel(videoControl: .speed)
-        let trimModel = PTVideoEditorVideoControlCellViewModel(videoControl: .trim)
-        let cropModel = PTVideoEditorVideoControlCellViewModel(videoControl: .crop)
-        let rotateModel = PTVideoEditorVideoControlCellViewModel(videoControl: .rotate)
-        return [speedModel,trimModel,cropModel,rotateModel]
+    lazy var bottomControlModels:[PTVideoEditorToolsModel] = {
+        let speedModel = PTVideoEditorToolsModel(videoControl: .speed)
+        let trimModel = PTVideoEditorToolsModel(videoControl: .trim)
+        let cropModel = PTVideoEditorToolsModel(videoControl: .crop)
+        let rotateModel = PTVideoEditorToolsModel(videoControl: .rotate)
+        let muteModel = PTVideoEditorToolsModel(videoControl: .mute)
+        let presetsModel = PTVideoEditorToolsModel(videoControl: .presets)
+        return [speedModel,trimModel,cropModel,rotateModel,muteModel,presetsModel]
     }()
     
     lazy var bottomControlCollection:PTCollectionView = {
@@ -326,73 +365,54 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         view.cellInCollection = { collectionViews,sectionModel,indexPath in
             let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTVideoEditorVideoControlCellViewModel
-            let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorVideoControlCell
+            let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
+            let cell = collectionViews.dequeueReusableCell(withReuseIdentifier: itemRow.ID, for: indexPath) as! PTVideoEditorToolsCell
             cell.configure(with: cellModel)
             return cell
         }
         view.collectionDidSelect = { collectionViews,sectionModel,indexPath in
+            self.c7Player.pause()
+            
             let itemRow = sectionModel.rows[indexPath.row]
-            let cellModel = itemRow.dataModel as! PTVideoEditorVideoControlCellViewModel
+            let cellModel = itemRow.dataModel as! PTVideoEditorToolsModel
             switch cellModel.videoControl {
             case .speed:
-                let vc = PTVideoEditorToolsSpeedControl(speed: 1)
+                let vc = PTVideoEditorToolsSpeedControl(speed: self.speed)
                 vc.speedHandler = { value in
+                    self.speed = value
                 }
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
-                    
                 })
             case .trim:
-                let vc = PTVideoEditorToolsTrimControl(trimPositions: (0.0,1.0), asset: self.videoAVAsset)
+                let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset)
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
                     
                 })
                 vc.trimPosotionsHandler = { value in
+                    self.trimPositions = value
                 }
             case .crop:
-                let currentTime = self.avPlayer.currentTime()
-                guard let asset = self.avPlayer.currentItem?.asset else { return }
-                let imageGenerator = AVAssetImageGenerator(asset: asset)
-                imageGenerator.appliesPreferredTrackTransform = true
-                guard let imageRef = try? imageGenerator.copyCGImage(at: currentTime, actualTime: nil) else { return }
-                guard let image = UIImage(cgImage: imageRef).rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
+                guard let image = self.originImageView.image!.rotate(radians: Float(CGFloat(.pi/2 * self.rotate))) else { return }
                 
                 let vc = PTVideoEditorToolsCropControl(image: image)
                 vc.cropImageHandler = { imageSize,cropFrame in
-                    let videoRect = self.videoRect
-                    let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
-                    let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
-                    let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
-                    let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
-                    let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
-                    self.dimFrame = dimFrame
+                    PTGCDManager.gcdAfter(time: 0.1) {
+                        let videoRect = self.videoRect
+                        let frameX = cropFrame.origin.x * videoRect.size.width / imageSize.width
+                        let frameY = cropFrame.origin.y * videoRect.size.height / imageSize.height
+                        let frameWidth = cropFrame.size.width * videoRect.size.width / imageSize.width
+                        let frameHeight = cropFrame.size.height * videoRect.size.height / imageSize.height
+                        let dimFrame = CGRect(x: frameX, y: frameY, width: frameWidth, height: frameHeight)
+                        self.dimFrame = dimFrame
+                    }
                 }
-//                let vc = PTCutViewController(image: self.originImageView.image!, status: self.currentClipStatus)
-//                vc.clipDoneBlock = { angle, editRect, selectRatio in
-//                    switch angle {
-//                    case -90.0:
-//                        self.rotate = 3
-//                    case -180.0:
-//                        self.rotate = 2
-//                    case -270.0:
-//                        self.rotate = 1
-//                    default:
-//                        self.rotate = 0
-//                    }
-//                    var transform = CGAffineTransform.identity
-//                    let rotate = CGFloat(.pi / 2 * self.rotate)
-//                    transform = transform.rotated(by: rotate)
-//                    self.originImageView.transform = transform
-//                    PTNSLogConsole("\(angle)>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(editRect),\(selectRatio)")
-//                }
                 let nav = PTBaseNavControl(rootViewController: vc)
                 nav.modalPresentationStyle = .fullScreen
-                self.present(nav, animated: false) {
-                }
+                self.present(nav, animated: false)
 
             case .rotate:
                 var transform = CGAffineTransform.identity
@@ -407,17 +427,34 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
                 }
                 self.dimFrame = nil
                 self.originImageView.transform = transform
+                self.dimView.transform = transform
+            case .mute:
+                let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
+                cell.buttonView.isSelected.toggle()
+                self.isMute.toggle()
+            case .presets:
+                let presets = AVAssetExportSession.exportPresets(compatibleWith: self.avPlayer.currentItem!.asset)
+
+                UIAlertController.baseActionSheet(title: "选择清晰度", titles: presets) { sheet, index, title in
+                    self.presets = title
+                }
             }
         }
         return view
     }()
     
+    //MARK: 速度
+    fileprivate var speed:Double = 1 {
+        didSet {
+            self.setVideoAsset()
+            self.reloadAsset()
+        }
+    }
+    
     //MARK: 旋轉
     fileprivate var rotate:Double = 0
     
     //MARK: 裁剪
-//    private var currentClipStatus: PTClipStatus!
-
     private let dimView: PTCropDimView = {
         let dimView = PTCropDimView()
         dimView.backgroundColor = UIColor(white: 0/255, alpha: 0.8)
@@ -470,7 +507,13 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         }
     }
     
-    override func viewWillAppear(_ animated: Bool) {
+    //MARK: 靜音
+    fileprivate var isMute:Bool = false
+    
+    //MARK: 输出清晰度
+    fileprivate var presets:String = ""
+    
+    public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 #if POOTOOLS_NAVBARCONTROLLER
 #else
@@ -487,7 +530,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewDidLoad() {
+    public override func viewDidLoad() {
         super.viewDidLoad()
 
 #if POOTOOLS_NAVBARCONTROLLER
@@ -558,13 +601,12 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
             self.videoAVAsset = avAsset
             
             UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
-                let imageSize = image!.size
-                
-                let scale = self.imageContent.frame.size.height / imageSize.height
-                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
-                self.originImageView.image = image!.pt.fixOrientation()
+//                let imageSize = image!.size
+//                
+//                let scale = self.imageContent.frame.size.height / imageSize.height
+//                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+                self.originImageView.image = image
                 self.originImageView.snp.makeConstraints { make in
-//                    make.size.equalTo(showImageSize)
                     make.left.right.lessThanOrEqualToSuperview()
                     make.top.bottom.equalToSuperview()
                     make.centerX.centerY.equalToSuperview()
@@ -578,7 +620,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
              
 //            PTHarBethFilter.share.texureSize = self.originImageView.frame.size
 //            self.c7Player.filters = [PTHarBethFilter.crosshatch.type.getFilterResult(texture: PTHarBethFilter.overTexture()!).filter!]
-                        
+//                        
             PTGCDManager.gcdMain {
                 self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
                 self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
@@ -662,7 +704,7 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         
         var rows = [PTRows]()
         bottomControlModels.enumerated().forEach { index,value in
-            let row = PTRows(cls: PTVideoEditorVideoControlCell.self,ID:PTVideoEditorVideoControlCell.ID,dataModel: value)
+            let row = PTRows(cls: PTVideoEditorToolsCell.self,ID:PTVideoEditorToolsCell.ID,dataModel: value)
             rows.append(row)
         }
         
@@ -675,6 +717,86 @@ class PTVideoEditorToolsViewController: PTBaseViewController {
         let nav = PTBaseNavControl(rootViewController: self)
         nav.modalPresentationStyle = .fullScreen
         vc.present(nav, animated: true)
+    }
+    
+    fileprivate func setOutPut(completion: @escaping ((URL?, Error?) -> Void)) {
+
+        var videoConverterCrop: ConverterCrop?
+        if let dimFrame = dimFrame {
+            videoConverterCrop = ConverterCrop(frame: dimFrame, contrastSize: originImageView.size)
+        }
+
+        let options = ConverterOption(
+            trimRange: trimPositions,
+            convertCrop: videoConverterCrop,
+            rotate: CGFloat(.pi/2 * self.rotate),
+            quality: presets,
+            isMute: self.isMute,
+            speed: speed)
+
+        let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
+        videoConverter.convert(options,progress: { progress in
+            PTAlertTipControl.present(title:"",subtitle: "\(String(describing: progress))",icon:.Heart,style: .SupportVisionOS)
+        },completion: completion)
+    }
+    
+    fileprivate func setVideoAsset() {
+
+        let options = ConverterOption(
+            trimRange: trimPositions,
+            convertCrop: nil,
+            rotate: 0,
+            quality: presets,
+            isMute: false,
+            speed: speed)
+
+        let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
+        videoConverter.convert(options) { ac,avc in
+            PTGCDManager.gcdMain {
+                self.avPlayerItem = AVPlayerItem(asset: ac)
+                self.avPlayerItem.videoComposition = avc
+                self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
+                
+                
+                UIImage.pt.getVideoFirstImage(asset: self.avPlayer.currentItem!.asset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+                    self.originImageView.image = image
+                }
+                self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+            }
+        }
+    }
+    
+    func reloadAsset() {
+        PTGCDManager.gcdAfter(time: 0.35) {
+            PTGCDManager.gcdMain {
+                self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+                self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
+                let formattedDuration = self.videoTime >= 3600 ?
+                    DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
+                    DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
+                self.videoTimeLabel.text = formattedDuration
+                self.currentPlayTime = 0
+            }
+
+            Task.init {
+                do {
+                    let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
+                    let cgImages = try await self.videoTimeline(for: self.avPlayer.currentItem!.asset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
+                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
+                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                    
+                    let width: CGFloat = 2.0
+                    let height: CGFloat = 160.0
+                    let x = self.timeLineContent.bounds.midX - width / 2
+                    let y = (self.timeLineContent.bounds.height - height) / 2
+                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+
+                } catch {
+                    PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                }
+            }
+        }
     }
 }
 
@@ -703,7 +825,7 @@ extension PTVideoEditorToolsViewController {
 
 //MARK: 實時圖像輸出
 extension PTVideoEditorToolsViewController:C7CollectorImageDelegate {
-    func preview(_ collector: C7Collector, fliter image: C7Image) {
+    public func preview(_ collector: C7Collector, fliter image: C7Image) {
         originImageView.image = image
     }
 }
@@ -763,21 +885,21 @@ extension PTVideoEditorToolsViewController: UIScrollViewDelegate {
         timeLineScroll.setContentOffset(point, animated: false)
     }
 
-    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+    public func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
         isSeeking = true
     }
 
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         isSeeking = false
     }
 
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+    public func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
             isSeeking = false
         }
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let presentValue = Double((scrollView.contentOffset.x + (scrollView.contentSize.width / 2)) / scrollView.contentSize.width)
         let current = Float64(videoTime * presentValue)
         let cmTime = CMTimeMakeWithSeconds(current, preferredTimescale: Int32(NSEC_PER_SEC))

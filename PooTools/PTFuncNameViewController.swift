@@ -112,8 +112,8 @@ class PTFuncNameViewController: PTBaseViewController {
         return outputURL
     }()
 
-    private var videoEdit: PTVideoEdit?
-    fileprivate var cancellables = Set<AnyCancellable>()
+//    private var videoEdit: PTVideoEdit?
+//    fileprivate var cancellables = Set<AnyCancellable>()
 
     func rowBaseModel(name:String) -> PTFusionCellModel {
         let models = PTFusionCellModel()
@@ -512,35 +512,35 @@ class PTFuncNameViewController: PTBaseViewController {
                                 let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
                                 controller.videoEditorShow(vc: self)
                             } else {
-                                self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
-                                    if let avAsset = avAsset {
-                                        PTGCDManager.gcdMain {
-                                            let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-                                            controller.onEditCompleted
-                                                .sink {  editedPlayerItem, videoEdit in
-                                                    self.videoEdit = videoEdit
-                                                    
-                                                    AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
-                                                        if status == .completed {
-                                                            PTGCDManager.gcdMain {
-                                                                PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
-                                                            }
-                                                        } else if status == .failed {
-                                                            PTGCDManager.gcdMain {
-                                                                PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                .store(in: &self.cancellables)
-                                            controller.modalPresentationStyle = .fullScreen
-                                            let nav = PTBaseNavControl(rootViewController: controller)
-                                            self.navigationController?.present(nav, animated: true)
-                                        }
-                                    } else {
-                                        UIViewController.gobal_drop(title: "获取失败,请重试")
-                                    }
-                                }
+//                                self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
+//                                    if let avAsset = avAsset {
+//                                        PTGCDManager.gcdMain {
+//                                            let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
+//                                            controller.onEditCompleted
+//                                                .sink {  editedPlayerItem, videoEdit in
+//                                                    self.videoEdit = videoEdit
+//                                                    
+//                                                    AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
+//                                                        if status == .completed {
+//                                                            PTGCDManager.gcdMain {
+//                                                                PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
+//                                                            }
+//                                                        } else if status == .failed {
+//                                                            PTGCDManager.gcdMain {
+//                                                                PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
+//                                                            }
+//                                                        }
+//                                                    }
+//                                                }
+//                                                .store(in: &self.cancellables)
+//                                            controller.modalPresentationStyle = .fullScreen
+//                                            let nav = PTBaseNavControl(rootViewController: controller)
+//                                            self.navigationController?.present(nav, animated: true)
+//                                        }
+//                                    } else {
+//                                        UIViewController.gobal_drop(title: "获取失败,请重试")
+//                                    }
+//                                }
                             }
                         } else {
                             PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)

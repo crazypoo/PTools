@@ -8,10 +8,48 @@
 
 import UIKit
 import SnapKit
+import SwifterSwift
+#if POOTOOLS_NAVBARCONTROLLER
+import ZXNavigationBar
+#endif
 
 class PTVideoEditorToolsCropControl: PTBaseViewController {
 
     var cropImageHandler:((CGSize,CGRect)->Void)!
+    
+    lazy var dismissButtonItem:UIButton = {
+        let image = "❌".emojiToImage(emojiFont: .appfont(size: 20))
+        let buttonItem = UIButton(type: .custom)
+        buttonItem.setImage(image, for: .normal)
+        buttonItem.addActionHandlers { sender in
+            self.returnFrontVC()
+        }
+        return buttonItem
+    }()
+    
+    lazy var doneButtonItem:UIButton = {
+        let image = "✂️".emojiToImage(emojiFont: .appfont(size: 20))
+        let buttonItem = UIButton(type: .custom)
+        buttonItem.setImage(image, for: .normal)
+        buttonItem.addActionHandlers { sender in
+            self.cropView.crop { [weak self] (crop) in
+                guard let self = self else { return }
+                if let error = crop.error {
+                    PTGCDManager.gcdMain {
+                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription,icon:.Error,style: .Normal)
+                    }
+                    return
+                }
+                if let cropFrame = crop.cropFrame, let imageSize = crop.imageSize {
+                    self.dismiss(animated: true) {
+                        self.cropImageHandler(imageSize,cropFrame)
+                    }
+                }
+            }
+        }
+        return buttonItem
+    }()
+
     
     private var cropView: CropPickerView = {
         let view = CropPickerView()
@@ -22,6 +60,15 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     }()
 
     private let image: UIImage
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+#if POOTOOLS_NAVBARCONTROLLER
+#else
+        PTBaseNavControl.GobalNavControl(nav: navigationController!)
+#endif
+    }
 
     init(image: UIImage) {
         self.image = image
@@ -35,52 +82,40 @@ class PTVideoEditorToolsCropControl: PTBaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+#if POOTOOLS_NAVBARCONTROLLER
+        zx_navBar?.addSubviews([dismissButtonItem,doneButtonItem])
+        dismissButtonItem.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+            make.bottom.equalToSuperview().inset(5)
+        }
+        
+        doneButtonItem.snp.makeConstraints { make in
+            make.size.bottom.equalTo(self.dismissButtonItem)
+            make.right.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+        }
+#else
+        dismissButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        doneButtonItem.frame = CGRect(x: 0, y: 0, width: 34, height: 34)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: dismissButtonItem)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: doneButtonItem)
+#endif
+
         self.view.clipsToBounds = true
         self.view.backgroundColor = .black
         self.view.addSubview(self.cropView)
         self.cropView.snp.makeConstraints { make in
-            make.left.right.top.equalToSuperview().inset(10)
+#if POOTOOLS_NAVBARCONTROLLER
+            make.top.equalToSuperview().inset(CGFloat.kNavBarHeight_Total + 10)
+#else
+            make.top.equalToSuperview().inset(10)
+#endif
+            make.left.right.equalToSuperview()
             make.bottom.equalToSuperview().inset(CGFloat.kTabbarSaveAreaHeight + 10)
         }
 
         DispatchQueue.main.async {
             self.cropView.image(self.image, isMin: true)
-        }
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(self.closeTab(_:)))
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Crop", style: .plain, target: self, action: #selector(self.cropTab(_:)))
-
-        self.navigationController?.navigationBar.isTranslucent = false
-        self.navigationController?.navigationBar.barTintColor = .black
-        self.navigationController?.navigationBar.backgroundColor = .black
-        self.navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-    }
-
-    @objc private func closeTab(_ sender: UIBarButtonItem) {
-        self.dismiss(animated: true, completion: nil)
-    }
-
-    @objc private func cropTab(_ sender: UIButton) {
-        self.cropView.crop { [weak self] (crop) in
-            guard let self = self else { return }
-            if let error = crop.error {
-                DispatchQueue.main.async {
-                    let alertController = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
-                    alertController.addAction(UIAlertAction(title: "Confirm", style: .default, handler: nil))
-                    self.present(alertController, animated: true, completion: nil)
-                }
-                return
-            }
-            if let cropFrame = crop.cropFrame, let imageSize = crop.imageSize {
-                self.dismiss(animated: true) {
-                    self.cropImageHandler(imageSize,cropFrame)
-                }
-            }
         }
     }
 }

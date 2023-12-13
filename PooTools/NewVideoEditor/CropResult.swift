@@ -1,8 +1,9 @@
 //
 //  CropResult.swift
-//  CropPickerView
+//  PooTools_Example
 //
-//  Created by Apple on 2020/09/05.
+//  Created by 邓杰豪 on 11/12/23.
+//  Copyright © 2023 crazypoo. All rights reserved.
 //
 
 import Foundation

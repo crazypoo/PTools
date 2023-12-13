@@ -102,6 +102,9 @@ class PTVideoEditorToolsTrimmingControl: UIControl {
             internalRightTrimValue = self.rightHandleValue(for: location.x)
         }
 
+        if #unavailable(iOS 16.0) {
+            trimPositions = (Double(internalLeftTrimValue), Double(internalRightTrimValue))
+        }
         return true
     }
 

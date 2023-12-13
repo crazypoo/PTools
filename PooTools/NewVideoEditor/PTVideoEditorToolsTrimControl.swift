@@ -58,17 +58,15 @@ class PTVideoEditorToolsTrimControl: PTVideoEditorBaseFloatingViewController {
                     let cgImages = try await self.videoTimeline(for: self.asset, in: bounds, numberOfFrames: count)
                     self.updateVideoTimeline(with: cgImages, assetAspectRatio: ratio)
                 } catch {
-                    PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription,icon: .Error,style: .Normal)
                 }
             }
         }
         
         doneButton.addActionHandlers { sender in
-            self.returnFrontVC {
-                self.trimPosotionsHandler(self.trimmingControlView.trimPositions)
-            }
+            self.trimPosotionsHandler(self.trimmingControlView.trimPositions)
+            self.returnFrontVC()
         }
-
     }
 }
 
