@@ -496,7 +496,12 @@ public extension UIViewController {
             modalViewController.completion = completion
             PTFloatingPanelFuction.floatPanel_VC(vc: modalViewController,panGesDelegate: panGesDelegate,currentViewController: self,floatingDismiss: dismissCompletion)
 #else
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"須要導入POOTOOLS_FLOATINGPANEL",icon:.Error,style: .Normal)
+                if #available(iOS 15.0, *) {
+                    modalViewController.dismissCompletion = dismissCompletion
+                    sheetPresent(modalViewController: modalViewController, type: type, scale: scale, completion: completion)
+                } else {
+                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"須要導入POOTOOLS_FLOATINGPANEL",icon:.Error,style: .Normal)
+                }
 #endif
             }
         default:
