@@ -261,7 +261,6 @@
 		55B13D4C2B1AE8CC00C67EDA /* PTImageEditorConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */; };
 		55B13D4E2B1AEAF300C67EDA /* PTImageClipRatio.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */; };
 		55B13D502B1AEC6800C67EDA /* PTImageCutRatioCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D4F2B1AEC6800C67EDA /* PTImageCutRatioCell.swift */; };
-		55B13D522B1AED0E00C67EDA /* UIImage+PTEditEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D512B1AED0E00C67EDA /* UIImage+PTEditEX.swift */; };
 		55B13D542B1AEDE800C67EDA /* PTEditModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D532B1AEDE800C67EDA /* PTEditModel.swift */; };
 		55B13D562B1AEE1B00C67EDA /* PTMediaEditManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */; };
 		55B13D582B1AEF3F00C67EDA /* PTEditToolsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */; };
@@ -737,7 +736,6 @@
 		55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageEditorConfig.swift; sourceTree = "<group>"; };
 		55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageClipRatio.swift; sourceTree = "<group>"; };
 		55B13D4F2B1AEC6800C67EDA /* PTImageCutRatioCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImageCutRatioCell.swift; sourceTree = "<group>"; };
-		55B13D512B1AED0E00C67EDA /* UIImage+PTEditEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+PTEditEX.swift"; sourceTree = "<group>"; };
 		55B13D532B1AEDE800C67EDA /* PTEditModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditModel.swift; sourceTree = "<group>"; };
 		55B13D552B1AEE1B00C67EDA /* PTMediaEditManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaEditManager.swift; sourceTree = "<group>"; };
 		55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTEditToolsCell.swift; sourceTree = "<group>"; };
@@ -1748,7 +1746,6 @@
 				55BCB9642B1731C20016A4C2 /* PTPaths.swift */,
 				55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */,
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
-				55B13D512B1AED0E00C67EDA /* UIImage+PTEditEX.swift */,
 			);
 			path = ImageEditor;
 			sourceTree = "<group>";
@@ -2726,7 +2723,6 @@
 				231D168C272CDEEA003D6F62 /* BorderManager.swift in Sources */,
 				9A14E99D2861BC8E00D7E8EF /* PTLanguage.swift in Sources */,
 				55BCB97D2B1732030016A4C2 /* PTMediaLibManager.swift in Sources */,
-				55B13D522B1AED0E00C67EDA /* UIImage+PTEditEX.swift in Sources */,
 				55B4FA102AE0F9D8006D35F3 /* PTPermissionCamera.swift in Sources */,
 				231D1672272CDEEA003D6F62 /* String+PTEX.swift in Sources */,
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
