@@ -1736,7 +1736,6 @@
 				55BCB97E2B1733620016A4C2 /* PTEditInputViewController.swift */,
 				55B13D532B1AEDE800C67EDA /* PTEditModel.swift */,
 				55B13D572B1AEF3F00C67EDA /* PTEditToolsCell.swift */,
-				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55B13D4D2B1AEAF300C67EDA /* PTImageClipRatio.swift */,
 				55B13D4F2B1AEC6800C67EDA /* PTImageCutRatioCell.swift */,
 				55B13D4B2B1AE8CC00C67EDA /* PTImageEditorConfig.swift */,
@@ -2215,6 +2214,7 @@
 		55F162E22B18E32300320925 /* C7Collector */ = {
 			isa = PBXGroup;
 			children = (
+				55F163062B19DC5400320925 /* PTFilterImageCell.swift */,
 				55B13D5B2B1AF80300C67EDA /* C7CameraConfig.swift */,
 				55F162E32B18E36200320925 /* C7Collector.swift */,
 				55F162E72B18E3F300320925 /* C7CollectorCamera.swift */,
