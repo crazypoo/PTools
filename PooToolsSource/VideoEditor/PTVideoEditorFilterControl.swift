@@ -40,6 +40,7 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
+            let config = PTVideoEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! UIImage
             let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
