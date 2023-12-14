@@ -28,11 +28,11 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             var customers = [NSCollectionLayoutGroupCustomItem]()
             var groupW:CGFloat = PTAppBaseConfig.share.defaultViewSpace
             let screenW:CGFloat = 88
-            let cellHeight:CGFloat = PTCutViewController.cutRatioHeight
+            let cellHeight:CGFloat = 108
             sectionModel.rows.enumerated().forEach { (index,model) in
                 let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: PTAppBaseConfig.share.defaultViewSpace + 10 * CGFloat(index) + screenW * CGFloat(index), y: 0, width: screenW, height: cellHeight), zIndex: 1000+index)
                 customers.append(customItem)
-                groupW += (cellHeight + 10)
+                groupW += (screenW + 10)
             }
             bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupW), heightDimension: NSCollectionLayoutDimension.absolute(cellHeight))
             return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
@@ -40,7 +40,6 @@ class PTVideoEditorFilterControl: PTVideoEditorBaseFloatingViewController {
             })
         }
         view.cellInCollection = { collection,sectionModel,indexPath in
-            let config = PTImageEditorConfig.share
             let itemRow = sectionModel.rows[indexPath.row]
             let cellTools = itemRow.dataModel as! UIImage
             let cellFilter = PTVideoEditorConfig.share.filters[indexPath.row]
