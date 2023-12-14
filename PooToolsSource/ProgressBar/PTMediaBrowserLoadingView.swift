@@ -23,7 +23,9 @@ public class PTMediaBrowserLoadingView: UIView {
         didSet {
             self.setNeedsDisplay()
             if progress >= 1 {
-                removeFromSuperview()
+                PTGCDManager.gcdMain {
+                    self.removeFromSuperview()
+                }
             }
         }
     }

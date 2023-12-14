@@ -183,28 +183,27 @@ open class VideoConverter {
             self.progressCallback = progress
             // progress timer
             PTGCDManager.gcdMain {
-                self.timer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] (time) in
-                    if let progress = self?.assetExportsSession?.progress {
-                        self?.progressCallback?(Double(progress))
+                self.timer = Timer.scheduledTimer(timeInterval: 0.1, repeats: true, block: { timer in
+                    if let progress = self.assetExportsSession?.progress {
+                        self.progressCallback?(Double(progress))
                         if progress >= 1 {
-                            self?.timer?.invalidate()
-                            self?.timer = nil
+                            self.timer?.invalidate()
+                            self.timer = nil
                         }
-                    } else if self?.assetExportsSession == nil {
-                        self?.timer?.invalidate()
-                        self?.timer = nil
+                    } else if self.assetExportsSession == nil {
+                        self.timer?.invalidate()
+                        self.timer = nil
                     }
-                }
+                })
             }
-            
+                        
             let presetName = option?.quality ?? AVAssetExportPresetHighestQuality
             self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
             self.assetExportsSession?.outputFileType = AVFileType.mp4
             self.assetExportsSession?.shouldOptimizeForNetworkUse = true
             self.assetExportsSession?.videoComposition = avc
             self.assetExportsSession?.outputURL = url
-            
-            //        PTNSLogConsole("\(ac)\n\(avc)")
+
             self.assetExportsSession?.exportAsynchronously {
                 self.timer?.invalidate()
                 self.timer = nil
@@ -220,9 +219,8 @@ open class VideoConverter {
                 }
             }
         } else {
-            PTAlertTipControl.present(title:"",subtitle:result.error,icon:.Error,style: .Normal)
+            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:result.error,icon:.Error,style: .Normal)
         }
-
     }
 
     // Video Size

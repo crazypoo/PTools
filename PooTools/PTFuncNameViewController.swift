@@ -495,58 +495,23 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
                 touchID.biologyStart(alertTitle: "Test")
             } else if itemRow.title == .videoEditor {
+                let pickerConfig = PTMediaLibConfig.share
+                pickerConfig.allowSelectImage = false
+                pickerConfig.allowSelectVideo = true
+                pickerConfig.allowSelectGif = false
+                pickerConfig.maxVideoSelectCount = 1
                 
-                UIAlertController.baseActionSheet(title: "选择", titles: ["新","旧"], otherBlock: { sheet,index,title in
-                    let pickerConfig = PTMediaLibConfig.share
-                    pickerConfig.allowSelectImage = false
-                    pickerConfig.allowSelectVideo = true
-                    pickerConfig.allowSelectGif = false
-                    pickerConfig.maxVideoSelectCount = 1
-                    
-                    let vc = PTMediaLibViewController()
-                    vc.mediaLibShow()
-                    vc.selectImageBlock = { result, isOriginal in
-                        PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
-                        if result.count > 0 {
-                            if index == 0 {
-                                let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
-                                controller.videoEditorShow(vc: self)
-                            } else {
-//                                self.convertPHAssetToAVAsset(phAsset: result.first!.asset) { avAsset in
-//                                    if let avAsset = avAsset {
-//                                        PTGCDManager.gcdMain {
-//                                            let controller = PTVideoEditorVideoEditorViewController(asset: avAsset, videoEdit: self.videoEdit)
-//                                            controller.onEditCompleted
-//                                                .sink {  editedPlayerItem, videoEdit in
-//                                                    self.videoEdit = videoEdit
-//                                                    
-//                                                    AVAssetExportSession.pt.saveVideoToCache(playerItem: editedPlayerItem) { status, exportSession, fileUrl, error in
-//                                                        if status == .completed {
-//                                                            PTGCDManager.gcdMain {
-//                                                                PTAlertTipControl.present(title:"完成",icon:.Done,style: .Normal)
-//                                                            }
-//                                                        } else if status == .failed {
-//                                                            PTGCDManager.gcdMain {
-//                                                                PTAlertTipControl.present(title:"失敗了",icon:.Done,style: .Normal)
-//                                                            }
-//                                                        }
-//                                                    }
-//                                                }
-//                                                .store(in: &self.cancellables)
-//                                            controller.modalPresentationStyle = .fullScreen
-//                                            let nav = PTBaseNavControl(rootViewController: controller)
-//                                            self.navigationController?.present(nav, animated: true)
-//                                        }
-//                                    } else {
-//                                        UIViewController.gobal_drop(title: "获取失败,请重试")
-//                                    }
-//                                }
-                            }
-                        } else {
-                            PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
-                        }
+                let vc = PTMediaLibViewController()
+                vc.mediaLibShow()
+                vc.selectImageBlock = { result, isOriginal in
+                    PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
+                    if result.count > 0 {
+                        let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
+                        controller.videoEditorShow(vc: self)
+                    } else {
+                        PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
                     }
-                })
+                }
             } else if itemRow.title == .sign {
                 let signConfig = PTSignatureConfig()
                 
@@ -844,6 +809,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 config.maxSelectCount = 2
                 config.maxVideoSelectCount = 2
                 config.allowEditImage = true
+                config.allowEditVideo = true
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
                 vc.selectImageBlock = { result,isOriginal in

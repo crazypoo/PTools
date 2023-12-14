@@ -25,8 +25,8 @@ let shareURLString = "https://www.github.com/crazypoo"
 
 class PTSwiftViewController: PTBaseViewController {
         
-    private var videoEdit: PTVideoEdit?
-    fileprivate var cancellables = Set<AnyCancellable>()
+//    private var videoEdit: PTVideoEdit?
+//    fileprivate var cancellables = Set<AnyCancellable>()
 
     lazy var cycleView: PTCycleScrollView = {
         let banner = PTCycleScrollView.cycleScrollViewCreate()

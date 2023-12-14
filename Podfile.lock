@@ -284,6 +284,7 @@ PODS:
     - PooTools/Picker
     - PooTools/Ping
     - PooTools/PopoverKit
+    - PooTools/ProgressBar
     - PooTools/RateView
     - PooTools/Rotation
     - PooTools/Router
@@ -335,6 +336,7 @@ PODS:
     - PooTools/Core
     - PooTools/NetWork
     - PooTools/PageControl
+    - PooTools/ProgressBar
   - PooTools/MeidaPermission (3.27.5):
     - PooTools/Core
   - PooTools/MicPermission (3.27.5):
@@ -390,6 +392,8 @@ PODS:
   - PooTools/PopoverKit (3.27.5):
     - PooTools/Core
     - Popovers
+  - PooTools/ProgressBar (3.27.5):
+    - PooTools/Core
   - PooTools/RateView (3.27.5):
     - PooTools/Core
   - PooTools/RemindersPermission (3.27.5):
@@ -686,7 +690,7 @@ SPEC CHECKSUMS:
   NotificationBannerSwift: dce54ded532b26e30cd8e7f4d80e124a0f2ba7d1
   PhoneNumberKit: 3c68a822bad955ffcefc72a52df72b6596498555
   PocketSVG: ca3bc53ea8d68336ba830c47b2e547790507b901
-  PooTools: 007273f6f9a185c004e8b081f9a521d28f181c7e
+  PooTools: 16f125015668f2ffbb1d49fd5aaf83c84ba836bb
   pop: d582054913807fd11fd50bfe6a539d91c7e1a55a
   Popovers: 8690b055b2c9ef433492b40e081b1a0be5859437
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5

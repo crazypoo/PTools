@@ -220,7 +220,9 @@
 "PT Permission Authorize title" = "Autorizar";
 "PT Video editor function rotate" = "Rotar";
 "PT Video editor function mute" = "Sordina";
-"PT Video editor function export preset" = "Tipo de exportación";
+"PT Video editor function export preset" = "Calidad de imagen";
 "PT Video editor function save done" = "¡Trabajo hecho!";
 "PT Video editor function filter" = "Filtro";
 "PT Video editor function rewrite" = "Volver a escribir";
+"PT Video editor function export preset select" = "Por favor, seleccione la calidad de la imagen.";
+"PT Video editor function export preset select current" = "Actual: %@";

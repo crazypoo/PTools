@@ -33,8 +33,8 @@ public class PTMediaLibView:UIView {
         return false
     }
 
-    private var videoEdit: PTVideoEdit?
-    fileprivate var cancellables = Set<AnyCancellable>()
+//    private var videoEdit: PTVideoEdit?
+//    fileprivate var cancellables = Set<AnyCancellable>()
     
     var selectedCount:((Int)->Void)?
     
@@ -103,35 +103,27 @@ public class PTMediaLibView:UIView {
                 cell.editButton.addActionHandlers { sender in
                     switch cellModel.type {
                     case .video:
-                        let _ = PTMediaLibManager.fetchAVAsset(forVideo: cellModel.asset) { avAsset, parma in
-                            if avAsset != nil {
-                                let controller = PTVideoEditorVideoEditorViewController(asset: avAsset!, videoEdit: self.videoEdit)
-                                controller.onEditCompleted
-                                    .sink {  editedPlayerItem, videoEdit in
-                                        self.videoEdit = videoEdit
-                                        
-                                        for (index, selM) in self.selectedModel.enumerated() {
-                                            if cellModel == selM {
-                                                self.saveVideoToCache(playerItem: editedPlayerItem) { fileURL, finish in
-                                                    if finish {
-                                                        PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
-                                                            let m = PTMediaModel(asset: asset!)
-                                                            m.isSelected = true
-                                                            self.selectedModel[index] = m
-                                                            config.didSelectAsset?(asset!)
-                                                        }
-                                                    }
-                                                }
-                                                break
+                        let controller = PTVideoEditorToolsViewController(asset: cellModel.asset)
+                        controller.onlyOutput = true
+                        controller.onEditCompleteHandler = { url in
+                            let alPlayerItem = AVPlayerItem(url: url)
+                            for (index, selM) in self.selectedModel.enumerated() {
+                                if cellModel == selM {
+                                    self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
+                                        if finish {
+                                            PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
+                                                let m = PTMediaModel(asset: asset!)
+                                                m.isSelected = true
+                                                self.selectedModel[index] = m
+                                                config.didSelectAsset?(asset!)
                                             }
                                         }
                                     }
-                                    .store(in: &self.cancellables)
-                                let nav = PTBaseNavControl(rootViewController: controller)
-                                nav.modalPresentationStyle = .fullScreen
-                                PTUtils.getCurrentVC().present(nav, animated: true)
+                                    break
+                                }
                             }
                         }
+                        controller.videoEditorShow(vc: PTUtils.getCurrentVC())
                     default:
                         PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
                             if !isDegraded {
