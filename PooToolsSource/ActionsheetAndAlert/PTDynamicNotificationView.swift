@@ -54,11 +54,14 @@ public class PTDynamicNotificationView: UIView {
         content(contentViews)
         AppWindows!.addSubviews([self])
         self.snp.makeConstraints { make in
-            make.width.equalTo(371)
+            make.width.equalTo(CGFloat.ScaleW(w: 371))
             make.height.equalTo(contentHeight)
             make.centerX.equalToSuperview()
+
             if Gobal_device_info.isOneOf([.iPhone14Pro,.iPhone14ProMax,.iPhone15,.iPhone15Pro,.iPhone15ProMax,.iPhone15Plus]) {
                 make.top.equalToSuperview().inset(10)
+            } else if Gobal_device_info.isOneOf([.iPhoneX, .iPhoneXS, .iPhoneXSMax, .iPhoneXR, .iPhone11, .iPhone11Pro, .iPhone11ProMax, .iPhone12, .iPhone12Mini, .iPhone12Pro, .iPhone12ProMax, .iPhone13, .iPhone13Mini, .iPhone13Pro, .iPhone13ProMax, .iPhone14, .iPhone14Plus]) {
+                make.top.equalToSuperview()
             } else {
                 make.top.equalToSuperview().inset(CGFloat.statusBarHeight())
             }

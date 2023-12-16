@@ -47,6 +47,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.backgroundColor = .black
+        imageView.isUserInteractionEnabled = true
         return imageView
     }()
     
@@ -105,9 +106,17 @@ public class PTFilterCameraViewController: PTBaseViewController {
         view.isHidden = cameraCount <= 1
         view.addActionHandlers { sender in
             self.camera.changeCamera {
-                PTGCDManager.gcdBackground {
+//                let rotationAngle: CGFloat = CGFloat.pi / 2
+//                self.originImageView.transform = CGAffineTransform(rotationAngle: rotationAngle)
+//
+//                PTGCDManager.gcdMain {
+//                    self.originImageView.snp.remakeConstraints { make in
+//                        make.edges.equalToSuperview()
+//                    }
+//                }
+//                PTGCDManager.gcdBackground {
 //                    self.originImageView.image = self.originImageView.image?.imageRotated(byDegrees: 90)
-                }
+//                }
             }
         }
         return view
@@ -404,7 +413,7 @@ public class PTFilterCameraViewController: PTBaseViewController {
             make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
         }
         
-        view.addGestureRecognizer(focusCursorTapGes)
+        originImageView.addGestureRecognizer(focusCursorTapGes)
 
         setupToolBar()
     }

@@ -311,7 +311,7 @@ public final class C7CollectorCamera: C7Collector {
                     }
                 }
             } catch {
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"切换摄像头失败 \(error.localizedDescription)",icon:.Error,style: .Normal)
+                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"\("PT Filter cam change failed".localized())\(error.localizedDescription)",icon:.Error,style: .Normal)
             }
         }
     }
@@ -519,20 +519,38 @@ extension C7CollectorCamera:AVCapturePhotoCaptureDelegate {
             }
             
             if photoSampleBuffer == nil || error != nil {
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"拍照失败 \(error?.localizedDescription ?? "")",icon:.Error,style: .Normal)
+                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"\("PT Filter cam take photo failed".localized()) \(error?.localizedDescription ?? "")",icon:.Error,style: .Normal)
                 return
             }
 
-            if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
-                self.stopRunning()
-                let image = UIImage(data: data)?.c7.fixOrientation()
-                
-                var dest = BoxxIO(element: image, filters: self.filters)
-                dest.transmitOutputRealTimeCommit = true
-                self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
-            } else {
-                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"拍照失败，data为空",icon:.Error,style: .Normal)
-            }
+            // 初始化 AVCapturePhotoOutput 实例
+            let photoOutput = AVCapturePhotoOutput()
+
+            // 设置 capturePhoto 方法的参数和代理
+            let photoSettings = AVCapturePhotoSettings(format: [AVVideoCodecKey: AVVideoCodecType.jpeg])
+            photoOutput.capturePhoto(with: photoSettings, delegate: self)
+
+//            if let data = AVCapturePhotoOutput.jpegPhotoDataRepresentation(forJPEGSampleBuffer: photoSampleBuffer!, previewPhotoSampleBuffer: previewPhotoSampleBuffer) {
+//                self.stopRunning()
+//                let image = UIImage(data: data)?.c7.fixOrientation()
+//                
+//                var dest = BoxxIO(element: image, filters: self.filters)
+//                dest.transmitOutputRealTimeCommit = true
+//                self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
+//            } else {
+//                PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"拍照失败，data为空",icon:.Error,style: .Normal)
+//            }
+        }
+    }
+    
+    public func photoOutput(_ output: AVCapturePhotoOutput, didFinishProcessingPhoto photo: AVCapturePhoto, error: Error?) {
+        self.stopRunning()
+        if let data = photo.fileDataRepresentation() {
+            let image = UIImage(data: data)?.c7.fixOrientation()
+            
+            var dest = BoxxIO(element: image, filters: self.filters)
+            dest.transmitOutputRealTimeCommit = true
+            self.delegate?.takePhoto!(self, fliter: (try? dest.output() ?? image!)!)
         }
     }
 }

@@ -110,7 +110,7 @@ extension C7Collector {
             }
             PTGCDManager.gcdMain {
                 if self.autoCorrectDirection {
-                    image = image.c7.fixOrientation()
+                    image = image.pt.fixOrientation()
                 }
                 self.delegate?.preview(self, fliter: image)
             }
