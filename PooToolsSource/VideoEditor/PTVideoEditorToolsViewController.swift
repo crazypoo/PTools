@@ -17,6 +17,8 @@ import SafeSFSymbols
 import ZXNavigationBar
 #endif
 
+public let OutputFilePath = FileManager.pt.DocumnetsDirectory() + "/AudioEditor"
+
 extension UIImage {
     func rotate(radians: Float) -> UIImage? {
         var newSize = CGRect(origin: .zero, size: self.size).applying(CGAffineTransform(rotationAngle: CGFloat(radians))).size
@@ -120,7 +122,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 }
                 self.setOutPut { url, error in
                     if url != nil {
-                        let exporter = Exporter(provider: Exporter.Provider.init(with: url!))
+                        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+                        let random = Int(arc4random_uniform(89999) + 10000)
+                        let outputURL = documents.appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
+
+                        let exporter = Exporter(provider: Exporter.Provider.init(with: url!,to: outputURL))
                         exporter.export(options: [
                             .OptimizeForNetworkUse: true,
                         ], filtering: { buffer in
@@ -249,10 +255,11 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     var currentPlayTime:Float64 = 0
     var videoTime:Double = 0
 
-    lazy var playerButton:UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(UIImage(.play.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)), for: .normal)
-        view.setImage(UIImage(.pause.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)), for: .selected)
+    lazy var playerButton:PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.imageSize = CGSizeMake(25, 25)
+        view.normalImage = UIImage(.play.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        view.selectedImage = UIImage(.pause.circleFill).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
         view.isSelected = false
         view.addActionHandlers { sender in
             sender.isSelected = !sender.isSelected
@@ -303,6 +310,63 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         return view
     }()
     
+    lazy var muteButton:PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.imageSize = CGSizeMake(25, 25)
+        view.normalImage = UIImage(.speaker).withTintColor(PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white))
+        view.selectedImage = UIImage(.speaker.zzz).withTintColor(PTVideoEditorConfig.share.themeColor)
+        view.isSelected = false
+        view.addActionHandlers { sender in
+            sender.isSelected = !sender.isSelected
+            self.isMute = sender.isSelected
+        }
+        return view
+    }()
+    
+    var currentOutputType:PTConverterOptionOutputType = PTConverterOptionOutputType()
+    
+    let outputTypes:[PTConverterOptionOutputType] = {
+        let mov = PTConverterOptionOutputType()
+        mov.type = .mov
+        
+        let mp4 = PTConverterOptionOutputType()
+        mp4.type = .mp4
+
+        let m4v = PTConverterOptionOutputType()
+        m4v.type = .m4v
+
+        let gp = PTConverterOptionOutputType()
+        gp.type = .mobile3GPP
+
+        let gp2 = PTConverterOptionOutputType()
+        gp2.type = .mobile3GPP2
+
+        return [mov,mp4,m4v,gp,gp2]
+    }()
+    
+    lazy var outputTypeButton:PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.layoutStyle = .leftTitleRightImage
+        view.imageSize = CGSizeMake(15, 15)
+        view.normalTitle = currentOutputType.name
+        view.normalTitleFont = .appfont(size: 14)
+        view.normalTitleColor = .systemBlue
+        view.midSpacing = 5
+        view.normalImage = UIImage(.chevron.upChevronDown).withTintColor(.systemBlue)
+        view.addActionHandlers { sender in
+            var titles = [String]()
+            self.outputTypes.enumerated().forEach { index,value in
+                titles.append(value.name)
+            }
+            
+            UIAlertController.baseActionSheet(title: "PT Video editor output type".localized(),subTitle: String(format: "PT Video editor function export preset select current".localized(), self.currentOutputType.name), titles: titles) { sheet, index, title in
+                self.currentOutputType = self.outputTypes[index]
+                self.outputTypeButton.normalTitle = self.currentOutputType.name
+            }
+        }
+        return view
+    }()
+    
     lazy var centerLine:UIView = {
         let view = UIView()
         view.backgroundColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
@@ -311,7 +375,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
     lazy var currentTimeLabel:UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.textAlignment = .right
         label.text = "0:00"
         label.font = .systemFont(ofSize: 13.0)
         label.textColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
@@ -320,7 +384,7 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 
     lazy var videoTimeLabel:UILabel = {
         let label = UILabel()
-        label.textAlignment = .center
+        label.textAlignment = .left
         label.text = "0:00"
         label.font = .systemFont(ofSize: 13.0)
         label.textColor = PTDarkModeOption.colorLightDark(lightColor: .black, darkColor: .white)
@@ -386,10 +450,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         let trimModel = PTVideoEditorToolsModel(videoControl: .trim)
         let cropModel = PTVideoEditorToolsModel(videoControl: .crop)
         let rotateModel = PTVideoEditorToolsModel(videoControl: .rotate)
-        let muteModel = PTVideoEditorToolsModel(videoControl: .mute)
+//        let muteModel = PTVideoEditorToolsModel(videoControl: .mute)
         let presetsModel = PTVideoEditorToolsModel(videoControl: .presets)
 //        let rewriteModel = PTVideoEditorToolsModel(videoControl: .rewrite)
-        return [filterModel,speedModel,trimModel,cropModel,rotateModel,muteModel,presetsModel/*,rewriteModel*/]
+        return [filterModel,speedModel,trimModel,cropModel,rotateModel/*,muteModel*/,presetsModel/*,rewriteModel*/]
     }()
     
     lazy var bottomControlCollection:PTCollectionView = {
@@ -603,6 +667,12 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
 #else
         PTBaseNavControl.GobalNavControl(nav: navigationController!)
 #endif
+        if !FileManager.pt.judgeFileOrFolderExists(filePath: OutputFilePath) {
+            let result = FileManager.pt.createFolder(folderPath: OutputFilePath)
+            if !result.isSuccess {
+                PTNSLogConsole("創建失敗")
+            }
+        }
     }
     
     public init(asset:PHAsset) {
@@ -738,28 +808,41 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
     }
     
     func playContentSet() {
-        playContent.addSubviews([playerButton,centerLine,currentTimeLabel,videoTimeLabel])
+        playContent.addSubviews([playerButton,muteButton,centerLine,currentTimeLabel,videoTimeLabel,outputTypeButton])
         
+        playerButton.snp.makeConstraints { make in
+            make.size.equalTo(34)
+            make.centerY.equalToSuperview()
+            make.left.equalToSuperview().inset(30)
+        }
+        
+        muteButton.snp.makeConstraints { make in
+            make.size.centerY.equalTo(self.playerButton)
+            make.left.equalTo(self.playerButton.snp.right).offset(10)
+        }
+
         centerLine.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview().inset(12.5)
             make.width.equalTo(1.5)
             make.centerX.equalToSuperview()
         }
         
+        outputTypeButton.snp.makeConstraints { make in
+            make.height.equalTo(34)
+            make.right.equalToSuperview().inset(30)
+            make.centerY.equalToSuperview()
+        }
+
         currentTimeLabel.snp.makeConstraints { make in
             make.right.equalTo(self.centerLine.snp.left).offset(-5)
             make.centerY.equalToSuperview()
+            make.left.lessThanOrEqualTo(self.muteButton.snp.right).offset(10)
         }
         
         videoTimeLabel.snp.makeConstraints { make in
             make.left.equalTo(self.centerLine.snp.left).offset(5)
             make.centerY.equalToSuperview()
-        }
-        
-        playerButton.snp.makeConstraints { make in
-            make.size.equalTo(34)
-            make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(30)
+            make.right.lessThanOrEqualTo(self.outputTypeButton.snp.left).offset(-10)
         }
     }
     
@@ -818,7 +901,8 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             rotate: CGFloat(.pi/2 * self.rotate),
             quality: presets,
             isMute: self.isMute,
-            speed: speed)
+            speed: speed,
+            outputModel: currentOutputType)
 
         let videoConverter: VideoConverter = VideoConverter(asset:self.videoAVAsset)
         videoConverter.convert(options,progress: { progress in

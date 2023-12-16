@@ -121,14 +121,8 @@ public class PTPermissionSettingViewController: PTBaseViewController {
     }
     
     public func permissionShow(vc:UIViewController) {
-#if POOTOOLS_NAVBARCONTROLLER
         let nav = PTBaseNavControl(rootViewController: self)
         nav.modalPresentationStyle = .formSheet
         vc.showDetailViewController(nav, sender: nil)
-#else
-        let nav = UINavigationController(rootViewController: self)
-        nav.modalPresentationStyle = .formSheet
-        vc.showDetailViewController(nav, sender: nil)
-#endif
     }
 }

@@ -499,6 +499,8 @@ class PTFuncNameViewController: PTBaseViewController {
                 pickerConfig.allowSelectImage = false
                 pickerConfig.allowSelectVideo = true
                 pickerConfig.allowSelectGif = false
+                pickerConfig.allowEditVideo = false
+                pickerConfig.maxSelectCount = 1
                 pickerConfig.maxVideoSelectCount = 1
                 
                 let vc = PTMediaLibViewController()

@@ -174,7 +174,19 @@ open class VideoConverter {
     }
     
     func convert(ac:AVMutableComposition,avc:AVMutableVideoComposition,temporaryFileName: String? = nil, progress: ((Double?) -> Void)? = nil, completion: @escaping ((URL?, Error?) -> Void)) {
-        let temporaryFileName = temporaryFileName ?? "TrimmedMovie.mp4"
+        var outputType:String = ""
+        if option != nil {
+            outputType = option!.outputModel.name
+        } else {
+            outputType = "mov"
+        }
+        
+        var outputTypeType:AVFileType = .mov
+        if option != nil {
+            outputTypeType = option!.outputModel.type
+        }
+        
+        let temporaryFileName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
         let filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
         let url = URL(fileURLWithPath: filePath)
         
@@ -199,7 +211,7 @@ open class VideoConverter {
                         
             let presetName = option?.quality ?? AVAssetExportPresetHighestQuality
             self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
-            self.assetExportsSession?.outputFileType = AVFileType.mp4
+            self.assetExportsSession?.outputFileType = outputTypeType
             self.assetExportsSession?.shouldOptimizeForNetworkUse = true
             self.assetExportsSession?.videoComposition = avc
             self.assetExportsSession?.outputURL = url
