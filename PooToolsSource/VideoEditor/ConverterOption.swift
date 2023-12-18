@@ -25,6 +25,26 @@ public class PTConverterOptionOutputType:NSObject {
                 return "3gp"
             case .mobile3GPP2:
                 return "3gp2"
+            case .m4a:
+                return "m4a"
+            case .caf:
+                return "caf"
+            case .wav:
+                return "wav"
+            case .aiff:
+                return "aiff"
+            case .aifc:
+                return "aifc"
+            case .amr:
+                return "amr"
+            case .mp3:
+                return "mp3"
+            case .au:
+                return "au"
+            case .ac3:
+                return "ac3"
+            case .eac3:
+                return "eac3"
             default:
                 return "Unknow"
             }

@@ -510,6 +510,9 @@ class PTFuncNameViewController: PTBaseViewController {
                     if result.count > 0 {
                         let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
                         controller.videoEditorShow(vc: self)
+                        controller.onEditCompleteHandler = { url in
+                            PTAlertTipControl.present(title:"我好了\(url)",icon:.Done,style: .Normal)
+                        }
                     } else {
                         PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
                     }

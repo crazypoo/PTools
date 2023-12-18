@@ -185,9 +185,18 @@ open class VideoConverter {
         if option != nil {
             outputTypeType = option!.outputModel.type
         }
-        
-        let temporaryFileName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
-        let filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
+                
+        var filePath = ""
+        switch outputTypeType {
+        case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
+            let temporaryFileName = temporaryFileName ?? "TrimmedMovie.\(outputType)"
+            filePath = FileManager.pt.TmpDirectory().appendingPathComponent(temporaryFileName)
+        default:
+            let random = Int(arc4random_uniform(89999) + 10000)
+            let fileName = "condy_export_audio_\(random).\(outputType)"
+            filePath = OutputFilePath.appendingPathComponent(fileName)
+        }
+
         let url = URL(fileURLWithPath: filePath)
         
         let result = FileManager.pt.removefile(filePath: filePath)
@@ -209,11 +218,22 @@ open class VideoConverter {
                 })
             }
                         
-            let presetName = option?.quality ?? AVAssetExportPresetHighestQuality
+            var presetName = ""
+            switch outputTypeType {
+            case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
+                presetName = option?.quality ?? AVAssetExportPresetHighestQuality
+            default:
+                presetName = AVAssetExportPresetPassthrough
+            }
+            
             self.assetExportsSession = AVAssetExportSession(asset: ac, presetName: presetName)
             self.assetExportsSession?.outputFileType = outputTypeType
-            self.assetExportsSession?.shouldOptimizeForNetworkUse = true
-            self.assetExportsSession?.videoComposition = avc
+            switch outputTypeType {
+            case .mov,.mp4,.m4v,.mobile3GPP,.mobile3GPP2:
+                self.assetExportsSession?.shouldOptimizeForNetworkUse = true
+                self.assetExportsSession?.videoComposition = avc
+            default:break
+            }
             self.assetExportsSession?.outputURL = url
 
             self.assetExportsSession?.exportAsynchronously {

@@ -226,6 +226,7 @@ public class PTLayoutButton: UIButton {
 
     open var normalTitle: String = "" {
         didSet {
+            selectedTitle = normalTitle
             if #available(iOS 15.0, *) {
                 configuration = layoutConfig
             } else {
@@ -233,17 +234,12 @@ public class PTLayoutButton: UIButton {
             }
         }
     }
-    open var selectedTitle: String {
-        get {
-            normalTitle
-        } set {
-            if selectedTitle != newValue {
-                self.selectedTitle = newValue
-                if #available(iOS 15.0, *) {
-                    configuration = layoutConfig
-                } else {
-                    setTitle(selectedTitle, for: .selected)
-                }
+    open var selectedTitle: String! {
+        didSet {
+            if #available(iOS 15.0, *) {
+                configuration = layoutConfig
+            } else {
+                setTitle(selectedTitle, for: .selected)
             }
         }
     }
@@ -568,7 +564,7 @@ public class PTLayoutButton: UIButton {
         guard var leftViewFrame = leftView?.frame,
               var rightViewFrame = rightView?.frame else { return }
 
-        let totalWidth: CGFloat = leftViewFrame.width + midSpacing + rightViewFrame.width
+        let totalWidth: CGFloat = (leftViewFrame.width > 0 ? leftViewFrame.width : 0) + midSpacing + (rightViewFrame.width > 0 ? rightViewFrame.width : 0)
 
         var leftOrighialX: CGFloat = 0
         var rightOrighialX: CGFloat = 0
