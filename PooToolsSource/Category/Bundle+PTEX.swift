@@ -40,7 +40,7 @@ public extension Bundle {
     }
     
     class func podBundle(bundleName:String) -> Bundle? {
-        Bundle.init(path: Bundle.main.path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
+        Bundle.init(path: PTUtils.cgBaseBundle().path(forResource: bundleName, ofType: "bundle") ?? Bundle.main.bundlePath)
     }
     
     class func appScheme()->[String] {
