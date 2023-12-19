@@ -154,7 +154,6 @@ public class PTMediaLibView:UIView {
                 if let index = self.selectedModel.firstIndex(where: { $0 == cellModel }) {
                     self.setCellIndex(cell, index: index + 1)
                     cellModel.isSelected = true
-                    PTNSLogConsole("找到选中的\(indexPath.row)>>>>>>是否选中\(cellModel.isSelected)")
                 } else {
                     cellModel.isSelected = false
                     cell.selectButton.normalTitle = ""
@@ -339,7 +338,7 @@ public class PTMediaLibView:UIView {
             if selCount < config.maxSelectCount {
                 if config.allowMixSelect {
                     let videoCount = selectedModel.filter { $0.type == .video }.count
-                    if videoCount >= config.maxVideoSelectCount, model.type == .video {
+                    if videoCount >= config.maxVideoSelectCount, model.type != .video {
                         cell.coverView.backgroundColor = .DevMaskColor
                         cell.coverView.isHidden = !uiConfig.showInvalidMask
                         cell.enableSelect = false
@@ -734,9 +733,7 @@ extension PTMediaLibViewController {
                 return
             }
         }
-        
-        PTAlertTipControl.present(title: "",subtitle:"PT Alert Doning".localized(),icon:.Heart,style:.Normal)
-        
+                
         let isOriginal = config.allowSelectOriginal ? isSelectOriginal : config.alwaysRequestOriginal
         
         let callback = { [weak self] (sucModels: [PTResultModel], errorAssets: [PHAsset], errorIndexs: [Int]) in

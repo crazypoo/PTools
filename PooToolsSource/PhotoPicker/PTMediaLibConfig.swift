@@ -22,6 +22,7 @@ let PTMaxImageWidth: CGFloat = 500
     case externalAlbumList
 }
 
+@objcMembers
 public class PTMediaLibConfig:NSObject {
     public static let share = PTMediaLibConfig()
         

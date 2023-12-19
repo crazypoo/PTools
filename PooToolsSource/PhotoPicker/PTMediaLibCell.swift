@@ -142,16 +142,18 @@ class PTMediaLibCell: PTBaseNormalCell {
         view.configBackgroundColor = .clear
         view.configBackgroundSelectedColor = .systemBlue
         view.addActionHandlers { sender in
-            self.selectedBlock?({ isSelected in
-                sender.isSelected = isSelected
-                sender.layer.removeAllAnimations()
-                
-                if isSelected {
-                    self.fetchBigImage()
-                } else {
-                    self.cancelFetchBigImage()
-                }
-            })
+            if self.enableSelect {
+                self.selectedBlock?({ isSelected in
+                    sender.isSelected = isSelected
+                    sender.layer.removeAllAnimations()
+                    
+                    if isSelected {
+                        self.fetchBigImage()
+                    } else {
+                        self.cancelFetchBigImage()
+                    }
+                })
+            }
         }
         view.cornerStyle = .small
         view.cornerRadius = 12.5

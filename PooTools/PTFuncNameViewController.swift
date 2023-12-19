@@ -811,10 +811,13 @@ class PTFuncNameViewController: PTBaseViewController {
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
                 let config = PTMediaLibConfig.share
-                config.maxSelectCount = 2
-                config.maxVideoSelectCount = 2
-                config.allowEditImage = true
-                config.allowEditVideo = true
+                config.maxSelectCount = 9
+                config.allowSelectImage = true
+                config.allowSelectVideo = true
+                config.allowMixSelect = true
+                config.maxVideoSelectCount = 1
+                config.allowEditImage = false
+                config.allowEditVideo = false
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
                 vc.selectImageBlock = { result,isOriginal in

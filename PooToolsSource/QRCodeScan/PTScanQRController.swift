@@ -129,8 +129,8 @@ public class PTScanQRController: PTBaseViewController {
         let view = UIButton(type: .custom)
         view.setImage(self.viewConfig.backImage, for: .normal)
         view.addActionHandlers { sender in
-            if self.session.isRunning {
-                self.session.stopRunning()
+            self.sessionQueue.async {
+                self.removeTimer()
             }
             self.returnFrontVC()
         }
@@ -206,11 +206,17 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
         sessionQueue.async {
             self.removeTimer()
         }
     }
-        
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: false)
+    }
+    
     public override func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -464,12 +470,11 @@ public class PTScanQRController: PTBaseViewController {
     
     //MARK: 根據UIImage來查找QR code
     func findQR(inImage image:UIImage) {
-        PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(),icon: .Heart,style: .Normal)
-        PTGCDManager.gcdMain {
-            self.session.stopRunning()
-            self.timer.invalidate()
+        PTAlertTipControl.present(title:"",subtitle: "PT Alert Doning".localized(),icon: .Heart,style: .SupportVisionOS)
+        self.sessionQueue.async {
+            self.removeTimer()
         }
-        PTGCDManager.gcdBackground {
+        PTGCDManager.gcdMain {
             let detector = CIDetector(ofType: CIDetectorTypeQRCode, context: nil,options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
             let features = detector?.features(in: CIImage(cgImage: image.cgImage!))
             if features!.count == 0 {
@@ -480,7 +485,6 @@ public class PTScanQRController: PTBaseViewController {
                 self.processResult(result: resultString!,error: nil)
             }
         }
-        
     }
 }
 
