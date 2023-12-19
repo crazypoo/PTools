@@ -355,7 +355,7 @@ public class PTMediaBrowserController: PTBaseViewController {
 
             let cellModel = self.viewConfig.mediaData[loadSome]
             self.updateBottom(models: cellModel)
-        }        
+        }
     }
     
     func showCollectionViewData(loadedTask:((UICollectionView)->Void)? = nil) {
@@ -379,7 +379,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                     } else {
                         loadSome = self.viewConfig.defultIndex
                     }
-                    collectionView.scrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: false)
+                    collectionView.safeScrollToItem(at: IndexPath(row: loadSome, section: 0), at: .right, animated: true)
                 } else {
                     if loadedTask != nil {
                         loadedTask!(collectionView)

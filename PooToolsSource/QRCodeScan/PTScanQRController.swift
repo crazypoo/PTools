@@ -266,7 +266,9 @@ public class PTScanQRController: PTBaseViewController {
         
         addTimer()
         startScanAction {
-            self.scanSession()
+            self.sessionQueue.async {
+                self.scanSession()
+            }
         }
     }
     
