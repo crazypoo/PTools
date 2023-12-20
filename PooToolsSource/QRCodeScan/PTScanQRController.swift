@@ -125,9 +125,12 @@ public class PTScanQRController: PTBaseViewController {
     }()
     
     //MARK: 按鈕
-    lazy var backBtn : UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(self.viewConfig.backImage, for: .normal)
+    lazy var backBtn : PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.imageSize = CGSize(width: 44, height: 44)
+        view.midSpacing = 0
+        view.normalTitle = ""
+        view.normalImage = self.viewConfig.backImage
         view.addActionHandlers { sender in
             self.sessionQueue.async {
                 self.removeTimer()
@@ -137,19 +140,25 @@ public class PTScanQRController: PTBaseViewController {
         return view
     }()
     
-    lazy var photosButton : UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(self.viewConfig.photoImage, for: .normal)
+    lazy var photosButton : PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.imageSize = CGSize(width: 44, height: 44)
+        view.midSpacing = 0
+        view.normalTitle = ""
+        view.normalImage = self.viewConfig.photoImage
         view.addActionHandlers { sender in
             self.photosAction()
         }
         return view
     }()
     
-    lazy var flashButton : UIButton = {
-        let view = UIButton(type: .custom)
-        view.setImage(self.viewConfig.flashImage, for: .normal)
-        view.setImage(self.viewConfig.flashImageSelected, for: .selected)
+    lazy var flashButton : PTLayoutButton = {
+        let view = PTLayoutButton()
+        view.imageSize = CGSize(width: 44, height: 44)
+        view.midSpacing = 0
+        view.normalTitle = ""
+        view.normalImage = self.viewConfig.flashImage
+        view.selectedImage = self.viewConfig.flashImageSelected
         view.addActionHandlers { sender in
             self.torchOn = !self.torchOn
             if self.device.hasTorch {
@@ -200,6 +209,7 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        changeStatusBar(type: .Dark)
         navigationController?.setNavigationBarHidden(true, animated: false)
         navigationController?.view.backgroundColor = .clear
     }
@@ -214,6 +224,7 @@ public class PTScanQRController: PTBaseViewController {
     
     public override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
+        changeStatusBar(type: .Auto)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
     
@@ -266,7 +277,7 @@ public class PTScanQRController: PTBaseViewController {
         
         addTimer()
         startScanAction {
-            self.sessionQueue.async {
+            PTGCDManager.gcdMain {
                 self.scanSession()
             }
         }
