@@ -30,7 +30,7 @@ public class PTMediaBrowserController: PTBaseViewController {
     }
     
     ///更多按钮操作
-    open var viewMoreActionBlock:PTViewerIndexBlock?
+    open var viewMoreActionBlock:PTViewerEXIndexBlock?
     ///保存回调
     open var viewSaveImageBlock:PTViewerSaveBlock?
     ///删除回调
@@ -300,6 +300,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         } else {
             bottomControl.moreActionButton.addActionHandlers { sender in
                 UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
+                    let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
                     switch self.viewConfig.actionType {
                     case .Save:
                         switch index {
@@ -307,7 +308,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                             self.saveImage()
                         default:
                             if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 1)
+                                self.viewMoreActionBlock!((index - 1),currentView.gifImage)
                             }
                             self.viewMoreActionDismiss()
                         }
@@ -317,7 +318,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                             self.deleteImage()
                         default:
                             if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 1)
+                                self.viewMoreActionBlock!((index - 1),currentView.gifImage)
                             }
                             self.viewMoreActionDismiss()
                         }
@@ -329,13 +330,13 @@ public class PTMediaBrowserController: PTBaseViewController {
                             self.deleteImage()
                         default:
                             if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!(index - 2)
+                                self.viewMoreActionBlock!((index - 2),currentView.gifImage)
                             }
                             self.viewMoreActionDismiss()
                         }
                     case .DIY:
                         if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index)
+                            self.viewMoreActionBlock!(index,currentView.gifImage)
                         }
                         self.viewMoreActionDismiss()
                     default:
@@ -474,6 +475,7 @@ public class PTMediaBrowserController: PTBaseViewController {
         var debugActions: [UIMenuElement] = []
         actionSheetTitle.enumerated().forEach { index,value in
             let menuActions = UIAction(title: value) { _ in
+                let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
                 switch self.viewConfig.actionType {
                 case .Save:
                     switch index {
@@ -481,7 +483,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                         self.saveImage()
                     default:
                         if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index - 1)
+                            self.viewMoreActionBlock!((index - 1),currentView.gifImage)
                         }
                         self.viewMoreActionDismiss()
                     }
@@ -491,7 +493,7 @@ public class PTMediaBrowserController: PTBaseViewController {
                         self.deleteImage()
                     default:
                         if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index - 1)
+                            self.viewMoreActionBlock!((index - 1),currentView.gifImage)
                         }
                         self.viewMoreActionDismiss()
                     }
@@ -503,13 +505,13 @@ public class PTMediaBrowserController: PTBaseViewController {
                         self.deleteImage()
                     default:
                         if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index - 2)
+                            self.viewMoreActionBlock!((index - 2),currentView.gifImage)
                         }
                         self.viewMoreActionDismiss()
                     }
                 case .DIY:
                     if self.viewMoreActionBlock != nil {
-                        self.viewMoreActionBlock!(index)
+                        self.viewMoreActionBlock!(index,currentView.gifImage)
                     }
                     self.viewMoreActionDismiss()
                 default:

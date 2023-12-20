@@ -10,6 +10,7 @@ import UIKit
 
 public typealias PTViewerSaveBlock = (_ finish:Bool) -> Void
 public typealias PTViewerIndexBlock = (_ dataIndex:Int) -> Void
+public typealias PTViewerEXIndexBlock = (_ dataIndex:Int,_ image:UIImage?) -> Void
 
 @objc public enum PTViewerDataType:Int {
     case Normal
