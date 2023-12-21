@@ -745,8 +745,9 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
     }
     
-    public init(asset:PHAsset) {
+    public init(asset:PHAsset,avAsset:AVAsset) {
         videoAsset = asset
+        videoAVAsset = avAsset
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -824,13 +825,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         timeLineContentSet()
-
-        convertPHAssetToAVAsset(phAsset: videoAsset) { avAsset in
-            self.videoAVAsset = avAsset
-            
-            UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+                
+        UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+            PTGCDManager.gcdMain {
                 let imageSize = image!.size
-
                 let scale = self.imageContent.frame.size.height / imageSize.height
                 let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
                 self.originFilterImageView.image = image
@@ -842,39 +840,41 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     make.centerX.centerY.equalToSuperview()
                 }
             }
-            
-            self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
-            self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
-            self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
-             
-            PTGCDManager.gcdMain {
-                self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
-                self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
-                let formattedDuration = self.videoTime >= 3600 ?
-                    DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
-                    DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
-                self.videoTimeLabel.text = formattedDuration
-            }
-            
-            Task.init {
-                do {
-                    let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
-                    let cgImages = try await self.videoTimeline(for: avAsset!, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
-                    self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
-                    self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
-                    self.updateScrollViewContentOffset(fractionCompleted: .zero)
-                    
-                    let width: CGFloat = 2.0
-                    let height: CGFloat = 160.0
-                    let x = self.timeLineContent.bounds.midX - width / 2
-                    let y = (self.timeLineContent.bounds.height - height) / 2
-                    self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+        }
+        
+        self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
+        self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
+        self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+         
+        PTGCDManager.gcdMain {
+            self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+            self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
+            let formattedDuration = self.videoTime >= 3600 ?
+                DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
+                DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
+            self.videoTimeLabel.text = formattedDuration
+        }
 
-                } catch {
-                    PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
-                }
+        Task.init {
+            do {
+
+                let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
+                let cgImages = try await self.videoTimeline(for: self.videoAVAsset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
+                self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
+                self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
+                self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                
+                let width: CGFloat = 2.0
+                let height: CGFloat = 160.0
+                let x = self.timeLineContent.bounds.midX - width / 2
+                let y = (self.timeLineContent.bounds.height - height) / 2
+                self.currentTimeLine.frame = CGRect(x: x, y: y, width: width, height: height)
+
+            } catch {
+                PTAlertTipControl.present(title:"",subtitle:error.localizedDescription,icon: .Error,style: .Normal)
             }
         }
+
     }
     
     func playContentSet() {
@@ -1058,16 +1058,6 @@ extension PTVideoEditorToolsViewController {
                 return
             }
             completion(avURLAsset.url)
-        }
-    }
-    
-    // 获取PHAsset并转换为AVAsset的方法
-    func convertPHAssetToAVAsset(phAsset: PHAsset, completion: @escaping (AVAsset?) -> Void) {
-        let options = PHVideoRequestOptions()
-        options.version = .original
-
-        PHImageManager.default().requestAVAsset(forVideo: phAsset, options: options) { avAsset, _, _ in
-            completion(avAsset)
         }
     }
 }

@@ -103,27 +103,37 @@ public class PTMediaLibView:UIView {
                 cell.editButton.addActionHandlers { sender in
                     switch cellModel.type {
                     case .video:
-                        let controller = PTVideoEditorToolsViewController(asset: cellModel.asset)
-                        controller.onlyOutput = true
-                        controller.onEditCompleteHandler = { url in
-                            let alPlayerItem = AVPlayerItem(url: url)
-                            for (index, selM) in self.selectedModel.enumerated() {
-                                if cellModel == selM {
-                                    self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
-                                        if finish {
-                                            PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
-                                                let m = PTMediaModel(asset: asset!)
-                                                m.isSelected = true
-                                                self.selectedModel[index] = m
-                                                config.didSelectAsset?(asset!)
+                        cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
+                            if avAsset != nil {
+                                PTGCDManager.gcdMain {
+                                    let controller = PTVideoEditorToolsViewController(asset: cellModel.asset,avAsset: avAsset!)
+                                    controller.onlyOutput = true
+                                    controller.onEditCompleteHandler = { url in
+                                        let alPlayerItem = AVPlayerItem(url: url)
+                                        for (index, selM) in self.selectedModel.enumerated() {
+                                            if cellModel == selM {
+                                                self.saveVideoToCache(playerItem: alPlayerItem) { fileURL, finish in
+                                                    if finish {
+                                                        PTMediaLibManager.saveVideoToAlbum(url: fileURL!) { isFinish, asset in
+                                                            let m = PTMediaModel(asset: asset!)
+                                                            m.isSelected = true
+                                                            self.selectedModel[index] = m
+                                                            config.didSelectAsset?(asset!)
+                                                        }
+                                                    }
+                                                }
+                                                break
                                             }
                                         }
                                     }
-                                    break
+                                    controller.videoEditorShow(vc: PTUtils.getCurrentVC())
+                                }
+                            } else {
+                                PTGCDManager.gcdMain {
+                                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
                                 }
                             }
                         }
-                        controller.videoEditorShow(vc: PTUtils.getCurrentVC())
                     default:
                         PTMediaLibManager.fetchImage(for: cellModel.asset, size: cellModel.previewSize) { image, isDegraded in
                             if !isDegraded {
@@ -338,10 +348,14 @@ public class PTMediaLibView:UIView {
             if selCount < config.maxSelectCount {
                 if config.allowMixSelect {
                     let videoCount = selectedModel.filter { $0.type == .video }.count
-                    if videoCount >= config.maxVideoSelectCount, model.type != .video {
+                    if videoCount >= config.maxVideoSelectCount {
                         cell.coverView.backgroundColor = .DevMaskColor
                         cell.coverView.isHidden = !uiConfig.showInvalidMask
-                        cell.enableSelect = false
+                        if model.type != .video {
+                            cell.enableSelect = true
+                        } else {
+                            cell.enableSelect = false
+                        }
                     } else if (config.maxSelectCount - selCount) <= (config.minVideoSelectCount - videoCount), model.type != .video {
                         cell.coverView.backgroundColor = .DevMaskColor
                         cell.coverView.isHidden = !uiConfig.showInvalidMask

@@ -508,13 +508,25 @@ class PTFuncNameViewController: PTBaseViewController {
                 vc.selectImageBlock = { result, isOriginal in
                     PTNSLogConsole("視頻選擇後:>>>>>>>>>>>>>\(result)")
                     if result.count > 0 {
-                        let controller = PTVideoEditorToolsViewController(asset: result.first!.asset)
-                        controller.videoEditorShow(vc: self)
-                        controller.onEditCompleteHandler = { url in
-                            PTAlertTipControl.present(title:"我好了\(url)",icon:.Done,style: .Normal)
+                        result.first!.asset.pt.convertPHAssetToAVAsset { avAsset in
+                            if avAsset != nil {
+                                PTGCDManager.gcdMain {
+                                    let controller = PTVideoEditorToolsViewController(asset: result.first!.asset,avAsset: avAsset!)
+                                    controller.videoEditorShow(vc: self)
+                                    controller.onEditCompleteHandler = { url in
+                                        PTAlertTipControl.present(title:"我好了\(url)",icon:.Done,style: .Normal)
+                                    }
+                                }
+                            } else {
+                                PTGCDManager.gcdMain {
+                                    PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                }
+                            }
                         }
                     } else {
-                        PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
+                        PTGCDManager.gcdMain {
+                            PTAlertTipControl.present(title:"沒有選擇Video",icon:.Error,style: .Normal)
+                        }
                     }
                 }
             } else if itemRow.title == .sign {

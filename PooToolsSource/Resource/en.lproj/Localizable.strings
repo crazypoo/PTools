@@ -257,3 +257,4 @@
 "PT Filter cam filter storyboard" = "Storyboard";
 "PT Filter cam filter none" = "Original";
 "PT Video editor output type" = "Output format";
+"PT Video editor get video error" = "The video could not be obtained.";

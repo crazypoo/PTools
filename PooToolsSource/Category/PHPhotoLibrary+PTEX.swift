@@ -22,5 +22,5 @@ public extension PTPOP where Base: PHPhotoLibrary {
                 result(false,NSError(domain: "Video save error：\(error?.localizedDescription ?? "")", code: 0))
             }
         }
-    }
+    }    
 }

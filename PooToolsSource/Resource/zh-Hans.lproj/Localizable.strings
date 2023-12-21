@@ -257,3 +257,4 @@
 "PT Filter cam filter storyboard" = "分镜";
 "PT Filter cam filter none" = "原相机";
 "PT Video editor output type" = "输出格式";
+"PT Video editor get video error" = "获取视频失败";

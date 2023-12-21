@@ -33,4 +33,13 @@ public extension PTPOP where Base: PHAsset {
     var resource: PHAssetResource? {
         PHAssetResource.assetResources(for: base).first
     }
+    
+    func convertPHAssetToAVAsset(completion: @escaping (AVAsset?) -> Void) {
+        let options = PHVideoRequestOptions()
+        options.version = .original
+
+        PHImageManager.default().requestAVAsset(forVideo: base, options: options) { avAsset, _, _ in
+            completion(avAsset)
+        }
+    }
 }
