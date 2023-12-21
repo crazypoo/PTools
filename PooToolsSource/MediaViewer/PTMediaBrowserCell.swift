@@ -20,6 +20,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     var zoomTask:((Bool)->Void)?
     var tapTask:PTActionTask?
     var currentCellType:PTViewerDataType = .None
+    var longTapWakeUp:PTActionTask?
+    var imageLongTaped:Bool = false
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
@@ -115,7 +117,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     
     var gifImage:UIImage? = nil
 
-    //MARK: 视频相关        
+    //MARK: 视频相关
     fileprivate lazy var playBtn:UIButton = {
         
         let view = UIButton.init(type: .custom)
@@ -179,7 +181,8 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         return actualCenter
     }
     
-    func setImageTypeView(loading:PTMediaBrowserLoadingView) {
+    func
+    setImageTypeView(loading:PTMediaBrowserLoadingView) {
         gifImage = nil
         imageView.contentMode = .scaleAspectFit
         contentScrolView.addSubview(imageView)
@@ -208,8 +211,22 @@ class PTMediaBrowserCell: PTBaseNormalCell {
             }
         }
         singleTap.numberOfTapsRequired = 1
+        
+        var imageActions:[UIGestureRecognizer] = [singleTap,doubleTap]
+        if viewConfig.imageLongTapAction {
+            let longTap = UILongPressGestureRecognizer.init { sender in
+                if !self.imageLongTaped {
+                    if self.longTapWakeUp != nil {
+                        self.longTapWakeUp!()
+                    }
+                    self.imageLongTaped = true
+                }
+            }
+            longTap.minimumPressDuration = 1.5
+            imageActions = [singleTap,doubleTap,longTap]
+        }
 
-        imageView.addGestureRecognizers([singleTap,doubleTap])
+        imageView.addGestureRecognizers(imageActions)
 
         PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName) { receivedSize, totalSize in
             PTGCDManager.gcdMain {

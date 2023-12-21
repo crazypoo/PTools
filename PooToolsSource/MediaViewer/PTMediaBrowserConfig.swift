@@ -59,6 +59,8 @@ public class PTMediaBrowserConfig: NSObject {
     public var showMore:String = "...\("PT More".localized())"
     
     public var pageControlOption:PTMediaPageControlOption = .scrolling
+    
+    public var imageLongTapAction:Bool = true
 
     public enum PTMediaPageControlOption:Int {
         case system

@@ -114,6 +114,12 @@ public class PTMediaBrowserController: PTBaseViewController {
             cell.tapTask = {
                 self.toolBarControl(boolValue: !self.navControl.isHidden)
             }
+            cell.longTapWakeUp = {
+                self.actionSheet()
+                PTGCDManager.gcdAfter(time: 1.5) {
+                    cell.imageLongTaped = false
+                }
+            }
             return cell
         }
         collectionView.customerLayout = { sectionModel in
@@ -299,50 +305,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             bottomControl.moreActionButton.menu = makeMenu()
         } else {
             bottomControl.moreActionButton.addActionHandlers { sender in
-                UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
-                    let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
-                    switch self.viewConfig.actionType {
-                    case .Save:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .Delete:
-                        switch index {
-                        case 0:
-                            self.deleteImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!((index - 1),currentView.gifImage)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .All:
-                        switch index {
-                        case 0:
-                            self.saveImage()
-                        case 1:
-                            self.deleteImage()
-                        default:
-                            if self.viewMoreActionBlock != nil {
-                                self.viewMoreActionBlock!((index - 2),currentView.gifImage)
-                            }
-                            self.viewMoreActionDismiss()
-                        }
-                    case .DIY:
-                        if self.viewMoreActionBlock != nil {
-                            self.viewMoreActionBlock!(index,currentView.gifImage)
-                        }
-                        self.viewMoreActionDismiss()
-                    default:
-                        break
-                    }
-                })
+                self.actionSheet()
             }
         }
         
@@ -528,6 +491,52 @@ public class PTMediaBrowserController: PTBaseViewController {
         return UIMenu(title: "", children: menuContent)
     }
 
+    func actionSheet() {
+        UIAlertController.baseActionSheet(title: "PT Media option".localized(), cancelButtonName: "PT Button cancel".localized(),titles: self.actionSheetTitle, otherBlock: { sheet,index,title in
+            let currentView = self.newCollectionView.visibleCells().first as! PTMediaBrowserCell
+            switch self.viewConfig.actionType {
+            case .Save:
+                switch index {
+                case 0:
+                    self.saveImage()
+                default:
+                    if self.viewMoreActionBlock != nil {
+                        self.viewMoreActionBlock!((index - 1),currentView.gifImage)
+                    }
+                    self.viewMoreActionDismiss()
+                }
+            case .Delete:
+                switch index {
+                case 0:
+                    self.deleteImage()
+                default:
+                    if self.viewMoreActionBlock != nil {
+                        self.viewMoreActionBlock!((index - 1),currentView.gifImage)
+                    }
+                    self.viewMoreActionDismiss()
+                }
+            case .All:
+                switch index {
+                case 0:
+                    self.saveImage()
+                case 1:
+                    self.deleteImage()
+                default:
+                    if self.viewMoreActionBlock != nil {
+                        self.viewMoreActionBlock!((index - 2),currentView.gifImage)
+                    }
+                    self.viewMoreActionDismiss()
+                }
+            case .DIY:
+                if self.viewMoreActionBlock != nil {
+                    self.viewMoreActionBlock!(index,currentView.gifImage)
+                }
+                self.viewMoreActionDismiss()
+            default:
+                break
+            }
+        })
+    }
 }
 
 fileprivate extension PTMediaBrowserController {
