@@ -112,9 +112,10 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
             self.c7Player.pause()
             
             PTGCDManager.gcdMain {
+                PTAlertTipControl.present(title:"PT Alert Doning".localized(),subtitle:"PT Video editor convetering".localized(),icon:.Heart,style: .Normal)
                 if self.loadingProgress == nil {
                     self.loadingProgress = PTMediaBrowserLoadingView(type: .LoopDiagram)
-                    self.view.addSubview(self.loadingProgress!)
+                    AppWindows!.addSubview(self.loadingProgress!)
                     self.loadingProgress!.snp.makeConstraints { make in
                         make.size.equalTo(100)
                         make.centerX.centerY.equalToSuperview()
@@ -128,88 +129,103 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                             }
                             self.returnFrontVC()
                         } else {
-                            let documents = FileManager.pt.DocumnetsDirectory()
-                            let random = Int(arc4random_uniform(89999) + 10000)
-                            let outputURL = documents.appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
+                            PTGCDManager.gcdMain {
+                                PTAlertTipControl.present(title:"PT Alert Doning".localized(),subtitle:"PT Video editor ouputing".localized(),icon:.Heart,style: .Normal)
 
-                            let exporter = Exporter(provider: Exporter.Provider.init(with: url!,to: URL(fileURLWithPath: outputURL)))
-                            exporter.export(options: [
-                                .OptimizeForNetworkUse: true,
-                            ], filtering: { buffer in
-                                let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
-                                return try? dest.output()
-                            }, complete: { res in
-                                switch res {
-                                case .success(let outputURL):
-                                    if self.onlyOutput {
-                                        PTGCDManager.gcdMain {
-                                            if self.onEditCompleteHandler != nil {
-                                                self.onEditCompleteHandler!(outputURL)
-                                            }
-                                            self.returnFrontVC()
-                                        }
-                                    } else {
-                                        if self.rewrite {
-                                            PHPhotoLibrary.shared().performChanges({
-                                                // 获取原视频所在的相册
-                                                let fetchOptions = PHFetchOptions()
-                                                fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
-                                                let assets = PHAsset.fetchAssets(withLocalIdentifiers: [self.videoAsset.localIdentifier], options: fetchOptions)
-                                                
-                                                if let asset = assets.firstObject {
-                                                    let assetCollectionList = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
-                                                    if let assetCollection = assetCollectionList.firstObject {
-                                                        // 从相册中移除原视频
-                                                        PTGCDManager.gcdMain {
-                                                            let assetToDelete = [asset] as NSArray
-                                                            let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection)
-                                                            albumChangeRequest?.removeAssets(assetToDelete)
-                                                        }
-                                                    }
-                                                }
-                                                
-                                                // 保存编辑后的视频到用户相册
-                                                if let changeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL) {
-                                                    let assetPlaceholder = changeRequest.placeholderForCreatedAsset
-                                                }
+                                let hudConfig = PTHudConfig.share
+                                hudConfig.hudColors = [.gray,.gray]
+                                hudConfig.lineWidth = 4
+                                
+                                let hud = PTHudView()
+                                hud.hudShow()
 
-                                            }) { success, error in
-                                                if success {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
-                                                        self.returnFrontVC()
-                                                    }
-                                                } else {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Photo picker save video error".localized(),icon:.Done,style: .Normal)
-                                                    }
+                                let documents = FileManager.pt.DocumnetsDirectory()
+                                let random = Int(arc4random_uniform(89999) + 10000)
+                                let outputURL = documents.appendingPathComponent("condy_export_video_\(random).\(self.currentOutputType.name)")
+
+                                let exporter = Exporter(provider: Exporter.Provider.init(with: url!,to: URL(fileURLWithPath: outputURL)))
+                                exporter.export(options: [
+                                    .OptimizeForNetworkUse: true,
+                                ], filtering: { buffer in
+                                    let dest = BoxxIO(element: buffer, filters: self.c7Player.filters)
+                                    return try? dest.output()
+                                }, complete: { res in
+                                    PTGCDManager.gcdMain {
+                                        hud.hide(completion: nil)
+                                    }
+                                    switch res {
+                                    case .success(let outputURL):
+                                        if self.onlyOutput {
+                                            PTGCDManager.gcdMain {
+                                                if self.onEditCompleteHandler != nil {
+                                                    self.onEditCompleteHandler!(outputURL)
                                                 }
-                                                FileManager.pt.removefile(filePath: outputURL.description)
+                                                self.returnFrontVC()
                                             }
                                         } else {
-                                            PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
-                                                if error == nil,finish {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
-                                                        self.returnFrontVC()
+                                            if self.rewrite {
+                                                PHPhotoLibrary.shared().performChanges({
+                                                    // 获取原视频所在的相册
+                                                    let fetchOptions = PHFetchOptions()
+                                                    fetchOptions.predicate = NSPredicate(format: "mediaType = %d", PHAssetMediaType.video.rawValue)
+                                                    let assets = PHAsset.fetchAssets(withLocalIdentifiers: [self.videoAsset.localIdentifier], options: fetchOptions)
+                                                    
+                                                    if let asset = assets.firstObject {
+                                                        let assetCollectionList = PHAssetCollection.fetchAssetCollectionsContaining(asset, with: .album, options: nil)
+                                                        if let assetCollection = assetCollectionList.firstObject {
+                                                            // 从相册中移除原视频
+                                                            PTGCDManager.gcdMain {
+                                                                let assetToDelete = [asset] as NSArray
+                                                                let albumChangeRequest = PHAssetCollectionChangeRequest(for: assetCollection)
+                                                                albumChangeRequest?.removeAssets(assetToDelete)
+                                                            }
+                                                        }
                                                     }
-                                                } else {
-                                                    PTGCDManager.gcdMain {
-                                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error!.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                                    
+                                                    // 保存编辑后的视频到用户相册
+                                                    if let changeRequest = PHAssetChangeRequest.creationRequestForAssetFromVideo(atFileURL: outputURL) {
+                                                        let assetPlaceholder = changeRequest.placeholderForCreatedAsset
                                                     }
+
+                                                }) { success, error in
+                                                    if success {
+                                                        PTGCDManager.gcdMain {
+                                                            PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
+                                                            self.returnFrontVC()
+                                                        }
+                                                    } else {
+                                                        PTGCDManager.gcdMain {
+                                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Photo picker save video error".localized(),icon:.Done,style: .Normal)
+                                                        }
+                                                    }
+                                                    FileManager.pt.removefile(filePath: outputURL.description)
                                                 }
-                                                FileManager.pt.removefile(filePath: outputURL.description)
+                                            } else {
+                                                PHPhotoLibrary.pt.saveVideoToAlbum(fileURL: outputURL) { finish, error in
+                                                    if error == nil,finish {
+                                                        PTGCDManager.gcdMain {
+                                                            PTAlertTipControl.present(title:"",subtitle:"PT Video editor function save done".localized(),icon:.Done,style: .Normal)
+                                                            self.returnFrontVC()
+                                                        }
+                                                    } else {
+                                                        PTGCDManager.gcdMain {
+                                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error!.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                                        }
+                                                    }
+                                                    FileManager.pt.removefile(filePath: outputURL.description)
+                                                }
                                             }
                                         }
+                                    case .failure(let error):
+                                        PTGCDManager.gcdMain {
+                                            self.loadingProgress?.removeFromSuperview()
+                                            self.loadingProgress = nil
+                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription.localized(),icon:.Done,style: .Normal)
+                                        }
                                     }
-                                case .failure(let error):
-                                    PTGCDManager.gcdMain {
-                                        self.loadingProgress?.removeFromSuperview()
-                                        self.loadingProgress = nil
-                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:error.localizedDescription.localized(),icon:.Done,style: .Normal)
-                                    }
-                                }
-                            })
+                                })
+
+                            }
                         }
                     } else {
                         self.loadingProgress?.removeFromSuperview()
@@ -825,44 +841,63 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
         }
         
         timeLineContentSet()
-                
-        UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
-            PTGCDManager.gcdMain {
-                let imageSize = image!.size
-                let scale = self.imageContent.frame.size.height / imageSize.height
-                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
-                self.originFilterImageView.image = image
-                self.originImageView.image = image
-                self.originImageView.snp.makeConstraints { make in
-                    make.width.equalTo(showImageSize.width)
-                    make.centerX.equalToSuperview()
-                    make.top.bottom.equalToSuperview()
-                    make.centerX.centerY.equalToSuperview()
-                }
-            }
-        }
-        
-        self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
-        self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
-        self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
          
-        PTGCDManager.gcdMain {
-            self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
-            self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
-            let formattedDuration = self.videoTime >= 3600 ?
-                DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
-                DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
-            self.videoTimeLabel.text = formattedDuration
-        }
-
         Task.init {
             do {
+                
+//                UIImage.pt.getVideoFirstImage(asset: self.videoAVAsset,maximumSize: CGSizeMake(.infinity, .infinity)) { image in
+//                    if image != nil {
+//                        let imageSize = image!.size
+//                        let scale = self.imageContent.frame.size.height / imageSize.height
+//                        let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+//                        self.originFilterImageView.image = image
+//                        self.originImageView.image = image
+//                        self.originImageView.snp.makeConstraints { make in
+//                            make.width.equalTo(showImageSize.width)
+//                            make.centerX.equalToSuperview()
+//                            make.top.bottom.equalToSuperview()
+//                            make.centerX.centerY.equalToSuperview()
+//                        }
+//                    } else {
+//                        self.originImageView.snp.makeConstraints { make in
+//                            make.width.equalToSuperview()
+//                            make.centerX.equalToSuperview()
+//                            make.top.bottom.equalToSuperview()
+//                            make.centerX.centerY.equalToSuperview()
+//                        }
+//                    }
+//                }
+
+                self.avPlayerItem = AVPlayerItem(asset: self.videoAVAsset)
+                self.avPlayer = AVPlayer(playerItem: self.avPlayerItem)
+                self.c7Player = C7CollectorVideo(player: self.avPlayer, delegate: self)
+
+                self.videoTime = self.avPlayer.currentItem?.duration.seconds ?? 0.0
+                self.videoTime = self.videoTime.isNaN ? 0.0 : self.videoTime
+                let formattedDuration = self.videoTime >= 3600 ?
+                    DateComponentsFormatter.longDurationFormatter.string(from: self.videoTime) ?? "" :
+                    DateComponentsFormatter.shortDurationFormatter.string(from: self.videoTime) ?? ""
+                self.videoTimeLabel.text = formattedDuration
 
                 let timeLineViewRect = CGRect(x: 0, y: 0, width: self.timeLineContent.bounds.width, height: 64)
                 let cgImages = try await self.videoTimeline(for: self.videoAVAsset, in: timeLineViewRect, numberOfFrames: self.numberOfFrames(within: timeLineViewRect))
                 self.timeLineScroll.contentSize = CGSize(width: self.view.bounds.width, height: 64.0)
                 self.timeLineView.configure(with: cgImages, assetAspectRatio: self.assetAspectRatio)
                 self.updateScrollViewContentOffset(fractionCompleted: .zero)
+                self.currentTimeLabel.text = "0:00"
+
+                let imageSize = UIImage(cgImage: cgImages.first!).size
+                let scale = self.imageContent.frame.size.height / imageSize.height
+                let showImageSize = CGSize(width: imageSize.width * scale, height: imageSize.height * scale)
+                self.originFilterImageView.image = UIImage(cgImage: cgImages.first!)
+                self.originImageView.image = UIImage(cgImage: cgImages.first!)
+                self.originImageView.snp.makeConstraints { make in
+                    make.width.equalTo(showImageSize.width)
+                    make.centerX.equalToSuperview()
+                    make.top.bottom.equalToSuperview()
+                    make.centerX.centerY.equalToSuperview()
+                }
+
                 
                 let width: CGFloat = 2.0
                 let height: CGFloat = 160.0
@@ -984,7 +1019,6 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 } else {
                     self.loadingProgress?.progress = progress ?? 0
                 }
-                
             }
         },completion: completion)
     }

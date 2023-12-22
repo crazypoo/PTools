@@ -13,7 +13,7 @@ import UIKit
     case PieDiagram
 }
 
-public let PTLoadingBackgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+public let PTLoadingBackgroundColor:UIColor = .DevMaskColor
 public let PTLoadingItemSpace :CGFloat = 10
 
 @objcMembers
@@ -39,7 +39,6 @@ public class PTMediaBrowserLoadingView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = PTLoadingBackgroundColor
         clipsToBounds = true
     }
     
@@ -81,5 +80,7 @@ public class PTMediaBrowserLoadingView: UIView {
             ctx!.addArc(center: CGPoint.init(x: xCenter, y: yCenter), radius: radius, startAngle: (piFloat * 0.5), endAngle: to, clockwise: false)
             ctx!.strokePath()
         }
+        
+        viewCorner(radius: rect.size.height * 0.1)
     }
 }

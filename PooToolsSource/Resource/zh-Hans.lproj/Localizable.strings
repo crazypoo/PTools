@@ -258,3 +258,5 @@
 "PT Filter cam filter none" = "原相机";
 "PT Video editor output type" = "输出格式";
 "PT Video editor get video error" = "获取视频失败";
+"PT Video editor convetering" = "转换中";
+"PT Video editor ouputing" = "导出中";

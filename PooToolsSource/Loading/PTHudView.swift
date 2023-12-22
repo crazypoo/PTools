@@ -16,7 +16,6 @@ let framePerSecond:CGFloat = 60
 let maxWaitingFrame:CGFloat = 30
 let lengthIteration:CGFloat = 8
 let rotateIteration:CGFloat = 4
-let conterViewSize:CGFloat = 100
 let loadingHudSpace:CGFloat = 5
 
 @objc public enum PTHudStatus:Int {
@@ -27,16 +26,24 @@ let loadingHudSpace:CGFloat = 5
 
 @objcMembers
 public class PTHudConfig:NSObject {
+    static let share = PTHudConfig()
+    
     open var lineWidth:CGFloat = 2
     open var length:CGFloat = maxLength
     open var hudColors:[UIColor] = [UIColor(hexString: "#F05783")!,UIColor(hexString: "#FCB644")!,UIColor(hexString: "#88BD33")!,UIColor(hexString: "#E5512D")!,UIColor(hexString: "#3ABCAB")!]
     open var masked:Bool = true
     open var backgroundColor:UIColor = .clear
+    
+    fileprivate var conterViewSize:CGFloat = 100
+    public func conterViewSizeSet(@PTClampedProperyWrapper(range: 100...CGFloat.kSCREEN_WIDTH) size:CGFloat) {
+        conterViewSize = size
+    }
 }
 
 @objcMembers
 public class PTHudView: UIView {
-    open var hudConfig:PTHudConfig = PTHudConfig()
+    
+    fileprivate let hudShare = PTHudConfig.share
     
     lazy var centerView:UIView = {
         let view = UIView()
@@ -45,8 +52,7 @@ public class PTHudView: UIView {
     }()
     
     lazy var hudView:PTLoadingHud = {
-        let views = PTLoadingHud.init(frame: CGRect(x: loadingHudSpace, y: loadingHudSpace, width: conterViewSize - loadingHudSpace * 2, height: conterViewSize - loadingHudSpace * 2))
-        views.hudConfig = self.hudConfig
+        let views = PTLoadingHud.init(frame: CGRect(x: loadingHudSpace, y: loadingHudSpace, width: hudShare.conterViewSize - loadingHudSpace * 2, height: hudShare.conterViewSize - loadingHudSpace * 2))
         return views
     }()
     
@@ -56,9 +62,9 @@ public class PTHudView: UIView {
         addSubview(centerView)
         centerView.snp.makeConstraints { make in
             make.centerY.centerX.equalToSuperview()
-            make.width.height.equalTo(conterViewSize)
+            make.width.height.equalTo(hudShare.conterViewSize)
         }
-        centerView.viewCorner(radius: conterViewSize * 0.1)
+        centerView.viewCorner(radius: hudShare.conterViewSize * 0.1)
         centerView.addSubview(hudView)
     }
     
@@ -67,11 +73,11 @@ public class PTHudView: UIView {
     }
     
     public func hudShow() {
-        if hudConfig.hudColors.count < 2 {
+        if PTHudConfig.share.hudColors.count < 2 {
             PTNSLogConsole("不可以小于两个颜色")
             return
         }
-        backgroundColor = hudConfig.backgroundColor
+        backgroundColor = PTHudConfig.share.backgroundColor
         AppWindows?.addSubview(self)
         self.snp.makeConstraints { make in
             make.edges.equalToSuperview()
@@ -103,7 +109,7 @@ public class PTHudView: UIView {
     }
     
     public override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
-        if hudConfig.masked {
+        if PTHudConfig.share.masked {
             return super.hitTest(point, with: event)
         } else {
             for view in subviews {
@@ -118,7 +124,7 @@ public class PTHudView: UIView {
 
 @objcMembers
 public class PTLoadingHud:UIView {
-    open var hudConfig:PTHudConfig = PTHudConfig()
+    open var hudConfig = PTHudConfig.share
     open var length:CGFloat = maxLength
     open var gradualColor:UIColor = .randomColor
     open var finalColor:UIColor = .randomColor

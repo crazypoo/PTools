@@ -82,15 +82,33 @@ public class PTMediaLibView:UIView {
 
                     if !cellModel.isSelected {
                         guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
-                        downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-//                            if !self.shouldDirectEdit(cellModel) {
-//                            }
-                            cellModel.isSelected = true
-                            self.selectedModel.append(cellModel)
-                            isSelected(true)
-                            config.didSelectAsset?(cellModel.asset)
-                            self.refreshCellIndex()
+                        
+                        if cellModel.type == .video {
+                            cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
+                                if avAsset == nil {
+                                    PTGCDManager.gcdMain {
+                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                    }
+                                } else {
+                                    downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                                        cellModel.isSelected = true
+                                        self.selectedModel.append(cellModel)
+                                        isSelected(true)
+                                        config.didSelectAsset?(cellModel.asset)
+                                        self.refreshCellIndex()
+                                    }
+                                }
+                            }
+                        } else {
+                            downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                                cellModel.isSelected = true
+                                self.selectedModel.append(cellModel)
+                                isSelected(true)
+                                config.didSelectAsset?(cellModel.asset)
+                                self.refreshCellIndex()
+                            }
                         }
+
                     } else {
                         cellModel.isSelected = false
                         self.selectedModel.removeAll(where: { $0 == cellModel })

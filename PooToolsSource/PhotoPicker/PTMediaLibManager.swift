@@ -44,7 +44,7 @@ func canAddModel(_ model: PTMediaModel, currentSelectCount: Int, sender: UIViewC
     guard config.canSelectAsset?(model.asset) ?? true else {
         return false
     }
-    
+        
     if currentSelectCount >= config.maxSelectCount {
         if showAlert {
             PTAlertTipControl.present(title: "PT Alert Opps".localized(),subtitle:String(format: "PT Photo picker select cout more than".localized(), "\(config.maxSelectCount)"),icon:.Error,style:.Normal)

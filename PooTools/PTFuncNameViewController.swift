@@ -828,8 +828,8 @@ class PTFuncNameViewController: PTBaseViewController {
                 config.allowSelectVideo = true
                 config.allowMixSelect = true
                 config.maxVideoSelectCount = 1
-                config.allowEditImage = false
-                config.allowEditVideo = false
+                config.allowEditImage = true
+                config.allowEditVideo = true
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
                 vc.selectImageBlock = { result,isOriginal in

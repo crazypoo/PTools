@@ -34,6 +34,16 @@ public extension PTPOP where Base: PHAsset {
         PHAssetResource.assetResources(for: base).first
     }
     
+    func convertPHAssetToAVAsset() async throws -> AVAsset? {
+        await withUnsafeContinuation { continuation in
+            self.convertPHAssetToAVAsset { avAsset in
+                if avAsset != nil {
+                    continuation.resume(returning: avAsset!)
+                }
+            }
+        }
+    }
+    
     func convertPHAssetToAVAsset(completion: @escaping (AVAsset?) -> Void) {
         let options = PHVideoRequestOptions()
         options.version = .original
