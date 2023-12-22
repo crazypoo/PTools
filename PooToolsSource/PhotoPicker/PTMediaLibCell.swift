@@ -144,8 +144,10 @@ class PTMediaLibCell: PTBaseNormalCell {
         view.addActionHandlers { sender in
             if self.enableSelect {
                 self.selectedBlock?({ isSelected in
-                    sender.isSelected = isSelected
-                    sender.layer.removeAllAnimations()
+                    PTGCDManager.gcdMain {
+                        sender.isSelected = isSelected
+                        sender.layer.removeAllAnimations()
+                    }
                     
                     if isSelected {
                         self.fetchBigImage()
@@ -263,7 +265,9 @@ class PTMediaLibCell: PTBaseNormalCell {
     
     private func resetProgressViewStatus() {
 //        progressView.isHidden = true
-        imageView.alpha = 1
+        PTGCDManager.gcdMain {
+            self.imageView.alpha = 1
+        }
     }
 }
 
