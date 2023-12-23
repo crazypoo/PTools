@@ -60,7 +60,9 @@ public class PTLaunchAdMonitor: NSObject {
         
         monitor.detailParam = NSMutableDictionary()
         monitor.detailParam?.removeAllObjects()
-        monitor.detailParam?.addEntries(from: param as! [AnyHashable : Any])
+        if param != nil {
+            monitor.detailParam?.addEntries(from: param as! [AnyHashable : Any])
+        }
         
         let dic = (param == nil) ? false : true
         monitor.callBack = callBack
