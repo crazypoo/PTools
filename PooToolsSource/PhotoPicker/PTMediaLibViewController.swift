@@ -84,18 +84,22 @@ public class PTMediaLibView:UIView {
                         guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
                         
                         if cellModel.type == .video {
-                            cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
-                                if avAsset == nil {
-                                    PTGCDManager.gcdMain {
-                                        PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
-                                    }
-                                } else {
-                                    downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                                        cellModel.isSelected = true
-                                        self.selectedModel.append(cellModel)
-                                        isSelected(true)
-                                        config.didSelectAsset?(cellModel.asset)
-                                        self.refreshCellIndex()
+                            PTGCDManager.gcdMain {
+                                cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
+                                    if avAsset == nil {
+                                        PTGCDManager.gcdMain {
+                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
+                                        }
+                                    } else {
+                                        PTGCDManager.gcdMain {
+                                            downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
+                                                cellModel.isSelected = true
+                                                self.selectedModel.append(cellModel)
+                                                isSelected(true)
+                                                config.didSelectAsset?(cellModel.asset)
+                                                self.refreshCellIndex()
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -108,7 +112,6 @@ public class PTMediaLibView:UIView {
                                 self.refreshCellIndex()
                             }
                         }
-
                     } else {
                         cellModel.isSelected = false
                         self.selectedModel.removeAll(where: { $0 == cellModel })

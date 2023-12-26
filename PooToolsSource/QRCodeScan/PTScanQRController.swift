@@ -142,7 +142,7 @@ public class PTScanQRController: PTBaseViewController {
     
     lazy var photosButton : PTLayoutButton = {
         let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 44, height: 44)
+        view.imageSize = CGSize(width: 24, height: 24)
         view.midSpacing = 0
         view.normalTitle = ""
         view.normalImage = self.viewConfig.photoImage
@@ -154,7 +154,7 @@ public class PTScanQRController: PTBaseViewController {
     
     lazy var flashButton : PTLayoutButton = {
         let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 44, height: 44)
+        view.imageSize = CGSize(width: 24, height: 24)
         view.midSpacing = 0
         view.normalTitle = ""
         view.normalImage = self.viewConfig.flashImage

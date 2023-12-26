@@ -116,7 +116,7 @@ public class PTMediaBrowserController: PTBaseViewController {
             }
             cell.longTapWakeUp = {
                 self.actionSheet()
-                PTGCDManager.gcdAfter(time: 1.5) {
+                PTGCDManager.gcdAfter(time: 0.5) {
                     cell.imageLongTaped = false
                 }
             }
