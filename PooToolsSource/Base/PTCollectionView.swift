@@ -505,6 +505,10 @@ public class PTCollectionView: UIView {
     public func scrolToItem(indexPath:IndexPath,position:UICollectionView.ScrollPosition) {
         collectionView.scrollToItem(at: indexPath, at: position, animated: true)
     }
+    
+    public func mtSelectItem(indexPath:IndexPath,animated:Bool,scrollPosition:UICollectionView.ScrollPosition) {
+        collectionView.selectItem(at: indexPath, animated: animated, scrollPosition: scrollPosition)
+    }
         
     @available(iOS 17, *)
     private func showEmptyConfig() {
