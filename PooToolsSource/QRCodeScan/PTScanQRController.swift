@@ -127,7 +127,7 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 按鈕
     lazy var backBtn : PTLayoutButton = {
         let view = PTLayoutButton()
-        view.imageSize = CGSize(width: 44, height: 44)
+        view.imageSize = CGSize(width: 24, height: 24)
         view.midSpacing = 0
         view.normalTitle = ""
         view.normalImage = self.viewConfig.backImage
