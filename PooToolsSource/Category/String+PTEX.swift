@@ -1302,7 +1302,6 @@ public extension String {
         dateFormatter.timeZone = TimeZone(abbreviation: timeZone)
         return dateFormatter.string(from: Date())
     }
-
     
     //MARK: 时间字符串转化为时间戳
     /// - Returns: 时间戳
@@ -1640,20 +1639,16 @@ public extension PTPOP where Base: ExpressibleByStringLiteral {
 
         do {
             if let jsonObject = try JSONSerialization.jsonObject(with: jsonData, options: []) as? [String: Any] {
-                var queryString = ""
+                var queryString: [String] = []
                 for (key, value) in jsonObject {
-                    if let stringValue = value as? String {
-                        let encodedValue = stringValue.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-                        queryString += "\(key)=\(encodedValue)&"
-                    } else {
-                        // Handle other value types if needed
+                    if let encodedKey = key.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+                       let encodedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
+                        queryString.append("\(encodedKey)=\(encodedValue)")
                     }
                 }
                 // Remove the trailing '&' character if present
-                if queryString.last == "&" {
-                    queryString.removeLast()
-                }
-                return queryString
+                let resultString = queryString.joined(separator: "&")
+                return resultString
             }
         } catch {
             PTNSLogConsole("Error parsing JSON: \(error)")

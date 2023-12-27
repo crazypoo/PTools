@@ -26,7 +26,7 @@ let loadingHudSpace:CGFloat = 5
 
 @objcMembers
 public class PTHudConfig:NSObject {
-    static let share = PTHudConfig()
+    public static let share = PTHudConfig()
     
     open var lineWidth:CGFloat = 2
     open var length:CGFloat = maxLength
