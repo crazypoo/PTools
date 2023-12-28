@@ -12,13 +12,13 @@ public extension Bundle {
     
     class func podBundleImage(bundleName:String,
                                imageName:String) -> UIImage {
-        let bundle = Bundle.main
+        let bundle = PTUtils.cgBaseBundle()
         let resourcePath = bundle.path(forResource: bundleName, ofType: "bundle")
-        let resourceBundle = Bundle.init(path: resourcePath ?? "") ?? bundle
+        let resourceBundle = Bundle.init(path: resourcePath ?? Bundle.main.bundlePath)
         let image = UIImage(named: imageName, in: resourceBundle, compatibleWith: nil)
         return image ?? UIImage()
     }
-    
+
     class func podBundleResource(bundleName:String,
                                  sourceName:String,
                                  type:String) -> String? {
