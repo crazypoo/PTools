@@ -34,7 +34,7 @@ public extension UITextView {
         
     //MARK: 設置TextView的Placeholder Label
     ///設置TextView的Placeholder Label
-    var pt_placeholderLabel: UILabel? {
+    @objc var pt_placeholderLabel: UILabel? {
         set{
             objc_setAssociatedObject(self, &AssociatedKeys.pt_placeholderLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         } get {
@@ -93,7 +93,7 @@ public extension UITextView {
     
     //MARK: 設置TextView的字數限制Label
     ///設置TextView的字數限制Label
-    var pt_wordCountLabel: UILabel? {
+    @objc var pt_wordCountLabel: UILabel? {
         set{
             // 调用 setter 的时候会执行此处代码，将自定义的label通过runtime保存起来
             objc_setAssociatedObject(self, &AssociatedKeys.pt_wordCountLabelKey, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
