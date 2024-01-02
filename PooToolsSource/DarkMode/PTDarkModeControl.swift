@@ -167,14 +167,37 @@ public class PTDarkModeControl: PTBaseViewController {
         }
         return view
     }()
+    
+    lazy var backButton:UIButton = {
+        let view = UIButton(type: .custom)
+        view.setImage("❌".emojiToImage(emojiFont: .appfont(size: 20)), for: .normal)
+        view.addActionHandlers { sender in
+            self.returnFrontVC()
+        }
+        return view
+    }()
 
     public override func viewDidLoad() {
         super.viewDidLoad()
 
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navTitle = "PT Theme title".localized()
+        
+        if checkVCIsPresenting() {
+            zx_navBar?.addSubviews([backButton])
+            backButton.snp.makeConstraints { make in
+                make.size.equalTo(34)
+                make.left.equalToSuperview().inset(PTAppBaseConfig.share.defaultViewSpace)
+                make.bottom.equalToSuperview().inset(5)
+            }
+        }
 #else
         title = "PT Theme title".localized()
+        
+        if checkVCIsPresenting() {
+            backButton.frame = CGRectMake(0, 0, 34, 34)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        }
 #endif
         // Do any additional setup after loading the view.
         view.addSubviews([newCollectionView])
