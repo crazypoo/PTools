@@ -328,6 +328,10 @@
 		55C9CBA528E8521500DB6200 /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA428E8521500DB6200 /* ResponseModel.swift */; };
 		55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */; };
 		55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */; };
+		55CFC6902B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */; };
+		55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */; };
+		55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */; };
+		55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */; };
 		55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */; };
 		55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */; };
 		55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */; };
@@ -807,6 +811,10 @@
 		55C9CBA428E8521500DB6200 /* ResponseModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		55C9CBA628E8605D00DB6200 /* PTLocalConsoleFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTLocalConsoleFunction.swift; sourceTree = "<group>"; };
 		55C9CBA828E95FC200DB6200 /* PTCountryCodes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountryCodes.swift; sourceTree = "<group>"; };
+		55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTObjcAssociatedWeakObject.swift; sourceTree = "<group>"; };
+		55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGifManager.swift; sourceTree = "<group>"; };
+		55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImage+PTEX.swift"; sourceTree = "<group>"; };
+		55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSImageView+PTEX.swift"; sourceTree = "<group>"; };
 		55D0EA7228E43CBB0002AA2A /* PTCheckFWords.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckFWords.swift; sourceTree = "<group>"; };
 		55D3D9D92972F9CB00F2E57C /* UITextField+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+PTEX.swift"; sourceTree = "<group>"; };
 		55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSMutableString+PTEX.swift"; sourceTree = "<group>"; };
@@ -1211,6 +1219,8 @@
 				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
 				5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */,
 				556CA4BF2B29535900A5B189 /* NSLayoutConstraint+PTEX.swift */,
+				55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */,
+				55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2024,6 +2034,7 @@
 				231D15D4272CDEE9003D6F62 /* PTUtils.swift */,
 				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
 				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
+				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2135,6 +2146,7 @@
 				55D59C6D28F54D9500B4FF76 /* PTFusionCellModel.swift */,
 				555818A42AF5CA760051C0AA /* PTHeaderAndFooter.swift */,
 				55102A882AFF575900E9529D /* PTUnavailableFunction.swift */,
+				55CFC68F2B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift */,
 			);
 			path = Base;
 			sourceTree = "<group>";
@@ -2694,6 +2706,7 @@
 				55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */,
 				55D3D9DC2975139100F2E57C /* NSMutableString+PTEX.swift in Sources */,
 				55E3BBBE2ABDFF3600858348 /* PTPingTool.swift in Sources */,
+				55CFC6942B44730F00CC6CF5 /* NSImage+PTEX.swift in Sources */,
 				9A14E98828616B4100D7E8EF /* PTSnakePageControl.swift in Sources */,
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
@@ -2728,6 +2741,7 @@
 				555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */,
 				9AE446A328598965007DC2B5 /* UserDefaults+PTEX.swift in Sources */,
 				9AE4467E28585D27007DC2B5 /* CGFloat+PTEX.swift in Sources */,
+				55CFC6902B4466B600CC6CF5 /* PTObjcAssociatedWeakObject.swift in Sources */,
 				55C905182A31B40200B7E83D /* PTUserDefultsViewController.swift in Sources */,
 				231D1681272CDEEA003D6F62 /* PTCollectionLayout.swift in Sources */,
 				231D1669272CDEEA003D6F62 /* PTUrlChange.swift in Sources */,
@@ -2773,6 +2787,7 @@
 				55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */,
 				559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */,
 				55102ADB2AFFD22E00E9529D /* PTLocalize.swift in Sources */,
+				55CFC6962B44749100CC6CF5 /* NSImageView+PTEX.swift in Sources */,
 				550CE4A62AF130010052539D /* PTActiveLabel.swift in Sources */,
 				555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */,
 				55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */,
@@ -2940,6 +2955,7 @@
 				231D167B272CDEEA003D6F62 /* PTDevMaskView.swift in Sources */,
 				556CA4C02B29535900A5B189 /* NSLayoutConstraint+PTEX.swift in Sources */,
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
+				55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
