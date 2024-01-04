@@ -57,4 +57,10 @@ public extension Int {
             return .Small
         }
     }
+    
+    func repetitions(task:(Int) -> Void) {
+        for i in 0..<self {
+            task(i)
+        }
+    }
 }

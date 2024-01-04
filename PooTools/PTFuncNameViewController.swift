@@ -848,7 +848,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 }
             }
         }
-        
+
         popover.addActionHandlers { sender in
             let items = PTPopoverItem()
             items.name = "123123123123"
