@@ -485,14 +485,18 @@ public class PTCollectionView: UIView {
 #if POOTOOLS_SCROLLREFRESH
     ///展示底部已经没有更多数据
     public func footerRefreshNoMore () {
-        self.collectionView.mj_footer?.endRefreshingWithNoMoreData()
+        collectionView.mj_footer?.endRefreshingWithNoMoreData()
+    }
+    
+    public func footerRefreshReset() {
+        collectionView.mj_footer?.resetNoMoreData()
     }
 #endif
     
 #if POOTOOLS_PAGINGCONTROL
     ///用于SegmentView上
     public func segmentScrolView() -> UIScrollView {
-        self.collectionView
+        collectionView
     }
 #endif
     
