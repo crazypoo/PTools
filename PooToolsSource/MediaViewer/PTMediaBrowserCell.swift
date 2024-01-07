@@ -227,32 +227,32 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         }
 
         imageView.addGestureRecognizers(imageActions)
-
-        PTLoadImageFunction.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName) { receivedSize, totalSize in
+        
+        imageView.loadImage(contentData: dataModel.imageURL as Any,iCloudDocumentName: viewConfig.iCloudDocumentName,emptyImage: UIImage()) { receivedSize, totalSize in
             PTGCDManager.gcdMain {
                 loading.progress = CGFloat(receivedSize / totalSize)
             }
-        } taskHandle: { images,image in
+        } loadFinish: { images, image in
             if (images?.count ?? 0) > 1 {
                 self.currentCellType = .GIF
                 self.gifImage = image
-                self.imageView.image = UIImage.animatedImage(with: images!, duration: 2)
                 if self.viewConfig.dynamicBackground {
                     self.backgroundImageView.image = UIImage.animatedImage(with: images!, duration: 2)
                 }
 
                 self.adjustFrame()
                 loading.removeFromSuperview()
+                self.reloadButton.removeFromSuperview()
             } else if images?.count == 1 {
                 self.currentCellType = .Normal
                 self.gifImage = image
-                self.imageView.image = images!.first
                 if self.viewConfig.dynamicBackground {
                     self.backgroundImageView.image = images!.first
                 }
 
                 self.adjustFrame()
                 loading.removeFromSuperview()
+                self.reloadButton.removeFromSuperview()
             } else {
                 self.currentCellType = .None
                 loading.removeFromSuperview()
@@ -274,67 +274,130 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         if dataModel.imageURL is String {
             let urlString = dataModel.imageURL as! String
             if urlString.pathExtension.lowercased() == "mp4" || urlString.pathExtension.lowercased() == "mov" {
-                
-                UIImage.pt.getVideoFirstImage(videoUrl: urlString, closure: { image in
-                    if image == nil {
-                        PTGCDManager.gcdMain {
-                            self.imageView.contentMode = .scaleAspectFit
-                            self.contentScrolView.addSubview(self.imageView)
-                            self.currentCellType = .None
-                            loading.removeFromSuperview()
-                            self.createReloadButton()
-                        }
-                    } else {
-                        self.currentCellType = .Video
-                        loading.removeFromSuperview()
-                        self.contentScrolView.addSubviews([self.imageView,self.playBtn])
-                        self.playBtn.snp.makeConstraints { make in
-                            make.width.height.equalTo(44)
-                            make.centerX.centerY.equalToSuperview()
-                        }
-                        
-                        let singleTap = UITapGestureRecognizer.init { sender in
-                            if self.tapTask != nil {
-                                self.tapTask!()
-                            }
-                        }
-                        singleTap.numberOfTapsRequired = 1
-                        self.imageView.addGestureRecognizer(singleTap)
-
-                        self.gifImage = nil
-
-                        var videoUrl:NSURL?
-                        let urlString = self.dataModel.imageURL as! String
-                        if FileManager.pt.judgeFileOrFolderExists(filePath: urlString) {
-                            videoUrl = NSURL.init(fileURLWithPath: urlString)
-                        } else {
-                            videoUrl = NSURL.init(string: urlString.nsString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)
-                        }
-                        
-                        self.gifImage = image
-                        self.imageView.image = image
-                        self.adjustFrame()
-                        if self.viewConfig.dynamicBackground {
-                            self.backgroundImageView.image = image
-                        }
-
-                        self.playBtn.addActionHandlers { sender in
-                            let videoController = AVPlayerViewController()
-                            videoController.player = AVPlayer(url: videoUrl! as URL)
-
-                            PTUtils.getCurrentVC().present(videoController, animated: true) {
-                              videoController.player?.play()
-                            }
-                        }
-                    }
-                })
-
+                videoUrlLoad(url: urlString, loading: loading)
             } else {
-                self.setImageTypeView(loading: loading)
+                setImageTypeView(loading: loading)
             }
+        } else if dataModel.imageURL is URL {
+            let urlString = dataModel.imageURL as! URL
+            if urlString.pathExtension.lowercased() == "mp4" || urlString.pathExtension.lowercased() == "mov" {
+                videoUrlLoad(url: urlString.description, loading: loading)
+            } else {
+                setImageTypeView(loading: loading)
+            }
+        } else if dataModel.imageURL is AVPlayerItem {
+            let avItem  = dataModel.imageURL as! AVPlayerItem
+            videoAVItem(avItem: avItem, loading: loading)
+        }  else if dataModel.imageURL is AVAsset {
+            let avAsset  = dataModel.imageURL as! AVAsset
+            let avPlayerItem = AVPlayerItem(asset: avAsset)
+            videoAVItem(avItem: avPlayerItem, loading: loading)
         } else {
             setImageTypeView(loading: loading)
         }
+    }
+    
+    func videoAVItem(avItem:AVPlayerItem,loading:PTMediaBrowserLoadingView) {
+        avItem.generateThumbnail { image in
+            if image != nil {
+                PTGCDManager.gcdMain {
+                    self.currentCellType = .Video
+                    loading.removeFromSuperview()
+                    self.contentScrolView.addSubviews([self.imageView,self.playBtn])
+                    self.playBtn.snp.makeConstraints { make in
+                        make.width.height.equalTo(44)
+                        make.centerX.centerY.equalToSuperview()
+                    }
+                    
+                    let singleTap = UITapGestureRecognizer.init { sender in
+                        if self.tapTask != nil {
+                            self.tapTask!()
+                        }
+                    }
+                    singleTap.numberOfTapsRequired = 1
+                    self.imageView.addGestureRecognizer(singleTap)
+                    
+                    self.gifImage = image
+                    self.imageView.image = image
+                    self.adjustFrame()
+                    if self.viewConfig.dynamicBackground {
+                        self.backgroundImageView.image = image
+                    }
+                    self.reloadButton.removeFromSuperview()
+                    self.playBtn.addActionHandlers { sender in
+                        let videoController = AVPlayerViewController()
+                        videoController.player = AVPlayer(playerItem: avItem)
+                        PTUtils.getCurrentVC().present(videoController, animated: true) {
+                          videoController.player?.play()
+                        }
+                    }
+                }
+            } else {
+                PTGCDManager.gcdMain {
+                    self.imageView.contentMode = .scaleAspectFit
+                    self.contentScrolView.addSubview(self.imageView)
+                    self.currentCellType = .None
+                    loading.removeFromSuperview()
+                    self.createReloadButton()
+                }
+            }
+        }
+    }
+    
+    func videoUrlLoad(url:String,loading:PTMediaBrowserLoadingView) {
+        UIImage.pt.getVideoFirstImage(videoUrl: url, closure: { image in
+            if image == nil {
+                PTGCDManager.gcdMain {
+                    self.imageView.contentMode = .scaleAspectFit
+                    self.contentScrolView.addSubview(self.imageView)
+                    self.currentCellType = .None
+                    loading.removeFromSuperview()
+                    self.createReloadButton()
+                }
+            } else {
+                self.currentCellType = .Video
+                loading.removeFromSuperview()
+                self.contentScrolView.addSubviews([self.imageView,self.playBtn])
+                self.playBtn.snp.makeConstraints { make in
+                    make.width.height.equalTo(44)
+                    make.centerX.centerY.equalToSuperview()
+                }
+                
+                let singleTap = UITapGestureRecognizer.init { sender in
+                    if self.tapTask != nil {
+                        self.tapTask!()
+                    }
+                }
+                singleTap.numberOfTapsRequired = 1
+                self.imageView.addGestureRecognizer(singleTap)
+
+                self.gifImage = nil
+
+                var videoUrl:NSURL?
+                let urlString = self.dataModel.imageURL as! String
+                if FileManager.pt.judgeFileOrFolderExists(filePath: urlString) {
+                    videoUrl = NSURL.init(fileURLWithPath: urlString)
+                } else {
+                    videoUrl = NSURL.init(string: urlString.nsString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!)
+                }
+                
+                self.gifImage = image
+                self.imageView.image = image
+                self.adjustFrame()
+                if self.viewConfig.dynamicBackground {
+                    self.backgroundImageView.image = image
+                }
+                self.reloadButton.removeFromSuperview()
+                self.playBtn.addActionHandlers { sender in
+                    let videoController = AVPlayerViewController()
+                    videoController.player = AVPlayer(url: videoUrl! as URL)
+
+                    PTUtils.getCurrentVC().present(videoController, animated: true) {
+                      videoController.player?.play()
+                    }
+                }
+            }
+        })
     }
     
     func prepareForHide() {

@@ -194,6 +194,7 @@
 		556CA4C22B295A5600A5B189 /* PTVideoEditorToolsModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA4C12B295A5600A5B189 /* PTVideoEditorToolsModel.swift */; };
 		556CA4F82B295D9600A5B189 /* UIColor+VideoEditorEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA4CD2B295D9400A5B189 /* UIColor+VideoEditorEX.swift */; };
 		556CA51A2B295E7E00A5B189 /* PTVideoEditorToolsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA5192B295E7E00A5B189 /* PTVideoEditorToolsCell.swift */; };
+		556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556F84C32B4A874D008675EB /* AVPlayerItem+PTEX.swift */; };
 		557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */; };
 		5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */; };
 		5571F60C2AFD21BA00DB4420 /* PTAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5571F60B2AFD21BA00DB4420 /* PTAppDelegate.swift */; };
@@ -671,6 +672,7 @@
 		556CA4C12B295A5600A5B189 /* PTVideoEditorToolsModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorToolsModel.swift; sourceTree = "<group>"; };
 		556CA4CD2B295D9400A5B189 /* UIColor+VideoEditorEX.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+VideoEditorEX.swift"; sourceTree = "<group>"; };
 		556CA5192B295E7E00A5B189 /* PTVideoEditorToolsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTVideoEditorToolsCell.swift; sourceTree = "<group>"; };
+		556F84C32B4A874D008675EB /* AVPlayerItem+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AVPlayerItem+PTEX.swift"; sourceTree = "<group>"; };
 		557049E0273568D3002E9479 /* PTOpenSystemFunction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTOpenSystemFunction.swift; sourceTree = "<group>"; };
 		5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppUserdefault.swift; sourceTree = "<group>"; };
 		5571F60B2AFD21BA00DB4420 /* PTAppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAppDelegate.swift; sourceTree = "<group>"; };
@@ -1141,6 +1143,7 @@
 				9AE4467928585C26007DC2B5 /* Array+PTEX.swift */,
 				55ED0D232B11834E00391136 /* AVCaptureDevice+PTEX.swift */,
 				9AE4469E28597DD7007DC2B5 /* AVExport+PTEX.swift */,
+				556F84C32B4A874D008675EB /* AVPlayerItem+PTEX.swift */,
 				55A5D6F929B08D7200DCA096 /* Bool+PTEX.swift */,
 				5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */,
 				9AE4467D28585D27007DC2B5 /* CGFloat+PTEX.swift */,
@@ -1167,11 +1170,16 @@
 				55F6C634298CF0A30052A58C /* NSDate+PTEX.swift */,
 				55A5D70329B09BF800DCA096 /* NSDecimalNumberHandler+PTEX.swift */,
 				231D15B7272CDEE9003D6F62 /* NSDictionary+PTEX.swift */,
+				55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */,
+				55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */,
+				556CA4BF2B29535900A5B189 /* NSLayoutConstraint+PTEX.swift */,
 				231D15BB272CDEE9003D6F62 /* NSMutableArray+PTEX.swift */,
 				55D3D9DB2975139100F2E57C /* NSMutableString+PTEX.swift */,
 				5593F5F2293703F70086C2EC /* NSString+PTEX.swift */,
 				559C1C92293AF138002874BA /* NSURLResponse+PTEX.swift */,
 				9AE4467B28585C77007DC2B5 /* Number+PTEX.swift */,
+				552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */,
+				5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */,
 				55D59C5928F2CC3F00B4FF76 /* PTColorRBGModel.swift */,
 				558D5EF62AAF5B4400C02042 /* PTJson+PTEX.swift */,
 				558D5EF82AAF5B8700C02042 /* PTKeyedDecoding+PTEX.swift */,
@@ -1190,6 +1198,7 @@
 				555818C52AFA79A50051C0AA /* UIFeedbackGenerator+PTEX.swift */,
 				9AE4469328586A59007DC2B5 /* UIFont+PTEX.swift */,
 				550AA1062A04E54400E663A0 /* UIGestureRecognizer+PTEX.swift */,
+				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
 				231D15D8272CDEE9003D6F62 /* UIImage+PTEX.swift */,
 				555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */,
 				55D3D9E12976E67800F2E57C /* UILabel+PTEX.swift */,
@@ -1215,12 +1224,6 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
-				552F078F2B15C66D00CB47CD /* PHAsset+PTEX.swift */,
-				552F079F2B16790800CB47CD /* UIGraphicsImageRenderer+PTEX.swift */,
-				5507FF9D2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift */,
-				556CA4BF2B29535900A5B189 /* NSLayoutConstraint+PTEX.swift */,
-				55CFC6932B44730F00CC6CF5 /* NSImage+PTEX.swift */,
-				55CFC6952B44749100CC6CF5 /* NSImageView+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2851,6 +2854,7 @@
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
 				555818C42AFA79580051C0AA /* UIEdgeInsets+PTEX.swift in Sources */,
+				556F84C42B4A874D008675EB /* AVPlayerItem+PTEX.swift in Sources */,
 				231D166D272CDEEA003D6F62 /* UIColor+PTEX.swift in Sources */,
 				55FA6CB32B02354800BC464B /* PTDarkFollowSystemFooter.swift in Sources */,
 				55E3BBC52ABE193200858348 /* PTFileBrowser.swift in Sources */,

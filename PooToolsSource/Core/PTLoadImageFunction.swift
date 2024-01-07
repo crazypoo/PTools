@@ -65,7 +65,6 @@ public class PTLoadImageFunction: NSObject {
                                     taskHandle([value.image],value.image)
                                 }
                             case .failure(let error):
-                                PTNSLogConsole(error)
                                 taskHandle([],nil)
                             }
                         }
