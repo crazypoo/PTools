@@ -43,30 +43,34 @@ public class PTLoadImageFunction: NSObject {
                         }
                     }
                 } else {
-                    ImageDownloader.default.downloadImage(with: URL(string: dataUrlString)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
-                        if progressHandle != nil {
-                            progressHandle!(receivedSize,totalSize)
-                        }
-                    }) { result in
-                        switch result {
-                        case .success(let value):
-                            if value.originalData.detectImageType() == .GIF {
-                                let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                let frameCount = CGImageSourceGetCount(source!)
-                                var frames = [UIImage]()
-                                for i in 0...frameCount {
-                                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                    let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                    frames.append(imageName)
-                                }
-                                taskHandle(frames,value.image)
-                            } else {
-                                taskHandle([value.image],value.image)
+                    if let imageURL = URL(string: dataUrlString) {
+                        ImageDownloader.default.downloadImage(with: imageURL, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
+                            if progressHandle != nil {
+                                progressHandle!(receivedSize,totalSize)
                             }
-                        case .failure(let error):
-                            PTNSLogConsole(error)
-                            taskHandle([],nil)
+                        }) { result in
+                            switch result {
+                            case .success(let value):
+                                if value.originalData.detectImageType() == .GIF {
+                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                    let frameCount = CGImageSourceGetCount(source!)
+                                    var frames = [UIImage]()
+                                    for i in 0...frameCount {
+                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                        frames.append(imageName)
+                                    }
+                                    taskHandle(frames,value.image)
+                                } else {
+                                    taskHandle([value.image],value.image)
+                                }
+                            case .failure(let error):
+                                PTNSLogConsole(error)
+                                taskHandle([],nil)
+                            }
                         }
+                    } else {
+                        taskHandle([],nil)
                     }
                 }
             } else if dataUrlString.isSingleEmoji {

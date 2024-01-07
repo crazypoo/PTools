@@ -462,10 +462,14 @@ class PTFuncNameViewController: PTBaseViewController {
                 let model4 = PTMediaBrowserModel()
                 model4.imageURL = "http://img.t.sinajs.cn/t35/style/images/common/face/ext/normal/7a/shenshou_thumb.gif"
                 model4.imageInfo = "GIF"
+                
+                let model5 = PTMediaBrowserModel()
+                model5.imageURL = "http://yuliao202310.oss-cn-beijing.aliyuncs.com/我的二维码 (7).jpg"
+                model5.imageInfo = "GIF"
 
                 let mediaConfig = PTMediaBrowserConfig()
                 mediaConfig.actionType = .All
-                mediaConfig.mediaData = [model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
+                mediaConfig.mediaData = [model5,model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
                 
                 let browser = PTMediaBrowserController()
                 browser.viewConfig = mediaConfig

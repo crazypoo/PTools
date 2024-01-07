@@ -273,28 +273,34 @@ class PTMediaBrowserCell: PTBaseNormalCell {
         
         if dataModel.imageURL is String {
             let urlString = dataModel.imageURL as! String
-
-            UIImage.pt.getVideoFirstImage(videoUrl: urlString, closure: { image in
-                if image == nil {
-                    self.setImageTypeView(loading: loading)
-                } else {
-                    self.currentCellType = .Video
-                    loading.removeFromSuperview()
-                    self.contentScrolView.addSubviews([self.imageView,self.playBtn])
-                    self.playBtn.snp.makeConstraints { make in
-                        make.width.height.equalTo(44)
-                        make.centerX.centerY.equalToSuperview()
-                    }
-                    
-                    let singleTap = UITapGestureRecognizer.init { sender in
-                        if self.tapTask != nil {
-                            self.tapTask!()
+            if urlString.pathExtension.lowercased() == "mp4" || urlString.pathExtension.lowercased() == "mov" {
+                
+                UIImage.pt.getVideoFirstImage(videoUrl: urlString, closure: { image in
+                    if image == nil {
+                        PTGCDManager.gcdMain {
+                            self.imageView.contentMode = .scaleAspectFit
+                            self.contentScrolView.addSubview(self.imageView)
+                            self.currentCellType = .None
+                            loading.removeFromSuperview()
+                            self.createReloadButton()
                         }
-                    }
-                    singleTap.numberOfTapsRequired = 1
-                    self.imageView.addGestureRecognizer(singleTap)
+                    } else {
+                        self.currentCellType = .Video
+                        loading.removeFromSuperview()
+                        self.contentScrolView.addSubviews([self.imageView,self.playBtn])
+                        self.playBtn.snp.makeConstraints { make in
+                            make.width.height.equalTo(44)
+                            make.centerX.centerY.equalToSuperview()
+                        }
+                        
+                        let singleTap = UITapGestureRecognizer.init { sender in
+                            if self.tapTask != nil {
+                                self.tapTask!()
+                            }
+                        }
+                        singleTap.numberOfTapsRequired = 1
+                        self.imageView.addGestureRecognizer(singleTap)
 
-                    if self.dataModel.imageURL is String {
                         self.gifImage = nil
 
                         var videoUrl:NSURL?
@@ -321,8 +327,11 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                             }
                         }
                     }
-                }
-            })
+                })
+
+            } else {
+                self.setImageTypeView(loading: loading)
+            }
         } else {
             setImageTypeView(loading: loading)
         }
