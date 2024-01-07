@@ -14,7 +14,7 @@ import SwifterSwift
 public class PTLoadImageFunction: NSObject {
 
     public class func loadImage(contentData:Any,
-                                iCloudDocumentName:String? = "",
+                                iCloudDocumentName:String = "",
                                 progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
                                 taskHandle:(([UIImage]?,UIImage?)->Void)!) {
         if contentData is UIImage {
@@ -27,19 +27,25 @@ public class PTLoadImageFunction: NSObject {
                 taskHandle([image],image)
             } else if dataUrlString.isURL() {
                 if dataUrlString.contains("file://") {
-                    if (iCloudDocumentName ?? "").stringIsEmpty() {
+                    if iCloudDocumentName.stringIsEmpty() {
                         let image = UIImage(contentsOfFile: dataUrlString)!
                         taskHandle([image],image)
                     } else {
-                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName!) {
+                        if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
                             let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
                             if let imageData = try? Data(contentsOf: imageURL) {
-                                let image = UIImage(data: imageData)!
-                                taskHandle([image],image)
+                                if let image = UIImage(data: imageData) {
+                                    taskHandle([image],image)
+                                } else {
+                                    taskHandle(nil,nil)
+                                }
                             }
                         } else {
-                            let image = UIImage(contentsOfFile: dataUrlString)!
-                            taskHandle([image],image)
+                            if let image = UIImage(contentsOfFile: dataUrlString) {
+                                taskHandle([image],image)
+                            } else {
+                                taskHandle(nil,nil)
+                            }
                         }
                     }
                 } else {
@@ -65,11 +71,11 @@ public class PTLoadImageFunction: NSObject {
                                     taskHandle([value.image],value.image)
                                 }
                             case .failure(let error):
-                                taskHandle([],nil)
+                                taskHandle(nil,nil)
                             }
                         }
                     } else {
-                        taskHandle([],nil)
+                        taskHandle(nil,nil)
                     }
                 }
             } else if dataUrlString.isSingleEmoji {
@@ -85,8 +91,11 @@ public class PTLoadImageFunction: NSObject {
                 }
             }
         } else if contentData is Data {
-            let dataImage = UIImage(data: contentData as! Data)!
-            taskHandle([dataImage],dataImage)
+            if let dataImage = UIImage(data: contentData as! Data) {
+                taskHandle([dataImage],dataImage)
+            } else {
+                taskHandle(nil,nil)
+            }
         } else {
             taskHandle(nil,nil)
         }

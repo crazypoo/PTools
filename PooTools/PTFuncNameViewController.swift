@@ -837,18 +837,21 @@ class PTFuncNameViewController: PTBaseViewController {
                 let vc = PTMediaLibViewController()
                 vc.mediaLibShow(panGesDelegate: self)
                 vc.selectImageBlock = { result,isOriginal in
-                    PTNSLogConsole("<<<<<<<<<<<<<<<<<<<<<<<<<<\(result)")
-                    let vc = PTEditImageViewController(readyEditImage: result.first!.image)
-                    vc.editFinishBlock = { ei,eiitModel in
-                        PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
-                            if finish {
-                                PTAlertTipControl.present(title:"保存成功",subtitle:"你的图片已经保存到相册中",icon:.Done,style: .Normal)
-                            } else {
-                                PTAlertTipControl.present(title:"保存失败",subtitle:"",icon:.Error,style: .Normal)
+                    if result.count > 0 {
+                        let vc = PTEditImageViewController(readyEditImage: result.first!.image)
+                        vc.editFinishBlock = { ei,eiitModel in
+                            PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+                                if finish {
+                                    PTAlertTipControl.present(title:"保存成功",subtitle:"你的图片已经保存到相册中",icon:.Done,style: .Normal)
+                                } else {
+                                    PTAlertTipControl.present(title:"保存失败",subtitle:"",icon:.Error,style: .Normal)
+                                }
                             }
                         }
+                        vc.editImageShow(vc: self)
+                    } else {
+                        PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
                     }
-                    vc.editImageShow(vc: self)
                 }
             }
         }
