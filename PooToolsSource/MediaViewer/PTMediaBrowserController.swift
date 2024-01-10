@@ -260,6 +260,12 @@ public class PTMediaBrowserController: PTBaseViewController {
 #else
         navigationController?.isNavigationBarHidden = true
 #endif
+        self.changeStatusBar(type: .Dark)
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        self.changeStatusBar(type: .Auto)
     }
 
     public override func viewDidLoad() {
@@ -536,6 +542,12 @@ public class PTMediaBrowserController: PTBaseViewController {
                 break
             }
         })
+    }
+    
+    public func medisShow(mediaConfig:PTMediaBrowserConfig) {
+        self.viewConfig = mediaConfig
+        self.modalPresentationStyle = .fullScreen
+        PTUtils.getCurrentVC().pt_present(self)
     }
 }
 

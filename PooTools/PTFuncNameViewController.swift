@@ -472,9 +472,7 @@ class PTFuncNameViewController: PTBaseViewController {
                 mediaConfig.mediaData = [model5,model1,model2,model3,model4,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1,model1]
                 
                 let browser = PTMediaBrowserController()
-                browser.viewConfig = mediaConfig
-                browser.modalPresentationStyle = .fullScreen
-                self.pt_present(browser)
+                browser.medisShow(mediaConfig: mediaConfig)
             } else if itemRow.title == .phoneCall {
                 PTPhoneBlock.callPhoneNumber(phoneNumber: "13800138000", call: { duration in
                 }, cancel: {
