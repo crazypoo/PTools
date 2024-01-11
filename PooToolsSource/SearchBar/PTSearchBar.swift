@@ -9,6 +9,13 @@
 import UIKit
 
 @objcMembers
+public class PTSearchBarTextFieldClearButtonConfig:NSObject {
+    open var clearAction:PTActionTask?
+    open var clearImage:Any?
+    open var clearTopSpace:CGFloat = 12.5
+}
+
+@objcMembers
 public class PTSearchBar: UISearchBar {
     //MARK: 輸入框Placeholder
     ///輸入框Placeholder
@@ -44,6 +51,40 @@ public class PTSearchBar: UISearchBar {
     ///輸入框底部顏色
     open var searchTextFieldBackgroundColor : UIColor? = UIColor.random
 
+    open var clearConfig:PTSearchBarTextFieldClearButtonConfig? {
+        didSet {
+            if clearConfig != nil {
+                let searchField: UITextField = self.value(forKey: "searchField") as! UITextField
+                let clearBtn: UIButton = searchField.value(forKey: "_clearButton") as! UIButton
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    @PTClampedProperyWrapper(range:0...(self.frame.size.height - 15)) var clearTopSpace:CGFloat = self.clearConfig!.clearTopSpace
+                    let clearHeight = self.frame.size.height - clearTopSpace * 2
+                    clearBtn.imageView?.contentMode = .scaleAspectFit
+                    clearBtn.bounds = CGRect(x: 0, y: clearTopSpace, width: clearHeight, height: clearHeight)
+                    if self.clearConfig!.clearImage != nil {
+                        PTLoadImageFunction.loadImage(contentData: self.clearConfig!.clearImage!) { images, image in
+                            if (images?.count ?? 0) > 0 {
+                                if (images?.count ?? 0) > 1 {
+                                    clearBtn.setImage(UIImage.animatedImage(with: images!, duration: 2)!, for: .normal)
+                                } else {
+                                    if image != nil {
+                                        let resizeImage = image!.transformImage(size: CGSize(width: clearHeight, height: clearHeight))
+                                        clearBtn.setImage(resizeImage, for: .normal)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    clearBtn.addActionHandlers { sender in
+                        if self.clearConfig!.clearAction != nil {
+                            self.clearConfig!.clearAction!()
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
     public override func layoutSubviews() {
         super.layoutSubviews()
         

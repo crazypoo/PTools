@@ -795,6 +795,19 @@ class PTFuncNameViewController: PTBaseViewController {
         popover.setTitleColor(.random, for: .normal)
         popover.setTitle("Popover", for: .normal)
         popover.bounds = CGRect(x: 0, y: 0, width: 34, height: 34)
+        
+        
+        let searchBarConfig = PTSearchBarTextFieldClearButtonConfig()
+        searchBarConfig.clearTopSpace = 20
+        searchBarConfig.clearImage = "http://p3.music.126.net/VDn1p3j4g2z4p16Gux969w==/2544269907756816.jpg"
+        searchBarConfig.clearAction = {
+            PTNSLogConsole("1231231231")
+        }
+        
+        let searchBar = PTSearchBar()
+        searchBar.clearConfig = searchBarConfig
+        searchBar.bounds = CGRect(x: 0, y: 0, width: 150, height: 34)
+        
 #if POOTOOLS_NAVBARCONTROLLER
         self.zx_navBar?.addSubviews([more,popover])
         more.snp.makeConstraints { make in
@@ -811,6 +824,7 @@ class PTFuncNameViewController: PTBaseViewController {
 #else
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: popover)
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: more)
+        navigationItem.titleView = searchBar
 #endif
         let popoverContent = PTBaseViewController(hideBaseNavBar: true)
         

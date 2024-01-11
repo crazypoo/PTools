@@ -110,7 +110,7 @@ public extension UIImage {
             if isSymbolImage {
                 return resize(targetSize: size)
             } else {
-                return preparingThumbnail(of: size)!
+                return preparingThumbnail(of: size) ?? resize(targetSize: size)
             }
         } else {
             if isSymbolImage {
