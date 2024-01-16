@@ -8,6 +8,7 @@
 
 import UIKit
 import SnapKit
+import AttributedString
 #if POOTOOLS_SCROLLREFRESH
 import MJRefresh
 #endif
@@ -684,9 +685,23 @@ extension PTCollectionView:LXFEmptyDataSetable {
             }
         })
         
+        let firstString = self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.string ?? ""
+        let secondary = self.viewConfig.emptyViewConfig?.secondaryEmptyAtt?.value.string ?? ""
+        
+        var total = ""
+        if !firstString.stringIsEmpty() && secondary.stringIsEmpty() {
+            total = firstString
+        } else if !firstString.stringIsEmpty() && !secondary.stringIsEmpty() {
+            total = firstString + "\n" + secondary
+        } else if firstString.stringIsEmpty() && secondary.stringIsEmpty() {
+            total = ""
+        } else if firstString.stringIsEmpty() && !secondary.stringIsEmpty() {
+            total = secondary
+        }
+        
         self.lxf_EmptyDataSet(currentScroller) { () -> [LXFEmptyDataSetAttributeKeyType : Any] in
             [
-                .tipStr: self.viewConfig.emptyViewConfig?.mainTitleAtt?.value.string as Any,
+                .tipStr: total,
                 .tipColor: textColor,
                 .tipFont:font,
                 .verticalOffset: 0,
@@ -696,7 +711,12 @@ extension PTCollectionView:LXFEmptyDataSetable {
     }
     
     open func buttonTitle(forEmptyDataSet scrollView: UIScrollView!, for state: UIControl.State) -> NSAttributedString! {
-        self.viewConfig.emptyViewConfig?.secondaryEmptyAtt?.value
+        let buttonAtt:ASAttributedString = """
+                    \(wrap: .embedding("""
+                    \(self.viewConfig.emptyViewConfig?.buttonTitle ?? "",.font(self.viewConfig.emptyViewConfig?.buttonFont ?? .appfont(size: 14)),.paragraph(.alignment(.center),.lineSpacing(7.5)),.foreground(self.viewConfig.emptyViewConfig?.buttonTextColor ?? PTAppBaseConfig.share.viewDefaultTextColor))
+                    """))
+                    """
+        return buttonAtt.value
     }
 }
 #endif
