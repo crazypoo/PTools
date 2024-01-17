@@ -83,27 +83,7 @@ public class PTMediaLibView:UIView {
                     if !cellModel.isSelected {
                         guard canAddModel(cellModel, currentSelectCount: self.selectedModel.count, sender: PTUtils.getCurrentVC()) else { return }
                         
-                        if cellModel.type == .video {
-                            PTGCDManager.gcdMain {
-                                cellModel.asset.pt.convertPHAssetToAVAsset { avAsset in
-                                    if avAsset == nil {
-                                        PTGCDManager.gcdMain {
-                                            PTAlertTipControl.present(title:"PT Alert Opps".localized(),subtitle:"PT Video editor get video error".localized(),icon:.Error,style: .Normal)
-                                        }
-                                    } else {
-                                        PTGCDManager.gcdMain {
-                                            downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
-                                                cellModel.isSelected = true
-                                                self.selectedModel.append(cellModel)
-                                                isSelected(true)
-                                                config.didSelectAsset?(cellModel.asset)
-                                                self.refreshCellIndex()
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } else {
+                        PTGCDManager.gcdMain {
                             downloadAssetIfNeed(model: cellModel, sender: PTUtils.getCurrentVC()) {
                                 cellModel.isSelected = true
                                 self.selectedModel.append(cellModel)
