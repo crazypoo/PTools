@@ -39,7 +39,7 @@ struct PTRegexParser {
         "((https?://|www\\.|pic\\.)[-\\w;/?:@&=+$\\|\\_.!~*\\|'()\\[\\]%#,☺]+[\\w/#](\\(\\))?)" +
     "(?=$|[\\s',\\|\\(\\).:;?\\-\\[\\]>\\)])"
     static let chinaCellPhone = "1[3456789]\\d{9}"
-    static let snsID = "([a-zA-Z0-9]+)"
+    static let snsID = "([a-zA-Z]+\\d*)"
 
     private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
 
