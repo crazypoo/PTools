@@ -358,7 +358,7 @@ public class PTCollectionView: UIView {
     open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
-    fileprivate var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
+    public var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
     
     //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
