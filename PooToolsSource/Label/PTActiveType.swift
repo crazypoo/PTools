@@ -13,6 +13,7 @@ enum PTActiveElement {
     case hashtag(String)
     case email(String)
     case url(original: String, trimmed: String)
+    case chinaCellPhone(String)
     case custom(String)
     
     static func create(with activeType: PTActiveType, text: String) -> PTActiveElement {
@@ -21,6 +22,7 @@ enum PTActiveElement {
         case .hashtag: return hashtag(text)
         case .email: return email(text)
         case .url: return url(original: text, trimmed: text)
+        case .chinaCellPhone: return chinaCellPhone(text)
         case .custom: return custom(text)
         }
     }
@@ -34,12 +36,14 @@ struct PTRegexParser {
     static let urlPattern = "(^|[\\s.:;?\\-\\]<\\(])" +
         "((https?://|www\\.|pic\\.)[-\\w;/?:@&=+$\\|\\_.!~*\\|'()\\[\\]%#,☺]+[\\w/#](\\(\\))?)" +
     "(?=$|[\\s',\\|\\(\\).:;?\\-\\[\\]>\\)])"
+    static let chinaCellPhone = "1[3456789]\\d{9}"
 
     private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
 
     static func getElements(from text: String, with pattern: String, range: NSRange) -> [NSTextCheckingResult]{
         guard let elementRegex = regularExpression(for: pattern) else { return [] }
-        return elementRegex.matches(in: text, options: [], range: range)
+        let result = elementRegex.matches(in: text, options: [], range: range)
+        return result
     }
 
     private static func regularExpression(for pattern: String) -> NSRegularExpression? {
@@ -59,6 +63,7 @@ public enum PTActiveType {
     case hashtag
     case url
     case email
+    case chinaCellPhone
     case custom(pattern: String)
     
     var pattern: String {
@@ -67,6 +72,7 @@ public enum PTActiveType {
         case .hashtag: return PTRegexParser.hashtagPattern
         case .url: return PTRegexParser.urlPattern
         case .email: return PTRegexParser.emailPattern
+        case .chinaCellPhone: return PTRegexParser.chinaCellPhone
         case .custom(let regex): return regex
         }
     }
@@ -79,6 +85,7 @@ extension PTActiveType: Hashable, Equatable {
         case .hashtag: hasher.combine(-2)
         case .url: hasher.combine(-3)
         case .email: hasher.combine(-4)
+        case .chinaCellPhone: hasher.combine(-5)
         case .custom(let regex): hasher.combine(regex)
         }
     }
@@ -90,6 +97,7 @@ public func ==(lhs: PTActiveType, rhs: PTActiveType) -> Bool {
     case (.hashtag, .hashtag): return true
     case (.url, .url): return true
     case (.email, .email): return true
+    case (.chinaCellPhone,.chinaCellPhone): return true
     case (.custom(let pattern1), .custom(let pattern2)): return pattern1 == pattern2
     default: return false
     }

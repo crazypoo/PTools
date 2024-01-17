@@ -153,7 +153,7 @@ public extension String {
     static let IpAddress = "^(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|[1-9])\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)\\.(1\\d{2}|2[0-4]\\d|25[0-5]|[1-9]\\d|\\d)$"
     static let URLSTRING = "[a-zA-z]+://.*"
     static let COLTDCode = "^([0-9A-HJ-NPQRTUWXY]{2}\\d{6}[0-9A-HJ-NPQRTUWXY]{10}|[1-9]\\d{14})$"
-    static let POOPHONE = "^1[3|4|5|6|7|8|9][0-9]\\d{8}$"
+    static let POOPHONE = "^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\\d{8}$"
     static let HomePhone = "^\\d{3}-?\\d{8}|\\d{4}-?\\d{8}$"
     static let ISNUMBER = "^[0-9]*$"
     static let AMOUT1 = "^[0][0-9]+$"
@@ -512,26 +512,22 @@ public extension String {
     
     //MARK: 時間與當前時間的對比狀態
     ///時間與當前時間的對比狀態
-    func timeContrastStatus(timeInterval:TimeInterval)->String {
-        let dateFormatter = "yyyy-MM-dd HH:mm:ss"
-        let timeString = timeInterval.toTimeString(dateFormat: dateFormatter)
-             
-        let regions = Region(calendar: Calendars.republicOfChina,zone: Zones.asiaMacau,locale: Locales.chineseChina)
-        var timeInterval = timeString.toDate(dateFormatter,region: regions)!.date.timeIntervalSinceNow
+    func timeContrastStatus()->String {
+        var timeInterval = self.dateTime!.timeIntervalSinceNow
         timeInterval = -timeInterval
         var result = ""
         if timeInterval < 60 {
             result = "刚刚"
         } else if (timeInterval/60) < 60 {
-            result = "\((timeInterval/60))分钟前"
+            result = String(format: "%.0f", (timeInterval/60)) + "分钟前"
         } else if (timeInterval/3600) > 1 && (timeInterval/3600) < 24 {
-            result = "\((timeInterval/3600))小时前"
+            result = String(format: "%.0f", (timeInterval/3600)) + "小时前"
         } else if (timeInterval/3600) > 24 && (timeInterval/3600) < 48 {
             result = "昨天"
         } else if (timeInterval/3600) > 48 && (timeInterval/3600) < 72 {
             result = "前天"
         } else {
-            result = timeString
+            result = self
         }
         return result
     }
@@ -774,12 +770,12 @@ public extension String {
     ///检查URL是否可以读取
     func checkURLCanLoad(encodingInvalidCharacters:Bool = false) ->Bool {
         if #available(iOS 17.0, *) {
-            if let url = URL(string: self, encodingInvalidCharacters: encodingInvalidCharacters) {
+            if URL(string: self, encodingInvalidCharacters: encodingInvalidCharacters) != nil {
                 return true
             }
             return false
         } else {
-            if let url = URL(string: self) {
+            if URL(string: self) != nil {
                 return true
             }
             return false

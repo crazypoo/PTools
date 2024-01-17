@@ -19,7 +19,7 @@ public class PTActiveLabel: UILabel {
     
     open var didSelectedHandle: PTActiveDidSelectedHandle?
     
-    open var enabledTypes: [PTActiveType] = [.mention, .hashtag, .url]
+    open var enabledTypes: [PTActiveType] = [.mention, .hashtag, .url,.chinaCellPhone]
     
     open var urlMaximumLength: Int?
     
@@ -52,6 +52,16 @@ public class PTActiveLabel: UILabel {
     }
     open var URLSelectedColor: UIColor? {
         didSet { 
+            updateTextStorage(parseText: false)
+        }
+    }
+    open var chinaCellPhoneColor: UIColor = .blue {
+        didSet {
+            updateTextStorage(parseText: false)
+        }
+    }
+    open var chinaCellPhoneSelectedColor: UIColor? {
+        didSet {
             updateTextStorage(parseText: false)
         }
     }
@@ -112,6 +122,10 @@ public class PTActiveLabel: UILabel {
         emailTapHandler = handler
     }
     
+    open func handleChinaCellPhoneTap(_ handler: @escaping PTActiveStringHandle) {
+        chinaCellPhoneTapHandler = handler
+    }
+
     open func removeHandle(for type: PTActiveType) {
         switch type {
         case .hashtag:
@@ -124,6 +138,8 @@ public class PTActiveLabel: UILabel {
             customTapHandlers[type] = nil
         case .email:
             emailTapHandler = nil
+        case .chinaCellPhone:
+            chinaCellPhoneTapHandler = nil
         }
     }
     
@@ -251,10 +267,12 @@ public class PTActiveLabel: UILabel {
             case .url(let originalURL, _): didTapStringURL(originalURL)
             case .custom(let element): didTap(element, for: selectedElement.type)
             case .email(let element): didTapStringEmail(element)
+            case .chinaCellPhone(let element) :didTapStringChinaCellPhone(element)
             }
             
-            let when = DispatchTime.now() + Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: when) {
+            let when = Double(Int64(0.25 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+            
+            PTGCDManager.gcdAfter(time: when) {
                 self.updateAttributesWhenSelected(false)
                 self.selectedElement = nil
             }
@@ -278,11 +296,13 @@ public class PTActiveLabel: UILabel {
     internal var hashtagTapHandler: PTActiveStringHandle?
     internal var urlTapHandler: PTActiveURLHandle?
     internal var emailTapHandler: PTActiveStringHandle?
+    internal var chinaCellPhoneTapHandler: PTActiveStringHandle?
     internal var customTapHandlers: [PTActiveType : PTActiveStringHandle] = [:]
     
     fileprivate var mentionFilterPredicate: PTActiveStringBoolCallBack?
     fileprivate var hashtagFilterPredicate: PTActiveStringBoolCallBack?
-    
+    fileprivate var chinaCellPhoneFilterPredicate: PTActiveStringBoolCallBack?
+
     fileprivate var selectedElement: PTElementTuple?
     fileprivate var heightCorrection: CGFloat = 0
     internal lazy var textStorage = NSTextStorage()
@@ -358,6 +378,7 @@ public class PTActiveLabel: UILabel {
             case .url: attributes[NSAttributedString.Key.foregroundColor] = URLColor
             case .custom: attributes[NSAttributedString.Key.foregroundColor] = customColor[type] ?? defaultCustomColor
             case .email: attributes[NSAttributedString.Key.foregroundColor] = URLColor
+            case .chinaCellPhone: attributes[NSAttributedString.Key.foregroundColor] = chinaCellPhoneColor
             }
             
             if let highlightFont = hightlightFont {
@@ -396,6 +417,8 @@ public class PTActiveLabel: UILabel {
                 filter = mentionFilterPredicate
             } else if type == .hashtag {
                 filter = hashtagFilterPredicate
+            } else if type == .chinaCellPhone {
+                filter = chinaCellPhoneFilterPredicate
             }
             let hashtagElements = PTActiveBuilder.createElements(type: type, from: textString, range: textRange, filterPredicate: filter)
             activeElements[type] = hashtagElements
@@ -441,6 +464,7 @@ public class PTActiveLabel: UILabel {
                 let possibleSelectedColor = customSelectedColor[selectedElement.type] ?? customColor[selectedElement.type]
                 selectedColor = possibleSelectedColor ?? defaultCustomColor
             case .email: selectedColor = URLSelectedColor ?? URLColor
+            case .chinaCellPhone: selectedColor = chinaCellPhoneSelectedColor ?? chinaCellPhoneColor
             }
             attributes[NSAttributedString.Key.foregroundColor] = selectedColor
         } else {
@@ -451,6 +475,7 @@ public class PTActiveLabel: UILabel {
             case .url: unselectedColor = URLColor
             case .custom: unselectedColor = customColor[selectedElement.type] ?? defaultCustomColor
             case .email: unselectedColor = URLColor
+            case .chinaCellPhone: unselectedColor = chinaCellPhoneColor
             }
             attributes[NSAttributedString.Key.foregroundColor] = unselectedColor
         }
@@ -547,6 +572,14 @@ public class PTActiveLabel: UILabel {
             return
         }
         emailHandler(stringEmail)
+    }
+    
+    fileprivate func didTapStringChinaCellPhone(_ stringChinaCellPhone: String) {
+        guard let chinaCellPhoneTapHandler = chinaCellPhoneTapHandler else {
+            didSelectedHandle?(stringChinaCellPhone,.chinaCellPhone)
+            return
+        }
+        chinaCellPhoneTapHandler(stringChinaCellPhone)
     }
     
     fileprivate func didTap(_ element: String, for type: PTActiveType) {

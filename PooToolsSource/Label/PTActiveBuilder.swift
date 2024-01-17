@@ -20,6 +20,8 @@ struct PTActiveBuilder {
             return createElements(text: text, type: type, range: range, minLength: 1, filterPredicate: filterPredicate)
         case .email:
             return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
+        case .chinaCellPhone:
+            return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
         }
     }
 
@@ -85,8 +87,7 @@ struct PTActiveBuilder {
             var word = nsstring.substring(with: range)
             if word.hasPrefix("@") {
                 word.remove(at: word.startIndex)
-            }
-            else if word.hasPrefix("#") {
+            } else if word.hasPrefix("#") {
                 word.remove(at: word.startIndex)
             }
 
@@ -94,6 +95,7 @@ struct PTActiveBuilder {
                 let element = PTActiveElement.create(with: type, text: word)
                 elements.append((match.range, element, type))
             }
+            
         }
         return elements
     }

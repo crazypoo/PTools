@@ -215,7 +215,7 @@ class AppDelegate: PTAppWindowsDelegate {
             logger.error("这是一个 Error 信息")
             logger.fault("这是一个 fault 信息")
         }
-        
+                
         return true
     }
     

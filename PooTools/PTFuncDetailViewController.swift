@@ -266,9 +266,10 @@ class PTFuncDetailViewController: PTBaseViewController {
             label.urlMaximumLength = 10
 
             label.customize { label in
-                label.text = "我是一个推文 #推文1 #我是辣鸡 @crazypoo. 推文发自" +
-                " https://192.168.0.1 . 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
-                    "还可以缩短链接长度: \n https://github.com/crazypoo"
+                label.text = "13800138000我啊啊啊啊啊啊啊是的" + "\n" + "#推文1 18665710271"
+//                label.text = "我是一个推文 #推文1 #我是辣鸡 @crazypoo. 推文发自" +
+//                " https://192.168.0.1 . $13800138000 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
+//                    "还可以缩短链接长度: \n https://github.com/crazypoo"
                 label.numberOfLines = 0
                 label.lineSpacing = 4
                 
@@ -277,7 +278,8 @@ class PTFuncDetailViewController: PTBaseViewController {
                 label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
                 label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
                 label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
-
+                label.chinaCellPhoneColor = .random
+                
                 label.handleMentionTap { text in
                     self.alert(title:"Mention", message: text)
                 }
@@ -286,6 +288,9 @@ class PTFuncDetailViewController: PTBaseViewController {
                 }
                 label.handleURLTap { url in
                     self.alert(title:"URL", message: url.absoluteString)
+                }
+                label.handleChinaCellPhoneTap { phone in
+                    self.alert(title:"CellPhone", message: phone)
                 }
 
                 //Custom types
@@ -308,9 +313,6 @@ class PTFuncDetailViewController: PTBaseViewController {
                     return atts
                 }
 
-                label.handleCustomTap(for: customType) { text in
-                    self.alert(title:"Custom type", message: text)
-                }
                 label.handleCustomTap(for: customType) { text in
                     self.alert(title:"Custom type", message: text)
                 }
