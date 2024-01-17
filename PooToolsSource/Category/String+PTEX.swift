@@ -20,6 +20,7 @@ import AVFoundation
 import Foundation
 import SwiftDate
 import CryptoKit
+import CoreLocation
 
 extension String:PTProtocolCompatible {}
 
@@ -767,6 +768,54 @@ public extension String {
     func replace(_ replacingString: String,
                  with newString: String) -> String {
         self.replacingOccurrences(of: replacingString, with: newString)
+    }
+    
+    //MARK: 检查URL是否可以读取
+    ///检查URL是否可以读取
+    func checkURLCanLoad(encodingInvalidCharacters:Bool = false) ->Bool {
+        if #available(iOS 17.0, *) {
+            if let url = URL(string: self, encodingInvalidCharacters: encodingInvalidCharacters) {
+                return true
+            }
+            return false
+        } else {
+            if let url = URL(string: self) {
+                return true
+            }
+            return false
+        }
+    }
+    
+    //MARK: 检查字符串
+    ///是否仅包含数字
+    var containsOnlyDigits: Bool {
+            let notDigits = NSCharacterSet.decimalDigits.inverted
+            return rangeOfCharacter(from: notDigits, options: String.CompareOptions.literal, range: nil) == nil
+    }
+        
+    ///是否仅包含字符
+    var containsOnlyLetters: Bool {
+        let notLetters = NSCharacterSet.letters.inverted
+        return rangeOfCharacter(from: notLetters, options: String.CompareOptions.literal, range: nil) == nil
+    }
+    
+    ///是否混合字符串(不包含标点符号)
+    var isAlphanumeric: Bool {
+        let notAlphanumeric = NSCharacterSet.decimalDigits.union(NSCharacterSet.letters).inverted
+        return rangeOfCharacter(from: notAlphanumeric, options: String.CompareOptions.literal, range: nil) == nil
+    }
+    
+    //MARK: 经纬度字符串转经纬度
+    var asCoordinates: CLLocationCoordinate2D? {
+        let components = self.components(separatedBy: ",")
+        if components.count != 2 { return nil }
+        let strLat = components[0].trimmed
+        let strLng = components[1].trimmed
+        if let dLat = Double(strLat),
+            let dLng = Double(strLng) {
+            return CLLocationCoordinate2D(latitude: dLat, longitude: dLng)
+        }
+        return nil
     }
 }
 

@@ -15,5 +15,5 @@ public extension URL {
         return queryItems.reduce(into: [String: String]()) { (result, item) in
             result[item.name] = item.value
         }
-    }
+    }    
 }
