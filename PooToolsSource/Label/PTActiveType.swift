@@ -14,6 +14,7 @@ enum PTActiveElement {
     case email(String)
     case url(original: String, trimmed: String)
     case chinaCellPhone(String)
+    case snsId(String)
     case custom(String)
     
     static func create(with activeType: PTActiveType, text: String) -> PTActiveElement {
@@ -23,6 +24,7 @@ enum PTActiveElement {
         case .email: return email(text)
         case .url: return url(original: text, trimmed: text)
         case .chinaCellPhone: return chinaCellPhone(text)
+        case .snsId: return snsId(text)
         case .custom: return custom(text)
         }
     }
@@ -37,6 +39,7 @@ struct PTRegexParser {
         "((https?://|www\\.|pic\\.)[-\\w;/?:@&=+$\\|\\_.!~*\\|'()\\[\\]%#,☺]+[\\w/#](\\(\\))?)" +
     "(?=$|[\\s',\\|\\(\\).:;?\\-\\[\\]>\\)])"
     static let chinaCellPhone = "1[3456789]\\d{9}"
+    static let snsID = "([a-zA-Z0-9]+)"
 
     private static var cachedRegularExpressions: [String : NSRegularExpression] = [:]
 
@@ -64,6 +67,7 @@ public enum PTActiveType {
     case url
     case email
     case chinaCellPhone
+    case snsId
     case custom(pattern: String)
     
     var pattern: String {
@@ -73,6 +77,7 @@ public enum PTActiveType {
         case .url: return PTRegexParser.urlPattern
         case .email: return PTRegexParser.emailPattern
         case .chinaCellPhone: return PTRegexParser.chinaCellPhone
+        case .snsId: return PTRegexParser.snsID
         case .custom(let regex): return regex
         }
     }
@@ -86,6 +91,7 @@ extension PTActiveType: Hashable, Equatable {
         case .url: hasher.combine(-3)
         case .email: hasher.combine(-4)
         case .chinaCellPhone: hasher.combine(-5)
+        case .snsId: hasher.combine(-6)
         case .custom(let regex): hasher.combine(regex)
         }
     }
@@ -98,6 +104,7 @@ public func ==(lhs: PTActiveType, rhs: PTActiveType) -> Bool {
     case (.url, .url): return true
     case (.email, .email): return true
     case (.chinaCellPhone,.chinaCellPhone): return true
+    case (.snsId,.snsId): return true
     case (.custom(let pattern1), .custom(let pattern2)): return pattern1 == pattern2
     default: return false
     }

@@ -22,6 +22,8 @@ struct PTActiveBuilder {
             return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
         case .chinaCellPhone:
             return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
+        case .snsId:
+            return createElements(text: text, type: type, range: range, filterPredicate: filterPredicate)
         }
     }
 

@@ -266,10 +266,9 @@ class PTFuncDetailViewController: PTBaseViewController {
             label.urlMaximumLength = 10
 
             label.customize { label in
-                label.text = "13800138000我啊啊啊啊啊啊啊是的" + "\n" + "#推文1 18665710271"
-//                label.text = "我是一个推文 #推文1 #我是辣鸡 @crazypoo. 推文发自" +
-//                " https://192.168.0.1 . $13800138000 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
-//                    "还可以缩短链接长度: \n https://github.com/crazypoo"
+                label.text = "我是一个推文 13800138000 微信号:xxxx123 #推文1 #我是辣鸡 @crazypoo. 推文发自" +
+                " https://192.168.0.1 . $13800138000 我顺便 支持 自定义 标签 -> 克狗扑\n\n" +
+                    "还可以缩短链接长度: \n https://github.com/crazypoo"
                 label.numberOfLines = 0
                 label.lineSpacing = 4
                 
