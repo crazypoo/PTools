@@ -369,7 +369,7 @@ public extension UIView {
             paraStyle.lineSpacing = CGFloat(lineSpacing!.floatValue)
             dic[NSAttributedString.Key.paragraphStyle] = paraStyle
         }
-        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin], attributes: dic, context: nil).size
+        let size = string.boundingRect(with: CGSize.init(width: width, height: height), options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: dic, context: nil).size
         return size
     }
     
@@ -599,7 +599,7 @@ public extension UIView {
         layer.add(keyFrame, forKey: "shake")
     }
     
-    @objc func pt_createLabel(text: String = "", 
+    @objc func pt_createLabel(text: String = "",
                               font: UIFont = .systemFont(ofSize: 15),
                               bgColor: UIColor = .clear,
                               textColor: UIColor = .black,
