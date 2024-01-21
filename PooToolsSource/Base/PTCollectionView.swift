@@ -311,6 +311,7 @@ public class PTCollectionView: UIView {
     open var collectionDidEndDragging:((UICollectionView,Bool)->Void)?
     open var collectionDidEndDecelerating:PTCollectionViewScrollHandler?
     open var collectionDidEndScrollingAnimation:PTCollectionViewScrollHandler?
+    open var collectionDidScrolltoTop:PTCollectionViewScrollHandler?
 
     ///头部刷新事件
     open var headerRefreshTask:((UIRefreshControl)->Void)?
@@ -661,6 +662,12 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
         if collectionDidEndScrollingAnimation != nil {
             collectionDidEndScrollingAnimation!(scrollView as! UICollectionView)
+        }
+    }
+    
+    public func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
+        if collectionDidScrolltoTop != nil {
+            collectionDidScrolltoTop!(scrollView as! UICollectionView)
         }
     }
 }

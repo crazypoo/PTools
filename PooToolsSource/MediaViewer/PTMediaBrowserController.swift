@@ -800,15 +800,7 @@ fileprivate extension PTMediaBrowserController {
     }
     
     func heightForString(_ string: String) -> CGFloat {
-        var labelW:CGFloat = 0
-
-        switch viewConfig.actionType {
-        case .Empty:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2
-        default:
-            labelW = CGFloat.kSCREEN_WIDTH - PTAppBaseConfig.share.defaultViewSpace * 2 - 10 - 34
-        }
-
+        let labelW:CGFloat = labelContentWidth()
         return UIView.sizeFor(string: string, font: viewConfig.viewerFont,lineSpacing: 2, width: labelW).height
     }
 

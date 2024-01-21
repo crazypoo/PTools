@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftDate
 
 public extension TimeInterval {
     var formattedString: String? {
@@ -69,6 +70,28 @@ public extension TimeInterval {
         }
         if callBack != nil {
             callBack!("00",String(format: "%02d", Min),String(format: "%02d", Sec))
+        }
+    }
+    
+    func conversationTimeSet() -> String? {
+        var timeInterval = self;
+        if(self > 140000000000) {
+            timeInterval = self / 1000;
+        }
+        let ret = timeInterval.timeToDate()
+
+        if ret.isToday {
+            return ret.dateFormat(formatString: "HH:mm")
+        } else if ret.isInCurrentWeek {
+            if ret.isYesterday {
+                return "昨天" + " " + ret.dateFormat(formatString: "HH:mm")
+            } else {
+                return ret.weekdayName(.default,locale: Locales.chinese)
+            }
+        } else if ret.isInCurrentYear {
+            return ret.dateFormat(formatString: "MM-dd")
+        } else {
+            return ret.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
         }
     }
 }
