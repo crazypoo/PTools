@@ -532,6 +532,73 @@ public extension String {
         return result
     }
     
+    func timeStringChange() -> String {
+        let ret = self.toDate("yyyy-MM-dd HH:mm:ss")!.date
+        if ret.compare(.isThisYear) {
+            if ret.compare(.isThisWeek) {
+                if ret.compare(.isYesterday) {
+                    return "昨天" + " " + ret.toFormat("HH:mm", locale: Locales.chinese)
+                } else if ret.compare(.isToday) {
+                    return ret.dateFormat(formatString: "HH:mm")
+                } else {
+                    return ret.weekdayName(.default,locale: Locales.chinese)
+                }
+            } else {
+                return ret.dateFormat(formatString: "MM-dd")
+            }
+        } else {
+            return ret.dateFormat(formatString: "yyyy-MM-dd HH:mm:ss")
+        }
+    }
+    
+    func timeStringChangeEX() -> String {
+        let regions = Region(zone: Zones.asiaHongKong)
+        let ret = self.toDate("yyyy-MM-dd HH:mm:ss",region: regions)!.date
+                
+        var timeInterval = ret.timeIntervalSinceNow
+        timeInterval = -timeInterval
+        let hours = timeInterval / (60 * 60)
+        let minites = timeInterval / 60
+        let seconds = timeInterval
+
+        if !ret.compare(.isThisYear) {
+            return ret.toFormat("yyyy-MM-dd")
+        } else {
+            if hours > 0 {
+                if hours >= 1 && hours <= 24 {
+                    return "\(String(format: "%.0f", hours))小时前"
+                } else if hours >= 24 && hours <= 96 {
+                    if hours >= 24 && hours < 48 {
+                        return "1天前"
+                    } else if hours >= 48 && hours < 72 {
+                        return "2天前"
+                    } else if hours >= 72 && hours <= 86 {
+                        return "3天前"
+                    }
+                } else if hours > 96 {
+                    return ret.toFormat("yyyy-MM-dd")
+                } else if hours < 1 {
+                    if hours < 1 && minites < 1 {
+                        return "\(String(format: "%.0f", seconds))秒前"
+                    }
+                    
+                    if hours < 1 {
+                        return "\(String(format: "%.0f", minites))分钟前"
+                    }
+                }
+            } else {
+                if hours < 1 && minites < 1 {
+                    return "\(String(format: "%.0f", seconds))秒前"
+                }
+                
+                if hours < 1 {
+                    return "\(String(format: "%.0f", minites))分钟前"
+                }
+            }
+        }
+        return ""
+    }
+    
     //MARK: JSON字符串轉換成真正的JSON字符串
     ///JSON字符串轉換成真正的JSON字符串
     func jsonToTrueJsonString()->String {

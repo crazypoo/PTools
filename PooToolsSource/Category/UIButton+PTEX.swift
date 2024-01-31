@@ -41,8 +41,8 @@ public extension UIButton {
         removeTarget(nil, action: nil, for: .allEvents)
     }
     
-    @objc func pt_SDWebImage(imageString:String) {
-        kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
+    @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage) {
+        kf.setImage(with: URL.init(string: imageString), for: .normal,placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
     func layoutButtonWithEdgeInsets(style:PTButtonEdgeInsetsStyle,

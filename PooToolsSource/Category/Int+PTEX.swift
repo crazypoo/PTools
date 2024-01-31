@@ -63,4 +63,12 @@ public extension Int {
             task(i)
         }
     }
+    
+    func toBool() -> Bool {
+        if self <= 0 {
+            return false
+        } else {
+            return true
+        }
+    }
 }

@@ -24,8 +24,8 @@ public extension UIImageView {
         return image!.getImgePointColor(point: pInImage)
     }
     
-    func pt_SDWebImage(imageString:String) {
-        kf.setImage(with: URL.init(string: imageString),placeholder: PTAppBaseConfig.share.defaultPlaceholderImage,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
+    func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage) {
+        kf.setImage(with: URL.init(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
     func blur(withStyle style: UIBlurEffect.Style) {
