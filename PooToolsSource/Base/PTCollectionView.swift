@@ -145,7 +145,8 @@ public class PTCollectionViewConfig:NSObject {
     open var collectionViewBehavior:UICollectionLayoutSectionOrthogonalScrollingBehavior = .continuous
     ///是否开启自定义Header和Footer
     open var customReuseViews:Bool = false
-    
+    ///首是否开启刷新动画
+    open var refreshWithoutAnimation:Bool = false
 #if POOTOOLS_SWIPECELL
     ///设置Swipe的样式
     open var swipeButtonStyle:ButtonStyle = .circular
@@ -440,14 +441,28 @@ public class PTCollectionView: UIView {
         mSections = collectionData
         
         collectionView.pt_register(by: mSections)
-        collectionView.reloadData {
-            if #available(iOS 17.0, *) {
-                self.showEmptyConfig()
-            }
+        if viewConfig.refreshWithoutAnimation {
+            collectionView.reloadDataWithOutAnimation {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
+                }
 
-            PTGCDManager.gcdAfter(time: 0.1) {
-                if finishTask != nil {
-                    finishTask!(self.collectionView)
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    if finishTask != nil {
+                        finishTask!(self.collectionView)
+                    }
+                }
+            }
+        } else {
+            collectionView.reloadData {
+                if #available(iOS 17.0, *) {
+                    self.showEmptyConfig()
+                }
+
+                PTGCDManager.gcdAfter(time: 0.1) {
+                    if finishTask != nil {
+                        finishTask!(self.collectionView)
+                    }
                 }
             }
         }
@@ -457,13 +472,26 @@ public class PTCollectionView: UIView {
         mSections.removeAll()
         collectionView.pt_register(by: mSections)
         PTGCDManager.gcdAfter(time: 0.1) {
-            self.collectionView.reloadData {
-                if #available(iOS 17.0, *) {
-                    self.showEmptyConfig()
+            if self.viewConfig.refreshWithoutAnimation {
+                self.collectionView.reloadDataWithOutAnimation {
+                    if #available(iOS 17.0, *) {
+                        self.showEmptyConfig()
+                    }
+                    PTGCDManager.gcdAfter(time: 0.35) {
+                        if finishTask != nil {
+                            finishTask!(self.collectionView)
+                        }
+                    }
                 }
-                PTGCDManager.gcdAfter(time: 0.35) {
-                    if finishTask != nil {
-                        finishTask!(self.collectionView)
+            } else {
+                self.collectionView.reloadData {
+                    if #available(iOS 17.0, *) {
+                        self.showEmptyConfig()
+                    }
+                    PTGCDManager.gcdAfter(time: 0.35) {
+                        if finishTask != nil {
+                            finishTask!(self.collectionView)
+                        }
                     }
                 }
             }
