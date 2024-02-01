@@ -467,9 +467,18 @@ public class PTCollectionView: UIView {
     open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
-    public var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig() {
+    public var viewConfig:PTCollectionViewConfig! {
         didSet {
-            
+            if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
+                indicator.removeFromSuperview()
+                indexView.removeFromSuperview()
+                clearTextLayers()
+                addSubview(collectionView)
+                collectionView.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
+                }
+                setIndexViews()
+            }
         }
     }
     
@@ -482,19 +491,6 @@ public class PTCollectionView: UIView {
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
-        }
-        
-        if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
-            PTGCDManager.gcdAfter(time: 0.1) {
-                self.setupUI()
-            }
-            
-            addSubview(indexView)
-            indexView.snp.makeConstraints { make in
-                make.right.equalToSuperview().inset(7.5)
-                make.top.bottom.equalToSuperview()
-                make.width.equalTo(viewConfig.indexConfig!.itemSize.width)
-            }
         }
         
 #if POOTOOLS_LISTEMPTYDATA
@@ -562,6 +558,29 @@ public class PTCollectionView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
+    }
+    
+    func clearTextLayers() {
+        if let sublayers = self.layer.sublayers {
+            for layer in sublayers {
+                layer.removeFromSuperlayer()
+            }
+        }
+    }
+    
+    func setIndexViews() {
+        if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.setupUI()
+            }
+            
+            addSubview(indexView)
+            indexView.snp.makeConstraints { make in
+                make.right.equalToSuperview().inset(7.5)
+                make.top.bottom.equalToSuperview()
+                make.width.equalTo(viewConfig.indexConfig!.itemSize.width)
+            }
+        }
     }
     
     ///加载数据并且刷新界面
