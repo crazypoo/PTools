@@ -39,6 +39,8 @@ public class PTScanQRConfig:NSObject {
     open var canScanQR:Bool = true
     ///是否自动返回
     open var autoReturn:Bool = true
+    ///是否跟随系统判断选择相册
+    open var openAblumFollowSystem:Bool = true
 }
 
 public typealias PTQRCodeResultBlock = (_ result:String,_ error:NSError?) -> Void
@@ -290,35 +292,43 @@ public class PTScanQRController: PTBaseViewController {
     //MARK: 進入相冊
     func enterPhotos() {
         PTGCDManager.gcdAfter(time: 0.1) {
-            if #available(iOS 14.0, *) {
-                Task {
-                    do {
-                        let object:UIImage = try await PTImagePicker.openAlbum()
-                        await MainActor.run {
-                            PTGCDManager.gcdMain {
-                                self.findQR(inImage: object)
+            if self.viewConfig.openAblumFollowSystem {
+                if #available(iOS 14.0, *) {
+                    Task {
+                        do {
+                            let object:UIImage = try await PTImagePicker.openAlbum()
+                            await MainActor.run {
+                                PTGCDManager.gcdMain {
+                                    self.findQR(inImage: object)
+                                }
                             }
+                        } catch let pickerError as PTImagePicker.PickerError {
+                            pickerError.outPutLog()
                         }
-                    } catch let pickerError as PTImagePicker.PickerError {
-                        pickerError.outPutLog()
                     }
+                } else {
+                    self.ptAblum()
                 }
             } else {
-                let config = PTMediaLibConfig.share
-                config.allowSelectImage = true
-                config.allowSelectVideo = false
-                config.allowSelectGif = true
-                config.maxSelectCount = 1
-                config.maxVideoSelectCount = 1
-                
-                let vc = PTMediaLibViewController()
-                vc.mediaLibShow()
-                vc.selectImageBlock = { item,isOriginal in
-                    if let img = item.first?.image {
-                        PTGCDManager.gcdMain {
-                            self.findQR(inImage: img)
-                        }
-                    }
+                self.ptAblum()
+            }
+        }
+    }
+    
+    func ptAblum() {
+        let config = PTMediaLibConfig.share
+        config.allowSelectImage = true
+        config.allowSelectVideo = false
+        config.allowSelectGif = true
+        config.maxSelectCount = 1
+        config.maxVideoSelectCount = 1
+        
+        let vc = PTMediaLibViewController()
+        vc.mediaLibShow()
+        vc.selectImageBlock = { item,isOriginal in
+            if let img = item.first?.image {
+                PTGCDManager.gcdMain {
+                    self.findQR(inImage: img)
                 }
             }
         }

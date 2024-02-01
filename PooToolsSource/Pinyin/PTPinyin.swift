@@ -216,7 +216,7 @@ let firstLetterArray: String = "ydkqsxnwzssxjbymgcczqpssqbycdscdqldylybssjgyqzjj
     "cydyxyqmyqylddcyaytazdcymdydlzfffmmycqcwzzmabtbyctdmndzggdftypcgqyttssffwbdttqssystwnjhjytsxxylbyyhh" +
     "whxgzxwznnqzjzjjqjccchykxbzszcnjtllcqxynjnckycynccqnxyewyczdcjycchyjlbtzyycqwlpgpyllgktltlgkgqbgychj" + "xy"
 
-func pinyinFirstLetter(_ hanzi: UInt16) -> Character {
+public func pinyinFirstLetter(_ hanzi: UInt16) -> Character {
     let index = Int(hanzi - HANZI_START)
     
     if index >= 0 && index < HANZI_COUNT {
@@ -245,7 +245,7 @@ public extension String {
     }
 }
 
-extension Dictionary {
+public extension Dictionary {
     func containsKey(_ key: Key) -> Bool {
         return self[key] != nil
     }

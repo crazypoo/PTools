@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.30.16'
+    s.version     = '3.31.0'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -879,6 +879,14 @@ Pod::Spec.new do |s|
         }
     end
     
+    s.subspec 'ChinesePinyin' do |subspec|
+        subspec.dependency 'PooTools/Core'
+        subspec.source_files = 'PooToolsSource/Pinyin/*.{h,m,swift}'
+        subspec.pod_target_xcconfig = {
+            "SWIFT_ACTIVE_COMPILATION_CONDITIONS"  => "POOTOOLS_CHINESEPINYIN POOTOOLS_COCOAPODS"
+        }
+    end
+    
     s.subspec 'InputAll' do |subspec|
         subspec.dependency 'PooTools/Core'
         subspec.dependency 'PooTools/DataEncrypt'
@@ -951,6 +959,7 @@ Pod::Spec.new do |s|
         subspec.dependency 'PooTools/FilterCamera'
         subspec.dependency 'PooTools/ImageEditor'
         subspec.dependency 'PooTools/ProgressBar'
+        subspec.dependency 'PooTools/ChinesePinyin'
 #        subspec.dependency 'PooTools/SVGA'
 
         subspec.pod_target_xcconfig = {
