@@ -472,6 +472,7 @@ public class PTCollectionView: UIView {
             if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
                 indicator.removeFromSuperview()
                 indexView.removeFromSuperview()
+                collectionView.removeFromSuperview()
                 clearTextLayers()
                 addSubview(collectionView)
                 collectionView.snp.makeConstraints { make in
