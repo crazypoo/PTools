@@ -247,6 +247,7 @@ public class PTFusionCellContent:UIView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = true
     }
     
     func createSubViews() {

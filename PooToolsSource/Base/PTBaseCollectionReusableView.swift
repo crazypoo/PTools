@@ -12,6 +12,7 @@ import UIKit
 open class PTBaseCollectionReusableView: UICollectionReusableView {
     public override init(frame: CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = true
     }
     
     required public init?(coder: NSCoder) {

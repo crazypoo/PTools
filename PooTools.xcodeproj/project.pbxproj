@@ -278,6 +278,7 @@
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
 		55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AC2A2EADE900A7B3AD /* PTMemory.swift */; };
 		55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */; };
+		55B3F49E2B6AD3CB00A7CC66 /* PTPinyin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B3F49D2B6AD3CB00A7CC66 /* PTPinyin.swift */; };
 		55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */; };
 		55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */; };
 		55B4FA042AE0F07E006D35F3 /* PTPermissionNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */; };
@@ -762,6 +763,7 @@
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
 		55B389AC2A2EADE900A7B3AD /* PTMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMemory.swift; sourceTree = "<group>"; };
 		55B389AE2A2F156E00A7B3AD /* PTColorPickPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTColorPickPlugin.swift; sourceTree = "<group>"; };
+		55B3F49D2B6AD3CB00A7CC66 /* PTPinyin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPinyin.swift; sourceTree = "<group>"; };
 		55B4F9FE2AE0EE74006D35F3 /* PTPermissionText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionText.swift; sourceTree = "<group>"; };
 		55B4FA002AE0EEB5006D35F3 /* PTPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermission.swift; sourceTree = "<group>"; };
 		55B4FA032AE0F07E006D35F3 /* PTPermissionNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionNotification.swift; sourceTree = "<group>"; };
@@ -1022,6 +1024,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				55B3F49F2B6AD3D400A7CC66 /* Pinyin */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1760,6 +1763,14 @@
 				55B13D5D2B1AFA8100C67EDA /* PTWeakProxy.swift */,
 			);
 			path = ImageEditor;
+			sourceTree = "<group>";
+		};
+		55B3F49F2B6AD3D400A7CC66 /* Pinyin */ = {
+			isa = PBXGroup;
+			children = (
+				55B3F49D2B6AD3CB00A7CC66 /* PTPinyin.swift */,
+			);
+			path = Pinyin;
 			sourceTree = "<group>";
 		};
 		55B4F9FD2AE0EE14006D35F3 /* PermissionCore */ = {
@@ -2652,6 +2663,7 @@
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
+				55B3F49E2B6AD3CB00A7CC66 /* PTPinyin.swift in Sources */,
 				55F163072B19DC5400320925 /* PTFilterImageCell.swift in Sources */,
 				55ED0D1E2B10FD5500391136 /* PTPulseDetector.swift in Sources */,
 				55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */,

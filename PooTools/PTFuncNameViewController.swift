@@ -344,8 +344,15 @@ class PTFuncNameViewController: PTBaseViewController {
         cConfig.itemHeight = PTAppBaseConfig.share.baseCellHeight
         cConfig.topRefresh = true
         cConfig.showEmptyAlert = !vcEmpty
+        var strings = [String]()
+        cSections.enumerated().forEach { index,value in
+            strings.append("\(index)")
+        }
+        cConfig.indexConfig = PTCollectionIndexViewConfiguration()
+        cConfig.sideIndexTitles = strings
+
         let aaaaaaa = PTCollectionView(viewConfig: cConfig)
-                
+        aaaaaaa.layoutSubviews()
         aaaaaaa.headerInCollection = { kind,collectionView,model,index in
             let sectionModel = (model.headerDataModel as! PTFusionCellModel)
             let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: model.headerID!, for: index) as! PTFusionHeader
@@ -880,7 +887,6 @@ class PTFuncNameViewController: PTBaseViewController {
         more.addActionHandlers { sender in
             self.popover(popoverVC: popoverContent, popoverSize: CGSize(width: 100, height: 300), sender: sender, arrowDirections: .any)
         }
-        
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
 #if POOTOOLS_NAVBARCONTROLLER

@@ -216,8 +216,8 @@ class AppDelegate: PTAppWindowsDelegate {
             logger.fault("这是一个 fault 信息")
         }
                 
-        let dateString = "2023-01-20 17:01:00"
-        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.timeStringChange())")
+//        let dateString = "你好吗"
+//        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
         
         return true
     }

@@ -15,6 +15,7 @@ import SwipeCellKit
 open class PTBaseNormalCell: UICollectionViewCell {
     override public init(frame:CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = true
     }
     
     required public init?(coder aDecoder: NSCoder) {

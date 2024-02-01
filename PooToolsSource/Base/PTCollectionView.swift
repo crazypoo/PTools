@@ -21,6 +21,10 @@ import LXFProtocolTool
 import SwipeCellKit
 #endif
 
+private let kPTCollectionIndexViewAnimationDuration: Double = 0.25
+private var kPTCollectionIndexViewContent: CChar = 0
+private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionView.contentOffset)
+
 //MARK: CollectionView展示的样式类型
 @objc public enum PTCollectionViewType:Int {
     case Normal
@@ -102,7 +106,9 @@ public typealias PTViewInDecorationResetHandler = (_ collectionView: UICollectio
 //MARK: Collection展示的基本配置参数设置
 @objcMembers
 public class PTCollectionViewConfig:NSObject {
+    ///CollectionView上下滑动条
     open var showsVerticalScrollIndicator:Bool = true
+    ///CollectionView水平滑动条
     open var showsHorizontalScrollIndicator:Bool = true
     ///CollectionView展示的样式类型
     open var viewType:PTCollectionViewType = .Normal
@@ -130,7 +136,6 @@ public class PTCollectionViewConfig:NSObject {
     open var headerWidthOffset:CGFloat = 0
     ///底部长度偏移
     open var footerWidthOffset:CGFloat = 0
-    
     ///是否开启空数据展示
     open var showEmptyAlert:Bool = false
     ///空数据展示参数设置
@@ -151,18 +156,114 @@ public class PTCollectionViewConfig:NSObject {
     ///设置Swipe的样式
     open var swipeButtonStyle:ButtonStyle = .circular
 #endif
+    ///索引
+    open var sideIndexTitles:[String]?
+    ///索引设置
+    open var indexConfig:PTCollectionIndexViewConfiguration?
+}
+
+public class PTTextLayer: CATextLayer {
+    open var index: Int = 0
+}
+
+public class PTCollectionIndexViewConfiguration: NSObject {
+    ///索引格子大小
+    open var itemSize: CGSize = CGSize(width: 15, height: 15)
+    ///索引上下间隔
+    open var itemSpacing: CGFloat = 0
+    ///索引格子背景颜色
+    open var itemBackgroundColor: UIColor = UIColor.clear
+    ///索引字体颜色
+    open var itemTextColor: UIColor = UIColor.darkText
+    ///索引选中背景颜色
+    open var itemSelectedBackgroundColor: UIColor = UIColor.lightGray
+    ///索引选中字体颜色
+    open var itemSelectedTextColor: UIColor = UIColor.white
+    ///根据这个数值来绘制displayLayer
+    open var indicatorRadius: CGFloat = 30
+    ///放大索引背景颜色
+    open var indicatorBackgroundColor: UIColor = UIColor.lightGray
+    ///放大索引字体颜色
+    open var indicatorTextColor: UIColor = UIColor.white
+    ///索引背景颜色
+    open var indexViewBackgroundColor:UIColor = .clear
+    ///索引字体
+    open var indexViewFont:UIFont = .appfont(size: 12)
+    ///放大索引字体,这个属性只会使用字体名字
+    open var indexViewHudFont:UIFont = .appfont(size: 18)
 }
 
 //MARK: 界面展示
 @objcMembers
 public class PTCollectionView: UIView {
-            
+                    
+    fileprivate var textLayerArray = [PTTextLayer]()
+    fileprivate lazy var indicator: UIView = {
+        let indicatorRadius = viewConfig.indexConfig!.indicatorRadius
+        let indicator = UIView()
+        indicator.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 3, height: indicatorRadius * 2)
+        indicator.backgroundColor = viewConfig.indexConfig!.indicatorBackgroundColor
+        indicator.alpha = 0
+        indicator.addSubview(bigTextLabel)
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.frame = indicator.frame
+        let path = UIBezierPath()
+        path.move(to: CGPoint(x: 2.414 * indicatorRadius, y: indicatorRadius))
+        path.addLine(to: CGPoint(x: 1.707 * indicatorRadius, y: 1.707 * indicatorRadius))
+        // 注意，这个画线的方法与数学中的坐标系不一样，0在3点钟方向，pi/2在6点钟方向，pi在9点钟方向。。。具体可以看文档
+        // 这里是以圆的0.25pi处和1.75pi处的切线的交点为箭头位置
+        path.addArc(withCenter: CGPoint(x: indicatorRadius, y: indicatorRadius), radius: indicatorRadius, startAngle: 0.25 * CGFloat.pi, endAngle: 1.75 * CGFloat.pi, clockwise: true)
+        path.close()
+        maskLayer.path = path.cgPath
+        maskLayer.fillColor = UIColor.red.cgColor
+        maskLayer.backgroundColor = UIColor.clear.cgColor
+        indicator.layer.mask = maskLayer
+        return indicator
+    }()
+    
+    /// CATextLayer的内容默认是上对齐的，不如用label方便
+    fileprivate lazy var bigTextLabel: UILabel = {
+        let indicatorRadius = viewConfig.indexConfig!.indicatorRadius
+        let label = UILabel()
+        label.frame = CGRect(x: 0, y: 0, width: indicatorRadius * 2, height: indicatorRadius * 2)
+        label.backgroundColor = viewConfig.indexConfig!.indicatorBackgroundColor
+        label.font = UIFont.appCustomFont(size: ceil(indicatorRadius * 1.414),customFont: viewConfig.indexConfig!.indexViewHudFont.fontName)
+        label.textAlignment = .center
+        label.layer.cornerRadius = indicatorRadius
+        label.layer.masksToBounds = true
+        label.textColor = viewConfig.indexConfig!.indicatorTextColor
+        return label
+    }()
+    
+    fileprivate var layerTopSpacing: CGFloat {
+        let count = CGFloat(viewConfig.sideIndexTitles!.count)
+        return floor(self.bounds.height - count * viewConfig.indexConfig!.itemSize.height - viewConfig.indexConfig!.itemSpacing * (count - 1)) / 2
+    }
+    
+    fileprivate var isTouched: Bool = false
+    
+    fileprivate var touchedIndex: Int = 0 {
+        didSet {
+            if touchedIndex != oldValue {
+                self.impactFeedbackGenerator.impactOccurred()
+            }
+        }
+    }
+    
+    private var _impactFeedbackGenerator: Any? = nil
+    fileprivate var impactFeedbackGenerator: UIImpactFeedbackGenerator {
+        if _impactFeedbackGenerator == nil {
+            _impactFeedbackGenerator = UIImpactFeedbackGenerator()
+        }
+        return _impactFeedbackGenerator as! UIImpactFeedbackGenerator
+    }
+
     fileprivate var mSections = [PTSection]()
     fileprivate func comboLayout()->UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout.init { section, environment in
             self.generateSection(section: section,environment:environment)
         }
-        
         switch viewConfig.decorationItemsType {
         case .Custom:
             viewConfig.decorationModel?.enumerated().forEach({ index,value in
@@ -279,6 +380,12 @@ public class PTCollectionView: UIView {
         return view
     }()
     
+    fileprivate lazy var indexView:UIView = {
+        let view = UIView()
+        view.backgroundColor = viewConfig.indexConfig?.indexViewBackgroundColor
+        return view
+    }()
+    
     private(set) lazy var refreshControl:UIRefreshControl = {
         let control = UIRefreshControl()
         control.addRefreshHandlers { sender in
@@ -360,15 +467,34 @@ public class PTCollectionView: UIView {
     open var swipeContentSpaceHandler:((_ collectionView:UICollectionView,_ orientation: SwipeActionsOrientation,_ indexPath:IndexPath) -> CGFloat)?
 #endif
     
-    public var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig()
+    public var viewConfig:PTCollectionViewConfig = PTCollectionViewConfig() {
+        didSet {
+            
+        }
+    }
     
     //MARK: 界面展示
     public init(viewConfig: PTCollectionViewConfig!) {
         super.init(frame: .zero)
+        isUserInteractionEnabled = true
         self.viewConfig = viewConfig
+        self.collectionView.addObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath, options: .new, context: &kPTCollectionIndexViewContent)
         addSubview(collectionView)
         collectionView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
+        }
+        
+        if viewConfig.sideIndexTitles?.count ?? 0 > 0 && viewConfig.indexConfig != nil {
+            PTGCDManager.gcdAfter(time: 0.1) {
+                self.setupUI()
+            }
+            
+            addSubview(indexView)
+            indexView.snp.makeConstraints { make in
+                make.right.equalToSuperview().inset(7.5)
+                make.top.bottom.equalToSuperview()
+                make.width.equalTo(viewConfig.indexConfig!.itemSize.width)
+            }
         }
         
 #if POOTOOLS_LISTEMPTYDATA
@@ -423,6 +549,10 @@ public class PTCollectionView: UIView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        collectionView.removeObserver(self, forKeyPath: kPTCollectionIndexViewContentOffsetKeyPath)
     }
     
     ///展示界面
@@ -569,7 +699,7 @@ public class PTCollectionView: UIView {
 
 //MARK: UICollectionViewDelegate && UICollectionViewDataSource
 extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate {
-
+    
     public func numberOfSections(in collectionView: UICollectionView) -> Int {
         mSections.count
     }
@@ -700,8 +830,8 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     }
 }
 
-#if POOTOOLS_LISTEMPTYDATA
 //MARK: LXFEmptyDataSetable
+#if POOTOOLS_LISTEMPTYDATA
 extension PTCollectionView:LXFEmptyDataSetable {
     
     public func showEmptyDataSet(currentScroller: UIScrollView) {
@@ -756,6 +886,7 @@ extension PTCollectionView:LXFEmptyDataSetable {
 }
 #endif
 
+//MARK: 滑动Cell设置
 #if POOTOOLS_SWIPECELL
 extension PTCollectionView:SwipeCollectionViewCellDelegate {
     
@@ -878,3 +1009,161 @@ extension PTCollectionView:SwipeCollectionViewCellDelegate {
     }
 }
 #endif
+
+//MARK: 索引设置
+private extension PTCollectionView {
+    
+    func setupUI() {
+        var layerArray = [PTTextLayer]()
+        for i in 0 ..< viewConfig.sideIndexTitles!.count {
+            let title = viewConfig.sideIndexTitles![i]
+            let textLayer = PTTextLayer()
+            textLayer.index = i
+            textLayer.font = CTFontCreateWithName(viewConfig.indexConfig!.indexViewFont.fontName as CFString, viewConfig.indexConfig!.indexViewFont.pointSize, nil)
+            textLayer.fontSize = viewConfig.indexConfig!.indexViewFont.pointSize
+            textLayer.alignmentMode = CATextLayerAlignmentMode.center
+            textLayer.string = title
+            textLayer.frame = self.frame(forTextLayer: textLayer)
+            textLayer.cornerRadius = viewConfig.indexConfig!.itemSize.width / 2
+            textLayer.masksToBounds = true
+            textLayer.position = self.frame(forTextLayer: textLayer).origin
+            self.layer.zPosition = CGFloat.greatestFiniteMagnitude
+            self.layer.insertSublayer(textLayer, above: nil)
+            layerArray.append(textLayer)
+        }
+        self.textLayerArray = layerArray
+        self.updateTextLayers(forSelectedIndex: 0)
+        
+        self.addSubview(self.indicator)
+    }
+    
+    func frame(forTextLayer textLayer: PTTextLayer) -> CGRect {
+        let width = viewConfig.indexConfig!.itemSize.width
+        let height = viewConfig.indexConfig!.itemSize.height
+        return CGRect(x: self.bounds.width - width, y: layerTopSpacing + CGFloat(textLayer.index) * height + viewConfig.indexConfig!.itemSpacing * CGFloat(textLayer.index), width: width, height: height)
+    }
+    
+    func showIndicator(forTextLayer textLayer: PTTextLayer) {
+        //直接修改calayer属性是有默认的隐式动画的，可以用CATransaction关闭隐式动画
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        indicator.center = CGPoint(x: self.frame.size.width - indicator.frame.size.width / 2 - viewConfig.indexConfig!.itemSize.width, y: textLayer.position.y)
+        bigTextLabel.text = textLayer.string as? String
+        indicator.alpha = 1
+        CATransaction.commit()
+    }
+    
+    func hideIndicator() {
+        indicator.alpha = 0
+    }
+    
+    func scrollCollectionView(toTextLayer textLayer: PTTextLayer, animated: Bool) {
+        let indexPath = IndexPath(item: 0, section: textLayer.index)
+        if let attributes = collectionView.layoutAttributesForSupplementaryElement(ofKind: UICollectionView.elementKindSectionHeader, at: indexPath),
+            let cellAttributes = collectionView.layoutAttributesForItem(at: indexPath) {
+            var targetPoint = cellAttributes.frame.origin
+            targetPoint.y = targetPoint.y - attributes.frame.size.height
+            // 用这种计算方法可以不考虑layout的sectionHeadersPinToVisibleBounds属性
+            // 如果直接用attributes的frame需要考虑sectionHeadersPinToVisibleBounds
+            collectionView.setContentOffset(targetPoint, animated: animated)
+        } else {
+            collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
+        }
+        
+    }
+    
+    func updateTextLayers(forSelectedIndex index: Int) {
+        for textLayer in textLayerArray {
+            if textLayer.index == index {
+                textLayer.backgroundColor = viewConfig.indexConfig!.itemSelectedBackgroundColor.cgColor
+                textLayer.foregroundColor = viewConfig.indexConfig!.itemSelectedTextColor.cgColor
+            } else {
+                textLayer.backgroundColor = viewConfig.indexConfig!.itemBackgroundColor.cgColor
+                textLayer.foregroundColor = viewConfig.indexConfig!.itemTextColor.cgColor
+            }
+        }
+    }
+}
+
+//MARK: KVO
+extension PTCollectionView {
+        
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if let context = context, context == &kPTCollectionIndexViewContent,
+            let keyPath = keyPath, keyPath == kPTCollectionIndexViewContentOffsetKeyPath {
+            guard isTouched == false else { return }
+            let indexPathArray = self.collectionView.indexPathsForVisibleItems
+            let minIndexPath = indexPathArray.min { (one, two) -> Bool in
+                return one.section <= two.section
+            }
+            if let temp = minIndexPath?.section {
+                updateTextLayers(forSelectedIndex: temp)
+            }
+        } else {
+            super.observeValue(forKeyPath: keyPath, of: object, change: change, context: context)
+        }
+    }
+}
+
+//MARK: 触摸事件
+extension PTCollectionView {
+    
+    open override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let view = super.hitTest(point, with: event)
+
+        if view == self {
+            let rect = CGRect(x: self.frame.size.width - viewConfig.indexConfig!.itemSize.width, y: layerTopSpacing, width: viewConfig.indexConfig!.itemSize.width, height: self.frame.size.height - layerTopSpacing * 2)
+            if rect.contains(point) {
+                return self
+            } else {
+                return nil
+            }
+        } else {
+            return view
+        }
+    }
+    
+    open override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        isTouched = true
+        showChanges(forTouches: touches)
+    }
+    
+    open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        hideIndicator()
+        isTouched = false
+    }
+    
+    open override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+
+        isTouched = true
+        showChanges(forTouches: touches)
+    }
+    
+    open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        hideIndicator()
+        isTouched = false
+    }
+    
+    func textLayer(forTouches touches: Set<UITouch>) -> PTTextLayer? {
+        guard let touch = touches.first else { return nil }
+        let touchPoint = touch.location(in: self)
+        
+        /// 为了达到微信的效果，即开始后就算滑动到非索引区域也行，这里不能用frame的包含，用了一条横线是否与textLayer相交来判断
+        let touchLine = CGRect(x: 0, y: touchPoint.y, width: self.frame.size.width, height: 1)
+        for textLayer in textLayerArray {
+            if touchLine.intersects(textLayer.frame) {
+                return textLayer
+            }
+        }
+        return nil
+    }
+    
+    func showChanges(forTouches touches: Set<UITouch>) {
+        guard let touchedLayer = textLayer(forTouches: touches) else { return }
+        if touchedIndex == touchedLayer.index { return }
+        updateTextLayers(forSelectedIndex: touchedLayer.index)
+        touchedIndex = touchedLayer.index
+        showIndicator(forTextLayer: touchedLayer)
+        scrollCollectionView(toTextLayer: touchedLayer, animated: false)
+    }
+}
