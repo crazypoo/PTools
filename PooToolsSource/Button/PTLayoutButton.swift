@@ -47,7 +47,7 @@ import Kingfisher
 @objcMembers
 public class PTLayoutButton: UIButton {
     /// 布局方式
-    open var layoutStyle: PTLayoutButtonStyle! = .leftImageRightTitle {
+    open var layoutStyle: PTLayoutButtonStyle = .leftImageRightTitle {
         didSet {
             if #available(iOS 15.0, *) {
                 configuration = layoutConfig
