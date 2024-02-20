@@ -226,4 +226,42 @@ public extension UICollectionView {
             customers
         })
     }
+    
+    //MARK: 設置CollectionView的TagShowLayout
+    ///設置CollectionView的TagShowLayout
+    @objc class func tagShowLayout(data:[String],
+                                   screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                   itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                   itemHeight:CGFloat = 32,
+                                   contentTopAndBottom:CGFloat = 10,
+                                   itemLeadingSpace:CGFloat = 10,
+                                   itemTrailingSpace:CGFloat = 10,
+                                   itemFont:UIFont = .appfont(size: 14),
+                                   itemContentSpace:CGFloat = 20) -> NSCollectionLayoutGroup {
+        var bannerGroupSize : NSCollectionLayoutSize
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+        
+        var groupWidth:CGFloat = itemOriginalX
+        var groupHeight:CGFloat = contentTopAndBottom + itemHeight
+        data.enumerated().forEach { (index,value) in
+            let currentCellWidth = UIView.sizeFor(string: value, font: itemFont,height: itemHeight).width + itemContentSpace
+            let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
+            if totalWidth > (screenWidth - itemOriginalX * 2) {
+                groupWidth = itemOriginalX
+                groupHeight += (itemTrailingSpace + itemHeight)
+            }
+
+            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight), zIndex: 1000+index)
+
+            groupWidth += (currentCellWidth + itemLeadingSpace)
+            if index == (data.count - 1) {
+                groupHeight += contentTopAndBottom
+            }
+            customers.append(customItem)
+        }
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupHeight))
+        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
 }
