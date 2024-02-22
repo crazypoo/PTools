@@ -19,6 +19,7 @@ open class PTSection: NSObject {
     public var headerHeight: CGFloat? = CGFloat.leastNormalMagnitude
     public var rows: [PTRows]!
     public var headerDataModel: AnyObject?
+    public var footerDataModel: AnyObject?
 
     public init(headerTitle: String? = "",
                 headerCls: AnyClass? = nil,
@@ -28,7 +29,8 @@ open class PTSection: NSObject {
                 footerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
                 headerHeight:CGFloat? = CGFloat.leastNormalMagnitude,
                 rows:[PTRows]!,
-                headerDataModel:AnyObject? = nil) {
+                headerDataModel:AnyObject? = nil,
+                footerDataModel:AnyObject? = nil) {
         super.init()
         
         self.headerTitle = headerTitle
@@ -40,6 +42,7 @@ open class PTSection: NSObject {
         self.headerHeight = headerHeight
         self.rows = rows
         self.headerDataModel = headerDataModel
+        self.footerDataModel = headerDataModel
     }
 }
 
