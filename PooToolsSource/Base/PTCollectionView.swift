@@ -284,19 +284,13 @@ public class PTCollectionView: UIView {
         let behavior : UICollectionLayoutSectionOrthogonalScrollingBehavior = viewConfig.collectionViewBehavior
         
         var sectionModel:PTSection?
-        var screenWidth:CGFloat = frame.size.width
+        let screenWidth:CGFloat = frame.size.width
         if  mSections.count > 0 {
             sectionModel = mSections[section]
-            
-            switch viewConfig.decorationItemsType {
-            case .Normal,.Corner:
-                screenWidth -= (self.viewConfig.decorationItemsEdges.leading * 2)
-            default:
-                break
-            }
+        
             switch viewConfig.viewType {
             case .Gird:
-                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: viewConfig.rowCount,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellLeadingSpace: viewConfig.cellLeadingSpace,cellTrailingSpace: viewConfig.cellTrailingSpace,sectionContentInsets: viewConfig.sectionEdges)
+                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: viewConfig.rowCount,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellLeadingSpace: viewConfig.cellLeadingSpace,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .Normal:
                 group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: 1,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .WaterFall:
@@ -314,10 +308,10 @@ public class PTCollectionView: UIView {
         switch viewConfig.decorationItemsType {
         case .Normal,.Corner:
             sectionInsets = NSDirectionalEdgeInsets.init(top: ((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopAndBottom + self.viewConfig.decorationItemsEdges.top),
-                                                         leading: sectionInsets.leading + self.viewConfig.decorationItemsEdges.leading,
+                                                         leading: sectionInsets.leading,
                                                          bottom: (sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopAndBottom,
-                                                         trailing: sectionInsets.trailing + self.viewConfig.decorationItemsEdges.trailing)
-            sectionWidth = self.viewConfig.decorationItemsEdges.leading * 2
+                                                         trailing: sectionInsets.trailing)
+            sectionWidth = (self.viewConfig.decorationItemsEdges.leading + self.viewConfig.decorationItemsEdges.trailing)
         default:
             break
         }
@@ -332,9 +326,9 @@ public class PTCollectionView: UIView {
         } else {
             let headerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth - viewConfig.headerWidthOffset - sectionWidth), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude + (self.viewConfig.decorationItemsEdges.top * 2 + sectionInsets.top)))
             let footerSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth - viewConfig.footerWidthOffset - sectionWidth), heightDimension: NSCollectionLayoutDimension.absolute(sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude + (self.viewConfig.decorationItemsEdges.top * 2 + sectionInsets.top)))
-            let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing, absoluteOffset: CGPoint(x: -(self.viewConfig.decorationItemsEdges.leading * 2), y:((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + self.viewConfig.decorationItemsEdges.top * 1)))
+            let headerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topTrailing, absoluteOffset: CGPoint(x: -(self.viewConfig.decorationItemsEdges.leading), y:((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + self.viewConfig.decorationItemsEdges.top * 1)))
             headerItem.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-            let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing, absoluteOffset: CGPoint(x: -(self.viewConfig.decorationItemsEdges.leading * 2), y:-(sectionInsets.top)))
+            let footerItem = NSCollectionLayoutBoundarySupplementaryItem.init(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottomTrailing, absoluteOffset: CGPoint(x: -(self.viewConfig.decorationItemsEdges.leading), y:-(sectionInsets.top)))
 
             var supplementarys = [NSCollectionLayoutBoundarySupplementaryItem]()
             if !(sectionModel?.headerID ?? "").stringIsEmpty() {
