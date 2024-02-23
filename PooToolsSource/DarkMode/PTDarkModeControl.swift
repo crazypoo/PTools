@@ -44,7 +44,7 @@ public class PTDarkModeControl: PTBaseViewController {
         cConfig.customReuseViews = true
         let view = PTCollectionView(viewConfig: cConfig)
             
-        view.customerReuseViews = { sectionModel in
+        view.customerReuseViews = { index,sectionModel in
             var items = [NSCollectionLayoutBoundarySupplementaryItem]()
             let screenW:CGFloat = CGFloat.kSCREEN_WIDTH
             if sectionModel.headerID == PTDarkModeHeader.ID {
