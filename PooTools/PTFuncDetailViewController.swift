@@ -540,6 +540,21 @@ class PTFuncDetailViewController: PTBaseViewController {
                 switchAESECB.isOn = false
                 switchAESCBC.isOn = false
             }
+        case String.sortButton:
+            
+            let sortButton = PTSortButton()
+            sortButton.buttonTitle = "1111111111111"
+            sortButton.buttonTitleSelectedColor = .random
+            view.addSubviews([sortButton])
+            sortButton.sortTypeHandler = { type in
+                PTNSLogConsole("\(type.rawValue)")
+            }
+            sortButton.snp.makeConstraints { make in
+                make.height.equalTo(44)
+                make.left.right.equalToSuperview()
+                make.top.equalToSuperview().inset(20)
+            }
+            break
         default:
             break
         }

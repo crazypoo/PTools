@@ -59,6 +59,7 @@ public extension String {
     static let scanQR = "ScanQRCode"
     static let filtercamera = "FilterCamera"
     static let editimage = "EditImage"
+    static let sortButton = "SortButton"
 
     static let route = "路由"
     
@@ -267,7 +268,9 @@ class PTFuncNameViewController: PTBaseViewController {
         
         let editimage = self.rowBaseModel(name: .editimage)
         
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage]
+        let sortButton = self.rowBaseModel(name: .sortButton)
+
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in

@@ -360,6 +360,7 @@
 		55D7383229E529BB0027BDC3 /* SpringMotionState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */; };
 		55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */; };
 		55D7383529E529BB0027BDC3 /* SpringMotionLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */; };
+		55DD93582B9169A000F65872 /* PTSortButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DD93572B9169A000F65872 /* PTSortButton.swift */; };
 		55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55DE65672B1450A000B436A8 /* SwipeCellOption.swift */; };
 		55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */; };
 		55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E3BBB62ABDFF1C00858348 /* ICMP.swift */; };
@@ -845,6 +846,7 @@
 		55D7382B29E529BB0027BDC3 /* SpringMotionState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionState.swift; sourceTree = "<group>"; };
 		55D7382D29E529BB0027BDC3 /* SpringConfiguration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringConfiguration.swift; sourceTree = "<group>"; };
 		55D7382E29E529BB0027BDC3 /* SpringMotionLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpringMotionLayer.swift; sourceTree = "<group>"; };
+		55DD93572B9169A000F65872 /* PTSortButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSortButton.swift; sourceTree = "<group>"; };
 		55DE65672B1450A000B436A8 /* SwipeCellOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeCellOption.swift; sourceTree = "<group>"; };
 		55E0558B28EA870F0097F3ED /* PTSwiftViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSwiftViewController.swift; sourceTree = "<group>"; };
 		55E3BBB62ABDFF1C00858348 /* ICMP.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ICMP.swift; sourceTree = "<group>"; };
@@ -1024,7 +1026,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				55B3F49F2B6AD3D400A7CC66 /* Pinyin */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1095,6 +1096,7 @@
 				55B4FA172AE0FDCC006D35F3 /* PhotoLibraryPermission */,
 				552F078A2B15C26B00CB47CD /* PhotoPicker */,
 				55E3BBB52ABDFF0C00858348 /* Ping */,
+				55B3F49F2B6AD3D400A7CC66 /* Pinyin */,
 				231D15DE272CDEE9003D6F62 /* PooTools.bundle */,
 				555818B62AFA48E70051C0AA /* ProgressBar */,
 				55025E4029FA54B60024A960 /* Protocol */,
@@ -1967,6 +1969,7 @@
 			children = (
 				231D15C5272CDEE9003D6F62 /* PTLayoutButton.swift */,
 				231D15B6272CDEE9003D6F62 /* PFloatingButton.swift */,
+				55DD93572B9169A000F65872 /* PTSortButton.swift */,
 			);
 			path = Button;
 			sourceTree = "<group>";
@@ -2672,6 +2675,7 @@
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
 				55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */,
+				55DD93582B9169A000F65872 /* PTSortButton.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
 				9AE4469428586A59007DC2B5 /* UIFont+PTEX.swift in Sources */,
 				9A14E98728616B4000D7E8EF /* PTImagePageControl.swift in Sources */,

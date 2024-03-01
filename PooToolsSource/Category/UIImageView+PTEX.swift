@@ -50,6 +50,7 @@ public extension UIImageView {
                    progressHandle:((_ receivedSize: Int64, _ totalSize: Int64)->Void)? = nil,
                    loadFinish:(([UIImage]?,UIImage?)->Void)? = nil) {
         
+        self.image = emptyImage
         PTLoadImageFunction.loadImage(contentData: contentData,iCloudDocumentName: iCloudDocumentName) { receivedSize, totalSize in
             PTGCDManager.gcdMain {
                 if progressHandle != nil {

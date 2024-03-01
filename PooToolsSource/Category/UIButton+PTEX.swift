@@ -153,6 +153,7 @@ public extension UIButton {
                    uniCount:Int = 0,
                    emptyImage:UIImage = PTAppBaseConfig.share.defaultEmptyImage,
                    controlState:UIControl.State = .normal) {
+        setImage(emptyImage, for: controlState)
         if contentData is UIImage {
             let image = (contentData as! UIImage)
             setImage(image, for: controlState)
