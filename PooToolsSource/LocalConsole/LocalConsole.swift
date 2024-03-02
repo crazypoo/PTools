@@ -263,7 +263,7 @@ public class LocalConsole: NSObject {
     
     lazy var feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
     
-    private var debugBordersEnabled = false {
+    var debugBordersEnabled = false {
         didSet {
             
             UIView.swizzleDebugBehaviour_UNTRACKABLE_TOGGLE()
@@ -591,9 +591,9 @@ public class LocalConsole: NSObject {
                 
                 var viewFrameString = ""
                 if self.debugBordersEnabled {
-                    viewFrameString = .hideViewFrames
-                } else {
                     viewFrameString = .showViewFrames
+                } else {
+                    viewFrameString = .hideViewFrames
                 }
                 let content_viewFrameString = PTActionSheetItem(title: viewFrameString,image: UIImage.viewFrameImage(),itemAlignment: .left)
                 contentItems.append(content_viewFrameString)
@@ -847,7 +847,7 @@ public class LocalConsole: NSObject {
             }
         }
 
-        let viewFrames = UIAction(title: debugBordersEnabled ? .hideViewFrames : .showViewFrames, image: UIImage.viewFrameImage()) { _ in
+        let viewFrames = UIAction(title: debugBordersEnabled ? .showViewFrames : .hideViewFrames, image: UIImage.viewFrameImage()) { _ in
             self.viewFramesAction()
             self.terminal!.menuButton.menu = self.makeMenu()
         }

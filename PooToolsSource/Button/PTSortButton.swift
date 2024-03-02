@@ -73,7 +73,7 @@ public class PTSortButton: UIView {
         }
     }
     
-    public var upNormalImage:Any = UIColor.randomColor.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+    public var upNormalImage:Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
             switch sortType {
             case .Normal:
@@ -86,7 +86,7 @@ public class PTSortButton: UIView {
         }
     }
     
-    public var upSelectedImage:Any = UIColor.randomColor.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+    public var upSelectedImage:Any = UIColor.systemRed.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
             switch sortType {
             case .Normal:
@@ -99,7 +99,7 @@ public class PTSortButton: UIView {
         }
     }
     
-    public var dowmNormalImage:Any = UIColor.randomColor.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+    public var dowmNormalImage:Any = UIColor.lightGray.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
             switch sortType {
             case .Normal:
@@ -112,7 +112,7 @@ public class PTSortButton: UIView {
         }
     }
     
-    public var downSelectedImage:Any = UIColor.randomColor.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
+    public var downSelectedImage:Any = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSizeMake(10, 10)) {
         didSet {
             switch sortType {
             case .Normal:

@@ -69,10 +69,9 @@ public class PTDebugViewController: PTBaseViewController {
             if itemRow.title == .DebugMode {
                 cell.switchValue = PTCoreUserDefultsWrapper.AppDebugMode
                 cell.switchValueChangeBlock = { title,sender in
-                    let value = !PTCoreUserDefultsWrapper.AppDebugMode
-                    PTCoreUserDefultsWrapper.AppDebugMode = value
+                    PTCoreUserDefultsWrapper.AppDebugMode = !PTCoreUserDefultsWrapper.AppDebugMode
                     let console = LocalConsole.shared
-                    console.isVisiable = value
+                    console.isVisiable = PTCoreUserDefultsWrapper.AppDebugMode
                 }
             }
             return cell

@@ -136,9 +136,9 @@ public extension UIFont {
     static func showAllFont() {
         var i = 0
         for family in UIFont.familyNames {
-            PTNSLogConsole("\(i)---项目字体---\(family)", error: true)
+            PTNSLogConsole("\(i)---项目字体---\(family)", levelType: .Error,loggerType: .Other)
             for names in UIFont.fontNames(forFamilyName: family) {
-                PTNSLogConsole("== \(names)", error: true)
+                PTNSLogConsole("== \(names)", levelType: .Error,loggerType: .Other)
             }
             i += 1
         }

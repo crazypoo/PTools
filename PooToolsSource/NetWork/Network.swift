@@ -226,16 +226,16 @@ public class Network: NSObject {
             apiHeader["Accept"] = "application/json"
 
             let postString = "GET请求"
-            PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
+            PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
 
             Network.manager.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success(_):
                     let ipString = String(data: data.data!, encoding: .utf8)
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(ipString ?? "")🌐")
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(ipString ?? "")🌐",levelType: PTLogMode,loggerType: .Network)
                     continuation.resume(returning: ipString ?? "")
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
+                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing: error)
                 }
             }
@@ -262,7 +262,7 @@ public class Network: NSObject {
             apiHeader["Accept"] = "application/json"
 
             let postString = "GET请求"
-            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐")
+            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
 
             Network.manager.request(urlStr1, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
                 switch data.result {
@@ -273,7 +273,7 @@ public class Network: NSObject {
                         return
                     }
 
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐",levelType: PTLogMode,loggerType: .Network)
 
                     guard let responseModel = PTIPInfoModel.deserialize(from: jsonStr) else {
                         continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
@@ -281,7 +281,7 @@ public class Network: NSObject {
                     }
                     continuation.resume(returning: responseModel)
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing: error)
                 }
             }
@@ -355,7 +355,7 @@ public class Network: NSObject {
             default:
                 postString = "其他"
             }
-            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐")
+            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💛2.参数 = \(parameters?.jsonString() ?? "没有参数")\n💙3.请求头 = \(header?.dictionary.jsonString() ?? "没有请求头")\n🩷4.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
 
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
@@ -366,7 +366,7 @@ public class Network: NSObject {
                         return
                     }
 
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐")
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐",levelType: PTLogMode,loggerType: .Network)
 
                     guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
                         continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
@@ -389,7 +389,7 @@ public class Network: NSObject {
                     }
                     continuation.resume(returning: responseModel)
                 case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", error: true)
+                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing: error)
                 }
             }
@@ -496,7 +496,7 @@ public class Network: NSObject {
                     }
                     
                     responseModel.originalString = jsonStr
-                    PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐")
+                    PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐",levelType: PTLogMode,loggerType: .Network)
                     guard let modelType1 = modelType else {
                         continuation.resume(returning: responseModel); return }
                     if responseModel.data is [String : Any] {
@@ -510,7 +510,7 @@ public class Network: NSObject {
                     
                     continuation.resume(returning: responseModel)
                 case .failure(let error):
-                    PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌",error: true)
+                    PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing:error)
                 }
             }

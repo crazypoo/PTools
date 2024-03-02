@@ -116,7 +116,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
         if task == downloadTask {
             let latency = (downloadStartTime! - tapStartTime!) * 1000
             latencyValue = latency
-            PTNSLogConsole("Network latency: \(latency) ms")
+            PTNSLogConsole("Network latency: \(latency) ms",levelType: .Notice,loggerType: .Network)
             netSpeedUpload()
             netSpeedStateType = .Upload
             PTGCDManager.gcdMain {
@@ -155,7 +155,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
                     historyModel.date = Date().toString()
                     
                     let jsonString = historyModel.toJSON()!.toJSON()!
-                    PTNSLogConsole(jsonString)
+                    PTNSLogConsole(jsonString,levelType: .Notice,loggerType: .Network)
                     self.saveHistory(jsonString: jsonString)
                     self.netSpeedStateType = .Free
                 })
@@ -170,7 +170,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
         totalBytesDownloaded += Int64(data.count)
         let elapsedTime = CFAbsoluteTimeGetCurrent() - downloadStartTime!
         let currentSpeed = Double(totalBytesDownloaded) / elapsedTime
-        PTNSLogConsole("Current download speed: \(currentSpeed) bytes/sec")
+        PTNSLogConsole("Current download speed: \(currentSpeed) bytes/sec",levelType: .Notice,loggerType: .Network)
         let liveSpeed = self.netFormula(value: currentSpeed)
         downloadValue = self.netFormula(value: currentSpeed)
         downloadValueArrs.append(liveSpeed)
@@ -184,10 +184,10 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
             uploadStartTime = CFAbsoluteTimeGetCurrent()
         }
         totalBytesUploaded = totalBytesSent
-        PTNSLogConsole("totalBytesUploaded: \(totalBytesSent)")
+        PTNSLogConsole("totalBytesUploaded: \(totalBytesSent)",levelType: .Notice,loggerType: .Network)
         let elapsedTime = CFAbsoluteTimeGetCurrent() - uploadStartTime!
         let currentSpeed = Double(totalBytesUploaded) / elapsedTime
-        PTNSLogConsole("Current upload speed: \(currentSpeed) bytes/sec")
+        PTNSLogConsole("Current upload speed: \(currentSpeed) bytes/sec",levelType: .Notice,loggerType: .Network)
         let liveSpeed = self.netFormula(value: currentSpeed)
         uploadValue = self.netFormula(value: currentSpeed)
         downloadValueArrs.append(liveSpeed)

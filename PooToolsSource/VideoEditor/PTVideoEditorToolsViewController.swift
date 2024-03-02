@@ -594,17 +594,37 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                 vc.speedHandler = { value in
                     self.speed = value
                 }
+#if POOTOOLS_FLOATINGPANEL
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
                 })
+#else
+                if #available(iOS 15.0, *) {
+                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
+                        
+                    }
+                } else {
+                    self.pt_present(vc)
+                }
+#endif
             case .trim:
                 let vc = PTVideoEditorToolsTrimControl(trimPositions: self.trimPositions, asset: self.avPlayer.currentItem!.asset,typeModel: cellModel)
+#if POOTOOLS_FLOATINGPANEL
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
                     
                 })
+#else
+                if #available(iOS 15.0, *) {
+                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
+                        
+                    }
+                } else {
+                    self.pt_present(vc)
+                }
+#endif
                 vc.trimPosotionsHandler = { value in
                     self.trimPositions = value
                 }
@@ -657,11 +677,21 @@ public class PTVideoEditorToolsViewController: PTBaseViewController {
                     self.currentFilter = filter
                     self.reloadAsset()
                 }
+#if POOTOOLS_FLOATINGPANEL
                 self.sheetPresent_floating(modalViewController:vc,type:.custom, scale:0.3,panGesDelegate:self,completion:{
                     
                 },dismissCompletion:{
                     
                 })
+#else
+                if #available(iOS 15.0, *) {
+                    self.sheetPresent(modalViewController: vc, type: .custom, scale: 0.3) {
+                        
+                    }
+                } else {
+                    self.pt_present(vc)
+                }
+#endif
             case .rewrite:
                 let cell = collectionViews.cellForItem(at: indexPath) as! PTVideoEditorToolsCell
                 cell.buttonView.isSelected.toggle()

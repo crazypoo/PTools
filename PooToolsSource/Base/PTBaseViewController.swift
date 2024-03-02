@@ -39,7 +39,7 @@ public enum PTScreenShotActionType {
 @objcMembers
 open class PTBaseViewController: ZXNavigationBarController {
     deinit {
-        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
         removeFromSuperStatusBar()
     }
         
@@ -60,7 +60,7 @@ open class PTBaseViewController: ZXNavigationBarController {
 open class PTBaseViewController: UIViewController {
             
     deinit {
-        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放")
+        PTNSLogConsole("[\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())]===已被释放",levelType: PTLogMode,loggerType: .ViewCycle)
         removeFromSuperStatusBar()
     }
 }
@@ -98,7 +98,7 @@ extension PTBaseViewController {
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+        PTNSLogConsole("加载==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
 #if POOTOOLS_NAVBARCONTROLLER
         if presentationController != nil {
             self.zx_leftClickedBlock { itenBtn in
@@ -110,7 +110,7 @@ extension PTBaseViewController {
     
     override open func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）")
+        PTNSLogConsole("离开==============================\(NSStringFromClass(type(of: self)))（\(Unmanaged<AnyObject>.passUnretained(self as AnyObject).toOpaque())）",levelType: PTLogMode,loggerType: .ViewCycle)
     }
     
     override open func viewDidDisappear(_ animated: Bool) {
@@ -179,7 +179,7 @@ extension PTBaseViewController {
             let orientation:UIInterfaceOrientationMask = isFullScreen ? .landscape : .portrait
             let geometryPreferencesIOS = UIWindowScene.GeometryPreferences.iOS(interfaceOrientations: orientation)
             scence.requestGeometryUpdate(geometryPreferencesIOS) { error in
-                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)")
+                PTNSLogConsole("强制\(isFullScreen ? "横屏" : "竖屏")错误:\(error)",levelType: PTLogMode,loggerType: .ViewCycle)
             }
         } else {
             let oriention:UIDeviceOrientation = isFullScreen ? .landscapeRight : .portrait

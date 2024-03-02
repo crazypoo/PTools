@@ -292,7 +292,15 @@ public extension UIView {
         
         let tracker = BorderManager(view: self)
         GLOBAL_BORDER_TRACKERS.append(tracker)
-        tracker.activate()
+#if POOTOOLS_DEBUG
+        if LocalConsole.shared.debugBordersEnabled {
+            tracker.activate()
+        } else {
+            tracker.deactivate()
+        }
+#else
+        tracker.deactivate()
+#endif
     }
     
     //MARK: View的背景渐变

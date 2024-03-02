@@ -205,20 +205,9 @@ class AppDelegate: PTAppWindowsDelegate {
 //        let keyID = "B9Q98BMSBQ" // Get from https://developer.apple.com/account/ios/authkey/
 //        let teamID = "77J8946934" // Get from https://developer.apple.com/account/#/membership/
 //        createToken(keyID: keyID, teamID: teamID)
-
-        if #available(iOS 14.0, *) {
-            let logger = Logger(subsystem: "my_system", category: "my_category")
-            logger.log("这是一个 Log 信息")
-            logger.info("这是一个 info 信息")
-            logger.warning("这是一个 warning 信息")
-            logger.debug("这是一个 Debug 信息")
-            logger.error("这是一个 Error 信息")
-            logger.fault("这是一个 fault 信息")
-        }
                 
 //        let dateString = "你好吗"
 //        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
-        
         return true
     }
     
