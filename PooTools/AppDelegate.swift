@@ -95,10 +95,16 @@ class AppDelegate: PTAppWindowsDelegate {
         
         PTAppBaseConfig.share.defaultPlaceholderImage = "🖼️".emojiToImage(emojiFont: .appfont(size: 44))
         
+        sideMenuConfig()
+
         makeKeyAndVisible(createViewControllerHandler: {
             let vc = PTFuncNameViewController()
             let mainNav = PTBaseNavControl(rootViewController: vc)
-            return mainNav
+            
+            let sideContent = PTSideController()
+            let sideMeniController = PTSideMenuControl(contentViewController: mainNav, menuViewController: sideContent)
+            
+            return sideMeniController
         }, tint: .white)
 #if DEBUG
         let filePath = NSTemporaryDirectory().appending("/demo.order")
@@ -209,6 +215,12 @@ class AppDelegate: PTAppWindowsDelegate {
 //        let dateString = "你好吗"
 //        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
         return true
+    }
+    
+    func sideMenuConfig() {
+        PTSideMenuControl.preferences.basic.direction = .right
+        PTSideMenuControl.preferences.basic.menuWidth = 240
+        PTSideMenuControl.preferences.basic.defaultCacheKey = "0"
     }
     
     func minCount(@PTClampedProperyWrapper(range:1...10) counts:Int) ->Int {
