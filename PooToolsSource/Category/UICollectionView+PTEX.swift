@@ -229,6 +229,17 @@ public extension UICollectionView {
     
     //MARK: 設置CollectionView的TagShowLayout
     ///設置CollectionView的TagShowLayout
+    /// - Parameters:
+    ///   - data: 數據(數組)
+    ///   - screenWidth: group的實際展示寬度
+    ///   - itemOriginalX: item的初始x坐标
+    ///   - itemHeight: item的height
+    ///   - contentTopAndBottom: item的初始y坐标
+    ///   - itemLeadingSpace: item左右间隔距离
+    ///   - itemTrailingSpace: item上下间隔距离
+    ///   - itemFont: item的字体大小
+    ///   - itemContentSpace: item的内容左右间距总和
+    /// - Returns: TagLayout
     @objc class func tagShowLayout(data:[String],
                                    screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
                                    itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
@@ -260,6 +271,36 @@ public extension UICollectionView {
             customers.append(customItem)
         }
         bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupHeight))
+        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
+    
+    //MARK: 設置CollectionView的Horizontallayout
+    ///設置CollectionView的Horizontallayout
+    /// - Parameters:
+    ///   - data: 數據(數組)
+    ///   - itemOriginalX: item的初始x坐标
+    ///   - itemWidth: item的width
+    ///   - itemHeight: item的height
+    ///   - contentTopAndBottom: item的初始y坐标
+    ///   - itemLeadingSpace: item左右间隔距离
+    /// - Returns: Horizontallayout
+    @objc class func horizontalLayout(data:[AnyObject],
+                                      itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                      itemWidth:CGFloat = 100,
+                                      itemHeight:CGFloat = 44,
+                                      contentTopAndBottom:CGFloat = 10,
+                                      itemLeadingSpace:CGFloat = 10) -> NSCollectionLayoutGroup {
+        var groupWidth:CGFloat = itemOriginalX
+        var bannerGroupSize : NSCollectionLayoutSize
+        var customers = [NSCollectionLayoutGroupCustomItem]()
+        data.enumerated().forEach { (index,model) in
+            let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupWidth, y: contentTopAndBottom, width: itemWidth, height: itemHeight), zIndex: 1000+index)
+            customers.append(customItem)
+            groupWidth += (itemWidth + itemLeadingSpace)
+        }
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(groupWidth), heightDimension: NSCollectionLayoutDimension.absolute((itemHeight + contentTopAndBottom * 2)))
         return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
             customers
         })

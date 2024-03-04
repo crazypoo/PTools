@@ -31,6 +31,7 @@ private let kPTCollectionIndexViewContentOffsetKeyPath = #keyPath(UICollectionVi
     case Gird
     case WaterFall
     case Custom
+    case Horizontal
 }
 
 //MARK: Collection展示的Section底部样式类型
@@ -116,6 +117,8 @@ public class PTCollectionViewConfig:NSObject {
     open var rowCount:Int = 3
     ///item高度
     open var itemHeight:CGFloat = PTAppBaseConfig.share.baseCellHeight
+    ///item宽度(Horizontal下使用)
+    open var itemWidth:CGFloat = 100
     ///item起始坐标X
     open var itemOriginalX:CGFloat = 0
     ///item的展示距离顶部和底部的高度
@@ -295,6 +298,8 @@ public class PTCollectionView: UIView {
                 group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: 1,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .WaterFall:
                 group = UICollectionView.waterFallLayout(data: sectionModel!.rows,screenWidth: screenWidth, rowCount: viewConfig.rowCount,itemOriginalX: viewConfig.itemOriginalX, itemOriginalY: viewConfig.contentTopAndBottom,itemSpace: viewConfig.cellLeadingSpace, itemHeight: waterFallLayout!)
+            case .Horizontal:
+                group = UICollectionView.horizontalLayout(data: sectionModel!.rows,itemOriginalX: viewConfig.itemOriginalX,itemWidth: viewConfig.itemWidth,itemHeight: viewConfig.itemHeight,contentTopAndBottom: viewConfig.contentTopAndBottom,itemLeadingSpace: viewConfig.cellLeadingSpace)
             case .Custom:
                 group = customerLayout!(sectionModel!)
             }
@@ -768,7 +773,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
     public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         if mSections.count > 0 {
             let itemSec = mSections[indexPath.section]
-            if !(itemSec.headerID ?? "").stringIsEmpty() || !(itemSec.footerID ?? "").stringIsEmpty() {
+            if (!(itemSec.headerID ?? "").stringIsEmpty() && itemSec.headerCls != nil) || (!(itemSec.footerID ?? "").stringIsEmpty() && itemSec.footerCls != nil) {
                 if kind == UICollectionView.elementKindSectionHeader {
                     return headerInCollection?(kind,collectionView,itemSec,indexPath) ?? UICollectionReusableView()
                 } else if kind == UICollectionView.elementKindSectionFooter {
@@ -1126,7 +1131,6 @@ private extension PTCollectionView {
         } else {
             collectionView.scrollToItem(at: indexPath, at: .top, animated: animated)
         }
-        
     }
     
     func updateTextLayers(forSelectedIndex index: Int) {
