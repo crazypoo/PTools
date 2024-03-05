@@ -15,7 +15,7 @@ import ImageIO
 public extension UIImageView {
     //MARK: 獲取圖片的某像素點的顏色
     ///獲取圖片的某像素點的顏色
-    func getImagePointColor(point:CGPoint)->UIColor {
+    @objc func getImagePointColor(point:CGPoint)->UIColor {
         let thumbSize = CGSize(width: image!.size.width, height: image!.size.height)
 
         // 当前点在图片中的相对位置
@@ -24,11 +24,11 @@ public extension UIImageView {
         return image!.getImgePointColor(point: pInImage)
     }
     
-    func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage) {
+    @objc func pt_SDWebImage(imageString:String,placeholder:UIImage = PTAppBaseConfig.share.defaultPlaceholderImage) {
         kf.setImage(with: URL.init(string: imageString),placeholder: placeholder,options: PTAppBaseConfig.share.gobalWebImageLoadOption())
     }
     
-    func blur(withStyle style: UIBlurEffect.Style) {
+    @objc func blur(withStyle style: UIBlurEffect.Style) {
         let blurEffect = UIBlurEffect(style: style)
         let blurEffectView = UIVisualEffectView(effect: blurEffect)
         blurEffectView.frame = bounds
@@ -37,7 +37,7 @@ public extension UIImageView {
         clipsToBounds = true
     }
     
-    func loadImage(contentData:Any,
+    @objc func loadImage(contentData:Any,
                    iCloudDocumentName:String = "",
                    borderWidth:CGFloat = 1.5,
                    borderColor:UIColor = UIColor.purple,
