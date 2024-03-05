@@ -103,6 +103,8 @@ func deviceSafeAreaInsets() -> UIEdgeInsets {
     return insets
 }
 
+public typealias PTImageLoadHandler = (_ error:Error?,_ sourceURL:URL?,_ image:UIImage?) -> Void
+
 @objcMembers
 public class PTUtils: NSObject {
         
