@@ -27,8 +27,25 @@ class PTSideController: PTBaseSideController {
         view.addActionHandlers { sender in
             self.sideMenuController?.hideMenu(animated: true, completion: { finish in
                 if finish {
-                    let vc = PTFuncDetailViewController(typeString: String.sortButton)
-                    PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: PTUtils.getCurrentVC() as! PTBaseViewController,currentViewController: PTUtils.getCurrentVC())
+                    let vc = PTBaseViewController()
+                    vc.view.backgroundColor = .systemBlue
+                    let button = UIButton(type: .custom)
+                    button.backgroundColor = .systemGray
+                    vc.view.addSubviews([button])
+                    button.snp.makeConstraints { make in
+                        make.size.equalTo(100)
+                        make.centerX.centerY.equalToSuperview()
+                    }
+                    button.addActionHandlers { sender in
+                        let vcs = PTBaseViewController()
+                        vc.navigationController?.pushViewController(vcs)
+                    }
+                    
+                    let nav = PTBaseNavControl(rootViewController: vc)
+                    let sheet = PTSheetViewController(controller: nav,sizes: [.percent(0.5),.fullscreen])
+                    PTUtils.getCurrentVC().present(sheet, animated: true)
+//                    let vc = PTFuncDetailViewController(typeString: String.sortButton)
+//                    PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: PTUtils.getCurrentVC() as! PTBaseViewController,currentViewController: PTUtils.getCurrentVC())
                 }
             })
         }

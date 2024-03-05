@@ -135,6 +135,13 @@
 		553038352B1CD85E0019A8E0 /* P8.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382E2B1CD85E0019A8E0 /* P8.swift */; };
 		553038362B1CD85E0019A8E0 /* JWT.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530382F2B1CD85E0019A8E0 /* JWT.swift */; };
 		553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */; };
+		5530651B2B9718A300BFB4EA /* PTSheetOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651A2B9718A300BFB4EA /* PTSheetOptions.swift */; };
+		5530651D2B97193400BFB4EA /* PTSheetTransition.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651C2B97193400BFB4EA /* PTSheetTransition.swift */; };
+		5530651F2B9719FD00BFB4EA /* PTSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5530651E2B9719FD00BFB4EA /* PTSheetView.swift */; };
+		553065212B971AB000BFB4EA /* UIViewController+PTSheetEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065202B971AB000BFB4EA /* UIViewController+PTSheetEX.swift */; };
+		553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */; };
+		553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */; };
+		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
@@ -273,6 +280,7 @@
 		55B1F0A62B25821E00247ED1 /* PTPermissionSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A52B25821E00247ED1 /* PTPermissionSettingViewController.swift */; };
 		55B1F0A82B25878200247ED1 /* PTPermissionSettingHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A72B25878200247ED1 /* PTPermissionSettingHeader.swift */; };
 		55B1F0AA2B25897B00247ED1 /* PTPermissionSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B1F0A92B25897B00247ED1 /* PTPermissionSettingCell.swift */; };
+		55B30E0F2B97200D00D99BD4 /* PTSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B30E0E2B97200D00D99BD4 /* PTSheetViewController.swift */; };
 		55B316A32994E18F00D8C39B /* UIScreen+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */; };
 		55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316A92999D41D00D8C39B /* PTGCDManager.swift */; };
 		55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */; };
@@ -621,6 +629,13 @@
 		5530382E2B1CD85E0019A8E0 /* P8.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = P8.swift; sourceTree = "<group>"; };
 		5530382F2B1CD85E0019A8E0 /* JWT.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JWT.swift; sourceTree = "<group>"; };
 		553038302B1CD85E0019A8E0 /* ECPrivateKey.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ECPrivateKey.swift; sourceTree = "<group>"; };
+		5530651A2B9718A300BFB4EA /* PTSheetOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetOptions.swift; sourceTree = "<group>"; };
+		5530651C2B97193400BFB4EA /* PTSheetTransition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetTransition.swift; sourceTree = "<group>"; };
+		5530651E2B9719FD00BFB4EA /* PTSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetView.swift; sourceTree = "<group>"; };
+		553065202B971AB000BFB4EA /* UIViewController+PTSheetEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+PTSheetEX.swift"; sourceTree = "<group>"; };
+		553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInitialTouchPanGestureRecognizer.swift; sourceTree = "<group>"; };
+		553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetEXCombos.swift; sourceTree = "<group>"; };
+		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaColorSelectViewController.swift; sourceTree = "<group>"; };
@@ -767,6 +782,7 @@
 		55B1F0A52B25821E00247ED1 /* PTPermissionSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingViewController.swift; sourceTree = "<group>"; };
 		55B1F0A72B25878200247ED1 /* PTPermissionSettingHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingHeader.swift; sourceTree = "<group>"; };
 		55B1F0A92B25897B00247ED1 /* PTPermissionSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPermissionSettingCell.swift; sourceTree = "<group>"; };
+		55B30E0E2B97200D00D99BD4 /* PTSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetViewController.swift; sourceTree = "<group>"; };
 		55B316A22994E18F00D8C39B /* UIScreen+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIScreen+PTEX.swift"; sourceTree = "<group>"; };
 		55B316A92999D41D00D8C39B /* PTGCDManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTGCDManager.swift; sourceTree = "<group>"; };
 		55B316AB299CA71500D8C39B /* UISlider+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UISlider+PTEX.swift"; sourceTree = "<group>"; };
@@ -1404,10 +1420,18 @@
 		55024DEA29F36A0900244E44 /* FloatPanel */ = {
 			isa = PBXGroup;
 			children = (
-				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
-				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
 				55024DEB29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift */,
 				558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */,
+				55D59C7B28F57C8D00B4FF76 /* PTFloatingPanelFuction.swift */,
+				55D59C7D28F57D8D00B4FF76 /* PTFloatPanelLayout.swift */,
+				553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */,
+				553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */,
+				553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */,
+				5530651A2B9718A300BFB4EA /* PTSheetOptions.swift */,
+				5530651C2B97193400BFB4EA /* PTSheetTransition.swift */,
+				5530651E2B9719FD00BFB4EA /* PTSheetView.swift */,
+				55B30E0E2B97200D00D99BD4 /* PTSheetViewController.swift */,
+				553065202B971AB000BFB4EA /* UIViewController+PTSheetEX.swift */,
 			);
 			path = FloatPanel;
 			sourceTree = "<group>";
@@ -2708,6 +2732,7 @@
 				55B389AD2A2EADE900A7B3AD /* PTMemory.swift in Sources */,
 				555818AB2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift in Sources */,
 				55E3BBB92ABDFF1D00858348 /* ICMP.swift in Sources */,
+				553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */,
 				555E8FE528D01BC200AF5E63 /* Utilities.swift in Sources */,
 				55D59C4E28F17DFD00B4FF76 /* PTAppStoreFunction.swift in Sources */,
 				231D1670272CDEEA003D6F62 /* NSMutableArray+PTEX.swift in Sources */,
@@ -2734,6 +2759,7 @@
 				9A14E98728616B4000D7E8EF /* PTImagePageControl.swift in Sources */,
 				559C3D402B2732FB00EE46BC /* PTVideoEditorToolsSpeedControl.swift in Sources */,
 				55B389AF2A2F156E00A7B3AD /* PTColorPickPlugin.swift in Sources */,
+				5530651F2B9719FD00BFB4EA /* PTSheetView.swift in Sources */,
 				55B13D4C2B1AE8CC00C67EDA /* PTImageEditorConfig.swift in Sources */,
 				555818D62AFA81980051C0AA /* Locale+PTEX.swift in Sources */,
 				9AE446A528598A58007DC2B5 /* PTNSLog.swift in Sources */,
@@ -2877,6 +2903,7 @@
 				5578BB132AE377EC00E9D22F /* PTLoadImageFunction.swift in Sources */,
 				55B4FA3F2AE149C5006D35F3 /* PTPermissionLocationAlwaysHandler.swift in Sources */,
 				231D166F272CDEEA003D6F62 /* PTBiologyID.swift in Sources */,
+				553065212B971AB000BFB4EA /* UIViewController+PTSheetEX.swift in Sources */,
 				558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */,
 				55BCB9872B1733620016A4C2 /* PTMediaLibViewController.swift in Sources */,
 				55B4F9FF2AE0EE74006D35F3 /* PTPermissionText.swift in Sources */,
@@ -2938,6 +2965,7 @@
 				55D59C7828F55D2D00B4FF76 /* PTList+EX.swift in Sources */,
 				9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */,
 				5571F6092AFC251C00DB4420 /* PTAppUserdefault.swift in Sources */,
+				5530651B2B9718A300BFB4EA /* PTSheetOptions.swift in Sources */,
 				55DD937B2B94CE4800F65872 /* PTBaseSideController.swift in Sources */,
 				551D908E28B620E100AAA856 /* PTEventOnCalendar.swift in Sources */,
 				231D168D272CDEEA003D6F62 /* UIImage+PTEX.swift in Sources */,
@@ -2950,11 +2978,13 @@
 				55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */,
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
+				5530651D2B97193400BFB4EA /* PTSheetTransition.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				556738042B040EB80058CEBA /* LocalConsole.swift in Sources */,
 				553038332B1CD85E0019A8E0 /* ECKeyData.swift in Sources */,
 				55A5D70629B0EF5700DCA096 /* WKWebView+PTEX.swift in Sources */,
 				55FA6CB52B02357E00BC464B /* PTDarkModeControl.swift in Sources */,
+				553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */,
 				55DE65682B1450A000B436A8 /* SwipeCellOption.swift in Sources */,
 				556CA4C22B295A5600A5B189 /* PTVideoEditorToolsModel.swift in Sources */,
 				231D1682272CDEEA003D6F62 /* UIControl+PTEX.swift in Sources */,
@@ -3008,6 +3038,7 @@
 				55B4FA012AE0EEB5006D35F3 /* PTPermission.swift in Sources */,
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */,
+				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
@@ -3035,6 +3066,7 @@
 				554CCBE128BC943700028597 /* PTRateView.swift in Sources */,
 				55CFC6922B446A3A00CC6CF5 /* PTGifManager.swift in Sources */,
 				554929F228F9108000C82ABF /* PTBaseDecorationFunction.swift in Sources */,
+				55B30E0F2B97200D00D99BD4 /* PTSheetViewController.swift in Sources */,
 				55B316AA2999D41D00D8C39B /* PTGCDManager.swift in Sources */,
 				55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */,
 			);
