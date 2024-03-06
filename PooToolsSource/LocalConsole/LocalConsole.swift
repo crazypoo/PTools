@@ -304,7 +304,9 @@ public class LocalConsole: NSObject {
 
         if isVisiable {
             createSystemLogView()
-            maskOpenFunction()
+            if PTCoreUserDefultsWrapper.AppDebbugMark {
+                maskOpenFunction()
+            }
         } else {
             cleanSystemLogView()
         }
