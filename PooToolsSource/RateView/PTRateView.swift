@@ -50,7 +50,7 @@ public class PTRateView: UIView {
             scorePercent = viewConfig!.scorePercent
             removeSubviews()
             loaded = false
-            layoutSubviews()
+            initView()
         }
     }
     fileprivate lazy var backgroundStarView:UIView = createStartView(image: viewConfig!.bImage, tag: PTRateBackgroundViewTags)

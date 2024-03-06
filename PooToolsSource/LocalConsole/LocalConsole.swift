@@ -218,7 +218,9 @@ public class LocalConsole: NSObject {
                 animation.duration = 0.6
                 terminal!.layer.add(animation, forKey: animation.keyPath)
                 terminal!.layer.shadowOpacity = 0.5
-                maskOpenFunction()
+                if PTCoreUserDefultsWrapper.AppDebbugMark {
+                    maskOpenFunction()
+                }
             } else {
                 UIViewPropertyAnimator(duration: 0.4, dampingRatio: 1) { [self] in
                     terminal!.transform = .init(scaleX: 0.9, y: 0.9)

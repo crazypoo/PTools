@@ -39,7 +39,9 @@ open class PTViewRulerPlugin: NSObject {
     }
     
     public func hide() {
-        rulerView.hide()
+        if showed {
+            rulerView.hide()
+        }
         showed = false
     }
 }
