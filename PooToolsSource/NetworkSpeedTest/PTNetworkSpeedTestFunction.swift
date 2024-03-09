@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import KakaJSON
 
 @objc public enum PTNetworkSpeedTestStateType:Int {
     case Download
@@ -154,7 +155,7 @@ extension PTNetworkSpeedTestFunction : URLSessionDataDelegate, URLSessionTaskDel
                     historyModel.networkType = self.netWorkName
                     historyModel.date = Date().toString()
                     
-                    let jsonString = historyModel.toJSON()!.toJSON()!
+                    let jsonString = historyModel.kj.JSONString(prettyPrinted: true)
                     PTNSLogConsole(jsonString,levelType: .Notice,loggerType: .Network)
                     self.saveHistory(jsonString: jsonString)
                     self.netSpeedStateType = .Free

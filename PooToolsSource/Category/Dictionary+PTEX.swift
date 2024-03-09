@@ -43,8 +43,8 @@ public extension Dictionary {
     
     //MARK: 字典转JSON字符串
     ///字典转JSONString
-    func toJSON() -> String? {
-        if let jsonData = try? JSONSerialization.data(withJSONObject: self, options: JSONSerialization.WritingOptions()) {
+    func toJSON(options:JSONSerialization.WritingOptions = JSONSerialization.WritingOptions.prettyPrinted) -> String? {
+        if let jsonData = try? JSONSerialization.data(withJSONObject: self, options: JSONSerialization.WritingOptions.prettyPrinted) {
             let jsonStr = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))
             return String(jsonStr ?? "")
         }

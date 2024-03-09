@@ -240,6 +240,7 @@
 		558D5F032AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S in Sources */ = {isa = PBXBuildFile; fileRef = 558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */; };
 		558D5F052AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */; };
 		558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */; };
+		55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */; };
 		5593F5F3293703F70086C2EC /* NSString+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5593F5F2293703F70086C2EC /* NSString+PTEX.swift */; };
 		5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */; };
 		5599AE9E28FCEE250035A364 /* PTCountingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */; };
@@ -393,6 +394,7 @@
 		55E96E2E2B07421200AB8ADE /* PTTipsDemoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */; };
 		55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */ = {isa = PBXBuildFile; fileRef = 55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */; };
 		55E96E332B0DCB0C00AB8ADE /* PTScrollingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */; };
+		55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */; };
 		55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */; };
 		55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */; };
 		55ECDBC128C1D94300F1DB69 /* PTCheckBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */; };
@@ -468,7 +470,6 @@
 		9AE446A92859B053007DC2B5 /* PTDrakModeOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446A82859B053007DC2B5 /* PTDrakModeOption.swift */; };
 		9AE446AB2859B1FE007DC2B5 /* PTThemeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AA2859B1FE007DC2B5 /* PTThemeProvider.swift */; };
 		9AE446AD2859B5DD007DC2B5 /* DateFormatter+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AE446AC2859B5DD007DC2B5 /* DateFormatter+PTEX.swift */; };
-		C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C8AFD6EF2155E96400F2FA10 /* MJExtension.framework */; };
 		CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE420AC3F7C00949DF6 /* DZNEmptyDataSet.framework */; };
 		CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CE620AC3F7C00949DF6 /* FDFullscreenPopGesture.framework */; };
 		CC658CED20AC3F7C00949DF6 /* IQKeyboardManager.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC658CEC20AC3F7C00949DF6 /* IQKeyboardManager.framework */; };
@@ -736,6 +737,7 @@
 		558D5F022AAF8DF500C02042 /* fix_UIKeyboardTaskQueue.S */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.asm; path = fix_UIKeyboardTaskQueue.S; sourceTree = "<group>"; };
 		558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = fix_UIKeyboardTaskQueue.m; sourceTree = "<group>"; };
 		558E93512B15319500719A8E /* PTFloatingBaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTFloatingBaseViewController.swift; sourceTree = "<group>"; };
+		55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTAPIFunctionCheck.swift; sourceTree = "<group>"; };
 		5593F5F2293703F70086C2EC /* NSString+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NSString+PTEX.swift"; sourceTree = "<group>"; };
 		5599ADAF28F949A80035A364 /* Bundle+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+PTEX.swift"; sourceTree = "<group>"; };
 		5599AE9D28FCEE250035A364 /* PTCountingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCountingLabel.swift; sourceTree = "<group>"; };
@@ -896,6 +898,7 @@
 		55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTipsDemoController.swift; sourceTree = "<group>"; };
 		55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_placeholder.png; sourceTree = "<group>"; };
 		55E96E322B0DCB0C00AB8ADE /* PTScrollingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScrollingPageControl.swift; sourceTree = "<group>"; };
+		55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestNewModel.swift; sourceTree = "<group>"; };
 		55ECDBBC28C195EE00F1DB69 /* PTCycleLoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCycleLoadingView.swift; sourceTree = "<group>"; };
 		55ECDBBE28C1A7CD00F1DB69 /* PTSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSlider.swift; sourceTree = "<group>"; };
 		55ECDBC028C1D94300F1DB69 /* PTCheckBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTCheckBox.swift; sourceTree = "<group>"; };
@@ -1023,7 +1026,6 @@
 				CCDD3CCB217EC3640021BC19 /* SSZipArchive.framework in Frameworks */,
 				CCDD3CCD217EC3640021BC19 /* TextFieldEffects.framework in Frameworks */,
 				CCDD3CC9217EC3540021BC19 /* libz.tbd in Frameworks */,
-				C8AFD6F02155E96400F2FA10 /* MJExtension.framework in Frameworks */,
 				CCE7811B20BD88D2004E6ADB /* CoreImage.framework in Frameworks */,
 				CC658CE520AC3F7C00949DF6 /* DZNEmptyDataSet.framework in Frameworks */,
 				CC658CE720AC3F7C00949DF6 /* FDFullscreenPopGesture.framework in Frameworks */,
@@ -2427,6 +2429,8 @@
 				555818AC2AFA33570051C0AA /* PTRouteViewController.swift */,
 				55E96E2D2B07421200AB8ADE /* PTTipsDemoController.swift */,
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
+				55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */,
+				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2471,9 +2475,9 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */,
 				559C1C91293AE247002874BA /* Run Script */,
-				29F3E4333B048CE193ED6FB6 /* [CP] Copy Pods Resources */,
+				76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */,
+				FF45F60167419A6208851B4B /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -2563,23 +2567,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		29F3E4333B048CE193ED6FB6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		559C1C91293AE247002874BA /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 8;
@@ -2600,7 +2587,7 @@
 			shellScript = "
 ";
 		};
-		E840B8592CC9684873A0758E /* [CP] Embed Pods Frameworks */ = {
+		76738E53582EEFB7E41DD7BD /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -2633,6 +2620,23 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		FF45F60167419A6208851B4B /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PooTools_Example/Pods-PooTools_Example-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -2786,6 +2790,7 @@
 				55BCB9772B1732030016A4C2 /* PTFetchImageOperation.swift in Sources */,
 				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
+				55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
 				55B4FA132AE0FAD4006D35F3 /* PTPermissionCalendar.swift in Sources */,
 				55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */,
@@ -2876,6 +2881,7 @@
 				550CE4C02AF23FAF0052539D /* PTVoiceActionView.swift in Sources */,
 				55ECDBBD28C195EE00F1DB69 /* PTCycleLoadingView.swift in Sources */,
 				557FC36C2966A2E500991C36 /* PTImagePicker.swift in Sources */,
+				55EA23D52B9AB5B500468F00 /* PTTestNewModel.swift in Sources */,
 				556CA4BD2B29500600A5B189 /* Exporter.swift in Sources */,
 				553038372B1CD85E0019A8E0 /* ECPrivateKey.swift in Sources */,
 				550CE49E2AEC27410052539D /* PTAnimationFunction.swift in Sources */,

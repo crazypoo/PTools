@@ -7,37 +7,11 @@
 //
 
 import UIKit
-import HandyJSON
 import KakaJSON
 
-open class PTBaseModel: HandyJSON,Convertible {
+open class PTBaseModel: Convertible {
     required public init() {}
-    
-    open func mapping(mapper: HelpingMapper) {   //自定义解析规则，日期数字颜色，如果要指定解析格式，子类实现重写此方法即可
-        //        mapper <<<
-        //            date <-- CustomDateFormatTransform(formatString: "yyyy-MM-dd")
-        //
-        //        mapper <<<
-        //            decimal <-- NSDecimalNumberTransform()
-        //
-        //        mapper <<<
-        //            url <-- URLTransform(shouldEncodeURLString: false)
-        //
-        //        mapper <<<
-        //            data <-- DataTransform()
-        //
-        //        mapper <<<
-        //            color <-- HexColorTransform()
-        //
-        //        mapper <<<
-        //        self.X_value_name <-- old_value_name
-        /**
-                            排除某些参数
-         */
-        //        mapper >>> self.x_value
-
-    }
-    
+        
     // 实现kj_modelKey方法
     // 会传入模型的属性`property`作为参数，返回值就是属性对应的key
     open func kj_modelKey(from property: KakaJSON.Property) -> ModelPropertyKey {

@@ -10,7 +10,6 @@ import UIKit
 import Alamofire
 import MBProgressHUD
 import KakaJSON
-import SwiftyJSON
 import Network
 
 public let NetWorkNoError = NSError(domain: "PT Network no network".localized(), code: 99999999996)
@@ -61,7 +60,6 @@ public enum NetWorkEnvironment: Int {
 }
 
 public typealias NetWorkStatusBlock = (_ NetWorkStatus: String, _ NetWorkEnvironment: String,_ NetworkStatusType:NetworkReachabilityManager.NetworkReachabilityStatus) -> Void
-public typealias NetWorkServerStatusBlock = (_ result: ResponseModel) -> Void
 public typealias UploadProgress = (_ progress: Progress) -> Void
 public typealias FileDownloadProgress = (_ bytesRead:Int64,_ totalBytesRead:Int64,_ progress:Double)->()
 public typealias FileDownloadSuccess = (_ reponse:AFDownloadResponse<Data>)->()
@@ -211,81 +209,23 @@ public class Network: NSObject {
     }
     
     class public func getIpAddress(url:String = "https://api.ipify.org") async throws -> String {
+        var apiHeader = HTTPHeaders.init([:])
+        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+        apiHeader["Accept"] = "application/json"
 
-        try await withCheckedThrowingContinuation { continuation in
-
-            // 判断网络是否可用
-            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
-                if !reachabilityManager.isReachable {
-                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkCheckIPError))
-                }
-            }
-
-            var apiHeader = HTTPHeaders.init([:])
-            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-            apiHeader["Accept"] = "application/json"
-
-            let postString = "GET请求"
-            PTNSLogConsole("🌐❤️1.请求地址 = \(url)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
-
-            Network.manager.request(url, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
-                switch data.result {
-                case .success(_):
-                    let ipString = String(data: data.data!, encoding: .utf8)
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(url)\n💛2.result:\(ipString ?? "")🌐",levelType: PTLogMode,loggerType: .Network)
-                    continuation.resume(returning: ipString ?? "")
-                case .failure(let error):
-                    PTNSLogConsole("❌接口:\(url)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        let model = try await Network.requestApi(needGobal:false,urlStr: url,method: .get,header: apiHeader)
+        let ipAddress = String(data: model.resultData!, encoding: .utf8) ?? ""
+        return ipAddress
     }
-
+    
     class public func requestIPInfo(ipAddress:String,lang:OSSVoiceEnum = .ChineseSimplified) async throws -> PTIPInfoModel {
-
-        try await withCheckedThrowingContinuation { continuation in
-            if !ipAddress.isIP() {
-                continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
-            }
-
-            let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
-            // 判断网络是否可用
-            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
-                if !reachabilityManager.isReachable {
-                    continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkCheckIPError))
-                }
-            }
-
-            var apiHeader = HTTPHeaders.init([:])
-            apiHeader["Content-Type"] = "application/json;charset=UTF-8"
-            apiHeader["Accept"] = "application/json"
-
-            let postString = "GET请求"
-            PTNSLogConsole("🌐❤️1.请求地址 = \(urlStr1)\n💙2.请求头 = \(apiHeader.dictionary.jsonString() ?? "没有请求头")\n🩷3.请求类型 = \(postString)🌐",levelType: PTLogMode,loggerType: .Network)
-
-            Network.manager.request(urlStr1, method: .get, parameters: nil, encoding: URLEncoding.default, headers: apiHeader).responseData { data in
-                switch data.result {
-                case .success(_):
-                    let json = JSON(data.value ?? "")
-                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
-                        return
-                    }
-
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐",levelType: PTLogMode,loggerType: .Network)
-
-                    guard let responseModel = PTIPInfoModel.deserialize(from: jsonStr) else {
-                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
-                        return
-                    }
-                    continuation.resume(returning: responseModel)
-                case .failure(let error):
-                    PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
+        
+        let urlStr1 = "http://ip-api.com/json/\(ipAddress)?lang=\(lang.rawValue)"
+        var apiHeader = HTTPHeaders.init([:])
+        apiHeader["Content-Type"] = "application/json;charset=UTF-8"
+        apiHeader["Accept"] = "application/json"
+        let models = try await Network.requestApi(needGobal: false, urlStr: urlStr1,method: .get,header: apiHeader,modelType: PTIPInfoModel.self)
+        return models.customerModel as! PTIPInfoModel
     }
     
     //JSONEncoding  JSON参数
@@ -308,7 +248,7 @@ public class Network: NSObject {
                                  parameters: Parameters? = nil,
                                  modelType: Convertible.Type? = nil,
                                  encoder:ParameterEncoding = URLEncoding.default,
-                                 jsonRequest:Bool? = false) async throws -> ResponseModel {
+                                 jsonRequest:Bool? = false) async throws -> PTBaseStructModel {
 
         try await withCheckedThrowingContinuation { continuation in
             let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
@@ -360,34 +300,18 @@ public class Network: NSObject {
             Network.manager.request(urlStr1, method: method, parameters: parameters, encoding: encoder, headers: apiHeader).responseData { data in
                 switch data.result {
                 case .success(_):
-                    let json = JSON(data.value ?? "")
-                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
-                        return
-                    }
-
-                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\(jsonStr)🌐",levelType: PTLogMode,loggerType: .Network)
-
-                    guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
-                        return
-                    }
-                    responseModel.originalString = jsonStr
-
+                    
+                    var requestStruct = PTBaseStructModel()
+                    requestStruct.resultData = data.data
+                    let jsonStr = data.data?.toDict()?.toJSON() ?? ""
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(urlStr1)\n💛2.result:\((!jsonStr.stringIsEmpty() ? jsonStr : ((data.data ?? Data()).string(encoding: .utf8)))!)🌐",levelType: PTLogMode,loggerType: .Network)
+                    requestStruct.originalString = jsonStr
                     guard let modelType1 = modelType else {
-                        continuation.resume(returning: responseModel); return
+                        continuation.resume(returning: requestStruct)
+                        return
                     }
-                    if responseModel.data is [String: Any] {
-                        guard let reslut = responseModel.data as? [String: Any] else {
-                            continuation.resume(returning: responseModel); return
-                        }
-                        responseModel.data = reslut.kj.model(type: modelType1)
-                    } else if responseModel.data is Array<Any> {
-                        responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
-                    } else {
-                        responseModel.customerModel = responseModel.originalString.kj.model(type: modelType1)
-                    }
-                    continuation.resume(returning: responseModel)
+                    requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
+                    continuation.resume(returning: requestStruct)
                 case .failure(let error):
                     PTNSLogConsole("❌接口:\(urlStr1)\n🎈----------------------出现错误----------------------🎈\(String(describing: error.errorDescription))❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing: error)
@@ -420,7 +344,7 @@ public class Network: NSObject {
                                   modelType: Convertible.Type? = nil,
                                   jsonRequest:Bool? = false,
                                   pngData:Bool? = true,
-                                  progressBlock:UploadProgress? = nil) async throws -> ResponseModel {
+                                  progressBlock:UploadProgress? = nil) async throws -> PTBaseStructModel {
         
         let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
         if !pathUrl.isURL() {
@@ -484,31 +408,19 @@ public class Network: NSObject {
             }).response { response in
                 switch response.result {
                 case .success(_):
-                    let json = JSON(response.value! ?? "")
-                    guard let jsonStr = json.rawString(String.Encoding.utf8, options: JSONSerialization.WritingOptions.prettyPrinted) else {
-                        continuation.resume(throwing: AFError.responseSerializationFailed(reason: .jsonSerializationFailed(error: NetWorkJsonExplainError)))
-                        return
-                    }
+                    var requestStruct = PTBaseStructModel()
+                    let jsonStr = response.data?.toDict()?.toJSON() ?? ""
+                    requestStruct.originalString = jsonStr
+                    requestStruct.resultData = response.data
                     
-                    guard let responseModel = jsonStr.kj.model(ResponseModel.self) else {
-                        continuation.resume(throwing: AFError.requestAdaptationFailed(error: NetWorkModelExplainError))
-                        return
-                    }
-                    
-                    responseModel.originalString = jsonStr
-                    PTNSLogConsole("🌐❤️1.请求地址 = \(pathUrl)\n💛2.result:\(String(describing: jsonStr))🌐",levelType: PTLogMode,loggerType: .Network)
+                    PTNSLogConsole("🌐接口请求成功回调🌐\n❤️1.请求地址 = \(pathUrl)\n💛2.result:\((!jsonStr.stringIsEmpty() ? jsonStr : ((response.data ?? Data()).string(encoding: .utf8)))!)🌐",levelType: PTLogMode,loggerType: .Network)
+
                     guard let modelType1 = modelType else {
-                        continuation.resume(returning: responseModel); return }
-                    if responseModel.data is [String : Any] {
-                        guard let reslut = responseModel.data as? [String : Any] else { continuation.resume(returning: responseModel); return }
-                        responseModel.data = reslut.kj.model(type: modelType1)
-                    } else if responseModel.data is Array<Any> {
-                        responseModel.datas = (responseModel.data as! Array<Any>).kj.modelArray(type: modelType1)
-                    } else {
-                        responseModel.customerModel = responseModel.originalString.kj.model(type:modelType1)
+                        continuation.resume(returning: requestStruct)
+                        return
                     }
-                    
-                    continuation.resume(returning: responseModel)
+                    requestStruct.customerModel = jsonStr.kj.model(type: modelType1)
+                    continuation.resume(returning: requestStruct)
                 case .failure(let error):
                     PTNSLogConsole("❌❤️1.请求地址 =\(pathUrl)\n💛2.error:\(error)❌", levelType: .Error,loggerType: .Network)
                     continuation.resume(throwing:error)

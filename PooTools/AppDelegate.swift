@@ -214,6 +214,15 @@ class AppDelegate: PTAppWindowsDelegate {
                 
 //        let dateString = "你好吗"
 //        PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\(dateString.uppercasePinYinFirstLetter())")
+        
+        PTAPIFunctionCheck.swiftApiRequest(apiUrl: "http://ceo.neospecs.shop/popup/getLatestPopUp",method:.get, modelType: LXHomePopoverMainModel.self) { resultObject in
+            let aaaaaa = resultObject as! LXHomePopoverMainModel
+            PTNSLogConsole("\(aaaaaa.msg?.image ?? "")")
+        } fail: { error in
+            
+        }
+
+
         return true
     }
     
