@@ -216,8 +216,10 @@ public func PTNSLog(_ msg: Any...,
         }
         
 #if POOTOOLS_DEBUG
-        if LocalConsole.shared.isVisiable {
-            LocalConsole.shared.print(prefix)
+        PTGCDManager.gcdMain {
+            if LocalConsole.shared.isVisiable {
+                LocalConsole.shared.print(prefix)
+            }
         }
 #endif
     }
