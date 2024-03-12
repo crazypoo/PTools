@@ -98,7 +98,7 @@ public typealias PTCollectionViewScrollHandler = (_ collectionView:UICollectionV
 public typealias PTCollectionViewSwipeHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> [SwipeAction]
 #endif
 
-public typealias PTCollectionViewCanSwipeHandler = (_ indexPath:IndexPath) -> Bool
+public typealias PTCollectionViewCanSwipeHandler = (_ sectionModel:PTSection,_ indexPath:IndexPath) -> Bool
 
 public typealias PTDecorationInCollectionHandler = (_ index:Int,_ sectionModel:PTSection) -> [NSCollectionLayoutDecorationItem]
 
@@ -797,7 +797,7 @@ extension PTCollectionView:UICollectionViewDelegate,UICollectionViewDataSource,U
 #if POOTOOLS_SWIPECELL
             if let swipeCell = cell as? SwipeCollectionViewCell {
                 if indexPathSwipe != nil {
-                    let swipe = indexPathSwipe!(indexPath)
+                    let swipe = indexPathSwipe!(itemSec,indexPath)
                     if swipe {
                         swipeCell.delegate = self
                     } else {
@@ -1054,7 +1054,8 @@ extension PTCollectionView:SwipeCollectionViewCellDelegate {
             return []
         } else {
             if indexPathSwipeRight != nil {
-                let swipeRight = indexPathSwipeRight!(indexPath)
+                let itemSec = mSections[indexPath.section]
+                let swipeRight = indexPathSwipeRight!(itemSec,indexPath)
                 if swipeRight {
                     if swipeRightHandler != nil {
                         let itemSec = mSections[indexPath.section]
