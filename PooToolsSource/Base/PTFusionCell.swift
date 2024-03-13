@@ -784,7 +784,7 @@ public class PTFusionCellContent:UIView {
         lineView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             make.bottom.equalToSuperview()
-            make.height.equalTo(1)
+            make.height.equalTo(cellModel!.bottomLineHeight)
             switch cellType {
             case .Switch(type: .BothImage(type: .Name)),
                     .Switch(type: .BothImage(type: .NameContent)),
@@ -831,7 +831,7 @@ public class PTFusionCellContent:UIView {
         topLineView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             make.top.equalToSuperview()
-            make.height.equalTo(1)
+            make.height.equalTo(cellModel!.topLineHeight)
             make.left.equalTo(self.lineView)
         }
     }

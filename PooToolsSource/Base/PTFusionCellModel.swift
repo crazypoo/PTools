@@ -97,4 +97,8 @@ open class PTFusionCellModel: NSObject {
     open var moreDisclosureIndicator :Any? = "▶️".emojiToImage(emojiFont: .appfont(size: 14))
     ///iCloudDocument地址
     open var iCloudDocument:String = ""
+    ///TopLineHeight
+    open var topLineHeight:CGFloat = 1
+    ///BottomLineHeight
+    open var bottomLineHeight:CGFloat = 1
 }
