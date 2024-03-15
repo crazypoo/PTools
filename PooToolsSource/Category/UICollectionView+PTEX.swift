@@ -252,6 +252,29 @@ public extension UICollectionView {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
         
+        var groupH:CGFloat = contentTopAndBottom + itemHeight
+        
+        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,contentTopAndBottom: contentTopAndBottom,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemFont: itemFont,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems in
+            groupH = groupHeight
+            customers = customerItems
+        })
+        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupH))
+        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
+            customers
+        })
+    }
+    
+    @objc class func tagShowLayoutHeight(data:[String],
+                                         screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
+                                         itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
+                                         itemHeight:CGFloat = 32,
+                                         contentTopAndBottom:CGFloat = 10,
+                                         itemLeadingSpace:CGFloat = 10,
+                                         itemTrailingSpace:CGFloat = 10,
+                                         itemFont:UIFont = .appfont(size: 14),
+                                         itemContentSpace:CGFloat = 20,
+                                         handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
+        var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupWidth:CGFloat = itemOriginalX
         var groupHeight:CGFloat = contentTopAndBottom + itemHeight
         data.enumerated().forEach { (index,value) in
@@ -270,10 +293,7 @@ public extension UICollectionView {
             }
             customers.append(customItem)
         }
-        bannerGroupSize = NSCollectionLayoutSize.init(widthDimension: NSCollectionLayoutDimension.absolute(screenWidth), heightDimension: NSCollectionLayoutDimension.absolute(groupHeight))
-        return NSCollectionLayoutGroup.custom(layoutSize: bannerGroupSize, itemProvider: { layoutEnvironment in
-            customers
-        })
+        handle(groupHeight,customers)
     }
     
     //MARK: 設置CollectionView的Horizontallayout
