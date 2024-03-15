@@ -68,11 +68,12 @@ open class PTAppWindowsDelegate: PTAppDelegate {
     
 #if POOTOOLS_ROUTER
     public func registerRouter(PrifxArray:[String]? = [".Jax"]) {
+        PTRouterManager.loadRouterClass(excludeCocoapods: true, useCache: true)
         PTRouter.lazyRegisterRouterHandle { url ,userInfo in
             PTRouter.injectRouterServiceConfig(webRouterUrl, serivceHost)
-            return PTRouterManager.addGloableRouter(PrifxArray!, url, userInfo)
+            return PTRouterManager.addGloableRouter(true, url, userInfo,forceCheckEnable: true)
         }
-        PTRouterManager.registerServices()
+        PTRouterManager.registerServices(excludeCocoapods: true)
         PTRouter.logcat { url, logType, errorMsg in
             PTNSLogConsole("PTRouter: logMsg- \(url) \(logType.rawValue) \(errorMsg)",levelType: .Notice,loggerType: .Router)
         }

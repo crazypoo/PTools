@@ -14,13 +14,21 @@ public let NSKVONotifyingPrefix = "KVONotifying_"
 
 /// 神策动态类
 public let kSADelegateClassSensorsSuffix = "_CN.SENSORSDATA"
+/// 排除苹果系统类
+public let kSAppleSuffix = "com.apple"
+
+/// 排除cocoaPods相关库
+public let kSCocoaPodsSuffix = "org.cocoapods"
 
 public class PTRouterManager: NSObject {
     
     static public let shareInstance = PTRouterManager()
     
     // MARK: - 注册路由
-    public static func addGloableRouter(_ registerClassPrifxArray: [String], _ urlPath: String, _ userInfo: [String: Any]) -> Any? {
+    public static func addGloableRouter(_ excludeCocoapods: Bool = false,
+                                        _ urlPath: String,
+                                        _ userInfo: [String: Any],
+                                        forceCheckEnable: Bool = false) -> Any? {
         
         PTRouter.globalOpenFailedHandler { (info) in
             guard let matchFailedKey = info[PTRouter.matchFailedKey] as? String else { return }
@@ -28,7 +36,7 @@ public class PTRouterManager: NSObject {
             PTRouter.shareInstance.logcat?("PTRouter: globalOpenFailedHandler", .logError, "\(matchFailedKey)")
         }
         
-        return PTRouterManager.registerRouterMap(registerClassPrifxArray, urlPath, userInfo)
+        return PTRouterManager.registerRouterMap(excludeCocoapods, urlPath, userInfo,forceCheckEnable: forceCheckEnable)
     }
     
     // MARK: -注册web与服务调用
@@ -43,14 +51,15 @@ extension PTRouterManager {
     static var apiArray = [String]()
     static var classMapArray = [String]()
     static var registerRouterList: Array = [[String: String]]()
-    
+
     // MARK: - 自动注册路由
-    public class func registerRouterMap(_ registerClassPrifxArray: [String],
+    public class func registerRouterMap(_ excludeCocoapods: Bool = false,
                                         _ urlPath: String,
-                                        _ userInfo: [String: Any]) -> Any? {
+                                        _ userInfo: [String: Any],
+                                        forceCheckEnable: Bool = false) -> Any? {
         let beginRegisterTime = CFAbsoluteTimeGetCurrent()
         if registerRouterList.isEmpty {
-            registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
+            registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
         }
         for item in registerRouterList {
             var priority: UInt32 = 0
@@ -63,14 +72,14 @@ extension PTRouterManager {
         PTRouter.shareInstance.logcat?("注册路由耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
         PTRouter.routerLoadStatus(true)
 #if DEBUG
-        routerForceRecheck(registerClassPrifxArray)
+        routerForceRecheck(excludeCocoapods)
 #endif
         return PTRouter.openURL(urlPath, userInfo: userInfo)
     }
     
     // MARK: - 客户端强制校验，是否匹配
-    public static func routerForceRecheck(_ registerClassPrifxArray: [String]) {
-        PTRouterManager.runtimeRouterList(registerClassPrifxArray)
+    public static func routerForceRecheck(_ excludeCocoapods: Bool = false) {
+        PTRouterManager.runtimeRouterList(excludeCocoapods)
         let paths = registerRouterList.compactMap { $0[PTRouterPath] }
         let patternArray = Set(paths)
         let apiPathArray = Set(apiArray)
@@ -87,20 +96,39 @@ extension PTRouterManager {
         assert(diffClassesArray.count == 0, "classes 拼写错误，请确认差集中的class是否匹配")
     }
     
-    class func runtimeRouterList(_ registerClassPrifxArray: [String]) {
+    class func runtimeRouterList(_ excludeCocoapods: Bool = false) {
         
-        let expectedClassCount = objc_getClassList(nil, 0)
-        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
-        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
-        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
-        
-        for i in 0 ..< actualClassCount {
+        let bundles = CFBundleGetAllBundles() as? [CFBundle]
+        for bundle in bundles ?? [] {
+            let identifier = CFBundleGetIdentifier(bundle);
             
-            let currentClass: AnyClass = allClasses[Int(i)]
-            let fullClassName: String = NSStringFromClass(currentClass.self)
+            if let id = identifier as? String {
+                if excludeCocoapods {
+                    if  id.hasPrefix(kSAppleSuffix) || id.hasPrefix(kSCocoaPodsSuffix) {
+                        continue
+                    }
+                } else {
+                    if  id.hasPrefix(kSAppleSuffix) {
+                        continue
+                    }
+                }
+            }
             
-            for value in registerClassPrifxArray {
-                if (fullClassName.containsSubString(substring: value))  {
+            guard let execURL = CFBundleCopyExecutableURL(bundle) as NSURL? else { continue }
+            let imageURL = execURL.fileSystemRepresentation
+            let classCount = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+            guard let classNames = objc_copyClassNamesForImage(imageURL, classCount) else {
+                continue
+            }
+            
+            for idx in 0..<classCount.pointee {
+                let currentClassName = String(cString: classNames[Int(idx)])
+                guard let currentClass = NSClassFromString(currentClassName) else {
+                    continue
+                }
+                
+                if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
+                   class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil  {
                     if let clss = currentClass as? CustomRouterInfo.Type {
                         apiArray.append(clss.patternString)
                         classMapArray.append(clss.routerClass)
@@ -110,11 +138,11 @@ extension PTRouterManager {
         }
     }
 
-    public class func loadRouterClass(_ registerClassPrifxArray: [String],
+    public class func loadRouterClass(excludeCocoapods: Bool = false,
                                       useCache: Bool = false) {
         
         if PTRouterDebugTool.checkTracing() || !useCache {
-            registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
+            registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
         } else {
             let cachePath = fetchCurrentVersionRouterCachePath()
             let fileExists = FileManager.pt.judgeFileOrFolderExists(filePath: cachePath)
@@ -126,7 +154,7 @@ extension PTRouterManager {
             if useCache && fileExists && !cacheData.isEmpty {
                 registerRouterList = cacheData
             } else {
-                registerRouterList = fetchRouterRegisterClass(registerClassPrifxArray)
+                registerRouterList = fetchRouterRegisterClass(excludeCocoapods)
             }
         }
     }
@@ -159,27 +187,48 @@ extension PTRouterManager {
 
 
     // MARK: - 提前获取工程中符合路由注册条件的类
-    public class func fetchRouterRegisterClass(_ registerClassPrifxArray: [String],
+    public class func fetchRouterRegisterClass(_ excludeCocoapods: Bool = false,
                                                _ localCache: Bool = false) -> [[String: String]] {
-        var registerRouterList: Array = [[String: String]]()
-        
-        let expectedClassCount = objc_getClassList(nil, 0)
-        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
-        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
-        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
+        let beginRegisterTime = CFAbsoluteTimeGetCurrent()
         
         var resultXLClass = [AnyClass]()
-        for i in 0 ..< actualClassCount {
+        
+        let bundles = CFBundleGetAllBundles() as? [CFBundle]
+        for bundle in bundles ?? [] {
+            let identifier = CFBundleGetIdentifier(bundle);
             
-            let currentClass: AnyClass = allClasses[Int(i)]
-            let fullClassName: String = NSStringFromClass(currentClass.self)
+            if let id = identifier as? String {
+                if excludeCocoapods {
+                    if  id.hasPrefix(kSAppleSuffix) || id.hasPrefix(kSCocoaPodsSuffix) {
+                        continue
+                    }
+                } else {
+                    if  id.hasPrefix(kSAppleSuffix) {
+                        continue
+                    }
+                }
+            }
             
-            for value in registerClassPrifxArray {
-                if (fullClassName.containsSubString(substring: value))  {
-                    if (class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil),
-                       (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil), let cls =  currentClass as? UIViewController.Type {
+            guard let execURL = CFBundleCopyExecutableURL(bundle) as NSURL? else { continue }
+            let imageURL = execURL.fileSystemRepresentation
+            let classCount = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+            guard let classNames = objc_copyClassNamesForImage(imageURL, classCount) else {
+                continue
+            }
+            
+            
+            for idx in 0..<classCount.pointee {
+                let currentClassName = String(cString: classNames[Int(idx)])
+                guard let currentClass = NSClassFromString(currentClassName) else {
+                    continue
+                }
+                
+                if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
+                   class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil {
+                    if let cls =  currentClass as? UIViewController.Type {
                         resultXLClass.append(cls)
                     }
+                    
 #if DEBUG
                     if let clss = currentClass as? CustomRouterInfo.Type {
                         apiArray.append(clss.patternString)
@@ -190,16 +239,16 @@ extension PTRouterManager {
             }
         }
         
+        
         for i in 0 ..< resultXLClass.count {
             let currentClass: AnyClass = resultXLClass[i]
             if let cls = currentClass as? PTRouterable.Type {
                 let fullName: String = NSStringFromClass(currentClass.self)
+                if fullName.contains(kSADelegateClassSensorsSuffix)  {
+                    break
+                }
                 
                 for s in 0 ..< cls.patternString.count {
-                    
-                    if fullName.contains(kSADelegateClassSensorsSuffix)  {
-                        break
-                    }
                     
                     if fullName.contains(NSKVONotifyingPrefix) {
                         let range = fullName.index(fullName.startIndex, offsetBy: NSKVONotifyingPrefix.count)..<fullName.endIndex
@@ -211,32 +260,73 @@ extension PTRouterManager {
                 }
             }
         }
-        
+        let endRegisterTime = CFAbsoluteTimeGetCurrent()
+        PTRouter.shareInstance.logcat?("提前获取工程中符合路由注册条件的类耗时：\(endRegisterTime - beginRegisterTime)", .logNormal, "")
         writeRouterMapToFile(mapArray: registerRouterList)
         return registerRouterList
+
     }
 
     
     // MARK: - 自动注册服务
-    public class func registerServices() {
+    public class func registerServices(excludeCocoapods: Bool = false) {
         
-        let expectedClassCount = objc_getClassList(nil, 0)
-        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
-        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
-        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
-        var resultXLClass = [AnyClass]()
-        for i in 0 ..< actualClassCount {
+//        let expectedClassCount = objc_getClassList(nil, 0)
+//        let allClasses = UnsafeMutablePointer<AnyClass>.allocate(capacity: Int(expectedClassCount))
+//        let autoreleasingAllClasses = AutoreleasingUnsafeMutablePointer<AnyClass>(allClasses)
+//        let actualClassCount: Int32 = objc_getClassList(autoreleasingAllClasses, expectedClassCount)
+//        var resultXLClass = [AnyClass]()
+//        for i in 0 ..< actualClassCount {
+//            
+//            let currentClass: AnyClass = allClasses[Int(i)]
+//            if (class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil),
+//               (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil),
+//               let cls = currentClass as? PTRouterServiceProtocol.Type {
+//                PTNSLogConsole(currentClass)
+//                resultXLClass.append(cls)
+//                
+//                PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+//            }
+//        }
+        let beginRegisterTime = CFAbsoluteTimeGetCurrent()
+        let bundles = CFBundleGetAllBundles() as? [CFBundle]
+        for bundle in bundles ?? [] {
+            let identifier = CFBundleGetIdentifier(bundle);
             
-            let currentClass: AnyClass = allClasses[Int(i)]
-            if (class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil),
-               (class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil),
-               let cls = currentClass as? PTRouterServiceProtocol.Type {
-                PTNSLogConsole(currentClass)
-                resultXLClass.append(cls)
-                
-                PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+            if let id = identifier as? String {
+                if excludeCocoapods {
+                    if  id.hasPrefix(kSAppleSuffix) || id.hasPrefix(kSCocoaPodsSuffix) {
+                        continue
+                    }
+                } else {
+                    if  id.hasPrefix(kSAppleSuffix) {
+                        continue
+                    }
+                }
+            }
+            
+            guard let execURL = CFBundleCopyExecutableURL(bundle) as NSURL? else { continue }
+            let imageURL = execURL.fileSystemRepresentation
+            let classCount = UnsafeMutablePointer<UInt32>.allocate(capacity: MemoryLayout<UInt32>.stride)
+            guard let classNames = objc_copyClassNamesForImage(imageURL, classCount) else {
+                continue
+            }
+            
+            for idx in 0..<classCount.pointee {
+                let currentClassName = String(cString: classNames[Int(idx)])
+                guard let currentClass = NSClassFromString(currentClassName) else {
+                    continue
+                }
+                if class_getInstanceMethod(currentClass, NSSelectorFromString("methodSignatureForSelector:")) != nil,
+                   class_getInstanceMethod(currentClass, NSSelectorFromString("doesNotRecognizeSelector:")) != nil,
+                   let cls = currentClass as? PTRouterServiceProtocol.Type {
+                    PTRouterServiceManager.default.registerService(named: cls.seriverName, lazyCreator: (cls as! NSObject.Type).init())
+                }
             }
         }
+        
+        let endRegisterTime = CFAbsoluteTimeGetCurrent()
+        PTNSLogConsole("服务注册耗时：\(endRegisterTime - beginRegisterTime)")
     }
     
     // MARK: - 重定向、剔除、新增、重置路由
