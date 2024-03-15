@@ -142,6 +142,7 @@
 		553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */; };
 		553065252B971B6800BFB4EA /* PTSheetEXCombos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */; };
 		553065272B971B9300BFB4EA /* PTSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */; };
+		553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */; };
 		553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */; };
 		55483A202B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */; };
 		554929ED28F9089D00C82ABF /* PTPermissionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 554929E928F9089D00C82ABF /* PTPermissionModel.swift */; };
@@ -637,6 +638,7 @@
 		553065222B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTInitialTouchPanGestureRecognizer.swift; sourceTree = "<group>"; };
 		553065242B971B6800BFB4EA /* PTSheetEXCombos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetEXCombos.swift; sourceTree = "<group>"; };
 		553065262B971B9300BFB4EA /* PTSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSheetContentViewController.swift; sourceTree = "<group>"; };
+		553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		553995F12B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTUserDefaultKeysAndValues.swift; sourceTree = "<group>"; };
 		553E36482AC3385E00F7C418 /* WoodPeckeriOS.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = WoodPeckeriOS.xcframework; path = Pods/WoodPeckeriOS/WoodPeckeriOS.xcframework; sourceTree = "<group>"; };
 		55483A1F2B17D57900D2FDA9 /* PTMediaColorSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMediaColorSelectViewController.swift; sourceTree = "<group>"; };
@@ -2431,6 +2433,7 @@
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
 				55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */,
 				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
+				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2536,6 +2539,7 @@
 				55FA6CBD2B0285FD00BC464B /* icon_cycle_selected@3x.png in Resources */,
 				231D14D1272CDD19003D6F62 /* PooTools.podspec in Resources */,
 				55102AAF2AFFAB5900E9529D /* icon_permission_health.png in Resources */,
+				553347B72BA4146D0086E1B4 /* PrivacyInfo.xcprivacy in Resources */,
 				55E96E312B0D0FBE00AB8ADE /* icon_placeholder.png in Resources */,
 				55102AB02AFFAB5900E9529D /* icon_permission_tracking.png in Resources */,
 				55102ABA2AFFAB5900E9529D /* icon_permission_contact.png in Resources */,
