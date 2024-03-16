@@ -910,23 +910,23 @@ open class PTFusionCell: PTBaseNormalCell {
     }
     
     //MARK: 需要在cellModel配置了之後設置
-    open var hideTopLine:Bool! {
+    open var hideTopLine:Bool! = true {
         didSet {
             if cellModel == nil {
                 dataContent.topLineView.isHidden = true
                 dataContent.topImaginaryLineView.isHidden = true
             } else {
-                switch cellModel?.haveLine {
+                switch cellModel!.haveTopLine {
                 case .Normal:
-                    dataContent.topLineView.isHidden = !hideTopLine
+                    dataContent.topLineView.isHidden = hideTopLine
                     dataContent.topImaginaryLineView.isHidden = true
                 case .Imaginary:
                     dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = !hideTopLine
+                    dataContent.topImaginaryLineView.isHidden = hideTopLine
                 case .NO:
                     dataContent.topLineView.isHidden = true
                     dataContent.topImaginaryLineView.isHidden = true
-                case nil:
+                default:
                     dataContent.topLineView.isHidden = true
                     dataContent.topImaginaryLineView.isHidden = true
                 }
@@ -934,23 +934,23 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
     
-    open var hideBottomLine:Bool! {
+    open var hideBottomLine:Bool! = true {
         didSet {
             if cellModel == nil {
                 dataContent.lineView.isHidden = true
                 dataContent.imaginaryLineView.isHidden = true
             } else {
-                switch cellModel?.haveLine {
+                switch cellModel!.haveLine {
                 case .Normal:
-                    dataContent.lineView.isHidden = !hideTopLine
+                    dataContent.lineView.isHidden = hideBottomLine
                     dataContent.imaginaryLineView.isHidden = true
                 case .Imaginary:
                     dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = !hideTopLine
+                    dataContent.imaginaryLineView.isHidden = hideBottomLine
                 case .NO:
                     dataContent.lineView.isHidden = true
                     dataContent.imaginaryLineView.isHidden = true
-                case nil:
+                default:
                     dataContent.lineView.isHidden = true
                     dataContent.imaginaryLineView.isHidden = true
                 }
@@ -1012,17 +1012,17 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
                 dataContent.topLineView.isHidden = true
                 dataContent.topImaginaryLineView.isHidden = true
             } else {
-                switch cellModel?.haveLine {
+                switch cellModel!.haveLine {
                 case .Normal:
-                    dataContent.topLineView.isHidden = !hideTopLine
+                    dataContent.topLineView.isHidden = hideTopLine
                     dataContent.topImaginaryLineView.isHidden = true
                 case .Imaginary:
                     dataContent.topLineView.isHidden = true
-                    dataContent.topImaginaryLineView.isHidden = !hideTopLine
+                    dataContent.topImaginaryLineView.isHidden = hideTopLine
                 case .NO:
                     dataContent.topLineView.isHidden = true
                     dataContent.topImaginaryLineView.isHidden = true
-                case nil:
+                default:
                     dataContent.topLineView.isHidden = true
                     dataContent.topImaginaryLineView.isHidden = true
                 }
@@ -1036,17 +1036,17 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
                 dataContent.lineView.isHidden = true
                 dataContent.imaginaryLineView.isHidden = true
             } else {
-                switch cellModel?.haveLine {
+                switch cellModel!.haveLine {
                 case .Normal:
-                    dataContent.lineView.isHidden = !hideTopLine
+                    dataContent.lineView.isHidden = hideBottomLine
                     dataContent.imaginaryLineView.isHidden = true
                 case .Imaginary:
                     dataContent.lineView.isHidden = true
-                    dataContent.imaginaryLineView.isHidden = !hideTopLine
+                    dataContent.imaginaryLineView.isHidden = hideBottomLine
                 case .NO:
                     dataContent.lineView.isHidden = true
                     dataContent.imaginaryLineView.isHidden = true
-                case nil:
+                default:
                     dataContent.lineView.isHidden = true
                     dataContent.imaginaryLineView.isHidden = true
                 }
