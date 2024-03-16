@@ -217,7 +217,8 @@ public class PTLaunchAdMonitor: NSObject {
                     make.left.top.right.equalToSuperview()
                     make.bottom.equalToSuperview().inset(bottomViewHeight!)
                 }
-                imageBtn.imageView?.contentMode = .scaleAspectFit
+                imageBtn.imageView?.clipsToBounds = true
+                imageBtn.imageView?.contentMode = .scaleAspectFill
                 imageBtn.adjustsImageWhenHighlighted = false
             }
             
