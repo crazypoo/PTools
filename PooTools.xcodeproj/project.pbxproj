@@ -2084,6 +2084,7 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */,
@@ -2433,7 +2434,6 @@
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
 				55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */,
 				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
-				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
