@@ -309,8 +309,13 @@ public extension UIView {
                             colors:[UIColor],
                             radius:CGFloat? = 0,
                             borderWidth:CGFloat? = 0,
-                            borderColor:UIColor? = UIColor.clear) {
+                            borderColor:UIColor? = UIColor.clear,
+                            corner:UIRectCorner = .allCorners) {
         PTGCDManager.gcdMain {
+            let maskPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius!, height: radius!))
+            let shapeLayer = CAShapeLayer()
+            shapeLayer.path = maskPath.cgPath
+
             self.backgroundColor = .clear
             let maskLayer = CAGradientLayer()
             
@@ -335,7 +340,7 @@ public extension UIView {
                 maskLayer.endPoint = CGPoint.init(x: 0, y: 0)
             }
             maskLayer.frame = self.bounds
-            maskLayer.cornerRadius = radius!
+            maskLayer.mask = shapeLayer
             maskLayer.masksToBounds = true
             maskLayer.borderWidth = borderWidth!
             maskLayer.borderColor = borderColor!.cgColor
