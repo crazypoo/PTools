@@ -16,6 +16,12 @@ import AttributedString
     case NoneAccessoryView
 }
 
+@objc public enum PTFusionLineType:Int {
+    case Normal
+    case Imaginary
+    case NO
+}
+
 @objcMembers
 open class PTFusionCellModel: NSObject {
     ///图片名
@@ -45,9 +51,9 @@ open class PTFusionCellModel: NSObject {
     ///AccessoryView类型
     open var accessoryType:PTFusionShowAccessoryType = .NoneAccessoryView
     ///是否有线
-    open var haveLine:Bool = false
+    open var haveLine:PTFusionLineType = .NO
     ///顶部线
-    open var haveTopLine:Bool = false
+    open var haveTopLine:PTFusionLineType = .NO
     ///字体
     open var cellFont:UIFont = .appfont(size: 16)
     ///Desc字体
@@ -101,4 +107,8 @@ open class PTFusionCellModel: NSObject {
     open var topLineHeight:CGFloat = 1
     ///BottomLineHeight
     open var bottomLineHeight:CGFloat = 1
+    ///TopLineColor
+    open var topLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
+    ///BottomLineColor
+    open var bottomLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
 }

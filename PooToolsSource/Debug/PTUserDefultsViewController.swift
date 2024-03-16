@@ -132,8 +132,8 @@ class PTUserDefultsViewController: PTBaseViewController {
             let model = PTFusionCellModel()
             model.name = value.keys.first!
             model.desc = String(format: "%@", value.values.first as! CVarArg)
-            model.haveLine = true
-            model.haveTopLine = false
+            model.haveLine = .Normal
+            model.haveTopLine = .NO
             model.accessoryType = .DisclosureIndicator
             model.disclosureIndicatorImage = "➡️".emojiToImage(emojiFont: .appfont(size: 14))
             userdefultArrs.append(model)

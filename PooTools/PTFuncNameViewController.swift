@@ -119,7 +119,7 @@ class PTFuncNameViewController: PTBaseViewController {
     func rowBaseModel(name:String) -> PTFusionCellModel {
         let models = PTFusionCellModel()
         models.name = name
-        models.haveLine = true
+        models.haveLine = .Normal
         models.accessoryType = .DisclosureIndicator
         models.disclosureIndicatorImage = "▶️".emojiToImage(emojiFont: .appfont(size: 12))
         return models

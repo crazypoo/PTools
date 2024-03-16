@@ -236,8 +236,27 @@ public class PTFusionCellContent:UIView {
         return view
     }()
         
-    public lazy var topLineView = drawLine()
-    public lazy var lineView = drawLine()
+    public lazy var topLineView:UIView = {
+        let view = drawLine()
+        view.backgroundColor = self.cellModel!.topLineColor
+        return view
+    }()
+    public lazy var lineView:UIView = {
+        let view = drawLine()
+        view.backgroundColor = self.cellModel!.bottomLineColor
+        return view
+    }()
+    
+    public lazy var topImaginaryLineView:PTImaginaryLineView = {
+        let view = PTImaginaryLineView()
+        view.lineColor = self.cellModel!.topLineColor
+        return view
+    }()
+    public lazy var imaginaryLineView:PTImaginaryLineView = {
+        let view = PTImaginaryLineView()
+        view.lineColor = self.cellModel!.bottomLineColor
+        return view
+    }()
     
     fileprivate lazy var cellContentIcon:UIImageView = {
         let view = UIImageView()
@@ -777,10 +796,22 @@ public class PTFusionCellContent:UIView {
     
     //MARK: 设置上下线
     func setLine(cellType:PTFusionCellAccessoryView) {
-        lineView.isHidden = !cellModel!.haveLine
-        topLineView.isHidden = !cellModel!.haveTopLine
+        switch cellModel?.haveLine {
+        case .Normal:
+            lineView.isHidden = false
+            imaginaryLineView.isHidden = true
+        case .Imaginary:
+            lineView.isHidden = true
+            imaginaryLineView.isHidden = false
+        case .NO:
+            lineView.isHidden = true
+            imaginaryLineView.isHidden = true
+        default:
+            lineView.isHidden = true
+            imaginaryLineView.isHidden = true
+        }
         
-        addSubviews([lineView, topLineView])
+        addSubviews([lineView, topLineView,imaginaryLineView,topImaginaryLineView])
         lineView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             make.bottom.equalToSuperview()
@@ -828,11 +859,19 @@ public class PTFusionCellContent:UIView {
             }
         }
         
+        imaginaryLineView.snp.makeConstraints { make in
+            make.edges.equalTo(self.lineView)
+        }
+        
         topLineView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
             make.top.equalToSuperview()
             make.height.equalTo(cellModel!.topLineHeight)
             make.left.equalTo(self.lineView)
+        }
+        
+        topImaginaryLineView.snp.makeConstraints { make in
+            make.edges.equalTo(self.topLineView)
         }
     }
 }
@@ -855,15 +894,52 @@ open class PTFusionCell: PTBaseNormalCell {
         }
     }
     
+    //MARK: 需要在cellModel配置了之後設置
     open var hideTopLine:Bool! {
         didSet {
-            dataContent.topLineView.isHidden = hideTopLine
+            if cellModel == nil {
+                dataContent.topLineView.isHidden = true
+                dataContent.topImaginaryLineView.isHidden = true
+            } else {
+                switch cellModel?.haveLine {
+                case .Normal:
+                    dataContent.topLineView.isHidden = !hideTopLine
+                    dataContent.topImaginaryLineView.isHidden = true
+                case .Imaginary:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = !hideTopLine
+                case .NO:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = true
+                case nil:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = true
+                }
+            }
         }
     }
     
     open var hideBottomLine:Bool! {
         didSet {
-            dataContent.lineView.isHidden = hideBottomLine
+            if cellModel == nil {
+                dataContent.lineView.isHidden = true
+                dataContent.imaginaryLineView.isHidden = true
+            } else {
+                switch cellModel?.haveLine {
+                case .Normal:
+                    dataContent.lineView.isHidden = !hideTopLine
+                    dataContent.imaginaryLineView.isHidden = true
+                case .Imaginary:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = !hideTopLine
+                case .NO:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = true
+                case nil:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = true
+                }
+            }
         }
     }
     
@@ -917,13 +993,49 @@ open class PTFusionSwipeCell: PTBaseSwipeCell {
     
     open var hideTopLine:Bool! {
         didSet {
-            self.dataContent.topLineView.isHidden = self.hideTopLine
+            if cellModel == nil {
+                dataContent.topLineView.isHidden = true
+                dataContent.topImaginaryLineView.isHidden = true
+            } else {
+                switch cellModel?.haveLine {
+                case .Normal:
+                    dataContent.topLineView.isHidden = !hideTopLine
+                    dataContent.topImaginaryLineView.isHidden = true
+                case .Imaginary:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = !hideTopLine
+                case .NO:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = true
+                case nil:
+                    dataContent.topLineView.isHidden = true
+                    dataContent.topImaginaryLineView.isHidden = true
+                }
+            }
         }
     }
     
     open var hideBottomLine:Bool! {
         didSet {
-            self.dataContent.lineView.isHidden = self.hideBottomLine
+            if cellModel == nil {
+                dataContent.lineView.isHidden = true
+                dataContent.imaginaryLineView.isHidden = true
+            } else {
+                switch cellModel?.haveLine {
+                case .Normal:
+                    dataContent.lineView.isHidden = !hideTopLine
+                    dataContent.imaginaryLineView.isHidden = true
+                case .Imaginary:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = !hideTopLine
+                case .NO:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = true
+                case nil:
+                    dataContent.lineView.isHidden = true
+                    dataContent.imaginaryLineView.isHidden = true
+                }
+            }
         }
     }
 
