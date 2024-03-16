@@ -811,6 +811,21 @@ public class PTFusionCellContent:UIView {
             imaginaryLineView.isHidden = true
         }
         
+        switch cellModel?.haveTopLine {
+        case .Normal:
+            topLineView.isHidden = false
+            topImaginaryLineView.isHidden = true
+        case .Imaginary:
+            topLineView.isHidden = true
+            topImaginaryLineView.isHidden = false
+        case .NO:
+            topLineView.isHidden = true
+            topImaginaryLineView.isHidden = true
+        default:
+            topLineView.isHidden = true
+            topImaginaryLineView.isHidden = true
+        }
+        
         addSubviews([lineView, topLineView,imaginaryLineView,topImaginaryLineView])
         lineView.snp.makeConstraints { make in
             make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
