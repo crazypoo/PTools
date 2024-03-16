@@ -350,6 +350,62 @@ public extension UIView {
         }
     }
     
+    //MARK: border的背景渐变
+    ///border的背景渐变
+    func borderGradient(type:Imagegradien,
+                        colors:[UIColor],
+                        radius:CGFloat? = 0,
+                        borderWidth:CGFloat = 1,
+                        corner:UIRectCorner = .allCorners) {
+        PTGCDManager.gcdMain {
+            var cgColorsss = [CGColor]()
+            colors.enumerated().forEach { (index,value) in
+                cgColorsss.append(value.cgColor)
+            }
+
+            let gradientLayer = CAGradientLayer()
+            gradientLayer.frame = self.bounds
+            gradientLayer.colors = cgColorsss
+            switch type {
+            case .LeftToRight:
+                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint.init(x: 1, y: 0)
+            case .TopToBottom:
+                gradientLayer.startPoint = CGPoint.init(x: 0, y: 0)
+                gradientLayer.endPoint = CGPoint.init(x: 0, y: 1)
+            case .RightToLeft:
+                gradientLayer.startPoint = CGPoint.init(x: 1, y: 0)
+                gradientLayer.endPoint = CGPoint.init(x: 0, y: 0)
+            case .BottomToTop:
+                gradientLayer.startPoint = CGPoint.init(x: 0, y: 1)
+                gradientLayer.endPoint = CGPoint.init(x: 0, y: 0)
+            }
+            
+            let borderShapeLayer = CAShapeLayer()
+            let borderPath = UIBezierPath.init(roundedRect: self.bounds, byRoundingCorners: corner, cornerRadii: CGSize.init(width: radius!, height: radius!))
+            borderShapeLayer.path = borderPath.cgPath
+            borderShapeLayer.fillColor = UIColor.clear.cgColor
+            borderShapeLayer.strokeColor = UIColor.black.cgColor
+            borderShapeLayer.lineWidth = borderWidth
+            gradientLayer.mask = borderShapeLayer
+
+            self.layer.insertSublayer(gradientLayer, at: 0)
+
+            let bgGradientLayer = CAGradientLayer()
+            bgGradientLayer.colors = [self.backgroundColor?.cgColor ?? UIColor.clear.cgColor]
+            bgGradientLayer.startPoint = CGPoint(x: 0, y: 0)
+            bgGradientLayer.endPoint = CGPoint(x: 1, y: 0)
+            bgGradientLayer.frame = self.bounds
+            
+            let bgShapeLayer = CAShapeLayer()
+            bgShapeLayer.path = borderPath.cgPath
+            bgGradientLayer.mask = bgShapeLayer
+            self.layer.insertSublayer(bgGradientLayer, at: 0)
+
+            self.setNeedsDisplay()
+        }
+    }
+    
     func isRolling()->Bool {
         if self is UIScrollView {
             let scrollView = self as! UIScrollView

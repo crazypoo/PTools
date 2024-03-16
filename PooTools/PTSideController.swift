@@ -23,7 +23,8 @@ class PTSideController: PTBaseSideController {
     
     lazy var sideButton:UIButton = {
         let view = UIButton(type: .custom)
-        view.backgroundColor = .randomColor
+//        view.backgroundColor = .systemGray
+        view.borderGradient(type: .LeftToRight, colors: [.systemRed,.systemBlue],radius: 20,borderWidth: 20,corner: [.bottomLeft,.bottomRight])
         view.addActionHandlers { sender in
             self.sideMenuController?.hideMenu(animated: true, completion: { finish in
                 if finish {
@@ -33,7 +34,7 @@ class PTSideController: PTBaseSideController {
                     button.backgroundColor = .systemGray
                     vc.view.addSubviews([button])
                     button.snp.makeConstraints { make in
-                        make.size.equalTo(100)
+                        make.size.equalTo(150)
                         make.centerX.centerY.equalToSuperview()
                     }
                     button.addActionHandlers { sender in
