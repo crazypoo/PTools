@@ -100,6 +100,7 @@ public class PTSheetContentViewController: PTBaseViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .clear
         self.setupContentView()
         self.setupChildContainerView()
         self.setupPullBarView()

@@ -289,7 +289,11 @@ public extension UICollectionView {
 
             groupWidth += (currentCellWidth + itemLeadingSpace)
             if index == (data.count - 1) {
-                groupHeight += contentTopAndBottom
+                if totalWidth > (screenWidth - itemOriginalX * 2) {
+                    groupHeight += (contentTopAndBottom)
+                } else {
+                    groupHeight += (contentTopAndBottom * 2 + itemHeight)
+                }
             }
             customers.append(customItem)
         }
