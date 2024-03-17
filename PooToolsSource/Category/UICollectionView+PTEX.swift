@@ -254,7 +254,7 @@ public extension UICollectionView {
         
         var groupH:CGFloat = contentTopAndBottom + itemHeight
         
-        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,contentTopAndBottom: contentTopAndBottom,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemFont: itemFont,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems in
+        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,contentTopAndBottom: contentTopAndBottom,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemFont: itemFont,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems,cloumNum in
             groupH = groupHeight
             customers = customerItems
         })
@@ -273,31 +273,42 @@ public extension UICollectionView {
                                          itemTrailingSpace:CGFloat = 10,
                                          itemFont:UIFont = .appfont(size: 14),
                                          itemContentSpace:CGFloat = 20,
-                                         handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem])->Void) {
+                                         handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem],_ cloumNum:Int)->Void) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
         var groupWidth:CGFloat = itemOriginalX
         var groupHeight:CGFloat = contentTopAndBottom + itemHeight
-        data.enumerated().forEach { (index,value) in
+        var cloumNum:Int = 1
+        for (index,value) in data.enumerated() {
             let currentCellWidth = UIView.sizeFor(string: value, font: itemFont,height: itemHeight).width + itemContentSpace
             let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
             if totalWidth > (screenWidth - itemOriginalX * 2) {
                 groupWidth = itemOriginalX
                 groupHeight += (itemTrailingSpace + itemHeight)
+                cloumNum += 1
             }
 
             let customItem = NSCollectionLayoutGroupCustomItem.init(frame: CGRect.init(x: groupWidth, y: (groupHeight - itemHeight), width: currentCellWidth, height: itemHeight), zIndex: 1000+index)
 
             groupWidth += (currentCellWidth + itemLeadingSpace)
-            if index == (data.count - 1) {
-                if totalWidth > (screenWidth - itemOriginalX * 2) {
-                    groupHeight += (contentTopAndBottom)
-                } else {
-                    groupHeight += (contentTopAndBottom * 2 + itemHeight)
-                }
-            }
             customers.append(customItem)
+            if index == (data.count - 1) {
+                if customers.last!.frame.origin.x < (screenWidth - itemOriginalX * 2) && customers.last!.frame.origin.x > itemOriginalX {
+                    groupHeight += (contentTopAndBottom)
+                    handle(groupHeight,customers,cloumNum)
+                    break
+                } else if customers.last!.frame.origin.x == itemOriginalX {
+                    groupHeight += (contentTopAndBottom + itemHeight + itemTrailingSpace)
+                    handle(groupHeight,customers,cloumNum)
+                    break
+                } else {
+                    groupHeight += (contentTopAndBottom)
+                    handle(groupHeight,customers,cloumNum)
+                    break
+                }
+            } else {
+                continue
+            }
         }
-        handle(groupHeight,customers)
     }
     
     //MARK: 設置CollectionView的Horizontallayout
