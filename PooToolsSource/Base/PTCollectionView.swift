@@ -132,6 +132,13 @@ public class PTCollectionViewConfig:NSObject {
 #if POOTOOLS_SCROLLREFRESH
     ///是否开启底部刷新
     open var footerRefresh:Bool = false
+    open var footerRefreshTextColor:UIColor = .white
+    open var footerRefreshTextFont:UIFont = .appfont(size: 14)
+    open var footerRefreshIdle:String = ""
+    open var footerRefreshPulling:String = "鬆開即可刷新"
+    open var footerRefreshRefreshing:String = "正在刷新中"
+    open var footerRefreshWillRefresh:String = "即將刷新"
+    open var footerRefreshNoMoreData:String = "已經全部加載完畢"
 #endif
     ///section偏移
     open var sectionEdges:NSDirectionalEdgeInsets = .zero
@@ -412,6 +419,13 @@ public class PTCollectionView: UIView {
                     self.footRefreshTask!()
                 }
             })
+            footerRefresh.setTitle(self.viewConfig.footerRefreshIdle, for: .idle)
+            footerRefresh.setTitle(self.viewConfig.footerRefreshPulling, for: .pulling)
+            footerRefresh.setTitle(self.viewConfig.footerRefreshRefreshing, for: .refreshing)
+            footerRefresh.setTitle(self.viewConfig.footerRefreshWillRefresh, for: .willRefresh)
+            footerRefresh.setTitle(self.viewConfig.footerRefreshNoMoreData, for: .noMoreData)
+            footerRefresh.stateLabel?.font = self.viewConfig.footerRefreshTextFont
+            footerRefresh.stateLabel?.textColor = self.viewConfig.footerRefreshTextColor
             footerRefresh.triggerAutomaticallyRefreshPercent = 0.5
             view.mj_footer = footerRefresh
         }
