@@ -48,9 +48,8 @@ public class PTLaunchAdMonitor: NSObject {
                              onView:Any,
                              timeInterval:TimeInterval,
                              param:NSDictionary?,
-                             year:String?,
                              skipFont:UIFont?,
-                             comName:String?,
+                             ltdString:String?,
                              comNameFont:UIFont,
                              callBack:PTActionTask?) {
         monitor.loadImageAtPath(path: path)
@@ -68,19 +67,18 @@ public class PTLaunchAdMonitor: NSObject {
         monitor.callBack = callBack
         
         var comLabel: Bool
-        if (year ?? "").stringIsEmpty() || (comName ?? "").stringIsEmpty() {
+        if (ltdString ?? "").stringIsEmpty() {
             comLabel = true
         } else {
             comLabel = false
         }
         
-        PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, year: year, comName: comName, dic: dic, comlabel: comLabel, comNameFont: comNameFont, skipFont: skipFont)
+        PTLaunchAdMonitor.showImageAt(onView: onView, timeInterval: timeInterval, ltdString: ltdString, dic: dic, comlabel: comLabel, comNameFont: comNameFont, skipFont: skipFont)
     }
     
     class func showImageAt(onView:Any,
                            timeInterval:TimeInterval,
-                           year:String?,
-                           comName:String?,
+                           ltdString:String?,
                            dic:Bool,
                            comlabel:Bool,
                            comNameFont:UIFont?,
@@ -257,7 +255,7 @@ public class PTLaunchAdMonitor: NSObject {
                 label.lineBreakMode = .byCharWrapping
                 label.font = comNameFont != nil ? comNameFont! : UIFont.systemFont(ofSize: 12)
                 label.textColor = .black
-                label.text = String.init(format:"Copyright (c) \("PT LA year".localized()) %@.\n All rights reserved.",year!,comName!)
+                label.text = ltdString
                 label.textAlignment = .center
                 v.addSubview(label)
                 label.snp.makeConstraints { make in
