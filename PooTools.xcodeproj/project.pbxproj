@@ -1518,14 +1518,9 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
-				55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */,
-				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
-				55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */,
-				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
-				55102ADF2AFFD3C100E9529D /* llplaceholder.png */,
-				55102ADD2AFFD39700E9529D /* lldotActive.png */,
-				55102ADE2AFFD39700E9529D /* lldotInActive.png */,
 				55102ADC2AFFD34900E9529D /* icon_clear.png */,
+				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
+				55FA6CBE2B02860D00BC464B /* icon_cycle_unselected@3x.png */,
 				55102AAB2AFFAB5800E9529D /* icon_permission_bluetooth.png */,
 				55102AA62AFFAB5800E9529D /* icon_permission_calendar.png */,
 				55102AA92AFFAB5800E9529D /* icon_permission_camera.png */,
@@ -1542,7 +1537,13 @@
 				55102AA22AFFAB5700E9529D /* icon_permission_siri.png */,
 				55102AA72AFFAB5800E9529D /* icon_permission_speech.png */,
 				55102AA02AFFAB5700E9529D /* icon_permission_tracking.png */,
+				55E96E302B0D0FBE00AB8ADE /* icon_placeholder.png */,
+				55102ADD2AFFD39700E9529D /* lldotActive.png */,
+				55102ADE2AFFD39700E9529D /* lldotInActive.png */,
+				55102ADF2AFFD3C100E9529D /* llplaceholder.png */,
 				55102AC82AFFB8A100E9529D /* Localizable.strings */,
+				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
+				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -2084,7 +2085,6 @@
 		55D59C5B28F3E6FB00B4FF76 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 				550CE4AE2AF233F40052539D /* OSSVoice.swift */,
 				231D15D7272CDEE9003D6F62 /* BorderManager.swift */,
 				558D5F042AAF8E4A00C02042 /* fix_UIKeyboardTaskQueue.m */,
