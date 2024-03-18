@@ -204,14 +204,16 @@ extension PTBaseViewController {
             navigationController?.popViewController(animated: true, completion)
         }
 #if POOTOOLS_DEBUG
-        SwizzleTool().swizzleDidAddSubview {
-            // Configure console window.
-            let lcm = LocalConsole.shared
-            if lcm.isVisiable {
-                if lcm.maskView != nil {
-                    PTUtils.fetchWindow()!.bringSubviewToFront(lcm.maskView!)
+        if UIApplication.shared.inferredEnvironment != .appStore {
+            SwizzleTool().swizzleDidAddSubview {
+                // Configure console window.
+                let lcm = LocalConsole.shared
+                if lcm.isVisiable {
+                    if lcm.maskView != nil {
+                        PTUtils.fetchWindow()!.bringSubviewToFront(lcm.maskView!)
+                    }
+                    PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
                 }
-                PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
             }
         }
 #endif
