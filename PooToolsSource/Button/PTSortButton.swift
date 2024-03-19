@@ -8,6 +8,7 @@
 
 import UIKit
 import SwifterSwift
+import SnapKit
 
 @objc public enum PTSortButtonType:Int {
     case Normal
@@ -129,7 +130,9 @@ public class PTSortButton: UIView {
         let view = UILabel()
         view.font = buttonTitleFont
         view.textAlignment = .center
+        view.numberOfLines = 0
         view.textColor = buttonTitleNormalColor
+        view.text = buttonTitle
         return view
     }()
     
@@ -171,9 +174,26 @@ public class PTSortButton: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public override func layoutSubviews() {
+        super.layoutSubviews()
+        titleLabel.text = buttonTitle
+    }
+    
     public override func draw(_ rect: CGRect) {
-        titleLabel.frame = CGRectMake(0, 0, rect.size.width - 10, rect.size.height)
-        upImage.frame = CGRect(x: CGRectGetMaxX(titleLabel.frame) + 2, y: titleLabel.pt.jx_centerY - 6, width: 6, height: 4)
-        downImage.frame = CGRect(x: CGRectGetMaxX(titleLabel.frame) + 2, y: titleLabel.pt.jx_centerY + 2, width: 6, height: 4)
+        titleLabel.snp.makeConstraints { make in
+            make.left.equalToSuperview().inset(2.5)
+            make.top.bottom.equalToSuperview()
+            make.right.equalToSuperview().inset(10)
+        }
+        
+        upImage.snp.makeConstraints { make in
+            make.left.equalTo(self.titleLabel.snp.right).offset(2)
+            make.size.equalTo(CGSize(width: 6, height: 4))
+            make.bottom.equalTo(self.titleLabel.snp.centerY).offset(-2)
+        }
+        downImage.snp.makeConstraints { make in
+            make.left.size.equalTo(self.upImage)
+            make.top.equalTo(self.upImage.snp.bottom).offset(4)
+        }
     }
 }
