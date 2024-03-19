@@ -212,7 +212,9 @@ extension PTBaseViewController {
                     if lcm.maskView != nil {
                         PTUtils.fetchWindow()!.bringSubviewToFront(lcm.maskView!)
                     }
-                    PTUtils.fetchWindow()!.bringSubviewToFront(lcm.terminal!)
+                    if lcm.terminal != nil {
+                        PTUtils.fetchWindow()?.bringSubviewToFront(lcm.terminal!)
+                    }
                 }
             }
         }

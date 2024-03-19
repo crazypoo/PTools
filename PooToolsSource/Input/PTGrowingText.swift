@@ -20,8 +20,9 @@ open class PTGrowingTextView: UITextView {
 
     override open var text: String! {
         didSet { setNeedsDisplay() }
-    }    
-    private var heightConstraintCustom: NSLayoutConstraint?
+    }
+    
+    private var newHeight:CGFloat = 0
         
     // Maximum length of text. 0 means no limit.
     @IBInspectable open var maxLength: Int = 0
@@ -37,13 +38,17 @@ open class PTGrowingTextView: UITextView {
         didSet { forceLayoutSubviews() }
     }
     @IBInspectable open var placeholder: String? {
-        didSet { setNeedsDisplay() }
+        didSet { layoutSubviews() }
     }
     @IBInspectable open var placeholderColor: UIColor = UIColor(white: 0.8, alpha: 1.0) {
-        didSet { setNeedsDisplay() }
+        didSet { layoutSubviews() }
     }
     open var attributedPlaceholder: NSAttributedString? {
-        didSet { setNeedsDisplay() }
+        didSet { layoutSubviews() }
+    }
+    
+    open var placeHolderLROffset: CGFloat = 10 {
+        didSet { layoutSubviews() }
     }
     
     // Initialize
@@ -74,10 +79,8 @@ open class PTGrowingTextView: UITextView {
     
     private func associateConstraints() {
         // iterate through all text view's constraints and identify
-        for constraint in constraints {
-            if constraint.firstAttribute == .height && constraint.relation == .equal {
-                heightConstraintCustom = constraint
-            }
+        PTGCDManager.gcdAfter(time: 0.1) {
+            self.newHeight = self.frame.size.height
         }
     }
     
@@ -96,11 +99,10 @@ open class PTGrowingTextView: UITextView {
     override open func layoutSubviews() {
         super.layoutSubviews()
         
-        if text == oldText && bounds.size == oldSize { return }
         oldText = text
         oldSize = bounds.size
         
-        let size = sizeThatFits(CGSize(width: bounds.size.width, height: CGFloat.greatestFiniteMagnitude))
+        let size = UIView.sizeFor(string: text, font: self.font ?? .systemFont(ofSize: 16),width: bounds.size.width)
         var height = size.height
         
         // Constrain minimum height
@@ -110,20 +112,14 @@ open class PTGrowingTextView: UITextView {
         height = maxHeight > 0 ? min(height, maxHeight) : height
         
         // Add height constraint if it is not found
-        if heightConstraintCustom == nil {
-            heightConstraintCustom = NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1.0, constant: height)
-            addConstraint(heightConstraintCustom!)
-        }
-        
+        newHeight = height
+
         // Update height constraint if needed
-        if height != heightConstraintCustom!.constant {
-            shouldScrollAfterHeightChanged = true
-            heightConstraintCustom!.constant = height
-            
-            if growingTextDidChangeHeight != nil {
-                growingTextDidChangeHeight!(self,height)
-            }
-        } else if shouldScrollAfterHeightChanged {
+        shouldScrollAfterHeightChanged = height > minHeight
+        if growingTextDidChangeHeight != nil {
+            growingTextDidChangeHeight!(self,height)
+        }
+        if shouldScrollAfterHeightChanged {
             shouldScrollAfterHeightChanged = false
             scrollToCorrectPosition()
         }
@@ -142,10 +138,10 @@ open class PTGrowingTextView: UITextView {
         super.draw(rect)
         
         if text.isEmpty {
-            let xValue = textContainerInset.left + textContainer.lineFragmentPadding
-            let yValue = textContainerInset.top
-            let width = rect.size.width - xValue - textContainerInset.right
-            let height = rect.size.height - yValue - textContainerInset.bottom
+            let height = (font ?? .systemFont(ofSize: 16)).pointSize
+            let xValue:CGFloat = placeHolderLROffset
+            let yValue:CGFloat = (rect.size.height - height) / 2
+            let width = rect.size.width - xValue * 2
             let placeholderRect = CGRect(x: xValue, y: yValue, width: width, height: height)
             
             if let attributedPlaceholder = attributedPlaceholder {
@@ -173,7 +169,7 @@ open class PTGrowingTextView: UITextView {
         if let sender = notification.object as? PTGrowingTextView, sender == self {
             if trimWhiteSpaceWhenEndEditing {
                 text = text?.trimmingCharacters(in: .whitespacesAndNewlines)
-                setNeedsDisplay()
+                layoutSubviews()
             }
             scrollToCorrectPosition()
         }
@@ -187,7 +183,7 @@ open class PTGrowingTextView: UITextView {
                 text = String(text[..<endIndex])
                 undoManager?.removeAllActions()
             }
-            setNeedsDisplay()
+            layoutSubviews()
         }
     }
 }
