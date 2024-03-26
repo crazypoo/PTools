@@ -179,6 +179,12 @@
 		555818D82AFA81E90051C0AA /* Mirror+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555818D72AFA81E90051C0AA /* Mirror+PTEX.swift */; };
 		555AE28E28BF1DBF002D4FFD /* PTImaginaryLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */; };
 		555AE29028BF2A1A002D4FFD /* PTMotion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555AE28F28BF2A1A002D4FFD /* PTMotion.swift */; };
+		555BE9FB2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */; };
+		555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */; };
+		555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */; };
+		555BEA012BB25A7C00E5987B /* PTListAnimationProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */; };
+		555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */; };
+		555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */; };
 		555E614E28EB4A31001C9542 /* UIImageView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */; };
 		555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */; };
 		555E8FE428D01BC200AF5E63 /* TouchOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */; };
@@ -677,6 +683,12 @@
 		555818D72AFA81E90051C0AA /* Mirror+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Mirror+PTEX.swift"; sourceTree = "<group>"; };
 		555AE28D28BF1DBF002D4FFD /* PTImaginaryLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTImaginaryLineView.swift; sourceTree = "<group>"; };
 		555AE28F28BF2A1A002D4FFD /* PTMotion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMotion.swift; sourceTree = "<group>"; };
+		555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionView+PTAnimationEX.swift"; sourceTree = "<group>"; };
+		555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTAnimationEX.swift"; sourceTree = "<group>"; };
+		555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationEnum.swift; sourceTree = "<group>"; };
+		555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationProtocols.swift; sourceTree = "<group>"; };
+		555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTListAnimationConfig.swift; sourceTree = "<group>"; };
+		555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+PTListAnimationEX.swift"; sourceTree = "<group>"; };
 		555E614D28EB4A31001C9542 /* UIImageView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+PTEX.swift"; sourceTree = "<group>"; };
 		555E8FE028D01BC200AF5E63 /* TouchInspectorWindow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchInspectorWindow.swift; sourceTree = "<group>"; };
 		555E8FE128D01BC200AF5E63 /* TouchOverlayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TouchOverlayView.swift; sourceTree = "<group>"; };
@@ -2032,10 +2044,16 @@
 		55D59C5228F2971E00B4FF76 /* Animation */ = {
 			isa = PBXGroup;
 			children = (
+				550CE49D2AEC27410052539D /* PTAnimationFunction.swift */,
+				5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */,
+				555BEA022BB25F3A00E5987B /* PTListAnimationConfig.swift */,
+				555BE9FE2BB25A4000E5987B /* PTListAnimationEnum.swift */,
+				555BEA002BB25A7C00E5987B /* PTListAnimationProtocols.swift */,
 				231D15BC272CDEE9003D6F62 /* PTPurchaseCarAnimationTool.swift */,
 				5578ED8E29A9A3E400F3E0AC /* PTWaterWaveView.swift */,
-				5578ED9029A9B27A00F3E0AC /* PTCoinAnimation.swift */,
-				550CE49D2AEC27410052539D /* PTAnimationFunction.swift */,
+				555BE9FA2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift */,
+				555BE9FC2BB2597700E5987B /* UITableView+PTAnimationEX.swift */,
+				555BEA062BB2601E00E5987B /* UIView+PTListAnimationEX.swift */,
 			);
 			path = Animation;
 			sourceTree = "<group>";
@@ -2733,6 +2751,7 @@
 				556CA4B02B29114E00A5B189 /* PTVideoEditorToolsSlider.swift in Sources */,
 				550CE4C12AF23FBD0052539D /* PTSoundVisualizerView.swift in Sources */,
 				55DD93752B938DE300F65872 /* PTSideMenuControl.swift in Sources */,
+				555BEA072BB2601E00E5987B /* UIView+PTListAnimationEX.swift in Sources */,
 				55024DEC29F36A7C00244E44 /* PTBaseViewController+FloatPanel.swift in Sources */,
 				558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */,
 				55F162EA2B1951E500320925 /* PTVideoEditorConfig.swift in Sources */,
@@ -2760,6 +2779,7 @@
 				552F57512ADB86A500E0EB7C /* PTCollectionView.swift in Sources */,
 				5528931D2AE84886009135F9 /* UIPageControl+PTEX.swift in Sources */,
 				9A14E98A28616B4100D7E8EF /* PTFilledPageControl.swift in Sources */,
+				555BE9FB2BB2585900E5987B /* UICollectionView+PTAnimationEX.swift in Sources */,
 				55228F182B0909130010E76E /* PTDocumentViewController.swift in Sources */,
 				55DD93582B9169A000F65872 /* PTSortButton.swift in Sources */,
 				559C1C97293F7ED8002874BA /* NSData+PTEX.swift in Sources */,
@@ -2793,6 +2813,7 @@
 				55BCB9792B1732030016A4C2 /* PTMediaLibConfig.swift in Sources */,
 				55BCB9772B1732030016A4C2 /* PTFetchImageOperation.swift in Sources */,
 				55B4FA252AE101AC006D35F3 /* PTPermissionHealth.swift in Sources */,
+				555BE9FD2BB2597700E5987B /* UITableView+PTAnimationEX.swift in Sources */,
 				55F6C633298B77360052A58C /* PTBankCardSearch.swift in Sources */,
 				55938CC02B9C276D0037E3B9 /* PTAPIFunctionCheck.swift in Sources */,
 				231D1673272CDEEA003D6F62 /* PTActionSheetView.swift in Sources */,
@@ -2829,6 +2850,7 @@
 				5507FF9E2B1E3FB50058FC83 /* PHPhotoLibrary+PTEX.swift in Sources */,
 				556CA4F82B295D9600A5B189 /* UIColor+VideoEditorEX.swift in Sources */,
 				556CA4BE2B29500600A5B189 /* Provider.swift in Sources */,
+				555BEA012BB25A7C00E5987B /* PTListAnimationProtocols.swift in Sources */,
 				55FF40742B2B002A00CD3906 /* CALayer+VideoEditorEX.swift in Sources */,
 				555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
@@ -3049,6 +3071,7 @@
 				55D59C7228F54FBA00B4FF76 /* PTFusionCell.swift in Sources */,
 				553038312B1CD85E0019A8E0 /* CupertinoJWTError.swift in Sources */,
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
+				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
@@ -3057,6 +3080,7 @@
 				553038322B1CD85E0019A8E0 /* ASN1.swift in Sources */,
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
+				555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */,
 				556CA4B92B29500600A5B189 /* Compositor.swift in Sources */,
 				55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,
@@ -3229,7 +3253,7 @@
 				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
-				DEVELOPMENT_TEAM = SFU2CNYFPC;
+				DEVELOPMENT_TEAM = K738QG676J;
 				EXCLUDED_ARCHS = "";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "PooTools/PooTools-Prefix.pch";

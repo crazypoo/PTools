@@ -848,33 +848,37 @@ class PTFuncNameViewController: PTBaseViewController {
         }
         popoverButton.addActionHandlers { sender in
             popoverContent.dismiss(animated: true) {
-                let config = PTMediaLibConfig.share
-                config.maxSelectCount = 9
-                config.allowSelectImage = true
-                config.allowSelectVideo = true
-                config.allowMixSelect = true
-                config.maxVideoSelectCount = 1
-                config.allowEditImage = true
-                config.allowEditVideo = true
-                let vc = PTMediaLibViewController()
-                vc.mediaLibShow(panGesDelegate: self)
-                vc.selectImageBlock = { result,isOriginal in
-                    if result.count > 0 {
-                        let vc = PTEditImageViewController(readyEditImage: result.first!.image)
-                        vc.editFinishBlock = { ei,eiitModel in
-                            PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
-                                if finish {
-                                    PTAlertTipControl.present(title:"保存成功",subtitle:"你的图片已经保存到相册中",icon:.Done,style: .Normal)
-                                } else {
-                                    PTAlertTipControl.present(title:"保存失败",subtitle:"",icon:.Error,style: .Normal)
-                                }
-                            }
-                        }
-                        vc.editImageShow(vc: self)
-                    } else {
-                        PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
-                    }
-                }
+                let fromAnimation = PTListAnimationType.vector(CGVector(dx: 30, dy: 0))
+                let zoomAnimation = PTListAnimationType.zoom(scale: 0.2)
+                UIView.animate(views: self.collectionView.contentCollectionView.visibleCells,
+                               animations: [fromAnimation, zoomAnimation], delay: 0.5)
+//                let config = PTMediaLibConfig.share
+//                config.maxSelectCount = 9
+//                config.allowSelectImage = true
+//                config.allowSelectVideo = true
+//                config.allowMixSelect = true
+//                config.maxVideoSelectCount = 1
+//                config.allowEditImage = true
+//                config.allowEditVideo = true
+//                let vc = PTMediaLibViewController()
+//                vc.mediaLibShow(panGesDelegate: self)
+//                vc.selectImageBlock = { result,isOriginal in
+//                    if result.count > 0 {
+//                        let vc = PTEditImageViewController(readyEditImage: result.first!.image)
+//                        vc.editFinishBlock = { ei,eiitModel in
+//                            PTMediaEditManager.saveImageToAlbum(image: ei) { finish, asset in
+//                                if finish {
+//                                    PTAlertTipControl.present(title:"保存成功",subtitle:"你的图片已经保存到相册中",icon:.Done,style: .Normal)
+//                                } else {
+//                                    PTAlertTipControl.present(title:"保存失败",subtitle:"",icon:.Error,style: .Normal)
+//                                }
+//                            }
+//                        }
+//                        vc.editImageShow(vc: self)
+//                    } else {
+//                        PTAlertTipControl.present(title:"失败",subtitle:"",icon:.Error,style: .Normal)
+//                    }
+//                }
             }
         }
 
