@@ -39,15 +39,6 @@ public extension UIImageView {
         }
     }
     
-    @objc func blur(withStyle style: UIBlurEffect.Style) {
-        let blurEffect = UIBlurEffect(style: style)
-        let blurEffectView = UIVisualEffectView(effect: blurEffect)
-        blurEffectView.frame = bounds
-        blurEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        addSubview(blurEffectView)
-        clipsToBounds = true
-    }
-    
     @objc func loadImage(contentData:Any,
                    iCloudDocumentName:String = "",
                    borderWidth:CGFloat = 1.5,
