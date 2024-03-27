@@ -7,7 +7,7 @@
 //
 
 import Foundation
-import IQKeyboardManager
+import IQKeyboardManagerSwift
 import OSLog
 #if DEBUG
 import YCSymbolTracker
@@ -83,8 +83,8 @@ class AppDelegate: PTAppWindowsDelegate {
         
         createSettingBundle()
 
-        IQKeyboardManager.shared().isEnabled = true
-        IQKeyboardManager.shared().keyboardDistanceFromTextField = 50
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.keyboardDistanceFromTextField = 50
 
 #if POOTOOLS_ROTATION
         registerRotation()
