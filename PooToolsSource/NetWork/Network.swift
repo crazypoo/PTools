@@ -115,7 +115,7 @@ public class XMNetWorkStatus {
     
     ///监听网络运行状态
     public func obtainDataFromLocalWhenNetworkUnconnected(handle:((NetworkReachabilityManager.NetworkReachabilityStatus)->Void)?) {
-        detectNetWork { (status, environment,statusType)  in   
+        detectNetWork { (status, environment,statusType)  in
                         
             PTNSLogConsole(String(format: "PT App current mode".localized(), status,environment))
 
@@ -251,15 +251,18 @@ public class Network: NSObject {
                                  jsonRequest:Bool? = false) async throws -> PTBaseStructModel {
 
         try await withCheckedThrowingContinuation { continuation in
+            
             let urlStr1 = (needGobal! ? Network.gobalUrl() : "") + urlStr
-            if !urlStr1.isURL() {
+            if !urlStr1.isURL() || urlStr.stringIsEmpty() {
                 continuation.resume(throwing: AFError.invalidURL(url: "https://www.qq.com"))
+                return
             }
 
             // 判断网络是否可用
             if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
                 if !reachabilityManager.isReachable {
                     continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
+                    return
                 }
             }
 
@@ -347,7 +350,7 @@ public class Network: NSObject {
                                   progressBlock:UploadProgress? = nil) async throws -> PTBaseStructModel {
         
         let pathUrl = (needGobal! ? Network.gobalUrl() : "") + path!
-        if !pathUrl.isURL() {
+        if !pathUrl.isURL() || (path ?? "").stringIsEmpty() {
             throw AFError.invalidURL(url: "https://www.qq.com")
         }
 
@@ -450,7 +453,8 @@ public class Network: NSObject {
         self.progress = progress
         self.fail = fail
         
-        if !fileUrl.isURL() {
+        
+        if !fileUrl.isURL() || fileUrl.stringIsEmpty() {
             if self.fail != nil {
                 self.fail?(AFError.invalidURL(url: "https://www.qq.com"))
             }

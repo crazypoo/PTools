@@ -70,7 +70,7 @@ public class PTLoadImageFunction: NSObject {
                                 } else {
                                     taskHandle([value.image],value.image)
                                 }
-                            case .failure(let error):
+                            case .failure(_):
                                 taskHandle(nil,nil)
                             }
                         }
