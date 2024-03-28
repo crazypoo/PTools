@@ -192,6 +192,7 @@
 		55660F3C28C5C1EE00FB3E7C /* UITableView+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */; };
 		556738042B040EB80058CEBA /* LocalConsole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556738032B040EB80058CEBA /* LocalConsole.swift */; };
 		5568AE262B048F9E00996C8F /* PTDevColorPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */; };
+		556B67062BB503960070C10E /* PTHalfCircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556B67052BB503960070C10E /* PTHalfCircleView.swift */; };
 		556CA4AB2B28F66200A5B189 /* VideoConverter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA4A72B28F66200A5B189 /* VideoConverter.swift */; };
 		556CA4AC2B28F66200A5B189 /* ConverterCrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA4A82B28F66200A5B189 /* ConverterCrop.swift */; };
 		556CA4AD2B28F66200A5B189 /* ConverterDegree.swift in Sources */ = {isa = PBXBuildFile; fileRef = 556CA4A92B28F66200A5B189 /* ConverterDegree.swift */; };
@@ -695,6 +696,7 @@
 		55660F3B28C5C1EE00FB3E7C /* UITableView+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableView+PTEX.swift"; sourceTree = "<group>"; };
 		556738032B040EB80058CEBA /* LocalConsole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocalConsole.swift; sourceTree = "<group>"; };
 		5568AE252B048F9E00996C8F /* PTDevColorPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTDevColorPickerViewController.swift; sourceTree = "<group>"; };
+		556B67052BB503960070C10E /* PTHalfCircleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTHalfCircleView.swift; sourceTree = "<group>"; };
 		556CA4A72B28F66200A5B189 /* VideoConverter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VideoConverter.swift; sourceTree = "<group>"; };
 		556CA4A82B28F66200A5B189 /* ConverterCrop.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterCrop.swift; sourceTree = "<group>"; };
 		556CA4A92B28F66200A5B189 /* ConverterDegree.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ConverterDegree.swift; sourceTree = "<group>"; };
@@ -1094,6 +1096,7 @@
 				231D1576272CDEE9003D6F62 /* CheckBox */,
 				231D15EB272CDEE9003D6F62 /* CheckDirtyWord */,
 				5528375A28EA8FD600D12202 /* CheckUpdate */,
+				556B67042BB5037F0070C10E /* Circle */,
 				55D59C5E28F3E81000B4FF76 /* CodeView */,
 				55B4FA292AE108E3006D35F3 /* ContactsPermission */,
 				5589FF4E29A87B7E00519383 /* Contract */,
@@ -1656,6 +1659,14 @@
 				231D15C4272CDEE9003D6F62 /* SystemReport.swift */,
 			);
 			path = LocalConsole;
+			sourceTree = "<group>";
+		};
+		556B67042BB5037F0070C10E /* Circle */ = {
+			isa = PBXGroup;
+			children = (
+				556B67052BB503960070C10E /* PTHalfCircleView.swift */,
+			);
+			path = Circle;
 			sourceTree = "<group>";
 		};
 		5571F60A2AFD219B00DB4420 /* AppDelegate */ = {
@@ -3079,6 +3090,7 @@
 				55ED0D262B1183E200391136 /* PTHeartRateManager.swift in Sources */,
 				55D59C5A28F2CC3F00B4FF76 /* PTColorRBGModel.swift in Sources */,
 				555BE9FF2BB25A4000E5987B /* PTListAnimationEnum.swift in Sources */,
+				556B67062BB503960070C10E /* PTHalfCircleView.swift in Sources */,
 				556CA4B92B29500600A5B189 /* Compositor.swift in Sources */,
 				55F163092B1A29BE00320925 /* PTTakePictureReviewer.swift in Sources */,
 				5578EE5C29ADD10E00F3E0AC /* PTGetGPSData.swift in Sources */,

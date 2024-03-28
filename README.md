@@ -189,6 +189,8 @@ pod 'PooTools/WhatsNewsKit', :git => 'https://github.com/crazypoo/PTools.git'
 pod 'PooTools/FilterCamera', :git => 'https://github.com/crazypoo/PTools.git'
 ### ImageEditor
 pod 'PooTools/ImageEditor', :git => 'https://github.com/crazypoo/PTools.git'
+### Circle
+pod 'PooTools/Circle', :git => 'https://github.com/crazypoo/PTools.git'
 ```
 ## Author
 
