@@ -1825,35 +1825,11 @@
 		558B77A32BBC526700BD7AB0 /* MessageKit */ = {
 			isa = PBXGroup;
 			children = (
-				558B77A82BBC52B200BD7AB0 /* Function */,
-				558B77A52BBC52B200BD7AB0 /* Model */,
-				558B77B52BBC52B300BD7AB0 /* View */,
-			);
-			path = MessageKit;
-			sourceTree = "<group>";
-		};
-		558B77A52BBC52B200BD7AB0 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */,
-			);
-			path = Model;
-			sourceTree = "<group>";
-		};
-		558B77A82BBC52B200BD7AB0 /* Function */ = {
-			isa = PBXGroup;
-			children = (
-				558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */,
-			);
-			path = Function;
-			sourceTree = "<group>";
-		};
-		558B77B52BBC52B300BD7AB0 /* View */ = {
-			isa = PBXGroup;
-			children = (
 				558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */,
 				558B77AA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift */,
+				558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */,
 				558B77AB2BBC52B300BD7AB0 /* PTChatFileCell.swift */,
+				558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */,
 				558B77AC2BBC52B300BD7AB0 /* PTChatMapCell.swift */,
 				558B77AD2BBC52B300BD7AB0 /* PTChatMediaCell.swift */,
 				558B77AE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift */,
@@ -1864,7 +1840,7 @@
 				558B77B32BBC52B300BD7AB0 /* PTChatView.swift */,
 				558B77B42BBC52B300BD7AB0 /* PTChatVoiceCell.swift */,
 			);
-			path = View;
+			path = MessageKit;
 			sourceTree = "<group>";
 		};
 		558D5EDF2AAF4D8300C02042 /* Router */ = {
