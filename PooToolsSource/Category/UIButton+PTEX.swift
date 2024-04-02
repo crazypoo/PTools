@@ -179,8 +179,11 @@ public extension UIButton {
             } else if dataUrlString.isURL() {
                 if dataUrlString.contains("file://") {
                     if iCloudDocumentName.stringIsEmpty() {
-                        let image = UIImage(contentsOfFile: dataUrlString)!
-                        setImage(image, for: controlState)
+                        if let image = UIImage(contentsOfFile: dataUrlString) {
+                            setImage(image, for: controlState)
+                        } else {
+                            setImage(emptyImage, for: controlState)
+                        }
                     } else {
                         if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
                             let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
@@ -194,30 +197,34 @@ public extension UIButton {
                         }
                     }
                 } else {
-                    ImageDownloader.default.downloadImage(with: URL(string: dataUrlString)!, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
-                        PTGCDManager.gcdMain {
-                            self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
-                        }
-                    }) { result in
-                        switch result {
-                        case .success(let value):
-                            if value.originalData.detectImageType() == .GIF {
-                                let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
-                                let frameCount = CGImageSourceGetCount(source!)
-                                var frames = [UIImage]()
-                                for i in 0...frameCount {
-                                    let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
-                                    let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
-                                    frames.append(imageName)
-                                }
-                                self.setImage(UIImage.animatedImage(with: frames, duration: 2), for: controlState)
-                            } else {
-                                self.setImage(value.image, for: controlState)
+                    if let imageUrl = URL(string: dataUrlString) {
+                        ImageDownloader.default.downloadImage(with: imageUrl, options: PTAppBaseConfig.share.gobalWebImageLoadOption(),progressBlock: { receivedSize, totalSize in
+                            PTGCDManager.gcdMain {
+                                self.layerProgress(value: CGFloat((receivedSize / totalSize)),borderWidth: borderWidth,borderColor: borderColor,showValueLabel: showValueLabel,valueLabelFont:valueLabelFont,valueLabelColor:valueLabelColor,uniCount:uniCount)
                             }
-                        case .failure(let error):
-                            PTNSLogConsole(error)
-                            self.setImage(emptyImage, for: controlState)
+                        }) { result in
+                            switch result {
+                            case .success(let value):
+                                if value.originalData.detectImageType() == .GIF {
+                                    let source = CGImageSourceCreateWithData(value.originalData as CFData, nil)
+                                    let frameCount = CGImageSourceGetCount(source!)
+                                    var frames = [UIImage]()
+                                    for i in 0...frameCount {
+                                        let imageref = CGImageSourceCreateImageAtIndex(source!,i,nil)
+                                        let imageName = UIImage.init(cgImage: (imageref ?? UIColor.clear.createImageWithColor().cgImage)!)
+                                        frames.append(imageName)
+                                    }
+                                    self.setImage(UIImage.animatedImage(with: frames, duration: 2), for: controlState)
+                                } else {
+                                    self.setImage(value.image, for: controlState)
+                                }
+                            case .failure(let error):
+                                PTNSLogConsole(error)
+                                self.setImage(emptyImage, for: controlState)
+                            }
                         }
+                    } else {
+                        setImage(emptyImage, for: controlState)
                     }
                 }
             } else if dataUrlString.isSingleEmoji {

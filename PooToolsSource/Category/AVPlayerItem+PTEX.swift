@@ -8,7 +8,7 @@
 
 import AVFoundation
 
-extension AVPlayerItem {
+public extension AVPlayerItem {
     func generateThumbnail(startTime:Double = 0,completion: @escaping (UIImage?) -> Void) {
         let assetImageGenerator = AVAssetImageGenerator(asset: asset)
         assetImageGenerator.appliesPreferredTrackTransform = true

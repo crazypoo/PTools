@@ -28,8 +28,11 @@ public class PTLoadImageFunction: NSObject {
             } else if dataUrlString.isURL() {
                 if dataUrlString.contains("file://") {
                     if iCloudDocumentName.stringIsEmpty() {
-                        let image = UIImage(contentsOfFile: dataUrlString)!
-                        taskHandle([image],image)
+                        if let image = UIImage(contentsOfFile: dataUrlString) {
+                            taskHandle([image],image)
+                        } else {
+                            taskHandle(nil,nil)
+                        }
                     } else {
                         if let icloudURL = FileManager.default.url(forUbiquityContainerIdentifier: nil)?.appendingPathComponent(iCloudDocumentName) {
                             let imageURL = icloudURL.appendingPathComponent(dataUrlString.lastPathComponent)
