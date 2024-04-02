@@ -18,8 +18,16 @@ public extension TimeInterval {
 
     //MARK: 時間戳轉換成Date
     ///時間戳轉換成Date
-    func timeToDate() -> Date {
-        Date.init(timeIntervalSince1970: self)
+    func timeToDate(timeZone:TimeZone = TimeZone.current) -> Date {
+        Date.init(timeIntervalSince1970: self).addingTimeInterval(TimeInterval(timeZone.secondsFromGMT()))
+    }
+
+    func timeToDateWithFormatter(timeZone: TimeZone = TimeZone.current) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.timeZone = timeZone
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = dateFormatter.string(from: Date(timeIntervalSince1970: self))
+        return dateFormatter.date(from: dateString)!
     }
     
     //MARK: 時間戳轉換成Date

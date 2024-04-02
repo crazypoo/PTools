@@ -90,13 +90,12 @@ public extension Date {
     
     //MARK: 獲取時區的當前時間戳
     ///獲取時區的當前時間戳
-    func getTimeStamp(timeZone:String? = "Asia/Shanghai")->String {
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        _ = NSTimeZone.init(name: timeZone!)
-        return String(format: "%.0f", date.timeIntervalSince1970 * 1000)
+    func getTimeStamp()->String {
+        return String(format: "%.0f", self.getTimeInterval())
+    }
+    
+    func getTimeInterval() ->TimeInterval {
+        return Date().timeIntervalSince1970
     }
 
     //MARK: Date格式化

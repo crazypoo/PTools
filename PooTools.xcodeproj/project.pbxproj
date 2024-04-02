@@ -231,6 +231,20 @@
 		5589FF4A29A73ED600519383 /* PTScanQRController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4929A73ED600519383 /* PTScanQRController.swift */; };
 		5589FF4D29A8529E00519383 /* PTStepper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4C29A8529E00519383 /* PTStepper.swift */; };
 		5589FF5029A87BA700519383 /* PTContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5589FF4F29A87BA700519383 /* PTContract.swift */; };
+		558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */; };
+		558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */; };
+		558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */; };
+		558B77BA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift */; };
+		558B77BB2BBC52B300BD7AB0 /* PTChatFileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AB2BBC52B300BD7AB0 /* PTChatFileCell.swift */; };
+		558B77BC2BBC52B300BD7AB0 /* PTChatMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AC2BBC52B300BD7AB0 /* PTChatMapCell.swift */; };
+		558B77BD2BBC52B300BD7AB0 /* PTChatMediaCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AD2BBC52B300BD7AB0 /* PTChatMediaCell.swift */; };
+		558B77BE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift */; };
+		558B77BF2BBC52B300BD7AB0 /* PTChatTextCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77AF2BBC52B300BD7AB0 /* PTChatTextCell.swift */; };
+		558B77C02BBC52B300BD7AB0 /* PTChatTypingBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77B02BBC52B300BD7AB0 /* PTChatTypingBubble.swift */; };
+		558B77C12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77B12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift */; };
+		558B77C22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77B22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift */; };
+		558B77C32BBC52B300BD7AB0 /* PTChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77B32BBC52B300BD7AB0 /* PTChatView.swift */; };
+		558B77C42BBC52B300BD7AB0 /* PTChatVoiceCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558B77B42BBC52B300BD7AB0 /* PTChatVoiceCell.swift */; };
 		558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */; };
 		558D5EE12AAF4DCF00C02042 /* PTRouterServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */; };
 		558D5EE32AAF4E3500C02042 /* PTRouterServiceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */; };
@@ -735,6 +749,20 @@
 		5589FF4929A73ED600519383 /* PTScanQRController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTScanQRController.swift; sourceTree = "<group>"; };
 		5589FF4C29A8529E00519383 /* PTStepper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTStepper.swift; sourceTree = "<group>"; };
 		5589FF4F29A87BA700519383 /* PTContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTContract.swift; sourceTree = "<group>"; };
+		558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatListModel.swift; sourceTree = "<group>"; };
+		558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatConfig.swift; sourceTree = "<group>"; };
+		558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatBaseCell.swift; sourceTree = "<group>"; };
+		558B77AA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatBubbleCircle.swift; sourceTree = "<group>"; };
+		558B77AB2BBC52B300BD7AB0 /* PTChatFileCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatFileCell.swift; sourceTree = "<group>"; };
+		558B77AC2BBC52B300BD7AB0 /* PTChatMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatMapCell.swift; sourceTree = "<group>"; };
+		558B77AD2BBC52B300BD7AB0 /* PTChatMediaCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatMediaCell.swift; sourceTree = "<group>"; };
+		558B77AE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatSystemMessageCell.swift; sourceTree = "<group>"; };
+		558B77AF2BBC52B300BD7AB0 /* PTChatTextCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatTextCell.swift; sourceTree = "<group>"; };
+		558B77B02BBC52B300BD7AB0 /* PTChatTypingBubble.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatTypingBubble.swift; sourceTree = "<group>"; };
+		558B77B12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatTypingIndicator.swift; sourceTree = "<group>"; };
+		558B77B22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatTypingIndicatorCell.swift; sourceTree = "<group>"; };
+		558B77B32BBC52B300BD7AB0 /* PTChatView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatView.swift; sourceTree = "<group>"; };
+		558B77B42BBC52B300BD7AB0 /* PTChatVoiceCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTChatVoiceCell.swift; sourceTree = "<group>"; };
 		558BB54F2AD26F9B0092FCE0 /* PTMapActionSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTMapActionSheet.swift; sourceTree = "<group>"; };
 		558D5EE02AAF4DCF00C02042 /* PTRouterServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceProtocol.swift; sourceTree = "<group>"; };
 		558D5EE22AAF4E3500C02042 /* PTRouterServiceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTRouterServiceManager.swift; sourceTree = "<group>"; };
@@ -1074,6 +1102,7 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
+				558B77A32BBC526700BD7AB0 /* MessageKit */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1791,6 +1820,51 @@
 				5589FF4F29A87BA700519383 /* PTContract.swift */,
 			);
 			path = Contract;
+			sourceTree = "<group>";
+		};
+		558B77A32BBC526700BD7AB0 /* MessageKit */ = {
+			isa = PBXGroup;
+			children = (
+				558B77A82BBC52B200BD7AB0 /* Function */,
+				558B77A52BBC52B200BD7AB0 /* Model */,
+				558B77B52BBC52B300BD7AB0 /* View */,
+			);
+			path = MessageKit;
+			sourceTree = "<group>";
+		};
+		558B77A52BBC52B200BD7AB0 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				558B77A42BBC52B200BD7AB0 /* PTChatListModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		558B77A82BBC52B200BD7AB0 /* Function */ = {
+			isa = PBXGroup;
+			children = (
+				558B77A72BBC52B200BD7AB0 /* PTChatConfig.swift */,
+			);
+			path = Function;
+			sourceTree = "<group>";
+		};
+		558B77B52BBC52B300BD7AB0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				558B77A92BBC52B300BD7AB0 /* PTChatBaseCell.swift */,
+				558B77AA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift */,
+				558B77AB2BBC52B300BD7AB0 /* PTChatFileCell.swift */,
+				558B77AC2BBC52B300BD7AB0 /* PTChatMapCell.swift */,
+				558B77AD2BBC52B300BD7AB0 /* PTChatMediaCell.swift */,
+				558B77AE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift */,
+				558B77AF2BBC52B300BD7AB0 /* PTChatTextCell.swift */,
+				558B77B02BBC52B300BD7AB0 /* PTChatTypingBubble.swift */,
+				558B77B12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift */,
+				558B77B22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift */,
+				558B77B32BBC52B300BD7AB0 /* PTChatView.swift */,
+				558B77B42BBC52B300BD7AB0 /* PTChatVoiceCell.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		558D5EDF2AAF4D8300C02042 /* Router */ = {
@@ -2709,6 +2783,7 @@
 				55DD936C2B932A0400F65872 /* Logger+PTEX.swift in Sources */,
 				231D168F272CDEEA003D6F62 /* PTMarcos_swift.swift in Sources */,
 				555818BC2AFA5D2C0051C0AA /* PTAlertTips.swift in Sources */,
+				558B77C32BBC52B300BD7AB0 /* PTChatView.swift in Sources */,
 				9AE446A72859ACBB007DC2B5 /* UISwitch+PTEX.swift in Sources */,
 				9A14E97E2861680D00D7E8EF /* UICollectionView+PTEX.swift in Sources */,
 				558D5EF52AAF586700C02042 /* URL+PTEX.swift in Sources */,
@@ -2777,8 +2852,10 @@
 				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
+				558B77BE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
+				558B77C42BBC52B300BD7AB0 /* PTChatVoiceCell.swift in Sources */,
 				55C9051A2A31B6F100B7E83D /* PTBaseNavControl.swift in Sources */,
 				55B3F49E2B6AD3CB00A7CC66 /* PTPinyin.swift in Sources */,
 				55F163072B19DC5400320925 /* PTFilterImageCell.swift in Sources */,
@@ -2835,6 +2912,7 @@
 				558BB5502AD26F9B0092FCE0 /* PTMapActionSheet.swift in Sources */,
 				55F163052B19A47800320925 /* PTCameraAnimationUtils.swift in Sources */,
 				55F6C635298CF0A30052A58C /* NSDate+PTEX.swift in Sources */,
+				558B77C22BBC52B300BD7AB0 /* PTChatTypingIndicatorCell.swift in Sources */,
 				5507026F28F7A02300C48239 /* PTGrowingText.swift in Sources */,
 				55ECDBBF28C1A7CD00F1DB69 /* PTSlider.swift in Sources */,
 				231D1690272CDEEA003D6F62 /* PTPhoneBlock.swift in Sources */,
@@ -2864,6 +2942,7 @@
 				555818A52AF5CA760051C0AA /* PTHeaderAndFooter.swift in Sources */,
 				55E0558C28EA870F0097F3ED /* PTSwiftViewController.swift in Sources */,
 				554DE0FB2AC8243100471FF3 /* PTEditMenuInteractionDummy.m in Sources */,
+				558B77BB2BBC52B300BD7AB0 /* PTChatFileCell.swift in Sources */,
 				55B13D5A2B1AF03F00C67EDA /* PTAdjustToolCell.swift in Sources */,
 				55FA6CB72B0236AC00BC464B /* PTDarkModePickerView.swift in Sources */,
 				5516CCBE29E8545900614980 /* Kingfisher+SVG.swift in Sources */,
@@ -2891,6 +2970,7 @@
 				55024DE929F2999600244E44 /* PTEyeTrackingExtensions.swift in Sources */,
 				5528375C28EA8FF100D12202 /* PTCheckUpdateFunction.swift in Sources */,
 				55D3D9DE29753CCB00F2E57C /* PTKeyChain.swift in Sources */,
+				558B77B92BBC52B300BD7AB0 /* PTChatBaseCell.swift in Sources */,
 				558D5EEF2AAF54B600C02042 /* PTRouterBuilder.swift in Sources */,
 				231D161F272CDEE9003D6F62 /* UIViewController+Swizzled.swift in Sources */,
 				55BCB9732B1732030016A4C2 /* PTAdjustSliderView.swift in Sources */,
@@ -2924,6 +3004,7 @@
 				5507026528F6A0CB00C48239 /* PTMainSegmentDataSource.swift in Sources */,
 				9AE446A1285980CF007DC2B5 /* Device+PTEX.swift in Sources */,
 				9AE4468C28586309007DC2B5 /* UINavigationBar+PTEX.swift in Sources */,
+				558B77C02BBC52B300BD7AB0 /* PTChatTypingBubble.swift in Sources */,
 				555818C62AFA79A50051C0AA /* UIFeedbackGenerator+PTEX.swift in Sources */,
 				55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */,
 				559C3D592B282F9E00EE46BC /* CropPickerView.swift in Sources */,
@@ -2966,6 +3047,7 @@
 				231D168A272CDEEA003D6F62 /* PTLaunchAdMonitor.swift in Sources */,
 				55D0EA7328E43CBB0002AA2A /* PTCheckFWords.swift in Sources */,
 				231D1679272CDEEA003D6F62 /* SystemReport.swift in Sources */,
+				558B77BC2BBC52B300BD7AB0 /* PTChatMapCell.swift in Sources */,
 				553995F22B0F811B0084C595 /* PTUserDefaultKeysAndValues.swift in Sources */,
 				55D7383029E529BB0027BDC3 /* SpringMotionView-iOS.swift in Sources */,
 				55F162E42B18E36200320925 /* C7Collector.swift in Sources */,
@@ -2990,6 +3072,7 @@
 				556CA4AE2B28F66200A5B189 /* ConverterOption.swift in Sources */,
 				9AE446842858618C007DC2B5 /* StatusBarManager.swift in Sources */,
 				558D5EF72AAF5B4400C02042 /* PTJson+PTEX.swift in Sources */,
+				558B77B82BBC52B300BD7AB0 /* PTChatConfig.swift in Sources */,
 				231D1689272CDEEA003D6F62 /* PTUtils.swift in Sources */,
 				557049E1273568D3002E9479 /* PTOpenSystemFunction.swift in Sources */,
 				9AE4469D28597B1F007DC2B5 /* FileManager+PTEX.swift in Sources */,
@@ -3019,6 +3102,7 @@
 				55B4FA392AE10D98006D35F3 /* PTPermissionSiri.swift in Sources */,
 				55D3D9DA2972F9CB00F2E57C /* UITextField+PTEX.swift in Sources */,
 				5599ADB028F949A80035A364 /* Bundle+PTEX.swift in Sources */,
+				558B77BF2BBC52B300BD7AB0 /* PTChatTextCell.swift in Sources */,
 				5530651D2B97193400BFB4EA /* PTSheetTransition.swift in Sources */,
 				9AE4469F28597DD7007DC2B5 /* AVExport+PTEX.swift in Sources */,
 				556738042B040EB80058CEBA /* LocalConsole.swift in Sources */,
@@ -3058,6 +3142,7 @@
 				55D7383129E529BB0027BDC3 /* SpringMotionPhysics.swift in Sources */,
 				558D5EF12AAF54EA00C02042 /* PTRouterable.swift in Sources */,
 				55B13D542B1AEDE800C67EDA /* PTEditModel.swift in Sources */,
+				558B77B62BBC52B300BD7AB0 /* PTChatListModel.swift in Sources */,
 				55E3BBBA2ABDFF1D00858348 /* IPv4.swift in Sources */,
 				231D166C272CDEEA003D6F62 /* NSDictionary+PTEX.swift in Sources */,
 				5507026A28F6A8F800C48239 /* PTHealthKit.swift in Sources */,
@@ -3071,6 +3156,7 @@
 				55B13D5C2B1AF80300C67EDA /* C7CameraConfig.swift in Sources */,
 				55D3D9E42977EDAC00F2E57C /* PTObject2Json.swift in Sources */,
 				559C3D2F2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift in Sources */,
+				558B77BD2BBC52B300BD7AB0 /* PTChatMediaCell.swift in Sources */,
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,
 				558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */,
@@ -3082,6 +3168,7 @@
 				553065232B971AF400BFB4EA /* PTInitialTouchPanGestureRecognizer.swift in Sources */,
 				555BEA032BB25F3A00E5987B /* PTListAnimationConfig.swift in Sources */,
 				55FA6CB22B02354800BC464B /* PTDarkModeHeader.swift in Sources */,
+				558B77BA2BBC52B300BD7AB0 /* PTChatBubbleCircle.swift in Sources */,
 				550CE4B52AF233F50052539D /* OSSSpeech.swift in Sources */,
 				9AE4469228586987007DC2B5 /* Character+PTEX.swift in Sources */,
 				553038342B1CD85E0019A8E0 /* Data+Extension.swift in Sources */,
@@ -3100,6 +3187,7 @@
 				55D59C7628F558BF00B4FF76 /* PTDebugViewController.swift in Sources */,
 				5578ED9129A9B27A00F3E0AC /* PTCoinAnimation.swift in Sources */,
 				55D59C4B28F1790F00B4FF76 /* Double+PTEX.swift in Sources */,
+				558B77C12BBC52B300BD7AB0 /* PTChatTypingIndicator.swift in Sources */,
 				555E8FE328D01BC200AF5E63 /* TouchInspectorWindow.swift in Sources */,
 				55A3E98F298A5EBC0007BDDE /* PTSwiftMethodSwizzle.swift in Sources */,
 				55B316AC299CA71500D8C39B /* UISlider+PTEX.swift in Sources */,

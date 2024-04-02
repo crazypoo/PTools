@@ -223,7 +223,6 @@ class AppDelegate: PTAppWindowsDelegate {
             
         }
 
-
         return true
     }
     

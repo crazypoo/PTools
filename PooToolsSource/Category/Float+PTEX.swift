@@ -17,6 +17,20 @@ public extension Float {
                                   upper: Float = 100) -> Float {
         (Float(arc4random()) / Float(UInt32.max)) * (upper - lower) + lower
     }
+    
+    func floatToPlayTimeString() ->String {
+        var returnValue = "0:00"
+        if self < 60 {
+          returnValue = String(format: "0:%.02d", Int(self.rounded(.up)))
+        } else if self < 3600 {
+          returnValue = String(format: "%.02d:%.02d", Int(self / 60), Int(self) % 60)
+        } else if self.isFinite {
+          let hours = Int(self / 3600)
+          let remainingMinutesInSeconds = Int(self) - hours * 3600
+          returnValue = String(format: "%.02d:%.02d:%.02d", hours, Int(remainingMinutesInSeconds / 60), Int(remainingMinutesInSeconds) % 60)
+        }
+        return returnValue
+    }
 }
 
 public extension PTPOP where Base == Float {
