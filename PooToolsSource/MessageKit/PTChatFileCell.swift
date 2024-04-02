@@ -9,13 +9,13 @@ import UIKit
 import AttributedString
 
 public class PTChatFileCell: PTChatBaseCell {
-    static let ID = "PTChatFileCell"
-    static let FileCellHeight:CGFloat = 88
-    static let FileCellImageHeight:CGFloat = 64
-    static let FileCellConentFixbel:CGFloat = 7.5
-    static let FileConentWidth:CGFloat = 250
+    public static let ID = "PTChatFileCell"
+    public static let FileCellHeight:CGFloat = 88
+    public static let FileCellImageHeight:CGFloat = 64
+    public static let FileCellConentFixbel:CGFloat = 7.5
+    public static let FileConentWidth:CGFloat = 250
 
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
                 self.setBaseSubsViews(cellModel: self.cellModel)
@@ -24,13 +24,13 @@ public class PTChatFileCell: PTChatBaseCell {
         }
     }
     
-    lazy var fileImageView:UIImageView = {
+    fileprivate lazy var fileImageView:UIImageView = {
         let view = UIImageView()
         view.image = PTChatConfig.share.fileImage
         return view
     }()
     
-    lazy var fileNameInfo:UILabel = {
+    fileprivate lazy var fileNameInfo:UILabel = {
         let view = UILabel()
         view.numberOfLines = 0
         return view
@@ -44,7 +44,7 @@ public class PTChatFileCell: PTChatBaseCell {
         super.init(coder: aDecoder)
     }
     
-    func dataContentSets(cellModel:PTChatListModel) {
+    fileprivate func dataContentSets(cellModel:PTChatListModel) {
                 
         userIcon.snp.remakeConstraints { make in
             make.size.equalTo(PTChatConfig.share.messageUserIconSize)
@@ -122,7 +122,7 @@ public class PTChatFileCell: PTChatBaseCell {
                         """
                 self.fileNameInfo.attributedText = infoAtt.value
             } else {
-                getFileSizeOnline(from: url!) { fileSize in
+                url!.getFileSizeOnline { fileSize in
                     PTGCDManager.gcdMain {
                         let infoAtt:ASAttributedString = """
                                 \(wrap: .embedding("""
@@ -155,28 +155,5 @@ public class PTChatFileCell: PTChatBaseCell {
             self.sendMesageError?(cellModel)
         }
         checkCellSendStatus(cellModel: cellModel)
-    }
-    
-    func getFileSizeOnline(from url: URL, completion: @escaping (UInt64) -> Void) {
-        var request = URLRequest(url: url)
-        request.httpMethod = "HEAD"
-
-        let task = URLSession.shared.dataTask(with: request) { (data, response, error) in
-            guard let response = response as? HTTPURLResponse, error == nil else {
-                PTNSLogConsole("Error: \(error?.localizedDescription ?? "Unknown error")")
-                completion(0)
-                return
-            }
-            
-            if let contentLength = response.allHeaderFields["Content-Length"] as? String,
-               let fileSize = UInt64(contentLength) {
-                completion(fileSize)
-            } else {
-                PTNSLogConsole("Failed to retrieve file size.")
-                completion(0)
-            }
-        }
-
-        task.resume()
-    }
+    }    
 }

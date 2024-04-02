@@ -199,7 +199,7 @@ public class PTChatView: UIView {
         return view
     }()
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         addSubviews([listCollection])
         listCollection.snp.makeConstraints { make in
@@ -207,7 +207,7 @@ public class PTChatView: UIView {
         }     
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

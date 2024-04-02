@@ -9,23 +9,13 @@ import UIKit
 
 public class PTChatTypingBubble: UIView {
     
-    // MARK: Public
-
     public private(set) var isAnimating = false
 
-    // MARK: - Subviews
-
-    /// The indicator used to display the typing animation.
+    ///顯示正在輸入動畫
     public let typingIndicator = PTChatTypingIndicator()
-
     public let contentBubble = UIView()
-
     public let cornerBubble = PTChatBubbleCircle()
-
     public let tinyBubble = PTChatBubbleCircle()
-    // MARK: Open
-
-    // MARK: - Properties
 
     open var isPulseEnabled = true
 
@@ -38,8 +28,7 @@ public class PTChatTypingBubble: UIView {
         }
     }
 
-    // MARK: - Animation Layers
-
+    //MARK: - Animation Layers
     open var contentPulseAnimationLayer: CABasicAnimation {
         let animation = CABasicAnimation(keyPath: "transform.scale")
         animation.fromValue = 1
@@ -59,8 +48,6 @@ public class PTChatTypingBubble: UIView {
         animation.autoreverses = true
         return animation
     }
-
-    // MARK: Private
 
     private enum AnimationKeys {
         static let pulse = "typingBubble.pulse"
@@ -83,8 +70,6 @@ public class PTChatTypingBubble: UIView {
         contentBubble.addSubview(typingIndicator)
         backgroundColor = .white
     }
-
-    // MARK: - Layout
 
     open override func layoutSubviews() {
       super.layoutSubviews()
@@ -114,8 +99,6 @@ public class PTChatTypingBubble: UIView {
         let insets = UIEdgeInsets( top: offset, left: contentBubbleFrameCornerRadius / 1.25, bottom: offset, right: contentBubbleFrameCornerRadius / 1.25)
         typingIndicator.frame = contentBubble.bounds.inset(by: insets)
     }
-
-    // MARK: - Animation API
 
     open func startAnimating() {
         defer { isAnimating = true }

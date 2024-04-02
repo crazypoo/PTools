@@ -11,10 +11,10 @@ import GoogleMaps
 #endif
 import MapKit
 
-class PTChatMapCell: PTChatBaseCell {
-    static let ID = "PTChatMapCell"
+public class PTChatMapCell: PTChatBaseCell {
+    public static let ID = "PTChatMapCell"
 
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             setBaseSubsViews(cellModel: cellModel)
             dataContentSets(cellModel: cellModel)
@@ -50,11 +50,11 @@ class PTChatMapCell: PTChatBaseCell {
         return view
     }()
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

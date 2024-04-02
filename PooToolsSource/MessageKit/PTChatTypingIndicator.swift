@@ -8,7 +8,6 @@
 import UIKit
 
 public class PTChatTypingIndicator: UIView {
-    // MARK: Lifecycle
 
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -97,8 +96,6 @@ public class PTChatTypingIndicator: UIView {
             $0.layer.removeAnimation(forKey: AnimationKeys.opacity)
         }
     }
-
-    // MARK: Public
 
     /// The offset that each dot will transform by during the bounce animation
     public var bounceOffset: CGFloat = 2.5

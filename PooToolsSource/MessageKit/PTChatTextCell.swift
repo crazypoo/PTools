@@ -8,10 +8,10 @@
 import UIKit
 import AttributedString
 
-class PTChatTextCell: PTChatBaseCell {
-    static let ID = "PTChatTextCell"
+public class PTChatTextCell: PTChatBaseCell {
+    public static let ID = "PTChatTextCell"
             
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
                 self.setBaseSubsViews(cellModel: self.cellModel)
@@ -20,11 +20,11 @@ class PTChatTextCell: PTChatBaseCell {
         }
     }
             
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

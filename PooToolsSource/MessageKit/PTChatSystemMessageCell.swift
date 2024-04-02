@@ -8,10 +8,10 @@
 import UIKit
 import AttributedString
 
-class PTChatSystemMessageCell: PTBaseNormalCell {
-    static let ID = "PTChatSystemMessageCell"
+public class PTChatSystemMessageCell: PTBaseNormalCell {
+    public static let ID = "PTChatSystemMessageCell"
     
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             var timeAtt:ASAttributedString = """
                     \(wrap: .embedding("""
@@ -40,7 +40,7 @@ class PTChatSystemMessageCell: PTBaseNormalCell {
         return view
     }()
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
         
         contentView.addSubviews([timeLabel])
@@ -49,7 +49,7 @@ class PTChatSystemMessageCell: PTBaseNormalCell {
         }
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }

@@ -8,11 +8,11 @@
 import UIKit
 import AVFoundation
 
-class PTChatVoiceCell: PTChatBaseCell {
+public class PTChatVoiceCell: PTChatBaseCell {
     
-    static let ID = "PTChatVoiceCell"
+    public static let ID = "PTChatVoiceCell"
 
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
                 self.setBaseSubsViews(cellModel: self.cellModel)
@@ -49,11 +49,11 @@ class PTChatVoiceCell: PTChatBaseCell {
         return progressView
     }()
     
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
@@ -193,11 +193,11 @@ class PTChatVoiceCell: PTChatBaseCell {
 }
 
 extension PTChatVoiceCell:AVAudioPlayerDelegate {
-    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+    public func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
         stopPlaying()
     }
     
-    func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: (any Error)?) {
+    public func audioPlayerDecodeErrorDidOccur(_ player: AVAudioPlayer, error: (any Error)?) {
         stopPlaying()
     }
 }

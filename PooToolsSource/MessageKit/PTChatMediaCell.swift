@@ -8,10 +8,10 @@
 import UIKit
 import AVFoundation
 
-class PTChatMediaCell: PTChatBaseCell {
-    static let ID = "PTChatMediaCell"
+public class PTChatMediaCell: PTChatBaseCell {
+    public static let ID = "PTChatMediaCell"
 
-    var cellModel:PTChatListModel! {
+    public var cellModel:PTChatListModel! {
         didSet {
             PTGCDManager.gcdMain {
                 self.setBaseSubsViews(cellModel: self.cellModel)
@@ -34,11 +34,11 @@ class PTChatMediaCell: PTChatBaseCell {
         return view
     }()
         
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
-    required init?(coder: NSCoder) {
+    public required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
