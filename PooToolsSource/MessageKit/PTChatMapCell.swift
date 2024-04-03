@@ -42,7 +42,7 @@ public class PTChatMapCell: PTChatBaseCell {
         return view
     }()
     
-    var mapContent:UIView!
+    var mapContent:UIView?
     var locationPin:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -109,58 +109,60 @@ public class PTChatMapCell: PTChatBaseCell {
         }
         
         if dic != nil {
-            let lat = dic!["lat"] as! String
-            let lng = dic!["lng"] as! String
-            dataContent.addSubviews([mapContent])
-            mapContent.snp.makeConstraints { make in
-                make.edges.equalToSuperview()
-            }
-        
-            let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
-            switch PTChatConfig.share.mapKit {
-            case .Google:
-#if canImport(GoogleMaps)
-                let camera = GMSCameraPosition(target: location2D, zoom: 18)
-                (mapContent as! GMSMapView).camera = camera
-                
-                mapContent.addSubviews([locationPin])
-                locationPin.snp.makeConstraints { make in
-                    make.size.equalTo(40)
-                    make.centerY.centerX.equalToSuperview()
+            if mapContent != nil {
+                let lat = dic!["lat"] as! String
+                let lng = dic!["lng"] as! String
+                dataContent.addSubviews([mapContent!])
+                mapContent!.snp.makeConstraints { make in
+                    make.edges.equalToSuperview()
                 }
-#endif
-            case .MapKit:
-                let pinImage = PTChatConfig.share.mapCellPinImage
-                let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
-                annotationView.image = pinImage
-                annotationView.centerOffset = CGPoint(x: 0,y: -pinImage.size.height / 2)
-                
-                let snapshotOptions = MKMapSnapshotter.Options()
-                snapshotOptions.region = MKCoordinateRegion(center: location2D, span: PTChatConfig.share.span)
-                snapshotOptions.showsBuildings = PTChatConfig.share.showBuilding
-                snapshotOptions.pointOfInterestFilter = PTChatConfig.share.showsPointsOfInterest ? .includingAll : .excludingAll
-                let snapShotter = MKMapSnapshotter(options: snapshotOptions)
-                snapShotter.start { snapShot, error in
-                    guard let snapshot = snapShot, error == nil else {
-                      // show an error image?
-                      return
-                    }
+            
+                let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
+                switch PTChatConfig.share.mapKit {
+                case .Google:
+    #if canImport(GoogleMaps)
+                    let camera = GMSCameraPosition(target: location2D, zoom: 18)
+                    (mapContent! as! GMSMapView).camera = camera
                     
-                    UIGraphicsBeginImageContextWithOptions(snapshotOptions.size, true, 0)
+                    mapContent!.addSubviews([locationPin])
+                    locationPin.snp.makeConstraints { make in
+                        make.size.equalTo(40)
+                        make.centerY.centerX.equalToSuperview()
+                    }
+    #endif
+                case .MapKit:
+                    let pinImage = PTChatConfig.share.mapCellPinImage
+                    let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
+                    annotationView.image = pinImage
+                    annotationView.centerOffset = CGPoint(x: 0,y: -pinImage.size.height / 2)
+                    
+                    let snapshotOptions = MKMapSnapshotter.Options()
+                    snapshotOptions.region = MKCoordinateRegion(center: location2D, span: PTChatConfig.share.span)
+                    snapshotOptions.showsBuildings = PTChatConfig.share.showBuilding
+                    snapshotOptions.pointOfInterestFilter = PTChatConfig.share.showsPointsOfInterest ? .includingAll : .excludingAll
+                    let snapShotter = MKMapSnapshotter(options: snapshotOptions)
+                    snapShotter.start { snapShot, error in
+                        guard let snapshot = snapShot, error == nil else {
+                          // show an error image?
+                          return
+                        }
+                        
+                        UIGraphicsBeginImageContextWithOptions(snapshotOptions.size, true, 0)
 
-                    snapshot.image.draw(at: .zero)
+                        snapshot.image.draw(at: .zero)
 
-                    var point = snapshot.point(for: location2D)
-                    // Move point to reflect annotation anchor
-                    point.x -= annotationView.bounds.size.width / 2
-                    point.y -= annotationView.bounds.size.height / 2
-                    point.x += annotationView.centerOffset.x
-                    point.y += annotationView.centerOffset.y
+                        var point = snapshot.point(for: location2D)
+                        // Move point to reflect annotation anchor
+                        point.x -= annotationView.bounds.size.width / 2
+                        point.y -= annotationView.bounds.size.height / 2
+                        point.x += annotationView.centerOffset.x
+                        point.y += annotationView.centerOffset.y
 
-                    annotationView.image?.draw(at: point)
-                    let composedImage = UIGraphicsGetImageFromCurrentImageContext()
-                    UIGraphicsEndImageContext()
-                    (self.mapContent as! UIImageView).image = composedImage
+                        annotationView.image?.draw(at: point)
+                        let composedImage = UIGraphicsGetImageFromCurrentImageContext()
+                        UIGraphicsEndImageContext()
+                        (self.mapContent! as! UIImageView).image = composedImage
+                    }
                 }
             }
         }
