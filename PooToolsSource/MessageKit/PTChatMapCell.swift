@@ -85,6 +85,8 @@ public class PTChatMapCell: PTChatBaseCell {
         case .Google:
 #if canImport(GoogleMaps)
             mapContent = googleMap
+#else
+            mapContent = appleMap
 #endif
         case .MapKit:
             mapContent = appleMap
@@ -120,7 +122,7 @@ public class PTChatMapCell: PTChatBaseCell {
                 let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
                 switch PTChatConfig.share.mapKit {
                 case .Google:
-    #if canImport(GoogleMaps)
+#if canImport(GoogleMaps)
                     let camera = GMSCameraPosition(target: location2D, zoom: 18)
                     (mapContent! as! GMSMapView).camera = camera
                     
@@ -129,40 +131,11 @@ public class PTChatMapCell: PTChatBaseCell {
                         make.size.equalTo(40)
                         make.centerY.centerX.equalToSuperview()
                     }
-    #endif
+#else
+                    setBaseMapView(location2D: location2D)
+#endif
                 case .MapKit:
-                    let pinImage = PTChatConfig.share.mapCellPinImage
-                    let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
-                    annotationView.image = pinImage
-                    annotationView.centerOffset = CGPoint(x: 0,y: -pinImage.size.height / 2)
-                    
-                    let snapshotOptions = MKMapSnapshotter.Options()
-                    snapshotOptions.region = MKCoordinateRegion(center: location2D, span: PTChatConfig.share.span)
-                    snapshotOptions.showsBuildings = PTChatConfig.share.showBuilding
-                    snapshotOptions.pointOfInterestFilter = PTChatConfig.share.showsPointsOfInterest ? .includingAll : .excludingAll
-                    let snapShotter = MKMapSnapshotter(options: snapshotOptions)
-                    snapShotter.start { snapShot, error in
-                        guard let snapshot = snapShot, error == nil else {
-                          // show an error image?
-                          return
-                        }
-                        
-                        UIGraphicsBeginImageContextWithOptions(snapshotOptions.size, true, 0)
-
-                        snapshot.image.draw(at: .zero)
-
-                        var point = snapshot.point(for: location2D)
-                        // Move point to reflect annotation anchor
-                        point.x -= annotationView.bounds.size.width / 2
-                        point.y -= annotationView.bounds.size.height / 2
-                        point.x += annotationView.centerOffset.x
-                        point.y += annotationView.centerOffset.y
-
-                        annotationView.image?.draw(at: point)
-                        let composedImage = UIGraphicsGetImageFromCurrentImageContext()
-                        UIGraphicsEndImageContext()
-                        (self.mapContent! as! UIImageView).image = composedImage
-                    }
+                    setBaseMapView(location2D: location2D)
                 }
             }
         }
@@ -180,5 +153,41 @@ public class PTChatMapCell: PTChatBaseCell {
             self.sendMesageError?(cellModel)
         }
         checkCellSendStatus(cellModel: cellModel)
+    }
+    
+    func setBaseMapView(location2D:CLLocationCoordinate2D) {
+        let pinImage = PTChatConfig.share.mapCellPinImage
+        let annotationView = MKAnnotationView(annotation: nil, reuseIdentifier: nil)
+        annotationView.image = pinImage
+        annotationView.centerOffset = CGPoint(x: 0,y: -pinImage.size.height / 2)
+        
+        let snapshotOptions = MKMapSnapshotter.Options()
+        snapshotOptions.region = MKCoordinateRegion(center: location2D, span: PTChatConfig.share.span)
+        snapshotOptions.showsBuildings = PTChatConfig.share.showBuilding
+        snapshotOptions.pointOfInterestFilter = PTChatConfig.share.showsPointsOfInterest ? .includingAll : .excludingAll
+        let snapShotter = MKMapSnapshotter(options: snapshotOptions)
+        snapShotter.start { snapShot, error in
+            guard let snapshot = snapShot, error == nil else {
+              // show an error image?
+              return
+            }
+            
+            UIGraphicsBeginImageContextWithOptions(snapshotOptions.size, true, 0)
+
+            snapshot.image.draw(at: .zero)
+
+            var point = snapshot.point(for: location2D)
+            // Move point to reflect annotation anchor
+            point.x -= annotationView.bounds.size.width / 2
+            point.y -= annotationView.bounds.size.height / 2
+            point.x += annotationView.centerOffset.x
+            point.y += annotationView.centerOffset.y
+
+            annotationView.image?.draw(at: point)
+            let composedImage = UIGraphicsGetImageFromCurrentImageContext()
+            UIGraphicsEndImageContext()
+            (self.mapContent! as! UIImageView).image = composedImage
+        }
+
     }
 }
