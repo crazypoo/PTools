@@ -9,6 +9,7 @@
 import Foundation
 
 public let DevNetWorkKey = "UI_test_url"
+public let DevSocketKey = "UI_test_socket_url"
 public let PTDevMaskTouchBubbleKey = "PTDevMaskTouchBubbleKey"
 public let PTDevMaskKey = "PTDevMaskKey"
 public let ConsoleDebug = "UI_debug"
@@ -27,7 +28,11 @@ public struct PTCoreUserDefultsWrapper {
     //MARK: App的全局URL环境配置设置(1生产2测试3自定义)
     ///App的全局URL环境配置设置(1生产2测试3自定义)
     @PTUserDefault(withKey: "AppServiceIdentifier", defaultValue: nil) public static var AppServiceIdentifier:String?
+    ///App的全局URL环境配置设置(1生产2测试3自定义)
+    @PTUserDefault(withKey: "AppSocketServiceIdentifier", defaultValue: nil) public static var AppSocketServiceIdentifier:String?
     //MARK: App的自定义URL环境请求连接
+    ///App的自定义SocketURL环境请求连接
+    @PTUserDefault(withKey: DevSocketKey, defaultValue: "") public static var AppSocketUrl:String
     ///App的自定义URL环境请求连接
     @PTUserDefault(withKey: DevNetWorkKey, defaultValue: "") public static var AppRequestUrl:String
     //MARK: App测试环境(YES是)
