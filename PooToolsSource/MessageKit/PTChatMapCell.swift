@@ -25,14 +25,7 @@ public class PTChatMapCell: PTChatBaseCell {
         view.clipsToBounds = true
         return view
     }()
-    
-    var locationPin:UIImageView = {
-        let view = UIImageView()
-        view.contentMode = .scaleAspectFit
-        view.image = PTChatConfig.share.mapCellPinImage
-        return view
-    }()
-    
+        
     public override init(frame: CGRect) {
         super.init(frame: frame)
     }

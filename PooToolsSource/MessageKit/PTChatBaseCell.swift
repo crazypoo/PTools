@@ -11,7 +11,7 @@ import SnapKit
 public typealias PTChatBaseCellHandler = (_ dataModel:PTChatListModel) -> Void
 
 @objcMembers
-public class PTChatBaseCell: PTBaseNormalCell {
+open class PTChatBaseCell: PTBaseNormalCell {
     
     ///Cell时间到顶部的高度
     public static let TimeTopSpace:CGFloat = 5
@@ -28,21 +28,21 @@ public class PTChatBaseCell: PTBaseNormalCell {
     ///内容到头像距离
     public static let DataContentUserIconFixel:CGFloat = 5.5
     ///消息过期回调
-    public var sendExp:PTChatBaseCellHandler? = nil
+    open var sendExp:PTChatBaseCellHandler? = nil
     ///错误点击回调
-    public var sendMesageError:PTChatBaseCellHandler? = nil
+    open var sendMesageError:PTChatBaseCellHandler? = nil
 
     fileprivate var timer:Timer?
-    public var outputModel:PTChatListModel!
+    open var outputModel:PTChatListModel!
     
-    public lazy var userIcon:UIButton = {
+    open lazy var userIcon:UIButton = {
         let view = UIButton(type: .custom)
         view.clipsToBounds = true
         view.viewCorner(radius: PTChatConfig.share.messageUserIconSize / 2)
         return view
     }()
     
-    public lazy var messageTimeLabel:UILabel = {
+    open lazy var messageTimeLabel:UILabel = {
         let view = UILabel()
         view.textAlignment = .center
         view.font = PTChatConfig.share.chatTimeFont
@@ -52,7 +52,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
         return view
     }()
     
-    public lazy var senderNameLabel:UILabel = {
+    open lazy var senderNameLabel:UILabel = {
         let view = UILabel()
         view.font = PTChatConfig.share.senderNameFont
         view.textColor = PTChatConfig.share.senderNameColor
@@ -61,7 +61,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
         return view
     }()
     
-    public lazy var waitImageView:UIButton = {
+    open lazy var waitImageView:UIButton = {
         let view = UIButton(type: .custom)
         view.setImage(PTChatConfig.share.chatWaitImage, for: .normal)
         view.isUserInteractionEnabled = false
@@ -69,7 +69,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
         return view
     }()
     
-    public lazy var dataContent:UIButton = {
+    open lazy var dataContent:UIButton = {
         let view = UIButton(type: .custom)
         return view
     }()
@@ -90,7 +90,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
     }
     
     ///配置初始界面,如果继承这个view需要在新的view中remakeConstraints
-    public func setBaseSubsViews(cellModel:PTChatListModel) {
+    open func setBaseSubsViews(cellModel:PTChatListModel) {
         outputModel = cellModel
         userIcon.pt_SDWebImage(imageString: cellModel.senderCover)
         messageTimeLabel.text = cellModel.messageTimeStamp.conversationTimeSet()
@@ -139,7 +139,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
     }
     
     ///检测Cell是否过期
-    public func checkCellSendStatus(cellModel:PTChatListModel) {
+    open func checkCellSendStatus(cellModel:PTChatListModel) {
         
         switch cellModel.messageStatus {
         case .Sending:
@@ -160,7 +160,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
     }
     
     ///等待View动画开启
-    public func startWaitAnimation() {
+    open func startWaitAnimation() {
         waitImageView.isHidden = false
         waitImageView.isUserInteractionEnabled = false
         let layerAnimation = CABasicAnimation(keyPath: "transform.rotation")
@@ -172,7 +172,7 @@ public class PTChatBaseCell: PTBaseNormalCell {
     }
     
     ///等待View动画关闭
-    public func stopWaitAnimation() {
+    open func stopWaitAnimation() {
         waitImageView.layer.removeAllAnimations()
         waitImageView.isHidden = true
         waitImageView.isUserInteractionEnabled = false
@@ -192,6 +192,6 @@ public class PTChatBaseCell: PTBaseNormalCell {
             self.timer?.invalidate()
             self.timer = nil
             self.sendExp?(self.outputModel)
-        } 
+        }
     }
 }
