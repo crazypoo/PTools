@@ -7,6 +7,7 @@
 
 import UIKit
 import AttributedString
+import SnapKit
 
 public class PTChatSystemMessageCell: PTBaseNormalCell {
     public static let ID = "PTChatSystemMessageCell"

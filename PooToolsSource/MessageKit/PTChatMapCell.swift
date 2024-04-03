@@ -6,10 +6,8 @@
 //
 
 import UIKit
-#if canImport(GoogleMaps)
-import GoogleMaps
-#endif
 import MapKit
+import SnapKit
 
 public class PTChatMapCell: PTChatBaseCell {
     public static let ID = "PTChatMapCell"
@@ -21,20 +19,6 @@ public class PTChatMapCell: PTChatBaseCell {
         }
     }
         
-#if canImport(GoogleMaps)
-    lazy var googleMap:GMSMapView = {
-        let view = GMSMapView()
-        view.isMyLocationEnabled = false
-        view.settings.myLocationButton = false
-        view.settings.scrollGestures = false
-        view.settings.zoomGestures = false
-        view.setMinZoom(16, maxZoom: 18)
-        view.mapType = .normal
-        view.isUserInteractionEnabled = false
-        return view
-    }()
-#endif
-
     lazy var appleMap:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
@@ -42,7 +26,6 @@ public class PTChatMapCell: PTChatBaseCell {
         return view
     }()
     
-    var mapContent:UIView?
     var locationPin:UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFit
@@ -81,16 +64,6 @@ public class PTChatMapCell: PTChatBaseCell {
         }
 
         dataContent.viewCorner(radius: PTChatConfig.share.mapMessageImageCorner)
-        switch PTChatConfig.share.mapKit {
-        case .Google:
-#if canImport(GoogleMaps)
-            mapContent = googleMap
-#else
-            mapContent = appleMap
-#endif
-        case .MapKit:
-            mapContent = appleMap
-        }
         dataContent.snp.makeConstraints { make in
             if cellModel.belongToMe {
                 make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
@@ -111,33 +84,15 @@ public class PTChatMapCell: PTChatBaseCell {
         }
         
         if dic != nil {
-            if mapContent != nil {
-                let lat = dic!["lat"] as! String
-                let lng = dic!["lng"] as! String
-                dataContent.addSubviews([mapContent!])
-                mapContent!.snp.makeConstraints { make in
-                    make.edges.equalToSuperview()
-                }
-            
-                let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
-                switch PTChatConfig.share.mapKit {
-                case .Google:
-#if canImport(GoogleMaps)
-                    let camera = GMSCameraPosition(target: location2D, zoom: 18)
-                    (mapContent! as! GMSMapView).camera = camera
-                    
-                    mapContent!.addSubviews([locationPin])
-                    locationPin.snp.makeConstraints { make in
-                        make.size.equalTo(40)
-                        make.centerY.centerX.equalToSuperview()
-                    }
-#else
-                    setBaseMapView(location2D: location2D)
-#endif
-                case .MapKit:
-                    setBaseMapView(location2D: location2D)
-                }
+            let lat = dic!["lat"] as! String
+            let lng = dic!["lng"] as! String
+            dataContent.addSubviews([appleMap])
+            appleMap.snp.makeConstraints { make in
+                make.edges.equalToSuperview()
             }
+        
+            let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
+            setBaseMapView(location2D: location2D)
         }
         
         waitImageView.snp.remakeConstraints { make in
@@ -186,7 +141,7 @@ public class PTChatMapCell: PTChatBaseCell {
             annotationView.image?.draw(at: point)
             let composedImage = UIGraphicsGetImageFromCurrentImageContext()
             UIGraphicsEndImageContext()
-            (self.mapContent! as! UIImageView).image = composedImage
+            self.appleMap.image = composedImage
         }
 
     }

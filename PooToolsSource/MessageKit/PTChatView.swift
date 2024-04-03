@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public typealias PTChatHandler = (PTChatListModel,IndexPath) -> Void
 public typealias PTChatCellHandler = (_ collectionView:UICollectionView,_ sectionModel:PTSection,_ indexPath:IndexPath) -> PTChatBaseCell?

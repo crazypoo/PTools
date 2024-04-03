@@ -7,6 +7,7 @@
 
 import UIKit
 import AVFoundation
+import SnapKit
 
 public class PTChatMediaCell: PTChatBaseCell {
     public static let ID = "PTChatMediaCell"

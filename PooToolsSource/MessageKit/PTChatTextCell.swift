@@ -7,6 +7,7 @@
 
 import UIKit
 import AttributedString
+import SnapKit
 
 public class PTChatTextCell: PTChatBaseCell {
     public static let ID = "PTChatTextCell"
@@ -70,7 +71,7 @@ public class PTChatTextCell: PTChatBaseCell {
             contentHeight = PTChatConfig.share.contentBaseHeight
         }
         
-        let contentWidth:CGFloat = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,height: PTChatConfig.share.contentBaseHeight).width + textEdges
+        let contentWidth:CGFloat = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,height: PTChatConfig.share.contentBaseHeight).width + textEdges + 5
         
         dataContent.titleLabel?.numberOfLines = 0
         var titleColor:UIColor!
@@ -100,7 +101,7 @@ public class PTChatTextCell: PTChatBaseCell {
             }
             make.top.equalTo(self.senderNameLabel.snp.bottom)
             make.height.equalTo(contentHeight)
-            if contentNumberOfLines <= 1 {
+            if contentNumberOfLines <= 1 && contentWidth <= PTChatConfig.ChatContentShowMaxWidth {
                 make.width.equalTo(contentWidth)
             } else {
                 make.width.equalTo(PTChatConfig.ChatContentShowMaxWidth)

@@ -18,11 +18,6 @@ public extension UIImage {
     }
 }
 
-public enum PTChatMessageMapType:Int,CaseIterable {
-    case Google
-    case MapKit
-}
-
 @objcMembers
 public class PTChatConfig: NSObject {
     public static let share = PTChatConfig()
@@ -95,9 +90,9 @@ public class PTChatConfig: NSObject {
     ///別人文本字體
     public var textOtherMessageFont:UIFont = .appfont(size: 15)
     ///自己文本偏移設置
-    public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 10)
+    public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)
     ///別人文本偏移設置
-    public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)
+    public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
     ///文本字體間隔
     public var textLineSpace:NSNumber = 2
     ///設置聊天內容框最小Height
@@ -125,8 +120,6 @@ public class PTChatConfig: NSObject {
     public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)
     ///是否顯示POI
     public var showsPointsOfInterest: Bool = false
-    ///地圖樣式
-    public var mapKit:PTChatMessageMapType = .MapKit
     ///地圖Pin
     public var mapCellPinImage:UIImage = "🧭".emojiToImage(emojiFont: .appfont(size: 40))
     

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 public typealias PTChatBaseCellHandler = (_ dataModel:PTChatListModel) -> Void
 
