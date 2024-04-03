@@ -332,6 +332,8 @@
 		55B4FA402AE149C5006D35F3 /* PTPermissionLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */; };
 		55B4FA412AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */; };
 		55B4FA422AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */; };
+		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
+		55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55BA093D2BBD0C0F00F58126 /* sound1.m4a */; };
 		55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */; };
 		55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */; };
 		55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9642B1731C20016A4C2 /* PTPaths.swift */; };
@@ -856,6 +858,8 @@
 		55B4FA3C2AE149C5006D35F3 /* PTPermissionLocation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocation.swift; sourceTree = "<group>"; };
 		55B4FA3D2AE149C5006D35F3 /* PTPermissionLocationWhenInUseHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationWhenInUseHandler.swift; sourceTree = "<group>"; };
 		55B4FA3E2AE149C5006D35F3 /* PTPermissionLocationAccuracy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPermissionLocationAccuracy.swift; sourceTree = "<group>"; };
+		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
+		55BA093D2BBD0C0F00F58126 /* sound1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound1.m4a; sourceTree = "<group>"; };
 		55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTransitioningAnimation.swift; sourceTree = "<group>"; };
 		55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTHarBethFilter.swift; sourceTree = "<group>"; };
 		55BCB9642B1731C20016A4C2 /* PTPaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPaths.swift; sourceTree = "<group>"; };
@@ -1102,7 +1106,6 @@
 		231D14D6272CDEE9003D6F62 /* PooToolsSource */ = {
 			isa = PBXGroup;
 			children = (
-				558B77A32BBC526700BD7AB0 /* MessageKit */,
 				55D59C5328F2975D00B4FF76 /* ActionsheetAndAlert */,
 				231D15F4272CDEE9003D6F62 /* AESAndDES */,
 				55D59C5228F2971E00B4FF76 /* Animation */,
@@ -1161,6 +1164,7 @@
 				9AE4468D2858680A007DC2B5 /* Log */,
 				55D59C6428F3E8FE00B4FF76 /* MediaViewer */,
 				55B4FA2F2AE10B25006D35F3 /* MeidaLibraryPermission */,
+				558B77A32BBC526700BD7AB0 /* MessageKit */,
 				55B4FA2C2AE10A06006D35F3 /* MicPermission */,
 				55D59C5D28F3E7C400B4FF76 /* Motion */,
 				55B4FA142AE0FC2E006D35F3 /* MotionPermission */,
@@ -2480,6 +2484,7 @@
 		6003F593195388D20070C39A /* Example for PooTools */ = {
 			isa = PBXGroup;
 			children = (
+				55BA093D2BBD0C0F00F58126 /* sound1.m4a */,
 				557A29FC2B1CCD4800BBCDF7 /* JWT */,
 				55B1596F2B0CEED200A64741 /* heartbeat.svga */,
 				55B1596E2B0CEED200A64741 /* Goddess.svga */,
@@ -2511,6 +2516,7 @@
 				55228F172B0909130010E76E /* PTDocumentViewController.swift */,
 				55EA23D42B9AB5B500468F00 /* PTTestNewModel.swift */,
 				55938CBF2B9C276D0037E3B9 /* PTAPIFunctionCheck.swift */,
+				55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */,
 			);
 			name = "Example for PooTools";
 			path = PooTools;
@@ -2624,6 +2630,7 @@
 				231D14D4272CDD2C003D6F62 /* LICENSE in Resources */,
 				55102AB22AFFAB5900E9529D /* icon_permission_siri.png in Resources */,
 				55102AB82AFFAB5900E9529D /* icon_permission_motion.png in Resources */,
+				55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */,
 				55102AB52AFFAB5900E9529D /* icon_permission_notification.png in Resources */,
 				55102AAD2AFFAB5900E9529D /* icon_permission_media.png in Resources */,
 				55102AB12AFFAB5900E9529D /* icon_permission_location.png in Resources */,
@@ -3016,6 +3023,7 @@
 				555818D02AFA7E400051C0AA /* UIToolbar+PTEX.swift in Sources */,
 				550CE4B42AF233F50052539D /* OSSUtterance.swift in Sources */,
 				551FDB512AD93A47001045F9 /* PTNetworkSpeedHistoriaModel.swift in Sources */,
+				55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */,
 				555818C02AFA63FB0051C0AA /* View+PTEX.swift in Sources */,
 				231D168E272CDEEA003D6F62 /* UIApplication+PTEX.swift in Sources */,
 				9A14E98628616B4000D7E8EF /* PTCycleScrollView.swift in Sources */,

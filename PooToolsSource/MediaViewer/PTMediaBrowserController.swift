@@ -120,6 +120,11 @@ public class PTMediaBrowserController: PTBaseViewController {
                     cell.imageLongTaped = false
                 }
             }
+            cell.videoPlayHandler = { videoController in
+                self.present(videoController, animated: true) {
+                    videoController.player?.play()
+                }
+            }
             return cell
         }
         collectionView.customerLayout = { sectionModel in

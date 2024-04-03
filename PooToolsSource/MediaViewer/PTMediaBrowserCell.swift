@@ -22,6 +22,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
     var currentCellType:PTViewerDataType = .None
     var longTapWakeUp:PTActionTask?
     var imageLongTaped:Bool = false
+    var videoPlayHandler:((AVPlayerViewController)->Void)!
     
     let maxZoomSale:CGFloat = 2
     let minZoomSale:CGFloat = 0.6
@@ -327,9 +328,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                     self.playBtn.addActionHandlers { sender in
                         let videoController = AVPlayerViewController()
                         videoController.player = AVPlayer(playerItem: avItem)
-                        PTUtils.getCurrentVC().present(videoController, animated: true) {
-                          videoController.player?.play()
-                        }
+                        self.videoPlayHandler(videoController)
                     }
                 }
             } else {
@@ -391,10 +390,7 @@ class PTMediaBrowserCell: PTBaseNormalCell {
                 self.playBtn.addActionHandlers { sender in
                     let videoController = AVPlayerViewController()
                     videoController.player = AVPlayer(url: videoUrl! as URL)
-
-                    PTUtils.getCurrentVC().present(videoController, animated: true) {
-                      videoController.player?.play()
-                    }
+                    self.videoPlayHandler(videoController)
                 }
             }
         })

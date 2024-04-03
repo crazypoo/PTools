@@ -26,7 +26,7 @@ public class PTChatConfig: NSObject {
     ///文本內容實際顯示最大的Width
     public static let ChatContentShowMaxWidth = CGFloat.kSCREEN_WIDTH - PTChatConfig.share.messageUserIconSize - PTChatConfig.share.userIconFixelSpace - PTChatBaseCell.DataContentWaitImageFixel - PTChatBaseCell.WaitImageRightFixel - PTChatBaseCell.WaitImageSize - PTChatBaseCell.DataContentUserIconFixel
     ///設置持有人ID
-    public var imOwnerId:String = ""
+    open var imOwnerId:String = ""
     @PTClampedProperyWrapper(range:10...120) public var messageExpTime: Int = 60
 
     class public func timeExp(expTime:Date) ->Bool {
@@ -42,109 +42,117 @@ public class PTChatConfig: NSObject {
     
     //MARK: System message
     ///系統時間字體大小
-    public var chatTimeFont:UIFont = .appfont(size: 13)
+    open var chatTimeFont:UIFont = .appfont(size: 13)
     ///系統時間字體顏色
-    public var chatTimeColor:UIColor = UIColor(hexString: "919191")!
+    open var chatTimeColor:UIColor = UIColor(hexString: "919191")!
     ///系統內容字體大小
-    public var chatSystemMessageFont:UIFont = .appfont(size: 13)
+    open var chatSystemMessageFont:UIFont = .appfont(size: 13)
     ///系統內容字體顏色
-    public var chatSystemMessageColor:UIColor = UIColor(hexString: "919191")!
+    open var chatSystemMessageColor:UIColor = UIColor(hexString: "919191")!
     ///系統時間文字間隔
-    public var chatSystemTimeLineSpace:NSNumber = 2
+    open var chatSystemTimeLineSpace:NSNumber = 2
     ///系統內容文字間隔
-    public var chatSystemContentLineSpace:NSNumber = 2
+    open var chatSystemContentLineSpace:NSNumber = 2
 
     //MARK: Message base
     ///消息頭像大小
-    @PTClampedProperyWrapper(range:44...88) public var messageUserIconSize: CGFloat = 44
+    @PTClampedProperyWrapper(range:44...88) open var messageUserIconSize: CGFloat = 44
     ///是否顯示時間
-    public var showTimeLabel:Bool = true
+    open var showTimeLabel:Bool = true
     ///是否顯示用戶名
-    public var showSenderName:Bool = true
+    open var showSenderName:Bool = true
     ///用戶名字字體
-    public var senderNameFont:UIFont = .appfont(size: 13)
+    open var senderNameFont:UIFont = .appfont(size: 13)
     ///用戶名字顏色
-    public var senderNameColor:UIColor = UIColor(hexString: "919191")!
+    open var senderNameColor:UIColor = UIColor(hexString: "919191")!
     ///頭像到邊的距離
-    public var userIconFixelSpace:CGFloat = 10
+    open var userIconFixelSpace:CGFloat = 10
     ///自己消息的聊天氣泡
-    public var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    open var chatMeBubbleImage:UIImage = UIColor.white.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///自己消息的聊天Hightlight氣泡
-    public var chatMeHighlightedBubbleImage:UIImage = UIColor.white.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    open var chatMeHighlightedBubbleImage:UIImage = UIColor.white.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天氣泡
-    public var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    open var chatOtherBubbleImage:UIImage = UIColor.systemBlue.createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///別人消息的聊天Hightlight氣泡
-    public var chatOtherHighlightedBubbleImage:UIImage = UIColor.systemBlue.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
+    open var chatOtherHighlightedBubbleImage:UIImage = UIColor.systemBlue.lighter(amount: 0.8).createImageWithColor().transformImage(size: CGSize(width: 55, height: 55))
     ///等待消息的圖片
-    public var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20))
+    open var chatWaitImage:UIImage = "📀".emojiToImage(emojiFont: .appfont(size: 20))
     ///異常消息的圖片
-    public var chatWaitErrorImage:UIImage = "‼️".emojiToImage(emojiFont: .appfont(size: 20))
+    open var chatWaitErrorImage:UIImage = "‼️".emojiToImage(emojiFont: .appfont(size: 20))
+    ///已讀未讀開關
+    open var showReadStatus:Bool = true
+    ///已讀未讀字體
+    open var readStatusFont:UIFont = .appfont(size: 13)
+    ///已讀未讀顏色
+    open var readStatusColor:UIColor = UIColor(hexString: "919191")!
+    open var readStatusName:String = "Read"
+    open var unreadStatusName:String = "unread"
 
     //MARK: Text message
     ///自己文本顏色
-    public var textMeMessageColor:UIColor = .black
+    open var textMeMessageColor:UIColor = .black
     ///自己文本字體
-    public var textMeMessageFont:UIFont = .appfont(size: 15)
+    open var textMeMessageFont:UIFont = .appfont(size: 15)
     ///別人文本顏色
-    public var textOtherMessageColor:UIColor = .black
+    open var textOtherMessageColor:UIColor = .black
     ///別人文本字體
-    public var textOtherMessageFont:UIFont = .appfont(size: 15)
+    open var textOtherMessageFont:UIFont = .appfont(size: 15)
     ///自己文本偏移設置
-    public var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)
+    open var textOwnerContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 10, bottom: 20, right: 15)
     ///別人文本偏移設置
-    public var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
+    open var textOtherContentEdges:UIEdgeInsets = UIEdgeInsets(top: 20, left: 15, bottom: 20, right: 15)
     ///文本字體間隔
-    public var textLineSpace:NSNumber = 2
+    open var textLineSpace:NSNumber = 2
     ///設置聊天內容框最小Height
-    @PTClampedProperyWrapper(range:38...88) public var contentBaseHeight: CGFloat = 38
+    @PTClampedProperyWrapper(range:38...88) open var contentBaseHeight: CGFloat = 38
 
     //MARK: Media message
     ///Media的Width大小
-    @PTClampedProperyWrapper(range:88...200) public var imageMessageImageWidth: CGFloat = 200
+    @PTClampedProperyWrapper(range:88...200) open var imageMessageImageWidth: CGFloat = 200
     ///Media的Height大小
-    @PTClampedProperyWrapper(range:88...200) public var imageMessageImageHeight: CGFloat = 200
+    @PTClampedProperyWrapper(range:88...200) open var imageMessageImageHeight: CGFloat = 200
     ///Media的Coner大小
-    @PTClampedProperyWrapper(range:0...100) public var imageMessageImageCorner: CGFloat = 5
-    public var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
+    @PTClampedProperyWrapper(range:0...100) open var imageMessageImageCorner: CGFloat = 5
+    open var mediaPlayButton:UIImage = "▶️".emojiToImage(emojiFont: .appfont(size: 40))
     
     //MARK: Map message
     ///地圖Width大小
-    @PTClampedProperyWrapper(range:88...200) public var mapMessageImageWidth: CGFloat = 200
+    @PTClampedProperyWrapper(range:88...200) open var mapMessageImageWidth: CGFloat = 200
     ///地圖Height大小
-    @PTClampedProperyWrapper(range:88...200) public var mapMessageImageHeight: CGFloat = 200
+    @PTClampedProperyWrapper(range:88...200) open var mapMessageImageHeight: CGFloat = 200
     ///地圖Coner大小
-    @PTClampedProperyWrapper(range:0...100) public var mapMessageImageCorner: CGFloat = 5
+    @PTClampedProperyWrapper(range:0...100) open var mapMessageImageCorner: CGFloat = 5
     ///是否顯示建築
-    public var showBuilding:Bool = true
+    open var showBuilding:Bool = true
     ///地圖的圖片縮放
-    public var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)
+    open var span:MKCoordinateSpan = MKCoordinateSpan(latitudeDelta: 0, longitudeDelta: 0)
     ///是否顯示POI
-    public var showsPointsOfInterest: Bool = false
+    open var showsPointsOfInterest: Bool = false
     ///地圖Pin
-    public var mapCellPinImage:UIImage = "🧭".emojiToImage(emojiFont: .appfont(size: 40))
+    open var mapCellPinImage:UIImage = "🧭".emojiToImage(emojiFont: .appfont(size: 40))
     
     //MARK: Voice message
     ///音頻Width大小
-    @PTClampedProperyWrapper(range:150...250) public var audioMessageImageWidth: CGFloat = 150
+    @PTClampedProperyWrapper(range:150...250) open var audioMessageImageWidth: CGFloat = 250
     ///播放按鈕
-    public var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue)
+    open var playButtonImage:UIImage = UIImage(.play).withTintColor(.systemBlue)
     ///暫停按鈕
-    public var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue)
+    open var pauseButtonImage:UIImage = UIImage(.pause).withTintColor(.systemBlue)
     ///時間字體
-    public var durationFont:UIFont = .appfont(size: 14)
+    open var durationFont:UIFont = .appfont(size: 14)
     ///時間字體顏色
-    public var durationColor:UIColor = .systemBlue
+    open var durationColor:UIColor = .systemBlue
     ///Progress顏色
-    public var progressColor:UIColor = .systemBlue
+    open var progressColor:UIColor = .systemBlue
     
     //MARK: Typing message
-    public var dotColor:UIColor = .lightGray
+    open var dotColor:UIColor = .lightGray
     
     //MARK: File message
-    public var fileNameFont:UIFont = .appfont(size: 18,bold: true)
-    public var fileNameColor:UIColor = .black
-    public var fileSizeFont:UIFont = .appfont(size: 13)
-    public var fileSizeColor:UIColor = .lightGray
-    @PTClampedProperyWrapper(range:0...15) public var fileContentSpace: CGFloat = 2
-    public var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40))
+    open var fileNameFont:UIFont = .appfont(size: 18,bold: true)
+    open var fileNameColor:UIColor = .black
+    open var fileSizeFont:UIFont = .appfont(size: 13)
+    open var fileSizeColor:UIColor = .lightGray
+    @PTClampedProperyWrapper(range:0...15) open var fileContentSpace: CGFloat = 2
+    open var fileImage:UIImage = "📁".emojiToImage(emojiFont: .appfont(size: 40))
 }

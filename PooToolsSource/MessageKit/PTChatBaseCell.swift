@@ -15,10 +15,6 @@ open class PTChatBaseCell: PTBaseNormalCell {
     
     ///Cell时间到顶部的高度
     public static let TimeTopSpace:CGFloat = 5
-    ///Cell时间高度
-    public static let TimeHeight:CGFloat = 20
-    ///Cell名字高度
-    public static let NameHeight:CGFloat = 20
     ///等待图片大小
     public static let WaitImageSize:CGFloat = 20
     ///等待图片到边的距离
@@ -28,12 +24,12 @@ open class PTChatBaseCell: PTBaseNormalCell {
     ///内容到头像距离
     public static let DataContentUserIconFixel:CGFloat = 5.5
     ///消息过期回调
-    open var sendExp:PTChatBaseCellHandler? = nil
+    public var sendExp:PTChatBaseCellHandler? = nil
     ///错误点击回调
-    open var sendMesageError:PTChatBaseCellHandler? = nil
+    public var sendMesageError:PTChatBaseCellHandler? = nil
 
     fileprivate var timer:Timer?
-    open var outputModel:PTChatListModel!
+    public var outputModel:PTChatListModel!
     
     open lazy var userIcon:UIButton = {
         let view = UIButton(type: .custom)
@@ -69,6 +65,17 @@ open class PTChatBaseCell: PTBaseNormalCell {
         return view
     }()
     
+    open lazy var readStatusLabel:UIButton = {
+        let view = UIButton(type: .custom)
+        view.titleLabel?.font = PTChatConfig.share.readStatusFont
+        view.setTitleColor(PTChatConfig.share.readStatusColor, for: .normal)
+        view.setTitleColor(PTChatConfig.share.readStatusColor, for: .selected)
+        view.setTitle(PTChatConfig.share.unreadStatusName, for: .normal)
+        view.setTitle(PTChatConfig.share.readStatusName, for: .selected)
+        view.isHidden = !PTChatConfig.share.showReadStatus
+        return view
+    }()
+    
     open lazy var dataContent:UIButton = {
         let view = UIButton(type: .custom)
         return view
@@ -77,7 +84,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
     public override init(frame: CGRect) {
         super.init(frame: frame)
         
-        contentView.addSubviews([messageTimeLabel,userIcon,senderNameLabel,waitImageView,dataContent])
+        contentView.addSubviews([messageTimeLabel,userIcon,senderNameLabel,waitImageView,dataContent,readStatusLabel])
     }
     
     public required init?(coder: NSCoder) {
@@ -97,7 +104,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
         messageTimeLabel.snp.makeConstraints { make in
             make.left.right.equalToSuperview()
             make.top.equalToSuperview().inset(PTChatBaseCell.TimeTopSpace)
-            make.height.equalTo(PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
+            make.height.equalTo(PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
         }
         
         userIcon.snp.makeConstraints { make in
@@ -107,7 +114,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
             } else {
                 make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
             }
-            make.top.equalTo(self.messageTimeLabel.snp.bottom).offset(PTChatBaseCell.TimeTopSpace)
+            make.top.equalTo(self.messageTimeLabel.snp.bottom)
         }
         
         if cellModel.belongToMe {
@@ -124,7 +131,7 @@ open class PTChatBaseCell: PTBaseNormalCell {
                 make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
             }
             
-            make.height.equalTo(PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
+            make.height.equalTo(PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
         }
         
         waitImageView.snp.makeConstraints { make in
@@ -134,8 +141,65 @@ open class PTChatBaseCell: PTBaseNormalCell {
             } else {
                 make.right.lessThanOrEqualToSuperview().inset(PTChatBaseCell.WaitImageRightFixel)
             }
-            make.centerY.equalToSuperview()
+            make.bottom.equalTo(self.dataContent)
         }
+    }
+    
+    open func resetSubsFrame(cellModel:PTChatListModel) {
+        userIcon.snp.remakeConstraints { make in
+            make.size.equalTo(PTChatConfig.share.messageUserIconSize)
+            if cellModel.belongToMe {
+                make.right.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
+            } else {
+                make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
+            }
+            make.top.equalTo(self.messageTimeLabel.snp.bottom).offset(PTChatBaseCell.TimeTopSpace)
+        }
+        
+        senderNameLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.userIcon)
+            if cellModel.belongToMe {
+                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+            } else {
+                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+            }
+            
+            make.height.equalTo(PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
+        }
+
+        if PTChatConfig.share.showReadStatus {
+            if cellModel.belongToMe {
+                readStatusLabel.titleLabel?.textAlignment = .right
+            } else {
+                readStatusLabel.titleLabel?.textAlignment = .left
+            }
+            
+            readStatusLabel.isSelected = cellModel.isRead
+        }
+        readStatusLabel.snp.remakeConstraints { make in
+            make.top.equalTo(self.dataContent.snp.bottom)
+            if cellModel.belongToMe {
+                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
+            } else {
+                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
+            }
+            
+            make.height.equalTo(PTChatConfig.share.showReadStatus ? (PTChatConfig.share.readStatusFont.pointSize + 10) : 0)
+        }
+        
+        waitImageView.snp.remakeConstraints { make in
+            make.size.equalTo(PTChatBaseCell.WaitImageSize)
+            if cellModel.belongToMe {
+                make.right.equalTo(self.dataContent.snp.left).offset(-PTChatBaseCell.DataContentWaitImageFixel)
+            } else {
+                make.left.equalTo(self.dataContent.snp.right).offset(PTChatBaseCell.DataContentWaitImageFixel)
+            }
+            make.bottom.equalTo(self.dataContent)
+        }
+        waitImageView.addActionHandlers { sender in
+            self.sendMesageError?(cellModel)
+        }
+        checkCellSendStatus(cellModel: cellModel)
     }
     
     ///检测Cell是否过期

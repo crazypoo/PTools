@@ -47,27 +47,6 @@ public class PTChatFileCell: PTChatBaseCell {
     
     fileprivate func dataContentSets(cellModel:PTChatListModel) {
                 
-        userIcon.snp.remakeConstraints { make in
-            make.size.equalTo(PTChatConfig.share.messageUserIconSize)
-            if cellModel.belongToMe {
-                make.right.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
-            } else {
-                make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
-            }
-            make.top.equalTo(self.messageTimeLabel.snp.bottom).offset(PTChatBaseCell.TimeTopSpace)
-        }
-
-        senderNameLabel.snp.remakeConstraints { make in
-            make.top.equalTo(self.userIcon)
-            if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
-            } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
-            }
-            
-            make.height.equalTo(PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
-        }
-
         if cellModel.belongToMe {
             dataContent.setBackgroundImage(PTChatConfig.share.chatMeBubbleImage.resizeImage(), for: .normal)
             dataContent.setBackgroundImage(PTChatConfig.share.chatMeHighlightedBubbleImage.resizeImage(), for: .highlighted)
@@ -143,18 +122,6 @@ public class PTChatFileCell: PTChatBaseCell {
             make.right.equalTo(self.fileImageView.snp.left).offset(-PTChatFileCell.FileCellConentFixbel)
         }
         
-        waitImageView.snp.remakeConstraints { make in
-            make.size.equalTo(PTChatBaseCell.WaitImageSize)
-            if cellModel.belongToMe {
-                make.right.equalTo(self.dataContent.snp.left).offset(-PTChatBaseCell.DataContentWaitImageFixel)
-            } else {
-                make.left.equalTo(self.dataContent.snp.right).offset(PTChatBaseCell.DataContentWaitImageFixel)
-            }
-            make.centerY.equalToSuperview()
-        }
-        waitImageView.addActionHandlers { sender in
-            self.sendMesageError?(cellModel)
-        }
-        checkCellSendStatus(cellModel: cellModel)
+        resetSubsFrame(cellModel: cellModel)
     }    
 }

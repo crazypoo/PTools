@@ -60,6 +60,7 @@ public extension String {
     static let filtercamera = "FilterCamera"
     static let editimage = "EditImage"
     static let sortButton = "SortButton"
+    static let messageKit = "MessageKit"
 
     static let route = "路由"
     
@@ -269,8 +270,10 @@ class PTFuncNameViewController: PTBaseViewController {
         let editimage = self.rowBaseModel(name: .editimage)
         
         let sortButton = self.rowBaseModel(name: .sortButton)
+        
+        let messageKit = self.rowBaseModel(name: .messageKit)
 
-        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton]
+        let uikitArrs = [slider,rate,segment,countLabel,throughLabel,twitterLabel,movieCutOutput,progressBar,asTips,menu,loading,permission,permissionSetting,tipkit,document,svga,swipe,scanQR,filtercamera,editimage,sortButton,messageKit]
         
         var uikitRows = [PTRows]()
         uikitArrs.enumerated().forEach { index,value in
@@ -751,6 +754,9 @@ class PTFuncNameViewController: PTBaseViewController {
                 nav.view.backgroundColor = .black
                 nav.modalPresentationStyle = .fullScreen
                 self.showDetailViewController(nav, sender: nil)
+            } else if itemRow.title == .messageKit {
+                let vc = PTTestChatViewController()
+                self.navigationController?.pushViewController(vc)
             } else {
                 let vc = PTFuncDetailViewController(typeString: itemRow.title)
                 PTFloatingPanelFuction.floatPanel_VC(vc: vc,panGesDelegate: self,currentViewController: self)

@@ -48,6 +48,12 @@ public class PTChatView: UIView {
             sectionModel.rows.enumerated().forEach { (index,model) in
                 let cellModel = model.dataModel as! PTChatListModel
                 var cellHeight:CGFloat = 0
+                
+                let timeHeight = (PTChatConfig.share.showTimeLabel ? (PTChatConfig.share.chatTimeFont.pointSize + 15) : 0)
+                let nameHeight = (PTChatConfig.share.showSenderName ? (PTChatConfig.share.senderNameFont.pointSize + 10) : 0)
+                let readStatusHeight = PTChatConfig.share.showReadStatus ? (PTChatConfig.share.readStatusFont.pointSize + 10) : 0
+                let spaceHeight = PTChatBaseCell.TimeTopSpace * 2
+                
                 switch cellModel.messageType {
                 case .Text:
                     let msgContent = cellModel.msgContent as! String
@@ -64,34 +70,23 @@ public class PTChatView: UIView {
                     if contentHeight < PTChatConfig.share.contentBaseHeight {
                         contentHeight = PTChatConfig.share.contentBaseHeight
                     }
-                    
-                    let timeHeight = (PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
-                    let nameHeight = (PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
-                    var nameContentTotal = nameHeight + contentHeight
+                                        
+                    var nameContentTotal = nameHeight + contentHeight + readStatusHeight
                     if nameContentTotal < PTChatConfig.share.messageUserIconSize {
                         nameContentTotal = PTChatConfig.share.messageUserIconSize
                     }
                     
-                    cellHeight = nameContentTotal + timeHeight + PTChatBaseCell.TimeTopSpace * 3
+                    cellHeight = nameContentTotal + timeHeight + spaceHeight
                 case .Map:
-                    let timeHeight = (PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
-                    let nameHeight = (PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
                     let mapHeight = PTChatConfig.share.mapMessageImageHeight
-                    cellHeight = timeHeight + nameHeight + mapHeight + PTChatBaseCell.TimeTopSpace * 3
+                    cellHeight = timeHeight + nameHeight + mapHeight + spaceHeight + readStatusHeight
                 case .Media:
-                    let timeHeight = (PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
-                    let nameHeight = (PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
                     let imageHeight = PTChatConfig.share.imageMessageImageHeight
-                    cellHeight = timeHeight + nameHeight + imageHeight + PTChatBaseCell.TimeTopSpace * 3
+                    cellHeight = timeHeight + nameHeight + imageHeight + spaceHeight + readStatusHeight
                 case .Voice:
-                    let timeHeight = (PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
-                    let nameHeight = (PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
                     let voiceHeight:CGFloat = 38
-                    cellHeight = timeHeight + nameHeight + voiceHeight + PTChatBaseCell.TimeTopSpace * 3
+                    cellHeight = timeHeight + nameHeight + voiceHeight + spaceHeight + readStatusHeight
                 case .File:
-                    let timeHeight = (PTChatConfig.share.showTimeLabel ? PTChatBaseCell.TimeHeight : 0)
-                    let nameHeight = (PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
-                    
                     var url:URL?
                     if cellModel.msgContent is String {
                         let contentString = cellModel.msgContent as! String
@@ -109,19 +104,14 @@ public class PTChatView: UIView {
                             contentHeight = total
                         }
                     }
-                    cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.TimeTopSpace * 3
+                    cellHeight = timeHeight + contentHeight + nameHeight + PTChatBaseCell.TimeTopSpace * 3 + readStatusHeight
                 case .SystemMessage:
                     let timeHeight = UIView.sizeFor(string: cellModel.messageTimeStamp.timeToDate().toFormat("yyyy-MM-dd HH:MM:ss"), font: PTChatConfig.share.chatTimeFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                     var contentHeight:CGFloat = 0
                     if cellModel.msgContent is String {
                         contentHeight = UIView.sizeFor(string: cellModel.msgContent as! String, font: PTChatConfig.share.chatSystemMessageFont,lineSpacing: 2,width: CGFloat.kSCREEN_WIDTH).height
                     }
-                    let total = timeHeight + contentHeight
-                    if total >= PTChatConfig.share.contentBaseHeight {
-                        cellHeight = total
-                    } else {
-                        cellHeight = PTChatConfig.share.contentBaseHeight
-                    }
+                    cellHeight = timeHeight + contentHeight + 20
                 case .Typing:
                     cellHeight = 44
                 case .CustomerMessage:

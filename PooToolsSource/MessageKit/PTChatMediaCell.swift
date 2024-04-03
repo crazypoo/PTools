@@ -45,27 +45,6 @@ public class PTChatMediaCell: PTChatBaseCell {
     
     func dataContentSets(cellModel:PTChatListModel) {
                 
-        userIcon.snp.remakeConstraints { make in
-            make.size.equalTo(PTChatConfig.share.messageUserIconSize)
-            if cellModel.belongToMe {
-                make.right.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
-            } else {
-                make.left.equalToSuperview().inset(PTChatConfig.share.userIconFixelSpace)
-            }
-            make.top.equalTo(self.messageTimeLabel.snp.bottom).offset(PTChatBaseCell.TimeTopSpace)
-        }
-
-        senderNameLabel.snp.remakeConstraints { make in
-            make.top.equalTo(self.userIcon)
-            if cellModel.belongToMe {
-                make.right.equalTo(self.userIcon.snp.left).offset(-PTChatBaseCell.DataContentUserIconFixel)
-            } else {
-                make.left.equalTo(self.userIcon.snp.right).offset(PTChatBaseCell.DataContentUserIconFixel)
-            }
-            
-            make.height.equalTo(PTChatConfig.share.showSenderName ? PTChatBaseCell.NameHeight : 0)
-        }
-
         contentImageView.viewCorner(radius: PTChatConfig.share.imageMessageImageCorner)
         dataContent.viewCorner(radius: PTChatConfig.share.imageMessageImageCorner)
         dataContent.snp.remakeConstraints { make in
@@ -92,19 +71,7 @@ public class PTChatMediaCell: PTChatBaseCell {
             checkIsVideo(msgContent: cellModel.msgContent)
         }
 
-        waitImageView.snp.remakeConstraints { make in
-            make.size.equalTo(PTChatBaseCell.WaitImageSize)
-            if cellModel.belongToMe {
-                make.right.equalTo(self.dataContent.snp.left).offset(-PTChatBaseCell.DataContentWaitImageFixel)
-            } else {
-                make.left.equalTo(self.dataContent.snp.right).offset(PTChatBaseCell.DataContentWaitImageFixel)
-            }
-            make.centerY.equalToSuperview()
-        }
-        waitImageView.addActionHandlers { sender in
-            self.sendMesageError?(cellModel)
-        }
-        checkCellSendStatus(cellModel: cellModel)
+        resetSubsFrame(cellModel: cellModel)
     }
     
     func checkIsVideo(msgContent:Any?) {
@@ -123,7 +90,7 @@ public class PTChatMediaCell: PTChatBaseCell {
             switch contentURL.pathExtension.nsString.contentTypeForUrl() {
             case .MOV,.MP4,.ThreeGP:
                 self.mediaPlayImageView.isHidden = false
-                videoUrlLoad(url: contentURL.description)
+                videoUrlLoad(url: contentURL.absoluteString)
             default:
                 self.mediaPlayImageView.isHidden = true
                 self.contentImageView.loadImage(contentData: contentURL)
