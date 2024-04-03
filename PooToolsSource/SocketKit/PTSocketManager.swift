@@ -40,9 +40,9 @@ public class PTSocketManager: NSObject {
     fileprivate var webSocket:SRWebSocket?
 
     //MARK: socket服务器URL
-    public class func gobalUrl() -> String {
+    open class func gobalUrl() -> String {
         if UIApplication.applicationEnvironment() != .appStore {
-            PTNSLogConsole("PTBaseURLMode:\(PTSocketURLMode)")
+            PTNSLogConsole("PTSocketURLMode:\(PTSocketURLMode)")
             switch PTSocketURLMode {
             case .Development:
                 let url_debug:String = PTCoreUserDefultsWrapper.AppSocketUrl
@@ -67,7 +67,11 @@ public class PTSocketManager: NSObject {
 
     override init() {
         super.init()
-                
+                        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onNetworkStatusChange(notifi:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
+    }
+    
+    public func socketSet() {
         let urlString = PTSocketManager.gobalUrl()
         let webSocketUrl = URL(string: urlString)
         var urlcomponents = URLComponents(url: webSocketUrl!, resolvingAgainstBaseURL: false)
@@ -75,8 +79,6 @@ public class PTSocketManager: NSObject {
         
         let url = urlcomponents!.url
         self.request = NSMutableURLRequest(url: url!, cachePolicy: NSURLRequest.CachePolicy.reloadIgnoringCacheData, timeoutInterval: 1)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNetworkStatusChange(notifi:)), name: NSNotification.Name(rawValue: nNetworkStatesChangeNotification), object: nil)
     }
 
     @objc func onNetworkStatusChange(notifi:Notification) {
