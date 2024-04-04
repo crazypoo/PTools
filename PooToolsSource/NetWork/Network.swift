@@ -8,7 +8,6 @@
 
 import UIKit
 import Alamofire
-import MBProgressHUD
 import KakaJSON
 import Network
 
@@ -178,14 +177,35 @@ public class Network: NSObject {
         return Session(configuration: configuration)
     }()
     
-    /// manager
-    public static var hud: MBProgressHUD = {
-        let hud = MBProgressHUD.init(view: AppWindows!)
-        AppWindows!.addSubview(hud)
-        hud.show(animated: true)
-        return hud
-    }()
+    open var hud:PTHudView?
+    open var hudConfig : PTHudConfig {
+        let hudConfig = PTHudConfig.share
+        hudConfig.hudColors = [.gray,.gray]
+        hudConfig.lineWidth = 4
+        return hudConfig
+    }
     
+    func hudShow() {
+        PTGCDManager.gcdMain {
+            let _ = Network.share.hudConfig
+            if self.hud == nil {
+                self.hud = PTHudView()
+                self.hud!.hudShow()
+            }
+        }
+    }
+    
+    func hudHide(completion:PTActionTask? = nil) {
+        if self.hud != nil {
+            self.hud!.hide {
+                self.hud = nil
+                if completion != nil {
+                    completion!()
+                }
+            }
+        }
+    }
+        
     //MARK: 服务器URL
     public class func gobalUrl() -> String {
         if UIApplication.applicationEnvironment() != .appStore {
