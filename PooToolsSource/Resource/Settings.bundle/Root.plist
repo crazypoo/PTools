@@ -8,6 +8,36 @@
 	<array>
 		<dict>
 			<key>Type</key>
+			<string>PSTextFieldSpecifier</string>
+			<key>Title</key>
+			<string>自定义Socket地址</string>
+			<key>Key</key>
+			<string>UI_test_socket_url</string>
+		</dict>
+		<dict>
+			<key>Type</key>
+			<string>PSMultiValueSpecifier</string>
+			<key>Title</key>
+			<string>选择Socket服务器地址（默认是正式环境）</string>
+			<key>Key</key>
+			<string>AppSocketServiceIdentifier</string>
+			<key>DefaultValue</key>
+			<string>2</string>
+			<key>Titles</key>
+			<array>
+				<string>生产环境</string>
+				<string>测试环境</string>
+				<string>自定义环境</string>
+			</array>
+			<key>Values</key>
+			<array>
+				<string>1</string>
+				<string>2</string>
+				<string>3</string>
+			</array>
+		</dict>
+		<dict>
+			<key>Type</key>
 			<string>PSToggleSwitchSpecifier</string>
 			<key>Title</key>
 			<string>TouchInspect</string>

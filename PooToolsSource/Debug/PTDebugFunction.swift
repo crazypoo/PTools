@@ -13,7 +13,8 @@ public class PTDebugFunction: NSObject {
     //MARK: App測試模式的檢測
     ///App測試模式的檢測
     class open func registerDefaultsFromSettingsBundle() {
-        if let settingsBundle = Bundle.main.path(forResource: "Settings", ofType: "bundle") {
+        let bundle = PTUtils.cgBaseBundle()
+        if let settingsBundle = bundle.path(forResource: "Settings", ofType: "bundle") {
             let settings = NSDictionary.init(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist"))
             let prefernces = settings!["PreferenceSpecifiers"] as! [NSDictionary]
             let defaultsToRegister = NSMutableDictionary.init(capacity: prefernces.count)

@@ -14,7 +14,6 @@ import Photos
 import Combine
 import TipKit
 import AttributedString
-import MBProgressHUD
 
 #if canImport(LifetimeTracker)
 import LifetimeTracker
