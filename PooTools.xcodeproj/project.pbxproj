@@ -1564,6 +1564,7 @@
 		55102A9C2AFFAB1700E9529D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 				555818A82AF8DE8F0051C0AA /* Settings.bundle */,
 				55102ADC2AFFD34900E9529D /* icon_clear.png */,
 				55FA6CBC2B0285FD00BC464B /* icon_cycle_selected@3x.png */,
@@ -1590,7 +1591,6 @@
 				55102ADF2AFFD3C100E9529D /* llplaceholder.png */,
 				55102AC82AFFB8A100E9529D /* Localizable.strings */,
 				550CE4B62AF234E10052539D /* OSSKitImages.xcassets */,
-				553347B62BA4146D0086E1B4 /* PrivacyInfo.xcprivacy */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
