@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
     s.name        = 'PooTools'
-    s.version     = '3.41.4'
+    s.version     = '3.41.5'
     s.author           = { 'crazypoo' => '273277355@qq.com' }
     s.homepage    = 'http://crazypoo.github.io/PTools/'
     s.summary     = '多年来积累的轮子'
@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
     s.ios.deployment_target = '13.1'
     s.swift_versions = '5.0'
     s.default_subspec = "Core"
+    s.resource_bundles = {
+        'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy'],
+    }
     s.subspec "Core" do |subspec|
-        subspec.resource_bundles = {
-            'PooToolsResource' => ['PooToolsSource/Resource/**/*','PooToolsSource/Resource/PrivacyInfo.xcprivacy'],
-        }
         subspec.dependency 'SwiftDate'
         subspec.dependency 'WZLBadge'
         subspec.dependency 'SnapKit'
