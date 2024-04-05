@@ -12,10 +12,17 @@ import UIKit
 public class PTDebugFunction: NSObject {
     //MARK: App測試模式的檢測
     ///App測試模式的檢測
-    class open func registerDefaultsFromSettingsBundle() {
+    class open func registerDefaultsFromSettingsBundle(pod:Bool = false) {
         let bundle = PTUtils.cgBaseBundle()
         let podBundle = bundle.path(forResource: CorePodBundleName, ofType: "bundle")
-        if let settingsBundle = Bundle(path: podBundle!)!.path(forResource: "Settings", ofType: "bundle") {
+        var bundleSelected:Bundle!
+        if pod {
+            bundleSelected = Bundle(path: podBundle!)!
+        } else {
+            bundleSelected = Bundle.main
+        }
+        
+        if let settingsBundle = bundleSelected.path(forResource: "Settings", ofType: "bundle") {
             let settings = NSDictionary.init(contentsOfFile: settingsBundle.nsString.appendingPathComponent("Root.plist"))
             let prefernces = settings!["PreferenceSpecifiers"] as! [NSDictionary]
             let defaultsToRegister = NSMutableDictionary.init(capacity: prefernces.count)
@@ -25,6 +32,7 @@ public class PTDebugFunction: NSObject {
                 }
             }
             UserDefaults.standard.register(defaults: defaultsToRegister as! [String : Any])
+            UserDefaults.standard.synchronize()
         } else {
             PTCoreUserDefultsWrapper.AppServiceIdentifier = nil
             PTNSLogConsole("没有发现Settings.bundle")
