@@ -6,7 +6,7 @@
 //  Copyright © 2022 crazypoo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 import SwifterSwift
 
 /*
@@ -141,6 +141,46 @@ public extension Array {
         stride(from: 0, to: self.count, by: chunkSize).map {
             Array(self[$0..<Swift.min($0 + chunkSize, self.count)])
         }
+    }
+    
+    subscript(safe index:Index) ->Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
+    
+    /// 获取数组中的元素,增加了数组越界的判断
+    func safeIndex(_ i:Int) -> Array.Iterator.Element? {
+        guard !isEmpty && self.count > abs(i) else {
+            return nil
+        }
+        
+        for item in self.enumerated() {
+            if item.offset == i {
+                return item.element
+            }
+        }
+        return nil
+    }
+    
+    /// 从前面取 N 个数组元素
+    func limit(_ limitCount: Int) -> [Array.Iterator.Element] {
+        let maxCount = self.count
+        var resultCount: Int = limitCount
+        if maxCount < limitCount {
+            resultCount = maxCount
+        }
+        if resultCount <= 0 {
+            return []
+        }
+        return self[0..<resultCount].map { $0 }
+    }
+    
+    /// 从前面取 N 个数组元素
+    func fill(_ fillCount: Int) -> [Array.Iterator.Element] {
+        var items = self
+        while items.count > 0 && items.count < fillCount {
+            items = (items + items).limit(fillCount)
+        }
+        return items.limit(fillCount)
     }
 }
 

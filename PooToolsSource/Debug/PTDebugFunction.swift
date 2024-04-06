@@ -13,10 +13,10 @@ public class PTDebugFunction: NSObject {
     //MARK: App測試模式的檢測
     ///App測試模式的檢測
     class open func registerDefaultsFromSettingsBundle(pod:Bool = false) {
-        let bundle = PTUtils.cgBaseBundle()
-        let podBundle = bundle.path(forResource: CorePodBundleName, ofType: "bundle")
         var bundleSelected:Bundle!
         if pod {
+            let bundle = PTUtils.cgBaseBundle()
+            let podBundle = bundle.path(forResource: CorePodBundleName, ofType: "bundle")
             bundleSelected = Bundle(path: podBundle!)!
         } else {
             bundleSelected = Bundle.main

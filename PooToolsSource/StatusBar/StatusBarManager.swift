@@ -2,7 +2,7 @@
 //  StatusBarManager.swift
 //  Diou
 //
-//  Created by 王锦发 on 2019/12/23.
+//  Created by Jax on 2019/12/23.
 //  Copyright © 2019 kooun. All rights reserved.
 //
 
@@ -106,7 +106,6 @@ public class StatusBarManager {
             updateStatusBar()
         }
         
-//        printAllStates()
         return newState
         
     }
@@ -218,7 +217,6 @@ public class StatusBarManager {
             // 如果状态栏需要动画（fade or slide），需要添加动画时间，才会有动画效果
             UIView.animate(withDuration: self.duration, animations: {
                 AppWindows?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
-//                UIApplication.shared.keyWindow?.rootViewController?.setNeedsStatusBarAppearanceUpdate()
             })
         }
     }

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwifterSwift
 
 public extension UILabel {
     private struct AssociatedKey {
@@ -16,6 +17,8 @@ public extension UILabel {
         static var duration: Double = 0
         static var displayLink: UnsafeRawPointer = UnsafeRawPointer(bitPattern: "displayLink".hashValue)!
         static var formatter = 998
+        static var enableCopy:Int = 1
+        static var copyTapDuration:Float = 0.5
     }
     private var startTime: CFTimeInterval {
         get {
@@ -145,6 +148,66 @@ public extension UILabel {
                 return 0
             }
         }
+    }
+}
+
+public extension UILabel {
+    
+    ///是否允许有复制功能
+    var enableCopy:Bool {
+        get {
+            guard let value = objc_getAssociatedObject(self, &AssociatedKey.enableCopy) else {
+                return false
+            }
+            guard let enabledCopy = value as? Int else {
+                return false
+            }
+            return enabledCopy.toBool()
+        }
+        set {
+            objc_setAssociatedObject(self, &AssociatedKey.enableCopy, newValue, .OBJC_ASSOCIATION_ASSIGN)
+            self.attachLongPressGesture()
+        }
+    }
+    
+    ///设置按压时间，长按指定时间后出现复制按钮
+    var copyPressDuration: Float {
+        get {
+            guard let value = objc_getAssociatedObject(self, &AssociatedKey.copyTapDuration) else {
+                return 0.5
+            }
+            guard let pressDuration = value as? Float else {
+                return 0.5
+            }
+            return pressDuration
+        }
+        set {
+           objc_setAssociatedObject(self, &AssociatedKey.copyTapDuration, newValue, .OBJC_ASSOCIATION_ASSIGN)
+        }
+    }
+
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+    
+    ///附加长按手势
+    private func attachLongPressGesture() {
+        guard self.enableCopy else { return }
+        self.isUserInteractionEnabled = true
+        let longPressGesture = UILongPressGestureRecognizer.init { sender in
+            self.becomeFirstResponder()
+            
+            let menuItems = PTEditMenuItem(title: "copy") {
+                PTNSLogConsole("CopyFinish")
+                (self.text ?? self.attributedText?.string)?.copyToPasteboard()
+            }
+            
+            let menu = PTEditMenuItemsInteraction.share
+            menu.showMenu([menuItems], targetRect: self.frame, for: self)
+        }
+        let pressDuration = self.copyPressDuration != 0.5 ? self.copyPressDuration : 0.5
+        longPressGesture.minimumPressDuration = TimeInterval(pressDuration)
+        self.addGestureRecognizer(longPressGesture)
     }
 }
 

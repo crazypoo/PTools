@@ -22,6 +22,8 @@ public class PTLaunchAdMonitor: NSObject {
     public static let shared = PTLaunchAdMonitor()
     public static let monitor : PTLaunchAdMonitor = PTLaunchAdMonitor.shared
     
+    public var imageContentMode:UIView.ContentMode = .scaleAspectFill
+    
     private var images:[UIImage]? = [UIImage]()
     private var playMovie:Bool?
     private var imgLoaded:Bool? = false
@@ -216,7 +218,7 @@ public class PTLaunchAdMonitor: NSObject {
                     make.bottom.equalToSuperview().inset(bottomViewHeight!)
                 }
                 imageBtn.imageView?.clipsToBounds = true
-                imageBtn.imageView?.contentMode = .scaleAspectFill
+                imageBtn.imageView?.contentMode = PTLaunchAdMonitor.shared.imageContentMode
                 imageBtn.adjustsImageWhenHighlighted = false
             }
             

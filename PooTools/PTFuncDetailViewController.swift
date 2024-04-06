@@ -179,6 +179,7 @@ class PTFuncDetailViewController: PTBaseViewController {
             }
             
             let countLabelEx = UILabel()
+            countLabelEx.enableCopy = true
             countLabelEx.textAlignment = .center
             countLabelEx.font = .appfont(size: 30)
             countLabelEx.count(fromValue: 99999999.99, to: 0, duration: 1,formatter: "%.2f")

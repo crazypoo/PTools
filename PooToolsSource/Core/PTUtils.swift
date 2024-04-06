@@ -93,7 +93,7 @@ import SwifterSwift
     case HundredMillion
 }
 
-func deviceSafeAreaInsets() -> UIEdgeInsets {
+public func deviceSafeAreaInsets() -> UIEdgeInsets {
     var insets: UIEdgeInsets = .zero
     
     if #available(iOS 11, *) {

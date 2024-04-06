@@ -6,7 +6,7 @@
 //  Copyright © 2022 crazypoo. All rights reserved.
 //
 
-import UIKit
+import Foundation
 
 extension Float: PTProtocolCompatible {}
 
@@ -54,5 +54,27 @@ public extension PTPOP where Base == Float {
     func rounding(scale: Int16 = 1) -> Float {
         let value = NSDecimalNumberHandler.pt.rounding(value: base, scale: scale)
         return value.floatValue
+    }
+}
+
+// MARK: - BinaryFloatingPoint扩展
+public extension BinaryFloatingPoint {
+    
+    ///    截取二进制浮点数
+    ///
+    ///    let num = 3.1415927
+    ///    num.rounded(3, rule: .up) -> 3.142
+    ///    num.rounded(3, rule: .down) -> 3.141
+    ///    num.rounded(2, rule: .awayFromZero) -> 3.15
+    ///    num.rounded(4, rule: .towardZero) -> 3.1415
+    ///    num.rounded(-1, rule: .toNearestOrEven) -> 3
+    ///
+    /// - Parameters:
+    ///   - places: The expected number of decimal places.
+    ///   - rule: The rounding rule to use.
+    /// - Returns: The rounded value.
+    func rounded(_ places: Int, rule: FloatingPointRoundingRule = .up) -> Self {
+        let factor = Self(pow(10.0, Double(max(0, places))))
+        return (self * factor).rounded(rule) / factor
     }
 }

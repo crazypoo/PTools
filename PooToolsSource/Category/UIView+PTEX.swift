@@ -9,6 +9,7 @@
 #if canImport(UIKit) && (os(iOS) || os(tvOS))
 import UIKit
 import SnapKit
+import WebKit
 
 @objc public enum Imagegradien:Int {
     case LeftToRight
@@ -107,6 +108,7 @@ public extension UIView {
         static var layoutSubviewsCallback = 998
         static var layoutShapeLayerCallback = 996
         static var layoutShapeLayerProgressLabelCallback = 995
+        static var viewCapturing = 997
     }
 
     private var viewShapeLayer:CAShapeLayer? {
@@ -622,6 +624,30 @@ public extension UIView {
             }
         }
     }
+    
+    ///查找当前View的XViewController
+    func findController<T:UIViewController>(with class :T.Type) -> T? {
+        var responder = next
+        while responder != nil {
+            if responder!.isKind(of: `class`) {
+                return responder as? T
+            }
+            responder = responder?.next
+        }
+        return nil
+    }
+    
+    var ctrl: UIViewController? {
+        return self.findController(with: UIViewController.self)
+    }
+    
+    var naviCtrl: UINavigationController? {
+        return self.findController(with: UINavigationController.self)
+    }
+    
+    var tabBarCtrl: UITabBarController? {
+        return self.findController(with: UITabBarController.self)
+    }
 }
 
 public extension UIView {
@@ -849,6 +875,123 @@ public extension UIView {
         self.addConstraint(constraint)
         return constraint
     }
+}
+
+// MARK: - 截图-对当前视图进行快照
+public extension UIView {
+    
+    /** 是否正在截屏*/
+    var isCapturing: Bool {
+        get {
+            guard let value = objc_getAssociatedObject(self, &AssociatedKeys.viewCapturing) else {
+                return false
+            }
+            guard let boolValue = value as? Bool else {
+                return false
+            }
+            return boolValue
+        }
+        set { objc_setAssociatedObject(self, &AssociatedKeys.viewCapturing, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    }
+    
+    /**  是否包含了WKWebView*/
+    func isContainWKWebView() -> Bool {
+        if self.isKind(of: WKWebView.self) {
+            return true
+        } else {
+            for view in self.subviews {
+                return view.isContainWKWebView()
+            }
+        }
+        return false
+    }
+    
+    /** 快照回调*/
+    typealias captureCompletion = (UIImage?) -> Void
+    
+    /// 对视图进行快照
+    ///
+    /// - Parameter completion: 回调
+    func captureCurrent(_ completion: captureCompletion) {
+        self.isCapturing = true
+        let captureFrame = self.bounds
+        
+        UIGraphicsBeginImageContextWithOptions(captureFrame.size, true, UIScreen.main.scale)
+        let context = UIGraphicsGetCurrentContext()
+        context?.saveGState()
+        context?.translateBy(x: -self.pt.jx_x, y: -self.pt.jx_y)
+        
+        if self.isContainWKWebView() {
+            self.drawHierarchy(in: bounds, afterScreenUpdates: true)
+        } else {
+            self.layer.render(in: context!)
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        context?.restoreGState()
+        UIGraphicsEndImageContext()
+        self.isCapturing = false
+        completion(image)
+    }
+}
+
+// MARK: - 截图
+public extension UIView {
+    
+    /// 生成视图的截图 - bounds
+    ///
+    /// - Parameters:
+    ///   - opaque: alpha通道 true:不透明 / false透明
+    ///   - scale: 缩放清晰度
+    /// - Returns: 截图
+    func generateBoundsScreenshot(_ opaque: Bool = false, scale: CGFloat = 0) -> UIImage {
+        UIGraphicsBeginImageContextWithOptions(self.bounds.size, opaque, scale)
+        if let context = UIGraphicsGetCurrentContext() {
+            self.layer.render(in: context)
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image ?? UIImage()
+    }
+    
+    /// 生成视图的截图 - frame
+    ///
+    /// - Returns: 截图
+    func generateFrameScreenshot() -> UIImage {
+        let imageSize = self.frame.size
+        var orientation:UIInterfaceOrientation!
+        if let orientations = AppWindows?.windowScene?.interfaceOrientation {
+            orientation = orientations
+        } else {
+            orientation = UIInterfaceOrientation(rawValue: UIDevice.current.orientation.rawValue)
+        }
+        UIGraphicsBeginImageContextWithOptions(imageSize, false, 0)
+        if let context = UIGraphicsGetCurrentContext() {
+            context.saveGState()
+            context.translateBy(x: center.x, y: center.y)
+            context.concatenate(transform)
+            context.translateBy(x: -bounds.size.width * layer.anchorPoint.x, y: -bounds.size.height * layer.anchorPoint.y)
+            if orientation == .landscapeLeft {
+                context.rotate(by: .pi / 2)
+                context.translateBy(x: 0, y: -imageSize.width)
+            } else if orientation == .landscapeRight {
+                context.rotate(by: -.pi / 2)
+                context.translateBy(x: -imageSize.height, y: 0)
+            } else if orientation == .portraitUpsideDown {
+                context.rotate(by: .pi)
+                context.translateBy(x: -imageSize.width, y: -imageSize.height)
+            }
+            if self.responds(to: #selector(drawHierarchy(in:afterScreenUpdates:))) {
+                self.drawHierarchy(in: bounds, afterScreenUpdates: true)
+            } else {
+                layer.render(in: context)
+            }
+            context.restoreGState()
+        }
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return image ?? UIImage()
+    }
+    
 }
 
 public extension UILabel {

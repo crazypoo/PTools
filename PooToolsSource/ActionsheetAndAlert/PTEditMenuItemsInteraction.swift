@@ -21,6 +21,7 @@ public class PTEditMenuItem:NSObject {
 
 @objcMembers
 public class PTEditMenuItemsInteraction: NSObject {
+    public static let share = PTEditMenuItemsInteraction()
     private var showingItems: [PTEditMenuItem]?
     private var targetRect: CGRect?
     private let seperator = "_"

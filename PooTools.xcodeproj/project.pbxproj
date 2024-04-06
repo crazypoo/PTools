@@ -334,6 +334,9 @@
 		55BA093C2BBD09C400F58126 /* PTTestChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */; };
 		55BA093E2BBD0C0F00F58126 /* sound1.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 55BA093D2BBD0C0F00F58126 /* sound1.m4a */; };
 		55BA09412BBD597C00F58126 /* PTSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09402BBD597C00F58126 /* PTSocketManager.swift */; };
+		55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */; };
+		55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09492BC0623500F58126 /* Collection+PTEX.swift */; };
+		55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */; };
 		55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */; };
 		55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */; };
 		55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9642B1731C20016A4C2 /* PTPaths.swift */; };
@@ -860,6 +863,9 @@
 		55BA093B2BBD09C400F58126 /* PTTestChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTTestChatViewController.swift; sourceTree = "<group>"; };
 		55BA093D2BBD0C0F00F58126 /* sound1.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = sound1.m4a; sourceTree = "<group>"; };
 		55BA09402BBD597C00F58126 /* PTSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTSocketManager.swift; sourceTree = "<group>"; };
+		55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLGeocoder+PTEX.swift"; sourceTree = "<group>"; };
+		55BA09492BC0623500F58126 /* Collection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+PTEX.swift"; sourceTree = "<group>"; };
+		55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AutoScale+PTEX.swift"; sourceTree = "<group>"; };
 		55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTransitioningAnimation.swift; sourceTree = "<group>"; };
 		55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTHarBethFilter.swift; sourceTree = "<group>"; };
 		55BCB9642B1731C20016A4C2 /* PTPaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPaths.swift; sourceTree = "<group>"; };
@@ -1239,6 +1245,7 @@
 				555818D12AFA7FD40051C0AA /* CGRect+PTEX.swift */,
 				55BD5B7D29C61F790023458A /* CGSize+PTEX.swift */,
 				9AE4469128586987007DC2B5 /* Character+PTEX.swift */,
+				55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */,
 				55A5D6FD29B0987D00DCA096 /* CoreLocation+PTEX.swift */,
 				231D15DD272CDEE9003D6F62 /* Data+PTEX.swift */,
 				9AE44689285862B0007DC2B5 /* Date+PTEX.swift */,
@@ -1312,6 +1319,8 @@
 				9AE446A228598965007DC2B5 /* UserDefaults+PTEX.swift */,
 				555818BF2AFA63FB0051C0AA /* View+PTEX.swift */,
 				55A5D70529B0EF5700DCA096 /* WKWebView+PTEX.swift */,
+				55BA09492BC0623500F58126 /* Collection+PTEX.swift */,
+				55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -2785,6 +2794,7 @@
 				556CA51A2B295E7E00A5B189 /* PTVideoEditorToolsCell.swift in Sources */,
 				55BD5B8329C620C80023458A /* PTActivityViewController.swift in Sources */,
 				55D7383429E529BB0027BDC3 /* SpringConfiguration.swift in Sources */,
+				55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */,
 				55C9CBA928E95FC200DB6200 /* PTCountryCodes.swift in Sources */,
 				555818C82AFA7BDB0051C0AA /* UINavigationController+PTEX.swift in Sources */,
 				555818D42AFA7FFB0051C0AA /* CGPoint+PTEX.swift in Sources */,
@@ -2843,6 +2853,7 @@
 				55A5D6FE29B0987D00DCA096 /* CoreLocation+PTEX.swift in Sources */,
 				55F7A73929D594E200CF6272 /* UIScrollView+PTRefreshEX.swift in Sources */,
 				554929F028F9089D00C82ABF /* PTPermissionCell.swift in Sources */,
+				55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */,
 				558B77BE2BBC52B300BD7AB0 /* PTChatSystemMessageCell.swift in Sources */,
 				554929EF28F9089D00C82ABF /* PTPermissionHeader.swift in Sources */,
 				5571F6102AFD234B00DB4420 /* PTAppScenesDelegate.swift in Sources */,
@@ -3150,6 +3161,7 @@
 				559C3D2F2B26AF6F00EE46BC /* PTVideoEditorToolsViewController.swift in Sources */,
 				558B77BD2BBC52B300BD7AB0 /* PTChatMediaCell.swift in Sources */,
 				550CE4AA2AF1894A0052539D /* PTFuncNameViewController.swift in Sources */,
+				55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */,
 				55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */,
 				558E93522B15319500719A8E /* PTFloatingBaseViewController.swift in Sources */,
 				55C8EB0C29EFAB9C003F6ABD /* PTRefreshAutoStateFooter.swift in Sources */,
