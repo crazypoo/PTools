@@ -223,6 +223,8 @@ class AppDelegate: PTAppWindowsDelegate {
             
         }
 
+        PTIVarList("PTCustomAlertView")
+        
         return true
     }
     

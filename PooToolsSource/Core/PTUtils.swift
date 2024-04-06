@@ -103,6 +103,38 @@ public func deviceSafeAreaInsets() -> UIEdgeInsets {
     return insets
 }
 
+public func PTIVarList(_ className:String) {
+    var count : UInt32 = 0
+    let list = class_copyIvarList(NSClassFromString(className), &count)
+    for i in 0..<Int(count) {
+        let ivar = list![i]
+        let name = ivar_getName(ivar)
+        let type = ivar_getTypeEncoding(ivar)
+        PTNSLogConsole("\(String(cString: name!) + "<---->" + String(cString: type!))")
+    }
+}
+
+public func PTPropertyList(_ classString: String) {
+    var count : UInt32 = 0
+    let list = class_copyPropertyList(NSClassFromString(classString), &count)
+    for i in 0..<Int(count) {
+        let property = list![i]
+        let name = property_getName(property)
+        let type = property_getAttributes(property)
+        PTNSLogConsole("\(String(cString: name) + "<---->" + String(cString: type!))")
+    }
+}
+
+/// 判断一个类是否是自定义类
+///
+/// - Parameters:
+///   - cls: AnyClass
+/// - Returns: 自定义类返回true,系统类返回false
+public func checkCustomClass(for cls: AnyClass) -> Bool {
+    let bundle = Bundle(for: cls)
+    return bundle == .main
+}
+
 public typealias PTImageLoadHandler = (_ error:Error?,_ sourceURL:URL?,_ image:UIImage?) -> Void
 
 @objcMembers

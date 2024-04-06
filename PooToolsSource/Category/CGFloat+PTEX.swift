@@ -19,6 +19,10 @@ extension CGFloat: PTProtocolCompatible {}
 }
 
 public extension CGFloat {
+    //MARK: 屏幕分辨率
+    /// 屏幕分辨率
+    static let kScreenScale: CGFloat = UIScreen.main.scale
+
     //MARK: 獲取屏幕寬度
     ///獲取屏幕寬度
     static let kSCREEN_WIDTH = kSCREEN_SIZE.width
