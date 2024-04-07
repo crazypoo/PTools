@@ -183,8 +183,8 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
-        XMNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { state in
-            
+        PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { state in
+            PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
         }
         
 //        let url = Bundle.podBundle(bundleName: "PTHeartRateResource")?.url(forResource: "heartbeat", withExtension: "svga")
@@ -222,7 +222,7 @@ class AppDelegate: PTAppWindowsDelegate {
         } fail: { error in
             
         }
-
+        
         PTIVarList("PTCustomAlertView")
         
         return true

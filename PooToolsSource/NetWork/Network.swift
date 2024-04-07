@@ -78,9 +78,10 @@ public var PTBaseURLMode:NetWorkEnvironment {
 
 // MARK: - 网络运行状态监听
 @objcMembers
-public class XMNetWorkStatus {
+public class PTNetWorkStatus {
     
-    public static let shared = XMNetWorkStatus()
+    public static let shared = PTNetWorkStatus()
+    public var checkNetwork = "www.google.com"
     /// 当前网络环境状态
     private var currentNetWorkStatus: NetWorkStatus = .wifi
     /// 当前运行环境状态
@@ -88,7 +89,7 @@ public class XMNetWorkStatus {
     
     private let monitor = NWPathMonitor()
 
-    let reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.baidu.com")
+    let reachabilityManager = Alamofire.NetworkReachabilityManager(host: PTNetWorkStatus.shared.checkNetwork)
     
     private func detectNetWork(netWork: @escaping NetWorkStatusBlock) {
         reachabilityManager?.startListening(onUpdatePerforming: { [weak self] (status) in
@@ -279,7 +280,7 @@ public class Network: NSObject {
             }
 
             // 判断网络是否可用
-            if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
+            if let reachabilityManager = PTNetWorkStatus.shared.reachabilityManager {
                 if !reachabilityManager.isReachable {
                     continuation.resume(throwing: AFError.createURLRequestFailed(error: NetWorkNoError))
                     return
@@ -375,7 +376,7 @@ public class Network: NSObject {
         }
 
         // 判断网络是否可用
-        if let reachabilityManager = XMNetWorkStatus.shared.reachabilityManager {
+        if let reachabilityManager = PTNetWorkStatus.shared.reachabilityManager {
             if !reachabilityManager.isReachable {
                 throw AFError.createURLRequestFailed(error: NetWorkNoError)
             }

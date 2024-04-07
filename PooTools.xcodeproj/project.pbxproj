@@ -337,6 +337,7 @@
 		55BA09482BC0618D00F58126 /* CLGeocoder+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */; };
 		55BA094A2BC0623500F58126 /* Collection+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA09492BC0623500F58126 /* Collection+PTEX.swift */; };
 		55BA094C2BC0DE5000F58126 /* AutoScale+PTEX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */; };
+		55BA094E2BC2303400F58126 /* PTPhoneFeedBackControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */; };
 		55BCB9652B1731C20016A4C2 /* PTTransitioningAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */; };
 		55BCB9662B1731C20016A4C2 /* PTHarBethFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */; };
 		55BCB9672B1731C20016A4C2 /* PTPaths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55BCB9642B1731C20016A4C2 /* PTPaths.swift */; };
@@ -866,6 +867,7 @@
 		55BA09472BC0618D00F58126 /* CLGeocoder+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CLGeocoder+PTEX.swift"; sourceTree = "<group>"; };
 		55BA09492BC0623500F58126 /* Collection+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Collection+PTEX.swift"; sourceTree = "<group>"; };
 		55BA094B2BC0DE5000F58126 /* AutoScale+PTEX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AutoScale+PTEX.swift"; sourceTree = "<group>"; };
+		55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PTPhoneFeedBackControl.swift; sourceTree = "<group>"; };
 		55BCB9622B1731C20016A4C2 /* PTTransitioningAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTTransitioningAnimation.swift; sourceTree = "<group>"; };
 		55BCB9632B1731C20016A4C2 /* PTHarBethFilter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTHarBethFilter.swift; sourceTree = "<group>"; };
 		55BCB9642B1731C20016A4C2 /* PTPaths.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PTPaths.swift; sourceTree = "<group>"; };
@@ -2197,6 +2199,7 @@
 				555818AA2AFA0A420051C0AA /* PTPropertyWrapperFunction.swift */,
 				5571F6082AFC251C00DB4420 /* PTAppUserdefault.swift */,
 				55CFC6912B446A3A00CC6CF5 /* PTGifManager.swift */,
+				55BA094D2BC2303400F58126 /* PTPhoneFeedBackControl.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -2929,6 +2932,7 @@
 				555818BE2AFA5DC90051C0AA /* PTAlertTipsHaptic.swift in Sources */,
 				55C9CBA728E8605D00DB6200 /* PTLocalConsoleFunction.swift in Sources */,
 				55B13D582B1AEF3F00C67EDA /* PTEditToolsCell.swift in Sources */,
+				55BA094E2BC2303400F58126 /* PTPhoneFeedBackControl.swift in Sources */,
 				55F6C637298CF9960052A58C /* UIAlertController+PTEX.swift in Sources */,
 				55024DE629F2855300244E44 /* PTEyeTrackingManager.swift in Sources */,
 				55024DF229F3711000244E44 /* PTBaseViewController+Debug.swift in Sources */,

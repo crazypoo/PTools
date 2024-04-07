@@ -39,7 +39,7 @@ class PTFuncDetailViewController: PTBaseViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        XMNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { status in
+        PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { status in
             self.appNetWorkStatus = status
         }
     }
