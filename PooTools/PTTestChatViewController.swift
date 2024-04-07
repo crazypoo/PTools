@@ -160,10 +160,19 @@ class PTTestChatViewController: PTBaseViewController {
         meSendFileModel.senderCover = "https://tinhtinhimg.zxkjcn.cn/171143117700603E0FFC28AFB45B1BD21E0BA664E7C4C_image_0.png"
         meSendFileModel.senderName = "自己"
         meSendFileModel.messageStatus = .Arrived
+        
+        let meSendAttModel = PTChatListModel()
+        meSendAttModel.messageTimeStamp = 1711986851
+        meSendAttModel.messageType = .Text
+        meSendAttModel.creatorId = "46709394"
+        meSendAttModel.msgContent = "13800138000 http://www.qq.com #QQQQQQQQQQQQQ"
+        meSendAttModel.senderCover = "https://tinhtinhimg.zxkjcn.cn/171143117700603E0FFC28AFB45B1BD21E0BA664E7C4C_image_0.png"
+        meSendAttModel.senderName = "自己"
+        meSendAttModel.messageStatus = .Arrived
 
         let typingModel = PTChatListModel()
         typingModel.messageType = .Typing
-        return [systemModel,meSendTextModel,othetSendTextModel,othetSendTextErrorModel,meSendImageModel,otherSendImageModel,meSendMapModel,meSendAppleMapModel,meSendVoiceModel,meSendVideoModel,meSendFileModel,typingModel]
+        return [systemModel,meSendTextModel,othetSendTextModel,othetSendTextErrorModel,meSendImageModel,otherSendImageModel,meSendMapModel,meSendAppleMapModel,meSendVoiceModel,meSendVideoModel,meSendFileModel,meSendAttModel,typingModel]
     }
     
     override func viewDidLoad() {

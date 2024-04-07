@@ -57,14 +57,14 @@ public class PTChatMapCell: PTChatBaseCell {
         }
         
         if dic != nil {
-            let lat = dic!["lat"] as! String
-            let lng = dic!["lng"] as! String
+            let lat = (dic!["lat"] as? String) ?? "0"
+            let lng = (dic!["lng"] as? String) ?? "0"
             dataContent.addSubviews([appleMap])
             appleMap.snp.makeConstraints { make in
                 make.edges.equalToSuperview()
             }
         
-            let location2D = CLLocationCoordinate2D(latitude: lat.double()!, longitude: lng.double()!)
+            let location2D = CLLocationCoordinate2D(latitude: lat.double() ?? 0, longitude: lng.double() ?? 0)
             setBaseMapView(location2D: location2D)
         }
         

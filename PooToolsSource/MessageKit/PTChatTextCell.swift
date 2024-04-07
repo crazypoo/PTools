@@ -20,6 +20,13 @@ public class PTChatTextCell: PTChatBaseCell {
             }
         }
     }
+    
+//    fileprivate var activeLabel:PTActiveLabel = {
+//        let view = PTActiveLabel()
+//        view.urlMaximumLength = 20
+//                
+//        return view
+//    }()
             
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,7 +52,7 @@ public class PTChatTextCell: PTChatBaseCell {
         }
         
         let contentNumberOfLines = msgContent.numberOfLines(font: dataContentFont, labelShowWidth: PTChatConfig.ChatContentShowMaxWidth,lineSpacing: PTChatConfig.share.textLineSpace)
-        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height
+        var contentHeight = UIView.sizeFor(string: msgContent, font: dataContentFont,lineSpacing: PTChatConfig.share.textLineSpace,width: PTChatConfig.ChatContentShowMaxWidth).height + 10
         if contentHeight < PTChatConfig.share.contentBaseHeight {
             contentHeight = PTChatConfig.share.contentBaseHeight
         }
@@ -87,6 +94,77 @@ public class PTChatTextCell: PTChatBaseCell {
             }
         }
         
-        resetSubsFrame(cellModel: cellModel)        
+//        dataContent.addSubviews([activeLabel])
+//        activeLabel.snp.makeConstraints { make in
+//            make.top.bottom.equalToSuperview()
+//            make.left.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.left : PTChatConfig.share.textOtherContentEdges.left)
+//            make.right.equalToSuperview().inset(cellModel.belongToMe ? PTChatConfig.share.textOwnerContentEdges.right : PTChatConfig.share.textOtherContentEdges.right)
+//        }
+//        
+//        activeLabel.customize { label in
+//            label.textAlignment = .left
+//            label.text = msgContent
+//            label.numberOfLines = 0
+//            label.lineSpacing = CGFloat(truncating: PTChatConfig.share.textLineSpace)
+//            label.font = dataContentFont
+//            label.textColor = titleColor
+//            label.hashtagColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+//            label.hashtagSelectedColor = UIColor(red: 85.0/255, green: 172.0/255, blue: 238.0/255, alpha: 1)
+//            label.mentionColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
+//            label.mentionSelectedColor = UIColor(red: 238.0/255, green: 85.0/255, blue: 96.0/255, alpha: 1)
+//            label.URLColor = UIColor(red: 85.0/255, green: 238.0/255, blue: 151.0/255, alpha: 1)
+//            label.URLSelectedColor = UIColor(red: 82.0/255, green: 190.0/255, blue: 41.0/255, alpha: 1)
+//            label.chinaCellPhoneColor = .random
+//            label.chinaCellPhoneSelectedColor = .random
+//
+//            label.handleMentionTap { text in
+////                self.alert(title:"Mention", message: text)
+//                PTNSLogConsole("123")
+//            }
+//            label.handleHashtagTap { text in
+////                self.alert(title:"Hashtag", message: text)
+//                PTNSLogConsole("2222222")
+//            }
+//            label.handleURLTap { url in
+////                self.alert(title:"URL", message: url.absoluteString)
+//                PTNSLogConsole("aaaaaaaaaa")
+//            }
+//            label.handleChinaCellPhoneTap { phone in
+//                PTNSLogConsole("11111111111")
+////                self.alert(title:"CellPhone", message: phone)
+//            }
+//
+//            //Custom types
+//
+////            label.customColor[customType] = UIColor.purple
+////            label.customSelectedColor[customType] = UIColor.green
+////            label.customColor[customType2] = UIColor.magenta
+////            label.customSelectedColor[customType2] = UIColor.green
+////            
+////            label.configureLinkAttribute = { (type, attributes, isSelected) in
+////                var atts = attributes
+////                switch type {
+////                case PTActiveType.hashtag:
+////                    atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 16)
+////                case customType3:
+////                    atts[NSAttributedString.Key.font] = isSelected ? UIFont.boldSystemFont(ofSize: 16) : UIFont.boldSystemFont(ofSize: 14)
+////                default: ()
+////                }
+////                
+////                return atts
+////            }
+//
+////            label.handleCustomTap(for: customType) { text in
+////                self.alert(title:"Custom type", message: text)
+////            }
+////            label.handleCustomTap(for: customType2) { text in
+////                self.alert(title:"Custom type", message: text)
+////            }
+////            label.handleCustomTap(for: customType3) { text in
+////                self.alert(title:"Custom type", message: text)
+////            }
+//        }
+        
+        resetSubsFrame(cellModel: cellModel)
     }
 }
