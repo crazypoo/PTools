@@ -115,6 +115,11 @@ public extension UIImageView {
             return CGRect(x: 0, y: topLeftY, width: imageViewSize.width, height: height)
         }
     }
+    
+    @available(iOS 17.0, *)
+    func hdrSet(hdrModel:UIImage.DynamicRange = .constrainedHigh) {
+        self.preferredImageDynamicRange = hdrModel
+    }
 }
 
 /*
