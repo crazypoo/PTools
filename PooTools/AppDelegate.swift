@@ -183,6 +183,7 @@ class AppDelegate: PTAppWindowsDelegate {
         PTNSLogConsole("我有料>>>>>:\(PTCheckFWords.share.haveFWord(str:"半刺刀"))")
                 
         PTNSLogConsole(">>>>>>>>>>>>>>\("Test".localized())")
+        PTNetWorkStatus.shared.reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
         PTNetWorkStatus.shared.obtainDataFromLocalWhenNetworkUnconnected { state in
             PTNSLogConsole(">>>>>>>>>>>>>>>>>>>>>>>>>>\(state)")
         }

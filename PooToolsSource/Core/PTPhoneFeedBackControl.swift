@@ -8,35 +8,36 @@
 
 import Foundation
 import UIKit
+import AudioToolbox
 
-public class PTPhoneFeedBackControl:NSObject {
+public class PTPhoneFeedbackControl:NSObject {
     /// 系统震动
-    public class func systemVibrate() {
+    public class func systemVibrateShake() {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
     
     // MARK: - UINotificationFeedbackGenerator
-    public class func bk_addNotifi(_ type: UINotificationFeedbackGenerator.FeedbackType = .success) {
+    public class func addNotifi(_ type: UINotificationFeedbackGenerator.FeedbackType = .success) {
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(type)
     }
 
-   // MARK: - UIImpactFeedbackGenerator
-    public class func bk_addImpact(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
+    // MARK: - UIImpactFeedbackGenerator
+    public class func addImpact(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .medium) {
        let generator = UIImpactFeedbackGenerator(style: style)
        generator.prepare()
        generator.impactOccurred()
     }
    
     @available(iOS 13.0, *)
-    public class func bk_addNewImpact(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .rigid) {
+    public class func addNewImpact(_ style: UIImpactFeedbackGenerator.FeedbackStyle = .rigid) {
        let generator = UIImpactFeedbackGenerator(style: style)
        generator.prepare()
        generator.impactOccurred()
     }
    
     // MARK: - UISelectionFeedbackGenerator
-    public class func bk_addSelect() {
+    public class func addSelect() {
        let generator = UISelectionFeedbackGenerator()
        generator.selectionChanged()
    }

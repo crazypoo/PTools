@@ -81,7 +81,6 @@ public var PTBaseURLMode:NetWorkEnvironment {
 public class PTNetWorkStatus {
     
     public static let shared = PTNetWorkStatus()
-    public var checkNetwork = "www.google.com"
     /// 当前网络环境状态
     private var currentNetWorkStatus: NetWorkStatus = .wifi
     /// 当前运行环境状态
@@ -89,7 +88,7 @@ public class PTNetWorkStatus {
     
     private let monitor = NWPathMonitor()
 
-    let reachabilityManager = Alamofire.NetworkReachabilityManager(host: PTNetWorkStatus.shared.checkNetwork)
+    public var reachabilityManager = Alamofire.NetworkReachabilityManager(host: "www.google.com")
     
     private func detectNetWork(netWork: @escaping NetWorkStatusBlock) {
         reachabilityManager?.startListening(onUpdatePerforming: { [weak self] (status) in
