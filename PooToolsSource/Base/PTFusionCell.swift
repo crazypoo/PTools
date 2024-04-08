@@ -547,11 +547,11 @@ public class PTFusionCellContent:UIView {
                 case .Switch(type: .OnlyRightImage),
                         .Switch(type: .BothImage),
                         .Switch(type: .RightImageContent):
-                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .DisclosureIndicator(type: .OnlyRightImage),
                         .DisclosureIndicator(type: .BothImage),
                         .DisclosureIndicator(type: .RightImageContent):
-                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .NoneAccessoryView(type: .OnlyRightImage),
                         .NoneAccessoryView(type: .BothImage),
                         .NoneAccessoryView(type: .RightImageContent):
@@ -559,7 +559,7 @@ public class PTFusionCellContent:UIView {
                 case .More(type: .OnlyRightImage),
                         .More(type: .BothImage),
                         .More(type: .RightImageContent):
-                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.contentRightSpace)
                 default:
                     make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
                 }
@@ -663,10 +663,10 @@ public class PTFusionCellContent:UIView {
                         .More(type: .LeftImageContent(type: .NameContent)),
                         .More(type: .BothImage(type: .Name)),
                         .More(type: .BothImage(type: .NameContent)):
-                    make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
+                    make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
                     make.top.bottom.equalTo(self.cellIcon)
                 default:
-                    make.left.equalToSuperview().inset(self.cellModel!.leftSpace * 2 + (self.frame.size.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset)))
+                    make.left.equalToSuperview().inset(self.cellModel!.leftSpace + self.cellModel!.contentLeftSpace + (self.frame.size.height - (self.cellModel!.imageTopOffset + self.cellModel!.imageBottomOffset)))
                     make.top.bottom.equalTo(self.cellIcon)
                 }
                 
@@ -675,13 +675,13 @@ public class PTFusionCellContent:UIView {
                         .DisclosureIndicator(type: .BothImage(type: .Name)),
                         .NoneAccessoryView(type: .BothImage(type: .Name)),
                         .More(type: .BothImage(type: .Name)):
-                    make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .Switch(type: .None(type: .Name)):
-                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .DisclosureIndicator(type: .None(type: .Name)):
-                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .More(type: .None(type: .Name)):
-                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .Switch(type: .BothImage(type: .NameContent)),
                         .DisclosureIndicator(type: .BothImage(type: .NameContent)),
                         .More(type: .BothImage(type: .NameContent)),
@@ -755,7 +755,7 @@ public class PTFusionCellContent:UIView {
                         .Switch(type: .BothImage(type: .Content)),
                         .DisclosureIndicator(type: .BothImage(type: .Content)),
                         .More(type: .BothImage(type: .Content)):
-                    make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
+                    make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
                 default:
                     make.left.equalTo(self.snp.centerX).offset(10)
                 }
@@ -765,17 +765,17 @@ public class PTFusionCellContent:UIView {
                         .Switch(type: .LeftImageContent(type: .Content)),
                         .Switch(type: .LeftImageContent(type: .NameContent)),
                         .Switch(type: .None(type: .NameContent)):
-                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.valueSwitch.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .DisclosureIndicator(type: .None(type: .Content)),
                         .DisclosureIndicator(type: .LeftImageContent(type: .Content)),
                         .DisclosureIndicator(type: .LeftImageContent(type: .NameContent)),
                         .DisclosureIndicator(type: .None(type: .NameContent)):
-                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.accessV.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .More(type: .None(type: .Content)),
                         .More(type: .LeftImageContent(type: .Content)),
                         .More(type: .LeftImageContent(type: .NameContent)),
                         .More(type: .None(type: .NameContent)):
-                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.sectionMore.snp.left).offset(-self.cellModel!.contentRightSpace)
                 case .NoneAccessoryView(type: .BothImage(type: .Content)),
                         .NoneAccessoryView(type: .BothImage(type: .NameContent)),
                         .NoneAccessoryView(type: .LeftImageContent(type: .Content)),
@@ -784,9 +784,9 @@ public class PTFusionCellContent:UIView {
                         .NoneAccessoryView(type: .None(type: .NameContent)),
                         .NoneAccessoryView(type: .RightImageContent(type: .Content)),
                         .NoneAccessoryView(type: .RightImageContent(type: .NameContent)):
-                    make.right.equalToSuperview().inset(self.cellModel!.rightSpace)
+                    make.right.equalToSuperview().inset(self.cellModel!.contentRightSpace)
                 default:
-                    make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.rightSpace)
+                    make.right.equalTo(self.cellContentIcon.snp.left).offset(-self.cellModel!.contentRightSpace)
                 }
             }
         default:
@@ -868,7 +868,7 @@ public class PTFusionCellContent:UIView {
             case .Switch(type: .OnlyLeftImage),
                     .DisclosureIndicator(type: .OnlyLeftImage),
                     .More(type: .OnlyLeftImage):
-                make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.leftSpace)
+                make.left.equalTo(self.cellIcon.snp.right).offset(self.cellModel!.contentLeftSpace)
             default:
                 make.left.equalToSuperview().inset(self.cellModel!.leftSpace)
             }

@@ -75,8 +75,12 @@ open class PTFusionCellModel: NSObject {
     open var contentIcon:Any?
     ///Cell的右間隔
     open var rightSpace:CGFloat = 10
+    ///右內容的間距
+    open var contentRightSpace:CGFloat = 10
     ///Cell的左間隔
     open var leftSpace:CGFloat = 10
+    ///左內容的間距(有圖片的時候用)
+    open var contentLeftSpace:CGFloat = 10
     ///Cell的圓角度數
     open var cellCorner:CGFloat = 10
     ///Cell的Switch的开顏色
