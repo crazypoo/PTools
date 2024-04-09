@@ -116,3 +116,12 @@ open class PTFusionCellModel: NSObject {
     ///BottomLineColor
     open var bottomLineColor:UIColor = UIColor(hexString: "#E8E8E8")!
 }
+
+@objcMembers
+public class PTTagLayoutModel:NSObject {
+    open var name:String = ""
+    open var haveImage:Bool = false
+    open var imageWidth:CGFloat = 16
+    open var contentSpace:CGFloat = 4
+    open var contentFont:UIFont = .appfont(size: 14)
+}

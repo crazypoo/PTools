@@ -240,21 +240,20 @@ public extension UICollectionView {
     ///   - itemFont: item的字体大小
     ///   - itemContentSpace: item的内容左右间距总和
     /// - Returns: TagLayout
-    @objc class func tagShowLayout(data:[String],
+    @objc class func tagShowLayout(data:[PTTagLayoutModel],
                                    screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
                                    itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
                                    itemHeight:CGFloat = 32,
                                    contentTopAndBottom:CGFloat = 10,
                                    itemLeadingSpace:CGFloat = 10,
                                    itemTrailingSpace:CGFloat = 10,
-                                   itemFont:UIFont = .appfont(size: 14),
                                    itemContentSpace:CGFloat = 20) -> NSCollectionLayoutGroup {
         var bannerGroupSize : NSCollectionLayoutSize
         var customers = [NSCollectionLayoutGroupCustomItem]()
         
         var groupH:CGFloat = contentTopAndBottom + itemHeight
         
-        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,contentTopAndBottom: contentTopAndBottom,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemFont: itemFont,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems,cloumNum in
+        UICollectionView.tagShowLayoutHeight(data: data,screenWidth: screenWidth,itemOriginalX: itemOriginalX,itemHeight: itemHeight,contentTopAndBottom: contentTopAndBottom,itemLeadingSpace: itemLeadingSpace,itemTrailingSpace: itemTrailingSpace,itemContentSpace: itemContentSpace, handle: { groupHeight,customerItems,cloumNum in
             groupH = groupHeight
             customers = customerItems
         })
@@ -264,14 +263,13 @@ public extension UICollectionView {
         })
     }
     
-    @objc class func tagShowLayoutHeight(data:[String],
+    @objc class func tagShowLayoutHeight(data:[PTTagLayoutModel],
                                          screenWidth:CGFloat = CGFloat.kSCREEN_WIDTH,
                                          itemOriginalX:CGFloat = PTAppBaseConfig.share.defaultViewSpace,
                                          itemHeight:CGFloat = 32,
                                          contentTopAndBottom:CGFloat = 10,
                                          itemLeadingSpace:CGFloat = 10,
                                          itemTrailingSpace:CGFloat = 10,
-                                         itemFont:UIFont = .appfont(size: 14),
                                          itemContentSpace:CGFloat = 20,
                                          handle: (_ groupHeight:CGFloat, _ groupItem:[NSCollectionLayoutGroupCustomItem],_ cloumNum:Int)->Void) {
         var customers = [NSCollectionLayoutGroupCustomItem]()
@@ -279,7 +277,8 @@ public extension UICollectionView {
         var groupHeight:CGFloat = contentTopAndBottom + itemHeight
         var cloumNum:Int = 1
         for (index,value) in data.enumerated() {
-            let currentCellWidth = UIView.sizeFor(string: value, font: itemFont,height: itemHeight).width + itemContentSpace
+           
+            let currentCellWidth = UIView.sizeFor(string: value.name, font: value.contentFont,height: itemHeight).width + itemContentSpace + ( value.haveImage ? (value.imageWidth + value.contentSpace) : 0)
             let totalWidth = groupWidth + currentCellWidth + itemLeadingSpace
             if totalWidth > (screenWidth - itemOriginalX * 2) {
                 groupWidth = itemOriginalX
