@@ -121,8 +121,10 @@ public class PTCollectionViewConfig:NSObject {
     open var itemWidth:CGFloat = 100
     ///item起始坐标X
     open var itemOriginalX:CGFloat = 0
-    ///item的展示距离顶部和底部的高度
-    open var contentTopAndBottom:CGFloat = 0
+    ///item的展示距离顶部的高度
+    open var contentTopSpace:CGFloat = 0
+    ///item的展示距离底部的高度
+    open var contentBottomSpace:CGFloat = 0
     ///每个item的间隔(左右)
     open var cellLeadingSpace:CGFloat = 0
     ///每个item的间隔(上下)
@@ -300,13 +302,13 @@ public class PTCollectionView: UIView {
         
             switch viewConfig.viewType {
             case .Gird:
-                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: viewConfig.rowCount,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellLeadingSpace: viewConfig.cellLeadingSpace,cellTrailingSpace: viewConfig.cellTrailingSpace)
+                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: viewConfig.rowCount,originalX: viewConfig.itemOriginalX,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,cellLeadingSpace: viewConfig.cellLeadingSpace,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .Normal:
-                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: 1,originalX: viewConfig.itemOriginalX,contentTopAndBottom: viewConfig.contentTopAndBottom,cellTrailingSpace: viewConfig.cellTrailingSpace)
+                group = UICollectionView.girdCollectionLayout(data: sectionModel!.rows,groupWidth: screenWidth,itemHeight: viewConfig.itemHeight,cellRowCount: 1,originalX: viewConfig.itemOriginalX,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,cellTrailingSpace: viewConfig.cellTrailingSpace)
             case .WaterFall:
-                group = UICollectionView.waterFallLayout(data: sectionModel!.rows,screenWidth: screenWidth, rowCount: viewConfig.rowCount,itemOriginalX: viewConfig.itemOriginalX, itemOriginalY: viewConfig.contentTopAndBottom,itemSpace: viewConfig.cellLeadingSpace, itemHeight: waterFallLayout!)
+                group = UICollectionView.waterFallLayout(data: sectionModel!.rows,screenWidth: screenWidth, rowCount: viewConfig.rowCount,itemOriginalX: viewConfig.itemOriginalX, topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemSpace: viewConfig.cellLeadingSpace, itemHeight: waterFallLayout!)
             case .Horizontal:
-                group = UICollectionView.horizontalLayout(data: sectionModel!.rows,itemOriginalX: viewConfig.itemOriginalX,itemWidth: viewConfig.itemWidth,itemHeight: viewConfig.itemHeight,contentTopAndBottom: viewConfig.contentTopAndBottom,itemLeadingSpace: viewConfig.cellLeadingSpace)
+                group = UICollectionView.horizontalLayout(data: sectionModel!.rows,itemOriginalX: viewConfig.itemOriginalX,itemWidth: viewConfig.itemWidth,itemHeight: viewConfig.itemHeight,topContentSpace: viewConfig.contentTopSpace,bottomContentSpace: viewConfig.contentBottomSpace,itemLeadingSpace: viewConfig.cellLeadingSpace)
             case .Custom:
                 group = customerLayout!(sectionModel!)
             }
@@ -319,9 +321,9 @@ public class PTCollectionView: UIView {
         var sectionWidth:CGFloat = 0
         switch viewConfig.decorationItemsType {
         case .Normal,.Corner:
-            sectionInsets = NSDirectionalEdgeInsets.init(top: ((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopAndBottom + self.viewConfig.decorationItemsEdges.top),
+            sectionInsets = NSDirectionalEdgeInsets.init(top: ((sectionModel?.headerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopSpace + self.viewConfig.decorationItemsEdges.top),
                                                          leading: sectionInsets.leading,
-                                                         bottom: (sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentTopAndBottom,
+                                                         bottom: (sectionModel?.footerHeight ?? CGFloat.leastNormalMagnitude) + viewConfig.contentBottomSpace,
                                                          trailing: sectionInsets.trailing)
             sectionWidth = (self.viewConfig.decorationItemsEdges.leading + self.viewConfig.decorationItemsEdges.trailing)
         case .Custom:

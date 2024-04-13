@@ -90,7 +90,8 @@ public class PTMediaBrowserController: PTBaseViewController {
         let cConfig = PTCollectionViewConfig()
         cConfig.viewType = .Custom
         cConfig.itemOriginalX = 0
-        cConfig.contentTopAndBottom = 0
+        cConfig.contentTopSpace = 0
+        cConfig.contentBottomSpace = 0
         cConfig.cellTrailingSpace = 0
         cConfig.cellLeadingSpace = 0
         cConfig.collectionViewBehavior = .paging
